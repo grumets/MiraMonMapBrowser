@@ -1,0 +1,1408 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Ajuda del Navegador de Mapes del MiraMon</title><link href="ajuda.css" rel="stylesheet" type="text/css"></head>
+<body leftmargin="2" topmargin="2" bgcolor="#ffffff" link="#cc3333" marginheight="2" marginwidth="2" text="#0000ff">
+<a name="INICI"></a>
+<table class="taula_titol">
+  <tr><td><a href="http://www.creaf.uab.cat/miramon"><img src="mm_gaudi_curt_gisrs.gif" alt="Plana web del MiraMon " align="left" border="0" height="80" hspace="0" width="392"></a></td></tr>
+  <tr><td colspan="2" bgcolor="#0000ff" class="titol_prin">&nbsp;&nbsp;&nbsp;Navegador de Mapes del MiraMon</td></tr>
+</table>
+<br>
+<table class="general">
+  <tr>     
+	<td align="rigth" valign="top" width="25%"> 
+	<table class="taula_seccio">
+		<tr class="tr_seccio"><td colspan="3" class="titol_t1">Índex</td></tr>		
+		<tr><td colspan="3"><a href="#introduccio" class="vincle_index">Introducció</a></td></tr>
+		<tr><td colspan="3"><a href="#teledeteccio" class="vincle_index">La Teledetecció</a></td></tr>
+		<tr>
+			<td class="td_subseccio">1</td>	
+			<td colspan="2"><a href="#sat_landsat" class="vincle_index">Els satèl·lits Landsat</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">2</td>	
+			<td colspan="2"><a href="#sensor_tm_etm" class="vincle_index">Sensor MSS, TM i ETM+</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">3</td>	
+			<td colspan="2"><a href="#exemples_etm" class="vincle_index">Exemples de resposta per a les diferents bandes del sensor ETM+</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">4</td>	
+			<td colspan="2"><a href="#composicionsRGB" class="vincle_index">Composicions</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">5</td>	
+			<td colspan="2"><a href="#recepcio_dif" class="vincle_index">Recepció i difusió</a></td>
+		</tr>
+		<tr>
+			<td colspan="3"><a href="#descripcio_img_sat" class="vincle_index">Descripció de les imatges de satèl·lit proporcionades</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">1</td>	
+			<td colspan="2"><a href="#resum_carac" class="vincle_index">Resum de característiques</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">2</td>	
+			<td colspan="2"><a href="#proces_img" class="vincle_index">Processament realitzat sobre les imatges</a></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td class="td_subseccio">2.1</td>	
+			<td><a href="#correc_geom" class="vincle_index">Correcció geomètrica</a></td>
+		</tr>
+		<!--
+		<tr>
+		<td></td>
+			<td class="td_subseccio">2.2</td>	
+			<td><a href="#correc_radio" class="vincle_index">Correcció radiomètrica</a></td>
+		</tr>
+		-->
+		<tr>
+			<td class="td_subseccio">3</td>	
+			<td colspan="2"><a href="#producte" class="vincle_index">Producte final</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">4</td>	
+			<td colspan="2"><a href="#propietat" class="vincle_index">Propietat de les imatges Landsat</a></td>
+		</tr>
+		<tr><td colspan="3"><a href="#instruc_basic" class="vincle_index">Instruccions bàsiques del navegador</a></td></tr>
+		<tr>
+			<td class="td_subseccio">1</td>	
+			<td colspan="2"><a href="#situa" class="vincle_index">Situació</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">2</td>	
+			<td colspan="2"><a href="#llegenda" class="vincle_index">Llegenda i control de capes</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">3</td>	
+			<td colspan="2"><a href="#coord" class="vincle_index">Coordenades</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">4</td>	
+			<td colspan="2"><a href="#botons" class="vincle_index">Botons</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">5</td>	
+			<td colspan="2"><a href="#vista" class="vincle_index">Vista</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">6</td>	
+			<td colspan="2"><a href="#filtres" class="vincle_index">Consulta típica</a></td>
+		</tr>
+		<tr><td colspan="3"><a href="#instruc_espec" class="vincle_index">Instruccions específiques del navegador</a></td></tr>
+		<tr>
+			<td class="td_subseccio">1</td>	
+			<td colspan="2"><a href="#caixa_opcions" class="vincle_index">Caixa d'opcions de configuració</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">2</td>	
+			<td colspan="2"><a href="#situa_zona" class="vincle_index">Situació sobre la zona d'interès</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">3</td>	
+			<td colspan="2"><a href="#descarr_zona" class="vincle_index">Descàrrega de la zona d'interès</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">4</td>	
+			<td colspan="2"><a href="#descarr_zona" class="vincle_index">Instal·lació del Lector de Mapes de MiraMon</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">5</td>	
+			<td colspan="2"><a href="#animacions" class="vincle_index">Animacions</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">6</td>	
+			<td colspan="2"><a href="#animacions" class="vincle_index">Canvi de projecció automàtica</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">7</td>	
+			<td colspan="2"><a href="#animacions" class="vincle_index">Afegir capes d'altres servidors</a></td>
+		</tr>
+    </table>
+	</td>
+    <td width="1%"></td>
+    <td align="center" valign="top" width="74%"> 
+	<table class="taula_seccio">
+		<tr class="tr_seccio"><td colspan="3"><a name="INTRODUCCIO"><span class="titol_t1">Introducció</span></a></td></tr>
+        <tr> 
+	       <td><p class="text_general">Un navegador de mapes és un portal format per un conjunt de planes HTML, que ens permet visualitzar, consultar o descarregar capes subministrades per un o diversos servidors Web de mapes. <br> Aquests navegadors acosten la cartografia i el SIG als usuaris, eliminant la necessitat d'una formació específica en aquests camps, així com obviant la necessitat d'un <i>software</i> específic.</p> 
+          <p class="text_general">El Navegador de Mapes de MiraMon ha estat realitzat amb tecnologies conformes als estàndards internacionals: Web Map Service (ISO 19128), Web Map Tile Service, Web Feature Service i Web Coverage Service, elaborats per Open Geospatial Consortium i ISO. Gràcies a això, s'aconsegueix dotar-lo d'interoperabilitat, i per tant, és possible integrar en el Navegador la informació provinent de diferents servidors fins hi tot elaborats per diferents fabricants. WMS i WMTS són útils per mostrar les capes i per realitzar consultes per localització (obtenir informació addicional sobre un punt d'un mapa), WFS facilitat les descàrregues de mapes vectorials i la visualització i consulta d'objectes individualitzats i WCS facilita les descàrregues de mapes ràster.</p>
+		  </td>
+        </tr>
+      </table>
+    </td>   
+  </tr>
+</table>
+<br><br>
+<table class="taula_seccio">
+	<tr class="tr_seccio">
+	<td width="97%"><a name="teledeteccio"><span class="titol_t1">La Teledetecció</span></a></td>
+	<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+  </tr>
+</table>
+<p class="text_general">La Teledetecció és la disciplina científica que té per objecte la identificació de fenòmens i objectes a distància a través de sensors específicament dissenyats a tal efecte. Una de les branques més típiques de la Teledetecció és aquella que col·loca aquests sensors en plataformes capaces de sobrevolar la superfície terrestre i així poder fer cartografia de propòsit general, estudiar els recursos naturals del planeta o ajudar els meteoròlegs en la seva tasca de previsió del temps, per citar només algunes de les moltes aplicacions existents.</p>
+<p class="text_general">Aquests sensors de Teledetecció solen ser embarcats en satèl·lits o en avions. Tot i que cada tipus de plataformes té els seus avantatges i inconvenients, els satèl·lits tenen una importantíssima propietat: la repetitivitat d'observació, fruit del fet que orbiten al voltant de la superfície terrestre. Aquesta repetitivitat, en efecte, els permet revisitar un mateix punt terrestre periòdicament (des de cada pocs minuts en els satèl·lits meteorològics a cada pocs dies en els satèl·lits d'observació dels recursos naturals) i així podem fer un seguiment periòdic dels aspectes que ens convinguin.</p>
+<p class="text_general">En aquest servidor s'ofereixen imatges captades per satèl·lits de la sèrie Landsat, un dels programes espacials més importants que existeixen.</p>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">1</td>
+		<td width="97%"><a name="sat_landsat"><span class="titol_t1">Els satèl·lits Landsat</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  	</tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td>
+	   <table>
+	   	   <tr>
+			   <td valign="top"><p class="text_general"><b><i>Landsat</i></b> és el nom d'una sèrie de <b><i>7 satèl·lits</i></b> d'òrbita quasi-polar (nord-sud), gestionada per diverses agències nord-americanes (NASA/USGS/NOAA/EOSAT, segons l'època) i destinada a l'observació dels recursos naturals del planeta, sobretot de la part terrestre, des d'una altitud que en els primers satèl·lits era d'uns 900 km i actualment és d'uns 700 km. El satèl·lit <b><i>Landsat-1 va ser llançat el 23 de juliol de 1972 </i></b>i a ell el van succeir el 2 (1975), el 3 (1978), el 4 (1982), el 5 (1984), el 6 (1993, però que va fallar al llançament) i el 7 (1999). Està previst que al desembre de 2012 es llanci el Landsat 8.</p>
+			   </td>
+			   <td width="13%"><div align="center"><img src="peniarab.jpg" border="0" width="160"></div>
+		      <center><p align="left" class="text_general"><small><i>(Extret de: http://www.npagroup.co.uk/imagery/rs_intro)</i></small></p></center></td>			   
+		  </tr>
+		</table>
+	   </td>	   
+	</tr>
+	<tr>
+		<td></td>	   
+	    <td><img src="LandsatTimeLine.jpg" alt="" width="1078" height="426" style="width: 1122px; height: 460px;"></td>
+	</tr>
+	<tr>
+		<td></td>	   
+		<td class="text_general"><small><i>(Extret de: http://landsat.gsfc.nasa.gov/about/timeline.html)</i></small></td>
+	</tr>
+	<tr>
+		<td></td>	   
+		<td>
+			<table>
+				<tr>
+					<td>
+					<ul>
+						<li class="text_general">Tipus d'òrbita: heliosíncrona (passa a la mateixa hora solar)</li>
+						<li class="text_general">Inclinació: 98.2° (99.1° per Landsat 1-2-3)</li>
+						<li class="text_general">Alçada sobre la superfície: 705 km (903.5 km per Landsat 1-2-3)</li>
+						<li class="text_general">Període 98.9 minuts (103.10 minuts per Landsat 1-2-3)</li>
+						<li class="text_general">Repetició del cicle orbital cada 16 dies [233 òrbites] (18 dies per Landsat 1-2-3 [251 òrbites])</li>
+						<li class="text_general">Landsat 5 i 7 comparteixen la mateixa òrbita; Landsat 1-2-3 comparteixen també òrbita entre ells</li>
+						<li class="text_general">El cicle de 233 de òrbites [o 251 per Landsat 1-2-3] cobreix cada 16 dies tot el globus terraqüi (excepte per a les latituds polars)</li>
+						<li class="text_general">Cada òrbita es divideix en 248 files (rows).</li>
+						<li class="text_general">233 òrbites × 248 files = 57784 escenes (251 òrbites × 248 files = 62248 escenes)</li>
+						<li class="text_general">La passada 001 creua l'equador a una longitud de 64°60´ W.</li>
+						<li class="text_general">Continua de est a oest. </li>
+						<li class="text_general">La fila 001 comença a la part de l'òrbita: latitud de 80°47´ N. </li>
+						<li class="text_general">Cada escena té uns 185km d'ample × 170km d'alt.</li>
+						<li class="text_general">Hi ha un cert ensolapament lateral de les passades adjacents que és menor a l'equador (7.3% a 0°) que als pols. (p.ex. 29.0% a 40°)</li>
+					</ul>
+					</td>
+					<td align="center">
+					  <p align="center"><img src="orbita.gif" border="0" height="251" width="255"><br>
+	                      <span class="text_general" ><small><i>(Extret de:<br> http://bsrsi.msu.edu/trfic/data_portal/ Landsat7doc/intro_landsat.html)</i></small></span></p>
+				    </td>
+				</tr>
+				  <tr>
+				    <td>&nbsp;</td>
+				    <td>&nbsp;</td>
+			      </tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td></td>	   
+	    <td >
+		<center>
+		<img src="Feb-20-2004.jpg" border="0"><br>
+		<span class="text_general">Exemple de les passades previstes pel dia 20 de febrer de 2004. <br>
+		Podeu veure una versió actualitzada a: <br> 
+		<a href="http://landsat7.usgs.gov/pathrows.php">http://landsat7.usgs.gov/pathrows.php</a></span>
+		</center>
+		</td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+		<table class="taula_seccio">
+			<tr class="tr_seccio">
+			<td width="3%" class="titol_t1">2</td>
+			<td width="97%"><a name="sensor_tm_etm"><span class="titol_t1">Sensor MSS, TM i ETM+</span></a></td>
+			<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+			</tr>
+		</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td>
+	   <table>
+		   <tr>
+		   <td valign="top">
+		   <p class="text_general">Encara que els primers satèl·lits usaven pel·lícula fotogràfica que era retornada a la terra per al seu processat, el primer satèl·lit de la sèrie Landsat, llançat el 1972, ja usava sensors digitals per capturar les imatges, que eren transmeses digitalment a les estacions de terra. En aquest satèl·lit els sensors són passius. Un sensor passiu és aquell que registra la radiació reflectida o emesa des de la Terra. Aquests sensors també pertanyen als anomenats sensors òptics, que mesuren en les longituds d'ona visible, infraroig proper, infraroig mitja i infraroig tèrmic.</p>
+		   <p class="text_general">L'MSS (Multispectral Scanner) és un sensor de teledetecció instal&middot;lat a bord dels satèl&middot;lits de la sèrie Landsat (concretament en els satèl&middot;lits Landsat-1 a 5) i destinat a l'estudi dels usos del sòl, l'agricultura, els boscos, la geologia, els recursos aquàtics, la cartografia, etc. En els satèl&middot;lits Landsat-1, 2, 4 i 5 permet obtenir imatges en les regions espectrals del VIS i l'IRp amb una resolució espacial al nadir de 57 m (transversal a la traça) i 80 m (al llarg de la traça). En el satèl&middot;lit Landsat-3, amplia les regions espectrals amb l'IRol, amb una resolució espacial al nadir en aquesta banda de 240 m (al llarg de la traça).</p>
+		   <p class="text_general">La tècnica d'escombrat òptic emprada pel sensor Thematic Mapper (TM) consisteix en un mirall oscil·lant que reflecteix la llum directament a un nombre petit de lectors, i construint així una imatge a partir d'una o poques línies de píxels a la vegada. La imatge completa s'obté de la combinació de les línies d'escombrat amb el moviment del propi satèl·lit en la direcció perpendicular a l'escombrat. </p>
+		   </td>
+		   <td class="text_general">
+			<a href="whisk-broom.jpg"><img src="whisk-broom.jpg" width="297" height="383" border="0"></a>
+			<br>
+			<small><i>(Extret de:<br> http://www.fas.org/irp/imint/docs/rst/Intro/Part2_5a.html)</i></small>
+			</td>
+   		 </tr>
+	   </table>
+   	   </td>
+	</tr>
+	
+	<tr>
+    <td></td>	   
+	<td>
+	<p class="text_general">El sensor TM recull per a cada punt del territori (píxel) infromació d'una part de l'espectre electromagnètic. Del continu d'aquest espectre, el satèl·lit <i>veu</i> només l'energia d'unes certes zones: 3 bandes dins la llum visible (bandes 1, 2, 3), 1 banda a l'infraroig proper (banda 4), 2 bandes a l'infraroig mitjà (bandes 5 i 7) i 1 banda a l'infraroig tèrmic (banda 6). La banda 9 del Landsat 7 correspon a un escalat diferent de les dades de la banda 6. La banda 8 del Landsat 7 és una banda que abasta bona part del visible i l'infraroig proper. 3 bandes per sota del visible (a la porció infraroja del espectre) i, a més, 1 (Landsat 5) o 2 (Landsat 7) bandes a l'infraroig llunyà (tèrmic).</p>
+	<p class="text_general"><center> 
+	<img src="spectrum4w2.gif" width="478" height="182" border="0"><br>
+	<small><i>(Extret de: http://www.satelliteimpressions.com/landsat.html)</i></small>
+	</center></p> 
+	<p class="text_general">La figura inferior il·lustra quines parts de l'espectre electromagnètic pot recollir el sensor. La base dels rectangles representa l'amplada de banda recollida per a cada banda dins de l'espectre electromagnètic. Les línies corbes il·lustren la resposta de diferents tipus de cobertes. Si observem les corbes podem veure que un tipus de coberta pot tenir una resposta similar a les altres per a una regió del espectre (per una determinada banda) però força diferent en una altra regió (per una altra banda). Aquest fet, explica la varietat de contrast per a cada imatge banda. A la figura no apareix la banda 6 (i 9) tèrmica que quedaria a la dreta de l'espectre, ni la banda pancromàtica de ETM+ (de banda més ampla) que integra la resposta de les bandes 2, 3 i 4.</p>
+	<p class="text_general"><center>
+	<img src="tmbands4w.gif" border="0" height="222" width="473"><br>
+	<small><i>(Extret de: http://www.satelliteimpressions.com/landsat.html)</i></small>
+	</center></p></td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">3</td>
+		<td width="97%"><a name="exemples_etm"><span class="titol_t1">Exemples de resposta per a les diferents bandes del sensor ETM+</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td align="center">
+	<table>
+		<tr>
+		<td><a href="1.jpg"><img src="1.jpg" width="190" border="0"></a></td>
+		<td><a href="2.jpg"><img src="2.jpg" width="190" border="0"></a></td>
+		<td><a href="3.jpg"><img src="3.jpg" width="190" border="0"></a></td>
+		</tr>
+		<tr class="text_general">
+		<td>Banda 1 (<font color="#0000bb">blau</font>)</td>
+		<td>Banda 2 (<font color="#00bb00">verd</font>)</td>
+		<td>Banda 3 (<font color="#bb0000">vermell</font>)</td>
+		</tr>
+		<tr class="text_general">
+		<td><a href="4.jpg"><img src="4.jpg" width="190" border="0"></a></td>
+		<td><a href="5.jpg"><img src="5.jpg" width="190" border="0"></a></td>
+		<td><a href="7.jpg"><img src="7.jpg" width="190" border="0"></a></td>
+		</tr>
+		<tr class="text_general">
+		<td>Banda 4: (infraroig proper)</td>
+		<td>Banda 5: (infraroig mitjà)</td>
+		<td>Banda 7: (infraroig mitjà)</td>	   
+		</tr>
+		<tr>
+		<td><a href="6.jpg"><img src="6.jpg" width="190" border="0"></a></td>
+		<td><a href="9.jpg"><img src="9.jpg" width="190" border="0"></a></td>
+		<td><a href="8.jpg"><img src="8.jpg" width="190" border="0"></a></td>	   
+		</tr>
+		<tr class="text_general">
+		<td>Banda 6: (tèrmic)</td>
+		<td>Banda 9: (tèrmic) (alt guany)</td>
+		<td>Banda 8: (pancromàtica)</td>
+		</tr>
+	</table>
+	</td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">4</td>
+		<td width="97%"><a name="composicionsRGB"><span class="titol_t1">Composicions</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	
+	<tr>
+	<td></td>
+	<td><p class="text_general">Moltes vegades es fan servir composicions de 3 bandes per a representar la resposta de 3 bandes en una sola imatge de color:</p>
+	</td>
+	</tr>
+	
+	<tr>
+	<td></td>
+	<td>
+	<table>
+	<tr>
+       <td><a href="321.jpg"><img src="321.jpg" width="300" border="0"></a></td>
+       <td class="text_general"><p>Per obtenir una composició similar a la que veuria l'ull humà, fem servir una composició de les bandes 3, 2 i 1 per a representar vermell, verd i blau. Aquesta composició l'anomenem de <b>color natural</b>.</p></td>
+	</tr>
+	<tr>
+       <td><a href="453.jpg"><img src="453.jpg" width="300" border="0"></a></td>
+	   <td class="text_general"><p>És possible, però, combinar altres bandes. Una combinació interessant és la 4, 5 i 3. Així utilitzem dos bandes infraroges (bandes 4 i 5) i llum vermella (banda 3), per a representar vermell, verd i blau. Apareix aquí la capacitat del sensor TM i ETM+ de mesurar llum no visible, que és energia electromagnètica de llum infraroja, en aquest cas. Llavors, convertim els valors numèrics proporcionats pel sensor a colors que són visibles per nosaltres. Aquest tipus d'imatges és anomenat <b>fals color</b> perquè estem convertint llum no visible (informació espectral) en un format visible que podem veure. Observeu que, les dades de la banda 3 (que són respostes a la llum vermella) són representats com a color blau a la imatge. Aquesta composició en particular ofereix una especialment bona discriminació de la vegetació. </p></td>
+	</tr>
+	<tr>
+       <td><a href="457.jpg"><img src="457.jpg" width="300" border="0"></a></td>
+       <td class="text_general"><p>Una altra combinació interessant és la 4, 5, i 7. Així, utilitzem una banda de l'infraroig proper (banda 4) i dues bandes de l'infraroig mitjà, per a representar vermell, verd i blau. Aquesta és una combinació de llum totalment invisible a l'ull humà. La inclusió de la banda 7 aporta més informació sobre els sòls. </p></td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">5</td>
+		<td width="97%"><a name="recepcio_dif"><span class="titol_t1">Recepció i difusió</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+  	<td></td>
+	<td><br><p class="text_general">La recepció de les imatges generades pels sensors d'aquest satèl·lits és transmesa
+      directament a una estació receptora a terra o redistribuïda a partir de la xarxa
+      de satèl·lits repetidors <i>Tracking and Data Relay Satellite System (TDRSS)</i>.
+      La majoria d'imatges d'aquest servidor s'han obtingut de l'arxiu
+      nord-americà distribuït al públic de manera gratuïta des de 2008.
+      Altres imatges s'han adquirit anteriorment des d'<a href="http://www.eurimage.com/">Eurimage</a>, en el seu moment proveïdor exclusiu 
+      dins de la Comunitat Europea per a imatges QuickBird i Landsat entre d'altres.</p></td>
+  </tr>
+</table>
+<br><br>
+<table class="taula_seccio">
+	<tr class="tr_seccio">
+	<td width="97%"><a name="descripcio_img_sat"><span class="titol_t1">Descripció de les imatges de satèl·lit proporcionades</span></a></td>
+	<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+  </tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">1</td>
+		<td width="97%"><a name="resum_carac"><span class="titol_t1">Resum de característiques</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td>
+	<br>
+	<ul>
+		<li class="text_general">Satèl·lit:</li>
+		<ul>
+			<li class="text_general">Nom:</li>
+			<ul>
+			<li class="text_general">Landsat-1 (1972 - 1978)</li>
+			<li class="text_general">Landsat-2 (1975 - 1983)</li>
+			<li class="text_general">Landsat-3 (1978 - 1983)</li>
+			<li class="text_general">Landsat-4 (1982 - 1993)</li>
+			<li class="text_general">Landsat-5 (1984 - 2011)</li>
+			<li class="text_general">Landsat-7 ETM+ (1999 – present*)</li>
+			</ul>
+		</ul>		
+		<p class="text_general">* El 31 de maig de 2003 el Landsat-7 va patir una avaria deguda a problemes mecànics amb el sensor ETM+. Tot i que el satèl•lit ha seguit captant imatges, aquesta avaria no va poder ser reparada i les dades captades presenten un bandejat característic.</p>
+	</ul>
+	<ul>
+		<li class="text_general">Sensor:</li>
+		<ul>
+			<li class="text_general">Nom:</li>
+			<ul>
+			<li class="text_general">Multispectral Scanner (MSS) (Landsat-1, Landsat-2, Landsat-3, Landsat-4 i Landsat-5)</li>
+			<li class="text_general">Thematic Mapper (TM) (Landsat-4 i Landsat-5)</li>
+			<li class="text_general">Enhanced Thematic Mapper (ETM+) (només per a Landsat-7)</li>
+			</ul>
+		</ul>
+		<br>
+		<ul>
+			<li class="text_general">MSS: Descripció, resolució espacial i longitud d'ona de les bandes:</li>
+			<ul>
+			<li class="text_general">4 bandes de resolució espacial nominal de 80 m</li>
+				<ul>
+					<li class="text_general">canal 4 verd [0.5-0.6 µm] 80 m</li>
+					<li class="text_general">canal 5 vermell [0.6-0.7 µm] 80 m</li>
+					<li class="text_general">canal 6 Infraroig proper [0.7-0.8 µm] 80 m</li>
+					<li class="text_general">canal 7 Infraroig proper [0.8-1.1 µm] 80 m</li>
+				</ul>
+			<li class="text_general">Resolució temporal 18 dies (Landsat 1,2 i 3) i 16 dies (Landsat 4 i 5)</li>
+			</ul>
+		</ul>
+		<br>
+		<ul>
+			<li class="text_general">TM: Descripció, resolució espacial i longitud d'ona de les bandes:</li>
+			<ul>
+				<li class="text_general">Visible:</li>
+				<ul>
+					<li class="text_general">Canal 1 blau  [0.45 – 0.52 µm] 30 m</li>
+					<li class="text_general">Canal 2 verd [0.52 – 0.60 µm] 30 m</li>
+					<li class="text_general">Canal 3 vermell [0.63 – 0.69 µm] 30 m</li>
+				</ul>
+				<li class="text_general">Infraroig proper:</li>
+				<ul>
+					<li class="text_general">Canal 4 [0.76 – 0.90 µm] 30 m</li>					
+				</ul>
+				<li class="text_general">Infraroig d'ona curta (mitjà):</li>
+				<ul>
+					<li class="text_general">Canal 5 [1.55 – 1.75 µm] 30 m</li>
+					<li class="text_general">Canal 7 [2.08 – 2.35 µm] 30 m</li>
+				</ul>
+				<li class="text_general">Tèrmic:</li>
+				<ul>
+					<li class="text_general">Canal 6 [10.40 – 12.50 µm] 120 m</li>
+				</ul>
+				<li class="text_general">Resolució temporal: 16 dies</li>
+			</ul>
+		</ul>
+		<br>
+		<ul>
+			<li class="text_general">ETM+: Descripció, resolució espacial i longitud d'ona de les bandes:</li>
+			<ul>
+				<li class="text_general">Pancromàtica: </li>
+				<ul>
+					<li class="text_general">Canal 8 [0.520-0.900 µm] 15 m</li>
+				</ul>
+				<li class="text_general">Visible:</li>
+				<ul>
+					<li class="text_general">Canal 1 blau  [0.45 – 0.52 µm] 30 m</li>
+					<li class="text_general">Canal 2 verd [0.52 – 0.60 µm] 30 m</li>
+					<li class="text_general">Canal 3 vermell [0.63 – 0.69 µm] 30 m</li>
+				</ul>
+				<li class="text_general">Infraroig proper:</li>
+				<ul>
+					<li class="text_general">Canal 4 [0.76 – 0.90 µm] 30 m</li>					
+				</ul>
+				<li class="text_general">Infraroig d'ona curta (mitjà):</li>
+				<ul>
+					<li class="text_general">Canal 5 [1.55 – 1.75 µm] 30 m</li>
+					<li class="text_general">Canal 7 [2.08 – 2.35 µm] 30 m</li>
+				</ul>
+				<li class="text_general">Tèrmic:</li>
+				<ul>
+					<li class="text_general">Canal 6 I 9 [10.40 – 12.50 µm] (alt i baix guany) 120 m</li>
+				</ul>
+				<li class="text_general">Resolució temporal: 16 dies</li>
+			</ul>
+		</ul>
+		<br>
+		<li class="text_general">En el cas de les imatges captades pels satèl·lits Landsat-4, Landsat-5 i Landsat-7, Catalunya queda coberta amb dues passades o òrbites (espaiades uns 8 dies i amb superposició) (Path): 
+			<ul>
+				<li class="text_general">Girona i Barcelona (Path 197 i Row aproximat 31) </li>
+				<li class="text_general">Lleida i Tarragona (Path 198 i Rows aproximats 30, 31 i 32) </li>
+			</ul>
+		</li>
+		<br>
+		<li class="text_general">Les files (rows) 30 31 i 32, que pertanyen a la mateixa passada o òrbita (figura 1) s'ofereixen mosaicats en una única imatge. Això fa que, a la pràctica, només tinguem dos tipus de zones disponibles, una corresponent a l'òrbita de Lleida i Tarragona (3 escenes mosaicades de la mateixa data) i una corresponent a l'òrbita de Girona i Barcelona (1 escena). </li>
+		<br>
+		<center>
+		<table>
+		<tr>
+			   <td>a)<a href="path_row_cat.gif"><img src="path_row_cat.gif" width="300" border="0"></a></td>
+			   <td>b)<a href="path_cat.gif"><img src="path_cat.gif" width="300" border="0"></a></td>
+		</tr>
+		<tr>
+		<td colspan="2" align="center"><p class="text_general">Figura 1: Distribució del mosaic de Catalunya</p></td>
+		<tr>
+		</table>
+		</center>
+		<br>
+		<li class="text_general">Abast de cada imatge:
+			<ul>
+		  	<li class="text_general">Comarques de Catalunya:</li>
+		  		<br>
+				<ul>
+			 		<li class="text_general">Girona i Barcelona:</li>
+				  	<ul>
+						<li class="text_general">senceres</li>						
+						<table class="text_general">
+						<tr>
+							<td width="33%" valign="top">
+							Alt Empordà<br>
+							Baix Empordà<br>
+							Baix Llobregat<br>
+							Barcelonès<br>
+							Garraf
+							</td>
+							<td width="33%" valign="top">
+							Garrotxa<br>
+							Gironès<br>
+							Maresme<br>
+							Osona<br>
+							Pla de l'Estany
+							</td>
+							<td width="33%" valign="top">
+							Ripollès<br>
+							Selva<br>
+							Vallès Occidental<br>
+							Vallès Oriental	</td>
+						</tr>
+						</table>
+				  		<li class="text_general">parcialment incloses:</li>
+						<table class="text_general">
+						<tr>
+			   				<td width="33%" valign="top">
+							Alt Penedès<br>
+							Anoia
+							</td>
+							<td width="33%" valign="top">
+							Bages<br>
+							Baix Penedès</td>
+							<td width="33%" valign="top">
+							Berguedà<br>
+							Cerdanya</td>
+						</tr>
+						</table> 
+			  		</ul>
+			  		<li class="text_general">Lleida i Tarragona:</li>
+			  		<ul>
+				  		<li class="text_general">senceres:</li>
+						<table class="text_general">
+						<tr>
+							<td width="33%" valign="top">Alt Camp<br>
+							Alt Penedès<br>
+							Alt Urgell<br>
+							Alta Ribagorça<br>
+							Anoia<br>
+							Bages<br>
+							Bages<br>
+							Baix Camp<br>
+							Baix Ebre<br>
+							Baix Llobregat<br>
+							Baix Penedès<br>
+							Barcelonès<br>		</td>
+							<td width="33%" valign="top">Berguedà<br>
+							Cerdanya<br>
+							Conca de Barberà<br>
+							Garraf<br>
+							Garrigues<br>
+							Montsià<br>
+							Noguera<br>
+							Pallars Jussà<br>
+							Pallars Sobirà<br>
+							Pla d’Urgell<br>
+							Pla Urgell<br>
+							Priorat<br>		</td>
+							<td width="33%" valign="top">Ribera d’Ebre<br>
+							Ripollès<br>
+							Segarra<br>
+							Segrià<br>
+							Solsonès<br>
+							Tarragonès<br>
+							Terra Alta<br>
+							Urgell<br>
+							Val d’Aran<br>
+							Vallès Occidental<br>		</td>
+						</tr>
+						</table>  
+				  		<li class="text_general">parcialment incloses:</li>
+						<table class="text_general">
+							<tr>
+							   <td width="33%">Garrotxa<br>
+								Maresme		</td>
+							   <td width="33%">Osona<br>
+								Vallès Oriental		</td>
+							   <td width="33%">&nbsp;		</td>
+							</tr>
+						</table> 
+					</ul>
+				</ul>	   
+				<li class="text_general">Altres àrees parcialment incloses:</li>
+			   	<ul>	   
+					<li class="text_general">França, Aragó i Castelló</li>
+			   	</ul>	   
+			</ul>	   
+		</ul>
+	</td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">2</td>
+		<td width="97%"><a name="proces_img"><span class="titol_t1">Processament realitzat sobre les imatges</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">2.1</td>
+		<td width="97%"><a name="correc_geom"><span class="titol_t1">Correcció geomètrica</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td>
+	<p class="text_general">La correcció geomètrica de les dades és un procés primari indispensable per tal d’eliminar les deformacions típiques de les imatges de satèl·lit  (degudes a la curvatura i rotació de la Terra, la cinemàtica de la captació, el relleu, l’actitud dels sensor, etc.) i que permetrà combinar dades de diferents imatges, així com sobreposar-hi altra informació geogràfica. La georeferenciació implica la correcció dels errors esmentats i l’adaptació de la seva geometria al Sistema de Referència Horitzontal oficial a Catalunya.</p>
+	<p class="text_general">El Servidor d’Imatges de Satèl·lit de Catalunya ofereix les imatges rectificades geomètricament pel Departament de Geografia de la UAB utilitzant un procés automàtic de col·locació de punts de control a partir d’un banc de punts generat en funció del relleu de la zona a corregir i l’ús d’ortofotografies aèries de referència de l'Institut Cartogràfic de Catalunya (ICC).</p>
+	<p class="text_general">Aquest sistema de correcció automàtica d’imatges proporciona un ajust per a totes les imatges amb errors RMS (Root Mean Square) molt inferiors a la meitat del píxel original i una alta coherència geomètrica entre les diferents dates tractades.<br>
+Els punts de control es col·loquen sempre sobre la banda de més resolució de la imatge. A continuació s’aplica un ajust polinòmic amb zetes, tenint en compte el relleu terrestre a través del Model Digital d'Elevacions (MDE) de Catalunya de l'ICC amb una resolució espacial de 30 m.</p>
+	</td>
+	</tr>
+</table>
+<br><br>
+<!--
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">2.2</td>
+		<td width="97%"><a name="correc_radio"><span class="titol_t1">Correcció radiomètrica</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td>
+	<p class="text_general">La correcció radiomètrica permet reduir la presència d’artefactes no desitjats deguts als efectes de l'atmosfera o a la il·luminació diferencial provocada per l'hora del dia, el dia de l’any, el lloc de la Terra, el relleu (zones més o menys il·luminades, ocultes, ombres projectades, etc) [Pons i Solé, 1994] així com, en les bandes tèrmiques 6 i 9 obtenir dades de temperatura de superfície [Sobrino 2000].
+	<p class="text_general"> Essencialment, el model de correcció radiomètrica converteix una imatge de valors (DN) proporcionals a la radiància rebuda pel sensor a una imatge en què els valors són reflectàncies (o bé temperatures per a les bades 6 i 9). Com és sabut, els valors de reflectàncies se solen distribuir en l'interval [0,1].</p>
+	<p class="text_general">El model de correcció radiomètrica té en compte, entre altres factors, el relleu (angles d'incidència i ombres projectades), la posició solar, la distància Terra-Sol en el moment de presa de la imatge, l'esmorteïment atmosfèric en els camins d'anada i de retorn de la radiació, la radiància atmosfèrica( com a mínim, per una zona de la imatge) i paràmetres estàndard, per cada canal, de densitat òptica atmosfèrica, irradiància exoatmosfèrica solar i calibració del sensor.</p>
+	<P class="text_general">
+	<TABLE class="text_general">
+		<TR>
+		<TD><img src="atmos_transmn_4b.jpg" width="286" height="168" border="0"><br>
+		<small><i>(Extret de:<br> http://www.npagroup.co.uk/imagery/rs_intro)</i></small>
+		</TD>
+		<TD>
+		A mode d'exemple se cita la dependència de la transmitància amb la longitud d'ona 
+		per unes condicions d'atmosfera típica. La transmitàcia és la proporció d'energia 
+		solar incident que arriba a la superfície, influida pels gasos atmosfèrics, partícules, etc.
+		</TD>
+		</TR>
+	</TABLE>
+	</P>
+	</td>
+	</tr>
+</table>
+<br><br>
+-->
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">3</td>
+		<td width="97%"><a name="producte"><span class="titol_t1">Producte final</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>	
+	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td>
+	<ul>
+		<li class="text_general">Costat de píxel:</li>
+		<ul>
+			<li class="text_general">15m per a la banda pancromàtica de Landsat-7 ETM+</li>
+			<li class="text_general">20m per a les bandes multispectrals dels sensors TM i ETM+ (també per a les tèrmiques)</li>
+			<li class="text_general">60m per a les bandes multispectrals dels sensors MSS</li>
+		</ul>
+		<br>
+		<li class="text_general">Mida descomprimida de les passades completes per a una certa data:</li>
+		<ul>
+			<li class="text_general">Girona i Barcelona</li>
+			<ul>
+				<li class="text_general">banda pancromàtica 120.5Mb aprox.</li>
+				<li class="text_general">banda multispectral 67.8Mb aprox.</li>
+				<li class="text_general">conjunt multispectral complet 662.9Mb aprox.</li>
+			</ul>
+			<li class="text_general">Lleida i Tarragona</li>
+			<ul>
+				<li class="text_general">banda pancromàtica 255.6Mb aprox.</li>
+				<li class="text_general">banda multispectral 143.8Mb aprox.</li>
+				<li class="text_general">conjunt multispectral complet 1406.0Mb aprox.</li>
+			</ul>
+		</ul>
+		<br>
+		<li class="text_general">Processat de les imatges:<br>Totes les imatges subministrades han estat corregides geomètricament.
+		<br><br>S'ofereixen els següents productes:</li>
+		<ul>
+			<li class="text_general">Radiometria original: una o diverses bandes amb la radiometria original.</li>
+			<li class="text_general">Optimització visual en color natural. Una imatge de color real (24 bits) que combina els canals 3 (vermell), 2 (verd) i 1 (blau), amb millorament del contrast i ressaltant els contorns. Aquesta combinació és la més propera a una imatge fotogràfica en color convencional.</li> 
+			<li class="text_general">Optimització visual en fals color. Una imatge de color real (24 bits) que combina els canals 4 (infraroig proper), 5 (infraroig mitjà) i 3 (vermell) millorant el contrast i ressaltant els contorns en el cas de TM i ETM+ i una imatge de color real (24 bits) que combina els canals 6 (infraroig proper),4 (verd) i 5 (vermell) en el cas de MSS. Aquestes combinacions accentuen fortament les diferents respostes en funció del tipus de recobriment vegetal.</li>
+			<!--<li class="text_general">Correcció radiomètrica: dades en reflectàncies o en temperatures (bandes 6 i 9)</li> -->
+		</ul>
+		<p  class="text_general">Addicionalment es facilita, per a cada any en què ha estat possible configurar-la, una imatge que abasta tot Catalunya, sense núvols (o molt pocs), per a propòsits visuals, en les combinacions de color natural i de fals color; en el primer cas els colors són similars als que veuríem a ull nu sobre el territori, mentre que en el segon cas s'utilitza informació de les regions espectrals visible i infraroig proper i infraroig d'ona curta per tal d'augmentar les capacitats de discriminació visual de les diferents cobertes del sòl. </p>
+	</ul>
+	</td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">4</td>
+		<td width="97%"><a name="propietat"><span class="titol_t1">Propietat de les imatges Landsat</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td>
+	<p class="text_general">Les imatges disponibles en el Servidor d’Imatges de Satèl·lit de Catalunya han estat obtingudes tant a través de la ESA com del USGS. Actualment, tots dos organismes han comunicat l’alliberament del banc d’imatges Landsat <sup>(1)</sup></p>
+	<p class="text_general">Totes les imatges facilitades aquí han estat processades geomètricament i optimitzades visualment pel Departament de Geografia de la UAB i resulta impossible tornar al producte original. Per tant, s'autoritza la lliure distribució de les imatges sempre que se citin aquestes fonts(ESA, USGS i Departament de Geografia-UAB).</p>
+	<p class="text_general"><sup>(1)</sup> Respectius anuncis de l’USGS i de la ESA de l’alliberament del banc d’imatges Landsat:<br><br>
+<a href="http://landsat.usgs.gov/documents/USGS_Landsat_Imagery_Release.pdf" target="_blank">http://landsat.usgs.gov/documents/USGS_Landsat_Imagery_Release.pdf</a><br><br>
+<a href="https://earth.esa.int/web/guest/pi-community/apply-for-data/ao-s?IFRAME_SRC=%2Fpi%2Fesa%3Fcmd%3Daodetail%26aoname%3Dlandsat%26displayMode%3Dcenter%26targetIFramePage%3D%252Fweb%252Fguest%252Fpi-community%252Fapply-for-data%252Fao-s"  target="_blank">https://earth.esa.int/web/guest/pi-community/apply-for-data/ao-s?IFRAME_SRC=%2Fpi%2Fesa%3Fcmd%3Daodetail%26aoname%3Dlandsat%26displayMode%3Dcenter%26targetIFramePage%3D%252Fweb%252Fguest%252Fpi-community%252Fapply-for-data%252Fao-s</a>
+	</p>
+	</td>
+	</tr>
+</table>
+<br><br>
+<table class="taula_seccio">
+	<tr class="tr_seccio">
+	<td width="97%"><a name="instruc_basic"><span class="titol_t1">Instruccions bàsiques del navegador</span></a></td>
+	<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+  </tr>
+</table>
+<p class="text_general">El navegador es compon d'un conjunt de planes html i d'imatges. Essencialment, està format per les 6 àrees descrites a continuació.<br></p>
+<table class="general">
+  <tr>     
+	<td width="4%"></td>
+	<td align="rigth" valign="top" width="30%"> 
+	<table class="taula_seccio">
+		<tr class="tr_seccio"><td colspan="2" class="titol_t1">Àrees del Navegador</td></tr>		
+		<tr>
+			<td class="td_subseccio">1</td>	
+			<td><a href="#situa" class="vincle_index">Situació</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">2</td>	
+			<td><a href="#llegenda" class="vincle_index">Llegenda i control de capes</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">3</td>	
+			<td><a href="#coord" class="vincle_index">Coordenades</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">4</td>	
+			<td><a href="#botons" class="vincle_index">Botons</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">5</td>	
+			<td><a href="#vista" class="vincle_index">Vista</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">6</td>	
+			<td><a href="#filtres" class="vincle_index">Consulta típica</a></td>
+		</tr>
+      </table></td>
+	  <td align="center" valign="top" width="66%"> 
+		<div align="left"><a href="navtot.png"><img src="navtop.PNG" alt="Navegador" width="1280" height="998" border="0" style="border: 0px solid ; width: 600px; height: 470px;"></a>
+      </div></td>
+  </tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">	
+	<table class="taula_seccio">
+		<tr class="tr_seccio">
+		<td width="3%" class="titol_t1">1</td>
+		<td width="97%"><a name="situa"><span class="titol_t1">Situació</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table>
+	   	   <tr>
+			   <td width="13%"><img src="navsitua.jpg" border="0" width="107"></td>
+			   <td valign="top"><p class="text_general">L'àrea
+de situació ens mostra l'àmbit complet per on es podrà navegar (mapa de
+situació). Mitjançant un requadre de color s'indica l'àmbit i la
+posició de la vista sobre el mapa de situació. Fent un clic sobre el
+mapa de situació (fora del requadre de la vista) es resitua la vista
+centrant-la sobre el punt clicat. Quan es passa el cursor sobre la
+vista, es mostren les coordenades de la projecció i la longitud/latitud
+geogràfiques a la caixa de coordenades (àrea 3).</p></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">2</td>
+		<td width="97%"><a name="llegenda"><span class="titol_t1">Llegenda i control de capes</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+	   <td></td>	   
+	   <td colspan="3">
+		 <table width="100%">
+			<tr>				
+	            <td width="72%"><p class="text_general">L'àrea
+de la llegenda mostra la llista de capes disponibles del navegador, com
+també la descripció de les categories de cada capa. Mitjançant la
+llegenda es poden controlar els diferents estats de visualització,
+consulta i descàrrega de les capes.</p>
+				<p class="text_general">Pot estar estructurada en diverses seccions, p. ex.:</p> 
+				<ul>
+				<li><p class="text_general"><span class="text_verd_titol">Cartografia de referència:</span> on hi ha algunes capes de referència per poder orientar-se: límits municipals, corbes de nivell, carreteres, etc. <br>La
+presència d'aquestes capes depèn del nivell de zoom seleccionat.
+Aquestes capes poden ser activades o desactivades a partir del botó <a href="javascript:alert('Botó per desactivar una capa');void(0);"><img src="visible.gif" alt="Desactivar capa" align="top" border="0" height="16" width="16"></a>. Algunes capes de polígons poden ser mostrades amb semitransparència prement altre cop aquest control fins que es mostri com: <a href="javascript:alert('Botó d\'activació i desactivació de la capa.\nAquesta capa és mostrada com a semitransparent en aquest moment.\nAquesta característica només està disponible per algunes capes de polígons.');void(0);"><img src="semitransparent.gif" alt="Semitransparent" align="top" border="0" height="16" width="16"></a>. Quan la capa mostra la icona <a href="javascript:alert('Botó per desplegar les categories de la llegenda.\nAquesta característica només està disponible per a les capes que presenten diverses categories representades amb diferents colors o per a models digitals del terreny (MDT's).');void(0);"><img src="mes.gif" alt="Desplegar les categories" align="top" border="0" height="9" width="9"></a>
+a la part esquerra, indica que les categories de la capa a la llegenda
+estan ocultes i que poden ser mostrades prement aquest símbol. En
+aquest cas, podeu tornar a ocultar-les prement sobre <a href="javascript:alert('Botó per plegar les categories de la llegenda.\nQuan es mostra el mateix botó però amb un color més apagat, vol dir que aquesta capa no desplega categories.');void(0);"><img src="menys.gif" alt="plegar les categories" align="top" border="0" height="9" width="9"></a>.</p></li>
+				<li><p class="text_general"><span class="text_verd_titol">Imatges:</span> s'ofereix un llistat d'imatges on cada capa pot ser activada o desactivada amb el botó <a href="javascript:alert('Botó d\'activació i desactivació de la capa.\nNomés una sola imatge pot ser mostrada a la vegada.');void(0);"> <img src="radio.gif" alt="Desactivar capa" align="top" border="0" height="16" width="16"></a>.
+Aquest tipus de botó indica que només una imatge pot ser mostrada
+alhora. És possible apagar totes les imatges fent clic sobre l'únic
+radial marcat (per tal de desmarcar-lo). Quan una imatge està activada,
+es despleguen els seus estils de visualització en cas que n'hi hagi més
+d'un. Llavors és possible triar la visualització d'un d'aquests estils.<br>
+				  <img src="estils.png" height="49" width="191">				</p>
+				</li>
+				</ul>				
+				<p class="text_general">Les metadades poden ser mostrades prement sobre el text descriptiu de la capa <a href="javascript:alert('Un clic sobre aquest text porta a les metadades de la capa.');"> <img src="metadata.png" height="15" width="147"></a>. Aquestes són mostrades en una finestra diferent.</p>
+				</td>			
+				<td width="2%"></td>
+			    <td><img src="navlleg.png" height="377" width="225"></td>
+				<td width="3%"></td>
+		</tr>
+		</table>
+	</td></tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">3</td>
+		<td width="97%"><a name="coord"><span class="titol_t1">Coordenades</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table>
+	   	   <tr>		   		
+	         <td><p class="text_general">Aquesta
+àrea mostra les coordenades de la projecció típicament emprada a la
+zona d'estudi i les coordenades geogràfiques (longitud/latitud) de la
+posició del cursor sobre la vista o sobre el mapa de situació.</p>
+				<a href="javascript:alert('Mostra les coordenades de la projecció UTM i geogràfiques (longitud/latitud) de la posició del cursor sobre la vista o sobre el mapa de situació.');"> <img src="coord.png" height="28" width="448"></a></td>
+			<td width="3%"></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">4</td>
+		<td width="97%"><a name="botons"><span class="titol_t1">Botons</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table width="100%">
+	   	   <tr>
+		   		<td width="99%"><img src="barra_botons.png" height="25" width="688"><font size="2">					<br>
+					<small>(feu clic sobre els elements d'aquesta barra de botons per obtenir informació sobre les seves funcionalitats)</small>
+			 </font></td>
+				<td width="3%"></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">5</td>
+		<td width="97%"><a name="vista"><span class="titol_t1">Vista</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table width="100%">
+	   	   <tr>		   		
+	          <td width="97%"><p class="text_general">L'àrea de la vista mostra les diverses capes activades des de la llegenda. <br>Quan
+es passa el cursor sobre la vista, es mostren les coordenades de la
+projecció i geogràfiques a la caixa de coordenades (àrea 3). També es
+poden realitzar les accions de centrat de la vista, zoom de finestra i
+consulta fent clic sobre la vista i depenent de l'estat de la barra de
+botons.</p>           
+				<table>
+				  <tr> 
+					<td align="left" width="2%"><a href="javascript:alert('Desplaçament diagonal');void(0);"><img src="f_inc11.gif" alt="Desplaçament" border="0" height="10" width="10"></a></td>
+					<td align="center" width="4%"><a href="javascript:alert('Desplaçament vertical');void(0);"><img src="f_pla1.gif" alt="Desplaçament" border="0" height="10" width="15"></a></td>
+					<td align="right" width="2%"><a href="javascript:alert('Desplaçament diagonal');void(0);"><img src="f_inc21.gif" alt="Desplaçament" border="0" height="10" width="10"></a></td>
+					<td rowspan="3" width="2%">&nbsp;</td>					
+	                <td width="90%" rowspan="3" valign="top" class="text_general">Els
+botons triangulars que hi als marges de la vista permeten desplaçar-nos
+lateralment, verticalment o en diagonal sobre les capes. El percentatge
+de salt és configurable des de la caixa d'<a href="#caixa_opcions">opcions de configuració</a>.</td>
+				  </tr>
+				  <tr> 
+					<td><a href="javascript:alert('Desplaçament horitzontal');void(0);"><img src="f_ver1.gif" alt="Desplaçament" border="0" height="15" width="10"></a></td>
+					<td>&nbsp;</td>
+					<td align="right"><a href="javascript:alert('Desplaçament horitzontal');void(0);"><img src="f_ver2.gif" alt="Desplaçament" border="0" height="15" width="10"></a></td>
+				  </tr>
+				  <tr> 
+					<td align="left"><a href="javascript:alert('Desplaçament diagonal');void(0);"><img src="f_inc12.gif" alt="Desplaçament" border="0" height="10" width="10"></a></td>
+					<td align="center"><a href="javascript:alert('Desplaçament vertical');void(0);"><img src="f_pla2.gif" alt="Desplaçament" border="0" height="10" width="15"></a></td>
+					<td align="right"><a href="javascript:alert('Desplaçament diagonal');void(0);"><img src="f_inc22.gif" alt="Desplaçament" border="0" height="10" width="10"></a></td>
+				  </tr>
+				</table>
+			 </td>
+				<td width="3%"></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br><br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">6</td>
+		<td width="97%"><a name="filtres"><span class="titol_t1">Consulta típica</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table>
+	   	   <tr>
+             <td><p class="text_general">Permeten
+resituar la vista sobre un determinat àmbit o regió administrativa (per
+exemple: un municipi, comarca o conca hidrogràfica). Primer s'ha de
+seleccionar del primer desplegable el tipus d'objecte (municipi,
+comarca, etc). Després cal seleccionar l'objecte del segon desplegable.
+La vista se centra sobre l'àmbit de l'objecte i s'adapta el nivell de
+zoom perquè l'objecte sigui totalment visible.</p>
+             <p class="text_general" align="left"><img src="AnarA.png" height="70" width="305"></p></td>
+			 <td width="3%"></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br><br>
+<table class="taula_seccio">
+	<tr class="tr_seccio">
+	<td width="97%"><a name="instruc_espec"><span class="titol_t1">Instruccions específiques del navegador</span></a></td>
+	<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+  </tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">1</td>
+		<td width="97%"><a name="caixa_opcions"><span class="titol_t1">Caixa d'opcions de configuració</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table>
+		<tr>
+			   <td><p class="text_general">Fent un clic sobre el botó d'opcions apareix aquesta caixa que ens permet configurar alguns			   aspectes del navegador:</p>
+				   <ul>
+				   <li class="text_general"><span class="text_verd_titol">Punt origen: </span>Coordenada actual de l'angle inferior esquerre de la vista. Pot ser editat per anar a un indret de coordenada coneguda.</li>
+					<li class="text_general"><span class="text_verd_titol">Ample i alt: </span>Permeten definir la mida de l'àrea de visualització, si el mode automàtic (<span class="text_verd">Omplir tota la finestra</span>) està desactivat. Si la casella <span class="text_verd_titol">Omplir tota la finestra</span> està activada redimensiona <span class="text_verd">Ample i alt</span> per omplir tota l'àrea de la vista disponible (àrea 5).</li>
+					<li class="text_general"><span class="text_verd_titol">Perc. de salt&gt;:</span>
+Indica el percentatge de la imatge que es desplaça quan s'utilitzen els
+triangles de desplaçament de l'àrea de la vista (àrea 5).</li>
+					<li class="text_general"><span class="text_verd_titol">Coord: </span>Permet configurar diversos aspectes sobre les coordenades que es mostren al navegador.</li>
+						<ul>
+						<li class="text_general"><span class="text_verd_titol">N. decimals: </span>És el nombre de dígits decimals de les coordenades mostrades.</li>
+						<li class="text_general"><span class="text_verd_titol">Cantonades: </span>Permet configurar com es veuran les coordenades dels extrems de l'àrea de la vista: segons la <span class="text_verd">projecció</span> o <span class="text_verd">Longitud/latitud</span>. Pel cas <span class="text_verd">longitud/latitud</span> es pot decidir si es volen en graus decimals o en graus, minuts i segons: <img src="visible.gif" alt="Graus, minuts i segons" align="middle" height="16" width="16"> (º ' ''). </li>
+						<li class="text_general"><span class="text_verd_titol">Actuals: </span>Permet configurar com es veuran les coordenades de l'àrea de coordenades: segons la <span class="text_verd">projecció</span> o <span class="text_verd">longitud/latitud</span>.<br>Aquestes coordenades indiquen la posició actual del cursor sobre la vista o sobre el mapa de situació. Per al cas <span class="text_verd">longitud/latitud</span> es pot decidir si es volen en graus decimals o en graus, minuts i segons:<img src="visible.gif" alt="Graus, minuts i segons" align="middle" height="16" width="16"> (º ' ''). </li>
+					  </ul>		  	
+				   </ul>
+		   	   </td>
+				<td width="2%"></td>
+				<td align="right" valign="top">
+                  <div align="center"><img src="opcions.png" height="358" width="343"> </div></td>
+				<td width="3%"></td>
+		</tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">2</td>
+		<td width="97%"><a name="situa_zona"><span class="titol_t1">Situació sobre la zona d'interès</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td colspan="3">
+	   <table>
+	   	   <tr>
+		   		<td><p class="text_general">Per tal de situar-se sobre l'àmbit desitjat podeu fer-ho a través de qualsevol de les següents vies:</p>
+				<ul>
+				<li class="text_general">Fent un clic sobre del mapa de situació (àrea 1) i ajustant el zoom (amb els botons de lupa). <small><a href="#situa">Saber més detalls sobre el mapa de situació.</a></small></li>
+				<li class="text_general">Desplaçant-se lateralment amb els botons triangulars dels costats de la imatge i ajustant el zoom. <small><a href="#vista">Saber més detalls sobre la vista.</a> ( àrea 5)</small></li>
+				<li class="text_general">Seleccionant dels desplegables de l'àrea 6 (consulta típica), per exemple: un nom de comarca, municipi o conca hidrogràfica. <small><a href="#filtres">Saber més detalls sobre les consultes típiques.</a></small></li>
+				<li class="text_general">Fent clic sobre la vista per centrar el punt clicat. <small><a href="#botons">Saber més detalls sobre els botons.</a> (botó de l'àrea 4)</small></li>
+				<li class="text_general">Fent un zoom de finestra.<small><a href="#botons">Saber més detalls sobre els botons.</a> (botó de l'àrea 4)</small></li>
+				</ul>
+				<p class="text_general">Com
+que la caixa del navegador té unes certes proporcions, de vegades no és
+possible obtenir exactament l'àmbit desitjat. En aquest cas, podeu
+modificar la mida de la caixa del navegador d'Internet. L'àmbit de la
+vista s'adapta a la mida de la caixa del navegador. Aquest petit truc,
+és similar al que s'emprava per triar exactament l'àrea d'impressió en
+el MiraMon professional v.4 o inferior.</p>
+				</td>
+				<td width="3%"></td>
+		  </tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">3</td>
+		<td width="97%"><a name="descarr_zona"><span class="titol_t1">Descàrrega de la zona d'interès</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td></td>	   
+	   <td>
+	   <table width="100%">
+	   		<tr>
+			  <td>
+			  <table>
+			  <tr>			  			  			 
+			  <td colspan="2" valign="top"><p class="text_general"> Alguns navegadors permeten la descàrrega de la cartografia a la màxima resolució disponible a partir de WCS.<br> Per a descarregar una de les imatges, només cal fer clic sobre el botó de la mirarroba <img src="getcov.gif" align="top" border="0" height="16" width="18">
+que hi ha al costat de la imatge desitjada a la llegenda (àrea 2). A
+través de caixes de diàleg se'ns demanaran les bandes desitjades i el
+format.</p></td>
+			  </tr>
+			  <tr><td height="20"></td></tr>
+			  <tr><td>
+			  <table width="100%"><tr><td valign="top" width="250"><img src="navwcs.png" height="366" width="289"></td>
+			  <td width="20"></td>
+			  <td valign="top"><p class="text_general">Amb
+aquesta caixa definim si es vol generar un retall d'una combinació RGB
+(en format JPEG) o un conjunt de bandes determinat (en format TIFF o
+IMG de MiraMon).</p>
+			  </td></tr></table></td></tr>
+			  <tr><td><table><tr><td align="justify" valign="top"><p class="text_general">Amb aquesta caixa determinem el format de sortida. Hi ha dues possibilitats:</p>
+			  <ul>
+				<li><p class="text_general">Trieu <span class="text_verd_titol">Mapa Comprimit de MiraMon (MMZ)</span> si voleu treballar amb la versió de MiraMon Professional, o amb el <a href="#mmr">Lector de Mapes de MiraMon</a>.
+Amb aquesta opció obtindreu un fitxer que s'obre amb un simple clic i
+que, a més, és directament superposable amb altres capes disponibles
+des d'altres servidors.</p></li>
+				<li><p class="text_general">Trieu <span class="text_verd_titol">JPEG/GeoTIFF</span>
+si voleu obtenir les capes en un format ompatible amb altres SIG's i
+programes de disseny gràfic. Obtindreu un fitxer comprimit en format
+ZIP que conté la combinació RGB en un JPEG (acompanyada d'un fitxer de
+metadades de MiraMon i un fitxer de georeferència JPW) o un conjunt de
+fitxers GeoTIFF (format TIFF georeferenciat; també acompanyats dels
+fitxers de georeferència TFW).</p></li>
+			  </ul>
+			  </td>
+ 			  <td width="20"></td>
+			  <td valign="top"> <img src="navwcs2.png" height="344" width="279"></td>
+			  </tr></table></td>
+			  
+			  </tr>
+			  </table>
+			  </td>		   		
+			  <td width="3%"></td>
+		  </tr>
+		  <tr><td>
+			<table border="0">
+			  <tr>		   
+			<td valign="top"><p class="text_general">El
+procés triga alguns segons (depenent de l'àmbit demanat). Dins de la
+caixa blanca es descriu l'estat del procés de generació de les capes.</p></td>
+			<td width="20"></td>		
+		    <td valign="top" width="250"><img src="navwcs3.gif" border="0"></td></tr>
+			<tr><td colspan="3" height="20"></td></tr>
+			<tr> <td><img src="navwcs4.gif" border="0"></td>
+			<td width="20"></td>
+			<td valign="top"><p class="text_general">Si només voleu generar el fitxer per a visualitzar-lo en una altra màquina, és convenient que useu l'opció <a href="javascript:alert('Preparar i oferir:\n\nPrepara la capa i ofereix un vincle per poder guardar-la (sense obrir-la). Així es pot traslladar fàcilment a un altre ordinador.');void(0);"> <img src="nav_prep_ofe.jpg" align="middle" border="0" height="24" width="134"></a> i guardar el fitxer fent servir el botò dret de ratolí (com s'il·lustra).</p></td>	  						  		  </tr>
+		</table>								  
+		</td>
+		<td width="3%"></td>		
+		</tr>
+		<tr>
+		<td><p class="text_general">Com
+que les imatges completes tenen un volum considerable, es recomana que
+abans de descarregar-les ajusteu l'àmbit estrictament a la zona
+d'interès i que seleccioneu només les bandes necessàries.</p></td>
+		<td width="3%"></td>
+		</tr>
+	     </table>		  	   
+	</td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">4</td>
+		<td width="97%"><a name="mmr"><span class="titol_t1">Instal·lació del Lector de Mapes de MiraMon</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+       <td width="3%"></td>	   
+	   <td width="97%">
+	   <table>
+	   <tr>
+          <td><p class="text_general">Si
+no teniu una llicència del MiraMon professional, és necessari
+instal·lar el Lector de Mapes de MiraMon per poder visualitzar fitxers
+descarregats en format MMZ. Només cal que el descarregueu i
+l'instal·leu prement la icona <img src="instmmr.png" height="21" width="25"> ara.<br>	
+            També podeu obtenir una versió actualitzada a la web del lector <a href="http://www.creaf.uab.es/miramon/mmr/cat">http://www.creaf.uab.es/miramon/mmr/cat</a>. </p></td>
+        <td width="3%"> </td>
+		</tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">5</td>
+		<td width="97%"><a name="animacions"><span class="titol_t1">Animacions</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>	
+	</td>
+	</tr>
+	<tr>
+       <td width="3%"></td>	   
+	   <td width="97%">
+	   <table>
+	   <tr>
+        <td valign="top"><p class="text_general">Fent
+clic sobre el botó d'animacions s'obre aquesta finestra d'animacions,
+que ens permet veure les imatges, que formin part d'una mateixa
+seqüencia temporal, seqüencialment com si es tractés d'un video. L'àrea
+carregada a la vista serà l'àrea usada en l'animació.<br><br>A la part central i superior de la finestra, podem escollir quina sèrie temporal volem veure com un video i amb quin estil.<br>Mitjançant el botons que es troben a la part inferior de la finestra podem controlar l'animació (engegar, aturar,...). <br><br>
+A la part esquerra de la finestra, es mostra en una tira totes les
+imatges que formen part d'una animació; mitjançant un botó de tipus
+"check", es pot seleccionar si es descarta alguna imatge en la animació
+(això és útil per a sèries d'imatges satèl·lit on alguna de les imatges
+pot contenir núvols. </p></td>
+		<td width="1%"></td>
+		<td><img src="video.png" height="422" width="540"></td>
+        <td width="3%"> </td>
+		</tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+<br>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">6</td>
+		<td width="97%"><a name="projeccio"><span class="titol_t1">Canvi de projecció automàtica</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>	
+	</td>
+	</tr>
+	<tr>
+       <td width="3%"></td>	   
+      <td width="97%">
+	   <table>
+	   <tr>
+        <td valign="top" width="81%"> <p class="text_general">El
+navegador de mapes del MiraMon permet fer canvis de projeccions
+automàticament en uns sistemes de projecció prefixats pel creador del
+servidor. El sistema canvia la cartografia d'un a l'altre
+automàticament.</p></td>
+		<td width="0%"></td>
+		<td width="17%"><div align="center"><img src="CanviProjeccio.png" border="0" height="51" width="111"></div></td>
+        <td width="2%"> </td>
+		</tr>
+		</table>
+      </td>
+	</tr>
+</table><p></p>
+<table border="0" cellspacing="0" width="100%">
+<tr>
+	<td width="3%"></td>
+	<td width="97%">
+	<table class="taula_seccio">
+	  <tr class="tr_seccio">
+		<td width="3%" class="titol_t1">7</td>
+		<td width="97%"><a name="projeccio"><span class="titol_t1">Afegir capes d'altres servidors</span></a></td>
+		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+	  </tr>
+	</table>	
+	</td>
+  </tr>
+	<tr>
+       <td width="3%"></td>	   
+	   <td width="97%">
+	   <table>
+	   <tr>
+        <td valign="top"><p class="text_general">Fent
+clic sobre el botó d'afegir capes s'obre la finestra d'incorporar
+servidors. Cal indicar l'adreça on està el servidor que es vol
+incorporar i prémer acceptar. Immediatament es desplega el llistat de
+capes que conté el servidor. Seleccionem la capa que ens és d'interès i
+premem afegir.</p>
+        <p class="text_general">Per defecte, la
+nova capa afegida es col·loca a la llegenda en última posició. Malgrat
+això, el navegador de mapes del MiraMon permet moure la capa: una
+posició o bé col·locar-la damunt de tot. Per a fer-ho, només cal clicar
+damunt el títol de la capa. En fer-ho, es desplega una petita
+finestreta amb les diferents opcions. Aquesta finestreta dóna també
+accés a les metadades de la capa. La nova opció de moure les capes, és
+vàlida també per a qualsevol de les capes ja existents.</p>
+        <div align="center"><img src="MoureCapes.png" border="0" height="178" width="233">
+        </div>
+        <p class="text_general">Cal
+recordar que el servidor a incorporar, ha de servir capes en el mateix
+sistema de projecció escollit en el navegador. Si no, el navegador no
+ens deixarà continuar. Cal també recordar que la nova capa afegida
+només serà present en aquella "sessió" del navegador. En el moment en
+que refresquem de nou la finestra del navegador, que canviem el sistema
+de projecció o que tanquem i tornem a obrir el navegador, perdrem les
+capes afegides.</p>
+		</td>
+		<td width="1%"></td>
+		<td><img src="AfegirCapes.png" border="0" height="388" width="541"></td>
+        <td width="3%"> </td>
+		</tr>
+		</table>
+	   </td>
+	</tr>
+</table>
+</body>
+</html>
