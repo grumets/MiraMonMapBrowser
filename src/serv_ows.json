@@ -1,0 +1,204 @@
+[
+		{
+			"url": "http://www.ideandorra.ad/wmscarto5000_2003/request.aspx", 
+			"nom": {
+				"cat": "Mapa topogràfic d'Andorra 1:5000 any 2003 (Vectorial)",		
+				"spa": "Mapa topográfico de Andorra 1:5000 año 2003 (Vectorial)",
+                "eng": "Topographic map of Andorra 1:5000 year 2003 (Vector)",
+				"fre": "Carte topographique d'Andorre 1:5000 année 2003 (Vectoriel)"
+			},
+			"tipus": "TipusWMS", 	
+			"categoria": {
+				"nom": "IDEA",
+				"desc": "Infrastructura de Dades Espacials D'Andorra"
+			}
+		},
+		{
+			"url": "http://www.ideandorra.ad/wmsortoIRC/request.aspx", 
+			"nom": {
+				"cat": "Ortofotos Infraroig Color (IRC) 1:5000 de l'any 2003 del Principat d'Andorra",
+				"spa": "Ortofotos Infrarrojo Color (IRC) 1:5000 del año 2003 del Principado de Andorra",
+				"eng": "Infrared Color Ortophotos (IRC) 1:5000 year 2003 from Andorran Principate",
+				"fre": "Photographies aériennes infra-rouge couleur (IRC) 1:5000ème de 2003 de la principauté d'Andorre"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEA", 
+				"desc": "Infrastructura de Dades Espacials D'Andorra"
+			}
+		},
+		{
+			"url": "http://www.ideandorra.ad/wms_carrerer/request.aspx", 
+			"nom": {
+				"cat": "Guia de carrers d’Andorra", 
+				"spa": "Guia de calles de Andorra",
+                "eng": "Street guide of Andorra",
+				"fre": "Guide des rues d'Andorre"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEA",
+				"desc": "Infrastructura de Dades Espacials D'Andorra"
+			}
+		},
+		{
+			"url": "http://www.ideandorra.ad/wms_espaisprotegits/request.aspx", 
+			"nom": {
+				"cat": "Espais protegits, espais d'interès per la fauna i zones regulades d'Andorra",
+				"spa": "Espacios protegidos, espacios de interés para la fauna y zonas reguladas de Andorra",
+				"eng": "Protected spaces, spaces of fauna interaction and regulatory zones of Andorra",				
+"fre": "Espaces protégés, espaces d'intérêts faunique et zones surveillées d'Andorre"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEA", 
+				"desc": "Infrastructura de Dades Espacials D'Andorra"
+			}
+		},
+		{
+			"url": "http://www.incendis.ad/cgi-bin/MiraMon5_0.cgi",
+			"nom": {
+				"cat": "Mapa de Perill d’Incendi Forestal a Andorra (CENMA)",
+				"spa": "Mapa de Peligro de Incendio Forestal en Andorra (CENMA)",
+				"eng": "Forest Fire Risk Map of Andorra (CENMA)",
+				"fre": "Carte du Risque d'Incendies de Forêt en Andorre (CENMA)"
+			},
+			"tipus": "TipusWMS"
+		},
+		{
+			"url": "http://oslo.geodata.es/wms4a/pallarssobira/servidor/info_general",
+			"nom": {
+				"cat": "Servidor de mapes amb informació general del Consell Comarcal del Pallars Sobirà",
+				"spa": "Servidor de mapas con información general del Consejo Comarcal del Pallars Sobirà",
+				"eng": "Map server with general information of the Consejo Comarcal del Pallars Sobirà",
+				"fre": "Serveur de cartes avec information du Conseil Régional du Pallars Sobirà"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEC", 
+				"desc": "Infrastructura de Dades Espacials de Catalunya"
+			}
+		},
+		{
+			"url": "http://www.opengis.uab.es/cgi-bin/acdc/MiraMon5_0.cgi",
+			"nom": {
+				"cat": "Atles Climàtic Digital de Catalunya",
+				"spa": "Atlas Climático Digital de Cataluña",
+				"eng": "Climatic Digital Atlas of Catalunya",
+				"fre": "Atlas climatique digital de la Catalogne"
+			},
+			"tipus": "TipusWMS"
+		},
+		{
+			"url": "http://www.opengis.uab.es/cgi-bin/iberia/MiraMon5_0.cgi ",
+			"nom": {
+				"cat": "Atles Climàtic Digital de la Península Ibèrica",
+				"spa": "Atlas Climático Digital de la Península Ibérica",
+				"eng": "Climatic Digital Atlas of the Iberian Peninsula",
+				"fre": "Atlas climatique digital de la Péninsule Ibérique"
+			},
+			"tipus": "TipusWMS"
+		},
+		{
+			"url": "http://shagrat.icc.es/lizardtech/iserv/ows",
+			"nom": {
+				"cat": "Servidor de dades ràster del ICGC",
+				"spa": "Servidor de datos ráster del ICGC",
+				"eng": "Raster data server of the ICGC",
+				"fre": "Serveur de données raster de la ICGC"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "ICC", 
+				"desc": "Institut Cartogràfic y Geologic de Catalunya"
+			}
+		},
+		{
+			"url": "http://www.idee.es/wms/IDEE-Base/IDEE-Base",
+			"nom": {
+				"cat": "IDEE-Mapa Base (IGN)",
+				"spa": "IDEE-Mapa Base (IGN)",
+				"eng": "IDEE-Base Map (IGN)",
+				"fre": "IDEE-Carte Base (IGN)"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEE", 
+				"desc": "Infrastructura de Datos Espaciales de España"
+			}
+		},
+		{
+			"url": "http://www.idee.es/wms/IGN-Corine/",
+			"nom": {
+				"cat": "IGN-Ocupació del Sol (Corine)",
+				"spa": "IGN-Ocupación del Suelo (Corine)",
+				"spa": "IGN-Land Ocupation (Corine)",
+				"fre": "IGN-Occupation du Sol (Corine)"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEE", 
+				"desc": "Infrastructura de Datos Espaciales de España"
+			}
+		},
+		{
+			"url": "http://www.idee.es/wms/IGN-1EdicionMTN50/IGN-1EdicionMTN50",
+			"nom": {
+				"cat": "Mapa Topogràfic Nacional d'Espanya",
+				"spa": "Mapa Topográfico Nacional de España",
+				"eng": "Topographic National Map of Spain",
+				"fre": "Carte topographique Nationale d'Espagne"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IDEE", 
+				"desc": "Infrastructura de Datos Espaciales de España"
+			}
+		},
+		{
+			"url": "http://www2.ign.es/WMS_SIGNA/request.aspx",
+			"nom": {
+				"cat": "Cartografia de base SIGNA",
+				"spa": "Cartografía de base SIGNA",
+				"eng": "Base Cartography SIGNA",
+				"fre": "Cartographie de base SIGNA"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "IGN", 
+				"desc": "Instituto Geográfico Nacional"
+			}
+		},
+		{
+			"url": "http://www.idee.es/wms/PNOA/PNOA",
+			"nom": "PNOA",
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "PNOA", 
+				"desc": "Plan Nacional de Ortofotografía Aérea"
+			}
+		},
+		{
+			"url": "http://wms.jpl.nasa.gov/wms.cgi ",
+			"nom": "NASA",
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "NASA", 
+				"desc": "NASA"
+			}
+		},
+		{
+			"url": "http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx",
+			"nom": {
+				"cat": "Cartografia cadastral d'Espanya",
+				"spa": "Cartografía catastral de España",
+				"eng": "Cadastral Cartography of Spain",
+				"fre": "Cartographie cadastrale de l'Espagne"
+			},
+			"tipus": "TipusWMS",
+			"categoria": {
+				"nom": "DGC", 
+				"desc": "DG catastro"
+			}
+		}
+]

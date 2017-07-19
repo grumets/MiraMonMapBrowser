@@ -1,0 +1,264 @@
+<html>
+
+<!--
+    This file is part of MiraMon Map Browser.
+
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Foobar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
+
+    Copyright 2001, 2016 Xavier Pons
+
+    Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
+    (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
+    dins del grup de MiraMon. MiraMon és un projecte del Centre
+    de recerca i aplicacions forestals (CREAF) que elabora programari de 
+    Sistema d'Informació Geogràfica i de Teledetecció per a la 
+    visualització, consulta, edició i anàlisi de mapes ràsters i 
+    vectorials. Elabora programari d'escriptori i també servidors i clients 
+    per Internet. No tots aquests productes són gratuïts o de codi obert. 
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència "GNU General Public 
+    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+-->
+<head>
+<title>Descàrrega de MMZ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<script LANGUAGE="JavaScript">
+<!---   Inici de JavaScript  
+
+function TancaCaixaMMZ()
+{
+    parent.opener.focus();
+    parent.opener.MMZWindow=null;
+    parent.close();	
+    return false;  //per no efectuar l'acció de submit del formulari
+}
+
+function CreaEstatDescarrega(temps)
+{
+var i_capa;
+var cdns= [];
+
+	with (parent.opener)
+	{
+		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+		{
+			if (ParamCtrl.capa[i_capa].descarregable=="si")
+				break;
+		}
+		cdns.push("VERSION=1.1.0&REQUEST=DonaEstatProces&IDPROCES=",self.IdProces,"_",self.NIdProces,"&TEMPS_REFRESC=",temps,"&FORMAT=text/html");
+		var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : false);
+
+	}
+//    alert(cadena_cgi);
+	parent.mmz3.location.href=cadena_cgi;
+}
+
+function RedibuixaMMZ(oferir_vincle)
+{
+var i_capa;
+var cdns=[];
+
+	with (parent.opener)
+	{
+		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+		{
+			if (ParamCtrl.capa[i_capa].descarregable=="si")
+				break;
+		}
+	}
+	if (i_capa<parent.opener.capa.length)
+	{
+		//alert("Aquest procediment inicia la descarrega d\'un fitxer MMZ que podrà ser visualitzat amb el Lector Universal de Mapes del MiraMon");
+		/*Quan es contrueixi un portal que pugui tenir mmz's en més d'un 
+		servidor, s'hauri de revisar aquest codi per enviar tantes peticions 
+		com servidors diferent sobre altres frames ocultes.*/
+		parent.mmz2.document.open();
+		with (parent.opener)
+		{
+			this.parent.mmz2.document.write("<HTML>"+ 
+						   "<body bgcolor=\"#D4D0C8\" text=\"#003300\" TOPMARGIN=\"2\" LEFTMARGIN=\"2\" MARGINWIDTH=\"2\" MARGINHEIGHT=\"0\">"+
+				           "<CENTER>" + DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Espere por favor", "eng":"Please, wait", "fre":"Attendez, s'il-vous-plaît"}) + "...<br>"+
+						   "<small>(" + DonaCadenaLang({"cat":"La generació d'un MMZ podria trigar alguns minuts", "spa":"La generación de un MMZ podría durar algunos minutos", "eng":"Generation of an MMZ could take some minutes", "fre":"La création d'un MMZ peut prendre quelques minutes"}) + ")</small><br>"+
+						   DonaCadenaLang({"cat":"Preparant un mapa amb les capes sol·licitades", "spa":"Preparando un mapa con las capas solicitadas", "eng":"Preparing a map with requested layers", "fre":"Préparant une carte avec les couches demandées"}) + ":<br>");
+
+			var env=DonaEnvolupantDescarregaAmbCTipicaCompleta();
+
+			cdns.push("VERSION=1.1.0&REQUEST=GetMap&SRS=", 
+				ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
+				"&BBOX=", env.MinX, ",", env.MinY, ",", env.MaxX, ",", env.MaxY, 
+				"&WIDTH=", ParamInternCtrl.vista.ncol, "&HEIGHT=", ParamInternCtrl.vista.nfil, "&LAYERS=");
+			var i_mmz=0;
+			for (var i=ParamCtrl.capa.length-1; i>=0; i--)
+			{
+			    if (ParamCtrl.capa[i].descarregable=="si")
+				{
+				    if (DonaNomServidorCaracterFinal(ParamCtrl.capa[i].servidor)!=DonaNomServidorCaracterFinal(ParamCtrl.capa[i_capa].servidor))
+					{
+					    alert(DonaCadenaLang({"cat":"Totes les capes a descarregar han de ser del mateix servidor. Desactiva: "+DonaCadena(ParamCtrl.capa[i].desc)+" i torna a intentar-ho",
+										  "spa":"Todas las capas a descargar deben residir en el mismo servidor. Desactive: "+DonaCadena(ParamCtrl.capa[i].desc)+" y vuelva a intentarlo",
+										  "eng":"All layers to download have to be in the same server. Please unselect: "+DonaCadena(ParamCtrl.capa[i].desc)+" and try it again",
+										  "fre":"Toutes les couches doivent être télécharger du même serveur. Désactivez: "+DonaCadena(ParamCtrl.capa[i].desc)+" et réessayez"}));
+						return 1;
+					}
+					if (i_mmz)
+					    cdns.push(",");
+					cdns.push(ParamCtrl.capa[i].nom);
+					i_mmz++;
+					this.parent.mmz2.document.write(" " + i_mmz + ".- " + DonaCadena(ParamCtrl.capa[i].desc) + "<br>");
+				}
+			}
+			cdns.push("&FORMAT=application/x-mmz");
+			if (oferir_vincle)
+				cdns.push("; disposition=attachment");
+
+			var form_ctipica=DonaFormulariCTipicaCompleta();
+
+			//Faig una primera volta per saber si caldrà posar el parametre STYLES=
+			for (var i=ParamCtrl.capa.length-1; i>=0; i--)
+			{
+				if (ParamCtrl.capa[i].descarregable=="si")
+				{
+					if ((ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length && ParamCtrl.capa[i].estil[ParamCtrl.capa[i].i_estil].nom) ||
+                                            (form_ctipica && form_ctipica.retallar[0].checked) /*fulls_sencers: &STYLES=FullsSencers*/)
+					{
+					    	cdns.push("&STYLES=");
+						break;
+					}
+				}
+			}
+
+			if (i>=0)
+			{
+			    i_mmz=0;
+			    for (var i=ParamCtrl.capa.length-1; i>=0; i--)
+			    {
+			        if (ParamCtrl.capa[i].descarregable=="si")
+				{
+					if (i_mmz)
+					    cdns.push(",");
+					if (ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length && ParamCtrl.capa[i].estil[ParamCtrl.capa[i].i_estil].nom)
+					{
+	 					cdns.push(ParamCtrl.capa[i].estil[ParamCtrl.capa[i].i_estil].nom);
+						if (form_ctipica && form_ctipica.retallar[0].checked) //fulls_sencers: &STYLES=FullsSencers
+							cdns.push(":FullsSencers");
+					}
+					else if (form_ctipica && form_ctipica.retallar[0].checked) //fulls_sencers: &STYLES=FullsSencers
+					{
+						cdns.push("FullsSencers");
+					}
+					i_mmz++;
+				}
+			    }
+			}
+			//·$·NJ: això no crec que funcioni està malament, en un estil molt antic
+			if (form_ctipica && form_ctipica.retallar[2].checked) //per_objecte
+			{
+		            for (var i=0; i<capa_consulta.length; i++)
+			    {
+			     	if (form_ctipica.capa[i].checked)
+				{
+			        	//triar l'ambit del objecte.
+					cdns.push("&TYPENAME=", capa_consulta[i].nom, "&FILTER=(<Filter xmlns=\"http://www.opengis.net/ogc\"><PropertyIsEqualTo><PropertyName>", capa_consulta[i].nom, ".", capa_consulta[i].camp, "</PropertyName><Literal>", capa_consulta[i].proj_camp[ctipica_valor].valor, "</Literal></PropertyIsEqualTo></Filter>)");
+					break;
+				}
+			    }
+			}
+
+			if (self.IdProces)
+			{
+			    self.NIdProces++;
+			    cdns.push("&IDPROCES=", self.IdProces, "_", self.NIdProces);
+			}
+			//Eliminat el 13-07-2008
+			//if (oferir_vincle)
+			//    cdns.push("&INFO_FORMAT=text/html");
+			var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : false);
+			CreaIOmpleEventConsola("GetMapMMZ", i_capa, cadena_cgi, TipusEventGetMap);
+		}
+		
+		parent.mmz2.document.write("</CENTER>"+
+						"</body>"+
+				           "</HTML>");
+		parent.mmz2.document.close();
+		parent.mmz2.location.href=cadena_cgi;
+		//alert(cadena_cgi);	
+		if (parent.opener.IdProces  && parent.opener.NIdProces)
+			setTimeout('CreaEstatDescarrega(parent.opener.ParamCtrl.TempsRefresc)',parent.opener.ParamCtrl.TempsRefresc);
+	}
+	else
+	{
+		with (parent.mmz2)
+		{
+			document.open();
+			document.write("<HTML>"+ 
+						   "<body bgcolor=\"#D4D0C8\" text=\"#DD0000\" TOPMARGIN=\"2\" LEFTMARGIN=\"2\" MARGINWIDTH=\"2\" MARGINHEIGHT=\"0\">"+
+				           "<CENTER><PRE>"+parent.opener.DonaCadenaLang({"cat":"No s'ha sel·lecionat cap capa per ser inclosa dins d'un MMZ", 
+						   												"spa":"No se ha seleccionado ninguna capa para ser incluida dentro de un MMZ", 
+																		"eng":"No layer has been sellected for being included on a MMZ", 
+																		"fre":"Aucune couche n'a été sélectionnée pour être insérée dans un MMZ"})+".</PRE></CENTER>"+
+						   "</body>"+
+				           "</HTML>");
+			document.close();
+		}
+	}
+}
+
+// --->
+</script>
+</head>
+
+<body bgcolor="#D4D0C8" text="#000000" TOPMARGIN="2" LEFTMARGIN="2" MARGINWIDTH="2" MARGINHEIGHT="0">
+<center>
+<script>
+with (parent.opener)
+{
+    this.document.write(DonaCadena(ParamCtrl.TitolCaixa));
+}
+</script>
+
+<br>
+<font face="Verdana, Arial, Helvetica, sans-serif" size=2><b>
+<script LANGUAGE="JavaScript">
+<!--
+	document.write(parent.opener.DonaCadenaLang({"cat":"Descàrrega de cartografia", "spa":"Descarga de cartografía", "eng":"Downloading the Cartography", "fre":"Téléchargement de cartographie"}));
+// -->
+</script>
+</b><br>
+</font>
+<small>
+<script LANGUAGE="JavaScript">
+<!--
+	if (parent.opener.ParamCtrl.DescarregesCertificades)
+		document.write(parent.opener.DonaCadenaLang({"cat":"Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
+							"spa":"Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
+							"eng":"If you don't have MiraMon Universal Map Reader installed or updated",
+							"fre":"Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon"})+
+				", <a href=\"http://www.creaf.uab.cat/miramon/mmr/"+
+				parent.opener.DonaCadenaLang({"cat":"cat", "spa":"esp", "eng":"usa", "fre":"cat"}) +
+				"/exe/Inst_MMR.EXE\" target=\"_blank\">" +
+				parent.opener.DonaCadenaLang({"cat":"descarregueu-lo", "spa":"descárguelo", "eng":"download it", "fre":"téléchargez"}) +
+				"</a>");
+	else
+		document.write(parent.opener.DonaCadenaLang({"cat":"Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon.", 
+													"spa":"Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon.", 
+													"eng":"To correctly download the layers you have to have MiraMon program installed.",
+													"fre":"Pour télécharger les couches il faut voir installé correctement le logiciel MiraMon"}));
+// -->
+</script>
+</small>
+<br>
+</center>
+</body>
+</html>
