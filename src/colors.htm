@@ -1,0 +1,319 @@
+<HTML>
+
+<!--
+    This file is part of MiraMon Map Browser.
+
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Foobar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
+
+    Copyright 2001, 2016 Xavier Pons
+
+    Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
+    (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
+    dins del grup de MiraMon. MiraMon és un projecte del Centre
+    de recerca i aplicacions forestals (CREAF) que elabora programari de 
+    Sistema d'Informació Geogràfica i de Teledetecció per a la 
+    visualització, consulta, edició i anàlisi de mapes ràsters i 
+    vectorials. Elabora programari d'escriptori i també servidors i clients 
+    per Internet. No tots aquests productes són gratuïts o de codi obert. 
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència "GNU General Public 
+    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+-->
+
+<HEAD>
+<STYLE TYPE="text/css"> 
+<!--
+      A                { color:#666600; text-decoration:none;font-family: arial,helvetica,sans serif}
+      A:hover,A:active { color:#6666FF; text-decoration:underline}
+      A:visited        { color:#666600; text-decoration:none}
+      .spec            { border : 1px solid #9F9F9F;}
+     TD.spectitle      { border-bottom:1px solid #9F9F9F;}
+     TD.speccontent    { border-left:1px solid #9F9F9F; border-bottom:1px solid #9F9F9F;}
+     .text,td          {font-family: arial,helvetica,sans serif;font-size:11px}
+     .text,BODY        {font-family: arial,helvetica,sans serif;font-size:11px}
+  -->
+</STYLE>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function setFV(clr) 
+{
+	eval("window.opener." + window.opener.CadenaVariableTreball + "= \"#\"+clr"); 
+	window.opener.focus();
+	window.opener.RedibuixaParamColors();
+	window.opener.ColorWindow=null;
+	window.close();
+}
+function TancaCaixa()
+{
+	window.opener.focus();
+	window.opener.ColorWindow=null;	
+	window.close();
+}
+// -->
+</SCRIPT>
+</HEAD>
+
+<BODY BGCOLOR=#ffffee TEXT=#000000 LINK=#666600 VLINK=#666600 topmargin=0 marginheight=0 leftmargin=0 marginwidth=2><a name=uu></a>
+<center><b>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+document.write(window.opener.TextDescDelColor);
+// -->
+</SCRIPT>
+</b><br>
+<table border=1 cellpadding=1 cellspacing=0>
+<tr>
+<td bgcolor=#000000><a href="JavaScript:setFV('000000')"><font color=#000000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#330000><a href="JavaScript:setFV('330000')"><font color=#330000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#660000><a href="JavaScript:setFV('660000')"><font color=#660000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#990000><a href="JavaScript:setFV('990000')"><font color=#990000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc0000><a href="JavaScript:setFV('cc0000')"><font color=#cc0000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff0000><a href="JavaScript:setFV('ff0000')"><font color=#ff0000>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#003300><a href="JavaScript:setFV('003300')"><font color=#003300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#333300><a href="JavaScript:setFV('333300')"><font color=#333300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#663300><a href="JavaScript:setFV('663300')"><font color=#663300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#993300><a href="JavaScript:setFV('993300')"><font color=#993300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc3300><a href="JavaScript:setFV('cc3300')"><font color=#cc3300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff3300><a href="JavaScript:setFV('ff3300')"><font color=#ff3300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#006600><a href="JavaScript:setFV('006600')"><font color=#006600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#336600><a href="JavaScript:setFV('336600')"><font color=#336600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#666600><a href="JavaScript:setFV('666600')"><font color=#666600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#996600><a href="JavaScript:setFV('996600')"><font color=#996600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc6600><a href="JavaScript:setFV('cc6600')"><font color=#cc6600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff6600><a href="JavaScript:setFV('ff6600')"><font color=#ff6600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#009900><a href="JavaScript:setFV('009900')"><font color=#009900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#339900><a href="JavaScript:setFV('339900')"><font color=#339900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#669900><a href="JavaScript:setFV('669900')"><font color=#669900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#999900><a href="JavaScript:setFV('999900')"><font color=#999900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc9900><a href="JavaScript:setFV('cc9900')"><font color=#cc9900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff9900><a href="JavaScript:setFV('ff9900')"><font color=#ff9900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00cc00><a href="JavaScript:setFV('00cc00')"><font color=#00cc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33cc00><a href="JavaScript:setFV('33cc00')"><font color=#33cc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66cc00><a href="JavaScript:setFV('66cc00')"><font color=#66cc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99cc00><a href="JavaScript:setFV('99cc00')"><font color=#99cc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cccc00><a href="JavaScript:setFV('cccc00')"><font color=#cccc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffcc00><a href="JavaScript:setFV('ffcc00')"><font color=#ffcc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ff00><a href="JavaScript:setFV('00ff00')"><font color=#00ff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ff00><a href="JavaScript:setFV('33ff00')"><font color=#33ff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ff00><a href="JavaScript:setFV('66ff00')"><font color=#66ff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ff00><a href="JavaScript:setFV('99ff00')"><font color=#99ff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccff00><a href="JavaScript:setFV('ccff00')"><font color=#ccff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffff00><a href="JavaScript:setFV('ffff00')"><font color=#ffff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+<tr>
+<td bgcolor=#000033><a href="JavaScript:setFV('000033')"><font color=#000033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#330033><a href="JavaScript:setFV('330033')"><font color=#330033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#660033><a href="JavaScript:setFV('660033')"><font color=#660033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#990033><a href="JavaScript:setFV('990033')"><font color=#990033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc0033><a href="JavaScript:setFV('cc0033')"><font color=#cc0033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff0033><a href="JavaScript:setFV('ff0033')"><font color=#ff0033>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#003333><a href="JavaScript:setFV('003300')"><font color=#003300>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#333333><a href="JavaScript:setFV('333333')"><font color=#333333>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#663333><a href="JavaScript:setFV('663333')"><font color=#663333>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#993333><a href="JavaScript:setFV('993333')"><font color=#993333>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc3333><a href="JavaScript:setFV('cc3333')"><font color=#cc3333>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff3333><a href="JavaScript:setFV('ff3333')"><font color=#ff3333>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#006633><a href="JavaScript:setFV('006600')"><font color=#006600>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#336633><a href="JavaScript:setFV('336633')"><font color=#336633>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#666633><a href="JavaScript:setFV('666633')"><font color=#666633>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#996633><a href="JavaScript:setFV('996633')"><font color=#996633>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc6633><a href="JavaScript:setFV('cc6633')"><font color=#cc6633>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff6633><a href="JavaScript:setFV('ff6633')"><font color=#ff6633>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#009933><a href="JavaScript:setFV('009900')"><font color=#009900>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#339933><a href="JavaScript:setFV('339933')"><font color=#339933>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#669933><a href="JavaScript:setFV('669933')"><font color=#669933>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#999933><a href="JavaScript:setFV('999933')"><font color=#999933>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc9933><a href="JavaScript:setFV('cc9933')"><font color=#cc9933>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff9933><a href="JavaScript:setFV('ff9933')"><font color=#ff9933>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00cc33><a href="JavaScript:setFV('00cc00')"><font color=#00cc00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33cc33><a href="JavaScript:setFV('33cc33')"><font color=#33cc33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66cc33><a href="JavaScript:setFV('66cc33')"><font color=#66cc33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99cc33><a href="JavaScript:setFV('99cc33')"><font color=#99cc33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cccc33><a href="JavaScript:setFV('cccc33')"><font color=#cccc33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffcc33><a href="JavaScript:setFV('ffcc33')"><font color=#ffcc33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ff33><a href="JavaScript:setFV('00ff00')"><font color=#00ff00>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ff33><a href="JavaScript:setFV('33ff33')"><font color=#33ff33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ff33><a href="JavaScript:setFV('66ff33')"><font color=#66ff33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ff33><a href="JavaScript:setFV('99ff33')"><font color=#99ff33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccff33><a href="JavaScript:setFV('ccff33')"><font color=#ccff33>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffff33><a href="JavaScript:setFV('ffff33')"><font color=#ffff33>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+<tr>
+<td bgcolor=#000066><a href="JavaScript:setFV('000066')"><font color=#000066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#330066><a href="JavaScript:setFV('330066')"><font color=#330066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#660066><a href="JavaScript:setFV('660066')"><font color=#660066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#990066><a href="JavaScript:setFV('990066')"><font color=#990066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc0066><a href="JavaScript:setFV('cc0066')"><font color=#cc0066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff0066><a href="JavaScript:setFV('ff0066')"><font color=#ff0066>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#003366><a href="JavaScript:setFV('003366')"><font color=#003366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#333366><a href="JavaScript:setFV('333366')"><font color=#333366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#663366><a href="JavaScript:setFV('663366')"><font color=#663366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#993366><a href="JavaScript:setFV('993366')"><font color=#993366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc3366><a href="JavaScript:setFV('cc3366')"><font color=#cc3366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff3366><a href="JavaScript:setFV('ff3366')"><font color=#ff3366>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#006666><a href="JavaScript:setFV('006666')"><font color=#006666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#336666><a href="JavaScript:setFV('336666')"><font color=#336666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#666666><a href="JavaScript:setFV('666666')"><font color=#666666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#996666><a href="JavaScript:setFV('996666')"><font color=#996666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc6666><a href="JavaScript:setFV('cc6666')"><font color=#cc6666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff6666><a href="JavaScript:setFV('ff6666')"><font color=#ff6666>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#009966><a href="JavaScript:setFV('009966')"><font color=#009966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#339966><a href="JavaScript:setFV('339966')"><font color=#339966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#669966><a href="JavaScript:setFV('669966')"><font color=#669966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#999966><a href="JavaScript:setFV('999966')"><font color=#999966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc9966><a href="JavaScript:setFV('cc9966')"><font color=#cc9966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff9966><a href="JavaScript:setFV('ff9966')"><font color=#ff9966>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00cc66><a href="JavaScript:setFV('00cc66')"><font color=#00cc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33cc66><a href="JavaScript:setFV('33cc66')"><font color=#33cc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66cc66><a href="JavaScript:setFV('66cc66')"><font color=#66cc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99cc66><a href="JavaScript:setFV('99cc66')"><font color=#99cc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cccc66><a href="JavaScript:setFV('cccc66')"><font color=#cccc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffcc66><a href="JavaScript:setFV('ffcc66')"><font color=#ffcc66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ff66><a href="JavaScript:setFV('00ff66')"><font color=#00ff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ff66><a href="JavaScript:setFV('33ff66')"><font color=#33ff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ff66><a href="JavaScript:setFV('66ff66')"><font color=#66ff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ff66><a href="JavaScript:setFV('99ff66')"><font color=#99ff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccff66><a href="JavaScript:setFV('ccff66')"><font color=#ccff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffff66><a href="JavaScript:setFV('ffff66')"><font color=#ffff66>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+<tr>
+<td bgcolor=#000099><a href="JavaScript:setFV('000099')"><font color=#000099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#330099><a href="JavaScript:setFV('330099')"><font color=#330099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#660099><a href="JavaScript:setFV('660099')"><font color=#660099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#990099><a href="JavaScript:setFV('990099')"><font color=#990099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc0099><a href="JavaScript:setFV('cc0099')"><font color=#cc0099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff0099><a href="JavaScript:setFV('ff0099')"><font color=#ff0099>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#003399><a href="JavaScript:setFV('003399')"><font color=#003399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#333399><a href="JavaScript:setFV('333399')"><font color=#333399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#663399><a href="JavaScript:setFV('663399')"><font color=#663399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#993399><a href="JavaScript:setFV('993399')"><font color=#993399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc3399><a href="JavaScript:setFV('cc3399')"><font color=#cc3399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff3399><a href="JavaScript:setFV('ff3399')"><font color=#ff3399>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#006699><a href="JavaScript:setFV('006699')"><font color=#006699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#336699><a href="JavaScript:setFV('336699')"><font color=#336699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#666699><a href="JavaScript:setFV('666699')"><font color=#666699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#996699><a href="JavaScript:setFV('996699')"><font color=#996699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc6699><a href="JavaScript:setFV('cc6699')"><font color=#cc6699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff6699><a href="JavaScript:setFV('ff6699')"><font color=#ff6699>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#009999><a href="JavaScript:setFV('009999')"><font color=#009999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#339999><a href="JavaScript:setFV('339999')"><font color=#339999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#669999><a href="JavaScript:setFV('669999')"><font color=#669999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#999999><a href="JavaScript:setFV('999999')"><font color=#999999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc9999><a href="JavaScript:setFV('cc9999')"><font color=#cc9999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff9999><a href="JavaScript:setFV('ff9999')"><font color=#ff9999>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00cc99><a href="JavaScript:setFV('00cc99')"><font color=#00cc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33cc99><a href="JavaScript:setFV('33cc99')"><font color=#33cc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66cc99><a href="JavaScript:setFV('66cc99')"><font color=#66cc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99cc99><a href="JavaScript:setFV('99cc99')"><font color=#99cc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cccc99><a href="JavaScript:setFV('cccc99')"><font color=#cccc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffcc99><a href="JavaScript:setFV('ffcc99')"><font color=#ffcc99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ff99><a href="JavaScript:setFV('00ff99')"><font color=#00ff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ff99><a href="JavaScript:setFV('33ff99')"><font color=#33ff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ff99><a href="JavaScript:setFV('66ff99')"><font color=#66ff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ff99><a href="JavaScript:setFV('99ff99')"><font color=#99ff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccff99><a href="JavaScript:setFV('ccff99')"><font color=#ccff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffff99><a href="JavaScript:setFV('ffff99')"><font color=#ffff99>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+<tr>
+<td bgcolor=#0000cc><a href="JavaScript:setFV('0000cc')"><font color=#0000cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3300cc><a href="JavaScript:setFV('3300cc')"><font color=#3300cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6600cc><a href="JavaScript:setFV('6600cc')"><font color=#6600cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9900cc><a href="JavaScript:setFV('9900cc')"><font color=#9900cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc00cc><a href="JavaScript:setFV('cc00cc')"><font color=#cc00cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff00cc><a href="JavaScript:setFV('ff00cc')"><font color=#ff00cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0033cc><a href="JavaScript:setFV('0033cc')"><font color=#0033cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3333cc><a href="JavaScript:setFV('3333cc')"><font color=#3333cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6633cc><a href="JavaScript:setFV('6633cc')"><font color=#6633cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9933cc><a href="JavaScript:setFV('9933cc')"><font color=#9933cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc33cc><a href="JavaScript:setFV('cc33cc')"><font color=#cc33cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff33cc><a href="JavaScript:setFV('ff33cc')"><font color=#ff33cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0066cc><a href="JavaScript:setFV('0066cc')"><font color=#0066cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3366cc><a href="JavaScript:setFV('3366cc')"><font color=#3366cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6666cc><a href="JavaScript:setFV('6666cc')"><font color=#6666cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9966cc><a href="JavaScript:setFV('9966cc')"><font color=#9966cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc66cc><a href="JavaScript:setFV('cc66cc')"><font color=#cc66cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff66cc><a href="JavaScript:setFV('ff66cc')"><font color=#ff66cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0099cc><a href="JavaScript:setFV('0099cc')"><font color=#0099cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3399cc><a href="JavaScript:setFV('3399cc')"><font color=#3399cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6699cc><a href="JavaScript:setFV('6699cc')"><font color=#6699cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9999cc><a href="JavaScript:setFV('9999cc')"><font color=#9999cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc99cc><a href="JavaScript:setFV('cc99cc')"><font color=#cc99cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff99cc><a href="JavaScript:setFV('ff99cc')"><font color=#ff99cc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00cccc><a href="JavaScript:setFV('00cccc')"><font color=#00cccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33cccc><a href="JavaScript:setFV('33cccc')"><font color=#33cccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66cccc><a href="JavaScript:setFV('66cccc')"><font color=#66cccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99cccc><a href="JavaScript:setFV('99cccc')"><font color=#99cccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cccccc><a href="JavaScript:setFV('cccccc')"><font color=#cccccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffcccc><a href="JavaScript:setFV('ffcccc')"><font color=#ffcccc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ffcc><a href="JavaScript:setFV('00ffcc')"><font color=#00ffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ffcc><a href="JavaScript:setFV('33ffcc')"><font color=#33ffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ffcc><a href="JavaScript:setFV('66ffcc')"><font color=#66ffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ffcc><a href="JavaScript:setFV('99ffcc')"><font color=#99ffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccffcc><a href="JavaScript:setFV('ccffcc')"><font color=#ccffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffffcc><a href="JavaScript:setFV('ffffcc')"><font color=#ffffcc>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+<tr>
+<td bgcolor=#0000ff><a href="JavaScript:setFV('0000ff')"><font color=#0000ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3300ff><a href="JavaScript:setFV('3300ff')"><font color=#3300ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6600ff><a href="JavaScript:setFV('6600ff')"><font color=#6600ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9900ff><a href="JavaScript:setFV('9900ff')"><font color=#9900ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc00ff><a href="JavaScript:setFV('cc00ff')"><font color=#cc00ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff00ff><a href="JavaScript:setFV('ff00ff')"><font color=#ff00ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0033ff><a href="JavaScript:setFV('0033ff')"><font color=#0033ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3333ff><a href="JavaScript:setFV('3333ff')"><font color=#3333ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6633ff><a href="JavaScript:setFV('6633ff')"><font color=#6633ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9933ff><a href="JavaScript:setFV('9933ff')"><font color=#9933ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc33ff><a href="JavaScript:setFV('cc33ff')"><font color=#cc33ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff33ff><a href="JavaScript:setFV('ff33ff')"><font color=#ff33ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0066ff><a href="JavaScript:setFV('0066ff')"><font color=#0066ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3366ff><a href="JavaScript:setFV('3366ff')"><font color=#3366ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6666ff><a href="JavaScript:setFV('6666ff')"><font color=#6666ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9966ff><a href="JavaScript:setFV('9966ff')"><font color=#9966ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc66ff><a href="JavaScript:setFV('cc66ff')"><font color=#cc66ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff66ff><a href="JavaScript:setFV('ff66ff')"><font color=#ff66ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#0099ff><a href="JavaScript:setFV('0099ff')"><font color=#0099ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#3399ff><a href="JavaScript:setFV('3399ff')"><font color=#3399ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#6699ff><a href="JavaScript:setFV('6699ff')"><font color=#6699ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#9999ff><a href="JavaScript:setFV('9999ff')"><font color=#9999ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#cc99ff><a href="JavaScript:setFV('cc99ff')"><font color=#cc99ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ff99ff><a href="JavaScript:setFV('ff99ff')"><font color=#ff99ff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ccff><a href="JavaScript:setFV('00ccff')"><font color=#00ccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ccff><a href="JavaScript:setFV('33ccff')"><font color=#33ccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ccff><a href="JavaScript:setFV('66ccff')"><font color=#66ccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ccff><a href="JavaScript:setFV('99ccff')"><font color=#99ccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccccff><a href="JavaScript:setFV('ccccff')"><font color=#ccccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffccff><a href="JavaScript:setFV('ffccff')"><font color=#ffccff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#00ffff><a href="JavaScript:setFV('00ffff')"><font color=#00ffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#33ffff><a href="JavaScript:setFV('33ffff')"><font color=#33ffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#66ffff><a href="JavaScript:setFV('66ffff')"><font color=#66ffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#99ffff><a href="JavaScript:setFV('99ffff')"><font color=#99ffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ccffff><a href="JavaScript:setFV('ccffff')"><font color=#ccffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+<td bgcolor=#ffffff><a href="JavaScript:setFV('ffffff')"><font color=#ffffff>&nbsp;&nbsp;&nbsp;</font></a></td>
+</tr>
+</table>
+<script>
+with(window.opener)
+{
+	this.document.write(DonaCadenaLang({"cat":"Per aplicar un nou color feu un clic directament sobre el color desitjat",
+										"spa":"Para aplicar un nuevo color haga clic directamente sobre el color deseado",
+										"eng":"To apply a new color, please click on the wished color",
+										"fre":"Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée"})+
+					".<br>"+
+					"<form><input type=button onClick=\"TancaCaixa()\" value=\""+
+					DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"})+"\"></form>");
+}
+</script>
+
+</center><p>
+</body></html>

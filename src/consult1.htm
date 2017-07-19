@@ -1,0 +1,64 @@
+<html>
+<!--
+    This file is part of MiraMon Map Browser.
+
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Foobar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
+
+    Copyright 2001, 2016 Xavier Pons
+
+    Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
+    (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
+    dins del grup de MiraMon. MiraMon és un projecte del Centre
+    de recerca i aplicacions forestals (CREAF) que elabora programari de 
+    Sistema d'Informació Geogràfica i de Teledetecció per a la 
+    visualització, consulta, edició i anàlisi de mapes ràsters i 
+    vectorials. Elabora programari d'escriptori i també servidors i clients 
+    per Internet. No tots aquests productes són gratuïts o de codi obert. 
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència "GNU General Public 
+    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+-->
+
+<head>
+<title>Consulta</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<script LANGUAGE="JavaScript">
+<!---   Inici de JavaScript  
+
+function TancaCaixaConsulta()
+{
+    parent.opener.focus();
+	parent.opener.ConsultaWindow=null;
+    parent.close();	
+    return false;  //per no efectuar l'acció de submit del formulari
+}
+
+
+
+// --->
+</script>
+</head>
+
+<body bgcolor="#D4D0C8" text="#000000" TOPMARGIN="2" LEFTMARGIN="2" MARGINWIDTH="2" MARGINHEIGHT="0">
+<center>
+<script>
+with (parent.opener)
+{
+    this.document.write(DonaCadena(ParamCtrl.TitolCaixa));
+}
+</script>
+</center>
+</body>
+</html>
