@@ -1,0 +1,41 @@
+<!-- DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd" -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="tools.css" rel="stylesheet" type="text/css">
+</head>
+<BODY BGCOLOR="#FFFFFF" TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" TEXT="#000000" onLoad="setTimeout('StartMiraMonMapBrowser();',30);" onunLoad="EndMiraMonMapBrowser();" onResize="setTimeout('ChangeSizeMiraMonMapBrowser()',200);" onMouseMove="MovementMiraMonMapBrowser(event);">
+<SCRIPT LANGUAGE="JavaScript" src="tools1.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript">
+setSpaceForLayers(1280,904); //amplada i alçada del navegador per defecte en píxels
+//Funció per crear les layers de cada un dels components del navegador
+//createLayer(win, name, left, top, width, height, ancora, scroll, visible, ev, content) 
+//Width i Height són amplada i alçada dels elements respectivament no el punt de la finestra
+//on volem que arribi
+createLayer(this, "situacio", 0, 0, 253, 243, "NWse", "no", true, null, null);
+createLayer(this, "llegenda", 1, 243, 243, 661, "nWSe", "ara_no", true, null, null);
+createLayer(this, "titol", 250, 20, 900, 80, "NwEs", "no", true, null, null);
+createLayer(this, "logos", 1000, 5, 270, 150, "NwEsC", "no", true, null, "<table><tr><td valign=\"middle\" align=\"center\"><a href=\"http://www.ecopotential-project.eu\" target=\"_blank\"><img src=\"propies/Logo_ECOPOTENTIAL_web.png\" width=100 title=\"ECOPOTENTIAL\" border=0></a></td><td><table><tr><td align=\"center\"><a href=\"http://europa.eu\" target=\"_blank\"><img src=\"propies/EuropeanC.gif\" title=\"European Union\" width=70 border=0></a></td></tr><tr><td align=\"center\" class=\"Verdana11px\">This project is funded by<br>the European Union</td></tr></table></td></tr></table>");
+createLayer(this, "barra", 245, 97, 885, 35, "wC", "no", true, null, null);
+createLayer(this, "projeccio", 1120, 97, 140, 15, "NwEsC", "no", true, null, null);
+createLayer(this, "vista", 243, 122, 1037, 755, "NwSE", "no", true, null, null);
+createLayer(this, "atribucio", 243, 821, 1012, 15, "SEwR", "no", true, null, null);
+createLayer(this, "logo_miramon", 1195, 743, 50, 25, "SECR", "no", true, null, { "cat" :"<a href=\"http://www.creaf.uab.cat/miramon/index_ca.htm\" target=\"_blank\"><img src=\"propies/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","spa":"<a href=\"http://www.creaf.uab.cat/miramon/index_es.htm\" target=\"_blank\"><img src=\"propies/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","eng":"<a href=\"http://www.creaf.uab.cat/miramon/index.htm\" target=\"_blank\"><img src=\"propies/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"});
+createLayer(this, "coord", 560, 850, 730, 15, "SECR", "no", true, null, null);
+createLayer(this, "ctipica", 260, 853, 400, 15, "wCSR", "no", true, null, null);
+
+
+
+</SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="caixadlg.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="canviprj.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="tools2.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="gml.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="owsc.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="wms.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="wps.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="Chart.bundle.min.js"></SCRIPT>
+
+</BODY>
+
+</html>
