@@ -1,0 +1,70 @@
+<html>
+<!--
+    This file is part of MiraMon Map Browser.
+
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Foobar is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
+
+    Copyright 2001, 2016 Xavier Pons
+
+    Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
+    (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
+    dins del grup de MiraMon. MiraMon és un projecte del Centre
+    de recerca i aplicacions forestals (CREAF) que elabora programari de 
+    Sistema d'Informació Geogràfica i de Teledetecció per a la 
+    visualització, consulta, edició i anàlisi de mapes ràsters i 
+    vectorials. Elabora programari d'escriptori i també servidors i clients 
+    per Internet. No tots aquests productes són gratuïts o de codi obert. 
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència "GNU General Public 
+    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+-->
+
+<script>
+	document.writeln("<BODY BGCOLOR=\"" + parent.opener.ParamCtrl.ColorFonsPlana + "\" TOPMARGIN=\"2\" LEFTMARGIN=\"2\" MARGINWIDTH=\"2\" MARGINHEIGHT=\"0\" TEXT=\"#000000\">");
+</script>
+<FORM NAME="botons" METHOD="GET" onSubmit="return parent.VideoTools.VideoPlay();">
+<center>
+
+<script>
+document.writeln("<button onClick=\"return parent.VideoTools.VideoMostraRetornFalse(-2);\"><img align=middle src=\"b_start.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoMostraRetornFalse(-1);\"><img align=middle src=\"b_rewind.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoMostraRetornFalse(0);\"><img align=middle src=\"b_pause.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoPlay(9);\"><img align=middle src=\"b_play.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoPlay(8);\"><img align=middle src=\"b_repeat.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitivamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoMostraRetornFalse(1);\"><img align=middle src=\"b_forward.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"})+"\"></button>"+
+		"<button onClick=\"return parent.VideoTools.VideoMostraRetornFalse(2);\"><img align=middle src=\"b_end.gif\" alt=\""+parent.opener.DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"})+"\" title=\""+parent.opener.DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"})+"\"></button>");
+</script>
+<br>
+<font face="Verdana, Arial, Helvetica, sans-serif" size=1>
+<input type="radio" name="TipusTemps">
+<script>
+document.write(parent.opener.DonaCadenaLang({"cat":"Escala temporal","spa":"Escala temporal","eng":"Temporal scale", "fre":"Échelle temporelle"}));
+</script>
+ 1:<input type="text" name="EscalaTemporal" value="1000000" size=8 onChange="document.botons.TipusTemps[0].checked=true">
+<input type="radio" name="TipusTemps" checked>
+<script>
+document.write(parent.opener.DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}));
+</script>
+<input name="interval" type="text" value="2" size=1 onChange="document.botons.TipusTemps[1].checked=true">s
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="javascript:parent.VideoTools.TancaCaixaVideo();">
+<script>
+document.write(parent.opener.DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"})); 
+</script>
+</a>
+</font>
+</form>
+</center>
+</body>
+</html>

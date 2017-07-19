@@ -1,0 +1,554 @@
+/* Document d'estils del navegador de Mapes de MiraMon*/
+/* *******************************************************
+ Estils de visualització d'alguns elements generals del
+           N A V E G A D O R
+*******************************************************/
+/* Estils de visualització usats en diversos elements i més generals */
+.text_petit { font-size: xx-small;}
+a:link { text-decoration: none}
+a:visited { text-decoration: none}
+a:active { text-decoration: none}
+a:hover { text-decoration: underline}
+
+/* General forms style */
+select
+{
+	margin:3px;
+	font-size:11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-color:#99CCFF;
+	border-style:solid;
+	border-width:1px;
+}
+input
+{
+	margin:3px;
+	font-size:11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-color: #99CCFF;
+}
+input[type="button"],[type="submit"]
+{
+	font-weight:bold;
+	color:white;
+	background-color:#BDDAFF;
+	border-radius: 7px;
+	border-width: 2px;
+	border-style: solid;/*none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset*/
+}
+input[type="button"]:hover,[type="submit"]:hover
+{
+	border-style: outset;
+	cursor:pointer;
+}
+input[type="text"]
+{
+	border-style:solid;
+	border-width:1px;
+//	width:97%;
+}
+
+/* Coordenades */
+.text_coord{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;	
+	font-weight: bold;
+	color: #000099;
+}
+.input_info_coord{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	width:200px;
+}
+
+.atribucio{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	background: rgba(255, 255, 255, 0.7);
+}
+
+
+/* Llistat Nivells de zoom */
+.titol_zoom{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;	
+	font-weight: bold;
+	color: #000099;
+}
+
+/* Consulta típica */
+.text_general_consulta{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;	
+	color: #000099;
+}
+.nom_capa_consulta{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;	
+	color: #000099;
+}
+.nom_camp_consulta{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;	
+	color: #000099;
+}
+.desplegable{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.lletres_consulta_inicials{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #000099;
+}
+.valors_consulta_inicials{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000099;
+}
+
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la
+ 
+ C O N S U L T A   T Í P I C A   de tipus  C E R C A D O R
+  
+********************************************************** */
+.TaulaAmbVora{
+	background-color: #FFFFFF;
+	padding: 1px;
+	font-family: Helvetica;
+	font-size: 12;
+	top: 20;
+	left: 28;
+	width: 346;
+}
+.InputPetit{
+	font-family: Helvetica;
+	font-size: 12;
+	font-weight: bold;
+	position: absolute;
+	top: 0;
+	left: 60;
+}
+.CellaBlava{
+	background-color: #3366CC;
+	color: #FFFFFF;
+}
+.CellaTransparent{
+	background-color: transparent;
+	color: #000000;
+}
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la 
+ 
+  FINESTRA per Afegir Capes
+  
+********************************************************** */
+
+.input_url{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 400px;
+}
+
+.layerselectorcapesafegir {
+	background-color: #FFFFFF;
+	border: 2px solid #C0C0C0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	position:relative;
+	width:500px;
+	height:200px;
+	overflow:auto;
+
+}
+
+.MenuContextualCapa{
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	width:110;
+	height:140;
+	border: 2px  #999999; 
+	border-style:groove;
+}
+.llistaMenuContext{
+	padding: 5px;
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;	
+}
+
+
+a.unmenu:link{
+	text-decoration: none;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#006699;
+}
+a.unmenu:visited { 
+	text-decoration: none;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#006699;
+}
+a.unmenu:active { 
+	text-decoration: none;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#006699;
+}	
+a.unmenu:hover { 
+	text-decoration: underline;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#FFFFFF;
+	background-color:#6699FF;
+}
+
+
+
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la 
+ 
+  E D I C I Ó    D E    P U N T S
+  
+********************************************************** */
+
+/* 'layerpunteditar' configura l'aspecte de la layer en la que apareix la coordenada del punt que s'està editant */
+.layerpunteditar{
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	text-align:left;
+	padding: 5px;
+	margin: 2%;
+	border: 2px solid #C0C0C0;
+}
+.temps{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 20px;
+}
+
+
+.input_coord{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 80px;
+}
+
+.input_area{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 240px;
+}
+.input_text{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 120px;
+}
+
+/* 'layereditar' és l'estil de la layer que engloba l'edició d'un punt d'una capa digi.*/
+.layereditar {
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	margin: 2%;
+}
+
+.mistrans {
+	background-color:#FFFFCC;
+	border: 1px solid #CCCCCC;	
+	margin: 2px;
+	padding: 2px;
+	opacity:0.5;  /*NE*/
+	filter: alpha(Opacity=50);  /*IE*/
+}
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la 
+ 
+  C O N S U L T A    P E R    L O C A L I T Z A C I Ó 
+  
+********************************************************** */
+
+/* 'layerprincipal' és l'estil de la layer que engloba totes les altres layers amb 
+les respostes de la consulta per localització de les diverses capes consultades.
+Només s'usa en les consultes per localització de finestra no incrustada */
+
+.layerprincipal{
+	border: 2px solid #666666;
+	background-color: #FFFFFF;
+	width: 97%;
+	height: 97%;
+	overflow: auto;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	visibility: visible;
+	position: relative;
+}
+.TaulaRespostaConsulta {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	font-weight: normal;
+}
+
+/* 'layerresposta' és l'estil de la layer que engloba la resposta d'una consulta d'una capa.*/
+.layerresposta {
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	margin: 3%;	
+}
+
+/* 'layerpuntconsultat' configura l'aspecte de la layer en la que apareix la coordenada del punt consultat */
+.layerpuntconsultat{
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	margin: 3%;
+	border: 2px solid #C0C0C0;
+}
+/* 'TitolRepostaConsulta' configura l'aspecte del nom de la capa o títol de la resposta consulta de cada capa */
+.TitolRepostaConsulta{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #000099;
+	background-color: #FFFFFF;
+	font-weight: bold;
+}
+/* 'CampRepostaConsulta' configura l'aspecte del nom del camp.*/
+.CampRespostaConsulta {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+}
+/* 'ValorRepostaConsulta' configura l'aspecte del valor del camp.*/
+.ValorRespostaConsulta {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	font-weight: normal;
+}
+/* 'CampRepostaConsultaValidacio' configura l'aspecte del nom del camp que s'esta validant, 
+de forma que es pugui diferenciar de la resta de camps consultables i no validables d'una capa.*/
+.CampRespostaConsultaValidacio {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #FF0000;
+}
+/* 'ValorRepostaConsultaValidacio' configura l'aspecte del valor del camp que s'esta validant, 
+de forma que es pugui diferenciar de la resta de camps consultables i no validables d'una capa.*/
+.ValorRespostaConsultaValidacio {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	font-weight: normal;
+	color: #FF0000;
+}
+/* 'TextValidacio' configura l'aspecte del text adicional que es mostra en la consulta quan s'està validant.*/
+.TextValidacio{
+		font-family: Verdana, Arial, Helvetica, sans-serif;
+		font-size: 11px;
+		background-color: #FFFFFF;
+		text-align: left;
+		margin: 5%;
+}
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de les 
+ 
+  L A Y E R S     F I N E S T R A 
+  
+********************************************************** */
+.finestra {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	background-color: #FFFFFF;
+	margin: 0px;
+	padding: 0px;
+	border: 1px solid #99CCFF;
+	resize:both;
+}
+.barrafinestra {
+	background-image: url(fons_barra.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #99CCFF;
+	margin: 0px;
+	padding: 0px;
+	overflow: visible;
+}
+.titolfinestra{
+	text-align: left;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #FFFFFF;
+	cursor:move;
+}
+/* Format de la font del text de la layers-finestra d'Anar a Coordenada */
+.Verdana11px{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+.TaulaCoordenades{
+	background-color: #FFFFFF;
+	border:thin;
+	border-color:#999999;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+.no_negreta{
+	font-weight: normal;
+}
+
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la 
+ 
+		F I N E S T R A   D E   W P S 
+  
+********************************************************** */
+.textgris{
+	color:#CCCCCC;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+}
+.finestraproces{
+	background-color: #FFFFFF;
+	margin: 5px;
+	padding: 5px;
+	overflow: auto;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	position: relative;
+}
+.finestraresultatproces
+{
+	background-color: #FFFFFF;
+	margin-left:10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	position: relative;
+}
+
+/* Estil de les classes de tipus 'slider' (bruixola, zoom)*/
+table.slider{
+	opacity: 0.2;
+}
+table.slider:hover {
+	opacity: 0.9;
+}
+/* Estil del id='bruixola' */
+table#bruixola:hover {
+	cursor:pointer;
+}
+/* Estil vertical del id='latZoom' */
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+}
+input[type=range]::-ms-tooltip{
+    display: none;
+}
+
+
+/*Estils de llistes*/
+/*
+This unfoldable class style makes the <li> elements of the list to
+appear only when the cursor is over the <ul> element.
+Remember you can apply more than one class separating the name by a space.
+Currently used for listing layers in a floatingWindow.
+*/
+ul.disabled
+{
+	color: grey;
+	/*text-decoration:line-through; It seems too much reinforced...*/
+}
+ul.disabled:hover
+{
+	text-decoration: none;
+}
+ul
+{
+	margin: 0px;
+	padding: 1px; /*Avoid too large indentation*/
+}
+ul.field
+{
+	margin: 0px;
+	padding: 1px;
+	list-style-type: none; /* Do not use any circle or marck */
+	padding-left: 17px;
+}
+ul.unfoldable li
+{
+	display: none;
+}
+ul.unfoldable:hover li
+{
+	display: block;
+}
+ul.unfoldableByClick
+{
+	cursor: pointer;
+}
+ul.unfoldableByClick:hover
+{
+	text-decoration: underline;
+}
+ul.unfoldableByClick li
+{
+	display: none;
+	padding-top: 5px;
+	padding-left: 17px;
+}
+ul.foldableByClick
+{
+	cursor: pointer;
+}
+ul.foldableByClick li
+{
+	display: block;
+	cursor: auto;
+	padding-top: 0px;
+	padding-left: 17px;
+}
+
+/*Estils dels canvas*/
+canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+}
+
+/*
+ul.floatingWindowText
+{
+	color: green;
+}*/
