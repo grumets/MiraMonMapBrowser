@@ -780,7 +780,7 @@ var ll, env_ll={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 function DonaEnvolupantCRS(env,crs)
 {
 var crs_xy;
-var env_crs={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
+var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 
     crs_xy=DonaCoordenadesCRS(env.MinX, env.MinY, crs);
     env_crs_xy.MinX=env_crs_xy.MaxX=crs_xy.x;
@@ -876,7 +876,7 @@ var env_crs={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     if (env_crs_xy.MinY>crs_xy.y) env_crs_xy.MinY=crs_xy.y;
     else if (env_crs_xy.MaxY<crs_xy.y) env_crs_xy.MaxY=crs_xy.y;
 
-    return env_crs;
+    return env_crs_xy;
 }
 
 

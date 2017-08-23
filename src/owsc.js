@@ -197,7 +197,7 @@ function parseWMSOffering(tag,myOffering)
 	myOffering.operationsHTML= [], //Used to store the info of the operation in HTML to show to the user
 
 	//Process the operations within the offering
-	operationTags= compatGetElementsByTag(tag,"owc","operation");
+	operationTags=DonamElementsNodeAPartirDelNomDelTag(tag, null, "owc", "operation");
 	if(operationTags && operationTags.length>0)
 	{
 		for(i=0;i<operationTags.length;i++)
@@ -335,7 +335,7 @@ function parseWMTSOffering(tag,myOffering)
 	myOffering.type="TipusWMTS_REST";
 
 	//Process the operations within the offering
-	operationTags= compatGetElementsByTag(tag,"owc","operation");
+	operationTags=DonamElementsNodeAPartirDelNomDelTag(tag, null, "owc", "operation");
 	if(operationTags && operationTags.length>0)
 	{
 		for(i=0;i<operationTags.length;i++)
@@ -515,7 +515,7 @@ function parseTag(aTags,tagField,root,OWSCObject)
 	for(i=0;i<aTags.length;i+=tagField.size)
 	{
 		shown= false; //Controls if a value has been shown and therefore the field must be closed
-		elem=compatGetElementsByTag(root,aTags[i+tagField.namespace],aTags[i+tagField.name],true);
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, null, aTags[i+tagField.namespace], aTags[i+tagField.name],true);
 		//We get only those tags that has as direct parent root
 		elem= MMnodeListFilterByParent(elem,root);
 		if(!elem || !elem[0] || elem[0].childNodes.length<1)
@@ -604,7 +604,7 @@ function parseTag(aTags,tagField,root,OWSCObject)
 		else if(aTags[i+tagField.nestedTag])
 		{
 			//Get all the nestedTag elements of 'elem'
-			elem= compatGetElementsByTag(elem[0],aTags[i+tagField.namespace],aTags[i+tagField.nestedTag]);
+			elem=DonamElementsNodeAPartirDelNomDelTag(elem[0], null, aTags[i+tagField.namespace], aTags[i+tagField.nestedTag]);
 			//Have we found some neted tags?
 			if(!elem || !elem.length)
 			{
@@ -821,7 +821,7 @@ entryTags=[
 
 		//Get the root node 'feed' (check if this is a valid OWSC file)
 		if(doc)
-			root= compatGetElementsByTag(doc,"*","feed");
+			root=DonamElementsNodeAPartirDelNomDelTag(doc, null, "*", "feed");
 		if(!root || root.length<1)
 		{
 			throw DonaCadenaLang({"cat":"El document de context OWS no té \"feed\" com a node arrel.",
@@ -839,7 +839,7 @@ entryTags=[
 		newHTML+= "<h3 class=\"floatingWindowText\">"
 			+DonaCadenaLang({"cat":"Capes de la vista","spa":"Capas de la vista","eng":"Layers on this view","fre":"Couches sur ce point de vue"})
 			+":</h3><form action=\"\" onsubmit=\"OpenmyOWSCLayers(this); return false;\">"; //Capture the submit event
-		entries=compatGetElementsByTag(root,"*","entry");
+		entries=DonamElementsNodeAPartirDelNomDelTag(root, null, "*", "entry");
 		for(i=0;i<entries.length;i++)
 		{
 			//New OWSCLayer instance for this entry...
@@ -847,7 +847,7 @@ entryTags=[
 			//Go through the entry tags and show them as stated in the entryTags array
 			//Should be done now, so myOWSCLayer get the proper values
 			auxHTML= parseTag(entryTags,tagField,entries[i],myOWSCLayer);
-			myOWSCLayer.title= compatGetElementsByTag(entries[i],"*","title")[0].childNodes[0].nodeValue;
+			myOWSCLayer.title=DonamElementsNodeAPartirDelNomDelTag(entries[i], null, "*","title")[0].childNodes[0].nodeValue;
 			
 			//Now check if the layer is openable
 			error= isOpenableLayer(myOWSCLayer);

@@ -247,18 +247,18 @@ var trans_actual;
 	
 	if(!root) return;
 	
-	elem=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengis.net/wfs", "wfs", "totalInserted");
+	elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "totalInserted");
 	if(elem==null) return;
 
 	if(parseInt(elem[0].childNodes[0].nodeValue,10)==1)
 	{
 		//Llegeix-ho la info, agafo l'identificador i faig un GetFeature d'aquest nou element
-		elem=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengis.net/wfs", "wfs", "Feature");
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Feature");
 		var i_trans=parseInt(elem[0].getAttribute('handle'),10);
 		trans_actual=transaccio[i_trans];
 		trans_actual.estat=estat_fi_exit;
 		
-		elem=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengis.net/ogc", "ogc", "FeatureId");
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/ogc", "ogc", "FeatureId");
 		var identificador=[];
 		identificador.push(elem[0].getAttribute('fid'));		
 		
@@ -279,11 +279,11 @@ var trans_actual;
 	else
 	{
 		
-		elem=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengis.net/wfs", "wfs", "Action");
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Action");
 		var i_trans=parseInt(elem[0].getAttribute('locator'),10);
 		trans_actual=transaccio[i_trans];
 		trans_actual.estat=estat_fi_error;
-		elem=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengis.net/wfs", "wfs", "Message");
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Message");
 		var mis=getLayer(trans_actual.win, "missatges");
 		if(mis)
 		{
@@ -1705,7 +1705,7 @@ var ll;
 						//for( var j=0; j<ParamCtrl.CapaDigi[i].objectes.features.length; j++)//De moment tots els objectes són de tipus punt					
 						//	cdns.push(PintaObjecteCapaDigiImpressio(i, j));
 					}
-					//if(ParamCtrl.CapaDigi[i].servidor)
+					//if(ParamCtrl.CapaDigi[i].tipus)
 					//	DemanaTilesDeCapaDigitalitzadaSiCal(i,ParamInternCtrl.vista.EnvActual);			    
 				 }
 			}
@@ -2218,7 +2218,7 @@ function EsCapaConsultable(i)
 function EsObjDigiConsultable(i,j)
 {
 	//Quan no té atributs només retorno fals si és una capa estàtica, perquè sinó pot voler dir que haig de sol·licitar els atributs
-	if(!ParamCtrl.CapaDigi[i].objectes || (!ParamCtrl.CapaDigi[i].servidor && (!ParamCtrl.CapaDigi[i].objectes.features || CountPropertiesOfObject(ParamCtrl.CapaDigi[i].objectes.features[j].properties==0))))
+	if(!ParamCtrl.CapaDigi[i].objectes || (!ParamCtrl.CapaDigi[i].tipus && (!ParamCtrl.CapaDigi[i].objectes.features || CountPropertiesOfObject(ParamCtrl.CapaDigi[i].objectes.features[j].properties==0))))
 		return false;
 	if(ParamCtrl.CapaDigi[i].estil==null || !ParamCtrl.CapaDigi[i].estil.length || ParamCtrl.CapaDigi[i].estil[ParamCtrl.CapaDigi[i].i_estil].simbols==null)
 	{
@@ -3479,6 +3479,8 @@ var TipusEventDonaProjeccioConsultaTipica=5;
 var TipusEventWMTSTile=6;
 var TipusEventWMTSTileSOAP=7;
 var TipusEventExecuteProces=8;
+var TipusEventGetFeatureOfInterest=9;
+var TipusEventGetObservation=10;
 
 var EstarEventPendent=1;
 var EstarEventError=2;
@@ -3578,7 +3580,7 @@ var temp, event_consola;
 		temp=temp.replace(">", "&gt;");
 		temp=temp.replace("\n", "<br>");		
 		cdns.push("<b>", event_consola.titol);
-		if (event_consola.tipus==TipusEventGetFeature)
+		if (event_consola.tipus==TipusEventGetFeature || event_consola.tipus==TipusEventGetFeatureOfInterest || event_consola.tipus==TipusEventGetObservation)
 		{
 			if (ParamCtrl.capa[event_consola.i_capa].desc)
 				cdns.push(" ", DonaCadena(ParamCtrl.CapaDigi[event_consola.i_capa].desc));
@@ -3724,10 +3726,12 @@ function DonaDescripcioTipusServidor(tipus)
 		return "WMTS KVP";
     if (tipus=="TipusWMTS_SOAP")
 		return "WMTS SOAP";
-    //if (tipus=="TipusGoogle_KVP")
-//		return "Google KVP";
+    /*if (tipus=="TipusGoogle_KVP")
+		return "Google KVP";*/
     if (tipus=="TipusWFS")
 		return "WFS";
+    if (tipus=="TipusSOS")
+		return "SOS";
     return "";
 }
 
@@ -3744,9 +3748,11 @@ var cdns=[];
 	}
 	else
 	{
-		cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor)), 
-				DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)), DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus), "\" target=\"_blank\">", 
-				DonaServidorCapa(ParamCtrl.capa[i_capa].servidor), " (", DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)), ")", "</a><br>");
+		cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor), 
+				DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)), 
+				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)), "\" target=\"_blank\">", 
+				DonaServidorCapa(ParamCtrl.capa[i_capa].servidor), " (", 
+				DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)), ")", "</a><br>");
 	}
 	return cdns.join("");
 }
@@ -3773,8 +3779,8 @@ var elem=getLayer(this, "enllacWMS_finestra");
 		{
 		    for (i_capa=0; i_capa<ParamCtrl.CapaDigi.length; i_capa++)
 		    {
-			if (ParamCtrl.CapaDigi[i_capa].servidor)
-				cdns.push(ParamCtrl.CapaDigi[i_capa].servidor);
+			if (ParamCtrl.CapaDigi[i_capa].tipus)
+				cdns.push(DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor));
    		    }
                 }
 
@@ -3811,14 +3817,15 @@ var elem=getLayer(this, "enllacWMS_finestra");
 						{
 						    for (i_capa=0; i_capa<ParamCtrl.CapaDigi.length; i_capa++)
 						    {
-							if (ParamCtrl.CapaDigi[i_capa].servidor && cdns[i]==ParamCtrl.CapaDigi[i_capa].servidor)
+							if (ParamCtrl.CapaDigi[i_capa].tipus && cdns[i]==DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor))
 							{
 								if (tipus_acumulat&ParamCtrl.CapaDigi[i_capa].tipus)
 									continue;
 								tipus_acumulat|=ParamCtrl.CapaDigi[i_capa].tipus;
-								cdns2.push("<a href=\"", DonaRequestServiceMetadata(ParamCtrl.CapaDigi[i_capa].servidor, 
-											DonaVersioComAText(ParamCtrl.CapaDigi[i_capa].versio), "TipusWFS"), "\" target=\"_blank\">", 
-										   ParamCtrl.CapaDigi[i_capa].servidor, " (", DonaDescripcioTipusServidor("TipusWFS"), ")","</a><br>");
+								cdns2.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor), 
+											DonaVersioComAText(ParamCtrl.CapaDigi[i_capa].versio), 
+											ParamCtrl.CapaDigi[i_capa].tipus ? ParamCtrl.CapaDigi[i_capa].tipus : "TipusWFS"), "\" target=\"_blank\">", 
+										   DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor), " (", DonaDescripcioTipusServidor(ParamCtrl.CapaDigi[i_capa].tipus ? ParamCtrl.CapaDigi[i_capa].tipus : "TipusWFS"), ")","</a><br>");
 							}
 						    }
 						}
@@ -3846,14 +3853,14 @@ var elem=getLayer(this, "enllacWMS_finestra");
 					{
 					    for (i_capa=0; i_capa<ParamCtrl.CapaDigi.length; i_capa++)
 					    {
-						if (ParamCtrl.CapaDigi[i_capa].servidor && cdns[i].toLowerCase()==ParamCtrl.CapaDigi[i_capa].servidor.toLowerCase())
+						if (ParamCtrl.CapaDigi[i_capa].tipus && cdns[i].toLowerCase()==DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor).toLowerCase())
 						{
 							if (tipus_acumulat&ParamCtrl.CapaDigi[i_capa].tipus)
 								continue;
 							tipus_acumulat|=ParamCtrl.CapaDigi[i_capa].tipus;
-							cdns2.push("<a href=\"", DonaRequestServiceMetadata(ParamCtrl.CapaDigi[i_capa].servidor, 
-										DonaVersioComAText(ParamCtrl.CapaDigi[i_capa].versio), "TipusWFS"), "\" target=\"_blank\">", 
-									   ParamCtrl.CapaDigi[i_capa].servidor, " (", DonaDescripcioTipusServidor("TipusWFS"), ")","</a><br>");
+							cdns2.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor), 
+										DonaVersioComAText(ParamCtrl.CapaDigi[i_capa].versio), ParamCtrl.CapaDigi[i_capa].tipus ? ParamCtrl.CapaDigi[i_capa].tipus : "TipusWFS"), "\" target=\"_blank\">", 
+									   DonaServidorCapa(ParamCtrl.CapaDigi[i_capa].servidor), " (", DonaDescripcioTipusServidor(ParamCtrl.CapaDigi[i_capa].tipus ? ParamCtrl.CapaDigi[i_capa].tipus : "TipusWFS"), ")","</a><br>");
 						}
 					    }
 					}
@@ -5000,6 +5007,7 @@ var node, node2;
 						  "spa":"Se ha producido algun error durante el envío del fichero. Vuélvalo a intentar",
 						  "eng":"Has been occurred an error while sending the file. Try again",
 						  "fre":"Une erreur vient de se produire pendant l'envoi du fichier. Réessayez"}));
+		CanviaEstatEventConsola(null, param_extra.i_event, EstarEventError);
 		return;
 	}
 	document.getElementById("finestra_download_status").innerHTML=s;
@@ -7710,11 +7718,11 @@ var ns;
 	
 	//Agafo l'element BinaryPayload
 	ns="http://www.opengis.net/wmts/"+DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa].versio));	
-	elem=DonamElementsNodeAPartirDelNomDelCamp(root, ns, "wmts", "BinaryPayload");
+	elem=DonamElementsNodeAPartirDelNomDelTag(root, ns, "wmts", "BinaryPayload");
 	if(!elem || elem.length<1)
 	{
 		ns="http://www.opengis.net/wmts/"+DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa].versio));	
-		elem=DonamElementsNodeAPartirDelNomDelCamp(root, ns, "wmts", "BinaryPayload");
+		elem=DonamElementsNodeAPartirDelNomDelTag(root, ns, "wmts", "BinaryPayload");
 		if(!elem || elem.length<1)
 		{
 			alert(DonaCadenaLang({"cat":"No trobo BinaryPayload a la resposta GetTile en SOAP", 
@@ -7753,16 +7761,16 @@ var ns;
 	
 	/* No ho faig servir perquè no sé perquè però em diu que el binary_content no té cap fill
 	//Obtinc el format
-	elem_fill=DonamElementsNodeAPartirDelNomDelCamp(elem[0], ns, "wmts", "Format");
+	elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0], ns, "wmts", "Format");
 	if(elem_fill && elem_fill.length>0 && elem_fill[0].hasChildNodes())
 	   format=elem_fill[0].childNodes[0].nodeValue;
 	else 
 		return;
 
 	//Obtinc el binary_content que és la imatge sol·licitada en codificació amb base 63
-	elem_fill=DonamElementsNodeAPartirDelNomDelCamp(elem[0],ns,"wmts","BinaryContent");
+	elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0],ns,"wmts","BinaryContent");
 	if(!elem_fill || elem.length<1)
-		elem_fill=DonamElementsNodeAPartirDelNomDelCamp(elem[0], ns, "wmts", "PayloadContent");
+		elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0], ns, "wmts", "PayloadContent");
 	if(elem_fill && elem_fill.length>0 && elem_fill[0].hasChildNodes())
 	   binary_content=elem_fill[0].childNodes[0].nodeValue;
 	else
@@ -8107,14 +8115,13 @@ function DonaRequestServiceMetadata(servidor, versio, tipus)
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.0.0&SERVICE=WMTS", (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : false);
 	if (tipus=="TipusWMTS_REST")
 		return servidor + ((servidor.charAt(servidor.length-1)=="/") ? "": "/") + "1.0.0/WMTSCapabilities.xml";
-	if (tipus=="TipusWMTS_SOAP")
-		return "";
+	return "";
 }
 
 
-function CalGirarCoordenades(CRS, v)
+function CalGirarCoordenades(crs, v)
 {
-	if(CRS=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
+	if(crs.toUpperCase()=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
 		return true;
 	return false;
 }
@@ -8362,54 +8369,17 @@ var s;
 }
 
 //Per demanar el punts dels objectes degitalitzats amb tots els atributs o no
-var ConsultaCapaDigi=[];
-var ajax_capa_digi=[];
-
+//var ajax_capa_digi=[];
+/*var ConsultaCapaDigi=[];
 function CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar)
 {
 	this.i_capa_digi=i_capa_digi;
 	this.i_tile=i_tile;
 	this.seleccionar=seleccionar;
 }//Fi de CreaConsultaCapaDigi()
-
+*/
 //Fer sol·licitar la informació dels atributs d'un punt determinat
 var RespostaConsultaObjDigiXML;
-
-function DonamElementsNodeAPartirDelNomDelCamp(pare, uri_ns, nom_ns, nom_tag)
-{
-	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
-	//de getElementsByTagNameNS és diferent
-	//En Motzilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag
-	//en d'altres és el nom del ns i el nom del tag 	
-	//Per getElementsByTagName() en Opera i Chorme no funciona si indicquem el id del ns, és a dir, ns:name no va
-	//En IE depen de la versió
-	//En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
-	//Recomano usar aquesta funció que provarà les diferents possibilitats i així és menys probable tenir problemes
-	
-	var fills=pare.getElementsByTagNameNS(uri_ns, nom_tag); //Mozilla
-	if(fills && fills.length>0)
-		return fills;
-		
-	var fills2=pare.getElementsByTagNameNS(nom_ns, nom_tag); //La resta			
-	if(fills2 && fills2.length>0)
-		return fills2;
-		
-	var fills3=pare.getElementsByTagName(nom_ns+":"+nom_tag); //IE, Mozilla segons versions
-	if(fills3 && fills3.length>0)
-		return fills3;
-		
-	var fills4=pare.getElementsByTagName(nom_tag); //sense namespace
-	if(fills4 && fills4.length>0)
-		return fills4;
-	
-	if(fills)
-		return fills;
-	if(fills2)
-		return fills2;
-	if(fills3)
-		return fills3;
-	return fills4;
-}
 
 function OrdenacioObjCapaDigi(x,y) {
 	//Ascendent per identificador i descendent per data
@@ -8420,13 +8390,13 @@ function OrdenacioObjCapaDigi(x,y) {
 	return 0; 
 }
 
-function OmpleAtributsObjecteCapaDigi(objecte_xml, atributs, feature)
+function OmpleAtributsObjecteCapaDigiDesDeWFS(objecte_xml, atributs, feature)
 {
 var i_atribut;
 var tag, tag2;
 var mostrar;
 
-	tag=DonamElementsNodeAPartirDelNomDelCamp(objecte_xml, "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "Atribut");
+	tag=DonamElementsNodeAPartirDelNomDelTag(objecte_xml, "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "Atribut");
 	atributs=[];  //Potser seria millor no esborrar-los cada cop però ararper ara ha quedat així
 	for(var i=0; i<tag.length; i++)			
 	{
@@ -8447,72 +8417,123 @@ var mostrar;
 		else
 			atributs[i_atribut].mostrar=true;
 		//descripció
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "descripcio");
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "descripcio");
 		if(tag2.length>0 && tag2[0].hasChildNodes())
-		   atributs[i_atribut].descripcio=tag2[0].childNodes[0].nodeValue;
+			atributs[i_atribut].descripcio=tag2[0].childNodes[0].nodeValue;
 		//nom
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "nom");
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "nom");
 		if(tag2.length>0 && tag2[0].hasChildNodes())
-		   atributs[i_atribut].nom=tag2[0].childNodes[0].nodeValue;
+			atributs[i_atribut].nom=tag2[0].childNodes[0].nodeValue;
 		//unitats
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "unitats");				
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "unitats");				
 		if(tag2.length>0 && tag2[0].hasChildNodes())
-		   atributs[i_atribut].unitats=tag2[0].childNodes[0].nodeValue;
+			atributs[i_atribut].unitats=tag2[0].childNodes[0].nodeValue;
 		//separador
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "separador");												
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "separador");												
 		if(tag2.length>0 && tag2[0].hasChildNodes())				
 		{				
-		   atributs[i_atribut].separador=tag2[0].childNodes[0].nodeValue;
-		   atributs[i_atribut].separador=CanviaRepresentacioCaractersProhibitsXMLaCaractersText(atributs[i_atribut].separador);		   
+			atributs[i_atribut].separador=tag2[0].childNodes[0].nodeValue;
+			atributs[i_atribut].separador=CanviaRepresentacioCaractersProhibitsXMLaCaractersText(atributs[i_atribut].separador);		   
 		}
 		//es link
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "esLink");				
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "esLink");				
 		if(tag2.length>0 && tag2[0].hasChildNodes() && tag2[0].childNodes[0].nodeValue=="true")
-		   atributs[i_atribut].esLink=true;
+			atributs[i_atribut].esLink=true;
 		//es imatge
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "esImatge");				
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "esImatge");				
 		if(tag2.length>0 && tag2[0].hasChildNodes() && tag2[0].childNodes[0].nodeValue=="true")
-		   atributs[i_atribut].esImatge=true;
+			atributs[i_atribut].esImatge=true;
 		//valor
-		tag2=DonamElementsNodeAPartirDelNomDelCamp(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "valor");
+		tag2=DonamElementsNodeAPartirDelNomDelTag(tag[i], "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "valor");
 		if(tag2.length>0 && tag2[0].hasChildNodes())
-		   feature.properties[atributs[i_atribut].nom ? atributs[i_atribut].nom : i]=tag2[0].childNodes[0].nodeValue;
+			feature.properties[atributs[i_atribut].nom ? atributs[i_atribut].nom : i]=tag2[0].childNodes[0].nodeValue;
 	}
-}//Fi de OmpleAtributsObjecteCapaDigi()
+}//Fi de OmpleAtributsObjecteCapaDigiDesDeWFS()
 
 function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
-var root;
+var root, id_obj_buscat, capa, valor;
 
 	if(!doc) 
 	{	 
-	    removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 		n_consultes_digi_zero++;
-	    return;	
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return;
 	}
 	root=doc.documentElement;	
 	
 	if(!root)
 	{
-	    removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 		n_consultes_digi_zero++;
-	    return;	
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return;	
 	}
 
-	var objectes=root.getElementsByTagName(ParamCtrl.CapaDigi[consulta.i_capa].nom);
+	capa=ParamCtrl.CapaDigi[consulta.i_capa];
+	if (capa.tipus=="TipusWFS")
+		id_obj_buscat=capa.objectes.features[consulta.i_obj].id;
+	else
+		id_obj_buscat=capa.namespace + "/" + capa.nom + "/featureOfInterest/" + capa.objectes.features[consulta.i_obj].id;
+
+	if (capa.tipus=="TipusWFS")
+		var objectes=root.getElementsByTagName(capa.nom);
+	else
+		var objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/om/2.0", "om", "OM_Observation");
 	
 	if(objectes && objectes.length>0)
 	{
 		for(var i_obj=0; i_obj<objectes.length; i_obj++)
 		{
 			//Agafo l'identificador del punt i miro si coincideix amb el de l'objecte que estic buscant
-			valor=objectes[i_obj].getAttribute('gml:id');
-			if(ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].id==valor)
-				OmpleAtributsObjecteCapaDigi(objectes[i_obj], ParamCtrl.CapaDigi[consulta.i_capa].atributs, ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj]);
+			if (capa.tipus=="TipusWFS")
+			{
+				valor=objectes[i_obj].getAttribute('gml:id');
+				if(id_obj_buscat==valor)
+					OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
+			}
+			else if (capa.tipus="TipusSOS")
+			{
+				var foi_xml=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/om/2.0", "om", "featureOfInterest");
+				if (foi_xml.length>0)
+				{
+					valor=foi_xml[0].getAttribute('xlink:href');
+					if(id_obj_buscat==valor)
+					{
+						var property_name=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/om/2.0", "om", "observedProperty");
+						if (property_name && property_name.length>0)
+						{
+							valor=property_name[0].getAttribute('xlink:href');
+							if (valor)
+							{
+								var prefix_valor=capa.namespace + "/" + capa.nom + "/observableProperty/";
+								property_name=valor.substring(prefix_valor.length);
+								var tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/om/2.0", "om", "result");
+								if(tag.length>0 && tag[0].hasChildNodes())
+								{
+									if (!capa.objectes.features[consulta.i_obj].properties)
+										capa.objectes.features[consulta.i_obj].properties={};
+									capa.objectes.features[consulta.i_obj].properties[property_name]=tag[0].childNodes[0].nodeValue;
+								}
+							}
+						}
+						//Ara el temps:
+						var tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/gml/3.2", "gml", "timePosition");
+						if(tag && tag.length>0 && tag[0].hasChildNodes())
+						{
+							if (!capa.objectes.features[consulta.i_obj].properties)
+								capa.objectes.features[consulta.i_obj].properties={};
+							capa.objectes.features[consulta.i_obj].properties.time=tag[0].childNodes[0].nodeValue;
+						}
+					}
+				}
+			}
 		}
 	}
 
-	if (!ParamCtrl.CapaDigi[consulta.i_capa].objectes || !ParamCtrl.CapaDigi[consulta.i_capa].objectes.features || !ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].properties)==0)
+	if (!capa.objectes || !capa.objectes.features || 
+		!capa.objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(capa.objectes.features[consulta.i_obj].properties)==0)
 	{
 		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 		n_consultes_digi_zero++;
@@ -8531,72 +8552,68 @@ var root;
 		}
 	}
 
-	
-	for(var i_obj=0; i_obj<objectes.length; i_obj++)
-	{
-		//Agafo l'identificador del punt i miro si coincideix amb el de l'objecte que estic buscant
-		valor=objectes[i_obj].getAttribute('gml:id');
-		if(ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].id==valor)
-			OmpleAtributsObjecteCapaDigi(objectes[i_obj], ParamCtrl.CapaDigi[consulta.i_capa].atributs, ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj]);
-	}
-	if (!ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].properties && CountPropertiesOfObject(ParamCtrl.CapaDigi[consulta.i_capa].objectes.features[consulta.i_obj].properties)==0)
-	{
-		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
-		n_consultes_digi_zero++;
-	}
-	else 
-	{
-		var text_resposta=MostraConsultaCapaDigitalitzadaComHTML(consulta.i_capa, consulta.i_obj, true, true)
-		if(!text_resposta || text_resposta=="")
-		{
-			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
-			n_consultes_digi_zero++;
-		}
-		else		
-		{
-		contentLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj), text_resposta);
-		}
-	}
-
+	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 }// Fi de OmpleCapaDigiAmbPropietatsObjecteDigitalitzat()
+
+function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
+{
+	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+}
 
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
-var root;
+var root, tag;
 var i_obj_capa;
-var tag;
-//var tag2, i_atribut, i;
-var valor;
-var cal_crear_vista=false;
-var cal_transformar;
-var punt;
-var objectes;
+var cal_crear_vista=false, cal_transformar;
+var punt, objectes, valor, capa;
 
 	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serà un punt	
-	if(!doc) return;
-	root=doc.documentElement;
-	if(!root)return;
-	
-	if(!ParamCtrl.CapaDigi[consulta.i_capa_digi].namespace || ParamCtrl.CapaDigi[consulta.i_capa_digi].namespace==null)
+	if(!doc) 
 	{
-		var ns;
-		var atributs=root.attributes;
-		if(atributs)
-			ns=atributs.getNamedItem("xmlns");
-		if(ns)
-			ParamCtrl.CapaDigi[consulta.i_capa_digi].namespace=ns.value;
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return;
 	}
-	objectes=root.getElementsByTagName(ParamCtrl.CapaDigi[consulta.i_capa_digi].nom);
+
+	root=doc.documentElement;
+	if(!root)
+	{
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return;
+	}
+
+	capa=ParamCtrl.CapaDigi[consulta.i_capa_digi];
+	if (capa.tipus=="TipusWFS")
+	{
+		if(!capa.namespace || capa.namespace==null)
+		{
+			var ns;
+			var atributs=root.attributes;
+			if(atributs)
+				ns=atributs.getNamedItem("xmlns");
+			if(ns)
+				capa.namespace=ns.value;
+		}
+		objectes=root.getElementsByTagName(capa.nom);
+	}
+	else if (capa.tipus=="TipusSOS")
+		objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/samplingSpatial/2.0", "sams", "SF_SpatialSamplingFeature");
+	else
+	{
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return;
+	}
+
 	if(objectes && objectes.length>0)
 	{
-		ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes={"type": "FeatureCollection", "features": []};
+		capa.objectes={"type": "FeatureCollection", "features": []};
 		for(var i_obj=0; i_obj<objectes.length; i_obj++)
 		{
 			//Agafo l'identificador del punt i creo l'objecte dins de la Capa
 			valor=objectes[i_obj].getAttribute('gml:id');
-			i_obj_capa=ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features.length;			
-			ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa]=//new CreaFeature(valor, new Date(), 0, [], [], (consulta.seleccionar? true : false));
-							{
+			if (capa.tipus=="TipusSOS")
+				valor=valor.substring(capa.nom.length+1); //elimino el nom de la capa de l'id.
+			i_obj_capa=capa.objectes.features.length;			
+			capa.objectes.features[i_obj_capa]={
 								"id": valor,
 								"data": null,
 								"i_simbol": 0,
@@ -8611,23 +8628,31 @@ var objectes;
 			if(objectes[i_obj].hasChildNodes)
 			{
 				//Agafo la posició dels objectes
-				tag=DonamElementsNodeAPartirDelNomDelCamp(objectes[i_obj], "http://www.opengis.net/gml", "gml", "pos");			
+				tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/gml", "gml", "pos");			
 				if(tag.length>0)
 				{
 					cal_crear_vista=true;
 					cal_transformar=false;
 					valor=tag[0].childNodes[0].nodeValue;
 					var coord=valor.split(" ");
-					ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[0]=parseFloat(coord[0]);
-					ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[1]=parseFloat(coord[1]);
-					if(ParamCtrl.CapaDigi[consulta.i_capa_digi].CRS  && 
-					   ParamCtrl.CapaDigi[consulta.i_capa_digi].CRS.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+					if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))
 					{
-						ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].puntCRSactual=[];
-						ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].puntCRSactual[0]={"x": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[0], 
-																"y": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[1]}
- 						TransformaCoordenadesPunt(ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].puntCRSactual[0], 
-											ParamCtrl.CapaDigi[consulta.i_capa_digi].CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+						capa.objectes.features[i_obj_capa].geometry.coordinates[0]=parseFloat(coord[1]);
+						capa.objectes.features[i_obj_capa].geometry.coordinates[1]=parseFloat(coord[0]);
+					}
+					else
+					{
+						capa.objectes.features[i_obj_capa].geometry.coordinates[0]=parseFloat(coord[0]);
+						capa.objectes.features[i_obj_capa].geometry.coordinates[1]=parseFloat(coord[1]);
+					}
+					if(capa.CRS  && 
+					   capa.CRS.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+					{
+						capa.objectes.features[i_obj_capa].puntCRSactual=[];
+						capa.objectes.features[i_obj_capa].puntCRSactual[0]={"x": capa.objectes.features[i_obj_capa].geometry.coordinates[0], 
+																"y": capa.objectes.features[i_obj_capa].geometry.coordinates[1]}
+ 						TransformaCoordenadesPunt(capa.objectes.features[i_obj_capa].puntCRSactual[0], 
+											capa.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 						cal_transformar=true;
 					}					
 					if(consulta.seleccionar==true)
@@ -8636,18 +8661,18 @@ var objectes;
 						if(EnvSelec==null)
 						{							
 							if(cal_transfomar)
-								punt=ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].puntCRSactual[0];
+								punt=capa.objectes.features[i_obj_capa].puntCRSactual[0];
 							else
-								punt={"x": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[0], "y": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[1]};
+								punt={"x": capa.objectes.features[i_obj_capa].geometry.coordinates[0], "y": capa.objectes.features[i_obj_capa].geometry.coordinates[1]};
 							EnvSelec={"MinX": punt.x, "MaxX": punt.x, "MinY": punt.y, "MaxY": punt.y};
 						}
 						else
 						{
 							if(cal_transfomar)
-								punt=ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].puntCRSactual[0];
+								punt=capa.objectes.features[i_obj_capa].puntCRSactual[0];
 							else
-								punt={"x": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[0], "y": ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa].geometry.coordinates[1]};
-								
+								punt={"x": capa.objectes.features[i_obj_capa].geometry.coordinates[0], "y": capa.objectes.features[i_obj_capa].geometry.coordinates[1]};
+							
 							if(punt.x<EnvSelec.MinX)
 								EnvSelec.MinX=punt.x;
 							if(punt.x>EnvSelec.MaxX)
@@ -8656,50 +8681,60 @@ var objectes;
 								EnvSelec.MinY=punt.y;
 							if(punt.y>EnvSelec.MaxY)
 								EnvSelec.MaxY=punt.y;
-						}
+						}	
 					}
 				}
-				//ara els atributs
-				OmpleAtributsObjecteCapaDigi(objectes[i_obj], ParamCtrl.CapaDigi[consulta.i_capa_digi].atributs, ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i_obj_capa]);
+
+				if (capa.tipus=="TipusWFS")
+				{
+					//ara els atributs
+					OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, capa.objectes.features[i_obj_capa]);
+				}
 				//ara el i_simbol
-				DeterminaISimbolObjecteCapaDigi(ParamCtrl.CapaDigi[consulta.i_capa_digi]);
-				CarregaSimbolsCapaDigi(consulta.i_capa_digi);
+				DeterminaISimbolObjecteCapaDigi(capa, i_obj);
 			}		
 		}
-		if (ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes && ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features && ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features.length==0)
-			ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes=null;
+		CarregaSimbolsCapaDigi(consulta.i_capa_digi);
+	}
+	if (capa.objectes && capa.objectes.features && capa.objectes.features.length==0)
+		capa.objectes=null;
 		
-		if (ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes && ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features)
+	if (capa.objectes && capa.objectes.features)
+	{
+		capa.objectes.features.sort(OrdenacioObjCapaDigi);
+		var anterior=capa.objectes.features[0].id;
+		var i=1;
+		while(i<capa.objectes.features.length)
 		{
-			ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features.sort(OrdenacioObjCapaDigi);
-			var anterior=ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[0].id;
-			var i=1;
-			while(i<ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features.length)
+			if(anterior==capa.objectes.features[i].id)
+				capa.objectes.features.splice(i,1);
+			else
 			{
-				if(anterior==ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i].id)
-				{
-					ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features.splice(i,1);
-				}
-				else
-				{
-					anterior=ParamCtrl.CapaDigi[consulta.i_capa_digi].objectes.features[i].id;
-					i++;
-				}
+				anterior=capa.objectes.features[i].id;
+				i++;
 			}
 		}
 	}
+
 	if(consulta.i_tile!=-1)		
-		ParamCtrl.CapaDigi[consulta.i_capa_digi].tiles_solicitats[consulta.i_tile]="TileRebut";
+		capa.tiles_solicitats[consulta.i_tile]="TileRebut";
 	if(consulta.seleccionar==false && cal_crear_vista)
 	    CreaVistes();
+	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
+
 }//Fi de OmpleCapaDigiAmbObjectesDigitalitzats()
+
+function ErrorCapaDigiAmbObjectesDigitalitzats(doc, consulta)
+{
+	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+}//Fi de ErrorCapaDigiAmbObjectesDigitalitzats()
 
 function DeterminaISimbolObjecteCapaDigi(capa_digi, i_obj_capa)
 {
 var index_atribut=-1, i_simbol, estil;
 	if(capa_digi.estil && capa_digi.estil.length && 
 		capa_digi.estil[capa_digi.i_estil].simbols &&
-		capa_digi.estil[capa_digi.i_estil].simbols.NomCamp!=null &&
+		capa_digi.estil[capa_digi.i_estil].simbols.NomCamp &&
 		capa_digi.objectes.features[i_obj_capa].properties &&
 		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
 	{
@@ -8736,29 +8771,31 @@ function EnErrorCarregarSimbolCapaDigi(i_capa_digi, i_simbol)
 
 function CarregaSimbolsCapaDigi(i_capa_digi)
 {
+	if (!ParamCtrl.CapaDigi[i_capa_digi].estil || 
+		!ParamCtrl.CapaDigi[i_capa_digi].estil[ParamCtrl.CapaDigi[i_capa_digi].i_estil].simbols || 
+		!ParamCtrl.CapaDigi[i_capa_digi].estil[ParamCtrl.CapaDigi[i_capa_digi].i_estil].simbols.simbol)
+		return;
+
 	simbols=ParamCtrl.CapaDigi[i_capa_digi].estil[ParamCtrl.CapaDigi[i_capa_digi].i_estil].simbols.simbol;
-	if (simbols)
+
+	for(i_simbol=0; i_simbol<simbols.length; i_simbol++)
 	{
-		for(i_simbol=0; i_simbol<simbols.length; i_simbol++)
+		if (simbols[i_simbol].icona)
 		{
-			if (simbols[i_simbol].icona)
+			if(!simbols[i_simbol].icona.img)
 			{
-				if(!simbols[i_simbol].icona.img)
-				{
-					simbols[i_simbol].icona.img = new Image();
-					simbols[i_simbol].icona.img.src = AfegeixAdrecaBaseSRC(simbols[i_simbol].icona.icona);
-					simbols[i_simbol].icona.img.ncol = simbols[i_simbol].icona.ncol;
-					simbols[i_simbol].icona.img.nfil = simbols[i_simbol].icona.nfil;
-					simbols[i_simbol].icona.img.sha_carregat = false;
-					simbols[i_simbol].icona.img.hi_ha_hagut_error = false;
-					simbols[i_simbol].icona.img.onload = EnCarregarSimbolCapaDigi;
-					simbols[i_simbol].icona.img.onerror = EnErrorCarregarSimbolCapaDigi;
-				}	
-			}
+				simbols[i_simbol].icona.img = new Image();
+				simbols[i_simbol].icona.img.src = AfegeixAdrecaBaseSRC(simbols[i_simbol].icona.icona);
+				simbols[i_simbol].icona.img.ncol = simbols[i_simbol].icona.ncol;
+				simbols[i_simbol].icona.img.nfil = simbols[i_simbol].icona.nfil;
+				simbols[i_simbol].icona.img.sha_carregat = false;
+				simbols[i_simbol].icona.img.hi_ha_hagut_error = false;
+				simbols[i_simbol].icona.img.onload = EnCarregarSimbolCapaDigi;
+				simbols[i_simbol].icona.img.onerror = EnErrorCarregarSimbolCapaDigi;
+			}	
 		}
 	}
 }
-
 
 function DonaRequestDescribeFeatureTypeInterna(i, simple)
 {
@@ -8768,26 +8805,37 @@ var c_afegir="";
 	cdns.push("VERSION=",DonaVersioComAText(ParamCtrl.CapaDigi[i_capa].versio),"&amp;SERVICE=WFS&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=",
 			  (simple ? "text/xml;subtype=gml/3.1.1/profiles/gmlsf/1.0.0/0" : "text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes") ,
 			  "&amp;SRSNAME=",ParamCtrl.CapaDigi[i].CRS ,"&amp;TYPENAME=" ,ParamCtrl.CapaDigi[i].nom);
-	var s=AfegeixNomServidorARequest(ParamCtrl.CapaDigi[i].servidor, cdns.join(""), true);
-	return s;
-}//Fi de DonaRequestDescribeFeatureType()
 
-function DonaRequestGetFeature(i,env, cadena_objectes, completa)
+	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaDigi[i].servidor), cdns.join(""), true);
+}//Fi de DonaRequestDescribeFeatureTypeInterna()
+
+function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
+{
+	if (ParamCtrl.CapaDigi[i_capa].tipus=="TipusWFS")
+		return DonaRequestGetFeature(i_capa, env, cadena_objectes, completa);
+	if (ParamCtrl.CapaDigi[i_capa].tipus=="TipusSOS")
+		return DonaRequestGetFeatureOfInterest(i_capa, env, cadena_objectes, completa);
+	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + ParamCtrl.CapaDigi[i_capa].tipus);
+	return "";
+}
+
+function DonaRequestGetFeature(i_capa, env, cadena_objectes, completa)
 {
 var cdns=[];
 var c_afegir="";
+var capa=ParamCtrl.CapaDigi[i_capa];
 
-	cdns.push("VERSION=",DonaVersioComAText(ParamCtrl.CapaDigi[i].versio),"&SERVICE=WFS&REQUEST=GetFeature&OUTPUTFORMAT=text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes&ATRIBUTFORMAT=complex&SRSNAME=" , 
-	          ParamCtrl.CapaDigi[i].CRS ,"&TYPENAME=" ,ParamCtrl.CapaDigi[i].nom);
+	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=WFS&REQUEST=GetFeature&OUTPUTFORMAT=text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes&ATRIBUTFORMAT=complex&SRSNAME=" , 
+	          capa.CRS ,"&TYPENAME=" ,capa.nom);
 	if(env)  //Està en el mateix sistema de referència que la CapaDigi
 	{
 		cdns.push("&BBOX=" , env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
 		if(completa==false)
 		{
-			if(ParamCtrl.CapaDigi[i].estil && ParamCtrl.CapaDigi[i].estil.length && ParamCtrl.CapaDigi[i].estil[ParamCtrl.CapaDigi[i].i_estil].simbols.NomCamp!=null)
-				cdns.push("&PROPERTYNAME=" , ParamCtrl.CapaDigi[i].nom , "/gml:position,", ParamCtrl.CapaDigi[i].nom , "/", ParamCtrl.CapaDigi[i].estil[ParamCtrl.CapaDigi[i].i_estil].simbols.NomCamp);		
+			if(capa.estil && capa.estil.length && capa.estil[capa.i_estil].simbols.NomCamp!=null)
+				cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position,", capa.nom , "/", capa.estil[capa.i_estil].simbols.NomCamp);		
 			else
-		          cdns.push("&PROPERTYNAME=" , ParamCtrl.CapaDigi[i].nom , "/gml:position");
+		          cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
 		}
 	}
 	else if(cadena_objectes)
@@ -8796,82 +8844,134 @@ var c_afegir="";
 		if(completa==false)
 		{
 			cdns.push("&PROPERTYNAME=");
-			if(ParamCtrl.CapaDigi[i].estil && ParamCtrl.CapaDigi[i].estil.length && ParamCtrl.CapaDigi[i].estil[ParamCtrl.CapaDigi[i].i_estil].simbols.NomCamp!=null)
-				c_afegir=","+ParamCtrl.CapaDigi[i].nom+"/"+ParamCtrl.CapaDigi[i].estil[ParamCtrl.CapaDigi[i].i_estil].simbols.NomCamp;
+			if(capa.estil && capa.estil.length && capa.estil[capa.i_estil].simbols.NomCamp!=null)
+				c_afegir=","+capa.nom+"/"+capa.estil[capa.i_estil].simbols.NomCamp;
 			else
 				c_afegir="";
 			for(var i_obj=0; i_obj<cadena_objectes.length; i_obj++)
 			{
-				cdns.push("(", ParamCtrl.CapaDigi[i].nom , "/gml:position", c_afegir, ")");
+				cdns.push("(", capa.nom , "/gml:position", c_afegir, ")");
 			}
 		}
 	}
-	var s=AfegeixNomServidorARequest(ParamCtrl.CapaDigi[i].servidor, cdns.join(""), true);
-	CreaIOmpleEventConsola("GetFeature", i, s, TipusEventGetFeature);
-	return s;
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
 }//Fi de DonaRequestGetFeature()
+
+function DonaRequestGetFeatureOfInterest(i_capa, env, cadena_objectes, completa)
+{
+var cdns=[];
+var capa=ParamCtrl.CapaDigi[i_capa];
+
+	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=SOS&REQUEST=GetFeatureOfInterest&procedure=", capa.namespace, "/", capa.nom, "/procedure");
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
+}
+
+function DonaRequestGetObservation(i_capa, i_obj)
+{
+var cdns=[];
+var capa=ParamCtrl.CapaDigi[i_capa];
+
+	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=SOS&REQUEST=GetObservation&featureOfInterest=", capa.namespace, "/", capa.nom, "/featureOfInterest/", capa.objectes.features[i_obj].id);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
+}
+
 
 function FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(i_capa_digi, env, seleccionar)
 {
-var i_consulta=ajax_capa_digi.length;
-	ajax_capa_digi[i_consulta]=new Ajax();
-	ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
+//var i_consulta=ajax_capa_digi.length;
+	//ajax_capa_digi[i_consulta]=new Ajax();
+	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
 	//env està en el CRS de la CapaDigi
-	ajax_capa_digi[i_consulta].doGet(DonaRequestGetFeature(i_capa_digi, env, null, false), OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", ConsultaCapaDigi[i_consulta]);
+
+	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env, null, false);
+	if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusWFS")
+		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusSOS")
+		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+
+	//ajax_capa_digi[i_consulta].doGet(url, OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+	loadFile(url, "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant()
 
 function FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(i_capa_digi, cadena_objectes, seleccionar)
 {
-var i_consulta=ajax_capa_digi.length;
-	ajax_capa_digi[i_consulta]=new Ajax();
-	ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
-	ajax_capa_digi[i_consulta].doGet(DonaRequestGetFeature(i_capa_digi, null, cadena_objectes, false), OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", ConsultaCapaDigi[i_consulta]);
+//var i_consulta=ajax_capa_digi.length;
+	//ajax_capa_digi[i_consulta]=new Ajax();
+	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
+
+	var url=DonaRequestOWSObjectesDigi(i_capa_digi, null, cadena_objectes, false);
+	if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusWFS")
+		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusSOS")
+		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+
+	//ajax_capa_digi[i_consulta].doGet(, OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+	loadFile(url, "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerIdentificador()
 
 function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, env_sol, seleccionar)
 {
-var i_consulta=ajax_capa_digi.length;
-	ajax_capa_digi[i_consulta]=new Ajax();
-	ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar);
+//var i_consulta=ajax_capa_digi.length;
+	//ajax_capa_digi[i_consulta]=new Ajax();
+	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar);
 	ParamCtrl.CapaDigi[i_capa_digi].tiles_solicitats[i_tile]="TileSolicitat";	
+
+	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env_sol, null, false);
+	if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusWFS")
+		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	else if (ParamCtrl.CapaDigi[i_capa_digi].tipus=="TipusSOS")
+		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+
 	//env_sol està ja en el CRS de la CapaDigi
-	ajax_capa_digi[i_consulta].doGet(DonaRequestGetFeature(i_capa_digi, env_sol, null, false), OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", ConsultaCapaDigi[i_consulta]);
+	//ajax_capa_digi[i_consulta].doGet(url, OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "seleccionar": seleccionar, "i_event": i_event});
+	loadFile(url, "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "seleccionar": seleccionar, "i_event": i_event});
+
 }//Fi de FesPeticioAjaxObjectesDigitalitzats()
 
 function FesPeticioAjaxConsultaObjDigi()
 {
 var env_icona;
-	ajax_consulta_capa_digi=[];
-	var punt;
-	var cal_transformar;
+//var ajax_consulta_capa_digi=[];
+var punt, cal_transformar, url;
+
 	for (var i=0; i<RespostaConsultaObjDigiXML.length; i++)
 		n_capes_digi_consultables++;
 	
 	for (var i=0; i<RespostaConsultaObjDigiXML.length; i++)
 	{
-		ajax_consulta_capa_digi[i]=new Ajax();		
-		cal_transformar=false;
-		if(!ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].CRS  || 
-			ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-			punt={"x": ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].objectes.features[RespostaConsultaObjDigiXML[i].i_obj].geometry.coordinates[0], 
-				"y": ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].objectes.features[RespostaConsultaObjDigiXML[i].i_obj].geometry.coordinates[1]};
-		else
+		//ajax_consulta_capa_digi[i]=new Ajax();		
+		var capa=ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa];
+		if (capa.tipus=="TipusWFS")
 		{
-			punt=ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].objectes.features[RespostaConsultaObjDigiXML[i].i_obj].puntCRSactual[0];
-			cal_transformar=true;
-		}
+			cal_transformar=false;
+			if(!capa.CRS  || 
+				capa.CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+				punt={"x": capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].geometry.coordinates[0], 
+					"y": capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].geometry.coordinates[1]};
+			else
+			{
+				punt=capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].puntCRSactual[0];
+				cal_transformar=true;
+			}
 			
-		env_icona=DonaEnvIcona(punt, 
-			     ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].estil[ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].i_estil].simbols.simbol[ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].objectes.features[RespostaConsultaObjDigiXML[i].i_obj].i_simbol].icona);
+			env_icona=DonaEnvIcona(punt, 
+				     capa.estil[capa.i_estil].simbols.simbol[capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].i_simbol].icona);
 		
-		if(cal_transformar)
-		{
-			//Transformo l'envolupant al sistema de referència de la capa
-			env_icona=TransformaEnvolupant(env_icona, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.CapaDigi[RespostaConsultaObjDigiXML[i].i_capa].CRS);
+			if(cal_transformar)
+			{
+				//Transformo l'envolupant al sistema de referència de la capa
+				env_icona=TransformaEnvolupant(env_icona, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS);
+			}
+			url=DonaRequestGetFeature(RespostaConsultaObjDigiXML[i].i_capa, env_icona, null, true);
+			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("GetFeature", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetFeature);
 		}
-		ajax_consulta_capa_digi[i].doGet(DonaRequestGetFeature(RespostaConsultaObjDigiXML[i].i_capa, env_icona, null, true), 
-						OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, 
-						"text/xml", RespostaConsultaObjDigiXML[i]);
+		else if (capa.tipus=="TipusSOS")
+		{
+			url=DonaRequestGetObservation(RespostaConsultaObjDigiXML[i].i_capa, RespostaConsultaObjDigiXML[i].i_obj);
+			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("GetObservation", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
+		}
+		//ajax_consulta_capa_digi[i].doGet();
+		loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 	}
 }//Fi de FesPeticioAjaxConsultaObjDigi()
 
@@ -8881,62 +8981,66 @@ function DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, env)
 var env_total;
 var env_temp;
 var incr_x=0, incr_y=0, i_tile=0;
+var capa=ParamCtrl.CapaDigi[i_capa];
+var env_img_situacio=ParamCtrl.ImatgeSituacio[capa.i_situacio].EnvTotal;
 
 	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamCtrl.CapaDigi[i_capa].i_situacio
-	if(ParamInternCtrl.ISituacio==ParamCtrl.CapaDigi[i_capa].i_situacio)
+	if(ParamInternCtrl.ISituacio==capa.i_situacio || 
+		ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==env_img_situacio.CRS)
 		env_total={"MinX": env.MinX, "MaxX": env.MaxX, "MinY": env.MinY, "MaxY": env.MaxY};
 	else
 	{
 		env_total=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, 
-								  ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.CRS);
+								  env_img_situacio.CRS);
 	}
-	if(env_total.MinX<ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX)
-		env_total.MinX=ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX;
-	if(env_total.MaxX>ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxX)
-		env_total.MaxX=ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxX;
-	if(env_total.MinY<ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY)
-		env_total.MinY=ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY;
-	if(env_total.MaxY>ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxY)
-		env_total.MaxY=ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxY;		
+	if(env_total.MinX<env_img_situacio.EnvCRS.MinX)
+		env_total.MinX=env_img_situacio.EnvCRS.MinX;
+	if(env_total.MaxX>env_img_situacio.EnvCRS.MaxX)
+		env_total.MaxX=env_img_situacio.EnvCRS.MaxX;
+	if(env_total.MinY<env_img_situacio.EnvCRS.MinY)
+		env_total.MinY=env_img_situacio.EnvCRS.MinY;
+	if(env_total.MaxY>env_img_situacio.EnvCRS.MaxY)
+		env_total.MaxY=env_img_situacio.EnvCRS.MaxY;		
+	
 	//Ara haig de fer els talls en funció de i_situacio indicat en CapaDigi i en la mida indicada i mirar si tinc els talls o no i sol·licitar-los
-	incr_x=(ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX)/ParamCtrl.CapaDigi[i_capa].n_cols_tiles;
-	incr_y=(ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY)/ParamCtrl.CapaDigi[i_capa].n_files_tiles;
+	incr_x=(env_img_situacio.EnvCRS.MaxX-env_img_situacio.EnvCRS.MinX)/capa.n_cols_tiles;
+	incr_y=(env_img_situacio.EnvCRS.MaxY-env_img_situacio.EnvCRS.MinY)/capa.n_files_tiles;
 	
 	env_temp={"MinX": env_total.MinX, "MaxX": env_total.MaxX, "MinY": env_total.MinY, "MaxY": env_total.MaxY};
-	for(var i_col=0; i_col<ParamCtrl.CapaDigi[i_capa].n_cols_tiles; i_col++)
+	for(var i_col=0; i_col<capa.n_cols_tiles; i_col++)
 	{
-		if(((ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX+(i_col*incr_x))<=env_temp.MinX )&& 
-		   ((ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX+((i_col+1)*incr_x))>=env_temp.MinX))
+		if(((env_img_situacio.EnvCRS.MinX+(i_col*incr_x))<=env_temp.MinX )&& 
+		   ((env_img_situacio.EnvCRS.MinX+((i_col+1)*incr_x))>=env_temp.MinX))
 		{
-			for(var j_fil=0; j_fil<ParamCtrl.CapaDigi[i_capa].n_files_tiles; j_fil++)
+			for(var j_fil=0; j_fil<capa.n_files_tiles; j_fil++)
 			{
-				i_tile=((j_fil)*ParamCtrl.CapaDigi[i_capa].n_cols_tiles)+i_col;
-				if((ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY+(j_fil*incr_y))<=env_temp.MinY && 
-				   (ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY+((j_fil+1)*incr_y))>=env_temp.MinY)
+				i_tile=((j_fil)*capa.n_cols_tiles)+i_col;
+				if((env_img_situacio.EnvCRS.MinY+(j_fil*incr_y))<=env_temp.MinY && 
+				   (env_img_situacio.EnvCRS.MinY+((j_fil+1)*incr_y))>=env_temp.MinY)
 				{
-					if(ParamCtrl.CapaDigi[i_capa].tiles_solicitats[i_tile]=="TileNoSolicitat")
+					if(capa.tiles_solicitats[i_tile]=="TileNoSolicitat")
 					{
-						var env_sol={"MinX": ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX+(i_col*incr_x), 
-							     "MaxX": ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX+((i_col+1)*incr_x), 
-							     "MinY": ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY+(j_fil*incr_y), 
-							     "MaxY": ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY+((j_fil+1)*incr_y)};								   
+						var env_sol={"MinX": env_img_situacio.EnvCRS.MinX+(i_col*incr_x), 
+							     "MaxX": env_img_situacio.EnvCRS.MinX+((i_col+1)*incr_x), 
+							     "MinY": env_img_situacio.EnvCRS.MinY+(j_fil*incr_y), 
+							     "MaxY": env_img_situacio.EnvCRS.MinY+((j_fil+1)*incr_y)};								   
 									   
-						env_sol=TransformaEnvolupant(env_sol, ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.CRS, 
-								  ParamCtrl.CapaDigi[i_capa].CRS);
-						FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false);					
+						env_sol=TransformaEnvolupant(env_sol, env_img_situacio.CRS, 
+								  capa.CRS);
+						FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false);
 					}
 				}			
-				env_temp.MinY=(ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinY+((j_fil+1)*incr_y));
+				env_temp.MinY=(env_img_situacio.EnvCRS.MinY+((j_fil+1)*incr_y));
 				if(env_temp.MaxY<=env_temp.MinY)
 					break;					
 			}			
 		}
-		env_temp.MinX=(ParamCtrl.ImatgeSituacio[ParamCtrl.CapaDigi[i_capa].i_situacio].EnvTotal.EnvCRS.MinX+((i_col+1)*incr_x));
+		env_temp.MinX=(env_img_situacio.EnvCRS.MinX+((i_col+1)*incr_x));
 		if(env_temp.MaxX<=env_temp.MinX)
 			break;					
 		env_temp.MinY=env_total.MinY;
 	}
-}//Fi de DemanaTilesDeCapaDigitalitzadaSiCalIMostraObjectesQueCalguin()
+}//Fi de DemanaTilesDeCapaDigitalitzadaSiCal()
 
 var EnvSelec=null;
 
@@ -10997,16 +11101,15 @@ var redibuixar_llegenda=false;
 		redibuixar_llegenda=true;
 	ParamCtrl.CapaDigi[i_capa].i_estil=i_estil;	
 	ParamCtrl.CapaDigi[i_capa].objectes=null;
-	ParamCtrl.CapaDigi[i_capa].tiles_solicitats==null;
-	if(ParamCtrl.CapaDigi[i_capa].servidor)
+	if (ParamCtrl.CapaDigi[i_capa].tipus)
 	{
-		//Creo un array de tiles
-		ParamCtrl.CapaDigi[i_capa].tiles_solicitats=[];
-		for(var i_tiles=0; i_tiles<ParamCtrl.CapaDigi[i_capa].n_cols_tiles*ParamCtrl.CapaDigi[i_capa].n_files_tiles; i_tiles++)
-			ParamCtrl.CapaDigi[i_capa].tiles_solicitats[i_tiles]="TileNoSolicitat";
-		DemanaTilesDeCapaDigitalitzadaSiCal(i_capa,ParamInternCtrl.vista.EnvActual);
+		InicialitzaTilesSolicitatsCapaDigi(ParamCtrl.CapaDigi[i_capa]);
+		DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, ParamInternCtrl.vista.EnvActual);
 	}
-    if (redibuixar_llegenda)
+	else
+		ParamCtrl.CapaDigi[i_capa].tiles_solicitats=null;
+
+	if (redibuixar_llegenda)
 		CreaLlegenda();
 }
 	
@@ -11100,7 +11203,7 @@ var capa_digi=ParamCtrl.CapaDigi[i];
 				//http://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
 			}				
 		}
-		if(capa_digi.servidor)
+		if(capa_digi.tipus)
 			DemanaTilesDeCapaDigitalitzadaSiCal(i, env);
 	}
 }
@@ -13353,6 +13456,21 @@ function PreparaParamInternCtrl()
     }
 }
 
+function InicialitzaTilesSolicitatsCapaDigi(capa)
+{
+	if (capa.tipus)
+	{
+		//Creo un array de tiles
+		capa.tiles_solicitats=[];
+		if (!capa.n_cols_tiles)
+			capa.n_cols_tiles=1;
+		if (!capa.n_files_tiles)
+			capa.n_files_tiles=1;
+		for(var i_tiles=0; i_tiles<capa.n_cols_tiles*capa.n_files_tiles; i_tiles++)
+			capa.tiles_solicitats[i_tiles]="TileNoSolicitat";
+	}
+}
+
 
 var ParamCtrl;
 
@@ -13398,26 +13516,26 @@ var win;
 	{
 		for(var i_capa_digi=0; i_capa_digi<ParamCtrl.CapaDigi.length; i_capa_digi++)
 		{
-			if(ParamCtrl.CapaDigi[i_capa_digi].servidor && ParamCtrl.CapaDigi[i_capa_digi].tiles_solicitats==null) //És una capa que té objectes GML
+			var capa=ParamCtrl.CapaDigi[i_capa_digi];
+
+			InicialitzaTilesSolicitatsCapaDigi(capa);
+
+			if(capa.CRS &&
+			   capa.CRS.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase() && capa.objectes && capa.objectes.features)
 			{
-				//Creo un array de tiles
-				ParamCtrl.CapaDigi[i_capa_digi].tiles_solicitats=[];
-				for(var i_tiles=0; i_tiles<ParamCtrl.CapaDigi[i_capa_digi].n_cols_tiles*ParamCtrl.CapaDigi[i_capa_digi].n_files_tiles; i_tiles++)
-					ParamCtrl.CapaDigi[i_capa_digi].tiles_solicitats[i_tiles]="TileNoSolicitat";
-			}
-			if(ParamCtrl.CapaDigi[i_capa_digi].CRS &&
-			   ParamCtrl.CapaDigi[i_capa_digi].CRS.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase() && ParamCtrl.CapaDigi[i_capa_digi].objectes && ParamCtrl.CapaDigi[i_capa_digi].objectes.features)
-			{
-				for(var j=0; j<ParamCtrl.CapaDigi[i_capa_digi].objectes.features.length; j++)
+				for(var j=0; j<capa.objectes.features.length; j++)
 				{
-					ParamCtrl.CapaDigi[i_capa_digi].objectes.features[j].puntCRSactual=[];
-					ParamCtrl.CapaDigi[i_capa_digi].objectes.features[j].puntCRSactual[0]={"x": ParamCtrl.CapaDigi[i].objectes.features[j].geometry.coordinates[0], 
-													"y": ParamCtrl.CapaDigi[i_capa_digi].objectes.features[j].geometry.coordinates[1]};
-					TransformaCoordenadesPunt(ParamCtrl.CapaDigi[i_capa_digi].objectes.features[j].puntCRSactual[0], ParamCtrl.CapaDigi[i_capa_digi].CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+					capa.objectes.features[j].puntCRSactual=[];
+					capa.objectes.features[j].puntCRSactual[0]={"x": ParamCtrl.CapaDigi[i].objectes.features[j].geometry.coordinates[0], 
+													"y": capa.objectes.features[j].geometry.coordinates[1]};
+					TransformaCoordenadesPunt(capa.objectes.features[j].puntCRSactual[0], capa.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 				}
 			}
-			for(var j=0; j<ParamCtrl.CapaDigi[i_capa_digi].objectes.features.length; j++)
-				DeterminaISimbolObjecteCapaDigi(ParamCtrl.CapaDigi[i_capa_digi], j);
+			if (capa.objectes)
+			{
+				for(var j=0; j<capa.objectes.features.length; j++)
+					DeterminaISimbolObjecteCapaDigi(ParamCtrl.CapaDigi[i_capa_digi], j);
+			}
 			CarregaSimbolsCapaDigi(i_capa_digi);
 		}
 	}

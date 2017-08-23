@@ -191,9 +191,9 @@ function loadGmlTag(gmlTag)
 			
 			//Process the childnodes until finding the posList of the
 			//exterior of the polygon.
-			elem= compatGetElementsByTag(gmlTag,"gml","exterior");
-			//elem= compatGetElementsByTag(elem[0],"gml","LinearRing"); Can be jumped...
-			elem= compatGetElementsByTag(elem[0],"gml","posList");
+			elem=DonamElementsNodeAPartirDelNomDelTag(gmlTag, null, "gml", "exterior");
+			//elem= DonamElementsNodeAPartirDelNomDelTag(elem[0], null, "gml","LinearRing"); Can be jumped...
+			elem= DonamElementsNodeAPartirDelNomDelTag(elem[0], null, "gml", "posList");
 
 			//Try to load the CRS from the posList
 			nameCRS= loadSrsName(elem[0],true);
@@ -244,11 +244,11 @@ function loadGmlTag(gmlTag)
 		case "Envelope":
 			var coordArray= [];
 			
-			elem= compatGetElementsByTag(gmlTag,"gml","lowerCorner");
+			elem=DonamElementsNodeAPartirDelNomDelTag(gmlTag, null, "gml", "lowerCorner");
 			elem= elem[0].firstChild.nodeValue.split(" ");
 			coordArray[0]= parseFloat(elem[0]);
 			coordArray[2]= parseFloat(elem[1]);
-			elem= compatGetElementsByTag(gmlTag,"gml","upperCorner");
+			elem=DonamElementsNodeAPartirDelNomDelTag(gmlTag, null, "gml", "upperCorner");
 			elem= elem[0].firstChild.nodeValue.split(" ");
 			coordArray[1]= parseFloat(elem[0]);
 			coordArray[3]= parseFloat(elem[1]);

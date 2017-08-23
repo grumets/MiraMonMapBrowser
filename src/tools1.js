@@ -38,14 +38,13 @@ function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Ver
 /////////////////////////////////////////////
 /*Cross browser compatibility functions*/
 
-/**
+/**  FUNCIO ELIMINADA, useu: DonamElementsNodeAPartirDelNomDelTag() de NJ
  * Cross browser function to get elements by tag name, properly handling
  * namespaces.
  * @param {Element} thisElement
  * @param {string} namespace
  * @param {string} name
  * @returns {Element}
- */
 function compatGetElementsByTag(thisElement,namespace,name)
 {
 	if(!thisElement.getElementsByTagNameNS)
@@ -66,13 +65,66 @@ function compatGetElementsByTag(thisElement,namespace,name)
 	}
 	else //DOM2 Standard compliant:
 	{
-		/*
-		var elem= thisElement.getElementsByTagNameNS(namespace,name);
-		if(elem && elem.length>0)
-			return elem;*/
+		//var elem= thisElement.getElementsByTagNameNS(namespace,name);
+		//if(elem && elem.length>0)
+		//	return elem;
 		namespace= "*"; //Hotfix as the line above seems not to work for owc:offering for example
 		return thisElement.getElementsByTagNameNS(namespace,name);
 	}
+}*/
+
+// Creada per NJ i modificada per JM
+// uri_ns pot ser null. nom_ns pot ser "*"
+function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
+{
+	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
+	//de getElementsByTagNameNS és diferent
+	//En Motzilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag
+	//en d'altres és el nom del ns i el nom del tag 	
+	//Per getElementsByTagName() en Opera i Chorme no funciona si indicquem el id del ns, és a dir, ns:name no va
+	//En IE depen de la versió
+	//En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
+	//Recomano usar aquesta funció que provarà les diferents possibilitats i així és menys probable tenir problemes
+	
+	if (pare.getElementsByTagNameNS)
+	{
+		if (uri_ns)
+		{
+			var fills=pare.getElementsByTagNameNS(uri_ns, nom_tag); //Mozilla
+			if(fills && fills.length>0)
+				return fills;
+		}
+		var fills2=pare.getElementsByTagNameNS(nom_ns, nom_tag); //La resta			
+		if(fills2 && fills2.length>0)
+			return fills2;
+	}
+	var fills3=pare.getElementsByTagName(nom_ns+":"+nom_tag); //IE, Mozilla segons versions
+	if(fills3 && fills3.length>0)
+		return fills3;
+		
+	var fills4=pare.getElementsByTagName(nom_tag); //sense namespace
+	if(fills4 && fills4.length>0)
+		return fills4;
+
+	if (pare.getElementsByTagNameNS)  //Incorporo a la funció de NJ aquest truc suggerit per DD i esborro compatGetElementsByTag() que havia fet el darrer (JM) 19-08-2017
+	{
+		var fills5=pare.getElementsByTagNameNS("*",nom_tag); //amb qualsevol namespace
+		if (fills5 && fills5.length>0)
+			return fills5;
+	}
+
+	
+	if(fills)
+		return fills;
+	if(fills2)
+		return fills2;
+	if(fills3)
+		return fills3;
+	if(fills4)
+		return fills4;
+	if(fills5)
+		return fills5;
+	return null;
 }
 
 /*
@@ -84,7 +136,8 @@ function compatGetElementsByTag(thisElement,namespace,name)
  */
 function MMgetElementTextByTag(thisElement,namespace,name)
 {
-	var tags= compatGetElementsByTag(thisElement,namespace,name);
+	//var tags= compatGetElementsByTag(thisElement,namespace,name);
+	var tags=DonamElementsNodeAPartirDelNomDelTag(thisElement, null, namespace,name);
 	
 	if(tags && tags.length && tags[0].firstChild)
 		return tags[0].firstChild.nodeValue;

@@ -130,10 +130,10 @@ var i,j;
 		
 	if(root.nodeName!="wps:ExecuteResponse")  //Això passa quan ho he fet amb soap
 	{
-		root=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengeospatial.net/wps", "wps", "ExecuteResponse")[0];
+		root=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "ExecuteResponse")[0];
 	}
 	
-	var reference=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengeospatial.net/wps", "wps", "Reference");
+	var reference=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "Reference");
 	if (reference && reference.length>0)
 	{		
 		reference=reference[0];
@@ -145,19 +145,19 @@ var i,j;
 	}
 	var localitzacio_estat=root.getAttribute('statusLocation');
 	
-	var status=DonamElementsNodeAPartirDelNomDelCamp(root, "http://www.opengeospatial.net/wps", "wps", "Status");
+	var status=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "Status");
 	if (status.length>0)
 	{
 		status=status[0];
 		var percent=-1;
-		var process_status=DonamElementsNodeAPartirDelNomDelCamp(status, "http://www.opengeospatial.net/wps", "wps", "ProcessAccepted");
+		var process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessAccepted");
 		if (process_status && process_status.length>0)
 		{
 			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
 			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Acceptat", "spa":"Aceptado", "eng":"Accepted", "fre":"Accepté"});
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelCamp(status, "http://www.opengeospatial.net/wps", "wps", "ProcessStarted");
+		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessStarted");
 		if (process_status && process_status.length>0)
 		{
 			var process_started=process_status[0];
@@ -168,7 +168,7 @@ var i,j;
 			DonaCadenaLang({"cat":" percentatge completat: ","spa":" porcentaje completado: ","eng":" percent completed: ", "fre":" pourcentage complété: "})+percent+"%";
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelCamp(status, "http://www.opengeospatial.net/wps", "wps", "ProcessPaused");
+		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessPaused");
 		if (process_status && process_status.length>0)
 		{
 			var process_paused=process_status[0];
@@ -182,25 +182,25 @@ var i,j;
 				document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Pausat", "spa":"Pausado", "eng":"Paused", "fre":"En pause"});
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelCamp(status, "http://www.opengeospatial.net/wps", "wps", "ProcessSucceeded");
+		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessSucceeded");
 		if (process_status && process_status.length>0)
 		{
 			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Finalitzat", "spa":"Finalizado", "eng":"Succeeded", "fre":"Terminé"});
 			document.getElementById("ResponseWPSReference").style.display="inline";
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelCamp(status, "http://www.opengeospatial.net/wps", "wps", "ProcessFailed");
+		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessFailed");
 		if (process_status && process_status.length>0)
 		{
 			var codi_error=null, text_error=null;
-			var excepcio=DonamElementsNodeAPartirDelNomDelCamp(process_status[0], "http://www.opengeospatial.net/ows", "ows", "ExceptionReport");
+			var excepcio=DonamElementsNodeAPartirDelNomDelTag(process_status[0], "http://www.opengeospatial.net/ows", "ows", "ExceptionReport");
 			if(excepcio && excepcio.length>0)
 			{
-				excepcio=DonamElementsNodeAPartirDelNomDelCamp(excepcio[0], "http://www.opengeospatial.net/ows", "ows", "Exception");
+				excepcio=DonamElementsNodeAPartirDelNomDelTag(excepcio[0], "http://www.opengeospatial.net/ows", "ows", "Exception");
 				if(excepcio)
 				{
 					excepcio=excepcio[0];
 					codi_error=excepcio.getAttribute('exceptionCode');
-					text_error=DonamElementsNodeAPartirDelNomDelCamp(excepcio, "http://www.opengeospatial.net/ows", "ows", "ExceptionText");
+					text_error=DonamElementsNodeAPartirDelNomDelTag(excepcio, "http://www.opengeospatial.net/ows", "ows", "ExceptionText");
 					if(text_error && text_error.length>0)
 						text_error=text_error[0].childNodes[0].nodeValue;
 				}
