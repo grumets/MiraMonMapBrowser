@@ -31,7 +31,8 @@
 	"ColorFonsVista":	"#C0C0C0",
 	"ColorQuadratSituacio":	"#FF0000",
 	"ColorFonsPlana":	"#FFFFFF",
-	"TitolCoord":	"Coord: ",
+	"TitolCoord": "Current position: ",
+	"EstilCoord": "area",
 	"NDecimalsCoordXY":	2,
 	"CoordExtremes": null,
 	"CoordActualProj":	true,
@@ -91,6 +92,22 @@
 	"RelaxaAmbitVisualitzacio":	false,
 	"VoraVistaGrisa":	false,
 	"ImatgeSituacio":	[{
+			"EnvTotal":	{
+				"EnvCRS":	{				
+					"MinX":	-180,
+					"MaxX":	 180,
+					"MinY":	-90,
+					"MaxY":	 90
+				},
+				"CRS":	"EPSG:4326"
+			},
+			"nom":	"propies/s_world.png",
+			"Ample":	290,
+			"Alt":	145,
+			"MargeEsq":	2,
+			"MargeSup":	50
+		},
+		{
 			"EnvTotal":	{
 				"EnvCRS":	{				
 					"MinX":	-29.3966669,
@@ -467,8 +484,8 @@
 	"AspecteLlegenda":	{
 		"CapcaleraLlegenda":	"",
 		"PeuLlegenda":	"",
-		"PreviSepara":	"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2 color=\"#000099\">",
-		"PostSepara":	"</font>",
+		"PreviSepara":	"<hr align=\"left\" width=\"230\"><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2 color=\"#000099\"><b>",
+		"PostSepara":	"</b></font><hr align=\"left\" width=\"230\">",
 		"PreviDescLlegenda":	"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>",
 		"PostDescLlegenda":	"</b></font>",
 		"PreviDescLlegendaGris":	"<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
@@ -523,18 +540,18 @@
 		"nom": "PALimits",
 		"camps": [{
 			"previ": {
-				"cat": "Anar a la:",
-				"spa": "Ir a la:",
-				"eng": "Go to:"
+				"cat": "Anar a la",
+				"spa": "Ir a la",
+				"eng": "Go to"
 			}, 
 			"nom": "PA", 
 			"desc": {
 				"eng": "Protected Area"
 			}, 
 			"post": {
-				"cat": "de:", 
-				"spa": "de:", 
-				"eng": "of:"
+				"cat": "de", 
+				"spa": "de", 
+				"eng": "of"
 			}
 		}],
 		"CRS": "EPSG:4326"		
@@ -763,7 +780,6 @@
 	}],
 	"capa":	[
 	{
-		"ordre":	0,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -786,7 +802,7 @@
 		"TileMatrixSet":	null,
 		"FormatConsulta":	"text/xml",
 		"grup":	null,
-		"separa": "<hr align=\"left\" width=\"230\"><b>PA Datasets</b><hr align=\"left\" width=\"230\">",
+		"separa": "PA Datasets",
 		"DescLlegenda":	"Abisko Limits",
 		"estil":	[{
 					"nom":	null,
@@ -822,7 +838,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	1,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -881,7 +896,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	2,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -940,7 +954,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	3,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -999,7 +1012,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	4,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1058,7 +1070,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	5,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1117,7 +1128,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	6,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1176,7 +1186,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	7,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1235,7 +1244,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	8,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1294,7 +1302,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	9,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1353,7 +1360,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	10,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1412,7 +1418,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	11,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1471,7 +1476,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	12,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1530,7 +1534,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	13,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1589,7 +1592,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	14,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1648,7 +1650,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	15,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1707,7 +1708,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	16,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1766,7 +1766,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	17,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1825,7 +1824,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	18,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1884,7 +1882,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	19,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -1943,7 +1940,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	20,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -2002,7 +1998,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	33,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -2406,6 +2401,25 @@
 				}
 			}],
 			"metadades": null
+		},{
+			"nom":	null,
+			"desc":	"t2-t1",
+			"TipusObj":	"P",
+			"component": [{
+				"calcul": "{\"i_valor\":11, \"i_data\":0}-{\"i_valor\":11, \"i_data\":1}",
+				"estiramentPaleta": {
+					"valorMaxim": 4095,
+					"valorMinim": -4095
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false,
+			"paleta": {
+				"colors": ["#FF0000", "#FD0000", "#FB0000", "#F90000", "#F70000", "#F50000", "#F30000", "#F10000", "#EF0000", "#ED0000", "#EB0000", "#E90000", "#E70000", "#E50000", "#E30000", "#E10000", "#DF0000", "#DD0000", "#DB0000", "#D90000", "#D70000", "#D50000", "#D30000", "#D10000", "#CF0000", "#CD0000", "#CB0000", "#C90000", "#C70000", "#C50000", "#C30000", "#C10000", "#BF0000", "#BD0000", "#BB0000", "#B90000", "#B70000", "#B50000", "#B30000", "#B10000", "#AF0000", "#AD0000", "#AB0000", "#A90000", "#A70000", "#A50000", "#A30000", "#A10000", "#9F0000", "#9D0000", "#9B0000", "#990000", "#970000", "#950000", "#930000", "#910000", "#8F0000", "#8D0000", "#8B0000", "#890000", "#870000", "#850000", "#830000", "#810000", "#7F0000", "#7D0000", "#7B0000", "#790000", "#770000", "#750000", "#730000", "#710000", "#6F0000", "#6D0000", "#6B0000", "#690000", "#670000", "#650000", "#630000", "#610000", "#5F0000", "#5D0000", "#5B0000", "#590000", "#570000", "#550000", "#530000", "#510000", "#4F0000", "#4D0000", "#4B0000", "#490000", "#470000", "#450000", "#430000", "#410000", "#3F0000", "#3D0000", "#3B0000", "#390000", "#370000", "#350000", "#330000", "#310000", "#2F0000", "#2D0000", "#2B0000", "#290000", "#270000", "#250000", "#230000", "#210000", "#1F0000", "#1D0000", "#1B0000", "#190000", "#170000", "#150000", "#130000", "#110000", "#0F0000", "#0D0000", "#0B0000", "#090000", "#070000", "#050000", "#030000", "#010000", "#000100", "#000300", "#000500", "#000700", "#000900", "#000B00", "#000D00", "#000F00", "#001100", "#001300", "#001500", "#001700", "#001900", "#001B00", "#001D00", "#001F00", "#002100", "#002300", "#002500", "#002700", "#002900", "#002B00", "#002D00", "#002F00", "#003100", "#003300", "#003500", "#003700", "#003900", "#003B00", "#003D00", "#003F00", "#004100", "#004300", "#004500", "#004700", "#004900", "#004B00", "#004D00", "#004F00", "#005100", "#005300", "#005500", "#005700", "#005900", "#005B00", "#005D00", "#005F00", "#006100", "#006300", "#006500", "#006700", "#006900", "#006B00", "#006D00", "#006F00", "#007100", "#007300", "#007500", "#007700", "#007900", "#007B00", "#007D00", "#007F00", "#008100", "#008300", "#008500", "#008700", "#008900", "#008B00", "#008D00", "#008F00", "#009100", "#009300", "#009500", "#009700", "#009900", "#009B00", "#009D00", "#009F00", "#00A100", "#00A300", "#00A500", "#00A700", "#00A900", "#00AB00", "#00AD00", "#00AF00", "#00B100", "#00B300", "#00B500", "#00B700", "#00B900", "#00BB00", "#00BD00", "#00BF00", "#00C100", "#00C300", "#00C500", "#00C700", "#00C900", "#00CB00", "#00CD00", "#00CF00", "#00D100", "#00D300", "#00D500", "#00D700", "#00D900", "#00DB00", "#00DD00", "#00DF00", "#00E100", "#00E300", "#00E500", "#00E700", "#00E900", "#00EB00", "#00ED00", "#00EF00", "#00F100", "#00F300", "#00F500", "#00F700", "#00F900", "#00FB00", "#00FD00", "#00FF00"]
+			}			
 		}],
 		"i_estil":	0,
 		"NColEstil":	2,
@@ -2422,7 +2436,473 @@
 						{"desc": "True color RGB", "url": "http://www.creaf.cat/{time}.{extension}", "format": [0,1]},
 						{"desc": "Band 3; Green (0.560µm)", "url": "http://www.creaf.cat/{time}", "format": [0]}],
 		"metadades":	null,
-		"NomVideo":	null,
+		"NomVideo": null,
+		"DescVideo": null,
+		"FlagsData": {
+			"DataMostraAny": true,
+			"DataMostraMes": true,
+			"DataMostraDia": true,
+			"DataMostraHora": false,
+			"DataMostraMinut": false,
+			"DataMostraSegon": false,
+			"DataMostraDescLlegenda": false
+		},
+		"data": [
+			{"year": 2016, "month": 9, "day": 23},
+			{"year": 2016, "month": 10, "day": 3},
+			{"year": 2016, "month": 10, "day": 13},
+			{"year": 2016, "month": 10, "day": 23},
+			{"year": 2016, "month": 11, "day": 2},
+			{"year": 2016, "month": 11, "day": 12},
+			{"year": 2016, "month": 11, "day": 22},
+			{"year": 2016, "month": 12, "day": 2}
+		],
+		"i_data": -1,
+		"animable":	true,
+		"AnimableMultiTime": true,
+		"proces":	null,
+		"ProcesMostrarTitolCapa" : false
+	},
+	{
+		"servidor": null,
+		"versio": null,
+		"tipus": null,
+		"nom":	"HarHaNegevSentinel36RXU",
+		"desc":	"Har Ha Negev Sentinel 2 (b)",
+		"atribucio": "ESA",
+		"CRS":	["EPSG:4326", "EPSG:32636"],
+		"EnvTotal":	{
+				"EnvCRS":	{
+					"MinX": 644874.708625004,
+					"MaxX": 697624.000000000,
+					"MinY": 3370606.49547499,
+					"MaxY": 3444856.00000000
+				},
+				"CRS":	"EPSG:32636"
+			},
+		"FormatImatge": "application/x-img",
+		"valors": [{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B01", "desc": "Coastal aerosol (0.443µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},
+		{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B02", "desc": "Blue (0.490µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B03", "desc": "Green (0.560µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B04", "desc": "Red (0.665µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B05", "desc": "Vegetation Red Edge (0.705µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B06", "desc": "Vegetation Red Edge (0.740µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B07", "desc": "Vegetation Red Edge (0.783µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B08", "desc": "NIR (0.842µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B8A", "desc": "Vegetation Red Edge (0.865µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B09", "desc": "Water vapour (0.945µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B11", "desc": "SWIR (1.610µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		},{
+			"param": [{"clau": {"nom": "DIM_BAND", "desc": "Band"}, "valor": {"nom": "B12", "desc": "SWIR (2.190µm)"}}],
+			"compression": "RLE",
+			"datatype": "uint16",
+			"nodata": [65535, 0]
+		}],
+		"transparencia":	"semitransparent",
+		"CostatMinim":	0.00005,
+		"CostatMaxim":	0.005,
+		"TileMatrixSet":	null,
+		"FormatConsulta":	"text/xml",
+		"grup":	null,
+		"separa": null,
+		"DescLlegenda": "Har Ha Negev Sentinel 2 (b)",
+		"estil": [{
+			"nom":	null,
+			"desc":	"Band 1 (b)",
+			"DescItems": "Coastal aerosol (0.443µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 2",
+			"DescItems": "Blue (0.490µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 1,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 3",
+			"DescItems": "Green (0.560µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 2,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 4",
+			"DescItems": "Red (0.665µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 3,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 5",
+			"DescItems": "Vegetation Red Edge (0.705µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 4,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 6",
+			"DescItems": "Vegetation Red Edge (0.740µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 5,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 7",
+			"DescItems": "Vegetation Red Edge (0.783µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 6,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 8",
+			"DescItems": "NIR (0.842µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 7,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 8A",
+			"DescItems": "Vegetation Red Edge (0.865µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 8,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 9",
+			"DescItems": "Water vapour (0.945µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 9,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 11",
+			"DescItems": "SWIR (1.610µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 10,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"Band 12",
+			"DescItems": "SWIR (2.190µm)",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 11,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false
+		},{
+			"nom":	null,
+			"desc":	"NDVI",
+			"DescItems": "NDVI (b)",
+			"TipusObj":	"P",
+			"component": [{
+			      "NOTES": "(B08 - B04) / (B08 + B04)",
+				"FormulaConsulta": "(v[7]-v[3])/(v[7]+v[3])",
+				"NDecimals": 3,
+				"estiramentPaleta": {
+					"valorMaxim": 0.3,
+					"valorMinim": -0.2
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false,
+			"paleta": {
+				"colors": ["#000000", "#100000", "#1C0000", "#2D0000", "#3D0000", "#4D0000", "#590000", "#690000", "#790000", "#860000", "#960000", "#A60000", "#B20000", "#C20000", "#D20000", "#E30000", "#EF0000", "#FF0000", "#FB0000", "#F70400", "#F30400", "#EF0800", "#EB0800", "#E70C00", "#E30C00", "#DF1000", "#DF1000", "#DB1400", "#D71400", "#D21800", "#CE1800", "#CA1C00", "#C61C00", "#C22000", "#BE2000", "#BA2004", "#BA2004", "#B62408", "#B2240C", "#B22410", "#AE2410", "#AA2814", "#AA2818", "#A62818", "#A6281C", "#A22D20", "#9E2D20", "#9E2D24", "#9A2D28", "#96312D", "#96312D", "#923131", "#963531", "#96352D", "#9A392D", "#9E3D2D", "#A24128", "#A24128", "#A64528", "#AA4924", "#AA4924", "#AE4D20", "#B25120", "#B25120", "#B6551C", "#BA591C", "#BE5D1C", "#BE5D18", "#C26118", "#C26518", "#C26514", "#C66914", "#C66D14", "#C66D10", "#C67110", "#CA7510", "#CA750C", "#CA790C", "#CA7908", "#CE7D08", "#CE8208", "#CE8204", "#CE8604", "#D28A04", "#D28A00", "#D28E00", "#D79204", "#D79608", "#DB9A0C", "#DF9E10", "#DFA214", "#E3A618", "#E7AA1C", "#E7AE20", "#EBAE28", "#EBB22D", "#EFB631", "#F3BA35", "#F3BE39", "#F7C23D", "#FBC641", "#FBCA45", "#FFCE49", "#FFCE45", "#FFD241", "#FFD241", "#FFD73D", "#FFD739", "#FFDB35", "#FFDB31", "#FFDF2D", "#FFDF2D", "#FFE328", "#FFE324", "#FFE720", "#FFE71C", "#FFEB18", "#FFEB18", "#FFEF14", "#FFEF10", "#FFEF14", "#FBEF14", "#FBF318", "#F7F318", "#F7F31C", "#F7F31C", "#F3F720", "#F3F720", "#EFF724", "#EFF724", "#EBFB28", "#EBFB28", "#EBFB2D", "#E7FB2D", "#E7FF31", "#E3FF31", "#E3FF35", "#E3FF39", "#E3FF39", "#E3FF3D", "#E3FF41", "#DFFB45", "#DFFB45", "#DFFB49", "#DFFB4D", "#DFFB4D", "#DFFB51", "#DFFB55", "#DFFB55", "#DBF759", "#DBF75D", "#DBF761", "#DBF761", "#DBF765", "#D7F765", "#D7F765", "#D2F365", "#CEF365", "#CEF365", "#CAF365", "#C6EF65", "#C6EF65", "#C2EF65", "#C2EF65", "#BEEB65", "#BAEB65", "#BAEB65", "#B6EB65", "#B2E765", "#B2E765", "#AEE765", "#AAE765", "#AAE765", "#A6E365", "#A2E365", "#A2E365", "#9EE365", "#9AE365", "#9AE365", "#96DF65", "#96DF65", "#92DF65", "#8EDF65", "#8EDF65", "#8ADF65", "#86DB65", "#86DB65", "#82DB65", "#7DDB65", "#7DDB65", "#79D765", "#79D765", "#75D765", "#75D765", "#71D765", "#71D765", "#6DD265", "#6DD265", "#69D265", "#69D265", "#65D265", "#65D265", "#61CE65", "#61CE65", "#5DCE65", "#59CE65", "#59CE65", "#55CA65", "#51CA65", "#51CA65", "#4DCA65", "#49CA65", "#49CA65", "#45C661", "#45C661", "#41C661", "#3DC661", "#3DC661", "#39C661", "#35C261", "#35C261", "#31C261", "#31C261", "#35C261", "#35C65D", "#35C65D", "#39C65D", "#39C65D", "#39CA5D", "#3DCA5D", "#3DCA59", "#41CA59", "#41CE59", "#41CE59", "#45CE59", "#45CE59", "#45D255", "#49D255", "#49D255", "#49D255", "#49D751", "#45D751", "#45D74D", "#45DB4D", "#45DB49", "#41DB49", "#41DF45", "#41DF45", "#41E341", "#3DE341", "#3DE33D", "#3DE73D", "#3DE739", "#39E739", "#39EB35", "#39EB35"]
+			}
+		},{
+			"nom":	null,
+			"desc":	"True color",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 3,
+				"desc": "Red (0.665µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 2,
+				"desc": "Green (0.560µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 1,
+				"desc": "Blue (0.490µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null
+		},{
+			"nom":	null,
+			"desc":	"False color",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 7,
+				"desc": "NIR (0.842µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 3,
+				"desc": "Red (0.665µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 2,
+				"desc": "Green (0.560µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null
+		},{
+			"nom":	null,
+			"desc":	"RGB(12,11,2) Geology",
+			"TipusObj":	"P",
+			"component": [{
+				"i_valor": 11,
+				"desc": "SWIR (2.190µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 10,
+				"desc": "SWIR (1.610µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			},{
+				"i_valor": 1,
+				"desc": "Blue (0.490µm)",
+				"NDecimals": 0,
+				"estiramentPaleta": {
+					"valorMaxim": 8191,
+					"valorMinim": 0
+				}
+			}],
+			"metadades": null
+		},{
+			"nom":	null,
+			"desc":	"t2-t1 (b)",
+			"TipusObj":	"P",
+			"component": [{
+				"calcul": "{\"i_valor\":11, \"i_data\":0}-{\"i_valor\":11, \"i_data\":1}",
+				"estiramentPaleta": {
+					"valorMaxim": 4095,
+					"valorMinim": -4095
+				}
+			}],
+			"metadades": null,
+			"nItemLlegAuto": 20,
+			"ncol": 4,
+			"descColorMultiplesDe": 0.01,
+			"ColorMinimPrimer": false,
+			"paleta": {
+				"colors": ["#FF0000", "#FD0000", "#FB0000", "#F90000", "#F70000", "#F50000", "#F30000", "#F10000", "#EF0000", "#ED0000", "#EB0000", "#E90000", "#E70000", "#E50000", "#E30000", "#E10000", "#DF0000", "#DD0000", "#DB0000", "#D90000", "#D70000", "#D50000", "#D30000", "#D10000", "#CF0000", "#CD0000", "#CB0000", "#C90000", "#C70000", "#C50000", "#C30000", "#C10000", "#BF0000", "#BD0000", "#BB0000", "#B90000", "#B70000", "#B50000", "#B30000", "#B10000", "#AF0000", "#AD0000", "#AB0000", "#A90000", "#A70000", "#A50000", "#A30000", "#A10000", "#9F0000", "#9D0000", "#9B0000", "#990000", "#970000", "#950000", "#930000", "#910000", "#8F0000", "#8D0000", "#8B0000", "#890000", "#870000", "#850000", "#830000", "#810000", "#7F0000", "#7D0000", "#7B0000", "#790000", "#770000", "#750000", "#730000", "#710000", "#6F0000", "#6D0000", "#6B0000", "#690000", "#670000", "#650000", "#630000", "#610000", "#5F0000", "#5D0000", "#5B0000", "#590000", "#570000", "#550000", "#530000", "#510000", "#4F0000", "#4D0000", "#4B0000", "#490000", "#470000", "#450000", "#430000", "#410000", "#3F0000", "#3D0000", "#3B0000", "#390000", "#370000", "#350000", "#330000", "#310000", "#2F0000", "#2D0000", "#2B0000", "#290000", "#270000", "#250000", "#230000", "#210000", "#1F0000", "#1D0000", "#1B0000", "#190000", "#170000", "#150000", "#130000", "#110000", "#0F0000", "#0D0000", "#0B0000", "#090000", "#070000", "#050000", "#030000", "#010000", "#000100", "#000300", "#000500", "#000700", "#000900", "#000B00", "#000D00", "#000F00", "#001100", "#001300", "#001500", "#001700", "#001900", "#001B00", "#001D00", "#001F00", "#002100", "#002300", "#002500", "#002700", "#002900", "#002B00", "#002D00", "#002F00", "#003100", "#003300", "#003500", "#003700", "#003900", "#003B00", "#003D00", "#003F00", "#004100", "#004300", "#004500", "#004700", "#004900", "#004B00", "#004D00", "#004F00", "#005100", "#005300", "#005500", "#005700", "#005900", "#005B00", "#005D00", "#005F00", "#006100", "#006300", "#006500", "#006700", "#006900", "#006B00", "#006D00", "#006F00", "#007100", "#007300", "#007500", "#007700", "#007900", "#007B00", "#007D00", "#007F00", "#008100", "#008300", "#008500", "#008700", "#008900", "#008B00", "#008D00", "#008F00", "#009100", "#009300", "#009500", "#009700", "#009900", "#009B00", "#009D00", "#009F00", "#00A100", "#00A300", "#00A500", "#00A700", "#00A900", "#00AB00", "#00AD00", "#00AF00", "#00B100", "#00B300", "#00B500", "#00B700", "#00B900", "#00BB00", "#00BD00", "#00BF00", "#00C100", "#00C300", "#00C500", "#00C700", "#00C900", "#00CB00", "#00CD00", "#00CF00", "#00D100", "#00D300", "#00D500", "#00D700", "#00D900", "#00DB00", "#00DD00", "#00DF00", "#00E100", "#00E300", "#00E500", "#00E700", "#00E900", "#00EB00", "#00ED00", "#00EF00", "#00F100", "#00F300", "#00F500", "#00F700", "#00F900", "#00FB00", "#00FD00", "#00FF00"]
+			}			
+		}],
+		"i_estil":	0,
+		"NColEstil":	2,
+		"LlegDesplegada":	false,
+		"VisibleALaLlegenda":	true,
+		"visible":	"ara_no",
+		"visible_vista":	null,
+		"consultable":	"si",
+		"descarregable":	"no",
+		"ParamCoverage":	0,
+		"FormatCoverage":	0,
+		"ResCoverage":	0,
+		"DescarregaTot": [{"desc": "All bands", "url": "http://www.creaf.cat/{time}", "format": [0]}, 
+						{"desc": "True color RGB", "url": "http://www.creaf.cat/{time}.{extension}", "format": [0,1]},
+						{"desc": "Band 3; Green (0.560µm)", "url": "http://www.creaf.cat/{time}", "format": [0]}],
+		"metadades":	null,
+		"NomVideo":	"KKVideoRepetit",
 		"DescVideo":	null,
 		"FlagsData": {
 			"DataMostraAny": true,
@@ -2434,17 +2914,29 @@
 			"DataMostraDescLlegenda": false
 		},
 		"data": [
+			{"year": 2016, "month": 9, "day": 23},
+			{"year": 2016, "month": 10, "day": 3},
+			{"year": 2016, "month": 10, "day": 13},
+			{"year": 2016, "month": 10, "day": 23},
+			{"year": 2016, "month": 11, "day": 2},
+			{"year": 2016, "month": 11, "day": 12},
+			{"year": 2016, "month": 11, "day": 22},
+			{"year": 2016, "month": 9, "day": 23},
+			{"year": 2016, "month": 10, "day": 3},
+			{"year": 2016, "month": 10, "day": 13},
+			{"year": 2016, "month": 10, "day": 23},
+			{"year": 2016, "month": 11, "day": 2},
+			{"year": 2016, "month": 11, "day": 12},
 			{"year": 2016, "month": 11, "day": 22},
 			{"year": 2016, "month": 12, "day": 2}
 		],
 		"i_data": -1,
-		"animable":	false,
+		"animable":	true,
 		"AnimableMultiTime": true,
 		"proces":	null,
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	34,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -2533,7 +3025,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	22,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -2672,7 +3163,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	21,
 		"servidor": null,
 		"versio": null,
 		"tipus": null,
@@ -2768,7 +3258,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	22,
 		"servidor": "http://www.opengis.uab.cat/cgi-bin/world/miramon.cgi?",
 		"versio": null,
 		"tipus": null,
@@ -2783,7 +3272,7 @@
 		"TileMatrixSet":	null,
 		"FormatConsulta":	"text/xml",
 		"grup":	null,
-		"separa": "<hr align=\"left\" width=\"230\"><b>Reference datasets</b><hr align=\"left\" width=\"230\">",
+		"separa": "Reference datasets",
 		"DescLlegenda":	"Zero level boundaries (countries)",
 		"estil":	[{
 					"nom":	null,
@@ -2819,7 +3308,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	23,
 		"servidor": "http://www.opengis.uab.cat/cgi-bin/world/miramon.cgi?",
 		"versio": null,
 		"tipus": null,
@@ -2870,7 +3358,126 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	24,
+		"servidor": "https://data.lter-europe.net/geoserver/ows?",
+		"versio": null,
+		"tipus": null,
+		"nom":	"deims:deims_all_sites",
+		"desc":	"Sites on DEIMS-SDR",
+		"CRS":	null,
+		"EnvTotal":	null,
+		"FormatImatge": "image/png",
+		"transparencia":	"semitransparent",
+		"CostatMinim":	0.0008333333333333,
+		"CostatMaxim":	0.5,
+		"TileMatrixSet":	null,
+		"FormatConsulta": "application/json",
+		"grup": "DEIMS",
+		"separa": null,
+		"DescLlegenda": "DEIMS-SDR",
+		"estil": null,
+		"i_estil": 0,
+		"NColEstil":	1,
+		"LlegDesplegada":	false,
+		"VisibleALaLlegenda":	true,
+		"visible":	"si",
+		"visible_vista":	null,
+		"consultable":	"si",
+		"descarregable":	"no",
+		"ParamCoverage":	null,
+		"FormatCoverage":	null,
+		"ResCoverage":	null,
+		"metadades":	null,
+		"NomVideo":	null,
+		"DescVideo":	null,
+		"FlagsData":	null,
+		"data":	null,
+		"i_data":	0,
+		"animable":	false,
+		"AnimableMultiTime":	false,
+		"proces":	null,
+		"ProcesMostrarTitolCapa" : false
+	},
+	{
+		"servidor": "https://data.lter-europe.net/geoserver/ows?",
+		"versio": null,
+		"tipus": null,
+		"nom":	"deims:lter_all_formal",
+		"desc":	"Nationally accredited LTER sites",
+		"CRS":	null,
+		"EnvTotal":	null,
+		"FormatImatge": "image/png",
+		"transparencia":	"semitransparent",
+		"CostatMinim":	0.0008333333333333,
+		"CostatMaxim":	0.5,
+		"TileMatrixSet":	null,
+		"FormatConsulta": "application/json",
+		"grup": "DEIMS",
+		"separa": null,
+		"DescLlegenda": "Nationally accredited LTER sites",
+		"estil": null,
+		"i_estil": 0,
+		"NColEstil":	1,
+		"LlegDesplegada":	false,
+		"VisibleALaLlegenda":	true,
+		"visible":	"ara_no",
+		"visible_vista":	null,
+		"consultable":	"no",
+		"descarregable":	"no",
+		"ParamCoverage":	null,
+		"FormatCoverage":	null,
+		"ResCoverage":	null,
+		"metadades":	null,
+		"NomVideo":	null,
+		"DescVideo":	null,
+		"FlagsData":	null,
+		"data":	null,
+		"i_data":	0,
+		"animable":	false,
+		"AnimableMultiTime":	false,
+		"proces":	null,
+		"ProcesMostrarTitolCapa" : false
+	},
+	{
+		"servidor": "https://data.lter-europe.net/geoserver/ows?",
+		"versio": null,
+		"tipus": null,
+		"nom":	"deims:ecopotential_all",
+		"desc":	"H2020 project ECOPotential sides in DEIMS",
+		"CRS":	null,
+		"EnvTotal":	null,
+		"FormatImatge": "image/png",
+		"transparencia":	"semitransparent",
+		"CostatMinim":	0.0008333333333333,
+		"CostatMaxim":	0.5,
+		"TileMatrixSet":	null,
+		"FormatConsulta": "application/json",
+		"grup": "DEIMS",
+		"separa": null,
+		"DescLlegenda": "ECOPotential sides in DEIMS",
+		"estil": null,
+		"i_estil": 0,
+		"NColEstil":	1,
+		"LlegDesplegada":	false,
+		"VisibleALaLlegenda":	true,
+		"visible":	"ara_no",
+		"visible_vista":	null,
+		"consultable":	"no",
+		"descarregable":	"no",
+		"ParamCoverage":	null,
+		"FormatCoverage":	null,
+		"ResCoverage":	null,
+		"metadades":	null,
+		"NomVideo":	null,
+		"DescVideo":	null,
+		"FlagsData":	null,
+		"data":	null,
+		"i_data":	0,
+		"animable":	false,
+		"AnimableMultiTime":	false,
+		"proces":	null,
+		"ProcesMostrarTitolCapa" : false
+	},	
+	{
 		"servidor": "http://www.opengis.uab.cat/cgi-bin/world/miramon.cgi?",
 		"versio": null,
 		"tipus": null,
@@ -3066,7 +3673,6 @@
 		"ProcesMostrarTitolCapa" : false
 	},
 	{
-		"ordre":	25,
 		"servidor": "http://www.opengis.uab.cat/cgi-bin/world/miramon.cgi?",
 		"versio": null,
 		"tipus": null,
@@ -3621,7 +4227,7 @@
 			"mostrar": true
 		}],
 		"DescLlegenda": "Protected Area Location",
-		"separa": "<hr align=\"left\" width=\"230\"><b>PA Datasets</b><hr align=\"left\" width=\"230\">",		
+		"separa": "PA Datasets",		
 		"estil": [{
 			"nom":	null,
 			"desc":	null,
@@ -3719,8 +4325,85 @@
 		"consultable": "si",
 		"editable": "no",
 		"metadades": null
+	},{
+		"namespace": "http://www.opengis.uab.cat",
+		"servidor": "http://localhost/cgi-bin/miramon.cgi?",
+		"versio": {
+			"Vers": 2,
+			"SubVers": 0,		
+			"VariantVers": 0
+		},
+		"tipus": "TipusSOS",
+		"nom": "fenodato",
+		"desc": "Fenodato Observations",
+		"CRS":	"EPSG:4326",
+		"i_situacio": 0,
+		"objectes": null,
+		"atributs": [{
+			"nom": "__om_time__",
+			"descripcio": "Observation time",
+			"mostrar": true
+		},{
+			"nom": "__om_sensor__",
+			"descripcio": "Citizen Tweeter name",
+			"mostrar": true
+		},{
+			"nom": "TEXT",
+			"descripcio": "Complete tweet",
+			"mostrar": true
+		},{
+			"nom": "ID",
+			"descripcio": "Tweet ID",
+			"mostrar": true
+		},{
+			"nom": "KIND",
+			"descripcio": "Reported name",
+			"mostrar": true
+		},{
+			"nom": "K_NAME",
+			"descripcio": "Common name",
+			"mostrar": true
+		},{
+			"nom": "K_SNAME",
+			"descripcio": "Scientific name",
+			"mostrar": true
+		},{
+			"nom": "PHASE",
+			"descripcio": "Phenophase",
+			"mostrar": true
+		},{
+			"nom": "P_NAME",
+			"descripcio": "Phenophase id",
+			"mostrar": true
+		}],
+		"DescLlegenda": "Fenodato observations",
+		"separa": "Citizen Science",		
+		"estil": [{
+			"nom":	null,
+			"desc":	null,
+			"DescItems": "Site type",
+			"TipusObj": "S",
+			"ItemLleg":	[
+				{"color": "propies/Fenodato/FD_s.png", "DescColor": "Observation"}
+			],
+			"ncol": 1,
+			"simbols": {
+				"simbol": [{
+					"icona": {
+						"icona": "propies/Fenodato/FD.png", "ncol": 31,  "nfil": 31, "i": 15, "j": 25
+					}
+				}]
+			}
+		}],
+		"i_estil": 0,
+		"NColEstil": 1,
+		"CostatMinim":	0.0000833333333333,
+		"CostatMaxim":	0.5,
+		"LlegDesplegada": true,
+		"VisibleALaLlegenda": true, 
+		"visible": "si",
+		"consultable": "si",
+		"editable": "no",
+		"metadades": null
 	}]
 }
-
-
-				

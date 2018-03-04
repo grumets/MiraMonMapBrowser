@@ -114,8 +114,12 @@
 			"type": "string"
 		},
 		"TitolCoord": { 
-			"description": "Títol del desplegable dels nivells de zoom. Típicament val 'coord:' ",
+			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' ",
 			"$ref": "#/definitions/StringOCadenaLang" 
+		},
+		"EstilCoord": { 
+			"description": "Estil del recurs de coordenada actual. Per defecte és 'text' que es mostre en úna sola línia. 'area' ho mostra en un recurs multilínia",
+			"enum": [null, "text", "area"]
 		},
 		"NDecimalsCoordXY": { 
 			"description": "Nombre de decimals dels valors de les coordenades mostrats per pantalla",
@@ -129,15 +133,15 @@
 			"enum": [null, "proj", "longlat_g", "longlat_gms"]
 		},
 		"CoordActualProj": {
-			"description": "Representar les coordenades de la projecció al rectangle de la coordenada actual. Opcional",
+			"description": "Representar les coordenades de la projecció a la caixa de la posició actual. És combinable amb CoordActualLongLatG Opcional",
 			"type": "boolean"
 		},
 		"CoordActualLongLatG": {
-			"description": "Representar les coordenades en graus decimals al rectangle de la coordenada actual. Opcional",
+			"description": "Representar les coordenades en long/lat en graus a la caixa de la posició actual. És combinable amb CoordActualProj. Opcional",
 			"type": "boolean"
 		},
 		"CoordActualLongLatGMS": {
-			"description": "Representar les coordenades en graus, minuts i segons al rectangle de la coordenada actual. Opcional",
+			"description": "Representar les coordenades en long/lat en graus, minuts i segons a la caixa de la posició actual. Només té efecte si CoordActualLongLatG és true. Opcional si no es posa les coordenades long/lat estant en graus decimals.",
 			"type": "boolean"
 		},
 		"zoom": {
@@ -790,12 +794,6 @@
 				"type": ["object"],
 				"required": ["nom", "FormatImatge", "CostatMinim", "CostatMaxim", "visible", "consultable", "descarregable"],
 				"properties": {
-					"ordre": {
-						"description": "Ordre de la capa inicial. S'omple automàticament al principi del codi",
-						"type": "number",
-						"minimum": 0,
-						"multipleOf" : 1
-					},
 					"servidor": { 
 						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal",
 						"type": ["string", "null"],
@@ -892,6 +890,63 @@
 										"description": "Valor del nodata",
 										"type": "number"
 									}
+								},
+								"arrayBuffer": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal"
+								},
+								"arrayBuffer": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la impressió"
+								},
+								"capa_rodet": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tot el rodet. N'hi ha tants com capa.data.length",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'un frame del rodet",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors"
+											}
+										}
+									}
+								},
+								"capa_video": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tots els fotogrames del video. N'hi ha tants com capa.data.length",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'un fotograma del video",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors"
+											}
+										}
+									}
+								},
+								"nova_capa": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tots els fotogrames del video. N'hi ha tants com noves vistes",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'una nova vista",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors"
+											}
+										}
+									}
+								},
+								"i_capa": { 
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre capa en una estil tipus 'calcul'",
+									"type": "string"
+								},
+								"i_data": { 
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre data en una estil tipus 'calcul'",
+									"type": "string"
+								},
+								"i_valor": { 
+									"description": "INTERN: s'afegeix programaticament si la banda usa una altre banda una estil tipus 'calcul'",
+									"type": "string"
 								}
 							}
 						}
@@ -1027,12 +1082,16 @@
 										"description": "Membre de l'array de components del estil",
 										"type": "object",
 										"properties": {
+											"calcul": { 
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altre capa o una altre data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {\"i_capa\":0, \"i_valor\":1, \"i_data\":2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc. Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'asumeix la capa actual; si no indiqueu i_data d'assumeix la data actual (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+												"type": "string"
+											},
 											"FormulaConsulta": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes (p.ex. pot servir només per reescalar o per fer un NDVI entre 2 bandes). Useu v[0] per indicar el primer array de valors, etc. Només es pot fer servir si hi ha capa.valors.",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en aquests i_data (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'uan aaltre capa o un altre i_data useu 'calcul'",
 												"type": "string"
 											},
 											"i_valor": { 
-												"description": "Element de l'array de valors que s'usa. Obligatori si hi ha capa.valors i no hi ha FormulaConsulta. Es proporciona com una alternativa ràpida a una FormulaConsulta: v[i_valor]",
+												"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha FormulaConsulta o calcul. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: v[{i_valor}]. El valor per defecte és 0",
 												"type": "number",
 												"minimum": 0,
 												"multipleOf": 1
@@ -1061,7 +1120,7 @@
 														"type": "number"
 													}
 												}
-											}																			
+											}
 										}
 									}
 								},
@@ -1119,6 +1178,26 @@
 												"type": "string"
 											}
 										}
+									}
+								},
+								"histograma": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors",
+									"$ref": "#/definitions/histograma"
+								},
+								"capa_video":
+								{
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors",
+									"type": "array",
+									"items": 
+									{
+										"description": "Histograma per a cada fotograma. N'hi ha tants com capa.data.length",
+										"type": "object",
+										"properties": {
+											"histograma": {
+												"description": "Historgrama per un fotograma",
+												"$ref": "#/definitions/histograma"
+											}
+										}	
 									}
 								}
 							}
@@ -1217,11 +1296,11 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"NomVideo": { 
-						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades juntes",
+						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom",
 						"type": ["string", "null"]
 					},
 					"DescVideo": { 
-						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades",
+						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.desc",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"FlagsData": {
@@ -1277,7 +1356,7 @@
 						"type": "boolean"
 					},
 					"AnimableMultiTime": {
-						"description": "La capa usa l'array de data per fer el vídeo. Opcional. Per defecte val false", 
+						"description": "La capa usa l'array de data per fer el vídeo. Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false", 
 						"type": "boolean"
 					},
 					"proces": {
@@ -1336,17 +1415,25 @@
 				"type": ["object"],
 				"properties": {
 					"namespace": {
-						"description": "Interna; no usar. Espai de noms utilitzat",
+						"description": "Espai de noms utilitzat. Interna excepte per els serveis SOS on es necessita per fer la petició també.",
 						"type": ["string", "null"]
 					},
-					"servidor": { 
+					"servidor": {
 						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si els servidor no és null s'assumeix un WFS amb GML",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
-					"versio": { 
+					"versio": {
 						"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa el VersioServidorLocal",
 						"$ref": "#/definitions/versio" 
+					},
+					"tipus": {
+						"description": "Tipus de servei per aquesta capa. Si és null s'enten que le objectes estan predefinits i no cal anar a un servidor",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"$ref": "#/definitions/EnumTipusServidorDigi" 
+						}]
 					},
 					"nom":	{ 
 						"description": "Nom de la capa digitalitzada",
@@ -1372,13 +1459,13 @@
 						"multipleOf" : 1
 					},
 					"n_cols_tiles": { 
-						"description": "Nombre de tessel·les de les peticions vectorials al servidor en al direcció x",
+						"description": "Nombre de tessel·les de les peticions vectorials al servidor en al direcció x. Per defecte val 1",
 						"type": ["number"],
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"n_files_tiles": { 
-						"description": "Nombre de tessel·les de les peticions vectorials al servidor en al direcció y",
+						"description": "Nombre de tessel·les de les peticions vectorials al servidor en al direcció y. Per defecte val 1",
 						"type": ["number"],
 						"minimum": 0,
 						"multipleOf" : 1
@@ -1404,13 +1491,13 @@
 							"features": {
 								"type": ["array", "null"],
 								"items": {
-									"description": "Objecte digitalitzat o recuperat d'un WFS",
+									"description": "Objecte digitalitzat o recuperat d'un servei OWS",
 									"type": "object",
 									"required": [ "type", "geometry", "properties" ],
 									"properties": {
 										"type": {"enum": ["Feature"]},
 										"id": {
-											"description": "Identificador de la capa digitalitzada",
+											"description": "Identificador del objecte de la capa digitalitzat o recuperat d'un servei OWS",
 											"type": "string"
 										},
 										"bbox": {
@@ -1697,7 +1784,11 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator).",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP"]
+		},
+		"EnumTipusServidorDigi": {
+			"description": "Tipus de servei suportat per les CapaDigi",
+			"enum": ["TipusWFS", "TipusSOS"]
 		},
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",
@@ -2039,7 +2130,7 @@
 				"required": ["nom"],
 				"properties": {
 					"nom": { 
-						"description": "Nom de l'atribut",
+						"description": "Nom de l'atribut. Si el servidor és SOS hi ha 2 noms especials: __om_time__, __om_sensor__ i la resta coincidexen amb els noms de camp de la taula que conté els dades.",
 						"type": ["string"]
 					},
 					"descripcio": { 
@@ -2067,6 +2158,43 @@
 						"type": "boolean"
 					}
 				}
+			}
+		},
+		"histograma": {
+			"description": "Un histograma, composat per les seves clases.",
+			"type": "object",
+			"properties": 
+			{
+				"component": {
+					"description": "Cada component té les seves classes definides a part i els seus màxims i mínims reals. N'hi tants com estil.component.length",
+					"type": "array",
+					"items": {
+						"description": "Membre de l'array de components del histograma.",
+						"type": "object",
+						"properties": {
+							"classe": {
+								"description": "Nombre de cel·les de cada classe. N'hi ha tants com valor de la paleta o per 256 valors si no hi ha paleta",
+								"type": "array",
+								"items": {
+									"description": "Nombre de cel·les per una classe donada",
+									"type": "number"
+								}
+							},
+							"valorMinimReal": {
+								"description": "És el valor mínim de l'array binary",
+								"type": "number"
+							},
+							"valorMaximReal": {
+								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Es el valor màxim de l'array",
+								"type": "number"
+							}
+						}
+					}
+				},
+				"classe_nodata": {
+					"description": "Nombre de cel·les on qualsevol de les component de array binari és assignada a nodata",
+					"type": "number"
+				}								
 			}
 		}
 	}
