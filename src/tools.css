@@ -48,6 +48,15 @@ input[type="text"]
 //	width:97%;
 }
 
+textarea
+{
+	margin:3px;
+	font-size:11px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border: 1px solid #99CCFF;
+	//resize: none;
+}
+
 /* Coordenades */
 .text_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -151,12 +160,6 @@ input[type="text"]
   
 ********************************************************** */
 
-.input_url{
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	width: 400px;
-}
-
 .layerselectorcapesafegir {
 	background-color: #FFFFFF;
 	border: 2px solid #C0C0C0;
@@ -167,7 +170,6 @@ input[type="text"]
 	width:500px;
 	height:200px;
 	overflow:auto;
-
 }
 
 .MenuContextualCapa{
@@ -179,7 +181,9 @@ input[type="text"]
 	height:140;
 	border: 2px  #999999; 
 	border-style:groove;
+	cursor: context-menu;
 }
+
 .llistaMenuContext{
 	padding: 5px;
 	background-color: #FFFFFF;
@@ -457,16 +461,22 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 }
 
 /* Estil de les classes de tipus 'slider' (bruixola, zoom)*/
-table.slider{
+.finestra_superposada 
+{
 	opacity: 0.2;
 }
-table.slider:hover {
+
+.finestra_superposada:hover 
+{
 	opacity: 0.9;
-}
-/* Estil del id='bruixola' */
-table#bruixola:hover {
 	cursor:pointer;
 }
+
+.text_allus
+{
+	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF, 0 0 3px #FFFFFF;
+}
+
 /* Estil vertical del id='latZoom' */
 input[type=range][orient=vertical]
 {

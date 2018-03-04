@@ -168,11 +168,12 @@ function MMgetCheckedRadioButton(form,buttonName)
  * String class. Otherwise, returns false.
  * @param {Object} thisVariable
  * @returns {boolean}
- */
+No usada.
 function MMisString(thisVariable) 
 {
 	return typeof thisVariable==="string" || thisVariable instanceof String;
 }
+*/
 
 //IE8 and lower compatibility for addEventListener
 if(!window.addEventListener)
@@ -297,6 +298,40 @@ function MMgetFileExtension(fileName)
 	var re= /(?:\.([^.]+))?$/;
 	return re.exec(fileName)[1];
 }
+
+
+function DonaAdrecaSenseBarraFinal(s)
+{
+	if (s.charAt(s.length-1)=="/" || s.charAt(s.length-1)=="\\")
+		return s.substring(0,s.length-1);
+	return s;
+}
+
+function AfegeixAdrecaBaseSRC(s)
+{
+	if (ParamCtrl.AdrecaBaseSRC)
+		return ParamCtrl.AdrecaBaseSRC+"/"+s;
+	return s;
+}
+
+function TreuAdreca(s)
+{
+	var i=s.lastIndexOf("/");
+	if (i==-1)
+		return s;
+	return s.substring(i+1);
+}
+
+function DonaExtensioFitxerSensePunt(s)
+{
+	var i=s.lastIndexOf(".");
+	if(i==-1)
+		return "";
+	return s.substring(i+1);
+}
+
+
+
 /*
  * Returns the currently selected button of the group with name 'groupName' in
  * the 'myForm' form. In case there is no radio button with that name, or
@@ -483,14 +518,19 @@ function getContentLayer(elem)
 	return elem.innerHTML;
 }
 
+//Si alguna de les x, y, w, h són -1, no es canvia aquesta dimensió.
 function moveLayer(elem, x, y, w, h)
 {
 	//Ara ho manipulo i ho canvio.
 	var estil=elem.style;
-	estil.left = x;
-	estil.top = y;
-	estil.width = w;
-	estil.height = h;
+	if (x!=-1)
+		estil.left = x;
+	if (y!=-1)
+		estil.top = y;
+	if (w!=-1)
+		estil.width = w;
+	if (h!=-1)
+		estil.height = h;
 }
 
 function changePosAndShowLayer(elem, x, y)
@@ -636,7 +676,7 @@ function changeSizeLayers(win)
 {
 var w_previ,h_previ, delta_w, delta_h, delta, delta1;
 var canvis=false;
-var elem, rect;
+var elem, rect, ancora, nom;
 
 	w_previ=SpaceWidth;
 	h_previ=SpaceHeight;
@@ -649,51 +689,52 @@ var elem, rect;
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
 	{
-		if (layerList[i].ancora)
+		nom=layerList[i].nom;
+		if(-1!=nom.search("_barra"))
+			continue;
+
+		elem=getLayer(win, nom);
+		rect=getRectLayer(elem);
+		if(-1!=nom.search("_finestra"))
 		{
-			if(-1!=layerList[i].nom.search("_barra"))
-				continue;
-
-			elem=getLayer(win, layerList[i].nom);
-			rect=getRectLayer(elem);
-			if(-1!=layerList[i].nom.search("_finestra"))
-			{
-				rect.alt+=AltBarraFinestraLayer;
-				rect.sup-=AltBarraFinestraLayer;
-			}
-
-			if (layerList[i].ancora.indexOf("e")!=-1)
+			rect.alt+=AltBarraFinestraLayer;
+			rect.sup-=AltBarraFinestraLayer;
+		}
+		ancora=layerList[i].ancora;
+		if (ancora)
+		{
+			if (ancora.indexOf("e")!=-1)
 			{
 				delta=Math.round(delta_w*(rect.esq+rect.ample)/w_previ);
-				if (layerList[i].ancora.indexOf("w")!=-1)
+				if (ancora.indexOf("w")!=-1)
 				{
 					delta1=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta1;
 					rect.ample+=delta-delta1;
 				}
-				else if (layerList[i].ancora.indexOf("C")!=-1)
+				else if (ancora.indexOf("C")!=-1)
 				{
 					rect.esq+=delta;
 				}
-				else //if (layerList[i].ancora.indexOf("W")!=-1)
+				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta;
 				}
 				canvis=true;
 			}
-			else if (layerList[i].ancora.indexOf("E")!=-1)
+			else if (ancora.indexOf("E")!=-1)
 			{
-				if (layerList[i].ancora.indexOf("w")!=-1)
+				if (ancora.indexOf("w")!=-1)
 				{
 					delta=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta;
 					rect.ample+=delta_w-delta;
 				}
-				else if (layerList[i].ancora.indexOf("C")!=-1)
+				else if (ancora.indexOf("C")!=-1)
 				{
 					rect.esq+=delta_w;
 				}
-				else //if (layerList[i].ancora.indexOf("W")!=-1)
+				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta_w;
 				}
@@ -701,50 +742,50 @@ var elem, rect;
 			}
 			else
 			{
-				if (layerList[i].ancora.indexOf("w")!=-1)
+				if (ancora.indexOf("w")!=-1)
 				{
 					delta=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta;
-					if (layerList[i].ancora.indexOf("C")!=-1)
+					if (ancora.indexOf("C")!=-1)
 						;
 					else
 						rect.ample-=delta;
 					canvis=true;
 				}
-				//else if (layerList[i].ancora.indexOf("W")!=-1)
+				//else if (ancora.indexOf("W")!=-1)
 			}
-			if (layerList[i].ancora.indexOf("s")!=-1)
+			if (ancora.indexOf("s")!=-1)
 			{
 				delta=Math.round(delta_h*(rect.sup+rect.alt)/h_previ);
-				if (layerList[i].ancora.indexOf("n")!=-1)
+				if (ancora.indexOf("n")!=-1)
 				{
 					delta1=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta1;
 					rect.alt+=delta-delta1;
 				}
-				else if (layerList[i].ancora.indexOf("R")!=-1)
+				else if (ancora.indexOf("R")!=-1)
 				{
 					rect.sup+=delta;
 				}
-				else //if (layerList[i].ancora.indexOf("N")!=-1)
+				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta;
 				}
 				canvis=true;
 			}
-			else if (layerList[i].ancora.indexOf("S")!=-1)
+			else if (ancora.indexOf("S")!=-1)
 			{
-				if (layerList[i].ancora.indexOf("n")!=-1)
+				if (ancora.indexOf("n")!=-1)
 				{
 					delta=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta;
 					rect.alt+=delta_h-delta;
 				}
-				else if (layerList[i].ancora.indexOf("R")!=-1)
+				else if (ancora.indexOf("R")!=-1)
 				{
 					rect.sup+=delta_h;
 				}
-				else //if (layerList[i].ancora.indexOf("N")!=-1)
+				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta_h;
 				}
@@ -752,21 +793,19 @@ var elem, rect;
 			}
 			else
 			{
-				if (layerList[i].ancora.indexOf("n")!=-1)
+				if (ancora.indexOf("n")!=-1)
 				{
 					delta=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta;
-					if (layerList[i].ancora.indexOf("R")!=-1)
-						;
-					else
+					if (ancora.indexOf("R")==-1)
 						rect.alt-=delta;
 					canvis=true;
 				}
-				//else if (layerList[i].ancora.indexOf("N")!=-1)
+				//else if (ancora.indexOf("N")!=-1)
 			}
 			if (canvis==true)
 			{
-				//alert(layerList[i].nom+" "+rect.esq+" "+rect.sup+" "+rect.ample+" "+rect.alt);
+				//alert(nom+" "+rect.esq+" "+rect.sup+" "+rect.ample+" "+rect.alt);
 				if (rect.esq<0)
 					rect.esq=0;
 				if (rect.ample<5)  //Impedeixo que les layers desaparexin totalment
@@ -776,17 +815,8 @@ var elem, rect;
 				if (rect.alt<5)    //Impedeiso que les layers desaparexin totalment
 					rect.alt=5;
 
-				if(-1!=layerList[i].nom.search("_finestra"))
-				{
-
-					var barra;
-					barra=layerList[i].nom.replace("_finestra", "_barra");
-
-					moveLayer(getLayer(win, barra), rect.esq, rect.sup, rect.ample, AltBarraFinestraLayer);
-					//alert(layerList[i].nom +" RectBarra : " +(rect.esq) +" , " + (rect.sup)+" , " + (rect.ample) + " , AltBarraFinestraLayer)");
-					moveLayer(elem, rect.esq, (rect.sup+AltBarraFinestraLayer), rect.ample, (rect.alt-AltBarraFinestraLayer));
-					//alert(layerList[i].nom + " RectBarra : " +rect.esq +" , " + (rect.sup+AltBarraFinestraLayer)+" , " + rect.ample+" , " +  (rect.alt-AltBarraFinestraLayer));
-				}
+				if(-1!=nom.search("_finestra"))
+					moveFinestraLayer(win, nom.replace("_finestra", ""), rect.esq, rect.sup, rect.ample, rect.alt);
 				else					
 					moveLayer(elem, rect.esq, rect.sup, rect.ample, rect.alt);
 			}
@@ -807,10 +837,85 @@ function vScrollLayer(elem, i, n)
 	}
 }
 
+//Aquests 
 var boto_tancar=0x01;
 var boto_pop_up=0x02;
 var boto_pop_down=0x04;
 var boto_ajuda=0x08;
+var boto_copiar=0x10;
+
+function OmpleBarraFinestraLayerNom(win, nom)
+{
+var z;
+	for (z=0; z<layerFinestraList.length; z++)
+	{
+		if (layerFinestraList[z].nom && nom==layerFinestraList[z].nom)
+			return OmpleBarraFinestraLayer(win, z);
+	}
+	alert("Finestra \""+nom+ "\"no trobada");
+}
+
+function OmpleBarraFinestraLayer(win, i_finestra)
+{
+var cdns=[];
+var nom=layerFinestraList[i_finestra].nom + "_barra";
+
+	cdns.push("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>",
+			  "<td class=\"titolfinestra\" onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			  "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
+  			  "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			  "onmousemove=\"MouFinestraLayer(event, ",i_finestra,");\" >", 
+			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
+
+	if(layerFinestraList[i_finestra].botons&boto_copiar)
+	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
+				 AfegeixAdrecaBaseSRC("boto_copiar.gif"), 
+				 "\" alt=\"pop down\" onClick=\"",
+				 "CopiaPortapapersFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
+
+	if(layerFinestraList[i_finestra].botons&boto_ajuda)
+	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
+				 AfegeixAdrecaBaseSRC("boto_ajuda.gif"), 
+				 "\" alt=\"pop down\" onClick=\"AjudaFinestra_",
+				 layerFinestraList[i_finestra].nom ,"();\"></td>");
+
+	if(layerFinestraList[i_finestra].botons&boto_pop_down)
+	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
+				 AfegeixAdrecaBaseSRC("pop_down.gif"),
+				 "\" alt=\"pop down\" onClick=\"PopDownFinestra_",
+				 layerFinestraList[i_finestra].nom ,"();\"></td>");
+	if(layerFinestraList[i_finestra].botons&boto_pop_up)
+	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
+				 AfegeixAdrecaBaseSRC("pop_up.gif"), 
+				 "\" alt=\"pop up\" onClick=\"PopUpFinestra_",
+				 layerFinestraList[i_finestra].nom,"();\"></td>");
+
+	if(layerFinestraList[i_finestra].botons&boto_tancar)
+	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
+				 AfegeixAdrecaBaseSRC("tanca_consulta.gif"), 
+				 "\" alt=\"",
+				 DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}) , "\" onClick=\"", 
+				"TancaFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
+	cdns.push("<td width=\"5px\"></td></tr></table>");
+	contentLayer(getLayer(win, nom), cdns.join(""));
+
+}//Fi de OmpleBarraFinestraLayer()
+
+function afegeixBotoABarraFinestraLayer(win, name, botons)
+{
+var nom=name+"_barra";
+
+	for(var i=0; i<layerFinestraList.length; i++)
+	{
+	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
+	    {
+			layerFinestraList[i].botons|=botons;		
+			//Omplo la layer barra amb els botons i el títol
+			OmpleBarraFinestraLayer(win,i);
+			return;
+	    }
+	}
+}//Fi de afegeixBotoABarraFinestraLayer()
 
 function getFinestraLayer(win, name)
 {
@@ -885,7 +990,7 @@ var titleBar;
 
 function showFinestraLayer(win, name) 
 {
-	showLayer(getFinestraLayer(win,name));
+	showLayer(getFinestraLayer(win, name));
 	showLayer(getLayer(win,name+"_barra"));
 
 	//Set this floating window to be the topmost
@@ -896,7 +1001,7 @@ function showFinestraLayer(win, name)
 
 function removeFinestraLayer(win, name) 
 {
-	removeLayer(getFinestraLayer(win,name));
+	removeLayer(getFinestraLayer(win, name));
 	removeLayer(getLayer(win,name+"_barra"));
 }
 
@@ -1009,6 +1114,12 @@ function MouFinestraLayer(event, i_finestra)
 	}
 }
 
+function moveFinestraLayer(win, name, x, y, w, h)
+{
+	moveLayer(getLayer(win, name+"_barra"), x, y, w, AltBarraFinestraLayer);
+	moveLayer(getFinestraLayer(win, name), x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
+}
+
 function DesactivaMovimentFinestraLayer(event_on_click, i_finestra)
 {
 	layerFinestraList[i_finestra].estat_click=moure_desactiu;
@@ -1083,7 +1194,7 @@ function createLayer(win, name, left, top, width, height, ancora, scroll, visibl
 /*
 name: id de la divisió
 left, top, width, height: mides de la divisió
-ancora: com s'acora la finestra als extrems de la finestra del navegador. Es fan servir punts cardinals "NSEW" (es manté la distàcia amb el punt cardinal) o "nsew" (es manté una distància proporcional al punt cardinal) i "CR". p.ex. "NW"
+ancora: com s'acora la finestra als extrems de la finestra del navegador. Es fan servir punts cardinals "NSEW" (es manté la distància amb el punt cardinal) o "nsew" (es manté una distància proporcional al punt cardinal) i "CR" (es manté l'ample (Columns) o l'alt (Rows)). p.ex. "NW"
 scroll: Pot ser "si" (sempre), "ara_no" (automàtiques), "no" (no scrolls)
 visible: Si la divisió es crea com a visible immediatament. Pot ser true o false
 div_class: Classe en la css que s'asocia a la divisió.
@@ -1131,6 +1242,7 @@ function isLayer(elem)
 		return true;
 	return false;
 }
+
 
 // Funció inspirada en una de SitePoint Pty. Ltd, www.sitepoint.com
 function Ajax() {
@@ -1294,6 +1406,16 @@ function Ajax() {
   };
 }
 
+function IsXMLMimeType(mimetype)
+{
+	if (typeof mimetype!=="undefined" && (mimetype=="text/xml" || mimetype=="application/xml" || 
+		mimetype=="application/vnd.ogc.gml" || mimetype=="application/vnd.ogc.gml/3.1.1" || 
+		mimetype=="subtype=gml/3.1.1"))
+		return true;
+	else
+		return false;
+}
+
 function loadFile(path, mimetype, success, error, extra_param)
 {
 var xhr = new XMLHttpRequest();
@@ -1303,7 +1425,7 @@ var xhr = new XMLHttpRequest();
 		{
 	            	if (xhr.status === 200) 
 			{
-				if (mimetype!=xhr.getResponseHeader('content-type'))
+				if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
 				{
 			                if (error)
 					{
@@ -1321,8 +1443,7 @@ var xhr = new XMLHttpRequest();
 				{
 	                		if (success)
 					{
-						if (mimetype=="text/xml" ||
-						    mimetype=="application/xml")
+						if (IsXMLMimeType(mimetype))
 							success(xhr.responseXML, extra_param);
 						else
 							success(xhr.responseText, extra_param);
@@ -1507,6 +1628,21 @@ var r;
     	}
 }
 
+function sortAscendingNumber(a, b)
+{
+	return a - b;
+}
+
+function EliminaRepeticionsArray(llista, funcio_ordena)
+{
+	for (i=0; i+1<llista.length;)
+	{
+		if (0==funcio_ordena(llista[i], llista[i+1]))
+			llista.splice(i+1, 1);
+		else
+			i++;
+	}
+}
 
 //Aquesta funció no és a la llibrerira matemàtica.
 function sinh(z)
@@ -1644,7 +1780,7 @@ function DonaCaracterHexaMultiple3(s)
 function DonaFitxerColor(c)
 {
 	//Arrodoneix el valor del color
-	s=new String(c)	
+	var s=new String(c)	
 	if (s.toLowerCase()=="#e6f2ff")
 		s="colors/c"+s.substring(1,7)+".gif";	
 	else
@@ -1677,6 +1813,7 @@ function DonaCadenaAmbCometesBarra(cadena)
 //Després de intentar fer servir l'objecte link() sense exit he hagut de fer això.
 function DonaHost(s)
 {
+var s2;
 	if (-1!=s.indexOf("//"))
 	{
 		s2=s.substring(s.indexOf("//")+2,s.length);
@@ -1874,7 +2011,7 @@ var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre
 				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
 				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "Octuber", "fre": "Octobre"},
 				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"}, 
-				   {"cat": "de desembre", "spa": "de diciembre", "eng": "Desember", "fre": "Décembre"}];
+				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
 
 var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvier"},
 			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"}, 
@@ -2038,22 +2175,6 @@ function CreaAccio(accio,servidor, coord, buffer, capes, camps, valors, id_trans
 	this.valors=valors; //Array de valors dels camps (1 per cada camp en el mateix ordre)
 	this.id_trans=id_trans; //Identificador de la transacció
 	this.feta=feta; //feta:true--> acció despatxada, feta:false --> acció cancel·lada
-}
-
-// Això s'usa d'una manera rara. De fet CreaTransaccio() no sembla usar-se mai però en canvi sí que hi ha un us dels estats. Cal repasar.
-var estat_pendent=0x0001;
-var estat_fi_exit=0x0002;
-var estat_fi_error=0x0004;
-
-var tipus_insert=0x0001;
-
-function CreaTransaccio(i_capa, tipus, estat, win)
-{
-	this.i_capa=i_capa;
-	this.tipus=tipus;
-	this.estat=estat;
-	this.text="";
-	this.win=win;
 }
 
 /*LlistaServOWS=[]; es deixa només com a documentació del JSON

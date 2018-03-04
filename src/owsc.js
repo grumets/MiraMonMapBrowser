@@ -90,9 +90,7 @@ function parseOWSCDate(tag)
 //Process the value of a tag and returns a string to show to the user (requires Gml() libraries)
 function parseWhere(geoTag,myHolder,myOWSC)
 {
-	var collection= loadGeoRSSTag(geoTag),
-		myGml,
-		i=0;
+	var collection= loadGeoRSSTag(geoTag), myGml, i;
 
 	if(!collection || !collection.length)
 		return "";
@@ -318,19 +316,11 @@ function parseWMSOffering(tag,myOffering)
 
 function parseWMTSOffering(tag,myOffering)
 {
-	var elem,
-		reason,
-		isSupported= false, //In order to check if at least one operation is supported
-		myTileMatrixSet,
-		bBox= getWhere(myOffering.layer),
-		operationTags,
-		tilesWidth= [],
-		tilesHeight= [],
-		tilesTop= [],
-		tilesLeft= [],
-		tilesOpacity= [],
-		i,
-		x;
+var elem, reason,isSupported= false, //In order to check if at least one operation is supported
+	myTileMatrixSet,bBox= getWhere(myOffering.layer),
+	operationTags,
+	tilesWidth= [], tilesHeight= [], tilesTop= [], tilesLeft= [], tilesOpacity= [],
+	i, x;
 
 	myOffering.type="TipusWMTS_REST";
 
@@ -433,9 +423,7 @@ If there are 2 or more offerings... which one should I choose for the entry?
 */
 function parseOffering(tag,myOWSCLayer)
 {
-	var myOffering= new Offering(myOWSCLayer),
-		elem,
-		i;
+var myOffering= new Offering(myOWSCLayer), elem;
 
 	elem= tag.getAttribute("code");
 	if(!elem)
@@ -446,11 +434,7 @@ function parseOffering(tag,myOWSCLayer)
 
 	myOffering.code= elem;
 	//Process the 'code' attribute to get the type of offering
-	i= elem.lastIndexOf("/");
-	if(-1===i)
-		myOffering.typeName= elem.toUpperCase();
-	else
-		myOffering.typeName= elem.substr(i+1,elem.length-i-1).toUpperCase();
+	myOffering.typeName=TreuAdreca(elem).toUpperCase();
 
 	//Select the proper offering parser depending on the offering type
 	switch(myOffering.typeName)
@@ -502,13 +486,8 @@ function parseActive(attribute,OWSCObject)
 }
 function parseTag(aTags,tagField,root,OWSCObject)
 {
-	var elem,i,j,
-		newHTML= "",
-		auxHTML,
-		shown,
-		attMatch,
-		attValueMatch,
-		attRetrieved;
+var elem,i,j,
+	newHTML= "", auxHTML,shown, attMatch, attValueMatch, attRetrieved;
 
 	//Loop the tags looking for all the existing ones, and checking the
 	//validity of the mandatory ones.
@@ -1274,14 +1253,11 @@ function SaveOWSContext(url_context)
 
 function OpenmyOWSCLayers(myForm)
 {
-	var i,
-		separator_set= null, //The layer group separator must be set only in the first layer
-		myOWSC,
-		myLayer,
-		newLayers= [],
-		bBox; //Layers bounding box
+var i, separator_set= null, //The layer group separator must be set only in the first layer
+	myOWSC, n_nova_capa=0, bBox; //Layers bounding box
 
 	for(i=0;i<myForm.length;i++)
+	{
 	//Reverse order so last processed layer is top one
 	//for(i=myForm.length;i--;)
 		if(myForm.elements[i].type==="checkbox" && myForm.elements[i].checked)
@@ -1296,8 +1272,8 @@ function OpenmyOWSCLayers(myForm)
 
 			//bBox= getWhere(myOWSC); By now, leave it visible in all CRS
 
-			//A new layer is created with this myOWSC
-			myLayer={ "ordre": 0,
+			//Add the new layers on top of the capa Array
+			ParamCtrl.capa.splice(n_nova_capa, 0, { "ordre": n_nova_capa,
 				"servidor": myOWSC.offerings[0].server, //Server to which the request will be send
 				"versio": DonaVersioDeCadena(myOWSC.offerings[0].version), //Version of the request
 				"tipus": myOWSC.offerings[0].type, //The flag of the request type (WMS, WFS, ...)
@@ -1320,31 +1296,24 @@ function OpenmyOWSCLayers(myForm)
 				"consultable": "ara_no", 
 				"descarregable": "no", 
 				"i_data": 0, 
-				"animable": false}; 
+				"animable": false});
 
 			//Add a tool tip to show on mouse over the layer name
-			myLayer.toolTip= myOWSC.description;
-			//Add the OWSC layer to the layer array
-			newLayers.push(myLayer);
-			//capa.unshift(myLayer); //Add it on top so it is viewed
+			ParamCtrl.capa[n_nova_capa].toolTip= myOWSC.description;  //Ni ideal del que és això. Cal revisar.
 
 			//Control if the separator has been already set (so it is not redrawn)
 			if(!separator_set)
 				separator_set= true;
+			CompletaDefinicioCapa(ParamCtrl.capa[n_nova_capa]);
+			n_nova_capa++;
 		}
-	
+	}	
 	//None layers will be added
-	if(!myLayer)
+	if(n_nova_capa==0)
 		return;
-
-	//Add the new layers on top of the capa Array
-	//capa= newLayers.concat(capa); or newLayers.push(capa); do not work properly
-	for(i=0;i<ParamCtrl.capa.length;i++)
-		newLayers.push(ParamCtrl.capa[i]);
-	ParamCtrl.capa= newLayers;
-		
+	
 	//The map browser is redrawn in order the layers to appear
-	CreaParamInternCtrlCapa();
+	ReescriuIndexOrdreCapes();
 	RevisaEstatsCapes();
 	CreaLlegenda();
 	RepintaMapesIVistes();

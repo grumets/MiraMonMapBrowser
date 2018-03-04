@@ -31,6 +31,7 @@
 
 var FactorGrausARadiants=0.0174532925199432957692369076848   //M_PI/180
 var FactorRadiantsAGraus=57.295779513082320876798154814105   //180/M_PI
+var FactotGrausAMetres=111319.5
 
 function g_gms(graus_totals, zeros)
 {
@@ -626,10 +627,8 @@ var crs_up;
 		return Mercator_Geo(x,y);
 	if (crs_up=="EPSG:3785")
 		return Mercator_esferica_Geo(x,y);
-	if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
+	if (EsProjLongLat(crs_up))
 	{
-		//ll_x=x;
-		//ll_y=y;
 		return {"x": x, "y": y};
 	}
 	if (CantaNoImplemCoordLongLat)
@@ -663,7 +662,7 @@ var crs_up;
 		return Geo_Mercator(ll_x,ll_y);
 	if (crs_up=="EPSG:3785")
 		return Geo_Mercator_esferica(ll_x,ll_y);
-	if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
+	if (EsProjLongLat(crs_up))
 	{
 		//crs_x=ll_x;
 		//crs_y=ll_y;
@@ -696,7 +695,7 @@ var ll, env_ll={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     if (env_ll.MinY>ll.y) env_ll.MinY=ll.y;
     else if (env_ll.MaxY<ll.y) env_ll.MaxY=ll.y;
 
-    ll=DonaCoordenadesLongLat(x=env.MinX, env.MinY+(env.MaxY-env.MinY)*3/4, crs);
+    ll=DonaCoordenadesLongLat(env.MinX, env.MinY+(env.MaxY-env.MinY)*3/4, crs);
     if (env_ll.MinX>ll.x) env_ll.MinX=ll.x;
     else if (env_ll.MaxX<ll.x) env_ll.MaxX=ll.x;
     if (env_ll.MinY>ll.y) env_ll.MinY=ll.y;
@@ -879,6 +878,12 @@ var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     return env_crs_xy;
 }
 
+function EsProjLongLat(crs)
+{
+	if (DonaUnitatsCoordenadesProj(crs)=="°")
+		return true;
+	return false;
+}
 
 function DonaUnitatsCoordenadesProj(crs)
 {
