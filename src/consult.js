@@ -279,7 +279,7 @@ function MostraConsultaComHTML(consulta)
 		var elem=getLayer(consulta.win, consulta.nom_layer);		
 		cdns.push("<span class='TitolRepostaConsulta'>", 
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom )), 			
-			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, -1) : ""), 
+			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, ParamCtrl.capa[consulta.i_capa].i_data) : ""), 
 			"</span><hr size=\"2\">");
 			
 		if(consulta.estat==EstatXMLOmplert)
@@ -420,7 +420,7 @@ function OmpleRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer), 
 			"<span class='TitolRepostaConsulta'>"+ 
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+ 
-			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, -1) : "")+ 
+			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, ParamCtrl.capa[consulta.i_capa].i_data) : "")+ 
 			"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'>" + 
 			((consulta.capa.FormatConsulta=="text/html") ? "" : "<pre>") +
 			doc + 
@@ -444,7 +444,7 @@ function ErrorRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer), 
 		"<span class='TitolRepostaConsulta'>"+ 
 		(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+ 
-		((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, -1) : "")+ 
+		((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, ParamCtrl.capa[consulta.i_capa].i_data) : "")+ 
 		"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'></span>");
 	}
 	OmpleRespostaConsultaNoHiHaDadesSiCal(consulta.win)
@@ -747,7 +747,7 @@ var cdns=[], capa;
 						cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 						cdns.push("<span class='TitolRepostaConsulta'>", 
 							(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
-							((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, -1) : ""),
+							((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, capa.i_data) : ""),
 							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", v, "</span>");
 						cdns.push("</div>");
 					}
@@ -760,7 +760,7 @@ var cdns=[], capa;
 				cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 				cdns.push("<b>",
 						(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )) ,
-						((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, -1) : ""),
+						((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, capa.i_data) : ""),
 						"</b><br>", DonaCadenaLang({"cat":"Esperant dades...", "spa":"Esperando datos...", "eng":"Waiting for data...", "fre":"En attente des données..."}));
 				cdns.push("</div>");
 			}
