@@ -35,170 +35,156 @@
 
 <script LANGUAGE="JavaScript">
 <!--   Inici de JavaScript  
+"use strict"
 
 function IniciaPrintTools()
 {
-    with(opener)
-    {
-	var cdns=[];
-	cdns.push(DonaCadenaLang({"cat":"Mida i orientació del paper", 
+var cdns=[], i;
+	cdns.push(opener.DonaCadenaLang({"cat":"Mida i orientació del paper", 
 			"spa":"Tamaño y orientación del papel", 
 			"eng":"Size and orientation of the paper",
 			"fre":"Dimensions et position du papier"}),":<br>");
-	for (i=0; i<ParamCtrl.PlantillaDImpressio.length; i++)
+	for (i=0; i<opener.ParamCtrl.PlantillaDImpressio.length; i++)
 	{
-		cdns.push(" <input type=\"radio\" name=\"TipusFull\" value=\"",ParamCtrl.PlantillaDImpressio[i].nom,"\" onClick=\"CanviaPlantillaImpressio(true);\"> ", 
-								DonaCadena(ParamCtrl.PlantillaDImpressio[i].desc) ,"<br>");
+		cdns.push(" <input type=\"radio\" name=\"TipusFull\" value=\"",opener.ParamCtrl.PlantillaDImpressio[i].nom,"\" onClick=\"CanviaPlantillaImpressio(true);\"> ", 
+								opener.DonaCadena(opener.ParamCtrl.PlantillaDImpressio[i].desc) ,"<br>");
 	}
 	cdns.push("<hr>",
-				DonaCadenaLang({"cat":"En imprimir la vista, respectar", "spa":"Al imprimir la vista, respetar", 
-								"eng":"When printing the view, keep", "fre":"En imprimant la vue, respecter"}),":<br>",
-				" <input type=\"radio\" name=\"RespectarResolucio\" value=\"false\"",
-					" onClick=\"AnalitzarResolucioImpressio(false);\"",
-					"> ", DonaCadenaLang({"cat":"l\'àmbit", "spa":"el ámbito", "eng":"the extent", "fre":"le champ"}) ,"<br>" ,
-				" <input type=\"radio\" name=\"RespectarResolucio\" value=\"true\"",
-					" onClick=\"AnalitzarResolucioImpressio(true);\"",
-					"> ", DonaCadenaLang({"cat":"la resolució", "spa":"la resolución", "eng":"the resolution", "fre":"la résolution"}));
-	this.document.getElementById("print_tools").innerHTML=cdns.join("");
-    }
+			opener.DonaCadenaLang({"cat":"En imprimir la vista, respectar", "spa":"Al imprimir la vista, respetar", 
+							"eng":"When printing the view, keep", "fre":"En imprimant la vue, respecter"}),":<br>",
+			" <input type=\"radio\" name=\"RespectarResolucio\" value=\"false\"",
+				" onClick=\"AnalitzarResolucioImpressio(false);\"",
+				"> ", opener.DonaCadenaLang({"cat":"l\'àmbit", "spa":"el ámbito", "eng":"the extent", "fre":"le champ"}) ,"<br>" ,
+			" <input type=\"radio\" name=\"RespectarResolucio\" value=\"true\"",
+				" onClick=\"AnalitzarResolucioImpressio(true);\"",
+				"> ", opener.DonaCadenaLang({"cat":"la resolució", "spa":"la resolución", "eng":"the resolution", "fre":"la résolution"}));
+	window.document.getElementById("print_tools").innerHTML=cdns.join("");
 }
 
 function IniciaPrintBarra()
 {
-    with(opener)
-    {
-	var cdns=[];
-	cdns.push("<div align=right><input TYPE=\"submit\" VALUE=\""+DonaCadenaLang({"cat":"Imprimir", "spa":"Imprimir", "eng":"Print", "fre":"Imprimer"})+"\"> ",
-		"<input TYPE=\"button\" VALUE=\"",DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),"\" onClick=\"CancellaImpressio();\"> &nbsp;&nbsp;",
-		"<input TYPE=\"button\" VALUE=\"",DonaCadenaLang({"cat":"Previsualitzar", "spa":"Previsualizar", "eng":"Preview", "fre":"Aperçu"}),"\" onClick=\"AplicaCanvisImpressio();\">&nbsp;&nbsp;</div>");
-	this.document.getElementById("print_barra").innerHTML=cdns.join("");
-    }
+var cdns=[];
+	cdns.push("<div align=right><input TYPE=\"submit\" VALUE=\""+opener.DonaCadenaLang({"cat":"Imprimir", "spa":"Imprimir", "eng":"Print", "fre":"Imprimer"})+"\"> ",
+		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),"\" onClick=\"CancellaImpressio();\"> &nbsp;&nbsp;",
+		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Previsualitzar", "spa":"Previsualizar", "eng":"Preview", "fre":"Aperçu"}),"\" onClick=\"AplicaCanvisImpressio();\">&nbsp;&nbsp;</div>");
+	window.document.getElementById("print_barra").innerHTML=cdns.join("");
 }
 
 function IniciaFormulari()
 {
 	IniciaPrintTools();
 	IniciaPrintBarra();
-	with(opener)
+	var print_form=window.document.print_form;
+	for (var i=0; i<opener.ParamCtrl.PlantillaDImpressio.length; i++)
 	{
-		var print_form=this.document.print_form;
-		for (i=0; i<ParamCtrl.PlantillaDImpressio.length; i++)
-		{
-			if (i==IPlantillaDImpressio)
-				print_form.TipusFull[i].checked=true;
-			else
-				print_form.TipusFull[i].checked=false;
-		}
-	}
+		if (i==opener.IPlantillaDImpressio)
+			print_form.TipusFull[i].checked=true;
+		else
+			print_form.TipusFull[i].checked=false;
+	}	
 	CanviaPlantillaImpressio(false);
 }
 
 function RecuperaEstatPlantilla()
 {
-    if (!this.FullImprimirWindow)
+    if (!window.FullImprimirWindow)
     {
 		ObreFullImprimir();
 		return 1;
     }
 
-    with(opener)
-    {
-		//alert(IPlantillaDImpressio+ " " +(plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirSituacio));
-		var print_form=this.document.print_form;
-		if (print_form.RespectarResolucio[0].checked)
-			plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~RespectarResolucioVistaImprimir;
-		else
-			plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=RespectarResolucioVistaImprimir;
+	//alert(opener.IPlantillaDImpressio+ " " +(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirSituacio));
+	var print_form=window.document.print_form;
+	if (print_form.RespectarResolucio[0].checked)
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.RespectarResolucioVistaImprimir;
+	else
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.RespectarResolucioVistaImprimir;
 
-		if (isLayer(getLayer(this.FullImprimirWindow, "vista")) && this.print_layers && print_form.ElementImprimirVista)
-		{
-			if (print_form.ElementImprimirVista.checked)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirVista;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirVista;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.esq=print_form.ElementImprimirVistaEsq.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.sup=print_form.ElementImprimirVistaSup.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample=print_form.ElementImprimirVistaAmple.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt=print_form.ElementImprimirVistaAlt.value;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "escala")))
-		{
-			if (print_form.ElementImprimirEscala.checked)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirEscala;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirEscala;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.esq=print_form.ElementImprimirEscalaEsq.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.sup=print_form.ElementImprimirEscalaSup.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.ample=print_form.ElementImprimirEscalaAmple.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.alt=print_form.ElementImprimirEscalaAlt.value;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "titol")))
-		{
-			if (print_form.ElementImprimirTitol.checked)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirTitol;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirTitol;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.esq=print_form.ElementImprimirTitolEsq.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.sup=print_form.ElementImprimirTitolSup.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.ample=print_form.ElementImprimirTitolAmple.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.alt=print_form.ElementImprimirTitolAlt.value;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "situacio")))
-		{
-			if (print_form.ElementImprimirSituacio.checked)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirSituacio;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirSituacio;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.esq=print_form.ElementImprimirSituacioEsq.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.sup=print_form.ElementImprimirSituacioSup.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample=print_form.ElementImprimirSituacioAmple.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt=print_form.ElementImprimirSituacioAlt.value;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "llegenda")))
-		{
-			if (print_form.ElementImprimirLlegenda.checked)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirLlegenda;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirLlegenda;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.esq=print_form.ElementImprimirLlegendaEsq.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.sup=print_form.ElementImprimirLlegendaSup.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.ample=print_form.ElementImprimirLlegendaAmple.value;
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.alt=print_form.ElementImprimirLlegendaAlt.value;
-		}
-		RecuperaEstatEditsMidesPropia(DarrerEstatDesplegableLayersPropies);
-    }
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "vista")) && window.print_layers && print_form.ElementImprimirVista)
+	{
+		if (print_form.ElementImprimirVista.checked)
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.CalImprimirVista;
+		else
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.CalImprimirVista;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.esq=print_form.ElementImprimirVistaEsq.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.sup=print_form.ElementImprimirVistaSup.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.ample=print_form.ElementImprimirVistaAmple.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.alt=print_form.ElementImprimirVistaAlt.value;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
+	{
+		if (print_form.ElementImprimirEscala.checked)
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.CalImprimirEscala;
+		else
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.CalImprimirEscala;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.esq=print_form.ElementImprimirEscalaEsq.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.sup=print_form.ElementImprimirEscalaSup.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.ample=print_form.ElementImprimirEscalaAmple.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.alt=print_form.ElementImprimirEscalaAlt.value;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
+	{
+		if (print_form.ElementImprimirTitol.checked)
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.CalImprimirTitol;
+		else
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.CalImprimirTitol;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.esq=print_form.ElementImprimirTitolEsq.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.sup=print_form.ElementImprimirTitolSup.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.ample=print_form.ElementImprimirTitolAmple.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.alt=print_form.ElementImprimirTitolAlt.value;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
+	{
+		if (print_form.ElementImprimirSituacio.checked)
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.CalImprimirSituacio;
+		else
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.CalImprimirSituacio;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.esq=print_form.ElementImprimirSituacioEsq.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.sup=print_form.ElementImprimirSituacioSup.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.ample=print_form.ElementImprimirSituacioAmple.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.alt=print_form.ElementImprimirSituacioAlt.value;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
+	{
+		if (print_form.ElementImprimirLlegenda.checked)
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir|=opener.CalImprimirLlegenda;
+		else
+			opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&=~opener.CalImprimirLlegenda;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.esq=print_form.ElementImprimirLlegendaEsq.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.sup=print_form.ElementImprimirLlegendaSup.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.ample=print_form.ElementImprimirLlegendaAmple.value;
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.alt=print_form.ElementImprimirLlegendaAlt.value;
+	}
+	RecuperaEstatEditsMidesPropia(DarrerEstatDesplegableLayersPropies);
     return 0;
 }
 
 function CanviaPlantillaActiva()
 {
-    with(opener)
-    {
-		for (i=0; i<ParamCtrl.PlantillaDImpressio.length; i++)
+	for (var i=0; i<opener.ParamCtrl.PlantillaDImpressio.length; i++)
+	{
+		if (window.document.print_form.TipusFull[i].checked)
 		{
-			if (this.document.print_form.TipusFull[i].checked)
-			{
-				IPlantillaDImpressio=i;
-				break;
-			}
+			opener.IPlantillaDImpressio=i;
+			break;
 		}
-    }
+	}
 }
 
 var FullImprimirWindow=null;
 function ObreFullImprimir()
 {
-    if (FullImprimirWindow==null || FullImprimirWindow.closed)
-    {
-       	FullImprimirWindow=window.open(opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].src,
-			"FinestraFullImprimir",
-			'toolbar=no,status=yes,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,left=400,top=0,width='+opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].ample+',height='+opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].alt);
-    }
-    else
-    {
-    	FullImprimirWindow.focus();
+	if (FullImprimirWindow==null || FullImprimirWindow.closed)
+	{
+		FullImprimirWindow=window.open(opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].src,
+		"FinestraFullImprimir",
+		'toolbar=no,status=yes,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,left=400,top=0,width='+opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].ample+',height='+opener.ParamCtrl.PlantillaDImpressio[opener.IPlantillaDImpressio].alt);
+	}
+	else
+	{
+		FullImprimirWindow.focus();
 		window.focus();
-    }
+	}
 }
 
 function AplicaCanvisImpressio()
@@ -246,12 +232,12 @@ function CanviaPlantillaImpressio(recupera_estat_previ)
 {
 	if (recupera_estat_previ==true)
 	{
-	    if (RecuperaEstatPlantilla()!=0)
-	    {
+		if (RecuperaEstatPlantilla()!=0)
+		{
 			setTimeout("CanviaPlantillaImpressio(true)", 500);
 			return;
-        }
-	    CanviaPlantillaActiva();
+	    }
+		CanviaPlantillaActiva();
 	}
 	TancaFinestraImpressio();
 	ObreFullImprimir();  // Aquesta ja provoca un MouLayersImpressio() en un onLoad
@@ -259,42 +245,39 @@ function CanviaPlantillaImpressio(recupera_estat_previ)
 
 function AnalitzarResolucioImpressio(respectar_resolucio)
 {
-	with (opener)
-	{
-		CalculaNColNFilVistaImprimir(plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample,
-							plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt);
+	opener.CalculaNColNFilVistaImprimir(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.ample,
+						opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.alt);
 
-		var cdns=[];
-		cdns.push("<hr>");
-		if ((typeof respectar_resolucio=="undefined" && plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&RespectarResolucioVistaImprimir) || 
-		    respectar_resolucio)
+	var cdns=[];
+	cdns.push("<hr>");
+	if ((typeof respectar_resolucio=="undefined" && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.RespectarResolucioVistaImprimir) || 
+		respectar_resolucio)
+	{
+		cdns.push(opener.DonaCadenaLang({"cat":"La resolució original de la vista es respecta però es canvia l\'àmbit.",
+					"spa":"La resolución original de la vista se respeta pero se cambia el ámbito.",
+					"eng":"The original resolution of the view is kept but the extent is changed.",
+					"fre":"La résolution originelle de la vue est respectée mais le champ est changé."}));
+	}
+	else
+	{
+		if (opener.VistaImprimir.nfil<opener.ParamInternCtrl.vista.nfil || opener.VistaImprimir.nfil<opener.ParamInternCtrl.vista.nfil)
 		{
-			cdns.push(DonaCadenaLang({"cat":"La resolució original de la vista es respecta però es canvia l\'àmbit.",
-						"spa":"La resolución original de la vista se respeta pero se cambia el ámbito.",
-						"eng":"The original resolution of the view is kept but the extent is changed.",
-						"fre":"La résolution originelle de la vue est respectée mais le champ est changé."}));
+			cdns.push("<font color=red>",
+					opener.DonaCadenaLang({"cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l\'àrea de la vista a imprimir.\nPrem \'Imprimir\' per a imprimir a un resolució inferior o cancel·la i fes més petita l\'area de la vista (p.ex. canviat la mida del navegador).",
+										"spa":"La resolución asignada a la impresora por el navegador es INFERIOR a la resolución del área de la vista a imprimir.\nSeleccione \'Imprimir\' para imprimir a una resolución inferior o cancelar y haga más pequeña el área de la vista (p.ej. cambiando la medida del navegador).",
+										"eng":"The resolution assigned to the printer in a browser is LOWER than resolution of the view area to print.\nPlease, press \'Ok\' to print in a lower resolution or cancel do view area smaller (f.ex. changing browser window size).",
+										"fre":"La résolution assignée à l\'imprimante par le navigateur est INFÉRIEURE à la résolution de l\'aire de la vue à imprimer.\nAppuyer \'Imprimer\' pour imprimer à une résolution inférieure où annuler et faites plus petite l\'aire de la vue (p.ex. En changeant la taille du navigateur)."}),
+						"</font>");
 		}
 		else
 		{
-			if (nfilVistaImprimir<ParamInternCtrl.vista.nfil || nfilVistaImprimir<ParamInternCtrl.vista.nfil)
-			{
-				cdns.push("<font color=red>",
-						DonaCadenaLang({"cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l\'àrea de la vista a imprimir.\nPrem \'Imprimir\' per a imprimir a un resolució inferior o cancel·la i fes més petita l\'area de la vista (p.ex. canviat la mida del navegador).",
-											"spa":"La resolución asignada a la impresora por el navegador es INFERIOR a la resolución del área de la vista a imprimir.\nSeleccione \'Imprimir\' para imprimir a una resolución inferior o cancelar y haga más pequeña el área de la vista (p.ej. cambiando la medida del navegador).",
-											"eng":"The resolution assigned to the printer in a browser is LOWER than resolution of the view area to print.\nPlease, press \'Ok\' to print in a lower resolution or cancel do view area smaller (f.ex. changing browser window size).",
-											"fre":"La résolution assignée à l\'imprimante par le navigateur est INFÉRIEURE à la résolution de l\'aire de la vue à imprimer.\nAppuyer \'Imprimer\' pour imprimer à une résolution inférieure où annuler et faites plus petite l\'aire de la vue (p.ex. En changeant la taille du navigateur)."}),
-							"</font>");
-			}
-			else
-			{
-				cdns.push(DonaCadenaLang({"cat":"La resolució assignada a la impressora pel navegador és suficient per imprimir la vista.",
-								"spa":"La resolución asignada a la impresora por el navegador es suficiente para imprimir la vista.",
-								"eng":"The resolution assigned to the printer in a browser is enough to print the view.",
-								"fre":"La résolution assignée à l'imprimante par le navigateur est suffisante  pour imprimer la vue."}));
-			}
+			cdns.push(opener.DonaCadenaLang({"cat":"La resolució assignada a la impressora pel navegador és suficient per imprimir la vista.",
+							"spa":"La resolución asignada a la impresora por el navegador es suficiente para imprimir la vista.",
+							"eng":"The resolution assigned to the printer in a browser is enough to print the view.",
+							"fre":"La résolution assignée à l'imprimante par le navigateur est suffisante  pour imprimer la vue."}));
 		}
-		this.document.getElementById("print_text").innerHTML=cdns.join("");
 	}
+	window.document.getElementById("print_text").innerHTML=cdns.join("");
 }
 
 var DarrerEstatDesplegableLayersPropies=-1;
@@ -303,344 +286,326 @@ function RecuperaEstatEditsMidesPropia(i_layer)
 {
 	if (DarrerEstatDesplegableLayersPropies==-1)
 		return;
-	with (opener)
-	{
-		var print_form=this.document.print_form;
-		if (print_form.ElementImprimir.checked)
-			plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].visible=true;
-		else
-			plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].visible=false;
-		plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.esq=print_form.ElementImprimirEsq.value;
-		plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.sup=print_form.ElementImprimirSup.value;
-		plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.ample=print_form.ElementImprimirAmple.value;
-		plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.alt=print_form.ElementImprimirAlt.value;
-		plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].contingut=print_form.ContingutElementImprimir.value;
-	}
+	var print_form=window.document.print_form;
+	if (print_form.ElementImprimir.checked)
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].visible=true;
+	else
+		opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].visible=false;
+	opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.esq=print_form.ElementImprimirEsq.value;
+	opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.sup=print_form.ElementImprimirSup.value;
+	opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.ample=print_form.ElementImprimirAmple.value;
+	opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.alt=print_form.ElementImprimirAlt.value;
+	opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].contingut=print_form.ContingutElementImprimir.value;
 }
+
 function ReompleEditsMidesPropia(i_layer, primer_cop)
 {
-	with (opener)
+	if (!primer_cop)
 	{
-		if (!primer_cop)
-		{
-			RecuperaEstatEditsMidesPropia(this.DarrerEstatDesplegableLayersPropies);
-		}
-		var print_form=this.document.print_form;
-		print_form.ElementImprimir.checked=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].visible;
-		print_form.ElementImprimirEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.esq;
-		print_form.ElementImprimirSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.sup;
-		print_form.ElementImprimirAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.ample;
-		print_form.ElementImprimirAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].rect.alt;
-		print_form.ContingutElementImprimir.value=plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i_layer].contingut;
-		this.DarrerEstatDesplegableLayersPropies=i_layer;
+		RecuperaEstatEditsMidesPropia(DarrerEstatDesplegableLayersPropies);
 	}
+	var print_form=window.document.print_form;
+	print_form.ElementImprimir.checked=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].visible;
+	print_form.ElementImprimirEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.esq;
+	print_form.ElementImprimirSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.sup;
+	print_form.ElementImprimirAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.ample;
+	print_form.ElementImprimirAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].rect.alt;
+	print_form.ContingutElementImprimir.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i_layer].contingut;
+	DarrerEstatDesplegableLayersPropies=i_layer;
 }
 
 function DibuixaEditsMides()
 {
-    with (opener)
-    {
-		var cdns=[];
-		cdns.push("<hr>");
-		cdns.push("<table border=0 cellspacing=0 cellpadding=0>",
-				"<THEAD><TR><TH>",DonaCadenaLang({"cat":"Elements a imprimir (píxels)", "spa":"Elementos a imprimir (píxeles)","eng":"Elements to print (pixels)", "fre":"Éléments à imprimer (pixels)"}),"</TH><TH>",
-									DonaCadenaLang({"cat":"esq.", "spa":"izq.", "eng":"left", "fre":"gauche"}),"</TH><TH>",
-									DonaCadenaLang({"cat":"sup.", "spa":"sup.", "eng":"top", "fre":"sup."}),"</TH><TH>",
-									DonaCadenaLang({"cat":"ample", "spa":"ancho", "eng":"width", "fre":"largeur"}),"</TH><TH>",
-									DonaCadenaLang({"cat":"alt", "spa":"alto", "eng":"height", "fre":"hauteur"}),"</TH></TR></THEAD>");
-		if (isLayer(getLayer(this.FullImprimirWindow, "vista")))
-			cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirVista\"> ", DonaCadenaLang({"cat":"Vista", "spa":"Vista", "eng":"View", "fre":"Vue"}) ,"<td><input type=\"text\" name=\"ElementImprimirVistaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAlt\" size=3></td></tr>");
-		if (isLayer(getLayer(this.FullImprimirWindow, "escala")))
-			cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirEscala\"> ", DonaCadenaLang({"cat":"Barra d\'escala", "spa":"Barra de escala", "eng":"Scale Bar", "fre":"Barre d\'échelle"}) ,"<td><input type=\"text\" name=\"ElementImprimirEscalaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAlt\" size=3></td></tr>");
-		if (isLayer(getLayer(this.FullImprimirWindow, "titol")))
-			cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", DonaCadenaLang({"cat":"Títol", "spa":"Título", "eng":"Title", "fre":"Titre"}) ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
-		if (isLayer(getLayer(this.FullImprimirWindow, "situacio")))
-			cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirSituacio\"> ", DonaCadenaLang({"cat":"Mapa de situació", "spa":"Mapa de situación", "eng":"Situation map", "fre":"Carte de situation"}) ,"<td><input type=\"text\" name=\"ElementImprimirSituacioEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAlt\" size=3></td></tr>");
-		if (isLayer(getLayer(this.FullImprimirWindow, "llegenda")))
-			cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirLlegenda\"> ", DonaCadenaLang({"cat":"Llegenda", "spa":"Leyenda", "eng":"Legend", "fre":"Légende"}) ,"<td><input type=\"text\" name=\"ElementImprimirLlegendaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAlt\" size=3></td></tr>");
+	var cdns=[];
+	cdns.push("<hr>");
+	cdns.push("<table border=0 cellspacing=0 cellpadding=0>",
+			"<THEAD><TR><TH>",opener.DonaCadenaLang({"cat":"Elements a imprimir (píxels)", "spa":"Elementos a imprimir (píxeles)","eng":"Elements to print (pixels)", "fre":"Éléments à imprimer (pixels)"}),"</TH><TH>",
+							opener.DonaCadenaLang({"cat":"esq.", "spa":"izq.", "eng":"left", "fre":"gauche"}),"</TH><TH>",
+							opener.DonaCadenaLang({"cat":"sup.", "spa":"sup.", "eng":"top", "fre":"sup."}),"</TH><TH>",
+							opener.DonaCadenaLang({"cat":"ample", "spa":"ancho", "eng":"width", "fre":"largeur"}),"</TH><TH>",
+							opener.DonaCadenaLang({"cat":"alt", "spa":"alto", "eng":"height", "fre":"hauteur"}),"</TH></TR></THEAD>");
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "vista")))
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirVista\"> ", opener.DonaCadenaLang({"cat":"Vista", "spa":"Vista", "eng":"View", "fre":"Vue"}) ,"<td><input type=\"text\" name=\"ElementImprimirVistaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAlt\" size=3></td></tr>");
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirEscala\"> ", opener.DonaCadenaLang({"cat":"Barra d\'escala", "spa":"Barra de escala", "eng":"Scale Bar", "fre":"Barre d\'échelle"}) ,"<td><input type=\"text\" name=\"ElementImprimirEscalaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAlt\" size=3></td></tr>");
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", opener.DonaCadenaLang({"cat":"Títol", "spa":"Título", "eng":"Title", "fre":"Titre"}) ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirSituacio\"> ", opener.DonaCadenaLang({"cat":"Mapa de situació", "spa":"Mapa de situación", "eng":"Situation map", "fre":"Carte de situation"}) ,"<td><input type=\"text\" name=\"ElementImprimirSituacioEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAlt\" size=3></td></tr>");
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirLlegenda\"> ", opener.DonaCadenaLang({"cat":"Llegenda", "spa":"Leyenda", "eng":"Legend", "fre":"Légende"}) ,"<td><input type=\"text\" name=\"ElementImprimirLlegendaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAlt\" size=3></td></tr>");
 
-		var n_layers_propies=0;
-		for (var i=0; i<this.FullImprimirWindow.layerList.length; i++)
+	var n_layers_propies=0;
+	for (var i=0; i<window.FullImprimirWindow.layerList.length; i++)
+	{
+		if (window.FullImprimirWindow.layerList[i]=="vista" ||
+			window.FullImprimirWindow.layerList[i]=="escala" ||
+			window.FullImprimirWindow.layerList[i]=="titol" ||
+			window.FullImprimirWindow.layerList[i]=="situacio" ||
+			window.FullImprimirWindow.layerList[i]=="llegenda")
+			continue;
+		n_layers_propies++;
+	}
+	if (n_layers_propies>1)
+	{
+		//Omplo un select
+		cdns.push("<tr><td colspan=5><img src=1tran.gif height=5></td></tr><tr><td>"+opener.DonaCadenaLang({"cat":"Altres elements", "spa":"Otros elementos", "eng":"Other elements", "fre":"Autres éléments"})+": </td><td colspan=4><select name=\"LayersPropies\" onChange=\"print_tools.ReompleEditsMidesPropia(document.print_form.LayersPropies.options[document.print_form.LayersPropies.selectedIndex].value, false);\">");
+		var i_layer_propies=0;
+		for (var i=0; i<window.FullImprimirWindow.layerList.length; i++)
 		{
-			if (this.FullImprimirWindow.layerList[i]=="vista" ||
-				this.FullImprimirWindow.layerList[i]=="escala" ||
-				this.FullImprimirWindow.layerList[i]=="titol" ||
-				this.FullImprimirWindow.layerList[i]=="situacio" ||
-				this.FullImprimirWindow.layerList[i]=="llegenda")
+			if (window.FullImprimirWindow.layerList[i]=="vista" ||
+				window.FullImprimirWindow.layerList[i]=="escala" ||
+				window.FullImprimirWindow.layerList[i]=="titol" ||
+				window.FullImprimirWindow.layerList[i]=="situacio" ||
+				window.FullImprimirWindow.layerList[i]=="llegenda")
 				continue;
-			n_layers_propies++;
-		}
-		if (n_layers_propies>1)
-		{
-			//Omplo un select
-			cdns.push("<tr><td colspan=5><img src=1tran.gif height=5></td></tr><tr><td>"+DonaCadenaLang({"cat":"Altres elements", "spa":"Otros elementos", "eng":"Other elements", "fre":"Autres éléments"})+": </td><td colspan=4><select name=\"LayersPropies\" onChange=\"print_tools.ReompleEditsMidesPropia(document.print_form.LayersPropies.options[document.print_form.LayersPropies.selectedIndex].value, false);\">");
-			var i_layer_propies=0;
-			for (var i=0; i<this.FullImprimirWindow.layerList.length; i++)
-			{
-			if (this.FullImprimirWindow.layerList[i]=="vista" ||
-				this.FullImprimirWindow.layerList[i]=="escala" ||
-				this.FullImprimirWindow.layerList[i]=="titol" ||
-				this.FullImprimirWindow.layerList[i]=="situacio" ||
-				this.FullImprimirWindow.layerList[i]=="llegenda")
-				continue;
-			cdns.push("<option value=\"" ,i_layer_propies, "\"", ((i_layer_propies==0) ? " SELECTED": ""),">",DonaCadena(this.FullImprimirWindow.layerListDesc[i]));
+			cdns.push("<option value=\"" ,i_layer_propies, "\"", ((i_layer_propies==0) ? " SELECTED": ""),">",opener.DonaCadena(window.FullImprimirWindow.layerListDesc[i]));
 			i_layer_propies++;
-			}
-			cdns.push("</select></td></tr>");
 		}
-		if (n_layers_propies>0)
+		cdns.push("</select></td></tr>");
+	}
+	if (n_layers_propies>0)
+	{
+		cdns.push("<tr><td><input type=\"checkbox\" name=\"ElementImprimir\"> ");
+		if (n_layers_propies==1)
 		{
-			cdns.push("<tr><td><input type=\"checkbox\" name=\"ElementImprimir\"> ");
-			if (n_layers_propies==1)
+			for (var i=0; i<window.FullImprimirWindow.layerList.length; i++)
 			{
-			for (var i=0; i<this.FullImprimirWindow.layerList.length; i++)
-				{
-				if (this.FullImprimirWindow.layerList[i]=="vista" ||
-					this.FullImprimirWindow.layerList[i]=="escala" ||
-				this.FullImprimirWindow.layerList[i]=="titol" ||
-					this.FullImprimirWindow.layerList[i]=="situacio" ||
-					this.FullImprimirWindow.layerList[i]=="llegenda")
+				if (window.FullImprimirWindow.layerList[i]=="vista" ||
+					window.FullImprimirWindow.layerList[i]=="escala" ||
+					window.FullImprimirWindow.layerList[i]=="titol" ||
+					window.FullImprimirWindow.layerList[i]=="situacio" ||
+					window.FullImprimirWindow.layerList[i]=="llegenda")
 					continue;
-				cdns.push(DonaCadena(this.FullImprimirWindow.layerListDesc[i]));
-				}
+				cdns.push(opener.DonaCadena(window.FullImprimirWindow.layerListDesc[i]));
 			}
-			else
-				cdns.push(DonaCadena("visible", "visible", "visible"));
-			cdns.push("<td><input type=\"text\" name=\"ElementImprimirEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirAlt\" size=3></td></tr>",
-							"<tr><td colspan=5> <textarea name=\"ContingutElementImprimir\" rows=3 cols=40></textarea></td></tr>");
 		}
 		else
-		    this.DarrerEstatDesplegableLayersPropies=-1;
-
-		cdns.push("</table>");
-		this.document.getElementById("print_layers").innerHTML=cdns.join("");
-		if (n_layers_propies)
-			ReompleEditsMidesPropia(0,true);
+			cdns.push(opener.DonaCadena("visible", "visible", "visible"));
+		cdns.push("<td><input type=\"text\" name=\"ElementImprimirEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirAlt\" size=3></td></tr>",
+						"<tr><td colspan=5> <textarea name=\"ContingutElementImprimir\" rows=3 cols=40></textarea></td></tr>");
 	}
+	else
+		window.DarrerEstatDesplegableLayersPropies=-1;
+
+	cdns.push("</table>");
+	window.document.getElementById("print_layers").innerHTML=cdns.join("");
+	if (n_layers_propies)
+		ReompleEditsMidesPropia(0,true);	
 }
 
 function RedibuixaRadialsIChecks()
 {
-	with (opener)
+	var print_form=window.document.print_form;
+	if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.RespectarResolucioVistaImprimir)
 	{
-		var print_form=this.document.print_form;
-		if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&RespectarResolucioVistaImprimir)
-		{
-			print_form.RespectarResolucio[0].checked=false;
-			print_form.RespectarResolucio[1].checked=true;
-		}
+		print_form.RespectarResolucio[0].checked=false;
+		print_form.RespectarResolucio[1].checked=true;
+	}
+	else
+	{
+		print_form.RespectarResolucio[0].checked=true;
+		print_form.RespectarResolucio[1].checked=false;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "vista")))
+	{
+		if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirVista)
+			print_form.ElementImprimirVista.checked=true;
 		else
-		{
-			print_form.RespectarResolucio[0].checked=true;
-			print_form.RespectarResolucio[1].checked=false;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "vista")))
-		{
-			if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirVista)
-				print_form.ElementImprimirVista.checked=true;
-			else
-				print_form.ElementImprimirVista.checked=false;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "escala")))
-		{
-			if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirEscala)
-				print_form.ElementImprimirEscala.checked=true;
-			else
-				print_form.ElementImprimirEscala.checked=false;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "titol")))
-		{
-        		if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirTitol)
-			    print_form.ElementImprimirTitol.checked=true;
-			else
-			    print_form.ElementImprimirTitol.checked=false;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "situacio")))
-		{
-			if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirSituacio)
-				print_form.ElementImprimirSituacio.checked=true;
-			else
-				print_form.ElementImprimirSituacio.checked=false;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "llegenda")))
-		{
-			if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirLlegenda)
-				print_form.ElementImprimirLlegenda.checked=true;
-			else
-				print_form.ElementImprimirLlegenda.checked=false;
-		}
+			print_form.ElementImprimirVista.checked=false;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
+	{
+		if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirEscala)
+			print_form.ElementImprimirEscala.checked=true;
+		else
+			print_form.ElementImprimirEscala.checked=false;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
+	{
+			if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirTitol)
+			print_form.ElementImprimirTitol.checked=true;
+		else
+			print_form.ElementImprimirTitol.checked=false;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
+	{
+		if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirSituacio)
+			print_form.ElementImprimirSituacio.checked=true;
+		else
+			print_form.ElementImprimirSituacio.checked=false;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
+	{
+		if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirLlegenda)
+			print_form.ElementImprimirLlegenda.checked=true;
+		else
+			print_form.ElementImprimirLlegenda.checked=false;
 	}
 }
 
 function ReompleEditsMides()
 {
-	with (opener)
+	var print_form=window.document.print_form;
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "vista")))
 	{
-		var print_form=this.document.print_form;
-		if (isLayer(getLayer(this.FullImprimirWindow, "vista")))
-		{
-			print_form.ElementImprimirVistaEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.esq;
-			print_form.ElementImprimirVistaSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.sup;
-			print_form.ElementImprimirVistaAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample;
-			print_form.ElementImprimirVistaAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "escala")))
-		{
-			print_form.ElementImprimirEscalaEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.esq;
-			print_form.ElementImprimirEscalaSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.sup;
-			print_form.ElementImprimirEscalaAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.ample;
-			print_form.ElementImprimirEscalaAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.alt;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "titol")))
-		{
-			print_form.ElementImprimirTitolEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.esq;
-			print_form.ElementImprimirTitolSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.sup;
-			print_form.ElementImprimirTitolAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.ample;
-			print_form.ElementImprimirTitolAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.alt;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "situacio")))
-		{
-			print_form.ElementImprimirSituacioEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.esq;
-			print_form.ElementImprimirSituacioSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.sup;
-			print_form.ElementImprimirSituacioAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample;
-			print_form.ElementImprimirSituacioAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt;
-		}
-		if (isLayer(getLayer(this.FullImprimirWindow, "llegenda")))
-		{
-			print_form.ElementImprimirLlegendaEsq.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.esq;
-			print_form.ElementImprimirLlegendaSup.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.sup;
-			print_form.ElementImprimirLlegendaAmple.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.ample;
-			print_form.ElementImprimirLlegendaAlt.value=plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.alt;
-		}
+		print_form.ElementImprimirVistaEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.esq;
+		print_form.ElementImprimirVistaSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.sup;
+		print_form.ElementImprimirVistaAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.ample;
+		print_form.ElementImprimirVistaAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.alt;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
+	{
+		print_form.ElementImprimirEscalaEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.esq;
+		print_form.ElementImprimirEscalaSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.sup;
+		print_form.ElementImprimirEscalaAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.ample;
+		print_form.ElementImprimirEscalaAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.alt;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
+	{
+		print_form.ElementImprimirTitolEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.esq;
+		print_form.ElementImprimirTitolSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.sup;
+		print_form.ElementImprimirTitolAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.ample;
+		print_form.ElementImprimirTitolAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.alt;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
+	{
+		print_form.ElementImprimirSituacioEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.esq;
+		print_form.ElementImprimirSituacioSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.sup;
+		print_form.ElementImprimirSituacioAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.ample;
+		print_form.ElementImprimirSituacioAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.alt;
+	}
+	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
+	{
+		print_form.ElementImprimirLlegendaEsq.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.esq;
+		print_form.ElementImprimirLlegendaSup.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.sup;
+		print_form.ElementImprimirLlegendaAmple.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.ample;
+		print_form.ElementImprimirLlegendaAlt.value=opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.alt;
 	}
 }
 
 function MouLayersImpressio(primer_cop)
 {
-
     if (FullImprimirWindow==null)
 		ObreFullImprimir(); // Aquesta ja provoca un MouLayersImpressio() en un onLoad
     else
     {
     	var elem_vista, elem_escala, elem_titol, elem_situa, elem_llegenda;
-		with (opener)
+		elem_vista=opener.getLayer(window.FullImprimirWindow, "vista");
+		if (opener.isLayer(elem_vista) &&
+			(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.esq!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.sup!=0 || 
+			 opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.ample!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.alt!=0))
 		{
-			elem_vista=getLayer(this.FullImprimirWindow, "vista");
-			if (isLayer(elem_vista) &&
-				(plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.esq!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.sup!=0 || 
-				 plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt!=0))
-			{
-				moveLayer(elem_vista,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.esq,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.sup,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt);
-			}
-			elem_escala=getLayer(this.FullImprimirWindow, "escala");
-			if (isLayer(elem_escala) &&
-				(plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.esq!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.sup!=0 || 
-				 plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.ample!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.alt!=0))
-			{
-				moveLayer(elem_escala,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.esq,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.sup,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.ample,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.alt);
-			}
-			elem_titol=getLayer(this.FullImprimirWindow, "titol");
-			if (isLayer(elem_titol) && 
-				(plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.esq!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.sup!=0 || 
-				 plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.ample!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.alt!=0))
-			{
-				moveLayer(elem_titol, 
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.esq, 
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.sup,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.ample,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.alt);
-			}
-			elem_situa=getLayer(this.FullImprimirWindow, "situacio");
-			if (isLayer(elem_situa) &&
-				(plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.esq!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.sup!=0 || 
-				 plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt!=0))
-			{
-				moveLayer(elem_situa,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.esq,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.sup,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt);
-			}
-			var elem_llegenda=getLayer(this.FullImprimirWindow, "llegenda");
-			if (isLayer(elem_llegenda) &&
-				(plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.esq!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.sup!=0 || 
-				 plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.ample!=0 || plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.alt!=0))
-			{
-				moveLayer(elem_llegenda,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.esq,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.sup,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.ample,
-						plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.alt);
-			}
+			opener.moveLayer(elem_vista,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.esq,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.sup,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.ample,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectVista.alt);
+		}
+		elem_escala=opener.getLayer(window.FullImprimirWindow, "escala");
+		if (opener.isLayer(elem_escala) &&
+			(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.esq!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.sup!=0 || 
+			 opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.ample!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.alt!=0))
+		{
+			opener.moveLayer(elem_escala,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.esq,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.sup,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.ample,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectEscala.alt);
+		}
+		elem_titol=opener.getLayer(window.FullImprimirWindow, "titol");
+		if (opener.isLayer(elem_titol) && 
+			(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.esq!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.sup!=0 || 
+			 opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.ample!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.alt!=0))
+		{
+			opener.moveLayer(elem_titol, 
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.esq, 
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.sup,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.ample,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectTitol.alt);
+		}
+		elem_situa=opener.getLayer(window.FullImprimirWindow, "situacio");
+		if (opener.isLayer(elem_situa) &&
+			(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.esq!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.sup!=0 || 
+			 opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.ample!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.alt!=0))
+		{
+			opener.moveLayer(elem_situa,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.esq,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.sup,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.ample,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.alt);
+		}
+		elem_llegenda=opener.getLayer(window.FullImprimirWindow, "llegenda");
+		if (opener.isLayer(elem_llegenda) &&
+			(opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.esq!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.sup!=0 || 
+			 opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.ample!=0 || opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.alt!=0))
+		{
+			opener.moveLayer(elem_llegenda,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.esq,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.sup,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.ample,
+					opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectLlegenda.alt);
+		}
 	
-			//Encen o apaga layers impressio
-			if ((isLayer(elem_vista) && plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirVista) ||
-				(isLayer(elem_escala) && plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirEscala) ||
-				(isLayer(elem_situa) && plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirSituacio) )
-				this.AnalitzarResolucioImpressio();
-	
-			if (isLayer(elem_vista))
-			{
-				if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirVista)
-					CreaVistaFullImprimir(this.FullImprimirWindow);
-				else
-						contentLayer(elem_vista, "");
-			}
-				
-			if (isLayer(elem_escala))
-			{
-				if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirEscala)
-					CreaEscalaFullImprimir(this.FullImprimirWindow);
-				else
-						contentLayer(elem_escala, "");
-			}
-	
-			if (isLayer(elem_titol))
-			{
-				if (primer_cop)
-					contentLayer(elem_titol, "<CENTER>"+DonaCadena(ParamCtrl.TitolCaixa)+"</CENTER>");
-				showOrHideLayer(elem_titol, plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirTitol);
-			}
-	
-			if (isLayer(elem_situa))
-			{
-				if (plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirSituacio)
-					CreaSituacioFullImprimir(this.FullImprimirWindow, 0, 0, 
-							plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample,
-							plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt);
-				else
-						contentLayer(elem_situa, "");
-			}
-	
-			if (isLayer(elem_llegenda))
-			{
-				if (primer_cop)
-					contentLayer(elem_llegenda, DonaCadenaHTMLLlegenda(ParamCtrl.AspecteLlegendaImpressio, 0));
-				showOrHideLayer(elem_llegenda, plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&CalImprimirLlegenda);
-			}
-	
-			//Es fa el redibuixat de les layers pròpies.
-			var elem_capa;
-			for (i=0; i<plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies.length; i++)
-			{
-				elem_capa=getLayer(this.FullImprimirWindow, 
-					this.FullImprimirWindow.layerList[plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].ILayer]);
-				moveLayer(elem_capa,
-					plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].rect.esq,
-					plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].rect.sup,
-					plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].rect.ample,
-					plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].rect.alt);
-					contentLayer(elem_capa, plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].contingut);
-				showOrHideLayer(elem_capa, plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies[i].visible);
-			}
+		//Encen o apaga layers impressio
+		if ((opener.isLayer(elem_vista) && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirVista) ||
+			(opener.isLayer(elem_escala) && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirEscala) ||
+			(opener.isLayer(elem_situa) && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirSituacio) )
+			window.AnalitzarResolucioImpressio();
+
+		if (opener.isLayer(elem_vista))
+		{
+			if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirVista)
+				opener.CreaVistaFullImprimir(window.FullImprimirWindow);
+			else
+				opener.contentLayer(elem_vista, "");
+		}
+			
+		if (opener.isLayer(elem_escala))
+		{
+			if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirEscala)
+				opener.CreaEscalaFullImprimir(window.FullImprimirWindow);
+			else
+				opener.contentLayer(elem_escala, "");
+		}
+
+		if (opener.isLayer(elem_titol))
+		{
+			if (primer_cop)
+				opener.contentLayer(elem_titol, "<CENTER>"+opener.DonaCadena(opener.ParamCtrl.TitolCaixa)+"</CENTER>");
+			showOrHideLayer(elem_titol, opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirTitol);
+		}
+
+		if (opener.isLayer(elem_situa))
+		{
+			if (opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirSituacio)
+				opener.CreaSituacioFullImprimir(window.FullImprimirWindow, 0, 0, 
+						opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.ample,
+						opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].RectSituacio.alt);
+			else
+				opener.contentLayer(elem_situa, "");
+		}
+
+		if (opener.isLayer(elem_llegenda))
+		{
+			if (primer_cop)
+				opener.contentLayer(elem_llegenda, opener.DonaCadenaHTMLLlegenda(opener.ParamCtrl.AspecteLlegendaImpressio, 0));
+			opener.showOrHideLayer(elem_llegenda, opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirLlegenda);
+		}
+
+		//Es fa el redibuixat de les layers pròpies.
+		var elem_capa;
+		for (var i=0; i<opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies.length; i++)
+		{
+			elem_capa=opener.getLayer(window.FullImprimirWindow, 
+				window.FullImprimirWindow.layerList[opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].ILayer]);
+			opener.moveLayer(elem_capa,
+				opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].rect.esq,
+				opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].rect.sup,
+				opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].rect.ample,
+				opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].rect.alt);
+			opener.contentLayer(elem_capa, opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].contingut);
+			opener.showOrHideLayer(elem_capa, opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies[i].visible);
 		}
     }
 }
@@ -661,7 +626,7 @@ function MouLayersImpressio(primer_cop)
 </form>
 
 
-<!--FRAMESET ROWS="140,*,125,30" border="0" framespacing="0"  frameborder="0" onLoad="this.print_tools.IniciaFormulari()"> 
+<!--FRAMESET ROWS="140,*,125,30" border="0" framespacing="0"  frameborder="0" onLoad="window.print_tools.IniciaFormulari()"> 
   <FRAME SRC="print_tools.htm" NAME="print_tools">
   <FRAME SRC="gris.htm" NAME="print_layers">
   <FRAME SRC="gris.htm" NAME="print_text">

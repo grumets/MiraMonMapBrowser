@@ -10,6 +10,37 @@ a:visited { text-decoration: none}
 a:active { text-decoration: none}
 a:hover { text-decoration: underline}
 
+/* Estils propis usats per alguns elements del navegador */
+.titol_taronja_gran
+{
+	color: #e28338;
+	font:"Century Gothic", Verdana, Arial;
+	font-size:36px;
+	font-weight: bold;
+}
+.titol_taronja_petit
+{
+	color: #e28338;
+	font:"Century Gothic", Verdana, Arial;
+	font-size:24px;
+	font-weight: bold;
+}
+
+.titol_blau
+{
+	color: #3a92be;
+	font:"Century Gothic", Verdana, Arial;
+	font-size:36px;
+	font-weight: bold;
+}
+.CampRespostaConsultaSeparador {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:14px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+}
+
+
 /* General forms style */
 select
 {
@@ -177,7 +208,7 @@ textarea
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: normal;
-	width:110;
+	width:140;
 	height:140;
 	border: 2px  #999999; 
 	border-style:groove;
@@ -475,6 +506,23 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 .text_allus
 {
 	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF, 0 0 3px #FFFFFF;
+}
+
+.text_vertical
+{
+        white-space: nowrap;
+	/* FF3.5+ */
+	-moz-transform: rotate(-90.0deg);
+	/* Opera 10.5 */
+	-o-transform: rotate(-90.0deg);
+	/* Saf3.1+, Chrome */
+ 	-webkit-transform: rotate(-90.0deg);
+	/* IE6,IE7 */
+ 	filter: progid: DXImageTransform.Microsoft.BasicImage(rotation=0.083);
+ 	/* IE8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)";
+	/* Standard */
+	transform: rotate(-90.0deg);
 }
 
 /* Estil vertical del id='latZoom' */

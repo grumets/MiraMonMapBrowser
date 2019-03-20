@@ -28,17 +28,14 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
+
 /* Daniel Díaz Benito (d.diaz@creaf.uab.cat) 18-XII-2012
  * Script to allow OWSC (OGC Web Services Context) files to be opened and generated.
  * This Open Geospatial Consortium standard allows to save the maps application
  * status and retrieve it with the same maps and processes, even in different
  * computers and compatible software.
  */
-
-//Some configuration values
-ParamOWSC= {
-	defaultCRS: "EPSG:4326"
-};
 
 /*Given a resource entry, is that one openable by the Map browser?*/
 function isOpenableLayer(myResource)
@@ -371,7 +368,7 @@ var elem, reason,isSupported= false, //In order to check if at least one operati
 				if(bBox && bBox.CRS)
 					myTileMatrixSet.CRS= bBox.CRS.name;
 				else
-					myTileMatrixSet.CRS= ParamOWSC.defaultCRS;
+					myTileMatrixSet.CRS= {defaultCRS: "EPSG:4326"};
 
 				//Retrieve the mime type of the answer
 				elem= operationTags[i].getAttribute("type");
@@ -922,6 +919,8 @@ function MMFloatingWindowEnllac_close()
 	TancaFinestraLayer('enllac');
 }
 
+var ajaxOWSC;
+
 function OpenOWSContext(url_context)
 {
 	//Place a loading icon in the target box
@@ -967,9 +966,9 @@ function OpenOWSContext(url_context)
 	*/
 
 	//And Ajax load the OWSC file
-	ajax[0]=new Ajax();
+	ajaxOWSC=new Ajax();
     //We set a function to handle errors in case the ajax can not download the XML
-    ajax[0].setHandlerErr(function(resp)
+    ajaxOWSC.setHandlerErr(function(resp)
 			{
 				textTarget.innerHTML= DonaCadenaLang({"cat":"El document de context no s'ha pogut carregar: ",
 												"spa":"El documento de contexto no se ha podido cargar: ",
@@ -977,7 +976,7 @@ function OpenOWSContext(url_context)
 												"fre":"Il n'était pas possible de charger le document de contexte: "})
 										+"<a href=\""+url_context+"\">"+url_context+"</a>"
 										+"<br>Error: "+this.responseText; });
-	ajax[0].doGet(url_context, LlegeixIAplicaOWSContext, "text/xml",document);
+	ajaxOWSC.doGet(url_context, LlegeixIAplicaOWSContext, "text/xml",document);
 }
 
 /*
@@ -1007,7 +1006,7 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
  				+"&SERVICE="+thisService
  				+"&FORMAT="+thisLayer.FormatImatge
  				+"&TRANSPARENT="+(thisLayer.transparencia && thisLayer.transparencia!="opac" ? "TRUE":"FALSE")
- 				+"&CRS="+(thisLayer.CRS ? thisLayer.CRS:ParamOWSC.defaultCRS)
+ 				+"&CRS="+(thisLayer.CRS ? thisLayer.CRS:{defaultCRS: "EPSG:4326"})
  				+"&LAYERS="+thisLayer.nom
 				//El codi anterior no és correcte si la versió és la 1.3 i el sistema és lat/long i cal revisar-lo 05/12/2015 (JM)  ·$·
  				+"&BBOX="+ParamInternCtrl.vista.EnvActual.MinX+","+ParamInternCtrl.vista.EnvActual.MinY+","+ParamInternCtrl.vista.EnvActual.MaxX+","+ParamInternCtrl.vista.EnvActual.MaxY

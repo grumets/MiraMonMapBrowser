@@ -28,10 +28,13 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
+
 var RodetVertical=false;  // Constant. el mode vertical no s'ha provat mai.
-var DatesVideo=[];  //{"i_capa":, "i_data":, "i_estil:, "milisegons":, "animable", "carregada":, "timeoutRodet":, "timeoutFotograma":}
+var DatesVideo=[];  //{"i_capa":, "i_data":, "i_estil:, "milisegons":, "animable":("si", "ara_no", "no"), "carregada":, "carregadaRodet":, "timeoutRodet":, "timeoutFotograma":}
 var IDataVideoMostrada;
 var NomVideoActiu;
+var PuntsSerieTemporal=[];
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
 
@@ -53,14 +56,26 @@ function EsCapaAptePerVideo(capa)
 
 function DonaNPecesBarraVideo()
 {
-	return parseInt((ParamInternCtrl.vista.ncol-2)/8,10);
+	return Math.round((ParamInternCtrl.vista.ncol-2)/8);
 }
 
 function DonaIPecaBarraVideo(i_data_video, n)
 {
 	if (document.video_animacions.TipusTemps[0].checked)
 		return parseInt(((DatesVideo[i_data_video].milisegons-DatesVideo[0].milisegons)/(DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons))*(n-1),10);
-	return parseInt((n-1)*((i_data_video)/(DatesVideo.length-1)),10);
+	return Math.round((n-1)*(i_data_video/(DatesVideo.length-1)));
+}
+
+function DonaIDataVideoDesDePecaBarraVideo(i, n)
+{
+	if (document.video_animacions.TipusTemps[0].checked)
+	{
+		t=((DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons)/(n-1))*i+DatesVideo[0].milisegons;
+		for (i_data_video=0; i_data_video<DatesVideo.length; i++)
+			if (DatesVideo[i_data_video].milisegons<t)
+				return i_data_video;
+	}
+	return Math.round((DatesVideo.length-1)*(i/(n-1)));
 }
 
 function DeterminaNombreComponentsSerieTemporal()
@@ -68,7 +83,7 @@ function DeterminaNombreComponentsSerieTemporal()
 var n_c=0;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable && 
+		if (DatesVideo[i_data_video].animable=="si" && 
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
@@ -81,9 +96,9 @@ var n_c=0;
 }
 
 
-function DonaDadesValorsSerieTemporalLocalitzacio(i_col,i_fil)
+function DonaDadesValorsSerieTemporalLocalitzacio(i_col,i_fil, filtra_null)
 {
-var data=[], v, i_v, i_c;
+var data=[], v, i_c;
 	
 	var n_c=DeterminaNombreComponentsSerieTemporal();
 	if (n_c==0)
@@ -91,19 +106,24 @@ var data=[], v, i_v, i_c;
 	for (i_c=0; i_c<n_c; i_c++)
 		data[i_c]=[];
 
-	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable && 
+		if (DatesVideo[i_data_video].animable=="si" && 
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
 		{
-			v=DonaValorEstilComArrayDesDeValorsCapa(-4, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DonaValorsDeDadesBinariesCapa(-4, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data, i_col, i_fil));
+			v=DonaValorEstilComArrayDesDeValorsCapa(-4, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DonaValorsDeDadesBinariesCapa(-4, ParamCtrl.capa[DatesVideo[i_data_video].i_capa], DatesVideo[i_data_video].i_data, i_col, i_fil));
 			if (v==null)
-				return null;
+			{
+				if (!filtra_null)
+					for (i_c=0; i_c<n_c; i_c++)
+						data[i_c].push({t:DatesVideo[i_data_video].milisegons, y:""});
+				continue;
+			}
+			
 			for (i_c=0; i_c<v.length; i_c++)
-				data[i_c][i_v]={t:DatesVideo[i_data_video].milisegons, y:v[i_c]};
-			i_v++;
+				data[i_c].push({t:DatesVideo[i_data_video].milisegons, y:v[i_c]});
 		}
 	}
 	return data;
@@ -111,7 +131,7 @@ var data=[], v, i_v, i_c;
 
 function DonaDadesEstadistiquesSerieTemporalLocalitzacio()
 {
-var estadistics, estil
+var estadistics, estil;
 var data=[], i_v, i_c;
 	var n_c=DeterminaNombreComponentsSerieTemporal();
 	if (n_c==0)
@@ -121,7 +141,7 @@ var data=[], i_v, i_c;
 
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (!DatesVideo[i_data_video].animable ||
+		if (DatesVideo[i_data_video].animable!="si" ||
 			!ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil)
 			continue;
 		
@@ -133,7 +153,9 @@ var data=[], i_v, i_c;
 			{
 				estadistics=CalculaEstadisticsHistograma(estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe, 
 						DonaFactorValorMinEstiramentPaleta(estil.component[i_c]),
-						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c]));
+						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c], 
+								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
+									));
 				data[i_c][0][i_v]={t:DatesVideo[i_data_video].milisegons, y:estadistics.mitjana+estadistics.desv_tipica};
 				data[i_c][1][i_v]={t:DatesVideo[i_data_video].milisegons, y:estadistics.mitjana};
 				data[i_c][2][i_v]={t:DatesVideo[i_data_video].milisegons, y:estadistics.mitjana-estadistics.desv_tipica};
@@ -150,7 +172,7 @@ function DonaEtiquetesValorsSerieTemporalLocalitzacio()
 var labels=[];
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable && 
+		if (DatesVideo[i_data_video].animable=="si" && 
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
@@ -169,7 +191,7 @@ var temps=[];
 
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable && 
+		if (DatesVideo[i_data_video].animable=="si" && 
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
 			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
@@ -181,21 +203,21 @@ var temps=[];
 	return temps;
 }
 
-function DonaTitolsEixYSerieTemporalLocalitzacio()
+function DonaTitolEixYSerieTemporalLocalitzacio()
 {
 var titol=[], estil;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (!DatesVideo[i_data_video].animable ||
+		if (DatesVideo[i_data_video].animable!="si" ||
 			!ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil)
 			continue;
 		
 		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];	
 		if (estil.component)
 		{
-			for (i_c=0; i_c<estil.component.length; i_c++)
+			for (var i_c=0; i_c<estil.component.length; i_c++)
 				titol[i_c]=(estil.component[i_c].desc) ? DonaCadena(estil.component[i_c].desc) : DonaCadena(estil.desc);
-			return titol;  //gafem el primer títol sense més.
+			return titol;  //agafem el primer títol sense més.
 		}
 	}
 }
@@ -204,13 +226,16 @@ var ChartConsultaSobreVideo=null;
 
 function ConsultaSobreVideo(event_de_click)
 {
+	if (!EstanTotsElsFotogramesCarregatsVideo())
+		return;
+
 	var i=DonaCoordIDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientX)
 	var j=DonaCoordJDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientY)
 
 	var x=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientX);
 	var y=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientY);
 
-	var data=DonaDadesValorsSerieTemporalLocalitzacio(i, j);
+	var data=DonaDadesValorsSerieTemporalLocalitzacio(i, j, true);
 	if (data==null)
 		return;
 
@@ -221,9 +246,10 @@ function ConsultaSobreVideo(event_de_click)
 						DonaDadesEstadistiquesSerieTemporalLocalitzacio(), 								
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
 						DonaTempsValorsSerieTemporalLocalitzacio(), 
-						DonaTitolsEixYSerieTemporalLocalitzacio());
+						DonaTitolEixYSerieTemporalLocalitzacio());
 	}
 	AfegeixGraficSerieTemporal(ChartConsultaSobreVideo, data, DonaValorDeCoordActual(x, y, false, false));
+	PuntsSerieTemporal.push({i:i,j:j,x:x,y:y});
 }	
 
 function OmpleFinestraVideo(win, name)
@@ -294,7 +320,7 @@ var cdns=[], capa, i_capa_primer_video;
 				"<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 		var n=DonaNPecesBarraVideo();
 		for (var i=0; i<n; i++)
-			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\">");		
+			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center>");
 
 		//Dibuixar els botons de progrés del video.
@@ -313,7 +339,7 @@ var cdns=[], capa, i_capa_primer_video;
 			" 1:<input type=\"text\" name=\"EscalaTemporal\" value=\"1000000\" size=8 onChange=\"document.video_animacions.TipusTemps[0].checked=true\">",
 			"<input type=\"radio\" name=\"TipusTemps\" checked>",
 			DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
-			"<input name=\"interval\" type=\"text\" value=\"2.0\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s",
+			"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s",
 			"&nbsp;&nbsp;&nbsp;&nbsp;",
 			"<a href='javascript:TancaFinestraLayer(\"video\");'>",
 			DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
@@ -337,9 +363,19 @@ var cdns=[], capa, i_capa_primer_video;
 function CanviaEstatAnimable(boto, i_data_video)
 {
 	if (boto.checked)
-		DatesVideo[i_data_video].animable=true;
+	{
+		if (!DatesVideo[i_data_video].carregada)
+		{
+			if (DatesVideo[i_data_video].timeOutFotograma)
+				clearTimeout(DatesVideo[i_data_video].timeOutFotograma);
+			var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
+			vista.i_nova_vista=-4;
+			DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 50);
+		}
+		DatesVideo[i_data_video].animable="si";
+	}
 	else
-		DatesVideo[i_data_video].animable=false;
+		DatesVideo[i_data_video].animable="ara_no";
 }
 
 //Transforma un nom d'estil en un i_estil de la capa i_capa_video_actiu. Retorna null si no el troba
@@ -362,45 +398,48 @@ var capa=ParamCtrl.capa[i_capa_video_actiu];
 function CanviaImatgeCapaRodet(i_data_video, vista, i_capa, i_estil, i_data)
 {
 	var image=document.getElementById("rodet_i_raster"+i_data_video);
-	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, null, null);
+	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaRodet, i_data_video);
 }
 
 function CanviaImatgeCapaVideo(i_data_video, vista, i_capa, i_estil, i_data)
 {
 	var image=document.getElementById("video_i_raster"+i_data_video);
-	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaBarra, i_data_video);
+	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaVideo, i_data_video);
 }
 
 function CanviaVideo(nom_video, estil)
 {
+var img;
 	//Faig un reset general de variables.
 	AnullaTotsTimeOutVideo();
 
 	var n=DonaNPecesBarraVideo();
 	for (var i=0; i<n; i++)
 	{
-		img=eval("document.video_evol"+i);
+		img=document["video_evol"+i];
 		img.src=AfegeixAdrecaBaseSRC("evol_bl.png");
 	}
+
+	CarregaDatesVideo(nom_video, estil);
+
 	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 		DonaCadenaLang({"cat":"Prem", "spa":"Presione", "eng":"Press", "fre":"Presse"})+
 		": <input type=\"button\" class=\"Verdana11px\" value=\"--"+ 
 		DonaCadenaLang({"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"})+
-	        "--\" onClick='CarregaVideoEvent(event, \""+nom_video+"\", \""+estil+"\");'></font></center>";
+	        "--\" onClick='CarregaVideoRodetEvent(event, \""+nom_video+"\", \""+estil+"\");'>"+
+		" (" + DatesVideo.length + " " + DonaCadenaLang({"cat":"fotogrames", "spa":"fotogramas", "eng":"frames", "fre":"cadres"}) +")"+
+		"</font></center>";
 }
 
-function CarregaVideoEvent(event, nom_video, estil)
+function CarregaVideoRodetEvent(event, nom_video, estil)
 {
-	CarregaVideo(nom_video, estil);
+	CarregaVideoRodet(nom_video, estil);
 	dontPropagateEvent(event);
 }
 
-function CarregaVideo(nom_video, estil)
+function CarregaDatesVideo(nom_video, estil)
 {
-var i_data_video, i_estil, capa, cdns=[];
-var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
-	
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+var capa, i_estil
 
 	//Determino quins fotogrames he de fer servir.
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
@@ -419,32 +458,66 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 						"i_data": i_data, 
 						"i_estil": i_estil, 
 						"milisegons": d.getTime(), 
-						"animable": ((capa.animable && capa.animable==true) ? true : false),
-						"carregada": false});
+						"animable": ((capa.animable && capa.animable==true) ? "si" : "ara_no"),
+						"carregada": false,
+						"carregadaRodet": false});
 			}
 		}
 	}
 	DatesVideo.sort(OrdenacioCapesVideoData);
+}
+
+function DonaNColVideoRodet()
+{
+	if (RodetVertical)
+		return 85;
+	else
+		return parseInt(DonaNFilVideoRodet()*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil,10);
+}
+
+function DonaNFilVideoRodet()
+{
+	if (RodetVertical)
+		return parseInt(DonaNColVideoRodet()*ParamInternCtrl.vista.nfil/ParamInternCtrl.vista.ncol,10);
+	else
+		return 50;
+}
+
+function DonaCadenaHTMLTitolFotogramaRodet(i_data_video)
+{
+var cdns=[];
+	cdns.push("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><input ",
+				((DatesVideo[i_data_video].animable=="si") ? "checked" : ""), " id=\"video_rodet_foto_ch",i_data_video,"\"",
+				" type=\"checkbox\" onClick=\"CanviaEstatAnimable(this, ", i_data_video ,");\"><span id=\"video_rodet_foto_tx",i_data_video,"\" style=\"font-size:x-small;\">",
+				DonaDataCapaComATextBreu(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data),"</span>");
+	return cdns.join("");
+}
+
+function CarregaVideoRodet(nom_video, estil)
+{
+var i_data_video, capa, cdns=[];
+var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
+	
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
 
 	//Dibuixo el rodet de fotogrames buit
 	vista.i_nova_vista=-3;
 
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\'background-image: url(\"",AfegeixAdrecaBaseSRC("1film_v.png"),"\");background-repeat: repeat-x;\'>");
+	vista.ncol=DonaNColVideoRodet();
+	vista.nfil=DonaNFilVideoRodet();
 	if (RodetVertical)
 	{
 		//Estil antic del rodet vertical a la esquerra.
-		vista.ncol=85;
-		vista.nfil=parseInt(width_img_rodet*ParamInternCtrl.vista.nfil/ParamInternCtrl.vista.ncol,10);
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
 			cdns.push("<tr><td rowspan=\"4\" width=\"13\">&nbsp;</td>",
-				"<td colspan=3><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><input ",
-				((DatesVideo[i_data_video].animable) ? "checked" : ""), " name=\"foto",i_data_video,
-				"\" type=\"checkbox\" onClick=\"CanviaEstatAnimable(this, ", i_data_video ,");\"><small>",
-				DonaDataCapaComATextBreu(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data),"</small></td></tr>",
+				"<td colspan=3>", 
+				DonaCadenaHTMLTitolFotogramaRodet(i_data_video),
+				"</td></tr>",
 				"<tr><td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td></tr>",
 				"<tr><td><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>",
-				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
+				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px; background-color:white; \" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
 				((ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FormatImatge=="application/x-img") ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("1tran.gif"/*DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"})*/)+"\">"),
 				"</div></td>",
 				"<td><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"", vista.nfil,"\"></td></tr>",
@@ -454,16 +527,12 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	else
 	{
 		//Estil nou amb rodet horizontal a la part inferior.
-		vista.nfil=50;
-		vista.ncol=parseInt(vista.nfil*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil);
-
 		cdns.push("<tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
-			cdns.push("<td colspan=3><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><input ",
-				((DatesVideo[i_data_video].animable) ? "checked" : ""), " name=\"foto",i_data_video,
-				"\" type=\"checkbox\" onClick=\"CanviaEstatAnimable(this, ", i_data_video ,");\"><small>",
-				DonaDataCapaComATextBreu(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data),"</small></td>",
+			cdns.push("<td colspan=3>",
+				DonaCadenaHTMLTitolFotogramaRodet(i_data_video),
+				"</td>",
 				"<td rowspan=\"6\"><img src=1tran.gif width=\"8\"></td>");
 		}
 		cdns.push("</tr><tr>");
@@ -476,7 +545,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
 			cdns.push("<td><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>",
-				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
+				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px; background-color:white;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
 				((ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FormatImatge=="application/x-img") ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">"),
 				"</div></td>",
 				"<td><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>");
@@ -497,24 +566,14 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	else
 		rodet.scrollLeft=0;
 
-
 	//Demano totes les imatges petites per omplir el rodet de fotogrames
 	for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		/*capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
-		for (i_estil=0; i_estil<capa.estil.length; i_estil++)
-		{
-			if (estil==((capa.estil[i_estil].nom) ? capa.estil[i_estil].nom : capa.estil[i_estil].desc))
-				break;
-		}
-		if (i_estil==capa.estil.length)
-			i_estil=0;  //Per seguretat*/
 		DatesVideo[i_data_video].timeOutRodet=setTimeout("CanviaImatgeCapaRodet("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 75*i_data_video+75);
 	}
 
 	//Dibuixo tots els fotogrames de l'animació buits i apagats
 	cdns.length=0;
-	vista.i_nova_vista=-4;
 	vista.ncol=ParamInternCtrl.vista.ncol;
 	vista.nfil=ParamInternCtrl.vista.nfil;
 
@@ -525,31 +584,121 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 			((ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FormatImatge=="application/x-img") ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">"),
 			"</div>");
 	}
-	//Dibuixo el "tel" transparent amb els events de moure i click
-	//cdns.push("<div id=\"video_tel_trans\", style=\"position: absolute; width:", vista.ncol, "px; height:", vista.nfil, "px; opacity:0;\" onClick=\"ConsultaSobreVideo(event);\">hola</div>");
 
 	document.getElementById("video_pantalla").innerHTML=cdns.join("");
 
-	//Demano totes les imatges grans per omplir el video de fotogrames
-	for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-	{
-		/*capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
-		for (i_estil=0; i_estil<capa.estil.length; i_estil++)
-		{
-			if (estil==((capa.estil[i_estil].nom) ? capa.estil[i_estil].nom : capa.estil[i_estil].desc))
-				break;
-		}
-		if (i_estil==capa.estil.length)
-			i_estil=0;  //Per seguretat*/
-		DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 200*i_data_video+75);
-	}
 	NomVideoActiu=nom_video;
 	if (timeoutVideoInfo)
 	{
 	    clearTimeout(timeoutVideoInfo);
 	    timeoutVideoInfo=null;
 	}	
-	timeoutVideoInfo=setTimeout("ActualitzaNCarregat()", 1000);
+	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
+}
+
+function DonaRatioNodataRodet(i_data_video)
+{
+var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];	
+	if (capa.FormatImatge=="application/x-img")
+		return capa.estil[DatesVideo[i_data_video].i_estil].capa_rodet[DatesVideo[i_data_video].i_data].histograma.classe_nodata/(DonaNColVideoRodet()*DonaNFilVideoRodet());
+	else
+		return 0.0;
+}
+
+var RatioNodataNoTolerat=0.99;
+
+function CanviaRatioNodataNoTolera(event, valor)
+{
+	var ratio_nodata_no_tolerat=valor/100;
+	if (ratio_nodata_no_tolerat>0.99)
+		ratio_nodata_no_tolerat=0.99;
+	var n_foto=0;
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+	{
+		//Determino si la imatge és enterament nodata.
+		if (ratio_nodata_no_tolerat>DonaRatioNodataRodet(i_data_video))
+			n_foto++;
+	}
+	document.getElementById("video_nodata_max_tx").innerHTML=valor + "% (" + n_foto + "/" + DatesVideo.length + " " + DonaCadenaLang({"cat":"fotogrames", "spa":"fotogramas", "eng":"frames", "fre":"cadres"}) +")";
+}
+
+function FiltraNodataICarregaVideo()
+{
+var ratio_nodata, inserir_slider=false;
+
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+
+	//Demano totes les imatges grans per omplir el video de fotogrames
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+	{
+		//Determino si la imatge és enterament nodata.
+		ratio_nodata=DonaRatioNodataRodet(i_data_video);
+		if (0.99<ratio_nodata)
+		{
+			DatesVideo[i_data_video].animable="no";
+			document.getElementById("video_rodet_foto_ch"+i_data_video).disabled=true;
+			document.getElementById("video_rodet_foto_ch"+i_data_video).checked=false;
+			document.getElementById("video_rodet_foto_tx"+i_data_video).style.textDecoration="line-through";
+		}
+		if (ratio_nodata>0.01)
+			inserir_slider=true;
+	}
+	if (inserir_slider)
+	{
+		//codi que insereix un slider
+		var initial_value=(RatioNodataNoTolerat>=0.99 ? 100 : RatioNodataNoTolerat*100);
+		document.getElementById("video_info").innerHTML="<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
+			DonaCadenaLang({"cat":"Percentatge tolerat de superfície buida", "spa":"Porcentage tolerado de superficie vacia", "eng":"Allowed percentage of void space", "fre":"Pourcentage de surface vide toléré"})+
+			": <input id=\"video_nodata_max_rg\" type=\"range\" step=\"0.1\" min=\"0\" max=\"100\" value=\""+ initial_value +"\" onchange=\"CanviaRatioNodataNoTolera(event, this.value);\" oninput=\"CanviaRatioNodataNoTolera(event, this.value);\" style=\"width: 300px\">"+
+			" <span id=\"video_nodata_max_tx\"></span>"+
+			" <input type=\"button\" class=\"Verdana11px\" value=\"--"+ 
+			DonaCadenaLang({"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"})+
+		        "--\" onClick='CarregaVideoEvent(event);'></font>";
+		CanviaRatioNodataNoTolera(null, initial_value);
+		return;
+	}
+	//Mostrar immediatament el vídeo
+	CarregaVideo();
+}
+
+function CarregaVideoEvent(event)
+{
+	RatioNodataNoTolerat=document.getElementById("video_nodata_max_rg").value/100;
+	if (RatioNodataNoTolerat>0.99)
+		RatioNodataNoTolerat=0.99;
+
+	CarregaVideo();
+	dontPropagateEvent(event);
+}
+
+
+function CarregaVideo()
+{
+var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
+
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+
+	vista.i_nova_vista=-4; //Les imatges grans del video
+
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+	{
+		if (RatioNodataNoTolerat>DonaRatioNodataRodet(i_data_video))
+			DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 200*i_data_video+75);
+		else
+		{
+			if (DatesVideo[i_data_video].animable!="no")
+			{
+				document.getElementById("video_rodet_foto_ch"+i_data_video).checked=false;
+				DatesVideo[i_data_video].animable="ara_no";
+			}
+		}
+	}
+	if (timeoutVideoInfo)
+	{
+		clearTimeout(timeoutVideoInfo);
+		timeoutVideoInfo=null;
+	}	
+	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
 }//Fi de CanviaVideo()
 
 function CanviaAnimacio(nom_video)
@@ -626,34 +775,106 @@ function MostraFotogramaAillat(i_data_video, actualitza_scroll)
 	MostraFotograma(i_data_video, actualitza_scroll);
 }
 
-function ActualitzaNCarregat()
+var ActualitzaNCarregatRodetEsCurs=false;
+
+function ActualitzaNCarregatRodet()
+{
+var n_carregat=0;
+
+	if (ActualitzaNCarregatRodetEsCurs)
+	{
+		timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 50);
+		return;
+	}
+
+	ActualitzaNCarregatRodetEsCurs=true;
+	for (var i_data=0; i_data<DatesVideo.length; i_data++)
+	{	
+		if (DatesVideo[i_data].carregadaRodet)
+			n_carregat++
+	}
+	if (n_carregat>=DatesVideo.length)
+	{
+		document.getElementById("video_info").innerHTML="";
+		ActualitzaNCarregatRodetEsCurs=false;
+		FiltraNodataICarregaVideo();
+		return;
+	}
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant miniatures", "spa":"Cargando miniaturas", "eng":"Loading thumbnails", "fre":"Chargement des vignettes"}) + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"})+"...</font></center>";
+	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
+	ActualitzaNCarregatRodetEsCurs=false;
+}
+
+function DonaNFotogramesCarregatsVideo()
 {
 var n_carregat=0;
 	for (var i_data=0; i_data<DatesVideo.length; i_data++)
-	{	
+	{
 		if (DatesVideo[i_data].carregada)
 			n_carregat++
 	}
-	if (n_carregat+1>=DatesVideo.length)
-	{
-		//Nota sobre el +1 al if. Alguna vegada passa que no es contabilitza com a carregada una imatge i el missatge queda per sempre. Faig el +1 per evitar-ho "en part".
-		document.getElementById("video_info").innerHTML="";
-		VideoPlay(9);  //Com que se que ja ho tinc tot, faig "Play".
-	}
-	else
-	{
-		document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"})+"...</font></center>";
-		timeoutVideoInfo=setTimeout("ActualitzaNCarregat()", 1000);
-	}
+	return n_carregat;
 }
 
-function ActivaFotogramaBarra(i_data_video)
+function DonaNFotogramesCarregablesVideo()
+{
+var n_carregable=0;
+	for (var i_data=0; i_data<DatesVideo.length; i_data++)
+	{
+		if (DatesVideo[i_data].animable!="no" && RatioNodataNoTolerat>DonaRatioNodataRodet(i_data))
+			n_carregable++
+	}
+	return n_carregable;
+}
+
+
+function EstanTotsElsFotogramesCarregatsVideo()
+{
+var n_carregat=DonaNFotogramesCarregatsVideo();
+var n_carregable=DonaNFotogramesCarregablesVideo();
+	if (n_carregat<n_carregable)
+		return false;
+	return true;
+}
+
+var ActualitzaNCarregatVideoEsCurs=false;
+
+function ActualitzaNCarregatVideo()
+{
+var n_carregat, n_carregable;
+	if (ActualitzaNCarregatVideoEsCurs)
+	{
+		timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 50);
+		return;
+	}
+	ActualitzaNCarregatVideoEsCurs=true;
+	
+	n_carregat=DonaNFotogramesCarregatsVideo();
+	n_carregable=DonaNFotogramesCarregablesVideo();
+	if (n_carregat>=n_carregable)
+	{
+		document.getElementById("video_info").innerHTML="";
+		ActualitzaNCarregatVideoEsCurs=false;
+		VideoPlay(8);  //Com que se que ja ho tinc tot, faig "Play" repetitiu.
+		return;
+	}
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"})+"...</font></center>";
+	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
+	ActualitzaNCarregatVideoEsCurs=false;
+}
+
+function ActivaFotogramaRodet(i_data_video)
+{
+	DatesVideo[i_data_video].carregadaRodet=true;
+}
+
+function ActivaFotogramaVideo(i_data_video)
 {
 	DatesVideo[i_data_video].carregada=true;
-	var n=DonaNPecesBarraVideo();
-	var img=eval("document.video_evol"+DonaIPecaBarraVideo(i_data_video, n));
+	var img=document["video_evol"+DonaIPecaBarraVideo(i_data_video, DonaNPecesBarraVideo())];
 	var nom_icona=TreuAdreca(img.src);
 
+	//Posa la ratlleta vermella a la barra estreta
 	if (nom_icona=="evol_bl.png")
 		img.src=AfegeixAdrecaBaseSRC("evol_bl_fotog.png");
 	else if (nom_icona=="evol_blau.png")
@@ -664,11 +885,23 @@ function ActivaFotogramaBarra(i_data_video)
 		img.src=AfegeixAdrecaBaseSRC("evol_pnt_blau_fotog.png");
 }
 
+function CanviaFotogramaSiPuntABarra(event, i)
+{
+var img=document["video_evol"+i];
+var nom_icona=TreuAdreca(img.src);
+
+	if (nom_icona!="evol_bl_fotog.png" && nom_icona!="evol_blau_fotog.png" &&
+	    nom_icona!="evol_pnt_fotog.png" && nom_icona!="evol_pnt_blau_fotog.png")
+		return;
+
+	MostraFotogramaAillat(DonaIDataVideoDesDePecaBarraVideo(i, DonaNPecesBarraVideo()), true);
+}
+
 function MostraFotograma(i_data_video, actualitza_scroll)
 {
 var j, img, nom_icona;
 
-	if (!DatesVideo[i_data_video].animable)
+	if (DatesVideo[i_data_video].animable!="si")
 		return;
 
 	//Actualitzo la data.
@@ -681,33 +914,34 @@ var j, img, nom_icona;
 	var i=DonaIPecaBarraVideo(i_data_video, n);
 	for (j=0; j<i; j++)
 	{
-		img=eval("document.video_evol"+j);
+		img=document["video_evol"+j];
 		nom_icona=TreuAdreca(img.src);
-		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_blau_fotog.png" || nom_icona=="evol_pnt_fotog.png")
+		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_blau_fotog.png" || nom_icona=="evol_pnt_fotog.png" || nom_icona=="evol_pnt_blau_fotog.png")
 			img.src=AfegeixAdrecaBaseSRC("evol_blau_fotog.png");
 		else
 			img.src=AfegeixAdrecaBaseSRC("evol_blau.png");
+
 	}
 
-	img=eval("document.video_evol"+j);
+	img=document["video_evol"+j];
 	nom_icona=TreuAdreca(img.src);
 
 	if (j==n-1)
 	{
-		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_pnt_blau_fotog.png")
+		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_blau_fotog.png" || nom_icona=="evol_pnt_blau_fotog.png")
 			img.src=AfegeixAdrecaBaseSRC("evol_pnt_blau_fotog.png");
 		else
 			img.src=AfegeixAdrecaBaseSRC("evol_pnt_blau.png");
 	}
 	else
 	{
-		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_pnt_fotog.png")
+		if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_blau_fotog.png" || nom_icona=="evol_pnt_fotog.png")
 			img.src=AfegeixAdrecaBaseSRC("evol_pnt_fotog.png");
 		else
 			img.src=AfegeixAdrecaBaseSRC("evol_pnt.png");
 		for (j++; j<n; j++)
 		{
-			img=eval("document.video_evol"+j);
+			img=document["video_evol"+j];
 			nom_icona=TreuAdreca(img.src);
 			if (nom_icona=="evol_bl_fotog.png" || nom_icona=="evol_blau_fotog.png" || nom_icona=="evol_pnt_fotog.png" || nom_icona=="evol_pnt_blau_fotog.png")
 				img.src=AfegeixAdrecaBaseSRC("evol_bl_fotog.png");
@@ -720,56 +954,24 @@ var j, img, nom_icona;
 	var n=parseFloat(document.video_animacions.interval.value);
 	if (n<=0 || isNaN(n) || n<0.09)
 		n=0;
-	//for (var i_capa=0; i_capa<DatesVideo.length; i_capa++)
-	//{	
-
-			/*if (i_capa==i_data_video && DatesVideo[i_capa].animable)
-			{
-			
-				eval("document.video_marc_sup"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-				eval("document.video_marc_dre"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-				eval("document.video_marc_esq"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-				eval("document.video_marc_inf"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-				//Activo els fotograma que no toca en el video.
-				//eval("document.pantalla.src=document.foto"+ i_data_video +".src");
-				document.getElementById("video_l_raster"+i_capa).style.opacity=1;
-				if (n)  //Determino la corba adient amb: http://cubic-bezier.com
-					document.getElementById("video_l_raster"+i_capa).style.transition="opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)";
-				else
-					document.getElementById("video_l_raster"+i_capa).style.transition=null;
-			}
-			else
-			{			    			    
-				eval("document.video_marc_sup"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_dre"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_esq"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_inf"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				//Desactivo els fotograma que no toca ene l video
-				document.getElementById("video_l_raster"+i_capa).style.opacity=0;
-				if (n)
-					document.getElementById("video_l_raster"+i_capa).style.transition="opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)";
-				else
-					document.getElementById("video_l_raster"+i_capa).style.transition=null;
-			}*/
 			if (IDataVideoMostrada!=-1)
 			{
-				eval("document.video_marc_sup"+IDataVideoMostrada+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_dre"+IDataVideoMostrada+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_esq"+IDataVideoMostrada+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
-				eval("document.video_marc_inf"+IDataVideoMostrada+".src=\""+AfegeixAdrecaBaseSRC("1negre.gif")+"\"");
+				document["video_marc_sup"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
+				document["video_marc_dre"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
+				document["video_marc_esq"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
+				document["video_marc_inf"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
 				//Desactivo els fotograma que no toca en el video
 				document.getElementById("video_l_raster"+IDataVideoMostrada).style.opacity=0;
 				//Determino la corba adient amb: http://cubic-bezier.com
 				document.getElementById("video_l_raster"+IDataVideoMostrada).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
 			}
-			eval("document.video_marc_sup"+i_data_video+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-			eval("document.video_marc_dre"+i_data_video+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-			eval("document.video_marc_esq"+i_data_video+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
-			eval("document.video_marc_inf"+i_data_video+".src=\""+AfegeixAdrecaBaseSRC("1vermell.gif")+"\"");
+			document["video_marc_sup"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+			document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+			document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+			document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
 			//Activo els fotograma que no toca en el video.
 			document.getElementById("video_l_raster"+i_data_video).style.opacity=1;
 			document.getElementById("video_l_raster"+i_data_video).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)":null;
-	//}
 
 	var i_actual;
 	if (actualitza_scroll)
@@ -806,7 +1008,7 @@ var i_data_video_actiu;
 		{
 			for(var i=0; i<DatesVideo.length; i++)
 			{
-				if(DatesVideo[i].animable)
+				if(DatesVideo[i].animable=="si")
 					return i;
 			}
 		}
@@ -815,7 +1017,7 @@ var i_data_video_actiu;
 			for (i_data_video_actiu=0; i_data_video_actiu<DatesVideo.length; i_data_video_actiu++)
 			{	
 				if (i_data_video_actiu!=i_data_mostrada && 
-					DatesVideo[i_data_video_actiu].animable)
+					DatesVideo[i_data_video_actiu].animable=="si")
 				{			 	    				
 					if (opcio==1)
 					{
@@ -888,7 +1090,7 @@ var n;
 
 					//animació circular
 					i_data_a_mostrar=0;
-					while (DatesVideo[i_data_a_mostrar].animable==false)
+					while (DatesVideo[i_data_a_mostrar].animable!="si")
 					{
 						i_capa_previa=i_data_a_mostrar;
 						i_data_a_mostrar=DeterminaIDataVideoSeguent(i_capa_previa, 1);
@@ -953,7 +1155,7 @@ var i_capa_previa;
 
 			//animació circular
 		 	i_data_a_mostrar=0;
-			while (DatesVideo[i_data_a_mostrar].animable==false)
+			while (DatesVideo[i_data_a_mostrar].animable!="si")
 			{
 				i_capa_previa=i_data_a_mostrar;
 				i_data_a_mostrar=DeterminaIDataVideoSeguent(i_capa_previa, 1);
@@ -969,7 +1171,7 @@ var i_capa_previa;
 	else if (opcio==2)
 	{
 		i_data_a_mostrar=DatesVideo.length-1;    
-		while (DatesVideo[i_data_a_mostrar].animable==false)
+		while (DatesVideo[i_data_a_mostrar].animable!="si")
 		{
 			i_capa_previa=i_data_a_mostrar;
 			i_data_a_mostrar=DeterminaIDataVideoSeguent(i_capa_previa, -1);
@@ -980,7 +1182,7 @@ var i_capa_previa;
 	else if (opcio==-2)
 	{
 		i_data_a_mostrar=0;
-		while (DatesVideo[i_data_a_mostrar].animable==false)
+		while (DatesVideo[i_data_a_mostrar].animable!="si")
 		{
 			i_capa_previa=i_data_a_mostrar;
 			i_data_a_mostrar=DeterminaIDataVideoSeguent(i_capa_previa, 1);
@@ -1009,12 +1211,20 @@ function AnullaTotsTimeOutVideo()
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
 		if (DatesVideo[i_data_video].timeOutRodet)
-		    clearTimeout(DatesVideo[i_data_video].timeOutRodet);
+		{
+			clearTimeout(DatesVideo[i_data_video].timeOutRodet);
+			DatesVideo[i_data_video].timeOutRodet=null
+		}
 		if (DatesVideo[i_data_video].timeOutFotograma)
-		    clearTimeout(DatesVideo[i_data_video].timeOutFotograma);
+		{
+			clearTimeout(DatesVideo[i_data_video].timeOutFotograma);
+			DatesVideo[i_data_video].timeOutFotograma=null
+		}
 	}
-	DatesVideo.length=0;
+	DatesVideo=[];
 	IDataVideoMostrada=-1;
+	PuntsSerieTemporal=[];
+	TancaFinestraSerieTemp("video_grafic");
 }
 
 //No useu sola. Useu TancaFinestraLayer("video")

@@ -28,6 +28,8 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
+
 /* 
  * Daniel Díaz Benito 18-XII-2012
  * Gml object that supports loading GeoRSS.

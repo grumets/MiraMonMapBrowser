@@ -28,6 +28,8 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
+
 var opcio_predefinit=0x00;
 var opcio_editable=0x01;
 var opcio_url=0x02;
@@ -630,7 +632,7 @@ var i_proces_a_executar;
 				  DonaCadenaLang({"cat":"Opcions avançades","spa":"Opciones avanzadas","eng":"Advanced options","fre":"Options avancées"}),"</a>", 
 				  "<textarea class=\"Verdana11px\" name=\"responseWPS\" id=\"responseWPS\" wrap=off cols=80 rows=15 style=\"display:none\"></textarea>",
 				  "<br><br><center><input type=\"button\" value=\"",DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
-				  "\" onClick=\"TancaFinestra_executarProces();\" /></center></div>");
+				  "\" onClick='TancaFinestraLayer(\"executarProces\");'/></center></div>");
 		s=cdns.join("");
 		contentLayer(elem, s);			
 		ExecutaRequestProces(ProcessosAExecutar[i_proces_a_executar].servidor_on_fer_peticio, request);
@@ -645,13 +647,6 @@ var i_proces_a_executar;
 		return false;
 	}
 }//Fi de OmpleEstructGlobalIExecutaProces()
-
-
-function TancaFinestra_executarProces()
-{
-	hideFinestraLayer(this, "executarProces");
-}//Fi de TancaFinestra_executarProces()
-
 
 var ajaxEstatEnviaFitxer=[];
 var EstatProcesEnviaFitxer=[];
@@ -711,21 +706,12 @@ function EsUnaURLValida(text)
 	return false;
 }
 
-function DonaExtensioFitxerSensePunt(fitxer)
-{
-	var i=fitxer.lastIndexOf(".");
-	if(i==-1)
-		return null;
-	return fitxer.substring(i+1, fitxer.length);
-}
-
-
 function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces_sel, i_input)
 {
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].formats)
 	{
 		var ext_fitxer=DonaExtensioFitxerSensePunt(sz_fitxer);
-		if(!ext_fitxer)
+		if(ext_fitxer=="")
 		{
 			alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ", 
 						  "spa":"Formato incorrecto. Formatos permitidos by parameter ", 
@@ -964,31 +950,31 @@ function EnviarFitxerAlServidor(i_capa, i_proces_sel, i_input)
 function ActivaTextURL(i_input)
 {
 var elem;
-	elem=this.document.getElementById("p_opcio_"+i_input);
+	elem=document.getElementById("p_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;		
-	elem=this.document.getElementById("e_opcio_"+i_input);
+	elem=document.getElementById("e_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;		
-	elem=this.document.getElementById("p_sel_input_"+i_input);
+	elem=document.getElementById("p_sel_input_"+i_input);
 	if(elem)
 		elem.disabled=true;
-	elem=this.document.getElementById("e_file_"+i_input);
+	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_submit_"+i_input);
+	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_cancel_"+i_input);
+	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
 		elem.disabled=true;			
-	elem=this.document.getElementById("e_sel_file_"+i_input);						
+	elem=document.getElementById("e_sel_file_"+i_input);						
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_text_"+i_input);
+	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
-	elem=this.document.getElementById("u_text_"+i_input);
+	elem=document.getElementById("u_text_"+i_input);
 	if(elem)
 		elem.disabled=false;
 }
@@ -996,31 +982,31 @@ var elem;
 function ActivaTextPredefinit(i_input)
 {
 var elem;
-	elem=this.document.getElementById("e_opcio_"+i_input);
+	elem=document.getElementById("e_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;
-	elem=this.document.getElementById("u_opcio_"+i_input);
+	elem=document.getElementById("u_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;
-	elem=this.document.getElementById("p_sel_input_"+i_input);
+	elem=document.getElementById("p_sel_input_"+i_input);
 	if(elem)
 		elem.disabled=false;
-	elem=this.document.getElementById("e_file_"+i_input);
+	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_submit_"+i_input);
+	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_cancel_"+i_input);
+	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
 		elem.disabled=true;			
-	elem=this.document.getElementById("e_sel_file_"+i_input);						
+	elem=document.getElementById("e_sel_file_"+i_input);						
 	if(elem)
 		elem.disabled=true;		
-	elem=this.document.getElementById("e_text_"+i_input);
+	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
-	elem=this.document.getElementById("u_text_"+i_input);
+	elem=document.getElementById("u_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
 }
@@ -1029,31 +1015,31 @@ function ActivaTextEditable(i_input)
 {
 var elem;
 
-	elem=this.document.getElementById("p_opcio_"+i_input);
+	elem=document.getElementById("p_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;
-	elem=this.document.getElementById("u_opcio_"+i_input);
+	elem=document.getElementById("u_opcio_"+i_input);
 	if(elem)
 		elem.checked=false;
-	elem=this.document.getElementById("p_sel_input_"+i_input);
+	elem=document.getElementById("p_sel_input_"+i_input);
 	if(elem)
 		elem.disabled=true;
-	elem=this.document.getElementById("e_file_"+i_input);
+	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
 		elem.disabled=false;		
-	elem=this.document.getElementById("e_submit_"+i_input);
+	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
 		elem.disabled=false;
-	elem=this.document.getElementById("e_cancel_"+i_input);
+	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
 		elem.disabled=false;						
-	elem=this.document.getElementById("e_sel_file_"+i_input);						
+	elem=document.getElementById("e_sel_file_"+i_input);						
 	if(elem)
 		elem.disabled=false;					
-	elem=this.document.getElementById("e_text_"+i_input);
+	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=false;
-	elem=this.document.getElementById("u_text_"+i_input);
+	elem=document.getElementById("u_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
 }
@@ -1072,7 +1058,7 @@ function AfegeixProcessosADesactivar(id_proces_d)
 
 function ActivaIDesactivaProcessosAlFerClic(i_capa,i_proces_sel,i_input)
 {
-elem=this.document.getElementById("p_check_"+i_input);
+var elem=document.getElementById("p_check_"+i_input), i;
 
 	ProcessosAActivar=[];
 	ProcessosADesactivar=[];
@@ -1118,7 +1104,7 @@ var i,j;
 	//Necessito marcar tots els forms com a actius
 	for(j=0; j<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input.length;j++)
 	{
-		elem=this.document.getElementById("p_form_input_"+j);
+		elem=document.getElementById("p_form_input_"+j);
 		if(elem)
 			elem.disabled=false;
 	}
@@ -1129,10 +1115,10 @@ var i,j;
 		{
 			if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[j].nom.nom==ProcessosAActivar[i])
 			{
-				elem=this.document.getElementById("p_form_input_"+j);
+				elem=document.getElementById("p_form_input_"+j);
 				if(elem)
 					elem.disabled=false;
-				elem=this.document.getElementById("p_sel_input_"+j);
+				elem=document.getElementById("p_sel_input_"+j);
 				if(elem)
 					elem.disabled=false;
 				break;
@@ -1145,10 +1131,10 @@ var i,j;
 		{
 			if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[j].nom.nom==ProcessosADesactivar[i])
 			{
-				elem=this.document.getElementById("p_form_input_"+j);
+				elem=document.getElementById("p_form_input_"+j);
 				if(elem)
 					elem.disabled=true;
-				elem=this.document.getElementById("p_sel_input_"+j);
+				elem=document.getElementById("p_sel_input_"+j);
 				if(elem)
 					elem.disabled=true;
 				break;
@@ -1159,7 +1145,7 @@ var i,j;
 
 function ActualitzaParametresProces(i_capa, i_proces_sel)
 {
-var i_valor;
+var i_valor, i;
 var cdns=[]; 
 
 
@@ -1444,18 +1430,11 @@ var i_proces, i;
 
 function IniciaFinestraExecutaProcesCapa(i_capa)
 {
-	if (isFinestraLayer(this, "executarProces"))
-	{
-		showFinestraLayer(this, "executarProces");
-		var elem=getLayer(this, "executarProces_finestra");
-		FinestraExecutaProcesCapa(elem, i_capa);		
-	}
-	else  //missatge error
-	{
-		alert(DonaCadenaLang({"cat":"No s'ha definit la layer de tipus finestra 'executarProces' i per tant no es pot usar la funcionalitat d'afegir capes al navegador",
-							 "spa":"No se ha definido la layer de tipo ventana 'executarProces' y en consecuencia no se puede usar la funcionalidad de añadir capas al navegador",
-							 "eng":"The layer 'executarProces' don't has defined and its not possible use the funcionality add layer to browser",
-							 "fre":"La layer de type fenêtre 'executarProces' n'a été pas définie et il n'est donc pas possible d'utilise l'outil pour ajouter des couches au navigateur"}));						  
-	}
-	
+var elem=ObreFinestra(this, "executarProces", DonaCadenaLang({"cat":"d'afegir capes al navegador",
+							 "spa":"de añadir capas al navegador",
+							 "eng":"of adding a layer to the browser",
+							 "fre":"pour ajouter des couches au navigateur"}));
+	if (!elem)
+		return;
+	FinestraExecutaProcesCapa(elem, i_capa);			
 }//Fi de IniciaFinestraExecutaProcesCapa()

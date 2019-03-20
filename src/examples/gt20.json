@@ -1,0 +1,2661 @@
+{
+	"VersioConfigMMN":
+	{
+		"Vers": 6,
+		"SubVers": 0,
+		"VariantVers": null
+	},
+	"SpaceForLayers":
+	{
+		"width": 1280,
+		"height": 904
+	},
+	"Layer": [
+		{"name": "situacio", "left": 0, "top": 0, "width": 203, "height": 243, "ancora": "NWse", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "llegenda", "left": 1, "top": 243, "width": 203, "height": 661, "ancora": "nWSe", "scroll": "ara_no", "visible": true, "ev": null, "content": null},
+		{"name": "titol", "left": 240, "top": 17, "width": 900, "height": 80, "ancora": "NwEs", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "logos", "left": 900, "top": 5, "width": 270, "height": 150, "ancora": "NwEsC", "scroll": "no", "visible": true, "ev": null, "content": "<table><td valign=\"middle\" align=\"center\"><a href=\"http://www.gt20.eu\" target=\"_blank\"><img src=\"examples/gt20-img/gt20.png\" width=300 title=\"groundtruth2.0\" border=0></a></td><td><table><tr><td align=\"center\"><a href=\"http://europa.eu\" target=\"_blank\"><img src=\"examples/gt20-img/EuropeanC.gif\" title=\"European Union\" width=70 border=0></a></td></tr><tr><td align=\"center\" class=\"Verdana11px\">This project is funded by<br>the European Union</td></tr></table></td></tr></table>"},
+		{"name": "barra", "left": 205, "top": 97, "width": 685, "height": 35, "ancora": "wC", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "ctipica", "left": 660, "top": 97, "width": 400, "height": 15, "ancora": "wC", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "projeccio", "left": 1090, "top": 97, "width": 140, "height": 15, "ancora": "NwEsC", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "vista", "left": 203, "top": 122, "width": 1057, "height": 800, "ancora": "NwSE", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "atribucio", "left": 203, "top": 866, "width": 1030, "height": 15, "ancora": "SEwR", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "logo_miramon", "left": 1175, "top": 788, "width": 50, "height": 25, "ancora": "SECR", "scroll": "no", "visible": true, "ev": null, "content": { "cat" :"<a href=\"http://www.creaf.uab.cat/miramon/index_ca.htm\" target=\"_blank\"><img src=\"examples/gt20-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","spa":"<a href=\"http://www.creaf.uab.cat/miramon/index_es.htm\" target=\"_blank\"><img src=\"examples/gt20-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","eng":"<a href=\"http://www.creaf.uab.cat/miramon/index.htm\" target=\"_blank\"><img src=\"examples/gt20-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"}},
+		{"name": "coord", "left": 210, "top": 725, "width": 320, "height": 150, "ancora": "SCwR", "scroll": "no", "visible": true, "ev": null, "content": null}
+	],
+	"ServidorLocal": "http://localhost/cgi-bin/GT20/MiraMon.cgi?",
+	"ServidorLocalFINAL_A_CANVIAR": "http://www.ogc3.uab.cat/cgi-bin/CitSci/MiraMon.cgi?",
+	"VersioServidorLocal":
+	{
+		"Vers": 1,
+		"SubVers": 3,
+		"VariantVers": 0
+	},
+	"TipusServidorLocal": "TipusWMS",
+	"AdrecaBaseSRC": "",
+	"WPSschemaURL": "http://schemas.opengis.net",
+	"idiomes":
+	[
+		"cat",
+		"spa",
+		"eng"
+	],
+	"idioma": "eng",
+	"TitolNavegador":
+	{
+		"layer": "titol",
+		"text": "<a href='http://www.RitmeNatura.cat' target='_blank'><font size=8 face='Verdana' color='#3d61c2'>Citizen</font></a> <a href='http://www.RitmeNatura.cat' target='_blank'><font size=8 face='Verdana' color='#e3823b'>Observatories</font></a>"
+	},
+	"titol":
+	{
+		"cat": "RitmeNatura.cat - Segueix el ritme de la Natura",
+		"spa": "RitmeNatura.cat - Sigue el ritmo de la Naturaleza",
+		"eng": "RitmeNatura.cat - Follow the rhythm of Nature"
+	},
+	"TitolCaixa":
+	{
+		"cat": "<span class=\"titol_taronja_petit\">RitmeNatura.cat - Segueix el ritme de la Natura</span>",
+		"spa": "<span class=\"titol_taronja_petit\">RitmeNatura.cat - Sigue el ritmo de la Naturaleza</span>",
+		"eng": "<span class=\"titol_taronja_petit\">RitmeNatura.cat - Follow the rhythm of Nature</span>"
+	},
+	"ncol": 640,
+	"nfil": 480,
+	"NColNFilAuto": true,
+	"psalt": 80,
+	"MargeEsqVista": 0,
+	"MargeSupVista": 0,
+	"ColorFonsVista": "#C0C0C0",
+	"ColorQuadratSituacio": "#FF0000",
+	"ColorFonsPlana": "#FFFFFF",
+	"TitolCoord":
+	{
+		"cat": "Posició actual: ",
+		"spa": "Posición actual: ",
+		"eng": "Current position: "
+	},
+	"EstilCoord": "area",
+	"NDecimalsCoordXY": 2,
+	"CoordExtremes": null,
+	"CoordActualProj": true,
+	"CoordActualLongLatG": true,
+	"CoordActualLongLatGMS": true,
+	"zoom":
+	[
+		{"costat": 0.7031250},
+		{"costat": 0.35156250},
+		{"costat": 0.175781250},
+		{"costat": 0.0878906250},
+		{"costat": 0.04394531250},
+		
+		{"costat": 0.021972656250},
+		{"costat": 0.0109863281250},
+		{"costat": 0.00549316406250},
+		{"costat": 0.002746582031250},
+		{"costat": 0.0013732910156250},
+		
+		{"costat": 0.00068664550781250},
+		{"costat": 0.000343322753906250},
+		{"costat": 0.000171661376953125},
+		{"costat": 0.0000858306884765625},
+		{"costat": 0.0000429153442382812},
+		
+		{"costat": 0.0000214576721191406},
+		{"costat": 0.0000107288360595703},
+		{"costat": 0.00000536441802978516},
+		{"costat": 0.00000268220901489258},
+		{"costat": 0.00000134110450744629},
+		{"costat": 0.000000670552253723145}
+	],
+	"NivellZoomCostat": 0.35156250,
+	"ConsultableSegonsEscala": true,
+	"DesplegableProj": true,
+	"CanviProjAuto": true,
+	"ZoomUnSolClic": true,
+	"ZoomContinu": false,
+	"UsaSempreMeuServidor": false,
+	"MostraBarraEscala": true,
+	"RelaxaAmbitVisualitzacio": false,
+	"VoraVistaGrisa": false,
+	"ImatgeSituacio":
+	[
+		{
+			"EnvTotal":	{
+				"EnvCRS":	{				
+					"MinX":	-180,
+					"MaxX":	 180,
+					"MinY":	-90,
+					"MaxY":	 90
+				},
+				"CRS":	"EPSG:4326"
+			},
+			"nom":	"examples/gt20-img/s_world.png",
+			"Ample":	290,
+			"Alt":	145,
+			"MargeEsq":	2,
+			"MargeSup":	50
+		},
+		{
+			"EnvTotal":	{
+				"EnvCRS":	{				
+					"MinX":	-29.40,
+					"MaxX":	 60.25,
+					"MinY":	-42.20,
+					"MaxY":	 73.80
+				},
+				"CRS":	"EPSG:4326"
+			},
+			"nom":	"examples/gt20-img/allpalimits.png",
+			"Ample":	443,
+			"Alt":	576,
+			"MargeEsq":	100,
+			"MargeSup":	2
+		},
+		{
+			"EnvTotal":	{
+				"EnvCRS":	{				
+					"MinX":	-11.73,
+					"MaxX": 30.67,
+					"MinY": 29.85,
+					"MaxY":	73.57
+				},
+				"CRS":	"EPSG:4326"
+			},
+			"nom":	"examples/gt20-img/EU_allPAlimits_rectangule.png",
+			"Ample":	578,
+			"Alt":	434,
+			"MargeEsq":	2,
+			"MargeSup":	2
+		},
+		{
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": -1.062,
+					"MaxX": 4.827,
+					"MinY": 38.198,
+					"MaxY": 43.748
+				},
+				"CRS": "EPSG:4326"
+			},
+			"nom": "examples/gt20-img/ritme_natura_limits.png",
+			"Ample": 586,
+			"Alt": 554,
+			"MargeEsq": 4,
+			"MargeSup": 4
+		}
+	],
+	"AmpleAltSituacioAuto": true,
+	"ISituacioOri": 0,
+	"PuntOri":
+	{
+		"x": 0,
+		"y": 0
+	},
+	"AspecteLlegenda":
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda": "",
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"AspecteLlegendaImpressio":
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda": "",
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"PlantillaDImpressio":
+	[
+		{
+			"nom": "A4Vertical",
+			"desc": "A4 vertical",
+			"src": "a4vertical.htm",
+			"ample": 600,
+			"alt": 800
+		},
+		{
+			"nom": "A4Horitzontal",
+			"desc": "A4 horizontal",
+			"src": "a4horitzontal.htm",
+			"ample": 800,
+			"alt": 600
+		}
+	],
+	"LlegendaAmagaSegonsEscala": true,
+	"LlegendaGrisSegonsEscala": false,
+	"LlegendaIconesInactivesGrises": false,
+	"LlegendaGrupsComARadials": true,
+	"LlegendaLligaVisibleAmbCtipica": true,
+	"LlegendaAmagaSeparaNoCapa": true,
+	"LlegendaAmagaSiForaAmbit": true,
+	"LlegendaGrisSiForaAmbit": false,
+	"LlegendaLligaVisibleAmbDescarregable": true,
+		"CapaConsultaPreguntaServidor": [{
+		"servidor": null,
+		"nom": "CitObsBBOX",
+		"camps": [{
+			"previ": {
+				"cat": "Anar a la",
+				"spa": "Ir a la",
+				"eng": "Go to"
+			}, 
+			"nom": "CIT_OBS", 
+			"desc": {
+				"eng": "Citizen Obs."
+			}, 
+			"post": {
+				"cat": "de", 
+				"spa": "de", 
+				"eng": "of"
+			}
+		}],
+		"CRS": "EPSG:4326"		
+	}],
+	"ConsultaTipica":	[{
+		"nom": "ctipica",
+		"TipusConsultaTipica" : "CTipicaDesplegables",
+		"NomCapa": ["CitObsBBOX"]
+	}],	
+	"VistaPermanent":
+	[
+		{
+			"nom": "vista"
+		}
+	],
+	"BarraBotoMes": false,
+	"BarraBotoMenys": false,
+	"BarraBotoBack": false,
+	"BarraBotoVGeneral": false,
+	"BarraBotonsAlternatius": true,
+	"BarraBotoMouMig": true,
+	"BarraBotoNovaVista": true,
+	"BarraEscala": false,
+	"BarraBotoCaixaParam": true,
+	"BarraBotoPrint": true,
+	"BarraBotoPlanaPrincipal": true,
+	"BarraBotoAjuda": true,
+	"BarraBotoInstallarMMZ": true,
+	"BarraBotonsIdiomes": true,
+	"BarraBotoAnarCoord": false,
+	"BarraBotoConsola": true,
+	"BarraBotoEnllac": true,
+	"BarraBotoInsereix": false,
+	"BarraBotoEnllacWMS": true,
+	"BarraBotoAfegeixCapa": true,
+	"BarraBotoCalculadora": true,
+	"BarraBotoCTipica": false,
+	"BarraNomesDescarrega": false,
+	"VistaBotonsBruixola": true,
+	"VistaBotonsZoom": true,
+	"VistaEscalaNumerica": true,
+	"VistaSliderZoom": false,
+	"BotoVistaBack": "false NO IMPLEMENTAT",
+	"BotoVistaAnarACoordenada": "false NO IMPLEMENTAT",
+	"AltresLinks": null,
+	"TitolLlistatNivellZoom":
+	{
+		"cat": "<span class=\"text_coord\">Escala: </span>",
+		"spa": "<span class=\"text_coord\">Escala: </span>",
+		"eng": "<span class=\"text_coord\">Scale: </span>"
+	},
+	"LlistatZoomFraccio": false,
+	"LlistatZoomMidaPixel": true,
+	"LlistatZoomEscalaAprox": true,
+	"EstatClickSobreVista": "ClickConLoc",
+	"TipusConsulta": "FinestraDeCop",
+	"IconaConsulta":
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"PlantillaConsulta":
+	{
+		"nom": null,
+		"desc": null,
+		"src": "consulta_de_cop.htm",
+		"ample": 500,
+		"alt": 500
+	},
+	"IconaAnarCoord":
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"IconaEdicio": null,
+	"FuncioIconaEdicio": null,
+	"FuncioCanviProjeccio": null,
+	"IconaValidacio": null,
+	"TempsRefresc": 5000,
+	"DescarregesCertificades": true,
+	"ParGetCoverage": null,
+	"FormatGetCoverage": null,
+	"ResGetCoverage": null,
+	"FormatDescarregaTot":
+	[
+		{
+			"format":
+			{
+				"nom": "application/x-mmzx",
+				"desc":
+				{
+					"cat": "Mapa Comprimit de MiraMon (MMZX)",
+					"spa": "Mapa Comprimido de MiraMon (MMZX)",
+					"eng": "MiraMon Compressed Map (MMZX)"
+				}
+			},
+			"extension": "mmzx"
+		},
+		{
+			"format":
+			{
+				"nom": "image/tiff",
+				"desc":
+				{
+					"cat": "Format GeoTIFF",
+					"spa": "Formato GeoTIFF",
+					"eng": "GeoTIFF format"
+				}
+			},
+			"extension": "tif"
+		}
+	],
+	"capa":
+	[		
+		{
+			"nom": null,
+			"desc": "Citizen Observatory",
+			"CRSgeometry": "EPSG:4326",
+			"model": "vector",
+			"objectes": {
+			    "type": "FeatureCollection",
+			    "bbox": [1.560675, -17.124560, 35.505466, 59.150937],
+			    "features": [
+			    {
+				  "type": "Feature",
+				  "bbox": [1.560675, 41.761018, 1.560675, 41.761018],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [1.5606748745, 41.7610179986]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/ritmenatura.png",
+					"NAME":"Ritme Natura",
+					"SUBTITLE":"Preparing for climate change",
+					"COUNTRY":"Spain",
+					"DESC":"Crops are very sensitive to small variations in climate. Phenological data (e.g. flowering, breeding) are a useful proxy for detecting climate change. Local people are uniquely placed to observe the change in phenology. However, current observations of p",
+					"URL":"http://gt20.eu/cases/preparing-for-climate-change/",
+					"WEB_SITE":"http://ritmenatura.cat/en/home_en/",
+					"TWITTER":"https://twitter.com/ritmenatura",
+					"APP":"https://natusfera.gbif.es/projects/ritmenatura-cat-observacions-recurrents",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/Spain-Photo-New-taken-from-the-poster-400x0-c-default.jpg"
+				  }
+			    },
+			    {
+				  "type": "Feature",
+				  "bbox": [4.469559, 51.029591, 4.469559, 51.029591],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [4.4695590932, 51.0295910624]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/meet-mee-mechelen-1024x271.png",
+					"NAME":"Meet Mee Mechelen",
+					"SUBTITLE":"Environmental quality of life in Flanders",
+					"COUNTRY":"Belgium",
+					"DESC":"Flanders, the Northern region of Belgium, is one of the most urbanized in the world, with a population density close to 500 inhabitants/km². This leads to pressure on the environmental quality. Citizen observatory Meet Mee Mechelen aims to improve the di",
+					"URL":"http://gt20.eu/cases/environmental-quality-of-life-in-flanders-2/",
+					"WEB_SITE":"https://mechelen.meetmee.be/",
+					"TWITTER":"https://twitter.com/MeetMeeMechelen",
+					"APP":"",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/Photo-Mechelen-reduced-in-size-400x0-c-default.png"
+				  }
+			    },
+			    {
+				  "type": "Feature",
+				  "bbox": [4.893972, 51.770936, 4.893972, 51.770936],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [4.8939723283, 51.7709362589]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/grip-op-water-altena-1024x177.png",
+					"NAME":"Grip Op Water Altena",
+					"SUBTITLE":"Weather and climate-proof water management",
+					"COUNTRY":"Netherlands",
+					"DESC":"In the Netherlands, climate change leads to excessive local rainfall. This causes severe floods. In order to have effective flood-resilience policies and practices in place, accurate rainfall information and geo-information is needed. However, national r",
+					"URL":"http://gt20.eu/cases/weather-and-climate-proof-water-management/",
+					"WEB_SITE":"http://altena.gripopwater.nu/",
+					"TWITTER":"https://twitter.com/gripopwater",
+					"APP":"",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/The-Netherlands-Photo-New-taken-from-the-poster-400x0-c-default.jpg"
+				  }
+			    },
+			    {
+				  "type": "Feature",
+				  "bbox": [17.219870, 59.150937, 17.219870, 59.150937],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [17.2198696929, 59.1509369187]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/vattenfokus.png",
+					"NAME":"Vatten Fokus",
+					"SUBTITLE":"Water quality management in socio-ecological systems",
+					"COUNTRY":"Sweden",
+					"DESC":"The focus of the Swedish citizen observatory VattenFokus is on water quality management in socio-ecological systems in the Mälarendalen region (which includes Stockholm). The identified key challenge is the deteriorating water health due to current lifes",
+					"URL":"http://gt20.eu/cases/water-quality-management-in-socio-ecological-systems/",
+					"WEB_SITE":"https://vattenfokus.se/",
+					"TWITTER":"https://twitter.com/vattenfokus1",
+					"APP":"",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/Swedish-demo-case-400x0-c-default.png"
+				  }
+			    },
+			    {
+				  "type": "Feature",
+				  "bbox": [23.517170, -17.124560, 23.517170, -17.124560],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [23.5171699674, -17.1245602679]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/niti-luli.png",
+					"NAME":"Niti Luli",
+					"SUBTITLE":"Community-based sustainable natural resource management",
+					"COUNTRY":"Zambia",
+					"DESC":"In Zambia, Ground Truth 2.0 citizen observatory Niti Luli is designing a platform to support the work of existing Village Action Groups (VAG) and Community Resource Boards (CRB), a structure mandated under the Wildlife Law to realize a community-based na",
+					"URL":"http://gt20.eu/cases/community-based-sustainable-natural-resource-management/",
+					"WEB_SITE":"",
+					"TWITTER":"",
+					"APP":"",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/Identity-main-400x0-c-default.jpg"
+				  }
+			    },
+			    {
+				  "type": "Feature",
+				  "bbox": [35.505466, -1.140166, 35.505466, -1.140166],
+				  "geometry": {
+					"type": "Point",
+					"coordinates": [35.5054658949, -1.1401656979]
+				  },
+				  "properties": {
+					"LOGO":"http://gt20.eu/wp-content/uploads/2017/01/maasai-mara-citizen-observatory-1024x185.jpg",
+					"NAME":"Maasai Mara",
+					"SUBTITLE":"Balancing sustainable livelihoods and biodiversity management",
+					"COUNTRY":"Kenya",
+					"DESC":"n Kenya, the Maasai Mara Citizen Observatory aims to improve the livelihoods of the citizens of the Mara Region and the environment. It is setting up a multi-stakeholder platform for generating and sharing of data, information and knowledge to improve po",
+					"URL":"http://gt20.eu/cases/biodiversity-conservation/",
+					"WEB_SITE":"http://mara.info.ke/",
+					"TWITTER":"https://twitter.com/marainfoke",
+					"APP":"https://play.google.com/store/apps/details?id=com.mara.upande.groundtruth20",
+					"PICTURE":"http://gt20.eu/wp-content/uploads/2017/01/Image-Kenyan-demo-case-400x0-c-default.jpg"
+				  }
+			    }
+			    ]
+			},
+			"atributs": [{
+				"nom": "LOGO",
+				"descripcio": "Logo",
+				"esLink": true,
+				"esImatge": true,
+				"mostrar": true
+			},{
+				"nom": "NAME",
+				"descripcio": "Name",
+				"mostrar": true
+			},{
+				"nom": "SUBTITLE",
+				"descripcio": "Subtitle",
+				"mostrar": true
+			},{
+				"nom": "COUNTRY",
+				"descripcio": "Country",
+				"mostrar": true
+			},{
+				"nom": "DESC",
+				"descripcio": "Description",
+				"mostrar": true
+			},{
+				"nom": "URL",
+				"descripcio": "Url",
+				"esLink": true,
+				"mostrar": true
+			},{
+				"nom": "WEB_SITE",
+				"descripcio": "Web site",
+				"esLink": true,
+				"mostrar": true
+			},{
+				"nom": "TWITTER",
+				"descripcio": "Twitter",
+				"esLink": true,
+				"mostrar": true
+			},{
+				"nom": "APP",
+				"descripcio": "App",
+				"esLink": true,
+				"mostrar": true
+			},{
+				"nom": "PICTURE",
+				"descripcio": "Picture",
+				"esLink": true,
+				"esImatge": true,
+				"mostrar": true
+			}],
+			"DescLlegenda": "Citizen Observatories",
+			"separa": {
+				"cat": "<hr align=\"left\" width=\"240\"><b>Ciència Ciutadana</b><hr align=\"left\" width=\"240\">",
+				"spa": "<hr align=\"left\" width=\"240\"><b>Ciencia Ciudadana</b><hr align=\"left\" width=\"240\">",
+				"eng": "<hr align=\"left\" width=\"240\"><b>Citizen Science</b><hr align=\"left\" width=\"240\">"
+			},			
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc": "All",
+					"DescItems": "Site type",
+					"TipusObj": "S",
+					"ItemLleg":
+					[
+						{
+							"color": "examples/gt20-img/rm_s.png",
+							"DescColor":
+							{
+								"cat": "Observació",
+								"spa": "Observación",
+								"eng": "Observation"
+							}
+						}
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm.png",
+									"ncol": 20,
+									"nfil": 30,
+									"i": 3,
+									"j": 29
+								}
+							}
+						]
+					},
+					"fonts": {
+						"NomCampText": "NAME",
+						"aspecte": [{
+							"font": {
+								"font": "12px Verdana", "color": "#B50000", "align": "center", "i": 0, "j": 20
+							}
+						}]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"CostatMinim":	0.05,
+			"CostatMaxim":	0.5,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true, 
+			"visible": "si",
+			"consultable": "si",
+			"editable": "no",
+			"metadades": null
+		},
+		{
+			"namespace": "http://www.ogc.cat",
+			"servidor": null,
+			"versio":
+			{
+				"Vers": 2,
+				"SubVers": 0,
+				"VariantVers": 0
+			},
+			"tipus": "TipusWFS",
+			"model": "vector",
+			"nom": "ritme-natura",
+			"desc": "Ritme Natura",
+			"CRSgeometry": "EPSG:4326",
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": -1.062,
+					"MaxX": 4.827,
+					"MinY": 38.198,
+					"MaxY": 43.748
+				},
+				"CRS": "EPSG:4326"
+			},			
+			"objectes": null,
+			"atributs":
+			[
+				{
+					"separador": {"cat": "<span class=\"CampRespostaConsultaSeparador\">Bàsic</span><br>", "spa": "<span class=\"CampRespostaConsultaSeparador\">Básico</span><br>", "eng": "<span class=\"CampRespostaConsultaSeparador\">Basic</span><br>"},
+					"nom": "__om_time__",
+					"descripcio": {"cat": "Data de la observació", "spa": "Fecha de la observación", "eng": "Observation time"},
+					"mostrar": true
+				},
+				{
+					"nom": "__om_sensor__",
+					"descripcio": {"cat": "Alies de l'observador", "spa": "Alias del observador", "eng": "Observer alias"},
+					"mostrar": true
+				},
+				{
+					"nom": "ID",
+					"descripcio": {"cat": "Identificador", "spa": "Identificador", "eng": "Identifier"},
+					"mostrar": true
+				},
+				{
+					"nom": "observed_on_string",
+					"descripcio": {"cat": "Data/hora de l'observació", "spa": "Fecha/hora de la observació", "eng": "Date/hour of the observation"},
+					"mostrar": true
+				},
+				{
+					"nom": "observed_on",
+					"descripcio": {"cat": "Data normalitzada", "spa": "Fecha normalizada", "eng": "Normalized date"},
+					"mostrar": true
+				},
+				{
+					"nom": "time_observed_at",
+					"descripcio": {"cat": "Hora normalitzada", "spa": "Hora normalizada", "eng": "Normalized hour"},
+					"mostrar": true
+				},
+				{
+					"nom": "TIME_ZONE",
+					"descripcio": {"cat": "Zona horària", "spa": "Zona horaria", "eng": "Time zone"},
+					"mostrar": true
+				},
+				{
+					"nom": "out_of_range",
+					"descripcio": {"cat": "És fora de l'àrea geogràfica coneguda del tàxon?", "spa": "¿Está fuera del área geográfica conocida del taxon?", "eng": "Is outsite the known geographical area of the taxon?"},
+					"mostrar": true
+				},
+				{
+					"nom": "USER_ID",
+					"descripcio": {"cat": "Identificador d'usuari", "spa": "Identificador de usuario", "eng": "User identifier"},
+					"mostrar": true
+				},
+				{
+					"nom": "USER_LOGIN",
+					"descripcio": {"cat": "Nom d'usuari", "spa": "Nombre de usuario", "eng": "User name"},
+					"mostrar": true
+				},
+				{
+					"nom": "CREATED_AT",
+					"descripcio": {"cat": "Data de creació", "spa": "Fecha de creación", "eng": "Creation date"},
+					"mostrar": true
+				},
+				{
+					"nom": "UPDATED_AT",
+					"descripcio": {"cat": "Última data d'actualització", "spa": "Última fecha de actualitzación", "eng": "Last update date"},
+					"mostrar": true
+				},
+				{
+					"nom": "quality_grade",
+					"descripcio": {"cat": "Grau de qualitat", "spa": "Grado de calidad", "eng": "Quality grade"},
+					"mostrar": true
+				},
+				{
+					"nom": "LICENSE",
+					"descripcio": {"cat": "Llicència", "spa": "Licencia", "eng": "License"},
+					"mostrar": true
+				},
+				{
+					"nom": "URL",
+					"descripcio": "Url",
+					"esLink": true,
+					"mostrar": true
+				},
+				{
+					"nom": "IMAGE_URL",
+					"descripcio": {"cat": "Imatge", "spa": "Imagen", "eng": "Image"},
+					"esLink": true,
+					"esImatge": true,
+					"mostrar": true
+				},
+				{
+					"nom": "TAG_LIST",
+					"descripcio": {"cat": "Paraules clau", "spa": "Paraules clave", "eng": "Keywords"},
+					"mostrar": true
+				},
+				{
+					"nom": "description",
+					"descripcio": {"cat": "Descripció", "spa": "Descripción", "eng": "Description"},
+					"mostrar": true
+				},
+				{
+					"nom": "ID_PLEASE",
+					"descripcio": {"cat": "S'ha sol·licitat ajuda per la identificació?", "spa": "¿Se ha solicitado ayuda para la identificación?", "eng": "Help for identification has been requested?"},
+					"mostrar": false
+				},
+				{
+					"nom": "num_identification_agreements",
+					"descripcio": {"cat": "Nombre d'identificacions coincidents", "spa": "Número de identificaciones coincidentes", "eng": "Number of identifications in agreement"},
+					"mostrar": true
+				},
+				{
+					"nom": "num_identification_disagreements",
+					"descripcio": {"cat": "Nombre d'identificacions no coincidents o en desacord", "spa": "Número de identificaciones no coincidentes o en desacuerdo", "eng": "Number of identifications in disagreement"},
+					"mostrar": true
+				},
+				{
+					"nom": "captive_cultivated",
+					"descripcio": {"cat": "Havia estat captiva/conreada?", "spa": "¿Habia sido cautiva/cultivada?", "eng": "Has been captive/cultivated?"},
+					"mostrar": true
+				},
+				{
+					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>"},
+					"nom": "place_guess",
+					"descripcio": {"cat": "Descripció de la localitat", "spa": "Descripción de la localidad", "eng": "Description of the location"},
+					"mostrar": true
+				},
+				{
+					"nom": "positional_accuracy",
+					"descripcio": {"cat": "Exactitud posicional", "spa": "Exactitud posicional", "eng": "Positional accuracy"},
+					"mostrar": true
+				},
+				{
+					"nom": "GEOPRIVACY",
+					"descripcio": {"cat": "Geoprivacitat", "spa": "Geoprivacidad", "eng": "Geoprivacy"},
+					"mostrar": true
+				},
+				{
+					"nom": "positioning_method",
+					"descripcio": {"cat": "Mètode de posicionament", "spa": "Método de posicionamiento", "eng": "Positioning method"},
+					"mostrar": true
+				},
+				{
+					"nom": "positioning_device",
+					"descripcio": {"cat": "Dispositiu de posicionament", "spa": "Dispositivo de posicionamiento", "eng": "Positioning device"},
+					"mostrar": true
+				},
+				{
+					"nom": "place_town_name",
+					"descripcio": {"cat": "Localitat", "spa": "Localidad", "eng": "Town name"},
+					"mostrar": true
+				},
+				{
+					"nom": "place_county_name",
+					"descripcio": {"cat": "Demarcació regional", "spa": "Demarcación regional", "eng": "County name"},
+					"mostrar": true
+				},
+				{
+					"nom": "place_state_name",
+					"descripcio": {"cat": "Estat", "spa": "Estado", "eng": "State"},
+					"mostrar": true
+				},
+				{
+					"nom": "place_country_name",
+					"descripcio": {"cat": "País", "spa": "País", "eng": "Country"},
+					"mostrar": true
+				},
+				{					
+					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Tàxon</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon</span><br>"},
+					"nom": "species_guess",
+					"descripcio": {"cat": "Descripció de l'espècie", "spa": "Descripción de la especie", "eng": "Species description"},
+					"mostrar": true
+				},
+				{
+					"nom": "scientific_name",
+					"descripcio": {"cat": "Nom científic", "spa": "Nom científic", "eng": "Scientific name"},
+					"mostrar": true
+				},
+				{
+					"nom": "common_name",
+					"descripcio": {"cat": "Nom comú", "spa": "Nom comú", "eng": "Common name"},
+					"mostrar": true
+				},
+				{
+					"nom": "iconic_taxon_name",
+					"descripcio": {"cat": "Categoria taxonòmica de nivell superior", "spa": "Categoría taxonómica de nivel superior", "eng": "Taxonomic category of the superior level"},
+					"mostrar": true
+				},
+				{
+					"nom": "TAXON_ID",
+					"descripcio": {"cat": "Identificador de tàxon", "spa": "Identificador de tàxon", "eng": "Taxon identifier"},
+					"mostrar": true
+				},
+				{
+					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Tàxon extres</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon extras</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon extras</span><br>"},
+					"nom": "taxon_kingdom_name",
+					"descripcio": {"cat": "Regne", "spa": "Reino", "eng": "Kingdom"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_phylum_name",
+					"descripcio": {"cat": "Fílum o divisió", "spa": "Fílum o división", "eng": "Phylum or division"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_subphylum_name",
+					"descripcio": {"cat": "Subfílum o subdivisió", "spa": "Subfilum o subdivisión", "eng": "Subphylum or subdivision"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_superclass_name",
+					"descripcio": {"cat": "Superclasse", "spa": "Superclase", "eng": "Superclass"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_class_name",
+					"descripcio": {"cat": "Classe", "spa": "Classe", "eng": "Class"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_subclass_name",
+					"descripcio": {"cat": "Subclasse", "spa": "Subclase", "eng": "Subclass"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_superorder_name",
+					"descripcio": {"cat": "Superordre", "spa": "Superorden", "eng": "Superorder"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_order_name",
+					"descripcio": {"cat": "Ordre", "spa": "Orden", "eng": "Order"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_suborder_name",
+					"descripcio": {"cat": "Sudordre", "spa": "Suborden", "eng": "Suborder"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_superfamily_name",
+					"descripcio": {"cat": "Superfamília", "spa": "Superfamilia", "eng": "Superfamily"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_family_name",
+					"descripcio": "Familia",
+					"descripcio": {"cat": "Família", "spa": "Familia", "eng": "Family"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_subfamily_name",
+					"descripcio": {"cat": "Subfamília", "spa": "Subfamilia", "eng": "Subfamily"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_supertribe_name",
+					"descripcio": {"cat": "Supertribu", "spa": "Supertribu", "eng": "Supertribe"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_tribe_name",
+					"descripcio": {"cat": "Tribu", "spa": "Tribu", "eng": "Tribe"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_subtribe_name",
+					"descripcio": {"cat": "Subtribu", "spa": "Subtribu", "eng": "Subtribe"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_genus_name",
+					"descripcio": {"cat": "Gènere", "spa": "Género", "eng": "Genus"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_genushybrid_name",
+					"descripcio": {"cat": "Gènere híbrid", "spa": "Género híbrido", "eng": "Genus hybrid"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_species_name",
+					"descripcio": {"cat": "Espècie", "spa": "Especie", "eng": "Species"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_hybrid_name",
+					"descripcio": {"cat": "Híbrid", "spa": "Híbrido", "eng": "Hybrid"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_subspecies_name",
+					"descripcio": {"cat": "Subespècie", "spa": "Subespecie", "eng": "Subspecies"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_variety_name",
+					"descripcio": {"cat": "Varietat o raça", "spa": "Variedad o raza", "eng": "Variety or Race"},
+					"mostrar": true
+				},
+				{
+					"nom": "taxon_form_name",
+					"descripcio": {"cat": "Forma", "spa": "Forma", "eng": "Form"},
+					"mostrar": true
+				},
+				{
+					"separador": "<br>",
+					"nom": "FOCASIONAL",
+					"descripcio": {"cat": "Observació ocasional?", "spa": "¿Observación ocasional?", "eng": "Occasional observation"},
+					"mostrar": true
+				},
+				{
+					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Camps d'observació (en observacions recurrents)</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Campos de observación (en observaciones recurrentes)</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Camps d'observació (in recurrent observacions)</span><br>"},
+					"nom": "fid_observador",
+					"descripcio": {"cat": "Codi de l'observador", "spa": "Codigo del observador", "eng": "Observer code"},
+					"mostrar": true
+				},
+				{
+					"nom": "FID_POINT",
+					"descripcio": {"cat": "Codi del punt d'observació", "spa": "Código del punto de observación", "eng": "Code of the observation point"},
+					"mostrar": true
+				},
+				{
+					"nom": "FFENOFASE",
+					"descripcio": {"cat": "Fenofase", "spa": "Fenofase", "eng": "Phenophase"},
+					"mostrar": true
+				},
+				{
+					"nom": "fid_individu",
+					"descripcio": {"cat": "Identificador d'individu", "spa": "Identificador de individuo", "eng": "Individual identifier"},
+					"mostrar": true
+				},
+				{
+					"nom": "pos_acc_50",
+					"FormulaConsulta": "(p['positional_accuracy']>50)",
+					"descripcio": {"cat": "Exactitut major de 50", "spa": "Exactitud mayor de 50", "eng": "Accuracy bigger than 50"},
+					"mostrar": false
+				},
+				{
+					"nom": "20_cover",
+					"calcul": "{\"i_capa\": 7, \"i_valor\": 0}>20",
+					"descripcio": {"cat": "Categoria major de 20", "spa": "Categoría mayor de 20", "eng": "Category biggers that 20"},
+					"mostrar": false
+				}
+			],
+			"DescLlegenda": "Ritme Natura",
+			"separa": null, 
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc": "Scientific name",
+					"DescItems": null,
+					"TipusObj": "S",
+					"ItemLleg":
+					[
+						{
+							"color": "examples/gt20-img/rm/s/hirundo_rustica.png",
+							"DescColor": "Hirundo rustica"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/malus_domestica.png",
+							"DescColor": "Malus domestica"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/olea_europaea.png",
+							"DescColor": "Olea europaea"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/papaver_rhoeas.png",
+							"DescColor": "Papaver rhoeas"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/pinus_halepensis.png",
+							"DescColor": "Pinus halepensis"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/prunus_avium.png",
+							"DescColor": "Prunus avium"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/prunus_dulcis.png",
+							"DescColor": "Prunus dulcis"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/prunus_persica.png",
+							"DescColor": "Prunus persica"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/quercus_ilex.png",
+							"DescColor": "Quercus ilex"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/robinia_pseudoacacia.png",
+							"DescColor": "Robinia pseudoacacia"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/rosmarinus_officinalis.png",
+							"DescColor": "Rosmarinus officinalis"
+						},
+						{
+							"color": "examples/gt20-img/rm/s/spartium_junceum.png",
+							"DescColor": "Spartium junceum"
+						}
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"NomCamp": "scientific_name",
+						"simbol":
+						[
+							{
+								"ValorCamp": "Hirundo rustica",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/hirundo_rustica.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Malus domestica",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/malus_domestica.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},						
+							{
+								"DescColor": "Olea europaea",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/olea_europaea.png",									
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Papaver rhoeas",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/papaver_rhoeas.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Pinus halepensis",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/pinus_halepensis.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Prunus avium",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/prunus_avium.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Prunus dulcis",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/prunus_dulcis.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Prunus persica",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/prunus_persica.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Quercus ilex",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/quercus_ilex.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Robinia pseudoacacia",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/robinia_pseudoacacia.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Rosmarinus officinalis",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/rosmarinus_officinalis.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							},
+							{
+								"ValorCamp": "Spartium junceum",
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm/spartium_junceum.png",
+									"ncol": 25,
+									"nfil": 41,
+									"i": 12,
+									"j": 39
+								}
+							}
+						]
+					}
+				},
+				{
+					"nom": null,
+					"desc": "Accuracy > 50m",
+					"DescItems": "Site type",
+					"TipusObj": "S",
+					"ItemLleg":
+					[
+						{
+							"color": "examples/gt20-img/rm_s.png",
+							"DescColor":
+							{
+								"cat": "Observació",
+								"spa": "Observación",
+								"eng": "Observation"
+							}
+						}
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"NomCamp": "pos_acc_50",
+						"simbol":
+						[
+							{
+								"ValorCamp": true,
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm_red.png",
+									"ncol": 20,
+									"nfil": 30,
+									"i": 3,
+									"j": 29
+								}
+							},
+							{
+								"ValorCamp": false,
+								"icona":
+								{
+									"icona": "examples/gt20-img/rm.png",
+									"ncol": 20,
+									"nfil": 30,
+									"i": 3,
+									"j": 29
+								}
+							}							
+						]
+					}
+				}				
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"FormatImatge": "application/json",
+			"CostatMinim": 0.0000833333333333,
+			"CostatMaxim": 0.0166666666666667,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"consultable": "si",
+			"editable": "no",
+			"metadades": null
+		},
+		{
+			"namespace": "http://www.opengis.uab.cat",
+			"servidor": null,
+			"versio":
+			{
+				"Vers": 2,
+				"SubVers": 0,
+				"VariantVers": 0
+			},
+			"tipus": "TipusSOS",
+			"model": "vector",
+			"nom": "vatten-fokus",
+			"desc": "Vatten Fokus",
+			"CRSgeometry": "EPSG:4326",
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 16,
+					"MaxX": 20,
+					"MinY": 58,
+					"MaxY": 60					
+				},
+				"CRS": "EPSG:4326"
+			},			
+			"objectes": null,
+			"atributs":
+			[
+				{
+					"nom": "USER_ID",
+					"descripcio": "User ID",
+					"mostrar": true
+				},
+				{
+					"nom": "SAMPLE_ID",
+					"descripcio": "Sample ID",
+					"mostrar": true
+				},
+				{
+					"nom": "CREA_DATE",
+					"descripcio": "Creation Date",
+					"mostrar": true
+				},
+				{
+					"nom": "CHAN_DATE",
+					"descripcio": "Modification date",
+					"mostrar": true
+				},
+				{
+					"nom": "SAMPLEDATE",
+					"descripcio": "Sample date",
+					"mostrar": true
+				},
+				{
+					"nom": "GROUP_ID",
+					"descripcio": "Group ID",
+					"mostrar": true
+				},
+				{
+					"nom": "SITE_NAME",
+					"descripcio": "Site name",
+					"mostrar": true
+				},
+				{
+					"nom": "Sample_date_time",
+					"descripcio": "Sample date/time",
+					"mostrar": true
+				},
+				{
+					"nom": "N_PARTICIPANT",
+					"descripcio": "Total number of participants",
+					"mostrar": true
+				},
+				{
+					"nom": "NOTES",
+					"descripcio": "Notes",
+					"mostrar": true
+				},
+				{
+					"nom": "WATER_TYPE",
+					"descripcio": "Freshwater body type",
+					"mostrar": true
+				},
+				{
+					"nom": "OTHER_WATER_TYPE",
+					"descripcio": "Other freshwater body type",
+					"mostrar": true
+				},
+				{
+					"nom": "LAND_USE",
+					"descripcio": "Land use in the immediate surroundings",
+					"mostrar": true
+				},
+				{
+					"nom": "OTHER_LAND_USE",
+					"descripcio": "Other the land use in the immediate surroundings",
+					"mostrar": true
+				},
+				{
+					"nom": "BANK_VEGE",
+					"descripcio": "Bank vegetation",
+					"mostrar": true
+				},
+				{
+					"nom": "OTHER_BANK_VEGE",
+					"descripcio": "Other bank vegetation",
+					"mostrar": true
+				},
+				{
+					"nom": "ON_WATER",
+					"descripcio": "On the water surface",
+					"mostrar": true
+				},
+				{
+					"nom": "POPUT_SOURCES",
+					"descripcio": "Pollution sources in the immediate surroundings",
+					"mostrar": true
+				},
+				{
+					"nom": "WaterUses",
+					"descripcio": "Evidence of water uses",
+					"mostrar": true
+				},
+				{
+					"nom": "OTHER_WATER_USE",
+					"descripcio": "Other evidence of water uses",
+					"mostrar": true
+				},
+				{
+					"nom": "AQUATIC_LIVE",
+					"descripcio": "Evidence of aquatic life",
+					"mostrar": true
+				},
+				{
+					"nom": "OTHER_AQUATIC_LIVE",
+					"descripcio": "Other evidence of aquatic life",
+					"mostrar": true
+				},
+				{
+					"nom": "ALGUE",
+					"descripcio": "Algae presence",
+					"mostrar": true
+				},
+				{
+					"nom": "WATER_FLOW",
+					"descripcio": "Estimated the water flow",
+					"mostrar": true
+				},
+				{
+					"nom": "WATER_LEVEL",
+					"descripcio": "Estimated water level",
+					"mostrar": true
+				},
+				{
+					"nom": "NITRATE",
+					"descripcio": "Nitrate",
+					"unitats": "mg/L",
+					"mostrar": true
+				},
+				{
+					"nom": "PHOSPHATE",
+					"descripcio": "Phosphate",
+					"unitats": "mg/L",
+					"mostrar": true
+				},
+				{
+					"nom": "TURBIDITY",
+					"descripcio": "Water Quality Secchi Tube (Turbidity)",
+					"mostrar": true
+				},
+				{
+					"nom": "RESULT",
+					"descripcio": "Result",
+					"mostrar": true
+				},
+				{
+					"nom": "WATER_COLOR",
+					"descripcio": "Estimated water colour",
+					"mostrar": true
+				},
+				{
+					"nom": "WATER_COLOR_NUM",
+					"mostrar": false,
+					"FormulaConsulta": "(p['WATER_COLOR']=='Colourless' ? 0 : (p['WATER_COLOR']=='Brown' ? 1 : (p['WATER_COLOR']=='Yellow' ? 2 :(p['WATER_COLOR']=='Green' ? 3 :(p['WATER_COLOR']=='Other' ? 4 : '')))))"
+				},
+				{
+					"nom": "OTHER_WATER_COLOR",
+					"descripcio": "Other estimated water colour",
+					"mostrar": true
+				}
+			],
+			"DescLlegenda": "Vatten Fokus",
+			"separa": null,
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc": "Nitrate",
+					"DescItems": "mg/L",
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#0088FF",
+							"DescColor": "Clean waters. No risk of eutrophication"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Water at risk of eutrophication"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Polluted waters. Risk of strong eutrophication"
+						}
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 6
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "NITRATE",
+						"paleta": {
+							"comment": "Using UB Color Codes: http://www.ub.edu/barcelonarius/web/index.php/metodologia/36-indicadors-fisicoquimics",
+							"colors": [
+								"#000040", 
+								"#001966", 
+								"#00338C", 
+								"#004CB2", 
+								"#0066D8", 
+								"#0080FF", 
+								"#0582F9", 
+								"#0B85F3", 
+								"#1188EE", 
+								"#168BE8", 
+								"#1C8EE2", 
+								"#2290DD", 
+								"#2793D7", 
+								"#2D96D1", 
+								"#3399CC", 
+								"#389CC6", 
+								"#3E9FC0", 
+								"#44A1BB", 
+								"#49A4B5", 
+								"#4FA7AF", 
+								"#55AAAA", 
+								"#5AADA4", 
+								"#60AF9E", 
+								"#66B299", 
+								"#6BB593", 
+								"#71B88D", 
+								"#77BB88", 
+								"#7CBE82", 
+								"#82C07C", 
+								"#88C377", 
+								"#8DC671", 
+								"#93C96B", 
+								"#99CC66", 
+								"#9ECF60", 
+								"#A4D15A", 
+								"#AAD455", 
+								"#AFD74F", 
+								"#B5DA49", 
+								"#BBDD44", 
+								"#C0DF3E", 
+								"#C6E238", 
+								"#CCE533", 
+								"#D1E82D", 
+								"#D7EB27", 
+								"#DDEE22", 
+								"#E2F01C", 
+								"#E8F316", 
+								"#EEF611", 
+								"#F3F90B", 
+								"#F9FC05", 
+								"#FFFF00", 
+								"#FFF600", 
+								"#FFEE00", 
+								"#FFE500", 
+								"#FFDD00", 
+								"#FFD400", 
+								"#FFCC00", 
+								"#FFC300", 
+								"#FFBB00", 
+								"#FFB200", 
+								"#FFAA00", 
+								"#FFA100", 
+								"#FF9900", 
+								"#FF9000", 
+								"#FF8800", 
+								"#FF7F00", 
+								"#FF7700", 
+								"#FF6E00", 
+								"#FF6600", 
+								"#FF5D00", 
+								"#FF5500", 
+								"#FF4C00", 
+								"#FF4400", 
+								"#FF3B00", 
+								"#FF3300", 
+								"#FF2A00", 
+								"#FF2200", 
+								"#FF1900", 
+								"#FF1100", 
+								"#FF0800", 
+								"#FF0000"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 1.6,
+							"valorMinim": 0
+						}
+					}
+				},
+				{
+					"nom": null,
+					"desc": "Phosphate",
+					"DescItems": "mg/L",
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#0088FF",
+							"DescColor": "Clean waters. No risk of eutrophication"
+						},
+						{
+							"color": "#00FF44",
+							"DescColor": "Waters with slight symptoms of eutrophication"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Waters likely with significant plant growths"
+						},
+						{
+							"color": "#FF8800",
+							"DescColor": "Eutrophicated waters"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Very eutrophicated waters"
+						}
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 6
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "PHOSPHATE",
+						"paleta": {
+							"comment": "Using UB Color Codes: http://www.ub.edu/barcelonarius/web/index.php/metodologia/fq/fosfats",
+							"colors": [
+								"#000040", 
+								"#002A7F", 
+								"#0055BF", 
+								"#0080FF", 
+								"#0095DF", 
+								"#00AABF", 
+								"#00BF9F", 
+								"#00D47F", 
+								"#00E95F", 
+								"#00FF40", 
+								"#0CFF3C", 
+								"#19FF39", 
+								"#26FF36", 
+								"#33FF33", 
+								"#3FFF30", 
+								"#4CFF2C", 
+								"#59FF29", 
+								"#66FF26", 
+								"#72FF23", 
+								"#7FFF20", 
+								"#8CFF1C", 
+								"#99FF19", 
+								"#A5FF16", 
+								"#B2FF13", 
+								"#BFFF10", 
+								"#CCFF0C", 
+								"#D8FF09", 
+								"#E5FF06", 
+								"#F2FF03", 
+								"#FFFF00", 
+								"#FFF800", 
+								"#FFF200", 
+								"#FFEB00", 
+								"#FFE501", 
+								"#FFDF01", 
+								"#FFD801", 
+								"#FFD201", 
+								"#FFCC02", 
+								"#FFC502", 
+								"#FFBF02", 
+								"#FFB902", 
+								"#FFB203", 
+								"#FFAC03", 
+								"#FFA603", 
+								"#FF9F03", 
+								"#FF9904", 
+								"#FF9304", 
+								"#FF8C04", 
+								"#FF8604", 
+								"#FF8005", 
+								"#FF7904", 
+								"#FF7304", 
+								"#FF6D04", 
+								"#FF6704", 
+								"#FF6103", 
+								"#FF5B03", 
+								"#FF5503", 
+								"#FF4F03", 
+								"#FF4902", 
+								"#FF4302", 
+								"#FF3C02", 
+								"#FF3602", 
+								"#FF3001", 
+								"#FF2A01", 
+								"#FF2401", 
+								"#FF1E01", 
+								"#FF1800", 
+								"#FF1200", 
+								"#FF0C00", 
+								"#FF0600", 
+								"#FF0000"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 0.7,
+							"valorMinim": 0
+						}
+					}
+				},				
+				{
+					"nom": null,
+					"desc": "Water color",
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#FFFFFF",
+							"DescColor": "Colourless"
+						},
+						{
+							"color": "#804000",
+							"DescColor": "Brown"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Yellow"
+						},
+						{
+							"color": "#00FF00",
+							"DescColor": "Green"
+						},
+						{
+							"color": "#808080",
+							"DescColor": "Other"
+						}						
+					],
+					"ncol": 1,
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 6
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "WATER_COLOR_NUM",
+						"paleta": {
+							"colors": [
+								"#FFFFFF",
+								"#804000",
+								"#FFFF00",
+								"#00FF00",
+								"#808080"
+							]
+						}
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"CostatMinim": 0.0000833333333333,
+			"CostatMaxim": 0.0166666666666667,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"consultable": "si",
+			"editable": "no",
+			"metadades": null
+		},
+		{
+			"namespace": "http://www.opengis.uab.cat",
+			"servidor": null,
+			"versio":
+			{
+				"Vers": 2,
+				"SubVers": 0,
+				"VariantVers": 0
+			},
+			"tipus": "TipusSOS",
+			"model": "vector",
+			"nom": "meet-mee-mechelen",
+			"desc": "Meet Mee Mechelen",
+			"CRSgeometry": "EPSG:4326",
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 4.33,
+					"MaxX": 4.59,
+					"MinY": 50.9,
+					"MaxY": 51.13
+				},
+				"CRS": "EPSG:4326"
+			},
+			"FormatImatge": "application/json",
+			"objectes": null,
+			"atributs":
+			[
+				{
+					"nom": "CAMPAIGN",
+					"descripcio": "Campaign period",
+					"mostrar": true
+				},
+				{
+					"nom": "street_nam",
+					"descripcio": "Street number",
+					"mostrar": false
+				},
+				{
+					"nom": "time_first",
+					"descripcio": "Date and time of the first observation",
+					"mostrar": true
+				},
+				{
+					"nom": "time_last",
+					"descripcio": "Date and time the last observation",
+					"mostrar": true
+				},
+				{
+					"nom": "bc_aggr",
+					"descripcio": "Mean black carbon concentration",
+					"unitats": "ng/m³",
+					"mostrar": true
+				},
+				{
+					"nom": "bc_aggr_mi",
+					"descripcio": "Minimum black carbon concentration",
+					"unitats": "ng/m³",
+					"mostrar": true
+				},
+				{
+					"nom": "bc_aggr_ma",
+					"descripcio": "Maximum black carbon concentration",
+					"unitats": "ng/m³",
+					"mostrar": true
+				},
+				{
+					"nom": "bc_aggr_st",
+					"descripcio": "Standard deviation of the black carbon concentration",
+					"unitats": "ng/m³",
+					"mostrar": true
+				},
+				{
+					"nom": "number_of_",
+					"descripcio": "Total number of observations",
+					"mostrar": true
+				},
+				{
+					"nom": "number_o_1",
+					"descripcio": "Number of days with observations",
+					"mostrar": true
+				},
+				{
+					"nom": "mean_numbe",
+					"descripcio": " Average time-length per observation",
+					"unitats": "s",
+					"mostrar": false
+				},
+				{
+					"nom": "uncertaint",
+					"comentari": "t d'student explicada a: https://en.wikipedia.org/wiki/Student%27s_t-distribution considerant 10 mostres",
+					"descripcio": "Uncertainty on average (stan_dev/sqrt(n))* 2.228/mean)",
+					"mostrar": true
+				},
+				{
+					"nom": "uncertaint95",
+					"descripcio": "Uncertainty (half length conf. interval at 95% confidence)",
+					"unitats": "ng/m³",					
+					"FormulaConsulta": "p['uncertaint']*p['bc_aggr']",
+					"mostrar": true
+				},
+				{
+					"nom": "Oct-Nov2017",
+					"descripcio": "Campaign 1 (Oct-Nov2017)",
+					"FormulaConsulta": "p['CAMPAIGN']=='Oct-Nov2017'",
+					"mostrar": false
+				},
+				{
+					"nom": "Feb-Mar2018",
+					"descripcio": "Campaign 2 (Feb-Mar2018)",
+					"FormulaConsulta": "p['CAMPAIGN']=='Feb-Mar2018'",
+					"mostrar": false
+				},
+				{
+					"nom": "Jun-Jul2018",
+					"descripcio": "Campaign 3 (Jun-Jul2018)",
+					"FormulaConsulta": "p['CAMPAIGN']=='Jun-Jul2018'",
+					"mostrar": false
+				},
+				{
+					"nom": "Sep2018",
+					"descripcio": "Campaign 4 (Sep2018)",
+					"FormulaConsulta": "p['CAMPAIGN']=='Sep2018'",
+					"mostrar": false
+				}
+			],
+			"DescLlegenda": "Meet Mee Mechelen",
+			"separa": null,
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc": "Sep2018",
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#008000",
+							"DescColor": "Good"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Moderate"
+						},
+						{
+							"color": "#FF6600", 
+							"DescColor": "High"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Very high"
+						},
+						{
+							"color": "#800080",
+							"DescColor": "Unheathy"
+						}
+					],
+					"ncol": 1,
+					"NomCampSel": "Sep2018",
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 3
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "bc_aggr",
+						"paleta": {
+							"comment": "Using the USDA Air Quality Index Color Code: https://webcam.srs.fs.fed.us/test/AQI.shtml",
+							"colors": [
+								"#008000", 
+								"#0C8600", 
+								"#198C00", 
+								"#269300", 
+								"#339900", 
+								"#3F9F00", 
+								"#4CA600", 
+								"#59AC00", 
+								"#66B200", 
+								"#72B900", 
+								"#7FBF00", 
+								"#8CC500", 
+								"#99CC00", 
+								"#A5D200", 
+								"#B2D800", 
+								"#BFDF00", 
+								"#CCE500", 
+								"#D8EB00", 
+								"#E5F200", 
+								"#F2F800", 
+								"#FFFF00", 
+								"#FFF700", 
+								"#FFEF00", 
+								"#FFE800", 
+								"#FFE000", 
+								"#FFD800", 
+								"#FFD100", 
+								"#FFC900", 
+								"#FFC100", 
+								"#FFBA00", 
+								"#FFB200", 
+								"#FFAA00", 
+								"#FFA300", 
+								"#FF9B00", 
+								"#FF9300", 
+								"#FF8C00", 
+								"#FF8400", 
+								"#FF7C00", 
+								"#FF7500", 
+								"#FF6D00", 
+								"#FF6600", 
+								"#FF6000", 
+								"#FF5B00", 
+								"#FF5600", 
+								"#FF5100", 
+								"#FF4C00", 
+								"#FF4700", 
+								"#FF4200", 
+								"#FF3D00", 
+								"#FF3800", 
+								"#FF3300", 
+								"#FF2D00", 
+								"#FF2800", 
+								"#FF2300", 
+								"#FF1E00", 
+								"#FF1900", 
+								"#FF1400", 
+								"#FF0F00", 
+								"#FF0A00", 
+								"#FF0500", 
+								"#FF0000", 
+								"#F80006", 
+								"#F2000C", 
+								"#EB0013", 
+								"#E50019", 
+								"#DF0020", 
+								"#D80026", 
+								"#D2002C", 
+								"#CC0033", 
+								"#C50039", 
+								"#BF0040", 
+								"#B90046", 
+								"#B2004C", 
+								"#AC0053", 
+								"#A60059", 
+								"#9F0060", 
+								"#990066", 
+								"#93006C", 
+								"#8C0073", 
+								"#860079", 
+								"#800080"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 15000,
+							"valorMinim": 0
+						}
+					}
+				},
+				{
+					"nom": null,
+					"desc": "Jun-Jul2018",
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#008000",
+							"DescColor": "Good"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Moderate"
+						},
+						{
+							"color": "#FF6600", 
+							"DescColor": "High"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Very high"
+						},
+						{
+							"color": "#800080",
+							"DescColor": "Unheathy"
+						}
+					],
+					"ncol": 1,
+					"NomCampSel": "Jun-Jul2018",
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 3
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "bc_aggr",
+						"paleta": {
+							"comment": "Using the USDA Air Quality Index Color Code: https://webcam.srs.fs.fed.us/test/AQI.shtml",
+							"colors": [
+								"#008000", 
+								"#0C8600", 
+								"#198C00", 
+								"#269300", 
+								"#339900", 
+								"#3F9F00", 
+								"#4CA600", 
+								"#59AC00", 
+								"#66B200", 
+								"#72B900", 
+								"#7FBF00", 
+								"#8CC500", 
+								"#99CC00", 
+								"#A5D200", 
+								"#B2D800", 
+								"#BFDF00", 
+								"#CCE500", 
+								"#D8EB00", 
+								"#E5F200", 
+								"#F2F800", 
+								"#FFFF00", 
+								"#FFF700", 
+								"#FFEF00", 
+								"#FFE800", 
+								"#FFE000", 
+								"#FFD800", 
+								"#FFD100", 
+								"#FFC900", 
+								"#FFC100", 
+								"#FFBA00", 
+								"#FFB200", 
+								"#FFAA00", 
+								"#FFA300", 
+								"#FF9B00", 
+								"#FF9300", 
+								"#FF8C00", 
+								"#FF8400", 
+								"#FF7C00", 
+								"#FF7500", 
+								"#FF6D00", 
+								"#FF6600", 
+								"#FF6000", 
+								"#FF5B00", 
+								"#FF5600", 
+								"#FF5100", 
+								"#FF4C00", 
+								"#FF4700", 
+								"#FF4200", 
+								"#FF3D00", 
+								"#FF3800", 
+								"#FF3300", 
+								"#FF2D00", 
+								"#FF2800", 
+								"#FF2300", 
+								"#FF1E00", 
+								"#FF1900", 
+								"#FF1400", 
+								"#FF0F00", 
+								"#FF0A00", 
+								"#FF0500", 
+								"#FF0000", 
+								"#F80006", 
+								"#F2000C", 
+								"#EB0013", 
+								"#E50019", 
+								"#DF0020", 
+								"#D80026", 
+								"#D2002C", 
+								"#CC0033", 
+								"#C50039", 
+								"#BF0040", 
+								"#B90046", 
+								"#B2004C", 
+								"#AC0053", 
+								"#A60059", 
+								"#9F0060", 
+								"#990066", 
+								"#93006C", 
+								"#8C0073", 
+								"#860079", 
+								"#800080"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 15000,
+							"valorMinim": 0
+						}
+					}
+				},
+				{
+					"nom": null,
+					"desc": "Feb-Mar2018",
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#008000",
+							"DescColor": "Good"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Moderate"
+						},
+						{
+							"color": "#FF6600", 
+							"DescColor": "High"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Very high"
+						},
+						{
+							"color": "#800080",
+							"DescColor": "Unheathy"
+						}
+					],
+					"ncol": 1,
+					"NomCampSel": "Feb-Mar2018",
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 3
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "bc_aggr",
+						"paleta": {
+							"comment": "Using the USDA Air Quality Index Color Code: https://webcam.srs.fs.fed.us/test/AQI.shtml",
+							"colors": [
+								"#008000", 
+								"#0C8600", 
+								"#198C00", 
+								"#269300", 
+								"#339900", 
+								"#3F9F00", 
+								"#4CA600", 
+								"#59AC00", 
+								"#66B200", 
+								"#72B900", 
+								"#7FBF00", 
+								"#8CC500", 
+								"#99CC00", 
+								"#A5D200", 
+								"#B2D800", 
+								"#BFDF00", 
+								"#CCE500", 
+								"#D8EB00", 
+								"#E5F200", 
+								"#F2F800", 
+								"#FFFF00", 
+								"#FFF700", 
+								"#FFEF00", 
+								"#FFE800", 
+								"#FFE000", 
+								"#FFD800", 
+								"#FFD100", 
+								"#FFC900", 
+								"#FFC100", 
+								"#FFBA00", 
+								"#FFB200", 
+								"#FFAA00", 
+								"#FFA300", 
+								"#FF9B00", 
+								"#FF9300", 
+								"#FF8C00", 
+								"#FF8400", 
+								"#FF7C00", 
+								"#FF7500", 
+								"#FF6D00", 
+								"#FF6600", 
+								"#FF6000", 
+								"#FF5B00", 
+								"#FF5600", 
+								"#FF5100", 
+								"#FF4C00", 
+								"#FF4700", 
+								"#FF4200", 
+								"#FF3D00", 
+								"#FF3800", 
+								"#FF3300", 
+								"#FF2D00", 
+								"#FF2800", 
+								"#FF2300", 
+								"#FF1E00", 
+								"#FF1900", 
+								"#FF1400", 
+								"#FF0F00", 
+								"#FF0A00", 
+								"#FF0500", 
+								"#FF0000", 
+								"#F80006", 
+								"#F2000C", 
+								"#EB0013", 
+								"#E50019", 
+								"#DF0020", 
+								"#D80026", 
+								"#D2002C", 
+								"#CC0033", 
+								"#C50039", 
+								"#BF0040", 
+								"#B90046", 
+								"#B2004C", 
+								"#AC0053", 
+								"#A60059", 
+								"#9F0060", 
+								"#990066", 
+								"#93006C", 
+								"#8C0073", 
+								"#860079", 
+								"#800080"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 15000,
+							"valorMinim": 0
+						}
+					}
+				},
+				{
+					"nom": null,
+					"desc": "Oct-Nov2017",
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#008000",
+							"DescColor": "Good"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "Moderate"
+						},
+						{
+							"color": "#FF6600", 
+							"DescColor": "High"
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": "Very high"
+						},
+						{
+							"color": "#800080",
+							"DescColor": "Unheathy"
+						}
+					],
+					"ncol": 1,
+					"NomCampSel": "Oct-Nov2017",
+					"simbols":
+					{
+						"simbol":
+						[
+							{
+								"icona":
+								{
+									"type": "circle",
+									"r": 3
+								}
+							}
+						]
+					},
+					"interior":
+					{
+						"NomCamp": "bc_aggr",
+						"paleta": {
+							"comment": "Using the USDA Air Quality Index Color Code: https://webcam.srs.fs.fed.us/test/AQI.shtml",
+							"colors": [
+								"#008000", 
+								"#0C8600", 
+								"#198C00", 
+								"#269300", 
+								"#339900", 
+								"#3F9F00", 
+								"#4CA600", 
+								"#59AC00", 
+								"#66B200", 
+								"#72B900", 
+								"#7FBF00", 
+								"#8CC500", 
+								"#99CC00", 
+								"#A5D200", 
+								"#B2D800", 
+								"#BFDF00", 
+								"#CCE500", 
+								"#D8EB00", 
+								"#E5F200", 
+								"#F2F800", 
+								"#FFFF00", 
+								"#FFF700", 
+								"#FFEF00", 
+								"#FFE800", 
+								"#FFE000", 
+								"#FFD800", 
+								"#FFD100", 
+								"#FFC900", 
+								"#FFC100", 
+								"#FFBA00", 
+								"#FFB200", 
+								"#FFAA00", 
+								"#FFA300", 
+								"#FF9B00", 
+								"#FF9300", 
+								"#FF8C00", 
+								"#FF8400", 
+								"#FF7C00", 
+								"#FF7500", 
+								"#FF6D00", 
+								"#FF6600", 
+								"#FF6000", 
+								"#FF5B00", 
+								"#FF5600", 
+								"#FF5100", 
+								"#FF4C00", 
+								"#FF4700", 
+								"#FF4200", 
+								"#FF3D00", 
+								"#FF3800", 
+								"#FF3300", 
+								"#FF2D00", 
+								"#FF2800", 
+								"#FF2300", 
+								"#FF1E00", 
+								"#FF1900", 
+								"#FF1400", 
+								"#FF0F00", 
+								"#FF0A00", 
+								"#FF0500", 
+								"#FF0000", 
+								"#F80006", 
+								"#F2000C", 
+								"#EB0013", 
+								"#E50019", 
+								"#DF0020", 
+								"#D80026", 
+								"#D2002C", 
+								"#CC0033", 
+								"#C50039", 
+								"#BF0040", 
+								"#B90046", 
+								"#B2004C", 
+								"#AC0053", 
+								"#A60059", 
+								"#9F0060", 
+								"#990066", 
+								"#93006C", 
+								"#8C0073", 
+								"#860079", 
+								"#800080"
+							]
+						},
+						"estiramentPaleta": {
+							"valorMaxim": 15000,
+							"valorMinim": 0
+						}
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"CostatMinim": 0.00000833333333333,
+			"CostatMaxim": 0.0166666666666667,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"consultable": "si",
+			"editable": "no",
+			"metadades": null
+		},
+		{
+			"comentari1": "Extret de: https://home.geointservices.io/trainings/openstreetmap",
+			"servidor": "https://osm.geointservices.io/tiles/default_pc",
+			"versio":
+			{
+				"Vers": 1,
+				"SubVers": 0,
+				"VariantVers": 0
+			},
+			"tipus": "TipusWMTS_REST",
+			"nom": "geointservices",
+			"desc": "Open Street Map from GEOINT services",
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.000000670552253723145,
+			"CostatMaxim": 0.0109863281250,
+			"TileMatrixSet": [
+				{
+					"nom": "tiles",
+					"CRS": "EPSG:4326",
+					"URLTemplate": "https://osm.geointservices.io/tiles/{style}/{TileMatrix}/{TileCol}/{TileRow}.png",
+					"TileMatrix": [
+{"Identifier": "0", "costat": 0.703125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2, "MatrixHeight": 1},
+{"Identifier": "1", "costat": 0.3515625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 4, "MatrixHeight": 2},
+{"Identifier": "2", "costat": 0.17578125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 8, "MatrixHeight": 4},
+{"Identifier": "3", "costat": 0.087890625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 16, "MatrixHeight": 8},
+{"Identifier": "4", "costat": 0.0439453125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 32, "MatrixHeight": 16},
+{"Identifier": "5", "costat": 0.02197265625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 64, "MatrixHeight": 32},
+{"Identifier": "6", "costat": 0.010986328125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 128, "MatrixHeight": 64},
+{"Identifier": "7", "costat": 0.0054931640625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 256, "MatrixHeight": 128},
+{"Identifier": "8", "costat": 0.00274658203125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 512, "MatrixHeight": 256},
+{"Identifier": "9", "costat": 0.001373291015625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 1024, "MatrixHeight": 512},
+{"Identifier": "10", "costat": 0.0006866455078125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2048, "MatrixHeight": 1024},
+{"Identifier": "11", "costat": 0.00034332275390625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 4096, "MatrixHeight": 2048},
+{"Identifier": "12", "costat": 0.000171661376953125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 8192, "MatrixHeight": 4096},
+{"Identifier": "13", "costat": 0.0000858306884765625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 16384, "MatrixHeight": 8192},
+{"Identifier": "14", "costat": 0.0000429153442382812, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 32768, "MatrixHeight": 16384},
+{"Identifier": "15", "costat": 0.0000214576721191406, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 65536, "MatrixHeight": 32768},
+{"Identifier": "16", "costat": 0.0000107288360595703, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 131072, "MatrixHeight": 65536},
+{"Identifier": "17", "costat": 0.00000536441802978516, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 262144, "MatrixHeight": 131072},
+{"Identifier": "18", "costat": 0.00000268220901489258, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 524288, "MatrixHeight": 262144},
+{"Identifier": "19", "costat": 0.00000134110450744629, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 1048576, "MatrixHeight": 524288},
+{"Identifier": "20", "costat": 0.000000670552253723145, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2097152, "MatrixHeight": 1048576}
+					]
+				}
+			],
+			"transparencia": "transparent",
+			"FormatConsulta": null,
+			"grup": null,
+			"separa":
+			{
+				"cat": "<hr align=\"left\" width=\"240\"><b>Cartografia de referència</b>",
+				"spa": "<hr align=\"left\" width=\"240\"><b>Cartografía de referencia</b>",
+				"eng": "<hr align=\"left\" width=\"240\"><b>Reference layers</b>"
+			},
+			"DescLlegenda": "OSM",
+			"estil":
+			[
+				{
+					"nom": "default_pc",
+					"desc": "Default",
+					"DescItems": null,
+					"TipusObj": "I",
+					"metadades": null,
+					"ncol": 1
+				},
+				{
+					"nom": "bright_pc",
+					"desc": "Bright",
+					"DescItems": null,
+					"TipusObj": "I",
+					"metadades": null,
+					"ncol": 1
+				}				
+			],
+			"i_estil": 1,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"comentari1": "Extret de: https://home.geointservices.io/trainings/openstreetmap",
+			"servidor": "https://osm.geointservices.io/tiles/default_pc",
+			"versio":
+			{
+				"Vers": 1,
+				"SubVers": 0,
+				"VariantVers": 0
+			},
+			"tipus": "TipusWMTS_REST",
+			"nom": "geointservices",
+			"desc": "Open Street Map from GEOINT services",
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.021972656250,
+			"CostatMaxim": 0.7031250,
+			"TileMatrixSet": [
+				{
+					"nom": "tiles",
+					"CRS": "EPSG:4326",
+					"URLTemplate": "https://osm.geointservices.io/tiles/{style}/{TileMatrix}/{TileCol}/{TileRow}.png",
+					"TileMatrix": [
+{"Identifier": "0", "costat": 0.703125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2, "MatrixHeight": 1},
+{"Identifier": "1", "costat": 0.3515625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 4, "MatrixHeight": 2},
+{"Identifier": "2", "costat": 0.17578125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 8, "MatrixHeight": 4},
+{"Identifier": "3", "costat": 0.087890625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 16, "MatrixHeight": 8},
+{"Identifier": "4", "costat": 0.0439453125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 32, "MatrixHeight": 16},
+{"Identifier": "5", "costat": 0.02197265625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 64, "MatrixHeight": 32},
+{"Identifier": "6", "costat": 0.010986328125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 128, "MatrixHeight": 64},
+{"Identifier": "7", "costat": 0.0054931640625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 256, "MatrixHeight": 128},
+{"Identifier": "8", "costat": 0.00274658203125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 512, "MatrixHeight": 256},
+{"Identifier": "9", "costat": 0.001373291015625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 1024, "MatrixHeight": 512},
+{"Identifier": "10", "costat": 0.0006866455078125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2048, "MatrixHeight": 1024},
+{"Identifier": "11", "costat": 0.00034332275390625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 4096, "MatrixHeight": 2048},
+{"Identifier": "12", "costat": 0.000171661376953125, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 8192, "MatrixHeight": 4096},
+{"Identifier": "13", "costat": 0.0000858306884765625, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 16384, "MatrixHeight": 8192},
+{"Identifier": "14", "costat": 0.0000429153442382812, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 32768, "MatrixHeight": 16384},
+{"Identifier": "15", "costat": 0.0000214576721191406, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 65536, "MatrixHeight": 32768},
+{"Identifier": "16", "costat": 0.0000107288360595703, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 131072, "MatrixHeight": 65536},
+{"Identifier": "17", "costat": 0.00000536441802978516, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 262144, "MatrixHeight": 131072},
+{"Identifier": "18", "costat": 0.00000268220901489258, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 524288, "MatrixHeight": 262144},
+{"Identifier": "19", "costat": 0.00000134110450744629, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 1048576, "MatrixHeight": 524288},
+{"Identifier": "20", "costat": 0.000000670552253723145, "TopLeftPoint": {"x": -180, "y": 90}, "TileWidth": 256, "TileHeight": 256, "MatrixWidth": 2097152, "MatrixHeight": 1048576}
+					]
+				}
+			],
+			"transparencia": "transparent",
+			"FormatConsulta": null,
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": "OSM",
+			"estil":
+			[
+				{
+					"nom": "default_pc",
+					"desc": "Default",
+					"DescItems": null,
+					"TipusObj": "I",
+					"metadades": null,
+					"ncol": 1
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		}
+	]
+}

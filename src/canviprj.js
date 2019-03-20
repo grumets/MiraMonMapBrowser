@@ -28,6 +28,7 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
 
 var FactorGrausARadiants=0.0174532925199432957692369076848   //M_PI/180
 var FactorRadiantsAGraus=57.295779513082320876798154814105   //180/M_PI
@@ -123,25 +124,19 @@ function LambertConformal_Funcio_14_15_Snyder(e2, fi)
 {
 var retorn;
 
-	with(Math)
-	{
-		var sin_fi=sin(fi);
-		retorn=(cos(fi)/sqrt(1.0-e2*sin_fi*sin_fi));
-	}
+	var sin_fi=Math.sin(fi);
+	retorn=(Math.cos(fi)/Math.sqrt(1.0-e2*sin_fi*sin_fi));
 	return retorn;
 }
 
 function LambertConformal_Funcio_15_9a_Snyder(e, fi)
 {
 var retorn;
-	with(Math)
-	{
-		var sin_fi=sin(fi);
-		if (sin_fi>-1.0+0.00001)
-			retorn=sqrt(((1.0-sin_fi)/(1.0+sin_fi))*pow((1.0+e*sin_fi)/(1.0-e*sin_fi), e));
-		else
-			retorn=0;  //-MAXDOUBLE;
-	}
+	var sin_fi=Math.sin(fi);
+	if (sin_fi>-1.0+0.00001)
+		retorn=Math.sqrt(((1.0-sin_fi)/(1.0+sin_fi))*Math.pow((1.0+e*sin_fi)/(1.0-e*sin_fi), e));
+	else
+		retorn=0;  //-MAXDOUBLE;
 	return retorn;
 }
 
@@ -289,18 +284,16 @@ var crs_up=crs.toUpperCase();
     CanviCRS.fi_1=0*FactorGrausARadiants;
   }
   
-  with(Math)
-  {
-    if (crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031")
-    {
+	if (crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031")
+	{
 		CanviCRS.radi_a=6378388.0;
-    	CanviCRS.u_sobre_f=297.0;
-    }
-    else
-    {
+		CanviCRS.u_sobre_f=297.0;
+	}
+	else
+	{
 		CanviCRS.radi_a=6378137.0;
 		CanviCRS.u_sobre_f=298.257223563;
-    }
+	}
     CanviCRS.radi_b=((CanviCRS.u_sobre_f)?((CanviCRS.radi_a)-(CanviCRS.radi_a)/(CanviCRS.u_sobre_f)):CanviCRS.radi_a);
     CanviCRS.e2=(CanviCRS.radi_a*CanviCRS.radi_a - CanviCRS.radi_b*CanviCRS.radi_b)/(CanviCRS.radi_a*CanviCRS.radi_a);
     CanviCRS.e4=CanviCRS.e2*CanviCRS.e2;
@@ -308,7 +301,7 @@ var crs_up=crs.toUpperCase();
     CanviCRS.e8=CanviCRS.e4*CanviCRS.e4;
     CanviCRS.ep2=CanviCRS.e2/(1-CanviCRS.e2);
 
-    CanviCRS.e1=(1.0-sqrt(1.0-CanviCRS.e2))/(1.0+sqrt(1.0-CanviCRS.e2));
+    CanviCRS.e1=(1.0-Math.sqrt(1.0-CanviCRS.e2))/(1.0+Math.sqrt(1.0-CanviCRS.e2));
     CanviCRS.e1_sobre2=CanviCRS.e1*CanviCRS.e1;
     CanviCRS.e1_sobre3=CanviCRS.e1_sobre2*CanviCRS.e1;
     CanviCRS.e1_sobre4=CanviCRS.e1_sobre2*CanviCRS.e1_sobre2;
@@ -318,15 +311,15 @@ var crs_up=crs.toUpperCase();
         crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
         crs_up=="EPSG:32736")
     {
-        CanviCRS.m0=CanviCRS.radi_a*((1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0)*(CanviCRS.fi_0)-((3.0*CanviCRS.e2/8.0+3.0*CanviCRS.e4/32.0+45.0*CanviCRS.e6/1024.0)*sin(2.0*CanviCRS.fi_0)) +
-    		(15.0*CanviCRS.e4/256.0+45.0*CanviCRS.e6/1024.0)*sin(4.0*CanviCRS.fi_0)-((35.0*CanviCRS.e6/3072.0)*sin(6.0*CanviCRS.fi_0)));
+        CanviCRS.m0=CanviCRS.radi_a*((1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0)*(CanviCRS.fi_0)-((3.0*CanviCRS.e2/8.0+3.0*CanviCRS.e4/32.0+45.0*CanviCRS.e6/1024.0)*Math.sin(2.0*CanviCRS.fi_0)) +
+    		(15.0*CanviCRS.e4/256.0+45.0*CanviCRS.e6/1024.0)*Math.sin(4.0*CanviCRS.fi_0)-((35.0*CanviCRS.e6/3072.0)*Math.sin(6.0*CanviCRS.fi_0)));
 		CanviCRS.ap = CanviCRS.radi_a*CanviCRS.c_tissot;
 		CanviCRS.bp = CanviCRS.radi_b*CanviCRS.c_tissot;
 
-		CanviCRS.A = 1 + CanviCRS.e2*3/4 + CanviCRS.e2*CanviCRS.e2*45/64 + pow(CanviCRS.e2,3)*175/256 + pow(CanviCRS.e2,4)*11025/16384 + pow(CanviCRS.e2,5)*43659/65536;
-		CanviCRS.B_sobre_2 = (CanviCRS.e2*3/4 + CanviCRS.e2*CanviCRS.e2*15/16 + pow(CanviCRS.e2,3)*525/512 + pow(CanviCRS.e2,4)*2205/2048 + pow(CanviCRS.e2,5)*72765/65536) / 2;
-		CanviCRS.C_sobre_4 = (CanviCRS.e2*CanviCRS.e2*15/64 + pow(CanviCRS.e2,3)*105/256 + pow(CanviCRS.e2,4)*2205/4096 + pow(CanviCRS.e2,5)*10395/16384) / 4;
-		CanviCRS.D_sobre_6 = (pow(CanviCRS.e2,3)*35/512 + pow(CanviCRS.e2,4)*315/2048 + pow(CanviCRS.e2,5)*31185/131072) / 6;
+		CanviCRS.A = 1 + CanviCRS.e2*3/4 + CanviCRS.e2*CanviCRS.e2*45/64 + Math.pow(CanviCRS.e2,3)*175/256 + Math.pow(CanviCRS.e2,4)*11025/16384 + Math.pow(CanviCRS.e2,5)*43659/65536;
+		CanviCRS.B_sobre_2 = (CanviCRS.e2*3/4 + CanviCRS.e2*CanviCRS.e2*15/16 + Math.pow(CanviCRS.e2,3)*525/512 + Math.pow(CanviCRS.e2,4)*2205/2048 + Math.pow(CanviCRS.e2,5)*72765/65536) / 2;
+		CanviCRS.C_sobre_4 = (CanviCRS.e2*CanviCRS.e2*15/64 + Math.pow(CanviCRS.e2,3)*105/256 + Math.pow(CanviCRS.e2,4)*2205/4096 + Math.pow(CanviCRS.e2,5)*10395/16384) / 4;
+		CanviCRS.D_sobre_6 = (Math.pow(CanviCRS.e2,3)*35/512 + Math.pow(CanviCRS.e2,4)*315/2048 + Math.pow(CanviCRS.e2,5)*31185/131072) / 6;
 
 		CanviCRS._2_sobre_ap_bp=2 / (CanviCRS.ap+CanviCRS.bp);  //No sembla servir per res?
 		CanviCRS.ap_1_menys_e2=CanviCRS.ap*(1-CanviCRS.e2);
@@ -336,20 +329,20 @@ var crs_up=crs.toUpperCase();
     }
     else if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
     {
-		CanviCRS.e=sqrt(CanviCRS.e2);
+		CanviCRS.e=Math.sqrt(CanviCRS.e2);
         CanviCRS.m1=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_1);
         CanviCRS.t1=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_1);
         if (CanviCRS.fi_1==CanviCRS.fi_2)
-            CanviCRS.n=sin(CanviCRS.fi_1);
+            CanviCRS.n=Math.sin(CanviCRS.fi_1);
         else
         {
             CanviCRS.m2=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_2);
             CanviCRS.t2=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_2);
             CanviCRS.n=(log(CanviCRS.m1)-log(CanviCRS.m2))/(log(CanviCRS.t1)-log(CanviCRS.t2));
         }
-        CanviCRS.F=CanviCRS.m1/(CanviCRS.n*pow(CanviCRS.t1,CanviCRS.n));
+        CanviCRS.F=CanviCRS.m1/(CanviCRS.n*Math.pow(CanviCRS.t1,CanviCRS.n));
         CanviCRS.t0=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_0);
-        CanviCRS.ro_0=CanviCRS.radi_a*CanviCRS.F*pow(CanviCRS.t0, CanviCRS.n);
+        CanviCRS.ro_0=CanviCRS.radi_a*CanviCRS.F*Math.pow(CanviCRS.t0, CanviCRS.n);
     }
     else if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || 
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || 
@@ -357,10 +350,10 @@ var crs_up=crs.toUpperCase();
 		crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="EPSG:3395")
     {
-		CanviCRS.e=sqrt(CanviCRS.e2);
-        CanviCRS.a_NUM_PI=CanviCRS.radi_a*PI;
+		CanviCRS.e=Math.sqrt(CanviCRS.e2);
+        CanviCRS.a_NUM_PI=CanviCRS.radi_a*Math.PI;
 
-        CanviCRS.a_factor_fi1=CanviCRS.radi_a*cos(CanviCRS.fi_1)/sqrt((1-CanviCRS.e2*sin(CanviCRS.fi_1)*sin(CanviCRS.fi_1)));
+        CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1)/Math.sqrt((1-CanviCRS.e2*Math.sin(CanviCRS.fi_1)*Math.sin(CanviCRS.fi_1)));
 
         var CC=7.0*CanviCRS.e6/120.0+81.0*CanviCRS.e8/1120.0;
         var DD=4279.0*CanviCRS.e8/161280.0;
@@ -371,10 +364,9 @@ var crs_up=crs.toUpperCase();
     }
     else if (crs_up=="EPSG:3785")
     {
-        CanviCRS.a_factor_fi1=CanviCRS.radi_a*cos(CanviCRS.fi_1);
+        CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1);
     }
-  }
-  CanviCRS.darrerCRS=crs_up;
+    CanviCRS.darrerCRS=crs_up;
 }
 
 //var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecció.
@@ -386,19 +378,17 @@ var ll_x, ll_y;
     x-=CanviCRS.offset_mapa_X;
     y-=CanviCRS.offset_mapa_Y;
 
-  with(Math)
-  {
     var mu=(CanviCRS.m0+y/CanviCRS.c_tissot)/(CanviCRS.radi_a*(1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0));
     //fi1 és 'footpoint latitude o latitud del meridià central que té la mateixa y que el punt (lont, lat)
-    var fi1=mu+(3.0*CanviCRS.e1/2.0-27.0*CanviCRS.e1_sobre3/32.0)*sin(2.0*mu)+(21.0*CanviCRS.e1_sobre2/16.0-55.0*CanviCRS.e1_sobre4/32.0)*sin(4.0*mu)+(151.0*CanviCRS.e1_sobre3/96.0)*sin(6.0*mu)+(1097.0*CanviCRS.e1_sobre4/512.0)*sin(8.0*mu);
-    if (fi1<PI/2-0.00001 && fi1>-PI/2+0.00001)
+    var fi1=mu+(3.0*CanviCRS.e1/2.0-27.0*CanviCRS.e1_sobre3/32.0)*Math.sin(2.0*mu)+(21.0*CanviCRS.e1_sobre2/16.0-55.0*CanviCRS.e1_sobre4/32.0)*Math.sin(4.0*mu)+(151.0*CanviCRS.e1_sobre3/96.0)*Math.sin(6.0*mu)+(1097.0*CanviCRS.e1_sobre4/512.0)*Math.sin(8.0*mu);
+    if (fi1<Math.PI/2-0.00001 && fi1>-Math.PI/2+0.00001)
     {
-        var R1=CanviCRS.radi_a*(1.0-CanviCRS.e2)/pow(1.0-CanviCRS.e2*sin(fi1)*sin(fi1), 1.5);
-		var e2_sin2_lat=CanviCRS.e2*sin(fi1)*sin(fi1);
+        var R1=CanviCRS.radi_a*(1.0-CanviCRS.e2)/Math.pow(1.0-CanviCRS.e2*Math.sin(fi1)*Math.sin(fi1), 1.5);
+		var e2_sin2_lat=CanviCRS.e2*Math.sin(fi1)*Math.sin(fi1);
 		var N1;
 		
 		if (e2_sin2_lat+0.00001<1.0)
-		    N1=CanviCRS.radi_a/sqrt(1.0-e2_sin2_lat);
+		    N1=CanviCRS.radi_a/Math.sqrt(1.0-e2_sin2_lat);
         else
     	    N1=CanviCRS.radi_a;
 			
@@ -408,23 +398,22 @@ var ll_x, ll_y;
         else
             D=x;
 
-        var T1=tan(fi1)*tan(fi1);   //vigilar les singularitats de tan
-        var C1=CanviCRS.ep2*cos(fi1)*cos(fi1);
+        var T1=Math.tan(fi1)*Math.tan(fi1);   //vigilar les singularitats de tan
+        var C1=CanviCRS.ep2*Math.cos(fi1)*Math.cos(fi1);
 
-        ll_y=fi1-(N1*tan(fi1)/R1)*(D*D/2.0-((5.0+3.0*T1+10.0*C1-4.0*C1*C1-9.0*CanviCRS.ep2)*D*D*D*D/24.0)+
+        ll_y=fi1-(N1*Math.tan(fi1)/R1)*(D*D/2.0-((5.0+3.0*T1+10.0*C1-4.0*C1*C1-9.0*CanviCRS.ep2)*D*D*D*D/24.0)+
         	(61.0+90.0*T1+298.0*C1+45.0*T1*T1-252.0*CanviCRS.ep2-3.0*C1*C1)*D*D*D*D*D*D/720.0);
 
-        ll_x=CanviCRS.lambda_0+(D-(1.0+2*T1+C1)*D*D*D/6.0+(5.0-2.0*C1+28.0*T1-3.0*C1+8.0*CanviCRS.ep2+24.0*T1*T1)*D*D*D*D*D/120.0)/cos(fi1);
+        ll_x=CanviCRS.lambda_0+(D-(1.0+2*T1+C1)*D*D*D/6.0+(5.0-2.0*C1+28.0*T1-3.0*C1+8.0*CanviCRS.ep2+24.0*T1*T1)*D*D*D*D*D/120.0)/Math.cos(fi1);
     }
     else
     {
         ll_x=CanviCRS.lambda_0;   //indeterminat però podem donar CanviCRS.lambda_0
         if (x>0.0)
-    		ll_y=PI/2;
+    		ll_y=Math.PI/2;
         else
-    		ll_y=-PI/2;
+    		ll_y=-Math.PI/2;
     }
-  }
   //ll_x*=FactorRadiantsAGraus;
   //ll_y*=FactorRadiantsAGraus;
   return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
@@ -449,19 +438,16 @@ var p=llr_x-CanviCRS.lambda_0, crs_x, crs_y;
 	}
 	else
 	{
-	   with(Math)
-	   {
-			N = CanviCRS.ap / sqrt (1-CanviCRS.e2*sin(llr_y)*sin(llr_y));
+			N = CanviCRS.ap / Math.sqrt (1-CanviCRS.e2*Math.sin(llr_y)*Math.sin(llr_y));
 
-			I1 = CanviCRS.ap_1_menys_e2*(CanviCRS.A*llr_y-CanviCRS.B_sobre_2*sin(2*llr_y) + CanviCRS.C_sobre_4*sin(4*llr_y) - CanviCRS.D_sobre_6*sin(6*llr_y));
-			I2 = (N*pow(cos(llr_y),2)*tan(llr_y))/2;
-			I3 = (N*pow(cos(llr_y),4)*tan(llr_y)*(5-pow(tan(llr_y),2) + 9*CanviCRS.ep2*cos(llr_y)*cos(llr_y) + 4*CanviCRS.ep2*CanviCRS.ep2*pow(cos(llr_y),4)))/24;
-			I4 = N*cos(llr_y);
-			I5 = (N*pow(cos(llr_y),3)*(1 - pow(tan(llr_y),2) + CanviCRS.ep2*pow(cos(llr_y), 2)))/6;
+			I1 = CanviCRS.ap_1_menys_e2*(CanviCRS.A*llr_y-CanviCRS.B_sobre_2*Math.sin(2*llr_y) + CanviCRS.C_sobre_4*Math.sin(4*llr_y) - CanviCRS.D_sobre_6*Math.sin(6*llr_y));
+			I2 = (N*Math.pow(Math.cos(llr_y),2)*Math.tan(llr_y))/2;
+			I3 = (N*Math.pow(Math.cos(llr_y),4)*Math.tan(llr_y)*(5-Math.pow(Math.tan(llr_y),2) + 9*CanviCRS.ep2*Math.cos(llr_y)*Math.cos(llr_y) + 4*CanviCRS.ep2*CanviCRS.ep2*Math.pow(Math.cos(llr_y),4)))/24;
+			I4 = N*Math.cos(llr_y);
+			I5 = (N*Math.pow(Math.cos(llr_y),3)*(1 - Math.pow(Math.tan(llr_y),2) + CanviCRS.ep2*Math.pow(Math.cos(llr_y), 2)))/6;
 
 			crs_x = CanviCRS.offset_mapa_X + p*I4 + p*p*p*I5;
 			crs_y = I1+ p*p*I2+ p*p*p*p*I3;
-		}
 	}
 	crs_y += CanviCRS.offset_mapa_Y;
 	
@@ -476,16 +462,13 @@ var ll_x, ll_y;
   x-=CanviCRS.offset_mapa_X;
   y-=CanviCRS.offset_mapa_Y;
   var ro0_mapaY=(CanviCRS.ro_0 - y);
-  with(Math)
-  {
-    var t=pow(sign(CanviCRS.n)*sqrt(x*x+ro0_mapaY*ro0_mapaY)/(CanviCRS.radi_a*CanviCRS.F), 1.0/CanviCRS.n);
-    var psi=M_PI_2-2.0*atan(t);
+    var t=Math.pow(sign(CanviCRS.n)*Math.sqrt(x*x+ro0_mapaY*ro0_mapaY)/(CanviCRS.radi_a*CanviCRS.F), 1.0/CanviCRS.n);
+    var psi=M_PI_2-2.0*Math.atan(t);
     ll_x=atan2(x, ro0_mapaY)/CanviCRS.n+CanviCRS.lambda_0;
-    ll_y=psi + (CanviCRS.e2/2.0 + 5.0*CanviCRS.e4/24.0 + CanviCRS.e6/12.0 + 13.0*CanviCRS.e8/360.0) * sin(2.0*psi) +
-           ( 7.0*CanviCRS.e4/48.0 + 29.0*CanviCRS.e6/240.0 + 811.0*CanviCRS.e8/11520.0) * sin(4.0*psi) +
-           ( 7.0*CanviCRS.e6/120.0 + 81.0*CanviCRS.e8/1120.0) * sin(6.0*psi) +
-		   (4279.0*CanviCRS.e8/161280.0) *sin(8.0*psi);
-  }
+    ll_y=psi + (CanviCRS.e2/2.0 + 5.0*CanviCRS.e4/24.0 + CanviCRS.e6/12.0 + 13.0*CanviCRS.e8/360.0) * Math.sin(2.0*psi) +
+           ( 7.0*CanviCRS.e4/48.0 + 29.0*CanviCRS.e6/240.0 + 811.0*CanviCRS.e8/11520.0) * Math.sin(4.0*psi) +
+           ( 7.0*CanviCRS.e6/120.0 + 81.0*CanviCRS.e8/1120.0) * Math.sin(6.0*psi) +
+		   (4279.0*CanviCRS.e8/161280.0) *Math.sin(8.0*psi);
   //ll_x*=FactorRadiantsAGraus;
   //ll_y*=FactorRadiantsAGraus;
   return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
@@ -497,18 +480,15 @@ var crs_x, crs_y;
 var llr_x=ll_x*FactorGrausARadiants;
 var llr_y=ll_y*FactorGrausARadiants;
 
-  with(Math)
-  {
     var t;
     if ( (CanviCRS.n>0 && llr_y<-M_PI_4+PI/16) ||  (CanviCRS.n<0 && llr_y>M_PI_4-PI/16))
     	t=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, (-M_PI_4+PI/16)*sign(CanviCRS.n));
     else
 		t=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, llr_y);
-    var ro=CanviCRS.radi_a*CanviCRS.F*pow(t,CanviCRS.n);
+    var ro=CanviCRS.radi_a*CanviCRS.F*Math.pow(t,CanviCRS.n);
     var theta=CanviCRS.n*(llr_x-CanviCRS.lambda_0);
-    crs_x=ro*sin(theta)+CanviCRS.offset_mapa_X;
-    crs_y=CanviCRS.ro_0 - ro*cos(theta)+CanviCRS.offset_mapa_Y;
-  }
+    crs_x=ro*Math.sin(theta)+CanviCRS.offset_mapa_X;
+    crs_y=CanviCRS.ro_0 - ro*Math.cos(theta)+CanviCRS.offset_mapa_Y;
   return {"x": crs_x, "y": crs_y};
 
 }
@@ -517,10 +497,7 @@ function Mercator_esferica_Geo(x,y)
 {
 var ll_x, ll_y;
   ll_x=CanviCRS.lambda_0 + (x-CanviCRS.offset_mapa_X)/CanviCRS.a_factor_fi1;
-  with(Math)
-  {
-	ll_y=atan(sinh((y-CanviCRS.offset_mapa_Y)/CanviCRS.a_factor_fi1));
-  } 
+	ll_y=Math.atan(sinh((y-CanviCRS.offset_mapa_Y)/CanviCRS.a_factor_fi1));
   //ll_x*=FactorRadiantsAGraus;
   //ll_y*=FactorRadiantsAGraus;
   return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
@@ -534,9 +511,7 @@ var llr_y=ll_y*FactorGrausARadiants;
 
   crs_x=CanviCRS.a_factor_fi1*(llr_x-CanviCRS.lambda_0)+CanviCRS.offset_mapa_X;
 
-  with(Math)
-  {
-    var sin_lat=sin(llr_y);
+    var sin_lat=Math.sin(llr_y);
     if (sin_lat>=0.999999)
     	crs_y=CanviCRS.a_NUM_PI;
     else if (sin_lat<=-0.999999)
@@ -548,7 +523,6 @@ var llr_y=ll_y*FactorGrausARadiants;
 		crs_y=CanviCRS.a_NUM_PI;
     else if (crs_y<-CanviCRS.a_NUM_PI)
 		crs_y=-CanviCRS.a_NUM_PI;
-  }    
 	return {"x": crs_x, "y": crs_y};
 }
 
@@ -556,16 +530,13 @@ function Mercator_Geo(x,y)
 {
 var ll_x, ll_y;
 
-  ll_x=CanviCRS.lambda_0 + (x-CanviCRS.offset_mapa_X)/CanviCRS.a_factor_fi1;
-  with(Math)
-  {
-    var psi=M_PI_2-2.0*atan(exp(-(y-CanviCRS.offset_mapa_Y)/CanviCRS.a_factor_fi1));
-    var cos_2_psi=cos(2.0*psi);
-	ll_y=psi+sin(2.0*psi)*(CanviCRS.Ap+cos_2_psi*(CanviCRS.Bp+cos_2_psi*(CanviCRS.Cp+CanviCRS.Dp*cos_2_psi)));
-  } 
-  //ll_x*=FactorRadiantsAGraus;
-  //ll_y*=FactorRadiantsAGraus;
-  return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
+	ll_x=CanviCRS.lambda_0 + (x-CanviCRS.offset_mapa_X)/CanviCRS.a_factor_fi1;
+	var psi=M_PI_2-2.0*Math.atan(exp(-(y-CanviCRS.offset_mapa_Y)/CanviCRS.a_factor_fi1));
+	var cos_2_psi=Math.cos(2.0*psi);
+	ll_y=psi+Math.sin(2.0*psi)*(CanviCRS.Ap+cos_2_psi*(CanviCRS.Bp+cos_2_psi*(CanviCRS.Cp+CanviCRS.Dp*cos_2_psi)));
+	//ll_x*=FactorRadiantsAGraus;
+	//ll_y*=FactorRadiantsAGraus;
+	return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
 }
 
 function Geo_Mercator(ll_x,ll_y)
@@ -576,9 +547,7 @@ var llr_x=ll_x*FactorGrausARadiants;
 var llr_y=ll_y*FactorGrausARadiants;
 
   crs_x=CanviCRS.a_factor_fi1*(llr_x-CanviCRS.lambda_0)+CanviCRS.offset_mapa_X;
-  with(Math)
-  {
-    var e_sin_lat=CanviCRS.e*sin(llr_y);
+    var e_sin_lat=CanviCRS.e*Math.sin(llr_y);
     if (abs(llr_y-M_PI_2)<0.00001)
     	crs_y=CanviCRS.a_NUM_PI;
     else if (llr_y+M_PI_2<0.00001)
@@ -587,7 +556,7 @@ var llr_y=ll_y*FactorGrausARadiants;
     	crs_y=CanviCRS.a_NUM_PI;
     else
     {
-    	var r=tan(M_PI_4+ llr_y/2.0)*pow((1.0-e_sin_lat)/(1.0+e_sin_lat), (CanviCRS.e/2.0));
+    	var r=Math.tan(M_PI_4+ llr_y/2.0)*Math.pow((1.0-e_sin_lat)/(1.0+e_sin_lat), (CanviCRS.e/2.0));
         if (r<0.00001)
             crs_y=-CanviCRS.a_NUM_PI;
         else
@@ -599,7 +568,6 @@ var llr_y=ll_y*FactorGrausARadiants;
 				crs_y=-CanviCRS.a_NUM_PI;
     	}
     }
-  }
 	return {"x": crs_x, "y": crs_y};
 }
 
@@ -995,6 +963,16 @@ var crs_up=crs.toUpperCase();
 	else
 		return "";
 }
+
+//Es pot posar v=null si el servei no és un WMS
+function CalGirarCoordenades(crs, v)
+{
+	if(crs.toUpperCase()=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
+		return true;
+	return false;
+}
+
+
 
 /*
  * Returns a CRS code in the EPSG style. In case an equivalence is not found,

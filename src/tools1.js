@@ -30,10 +30,7 @@
 
 /////////////////////////////////////////////
 
-var VersioToolsMMN={"Vers": 5, "SubVers": 4, "VariantVers": null};
-var clientName= "MiraMon Map Browser";
-
-function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers; }
+"use strict"
 
 /////////////////////////////////////////////
 /*Cross browser compatibility functions*/
@@ -75,17 +72,17 @@ function compatGetElementsByTag(thisElement,namespace,name)
 
 // Creada per NJ i modificada per JM
 // uri_ns pot ser null. nom_ns pot ser "*"
+// Retorna una array de totes els nodes a qualsevol nivell del arbre que compleixen amb el nom. És lenta
+// Useu GetXMLChildElementByName(), sempre que sigui possible, per nodes immediatament fills del node actual.
 function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 {
 	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
 	//de getElementsByTagNameNS és diferent
-	//En Motzilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag
-	//en d'altres és el nom del ns i el nom del tag 	
-	//Per getElementsByTagName() en Opera i Chorme no funciona si indicquem el id del ns, és a dir, ns:name no va
-	//En IE depen de la versió
-	//En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
+	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres és el nom del ns i el nom del tag 
+	//Per getElementsByTagName() en Opera i Chrome no funciona si indiquem el id del ns, és a dir, ns:name no va
+	//En IE depen de la versió. En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
 	//Recomano usar aquesta funció que provarà les diferents possibilitats i així és menys probable tenir problemes
-	
+
 	if (pare.getElementsByTagNameNS)
 	{
 		if (uri_ns)
@@ -113,17 +110,6 @@ function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 			return fills5;
 	}
 
-	
-	if(fills)
-		return fills;
-	if(fills2)
-		return fills2;
-	if(fills3)
-		return fills3;
-	if(fills4)
-		return fills4;
-	if(fills5)
-		return fills5;
 	return null;
 }
 
@@ -155,7 +141,7 @@ function MMgetElementTextByTag(thisElement,namespace,name)
 function MMgetCheckedRadioButton(form,buttonName)
 {
 	var radios= form.getElementsByTagName("input");
-	for(var i=0;i<radios.length;i++)
+	for (var i=0;i<radios.length;i++)
 	{
 		if(radios[i].type==="radio" && radios[i].name===buttonName && radios[i].checked)
 			return radios[i];
@@ -188,24 +174,128 @@ if(!window.addEventListener)
 	};
 }
 
-//IE8 and lower compatibility for indexOf
+//IE8 and lower compatibility for Array.indexOf()
 if(!Array.prototype.indexOf)
 {
 	Array.prototype.indexOf = function (obj, fromIndex) {
-    if (fromIndex == null) {
-        fromIndex = 0;
-    } else if (fromIndex < 0) {
-        fromIndex = Math.max(0, this.length + fromIndex);
-    }
-    for (var i = fromIndex, j = this.length; i < j; i++) {
-        if (this[i] === obj)
-            return i;
-    }
-    return -1;
-  };
+		if (fromIndex == null) {
+			fromIndex = 0;
+		} 
+		else if (fromIndex < 0) {
+	        	fromIndex = Math.max(0, this.length + fromIndex);
+		}
+		for (var i = fromIndex, j = this.length; i < j; i++) {
+		        if (this[i] === obj)
+            			return i;
+		}
+		return -1;
+  	};
 }
 
-//IE8 compatibility for trim
+//IE11 and other old browsers for Array.find() (based on Array.filter() that has much better support). https://www.w3schools.com/js/js_array_iteration.asp
+if(!Array.prototype.find)
+{
+	Array.prototype.find = function (myFunction) {
+		try
+		{						
+			var x=this.filter(myFunction);
+			if (x.length>0)
+				return x[0];
+		}
+		catch(ex)
+		{								
+			// En funció de la versió potser que no existeixi la funció find()
+			for (var i=0; i<this.length; i++)
+			{
+				if (myFunction(this[i]))
+					return this[i];
+			}
+		}
+  	};
+}
+
+/*
+ * Binary search (bsearch) in a sorted array (from https://oli.me.uk/2013/06/08/searching-javascript-arrays-with-a-binary-search   http://jsfiddle.net/aryzhov/pkfst550/
+ * Returns 
+      * the index of the element in a sorted array that is iqual to 'elem' (see the note if there are more than one)
+      * (-n-1) where n is the insertion point for the new element.  E.g. -5 means "insert in i=4" to keep the array sorted, a.k.a "insert between 3 and 4".
+ * Parameters:
+ *     elem - An element to search for
+ *     compare_fn - A comparator function i the same way that Array.sort() wants it: The function takes two arguments: (a, b) and returns:
+ *        a negative number  if a is less than b;
+ *        0 if a is equal to b;
+ *        a positive number of a is greater than b.
+ * Note: The array may contain duplicate elements. 
+ * If there are more than one equal elements in the array, the returned value can be the index of any one of the equal elements.
+ */
+
+if(!Array.prototype.binarySearch)
+{
+	Array.prototype.binarySearch = function (elem, compare_fn) {
+		var m = 0;
+		var n = this.length - 1;
+		while (m <= n) {
+        		var k = (n + m) >> 1;
+		        var cmp = compare_fn(elem, this[k]);
+	        	if (cmp > 0) {
+				m = k + 1;
+	        	} else if(cmp < 0) {
+				n = k - 1;
+		        } else {
+				return k;
+		        }
+		}
+		return -m - 1;
+	}
+}
+
+function sortAscendingStringSensible(a, b)
+{
+	return ((a < b) ? -1 : ((a > b) ? 1 : 0));		
+}
+
+function sortAscendingStringInsensible(a, b)
+{
+	a = a.toLowerCase();
+    b = b.toLowerCase();
+   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));		
+}
+
+function sortAscendingNumber(a, b)
+{
+	return a - b;
+}
+
+/* Eliminada. Useu array.removeDuplicates() en el seu lloc
+function EliminaRepeticionsArray(llista, funcio_ordena)
+{
+	for (var i=0; i+1<llista.length;)
+	{
+		if (0==funcio_ordena(llista[i], llista[i+1]))
+			llista.splice(i+1, 1);
+		else
+			i++;
+	}
+}
+*/
+
+if(!Array.prototype.removeDuplicates)
+{
+	Array.prototype.removeDuplicates = function (compare_fn) {
+		for (var i=0; i+1<this.length;)
+		{
+			if (0==compare_fn(this[i], this[i+1]))
+				this.splice(i+1, 1);
+			else
+				i++;
+		}
+		return this;
+	}
+}
+
+
+/*Trim actual com DonaCadenaSenseEspaisDavantDarrera() i per tant no creem cap funció per fer-ho. Useu .trim()
+IE8 compatibility for trim*/
 if(!String.prototype.trim)
 {
 	String.prototype.trim= function() {
@@ -344,7 +434,7 @@ function MMgetCheckedRadioButton(myForm,groupName)
 {
 	var group= myForm.elements;
 
-	for(var i=0;i<group.length;i++)
+	for (var i=0;i<group.length;i++)
 		if(group[i].name===groupName && group[i].checked)
 			return group[i];
 
@@ -441,7 +531,7 @@ function semitransparentLayer(elem)
 
 function semitransparentThisNomLayer(nom)
 {
-	semitransparentNomLayer(getLayer(this, nom));
+	semitransparentLayer(getLayer(window, nom));
 }
 
 function opacLayer(elem)
@@ -655,21 +745,12 @@ function getRectSupLayer(elem)
 	return Math.round(elem.getBoundingClientRect().top) + window.pageYOffset - elem.ownerDocument.documentElement.clientTop;
 }
 
-var SpaceWidth=800;
-var SpaceHeight=600;
-
-function setSpaceForLayers(w,h)
-{
-	SpaceWidth=w;
-	SpaceHeight=h;
-}
-
 function spaceForLayers(win)
 {
 	if (win.document.body.clientWidth)
-		SpaceWidth=win.document.body.clientWidth;
+		ParamInternCtrl.realSpaceForLayers.width=win.document.body.clientWidth;
 	if (win.document.body.clientHeight)
-		SpaceHeight=win.document.body.clientHeight;
+		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight;
 }
 
 function changeSizeLayers(win)
@@ -678,13 +759,16 @@ var w_previ,h_previ, delta_w, delta_h, delta, delta1;
 var canvis=false;
 var elem, rect, ancora, nom;
 
-	w_previ=SpaceWidth;
-	h_previ=SpaceHeight;
+	if (!ParamInternCtrl.realSpaceForLayers)
+		ParamInternCtrl.realSpaceForLayers=JSON.parse(JSON.stringify(ParamCtrl.SpaceForLayers));
+
+	w_previ=ParamInternCtrl.realSpaceForLayers.width;
+	h_previ=ParamInternCtrl.realSpaceForLayers.height;
 
 	spaceForLayers(win);
 
-	delta_w=SpaceWidth-w_previ
-	delta_h=SpaceHeight-h_previ;
+	delta_w=ParamInternCtrl.realSpaceForLayers.width-w_previ
+	delta_h=ParamInternCtrl.realSpaceForLayers.height-h_previ;
 
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
@@ -870,13 +954,15 @@ var nom=layerFinestraList[i_finestra].nom + "_barra";
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
 	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
 				 AfegeixAdrecaBaseSRC("boto_copiar.gif"), 
-				 "\" alt=\"pop down\" onClick=\"",
+				 "\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" ", 
+				 "title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" onClick=\"",
 				 "CopiaPortapapersFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
 	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
 				 AfegeixAdrecaBaseSRC("boto_ajuda.gif"), 
-				 "\" alt=\"pop down\" onClick=\"AjudaFinestra_",
+				 "\" alt=\"",DonaCadenaLang({"cat":"ajuda", "spa":"ayuda", "eng":"help","fre":"aider"}),"\" ", 
+				 "title=\"",DonaCadenaLang({"cat":"ajuda", "spa":"ayuda", "eng":"help","fre":"aider"}),"\ onClick=\"AjudaFinestra_",
 				 layerFinestraList[i_finestra].nom ,"();\"></td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
@@ -893,8 +979,8 @@ var nom=layerFinestraList[i_finestra].nom + "_barra";
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
 	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
 				 AfegeixAdrecaBaseSRC("tanca_consulta.gif"), 
-				 "\" alt=\"",
-				 DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}) , "\" onClick=\"", 
+				 "\" alt=\"", DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}) , "\" ",
+				 "title=\"", DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}),"\" onClick=\"", 
 				"TancaFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
 	cdns.push("<td width=\"5px\"></td></tr></table>");
 	contentLayer(getLayer(win, nom), cdns.join(""));
@@ -905,7 +991,7 @@ function afegeixBotoABarraFinestraLayer(win, name, botons)
 {
 var nom=name+"_barra";
 
-	for(var i=0; i<layerFinestraList.length; i++)
+	for (var i=0; i<layerFinestraList.length; i++)
 	{
 	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
 	    {
@@ -945,6 +1031,22 @@ function esborraFinestraLayer(win, name)
 	esborraLayer(getFinestraLayer(win,name));
 }*/
 
+//Retorna la finestra de la barra per poder ser omplerta directament.
+function ObreFinestra(win, name, desc_funcionalitat_de)
+{
+	if (!isFinestraLayer(win, name))
+	{
+		alert(DonaCadenaLang({"cat":"No s'ha definit la layer de tipus finestra '"+name+"' i per tant no es pot usar la funcionalitat ",
+						  "spa":"No se ha definido la layer de tipo ventana '"+name+"' y en consecuencia no se puede usar la funcionalidad ",
+						  "eng":"The layer '"+name+"' has not been defined and its not possible use the funcionality ",
+						  "fre":"La layer de type fenêtre '"+name+"' n'a été pas définie et il n'est donc pas possible d'utilise l'outil "})+desc_funcionalitat_de);
+		return null;
+	}
+	showFinestraLayer(win, name);
+	setzIndexFinestraLayer(win, name, (layerList.length-1));
+	return getLayer(win, name+"_finestra");
+}
+
 //Returns the floating window position within the floating windows array
 function getFloatingWindowId(name)
 {
@@ -966,8 +1068,8 @@ var titleBar;
 
 	if(focusedFloatingWindow!=-1)
 	{		
-		floatingWindow=getLayer(this, layerFinestraList[focusedFloatingWindow].nom+"_finestra");
-		titleBar=getLayer(this, layerFinestraList[focusedFloatingWindow].nom+"_barra");
+		floatingWindow=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+"_finestra");
+		titleBar=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+"_barra");
 
 		 //Restore the zIndex
 		setzIndexLayer(titleBar,titleBar.old_zIndex);
@@ -975,8 +1077,8 @@ var titleBar;
 	}
 	if(i_finestra!=-1)
 	{
-		floatingWindow=getLayer(this, layerFinestraList[i_finestra].nom+"_finestra");
-		titleBar=getLayer(this, layerFinestraList[i_finestra].nom+"_barra");
+		floatingWindow=getLayer(window, layerFinestraList[i_finestra].nom+"_finestra");
+		titleBar=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
 
 		//Save the current zIndex (as they are the same we only need to save it in the bar)
 		titleBar.old_zIndex= titleBar.style.zIndex;
@@ -1065,8 +1167,8 @@ function ActivaMovimentFinestraLayer(event, i_finestra)
 	if(layerFinestraList[i_finestra].estat_click!=moure_actiu)
 	{
 		layerFinestraList[i_finestra].estat_click=moure_actiu;
-		var finestra=getFinestraLayer(this, layerFinestraList[i_finestra].nom);
-		var barra=getLayer(this, layerFinestraList[i_finestra].nom+"_barra");
+		var finestra=getFinestraLayer(window, layerFinestraList[i_finestra].nom);
+		var barra=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
 	
 		layerFinestraList[i_finestra].coord_click=winMousePos(event);		
 		
@@ -1084,8 +1186,8 @@ function MouFinestraLayer(event, i_finestra)
 	{
 		var dx, dy;
 		var coordActual;
-		var finestra=getFinestraLayer(this, layerFinestraList[i_finestra].nom);
-		var barra=getLayer(this, layerFinestraList[i_finestra].nom+"_barra");
+		var finestra=getFinestraLayer(window, layerFinestraList[i_finestra].nom);
+		var barra=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
 				
 		coordActual=winMousePos(event);
 		
@@ -1188,20 +1290,10 @@ var z=layerFinestraList.length;
 
 function createLayer(win, name, left, top, width, height, ancora, scroll, visible, ev, content) 
 {
-	win.document.writeln(textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, null, ev, true, content));
+	//win.document.writeln(textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, null, ev, true, content));
+	var container = document.getElementById(ParamCtrl.containerName);
+	container.innerHTML += textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, null, ev, true, content);
 }
-
-/*
-name: id de la divisió
-left, top, width, height: mides de la divisió
-ancora: com s'acora la finestra als extrems de la finestra del navegador. Es fan servir punts cardinals "NSEW" (es manté la distància amb el punt cardinal) o "nsew" (es manté una distància proporcional al punt cardinal) i "CR" (es manté l'ample (Columns) o l'alt (Rows)). p.ex. "NW"
-scroll: Pot ser "si" (sempre), "ara_no" (automàtiques), "no" (no scrolls)
-visible: Si la divisió es crea com a visible immediatament. Pot ser true o false
-div_class: Classe en la css que s'asocia a la divisió.
-ev: Events de la divisió. El format inclou també el nom de l'event "onClick=\"alert(1)\"". A la pràctica serviria per posar quasevol altre propietat de la divisió
-save_content: Cal guardar el contingut internament?. Això és úitl per les divisions en 3 idiomes que poden canviar entre els 3 idiomes.
-content: contingut html de l'interior de la divisió.
-*/
 
 function textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, div_class, ev, save_content, content)
 {
@@ -1243,234 +1335,171 @@ function isLayer(elem)
 	return false;
 }
 
-
 // Funció inspirada en una de SitePoint Pty. Ltd, www.sitepoint.com
-function Ajax() {
-  this.req = null;
-  this.url = null;
-  this.status = null;
-  this.statusText = '';
-  this.method = 'GET';
-  this.async = true;
-  this.dataPayload = "";
-  this.readyState = null;
-  this.responseText = null;
-  this.responseXML = null;
-  this.handleResp = null;
-  this.responseFormat = 'text/plain', // 'text/plain', 'text/xml', 'object'
-  this.requestFormat = 'application/x-www-form-urlencoded'  //només per POST
-  this.structResp=null;
-  this.mimeType = null;
-  this.headers = [];
+function Ajax() 
+{
+	this.req = null;
+	this.url = null;
+	this.status = null;
+	this.statusText = '';
+	this.method = 'GET';
+	this.async = true;
+	this.dataPayload = "";
+	this.readyState = null;
+	this.responseText = null;
+	this.responseXML = null;
+	this.handleResp = null;
+	this.responseFormat = 'text/plain', // 'text/plain', 'text/xml', 'object'
+	this.requestFormat = 'application/x-www-form-urlencoded'  //només per POST
+	this.structResp=null;
+	this.mimeType = null;  
+	//this.headers = [];
+	this.requestHeaders=[];
 
-  this.init = function() {
-    var i = 0;
-    var reqTry = [ 
-      function() { return new XMLHttpRequest(); },
-      function() { return new ActiveXObject('Msxml2.XMLHTTP') },
-      function() { return new ActiveXObject('Microsoft.XMLHTTP' )} ];
+	this.init = function() {
+		var i = 0;
+		var reqTry = [ 
+			function() { return new XMLHttpRequest(); },
+			function() { return new ActiveXObject('Msxml2.XMLHTTP') },
+			function() { return new ActiveXObject('Microsoft.XMLHTTP' )} ];
       
-    while (!this.req && (i < reqTry.length)) {
-      try { 
-        this.req = reqTry[i++]();
-      } 
-      catch(e) {}
-    }
-    return true;
-  };
-  this.doGet = function(url, hand, response_format, struct) {
-    this.url = url;
-    this.handleResp = hand;
-    this.responseFormat = response_format || 'text/plain';
-    this.structResp = struct;
-    this.doReq();
-
-  };
-
-  this.doPost = function(url, request_format, dataPayload, hand, response_format, struct) {
-    this.url = url;
-	this.requestFormat = request_format || 'application/x-www-form-urlencoded';    
-    this.dataPayload = dataPayload;
-    this.handleResp = hand;
-    this.responseFormat = response_format || 'text/plain';
-	this.structResp = struct;
-    this.method = 'POST';
-    this.doReq();
-  };
-
-  this.doReq = function() {
-    var self = null;
-    var req = null;
-    var headArr = [];
-    
-    if (!this.init()) {
-      alert('Could not create XMLHttpRequest object.');
-      return;
-    }
-    req = this.req;
-    req.open(this.method, this.url, this.async);
-    if (this.method == 'POST') 
-        req.setRequestHeader('Content-Type', this.requestFormat);
-    self = this;
-	
-    req.onreadystatechange = function() 
-    {
-      var resp = null;
-      self.readyState = req.readyState;
-      if (req.readyState == 4) {
-        
-		self.status = req.status;
-        self.statusText = req.statusText;
-        self.responseText = req.responseText;
-        self.responseXML = req.responseXML;        
-        
-	switch(self.responseFormat) {
-          case 'text/plain':
-            resp = self.responseText;
-            break;
-          case 'text/xml':
-            resp = self.responseXML;
-            break;
-          case 'object':
-            resp = req;
-            break;
-        }
-		
-		if(self.structResp)
-		   self.structResp.text=self.responseText;
-        if (self.status > 199 && self.status < 300) {
-          if (!self.handleResp) {
-            alert('No response handler defined ' +
-              'for this XMLHttpRequest object.');
-            return;
-          }
-          else {
-            if(self.structResp)			{
-				try
-				{
-            	self.handleResp(resp, self.structResp);
-				}
-				catch(e)
-				{
-					alert("Error on handling server response")
-				}
-			}
-	    	else
-		  		self.handleResp(resp);
-          }
-        }
-        
-        else {
-          self.handleErr(resp);
-        }
-      }
-    }
-    req.send(this.dataPayload);
-  };
-  this.abort = function() {
-    if (this.req) {
-      this.req.onreadystatechange = function() { };
-      this.req.abort();
-      this.req = null;
-    }
-  };
-  this.handleErr = function() {
-    var errorWin;
-    // Create new window and display error
-    try {
-      errorWin = window.open('', 'errorWin');
-      errorWin.document.body.innerHTML = this.responseText;
-    }
-    // If pop-up gets blocked, inform user
-    catch(e) {
-      alert('An error occurred, but the error message cannot be' +
-      ' displayed because of your browser\'s pop-up blocker.\n' +
-      'Please allow pop-ups from this Web site.');
-    }
-  };
-  this.setMimeType = function(mimeType) {
-    this.mimeType = mimeType;
-  };
-  this.setHandlerResp = function(funcRef) {
-    this.handleResp = funcRef;
-  };
-  this.setHandlerErr = function(funcRef) {
-    this.handleErr = funcRef; 
-  };
-  this.setHandlerBoth = function(funcRef) {
-    this.handleResp = funcRef;
-    this.handleErr = funcRef;
-  };
-  this.setRequestHeader = function(headerName, headerValue) {
-    this.headers.push(headerName + ': ' + headerValue);
-  };
-}
-
-function IsXMLMimeType(mimetype)
-{
-	if (typeof mimetype!=="undefined" && (mimetype=="text/xml" || mimetype=="application/xml" || 
-		mimetype=="application/vnd.ogc.gml" || mimetype=="application/vnd.ogc.gml/3.1.1" || 
-		mimetype=="subtype=gml/3.1.1"))
-		return true;
-	else
-		return false;
-}
-
-function loadFile(path, mimetype, success, error, extra_param)
-{
-var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function()
-	{
-        	if (xhr.readyState === XMLHttpRequest.DONE) 
-		{
-	            	if (xhr.status === 200) 
-			{
-				if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
-				{
-			                if (error)
-					{
-						var s=null;
-						if (xhr.response)
-						{
-							var s=xhr.response;
-							if (-1!=s.indexOf("<body>"))
-								s=s.substring(s.indexOf("<body>"));
-						}
-						error("Wrong response content type:"+ xhr.getResponseHeader('content-type') + "\n\nResponse headers:\n"+ ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
-					}
-				}
-				else
-				{
-	                		if (success)
-					{
-						if (IsXMLMimeType(mimetype))
-							success(xhr.responseXML, extra_param);
-						else
-							success(xhr.responseText, extra_param);
-					}
-				}
+		while (!this.req && (i < reqTry.length)) {
+			try { 
+				this.req = reqTry[i++]();
 			} 
-			else 
-			{
-                		if (error)
-				{
-					var s=null;
-					if (xhr.response)
-					{
-						var s=xhr.response;
-						if (-1!=s.indexOf("<body>"))
-							s=s.substring(s.indexOf("<body>"));
+			catch(e) {}
+		}
+		return true;
+	};
+	this.doGet = function(url, hand, response_format, struct) 
+	{
+		alert(url);  //·$·Per a depurar
+		this.url = url;
+		this.handleResp = hand;
+		this.responseFormat = response_format || 'text/plain';
+		this.structResp = struct;
+		this.doReq();
+	};
+
+	this.doPost = function(url, request_format, dataPayload, hand, response_format, struct) 
+	{
+		this.url = url;
+		this.requestFormat = request_format || 'application/x-www-form-urlencoded';    
+		this.dataPayload = dataPayload;
+		this.handleResp = hand;
+		this.responseFormat = response_format || 'text/plain';
+		this.structResp = struct;
+		this.method = 'POST';
+		this.doReq();
+	};
+
+	this.doReq = function() 
+	{
+		var self = null;
+		var req = null;
+		var headArr = [];
+    
+		if (!this.init()) {
+			alert('Could not create XMLHttpRequest object.');
+			return;
+		}
+		req = this.req;
+		req.open(this.method, this.url, this.async);
+		if (this.method == 'POST') 
+			req.setRequestHeader('Content-Type', this.requestFormat);
+		for (var i=0; i<this.requestHeaders.length; i++)
+			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
+
+		self = this;
+	
+		req.onreadystatechange = function() {
+			var resp = null;
+			self.readyState = req.readyState;
+			if (req.readyState == 4) {
+				self.status = req.status;
+				self.statusText = req.statusText;
+				self.responseText = req.responseText;
+				self.responseXML = req.responseXML;
+				switch(self.responseFormat) {
+					case 'text/plain':
+						resp = self.responseText;
+						break;
+					case 'text/xml':
+						resp = self.responseXML;
+						break;
+					case 'object':
+						resp = req;
+						break;
+				}
+
+				if(self.structResp)
+					self.structResp.text=self.responseText;
+				if (self.status > 199 && self.status < 300) {
+					if (!self.handleResp) {
+						alert('No response handler defined for this XMLHttpRequest object.');
+            					return;
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+ xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if(self.structResp) 
+					{
+						try
+						{
+					         self.handleResp(resp, self.structResp);
+						}
+						catch(e)
+						{
+							alert("Error on handling server response")
+						}
+					}
+					else
+						self.handleResp(resp);
+				} else {
+					self.handleErr(resp);
 				}
 			}
 		}
+		req.send(this.dataPayload);
 	};
-	xhr.open("GET", path, true);
-	//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=ISO-8859-1');
-	//xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-	xhr.send();
+	this.abort = function() {
+		if (this.req) {
+			this.req.onreadystatechange = function() { };
+			this.req.abort();
+			this.req = null;
+		}
+	};
+	this.handleErr = function() {
+		var errorWin;
+		// Create new window and display error
+		try {
+			errorWin = window.open('', 'errorWin');
+			errorWin.document.body.innerHTML = this.responseText;
+		}
+		// If pop-up gets blocked, inform user
+		catch(e) {
+			alert('An error occurred, but the error message cannot be displayed because of your browser\'s pop-up blocker.\n' +
+				'You could try to allow pop-ups from this Web site. Meanwhile, the text version of the error is:\n' + this.responseText);
+		}
+	};
+	this.setMimeType = function(mimeType) {
+		this.mimeType = mimeType;
+	};  
+	this.setHandlerResp = function(funcRef) {
+		this.handleResp = funcRef;
+	};
+	this.setHandlerErr = function(funcRef) {
+		this.handleErr = funcRef; 
+	};
+	this.setHandlerBoth = function(funcRef) {
+		this.handleResp = funcRef;
+		this.handleErr = funcRef;
+	};
+	this.setRequestHeader = function(headerName, headerValue) {
+		this.requestHeaders.push({"name": headerName, "value": headerValue});
+    		//this.headers.push(headerName + ': ' + headerValue);
+  	};
 }
+
+//See also loadFile() in xml.js
+
 
 //Preparo una funció per descarregar les dades JSON assincronament
 //Extreta de: http://stackoverflow.com/questions/9838812/how-can-i-open-a-json-file-in-javascript-without-jquery
@@ -1479,11 +1508,11 @@ function loadJSON(path, success, error, extra_param)
 var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function()
 	{
-        	if (xhr.readyState === XMLHttpRequest.DONE) 
+        if (xhr.readyState === XMLHttpRequest.DONE) 
 		{
-	            	if (xhr.status === 200) 
+	       	if (xhr.status === 200) 
 			{
-                		if (success)
+            	if (success)
 				{
 					var data;
 					try {
@@ -1498,7 +1527,7 @@ var xhr = new XMLHttpRequest();
 			} 
 			else 
 			{
-                		if (error)
+                if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -1514,9 +1543,62 @@ var xhr = new XMLHttpRequest();
 	};
 	xhr.open("GET", path, true);
 	//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=ISO-8859-1');
-	//xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+	xhr.setRequestHeader('Accept', 'application/json');
+	//xhr.setRequestHeader('Accept-Charset', 'utf-8');	Això no li agrada als navegadors, donen error
 	xhr.send();
 }
+
+function loadTextFile(path, mimetype, success, error, extra_param)
+{
+var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function()
+	{
+        if (xhr.readyState === XMLHttpRequest.DONE) 
+		{
+	        if (xhr.status === 200) 
+			{
+				if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
+				{
+			        if (error)
+					{
+						var s=null;
+						if (xhr.response)
+						{
+							var s=xhr.response;
+							if (-1!=s.indexOf("<body>"))
+								s=s.substring(s.indexOf("<body>"));
+						}
+						error("Wrong response content type:"+ xhr.getResponseHeader('content-type') + "\n\nResponse headers:\n"+ ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					}
+				}
+				else
+				{
+	                if (success)
+					{
+						success(xhr.responseText, extra_param);
+					}
+				}
+			} 
+			else 
+			{
+             	if (error)
+				{
+					var s=null;
+					if (xhr.response)
+					{
+						var s=xhr.response;
+						if (-1!=s.indexOf("<body>"))
+							s=s.substring(s.indexOf("<body>"));
+					}
+					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+ xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+				}
+			}
+		}
+	};
+	xhr.open("GET", path, true);
+	xhr.send();
+}
+
 
 //Modifyed as sugested in: http://www.html5rocks.com/en/tutorials/webgl/typed_arrays/ and http://www.html5rocks.com/en/tutorials/file/xhr2/
 function loadBinaryFile(path, mimetype, success, error, extra_param)
@@ -1530,7 +1612,7 @@ function loadBinaryFile(path, mimetype, success, error, extra_param)
 			{
 				if (mimetype!=xhr.getResponseHeader('content-type'))
 				{
-			                if (error)
+			        if (error)
 					{
 						var s=null;
 						if (xhr.response)
@@ -1544,13 +1626,13 @@ function loadBinaryFile(path, mimetype, success, error, extra_param)
 				}
 				else
 				{
-	                		if (success)
+	                if (success)
 						success(xhr.response, extra_param);
 				}
 			} 
 			else 
 			{
-		                if (error)
+		        if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -1605,11 +1687,8 @@ var es_negatiu;
 	
 	var Q = ''+Math.round(X*Number("1e"+N))
 	while (Q.length<=N) Q='0'+Q
-	with (new String(Q)) 
-	{
-		if (search(/e/)!=-1) { return X-0; }
-		return ((es_negatiu) ? "-" : "") + substring(0,length-N)+'.'+substring(length-N,length);
-	} 
+	if (Q.search(/e/)!=-1) { return X-0; }
+	return ((es_negatiu) ? "-" : "") + Q.substring(0,Q.length-N)+'.'+Q.substring(Q.length-N,Q.length);
 }
 
 //Pot ser que retorni el número com a text
@@ -1628,54 +1707,33 @@ var r;
     	}
 }
 
-function sortAscendingNumber(a, b)
-{
-	return a - b;
-}
-
-function EliminaRepeticionsArray(llista, funcio_ordena)
-{
-	for (i=0; i+1<llista.length;)
-	{
-		if (0==funcio_ordena(llista[i], llista[i+1]))
-			llista.splice(i+1, 1);
-		else
-			i++;
-	}
-}
 
 //Aquesta funció no és a la llibrerira matemàtica.
 function sinh(z)
 {
-    with (Math)
-	return (exp(z)-exp(-z))/2;
+	return (Math.exp(z)-Math.exp(-z))/2;
 }
 
 function ArrodoneixSiSoroll(n)
 { 
 var e, d;
 
-    with(Math)
-    {
-		e=floor(log(n)/LN10);    //dona l'exponent en base 10
-		d=n/pow(10,e);
-		if (parseFloat(OKStrOfNe(d, 4))==parseFloat(OKStrOfNe(d, 12)))
-			return OKStrOfNe(d, 4)*pow(10,e);
-		else
-			return n;
-    }
+	e=Math.floor(Math.log(n)/Math.LN10);    //dona l'exponent en base 10
+	d=n/Math.pow(10,e);
+	if (parseFloat(OKStrOfNe(d, 4))==parseFloat(OKStrOfNe(d, 12)))
+		return OKStrOfNe(d, 4)*Math.pow(10,e);
+	else
+		return n;
 }
 
 /*Aquesta funció retorna un número positiu arrodonit per sota a una
 sola xifra significativa que només pot ser 1, 2 o 5. Joan Masó*/
 function DonaNumeroArrodonit125(a)
 {
-    with(Math)
-    {
 	if (a<1e-20)
 		return a;
-	var e=floor(log(a)/LN10);    //dona l'exponent en base 10
-	var n=abs(a/pow(10,e));
+	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
+	var n=Math.abs(a/Math.pow(10,e));
 	
 	//Ara cal arrodinir a l'enter més proper:
 	if (n<2)
@@ -1684,21 +1742,18 @@ function DonaNumeroArrodonit125(a)
 		n=2;
 	else
 		n=5;
-	return n*pow(10,e);
-    }
+	return n*Math.pow(10,e);
 }
 
 function DonaDenominadorDeLEscalaArrodonit(a)
 {
-    with(Math)
-    {
 	if (a<1e-20)
 		return a;
-	var e=floor(log(a)/LN10);    //dona l'exponent en base 10
+	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
         if (e<2)
 		return a;
 	e-=2;
-	var n=abs(a/pow(10,e));
+	var n=Math.abs(a/Math.pow(10,e));
 	
 	//Ara cal arrodinir a l'enter més proper:
 	if (n<112)
@@ -1729,8 +1784,7 @@ function DonaDenominadorDeLEscalaArrodonit(a)
 		n=800;
 	else
 		n=1000;
-	return n*pow(10,e);
-    }
+	return n*Math.pow(10,e);
 }
 
 
@@ -1836,7 +1890,6 @@ var s2;
 function checkIt(detect, string)
 {
 	var place = detect.indexOf(string) + 1;
-	//thestring = string;
 	return place;
 }
 
@@ -1853,74 +1906,73 @@ function FesTestDeNavegador()
     }
 
     var detect = navigator.userAgent.toLowerCase();
-    var OS,browser,thestring;
-    var version = 0;
+    var OS, browser, version = 0, NomNavegador;
 
 	if (checkIt(detect, 'konqueror'))
-    {
+	{
 		browser = "Konqueror";
 		OS = "Linux";
-		thestring='konqueror';
-    }
-    else if (checkIt(detect, 'chrome'))
-    {
+		NomNavegador='konqueror';
+	}
+	else if (checkIt(detect, 'chrome'))
+	{
 		browser = "Chrome";
-		thestring='chrome';
-    }
-    else if (checkIt(detect, 'safari'))
-    {
+		NomNavegador='chrome';
+	}
+	else if (checkIt(detect, 'safari'))
+	{
 		browser = "Safari";
-		thestring='safari';
-    }
-    else if (checkIt(detect, 'omniweb')) 
-    {
+		NomNavegador='safari';
+	}
+	else if (checkIt(detect, 'omniweb')) 
+	{
 		browser = "OmniWeb";
-		thestring='omniweb';
-    }
-    else if (checkIt(detect, 'opera')) 
-    {
+		NomNavegador='omniweb';
+	}
+	else if (checkIt(detect, 'opera')) 
+	{
 		browser = "Opera";
-		thestring='opera';
-    }
-    else if (checkIt(detect, 'webtv'))
-    {
+		NomNavegador='opera';
+	}
+	else if (checkIt(detect, 'webtv'))
+	{
 		browser = "WebTV";
-		thestring='webtv';
-    }
-    else if (checkIt(detect, 'icab'))
-    {
+		NomNavegador='webtv';
+	}
+	else if (checkIt(detect, 'icab'))
+	{
 		browser = "iCab";
-		thestring='icab';
-    }
-    else if (checkIt(detect, 'msie'))
-    {
+		NomNavegador='icab';
+	}
+	else if (checkIt(detect, 'msie'))
+	{
 		browser = "Internet Explorer";
-		thestring='msie';
-    }
-    else if (!checkIt(detect, 'compatible'))
-    {
+		NomNavegador='msie';
+	}
+	else if (!checkIt(detect, 'compatible'))
+	{
 		browser = "Netscape Navigator";
 		version = detect.charAt(8);
-		thestring='compatible';
-    }
-    else
-    { 
+		NomNavegador='compatible';
+	}
+	else
+	{ 
 		browser = "An unknown browser";
-    }
+	}
 
 	if (!version)
 	{
 	   //Perform a search with regexp, looking for any number appearing after
 		//the browser name, and a random character ( space or /, matched by the dot.
 		//The parenthesis create the group that holds the value we want to capture.
-	   var re= new RegExp(thestring+".([0-9]*)");
+	   var re= new RegExp(NomNavegador+".([0-9]*)");
 
 		//We retrieve the element [1] (the first group), because [0] is the
 	   //whole matched string.
 	   version= parseInt(detect.match(re)[1],10);
 	   //This old version only gets the first digit (failing for >9) and is not
 	   //able to handle other inconsistencies.
-	   //version = detect.charAt(detect.indexOf(thestring) + 1 + thestring.length);
+	   //version = detect.charAt(detect.indexOf(NomNavegador) + 1 + NomNavegador.length);
 	}
 
     if (!OS)
@@ -2134,7 +2186,7 @@ function CreaCapaPreguntaServidorConsultaTipica(servidor, nom, camps, crs)
 	this.nom=nom;
 	this.camps=camps;  //Array de CreaCampConsultaTipica: noms,descripcions de camps i textos anteriors i posterios, ordenats en funció de com estan continguts  1er Municipis - 2on Provincies
 	this.CRS=crs;
-}*/
+}
 
 function CreaConsultaTipicaIntern(servidor, nom, camps, crs, proj_camp, id_camp)
 {
@@ -2144,7 +2196,7 @@ function CreaConsultaTipicaIntern(servidor, nom, camps, crs, proj_camp, id_camp)
 	this.CRS=crs;
 	this.proj_camp=proj_camp;  //Array de les projeccions de cada camp
 	this.id_camp=id_camp; //Array de les taules de identificadors que relacionen els diferents camps
-}
+}*/
 
 var IPlantillaDImpressio=0;
 

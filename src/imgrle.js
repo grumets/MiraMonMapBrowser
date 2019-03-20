@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2018 Xavier Pons
+    Copyright 2001, 2019 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -28,131 +28,190 @@
     License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
 */
 
+"use strict"
+
+/*Aquesta funció transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
+(la segona part només és vàlida per vectors).*/
+function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
+{
+var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
+//Busco la descripció de cada "valor" en la operació i creo un equivalent FormulaConsulta
+//busco una clau d'obrir
+var i, fragment, inici, final, cadena, c, i_capa_link;
+var FormulaConsulta="";
+
+	fragment=calcul;
+	while ((inici=fragment.indexOf("{"))!=-1)
+	{
+		//busco una clau de tancar
+		final=fragment.indexOf("}");
+		if  (final==-1)
+		{
+			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+			break;
+		}
+		cadena=fragment.substring(inici, final+1);
+		//interpreto el fragment metajson
+		var nou_valor=JSON.parse(cadena);
+		if (typeof nou_valor.i_capa!=="undefined")
+		{
+			if (nou_valor.i_capa>=ParamCtrl.capa.length)
+			{
+				alert("capa " + nou_valor.i_capa + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+				break;
+			}
+			if (nou_valor.i_capa==i_capa)
+			{
+				delete nou_valor.i_capa;
+				i_capa_link=i_capa;
+			}
+			else
+				i_capa_link=nou_valor.i_capa;
+		}
+		else
+			i_capa_link=i_capa
+
+		if (typeof nou_valor.i_data!=="undefined" && !ParamCtrl.capa[i_capa_link].data)
+		{
+			alert("i_data has been indicated for a 'capa' without 'data' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+			break;
+		}
+		if (typeof nou_valor.i_data!=="undefined" && nou_valor.i_data>=ParamCtrl.capa[i_capa_link].data.length)
+		{
+			alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+			break;
+		}
+		/*Eliminar aquesta línia em permet diferenciar entre "la data d'ara" encara que m'ho canviïn o "la seleccionada a la capa" i si la canvien l'adopto també.
+		if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
+			delete nou_valor.i_data;*/
+
+		
+		if(ParamCtrl.capa[i_capa_link].model==model_vector)
+		{
+			if(ParamCtrl.capa[i_capa].model==model_vector && i_capa!=i_capa_link)
+			{
+				alert("prop does not belong to the layer" + i_capa);
+				break;
+			}
+			if (typeof nou_valor.prop==="undefined")
+			{
+				alert("prop is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+				break;
+			}
+			FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; //contrueixo el fragment de FormulaConsulta
+		}
+		else
+		{
+			if (typeof nou_valor.i_valor==="undefined")
+			{
+				alert("i_valor is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+				break;
+			}
+			if (!ParamCtrl.capa[i_capa_link].valors)
+			{
+				alert("i_valor has been indicated for a 'capa' without 'valors' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+				break;
+			}
+			if (nou_valor.i_valor<0 || nou_valor.i_valor>=ParamCtrl.capa[i_capa_link].valors.length)
+			{
+				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+				break;
+			}
+			if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].calcul)
+			{
+				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that is a 'calcul'. This is not supported yet.");
+				break;
+			}
+			if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].FormulaConsulta)
+			{
+				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
+				break;
+			}
+			if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si és la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
+				i=nou_valor.i_valor;
+			else
+			{
+				//cerco si ja existeix un valor amb aquestes caracteristiques
+				if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
+					ParamCtrl.capa[i_capa].valors=[];
+				var valors=ParamCtrl.capa[i_capa].valors;
+				for (i=0; i<valors.length; i++)
+				{						
+					if ((
+						(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) && 
+						(
+							(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
+							(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
+						) && 
+						nou_valor.i_valor==i
+						) || 
+						(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa && 
+							nou_valor.i_valor==valors[i].i_valor && 
+							(
+								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
+								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
+							)
+						)
+						)
+						break;
+				}
+				if (i==valors.length)
+				{
+					//afageixo el valor si no existeix copiant tot el necessari.
+					valors[i]=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor]));
+					if (typeof nou_valor.i_capa!=="undefined")
+						valors[i].i_capa=nou_valor.i_capa;
+					valors[i].i_valor=nou_valor.i_valor;
+					if (typeof nou_valor.i_data!=="undefined")
+						valors[i].i_data=nou_valor.i_data;
+				}
+			}
+			FormulaConsulta+=fragment.substring(0, inici)+"v["+i+"]"; //contrueixo el fragment de FormulaConsulta
+		}		
+		fragment=fragment.substring(final+1, fragment.length);
+	}
+	return FormulaConsulta+fragment;
+}
+
+function HiHaValorsNecessarisCapaFormulaconsulta(capa, formula_consulta)
+{
+var valors=capa.valors;
+
+	if (!valors)
+		return false;
+	for (var i=0; i<valors.length; i++)
+	{
+		if (formula_consulta.indexOf("v["+i+"]")!=-1)
+			return true;
+	}
+	return false;
+}
 
 //v[] és false si la banda no està implicada en el redibuixat.
-function DeterminaArrayValorsNecessarisCapa(i_capa, i_estil)
+function DeterminaArrayValorsNecessarisCapa(i_capa, i_estil_o_atrib)
 {
-var valors=ParamCtrl.capa[i_capa].valors, component=ParamCtrl.capa[i_capa].estil[i_estil].component, v=[], i, i_c;
+var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
 
 	for (i=0; i<valors.length; i++)
 		v[i]=false;
 
+	if (capa.model==model_vector)
+	{
+		for (i=0; i<valors.length; i++)
+		{
+			if (capa.atributs[i_estil_o_atrib].FormulaConsulta.indexOf("v["+i+"]")!=-1)
+				v[i]=true;
+		}
+		return v;
+	}
+
+	var component=ParamCtrl.capa[i_capa].estil[i_estil_o_atrib].component, i_c;
+
 	for (i_c=0; i_c<component.length; i_c++)
 	{
 		if (component[i_c].calcul && !component[i_c].FormulaConsulta)
-		{
-			//Busco la descripció de cada "valor" en la operació i creo un equivalent FormulaConsulta
-			//busco una clau d'obrir
-			var fragment, inici, final, cadena, c, i_capa_link;
+			component[i_c].FormulaConsulta=DonaFormulaConsultaDesDeCalcul(component[i_c].calcul, i_capa, i_estil_o_atrib);
 
-			component[i_c].FormulaConsulta="";
-			fragment=component[i_c].calcul;
-			while ((inici=fragment.indexOf("{"))!=-1)
-			{
-				//busco una clau de tancar
-				final=fragment.indexOf("}");
-				if  (final==-1)
-				{
-					alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
-					break;
-				}
-				cadena=fragment.substring(inici, final+1);
-				//interpreto el fragment metajson
-				nou_valor=JSON.parse(cadena);
-				if (typeof nou_valor.i_capa!=="undefined")
-				{
-					if (nou_valor.i_capa>=ParamCtrl.capa.length)
-					{
-						alert("capa " + nou_valor.i_capa + " in 'calcul' in capa" + i_capa + " estil " + i_estil + " is out of range");
-						break;
-					}
-					if (nou_valor.i_capa==i_capa)
-					{
-						delete nou_valor.i_capa;
-						i_capa_link=i_capa;
-					}
-					else
-						i_capa_link=nou_valor.i_capa;
-				}
-				else
-					i_capa_link=i_capa
-
-				if (typeof nou_valor.i_data!=="undefined" && !ParamCtrl.capa[i_capa_link].data)
-				{
-					alert("i_data has been indicated for a 'capa' without 'data' array in 'calcul' in capa" + i_capa + " estil " + i_estil);
-					break;
-				}
-				if (typeof nou_valor.i_data!=="undefined" && nou_valor.i_data>=ParamCtrl.capa[i_capa_link].data.length)
-				{
-					alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + " estil " + i_estil + " is out of range");
-					break;
-				}
-				/*Eliminar aquesta línia em permet diferenciar entre "la data d'ara" encara que m'ho canviïn o "la seleccionada a la capa" i si la canvien l'adopto també.
-				if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
-					delete nou_valor.i_data;*/
-
-				if (typeof nou_valor.i_valor==="undefined")
-				{
-					alert("i_Valor is missing in 'calcul' in capa" + i_capa + " estil " + i_estil);
-					break;
-				}
-				if (!ParamCtrl.capa[i_capa_link].valors)
-				{
-					alert("i_valor has been indicated for a 'capa' without 'valors' array in 'calcul' in capa" + i_capa + " estil " + i_estil);
-					break;
-				}
-				if (nou_valor.i_valor>=ParamCtrl.capa[i_capa_link].valors.length)
-				{
-					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + " estil " + i_estil + " is out of range");
-					break;
-				}
-				if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].calcul)
-				{
-					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + " estil " + i_estil + " points to one of the 'values' that is a 'calcul'. This is not supported yet.");
-					break;
-				}
-				if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].FormulaConsulta)
-				{
-					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + " estil " + i_estil + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
-					break;
-				}
-				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si és la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
-					i=nou_valor.i_valor;
-				else
-				{
-					//cerco si ja existeix un valor amb aquestes caracteristiques
-					for (i=0; i<valors.length; i++)
-					{
-						if ((
-							(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) && 
-							(
-								(typeof nou_valor.i_data==="undefined" && valors[i].i_data==="undefined") || 
-								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
-							) && 
-							nou_valor.i_valor==i
-						    ) || (
-                                                        typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa && 
-							nou_valor.i_valor==valors[i].i_valor && 
-							typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data) 
-						    ))
-							break;
-					}
-					if (i==valors.length)
-					{
-						//afageixo el valor si no existeix copiant tot el necessari.
-						valors[i]=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor]));
-						if (typeof nou_valor.i_capa!=="undefined")
-							valors[i].i_capa=nou_valor.i_capa;
-						valors[i].i_valor=nou_valor.i_valor;
-						if (typeof nou_valor.i_data!=="undefined")
-							valors[i].i_data=nou_valor.i_data;
-					}
-				}
-				component[i_c].FormulaConsulta+=fragment.substring(0, inici)+"v["+i+"]"; //contrueixo el fragment de FormulaConsulta
-				fragment=fragment.substring(final+1, fragment.length);
-			}
-			component[i_c].FormulaConsulta+=fragment;
-		}
 		if (component[i_c].FormulaConsulta)
 		{
 			for (i=0; i<valors.length; i++)
@@ -161,13 +220,14 @@ var valors=ParamCtrl.capa[i_capa].valors, component=ParamCtrl.capa[i_capa].estil
 					v[i]=true;
 			}
 		}
-		else if (typeof component[i_c].i_valor !== "undefined")
+		else if (typeof component[i_c].i_valor !== "undefined" && component[i_c].i_valor!=null)
 		{
-			for (i=0; i<valors.length; i++)
+			if (component[i_c].i_valor<0 || component[i_c].i_valor>=valors.length)
 			{
-				if (i==component[i_c].i_valor)
-					v[i]=true;
+				alert("i_valor " + component[i_c].i_valor + " in 'component[" + i_c + "]' in capa" + i_capa + " estil " + i_estil_o_atrib + " is out of range");
+				continue;
 			}
+			v[component[i_c].i_valor]=true;
 		}
 		else
 			v[0]=true;
@@ -249,7 +309,7 @@ var n_v=0, i_v, array_buffer;
 			array_buffer=valors[i_v].capa_video[i_data].arrayBuffer;
 		else
 			array_buffer=(valors[i_v].nova_capa && valors[i_v].nova_capa[i_nova_vista] && valors[i_v].nova_capa[i_nova_vista].arrayBuffer) ? valors[i_v].nova_capa[i_nova_vista].arrayBuffer : null;
-		if (array_buffer)
+		if (array_buffer && array_buffer.byteLength)
 		{
 			dv[i_v]=new DataView(array_buffer);
 			n_v++;
@@ -263,10 +323,10 @@ var n_v=0, i_v, array_buffer;
 /*v[] és undefined si la banda no està implicada en el dibuixat i null si el valor és nodata.
 i_data és útil per a construir series temporals però pot ser null per a triar la data actual.
 Aquesta funció no es fa servir en el dibuixat sino només en les consultes*/
-function DonaValorsDeDadesBinariesCapa(i_nova_vista, i_capa, i_data, i_col, i_fil)
+function DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, i_data, i_col, i_fil)
 {
-var i_v, comptador, vista, dv=[], n_v, v=[], i_ndt;
-var valors=ParamCtrl.capa[i_capa].valors;
+var i_v, comptador, vista, dv=[], n_v, v=[], i_nodata;
+var valors=capa.valors;
 
 	vista=DonaVistaDesDeINovaVista(i_nova_vista);
 
@@ -280,16 +340,12 @@ var valors=ParamCtrl.capa[i_capa].valors;
 		if (dv[i_v])
 		{
 			v[i_v]=DonaValorBandaDeDadesBinariesCapa(dv[i_v], valors[i_v].compression, valors[i_v].datatype, vista.ncol, i_col, i_fil);
-			if (valors[i_v].nodata)
+			var nodata=valors[i_v].nodata;
+			if (nodata)
 			{
-				for (i_ndt=0; i_ndt<valors[i_v].nodata.length; i_ndt++)
-				{
-					if (v[i_v]==valors[i_v].nodata[i_ndt])
-					{
-						v[i_v]=null;
-						break;
-					}
-				}
+				i_nodata=nodata.indexOf(v[i_v]);
+				if (i_nodata>=0)
+					v[i_v]=null;				
 			}
 		}
 		//else v[i_v] queda a undefined deliveradament.
@@ -301,6 +357,9 @@ var valors=ParamCtrl.capa[i_capa].valors;
 function DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, v)
 {
 var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_v, i_c, i_a, i_valor, v_c;
+
+	if (v==null)
+		return "";
 
 	estil=capa.estil[DonaEstilDadesBinariesCapa(i_nova_vista, i_capa)]
 	component=estil.component;
@@ -327,7 +386,7 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	return cdns.join(", ");
 }
 
-//Retorna els valors de les compoments com a un array (un per cada component). Els valors es poden obtenir de DonaValorsDeDadesBinariesCapa()
+	//Retorna els valors de les compoments com a un array (un per cada component). Els valors es poden obtenir de DonaValorsDeDadesBinariesCapa()
 function DonaValorEstilComArrayDesDeValorsCapa(i_nova_vista, i_capa, i_estil, v)
 {
 var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_v, i_c, i_a, i_valor;
@@ -337,7 +396,7 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 
 	for (i_v=0; i_v<valors.length; i_v++)
 	{
-	       	if (typeof v[i_v]==="undefined")
+	    if (typeof v[i_v]==="undefined")
 			continue;
 		if (v[i_v]==null)
 			return null;
@@ -522,13 +581,18 @@ var valors=ParamCtrl.capa[extra_param.i_capa].valors
 		delete valors[extra_param.i_valor].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer;
 }
 
-function ContruieixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta)
-{
-var i_cell=[], i_byte=[], i_data=0, j, i, v=[], v_i, dv_i, i_c, valor0, i_color=[], i_color0, a=[], valor_min=[], comptador, acumulat, bigint, fila=[], es_nodata, i_ndt, classe0;
-var component0, n_v=valors.length;
-var colors, ncolors, valors_i, nodata, dtype, una_component;
+/*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255. 
+This is especially handy for Canvas image processing algorithms since now you don’t have to manually clamp your 
+image processing math to avoid overflowing the 8-bit range.*/
 
-	for (i_v=0; i_v<n_v; i_v++)
+function ContruieixImatgeCanvas(img_data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta)
+{
+var i_cell=[], i_byte=[], j, i, v=[], v_i, dv_i, i_c, valor0, i_color=[], i_color0, a=[], valor_min=[], comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0;
+var histo_component0, component0, n_v=valors.length;
+var colors, ncolors, valors_i, nodata, dtype, una_component;
+var data;
+
+	for (var i_v=0; i_v<n_v; i_v++)
 	{
 		i_cell[i_v]=0;
 		i_byte[i_v]=0;
@@ -560,8 +624,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + colors[i_color0] + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
 			}
 		}
-		a[0]=DonaFactorAEstiramentPaleta(component0, ncolors);
-		valor_min[0]=DonaFactorValorMinEstiramentPaleta(component0);
+		a[0]=DonaFactorAEstiramentPaleta(component0.estiramentPaleta, ncolors);
+		valor_min[0]=DonaFactorValorMinEstiramentPaleta(component0.estiramentPaleta);
 		if (histograma)
 		{
 			//cal_histo=true;
@@ -591,8 +655,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			histograma.component=[];
 		for (i_c=0; i_c<3; i_c++)
 		{
-			a[i_c]=DonaFactorAEstiramentPaleta(component[i_c], 256);
-			valor_min[i_c]=DonaFactorValorMinEstiramentPaleta(component[i_c]);
+			a[i_c]=DonaFactorAEstiramentPaleta(component[i_c].estiramentPaleta, 256);
+			valor_min[i_c]=DonaFactorValorMinEstiramentPaleta(component[i_c].estiramentPaleta);
 			/*if (extra_param.vista.i_nova_vista!=-2 && extra_param.vista.i_nova_vista!=-3 && extra_param.vista.i_nova_vista!=-4)
 			{
 				cal_histo=true;
@@ -623,14 +687,16 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 
 	una_component=(component.length==1)?true:false;
 
+	data=[]; //Empty the array;
+
 	if (mes_duna_v)  
 	{
 		for (j=0;j<nfil;j++)
 		{
 			//Primer llegim totes les bandes de les files
-			for (i_v=0;i_v<n_v;i_v++)
-		    	{
-			        if (dv[i_v]==null)
+		    for (i_v=0;i_v<n_v;i_v++)
+		    {
+			    if (dv[i_v]==null)
 					continue;
 				dv_i=dv[i_v];
 				valors_i=valors[i_v];
@@ -651,10 +717,10 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 								i_byte[i_v]++;
 								acumulat += comptador;
-		
+
 								for ( ; i<acumulat; i++)
                 			    			{
-									fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); 
+									fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian);
 									i_byte[i_v]++;
 								}
 							}
@@ -1017,7 +1083,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				for (i=0;i<ncol;i++)
 				{
 					v=fila[i];
-					es_nodata=false;
+					i_nodata=-1;
 					for (i_v=0;i_v<n_v;i_v++)
 					{
 					        if (dv[i_v]==null)
@@ -1025,24 +1091,16 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						nodata=valors[i_v].nodata;
 						if (nodata)
 						{
-							for (i_ndt in nodata)
-							{
-								if (v[i_v]==nodata[i_ndt])
-								{
-									es_nodata=true;
-									break;
-								}
-							}
-							if (es_nodata)
+							i_nodata=nodata.indexOf(v[i_v]);
+							if (i_nodata>=0)
 								break;
 						}
 					}
-					if (es_nodata)
+					if (i_nodata>=0)
 					{
 						if (histograma)
 							histograma.classe_nodata++;
-						data[i_data+2]=data[i_data+1]=data[i_data]=255;
-						data[i_data+3]=0;
+						data.push(255,255,255,0);
 					}
 					else
 					{
@@ -1051,8 +1109,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						{
 							if (histograma)	
 								histograma.classe_nodata++;
-							data[i_data+2]=data[i_data+1]=data[i_data]=255;
-							data[i_data+3]=0;
+							data.push(255,255,255,0);
 						}
 						else
 						{
@@ -1073,24 +1130,20 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							if (colors)
 							{
 								bigint = parseInt(colors[i_color0].substring(1), 16);
-								data[i_data]=(bigint >> 16) & 255;
-								data[i_data+1]=(bigint >> 8) & 255;
-								data[i_data+2]=bigint & 255;
+								data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
 							}
 							else
-								data[i_data+2]=data[i_data+1]=data[i_data]=i_color0;
-							data[i_data+3]=255;
+								data.push(i_color0, i_color0, i_color0, 255);
 						}
 					}
-					i_data+=4;
-                        	}
+				}
 			}
 			else
 			{
 				for (i=0;i<ncol;i++)
 				{
 					v=fila[i];
-					es_nodata=false;
+					i_nodata=-1;
 					for (i_v=0;i_v<n_v;i_v++)
 					{
 					        if (dv[i_v]==null)
@@ -1098,28 +1151,19 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						nodata=valors[i_v].nodata;
 						if (nodata)
 						{
-							for (i_ndt in nodata)
-							{
-								if (v[i_v]==nodata[i_ndt])
-								{
-									es_nodata=true;
-									break;
-								}
-							}
-							if (es_nodata)
+							i_nodata=nodata.indexOf(v[i_v]);
+							if (i_nodata>=0)
 								break;
 						}
 					}
-					if (es_nodata)
+					if (i_nodata>=0)
 					{
 						if (histograma)
 							histograma.classe_nodata++;
-						data[i_data+2]=data[i_data+1]=data[i_data]=255;
-						data[i_data+3]=0;
+						data.push(255, 255, 255, 0);
 					}
 					else
 					{
-						data[i_data+3]=255;
 						for (i_c=0; i_c<3; i_c++)
 						{
 							if (component[i_c].FormulaConsulta)
@@ -1129,8 +1173,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								{
 									if (histograma)
 										histograma.classe_nodata++;
-									data[i_data+2]=data[i_data+1]=data[i_data]=255;
-									data[i_data+3]=0;
+									for (; i_c<3; i_c++)
+										data.push(255);
+									data.push(0);
 									break;
 								}
 							}
@@ -1152,21 +1197,22 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								i_color0=0;
 							if (histograma)
 								histograma.component[i_c].classe[i_color0]++;
-							data[i_data+i_c]=i_color0;
+							data.push(i_color0)
+							if (i_c==2)
+								data.push(255);
 						}
 					}
-					i_data+=4;
 				}
 			}
-	    	} //End of for
+	  	} //End of for
 	}
 	else
 	{
 		for (j=0;j<nfil;j++)
 		{
 			for (i_v=0;i_v<n_v;i_v++)
-		    	{
-			        if (dv[i_v]==null)
+		   	{
+			    if (dv[i_v]==null)
 					continue;
 				dv_i=dv[i_v];
 				valors_i=valors[i_v];
@@ -1207,24 +1253,14 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								else if (dtype=="float64")
 									{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
 							
-								es_nodata=false;
+								i_nodata=-1;
 								if (nodata)
-								{
-									for (i_ndt in nodata)
-									{
-										if (v[i_v]==nodata[i_ndt])
-										{
-											es_nodata=true;
-											break;
-										}
-									}
-								}
-								if (es_nodata)
+									i_nodata=nodata.indexOf(v[i_v]);
+								if (i_nodata>=0)
 								{
 									if (histograma)
 										histograma.classe_nodata++;
-									data[i_data+2]=data[i_data+1]=data[i_data]=255;
-									data[i_data+3]=0;
+									data.push(255,255,255,0);
 								}
 								else
 								{
@@ -1238,17 +1274,16 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										{
 											if (histograma)
 												component0.histograma_nodata++;
-											data[i_data+2]=data[i_data+1]=data[i_data]=255;
-											data[i_data+3]=0;
+											data.push(255,255,255,0);
 										}
 										else
 										{
 											if (histograma)
 											{
 												if (histo_component0.valorMinimReal>valor0)
-													component0.valorMinimReal=valor0;
+													histo_component0.valorMinimReal=valor0;
 												if (histo_component0.valorMaximReal<valor0)
-													component0.valorMaximReal=valor0;
+													histo_component0.valorMaximReal=valor0;
 											}
 											i_color0=Math.floor(a[0]*(valor0-valor_min[0]));
 											if (i_color0>=ncolors)
@@ -1262,18 +1297,14 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 											{	
 												//From http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 												bigint = parseInt(colors[i_color0].substring(1), 16);
-												data[i_data]=(bigint >> 16) & 255;
-												data[i_data+1]=(bigint >> 8) & 255;
-												data[i_data+2]=bigint & 255;
+												data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
 											}
 											else
-												data[i_data+2]=data[i_data+1]=data[i_data]=i_color0;
-											data[i_data+3]=255;
+												data.push(i_color0, i_color0, i_color0, 255);
 										}
 									}
 									else
 									{
-										data[i_data+3]=255;
 										for (i_c=0; i_c<3; i_c++)
 										{
 											if (component[i_c].FormulaConsulta)
@@ -1283,8 +1314,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												{
 													if (histograma)
 														histograma.classe_nodata++;
-													data[i_data+2]=data[i_data+1]=data[i_data]=255;
-													data[i_data+3]=0;
+													for (;i_c<3; i_c++)
+														data.push(255);
+													data.push(0);
 													break;
 												}
 											}
@@ -1304,11 +1336,12 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												i_color0=0;
 											if (histograma)
 												histograma.component[i_c].classe[i_color0]++;
-											data[i_data+i_c]=i_color0;
+											data.push(i_color0)
+											if (i_c==2)
+												data.push(255);
 										}
 									}
 								}
-								i_data+=4;
 		                    			}
 						}
 						else
@@ -1333,28 +1366,15 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							else if (dtype=="float64")
 								{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
 	
-							es_nodata=false;
+							i_nodata=-1;
 							if (nodata)
-							{
-								for (i_ndt in nodata)
-								{
-									if (v[i_v]==nodata[i_ndt])
-									{
-										es_nodata=true;
-										break;
-									}
-								}
-							}
-							if (es_nodata)
+								i_nodata=nodata.indexOf(v[i_v]);
+							if (i_nodata>=0)
 							{
 								if (histograma)
 									histograma.classe_nodata+=comptador;
 								for ( ; i<acumulat; i++)
-								{
-									data[i_data+2]=data[i_data+1]=data[i_data]=255;
-									data[i_data+3]=0;
-									i_data+=4;
-								}
+									data.push(255,255,255,0);
 							}
 							else
 							{
@@ -1369,11 +1389,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										if (histograma)
 											histograma.classe_nodata+=comptador;
 										for ( ; i<acumulat; i++)
-										{
-											data[i_data+2]=data[i_data+1]=data[i_data]=255;
-											data[i_data+3]=0;
-											i_data+=4;
-										}
+											data.push(255,255,255,0);
 									}
 									else
 									{
@@ -1395,22 +1411,12 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										{
 											bigint = parseInt(colors[i_color0].substring(1), 16);
 											for ( ; i<acumulat; i++)
-											{
-												data[i_data]=(bigint >> 16) & 255;
-												data[i_data+1]=(bigint >> 8) & 255;
-												data[i_data+2]=bigint & 255;
-												data[i_data+3]=255;
-												i_data+=4;
-											}
+												data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
 										}
 										else
 										{
 											for ( ; i<acumulat; i++)
-											{
-												data[i_data+2]=data[i_data+1]=data[i_data]=i_color0;
-												data[i_data+3]=255;
-												i_data+=4;
-											}
+												data.push(i_color0,i_color0,i_color0,255);
 										}
 									}
 								}
@@ -1447,26 +1453,16 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										if (histograma)
 											histograma.classe_nodata+=comptador;
 										for ( ; i<acumulat; i++)
-										{
-											data[i_data+2]=data[i_data+1]=data[i_data]=255;
-											data[i_data+3]=0;
-											i_data+=4;
-										}
+											data.push(255,255,255,0);
 									}
 									else
 									{
 										for ( ; i<acumulat; i++)
-										{
-											data[i_data]=i_color[0];
-											data[i_data+1]=i_color[1];
-											data[i_data+2]=i_color[2];
-											data[i_data+3]=255;
-											i_data+=4;
-										}
+											data.push(i_color[0], i_color[1], i_color[2], 255);
 									}
 								}
 							}
-		                		}
+						}
 					}			
 				}
 				else
@@ -1493,24 +1489,14 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							v[i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
 						i_cell[i_v]++;
 	
-						es_nodata=false;
+						i_nodata=-1;
 						if (nodata)
-						{
-							for (i_ndt in nodata)
-							{
-								if (v[i_v]==nodata[i_ndt])
-								{
-									es_nodata=true;
-									break;
-								}
-							}
-						}
-						if (es_nodata)
+							i_nodata=nodata.indexOf(v[i_v]);
+						if (i_nodata>=0)
 						{
 							if (histograma)
 								histograma.classe_nodata++;
-							data[i_data+2]=data[i_data+1]=data[i_data]=255;
-							data[i_data+3]=0;
+							data.push(255,255,255,0);
 						}
 						else
 						{
@@ -1524,8 +1510,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								{
 									if (histograma)
 										histograma.classe_nodata++;
-									data[i_data+2]=data[i_data+1]=data[i_data]=255;
-									data[i_data+3]=0;
+									data.push(255,255,255,0);
 								}
 								else
 								{
@@ -1546,18 +1531,14 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									if (colors)
 									{
 										bigint = parseInt(colors[i_color0].substring(1), 16);
-										data[i_data]=(bigint >> 16) & 255;
-										data[i_data+1]=(bigint >> 8) & 255;
-										data[i_data+2]=bigint & 255;
+										data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
 									}
 									else
-										data[i_data+2]=data[i_data+1]=data[i_data]=i_color0;
-									data[i_data+3]=255;
+										data.push(i_color0, i_color0, i_color0, 255);
 								}
 							}
 							else
 							{
-								data[i_data+3]=255;
 								for (i_c=0; i_c<3; i_c++)
 								{
 									if (component[i_c].FormulaConsulta)
@@ -1567,8 +1548,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										{
 											if (histograma)
 												histograma.classe_nodata++;
-											data[i_data+2]=data[i_data+1]=data[i_data]=255;
-											data[i_data+3]=0;
+											for (; i_c<3; i_c++)
+												data.push(255);
+											data.push(0);
 											break;
 										}
 									}
@@ -1578,8 +1560,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									{
 										if (histograma.component[i_c].valorMinimReal>valor0)
 											histograma.component[i_c].valorMinimReal=valor0;
-										if (component[i_c].valorMaximReal<valor0)
-											component[i_c].valorMaximReal=valor0;
+										if (histograma.component[i_c].valorMaximReal<valor0)
+											histograma.component[i_c].valorMaximReal=valor0;
 									}
 									i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 									if (i_color0>=256)
@@ -1588,16 +1570,18 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										i_color0=0;
 									if (histograma)
 										histograma.component[i_c].classe[i_color0]++;
-									data[i_data+i_c]=i_color0;
+									data.push(i_color0);
+									if (i_c==2)
+										data.push(255);
 								}
 							}
 						}
-						i_data+=4;
 					}
 				}
 			}
 		}
-        }
+	}
+	img_data.set(data);
 }
 
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
@@ -1609,12 +1593,6 @@ var histograma=null, imgData, ctx;
 //cal_histo=false;
 
 	CanviaEstatEventConsola(null, extra_param.i_event, EstarEventTotBe);
-
-	if (extra_param.imatge==null)
-	{
-		alert("No support for canvas detected");
-		return;
-	}
 
 	//Carrego la banda que m'ha passat
 	if (extra_param.vista.i_nova_vista==-1)
@@ -1660,32 +1638,40 @@ var histograma=null, imgData, ctx;
 	}
 
 	//Ara ha se que tinc el que necessito.
-
-	//Decidim on en guarda l'histograma
-	if (extra_param.vista.i_nova_vista==-1)
-		histograma=estil.histograma={};
-	else if (extra_param.vista.i_nova_vista==-4)
+	
+	if (extra_param.imatge)
 	{
-		estil.capa_video[extra_param.i_data]={histograma: {}};
-		histograma=estil.capa_video[extra_param.i_data].histograma;
+		//Decidim on en guarda l'histograma
+		if (extra_param.vista.i_nova_vista==-1)
+			histograma=estil.histograma={};
+		else if (extra_param.vista.i_nova_vista==-3)
+		{
+			estil.capa_rodet[extra_param.i_data]={histograma: {}};
+			histograma=estil.capa_rodet[extra_param.i_data].histograma;
+		}
+		else if (extra_param.vista.i_nova_vista==-4)
+		{
+			estil.capa_video[extra_param.i_data]={histograma: {}};
+			histograma=estil.capa_video[extra_param.i_data].histograma;
+		}
+
+		extra_param.imatge.width  = extra_param.vista.ncol;
+		extra_param.imatge.height = extra_param.vista.nfil;	
+
+		ctx=extra_param.imatge.getContext("2d");
+		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+		imgData=ctx.createImageData(extra_param.imatge.width,extra_param.imatge.height);
+
+		n_v=CarregaDataViewsCapa(dv, extra_param.vista.i_nova_vista, extra_param.i_data, valors);
+
+		if (n_v==0)
+			return;
+
+		ContruieixImatgeCanvas(imgData.data, histograma, imgData.width, imgData.height, dv, n_v-1, capa.estil[extra_param.i_estil].component, valors, estil.paleta)
+
+		ctx.putImageData(imgData,0,0);
 	}
-
-	extra_param.imatge.width  = extra_param.vista.ncol;
-	extra_param.imatge.height = extra_param.vista.nfil;
-
-	ctx=extra_param.imatge.getContext("2d");
-	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
-
-	imgData=ctx.createImageData(extra_param.imatge.width,extra_param.imatge.height);
-
-	n_v=CarregaDataViewsCapa(dv, extra_param.vista.i_nova_vista, extra_param.i_data, valors);
-
-	if (n_v==0)
-		return;
-
-	ContruieixImatgeCanvas(imgData.data, histograma, imgData.width, imgData.height, dv, n_v-1, capa.estil[extra_param.i_estil].component, valors, estil.paleta)
-
-	ctx.putImageData(imgData,0,0);
 	CanviaCursorSobreVista("auto");
 	if (extra_param.nom_funcio_ok)
 	{
@@ -1696,21 +1682,20 @@ var histograma=null, imgData, ctx;
 	}
 }
 
-
+//Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per atributs calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
 var i, i_event;
 var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
-var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 
-		if (!estil.component)
+		/*if (!estil.component)
 		{
 			alert(DonaCadenaLang({"cat":"La capa ha estat demanada com img però no hi ha components definides al estil actual. No es podrà ni consultar\nCapa: \"",
 						"spa":"La capa ha sido solicitada como img pero no tiene componentes definidas en el estilo actual.\nCapa \"",
 						"eng":"The layer is requested as img but there are no defined components for the current style.\nLayer \"", 
 						"fre":"La couche est requise comme img mais il n'y a pas de composants définis pour le style actuel.\nCouche \""}) + DonaCadena(ParamCtrl.capa[i_capa].desc));
 			return;
-		}
+		}*/
 		//arrayBuffer és "undefined" si la banda no està implicada al dibuixat i null si encara no s'ha carregar però s'espera que ho faci.
 		var valors=ParamCtrl.capa[i_capa].valors;
 		//Determina les v[i] presents a l'expressió.
@@ -1744,6 +1729,9 @@ var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 		}
 		else if (vista.i_nova_vista==-3)
 		{
+			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
+			if (!estil.capa_rodet)
+				estil.capa_rodet=[];       //Preparo guardat els histogrames petits aquí dins.
 			for (i=0; i<valors.length; i++)
 			{
 				if (!valors[i].capa_rodet)
@@ -1764,6 +1752,7 @@ var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 		}
 		else if (vista.i_nova_vista==-4)
 		{
+			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			if (!estil.capa_video)
 				estil.capa_video=[];       //Preparo guardat els histogrames aquí dins.
 			for (i=0; i<valors.length; i++)
@@ -1826,4 +1815,44 @@ var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			}
 		}
 		CanviaCursorSobreVista("progress");
+}
+
+function BuidaArrayBufferCapa(capa)
+{
+var valors, estil;
+	if (capa.valors)
+	{
+		for (var i_v=0; i_v<capa.valors.length; i_v++)
+		{
+			valors=capa.valors[i_v];
+			if (valors.arrayBuffer)
+				delete valors.arrayBuffer;
+			if (valors.arrayBufferPrint)
+				delete valors.arrayBufferPrint;
+			if (valors.arrayBuffer)
+				delete valors.capa_rodet;
+			if (valors.arrayBuffer)
+				delete valors.capa_video;
+			if (valors.nova_capa)
+				delete valors.nova_capa;
+		}
+	}	
+	if (capa.estil)
+	{
+		for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
+		{
+			estil=capa.estil[i_estil];
+			if (estil.histograma)
+				delete estil.histograma;
+			else if (estil.capa_rodet)
+				delete estil.capa_rodet;
+			else if (estil.capa_video)
+				delete estil.capa_video;
+			for (var i_c=0; i_c<estil.component; i_c++)
+			{
+				if (estil.component[i_c].calcul && estil.component[i_c].FormulaConsulta)
+					delete estil.component[i_c].FormulaConsulta;
+			}
+		}
+	}
 }

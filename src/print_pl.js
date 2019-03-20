@@ -32,6 +32,10 @@
     Joan Masó   15-01-2007 
 */
 
+//ATENCIO: Aquest mòdul NO s'ha d'incloure a la plana principal
+
+"use strict"
+
 /*Duplicar la funció de createLayer em permet tenir un array
   diferent de layers per a cada plantilla d'impressió i pel
   navegador. Malgrat tot, ara per ara aquest array no s'usa.*/
@@ -91,88 +95,85 @@ function SurtModificaPlantillaImpressio()
 
 function ModificaPlantillaImpressio()
 {
-	with (window.opener.parent.opener)
+var win=window.opener.parent.opener;
+	window.document.title=win.DonaCadena(win.ParamCtrl.titol);
+	var elem=win.getLayer(window, "vista");
+	if (win.isLayer(elem) &&
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectVista.esq==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectVista.sup==0 && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectVista.ample==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectVista.alt==0)
+	{		
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectVista=win.getRectLayer(elem);
+		if (win.isLayerVisible(elem))
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.CalImprimirVista;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.CalImprimirVista;
+		if (window.RespectarResolucioVista)
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.RespectarResolucioVistaImprimir;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.RespectarResolucioVistaImprimir;
+	}
+	elem=win.getLayer(window, "escala");
+	if (win.isLayer(elem) &&
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectEscala.esq==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectEscala.sup==0 && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectEscala.ample==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectEscala.alt==0)
 	{
-		this.document.title=DonaCadena(ParamCtrl.titol);
-		var elem=getLayer(this, "vista");
-		if (isLayer(elem) &&
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.esq==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.sup==0 && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.ample==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista.alt==0)
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectEscala=win.getRectLayer(elem);
+		if (win.isLayerVisible(elem))
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.CalImprimirEscala;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.CalImprimirEscala;
+	}
+	elem=win.getLayer(window, "titol");
+	if (win.isLayer(elem) && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectTitol.esq==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectTitol.sup==0 && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectTitol.ample==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectTitol.alt==0)
+	{
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectTitol=win.getRectLayer(elem);
+		if (win.isLayerVisible(elem))
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.CalImprimirTitol;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.CalImprimirTitol;
+	}
+	elem=win.getLayer(window, "llegenda");
+	if (win.isLayer(elem) &&
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectLlegenda.esq==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectLlegenda.sup==0 && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectLlegenda.ample==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectLlegenda.alt==0)
+	{
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectLlegenda=win.getRectLayer(elem);
+		if (win.isLayerVisible(elem))
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.CalImprimirLlegenda;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.CalImprimirLlegenda;
+	}
+	elem=win.getLayer(window, "situacio");
+	if (win.isLayer(elem) &&
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectSituacio.esq==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectSituacio.sup==0 && 
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectSituacio.ample==0 && win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectSituacio.alt==0)
+	{
+		win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].RectSituacio=win.getRectLayer(elem);
+		if (win.isLayerVisible(elem))
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir|=win.CalImprimirSituacio;
+		else
+			win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].CalImprimir&=~win.CalImprimirSituacio;
+	}
+	if (win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].LayersPropies.length==0)
+	{
+		for (var i=0; i<window.layerList.length; i++)
 		{
+			if (window.layerList[i]=="vista" ||
+				window.layerList[i]=="escala" ||
+				window.layerList[i]=="titol" ||
+				window.layerList[i]=="situacio" ||
+				window.layerList[i]=="llegenda")
+				continue;
+			elem=win.getLayer(window, window.layerList[i]);
+			var rect=win.getRectLayer(elem);
 			
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectVista=getRectLayer(elem);
-			if (isLayerVisible(elem))
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirVista;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirVista;
-			if (this.RespectarResolucioVista)
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=RespectarResolucioVistaImprimir;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~RespectarResolucioVistaImprimir;
-		}
-		elem=getLayer(this, "escala");
-		if (isLayer(elem) &&
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.esq==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.sup==0 && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.ample==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala.alt==0)
-		{
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectEscala=getRectLayer(elem);
-			if (isLayerVisible(elem))
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirEscala;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirEscala;
-		}
-		elem=getLayer(this, "titol");
-		if (isLayer(elem) && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.esq==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.sup==0 && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.ample==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol.alt==0)
-		{
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectTitol=getRectLayer(elem);
-			if (isLayerVisible(elem))
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirTitol;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirTitol;
-		}
-		elem=getLayer(this, "llegenda");
-		if (isLayer(elem) &&
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.esq==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.sup==0 && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.ample==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda.alt==0)
-		{
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectLlegenda=getRectLayer(elem);
-			if (isLayerVisible(elem))
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirLlegenda;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirLlegenda;
-		}
-		elem=getLayer(this, "situacio");
-		if (isLayer(elem) &&
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.esq==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.sup==0 && 
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.ample==0 && plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio.alt==0)
-		{
-			plantilla_dimpressio_intern[IPlantillaDImpressio].RectSituacio=getRectLayer(elem);
-			if (isLayerVisible(elem))
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir|=CalImprimirSituacio;
-			else
-				plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&=~CalImprimirSituacio;
-		}
-		if (plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies.length==0)
-		{
-		    for (var i=0; i<this.layerList.length; i++)
-		    {
-			if (this.layerList[i]=="vista" ||
-			    this.layerList[i]=="escala" ||
-			    this.layerList[i]=="titol" ||
-			    this.layerList[i]=="situacio" ||
-			    this.layerList[i]=="llegenda")
-			    continue;
-			elem=getLayer(this, this.layerList[i]);
-			var rect=getRectLayer(elem);
-			
-			IniciaLayerPropiaPlantillaDImpressio(IPlantillaDImpressio, plantilla_dimpressio_intern[IPlantillaDImpressio].LayersPropies.length,
-						isLayerVisible(elem),
+			win.IniciaLayerPropiaPlantillaDImpressio(win.IPlantillaDImpressio, win.plantilla_dimpressio_intern[win.IPlantillaDImpressio].LayersPropies.length,
+						win.isLayerVisible(elem),
 						rect.esq, rect.sup, rect.ample, rect.alt,
-						getContentLayer(elem),
+						win.getContentLayer(elem),
 						i);
-		    }
 		}
 	}
 	window.opener.DibuixaEditsMides();
