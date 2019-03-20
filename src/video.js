@@ -704,14 +704,15 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 function CanviaAnimacio(nom_video)
 {
 //Generar desplegable d'estils.
-var capa, estils=[], cdns=[], i_estil;
+var capa, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 
 		//Determino la llista d'estils.
 		for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
 		{
-			if (EsCapaAptePerVideo(ParamCtrl.capa[i_capa_video_actiu]) && nom_video==ParamCtrl.capa[i_capa_video_actiu].NomVideo)
+			capa=ParamCtrl.capa[i_capa_video_actiu];
+			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo)
 			{
-				if (ParamCtrl.capa[i_capa_video_actiu].estil==null || ParamCtrl.capa[i_capa_video_actiu].estil.length==0)
+				if (capa.estil==null || capa.estil.length==0)
 				{
 					for (i_estil=0; i_estil<estils.length; i_estil++)
 					{
@@ -719,13 +720,16 @@ var capa, estils=[], cdns=[], i_estil;
 							break;
 					}
 					if (i_estil==estils.length)
+					{
 						estils[i_estil]={"nom":"", "desc": ""};
+						if (i_estil_sel==-1)
+							i_estil_sel=i_estil;
+					}
 				}
 				else
 				{
-					for (var i_estil_video_actiu=0; i_estil_video_actiu<ParamCtrl.capa[i_capa_video_actiu].estil.length; i_estil_video_actiu++)
+					for (var i_estil_video_actiu=0; i_estil_video_actiu<capa.estil.length; i_estil_video_actiu++)
 					{				
-						capa=ParamCtrl.capa[i_capa_video_actiu];
 						for (i_estil=0; i_estil<estils.length; i_estil++)
 						{
 							if (!capa.estil[0].nom)
@@ -742,6 +746,8 @@ var capa, estils=[], cdns=[], i_estil;
 						if (i_estil==estils.length)
 						{
 							estils[i_estil]={"nom":capa.estil[i_estil_video_actiu].nom, "desc": capa.estil[i_estil_video_actiu].desc};
+							if (i_estil_sel==-1 && i_estil_video_actiu==capa.i_estil)
+								i_estil_sel=i_estil;
 						}
 					}
 				}
@@ -754,9 +760,11 @@ var capa, estils=[], cdns=[], i_estil;
 			cdns.push(DonaCadena(estils[0].desc));
 		else
 		{
+			if (i_estil_sel==-1)
+				i_estil_sel=0;
 			cdns.push("<select name=\"estil\" onChange=\"CanviaVideo(document.video_animacions.capa.value, document.video_animacions.estil.value);\">");
 			for (i_estil=0; i_estil<estils.length; i_estil++)
-				cdns.push("<option value=\"",((estils[i_estil].nom) ? estils[i_estil].nom : DonaCadena(estils[i_estil].desc)),"\"",((i_estil==0) ? " SELECTED" : "") +">",DonaCadena(estils[i_estil].desc),"</option>");
+				cdns.push("<option value=\"",((estils[i_estil].nom) ? estils[i_estil].nom : DonaCadena(estils[i_estil].desc)),"\"",((i_estil==i_estil_sel) ? " SELECTED" : "") +">",DonaCadena(estils[i_estil].desc),"</option>");
 			cdns.push("</select>");
 		}
 		document.getElementById("video_estil").innerHTML=cdns.join("");
