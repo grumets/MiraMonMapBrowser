@@ -25,7 +25,7 @@
     per Internet. No tots aquests productes són gratuïts o de codi obert. 
     En particular, el Navegador de Mapes del MiraMon (client per Internet) 
     es distribueix sota els termes de la llicència "GNU General Public 
-    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+    License". Es pot actualitzar des de https://github.com/joanma747/MiraMonMapBrowser
 */
 
 "use strict"
