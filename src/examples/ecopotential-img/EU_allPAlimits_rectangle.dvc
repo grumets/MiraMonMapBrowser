@@ -1,0 +1,13 @@
+file title  : 
+id type     : integer
+file type   : ascii
+object type : polygon
+ref. system : lat/long-WGS84
+ref. units  : deg
+unit dist.  : 1.000000
+min. X      : -11.7300000000000
+max. X      : 30.6749996169250
+min. Y      : 29.8500001468750
+max. Y      : 73.5700000000000
+pos'n error : unknown
+resolution  : unknown

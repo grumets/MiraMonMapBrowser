@@ -1,4 +1,4 @@
-/* 
+ /* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -6278,7 +6278,7 @@ function CreaItemLlegDePaletaSiCal(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
 var estil=capa.estil[i_estil];
-var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample;
+var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample, desc;
 
 	if (estil.ItemLleg && estil.ItemLleg.length>0)
 		return;  //No cal fer-la: ja està feta.
@@ -6297,7 +6297,10 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample;
 		{
 			if (!estil.categories[i_color])
 				continue;
-			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": DonaTextCategoriaDesDeColor(estil, i_color)};
+			desc=DonaTextCategoriaDesDeColor(estil, i_color);
+			if (desc=="")
+				continue;
+			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": desc};
 			i++;
 		}	
 		return;
@@ -6351,7 +6354,7 @@ var capa=ParamCtrl.capa[i_capa];
 			);
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs
+//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, retorna una cadean buida.
 function DonaTextCategoriaDesDeColor(estil, i_color)
 {
 	if (estil.atributs.length==1)
@@ -6360,6 +6363,8 @@ function DonaTextCategoriaDesDeColor(estil, i_color)
 	var value_text="[";
 	for (var i_a=0; i_a<estil.atributs.length; i_a++)
 	{
+		if (!estil.categories[i_color][estil.atributs[i_a].nom])
+			return "";
 		value_text+=(estil.atributs[i_a].desc ? DonaCadena(estil.atributs[i_a].desc) : estil.atributs[i_a].nom) + ": " + estil.categories[i_color][estil.atributs[i_a].nom]; 
 		if (i_a+1<estil.atributs.length)
 			value_text+="; "

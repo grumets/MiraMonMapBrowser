@@ -1,0 +1,4362 @@
+{
+	"VersioConfigMMN":
+	{
+		"Vers": 6,
+		"SubVers": 0,
+		"VariantVers": null
+	},
+	"SpaceForLayers":
+	{
+		"width": 1280,
+		"height": 904
+	},
+	"Layer": [
+		{"name": "situacio", "left": 0, "top": 0, "width": 203, "height": 243, "ancora": "NWse", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "llegenda", "left": 1, "top": 243, "width": 203, "height": 661, "ancora": "nWSe", "scroll": "ara_no", "visible": true, "ev": null, "content": null},
+		{"name": "titol", "left": 250, "top": 20, "width": 900, "height": 80, "ancora": "NwEs", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "logos", "left": 1000, "top": 5, "width": 270, "height": 150, "ancora": "NwEsC", "scroll": "no", "visible": true, "ev": null, "content": "<a href=\"http://www.creaf.cat\" target=\"_top\"><img align=\"middle\" border=\"0\" src=\"examples/mcsc-img/LogoCREAF.png\" width=\"180\" alt=\"CREAF\"></a>"},
+		{"name": "barra", "left": 245, "top": 97, "width": 685, "height": 35, "ancora": "wC", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "projeccio", "left": 1080, "top": 97, "width": 140, "height": 15, "ancora": "NwEsC", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "vista", "left": 243, "top": 122, "width": 1037, "height": 800, "ancora": "NwSE", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "atribucio", "left": 243, "top": 866, "width": 1012, "height": 15, "ancora": "SEwR", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "logo_miramon", "left": 1195, "top": 788, "width": 50, "height": 25, "ancora": "SECR", "scroll": "no", "visible": true, "ev": null, "content": { "cat" :"<a href=\"http://www.creaf.uab.cat/miramon/index_ca.htm\" target=\"_blank\"><img src=\"examples/mcsc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","spa":"<a href=\"http://www.creaf.uab.cat/miramon/index_es.htm\" target=\"_blank\"><img src=\"examples/mcsc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","eng":"<a href=\"http://www.creaf.uab.cat/miramon/index.htm\" target=\"_blank\"><img src=\"examples/mcsc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"}},
+		{"name": "coord", "left": 250, "top": 725, "width": 320, "height": 150, "ancora": "SCwR", "scroll": "no", "visible": true, "ev": null, "content": null},
+		{"name": "ctipica", "left": 660, "top": 97, "width": 400, "height": 15, "ancora": "wC", "scroll": "no", "visible": true, "ev": null, "content": null}
+	],
+	"ServidorLocal": "http://www.ogc.uab.cat/cgi-bin/MCSC/MiraMon.cgi?",
+	"VersioServidorLocal":
+	{
+		"Vers": 1,
+		"SubVers": 3,
+		"VariantVers": 0
+	},
+	"TipusServidorLocal": "TipusWMS",
+	"AdrecaBaseSRC": "",
+	"WPSschemaURL": "http://schemas.opengis.net",
+	"idiomes":
+	[
+		"cat",
+		"spa",
+		"eng"
+	],
+	"idioma": "cat",
+	"PlanaPrincipal": "http://www.creaf.uab.es/mcsc",
+	"TitolNavegador":
+	{
+		"layer": "titol",
+		"text":
+		{
+			"cat": "<b><font FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=\"5\" color=\"#009900\"><font SIZE=\"6\">M</font>APA DE <font SIZE=\"6\">C</font>OBERTES DEL <font SIZE=\"6\">S</font>ÒL DE <font SIZE=\"6\">C</font>ATALUNYA</font></b>",
+			"spa": "<b><font FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=\"5\" color=\"#009900\"><font SIZE=\"6\">M</font>APA DE <font SIZE=\"6\">C</font>UBIERTAS DEL <font SIZE=\"6\">S</font>UELO DE <font SIZE=\"6\">C</font>ATALUÑA</font></b>",
+			"eng": "<b><font FACE=\"Verdana, Arial, Helvetica, sans-serif\" SIZE=\"5\" color=\"#009900\"><font SIZE=\"6\">C</font>ATALONIA <font SIZE=\"6\">L</font>AND <font SIZE=\"6\">C</font>OVER <font SIZE=\"6\">M</font>AP</font></b>"
+		}
+	},
+	"titol":
+	{
+		"cat": "Mapa de Cobertes del Sòl de Catalunya",
+		"spa": "Mapa de Cubiertas del Suelo de Cataluña",
+		"eng": "Catalonia Land Cover Map"
+	},
+	"TitolCaixa":
+	{
+		"cat": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Mapa de Cobertes del Sòl de Catalunya</b></font>",
+		"spa": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Mapa de Cubiertas del Suelo de Cataluña</b></font>",
+		"eng": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Catalonia Land Cover Map</b></font>"
+	},
+	"ncol": 640,
+	"nfil": 480,
+	"NColNFilAuto": true,
+	"psalt": 80,
+	"MargeEsqVista": 10,
+	"MargeSupVista": 3,
+	"ColorFonsVista": "#CCCCCC",
+	"ColorQuadratSituacio": "#FF0000",
+	"ColorFonsPlana": "#FFFFFF",
+	"TitolCoord":
+	{
+		"cat": "Posició actual: ",
+		"spa": "Posición actual: ",
+		"eng": "Current position: "
+	},
+	"EstilCoord": "area",
+	"NDecimalsCoordXY": 2,
+	"CoordExtremes": null,
+	"CoordActualProj": true,
+	"CoordActualLongLatG": true,
+	"CoordActualLongLatGMS": true,
+	"zoom":
+	[
+		{
+			"costat": 500
+		},
+		{
+			"costat": 200
+		},
+		{
+			"costat": 100
+		},
+		{
+			"costat": 50
+		},
+		{
+			"costat": 20
+		},
+		{
+			"costat": 10
+		},
+		{
+			"costat": 5
+		},
+		{
+			"costat": 2
+		}
+	],
+	"NivellZoomCostat": 500,
+	"ConsultableSegonsEscala": true,
+	"DesplegableProj": true,
+	"CanviProjAuto": true,
+	"ZoomUnSolClic": true,
+	"ZoomContinu": false,
+	"UsaSempreMeuServidor": false,
+	"MostraBarraEscala": true,
+	"RelaxaAmbitVisualitzacio": false,
+	"VoraVistaGrisa": false,
+	"ImatgeSituacio":
+	[
+		{
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260305.0,
+					"MaxX": 528025.0,
+					"MinY": 4488915.0,
+					"MaxY": 4748120.0
+				},
+				"CRS": "EPSG:25831"
+			},			
+			"nom": "examples/mcsc-img/s_mcsc.gif",
+			"Ample": 200,
+			"Alt": 192,
+			"MargeEsq": 20,
+			"MargeSup": 3
+		}
+	],
+	"AmpleAltSituacioAuto": true,
+	"ISituacioOri": 0,
+	"PuntOri":
+	{
+		"x": 388500,
+		"y": 4609500
+	},
+	"AspecteLlegenda":
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda":
+		{
+			"cat": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>Fonts externes:</b><br><sup>1</sup>Servidor del CREAF però capa extreta del SIG del DMAH<br><sup>2</sup>Diputació de Barcelona<br><sup>3</sup>Servidor de l'ICGC</font>",
+			"spa": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>Fuentes externas:</b><br><sup>1</sup>Servidor del CREAF pero capa extraída del SIG del DMAH<br><sup>2</sup>Diputación de Barcelona<br><sup>3</sup>Servidor del ICGC</font>",
+			"eng": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>External sources:</b><br><sup>1</sup>CREAF server but layer extracted from the DMAH GIS<br><sup>2</sup>Barcelona Provincial Council<br><sup>3</sup>ICGC server</font>"
+		},
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000000\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#009900\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#009900\"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"AspecteLlegendaImpressio":
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda": "",
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000000\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#009900\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#009900  \"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"PlantillaDImpressio":
+	[
+		{
+			"nom": "A4Vertical",
+			"desc": "A4 vertical",
+			"src": "a4vertical.htm",
+			"ample": 600,
+			"alt": 800
+		},
+		{
+			"nom": "A4Horitzontal",
+			"desc": "A4 horizontal",
+			"src": "a4horitzontal.htm",
+			"ample": 800,
+			"alt": 600
+		}
+	],
+	"LlegendaAmagaSegonsEscala": true,
+	"LlegendaGrisSegonsEscala": false,
+	"LlegendaIconesInactivesGrises": false,
+	"LlegendaGrupsComARadials": true,
+	"LlegendaLligaVisibleAmbCtipica": true,
+	"LlegendaAmagaSeparaNoCapa": true,
+	"LlegendaAmagaSiForaAmbit": true,
+	"LlegendaGrisSiForaAmbit": false,
+	"LlegendaLligaVisibleAmbDescarregable": true,
+	"CapaConsultaPreguntaServidor":
+	[
+		{
+			"servidor": null,
+			"nom": "ComarquesSEL_BM-50M_v3_3",
+			"camps":
+			[
+				{
+					"previ":
+					{
+						"cat": "Anar a la",
+						"spa": "Ir a la",
+						"eng": "Go to"
+					},
+					"nom": "IDCOLOR`7`COMARCA",
+					"desc":
+					{
+						"cat": "Comarca",
+						"spa": "Comarca",
+						"eng": "County"
+					},
+					"post":
+					{
+						"cat": "de",
+						"spa": "de",
+						"eng": "of"
+					}
+				}
+			],
+			"CRS": "EPSG:25831"
+		}
+	],
+	"ConsultaTipica":
+	[
+		{
+			"nom": "ctipica",
+			"TipusConsultaTipica": "CTipicaDesplegables",
+			"NomCapa":
+			[
+				"ComarquesSEL_BM-50M_v3_3"
+			]
+		}
+	],
+	"VistaPermanent":
+	[
+		{
+			"nom": "vista"
+		}
+	],
+	"BarraBotoMes": false,
+	"BarraBotoMenys": false,
+	"BarraBotoBack": false,
+	"BarraBotoVGeneral": false,
+	"BarraBotonsAlternatius": true,
+	"BarraBotoMouMig": true,
+	"BarraBotoNovaVista": true,
+	"BarraEscala": false,
+	"BarraBotoCaixaParam": true,
+	"BarraBotoPrint": true,
+	"BarraBotoPlanaPrincipal": true,
+	"BarraBotoAjuda": true,
+	"BarraBotoInstallarMMZ": true,
+	"BarraBotonsIdiomes": true,
+	"BarraBotoAnarCoord": false,
+	"BarraBotoConsola": true,
+	"BarraBotoEnllac": true,
+	"BarraBotoInsereix": false,
+	"BarraBotoEnllacWMS": true,
+	"BarraBotoAfegeixCapa": true,
+	"BarraBotoCalculadora": true,
+	"BarraBotoCTipica": false,
+	"BarraNomesDescarrega": false,
+	"VistaBotonsBruixola": true,
+	"VistaBotonsZoom": true,
+	"VistaEscalaNumerica": true,
+	"VistaSliderZoom": false,
+	"BotoVistaBack": "false NO IMPLEMENTAT",
+	"BotoVistaAnarACoordenada": "false NO IMPLEMENTAT",
+	"AltresLinks": null,
+	"TitolLlistatNivellZoom":
+	{
+		"cat": "<span class=\"text_coord\">Escala: </span>",
+		"spa": "<span class=\"text_coord\">Escala: </span>",
+		"eng": "<span class=\"text_coord\">Scale: </span>"
+	},
+	"LlistatZoomFraccio": false,
+	"LlistatZoomMidaPixel": true,
+	"LlistatZoomEscalaAprox": true,
+	"EstatClickSobreVista": "ClickConLoc",
+	"TipusConsulta": "FinestraDeCop",
+	"IconaConsulta":
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"PlantillaConsulta":
+	{
+		"nom": null,
+		"desc": null,
+		"src": "consulta_de_cop.htm",
+		"ample": 500,
+		"alt": 500
+	},
+	"IconaAnarCoord":
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"IconaEdicio": null,
+	"FuncioIconaEdicio": null,
+	"FuncioCanviProjeccio": null,
+	"IconaValidacio": null,
+	"TempsRefresc": 5000,
+	"DescarregesCertificades": true,
+	"ParGetCoverage": null,
+	"FormatGetCoverage": null,
+	"ResGetCoverage": null,
+	"FormatDescarregaTot":
+	[
+		{
+			"format":
+			{
+				"nom": "application/x-mmzx",
+				"desc":
+				{
+					"cat": "Mapa Comprimit de MiraMon (MMZX)",
+					"spa": "Mapa Comprimido de MiraMon (MMZX)",
+					"eng": "MiraMon Compressed Map (MMZX)"
+				}
+			},
+			"extension": "mmzx"
+		},
+		{
+			"format":
+			{
+				"nom": "image/tiff",
+				"desc":
+				{
+					"cat": "Format GeoTIFF",
+					"spa": "Formato GeoTIFF",
+					"eng": "GeoTIFF format"
+				}
+			},
+			"extension": "tif"
+		}
+	],
+	"capa":
+	[
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MunicipisSEL_BM-5M_v2_0",
+			"desc":
+			{
+				"cat": "Municipis de Catalunya",
+				"spa": "Municipios de Catalunya",
+				"eng": "Municipalities of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "int16",
+					"nodata":
+					[
+						0,
+						948
+					]
+				}
+			],			
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Municipis de Catalunya",
+				"spa": "Municipios de Catalunya",
+				"eng": "Municipalities of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": {
+						"cat": "Municipis",
+						"spa": "Municipios",
+						"eng": "Municipalities"
+					},		
+					"DescItems": null,					
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": 
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						null, { "COVER": "Arenys de Mar" }, { "COVER": "Badalona" }, { "COVER": "Cabrera de Mar" }, { "COVER": "Caldes d'Estrac" }, { "COVER": "Pineda de Mar" }, { "COVER": "Canet de Mar" }, { "COVER": "Sant Iscle de Vallalta" }, { "COVER": "Castelldefels" }, { "COVER": "Cubelles" }, { "COVER": "Gavà" }, { "COVER": "Viladecans" }, { "COVER": "Malgrat de Mar" }, { "COVER": "el Masnou" }, { "COVER": "Mataró" }, { "COVER": "Montgat" }, { "COVER": "Tiana" }, { "COVER": "Sant Cebrià de Vallalta" }, { "COVER": "Tordera" }, { "COVER": "el Prat de Llobregat" }, { "COVER": "Sant Boi de Llobregat" }, { "COVER": "Premià de Mar" }, { "COVER": "Vallgorguina" }, { "COVER": "Sant Celoni" }, { "COVER": "Sant Adrià de Besòs" }, { "COVER": "Sant Andreu de Llavaneres" }, { "COVER": "Sant Joan Despí" }, { "COVER": "Sant Climent de Llobregat" }, { "COVER": "Santa Coloma de Cervelló" }, { "COVER": "Sant Feliu de Buixalleu" }, { "COVER": "Riells i Viabrea" }, { "COVER": "Santa Maria de Palautordera" }, { "COVER": "Torrelles de Llobregat" }, { "COVER": "Sant Esteve de Palautordera" }, { "COVER": "Sant Pere de Vilamajor" }, { "COVER": "Sant Fost de Campsentelles" }, { "COVER": "Sant Feliu de Llobregat" }, { "COVER": "Sant Vicenç dels Horts" }, { "COVER": "Sant Just Desvern" }, { "COVER": "Vilassar de Mar" }, { "COVER": "Sant Pere de Ribes" }, { "COVER": "Santa Maria de Martorelles" }, { "COVER": "Vallromanes" }, { "COVER": "la Palma de Cervelló" }, { "COVER": "Sant Vicenç de Montalt" }, { "COVER": "Teià" }, { "COVER": "Maçanet de la Selva" }, { "COVER": "Vallirana" }, { "COVER": "Vilalba Sasserra" }, { "COVER": "Vilanova del Vallès" }, { "COVER": "Agullana" }, { "COVER": "Darnius" }, { "COVER": "la Vajol" }, { "COVER": "la Jonquera" }, { "COVER": "Albanyà" }, { "COVER": "Alp" }, { "COVER": "Fontanals de Cerdanya" }, { "COVER": "Arbúcies" }, { "COVER": "Espinelves" }, { "COVER": "Sant Hilari Sacalm" }, { "COVER": "Viladrau" }, { "COVER": "Maçanet de Cabrenys" }, { "COVER": "Bolvir" }, { "COVER": "Breda" }, { "COVER": "Boadella i les Escaules" }, { "COVER": "Biure" }, { "COVER": "Terrades" }, { "COVER": "Maià de Montcal" }, { "COVER": "Cistella" }, { "COVER": "Lladó" }, { "COVER": "Navata" }, { "COVER": "Sant Llorenç de la Muga" }, { "COVER": "Crespià" }, { "COVER": "Camprodon" }, { "COVER": "Molló" }, { "COVER": "Montagut i Oix" }, { "COVER": "Llanars" }, { "COVER": "la Vall de Bianya" }, { "COVER": "Sant Pau de Segúries" }, { "COVER": "Cantallops" }, { "COVER": "Capmany" }, { "COVER": "Masarac" }, { "COVER": "Sant Climent Sescebes" }, { "COVER": "Queralbs" }, { "COVER": "Ribes de Freser" }, { "COVER": "Setcases" }, { "COVER": "Vilallonga de Ter" }, { "COVER": "Castellfollit de la Roca" }, { "COVER": "Sant Joan les Fonts" }, { "COVER": "Castelló d'Empúries" }, { "COVER": "Vilanant" }, { "COVER": "Rabós" }, { "COVER": "Esponellà" }, { "COVER": "Das" }, { "COVER": "Ger" }, { "COVER": "Isòvol" }, { "COVER": "Prats i Sansor" }, { "COVER": "Urús" }, { "COVER": "Espolla" }, { "COVER": "Mollet de Peralada" }, { "COVER": "Fontcoberta" }, { "COVER": "Vilademuls" }, { "COVER": "Serinyà" }, { "COVER": "Puigcerdà" }, { "COVER": "Porqueres" }, { "COVER": "Garriguella" }, { "COVER": "Vilajuïga" }, { "COVER": "Meranges" }, { "COVER": "Guils de Cerdanya" }, { "COVER": "Hostalric" }, { "COVER": "Massanes" }, { "COVER": "Bellver de Cerdanya" }, { "COVER": "Vilamaniscle" }, { "COVER": "Llers" }, { "COVER": "Vilafant" }, { "COVER": "Pont de Molins" }, { "COVER": "Vidreres" }, { "COVER": "Sant Ferriol" }, { "COVER": "Lles de Cerdanya" }, { "COVER": "Peralada" }, { "COVER": "Riudarenes" }, { "COVER": "Sils" }, { "COVER": "Mieres" }, { "COVER": "Sant Martí de Llémena" }, { "COVER": "Sant Miquel de Campmajor" }, { "COVER": "Santa Pau" }, { "COVER": "Sant Aniol de Finestres" }, { "COVER": "Tortellà" }, { "COVER": "Sant Jaume de Llierca" }, { "COVER": "Sales de Llierca" }, { "COVER": "Ordis" }, { "COVER": "Pontós" }, { "COVER": "Ogassa" }, { "COVER": "Ripoll" }, { "COVER": "Pardines" }, { "COVER": "Sant Joan de les Abadesses" }, { "COVER": "Olot" }, { "COVER": "la Vall d'en Bas" }, { "COVER": "les Preses" }, { "COVER": "Osor" }, { "COVER": "la Cellera de Ter" }, { "COVER": "Santa Coloma de Farners" }, { "COVER": "Susqueda" }, { "COVER": "Palau-saverdera" }, { "COVER": "Pau" }, { "COVER": "Pals" }, { "COVER": "Pedret i Marzà" }, { "COVER": "Vila-sacra" }, { "COVER": "Vilabertran" }, { "COVER": "les Planes d'Hostoles" }, { "COVER": "Sant Feliu de Pallerols" }, { "COVER": "Planoles" }, { "COVER": "Toses" }, { "COVER": "la Selva de Mar" }, { "COVER": "Vallfogona de Ripollès" }, { "COVER": "Vidrà" }, { "COVER": "Riudaura" }, { "COVER": "Sant Gregori" }, { "COVER": "Sant Julià de Ramis" }, { "COVER": "Sant Julià del Llor i Bonmatí" }, { "COVER": "Sant Pere Pescador" }, { "COVER": "Vilobí d'Onyar" }, { "COVER": "Santa Llogaia d'Àlguema" }, { "COVER": "Riu de Cerdanya" }, { "COVER": "Viladasens" }, { "COVER": "Àger" }, { "COVER": "Sant Esteve de la Sarga" }, { "COVER": "Camarasa" }, { "COVER": "Alcarràs" }, { "COVER": "Gimenells i el Pla de la Font" }, { "COVER": "Alfarràs" }, { "COVER": "Alins" }, { "COVER": "Almacelles" }, { "COVER": "Almatret" }, { "COVER": "Seròs" }, { "COVER": "Almenar" }, { "COVER": "Alòs de Balaguer" }, { "COVER": "Alt Àneu" }, { "COVER": "Naut Aran" }, { "COVER": "Espot" }, { "COVER": "Canejan" }, { "COVER": "Vilaller" }, { "COVER": "la Vall de Boí" }, { "COVER": "Vielha e Mijaran" }, { "COVER": "el Pont de Bar" }, { "COVER": "Montellà i Martinet" }, { "COVER": "Arres" }, { "COVER": "Bossòst" }, { "COVER": "la Sentiu de Sió" }, { "COVER": "Vallfogona de Balaguer" }, { "COVER": "Bellcaire d'Urgell" }, { "COVER": "les Avellanes i Santa Linya" }, { "COVER": "Aitona" }, { "COVER": "Sarroca de Lleida" }, { "COVER": "Soses" }, { "COVER": "Balaguer" }, { "COVER": "Cubells" }, { "COVER": "Castelló de Farfanya" }, { "COVER": "Os de Balaguer" }, { "COVER": "Térmens" }, { "COVER": "Menàrguens" }, { "COVER": "el Pont de Suert" }, { "COVER": "Sarroca de Bellera" }, { "COVER": "la Torre de Cabdella" }, { "COVER": "Bausen" }, { "COVER": "Penelles" }, { "COVER": "Bellmunt d'Urgell" }, { "COVER": "Montgai" }, { "COVER": "Linyola" }, { "COVER": "Prullans" }, { "COVER": "Bellvís" }, { "COVER": "Vilamòs" }, { "COVER": "Es Bòrdes" }, { "COVER": "Les" }, { "COVER": "Vilanova de Meià" }, { "COVER": "Castellserà" }, { "COVER": "Preixens" }, { "COVER": "Cava" }, { "COVER": "la Vansa i Fórnols" }, { "COVER": "Josa i Tuixén" }, { "COVER": "Foradada" }, { "COVER": "Rialp" }, { "COVER": "Esterri d'Àneu" }, { "COVER": "la Guingueta d'Àneu" }, { "COVER": "Sort" }, { "COVER": "la Fuliola" }, { "COVER": "Ivars d'Urgell" }, { "COVER": "Gavet de la Conca" }, { "COVER": "Llimiana" }, { "COVER": "Gósol" }, { "COVER": "Guixers" }, { "COVER": "la Granja d'Escarp" }, { "COVER": "Navès" }, { "COVER": "Odèn" }, { "COVER": "la Coma i la Pedra" }, { "COVER": "Sant Llorenç de Morunys" }, { "COVER": "Ivars de Noguera" }, { "COVER": "Tornabous" }, { "COVER": "Vila-sana" }, { "COVER": "Isona i Conca Dellà" }, { "COVER": "Conca de Dalt" }, { "COVER": "Lleida" }, { "COVER": "Montoliu de Lleida" }, { "COVER": "Sudanell" }, { "COVER": "Torregrossa" }, { "COVER": "Torrefarrera" }, { "COVER": "Torre-serona" }, { "COVER": "el Poal" }, { "COVER": "Lladorre" }, { "COVER": "Lladurs" }, { "COVER": "Llardecans" }, { "COVER": "Torrebesses" }, { "COVER": "Maials" }, { "COVER": "Llavorsí" }, { "COVER": "les Valls de Valira" }, { "COVER": "Massalcoreig" }, { "COVER": "Flix" }, { "COVER": "Riba-roja d'Ebre" }, { "COVER": "Vilanova de la Barca" }, { "COVER": "Torrelameu" }, { "COVER": "Miralcamp" }, { "COVER": "Mollerussa" }, { "COVER": "el Palau d'Anglesola" }, { "COVER": "Montferrer i Castellbò" }, { "COVER": "Sunyer" }, { "COVER": "Olius" }, { "COVER": "Fígols i Alinyà" }, { "COVER": "Oliana" }, { "COVER": "Peramola" }, { "COVER": "Riner" }, { "COVER": "Pinell de Solsonès" }, { "COVER": "Solsona" }, { "COVER": "Organyà" }, { "COVER": "Sidamon" }, { "COVER": "la Pobla de Segur" }, { "COVER": "Salàs de Pallars" }, { "COVER": "Sanaüja" }, { "COVER": "Vilanova de l'Aguda" }, { "COVER": "Torrefeta i Florejacs" }, { "COVER": "Pinós" }, { "COVER": "Torà" }, { "COVER": "Bellaguarda" }, { "COVER": "Margalef" }, { "COVER": "Tremp" }, { "COVER": "Puiggròs" }, { "COVER": "Puigverd d'Agramunt" }, { "COVER": "Puigverd de Lleida" }, { "COVER": "Soriguera" }, { "COVER": "les Valls d'Aguilar" }, { "COVER": "Ribera d'Urgellet" }, { "COVER": "la Seu d'Urgell" }, { "COVER": "Rosselló" }, { "COVER": "Vilanova de Segrià" }, { "COVER": "Talarn" }, { "COVER": "Sant Ramon" }, { "COVER": "Sant Guim de la Plana" }, { "COVER": "Castell de Mur" }, { "COVER": "Torres de Segre" }, { "COVER": "Senterada" }, { "COVER": "Tarroja de Segarra" }, { "COVER": "Tiurana" }, { "COVER": "Vall de Cardós" }, { "COVER": "els Plans de Sió" }, { "COVER": "Alfara de Carles" }, { "COVER": "Xerta" }, { "COVER": "Paüls" }, { "COVER": "Horta de Sant Joan" }, { "COVER": "Altafulla" }, { "COVER": "Arnes" }, { "COVER": "Ascó" }, { "COVER": "Vinebre" }, { "COVER": "Móra d'Ebre" }, { "COVER": "Garcia" }, { "COVER": "la Fatarella" }, { "COVER": "Batea" }, { "COVER": "Benifallet" }, { "COVER": "Prat de Comte" }, { "COVER": "Tivenys" }, { "COVER": "Rasquera" }, { "COVER": "el Pinell de Brai" }, { "COVER": "Benissanet" }, { "COVER": "Tivissa" }, { "COVER": "Miravet" }, { "COVER": "Corbera d'Ebre" }, { "COVER": "la Bisbal de Falset" }, { "COVER": "la Palma d'Ebre" }, { "COVER": "Bot" }, { "COVER": "Caseres" }, { "COVER": "Cabacés" }, { "COVER": "la Morera de Montsant" }, { "COVER": "la Torre de l'Espanyol" }, { "COVER": "la Figuera" }, { "COVER": "Calafell" }, { "COVER": "Capçanes" }, { "COVER": "la Sénia" }, { "COVER": "Colldejou" }, { "COVER": "Vilalba dels Arcs" }, { "COVER": "Gandesa" }, { "COVER": "Cornudella de Montsant" }, { "COVER": "Creixell" }, { "COVER": "la Pobla de Montornès" }, { "COVER": "el Molar" }, { "COVER": "la Vilella Baixa" }, { "COVER": "el Lloar" }, { "COVER": "els Guiamets" }, { "COVER": "el Masroig" }, { "COVER": "Móra la Nova" }, { "COVER": "Ginestar" }, { "COVER": "Gratallops" }, { "COVER": "Marçà" }, { "COVER": "Ulldemolins" }, { "COVER": "Pradell de la Teixeta" }, { "COVER": "Poboleda" }, { "COVER": "Torroja del Priorat" }, { "COVER": "la Vilella Alta" }, { "COVER": "la Nou de Gaià" }, { "COVER": "el Perelló" }, { "COVER": "la Pobla de Massaluca" }, { "COVER": "Vespella de Gaià" }, { "COVER": "Porrera" }, { "COVER": "la Torre de Fontaubella" }, { "COVER": "Pratdip" }, { "COVER": "Renau" }, { "COVER": "Vilabella" }, { "COVER": "la Secuita" }, { "COVER": "la Riera de Gaià" }, { "COVER": "Roquetes" }, { "COVER": "Tortosa" }, { "COVER": "Santa Bàrbara" }, { "COVER": "Salomó" }, { "COVER": "Vallmoll" }, { "COVER": "Vila-seca" }, { "COVER": "la Canonja" }, { "COVER": "Camarles" }, { "COVER": "l'Aldea" }, { "COVER": "Ulldecona" }, { "COVER": "Vilanova de Prades" }, { "COVER": "Vallclara" }, { "COVER": "Valls" }, { "COVER": "el Vendrell" }, { "COVER": "Sant Jaume d'Enveja" }, { "COVER": "Alella" }, { "COVER": "Arenys de Munt" }, { "COVER": "Dosrius" }, { "COVER": "Argentona" }, { "COVER": "Cabrils" }, { "COVER": "Santa Coloma de Gramenet" }, { "COVER": "Bagà" }, { "COVER": "Saldes" }, { "COVER": "Guardiola de Berguedà" }, { "COVER": "Gisclareny" }, { "COVER": "Sant Cugat del Vallès" }, { "COVER": "Molins de Rei" }, { "COVER": "Esplugues de Llobregat" }, { "COVER": "l'Hospitalet de Llobregat" }, { "COVER": "Cerdanyola del Vallès" }, { "COVER": "Begues" }, { "COVER": "Olivella" }, { "COVER": "Olesa de Bonesvalls" }, { "COVER": "el Brull" }, { "COVER": "Tagamanent" }, { "COVER": "Seva" }, { "COVER": "Montseny" }, { "COVER": "Vilassar de Dalt" }, { "COVER": "Òrrius" }, { "COVER": "Calonge de Segarra" }, { "COVER": "Castellfollit de Riubregós" }, { "COVER": "la Molsosa" }, { "COVER": "Pujalt" }, { "COVER": "Campins" }, { "COVER": "Gualba" }, { "COVER": "Fogars de Montclús" }, { "COVER": "Cànoves i Samalús" }, { "COVER": "les Franqueses del Vallès" }, { "COVER": "Cardedeu" }, { "COVER": "Figaró-Montmany" }, { "COVER": "la Garriga" }, { "COVER": "Canyelles" }, { "COVER": "Castellet i la Gornal" }, { "COVER": "Capolat" }, { "COVER": "Castellar del Riu" }, { "COVER": "Sant Antoni de Vilamajor" }, { "COVER": "Llinars del Vallès" }, { "COVER": "la Roca del Vallès" }, { "COVER": "Cardona" }, { "COVER": "Navàs" }, { "COVER": "Sant Mateu de Bages" }, { "COVER": "Viver i Serrateix" }, { "COVER": "Montmajor" }, { "COVER": "Clariana de Cardener" }, { "COVER": "Casserres" }, { "COVER": "Puig-reig" }, { "COVER": "Cercs" }, { "COVER": "Fígols" }, { "COVER": "Castellar de n'Hug" }, { "COVER": "la Pobla de Lillet" }, { "COVER": "Gombrèn" }, { "COVER": "Castellbisbal" }, { "COVER": "Corbera de Llobregat" }, { "COVER": "Pallejà" }, { "COVER": "el Papiol" }, { "COVER": "Martorell" }, { "COVER": "Ullastrell" }, { "COVER": "Sant Andreu de la Barca" }, { "COVER": "Rubí" }, { "COVER": "Castell de l'Areny" }, { "COVER": "la Nou de Berguedà" }, { "COVER": "les Llosses" }, { "COVER": "Vilada" }, { "COVER": "Olèrdola" }, { "COVER": "Castellví de la Marca" }, { "COVER": "Sant Jaume dels Domenys" }, { "COVER": "Bellvei" }, { "COVER": "Santa Margarida i els Monjos" }, { "COVER": "l'Arboç" }, { "COVER": "Ivorra" }, { "COVER": "Estaràs" }, { "COVER": "Castellnou de Bages" }, { "COVER": "Súria" }, { "COVER": "Santpedor" }, { "COVER": "el Montmell" }, { "COVER": "Sant Martí Sarroca" }, { "COVER": "Castellví de Rosanes" }, { "COVER": "Cervelló" }, { "COVER": "Gelida" }, { "COVER": "Cornellà de Llobregat" }, { "COVER": "l'Espunyola" }, { "COVER": "Montclar" }, { "COVER": "Vallcebre" }, { "COVER": "Fogars de la Selva" }, { "COVER": "Fonollosa" }, { "COVER": "Font-rubí" }, { "COVER": "Santa Fe del Penedès" }, { "COVER": "el Pla del Penedès" }, { "COVER": "Torrelavit" }, { "COVER": "Torrelles de Foix" }, { "COVER": "Mediona" }, { "COVER": "Vilobí del Penedès" }, { "COVER": "Granollers" }, { "COVER": "Gaià" }, { "COVER": "Sallent" }, { "COVER": "Sant Sadurní d'Anoia" }, { "COVER": "Sant Esteve Sesrovires" }, { "COVER": "Subirats" }, { "COVER": "Sant Llorenç d'Hortons" }, { "COVER": "la Granada" }, { "COVER": "Sant Cugat Sesgarrigues" }, { "COVER": "Vilafranca del Penedès" }, { "COVER": "Montmeló" }, { "COVER": "Lliçà de Vall" }, { "COVER": "Lliçà d'Amunt" }, { "COVER": "Montornès del Vallès" }, { "COVER": "Sant Julià de Cerdanyola" }, { "COVER": "la Llacuna" }, { "COVER": "Querol" }, { "COVER": "Santa Maria de Miralles" }, { "COVER": "la Llagosta" }, { "COVER": "Parets del Vallès" }, { "COVER": "Palau-solità i Plegamans" }, { "COVER": "Santa Eulàlia de Ronçana" }, { "COVER": "Mollet del Vallès" }, { "COVER": "Palafolls" }, { "COVER": "Malla" }, { "COVER": "Martorelles" }, { "COVER": "Masquefa" }, { "COVER": "Piera" }, { "COVER": "els Hostalets de Pierola" }, { "COVER": "Sant Pere de Riudebitlles" }, { "COVER": "la Torre de Claramunt" }, { "COVER": "Sant Quintí de Mediona" }, { "COVER": "Montcada i Reixac" }, { "COVER": "Santa Perpètua de Mogoda" }, { "COVER": "Barberà del Vallès" }, { "COVER": "Ripollet" }, { "COVER": "Montesquiu" }, { "COVER": "Sant Quirze de Besora" }, { "COVER": "Santa Maria de Besora" }, { "COVER": "Sant Quirze Safaja" }, { "COVER": "Sant Martí de Centelles" }, { "COVER": "Navarcles" }, { "COVER": "Talamanca" }, { "COVER": "Sant Fruitós de Bages" }, { "COVER": "Olvan" }, { "COVER": "la Quar" }, { "COVER": "Sagàs" }, { "COVER": "Orís" }, { "COVER": "Orpí" }, { "COVER": "Pacs del Penedès" }, { "COVER": "Sentmenat" }, { "COVER": "Polinyà" }, { "COVER": "la Pobla de Claramunt" }, { "COVER": "Vallbona d'Anoia" }, { "COVER": "Puigdàlber" }, { "COVER": "Vilanova del Camí" }, { "COVER": "Sant Jaume de Frontanyà" }, { "COVER": "Sabadell" }, { "COVER": "Pontons" }, { "COVER": "els Prats de Rei" }, { "COVER": "Sant Martí Sesgueioles" }, { "COVER": "Rubió" }, { "COVER": "Premià de Dalt" }, { "COVER": "Santa Maria de Merlès" }, { "COVER": "Sant Guim de Freixenet" }, { "COVER": "el Pont de Vilomara i Rocafort" }, { "COVER": "Sant Vicenç de Castellet" }, { "COVER": "Sant Quirze del Vallès" }, { "COVER": "Terrassa" }, { "COVER": "Badia del Vallès" }, { "COVER": "Sant Pere Sallavinera" }, { "COVER": "Sant Joan de Vilatorrada" }, { "COVER": "Sant Feliu de Codines" }, { "COVER": "Sant Feliu Sasserra" }, { "COVER": "Sant Julià de Vilatorta" }, { "COVER": "Taradell" }, { "COVER": "Sant Llorenç Savall" }, { "COVER": "Sant Martí de Tous" }, { "COVER": "Santa Margarida de Montbui" }, { "COVER": "Sant Pere de Torelló" }, { "COVER": "Sant Vicenç de Torelló" }, { "COVER": "l'Esquirol" }, { "COVER": "Sora" }, { "COVER": "Sant Sadurní d'Osormort" }, { "COVER": "Vilanova de Sau" }, { "COVER": "Marganell" }, { "COVER": "Santa Eugènia de Berga" }, { "COVER": "Torelló" }, { "COVER": "Rupit i Pruit" }, { "COVER": "Tavertet" }, { "COVER": "Pontils" }, { "COVER": "Tona" }, { "COVER": "Tavèrnoles" }, { "COVER": "Viladecavalls" }, { "COVER": "Vacarisses" }, { "COVER": "Veciana" }, { "COVER": "Aiguaviva" }, { "COVER": "Riudellots de la Selva" }, { "COVER": "Fornells de la Selva" }, { "COVER": "Vilablareix" }, { "COVER": "Beuda" }, { "COVER": "Albons" }, { "COVER": "Viladamat" }, { "COVER": "la Tallada d'Empordà" }, { "COVER": "el Far d'Empordà" }, { "COVER": "Vilamalla" }, { "COVER": "Figueres" }, { "COVER": "Fortià" }, { "COVER": "Amer" }, { "COVER": "Anglès" }, { "COVER": "Brunyola i Sant Martí Sapresa" }, { "COVER": "Argelaguer" }, { "COVER": "l'Armentera" }, { "COVER": "Ventalló" }, { "COVER": "Avinyonet de Puigventós" }, { "COVER": "Borrassà" }, { "COVER": "Regencós" }, { "COVER": "Banyoles" }, { "COVER": "Bàscara" }, { "COVER": "Garrigàs" }, { "COVER": "Bellcaire d'Empordà" }, { "COVER": "Besalú" }, { "COVER": "Bescanó" }, { "COVER": "Salt" }, { "COVER": "Bordils" }, { "COVER": "Juià" }, { "COVER": "Sant Martí Vell" }, { "COVER": "Sant Joan de Mollet" }, { "COVER": "Cervià de Ter" }, { "COVER": "Cabanes" }, { "COVER": "Cabanelles" }, { "COVER": "Caldes de Malavella" }, { "COVER": "Cassà de la Selva" }, { "COVER": "Sant Andreu Salou" }, { "COVER": "Llagostera" }, { "COVER": "Forallac" }, { "COVER": "Cruïlles, Monells i Sant Sadurní de l'Heura" }, { "COVER": "Camós" }, { "COVER": "Cornellà del Terri" }, { "COVER": "Palol de Revardit" }, { "COVER": "Canet d'Adri" }, { "COVER": "Campdevànol" }, { "COVER": "Campelles" }, { "COVER": "Campllong" }, { "COVER": "Llambilles" }, { "COVER": "Vilamacolum" }, { "COVER": "Riumors" }, { "COVER": "Celrà" }, { "COVER": "Girona" }, { "COVER": "Sant Jordi Desvalls" }, { "COVER": "Siurana" }, { "COVER": "Palau de Santa Eulàlia" }, { "COVER": "Torroella de Fluvià" }, { "COVER": "Colomers" }, { "COVER": "Jafre" }, { "COVER": "Vilopriu" }, { "COVER": "Foixà" }, { "COVER": "Corçà" }, { "COVER": "la Pera" }, { "COVER": "Rupià" }, { "COVER": "Parlavà" }, { "COVER": "Flaçà" }, { "COVER": "Verges" }, { "COVER": "Ultramort" }, { "COVER": "Fontanilles" }, { "COVER": "Palau-sator" }, { "COVER": "Serra de Daró" }, { "COVER": "Gualta" }, { "COVER": "Ullastret" }, { "COVER": "Quart" }, { "COVER": "Sant Mori" }, { "COVER": "Vilaür" }, { "COVER": "Garrigoles" }, { "COVER": "Sarrià de Ter" }, { "COVER": "Ullà" }, { "COVER": "Madremanya" }, { "COVER": "Vall-llobrega" }, { "COVER": "Torrent" }, { "COVER": "Sant Miquel de Fluvià" }, { "COVER": "Saus, Camallera i Llampaies" }, { "COVER": "Abella de la Conca" }, { "COVER": "Coll de Nargó" }, { "COVER": "Agramunt" }, { "COVER": "Artesa de Segre" }, { "COVER": "Oliola" }, { "COVER": "els Alamús" }, { "COVER": "Bell-lloc d'Urgell" }, { "COVER": "Alàs i Cerc" }, { "COVER": "Arsèguel" }, { "COVER": "Estamariu" }, { "COVER": "Albatàrrec" }, { "COVER": "Albesa" }, { "COVER": "Alguaire" }, { "COVER": "Algerri" }, { "COVER": "la Portella" }, { "COVER": "Alcanó" }, { "COVER": "Granyena de les Garrigues" }, { "COVER": "Alfés" }, { "COVER": "Alcoletge" }, { "COVER": "Aspa" }, { "COVER": "el Cogul" }, { "COVER": "Tírvia" }, { "COVER": "Esterri de Cardós" }, { "COVER": "Farrera" }, { "COVER": "Alpicat" }, { "COVER": "Arbeca" }, { "COVER": "Maldà" }, { "COVER": "els Omellons" }, { "COVER": "Belianes" }, { "COVER": "Vilanova de Bellpuig" }, { "COVER": "la Floresta" }, { "COVER": "Artesa de Lleida" }, { "COVER": "Castelldans" }, { "COVER": "Ponts" }, { "COVER": "la Baronia de Rialb" }, { "COVER": "Baix Pallars" }, { "COVER": "Bellpuig" }, { "COVER": "Castellar de la Ribera" }, { "COVER": "Sant Martí de Riucorb" }, { "COVER": "Vilagrassa" }, { "COVER": "Preixana" }, { "COVER": "Castellnou de Seana" }, { "COVER": "Benavent de Segrià" }, { "COVER": "Corbins" }, { "COVER": "Biosca" }, { "COVER": "Llobera" }, { "COVER": "Massoteres" }, { "COVER": "Bovera" }, { "COVER": "les Borges Blanques" }, { "COVER": "Cervià de les Garrigues" }, { "COVER": "Vinaixa" }, { "COVER": "Cabanabona" }, { "COVER": "Cabó" }, { "COVER": "Golmés" }, { "COVER": "Cervera" }, { "COVER": "Montoliu de Segarra" }, { "COVER": "Ribera d'Ondara" }, { "COVER": "Granyena de Segarra" }, { "COVER": "Granyanella" }, { "COVER": "les Oluges" }, { "COVER": "Juncosa" }, { "COVER": "la Pobla de Cérvoles" }, { "COVER": "el Soleràs" }, { "COVER": "l'Espluga Calba" }, { "COVER": "Senan" }, { "COVER": "Fondarella" }, { "COVER": "Fulleda" }, { "COVER": "Tarrés" }, { "COVER": "l'Espluga de Francolí" }, { "COVER": "la Granadella" }, { "COVER": "els Torms" }, { "COVER": "Tàrrega" }, { "COVER": "Verdú" }, { "COVER": "Montornès de Segarra" }, { "COVER": "Guimerà" }, { "COVER": "Vallfogona de Riucorb" }, { "COVER": "Passanant i Belltall" }, { "COVER": "Guissona" }, { "COVER": "Juneda" }, { "COVER": "Vallbona de les Monges" }, { "COVER": "els Omells de na Gaia" }, { "COVER": "Talavera" }, { "COVER": "Llorac" }, { "COVER": "Nalec" }, { "COVER": "Ossó de Sió" }, { "COVER": "el Vilosell" }, { "COVER": "Santa Coloma de Queralt" }, { "COVER": "Vimbodí i Poblet" }, { "COVER": "Blancafort" }, { "COVER": "Solivella" }, { "COVER": "Aiguamúrcia" }, { "COVER": "el Pla de Santa Maria" }, { "COVER": "el Pont d'Armentera" }, { "COVER": "Vila-rodona" }, { "COVER": "Albinyana" }, { "COVER": "Santa Oliva" }, { "COVER": "Freginals" }, { "COVER": "Alcover" }, { "COVER": "Mont-ral" }, { "COVER": "la Riba" }, { "COVER": "Aldover" }, { "COVER": "Alforja" }, { "COVER": "Vilaplana" }, { "COVER": "Riudecols" }, { "COVER": "Arbolí" }, { "COVER": "Alió" }, { "COVER": "Masdenverge" }, { "COVER": "la Febró" }, { "COVER": "Banyeres del Penedès" }, { "COVER": "l'Argentera" }, { "COVER": "Vilanova d'Escornalbou" }, { "COVER": "Duesaigües" }, { "COVER": "Riudecanyes" }, { "COVER": "la Bisbal del Penedès" }, { "COVER": "Llorenç del Penedès" }, { "COVER": "Barberà de la Conca" }, { "COVER": "Pira" }, { "COVER": "Bellmunt del Priorat" }, { "COVER": "Falset" }, { "COVER": "Rodonyà" }, { "COVER": "Masllorenç" }, { "COVER": "Montblanc" }, { "COVER": "Bonastre" }, { "COVER": "Montferri" }, { "COVER": "Botarell" }, { "COVER": "Riudoms" }, { "COVER": "Montbrió del Camp" }, { "COVER": "Bràfim" }, { "COVER": "Puigpelat" }, { "COVER": "Cabra del Camp" }, { "COVER": "Vinyols i els Arcs" }, { "COVER": "Capafonts" }, { "COVER": "Prades" }, { "COVER": "el Catllar" }, { "COVER": "els Pallaresos" }, { "COVER": "Mas de Barberans" }, { "COVER": "Conesa" }, { "COVER": "Rocafort de Queralt" }, { "COVER": "Sarral" }, { "COVER": "les Piles" }, { "COVER": "Savallà del Comtat" }, { "COVER": "Forès" }, { "COVER": "Constantí" }, { "COVER": "Reus" }, { "COVER": "la Selva del Camp" }, { "COVER": "la Pobla de Mafumet" }, { "COVER": "Figuerola del Camp" }, { "COVER": "Godall" }, { "COVER": "la Galera" }, { "COVER": "els Garidells" }, { "COVER": "la Masó" }, { "COVER": "el Milà" }, { "COVER": "Maspujols" }, { "COVER": "Vilaverd" }, { "COVER": "Vilallonga del Camp" }, { "COVER": "el Morell" }, { "COVER": "el Rourell" }, { "COVER": "Nulles" }, { "COVER": "Perafort" }, { "COVER": "Abrera" }, { "COVER": "Olesa de Montserrat" }, { "COVER": "Esparreguera" }, { "COVER": "Aguilar de Segarra" }, { "COVER": "Castellfollit del Boix" }, { "COVER": "Rajadell" }, { "COVER": "Alpens" }, { "COVER": "Sant Agustí de Lluçanès" }, { "COVER": "Borredà" }, { "COVER": "Lluçà" }, { "COVER": "l'Ametlla del Vallès" }, { "COVER": "Bigues i Riells" }, { "COVER": "Argençola" }, { "COVER": "Montmaneu" }, { "COVER": "Jorba" }, { "COVER": "Artés" }, { "COVER": "Calders" }, { "COVER": "Avinyó" }, { "COVER": "Avià" }, { "COVER": "Berga" }, { "COVER": "Moià" }, { "COVER": "Santa Maria d'Oló" }, { "COVER": "Avinyonet del Penedès" }, { "COVER": "Aiguafreda" }, { "COVER": "Centelles" }, { "COVER": "Balenyà" }, { "COVER": "Collsuspina" }, { "COVER": "Balsareny" }, { "COVER": "Bellprat" }, { "COVER": "Caldes de Montbui" }, { "COVER": "el Bruc" }, { "COVER": "Sant Salvador de Guardiola" }, { "COVER": "Castellolí" }, { "COVER": "les Cabanyes" }, { "COVER": "Cabrera d'Anoia" }, { "COVER": "Capellades" }, { "COVER": "Calaf" }, { "COVER": "Gallifa" }, { "COVER": "Monistrol de Calders" }, { "COVER": "Calldetenes" }, { "COVER": "Folgueroles" }, { "COVER": "Callús" }, { "COVER": "Canovelles" }, { "COVER": "Carme" }, { "COVER": "Gironella" }, { "COVER": "Castellar del Vallès" }, { "COVER": "Castellbell i el Vilar" }, { "COVER": "Monistrol de Montserrat" }, { "COVER": "Rellinars" }, { "COVER": "Castellterçol" }, { "COVER": "Castellcir" }, { "COVER": "Òdena" }, { "COVER": "Castellgalí" }, { "COVER": "Manresa" }, { "COVER": "Granera" }, { "COVER": "Collbató" }, { "COVER": "Copons" }, { "COVER": "l'Estany" }, { "COVER": "Vic" }, { "COVER": "Gurb" }, { "COVER": "Mura" }, { "COVER": "Santa Cecília de Voltregà" }, { "COVER": "les Masies de Roda" }, { "COVER": "Manlleu" }, { "COVER": "Roda de Ter" }, { "COVER": "les Masies de Voltregà" }, { "COVER": "Sant Bartomeu del Grau" }, { "COVER": "Igualada" }, { "COVER": "Sant Martí d'Albars" }, { "COVER": "Perafita" }, { "COVER": "Sobremunt" }, { "COVER": "Matadepera" }, { "COVER": "Oristà" }, { "COVER": "Santa Eulàlia de Riuprimer" }, { "COVER": "Olost" }, { "COVER": "Sant Boi de Lluçanès" }, { "COVER": "Prats de Lluçanès" }, { "COVER": "la Bisbal d'Empordà" }, { "COVER": "l'Albagés" }, { "COVER": "l'Albi" }, { "COVER": "Anglesola" }, { "COVER": "Barbens" }, { "COVER": "Ciutadilla" }, { "COVER": "l'Albiol" }, { "COVER": "l'Aleixar" }, { "COVER": "Almoster" }, { "COVER": "Castellvell del Camp" }, { "COVER": "les Borges del Camp" }, { "COVER": "Muntanyola" }, { "COVER": "Llívia" }, { "COVER": "Portbou" }, { "COVER": "Colera" }, { "COVER": "Llançà" }, { "COVER": "el Port de la Selva" }, { "COVER": "Cadaqués" }, { "COVER": "Roses" }, { "COVER": "l'Escala" }, { "COVER": "Torroella de Montgrí" }, { "COVER": "Sant Hipòlit de Voltregà" }, { "COVER": "Bassella" }, { "COVER": "Begur" }, { "COVER": "Palafrugell" }, { "COVER": "Mont-ras" }, { "COVER": "Palamós" }, { "COVER": "Calonge i Sant Antoni" }, { "COVER": "Castell-Platja d'Aro" }, { "COVER": "Sant Feliu de Guíxols" }, { "COVER": "Santa Cristina d'Aro" }, { "COVER": "Tossa de Mar" }, { "COVER": "Lloret de Mar" }, { "COVER": "Blanes" }, { "COVER": "Santa Susanna" }, { "COVER": "Calella" }, { "COVER": "Sant Pol de Mar" }, { "COVER": "Barcelona" }, { "COVER": "Sitges" }, { "COVER": "Vilanova i la Geltrú" }, { "COVER": "Cunit" }, { "COVER": "Roda de Berà" }, { "COVER": "Torredembarra" }, { "COVER": "Tarragona" }, { "COVER": "Cambrils" }, { "COVER": "Salou" }, { "COVER": "Mont-roig del Camp" }, { "COVER": "Vandellòs i l'Hospitalet de l'Infant" }, { "COVER": "l'Ametlla de Mar" }, { "COVER": "l'Ampolla" }, { "COVER": "Deltebre" }, { "COVER": "Amposta" }, { "COVER": "Sant Carles de la Ràpita" }, { "COVER": "Alcanar" }, null
+					],					
+					"atributs": 
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Municipis",
+							"mostrar": true
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "ComarquesSEL_BM-5M_v2_0",
+			"desc":
+			{
+				"cat": "Comarques de Catalunya",
+				"spa": "Comarcas de Catalunya",
+				"eng": "Counties of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],			
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Comarques de Catalunya",
+				"spa": "Comarcas de Catalunya",
+				"eng": "Counties of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": {
+						"cat": "Comarca",
+						"spa": "Comarca",
+						"eng": "County"
+					},		
+					"DescItems": null,					
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": 
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						null, { "COVER": "Alt Urgell" }, { "COVER": "Pallars Sobirà" }, { "COVER": "Solsonès" }, { "COVER": "Alta Ribagorça" }, { "COVER": "Val d'Aran" }, { "COVER": "Pallars Jussà" }, { "COVER": "Anoia" }, { "COVER": "Segarra" }, { "COVER": "Bages" }, { "COVER": "Baix Llobregat" }, { "COVER": "Osona" }, { "COVER": "Moianès" }, { "COVER": "Vallès Occidental" }, { "COVER": "Baix Camp" }, { "COVER": "Ribera d'Ebre" }, { "COVER": "Terra Alta" }, { "COVER": "Baix Penedès" }, { "COVER": "Vallès Oriental" }, { "COVER": "Cerdanya" }, { "COVER": "Ripollès" }, { "COVER": "Conca de Barberà" }, { "COVER": "Garrigues" }, { "COVER": "Urgell" }, { "COVER": "Priorat" }, { "COVER": "Pla d'Urgell" }, { "COVER": "Garrotxa" }, { "COVER": "Gironès" }, { "COVER": "Pla de l'Estany" }, { "COVER": "Noguera" }, { "COVER": "Alt Camp" }, { "COVER": "Alt Penedès" }, { "COVER": "Alt Empordà" }, { "COVER": "Berguedà" }, { "COVER": "Baix Empordà" }, { "COVER": "Selva" }, { "COVER": "Segrià" }, { "COVER": "Maresme" }, { "COVER": "Barcelonès" }, { "COVER": "Garraf" }, { "COVER": "Tarragonès" }, { "COVER": "Baix Ebre" }, { "COVER": "Montsià" }
+					],					
+					"atributs": 
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Comarca",
+							"mostrar": true
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "ProvinciesSEL_BM-5M_v2_0",
+			"desc":
+			{
+				"cat": "Províncies de Catalunya",
+				"spa": "Provincias de Catalunya",
+				"eng": "Provinces of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],			
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Províncies de Catalunya",
+				"spa": "Provincias de Catalunya",
+				"eng": "Provinces of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": {
+						"cat": "Província",
+						"spa": "Provincia",
+						"eng": "Province"
+					},		
+					"DescItems": null,					
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": 
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						 null,
+						{	"COVER": "Tarragona"},
+						{	"COVER": "Girona"},
+						{	"COVER": "Lleida"},
+						{	"COVER": "Barcelona"}
+					],					
+					"atributs": 
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Província",
+							"mostrar": true
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+{
+			"servidor": "http://www.opengis.uab.es/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "iefc-catalunya",
+			"desc":
+			{
+				"cat": "Estacions del Inventari Ecològic i Forestal de Catalunya",
+				"spa": "Estaciones del Inventario Ecológico y Forestal de Cataluña",
+				"eng": "Stations of Ecological and Forest Inventory of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 10,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa":
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Inventari forestal</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Inventario forestal</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Forest inventory</b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda":
+			{
+				"cat": "Estacions IEFC",
+				"spa": "Estaciones IEFC",
+				"eng": "IEFC stations"
+			},
+			"estil":
+			[
+				{
+					"TipusObj": "S",
+					"ItemLleg":
+					[
+						{
+							"color": "examples/mcsc-img/iefc/grups/l_con.gif",
+							"DescColor":
+							{
+								"cat": "Coníferes",
+								"spa": "Coníferas",
+								"eng": "Coníferes"
+							}
+						},
+						{
+							"color": "examples/mcsc-img/iefc/grups/l_esc.gif",
+							"DescColor":
+							{
+								"cat": "Esclerofil·les",
+								"spa": "Esclerofilas",
+								"eng": "Esclerofil·les"
+							}
+						},
+						{
+							"color": "examples/mcsc-img/iefc/grups/l_plan.gif",
+							"DescColor":
+							{
+								"cat": "Planifolis",
+								"spa": "Planifolios",
+								"eng": "Planifolis"
+							}
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "http://geoserveis.icgc.cat/icc_bt25m/wms/service?",
+			"versio": null,
+			"tipus": null,
+			"nom": "35_VIES_LN",
+			"desc":
+			{
+				"cat": "Xarxa de ferrocarril",
+				"spa": "Red ferroviária",
+				"eng": "Railway network"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 10,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa":
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Cartografia de referència</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Cartografía de referencia</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Reference layers</b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda":
+			{
+				"cat": "Vies de tren <sup>1</sup>",
+				"spa": "Vias de tren <sup>1</sup>",
+				"eng": "Railway <sup>1</sup>"
+			},
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "si",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": "http://mediambient.gencat.net/cat/el_departament/cartografia/docs/cartografia_referencia.jsp?ComponentID=7169&SourcePageID=3351#7096",
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},		
+		{
+			"servidor": "http://sig.gencat.cat/ows/XARXES_TRANSPORT/wms?",
+			"versio": null,
+			"tipus": null,
+			"nom": "XT_VIARI_CATALEGCARRETERESV2",
+			"desc":
+			{
+				"cat": "Xarxa de carreteres de Catalunya (1:250000)",
+				"spa": "Red de carreteras de Cataluña (1:250000)",
+				"eng": "Catalonia road network (1:250000)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 10,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Xarxa de carreteres <sup>3</sup>",
+				"spa": "Red de carreteras <sup>3</sup>",
+				"eng": "Road network <sup>3</sup>"
+			},
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "si",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},		
+		{
+			"servidor": "http://www.opengis.uab.es/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "hidro250k-catalunya",
+			"desc":
+			{
+				"cat": "Hidrografia de Catalunya (1:250000)",
+				"spa": "Hidrografía de Catalunya (1:250000)",
+				"eng": "Catalonia hidrography (1:250000)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 100,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Rius <sup>1</sup>",
+				"spa": "Ríos <sup>1</sup>",
+				"eng": "Rivers <sup>1</sup>"
+			},
+			"estil":
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg":
+					[
+						{
+							"color": "#00FFFF",
+							"DescColor": null
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "si",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "http://www.opengis.uab.es/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "altim250k-catalunya",
+			"desc":
+			{
+				"cat": "Corbes de nivell de Catalunya (1:250000)",
+				"spa": "Curvas de nivel de Cataluña (1:250000)",
+				"eng": "Catalonia Contour Lines (1:250000)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 10,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Corbes de nivell <sup>1</sup>",
+				"spa": "Curvas de nivel <sup>1</sup>",
+				"eng": "Contour Lines <sup>1</sup>"
+			},
+			"estil":
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg":
+					[
+						{
+							"color": "#C10000",
+							"DescColor": null
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "si",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": "http://mediambient.gencat.net/cat/el_departament/cartografia/docs/cartografia_referencia.jsp?ComponentID=7169&SourcePageID=3351#7093",
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "LimAdmin_BM-5M_v2_0",
+			"desc":
+			{
+				"cat": "Límits municipals de Catalunya 1:5 000 (BM-5M) v2.0",
+				"spa": "Límites municipales de Cataluña 1:5 000 (BM-5M) v2.0",
+				"eng": "Municipal limits of Catalonia 1:5 000 (BM-5M) v2.0"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Limits administratius",
+				"spa": "Límites administrativos",
+				"eng": "Administrative Boundaries"
+			},
+			"estil":
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg":
+					[
+						{
+							"color": "#969696",
+							"DescColor":
+							{
+								"cat": "Municipal",
+								"spa": "Municipal",
+								"eng": "Municipality"
+							}
+						},
+						{
+							"color": "#008000",
+							"DescColor":
+							{
+								"cat": "Comarcal",
+								"spa": "Comarcal",
+								"eng": "County"
+							}
+						},
+						{
+							"color": "#1E321E",
+							"DescColor":
+							{
+								"cat": "Provincial",
+								"spa": "Provincial",
+								"eng": "Provincial"
+							}
+						},
+						{
+							"color": "#804000",
+							"DescColor":
+							{
+								"cat": "Autonòmic",
+								"spa": "Autonómico",
+								"eng": "Autonomic"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor":
+							{
+								"cat": "Estatal",
+								"spa": "Estatal",
+								"eng": "Estate"
+							}
+						},
+						{
+							"color": "#0000FF",
+							"DescColor":
+							{
+								"cat": "Línia de costa",
+								"spa": "Línea de costa",
+								"eng": "Coast line"
+							}
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_AB",
+			"desc":
+			{
+				"cat": "Àrea basal",
+				"spa": "Área basal",
+				"eng": "Basal area"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa":			
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Variables biofísiques de l'arbrat</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Variables biofísicas del arbolado</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Biophysical variables of the trees</b><hr align=\"left\" width=\"230\">"				
+			},
+			"DescLlegenda":
+			{
+				"cat": "Àrea basal",
+				"spa": "Área basal",
+				"eng": "Basal area"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Àrea basal",
+					"DescItems": "m<sup>2</sup>/ha",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 100,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 21,
+					"ncol": 7,
+					"descColorMultiplesDe": 5,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_BAT",
+			"desc":
+			{
+				"cat": "Biomassa aèria total",
+				"spa": "Biomasa aérea total",
+				"eng": "Total air biomass"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Biomassa aèria total",
+				"spa": "Biomasa aérea total",
+				"eng": "Total air biomass"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Biomassa aèria total",
+					"DescItems": "t/ha",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 400,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 21,
+					"ncol": 7,
+					"descColorMultiplesDe": 20,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_BF",
+			"desc":
+			{
+				"cat": "Biomassa foliar",
+				"spa": "Biomasa foliar",
+				"eng": "Foliar biomass"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Biomassa foliar",
+				"spa": "Biomasa foliar",
+				"eng": "Foliar biomass"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Biomassa foliar",
+					"DescItems": "t/ha",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 10,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 11,
+					"ncol": 6,
+					"descColorMultiplesDe": 1,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_CAT",
+			"desc":
+			{
+				"cat": "Carboni aeri total",
+				"spa": "Carbono aéreo total",
+				"eng": "Total airborne carbon"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Carboni aeri total",
+				"spa": "Carbono aéreo total",
+				"eng": "Total airborne carbon"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Carboni aeri total",
+					"DescItems": "tC/ha",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 200,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 21,
+					"ncol": 7,
+					"descColorMultiplesDe": 10,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_DBH",
+			"desc":
+			{
+				"cat": "Diàmetre normal mitjà",
+				"spa": "Diámetro normal medio",
+				"eng": "Medium normal diameter"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Diàmetre normal mitjà",
+				"spa": "Diámetro normal medio",
+				"eng": "Medium normal diameter"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Diàmetre normal mitjà",
+					"DescItems": "cm",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 1,
+							"estiramentPaleta": {
+								"valorMaxim": 40,
+								"valorMinim": 7.5
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 14,
+					"ncol": 7,
+					"descColorMultiplesDe": 2.5,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_HM",
+			"desc":
+			{
+				"cat": "Alçada mitjana",
+				"spa": "Altura media",
+				"eng": "Medium height"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Alçada mitjana",
+				"spa": "Altura media",
+				"eng": "Medium height"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Alçada mitjana",
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 30,
+								"valorMinim": 3
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 14,
+					"ncol": 7,
+					"descColorMultiplesDe": 2,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_REC",
+			"desc":
+			{
+				"cat": "Recobriment",
+				"spa": "Recubrimiento",
+				"eng": "Coating"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Recobriment",
+				"spa": "Recubrimiento",
+				"eng": "Coating"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Recobriment",
+					"DescItems": "%",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 150,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 16,
+					"ncol": 8,
+					"descColorMultiplesDe": 10,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#E87F40", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000", "#D20000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "VBA_VAE",
+			"desc":
+			{
+				"cat": "Volum amb escorça",
+				"spa": "Volumen con corteza",
+				"eng": "Volume with bark"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "transparent",
+			"CostatMinim": 20,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": "VBA",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Volum amb escorça",
+				"spa": "Volumen con corteza",
+				"eng": "Volume with bark"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "Volum amb escorça",
+					"DescItems": "m<sup>3</sup>/ha",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 500,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 21,
+					"ncol": 7,
+					"descColorMultiplesDe": 25,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": ["#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#8080FF", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#3D939C", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#60A896", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#83BD91", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#A6D38C", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#C9E887", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#EDFE82", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#FFFF80", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#EE7F40", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000", "#DD0000"]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},	
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MCSCv4Nivell5",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya 4era edició (2009)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña 4era edición (2009)",
+				"eng": "Catalonia Land Cover Map 4th edition (2009)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa":
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Mapa de Cobertes del Sòl de Catalunya</b><hr align=\"left\" width=\"230\">Nivell 5<font size=1><br></font>",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Mapa de Cubiertas del Suelo de Cataluña</b><hr align=\"left\" width=\"230\">Nivel 5<font size=1><br></font>",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Catalonia Land Cover Map</b><hr align=\"left\" width=\"230\">Level 5<font size=1><br></font>"
+			},
+			"DescLlegenda":
+			{
+				"cat": "MCSC 4ª edició (2009)",
+				"spa": "MCSC 4ª edición (2009)",
+				"eng": "CLCM 4th edition (2009)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 5)",
+						"spa": "Tipo de cubierta (Nivel 5)",
+						"eng": "Land cover type (Level 5)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{  "color": "#689019",  "DescColor": "Boscos (>= 20%cc)" },
+						{  "color": "#A0FFAA",  "DescColor": "Boscos (5-20%cc)" },
+						{  "color": "#00FF01",  "DescColor": "Boscos caducifolis de ribera" },
+						{  "color": "#80FF88",  "DescColor": "Franja de protecció" },
+						{  "color": "#699026",  "DescColor": "Plantacions" },
+						{  "color": "#405E09",  "DescColor": "Plantacions d'avet" },
+						{  "color": "#40C209",  "DescColor": "Vivers forestals" },
+						{  "color": "#46FF46",  "DescColor": "Plantacions d'eucaliptus" },
+						{  "color": "#005A00",  "DescColor": "Plantacions de pollancres" },
+						{  "color": "#C3FF00",  "DescColor": "Plantacions de plàtans" },
+						{  "color": "#C1C09E",  "DescColor": "Matollars" },
+						{  "color": "#95CD17",  "DescColor": "Matollars procedents de tallades arreu" },
+						{  "color": "#19FFFF",  "DescColor": "Vegetació d'aiguamolls" },
+						{  "color": "#002524",  "DescColor": "Molleres d'alta muntanya" },
+						{  "color": "#356C6B",  "DescColor": "Salines" },
+						{  "color": "#FFFF85",  "DescColor": "Prats i herbassars" },
+						{  "color": "#95CD18",  "DescColor": "Prats i herbassars de tallades" },
+						{  "color": "#FFFF88",  "DescColor": "Vegetació en dunes i sorrals" },
+						{  "color": "#FF0000",  "DescColor": "Zones cremades" },
+						{  "color": "#79797A",  "DescColor": "Roquissars" },
+						{  "color": "#D0D0D0",  "DescColor": "Tarteres" },
+						{  "color": "#FF8610",  "DescColor": "Lleres naturals" },
+						{  "color": "#FF972F",  "DescColor": "Sòl nu" },
+						{  "color": "#F5DF78",  "DescColor": "Platges" },
+						{  "color": "#D7FFF5",  "DescColor": "Glaceres i congestes" },
+						{  "color": "#000064",  "DescColor": "Llacs i llacunes continentals" },
+						{  "color": "#0000DC",  "DescColor": "Llacunes litorals" },
+						{  "color": "#3737FF",  "DescColor": "Rius" },
+						{  "color": "#6F6FFF",  "DescColor": "Embassaments" },
+						{  "color": "#000080",  "DescColor": "Mar" },
+						{  "color": "#7F4218",  "DescColor": "Fruiters" },
+						{  "color": "#F8DCC4",  "DescColor": "Arrossars" },
+						{  "color": "#F4C8A3",  "DescColor": "Altres conreus herbacis" },
+						{  "color": "#F2E4E5",  "DescColor": "Rompudes agrícoles" },
+						{  "color": "#D7FFF6",  "DescColor": "Hivernacles" },
+						{  "color": "#F4C8A6",  "DescColor": "Conreus d'horta sota plàstic" },
+						{  "color": "#7F4221",  "DescColor": "Fruiters en bancals" },
+						{  "color": "#FFFF04",  "DescColor": "Conreus i fruiters abandonats " },
+						{  "color": "#D7FFFF",  "DescColor": "Vinyes abandonades - prats en zones agrícoles" },
+						{  "color": "#00FFC2",  "DescColor": "Altres conreus herbacis abandonats" },
+						{  "color": "#D8FFFF",  "DescColor": "Hivernacles en bancals" },
+						{  "color": "#F5C8A7",  "DescColor": "Horta familiar" },
+						{  "color": "#03FFBE",  "DescColor": "Piscifactories" },
+						{  "color": "#12466D",  "DescColor": "Canals artificials" },
+						{  "color": "#185F94",  "DescColor": "Basses agrícoles" },
+						{  "color": "#FFA4E2",  "DescColor": "Urbanitzacions o edificis aïllats" },
+						{  "color": "#FF53CB",  "DescColor": "Urbà" },
+						{  "color": "#710055",  "DescColor": "Polígon industrial" },
+						{  "color": "#C8008B",  "DescColor": "Granges" },
+						{  "color": "#2C001E",  "DescColor": "Preses" },
+						{  "color": "#000000",  "DescColor": "Cementiris" },
+						{  "color": "#FFCBF2",  "DescColor": "Grans vials" },
+						{  "color": "#49FD00",  "DescColor": "Parcs urbans" },
+						{  "color": "#12466E",  "DescColor": "Basses urbanes" },
+						{  "color": "#ADAACA",  "DescColor": "Autopistes i autovies" },
+						{  "color": "#827DAD",  "DescColor": "Carreteres" },
+						{  "color": "#67629A",  "DescColor": "Aeroports" },
+						{  "color": "#4A466E",  "DescColor": "Vies de ferrocarril" },
+						{  "color": "#2F2D46",  "DescColor": "Zones portuàries" },
+						{  "color": "#289702",  "DescColor": "Zones verdes en eixos viaris" },
+						{  "color": "#6200C5",  "DescColor": "Parcs recreatius" },
+						{  "color": "#952BFF",  "DescColor": "Càmpings" },
+						{  "color": "#B163FF",  "DescColor": "Camps de golf" },
+						{  "color": "#FF53CE",  "DescColor": "Equipaments" },
+						{  "color": "#72005A",  "DescColor": "Energia i infrastructures" },
+						{  "color": "#4A9595",  "DescColor": "Zones d'extracció minera" },
+						{  "color": "#254B4B",  "DescColor": "Abocadors" },
+						{  "color": "#72005E",  "DescColor": "Plantes de tractament" },
+						{  "color": "#FFCBEF",  "DescColor": "Sóls nus urbans" }
+					],
+					"component":
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 2,
+					"categories":
+					[
+						null,
+						{ "COVER": "Pineda de pi pinyer (>= 20%cc)" },
+						{ "COVER": "Pineda de pinastre (>= 20%cc)" },
+						{ "COVER": "Pineda de pi blanc (>= 20%cc)" },
+						{ "COVER": "Pineda de pinassa (>= 20%cc)" },
+						{ "COVER": "Pineda de pi roig (>= 20%cc)" },
+						{ "COVER": "Pineda de pi negre (>= 20%cc)" },
+						{ "COVER": "Avetosa (>= 20%cc)" },
+						{ "COVER": "Altres coníferes (>= 20%cc)" },
+						{ "COVER": "Alzinar (>= 20%cc)" },
+						{ "COVER": "Sureda (>= 20%cc)" },
+						{ "COVER": "Arboçar (>= 20%cc)" },
+						{ "COVER": "Altres perennifolis (>= 20%cc)" },
+						{ "COVER": "Bedollar (>= 20%cc)" },
+						{ "COVER": "Castanyeda (>= 20%cc)" },
+						{ "COVER": "Fageda (>= 20%cc)" },
+						{ "COVER": "Roureda de roure pènol (>= 20%cc)" },
+						{ "COVER": "Roureda de roure de fulla gran (>= 20%cc)" },
+						{ "COVER": "Roureda de roure africà (>= 20%cc)" },
+						{ "COVER": "Roureda de roure martinenc (>= 20%cc)" },
+						{ "COVER": "Roureda de roure de fulla menuda (>= 20%cc)" },
+						{ "COVER": "Roureda de reboll (>= 20%cc)" },
+						{ "COVER": "Avellanosa (>= 20%cc)" },
+						{ "COVER": "Freixeneda (>= 20%cc)" },
+						{ "COVER": "Altres caducifolis (>= 20%cc)" },
+						{ "COVER": "Boscos caducifolis de ribera (>= 20%cc)" },
+						{ "COVER": "Pineda de pi pinyer (5-20%cc)" },
+						{ "COVER": "Pineda de pinastre (5-20%cc)" },
+						{ "COVER": "Pineda de pi blanc (5-20%cc)" },
+						{ "COVER": "Pineda de pinassa (5-20%cc)" },
+						{ "COVER": "Pineda de pi roig (5-20%cc)" },
+						{ "COVER": "Pineda de pi negre (5-20%cc)" },
+						{ "COVER": "Avetosa (5-20%cc)" },
+						{ "COVER": "Altres coníferes (5-20%cc)" },
+						{ "COVER": "Alzinar (5-20%cc)" },
+						{ "COVER": "Sureda (5-20%cc)" },
+						{ "COVER": "Arboçar (5-20%cc)" },
+						{ "COVER": "Altres perennifolis (5-20%cc)" },
+						{ "COVER": "Bedollar (5-20%cc)" },
+						{ "COVER": "Castanyeda (5-20%cc)" },
+						{ "COVER": "Fageda (5-20%cc)" },
+						{ "COVER": "Roureda de roure pènol (5-20%cc)" },
+						{ "COVER": "Roureda de roure de fulla gran (5-20%cc)" },
+						{ "COVER": "Roureda de roure africà (5-20%cc)" },
+						{ "COVER": "Roureda de roure martinenc (5-20%cc)" },
+						{ "COVER": "Roureda de roure de fulla menuda (5-20%cc)" },
+						{ "COVER": "Roureda de reboll (5-20%cc)" },
+						{ "COVER": "Avellanosa (5-20%cc)" },
+						{ "COVER": "Freixeneda (5-20%cc)" },
+						{ "COVER": "Altres caducifolis (5-20%cc)" },
+						{ "COVER": "Boscos caducifolis de ribera (5-20%cc)" },
+						{ "COVER": "Franja de protecció de pi pinyer" },
+						{ "COVER": "Franja de protecció de pinastre" },
+						{ "COVER": "Franja de protecció de pi blanc" },
+						{ "COVER": "Franja de protecció de pinassa" },
+						{ "COVER": "Franja de protecció de pi roig" },
+						{ "COVER": "Franja de protecció d'alzina" },
+						{ "COVER": "Franja de protecció d'alzina surera" },
+						{ "COVER": "Franja de protecció de castanyer" },
+						{ "COVER": "Franja de protecció de faig" },
+						{ "COVER": "Franja de protecció de roure pènol" },
+						{ "COVER": "Franja de protecció de roure de fulla gran" },
+						{ "COVER": "Franja de protecció de roure africà" },
+						{ "COVER": "Franja de protecció de roure martinenc" },
+						{ "COVER": "Franja de protecció de roure de fulla menuda" },
+						{ "COVER": "Franja de protecció d'altres caducifolis" },
+						{ "COVER": "Plantacions de pi pinyer" },
+						{ "COVER": "Plantacions de pinastre" },
+						{ "COVER": "Plantacions de pi blanc" },
+						{ "COVER": "Plantacions de pinassa" },
+						{ "COVER": "Plantacions de pi roig" },
+						{ "COVER": "Plantacions de pi negre" },
+						{ "COVER": "Plantacions d'avet" },
+						{ "COVER": "Vivers forestals" },
+						{ "COVER": "Plantacions de coníferes no autòctones" },
+						{ "COVER": "Plantacions d'alzina surera" },
+						{ "COVER": "Plantacions de castanyer" },
+						{ "COVER": "Plantacions d'altres caducifolis" },
+						{ "COVER": "Plantacions d'eucaliptus" },
+						{ "COVER": "Plantacions de pollancres" },
+						{ "COVER": "Plantacions de plàtans" },
+						{ "COVER": "Regeneració de pi blanc" },
+						{ "COVER": "Regeneració de pinastre" },
+						{ "COVER": "Regeneració de pinassa" },
+						{ "COVER": "Regeneració de pi roig" },
+						{ "COVER": "Regeneració de pi negre" },
+						{ "COVER": "Regeneració d'avet" },
+						{ "COVER": "Regeneració d'alzina" },
+						{ "COVER": "Regeneració de bedoll" },
+						{ "COVER": "Regeneració de faig" },
+						{ "COVER": "Regeneració de roureda de roure martinenc" },
+						{ "COVER": "Regeneració de roure de fulla menuda" },
+						{ "COVER": "Matollars" },
+						{ "COVER": "Matollars en línies elèctriques" },
+						{ "COVER": "Franja de protecció de matollars" },
+						{ "COVER": "Matollars en tallafocs" },
+						{ "COVER": "Matollars procedents de tallades arreu" },
+						{ "COVER": "Matollars de formacions de ribera" },
+						{ "COVER": "Canyars" },
+						{ "COVER": "Vegetació d'aiguamolls litorals" },
+						{ "COVER": "Vegetació d'aiguamolls continentals" },
+						{ "COVER": "Molleres d'alta muntanya" },
+						{ "COVER": "Salines" },
+						{ "COVER": "Prats i herbassars" },
+						{ "COVER": "Prats i herbassars en línies elèctriques" },
+						{ "COVER": "Franja de protecció de prats i herbassars" },
+						{ "COVER": "Prats i herbassars d'alta muntanya" },
+						{ "COVER": "Prats i herbassars d'alta muntanya en línies elèctriques" },
+						{ "COVER": "Prats i herbassars en tallafocs" },
+						{ "COVER": "Prats i herbassars procedents de tallades arreu" },
+						{ "COVER": "Prats i herbassars d'alta muntanya procedents de tallades arreu" },
+						{ "COVER": "Vegetació arbustiva de dunes i sorrals" },
+						{ "COVER": "Vegetació herbàcia de dunes i sorrals" },
+						{ "COVER": "Zones cremades" },
+						{ "COVER": "Penya-segats marins" },
+						{ "COVER": "Roquissars" },
+						{ "COVER": "Tarteres" },
+						{ "COVER": "Lleres naturals" },
+						{ "COVER": "Sòl nu en tallafocs" },
+						{ "COVER": "Sòl erosionat per agent natural" },
+						{ "COVER": "Sòl nu per acció antròpica" },
+						{ "COVER": "Sòl nu en línies elèctriques" },
+						{ "COVER": "Platges" },
+						{ "COVER": "Glaceres i congestes" },
+						{ "COVER": "Llacs i llacunes continentals" },
+						{ "COVER": "Llacunes litorals" },
+						{ "COVER": "Rius" },
+						{ "COVER": "Embassaments" },
+						{ "COVER": "Mar" },
+						{ "COVER": "Cítrics" },
+						{ "COVER": "Fruiters no cítrics" },
+						{ "COVER": "Fruiters no cítrics en regadiu" },
+						{ "COVER": "Vivers agrícoles" },
+						{ "COVER": "Vinyes" },
+						{ "COVER": "Oliverars" },
+						{ "COVER": "Oliverars en regadiu" },
+						{ "COVER": "Garroferars" },
+						{ "COVER": "Garroferars en regadiu" },
+						{ "COVER": "Arrossars" },
+						{ "COVER": "Altres conreus herbacis" },
+						{ "COVER": "Altres conreus herbacis en regadiu" },
+						{ "COVER": "Prats de dall" },
+						{ "COVER": "Conreus en transformació" },
+						{ "COVER": "Rompudes agrícoles" },
+						{ "COVER": "Hivernacles" },
+						{ "COVER": "Conreus d'horta sota plàstic" },
+						{ "COVER": "Cítrics en bancals" },
+						{ "COVER": "Fruiters no cítrics en bancals" },
+						{ "COVER": "Fruiters no cítrics en bancals en regadiu" },
+						{ "COVER": "Vinyes en bancals" },
+						{ "COVER": "Oliverars en bancals" },
+						{ "COVER": "Oliverars en bancals en regadiu" },
+						{ "COVER": "Garroferars en bancals" },
+						{ "COVER": "Altres conreus herbacis en bancals" },
+						{ "COVER": "Altres conreus herbacis en bancals en regadiu" },
+						{ "COVER": "Conreus abandonats - boscos" },
+						{ "COVER": "Conreus abandonats - matollars" },
+						{ "COVER": "Conreus abandonats - prats en zones forestals" },
+						{ "COVER": "Conreus abandonats - prats d'alta muntanya en zones forestals" },
+						{ "COVER": "Cítrics abandonats - prats en zones agrícoles" },
+						{ "COVER": "Cítrics abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles" },
+						{ "COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Vinyes abandonades - prats en zones agrícoles" },
+						{ "COVER": "Oliverars abandonats - prats en zones agrícoles" },
+						{ "COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Garroferars abandonats - prats en zones agrícoles" },
+						{ "COVER": "Arrossars abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Prats de dall abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Prats de dall abandonats regadiu no regat - prats d'alta muntanya en zones agrícoles" },
+						{ "COVER": "Vinyes abandonades - prats en zones agrícoles en bancals" },
+						{ "COVER": "Oliverars abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Garroferars abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Hivernacles en bancals" },
+						{ "COVER": "Horta familiar" },
+						{ "COVER": "Assentament agrícola residencial" },
+						{ "COVER": "Piscifactories i conreus aqüícoles a terra" },
+						{ "COVER": "Piscifactories i conreus aqüícoles a mar" },
+						{ "COVER": "Canals artificials" },
+						{ "COVER": "Basses agrícoles" },
+						{ "COVER": "Urbanitzacions" },
+						{ "COVER": "Centre urbà" },
+						{ "COVER": "Eixample" },
+						{ "COVER": "Habitatges unifamiliars" },
+						{ "COVER": "Colònies i nuclis aïllats" },
+						{ "COVER": "Cases aïllades" },
+						{ "COVER": "Polígon industrial ordenat" },
+						{ "COVER": "Polígon industrial sense ordenar" },
+						{ "COVER": "Indústries aïllades" },
+						{ "COVER": "Serreries" },
+						{ "COVER": "Complexos comercials i d'oficines" },
+						{ "COVER": "Vivers" },
+						{ "COVER": "Complexos hotelers" },
+						{ "COVER": "Altres construccions" },
+						{ "COVER": "Naus d'ús agrícola" },
+						{ "COVER": "Granges" },
+						{ "COVER": "Preses" },
+						{ "COVER": "Cementiris" },
+						{ "COVER": "Grans vials" },
+						{ "COVER": "Zones d'aparcament" },
+						{ "COVER": "Parcs urbans" },
+						{ "COVER": "Basses urbanes" },
+						{ "COVER": "Autopistes i autovies" },
+						{ "COVER": "Carreteres" },
+						{ "COVER": "Aeroports" },
+						{ "COVER": "Vies de ferrocarril" },
+						{ "COVER": "Zones portuàries" },
+						{ "COVER": "Zones verdes viàries" },
+						{ "COVER": "Zones verdes ferroviàries" },
+						{ "COVER": "Àrees de servei en xarxa viària" },
+						{ "COVER": "Estacions d'autobusos" },
+						{ "COVER": "Zones d'esport" },
+						{ "COVER": "Parcs recreatius" },
+						{ "COVER": "Càmpings" },
+						{ "COVER": "Camps de golf" },
+						{ "COVER": "Complexos administratius" },
+						{ "COVER": "Equipaments sanitaris" },
+						{ "COVER": "Equipaments educatius" },
+						{ "COVER": "Centres penitenciaris" },
+						{ "COVER": "Centres religiosos" },
+						{ "COVER": "Centres culturals" },
+						{ "COVER": "Centrals eòliques" },
+						{ "COVER": "Centrals solars" },
+						{ "COVER": "Centrals nuclears" },
+						{ "COVER": "Centrals tèrmiques" },
+						{ "COVER": "Infraestructures elèctriques" },
+						{ "COVER": "Depuradores i potabilitzadores" },
+						{ "COVER": "Desalinitzadores" },
+						{ "COVER": "Telecomunicacions" },
+						{ "COVER": "Zones d'extracció minera" },
+						{ "COVER": "Abocadors" },
+						{ "COVER": "Plantes de tractament" },
+						{ "COVER": "Sòls nus urbans no edificats" },
+						{ "COVER": "Zones urbanes en construcció" },
+						{ "COVER": "Moviments de terres" }						
+					],
+					"atributs":
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Tipus de coberta",
+							"mostrar": true
+						}
+					],
+					"paleta":
+					{
+						"colors":
+						[
+"#FFFFFF", "#689010", "#689011", "#689012", "#689013", "#689014", "#689015", "#689016", "#689017", "#689018", "#689019", "#68901A", "#68901B", "#68901C", "#68901D", "#68901E", "#68901F", "#689020", "#689021", "#689022", "#689023", "#689024", "#689025", "#689026", "#689027", "#00FF01", "#A0FFA0", "#A0FFA1", "#A0FFA2", "#A0FFA3", "#A0FFA4", "#A0FFA5", "#A0FFA6", "#A0FFA7", "#A0FFA8", "#A0FFA9", "#A0FFAA", "#A0FFAB", "#A0FFAC", "#A0FFAD", "#A0FFAE", "#A0FFAF", "#A0FFB0", "#A0FFB1", "#A0FFB2", "#A0FFB3", "#A0FFB4", "#A0FFB5", "#A0FFB6", "#A0FFB7", "#00FF03", "#80FF80", "#80FF81", "#80FF82", "#80FF83", "#80FF84", "#80FF87", "#80FF88", "#80FF8A", "#80FF8B", "#80FF8C", "#80FF8D", "#80FF8E", "#80FF8F", "#80FF90", "#80FF92", "#699023", "#699024", "#699025", "#699026", "#699027", "#699028", "#405E09", "#40C209", "#405E0A", "#689029", "#68902A", "#68902B", "#46FF46", "#005A00", "#C3FF00", "#C0C096", "#C0C097", "#C0C098", "#C0C099", "#C0C09A", "#C0C09B", "#C1C099", "#C1C09A", "#C1C09B", "#C1C09C", "#C1C09D", "#C1C09E", "#C1C09F", "#C1C0A0", "#C1C0A1", "#95CD17", "#C1C0A2", "#C1C0A3", "#80FFFF", "#19FFFF", "#002524", "#356C6B", "#FFFF82", "#FFFF83", "#FFFF84", "#FFFF85", "#FFFF86", "#FFFF87", "#96CD17", "#95CD18", "#C0C09F", "#FFFF88", "#FF0000", "#797979", "#79797A", "#D0D0D0", "#FF8610", "#FF972F", "#FF9730", "#FF9731", "#FF9732", "#F5DF78", "#D7FFF5", "#000064", "#0000DC", "#3737FF", "#6F6FFF", "#000080", "#7F4218", "#7F4219", "#7F421A", "#7F4238", "#AF5B15", "#7F421B", "#7F421C", "#7F421D", "#7F421E", "#F8DCC4", "#F4C8A3", "#F4C8A4", "#F4C8A5", "#F2E4E4", "#F2E4E5", "#D7FFF6", "#F4C8A6", "#7F4221", "#7F4222", "#7F4223", "#AF5B1F", "#7F4224", "#7F4225", "#7F4226", "#F4C8AD", "#F4C8AE", "#FFFF00", "#FFFF01", "#FFFF02", "#FFFF03", "#FFFF04", "#FFFF05", "#B7B700", "#B7B701", "#797900", "#797901", "#D7FFFF", "#F4C8A7", "#F4C9A7", "#F4C8A8", "#00FFBE", "#00FFBF", "#01FFBF", "#00FFC2", "#03FFC2", "#00FFC3", "#00FFC4", "#00FFC5", "#F4C8A9", "#F4C9A9", "#F4C8AA", "#D8FFFF", "#F5C8A7", "#F5C8A8", "#03FFBE", "#03FFBF", "#12466D", "#185F94", "#FFA4E2", "#FF53CB", "#FF53CD", "#FFA4ED", "#FFA4E5", "#FFA4E4", "#71004F", "#710050", "#710051", "#710055", "#710056", "#710057", "#71005D", "#71005E", "#C8008A", "#C8008B", "#2C001E", "#000000", "#FFCBF2", "#FFCBF3", "#49FD00", "#12466E", "#ADAACA", "#827DAD", "#67629A", "#4A466E", "#2F2D46", "#289700", "#289701", "#289702", "#289703", "#6200C4", "#6200C5", "#952BFF", "#B163FF", "#FE53CD", "#FF53CE", "#FF53CF", "#FF53D0", "#FF53D1", "#FF53D2", "#720056", "#720057", "#720058", "#720059", "#72005A", "#72005B", "#72005C", "#72005D", "#4A9595", "#254B4B", "#72005E", "#FFCBEF", "#FFCBF0", "#FFCBF1"
+						]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MCSCv3_2Nivell5",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya 3era edició (2005-2007)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña 3era edición (2005-2007)",
+				"eng": "Catalonia Land Cover Map 3rd edition (2005-2007)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "MCSC 3ª edició (2005-07)",
+				"spa": "MCSC 3ª edición (2005-07)",
+				"eng": "CLCM 3rd edition (2005-07)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 5)",
+						"spa": "Tipo de cubierta (Nivel 5)",
+						"eng": "Land cover type (Level 5)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						 { "color": "#689019", "DescColor": "Boscos (>= 20%cc)" },
+						 { "color": "#A0FFAA", "DescColor": "Boscos (5-20%cc)" },
+						 { "color": "#00FF01", "DescColor": "Boscos caducifolis de ribera" },
+						 { "color": "#80FF88", "DescColor": "Franja de protecció" },
+						 { "color": "#699026", "DescColor": "Plantacions" },
+						 { "color": "#405E09", "DescColor": "Plantacions d'avet" },
+						 { "color": "#40C209", "DescColor": "Vivers forestals" },
+						 { "color": "#46FF46", "DescColor": "Plantacions d'eucaliptus" },
+						 { "color": "#005A00", "DescColor": "Plantacions de pollancres" },
+						 { "color": "#C3FF00", "DescColor": "Plantacions de plàtans" },
+						 { "color": "#C1C09E", "DescColor": "Matollars" },
+						 { "color": "#95CD17", "DescColor": "Matollars procedents de tallades arreu" },
+						 { "color": "#19FFFF", "DescColor": "Vegetació d'aiguamolls" },
+						 { "color": "#002524", "DescColor": "Molleres d'alta muntanya" },
+						 { "color": "#356C6B", "DescColor": "Salines" },
+						 { "color": "#FFFF85", "DescColor": "Prats i herbassars" },
+						 { "color": "#95CD18", "DescColor": "Prats i herbassars de tallades" },
+						 { "color": "#FFFF88", "DescColor": "Vegetació en dunes i sorrals" },
+						 { "color": "#FF0000", "DescColor": "Zones cremades" },
+						 { "color": "#79797A", "DescColor": "Roquissars" },
+						 { "color": "#D0D0D0", "DescColor": "Tarteres" },
+						 { "color": "#FF8610", "DescColor": "Lleres naturals" },
+						 { "color": "#FF972F", "DescColor": "Sòl nu" },
+						 { "color": "#F5DF78", "DescColor": "Platges" },
+						 { "color": "#D7FFF5", "DescColor": "Glaceres i congestes" },
+						 { "color": "#000064", "DescColor": "Llacs i llacunes continentals" },
+						 { "color": "#0000DC", "DescColor": "Llacunes litorals" },
+						 { "color": "#3737FF", "DescColor": "Rius" },
+						 { "color": "#6F6FFF", "DescColor": "Embassaments" },
+						 { "color": "#000080", "DescColor": "Mar" },
+						 { "color": "#7F4218", "DescColor": "Fruiters" },
+						 { "color": "#F8DCC4", "DescColor": "Arrossars" },
+						 { "color": "#F4C8A3", "DescColor": "Altres conreus herbacis" },
+						 { "color": "#F2E4E5", "DescColor": "Rompudes agrícoles" },
+						 { "color": "#D7FFF6", "DescColor": "Hivernacles" },
+						 { "color": "#F4C8A6", "DescColor": "Conreus d'horta sota plàstic" },
+						 { "color": "#7F4221", "DescColor": "Fruiters en bancals" },
+						 { "color": "#FFFF04", "DescColor": "Conreus i fruiters abandonats " },
+						 { "color": "#D7FFFF", "DescColor": "Vinyes abandonades - prats en zones agrícoles" },
+						 { "color": "#00FFC2", "DescColor": "Altres conreus herbacis abandonats" },
+						 { "color": "#D8FFFF", "DescColor": "Hivernacles en bancals" },
+						 { "color": "#F5C8A7", "DescColor": "Horta familiar" },
+						 { "color": "#03FFBE", "DescColor": "Piscifactories" },
+						 { "color": "#12466D", "DescColor": "Canals artificials" },
+						 { "color": "#185F94", "DescColor": "Basses agrícoles" },
+						 { "color": "#FFA4E2", "DescColor": "Urbanitzacions o edificis aïllats" },
+						 { "color": "#FF53CB", "DescColor": "Urbà" },
+						 { "color": "#710055", "DescColor": "Polígon industrial" },
+						 { "color": "#C8008B", "DescColor": "Granges" },
+						 { "color": "#2C001E", "DescColor": "Preses" },
+						 { "color": "#000000", "DescColor": "Cementiris" },
+						 { "color": "#FFCBF2", "DescColor": "Grans vials" },
+						 { "color": "#49FD00", "DescColor": "Parcs urbans" },
+						 { "color": "#12466E", "DescColor": "Basses urbanes" },
+						 { "color": "#ADAACA", "DescColor": "Autopistes i autovies" },
+						 { "color": "#827DAD", "DescColor": "Carreteres" },
+						 { "color": "#67629A", "DescColor": "Aeroports" },
+						 { "color": "#4A466E", "DescColor": "Vies de ferrocarril" },
+						 { "color": "#2F2D46", "DescColor": "Zones portuàries" },
+						 { "color": "#289702", "DescColor": "Zones verdes en eixos viaris" },
+						 { "color": "#6200C5", "DescColor": "Parcs recreatius" },
+						 { "color": "#952BFF", "DescColor": "Càmpings" },
+						 { "color": "#B163FF", "DescColor": "Camps de golf" },
+						 { "color": "#FF53CE", "DescColor": "Equipaments" },
+						 { "color": "#72005A", "DescColor": "Energia i infrastructures" },
+						 { "color": "#4A9595", "DescColor": "Zones d'extracció minera" },
+						 { "color": "#254B4B", "DescColor": "Abocadors" },
+						 { "color": "#72005E", "DescColor": "Plantes de tractament" },
+						 { "color": "#FFCBEF", "DescColor": "Sóls nus urbans" }
+					],
+					"component":
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 2,
+					"categories":
+					[
+						null,
+						{ "COVER": "Pineda de pi pinyer (>= 20%cc)" },
+						{ "COVER": "Pineda de pinastre (>= 20%cc)" },
+						{ "COVER": "Pineda de pi blanc (>= 20%cc)" },
+						{ "COVER": "Pineda de pinassa (>= 20%cc)" },
+						{ "COVER": "Pineda de pi roig (>= 20%cc)" },
+						{ "COVER": "Pineda de pi negre (>= 20%cc)" },
+						{ "COVER": "Avetosa (>= 20%cc)" },
+						{ "COVER": "Altres coníferes (>= 20%cc)" },
+						{ "COVER": "Alzinar (>= 20%cc)" },
+						{ "COVER": "Sureda (>= 20%cc)" },
+						{ "COVER": "Arboçar (>= 20%cc)" },
+						{ "COVER": "Altres perennifolis (>= 20%cc)" },
+						{ "COVER": "Bedollar (>= 20%cc)" },
+						{ "COVER": "Castanyeda (>= 20%cc)" },
+						{ "COVER": "Fageda (>= 20%cc)" },
+						{ "COVER": "Roureda de roure pènol (>= 20%cc)" },
+						{ "COVER": "Roureda de roure de fulla gran (>= 20%cc)" },
+						{ "COVER": "Roureda de roure africà (>= 20%cc)" },
+						{ "COVER": "Roureda de roure martinenc (>= 20%cc)" },
+						{ "COVER": "Roureda de roure de fulla menuda (>= 20%cc)" },
+						{ "COVER": "Roureda de reboll (>= 20%cc)" },
+						{ "COVER": "Avellanosa (>= 20%cc)" },
+						{ "COVER": "Freixeneda (>= 20%cc)" },
+						{ "COVER": "Altres caducifolis (>= 20%cc)" },
+						{ "COVER": "Boscos caducifolis de ribera (>= 20%cc)" },
+						{ "COVER": "Pineda de pi pinyer (5-20%cc)" },
+						{ "COVER": "Pineda de pinastre (5-20%cc)" },
+						{ "COVER": "Pineda de pi blanc (5-20%cc)" },
+						{ "COVER": "Pineda de pinassa (5-20%cc)" },
+						{ "COVER": "Pineda de pi roig (5-20%cc)" },
+						{ "COVER": "Pineda de pi negre (5-20%cc)" },
+						{ "COVER": "Avetosa (5-20%cc)" },
+						{ "COVER": "Altres coníferes (5-20%cc)" },
+						{ "COVER": "Alzinar (5-20%cc)" },
+						{ "COVER": "Sureda (5-20%cc)" },
+						{ "COVER": "Arboçar (5-20%cc)" },
+						{ "COVER": "Altres perennifolis (5-20%cc)" },
+						{ "COVER": "Bedollar (5-20%cc)" },
+						{ "COVER": "Castanyeda (5-20%cc)" },
+						{ "COVER": "Fageda (5-20%cc)" },
+						{ "COVER": "Roureda de roure pènol (5-20%cc)" },
+						{ "COVER": "Roureda de roure de fulla gran (5-20%cc)" },
+						{ "COVER": "Roureda de roure africà (5-20%cc)" },
+						{ "COVER": "Roureda de roure martinenc (5-20%cc)" },
+						{ "COVER": "Roureda de roure de fulla menuda (5-20%cc)" },
+						{ "COVER": "Roureda de reboll (5-20%cc)" },
+						{ "COVER": "Avellanosa (5-20%cc)" },
+						{ "COVER": "Freixeneda (5-20%cc)" },
+						{ "COVER": "Altres caducifolis (5-20%cc)" },
+						{ "COVER": "Boscos caducifolis de ribera (5-20%cc)" },
+						{ "COVER": "Franja de protecció de pi pinyer" },
+						{ "COVER": "Franja de protecció de pinastre" },
+						{ "COVER": "Franja de protecció de pi blanc" },
+						{ "COVER": "Franja de protecció de pinassa" },
+						{ "COVER": "Franja de protecció de pi roig" },
+						{ "COVER": "Franja de protecció d'alzina" },
+						{ "COVER": "Franja de protecció d'alzina surera" },
+						{ "COVER": "Franja de protecció de castanyer" },
+						{ "COVER": "Franja de protecció de faig" },
+						{ "COVER": "Franja de protecció de roure pènol" },
+						{ "COVER": "Franja de protecció de roure de fulla gran" },
+						{ "COVER": "Franja de protecció de roure africà" },
+						{ "COVER": "Franja de protecció de roure martinenc" },
+						{ "COVER": "Franja de protecció de roure de fulla menuda" },
+						{ "COVER": "Franja de protecció d'altres caducifolis" },
+						{ "COVER": "Plantacions de pi pinyer" },
+						{ "COVER": "Plantacions de pinastre" },
+						{ "COVER": "Plantacions de pi blanc" },
+						{ "COVER": "Plantacions de pinassa" },
+						{ "COVER": "Plantacions de pi roig" },
+						{ "COVER": "Plantacions de pi negre" },
+						{ "COVER": "Plantacions d'avet" },
+						{ "COVER": "Vivers forestals" },
+						{ "COVER": "Plantacions de coníferes no autòctones" },
+						{ "COVER": "Plantacions d'alzina surera" },
+						{ "COVER": "Plantacions de castanyer" },
+						{ "COVER": "Plantacions d'altres caducifolis" },
+						{ "COVER": "Plantacions d'eucaliptus" },
+						{ "COVER": "Plantacions de pollancres" },
+						{ "COVER": "Plantacions de plàtans" },
+						{ "COVER": "Regeneració de pi blanc" },
+						{ "COVER": "Regeneració de pinastre" },
+						{ "COVER": "Regeneració de pinassa" },
+						{ "COVER": "Regeneració de pi roig" },
+						{ "COVER": "Regeneració de pi negre" },
+						{ "COVER": "Regeneració d'avet" },
+						{ "COVER": "Regeneració d'alzina" },
+						{ "COVER": "Regeneració de bedoll" },
+						{ "COVER": "Regeneració de faig" },
+						{ "COVER": "Regeneració de roureda de roure martinenc" },
+						{ "COVER": "Regeneració de roure de fulla menuda" },
+						{ "COVER": "Matollars" },
+						{ "COVER": "Matollars en línies elèctriques" },
+						{ "COVER": "Franja de protecció de matollars" },
+						{ "COVER": "Matollars en tallafocs" },
+						{ "COVER": "Matollars procedents de tallades arreu" },
+						{ "COVER": "Matollars de formacions de ribera" },
+						{ "COVER": "Canyars" },
+						{ "COVER": "Vegetació d'aiguamolls litorals" },
+						{ "COVER": "Vegetació d'aiguamolls continentals" },
+						{ "COVER": "Molleres d'alta muntanya" },
+						{ "COVER": "Salines" },
+						{ "COVER": "Prats i herbassars" },
+						{ "COVER": "Prats i herbassars en línies elèctriques" },
+						{ "COVER": "Franja de protecció de prats i herbassars" },
+						{ "COVER": "Prats i herbassars d'alta muntanya" },
+						{ "COVER": "Prats i herbassars d'alta muntanya en línies elèctriques" },
+						{ "COVER": "Prats i herbassars en tallafocs" },
+						{ "COVER": "Prats i herbassars procedents de tallades arreu" },
+						{ "COVER": "Prats i herbassars d'alta muntanya procedents de tallades arreu" },
+						{ "COVER": "Vegetació arbustiva de dunes i sorrals" },
+						{ "COVER": "Vegetació herbàcia de dunes i sorrals" },
+						{ "COVER": "Zones cremades" },
+						{ "COVER": "Penya-segats marins" },
+						{ "COVER": "Roquissars" },
+						{ "COVER": "Tarteres" },
+						{ "COVER": "Lleres naturals" },
+						{ "COVER": "Sòl nu en tallafocs" },
+						{ "COVER": "Sòl erosionat per agent natural" },
+						{ "COVER": "Sòl nu per acció antròpica" },
+						{ "COVER": "Sòl nu en línies elèctriques" },
+						{ "COVER": "Platges" },
+						{ "COVER": "Glaceres i congestes" },
+						{ "COVER": "Llacs i llacunes continentals" },
+						{ "COVER": "Llacunes litorals" },
+						{ "COVER": "Rius" },
+						{ "COVER": "Embassaments" },
+						{ "COVER": "Mar" },
+						{ "COVER": "Cítrics" },
+						{ "COVER": "Fruiters no cítrics" },
+						{ "COVER": "Fruiters no cítrics en regadiu" },
+						{ "COVER": "Vivers agrícoles" },
+						{ "COVER": "Vinyes" },
+						{ "COVER": "Oliverars" },
+						{ "COVER": "Oliverars en regadiu" },
+						{ "COVER": "Garroferars" },
+						{ "COVER": "Garroferars en regadiu" },
+						{ "COVER": "Arrossars" },
+						{ "COVER": "Altres conreus herbacis" },
+						{ "COVER": "Altres conreus herbacis en regadiu" },
+						{ "COVER": "Prats de dall" },
+						{ "COVER": "Conreus en transformació" },
+						{ "COVER": "Rompudes agrícoles" },
+						{ "COVER": "Hivernacles" },
+						{ "COVER": "Conreus d'horta sota plàstic" },
+						{ "COVER": "Cítrics en bancals" },
+						{ "COVER": "Fruiters no cítrics en bancals" },
+						{ "COVER": "Fruiters no cítrics en bancals en regadiu" },
+						{ "COVER": "Vinyes en bancals" },
+						{ "COVER": "Oliverars en bancals" },
+						{ "COVER": "Oliverars en bancals en regadiu" },
+						{ "COVER": "Garroferars en bancals" },
+						{ "COVER": "Altres conreus herbacis en bancals" },
+						{ "COVER": "Altres conreus herbacis en bancals en regadiu" },
+						{ "COVER": "Conreus abandonats - boscos" },
+						{ "COVER": "Conreus abandonats - matollars" },
+						{ "COVER": "Conreus abandonats - prats en zones forestals" },
+						{ "COVER": "Conreus abandonats - prats d'alta muntanya en zones forestals" },
+						{ "COVER": "Cítrics abandonats - prats en zones agrícoles" },
+						{ "COVER": "Cítrics abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles" },
+						{ "COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Vinyes abandonades - prats en zones agrícoles" },
+						{ "COVER": "Oliverars abandonats - prats en zones agrícoles" },
+						{ "COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Garroferars abandonats - prats en zones agrícoles" },
+						{ "COVER": "Arrossars abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Prats de dall abandonats regadiu no regat - prats en zones agrícoles" },
+						{ "COVER": "Prats de dall abandonats regadiu no regat - prats d'alta muntanya en zones agrícoles" },
+						{ "COVER": "Vinyes abandonades - prats en zones agrícoles en bancals" },
+						{ "COVER": "Oliverars abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles en bancals" },
+						{ "COVER": "Garroferars abandonats - prats en zones agrícoles en bancals" },
+						{ "COVER": "Hivernacles en bancals" },
+						{ "COVER": "Horta familiar" },
+						{ "COVER": "Assentament agrícola residencial" },
+						{ "COVER": "Piscifactories i conreus aqüícoles a terra" },
+						{ "COVER": "Piscifactories i conreus aqüícoles a mar" },
+						{ "COVER": "Canals artificials" },
+						{ "COVER": "Basses agrícoles" },
+						{ "COVER": "Urbanitzacions" },
+						{ "COVER": "Centre urbà" },
+						{ "COVER": "Eixample" },
+						{ "COVER": "Habitatges unifamiliars" },
+						{ "COVER": "Colònies i nuclis aïllats" },
+						{ "COVER": "Cases aïllades" },
+						{ "COVER": "Polígon industrial ordenat" },
+						{ "COVER": "Polígon industrial sense ordenar" },
+						{ "COVER": "Indústries aïllades" },
+						{ "COVER": "Serreries" },
+						{ "COVER": "Complexos comercials i d'oficines" },
+						{ "COVER": "Vivers" },
+						{ "COVER": "Complexos hotelers" },
+						{ "COVER": "Altres construccions" },
+						{ "COVER": "Naus d'ús agrícola" },
+						{ "COVER": "Granges" },
+						{ "COVER": "Preses" },
+						{ "COVER": "Cementiris" },
+						{ "COVER": "Grans vials" },
+						{ "COVER": "Zones d'aparcament" },
+						{ "COVER": "Parcs urbans" },
+						{ "COVER": "Basses urbanes" },
+						{ "COVER": "Autopistes i autovies" },
+						{ "COVER": "Carreteres" },
+						{ "COVER": "Aeroports" },
+						{ "COVER": "Vies de ferrocarril" },
+						{ "COVER": "Zones portuàries" },
+						{ "COVER": "Zones verdes viàries" },
+						{ "COVER": "Zones verdes ferroviàries" },
+						{ "COVER": "Àrees de servei en xarxa viària" },
+						{ "COVER": "Estacions d'autobusos" },
+						{ "COVER": "Zones d'esport" },
+						{ "COVER": "Parcs recreatius" },
+						{ "COVER": "Càmpings" },
+						{ "COVER": "Camps de golf" },
+						{ "COVER": "Complexos administratius" },
+						{ "COVER": "Equipaments sanitaris" },
+						{ "COVER": "Equipaments educatius" },
+						{ "COVER": "Centres penitenciaris" },
+						{ "COVER": "Centres religiosos" },
+						{ "COVER": "Centres culturals" },
+						{ "COVER": "Centrals eòliques" },
+						{ "COVER": "Centrals solars" },
+						{ "COVER": "Centrals nuclears" },
+						{ "COVER": "Centrals tèrmiques" },
+						{ "COVER": "Infraestructures elèctriques" },
+						{ "COVER": "Depuradores i potabilitzadores" },
+						{ "COVER": "Desalinitzadores" },
+						{ "COVER": "Telecomunicacions" },
+						{ "COVER": "Zones d'extracció minera" },
+						{ "COVER": "Abocadors" },
+						{ "COVER": "Plantes de tractament" },
+						{ "COVER": "Sòls nus urbans no edificats" },
+						{ "COVER": "Zones urbanes en construcció" },
+						{ "COVER": "Moviments de terres" }
+					],					
+					"atributs":
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Tipus de coberta",
+							"mostrar": true
+						}
+					],
+					"paleta":
+					{
+						"colors":
+						[
+							"#FFFFFF", "#689010", "#689011", "#689012", "#689013", "#689014", "#689015", "#689016", "#689017", "#689018", "#689019", "#68901A", "#68901B", "#68901C", "#68901D", "#68901E", "#68901F", "#689020", "#689021", "#689022", "#689023", "#689024", "#689025", "#689026", "#689027", "#00FF01", "#A0FFA0", "#A0FFA1", "#A0FFA2", "#A0FFA3", "#A0FFA4", "#A0FFA5", "#A0FFA6", "#A0FFA7", "#A0FFA8", "#A0FFA9", "#A0FFAA", "#A0FFAB", "#A0FFAC", "#A0FFAD", "#A0FFAE", "#A0FFAF", "#A0FFB0", "#A0FFB1", "#A0FFB2", "#A0FFB3", "#A0FFB4", "#A0FFB5", "#A0FFB6", "#A0FFB7", "#00FF03", "#80FF80", "#80FF81", "#80FF82", "#80FF83", "#80FF84", "#80FF87", "#80FF88", "#80FF8A", "#80FF8B", "#80FF8C", "#80FF8D", "#80FF8E", "#80FF8F", "#80FF90", "#80FF92", "#699023", "#699024", "#699025", "#699026", "#699027", "#699028", "#405E09", "#40C209", "#405E0A", "#689029", "#68902A", "#68902B", "#46FF46", "#005A00", "#C3FF00", "#C0C096", "#C0C097", "#C0C098", "#C0C099", "#C0C09A", "#C0C09B", "#C1C099", "#C1C09A", "#C1C09B", "#C1C09C", "#C1C09D", "#C1C09E", "#C1C09F", "#C1C0A0", "#C1C0A1", "#95CD17", "#C1C0A2", "#C1C0A3", "#80FFFF", "#19FFFF", "#002524", "#356C6B", "#FFFF82", "#FFFF83", "#FFFF84", "#FFFF85", "#FFFF86", "#FFFF87", "#96CD17", "#95CD18", "#C0C09F", "#FFFF88", "#FF0000", "#797979", "#79797A", "#D0D0D0", "#FF8610", "#FF972F", "#FF9730", "#FF9731", "#FF9732", "#F5DF78", "#D7FFF5", "#000064", "#0000DC", "#3737FF", "#6F6FFF", "#000080", "#7F4218", "#7F4219", "#7F421A", "#7F4238", "#AF5B15", "#7F421B", "#7F421C", "#7F421D", "#7F421E", "#F8DCC4", "#F4C8A3", "#F4C8A4", "#F4C8A5", "#F2E4E4", "#F2E4E5", "#D7FFF6", "#F4C8A6", "#7F4221", "#7F4222", "#7F4223", "#AF5B1F", "#7F4224", "#7F4225", "#7F4226", "#F4C8AD", "#F4C8AE", "#FFFF00", "#FFFF01", "#FFFF02", "#FFFF03", "#FFFF04", "#FFFF05", "#B7B700", "#B7B701", "#797900", "#797901", "#D7FFFF", "#F4C8A7", "#F4C9A7", "#F4C8A8", "#00FFBE", "#00FFBF", "#01FFBF", "#00FFC2", "#03FFC2", "#00FFC3", "#00FFC4", "#00FFC5", "#F4C8A9", "#F4C9A9", "#F4C8AA", "#D8FFFF", "#F5C8A7", "#F5C8A8", "#03FFBE", "#03FFBF", "#12466D", "#185F94", "#FFA4E2", "#FF53CB", "#FF53CD", "#FFA4ED", "#FFA4E5", "#FFA4E4", "#71004F", "#710050", "#710051", "#710055", "#710056", "#710057", "#71005D", "#71005E", "#C8008A", "#C8008B", "#2C001E", "#000000", "#FFCBF2", "#FFCBF3", "#49FD00", "#12466E", "#ADAACA", "#827DAD", "#67629A", "#4A466E", "#2F2D46", "#289700", "#289701", "#289702", "#289703", "#6200C4", "#6200C5", "#952BFF", "#B163FF", "#FE53CD", "#FF53CE", "#FF53CF", "#FF53D0", "#FF53D1", "#FF53D2", "#720056", "#720057", "#720058", "#720059", "#72005A", "#72005B", "#72005C", "#72005D", "#4A9595", "#254B4B", "#72005E", "#FFCBEF", "#FFCBF0", "#FFCBF1"					
+						]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MCSCv4Nivell2",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya 4era edició (2009) (Llegenda Nivell 2)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña 4era edición (2009) (Legenda Nivel 2)",
+				"eng": "Catalonia Land Cover Map 4th edition (2009) (Legend Level 2)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa":
+			{
+				"cat": "<font size=1><br></font>Nivell 2<font size=1><br></font>",
+				"spa": "<font size=1><br></font>Nivel 2<font size=1><br></font>",
+				"eng": "<font size=1><br></font>Level 2<font size=1><br></font>"
+			},
+			"DescLlegenda":
+			{
+				"cat": "MCSC 4ª edició (2009)",
+				"spa": "MCSC 4ª edición (2009)",
+				"eng": "CLCM 4rd edition (2009)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 2)",
+						"spa": "Tipo de cubierta (Nivel 2)",
+						"eng": "Land cover type (Level 2)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#689010",
+							"DescColor":
+							{
+								"cat": "Boscos densos (no de ribera)",
+								"spa": "Bosques densos (no de ribera)",
+								"eng": "Dense forests (not for banks)"
+							}
+						},
+						{
+							"color": "#A0FFA0",
+							"DescColor":
+							{
+								"cat": "Boscos clars (no de ribera)",
+								"spa": "Bosques claros (no de ribera)",
+								"eng": "Clear forests (not for banks)"
+							}
+						},
+						{
+							"color": "#00FF00",
+							"DescColor":
+							{
+								"cat": "Boscos densos de ribera",
+								"spa": "Bosques densos de ribera",
+								"eng": "Dense banks forests"
+							}
+						},
+						{
+							"color": "#00C800",
+							"DescColor":
+							{
+								"cat": "Boscos clars de ribera",
+								"spa": "Bosques claros de ribera",
+								"eng": "Clear banks forests"
+							}
+						},						
+						{
+							"color": "#005A00",
+							"DescColor":
+							{
+								"cat": "Plantacions de pollancres",
+								"spa": "Plantaciones de chopos",
+								"eng": "Pollancres plantations"
+							}
+						},
+						{
+							"color": "#C3FF00",
+							"DescColor":
+							{
+								"cat": "Plantacions de plàtans",
+								"spa": "Plantaciones de plátanos",
+								"eng": "Bananas plantations"
+							}
+						},
+						{
+							"color": "#C0C09C",
+							"DescColor":
+							{
+								"cat": "Matollars",
+								"spa": "Matorrales",
+								"eng": "Bushes"
+							}
+						},
+						{
+							"color": "#80FFFF",
+							"DescColor":
+							{
+								"cat": "Aiguamolls",
+								"spa": "Humedales",
+								"eng": "Wetlands"
+							}
+						},
+						{
+							"color": "#FFFF82",
+							"DescColor":
+							{
+								"cat": "Prats i herbassars",
+								"spa": "Prados y herbazales",
+								"eng": "Meadows and grasslands"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor":
+							{
+								"cat": "Zones cremades",
+								"spa": "Zonas quemadas",
+								"eng": "Burned areas"
+							}
+						},
+						{
+							"color": "#797979",
+							"DescColor":
+							{
+								"cat": "Roquissars",
+								"spa": "Roquedales",
+								"eng": "Rocky area"
+							}
+						},
+						{
+							"color": "#EBEBEB",
+							"DescColor":
+							{
+								"cat": "Tarteres",
+								"spa": "Taludes",
+								"eng": "Screes"
+							}
+						},
+						{
+							"color": "#FF8610",
+							"DescColor":
+							{
+								"cat": "Sòls nus forestals",
+								"spa": "Suelos desnudos forestales",
+								"eng": "Bared forest soils"
+							}
+						},
+						{
+							"color": "#F5DF78",
+							"DescColor":
+							{
+								"cat": "Platges",
+								"spa": "Playas",
+								"eng": "Beaches"
+							}
+						},
+						{
+							"color": "#0000FF",
+							"DescColor":
+							{
+								"cat": "Aigües continentals",
+								"spa": "Aguas continentales",
+								"eng": "Continental waters"
+							}
+						},
+						{
+							"color": "#000080",
+							"DescColor":
+							{
+								"cat": "Mar",
+								"spa": "Mar",
+								"eng": "Sea"
+							}
+						},						
+						{
+							"color": "#D7FFF5",
+							"DescColor":
+							{
+								"cat": "Glaceres i congestes",
+								"spa": "Glaciares y ventisqueros",
+								"eng": "Glaciers and snowdrifts"
+							}
+						},
+						{
+							"color": "#F4C8A4",
+							"DescColor":
+							{
+								"cat": "Conreus",
+								"spa": "Cultivos",
+								"eng": "Fields"
+							}
+						},
+						{
+							"color": "#FFA4E2",
+							"DescColor":
+							{
+								"cat": "Zones urbanitzades",
+								"spa": "Zonas urbanizadas",
+								"eng": "Urbanized areas"
+							}
+						},
+						{
+							"color": "#FF00FF",
+							"DescColor":
+							{
+								"cat": "Vies de comunicació",
+								"spa": "Vías de comunicación",
+								"eng": "Roads"
+							}
+						},
+						{
+							"color": "#A244FF",
+							"DescColor":
+							{
+								"cat": "Zones esportives i lúdiques",
+								"spa": "Zonas deportivas y lúdicas",
+								"eng": "Sports and entertainment areas"
+							}
+						},
+						{
+							"color": "#408080",
+							"DescColor":
+							{
+								"cat": "Zones d'extracció minera",
+								"spa": "Zonas de extracción minera",
+								"eng": "Mining extraction areas"
+							}
+						},
+						{
+							"color": "#12466D",
+							"DescColor":
+							{
+								"cat": "Canals i basses agrícoles",
+								"spa": "Canales y balsas agrícolas",
+								"eng": "Agricultural channels and ponds"
+							}
+						},
+						{
+							"color": "#5FA083",
+							"DescColor":
+							{
+								"cat": "Basses urbanes",
+								"spa": "Balsas urbanas",
+								"eng": "Urban rafts"
+							}
+						},
+						{
+							"color": "#B5C9CC",
+							"DescColor":
+							{
+								"cat": "Sòls nus urbans",
+								"spa": "Suelos desnudos urbanos",
+								"eng": "Bared urban soils"
+							}
+						}	
+					],
+					"component":
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 2,
+					"categories":
+					[
+						null,
+						{ "COVER": "Boscos densos (no de ribera)" },
+						{ "COVER": "Boscos densos de ribera" },
+						{ "COVER": "Plantacions de pollancres" },
+						{ "COVER": "Plantacions de plàtans" },
+						{ "COVER": "Boscos clars (no de ribera)" },
+						{ "COVER": "Boscos clars de ribera" },
+						{ "COVER": "Matollars" },
+						{ "COVER": "Aiguamolls" },
+						{ "COVER": "Prats i herbassars" },
+						{ "COVER": "Zones cremades" },
+						{ "COVER": "Roquissars" },
+						{ "COVER": "Tarteres" },
+						{ "COVER": "Sòls nus forestals" },
+						{ "COVER": "Platges" },
+						{ "COVER": "Glaceres i congestes" },
+						{ "COVER": "Aigües continentals" },
+						{ "COVER": "Mar" },
+						{ "COVER": "Conreus" },
+						{ "COVER": "Canals i basses i agrícoles" },
+						{ "COVER": "Zones urbanitzades" },
+						{ "COVER": "Basses urbanes" },
+						{ "COVER": "Vies de comunicació" },
+						{ "COVER": "Zones esportives i lúdiques" },
+						{ "COVER": "Zones d'extracció minera" },
+						{ "COVER": "Sòls nus urbans" }
+					],
+					"atributs":
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Tipus de coberta",
+							"mostrar": true
+						}
+					],
+					"paleta":
+					{
+						"colors":
+						[
+						"#FFFFFF", "#689010", "#00FF00", "#005A00", "#C3FF00", "#A0FFA0", "#00C800", "#C0C09C", "#80FFFF", "#FFFF82", "#FF0000", "#797979", "#EBEBEB", "#FF8610", "#F5DF78", "#D7FFF5", "#0000FF", "#000080", "#F4C8A4", "#12466D", "#FFA4E2", "#5FA083", "#FF00FF", "#A244FF", "#408080", "#B5C9CC"
+						]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MCSCv3_2Nivell2",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya 3era edició (2005-2007)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña 3era edición (2005-2007)",
+				"eng": "Catalonia Land Cover Map 3rd edition (2005-2007)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "MCSC 3ª edició (2005-07)",
+				"spa": "MCSC 3ª edición (2005-07)",
+				"eng": "CLCM 3rd edition (2005-07)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 2)",
+						"spa": "Tipo de cubierta (Nivel 2)",
+						"eng": "Land cover type (Level 2)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#689010",
+							"DescColor":
+							{
+								"cat": "Boscos densos (no de ribera)",
+								"spa": "Bosques densos (no de ribera)",
+								"eng": "Dense forests (not for banks)"
+							}
+						},
+						{
+							"color": "#A0FFA0",
+							"DescColor":
+							{
+								"cat": "Boscos clars (no de ribera)",
+								"spa": "Bosques claros (no de ribera)",
+								"eng": "Clear forests (not for banks)"
+							}
+						},
+						{
+							"color": "#00FF00",
+							"DescColor":
+							{
+								"cat": "Boscos densos de ribera",
+								"spa": "Bosques densos de ribera",
+								"eng": "Dense banks forests"
+							}
+						},
+						{
+							"color": "#00C800",
+							"DescColor":
+							{
+								"cat": "Boscos clars de ribera",
+								"spa": "Bosques claros de ribera",
+								"eng": "Clear banks forests"
+							}
+						},						
+						{
+							"color": "#005A00",
+							"DescColor":
+							{
+								"cat": "Plantacions de pollancres",
+								"spa": "Plantaciones de chopos",
+								"eng": "Pollancres plantations"
+							}
+						},
+						{
+							"color": "#C3FF00",
+							"DescColor":
+							{
+								"cat": "Plantacions de plàtans",
+								"spa": "Plantaciones de plátanos",
+								"eng": "Bananas plantations"
+							}
+						},
+						{
+							"color": "#C0C09C",
+							"DescColor":
+							{
+								"cat": "Matollars",
+								"spa": "Matorrales",
+								"eng": "Bushes"
+							}
+						},
+						{
+							"color": "#80FFFF",
+							"DescColor":
+							{
+								"cat": "Aiguamolls",
+								"spa": "Humedales",
+								"eng": "Wetlands"
+							}
+						},
+						{
+							"color": "#FFFF82",
+							"DescColor":
+							{
+								"cat": "Prats i herbassars",
+								"spa": "Prados y herbazales",
+								"eng": "Meadows and grasslands"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor":
+							{
+								"cat": "Zones cremades",
+								"spa": "Zonas quemadas",
+								"eng": "Burned areas"
+							}
+						},
+						{
+							"color": "#797979",
+							"DescColor":
+							{
+								"cat": "Roquissars",
+								"spa": "Roquedales",
+								"eng": "Rocky area"
+							}
+						},
+						{
+							"color": "#EBEBEB",
+							"DescColor":
+							{
+								"cat": "Tarteres",
+								"spa": "Taludes",
+								"eng": "Screes"
+							}
+						},
+						{
+							"color": "#FF8610",
+							"DescColor":
+							{
+								"cat": "Sòls nus forestals",
+								"spa": "Suelos desnudos forestales",
+								"eng": "Bared forest soils"
+							}
+						},
+						{
+							"color": "#F5DF78",
+							"DescColor":
+							{
+								"cat": "Platges",
+								"spa": "Playas",
+								"eng": "Beaches"
+							}
+						},
+						{
+							"color": "#0000FF",
+							"DescColor":
+							{
+								"cat": "Aigües continentals",
+								"spa": "Aguas continentales",
+								"eng": "Continental waters"
+							}
+						},
+						{
+							"color": "#000080",
+							"DescColor":
+							{
+								"cat": "Mar",
+								"spa": "Mar",
+								"eng": "Sea"
+							}
+						},						
+						{
+							"color": "#D7FFF5",
+							"DescColor":
+							{
+								"cat": "Glaceres i congestes",
+								"spa": "Glaciares y ventisqueros",
+								"eng": "Glaciers and snowdrifts"
+							}
+						},
+						{
+							"color": "#F4C8A4",
+							"DescColor":
+							{
+								"cat": "Conreus",
+								"spa": "Cultivos",
+								"eng": "Fields"
+							}
+						},
+						{
+							"color": "#FFA4E2",
+							"DescColor":
+							{
+								"cat": "Zones urbanitzades",
+								"spa": "Zonas urbanizadas",
+								"eng": "Urbanized areas"
+							}
+						},
+						{
+							"color": "#FF00FF",
+							"DescColor":
+							{
+								"cat": "Vies de comunicació",
+								"spa": "Vías de comunicación",
+								"eng": "Roads"
+							}
+						},
+						{
+							"color": "#A244FF",
+							"DescColor":
+							{
+								"cat": "Zones esportives i lúdiques",
+								"spa": "Zonas deportivas y lúdicas",
+								"eng": "Sports and entertainment areas"
+							}
+						},
+						{
+							"color": "#408080",
+							"DescColor":
+							{
+								"cat": "Zones d'extracció minera",
+								"spa": "Zonas de extracción minera",
+								"eng": "Mining extraction areas"
+							}
+						},
+						{
+							"color": "#12466D",
+							"DescColor":
+							{
+								"cat": "Canals i basses agrícoles",
+								"spa": "Canales y balsas agrícolas",
+								"eng": "Agricultural channels and ponds"
+							}
+						},
+						{
+							"color": "#5FA083",
+							"DescColor":
+							{
+								"cat": "Basses urbanes",
+								"spa": "Balsas urbanas",
+								"eng": "Urban rafts"
+							}
+						},
+						{
+							"color": "#B5C9CC",
+							"DescColor":
+							{
+								"cat": "Sòls nus urbans",
+								"spa": "Suelos desnudos urbanos",
+								"eng": "Bared urban soils"
+							}
+						}	
+					],
+					"component":
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 2,
+					"categories":
+					[
+						null, 
+						{ "COVER": "Boscos densos (no de ribera)" },
+						{ "COVER": "Boscos densos de ribera" },
+						{ "COVER": "Plantacions de pollancres" },
+						{ "COVER": "Plantacions de plàtans" },
+						{ "COVER": "Boscos clars (no de ribera)" },
+						{ "COVER": "Boscos clars de ribera" },
+						{ "COVER": "Matollars" },
+						{ "COVER": "Aiguamolls" },
+						{ "COVER": "Prats i herbassars" },
+						{ "COVER": "Zones cremades" },
+						{ "COVER": "Roquissars" },
+						{ "COVER": "Tarteres" },
+						{ "COVER": "Sòls nus forestals" },
+						{ "COVER": "Platges" },
+						{ "COVER": "Glaceres i congestes" },
+						{ "COVER": "Aigües continentals" },
+						{ "COVER": "Mar" },
+						{ "COVER": "Conreus" },
+						{ "COVER": "Canals i basses i agrícoles" },
+						{ "COVER": "Zones urbanitzades" },
+						{ "COVER": "Basses urbanes" },
+						{ "COVER": "Vies de comunicació" },
+						{ "COVER": "Zones esportives i lúdiques" },
+						{ "COVER": "Zones d'extracció minera" },
+						{ "COVER": "Sòls nus urbans" }
+					],
+					"atributs":
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Tipus de coberta",
+							"mostrar": true
+						}
+					],
+					"paleta":
+					{
+						"colors":
+						[
+							"#FFFFFF", "#689010", "#00FF00", "#005A00", "#C3FF00", "#A0FFA0", "#00C800", "#C0C09C", "#80FFFF", "#FFFF82", "#FF0000", "#797979", "#EBEBEB", "#FF8610", "#F5DF78", "#D7FFF5", "#0000FF", "#000080", "#F4C8A4", "#12466D", "#FFA4E2", "#5FA083", "#FF00FF", "#A244FF", "#408080", "#B5C9CC"
+						]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MCSCv1Nivell2",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya 1era edició (1993)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña 1era edición (1993)",
+				"eng": "Catalonia Land Cover Map 1st edition (1993)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors":
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata":
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "MCSC 1ª edició (1993)",
+				"spa": "MCSC 1ª edición (1993)",
+				"eng": "CLCM 1st edition (1993)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 2)",
+						"spa": "Tipo de cubierta (Nivel 2)",
+						"eng": "Land cover type (Level 2)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#689010",
+							"DescColor":
+							{
+								"cat": "Boscos densos (no de ribera)",
+								"spa": "Bosques densos (no de ribera)",
+								"eng": "Dense forests (not for banks)"
+							}
+						},
+						{
+							"color": "#A0FFA0",
+							"DescColor":
+							{
+								"cat": "Boscos clars (no de ribera)",
+								"spa": "Bosques claros (no de ribera)",
+								"eng": "Clear forests (not for banks)"
+							}
+						},
+						{
+							"color": "#00FF00",
+							"DescColor":
+							{
+								"cat": "Boscos densos de ribera",
+								"spa": "Bosques densos de ribera",
+								"eng": "Dense banks forests"
+							}
+						},
+						{
+							"color": "#00C800",
+							"DescColor":
+							{
+								"cat": "Boscos clars de ribera",
+								"spa": "Bosques claros de ribera",
+								"eng": "Clear banks forests"
+							}
+						},						
+						{
+							"color": "#949400",
+							"DescColor":
+							{
+								"cat": "Reforestacions",
+								"spa": "Reforestaciones",
+								"eng": "Reforestations"
+							}
+						},
+						{
+							"color": "#005A00",
+							"DescColor":
+							{
+								"cat": "Plantacions de pollancres",
+								"spa": "Plantaciones de chopos",
+								"eng": "Pollancres plantations"
+							}
+						},
+						{
+							"color": "#C3FF00",
+							"DescColor":
+							{
+								"cat": "Plantacions de plàtans",
+								"spa": "Plantaciones de plátanos",
+								"eng": "Bananas plantations"
+							}
+						},
+						{
+							"color": "#C0C09C",
+							"DescColor":
+							{
+								"cat": "Matollars",
+								"spa": "Matorrales",
+								"eng": "Bushes"
+							}
+						},
+						{
+							"color": "#80FFFF",
+							"DescColor":
+							{
+								"cat": "Aiguamolls",
+								"spa": "Humedales",
+								"eng": "Wetlands"
+							}
+						},
+						{
+							"color": "#FFFF82",
+							"DescColor":
+							{
+								"cat": "Prats i herbassars",
+								"spa": "Prados y herbazales",
+								"eng": "Meadows and grasslands"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor":
+							{
+								"cat": "Zones cremades",
+								"spa": "Zonas quemadas",
+								"eng": "Burned areas"
+							}
+						},
+						{
+							"color": "#797979",
+							"DescColor":
+							{
+								"cat": "Roquissars",
+								"spa": "Roquedales",
+								"eng": "Rocky area"
+							}
+						},
+						{
+							"color": "#EBEBEB",
+							"DescColor":
+							{
+								"cat": "Tarteres",
+								"spa": "Taludes",
+								"eng": "Screes"
+							}
+						},
+						{
+							"color": "#FF8610",
+							"DescColor":
+							{
+								"cat": "Sòls nus forestals",
+								"spa": "Suelos desnudos forestales",
+								"eng": "Bared forest soils"
+							}
+						},
+						{
+							"color": "#F5DF78",
+							"DescColor":
+							{
+								"cat": "Platges",
+								"spa": "Playas",
+								"eng": "Beaches"
+							}
+						},
+						{
+							"color": "#0000FF",
+							"DescColor":
+							{
+								"cat": "Aigües continentals",
+								"spa": "Aguas continentales",
+								"eng": "Continental waters"
+							}
+						},
+						{
+							"color": "#000080",
+							"DescColor":
+							{
+								"cat": "Mar",
+								"spa": "Mar",
+								"eng": "Sea"
+							}
+						},						
+						{
+							"color": "#D7FFF5",
+							"DescColor":
+							{
+								"cat": "Glaceres i congestes",
+								"spa": "Glaciares y ventisqueros",
+								"eng": "Glaciers and snowdrifts"
+							}
+						},
+						{
+							"color": "#F4C8A4",
+							"DescColor":
+							{
+								"cat": "Conreus",
+								"spa": "Cultivos",
+								"eng": "Fields"
+							}
+						},
+						{
+							"color": "#FFA4E2",
+							"DescColor":
+							{
+								"cat": "Zones urbanitzades",
+								"spa": "Zonas urbanizadas",
+								"eng": "Urbanized areas"
+							}
+						},
+						{
+							"color": "#FF00FF",
+							"DescColor":
+							{
+								"cat": "Vies de comunicació",
+								"spa": "Vías de comunicación",
+								"eng": "Roads"
+							}
+						},
+						{
+							"color": "#A244FF",
+							"DescColor":
+							{
+								"cat": "Zones esportives i lúdiques",
+								"spa": "Zonas deportivas y lúdicas",
+								"eng": "Sports and entertainment areas"
+							}
+						},
+						{
+							"color": "#408080",
+							"DescColor":
+							{
+								"cat": "Zones d'extracció minera",
+								"spa": "Zonas de extracción minera",
+								"eng": "Mining extraction areas"
+							}
+						},
+						{
+							"color": "#12466D",
+							"DescColor":
+							{
+								"cat": "Canals i basses agrícoles",
+								"spa": "Canales y balsas agrícolas",
+								"eng": "Agricultural channels and ponds"
+							}
+						},
+						{
+							"color": "#5FA083",
+							"DescColor":
+							{
+								"cat": "Basses urbanes",
+								"spa": "Balsas urbanas",
+								"eng": "Urban rafts"
+							}
+						},
+						{
+							"color": "#B5C9CC",
+							"DescColor":
+							{
+								"cat": "Sòls nus urbans",
+								"spa": "Suelos desnudos urbanos",
+								"eng": "Bared urban soils"
+							}
+						}						
+					],
+					"component":
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 2,
+					"categories":
+					[
+						null, { "COVER": "Boscos densos (no de ribera)" }, { "COVER": "Boscos de ribera" }, { "COVER": "Plantacions de pollancres" }, { "COVER": "Plantacions de plàtans" }, { "COVER": "Boscos clars (no de ribera)" }, { "COVER": "Boscos clars de ribera" }, { "COVER": "Matollars" }, { "COVER": "Vegetació d'aiguamolls" }, { "COVER": "Prats i herbassars" }, { "COVER": "Zones recent cremades" }, { "COVER": "Roquissars" }, { "COVER": "Tarteres" }, { "COVER": "Sòls nus forestals" }, { "COVER": "Platges" }, { "COVER": "Glaceres i congestes" }, { "COVER": "Aigües continentals" }, { "COVER": "Mar" }, { "COVER": "Conreus" }, { "COVER": "Canals i basses i agrícoles" }, { "COVER": "Zones urbanitzades" }, { "COVER": "Basses urbanes" }, { "COVER": "Vies de comunicació" }, { "COVER": "Zones esportives i lúdiques" }, { "COVER": "Zones d'extracció minera" }, { "COVER": "Sòls nus urbans" }, { "COVER": "Reforestacions recents" }
+					],
+					"atributs":
+					[
+						{
+							"nom": "COVER",
+							"descripcio": "Tipus de coberta",
+							"mostrar": true
+						}
+					],
+					"paleta":
+					{
+						"colors":
+						[
+							"#FFFFFF", "#689010", "#00FF00", "#005A00", "#C3FF00", "#A0FFA0", "#00C800", "#C0C09C", "#80FFFF", "#FFFF82", "#FF0000", "#797979", "#EBEBEB", "#FF8610", "#F5DF78", "#D7FFF5", "#0000FF", "#000080", "#F4C8A4", "#12466D", "#FFA4E2", "#5FA083", "#FF00FF", "#A244FF", "#408080", "#B5C9CC", "#949400"
+						]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "http://sitmun.diba.cat/wms/servlet/CSA56?",
+			"versio": null,
+			"tipus": null,
+			"nom": "CSA56",
+			"desc":
+			{
+				"cat": "Mapa de Cobertes del Sòl de Catalunya de l'any 1956 (província Barcelona)",
+				"spa": "Mapa de Cubiertas del Suelo de Cataluña del año 1956 (provincia Barcelona)",
+				"eng": "Catalonia Land Cover Map 4rd edition 1956 (Barcelona province)"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260188.9,
+					"MaxX": 527402.0,
+					"MinY": 4488778.5,
+					"MaxY": 4747981.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 100,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "MCSC",
+			"separa":
+			{
+				"cat": "<font size=1><br></font>Històric<font size=1><br></font>",
+				"spa": "<font size=1><br></font>Histórico<font size=1><br></font>",
+				"eng": "<font size=1><br></font>Historical<font size=1><br></font>"
+			},
+			"DescLlegenda":
+			{
+				"cat": "Històric de l'any 1956 <sup>2</sup><br>(província Barcelona)",
+				"spa": "Histórico del año 1956 <sup>2</sup><br>(provincia Barcelona)",
+				"eng": "Historical 1956 <sup>2</sup><br>(Barcelona province)"
+			},
+			"estil":
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "Tipus de coberta (Nivell 2)",
+						"spa": "Tipo de cubierta (Nivel 2)",
+						"eng": "Land cover type (Level 2)"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg":
+					[
+						{
+							"color": "#628B00",
+							"DescColor":
+							{
+								"cat": "Boscos densos (no de ribera)",
+								"spa": "Bosques densos (no de ribera)",
+								"eng": "Dense forests (not for banks)"
+							}
+						},
+						{
+							"color": "#A4FFA4",
+							"DescColor":
+							{
+								"cat": "Boscos clars (no de ribera)",
+								"spa": "Bosques claros (no de ribera)",
+								"eng": "Clear forests (not for banks)"
+							}
+						},						
+						{
+							"color": "#00E600",
+							"DescColor":
+							{
+								"cat": "Boscos densos de ribera",
+								"spa": "Bosques densos de ribera",
+								"eng": "Dense banks forests"
+							}
+						},
+						{
+							"color": "#949400",
+							"DescColor":
+							{
+								"cat": "Reforestacions",
+								"spa": "Reforestaciones",
+								"eng": "Reforestations"
+							}
+						},
+						{
+							"color": "#005A00",
+							"DescColor":
+							{
+								"cat": "Plantacions de pollancres",
+								"spa": "Plantaciones de chopos",
+								"eng": "Pollancres plantations"
+							}
+						},
+						{
+							"color": "#C5FF00",
+							"DescColor":
+							{
+								"cat": "Plantacions de plàtans",
+								"spa": "Plantaciones de plátanos",
+								"eng": "Bananas plantations"
+							}
+						},
+						{
+							"color": "#C5C59C",
+							"DescColor":
+							{
+								"cat": "Matollars",
+								"spa": "Matorrales",
+								"eng": "Bushes"
+							}
+						},
+						{
+							"color": "#83FFFF",
+							"DescColor":
+							{
+								"cat": "Aiguamolls",
+								"spa": "Humedales",
+								"eng": "Wetlands"
+							}
+						},
+						{
+							"color": "#FFFF83",
+							"DescColor":
+							{
+								"cat": "Prats i herbassars",
+								"spa": "Prados y herbazales",
+								"eng": "Meadows and grasslands"
+							}
+						},
+						{
+							"color": "#7B7B7B",
+							"DescColor":
+							{
+								"cat": "Roquissars",
+								"spa": "Roquedales",
+								"eng": "Rocky area"
+							}
+						},
+						{
+							"color": "#D5D5D5",
+							"DescColor":
+							{
+								"cat": "Tarteres",
+								"spa": "Taludes",
+								"eng": "Screes"
+							}
+						},
+						{
+							"color": "#FF9420",
+							"DescColor":
+							{
+								"cat": "Sòls nus forestals",
+								"spa": "Suelos desnudos forestales",
+								"eng": "Bared forest soils"
+							}
+						},
+						{
+							"color": "#F6E67B",
+							"DescColor":
+							{
+								"cat": "Platges",
+								"spa": "Playas",
+								"eng": "Beaches"
+							}
+						},
+						{
+							"color": "#D5FFF6",
+							"DescColor":
+							{
+								"cat": "Glaceres i congestes",
+								"spa": "Glaciares y ventisqueros",
+								"eng": "Glaciers and snowdrifts"
+							}
+						},
+						{
+							"color": "#3131FF",
+							"DescColor":
+							{
+								"cat": "Aigües continentals",
+								"spa": "Aguas continentales",
+								"eng": "Continental waters"
+							}
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor":
+							{
+								"cat": "Conreus",
+								"spa": "Cultivos",
+								"eng": "Fields"
+							}
+						},
+						{
+							"color": "#10416A",
+							"DescColor":
+							{
+								"cat": "Canals i basses agrícoles",
+								"spa": "Canales y balsas agrícolas",
+								"eng": "Agricultural channels and ponds"
+							}
+						},
+						{
+							"color": "#FF52CD",
+							"DescColor":
+							{
+								"cat": "Zones urbanitzades",
+								"spa": "Zonas urbanizadas",
+								"eng": "Urbanized areas"
+							}
+						},
+						{
+							"color": "#10416A",
+							"DescColor":
+							{
+								"cat": "Basses urbanes",
+								"spa": "Balsas urbanas",
+								"eng": "Urban rafts"
+							}
+						},
+						{
+							"color": "#626262",
+							"DescColor":
+							{
+								"cat": "Vies de comunicació",
+								"spa": "Vías de comunicación",
+								"eng": "Roads"
+							}
+						},
+						{
+							"color": "#6200C5",
+							"DescColor":
+							{
+								"cat": "Zones esportives i lúdiques",
+								"spa": "Zonas deportivas y lúdicas",
+								"eng": "Sports and entertainment areas"
+							}
+						},
+						{
+							"color": "#4A9494",
+							"DescColor":
+							{
+								"cat": "Zones d'extracció minera",
+								"spa": "Zonas de extracción minera",
+								"eng": "Mining extraction areas"
+							}
+						},
+						{
+							"color": "#FFCDF6",
+							"DescColor":
+							{
+								"cat": "Sòls nus urbans",
+								"spa": "Suelos desnudos urbanos",
+								"eng": "Bared urban soils"
+							}
+						}
+					],
+					"metadades": null,
+					"ncol": 1
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MDT5m",
+			"desc":
+			{
+				"cat": "Model d'Elevacions del Terreny",
+				"spa": "Modelo de Elevaciones del Terreno",
+				"eng": "Terrain Elevations Model"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": [
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [ -9999 ]
+				}
+			],
+			"transparencia": "semitransparent",
+			"CostatMinim": 5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa":			
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Altres capes</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Otras capas</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Other layers</b><hr align=\"left\" width=\"230\">"				
+			},
+			"DescLlegenda":
+			{
+				"cat": "Model d'Elevacions del Terreny",
+				"spa": "Modelo de Elevaciones del Terreno",
+				"eng": "Terrain Elevations Model"
+			},
+			"ItemLleg": null,
+			"estil": [
+				{
+					"nom": null,
+					"desc": "DTM",
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": [
+						{
+							"i_valor": 0,
+							"NDecimals": 0,
+							"estiramentPaleta": {
+								"valorMaxim": 3143,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 13,
+					"ncol": 4,
+					"descColorMultiplesDe": 250,
+					"ColorMinimPrimer": true,
+					"paleta": {
+						"colors": [ "#000000", "#000400", "#000C00", "#001000", "#001800", "#001C00", "#002000", "#002800", "#002D00", "#003500", "#003900", "#004100", "#004500", "#004900", "#005100", "#005500", "#005D00", "#006100", "#006500", "#006900", "#006D00", "#007100", "#007500", "#007900", "#007D00", "#008200", "#008200", "#008600", "#008A00", "#008E00", "#009200", "#009600", "#009A00", "#009E00", "#00A200", "#00A600", "#00AE00", "#00B200", "#00B600", "#00BE00", "#00C200", "#00C600", "#00CE00", "#00D200", "#00DB00", "#00DF00", "#00E300", "#00EB00", "#00EF00", "#00F300", "#00FB00", "#00FF00", "#10FF00", "#1CFF00", "#2DFF00", "#3DFF00", "#4DFF00", "#59FF00", "#69FF00", "#79FF00", "#86FF00", "#96FF00", "#A6FF00", "#B2FF00", "#C2FF00", "#D2FF00", "#E3FF00", "#EFFF00", "#FFFF00", "#FFFB00", "#FFFB00", "#FFF700", "#FFF300", "#FFF300", "#FFEF00", "#FFEB00", "#FFEB00", "#FFE700", "#FFE700", "#FFE300", "#FFDF00", "#FFDF00", "#FFDB00", "#FFD700", "#FFD700", "#FFD200", "#FFD200", "#FFCE00", "#FFCE00", "#FFCA00", "#FFCA00", "#FFCA00", "#FFC600", "#FFC600", "#FFC200", "#FFC200", "#FFBE00", "#FFBE00", "#FFBE00", "#FFBA00", "#FFBA00", "#FFB600", "#FFB600", "#FFB200", "#FFB200", "#FFAE00", "#FFAA00", "#FFAA00", "#FFA600", "#FFA200", "#FFA200", "#FF9E00", "#FF9E00", "#FF9A00", "#FF9600", "#FF9600", "#FF9200", "#FF8E00", "#FF8E00", "#FF8A00", "#FF8A00", "#FF8600", "#FF8600", "#FF8600", "#FF8200", "#FF8200", "#FF8200", "#FF7D00", "#FF7D00", "#FF7900", "#FF7900", "#FF7900", "#FF7500", "#FF7500", "#FF7500", "#FF7100", "#FF7100", "#FB7100", "#F76D00", "#F36D00", "#EF6900", "#EB6900", "#E76900", "#E36500", "#DF6500", "#DB6100", "#D76100", "#D25D00", "#CE5D00", "#CA5D00", "#C65900", "#C25900", "#BE5500", "#BA5500", "#BA5900", "#BA5900", "#BA5D00", "#BA5D00", "#BA6100", "#BA6500", "#BA6500", "#BA6900", "#B66900", "#B66D00", "#B66D00", "#B67100", "#B67500", "#B67500", "#B67900", "#B67900", "#B67D00", "#B68200", "#B68200", "#B68600", "#B68600", "#B68A00", "#B68A00", "#B68E00", "#B68E00", "#BA9200", "#BA9200", "#BA9600", "#BA9600", "#BA9A00", "#BA9A00", "#BA9E00", "#BA9E00", "#BAA200", "#B69E00", "#B29A00", "#AE9600", "#AA9200", "#A69200", "#A28E00", "#9E8A00", "#9A8600", "#9A8200", "#967D00", "#927900", "#8E7500", "#8A7500", "#867100", "#826D00", "#7D6900", "#796500", "#796100", "#796100", "#795D00", "#795D00", "#795900", "#795900", "#795500", "#795500", "#795100", "#795100", "#794D00", "#794D00", "#794900", "#794900", "#794500", "#794500", "#794100", "#824D10", "#8A551C", "#8E612D", "#966939", "#9E7549", "#A68255", "#AA8A65", "#B29671", "#BA9E82", "#C2AA8E", "#C6B29E", "#CEBEAA", "#D7CABA", "#DFD2C6", "#E3DFD7", "#EBE7E3", "#F3F3F3", "#F3EFF3", "#F3EBF3", "#F7E7F7", "#F7E3F7", "#F7DFF7", "#F7DBF7", "#F7D7F7", "#F7D2F7", "#FBD2FB", "#FBCEFB", "#FBCAFB", "#FBC6FB", "#FBC2FB", "#FBBEFB", "#FFBAFF", "#FFB6FF", "#FFB2FF" ]
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},		
+		{
+			"servidor": "http://geoserveis.icgc.cat/icc_mapesbase/wms/service?",
+			"versio": null,
+			"tipus": null,
+			"nom": "orto25m",
+			"desc":
+			{
+				"cat": "Ortofoto 1:25.000 vigent",
+				"spa": "Ortofoto 1:25.000 vigente",
+				"eng": "Ortofoto 1:25.000 in force"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260188.9,
+					"MaxX": 527402.0,
+					"MinY": 4488778.5,
+					"MaxY": 4747981.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "image/png",
+			"CostatMinim": 50,
+			"CostatMaxim": 100,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Ortofoto 1:25.000 vigent <sup>3</sup>",
+				"spa": "Ortofoto 1:25.000 vigente <sup>3</sup>",
+				"eng": "Ortofoto 1:25.000 in force <sup>3</sup>"
+			},
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "http://geoserveis.icgc.cat/icc_mapesbase/wms/service?",
+			"versio": null,
+			"tipus": null,
+			"nom": "orto5m",
+			"desc":
+			{
+				"cat": "Ortofoto 1:5.000 vigent",
+				"spa": "Ortofoto 1:5.000 vigente",
+				"eng": "Ortofoto 1:5.000 in force"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260188.9,
+					"MaxX": 527402.0,
+					"MinY": 4488778.5,
+					"MaxY": 4747981.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "image/png",
+			"CostatMinim": 5,
+			"CostatMaxim": 20,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Ortofoto 1:5.000 vigent <sup>3</sup>",
+				"spa": "Ortofoto 1:5.000 vigente <sup>3</sup>",
+				"eng": "Ortofoto 1:5.000 in force <sup>3</sup>"
+			},
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "http://geoserveis.icgc.cat/icc_mapesbase/wms/service?",
+			"versio": null,
+			"tipus": null,
+			"nom": "orto25c",
+			"desc":
+			{
+				"cat": "Ortofoto 1:2.500 vigent",
+				"spa": "Ortofoto 1:2.500 vigente",
+				"eng": "Ortofoto 1:2.500 in force"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260188.9,
+					"MaxX": 527402.0,
+					"MinY": 4488778.5,
+					"MaxY": 4747981.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 2,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa":null,
+			"DescLlegenda":
+			{
+				"cat": "Ortofoto 1:2.500 vigent <sup>3</sup>",
+				"spa": "Ortofoto 1:2.500 vigente <sup>3</sup>",
+				"eng": "Ortofoto 1:2.500 in force <sup>3</sup>"
+			},
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},	
+		{
+			"servidor": "http://www.opengis.uab.cat/cgi-bin/europarc/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "landsat_ETM",
+			"desc":
+			{
+				"cat": "Imatge Landsat",
+				"spa": "Imatge Landsat",
+				"eng": "Imatge Landsat"
+			},
+			"CRS": null,
+			"EnvTotal":
+			{
+				"EnvCRS":
+				{
+					"MinX": 260188.9,
+					"MaxX": 527402.0,
+					"MinY": 4488778.5,
+					"MaxY": 4747981.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "image/png",
+			"CostatMinim": 200,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda":
+			{
+				"cat": "Imatge Landsat",
+				"spa": "Imatge Landsat",
+				"eng": "Imatge Landsat"
+			},
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null, 
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		}
+	]
+}

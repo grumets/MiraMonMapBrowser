@@ -1,0 +1,13 @@
+file title  : 
+id type     : integer
+file type   : ascii
+object type : polygon
+ref. system : UTM-30N-ETRS89
+ref. units  : m
+unit dist.  : 1.000000
+min. X      : 413916.800000000
+max. X      : 580000.000000000
+min. Y      : 4038365.40000000
+max. Y      : 4150000.00000000
+pos'n error : unknown
+resolution  : unknown
