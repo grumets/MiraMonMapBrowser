@@ -421,7 +421,7 @@
 							},
 							"valor": {
 								"nom": "green",
-								"desc": "Green (0.560\u00b5m)"
+								"desc": "Green (0.560\u00b5m) B03"
 							}
 						}
 					],
@@ -440,7 +440,7 @@
 							},
 							"valor": {
 								"nom": "red",
-								"desc": "Red (0.665\u00b5m)"
+								"desc": "Red (0.665\u00b5m) B04"
 							}
 						}
 					],
@@ -478,7 +478,7 @@
 							},
 							"valor": {
 								"nom": "veg2",
-								"desc": "Vegetation Red Edge (0.740\u00b5m) B05"
+								"desc": "Vegetation Red Edge (0.740\u00b5m) B06"
 							}
 						}
 					],
@@ -497,7 +497,7 @@
 							},
 							"valor": {
 								"nom": "veg3",
-								"desc": "Vegetation Red Edge (0.783\u00b5m) B03"
+								"desc": "Vegetation Red Edge (0.783\u00b5m) B07"
 							}
 						}
 					],
@@ -516,7 +516,7 @@
 							},
 							"valor": {
 								"nom": "nir",
-								"desc": "NIR (0.842\u00b5m)"
+								"desc": "NIR (0.842\u00b5m) B08"
 							}
 						}
 					],

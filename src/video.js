@@ -129,7 +129,7 @@ var data=[], v, i_c;
 	return data;
 }
 
-function DonaDadesEstadistiquesSerieTemporalLocalitzacio()
+function DonaDadesEstadistiquesFotogramaDeSerieTemporal()
 {
 var estadistics, estil;
 var data=[], i_v, i_c;
@@ -152,8 +152,8 @@ var data=[], i_v, i_c;
 			for (i_c=0; i_c<estil.component.length; i_c++)
 			{
 				estadistics=CalculaEstadisticsHistograma(estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe, 
-						DonaFactorValorMinEstiramentPaleta(estil.component[i_c]),
-						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c], 
+						DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
+						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, 
 								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
 									));
 				data[i_c][0][i_v]={t:DatesVideo[i_data_video].milisegons, y:estadistics.mitjana+estadistics.desv_tipica};
@@ -165,6 +165,7 @@ var data=[], i_v, i_c;
 	}
 	return data;
 }
+
 
 //Aquesta funció dona les etiquetes de temps en mode "moment" tal com ho vol la llibreria chart.js.
 function DonaEtiquetesValorsSerieTemporalLocalitzacio()
@@ -243,7 +244,7 @@ function ConsultaSobreVideo(event_de_click)
 	{
 		//Ara cal presentar la gràfica.
 		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_grafic", 
-						DonaDadesEstadistiquesSerieTemporalLocalitzacio(), 								
+						DonaDadesEstadistiquesFotogramaDeSerieTemporal(), 								
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
 						DonaTempsValorsSerieTemporalLocalitzacio(), 
 						DonaTitolEixYSerieTemporalLocalitzacio());
@@ -279,18 +280,19 @@ var cdns=[], capa, i_capa_primer_video;
 		cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
 			" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
 				  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-				  DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}),
+				  DonaCadenaLang({"cat":"Sèries temporals", "spa":"Series temporales", "eng":"Time series", "fre":"Séries chronologiques"}),
 				  ": <select name=\"capa\" onChange=\"CanviaAnimacio(document.video_animacions.capa.value);\">");
 
-		var i_video=0;
+		var i_capa_video_actiu_actual=-1;
 		for (var i_capa_video_actiu=i_capa_primer_video; i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
 		{
 			capa=ParamCtrl.capa[i_capa_video_actiu];
 		 	if (EsCapaAptePerVideo(capa))
 			{
-				cdns.push("<option value=\"",capa.NomVideo,"\"",((i_video==0) ? " selected" : ""),">" ,
+				cdns.push("<option value=\"",capa.NomVideo,"\"",((i_capa_video_actiu_actual==-1) ? " selected" : ""),">" ,
 						DonaCadena(capa.DescVideo),"</option>");
-				i_video++; 
+				if (i_capa_video_actiu_actual==-1)
+					i_capa_video_actiu_actual=i_capa_video_actiu; 
 				//Salto la resta.
 				for (var i_capa_video_actiu2=i_capa_video_actiu+1; true; i_capa_video_actiu2++)
 				{
@@ -315,17 +317,20 @@ var cdns=[], capa, i_capa_primer_video;
 			"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ConsultaSobreVideo(event);\">");
 
 		//Dibuixar la data i la barra de progrés del video.
-		cdns.push("<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+		cdns.push("<span id=\"video_time_slider\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
 				  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span><br>",
 				"<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 		var n=DonaNPecesBarraVideo();
 		for (var i=0; i<n; i++)
 			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
-		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center>");
+		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
+
+		
+		//Desplegable de animació o estadistic.
+		cdns.push("<center><span id=\"video_veure\"></span>");
 
 		//Dibuixar els botons de progrés del video.
-		cdns.push("<center>",
-			"<button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
+		cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
 			"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\" title=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\"></button>",
 			"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\" title=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\"></button>",
 			"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\"></button>",
@@ -334,12 +339,13 @@ var cdns=[], capa, i_capa_primer_video;
 			"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\" title=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\"></button>",
 			"<br />",
 			"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
-			"<input type=\"radio\" name=\"TipusTemps\">",
+			DonaCadenaLang({"cat":"Rapidesa per","spa":"Rapidez por","eng":"Speed by", "fre":"Vitesse pour"}),
+			": <input type=\"radio\" name=\"TipusTemps\">",
 			DonaCadenaLang({"cat":"Escala temporal","spa":"Escala temporal","eng":"Temporal scale", "fre":"Échelle temporelle"}),
 			" 1:<input type=\"text\" name=\"EscalaTemporal\" value=\"1000000\" size=8 onChange=\"document.video_animacions.TipusTemps[0].checked=true\">",
 			"<input type=\"radio\" name=\"TipusTemps\" checked>",
 			DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
-			"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s",
+			"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
 			"&nbsp;&nbsp;&nbsp;&nbsp;",
 			"<a href='javascript:TancaFinestraLayer(\"video\");'>",
 			DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
@@ -369,7 +375,7 @@ function CanviaEstatAnimable(boto, i_data_video)
 			if (DatesVideo[i_data_video].timeOutFotograma)
 				clearTimeout(DatesVideo[i_data_video].timeOutFotograma);
 			var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
-			vista.i_nova_vista=-4;
+			vista.i_nova_vista=NovaVistaVideo;
 			DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 50);
 		}
 		DatesVideo[i_data_video].animable="si";
@@ -501,7 +507,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
 
 	//Dibuixo el rodet de fotogrames buit
-	vista.i_nova_vista=-3;
+	vista.i_nova_vista=NovaVistaRodet;
 
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\'background-image: url(\"",AfegeixAdrecaBaseSRC("1film_v.png"),"\");background-repeat: repeat-x;\'>");
 	vista.ncol=DonaNColVideoRodet();
@@ -584,6 +590,10 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 			((ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FormatImatge=="application/x-img") ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">"),
 			"</div>");
 	}
+	if (ParamCtrl.capa[DatesVideo[0].i_capa].FormatImatge=="application/x-img")
+		cdns.push("<div id=\"video_l_raster_stat\" style=\"position: absolute; width:", vista.ncol, "px; height:", vista.nfil, "px; opacity:0;\" >",
+			"<canvas id=\"video_i_raster_stat\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>",
+			"</div>");
 
 	document.getElementById("video_pantalla").innerHTML=cdns.join("");
 
@@ -678,7 +688,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 
 	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
 
-	vista.i_nova_vista=-4; //Les imatges grans del video
+	vista.i_nova_vista=NovaVistaVideo; //Les imatges grans del video
 
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
@@ -704,74 +714,349 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 function CanviaAnimacio(nom_video)
 {
 //Generar desplegable d'estils.
-var capa, estils=[], cdns=[], i_estil, i_estil_sel=-1;
+var capa, estil, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 
-		//Determino la llista d'estils.
+	//Determino la llista d'estils.
+	for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
+	{
+		capa=ParamCtrl.capa[i_capa_video_actiu];
+		if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo)
+		{
+			if (capa.estil==null || capa.estil.length==0)
+			{
+				for (i_estil=0; i_estil<estils.length; i_estil++)
+				{
+					if (estils[i_estil].nom=="")
+						break;
+				}
+				if (i_estil==estils.length)
+				{
+					estils[i_estil]={"nom":"", "desc": ""};
+					if (i_estil_sel==-1)
+						i_estil_sel=i_estil;
+				}
+			}
+			else
+			{
+				for (var i_estil_video_actiu=0; i_estil_video_actiu<capa.estil.length; i_estil_video_actiu++)
+				{				
+					for (i_estil=0; i_estil<estils.length; i_estil++)
+					{
+						if (!capa.estil[0].nom)
+						{
+							if (estils[i_estil].desc==capa.estil[i_estil_video_actiu].desc)
+								break;
+						}
+						else
+						{
+							if (estils[i_estil].nom==capa.estil[i_estil_video_actiu].nom)
+								break;
+						}
+					}
+					if (i_estil==estils.length)
+					{
+						estils[i_estil]={"nom":capa.estil[i_estil_video_actiu].nom, "desc": capa.estil[i_estil_video_actiu].desc};
+						if (i_estil_sel==-1 && i_estil_video_actiu==capa.i_estil)
+							i_estil_sel=i_estil;
+					}
+				}
+			}
+		}
+	}
+
+	if (estils.length==0)
+		cdns.push("");
+	else if (estils.length==1)
+		cdns.push(DonaCadena(estils[0].desc));
+	else
+	{
+		if (i_estil_sel==-1)
+			i_estil_sel=0;
+		cdns.push("<select name=\"estil\" onChange=\"CanviaVideo(document.video_animacions.capa.value, document.video_animacions.estil.value);\">");
+		for (i_estil=0; i_estil<estils.length; i_estil++)
+			cdns.push("<option value=\"",((estils[i_estil].nom) ? estils[i_estil].nom : DonaCadena(estils[i_estil].desc)),"\"",((i_estil==i_estil_sel) ? " SELECTED" : "") +">",DonaCadena(estils[i_estil].desc),"</option>");
+		cdns.push("</select>");
+	}
+	document.getElementById("video_estil").innerHTML=cdns.join("");
+
+	cdns=[];
+
+	//Llista per veure animació o veure estadistics
+	if (i_estil_sel!=-1)
+	{
 		for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
 		{
 			capa=ParamCtrl.capa[i_capa_video_actiu];
 			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo)
 			{
-				if (capa.estil==null || capa.estil.length==0)
+				//Em quedo amb el primer i no em complico: Si n'hi ha més d'un haurien de ser iguals.
+				//De fet, cal limitar-ho a animacions d'una sola capa de moment.
+
+				estil=capa.estil[DonaIEstilFotograma(i_capa_video_actiu, ((estils[i_estil_sel].nom) ? estils[i_estil_sel].nom : DonaCadena(estils[i_estil_sel].desc)))];
+				if (capa.FormatImatge=="application/x-img" && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
 				{
-					for (i_estil=0; i_estil<estils.length; i_estil++)
+					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
+						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value);\">");
+					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
+					if (estil.categories && estil.atributs)
 					{
-						if (estils[i_estil].nom=="")
-							break;
-					}
-					if (i_estil==estils.length)
-					{
-						estils[i_estil]={"nom":"", "desc": ""};
-						if (i_estil_sel==-1)
-							i_estil_sel=i_estil;
-					}
-				}
-				else
-				{
-					for (var i_estil_video_actiu=0; i_estil_video_actiu<capa.estil.length; i_estil_video_actiu++)
-					{				
-						for (i_estil=0; i_estil<estils.length; i_estil++)
+						for (var i=0; i<estil.categories.length; i++)
 						{
-							if (!capa.estil[0].nom)
-							{
-								if (estils[i_estil].desc==capa.estil[i_estil_video_actiu].desc)
-									break;
-							}
-							else
-							{
-								if (estils[i_estil].nom==capa.estil[i_estil_video_actiu].nom)
-									break;
-							}
-						}
-						if (i_estil==estils.length)
-						{
-							estils[i_estil]={"nom":capa.estil[i_estil_video_actiu].nom, "desc": capa.estil[i_estil_video_actiu].desc};
-							if (i_estil_sel==-1 && i_estil_video_actiu==capa.i_estil)
-								i_estil_sel=i_estil;
+							if (!estil.categories[i])
+								continue;
+							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. fotog. with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil, i), "</option>");
 						}
 					}
+					else
+					{
+						//Fer estadistics clàsics: mitjana, desviació etc.
+						//Considerar determinar transformades de fourier o wavelet.	
+						cdns.push("<option value=\"Mitjana\">", DonaCadenaLang({"cat":"Mitjana", "spa":"Media", "eng":"Mean", "fre":"Moyenne"}), "</option>");
+					}
+					cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
+					cdns.push("</select>");
 				}
+				break;
 			}
 		}
+	}
+	document.getElementById("video_veure").innerHTML=cdns.join("");
 
-		if (estils.length==0)
-			cdns.push("");
-		else if (estils.length==1)
-			cdns.push(DonaCadena(estils[0].desc));
-		else
-		{
-			if (i_estil_sel==-1)
-				i_estil_sel=0;
-			cdns.push("<select name=\"estil\" onChange=\"CanviaVideo(document.video_animacions.capa.value, document.video_animacions.estil.value);\">");
-			for (i_estil=0; i_estil<estils.length; i_estil++)
-				cdns.push("<option value=\"",((estils[i_estil].nom) ? estils[i_estil].nom : DonaCadena(estils[i_estil].desc)),"\"",((i_estil==i_estil_sel) ? " SELECTED" : "") +">",DonaCadena(estils[i_estil].desc),"</option>");
-			cdns.push("</select>");
-		}
-		document.getElementById("video_estil").innerHTML=cdns.join("");
-
-		CanviaVideo(nom_video, (estils.length==0) ? null : ((estils[0].nom) ? estils[0].nom : estils[0].desc));
+	CanviaVideo(nom_video, (i_estil_sel==-1) ? null : (estils[i_estil_sel].nom ? estils[i_estil_sel].nom : DonaCadena(estils[i_estil_sel].desc)));
 	return false;
 }
+
+function CalculaCountClasseNValues(v, param)
+{
+var n_valids=0, i, suma=0, v_i, n=v.length;
+
+	for(i=0;i<n;i++)
+	{
+		if (v[i]==param)
+			count++;
+	}
+	return count;
+}
+
+function CalculaMeanNValues(v, param)
+{
+var n_valids=0, i, suma=0, v_i, n=v.length;
+
+	for(i=0;i<n;i++)
+	{
+		v_i=v[i];
+		if (!v_i && v_i!=0)
+			continue;
+		suma+=v_i;
+		n_valids++;
+	}
+	if (!n_valids)
+		return null;
+	return suma/n_valids;
+}
+
+function CalculaModeNValues(v, param)
+{
+var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
+
+	if (n==0)
+		return null;
+
+	v.sort(sortAscendingNumberNull);
+	m=v[0];
+	count_m=1;
+	for(i=1;i<n;i++)
+	{
+		v_i=v[i];
+		if (!v_i && v_i!=0)
+			break;
+		if (sortAscendingNumberNull(m, v_i)==0)
+			count_m++;						
+		else
+		{
+			if (count_m_previa<count_m)
+			{
+				count_m_previa=count_m;
+				m_previa[0]=m;
+				n_m_previa=1;
+			}
+			else (count_m_previa==count_m)
+			{
+				m_previa[n_m_previa]=m;
+				n_m_previa++;
+			}
+			//else no era una moda
+			m=v_i;  //Nou candidat.
+			count_m=1;
+		}
+	}
+	if (count_m_previa<count_m)
+	{
+		count_m_previa=count_m;
+		m_previa[0]=m;
+		n_m_previa=1;
+	}
+	else if (count_m_previa==count_m)
+	{
+		m_previa[n_m_previa]=m;
+		n_m_previa++;
+	}
+	if (n_m_previa==1)
+		return m_previa[0];
+	return m_previa[Math.floor(Math.random()*n_m_previa)];
+}
+
+
+function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, vista, estadistic)
+{
+var capa, estil, primer_estil=null, valors
+var ctx, imgData, data, dv=[], n_v_plena, mes_duna_v;
+var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
+var i_cell=[], i_byte=[], fila=[], fila_calc=[], img_stat=[];
+var f_estad, f_estad_param=null, estiramentPaleta, la_paleta;
+
+var histograma={"classe_nodata": 0,
+		"component": [{
+			//"classe": [], 
+			"valorMinimReal": +1e300,
+			"valorMaximReal": -1e300}]};
+
+	if (estadistic=="Mitjana")
+		f_estad=CalculaMeanNValues;
+	else if (estadistic=="Moda")
+		f_estad=CalculaModeNValues;
+	else if (estadistic.substring(0, 9)=="NDeValor_")
+	{
+		f_estad=CalculaCountClasseNValues;
+		f_estad_param=parseInt(estadistic.substring(9));
+	}
+	else
+	{
+		alert(DonaCadenaLang({"cat":"Funció estadística no suportada", "spa":"Función estadística no soportada", "eng":"Unsupported statistical function","fre":"Statistical function non supportée"}) + ": " + estadistic);
+		return;
+	}
+
+	for (i=0; i<ncol; i++)
+		fila_calc[i]=[];
+
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+	{
+		if (DatesVideo[i_data_video].animable!="si")
+			continue;
+		capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+		if (!capa.estil)
+			continue;
+		estil=capa.estil[DatesVideo[i_data_video].i_estil];
+		if (!estil.component || estil.component.length==0)
+			continue;
+		valors=capa.valors;
+		i_cell[i_data_video]=[];
+		i_byte[i_data_video]=[];
+		for (var i_v=0; i_v<valors.length; i_v++)
+		{
+			i_cell[i_data_video][i_v]=0;
+			i_byte[i_data_video][i_v]=0;
+		}
+		fila[i_data_video]=[];
+		for (i=0; i<ncol; i++)
+			fila[i_data_video][i]=[];
+	}
+	for (j=0;j<nfil;j++)
+	{
+		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+		{
+			if (DatesVideo[i_data_video].animable!="si")
+				continue;
+			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+			if (!capa.estil)
+				continue;
+			estil=capa.estil[DatesVideo[i_data_video].i_estil];
+			if (!estil.component || estil.component.length==0)
+				continue;
+			if (!primer_estil)
+				primer_estil=estil
+			valors=capa.valors;
+			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
+			if (n_v_plena==0)
+				return;  //Això no hauria d'haver passat mai
+
+			if (n_v_plena>1)  
+			{
+				OmpleMultiFilaDVDesDeBinaryArray(fila[i_data_video], dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video]);
+				FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, null, fila[i_data_video], dv, valors, ncol, estil.component[0]);
+			}
+			else
+			{
+				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
+			}
+		}
+		//Tinc una fila per tota la serie fins de file_calc[i_col]
+		//Calculo l'estadistic i el guardo en al imatge de floats
+		CalculaImatgeEstadisticaDesDesDeFilaCalc(img_stat, j, histograma, fila_calc, ncol, f_estad, f_estad_param);
+	}
+	var imatge=document.getElementById(nom_canvas);
+	imatge.width=ncol;
+	imatge.height=nfil;	
+
+	ctx=imatge.getContext("2d");
+	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+	imgData=ctx.createImageData(imatge.width,imatge.height);
+
+	data=[]; //Empty the array;
+	
+	//Determino com estirar la paleta i quina paleta
+	if (estadistic=="Mitjana" || estadistic=="Mida")
+	{
+		estiramentPaleta=primer_estil.component[0].estiramentPaleta;
+		la_paleta=primer_estil.paleta;
+	}
+	else
+	{
+		estiramentPaleta={"valorMaxim": histograma.component[0].valorMaximReal,
+				"valorMinim": histograma.component[0].valorMinimReal};
+		la_paleta=null;
+	}
+	//Aplico la paleta i obtinc l'array de dades dins de 'data'
+	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, img_stat, ncol, nfil, estiramentPaleta, la_paleta);
+	
+	imgData.data.set(data);
+
+	ctx.putImageData(imgData,0,0);
+}
+
+
+function PosaEstadisticSerieOAnimacio(estadistic)
+{
+	//$$$$
+
+	var n=parseFloat(document.video_animacions.interval.value);
+	if (isNaN(n) || n<0.09)
+		n=0;
+
+	if (estadistic=="animacio")
+	{
+		//Activo les caracteristiques de video.
+		document.getElementById("video_botons_animacio").style.visibility="visible";
+		document.getElementById("video_time_slider").style.visibility="visible";
+		EncenFotogramaVideo(IDataVideoMostrada, n);
+		ApagaEstadisticsVideo(n);
+	}
+	else
+	{
+		//Desactivo les caracteristiques de video.
+		VideoMostra(0)  //demano pausa.
+		document.getElementById("video_botons_animacio").style.visibility="hidden";
+		document.getElementById("video_time_slider").style.visibility="hidden";
+		ApagaFotogramaVideo(IDataVideoMostrada, n);
+		//Activo el fotograma de les estadístiques
+		EncenEstadisticsVideo(n);
+		//Demano l'execució del càlcul estadístic
+		CanviaImatgeBinariaEstadisticaSerieTemporal("video_i_raster_stat", ParamInternCtrl.vista, estadistic);
+	}
+	return;
+}
+
 
 function MostraFotogramaAillat(i_data_video, actualitza_scroll)
 {
@@ -905,6 +1190,48 @@ var nom_icona=TreuAdreca(img.src);
 	MostraFotogramaAillat(DonaIDataVideoDesDePecaBarraVideo(i, DonaNPecesBarraVideo()), true);
 }
 
+function ApagaFotogramaVideo(i_data_video, n)
+{
+	if (i_data_video!=-1)
+	{
+		document["video_marc_sup"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
+		document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
+		document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
+		document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
+		//Desactivo els fotograma que no toca en el video
+		document.getElementById("video_l_raster"+i_data_video).style.opacity=0;
+		//Determino la corba adient amb: http://cubic-bezier.com
+		document.getElementById("video_l_raster"+i_data_video).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
+	}
+}
+
+function ApagaEstadisticsVideo(n)
+{
+	document.getElementById("video_l_raster_stat").style.opacity=0;
+	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
+}
+
+function EncenFotogramaVideo(i_data_video, n)
+{
+	if (i_data_video!=-1)
+	{
+		document["video_marc_sup"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+		document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+		document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+		document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+		//Activo els fotograma que no toca en el video.
+		document.getElementById("video_l_raster"+i_data_video).style.opacity=1;
+		document.getElementById("video_l_raster"+i_data_video).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
+	}
+}
+
+function EncenEstadisticsVideo(n)
+{
+	document.getElementById("video_l_raster_stat").style.opacity=1;
+	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
+}
+
+
 function MostraFotograma(i_data_video, actualitza_scroll)
 {
 var j, img, nom_icona;
@@ -960,26 +1287,11 @@ var j, img, nom_icona;
 
 	//Actualitzo la posició del rodet i el fotograma actiu
 	var n=parseFloat(document.video_animacions.interval.value);
-	if (n<=0 || isNaN(n) || n<0.09)
+	if (isNaN(n) || n<0.09)
 		n=0;
-			if (IDataVideoMostrada!=-1)
-			{
-				document["video_marc_sup"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
-				document["video_marc_dre"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
-				document["video_marc_esq"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
-				document["video_marc_inf"+IDataVideoMostrada].src=AfegeixAdrecaBaseSRC("1negre.gif");
-				//Desactivo els fotograma que no toca en el video
-				document.getElementById("video_l_raster"+IDataVideoMostrada).style.opacity=0;
-				//Determino la corba adient amb: http://cubic-bezier.com
-				document.getElementById("video_l_raster"+IDataVideoMostrada).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
-			}
-			document["video_marc_sup"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
-			document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
-			document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
-			document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
-			//Activo els fotograma que no toca en el video.
-			document.getElementById("video_l_raster"+i_data_video).style.opacity=1;
-			document.getElementById("video_l_raster"+i_data_video).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)":null;
+
+	ApagaFotogramaVideo(IDataVideoMostrada, n);
+	EncenFotogramaVideo(i_data_video, n);
 
 	var i_actual;
 	if (actualitza_scroll)

@@ -266,6 +266,19 @@ function sortAscendingNumber(a, b)
 	return a - b;
 }
 
+//Posa els nulls i undefined al final de la lista ordenada
+function sortAscendingNumberNull(a, b)
+{
+	if (!a && a!=0 && !b && b!=0)
+		return 0;
+	if (!a && a!=0)
+		return 1;
+	if (!b && b!=0)
+		return -1;
+	return a - b;
+}
+
+
 /* Eliminada. Useu array.removeDuplicates() en el seu lloc
 function EliminaRepeticionsArray(llista, funcio_ordena)
 {

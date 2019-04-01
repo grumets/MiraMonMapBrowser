@@ -126,8 +126,8 @@ var i_histo, div, textarea, cdns=[], capa, estil, histograma, i_c, i, area_cella
 			{
 				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
 				estadistics[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe, 
-							DonaFactorValorMinEstiramentPaleta(estil.component[i_c]),
-							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c], ncolors));
+							DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
+							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors));
 			}
 			cdns.push(DonaCadenaLang({"cat": "Recompte", "spa": "Cuenta", "eng": "Count", "fre": "Compter"}));
 			for (i_c=0; i_c<estil.component.length; i_c++)

@@ -239,7 +239,7 @@ function DonaEstilDadesBinariesCapa(i_nova_vista, i_capa)
 {
 var valors=ParamCtrl.capa[i_capa].valors, i_v;
 
-	if (i_nova_vista==-1 || i_nova_vista==-2 || i_nova_vista==-3)  //L'estil d'impressió i de visualització són els mateixos
+	if (i_nova_vista==NovaVistaPrincipal || i_nova_vista==NovaVistaImprimir || i_nova_vista==NovaVistaRodet)  //L'estil d'impressió i de visualització són els mateixos
 		return ParamCtrl.capa[i_capa].i_estil;  
 	else
 	{
@@ -265,7 +265,7 @@ var valors=ParamCtrl.capa[i_capa].valors, i_v, v, i_estil;
 	v=DeterminaArrayValorsNecessarisCapa(i_capa, i_estil);
 
 	//Comprovo que tinc les bandes que necessito:
-	if (i_nova_vista==-1)
+	if (i_nova_vista==NovaVistaPrincipal)
 	{
 		for (i_v=0; i_v<valors.length; i_v++)
 		{
@@ -273,7 +273,7 @@ var valors=ParamCtrl.capa[i_capa].valors, i_v, v, i_estil;
 				return false;
 		}
 	}
-	/*else if (i_nova_vista==-2)
+	/*else if (i_nova_vista==NovaVistaImprimir)
 	{
 		for (i_v=0; i_v<valors.length; i_v++)
 		{
@@ -299,13 +299,13 @@ var n_v=0, i_v, array_buffer;
 
 	for (i_v=0; i_v<valors.length; i_v++)
 	{
-		if (i_nova_vista==-1)
+		if (i_nova_vista==NovaVistaPrincipal)
 			array_buffer=valors[i_v].arrayBuffer;
-		else if (i_nova_vista==-2)
+		else if (i_nova_vista==NovaVistaImprimir)
 			array_buffer=valors[i_v].arrayBufferPrint;
-		else if (i_nova_vista==-3)
+		else if (i_nova_vista==NovaVistaRodet)
 			array_buffer=valors[i_v].capa_rodet[i_data].arrayBuffer;
-		else if (i_nova_vista==-4)
+		else if (i_nova_vista==NovaVistaVideo)
 			array_buffer=valors[i_v].capa_video[i_data].arrayBuffer;
 		else
 			array_buffer=(valors[i_v].nova_capa && valors[i_v].nova_capa[i_nova_vista] && valors[i_v].nova_capa[i_nova_vista].arrayBuffer) ? valors[i_v].nova_capa[i_nova_vista].arrayBuffer : null;
@@ -325,15 +325,15 @@ i_data és útil per a construir series temporals però pot ser null per a triar la
 Aquesta funció no es fa servir en el dibuixat sino només en les consultes*/
 function DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, i_data, i_col, i_fil)
 {
-var i_v, comptador, vista, dv=[], n_v, v=[], i_nodata;
+var i_v, comptador, vista, dv=[], n_v_plena, v=[], i_nodata;
 var valors=capa.valors;
 
 	vista=DonaVistaDesDeINovaVista(i_nova_vista);
 
-	n_v=CarregaDataViewsCapa(dv, i_nova_vista, i_data, valors);
-	if (n_v==0)
+	n_v_plena=CarregaDataViewsCapa(dv, i_nova_vista, i_data, valors);
+	if (n_v_plena==0)
 		return null;
-	n_v--;
+	//n_v--;
 
 	for (i_v=0; i_v<valors.length; i_v++)
 	{
@@ -569,28 +569,782 @@ var valors=ParamCtrl.capa[extra_param.i_capa].valors
 
 	//arrayBuffer és "undefined" si la banda no està implicada al dibuixat. No em queda més remei que fer això.
 	//Carrego la banda que m'ha passat
-	if (extra_param.vista.i_nova_vista==-1)
+	if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		delete valors[extra_param.i_valor].arrayBuffer;
-	else if (extra_param.vista.i_nova_vista==-2)
+	else if (extra_param.vista.i_nova_vista==NovaVistaImprimir)
 		delete valors[extra_param.i_valor].arrayBufferPrint;
-	else if (extra_param.vista.i_nova_vista==-3)
+	else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		delete valors[extra_param.i_valor].capa_rodet[extra_param.i_data].arrayBuffer;
-	else if (extra_param.vista.i_nova_vista==-4)
+	else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		delete valors[extra_param.i_valor].capa_video[extra_param.i_data].arrayBuffer;
 	else
 		delete valors[extra_param.i_valor].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer;
 }
 
+//No substitueix el nodata.
+function OmpleMultiFilaDVDesDeBinaryArray(fila, dv, valors, ncol, i_byte, i_cell)
+{
+var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.length;
+
+	//Primer llegim totes les bandes de les files
+	for (i_v=0; i_v<n_v; i_v++)
+	{
+		if (dv[i_v]==null)
+			continue;
+		dv_i=dv[i_v];
+		valors_i=valors[i_v];
+		dtype=valors_i.datatype
+		if (!dtype)
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian);
+							i_byte[i_v]++;
+						}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
+						i_byte[i_v]++;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="int8")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); 
+							i_byte[i_v]++;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getInt8(i_byte[i_v], littleEndian); 
+						i_byte[i_v]++;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getInt8(i_cell[i_v], littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="uint8")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); 
+							i_byte[i_v]++;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
+						i_byte[i_v]++;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="int16")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=2;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getInt16(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=2;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getInt16(i_cell[i_v]*2, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="uint16")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=2;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getUint16(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=2;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+					}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getUint16(i_cell[i_v]*2, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="int32")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=4;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getInt32(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=4;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getInt32(i_cell[i_v]*4, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="uint32")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=4;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getUint32(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=4;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getUint32(i_cell[i_v]*4, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="float32")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=4;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getFloat32(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=4;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getFloat32(i_cell[i_v]*4, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else if (dtype=="float64")
+		{
+			if (valors_i.compression && valors_i.compression=="RLE")
+			{
+				i=0;
+				acumulat=0;
+				while (i < ncol)
+				{
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					if (comptador==0) /* Tros sense comprimir */
+					{
+						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+						i_byte[i_v]++;
+						acumulat += comptador;
+
+						for ( ; i<acumulat; i++)
+									{
+							fila[i][i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); 
+							i_byte[i_v]+=8;
+								}
+					}
+					else
+					{
+						acumulat += comptador;
+						v_i=dv_i.getFloat64(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=8;
+						for ( ; i<acumulat; i++)
+							fila[i][i_v]=v_i;
+							}
+				}				
+			}
+			else
+			{
+				for (i=0;i<ncol;i++)
+				{
+					fila[i][i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
+					i_cell[i_v]++;
+				}
+			}
+		}
+		else
+		{
+			alert(dtype + " " + DonaCadenaLang({"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"}));
+			return;
+		}
+	}
+}
+
+function FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, histograma, fila, dv, valors, ncol, component0)
+{
+var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
+
+	for (i=0;i<ncol;i++)
+	{
+		v=fila[i];
+		i_nodata=-1;
+		for (i_v=0;i_v<n_v;i_v++)
+		{
+			if (dv[i_v]==null)
+				continue;
+			nodata=valors[i_v].nodata;
+			if (nodata)
+			{
+				i_nodata=nodata.indexOf(v[i_v]);
+				if (i_nodata>=0)
+					break;
+			}
+		}
+		if (i_nodata>=0)
+		{
+			if (histograma)
+				histograma.classe_nodata++;
+			fila_calc[i][i_data_video]=null;
+		}
+		else
+		{
+			valor0=eval(component0.FormulaConsulta);
+			if (isNaN(valor0) || valor0==null)
+			{
+				if (histograma)	
+					histograma.classe_nodata++;
+				fila_calc[i][i_data_video]=null;
+			}
+			else
+			{
+				if (histograma)
+				{
+					if (histo_component0.valorMinimReal>valor0)
+						histo_component0.valorMinimReal=valor0;
+					if (histo_component0.valorMaximReal<valor0)
+						histo_component0.valorMaximReal=valor0;
+				}
+				fila_calc[i][i_data_video]=valor0;
+			}
+		}
+	}
+}
+
+//No suporta combinacions RGB
+function CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, histograma, dv, valors, ncol, i_byte, i_cell, component0)
+{
+var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, comptador, i_col=0, n_v=valors.length;
+
+	for (i_v=0;i_v<n_v;i_v++)
+	{
+		if (dv[i_v]==null)
+			continue;
+		dv_i=dv[i_v];
+		valors_i=valors[i_v];
+		nodata=valors_i.nodata;
+		dtype=valors_i.datatype
+		if (valors_i.compression && valors_i.compression=="RLE")
+		{
+			i=0;
+			acumulat=0;
+			while (i < ncol)
+			{
+				comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+				i_byte[i_v]++;
+				if (comptador==0) /* Tros sense comprimir */
+				{ /* La següent lectura de comptador no diu "quants de repetits vénen a continuació" sinó "quants de descomprimits en format ràster típic" */
+					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
+					i_byte[i_v]++;
+					acumulat += comptador;
+
+					for ( ; i<acumulat; i++)
+								{
+						if (!dtype)
+							{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+						else if (dtype=="int8")
+							{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+						else if (dtype=="uint8")
+							{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+						else if (dtype=="int16")
+							{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
+						else if (dtype=="uint16")
+							{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
+						else if (dtype=="int32")
+							{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+						else if (dtype=="uint32")
+							{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+						else if (dtype=="float32")
+							{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+						else if (dtype=="float64")
+							{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
+					
+						i_nodata=-1;
+						if (nodata)
+							i_nodata=nodata.indexOf(v[i_v]);
+						if (i_nodata>=0)
+						{
+							if (histograma)
+								histograma.classe_nodata++;
+							fila_calc[i_col][i_data_video]=null;
+						}
+						else
+						{
+							if (component0.FormulaConsulta)
+								valor0=eval(component0.FormulaConsulta);
+							else
+								valor0=v[i_v];
+							if (isNaN(valor0) || valor0==null)
+							{
+								if (histograma)
+									component0.histograma_nodata++;
+								fila_calc[i_col][i_data_video]=null;
+							}
+							else
+							{
+								if (histograma)
+								{
+									if (histo_component0.valorMinimReal>valor0)
+										histo_component0.valorMinimReal=valor0;
+									if (histo_component0.valorMaximReal<valor0)
+										histo_component0.valorMaximReal=valor0;
+								}
+								fila_calc[i_col][i_data_video]=valor0;
+							}
+						}
+						i_col++;
+					}
+				}
+				else
+				{
+					acumulat += comptador;
+					if (!dtype)
+						{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+					else if (dtype=="int8")
+						{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+					else if (dtype=="uint8")
+						{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
+					else if (dtype=="int16")
+						{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
+					else if (dtype=="uint16")
+						{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
+					else if (dtype=="int32")
+						{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+					else if (dtype=="uint32")
+						{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+					else if (dtype=="float32")
+						{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
+					else if (dtype=="float64")
+						{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
+
+					i_nodata=-1;
+					if (nodata)
+						i_nodata=nodata.indexOf(v[i_v]);
+					if (i_nodata>=0)
+					{
+						if (histograma)
+							histograma.classe_nodata+=comptador;
+						for ( ; i<acumulat; i++)
+						{
+							fila_calc[i_col][i_data_video]=null;
+							i_col++;
+						}
+					}
+					else
+					{
+						if (component0.FormulaConsulta)
+							valor0=eval(component0.FormulaConsulta);
+						else
+							valor0=v[i_v];
+						if (isNaN(valor0) || valor0==null)
+						{
+							if (histograma)
+								histograma.classe_nodata+=comptador;
+							for ( ; i<acumulat; i++)
+							{
+								fila_calc[i_col][i_data_video]=null;
+								i_col++;
+							}
+						}
+						else
+						{
+							if (histograma)
+							{
+								if (histo_component0.valorMinimReal>valor0)
+									histo_component0.valorMinimReal=valor0;
+								if (histo_component0.valorMaximReal<valor0)
+									histo_component0.valorMaximReal=valor0;
+							}
+							for ( ; i<acumulat; i++)
+							{
+								fila_calc[i_col][i_data_video]=valor0;
+								i_col++;
+							}
+						}
+					}
+				}
+			}			
+		}
+		else
+		{
+			for (i=0;i<ncol;i++)
+			{
+				if (!dtype)
+					v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
+				else if (dtype=="int8")
+					v[i_v]=dv_i.getInt8(i_cell[i_v], littleEndian);
+				else if (dtype=="uint8")
+					v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
+				else if (dtype=="int16")
+					v[i_v]=dv_i.getInt16(i_cell[i_v]*2, littleEndian);
+				else if (dtype=="uint16")
+					v[i_v]=dv_i.getUint16(i_cell[i_v]*2, littleEndian);
+				else if (dtype=="int32")
+					v[i_v]=dv_i.getInt32(i_cell[i_v]*4, littleEndian);
+				else if (dtype=="uint32")
+					v[i_v]=dv_i.getUint32(i_cell[i_v]*4, littleEndian);
+				else if (dtype=="float32")
+					v[i_v]=dv_i.getFloat32(i_cell[i_v]*4, littleEndian);
+				else if (dtype=="float64")
+					v[i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
+				i_cell[i_v]++;
+
+				i_nodata=-1;
+				if (nodata)
+					i_nodata=nodata.indexOf(v[i_v]);
+				if (i_nodata>=0)
+				{
+					if (histograma)
+						histograma.classe_nodata++;
+					fila_calc[i][i_data_video]=null;
+				}
+				else
+				{
+					if (component0.FormulaConsulta)
+						valor0=eval(component0.FormulaConsulta);
+					else
+						valor0=v[i_v];
+					if (isNaN(valor0) || valor0==null)
+					{
+						if (histograma)
+							histograma.classe_nodata++;
+						fila_calc[i][i_data_video]=null;
+					}
+					else
+					{
+						if (histograma)
+						{
+							if (histo_component0.valorMinimReal>valor0)
+								histo_component0.valorMinimReal=valor0;
+							if (histo_component0.valorMaximReal<valor0)
+								histo_component0.valorMaximReal=valor0;
+						}
+						fila_calc[i][i_data_video]=valor0;
+					}
+				}
+			}
+		}
+	}
+}
+
+function CalculaImatgeEstadisticaDesDesDeFilaCalc(img_stat, i_fil, histograma, fila_calc, ncol, f_estad, f_estad_param)
+{
+var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma.component[0];
+
+	for (i=0;i<ncol;i++)
+	{
+		valor0=img_stat[i_cell_ini+i]=f_estad(fila_calc[i], f_estad_param);
+		if (histograma)
+		{
+			if (isNaN(valor0) || valor0==null)
+				histograma.classe_nodata++;
+			else
+			{
+				if (histo_component0.valorMinimReal>valor0)
+					histo_component0.valorMinimReal=valor0;
+				if (histo_component0.valorMaximReal<valor0)
+					histo_component0.valorMaximReal=valor0;
+			}
+		}
+	}
+	return;
+}
+
+function DonaDataCanvasDesDeArrayNumericIPaleta(data, histograma, img_stat, ncol, nfil, estiramentPaleta, paleta)
+{
+var colors, ncolors, i_color0;
+var j, i, a0, valor_min0, valor0, bigint;
+
+	colors=(paleta && paleta.colors) ? paleta.colors : null;
+	ncolors=colors ? colors.length : 256;
+	/*if (colors)
+	{
+		for (i_color0=0; i_color0<ncolors; i_color0++)
+		{
+			if (colors[i_color0].charAt(0)!="#")
+				alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + colors[i_color0] + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
+		}
+	}*/
+	a0=DonaFactorAEstiramentPaleta(estiramentPaleta, ncolors);
+	valor_min0=DonaFactorValorMinEstiramentPaleta(estiramentPaleta);
+	if (histograma)
+	{
+		histograma.component=[{
+					"classe": [], 
+					"valorMinimReal": +1e300,
+					"valorMaximReal": -1e300
+				}];
+		histo_component0=histograma.component[0];
+		classe0=histo_component0.classe;
+		for (i_color0=0; i_color0<ncolors; i_color0++)
+			classe0[i_color0]=0;
+	}
+	for (j=0;j<nfil;j++)
+	{
+		//Passem la fila a colors RGB
+		for (i=0;i<ncol;i++)
+		{
+			valor0=img_stat[j*ncol+i];
+			if (isNaN(valor0) || valor0==null)
+			{
+				if (histograma)	
+					histograma.classe_nodata++;
+				data.push(255,255,255,0);
+			}
+			else
+			{
+				if (histograma)
+				{
+					if (histo_component0.valorMinimReal>valor0)
+						histo_component0.valorMinimReal=valor0;
+					if (histo_component0.valorMaximReal<valor0)
+						histo_component0.valorMaximReal=valor0;
+				}
+				i_color0=Math.floor(a0*(valor0-valor_min0));
+				if (i_color0>=ncolors)
+					i_color0=ncolors-1;
+				else if (i_color0<0)
+					i_color0=0;
+				if (histograma)
+					classe0[i_color0]++;
+				if (colors)
+				{
+					bigint = parseInt(colors[i_color0].substring(1), 16);
+					data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
+				}
+				else
+					data.push(i_color0, i_color0, i_color0, 255);
+			}
+		}
+	}	
+}
+
+
 /*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255. 
 This is especially handy for Canvas image processing algorithms since now you don’t have to manually clamp your 
-image processing math to avoid overflowing the 8-bit range.*/
-
-function ContruieixImatgeCanvas(img_data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta)
+image processing math to avoid overflowing the 8-bit range.
+'data' es un array de dades que servirà per enviar al canvas
+'histograma' pot contenir una variable on escriure histograma. Pot ser null si es vol obtenir un histograma.
+'dv' són les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades però moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...); 
+'mes_duna_v' Indica si hi ha més d'una dv[] carregada. Es pot fer servir CarregaDataViewsCapa()-1
+'component' és capa.estil[i_estil].component
+'valors' és capa.valors. No es mira la part on hi ha els arrays binaris perquè això està a dv.
+'paleta' és capa.estil[i_estil].paleta*/
+function ConstrueixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta)
 {
-var i_cell=[], i_byte=[], j, i, v=[], v_i, dv_i, i_c, valor0, i_color=[], i_color0, a=[], valor_min=[], comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0;
-var histo_component0, component0, n_v=valors.length;
+var i_cell=[], i_byte=[], j, i, CalculaFilaDesDeBinaryArraydv_i, i_c, valor0, i_color=[], i_color0, a=[], a0, valor_min=[], valor_min0, comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0;
+var histo_component0, component0, n_v=valors.length, dv_i, v=[];
 var colors, ncolors, valors_i, nodata, dtype, una_component;
-var data;
 
 	for (var i_v=0; i_v<n_v; i_v++)
 	{
@@ -624,8 +1378,8 @@ var data;
 					alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + colors[i_color0] + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
 			}
 		}
-		a[0]=DonaFactorAEstiramentPaleta(component0.estiramentPaleta, ncolors);
-		valor_min[0]=DonaFactorValorMinEstiramentPaleta(component0.estiramentPaleta);
+		a0=DonaFactorAEstiramentPaleta(component0.estiramentPaleta, ncolors);
+		valor_min0=DonaFactorValorMinEstiramentPaleta(component0.estiramentPaleta);
 		if (histograma)
 		{
 			//cal_histo=true;
@@ -657,7 +1411,7 @@ var data;
 		{
 			a[i_c]=DonaFactorAEstiramentPaleta(component[i_c].estiramentPaleta, 256);
 			valor_min[i_c]=DonaFactorValorMinEstiramentPaleta(component[i_c].estiramentPaleta);
-			/*if (extra_param.vista.i_nova_vista!=-2 && extra_param.vista.i_nova_vista!=-3 && extra_param.vista.i_nova_vista!=-4)
+			/*if (extra_param.vista.i_nova_vista!=NovaVistaImprimir && extra_param.vista.i_nova_vista!=NovaVistaRodet && extra_param.vista.i_nova_vista!=NovaVistaVideo)
 			{
 				cal_histo=true;
 				component[i_c].histograma=[];
@@ -687,399 +1441,15 @@ var data;
 
 	una_component=(component.length==1)?true:false;
 
-	data=[]; //Empty the array;
-
 	if (mes_duna_v)  
 	{
 		for (j=0;j<nfil;j++)
 		{
-			//Primer llegim totes les bandes de les files
-		    for (i_v=0;i_v<n_v;i_v++)
-		    {
-			    if (dv[i_v]==null)
-					continue;
-				dv_i=dv[i_v];
-				valors_i=valors[i_v];
-				nodata=valors_i.nodata;
-				dtype=valors_i.datatype
-				if (!dtype)
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian);
-									i_byte[i_v]++;
-								}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
-								i_byte[i_v]++;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="int8")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); 
-									i_byte[i_v]++;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getInt8(i_byte[i_v], littleEndian); 
-								i_byte[i_v]++;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getInt8(i_cell[i_v], littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="uint8")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); 
-									i_byte[i_v]++;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
-								i_byte[i_v]++;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="int16")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=2;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getInt16(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=2;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getInt16(i_cell[i_v]*2, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="uint16")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=2;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getUint16(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=2;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getUint16(i_cell[i_v]*2, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="int32")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=4;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getInt32(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=4;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getInt32(i_cell[i_v]*4, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="uint32")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=4;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getUint32(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=4;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getUint32(i_cell[i_v]*4, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="float32")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=4;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getFloat32(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=4;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getFloat32(i_cell[i_v]*4, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else if (dtype=="float64")
-				{
-					if (valors_i.compression && valors_i.compression=="RLE")
-					{
-						i=0;
-						acumulat=0;
-						while (i < ncol)
-						{
-							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-							i_byte[i_v]++;
-							if (comptador==0) /* Tros sense comprimir */
-							{
-								comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
-								i_byte[i_v]++;
-								acumulat += comptador;
-		
-								for ( ; i<acumulat; i++)
-                			    			{
-									fila[i][i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); 
-									i_byte[i_v]+=8;
-		               					}
-							}
-							else
-							{
-								acumulat += comptador;
-								v_i=dv_i.getFloat64(i_byte[i_v], littleEndian); 
-								i_byte[i_v]+=8;
-								for ( ; i<acumulat; i++)
-									fila[i][i_v]=v_i;
-		                			}
-						}				
-					}
-					else
-					{
-						for (i=0;i<ncol;i++)
-						{
-							fila[i][i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
-							i_cell[i_v]++;
-						}
-					}
-				}
-				else
-				{
-					alert(dtype + " " + DonaCadenaLang({"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"}));
-					return;
-				}
-			}
+			OmpleMultiFilaDVDesDeBinaryArray(fila, dv, valors, ncol, i_byte, i_cell)
 			//Segon passem la fila a colors RGB
 			if (una_component)
 			{
+				//Aquest codi és igual que FilaFormulaConsultaDesDeMultiFila() però sense passar a colors sino a una fila_calc
 				for (i=0;i<ncol;i++)
 				{
 					v=fila[i];
@@ -1120,7 +1490,7 @@ var data;
 								if (histo_component0.valorMaximReal<valor0)
 									histo_component0.valorMaximReal=valor0;
 							}
-							i_color0=Math.floor(a[0]*(valor0-valor_min[0]));
+							i_color0=Math.floor(a0*(valor0-valor_min0));
 							if (i_color0>=ncolors)
 								i_color0=ncolors-1;
 							else if (i_color0<0)
@@ -1285,7 +1655,7 @@ var data;
 												if (histo_component0.valorMaximReal<valor0)
 													histo_component0.valorMaximReal=valor0;
 											}
-											i_color0=Math.floor(a[0]*(valor0-valor_min[0]));
+											i_color0=Math.floor(a0*(valor0-valor_min0));
 											if (i_color0>=ncolors)
 												i_color0=ncolors-1;
 											else if (i_color0<0)
@@ -1400,7 +1770,7 @@ var data;
 											if (histo_component0.valorMaximReal<valor0)
 												histo_component0.valorMaximReal=valor0;
 										}
-										i_color0=Math.floor(a[0]*(valor0-valor_min[0]));
+										i_color0=Math.floor(a0*(valor0-valor_min0));
 										if (i_color0>=ncolors)
 											i_color0=ncolors-1;
 										else if (i_color0<0)
@@ -1521,7 +1891,7 @@ var data;
 										if (histo_component0.valorMaximReal<valor0)
 											histo_component0.valorMaximReal=valor0;
 									}
-									i_color0=Math.floor(a[0]*(valor0-valor_min[0]));
+									i_color0=Math.floor(a0*(valor0-valor_min0));
 									if (i_color0>=ncolors)
 										i_color0=ncolors-1;
 									else if (i_color0<0)
@@ -1581,27 +1951,28 @@ var data;
 			}
 		}
 	}
-	img_data.set(data);
 }
+
 
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
 {
 var i_v, dv=[], mes_duna_v;
-var capa=ParamCtrl.capa[extra_param.i_capa], valors=capa.valors, n_v;
+var capa=ParamCtrl.capa[extra_param.i_capa], valors=capa.valors, n_v, n_v_plena;
 var estil=capa.estil[extra_param.i_estil];
 var histograma=null, imgData, ctx;
+var data;
 //cal_histo=false;
 
 	CanviaEstatEventConsola(null, extra_param.i_event, EstarEventTotBe);
 
 	//Carrego la banda que m'ha passat
-	if (extra_param.vista.i_nova_vista==-1)
+	if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		valors[extra_param.i_valor].arrayBuffer=dades;
-	else if (extra_param.vista.i_nova_vista==-2)
+	else if (extra_param.vista.i_nova_vista==NovaVistaImprimir)
 		valors[extra_param.i_valor].arrayBufferPrint=dades;
-	else if (extra_param.vista.i_nova_vista==-3)
+	else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		valors[extra_param.i_valor].capa_rodet[extra_param.i_data].arrayBuffer=dades;
-	else if (extra_param.vista.i_nova_vista==-4)
+	else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		valors[extra_param.i_valor].capa_video[extra_param.i_data].arrayBuffer=dades;
 	else
 		valors[extra_param.i_valor].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer=dades;
@@ -1610,22 +1981,22 @@ var histograma=null, imgData, ctx;
 	n_v=valors.length;
 	for (i_v=0; i_v<n_v; i_v++)
 	{
-		if (extra_param.vista.i_nova_vista==-1)
+		if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		{
 			if (typeof valors[i_v].arrayBuffer!=="undefined" && valors[i_v].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
-		else if (extra_param.vista.i_nova_vista==-2)
+		else if (extra_param.vista.i_nova_vista==NovaVistaImprimir)
 		{
 			if (typeof valors[i_v].arrayBufferPrint!=="undefined" && valors[i_v].arrayBufferPrint==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
-		else if (extra_param.vista.i_nova_vista==-3)
+		else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		{
 			if (typeof valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
-		else if (extra_param.vista.i_nova_vista==-4)
+		else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		{
 			if (typeof valors[i_v].capa_video[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_video[extra_param.i_data].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
@@ -1642,14 +2013,14 @@ var histograma=null, imgData, ctx;
 	if (extra_param.imatge)
 	{
 		//Decidim on en guarda l'histograma
-		if (extra_param.vista.i_nova_vista==-1)
+		if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 			histograma=estil.histograma={};
-		else if (extra_param.vista.i_nova_vista==-3)
+		else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		{
 			estil.capa_rodet[extra_param.i_data]={histograma: {}};
 			histograma=estil.capa_rodet[extra_param.i_data].histograma;
 		}
-		else if (extra_param.vista.i_nova_vista==-4)
+		else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		{
 			estil.capa_video[extra_param.i_data]={histograma: {}};
 			histograma=estil.capa_video[extra_param.i_data].histograma;
@@ -1663,12 +2034,16 @@ var histograma=null, imgData, ctx;
 
 		imgData=ctx.createImageData(extra_param.imatge.width,extra_param.imatge.height);
 
-		n_v=CarregaDataViewsCapa(dv, extra_param.vista.i_nova_vista, extra_param.i_data, valors);
+		n_v_plena=CarregaDataViewsCapa(dv, extra_param.vista.i_nova_vista, extra_param.i_data, valors);
 
-		if (n_v==0)
+		if (n_v_plena==0)
 			return;
 
-		ContruieixImatgeCanvas(imgData.data, histograma, imgData.width, imgData.height, dv, n_v-1, capa.estil[extra_param.i_estil].component, valors, estil.paleta)
+		data=[]; //Empty the array;
+
+		ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, capa.estil[extra_param.i_estil].component, valors, estil.paleta)
+
+		imgData.data.set(data);
 
 		ctx.putImageData(imgData,0,0);
 	}
@@ -1701,7 +2076,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 		//Determina les v[i] presents a l'expressió.
 		var v=DeterminaArrayValorsNecessarisCapa(i_capa, i_estil2);
 
-		if (vista.i_nova_vista==-1)
+		if (vista.i_nova_vista==NovaVistaPrincipal)
 		{
 			for (i=0; i<valors.length; i++)
 			{
@@ -1714,7 +2089,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				}
 			}
 		}
-		else if (vista.i_nova_vista==-2)
+		else if (vista.i_nova_vista==NovaVistaImprimir)
 		{
 			for (i=0; i<valors.length; i++)
 			{
@@ -1727,7 +2102,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				}
 			}
 		}
-		else if (vista.i_nova_vista==-3)
+		else if (vista.i_nova_vista==NovaVistaRodet)
 		{
 			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			if (!estil.capa_rodet)
@@ -1750,7 +2125,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				}
 			}
 		}
-		else if (vista.i_nova_vista==-4)
+		else if (vista.i_nova_vista==NovaVistaVideo)
 		{
 			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			if (!estil.capa_video)
