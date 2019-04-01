@@ -80,12 +80,12 @@ var HistogramaFinestra={"n": 0, "vista":[]};
 
 function CopiaTextPortapapersFinestraHistograma(nom_finestra)
 {
-var i_histo, div, textarea, cdns=[], capa, estil, histograma, i_c, i, area_cella;
+var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cella;
 
 	i_histo=parseInt(nom_finestra.substring(prefixHistogramaFinestra.length));
 	histograma=HistogramaFinestra.vista[i_histo];
-	IniciaCopiaPortapapersFinestra(prefixHistogramaFinestra+i_histo+"_form_div");
-	textarea = document.getElementById(prefixHistogramaFinestra+i_histo+"_text");
+	prefix_div_copy=prefixHistogramaFinestra+i_histo;
+	IniciaCopiaPortapapersFinestra(prefix_div_copy);
 
 	capa=ParamCtrl.capa[histograma.i_capa];
 	estil=capa.estil[histograma.i_estil];
@@ -219,7 +219,7 @@ var i_histo, div, textarea, cdns=[], capa, estil, histograma, i_c, i, area_cella
 		}
 		cdns.push("Nodata", "\t", estil.histograma.classe_nodata*area_cella, "\n");
 	}
-	FinalitzaCopiaPortapapersFinestra(div, textarea, cdns.join(""));
+	FinalitzaCopiaPortapapersFinestra(prefix_div_copy, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
 }
 
 function ObreFinestraHistograma(i_capa)
@@ -248,8 +248,8 @@ var cdns=[];
 				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 		}
 	}
-	//Això només és ple portapapers, donat que aquesta àrea és invisible.
-	cdns.push("<div style=\"display: none\" id=\"", nom_histograma, "_form_div\"><form name=\"",nom_histograma,"_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"", nom_histograma, "_text\">kk</textarea></form></div>");
+	//Això només és pel portapapers, donat que aquesta àrea és invisible.
+	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
 	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, 200+HistogramaFinestra.n*10, 200+HistogramaFinestra.n*10, ncol, nfil*component.length+AltBarraFinestraLayer+2, "NW", "no", true, null, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_histograma);
@@ -727,31 +727,39 @@ var estil=capa.estil[histograma.i_estil];
 	});
 }
 
-function IniciaCopiaPortapapersFinestra(nom_div)
+function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)
 {
-	var div = document.getElementById(nom_div);
+	//Això només és pel portapapers, donat que aquesta àrea és invisible.
+	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\">kk</textarea></form></div>";
+}
+
+function IniciaCopiaPortapapersFinestra(prefix_nom_div)
+{
+	var div = document.getElementById(prefix_nom_div+"_copy_form_div");
 	div.style.display="inline";  //Sembla que no es pot fer un select d'un element invisible.
 	return div;
 }
 
 
-function FinalitzaCopiaPortapapersFinestra(div, textarea, text)
+function FinalitzaCopiaPortapapersFinestra(prefix_nom_div, text, missatge)
 {
+	var div=document.getElementById(prefix_nom_div+"_copy_form_div")
+	var textarea = document.getElementById(prefix_nom_div+"_copy_text");
+
 	textarea.value=text;
 
 	textarea.select();
 	document.execCommand("Copy");
 	div.style.display="none";
-	alert(DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+	alert(missatge);
 }
 
 function CopiaPortapapersFinestraSerieTemp(nom_histograma)
 {
-var div, textarea, cdns=[], data=[], temps, estadistics, capa, estil, area_cella;
+var cdns=[], data=[], temps, estadistics, capa, estil, area_cella;
 var component_name=["R", "G", "B"];
 
-	div=IniciaCopiaPortapapersFinestra(nom_histograma+"_form_div")
-	textarea = document.getElementById(nom_histograma+"_text");
+	IniciaCopiaPortapapersFinestra(nom_histograma)
 
 	estadistics=DonaDadesEstadistiquesSerieTemporalLocalitzacio()  //estadistics.mitjana+estadistics.desv_tipica, estadistics.mitjana, estadistics.mitjana-estadistics.desv_tipica
 	temps=DonaTempsValorsSerieTemporalLocalitzacio()
@@ -792,7 +800,7 @@ var component_name=["R", "G", "B"];
 			cdns.push("\n");
 		}
 	}
-	FinalitzaCopiaPortapapersFinestra(div, textarea, cdns.join(""));
+	FinalitzaCopiaPortapapersFinestra(nom_histograma, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
 }
 
 function TancaFinestraSerieTemp(nom_div)
@@ -818,7 +826,7 @@ var chart=[];
 			cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 	}
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
-	cdns.push("<div style=\"display: none\" id=\"", nom_histograma, "_form_div\"><form name=\"",nom_histograma,"_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"", nom_histograma, "_text\">kk</textarea></form></div>",
+	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma),
 	 	"</div>",
 		"<div style=\"width: ", ncol, "px; position:absolute; opacity: 0.7;\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("tanca_consulta.gif"), "\" ",
