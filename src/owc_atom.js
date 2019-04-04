@@ -28,7 +28,7 @@
 
 //Generic functions to access XML fragments.
 
-/*I apply a simplified solution that I fould here:
+/*I apply a simplified solution that I found here:
 
 http://stackoverflow.com/questions/2207941/getelementsbytagname-problem-in-chrome-and-safari
 
@@ -263,7 +263,8 @@ function ParseOWSContextAtomEntryProperties(entry)
 	//contentByRef, offering
 	//contextMetadata
 	//active, minScaleDenominator, maxScaleDenominator, folder
-		categories: ParseOWSContextAtomCategories(entry)
+		categories: ParseOWSContextAtomCategories(entry),		
+		openData: GetValueXMLElementByName(entry, "nmmb", "openData")
 	}
 }
 

@@ -455,7 +455,7 @@ var cdns=[], capa, estil;
 				if (capa.FormatImatge=="application/x-img" && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
 				{
 					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
-						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value);\">");
+						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"return PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value);\">");
 					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
 					if (estil.categories && estil.atributs)
 					{
@@ -1064,7 +1064,7 @@ function PosaEstadisticSerieOAnimacio(estadistic)
 		//Demano l'execució del càlcul estadístic
 		CanviaImatgeBinariaEstadisticaSerieTemporal("video_i_raster_stat", ParamInternCtrl.vista, estadistic);
 	}
-	return;
+	return true;
 }
 
 //Segons: http://resources.esri.com/help/9.3/arcgisengine/java/GP_ToolRef/spatial_analyst_tools/esri_ascii_raster_format.htm?
@@ -1110,7 +1110,7 @@ function VideoCopiaEstadistic()
 			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
 			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " ESRI ASCII raster format. " + DonaCadenaLang({"cat": "Per importar-ho al MiraMon, guardeu aquest contingut en un fitxer i useu ASCIIImg opció -1", "spa": "Para importarla a MiraMon, guarde este contenido en un fichero y use ASCIIImg opción -1", "eng": "To import it in MiraMon, save this content in a fila and use ASCIIImg option -1", "fre": "Pour l'importer dans MiraMon, enregistrez ce contenu dans un fichier et utilisez l'option ASCIIImg -1"}));
 
-	return;
+	return false;
 }
 
 
@@ -1508,7 +1508,7 @@ function VideoMostraEvent(event, opcio)
 
 function VideoMostra(opcio)
 {
-var i_data_a_mostrar=IDataVideoMostrada;
+var i_data_a_mostrar=(IDataVideoMostrada==-1) ? 0 : IDataVideoMostrada;
 var i_capa_previa;
 
   

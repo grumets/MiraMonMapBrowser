@@ -60,13 +60,13 @@ IncludeScript("vector.js");
 IncludeScript("video.js");
 IncludeScript("qualitat.js");
 IncludeScript("cntxmenu.js");
-IncludeScript("xml.js");
-IncludeScript("owc_atom.js");
+//IncludeScript("xml.js");   //Ja les carrega el GUF.js
+//IncludeScript("owc_atom.js");  //Ja les carrega el guf.js
+//IncludeScript("wps_iso_guf.js", true);  //Ja les carrega el GUF.js
+//IncludeScript("guf_locale.js", true);   //Ja les carrega el GUF.js
 IncludeScript("gml.js", true);
 IncludeScript("owsc.js", true);
 IncludeScript("wps.js", true);
-IncludeScript("wps_iso_guf.js", true);
-IncludeScript("guf_locale.js", true);
 IncludeScript("guf.js", true);
 IncludeScript("histopie.js", true);
 IncludeScript("Chart.bundle.min.js", true);

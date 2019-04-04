@@ -7,6 +7,30 @@
 
 "use strict"
 
+//var ServerGUF="http://localhost/cgi-bin/server1/nimmbus.cgi";
+//var ClientGUF="http://localhost/nimmbus/index.htm";
+var ServerGUF="https://www.opengis.uab.cat/cgi-bin/nimmbus/nimmbus.cgi";
+var ClientGUF="https://www.opengis.uab.cat/nimmbus/index.htm";
+
+function GUFIncludeScript(url, late)   //https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
+{
+	var script = document.createElement("script");  // create a script DOM node
+
+	if (late)
+	{
+	script.setAttributeNode(document.createAttribute("async"));
+	script.setAttributeNode(document.createAttribute("defer"));
+	}
+	script.src = url;  // set its src to the provided URL
+	document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead). Ja ho he fet.
+}
+
+GUFIncludeScript("Nmmblang.js");
+GUFIncludeScript("xml.js");
+GUFIncludeScript("owc_atom.js");
+GUFIncludeScript("wps_iso_guf.js");
+GUFIncludeScript("guf_locale.js");
+	
 function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang)
 {
 	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResource(seed_div_id, rsc_type, title, code, codespace, lang);
@@ -16,7 +40,7 @@ function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, code
 
 function GUFShowPreviousFeedbackInHTMLDiv(div_id, rsc_type, code, codespace, lang)
 {
-	var url="https://www.opengis.uab.cat/cgi-bin/nimmbus/nimmbus.cgi?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + codespace + "&TRG_OPR_2=EQ";
+	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + codespace + "&TRG_OPR_2=EQ";
 	loadFile(url, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: div_id, rsc_type:rsc_type, lang: lang});
 }
 
@@ -37,7 +61,7 @@ function GUFDonaCadenaLang(cadena_lang, lang)
 				return cadena_lang.fre;
 		}
 	}
-	return "";
+	return cadena_lang.eng;
 }
 
 //Duplicated from the MiraMon Map Browser
@@ -123,7 +147,7 @@ var cdns=[];
 		}
 	}
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
-		GUFDonaCadenaLang({"cat":"edita", "spa":"edita", "eng":"edit", "fre":"éditer"}, extra_param.lang), "\"",
+		GUFDonaCadenaLang({"cat":"Edita", "spa":"Edita", "eng":"Edit", "fre":"Éditer"}, extra_param.lang), "\"",
 		" onClick='GUFOpenNimmbus(\"", extra_param.lang, "\");' /> ",
 		GUFDonaCadenaLang({"cat":"les teves entrades prèvies", "spa":"tus entradas previas", "eng":"your previous entries", "fre":"vos entrées précédentes"}, extra_param.lang));
 	document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
@@ -135,6 +159,40 @@ var cdns=[];
 	}
 }
 
+function ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(identifier, lang, es_id_fb_item)
+{
+	var link_html="";
+
+	if (identifier)
+	{
+		var text_html;
+		if (identifier.codeSpace)
+		{
+			if (identifier.codeSpace.endsWith("/"))
+				text_html=identifier.codeSpace;
+			else
+				text_html=identifier.codeSpace+"/";
+		}
+		
+		if (identifier.code)
+			text_html=text_html+identifier.code;
+			
+		//text_html=text_html+". ";
+			
+		if (text_html.indexOf("www.doi.org") >= 0)
+			link_html="<u>DOI</u>: <a href=\""+text_html+"\" target=\"_blank\">"+identifier.code+"</a>. <br/>";
+		else if (text_html.indexOf("nimmbus/resourceId") >= 0) //si codeSpace és http://www.opengis.uab.cat/nimmbus/resourceId és que és un recurs NiMMbus, i per tant puc fer la consulta de retrieve
+		{
+			if (es_id_fb_item)
+				link_html="<b>NiMMbus Id.</b>: <a href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+lang+"&RESOURCE="+identifier.code+"\" target=\"_blank\">"+identifier.code+"</a><br/>";
+			else
+				link_html="<u>NiMMbus Id.</u>: <a href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+lang+"&RESOURCE="+identifier.code+"\" target=\"_blank\">"+identifier.code+"</a><br/>";
+		}
+		else			
+			link_html="<u>"+GUFDonaCadenaLang({"cat":"Identificador", "spa":"Identificador", "eng":"Identifier", "fre":"Identifiant"}, lang)+"</u>: "+text_html+"<br/>";	
+	}
+	return link_html;
+}
 
 function CarregaFeedbackAnterior(doc, extra_param)
 {
@@ -158,62 +216,169 @@ var cdns=[];
 		return;
 	}
 	
-	if (guf.purpose)
-		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Propòsit", "spa":"Proposito", "eng":"Purpose", "fre":"Raison"}, extra_param.lang), ":</b> ", guf.purpose, "<br/>");
+	if (guf.identifier)
+		cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.identifier, extra_param.lang, true));
 
 	if (guf.abstract)
 		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Abstrait"}, extra_param.lang), ":</b> ", guf.abstract, "<br/>");
 
-	if (guf.contactRole && GUFContactRoleDescription[guf.contactRole])
-		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Rol del contacte", "spa":"Rol del contacto", "eng":"Contact role", "fre":"Rôle de contact"}, extra_param.lang), ":</b> ", GUFDonaCadenaLang(GUFContactRoleDescription[guf.contactRole], extra_param.lang), "<br/>");
+	if (guf.purpose)
+		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Propòsit", "spa":"Propósito", "eng":"Purpose", "fre":"Raison"}, extra_param.lang), ":</b> ", guf.purpose, "<br/>");
 
+	if (guf.contactRole && GUF_UserRoleCode[guf.contactRole])
+		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Rol del contacte", "spa":"Rol del contacto", "eng":"Contact role", "fre":"Rôle de contact"}, extra_param.lang), ":</b> ", GUFDonaCadenaLang(GUF_UserRoleCode[guf.contactRole], extra_param.lang), "<br/>");
+
+	if (guf.dateInfo)
+	{
+		for (var i_date=0; i_date<guf.dateInfo.length; i_date++)
+		{
+			if (guf.dateInfo[i_date].dateType)
+				cdns.push("<b>", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+" ("+GUFDonaCadenaLang(CI_DateTypeCode[guf.dateInfo[i_date].dateType],extra_param.lang)+"):</b> "+guf.dateInfo[i_date].date+"<br/>");
+			else
+				cdns.push("<b>", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+":</b> "+guf.dateInfo[i_date].date+"<br/>");
+		}
+	}	
+	
 	if (guf.comment)
-		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Comentari", "spa":"Comentari", "eng":"Comment", "fre":"Commentaire"}, extra_param.lang), ":</b> ", guf.comment, "<br/>");
+		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Comentari", "spa":"Comentario", "eng":"Comment", "fre":"Commentaire"}, extra_param.lang), ":</b> ", guf.comment, "<br/>");
 
-	if (guf.motivation && GUFMotivationDescription[guf.motivation])
-		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Motivació del comentari", "spa":"Motivación del comentario", "eng":"Comment motivation", "fre":"Motivation du commentaire"}, extra_param.lang), ":</b> ", GUFDonaCadenaLang(GUFMotivationDescription[guf.motivation], extra_param.lang), "<br/>");
+	if (guf.motivation && GUF_MotivationCode[guf.motivation])
+		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Motivació del comentari", "spa":"Motivación del comentario", "eng":"Comment motivation", "fre":"Motivation du commentaire"}, extra_param.lang), ":</b> ", GUFDonaCadenaLang(GUF_MotivationCode[guf.motivation], extra_param.lang), "<br/>");
 
 	if (guf.rating)	
 		cdns.push("<b>", GUFDonaCadenaLang({"cat":"Puntuació", "spa":"Puntuación", "eng":"Rating", "fre":"Évaluation"}, extra_param.lang), ":</b> ", guf.rating, "/5<br/>");
 
-	/*if (guf.public)
+	if (guf.public)
 	{	
 		for (var i_publi=0; i_publi<guf.public.length; i_publi++)
+			{
+			if (i_publi>0)
+  				{
+				if (guf.public[i_publi].category)
+					cdns.push("<b>", GUFDonaCadenaLang(QCM_PublicationCategoryCode[guf.public[i_publi].category],extra_param.lang),":</b> ");
+				else
+					cdns.push("<b>", GUFDonaCadenaLang({"cat":"Publicació", "spa":"Publicación", "eng":"Publication", "fre":"Publication"}, extra_param.lang), ":</b> ");
+			}
+			else
+  					{
+				if (guf.public[i_publi].category)
+					cdns.push("<b>", GUFDonaCadenaLang(QCM_PublicationCategoryCode[guf.public[i_publi].category],extra_param.lang),":</b> ");
+				else
+					cdns.push("<b>", GUFDonaCadenaLang({"cat":"Publicació", "spa":"Publicación", "eng":"Publication", "fre":"Publication"}, extra_param.lang), ":</b> ");
+	  				}
+	
+			cdns.push("<input type=\"checkbox\" id=\""+extra_param.div_id+"_"+i_publi+"\" style=\"display:none;\">");
+
+			if (guf.public[i_publi].title)
+				cdns.push(guf.public[i_publi].title);
+							
+			cdns.push(" <div class=\"no_display user\">");
+				
+			if (guf.public[i_publi].edition)
+			{
+				cdns.push(" (", guf.public[i_publi].edition);
+				if (guf.public[i_publi].editionDate)
+					cdns.push(", ", guf.public[i_publi].editionDate);
+				cdns.push(")");				
+			} 			
+			else
+			{
+				if (guf.public[i_publi].editionDate)
+					cdns.push(" (", guf.public[i_publi].editionDate, ")");
+		}
+			
+			if (guf.public[i_publi].series && guf.public[i_publi].series.name)
+	{	
+					cdns.push(", <i>", guf.public[i_publi].series.name, "</i>");
+					if (guf.public[i_publi].series.issueIdentification)
 		{	
+						cdns.push(", ", guf.public[i_publi].series.issueIdentification);
+						if (guf.public[i_publi].series.page)
+							cdns.push(", pp.", guf.public[i_publi].series.page);
+				}
+			}
+			
+			if (guf.public[i_publi].otherCitationDetails)
+				cdns.push(", ", guf.public[i_publi].otherCitationDetails);			
+			
+			cdns.push(".<br/>");
+				
+			
+			//citedResponsibleParty
+			if (guf.public[i_publi].resp_party)
+			{			
+				for (var i_resp_party=0; i_resp_party<guf.public[i_publi].resp_party.length; i_resp_party++)
+				{
+					if (guf.public[i_publi].resp_party[i_resp_party].party_name)
+					{
+						var party_name_txt="";
+						//construeixo la cadena dels N parties amb igual rol
+						for (var i_party_name=0, i_afegit=0; i_party_name<guf.public[i_publi].resp_party[i_resp_party].party_name.length; i_party_name++)
+						{
+							if (guf.public[i_publi].resp_party[i_resp_party].party_name[i_party_name].name!="")
+									cdns.push("<u>",GUFDonaCadenaLang(CI_RoleCode[guf.public[i_publi].resp_party[i_resp_party].role],extra_param.lang)+":</u> "+guf.public[i_publi].resp_party[i_resp_party].party_name[i_party_name].name+"<br/>");	
+						}
+					}
+				}
+			}			
+				
+			if (guf.public[i_publi].onlineResource && guf.public[i_publi].onlineResource.linkage)
+			{				
+				var text_html="<u>"+GUFDonaCadenaLang({"cat":"Recurs online", "spa":"Recurso online", "eng":"Online resource", "fre":"Ressource en ligne"},extra_param.lang)+"</u>: <a href=\""+guf.public[i_publi].onlineResource.linkage+"\" target=\"_blank\">";
+				if (guf.public[i_publi].onlineResource.description)
+					text_html=text_html+guf.public[i_publi].onlineResource.description;
+				else
+					text_html=text_html+guf.public[i_publi].onlineResource.linkage;
+				text_html=text_html+"</a>";
+				
+				if (guf.public[i_publi].onlineResource.function)
+					text_html=text_html+" ("+GUFDonaCadenaLang(CI_OnLineFunctionCode[guf.public[i_publi].onlineResource.function],extra_param.lang)+")";			
+				text_html=text_html+"<br/>";	
+  			cdns.push(text_html);					
+			}			
+			
 			if (guf.public[i_publi].identifier)
 			{
 	  			for (var i_id=0; i_id<guf.public[i_publi].identifier.length; i_id++)
+	  				cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.public[i_publi].identifier[i_id], extra_param.lang, false));
+			}
+
+			if (guf.public[i_publi].abstract)
+				cdns.push("<u>"+GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Résumé"},extra_param.lang)+"</u>: ", guf.public[i_publi].abstract,"<br/>");				
+				
+			cdns.push("</div><a href=\"javascript:void(0);\"><label for=\""+extra_param.div_id+"_"+i_publi+"\"><i>"+GUFDonaCadenaLang({"cat":"Feu clic per mostrar/amagar més informació", "spa":"Haga clic para mostrar/ocultar más información", "eng":"Show/hide more information", "fre":"Cliquez pour afficher/masquer plus d'informations"},extra_param.lang)+"</i></a></label></input><br/>");
+		}
+	}
+	
+	if (guf.target)
   				{
-  					if (guf.public[i_publi].identifier[i_id].codeSpace=="http://www.opengis.uab.cat/nimmbus/resourceId")
+		for (var i_target=0; i_target<guf.target.length; i_target++)
   					{
-						cdns.push("<b>", GUFDonaCadenaLang({"cat":"Publicació", "spa":"Publicación", "eng":"Publication", "fre":"Publication"}, extra_param.lang), ":</b> ", <div id=\"", extra_param.div_id, "_publi_", i_publi , "\"></div>");
-  						break;
-	  				}
+			//if (i_target>0)
+				cdns.push("<b>", GUFDonaCadenaLang({"cat":"Recurs valorat", "spa":"Recurso valorado", "eng":"Target resource", "fre":"Ressource valorisée"}, extra_param.lang));
+			//else
+			//	cdns.push("<b>", GUFDonaCadenaLang({"cat":"Recurs valorat", "spa":"Recurso valorado", "eng":"Target resource", "fre":"Ressource valorisée"}, extra_param.lang));
+		
+			if (guf.target[i_target].role)
+				cdns.push(" (", GUFDonaCadenaLang(GUF_TargetRoleCode[guf.target[i_target].role],extra_param.lang),"):</b> ");
+			else
+				cdns.push(":</b>");
+			//cdns.push("<input type=\"checkbox\" id=\""+extra_param.div_id+"_"+i_target+"\" style=\"display:none;\">");
+
+			if (guf.target[i_target].title)
+				cdns.push(guf.target[i_target].title, "<br/>");
+			//cdns.push(" <div class=\"no_display user\">");
+			
+			if (guf.target[i_target].identifier)
+			{
+	  			for (var i_id=0; i_id<guf.target[i_target].identifier.length; i_id++)
+	  				cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.target[i_target].identifier[i_id], extra_param.lang, false));
   				}
+			//cdns.push("</div><label for=\""+extra_param.div_id+"_"+i_target+"\"><i>Click to show/hide more information</i></label></input>");
+			//cdns.push("<br/>");
 			} 			
 		}
-	}*/
 	document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
-	/*if (guf.public)
-	{	
-		for (var i_publi=0; i_publi<guf.public.length; i_publi++)
-		{	
-			if (guf.public[i_publi].identifier)
-			{
-	  			for (var i_id=0; i_id<guf.public[i_publi].identifier.length; i_id++)
-  				{
-  					if (guf.public[i_publi].identifier[i_id].codeSpace=="http://www.opengis.uab.cat/nimmbus/resourceId")
-  					{
-						var url="https://www.opengis.uab.cat/cgi-bin/nimmbus/nimmbus.cgi?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+extra_param.lang+"&RESOURCE=??&USER=Anonymous
-						guf.public[i_publi].identifier[i_id].code;
-						cdns.push("<b>", GUFDonaCadenaLang({"cat":"Publicació", "spa":"Publicación", "eng":"Publication", "fre":"Publication"}, extra_param.lang), ":</b> ", <div id=\"", extra_param.div_id, "_publi_", i_publi , "\"></div>");
-						loadFile(owc.features[i].properties.links.alternates[0].href, "text/xml", CarregaFeedbackAnterior, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i].properties.links.alternates[0].href, div_id: extra_param.div_id + "_" + i, lang: extra_param.lang});
-  						break;
-	  				}
-  				}
-			} 			
-		}
-	}*/
 }
 
 var GUFFeedbackWindow=null;
@@ -221,19 +386,19 @@ function GUFOpenNimmbus(lang)
 {
 	if (GUFFeedbackWindow==null || GUFFeedbackWindow.closed)
 	{
-		GUFFeedbackWindow=window.open("https://www.opengis.uab.cat/nimmbus/index.htm", "Feedback",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=800,height=700');
+		GUFFeedbackWindow=window.open(ClientGUF, "Feedback",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=800,height=700');
 		GUFShaObertPopUp(GUFFeedbackWindow, lang);
 	}
 	else
 	{
-		GUFFeedbackWindow.location.href="https://www.opengis.uab.cat/nimmbus/index.htm";
+		GUFFeedbackWindow.location.href=ClientGUF;
 		GUFFeedbackWindow.focus();
 	}
 }
 
 function GUFDonaNomFitxerAddFeedback(title, code, codespace)
 {
-	return "https://www.opengis.uab.cat/nimmbus/index.htm?target_title=" + title + "&target_code=" + code + "&target_codespace=" + codespace + "&page=ADDFEEDBACK&share_borrower_1=Anonymous";
+	return ClientGUF+"?target_title=" + title + "&target_code=" + code + "&target_codespace=" + codespace + "&page=ADDFEEDBACK&share_borrower_1=Anonymous";
 }
 
 function GUFAfegirFeedbackCapa(title, code, codespace, lang)
@@ -260,16 +425,16 @@ var cdns=[];
 	cdns.push("<fieldset><legend>", 
 		GUFDonaCadenaLang({"cat":"Afegir valoracions a", "spa":"Añadir valoraciones a", "eng":"Add user feedback to", "fre":"Ajouter rétroaction de l'utilisateur de"}, lang), 
 		": ", rsc_type,
-		":</legend>");
+		"</legend>");
 
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
-				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}), "\"",
+				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}, lang), "\"",
 				  " onClick='GUFAfegirFeedbackCapa(\"", title, "\", \"", code, "\", \"", codespace, "\", \"", lang, "\");' />",
 				  "</fieldset>");
 	cdns.push("<fieldset><legend>", 
 			GUFDonaCadenaLang({"cat":"Valoracions prèvies a", "spa":"Valoraciones previas a", "eng":"Previous user feedback to", "fre":"Précédent rétroaction de l'utilisateur de"}, lang), 
 			": ", rsc_type,
-			":</legend>");
+			"</legend>");
 	cdns.push("<div id=\"",div_id,"Previ\" class=\"Verdana11px\" style=\"width:98%\">",
 		"</div></fieldset>",
 		"</div></form>");
