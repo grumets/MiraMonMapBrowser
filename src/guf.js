@@ -165,7 +165,7 @@ function ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(identifier, lang, es_id_fb_it
 
 	if (identifier)
 	{
-		var text_html;
+		var text_html="";
 		if (identifier.codeSpace)
 		{
 			if (identifier.codeSpace.endsWith("/"))
@@ -179,7 +179,7 @@ function ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(identifier, lang, es_id_fb_it
 			
 		//text_html=text_html+". ";
 			
-		if (text_html.indexOf("www.doi.org") >= 0)
+		if (text_html.indexOf("www.doi.org") >= 0 || text_html.indexOf("/doi.org") >= 0)
 			link_html="<u>DOI</u>: <a href=\""+text_html+"\" target=\"_blank\">"+identifier.code+"</a>. <br/>";
 		else if (text_html.indexOf("nimmbus/resourceId") >= 0) //si codeSpace és http://www.opengis.uab.cat/nimmbus/resourceId és que és un recurs NiMMbus, i per tant puc fer la consulta de retrieve
 		{
@@ -279,17 +279,17 @@ var cdns=[];
 				cdns.push(" (", guf.public[i_publi].edition);
 				if (guf.public[i_publi].editionDate)
 					cdns.push(", ", guf.public[i_publi].editionDate);
-				cdns.push(")");				
+				cdns.push("), ");				
 			} 			
 			else
 			{
 				if (guf.public[i_publi].editionDate)
-					cdns.push(" (", guf.public[i_publi].editionDate, ")");
+					cdns.push(" (", guf.public[i_publi].editionDate, "), ");
 		}
 			
 			if (guf.public[i_publi].series && guf.public[i_publi].series.name)
 	{	
-					cdns.push(", <i>", guf.public[i_publi].series.name, "</i>");
+					cdns.push("<i>", guf.public[i_publi].series.name, "</i>");
 					if (guf.public[i_publi].series.issueIdentification)
 		{	
 						cdns.push(", ", guf.public[i_publi].series.issueIdentification);
