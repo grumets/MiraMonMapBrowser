@@ -1131,7 +1131,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"versio": null,
 		"tipus": null,
 		"nom":	"CombinedLayer",
-		"desc":	DonaCadenaLang({"cat": "Combinaciï¿½ de ", "spa": "Combinaciï¿½n de ", "eng": "Combination of ", "fre": "Combination of "}) + (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + DonaCadenaLang({"cat": "i", "spa": "y", "eng": "and", "fre": "et"}) + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		"desc":	DonaCadenaLang({"cat": "Combinació de ", "spa": "Combinación de ", "eng": "Combination of ", "fre": "Combination of "}) + (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + DonaCadenaLang({"cat": "i", "spa": "y", "eng": "and", "fre": "et"}) + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
