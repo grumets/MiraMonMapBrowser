@@ -91,8 +91,8 @@ var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cel
 	estil=capa.estil[histograma.i_estil];
 	area_cella=DonaAreaCella(histograma.env, histograma.costat, ParamCtrl.ImatgeSituacio[histograma.i_situacio].EnvTotal.CRS);
 
-	cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), "\t", capa.desc, "\n",
-		DonaCadenaLang({"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"}), "\t", estil.desc, "\t", ((estil.DescItems) ? estil.DescItems : ""), "\n",
+	cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), "\t", DonaCadena(capa.desc), "\n",
+		DonaCadenaLang({"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"}), "\t", DonaCadena(estil.desc), "\t", ((estil.DescItems) ? DonaCadena(estil.DescItems) : ""), "\n",
 		DonaCadenaLang({"cat": "Costat de cel·la", "spa": "Lado de celda", "eng": "Cell size", "fre": "Taille de la cellule"}), "\t", histograma.costat, "\t", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[histograma.i_situacio].EnvTotal.CRS), "\n",
 		DonaCadenaLang({"cat": "Àrea de la cel·la", "spa": "Área de celda", "eng": "Cell area", "fre": "Zone de la cellule"}), "\t", area_cella, "\tm²\n",
 		"MinX", "\t", histograma.env.MinX, "\n",
@@ -290,7 +290,7 @@ function SonCategoriesIguals(estil1, estil2)
 
 function CreaTextMatriuDeConfusio(histograma, es_html)
 {
-var cdns=[], ncol, nfil, j, v, cella, capa=[], estil=[], estil_nou, categories_iguals, suma_fil=[], suma_col=[], suma_total, encert, creuament, acumulat, area_cella, unitats, n_decimals, kappa;
+var cdns=[], ncol, nfil, j, v, cella, capa=[], estil=[], estil_nou, categories_iguals, suma_fil=[], suma_col=[], suma_total, encert, creuament, acumulat, area_cella, unitats, n_decimals, kappa, ncol_mostrades, nfil_mostrades;
 var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "spa": "Similitud", "eng": "Similarity", "fra": "Similitude"});
 
 	//La primera capa està a les columnes i la segona a les files
@@ -298,7 +298,7 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 	capa[0]=ParamCtrl.capa[estil_nou.component[0].representacio.dimMatriu[0].i_capa];
 	estil[0]=capa[0].estil[estil_nou.component[0].representacio.dimMatriu[0].i_estil];
 	capa[1]=ParamCtrl.capa[estil_nou.component[0].representacio.dimMatriu[1].i_capa];
-	estil[1]=capa[0].estil[estil_nou.component[0].representacio.dimMatriu[1].i_estil];
+	estil[1]=capa[1].estil[estil_nou.component[0].representacio.dimMatriu[1].i_estil];
 
 	area_cella=DonaAreaCella(histograma.env, histograma.costat, ParamCtrl.ImatgeSituacio[histograma.i_situacio].EnvTotal.CRS);
 	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[histograma.i_situacio].EnvTotal.CRS);
@@ -361,6 +361,21 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 		suma_fil.push(acumulat);
 	}
 
+	ncol_mostrades=0;
+	for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
+	{
+		if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
+			continue;
+		ncol_mostrades++;
+	}
+	nfil_mostrades=0;
+	for (var j_cat=0; j_cat<estil[1].categories.length; j_cat++)
+	{
+		if (!estil[1].categories[j_cat] || (categories_iguals ? suma_col[j_cat]==0 && suma_fil[j_cat]==0 : suma_fil[j_cat]==0))
+			continue;
+		nfil_mostrades++;
+	}
+
 	if (es_html)
 	{
 		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol, "\">",
@@ -373,12 +388,12 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 	}
 	else
 	{
-		cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 1", "\t", (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom), 
+		cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 1 (", DonaCadenaLang({"cat": "columnes", "spa": "columnas", "eng": "columns", "fre": "colonnes"}), ")\t", (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom), 
 			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), "\n",
-			DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 2", "\t", (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom), 
-			(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), "\n",
-			DonaCadenaLang({"cat": "Columnes", "spa": "Columnas", "eng": "Columns", "fre": "Colonnes"}), "\t", ncol, "\n",
-			DonaCadenaLang({"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"}), "\t", nfil, "\n");
+			DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 2 (", DonaCadenaLang({"cat": "files", "spa": "filas", "eng": "rows", "fre": "lignes"}), ")\t", (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom), 
+			(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), "\n");
+		cdns.push(DonaCadenaLang({"cat": "Columnes", "spa": "Columnas", "eng": "Columns", "fre": "Colonnes"}), "\t", ncol, "\t", DonaCadenaLang({"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"}), "\t", ncol_mostrades, "\n");
+		cdns.push(DonaCadenaLang({"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"}), "\t", nfil, "\t", DonaCadenaLang({"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"}), "\t", nfil_mostrades, "\n");
 		if (categories_iguals)
 			cdns.push(DonaCadenaLang({"cat": "Index Kappa", "spa": "Indice Kappa", "eng": "Kappa coefficient", "fre": "Coefficient kappa"}), "\t", kappa, "\n");
 		cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats, "²\n");
@@ -386,7 +401,7 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 	}
 
 	//Categories de la capa 1 (columnes)
-	for (var i_cat=0; i_cat<ncol; i_cat++)
+	for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 	{
 		if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 			continue;
@@ -414,7 +429,7 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 		cdns.push("\n");
 	}
 	j=0;
-	for (var j_cat=0; j_cat<nfil; j_cat++)
+	for (var j_cat=0; j_cat<estil[1].categories.length; j_cat++)
 	{
 		if (!estil[1].categories[j_cat] || (categories_iguals ? suma_col[j_cat]==0 && suma_fil[j_cat]==0 : suma_fil[j_cat]==0))
 			continue;
@@ -430,7 +445,7 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 		}
 		cdns.push(DonaTextCategoriaDesDeColor(estil[1], j_cat));
 		cdns.push(es_html ? "</td>" : "\t");
-		for (var i_cat=0; i_cat<ncol; i_cat++)
+		for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 		{
 			if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 				continue;
@@ -450,12 +465,12 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 				}
 				cdns.push("\">");
 			} 
-			cdns.push(OKStrOfNe(v, n_decimals));
+			cdns.push(OKStrOfNe(v*area_cella, n_decimals));
 			cdns.push(es_html ? "</td>" : "\t");
 		}
 		if (es_html)
 			cdns.push("<td style=\"text-align: right;color: #885533\">");
-		cdns.push(OKStrOfNe(suma_fil[j_cat], n_decimals));
+		cdns.push(OKStrOfNe(suma_fil[j_cat]*area_cella, n_decimals));
 		cdns.push(es_html ? "</td>" : "\t");
 		if (categories_iguals)
 		{
@@ -475,18 +490,18 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 	else
 		cdns.push(literal_total, "\t");	
 	//Pinto els totals
-	for (var i_cat=0; i_cat<ncol; i_cat++)
+	for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 	{
 		if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 			continue;
 		if (es_html)
 			cdns.push("<td style=\"text-align: right;color: #885533\">");
-		cdns.push(OKStrOfNe(suma_col[i_cat], n_decimals));
+		cdns.push(OKStrOfNe(suma_col[i_cat]*area_cella, n_decimals));
 		cdns.push(es_html ? "</td>" : "\t");
 	}
 	if (es_html)
 		cdns.push("<td style=\"text-align: right;color: #885533\">");
-	cdns.push(OKStrOfNe(suma_total, n_decimals));
+	cdns.push(OKStrOfNe(suma_total*area_cella, n_decimals));
 	if (es_html)
 	{
 		cdns.push("</td>");
@@ -506,7 +521,7 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 		else
 			cdns.push(literal_sembla,"\t");
 		//Pinto els totals
-		for (var i_cat=0; i_cat<ncol; i_cat++)
+		for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 		{
 			if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 				continue;

@@ -8211,7 +8211,7 @@ function CreaCapesEspecials()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_objdigi_consulta+1);
+		CanviaIndexosCapesSpliceCapa(1, i_objdigi_consulta+1, -1);
 	}
 	if (ParamCtrl.IconaEdicio && i_objdigi_edicio==-1)
 	{
@@ -8263,7 +8263,7 @@ function CreaCapesEspecials()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_objdigi_edicio+1);
+		CanviaIndexosCapesSpliceCapa(1, i_objdigi_edicio+1, -1);
 	}
 	if (!ParamCtrl.IconaAnarCoord)
 		ParamCtrl.IconaAnarCoord={"icona": "mes.gif",
@@ -8316,7 +8316,7 @@ function CreaCapesEspecials()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_objdigi_anar_coord+1);
+		CanviaIndexosCapesSpliceCapa(1, i_objdigi_anar_coord+1, -1);
 	}
 
 }
@@ -8854,7 +8854,7 @@ function EndMiraMonMapBrowser(event, reset)
 				//Esborro la capa calladament:				
 				ParamCtrl.capa.splice(i_capa, 1);
 				AnullaCapaEspecial(i_capa);
-				CanviaIndexosCapesSpliceCapa(-1, i_capa, ParamCtrl.capa.length);
+				CanviaIndexosCapesSpliceCapa(-1, i_capa, -1);
 				i_capa--;
 				continue;
 			}

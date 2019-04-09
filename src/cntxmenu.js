@@ -35,7 +35,7 @@ function MoureASobreDeTot(i_capa)
 	var n_capes_especials_a_sobre=NumeroDeCapesEspecials(i_capa);
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, ParamCtrl.capa.length);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1);
 
 	ParamCtrl.capa.splice(n_capes_especials_a_sobre, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -49,7 +49,7 @@ function MoureASobre(i_capa)
 {
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(1, i_capa-1);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, ParamCtrl.capa.length);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, -1);
 
 	ParamCtrl.capa.splice(i_capa-1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -64,7 +64,7 @@ function MoureASota(i_capa)
 {
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(-1, i_capa+1);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, ParamCtrl.capa.length);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, -1);
 
 	ParamCtrl.capa.splice(i_capa+1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -78,7 +78,7 @@ function MoureASotaDeTot(i_capa)
 {
 	//He de pujar totes les capes que estan sota i_capa una posició
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, ParamCtrl.capa.length+1);
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1);
 
 	ParamCtrl.capa.push(ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -97,7 +97,7 @@ function EsborrarCapa(i_capa)
 {
 	if (AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)==false)
 		return;
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, ParamCtrl.capa.length);
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1);
 	ParamCtrl.capa.splice(i_capa, 1);
 	RevisaEstatsCapes();
 	CreaLlegenda();
@@ -363,7 +363,7 @@ var minim, maxim;
 	else
 	{
 		k=i_on_afegir;
-		CanviaIndexosCapesSpliceCapa(1, k, ParamCtrl.capa.length);
+		CanviaIndexosCapesSpliceCapa(1, k, -1);
 	}
 	ParamCtrl.capa.splice(k, 0, {"servidor": servidorGC.servidor,
 				"versio": servidorGC.versio,
@@ -481,13 +481,15 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 
 //n_moviment pot ser negatiu quan elimines capes o positiu quan insereixes. Aquest funció s'ha de cridar despres fer capa.splice() o similars.
 //i_capa_ini és la capa inicial per fer el canvi d'indexos
-//i_capa_fi_per_sota és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Opcional; si no s'especifica, val i_capa_ini+1
+//i_capa_fi_per_sota és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length), Opcional; si no s'especifica, només es mouen els index de i_capa_ini.
 function CanviaIndexosCapesSpliceCapa(n_moviment, i_capa_ini, i_capa_fi_per_sota)
 {
 var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 
 	if (typeof i_capa_fi_per_sota==="undefined")
 		var i_capa_fi_per_sota=i_capa_ini+1;
+	if (i_capa_fi_per_sota==-1)
+		i_capa_fi_per_sota=ParamCtrl.capa.length;
 
 	for(var i=0; i<ParamCtrl.capa.length; i++)
 	{
@@ -1028,7 +1030,7 @@ var i_capes=DonaIndexosACapesDeCalcul(document.CalculadoraCapes.calcul.value);
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
-		CanviaIndexosCapesSpliceCapa(1, i_capa, ParamCtrl.capa.length);
+		CanviaIndexosCapesSpliceCapa(1, i_capa, -1);
 
 	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
@@ -1193,7 +1195,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
-		CanviaIndexosCapesSpliceCapa(1, i_capa, ParamCtrl.capa.length);
+		CanviaIndexosCapesSpliceCapa(1, i_capa, -1);
 
 	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 

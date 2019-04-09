@@ -346,7 +346,7 @@ var cdns=[];
 			if (guf.public[i_publi].abstract)
 				cdns.push("<u>"+GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Résumé"},extra_param.lang)+"</u>: ", guf.public[i_publi].abstract,"<br/>");				
 				
-			cdns.push("</div><a href=\"javascript:void(0);\"><label for=\""+extra_param.div_id+"_"+i_publi+"\"><i>"+GUFDonaCadenaLang({"cat":"Feu clic per mostrar/amagar més informació", "spa":"Haga clic para mostrar/ocultar más información", "eng":"Show/hide more information", "fre":"Cliquez pour afficher/masquer plus d'informations"},extra_param.lang)+"</i></a></label></input><br/>");
+			cdns.push("</div><a href=\"javascript:void(0);\"><label for=\""+extra_param.div_id+"_"+i_publi+"\"><i>"+GUFDonaCadenaLang({"cat":"Mostrar/amagar més informació", "spa":"Mostrar/ocultar más información", "eng":"Show/hide more information", "fre":"Afficher/masquer plus d'informations"},extra_param.lang)+"</i></a></label></input><br/>");
 		}
 	}
 	
