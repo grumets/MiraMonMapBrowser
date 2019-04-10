@@ -378,9 +378,9 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 
 	if (es_html)
 	{
-		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol, "\">",
+		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol_mostrades+2, "\">",
 			(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom), 
-			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, ")");
+			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, "²)");
 		if (categories_iguals)
 			cdns.push(" (Kappa: ", kappa, ")");
 		cdns.push("</th></tr>",
@@ -437,9 +437,9 @@ var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "s
 		{
 			cdns.push("<tr>");
 			if (j==0)
-				cdns.push("<td rowspan=\"", nfil, "\"><div class=\"text_vertical\" style=\"width: 15px;\">", 
+				cdns.push("<td style=\"vertical-align: bottom; text-align: center;\" rowspan=\"", nfil_mostrades+2, "\"><div class=\"text_vertical\" style=\"width: 15px;\">", 
 					(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom), 
-					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, ")</div></td>");	
+					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, "²)</div></td>");	
 			//Categories de la capa 2
 			cdns.push("<td style=\"white-space: nowrap; text-align: right;\">");
 		}
