@@ -6825,6 +6825,24 @@ function OmpleVistaCapaDigi(nom_vista, vista, i_capa_digi)
 	OmpleVistaCapaDigiIndirect({nom_vista: nom_vista, vista: vista, i_capa: i_capa_digi, carregant_geo: false/*, v_carregat_*: false*/})
 }
 
+function ActivaSombraFonts(ctx)
+{
+var shadowPrevi={blur: ctx.shadowBlur, offsetX: ctx.shadowOffsetX, offsetY: ctx.shadowOffsetY, color: ctx.shadowColor};
+	ctx.shadowBlur=3;
+	ctx.shadowOffsetX=1;
+	ctx.shadowOffsetY=1;
+	ctx.shadowColor="white";
+	return shadowPrevi;
+}
+
+function DesactivaSombraFonts(ctx, shadowPrevi)
+{
+	ctx.shadowBlur=shadowPrevi.blur;
+	ctx.shadowOffsetX=shadowPrevi.offsetX;
+	ctx.shadowOffsetY=shadowPrevi.offsetY;
+	ctx.shadowColor=shadowPrevi.color;
+}
+
 function OmpleVistaCapaDigiIndirect(param)
 {
 var nom_vista=param.nom_vista, vista=param.vista;
@@ -6916,7 +6934,7 @@ var env=vista.EnvActual;
 				return;  //ja es tornarà a cridar a si mateixa quan la crida assincrona acabi
 		}
 		var fillStylePrevi, a_interior=1, valor_min_interior=0, i_color, ncolors, valor;
-		var shadowBlurPrevi, shadowOffsetXPrevi, shadowOffsetYPrevi, shadowColorPrevi;
+		var shadowPrevi;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
 		var env_icona, punt={}, i_col, i_fil;
 		var icona, font, i_simbol;
@@ -7041,14 +7059,7 @@ var env=vista.EnvActual;
 					env.MinY < punt.y &&
 					env.MaxY > punt.y)
 				{
-					shadowBlurPrevi=ctx.shadowBlur;
-					shadowOffsetXPrevi=ctx.shadowOffsetX;
-					shadowOffsetYPrevi=ctx.shadowOffsetY;
-					shadowColorPrevi=ctx.shadowColor;
-					ctx.shadowBlur=3;
-					ctx.shadowOffsetX=1;
-					ctx.shadowOffsetY=1;
-					ctx.shadowColor="white";
+					shadowPrevi=ActivaSombraFonts(ctx);
 
 					if(estil.fonts.aspecte.length==1) 
 						font=estil.fonts.aspecte[0].font;
@@ -7065,10 +7076,7 @@ var env=vista.EnvActual;
 					ctx.fillText(capa_digi.objectes.features[j].properties[estil.fonts.NomCampText], i_col-font.i, i_fil-font.j);
 					if (font.color)
 						ctx.fillStyle=fillStylePrevi;
-					ctx.shadowBlur=shadowBlurPrevi;
-					ctx.shadowOffsetX=shadowOffsetXPrevi;
-					ctx.shadowOffsetY=shadowOffsetYPrevi;
-					ctx.shadowColor=shadowColorPrevi;
+					DesactivaSombraFonts(ctx, shadowPrevi);
 				}
 			}
 			//http://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas

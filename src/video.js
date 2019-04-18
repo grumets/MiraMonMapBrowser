@@ -35,14 +35,20 @@ var DatesVideo=[];  //{"i_capa":, "i_data":, "i_estil:, "milisegons":, "animable
 var IDataVideoMostrada;
 var NomVideoActiu;
 var PuntsSerieTemporal=[];
+var IconaVideoClick={};
 var ImgVideoStat=[];
 var ImgVideoStatHistograma={"classe_nodata": 0,
 		"component": [{
 			//"classe": [], 
 			"valorMinimReal": +1e300,
 			"valorMaximReal": -1e300}]};
+var EstadisticCarregatVideo=null;
+var IFilEixXEixTVideo=-1;
+var IDataFilEixXEixT=null;
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
+
+var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"}
 
 function OrdenacioCapesVideoData(x,y) 
 {
@@ -54,8 +60,7 @@ function EsCapaAptePerVideo(capa)
 {
 	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa.tipus)=="TipusWMS" && 
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
-		capa.animable && capa.animable==true &&
-		capa.data)
+		capa.animable==true && capa.data)
 		return true;
 	return false;
 }
@@ -68,20 +73,33 @@ function DonaNPecesBarraVideo()
 function DonaIPecaBarraVideo(i_data_video, n)
 {
 	if (document.video_animacions.TipusTemps[0].checked)
-		return parseInt(((DatesVideo[i_data_video].milisegons-DatesVideo[0].milisegons)/(DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons))*(n-1),10);
+		return parseInt(((DatesVideo[i_data_video].milisegons-DatesVideo[0].milisegons)/(DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons))*(n-1));
 	return Math.round((n-1)*(i_data_video/(DatesVideo.length-1)));
 }
 
 function DonaIDataVideoDesDePecaBarraVideo(i, n)
 {
+var t;
 	if (document.video_animacions.TipusTemps[0].checked)
 	{
 		t=((DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons)/(n-1))*i+DatesVideo[0].milisegons;
-		for (i_data_video=0; i_data_video<DatesVideo.length; i++)
-			if (DatesVideo[i_data_video].milisegons<t)
-				return i_data_video;
+		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+			if (DatesVideo[i_data_video].milisegons>t)
+				return i_data_video-1;
+		return DatesVideo.length-1;
 	}
 	return Math.round((DatesVideo.length-1)*(i/(n-1)));
+}
+
+function ParticipaFotogramaDeLaSerieTemporal(i_data_video)
+{
+var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+	if (DatesVideo[i_data_video].animable=="si" && capa.estil &&
+		capa.estil[DatesVideo[i_data_video].i_estil].component &&
+		capa.estil[DatesVideo[i_data_video].i_estil].component.length>0)
+		return true;
+	else
+		return false;
 }
 
 function DeterminaNombreComponentsSerieTemporal()
@@ -89,10 +107,7 @@ function DeterminaNombreComponentsSerieTemporal()
 var n_c=0;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable=="si" && 
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
+		if (ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 		{
 			if (n_c<ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length)
 				n_c=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length;
@@ -114,12 +129,9 @@ var data=[], v, i_c;
 
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable=="si" && 
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
+		if (ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 		{
-			v=DonaValorEstilComArrayDesDeValorsCapa(-4, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DonaValorsDeDadesBinariesCapa(-4, ParamCtrl.capa[DatesVideo[i_data_video].i_capa], DatesVideo[i_data_video].i_data, i_col, i_fil));
+			v=DonaValorEstilComArrayDesDeValorsCapa(NovaVistaVideo, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DonaValorsDeDadesBinariesCapa(NovaVistaVideo, ParamCtrl.capa[DatesVideo[i_data_video].i_capa], DatesVideo[i_data_video].i_data, i_col, i_fil));
 			if (v==null)
 			{
 				if (!filtra_null)
@@ -147,8 +159,7 @@ var data=[], i_v, i_c;
 
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable!="si" ||
-			!ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil)
+		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			continue;
 		
 		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];
@@ -179,10 +190,7 @@ function DonaEtiquetesValorsSerieTemporalLocalitzacio()
 var labels=[];
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable=="si" && 
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
+		if (ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 		{
 			labels[i_v]=moment(DatesVideo[i_data_video].milisegons);
 			i_v++;
@@ -198,10 +206,7 @@ var temps=[];
 
 	for (var i_data_video=0, i_v=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable=="si" && 
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component &&
-			ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil].component.length>0)
+		if (ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 		{
 			temps[i_v]=DonaDataCapaComATextBreu(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data);
 			i_v++;
@@ -215,8 +220,7 @@ function DonaTitolEixYSerieTemporalLocalitzacio()
 var titol=[], estil;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		if (DatesVideo[i_data_video].animable!="si" ||
-			!ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil)
+		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			continue;
 		
 		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];	
@@ -229,35 +233,142 @@ var titol=[], estil;
 	}
 }
 
+function CanviaTipusClickVideo(event)
+{
+	if (document.video_animacions.TipusClick[0].checked && PuntsSerieTemporal.length==0)
+	{
+		document.getElementById("video_click").style.visibility="hidden";
+		PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);
+	}	
+	else
+	{
+		TancaFinestraSerieTemp("video_grafic", "video_click");
+		document.getElementById("video_click").style.visibility="visible";
+		IFilEixXEixTVideo=-1;
+	}
+	if (event)
+		dontPropagateEvent(event);
+}
+
+function ClickSobreVideo(event_de_click)
+{
+	if (document.video_animacions.TipusClick[0].checked)
+		ConsultaSobreVideo(event_de_click);
+	else //if (document.video_animacions.TipusClick[1].checked)
+	{
+		if (!EstanTotsElsFotogramesCarregatsVideo())
+			return;
+		PosaEstadisticSerieOAnimacio("x/t", DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY))
+		document.getElementById("video_click").style.visibility="hidden";
+	}
+}
+
 var ChartConsultaSobreVideo=null;
 
 function ConsultaSobreVideo(event_de_click)
 {
+
 	if (!EstanTotsElsFotogramesCarregatsVideo())
 		return;
 
-	var i=DonaCoordIDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientX)
-	var j=DonaCoordJDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientY)
+	var i=DonaCoordIDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientX)
+	var j=DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY)
 
-	var x=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientX);
-	var y=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, -4, event_de_click.clientY);
+	var x=DonaCoordXDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientX);
+	var y=DonaCoordYDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY);
 
 	var data=DonaDadesValorsSerieTemporalLocalitzacio(i, j, true);
 	if (data==null)
 		return;
 
-	if (document.getElementById("video_grafic").style.visibility=="hidden")
+	if (PuntsSerieTemporal.length==0)
 	{
 		//Ara cal presentar la gràfica.
-		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_grafic", 
+		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_click", "video_grafic", 
 						DonaDadesEstadistiquesFotogramaDeSerieTemporal(), 								
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
 						DonaTempsValorsSerieTemporalLocalitzacio(), 
 						DonaTitolEixYSerieTemporalLocalitzacio());
 	}
-	AfegeixGraficSerieTemporal(ChartConsultaSobreVideo, data, DonaValorDeCoordActual(x, y, false, false));
-	PuntsSerieTemporal.push({i:i,j:j,x:x,y:y});
-}	
+	var color_name=AfegeixGraficSerieTemporal(ChartConsultaSobreVideo, data, /*DonaValorDeCoordActual(x, y, false, false)*/ PuntsSerieTemporal.length+1);
+	PuntsSerieTemporal.push({i:i, j:j, x:x, y:y, color:color_name});
+	PintaPosicionsConsutaSobreVideo();
+}
+
+function MouSobreVideo(event_de_click)
+{
+var ctx, canvas, shadowPrevi;
+
+	if (!document.video_animacions.TipusClick[1].checked)
+		return;
+
+	var j=DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY)
+
+	if (IFilEixXEixTVideo!=-1)
+	{
+		MostraFotograma(IDataFilEixXEixT[j], false, true);
+		return;
+	}
+
+	canvas = document.getElementById("video_click_canvas");
+	ctx = canvas.getContext('2d');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	shadowPrevi=ActivaSombraFonts(ctx)
+
+	ctx.beginPath();
+	ctx.strokeStyle="#888888";
+	ctx.lineWidth=2;
+	ctx.moveTo(0, j);
+	ctx.lineTo(canvas.width, j);
+	ctx.stroke();
+
+	DesactivaSombraFonts(ctx, shadowPrevi)
+}
+
+function PintaPosicionsConsutaSobreVideo()	
+{
+var ctx, canvas, shadowPrevi;
+
+	canvas = document.getElementById("video_click_canvas");
+	ctx = canvas.getContext('2d');
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	if (!IconaVideoClick.img || !IconaVideoClick.img.sha_carregat)
+		return;
+
+	for (var i_punt=0; i_punt<PuntsSerieTemporal.length; i_punt++)
+	{				
+		try 
+		{
+			ctx.drawImage(IconaVideoClick.img, PuntsSerieTemporal[i_punt].i-IconaVideoClick.i+1, 
+						PuntsSerieTemporal[i_punt].j-IconaVideoClick.j+1, IconaVideoClick.img.ncol, IconaVideoClick.img.nfil);
+
+			shadowPrevi=ActivaSombraFonts(ctx)
+
+			ctx.beginPath();
+			ctx.strokeStyle=PuntsSerieTemporal[i_punt].color;;
+			ctx.lineWidth=3;
+			var i_ini=PuntsSerieTemporal[i_punt].i+5;
+			var j_ini=PuntsSerieTemporal[i_punt].j-5;
+			ctx.moveTo(i_ini, j_ini);
+			ctx.lineTo(i_ini+15, j_ini);
+			ctx.stroke();
+
+			ctx.font="bold 15px Verdana";
+			ctx.fillStyle="#000000";
+			ctx.textAlign="left";
+			ctx.fillText(i_punt+1, PuntsSerieTemporal[i_punt].i+22, PuntsSerieTemporal[i_punt].j);
+			
+			DesactivaSombraFonts(ctx, shadowPrevi)
+
+		}
+		catch (e)
+		{
+			alert(e.message);
+		}
+	}
+}
 
 function OmpleFinestraVideo(win, name)
 {
@@ -316,22 +427,27 @@ var cdns=[], capa, i_capa_primer_video;
 		
 		//Creo la pantalla on es projecte el video.
 		//Segurament això s'ha de canviar radicalment.
-		cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:"+ ParamInternCtrl.vista.ncol +"; height:"+ ParamInternCtrl.vista.nfil +";\">",
-			"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:"+ ParamInternCtrl.vista.ncol +"; height:"+ ParamInternCtrl.vista.nfil +";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\""+ ParamInternCtrl.vista.ncol +"\" height=\""+ ParamInternCtrl.vista.nfil +"\">",
-			"</div>",
-			"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:"+ ParamInternCtrl.vista.ncol +"; height:"+ ParamInternCtrl.vista.nfil +";\" onClick=\"ConsultaSobreVideo(event);\"></div>",
-			"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ConsultaSobreVideo(event);\">");
+		cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
+			"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
+			"<div id=\"video_click\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></canvas></div>",
+			"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
+			"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
 		//Dibuixar la data i la barra de progrés del video.
-		cdns.push("<span id=\"video_time_slider\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-				  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span><br>",
-				"<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
+		cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+				  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
+				"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 		var n=DonaNPecesBarraVideo();
 		for (var i=0; i<n; i++)
 			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
 
-		
+		if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
+		{
+			IconaVideoClick=JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta));
+			CarregaImatgeIcona(IconaVideoClick);
+		}
+
 		//Desplegable de animació o estadistic.
 		cdns.push("<center><span id=\"video_veure\"></span>");
 
@@ -354,9 +470,13 @@ var cdns=[], capa, i_capa_primer_video;
 			DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
 			"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
 			"&nbsp;&nbsp;&nbsp;&nbsp;",
-			"<a href='javascript:TancaFinestraLayer(\"video\");'>",
-			DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
-			"</a>",
+			DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
+			" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\" checked>",
+			DonaCadenaLang({"cat":"punt/t", "spa":"punto/t", "eng":"point/t", "fre":"point/t"}),
+			" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\">x/t",
+			//"<a href='javascript:TancaFinestraLayer(\"video\");'>",
+			//DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
+			//"</a>",
 			"</font>",
 			"</center>");
 		cdns.push("</div>",
@@ -455,15 +575,16 @@ var cdns=[], capa, estil;
 				if (capa.FormatImatge=="application/x-img" && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
 				{
 					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
-						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"return PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value);\">");
+						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"return PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);\">");
 					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
+					cdns.push("<option value=\"x/t\">", DonaCadenaLang({"cat":"Gràfic", "spa":"Gráfico", "eng":"Graph", "fre":"Graphique"}), " x/t</option>");
 					if (estil.categories && estil.atributs)
 					{
 						for (var i=0; i<estil.categories.length; i++)
 						{
 							if (!estil.categories[i])
 								continue;
-							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. fotog. with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil, i), "</option>");
+							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. photos with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil, i), "</option>");
 						}
 					}
 					else
@@ -471,6 +592,7 @@ var cdns=[], capa, estil;
 						//Fer estadistics clàsics: mitjana, desviació etc.
 						//Considerar determinar transformades de fourier o wavelet.	
 						cdns.push("<option value=\"Mitjana\">", DonaCadenaLang({"cat":"Mitjana", "spa":"Media", "eng":"Mean", "fre":"Moyenne"}), "</option>");
+						cdns.push("<option value=\"StanDev\">", DonaCadenaLang({"cat":"Desviació típica", "spa":"Desviación típica", "eng":"Standard deviation", "fre":"Déviation standard"}), "</option>");
 					}
 					cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
 					cdns.push("</select>");
@@ -557,7 +679,7 @@ function CarregaVideoRodet(nom_video, estil)
 var i_data_video, capa, cdns=[];
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	//Dibuixo el rodet de fotogrames buit
 	vista.i_nova_vista=NovaVistaRodet;
@@ -689,7 +811,7 @@ function FiltraNodataICarregaVideo()
 {
 var ratio_nodata, inserir_slider=false;
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	//Demano totes les imatges grans per omplir el video de fotogrames
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
@@ -709,10 +831,10 @@ var ratio_nodata, inserir_slider=false;
 	if (inserir_slider)
 	{
 		//codi que insereix un slider
-		var initial_value=(RatioNodataNoTolerat>=0.99 ? 100 : RatioNodataNoTolerat*100);
+		var initial_value=(RatioNodataNoTolerat>=0.99 ? 99.9 : RatioNodataNoTolerat*100);
 		document.getElementById("video_info").innerHTML="<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 			DonaCadenaLang({"cat":"Percentatge tolerat de superfície buida", "spa":"Porcentage tolerado de superficie vacia", "eng":"Allowed percentage of void space", "fre":"Pourcentage de surface vide toléré"})+
-			": <input id=\"video_nodata_max_rg\" type=\"range\" step=\"0.1\" min=\"0\" max=\"100\" value=\""+ initial_value +"\" onchange=\"CanviaRatioNodataNoTolera(event, this.value);\" oninput=\"CanviaRatioNodataNoTolera(event, this.value);\" style=\"width: 300px\">"+
+			": <input id=\"video_nodata_max_rg\" type=\"range\" step=\"0.1\" min=\"0\" max=\"99.9\" value=\""+ initial_value +"\" onchange=\"CanviaRatioNodataNoTolera(event, this.value);\" oninput=\"CanviaRatioNodataNoTolera(event, this.value);\" style=\"width: 300px\">"+
 			" <span id=\"video_nodata_max_tx\"></span>"+
 			" <input type=\"button\" class=\"Verdana11px\" value=\"--"+ 
 			DonaCadenaLang({"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"})+
@@ -739,7 +861,7 @@ function CarregaVideo()
 {
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + "; " + DonaCadenaLang({"cat":"espereu si us plau", "spa":"por favor, espere", "eng":"please wait", "fre":"s'il vous plaît, attendez"})+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	vista.i_nova_vista=NovaVistaVideo; //Les imatges grans del video
 
@@ -865,6 +987,28 @@ var n_valids=0, i, suma=0, v_i, n=v.length;
 	return suma/n_valids;
 }
 
+function CalculaStanDevNValues(v, param)
+{
+var n_valids=0, delta, i, suma=0, v_i, n=v.length;
+
+	var mean=CalculaMeanNValues(v, param);
+	if (mean==null)
+		return null;
+
+	for(i=0;i<n;i++)
+	{
+		v_i=v[i];
+		if (!v_i && v_i!=0)
+			continue;
+		delta=v_i-mean;
+		suma+=delta*delta;
+		n_valids++;
+	}
+	if (!n_valids)
+		return null;
+	return Math.sqrt(suma/n_valids);
+}
+
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
@@ -916,8 +1060,42 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	return m_previa[Math.floor(Math.random()*n_m_previa)];
 }
 
+function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, estadistic)
+{
+	CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, ParamInternCtrl.vista, estadistic);
+	EstadisticCarregatVideo=estadistic;
+	IFilEixXEixTVideo=-1;
+	document.getElementById("video_info").innerHTML="";
+}
 
-function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, vista, estadistic)
+function PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol)
+{
+var capa, estil, valors;
+
+	for (var i=0; i<ncol; i++)
+		fila_calc[i]=[];
+
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+	{
+		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
+			continue;
+		capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+		estil=capa.estil[DatesVideo[i_data_video].i_estil];
+		valors=capa.valors;
+		i_cell[i_data_video]=[];
+		i_byte[i_data_video]=[];
+		for (var i_v=0; i_v<valors.length; i_v++)
+		{
+			i_cell[i_data_video][i_v]=0;
+			i_byte[i_data_video][i_v]=0;
+		}
+		fila[i_data_video]=[];
+		for (var i=0; i<ncol; i++)
+			fila[i_data_video][i]=[];
+	}
+}
+
+function CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, vista, estadistic)
 {
 var capa, estil, primer_estil=null, valors
 var ctx, imgData, data, dv=[], n_v_plena, mes_duna_v;
@@ -933,6 +1111,8 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 
 	if (estadistic=="Mitjana")
 		f_estad=CalculaMeanNValues;
+	else if (estadistic=="StanDev")
+		f_estad=CalculaStanDevNValues;
 	else if (estadistic=="Moda")
 		f_estad=CalculaModeNValues;
 	else if (estadistic.substring(0, 9)=="NDeValor_")
@@ -946,43 +1126,17 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		return;
 	}
 
-	for (i=0; i<ncol; i++)
-		fila_calc[i]=[];
+	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
 
-	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-	{
-		if (DatesVideo[i_data_video].animable!="si")
-			continue;
-		capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
-		if (!capa.estil)
-			continue;
-		estil=capa.estil[DatesVideo[i_data_video].i_estil];
-		if (!estil.component || estil.component.length==0)
-			continue;
-		valors=capa.valors;
-		i_cell[i_data_video]=[];
-		i_byte[i_data_video]=[];
-		for (var i_v=0; i_v<valors.length; i_v++)
-		{
-			i_cell[i_data_video][i_v]=0;
-			i_byte[i_data_video][i_v]=0;
-		}
-		fila[i_data_video]=[];
-		for (i=0; i<ncol; i++)
-			fila[i_data_video][i]=[];
-	}
+	//last_perc=0;
 	for (j=0;j<nfil;j++)
 	{
 		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
-			if (DatesVideo[i_data_video].animable!="si")
+			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 				continue;
 			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
-			if (!capa.estil)
-				continue;
 			estil=capa.estil[DatesVideo[i_data_video].i_estil];
-			if (!estil.component || estil.component.length==0)
-				continue;
 			if (!primer_estil)
 				primer_estil=estil
 			valors=capa.valors;
@@ -990,7 +1144,7 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 			if (n_v_plena==0)
 				return;  //Això no hauria d'haver passat mai
 
-			if (n_v_plena>1)  
+			if (n_v_plena>1)
 			{
 				OmpleMultiFilaDVDesDeBinaryArray(fila[i_data_video], dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video]);
 				FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, null, fila[i_data_video], dv, valors, ncol, estil.component[0]);
@@ -1003,7 +1157,14 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		//Tinc una fila per tota la serie fins de file_calc[i_col]
 		//Calculo l'estadistic i el guardo en al imatge de floats
 		CalculaImatgeEstadisticaDesDesDeFilaCalc(ImgVideoStat, j, ImgVideoStatHistograma, fila_calc, ncol, f_estad, f_estad_param);
+		/*perc=Math.floor(j*10/nfil)*10;
+		if (perc!=last_perc)
+		{
+			document.getElementById("video_nodata_max_tx").innerHTML=perc;
+			last_perc=perc;
+		}*/
 	}
+	//document.getElementById("video_nodata_max_tx").innerHTML=100;
 	var imatge=document.getElementById(nom_canvas);
 	imatge.width=ncol;
 	imatge.height=nfil;	
@@ -1016,7 +1177,7 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 	data=[]; //Empty the array;
 	
 	//Determino com estirar la paleta i quina paleta
-	if (estadistic=="Mitjana" || estadistic=="Mida")
+	if (estadistic=="Mitjana" || estadistic=="Moda")
 	{
 		estiramentPaleta=primer_estil.component[0].estiramentPaleta;
 		la_paleta=primer_estil.paleta;
@@ -1035,9 +1196,163 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 	ctx.putImageData(imgData,0,0);
 }
 
-
-function PosaEstadisticSerieOAnimacio(estadistic)
+function CanviaImatgeBinariaEstadisticaEixXEixT(nom_canvas, i_fil)
 {
+	CanviaImatgeBinariaEstadisticaEixXEixTVista(nom_canvas, ParamInternCtrl.vista, i_fil);
+	EstadisticCarregatVideo="x/t";
+	IFilEixXEixTVideo=i_fil;
+	document.getElementById("video_info").innerHTML="";
+}
+
+function CanviaImatgeBinariaEstadisticaEixXEixTVista(nom_canvas, vista, i_fil)
+{
+var capa, estil, primer_estil=null, valors
+var ctx, imgData, data, dv=[], n_v_plena, mes_duna_v;
+var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
+var i_cell=[], i_byte=[], fila=[], fila_calc=[];
+
+ImgVideoStatHistograma={"classe_nodata": 0,
+		"component": [{
+			//"classe": [], 
+			"valorMinimReal": +1e300,
+			"valorMaximReal": -1e300}]};
+
+	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
+
+	for (j=0;j<nfil;j++)
+	{
+		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+		{
+			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
+				continue;
+			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+			estil=capa.estil[DatesVideo[i_data_video].i_estil];
+			if (!primer_estil)
+				primer_estil=estil
+			valors=capa.valors;
+			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
+			if (n_v_plena==0)
+				return;  //Això no hauria d'haver passat mai
+
+			if (n_v_plena>1)
+			{
+				OmpleMultiFilaDVDesDeBinaryArray(fila[i_data_video], dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video]);
+				if (j==i_fil)
+					FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, null, fila[i_data_video], dv, valors, ncol, estil.component[0]);
+			}
+			else
+			{
+				//Es podria obtimitzar evitant que calculi el que no cal donat que només vull la darrera fila
+				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
+			}
+		}
+		//Tinc una fila per tota la serie fins de file_calc[i_col]
+
+		if (j==i_fil)
+		{
+			CalculaImatgeEixXEixTDesDesDeFilaCalc(ImgVideoStat, i_fil, nfil, ImgVideoStatHistograma, fila_calc, ncol);
+			break;
+		}
+	}
+
+	var imatge=document.getElementById(nom_canvas);
+	imatge.width=ncol;
+	imatge.height=nfil;	
+
+	ctx=imatge.getContext("2d");
+	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+	imgData=ctx.createImageData(imatge.width,imatge.height);
+
+	data=[]; //Empty the array;
+	
+	//Aplico la paleta i obtinc l'array de dades dins de 'data'
+	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, ImgVideoStat, ncol, nfil, primer_estil.component[0].estiramentPaleta, primer_estil.paleta);
+	
+	imgData.data.set(data);
+
+	ctx.putImageData(imgData,0,0);
+}
+
+function CalculaValorsEixTPerImatgeEixXEixT(nfil)
+{
+var i_data_fil=[], t, j, i_data_video;
+
+	var time_span=(DatesVideo[DatesVideo.length-1].milisegons-DatesVideo[0].milisegons)
+	time_span+=time_span/DatesVideo.length; //Per tal de fer que el darrer temps s'allargui com tots els altres
+	var time_step=time_span/nfil;
+
+	for (j=0, t=DatesVideo[0].milisegons, i_data_video=0; j<nfil; j++, t+=time_step)
+	{
+		while(i_data_video<DatesVideo.length && DatesVideo[i_data_video].milisegons<=t)
+			i_data_video++;
+		i_data_fil[j]=i_data_video-1;
+	}
+
+	//Ara elimino totes les files no animables
+	//Busco el primer temps animable
+	for (j=0; j<nfil; j++)
+	{
+		if (ParticipaFotogramaDeLaSerieTemporal(i_data_fil[j]))
+			break;
+	}	
+	if (j<nfil)
+	{
+		//substituexo els primers temps que no són animables pel primer que ho és
+		for (var j2=0; j2<j; j2++)
+			i_data_fil[j2]=i_data_fil[j];
+	
+		//substituexo els temps que no són animables pels immediatement anteriors que ho són
+		for (j++; j<nfil; j++)
+		{
+			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_fil[j]))
+				i_data_fil[j]=i_data_fil[j-1];
+		}
+	}
+
+	return i_data_fil;
+}
+
+function CalculaImatgeEixXEixTDesDesDeFilaCalc(img_stat, i_fil, nfil, histograma, fila_calc, ncol)
+{
+var i_cell_ini, i_data, i, j, valor0, histo_component0=histograma ? histograma.component[0] : null;
+
+	IDataFilEixXEixT=CalculaValorsEixTPerImatgeEixXEixT(nfil);
+
+	for (j=0; j<nfil; j++)
+	{
+		i_data=IDataFilEixXEixT[j];
+		i_cell_ini=j*ncol;
+		for (i=0; i<ncol; i++)
+		{
+			valor0=img_stat[i_cell_ini+i]=fila_calc[i][i_data];
+			if (histograma)
+			{
+				if (isNaN(valor0) || valor0==null)
+					histograma.classe_nodata++;
+				else
+				{
+					if (histo_component0.valorMinimReal>valor0)
+						histo_component0.valorMinimReal=valor0;
+					if (histo_component0.valorMaximReal<valor0)
+						histo_component0.valorMaximReal=valor0;
+				}
+			}
+		}
+	}
+	return;
+}
+
+function PosaEstadisticSerieOAnimacio(estadistic, i_fil)
+{
+	if (estadistic=="x/t" && i_fil==-1 && IFilEixXEixTVideo==-1)
+	{	
+		document.video_animacions.TipusClick[0].checked=false;
+		document.video_animacions.TipusClick[1].checked=true;
+		CanviaTipusClickVideo();
+		return;
+	}
+
 	var n=parseFloat(document.video_animacions.interval.value);
 	if (isNaN(n) || n<0.09)
 		n=0;
@@ -1047,9 +1362,12 @@ function PosaEstadisticSerieOAnimacio(estadistic)
 		//Activo les caracteristiques de video.
 		document.getElementById("video_botons_animacio").style.visibility="visible";
 		document.getElementById("video_botons_estadistics").style.visibility="hidden";
+		document.getElementById("video_time_text").style.visibility="visible";
 		document.getElementById("video_time_slider").style.visibility="visible";
+		EncenFotogramaRodet(IDataVideoMostrada, n);
 		EncenFotogramaVideo(IDataVideoMostrada, n);
 		ApagaEstadisticsVideo(n);
+		IFilEixXEixTVideo=-1;
 	}
 	else
 	{
@@ -1061,8 +1379,31 @@ function PosaEstadisticSerieOAnimacio(estadistic)
 		ApagaFotogramaVideo(IDataVideoMostrada, n);
 		//Activo el fotograma de les estadístiques
 		EncenEstadisticsVideo(n);
-		//Demano l'execució del càlcul estadístic
-		CanviaImatgeBinariaEstadisticaSerieTemporal("video_i_raster_stat", ParamInternCtrl.vista, estadistic);
+		if (estadistic=="x/t")
+		{
+			document.getElementById("video_time_text").style.visibility="visible";
+			if (EstadisticCarregatVideo!=estadistic || (IFilEixXEixTVideo!=i_fil && i_fil!=-1))
+			{
+				//Demano l'execució del perfil x/t
+				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
+					DonaCadenaLang({"cat":"Calculant grafic x/t de la sèrie", "spa":"Calculando gráfico x/t de la serie", "eng":"Computing graphic x/t of the series", "fre":"Informatique graphique x / t de la série"})+
+					". " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
+			}
+		}
+		else
+		{
+			document.getElementById("video_time_text").style.visibility="hidden";
+			IFilEixXEixTVideo=-1;
+			if (EstadisticCarregatVideo!=estadistic)
+			{
+				//Demano l'execució del càlcul estadístic
+				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
+					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
+					". " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
+			}
+		}
 	}
 	return true;
 }
@@ -1108,7 +1449,7 @@ function VideoCopiaEstadistic()
 
 	FinalitzaCopiaPortapapersFinestra("VideoDiv", 
 			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
-			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " ESRI ASCII raster format. " + DonaCadenaLang({"cat": "Per importar-ho al MiraMon, guardeu aquest contingut en un fitxer i useu ASCIIImg opció -1", "spa": "Para importarla a MiraMon, guarde este contenido en un fichero y use ASCIIImg opción -1", "eng": "To import it in MiraMon, save this content in a fila and use ASCIIImg option -1", "fre": "Pour l'importer dans MiraMon, enregistrez ce contenu dans un fichier et utilisez l'option ASCIIImg -1"}));
+			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " ESRI ASCII raster format. " + DonaCadenaLang({"cat": "Per importar-ho al MiraMon, guardeu aquest contingut en un fitxer i useu ASCIIImg opció -1", "spa": "Para importarla a MiraMon, guarde este contenido en un fichero y use ASCIIImg opción -1", "eng": "To import it in MiraMon, save this content in a file and use ASCIIImg option -1", "fre": "Pour l'importer dans MiraMon, enregistrez ce contenu dans un fichier et utilisez l'option ASCIIImg -1"}));
 
 	return false;
 }
@@ -1121,7 +1462,7 @@ function MostraFotogramaAillat(i_data_video, actualitza_scroll)
         	clearTimeout(timeoutVideoID);
 		timeoutVideoID=null;""
 	}
-	MostraFotograma(i_data_video, actualitza_scroll);
+	MostraFotograma(i_data_video, true, actualitza_scroll);
 }
 
 var ActualitzaNCarregatRodetEsCurs=false;
@@ -1149,7 +1490,7 @@ var n_carregat=0;
 		FiltraNodataICarregaVideo();
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant miniatures", "spa":"Cargando miniaturas", "eng":"Loading thumbnails", "fre":"Chargement des vignettes"}) + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"})+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant miniatures", "spa":"Cargando miniaturas", "eng":"Loading thumbnails", "fre":"Chargement des vignettes"}) + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
 	ActualitzaNCarregatRodetEsCurs=false;
 }
@@ -1207,7 +1548,7 @@ var n_carregat, n_carregable;
 		VideoPlay(8);  //Com que se que ja ho tinc tot, faig "Play" repetitiu.
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"})+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
 	ActualitzaNCarregatVideoEsCurs=false;
 }
@@ -1246,7 +1587,7 @@ var nom_icona=TreuAdreca(img.src);
 	MostraFotogramaAillat(DonaIDataVideoDesDePecaBarraVideo(i, DonaNPecesBarraVideo()), true);
 }
 
-function ApagaFotogramaVideo(i_data_video, n)
+function ApagaFotogramaRodet(i_data_video, n)
 {
 	if (i_data_video!=-1)
 	{
@@ -1254,6 +1595,13 @@ function ApagaFotogramaVideo(i_data_video, n)
 		document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
 		document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
 		document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1negre.gif");
+	}
+}
+
+function ApagaFotogramaVideo(i_data_video, n)
+{
+	if (i_data_video!=-1)
+	{
 		//Desactivo els fotograma que no toca en el video
 		document.getElementById("video_l_raster"+i_data_video).style.opacity=0;
 		//Determino la corba adient amb: http://cubic-bezier.com
@@ -1267,7 +1615,7 @@ function ApagaEstadisticsVideo(n)
 	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
 }
 
-function EncenFotogramaVideo(i_data_video, n)
+function EncenFotogramaRodet(i_data_video, n)
 {
 	if (i_data_video!=-1)
 	{
@@ -1275,6 +1623,13 @@ function EncenFotogramaVideo(i_data_video, n)
 		document["video_marc_dre"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
 		document["video_marc_esq"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
 		document["video_marc_inf"+i_data_video].src=AfegeixAdrecaBaseSRC("1vermell.gif");
+	}
+}
+
+function EncenFotogramaVideo(i_data_video, n)
+{
+	if (i_data_video!=-1)
+	{
 		//Activo els fotograma que no toca en el video.
 		document.getElementById("video_l_raster"+i_data_video).style.opacity=1;
 		document.getElementById("video_l_raster"+i_data_video).style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
@@ -1287,8 +1642,7 @@ function EncenEstadisticsVideo(n)
 	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
 }
 
-
-function MostraFotograma(i_data_video, actualitza_scroll)
+function MostraFotograma(i_data_video, actualitza_fotograma_video, actualitza_scroll)
 {
 var j, img, nom_icona;
 
@@ -1346,12 +1700,19 @@ var j, img, nom_icona;
 	if (isNaN(n) || n<0.09)
 		n=0;
 
-	ApagaFotogramaVideo(IDataVideoMostrada, n);
-	EncenFotogramaVideo(i_data_video, n);
+	ApagaFotogramaRodet(IDataVideoMostrada, n);
+	EncenFotogramaRodet(i_data_video, n);
 
-	var i_actual;
+	ApagaFotogramaVideo(IDataVideoMostrada, n);
+	if (actualitza_fotograma_video)
+	{
+		EncenFotogramaVideo(i_data_video, n);
+		ApagaEstadisticsVideo(n);
+	}
+
 	if (actualitza_scroll)
 	{
+		var i_actual;
 		var rodet;
 		rodet=document.getElementById("video_rodet");
 		if (rodet)
@@ -1568,7 +1929,7 @@ var i_capa_previa;
 	}
 	
 	/*else  //(opcio==0)*/
-	MostraFotograma(i_data_a_mostrar, true);
+	MostraFotograma(i_data_a_mostrar, true, true);
 	return 0;
 }
 
@@ -1598,9 +1959,12 @@ function AnullaTotsTimeOutVideo()
 		}
 	}
 	DatesVideo=[];
-	IDataVideoMostrada=-1;
+	IDataVideoMostrada=-1;	
 	PuntsSerieTemporal=[];
-	TancaFinestraSerieTemp("video_grafic");
+	ImgVideoStat=[];
+	EstadisticCarregatVideo=null;
+	IFilEixXEixTVideo-1;
+	TancaFinestraSerieTemp("video_grafic", "video_click");
 }
 
 //No useu sola. Useu TancaFinestraLayer("video")

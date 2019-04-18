@@ -1239,7 +1239,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 
 function CalculaImatgeEstadisticaDesDesDeFilaCalc(img_stat, i_fil, histograma, fila_calc, ncol, f_estad, f_estad_param)
 {
-var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma.component[0];
+var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma ? histograma.component[0] : null;
 
 	for (i=0;i<ncol;i++)
 	{

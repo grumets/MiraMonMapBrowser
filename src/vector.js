@@ -1192,7 +1192,7 @@ function DonaRequestGetFeatureOfInterest(i_capa, env)
 var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
 
-	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=SOS&REQUEST=GetFeatureOfInterest&observedProperty=", capa.namespace, "/", capa.nom, "/observedProperty");
+	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=SOS&REQUEST=GetFeatureOfInterest&observedProperty=", (capa.namespace ? capa.namespace + "/" + capa.nom + "/observedProperty" : capa.nom));
 	if (env!=null)
 	{
 		var env2=null;
@@ -1373,7 +1373,13 @@ var ha_calgut=false, vaig_a_carregar=false;
 						if(vaig_a_carregar)
 						{
 							ha_calgut=true;
-							FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
+							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && capa.tipus=="TipusSOS")
+							{
+								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
+								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, null, false, funcio, param);
+							}
+							else
+								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
 						}
 						else
 							return true;

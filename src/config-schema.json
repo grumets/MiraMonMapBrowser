@@ -899,7 +899,7 @@
 						}]
 					},
 					"namespace": {
-						"description": "Espai de noms utilitzat. Només s'usa quan el model és vector. Interna excepte per els serveis SOS on es necessita per fer la petició també.",
+						"description": "Espai de noms utilitzat. Només s'usa quan el model és vector. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
 						"type": ["string", "null"]
 					},
 					"nom":	{ 

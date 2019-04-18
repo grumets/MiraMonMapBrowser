@@ -776,7 +776,7 @@ var component_name=["R", "G", "B"];
 
 	IniciaCopiaPortapapersFinestra(nom_histograma)
 
-	estadistics=DonaDadesEstadistiquesSerieTemporalLocalitzacio()  //estadistics.mitjana+estadistics.desv_tipica, estadistics.mitjana, estadistics.mitjana-estadistics.desv_tipica
+	estadistics=DonaDadesEstadistiquesFotogramaDeSerieTemporal()  //estadistics.mitjana+estadistics.desv_tipica, estadistics.mitjana, estadistics.mitjana-estadistics.desv_tipica
 	temps=DonaTempsValorsSerieTemporalLocalitzacio()
 	for (var p=0; p<PuntsSerieTemporal.length; p++)
 		data[p]=DonaDadesValorsSerieTemporalLocalitzacio(PuntsSerieTemporal[p].i, PuntsSerieTemporal[p].j, false);
@@ -818,13 +818,14 @@ var component_name=["R", "G", "B"];
 	FinalitzaCopiaPortapapersFinestra(nom_histograma, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
 }
 
-function TancaFinestraSerieTemp(nom_div)
+function TancaFinestraSerieTemp(nom_div, nom_div_click)
 {
 	document.getElementById(nom_div).style.visibility="hidden";
+	document.getElementById(nom_div_click).style.visibility="hidden";
 	PuntsSerieTemporal=[];
 }
 
-function ObreGraficSerieTemporal(nom_div, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label)
+function ObreGraficSerieTemporal(nom_div, nom_div_click, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label)
 {
 var ncol=460, nfil=260, cdns=[];
 var nom_histograma=perfix_serie_temporal+"serie_temp";
@@ -846,7 +847,7 @@ var chart=[];
 		"<div style=\"width: ", ncol, "px; position:absolute; opacity: 0.7;\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("tanca_consulta.gif"), "\" ",
 				"alt=\"",DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}) , "\" ",
-				"title=\"",DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"');\">",
+				"title=\"",DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"','",nom_div_click,"');\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("boto_copiar.gif"), "\" ",
 				"alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" ", 
 				"title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" onClick=\"CopiaPortapapersFinestraSerieTemp('",nom_histograma,"');\">",
@@ -857,6 +858,7 @@ var chart=[];
 		chart[i_c]=CreaGraficSerieTemporal(nom_histograma+"_canvas_"+i_c, data[i_c], labels, temps, y_scale_label[i_c]);
 
 	document.getElementById(nom_div).style.visibility="visible";
+	document.getElementById(nom_div_click).style.visibility="visible";
 	return chart;
 }
 
@@ -942,11 +944,12 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 
 function AfegeixGraficSerieTemporal(chart, data, legend_label)
 {
-var color_names=["Black", "Red", "Maroon", "Yellow", "Olive", "Lime", "Green", "Aqua", "Teal", "Blue", "Navy", "Fuchsia", "Purple"]
+var color_name, color_names=["Black", "Red", "Maroon", "Yellow", "Olive", "Lime", "Green", "Aqua", "Teal", "Blue", "Navy", "Fuchsia", "Purple"]
 var component_name=["R", "G", "B"];
 
 	for (var i_c=0; i_c<data.length; i_c++)
 	{
+		color_name=color_names[(chart[i_c].data.datasets.length-3)%color_names.length];
 		chart[i_c].data.datasets.push({
 				label: legend_label + (data.length==3 ? "("+component_name[i_c]+")":""),
 				data: data[i_c],
@@ -957,12 +960,13 @@ var component_name=["R", "G", "B"];
 				lineTension: 0,
 				borderWidth: 3,
 				pointStyle: "line",
-				borderColor: color_names[(chart[i_c].data.datasets.length-3)%color_names.length], 
-				backgroundColor: color_names[(chart[i_c].data.datasets.length-3)%color_names.length]
+				borderColor: color_name, 
+				backgroundColor: color_name
 			});
 		chart[i_c].update({
 			duration: 0,
 			easing: 'easeOutBounce'
 		});
 	}
+	return color_name;
 }
