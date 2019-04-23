@@ -633,7 +633,7 @@ var estil=capa.estil[histograma.i_estil];
 						var tooltipLabel = data.labels[tooltipItem.index]; 
 						var tooltipData = allData[tooltipItem.index];
 						var total = 0; 
-						for (var i in allData) { 
+						for (i=0; i<allData.length; i++) { 
 							total += allData[i]; 
 						} 
 						var tooltipPercentage = OKStrOfNe(tooltipData / total * 100, 2); 

@@ -238,6 +238,7 @@ function CanviaTipusClickVideo(event)
 	if (document.video_animacions.TipusClick[0].checked && PuntsSerieTemporal.length==0)
 	{
 		document.getElementById("video_click").style.visibility="hidden";
+		document.video_animacions.veure.selectedIndex=0;
 		PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);
 	}	
 	else
@@ -258,6 +259,7 @@ function ClickSobreVideo(event_de_click)
 	{
 		if (!EstanTotsElsFotogramesCarregatsVideo())
 			return;
+		document.video_animacions.veure.selectedIndex=1;
 		PosaEstadisticSerieOAnimacio("x/t", DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY))
 		document.getElementById("video_click").style.visibility="hidden";
 	}
@@ -1708,6 +1710,8 @@ var j, img, nom_icona;
 	{
 		EncenFotogramaVideo(i_data_video, n);
 		ApagaEstadisticsVideo(n);
+		//Poso el selector a animacions
+		document.video_animacions.veure.selectedIndex=0;
 	}
 
 	if (actualitza_scroll)
