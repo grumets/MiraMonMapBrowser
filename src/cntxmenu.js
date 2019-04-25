@@ -234,6 +234,11 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 			cdns.push(DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}));
 		cdns.push("</a><br>");
 	}
+	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio=="3d")
+	{
+		var estil=capa.estil[capa.i_estil];
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", DonaCadenaLang({"cat":"Superfície", "spa":"superficie", "eng":"Surface", "fre":"Surface"})," 3D</a><br>");
+	}
 	if (capa.valors && capa.valors.length>2)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCombinacioRGB(", i_capa, ");TancaContextMenuCapa();\">",
