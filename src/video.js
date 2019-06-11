@@ -388,10 +388,10 @@ var cdns=[], capa, i_capa_primer_video;
 		}
 		if (i_capa_primer_video==ParamCtrl.capa.length)
 		{
-			alert(DonaCadenaLang({"cat":"No hi ha cap capa disponible per al vídeo en aquesta àrea o zoom.", 
-						"spa":"No hi ha ninguna capa disponible para el vídeo en este área o zoom.", 
-						"eng":"There is no layer available for the video in this area or zoom.",
-						"fre":"Il n'y a pas de couche disponible pour la vidéo dans cette zone ou le zoom"}));
+			alert(DonaCadenaLang({"cat":"No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.", 
+						"spa":"No hi ha ninguna capa disponible para la animación en este área o zoom.", 
+						"eng":"There is no layer available for the animation in this area or zoom.",
+						"fre":"Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom"}));
 			return;
 		}
 

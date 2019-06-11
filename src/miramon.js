@@ -69,6 +69,7 @@ IncludeScript("owsc.js", true);
 IncludeScript("wps.js", true);
 IncludeScript("guf.js", true);
 IncludeScript("histopie.js", true);
+IncludeScript("jsonpointer.js");
 IncludeScript("Chart.bundle.min.js", true);
 IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
@@ -3903,10 +3904,10 @@ function MostraFinestraDownload(i_capa)
 
 function MostraFinestraVideo()
 {
-	if (!ObreFinestra(window, "video", DonaCadenaLang({"cat":"de projectar videos", 
-							  "spa":"de proyectar vídeos",
-							  "eng":"of projecting videos",
-							  "fre":"pour vidéos en projection"})))
+	if (!ObreFinestra(window, "video", DonaCadenaLang({"cat":"de sèries temporals", 
+							  "spa":"de series temporales",
+							  "eng":"of time series",
+							  "fre":"pour séries chronologiques"})))
 		return;
 	OmpleFinestraVideo(window, "video");
 }
@@ -4176,7 +4177,7 @@ var cdns=[];
 		{
 		 	if (ParamCtrl.capa[i].animable==true)
 			{
-				cdns.push((CadenaBotoPolsable("video", "video", DonaCadenaLang({"cat":"mostrar animació", "spa":"mostrar animación", "eng":"show animation", "fre":"montrer animation"}), 
+				cdns.push((CadenaBotoPolsable("video", "video", DonaCadenaLang({"cat":"series temporals i animacions", "spa":"series temporales y animaciones", "eng":"time series and animations", "fre":"séries chronologiques et animations"}), 
 					"MostraFinestraVideo();")),"\n");
 				break;
 			}
@@ -8377,7 +8378,10 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 		return;
 	}
 	ParamCtrl.containerName=param.div_name;
-	ParamCtrl.config_json=param.config_json; 
+	ParamCtrl.config_json=param.config_json;
+
+	ResolveJSONPointerRefs(ParamCtrl);
+
 	IniciaVisualitzacio();
 }
 
@@ -8417,7 +8421,7 @@ var win, i;
 	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", "ara_no", false, null, null);
 	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 320, "NwCR", "no", false, null, null);
 	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", "no", false, null, null);
-	createFinestraLayer(window, "video", {"cat":"Vídeo", "spa":"Vídeo", "eng":"Video", "fre":"Vidéo"}, boto_tancar, 20, 1, 900, 610, "NWCR", "no", false, null, null);
+	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", "no", false, null, null);
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", "ara_no", false, null, null);
@@ -8881,6 +8885,7 @@ function EndMiraMonMapBrowser(event, reset)
 					delete capa.TileMatrixGeometry.env;
 			}
 		}
+		RemoveOtherPropertiesInObjWithRef(ParamCtrl);
 
 		if (reset)
 			localStorage.removeItem("EditedParamCtrl_"+ParamCtrl.config_json);

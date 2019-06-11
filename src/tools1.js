@@ -221,7 +221,7 @@ if(!Array.prototype.find)
       * (-n-1) where n is the insertion point for the new element.  E.g. -5 means "insert in i=4" to keep the array sorted, a.k.a "insert between 3 and 4".
  * Parameters:
  *     elem - An element to search for
- *     compare_fn - A comparator function i the same way that Array.sort() wants it: The function takes two arguments: (a, b) and returns:
+ *     compare_fn - A comparator function in the same way that Array.sort() wants it: The function takes two arguments: (elem, b) and returns:
  *        a negative number  if a is less than b;
  *        0 if a is equal to b;
  *        a positive number of a is greater than b.
@@ -295,12 +295,13 @@ function EliminaRepeticionsArray(llista, funcio_ordena)
 if(!Array.prototype.removeDuplicates)
 {
 	Array.prototype.removeDuplicates = function (compare_fn) {
-		for (var i=0; i+1<this.length;)
+		for (var i=0; i+1<this.length; i++)
 		{
-			if (0==compare_fn(this[i], this[i+1]))
-				this.splice(i+1, 1);
-			else
-				i++;
+			var n=0;
+			while (i+n+1<this.length && 0==compare_fn(this[i], this[i+n+1]))
+				n++;	
+			if (n)
+				this.splice(i+1, n);
 		}
 		return this;
 	}
@@ -1672,6 +1673,154 @@ function arrayBufferToString(buffer){
     return str;
 }
 
+//Auxiliar internal function. Use ResolveJSONPointerRefs(obj_root) instead
+function AddJSONPointerRefToObject(obj_root, obj, ref)
+{
+var i;
+	if (-1==(i=ref.indexOf('#')))
+	{
+		alert(DonaCadenaLang({"cat": "El valor de $ref ha de contenir un caracter '#'", "spa": "El valor de $ref debe contenir un caracter '#'", "eng": "The value of $ref requires a caracter '#'", "fre": "La valeur de $ref nécessite un caractère '#'"}));
+		return;
+	}
+	if (i!=0)
+	{
+		alert(DonaCadenaLang({"cat": "Encara no se suporten valors de $ref amb referències a altres fitxers JSON", "spa": "Aún no se suporta valores de $ref con referencias a otros ficheros JSON", "eng": "$ref values with references to other JSON files are still not supported", "fre": "Les valeurs $ref avec des références à d'autres fichiers JSON ne sont toujours pas prises en charge"}));
+		return;
+	}
+	var r=jsonpointer.get(obj_root, ref);
+	if (typeof r === "undefined" || r===null)
+	{
+		alert(DonaCadenaLang({"cat": "El valor de $ref", "spa": "El valor de $ref", "eng": "The value of $ref", "fre": "La valeur de $ref"})+": \""+ref+"\" "+ DonaCadenaLang({"cat": "no està definit", "spa": "no está definido", "eng": "is not defined", "fre": "n'est pas défini"}));
+		return;
+	}
+	if (typeof r !== "object")
+	{
+		alert(DonaCadenaLang({"cat": "El valor de $ref", "spa": "El valor de $ref", "eng": "The value of $ref", "fre": "La valeur de $ref"})+": \""+ref+"\" "+ DonaCadenaLang({"cat": "no és un objecte", "spa": "no es un objecto", "eng": "is not an object", "fre": "n'est pas un objet"}));
+		return;
+	}
+	//Replico les propietats de l'objecte aquí
+	for (var p in r)
+	{
+		if (r.hasOwnProperty(p))
+			obj[p]=JSON.parse(JSON.stringify(r[p]));
+	}
+}
+
+/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter. 
+It supports that "$ref" is a string of a single JSON Pointer or an array of JSON Pointers.
+The original object can have other properties but they should not the properties of the pointed object ($ref) 
+should not have the same names.
+The only JSON Pointers supported are the ones starting by "#/" (root JSON Pointers to this document).
+Pointing to a different JSON document is not implemented yet.
+*/
+function ResolveJSONPointerRefs(obj_root, obj)
+{
+	if (typeof obj === "undefined")
+		obj=obj_root;
+	if (typeof obj === "object" && null !== obj)
+	{
+		for (var k in obj)
+		{
+			var found=false;
+			if (obj.hasOwnProperty(k) && k=="$ref")
+			{
+				found=true;
+				break;
+			}
+		}
+		if (found)
+		{
+			if (typeof obj["$ref"]==="string")
+			{
+				AddJSONPointerRefToObject(obj_root, obj, obj["$ref"]);
+			}
+			else  //assumeixo que és un Array
+			{
+				for (var i=0; i<obj["$ref"].length; i++)
+					AddJSONPointerRefToObject(obj_root, obj, obj["$ref"][i]);
+			}
+			for (var k in obj)
+			{
+				if (obj.hasOwnProperty(k) && k!="$ref")
+					ResolveJSONPointerRefs(obj_root, obj[k]);
+			}
+		}
+		else
+		{
+			for (var k in obj)
+			{
+				if (obj.hasOwnProperty(k))
+					ResolveJSONPointerRefs(obj_root, obj[k]);
+			}
+		}
+	}
+}
+
+function RemoveOtherPropertiesInObjWithRef(obj_root, obj)
+{
+	if (typeof obj === "undefined")
+		obj=obj_root;
+	if (typeof obj === "object" && null !== obj)
+	{
+		var found=false;
+		for (var k in obj)
+		{
+			if (obj.hasOwnProperty(k) && k=="$ref")
+			{
+				found=true;
+				break;
+			}
+		}
+		if (found)
+		{
+			if (typeof obj["$ref"]==="string")
+			{
+				var r=jsonpointer.get(obj_root, obj["$ref"]);
+				for (var k in obj)
+				{
+					if (obj.hasOwnProperty(k) && k!="$ref")
+					{
+						if (r.hasOwnProperty(k))
+							delete obj[k];
+						else			
+							RemoveOtherPropertiesInObjWithRef(obj_root, obj[k]);
+					}
+				}
+			}
+			else //assumeixo que és un Array
+			{
+				var r=[];
+				for (var i=0; i<obj["$ref"].length; i++)
+				{
+					r[i]=jsonpointer.get(obj_root, obj["$ref"][i]);
+				}	
+				for (var k in obj)
+				{
+					if (obj.hasOwnProperty(k) && k!="$ref")
+					{
+						for (var i=0; i<obj["$ref"].length; i++)
+						{
+							if (r[i].hasOwnProperty(k))
+								delete obj[k];
+						}
+						if (obj[k])
+							RemoveOtherPropertiesInObjWithRef(obj_root, obj[k]);
+					}
+				}
+			}
+		}
+		else
+		{
+			for (var k in obj)
+			{
+				if (obj.hasOwnProperty(k))
+					RemoveOtherPropertiesInObjWithRef(obj_root, obj[k]);
+			}
+		}
+	}
+}
+
+
 function floor_DJ(x)
 {
 var a=Math.floor(x);
@@ -1684,12 +1833,12 @@ var a=Math.floor(x);
 //Arrodonir X a N decimals amb suport a positius i negatius i notació exponencial.
 //Extret de http://www.merlyn.demon.co.uk/js-round.htm
 //Modificada perque si es demanen 0 decimals no es vegi el punt.
-//Retorna el número com a text
+//Sempre retorna el número com a text
 function OKStrOfNe(X, N) 
 { 
 var es_negatiu;
 	if (N==0)
-		return Math.round(X);
+		return Math.round(X).toString();
 	if (X<0)
 	{
 		X=-X
@@ -1699,8 +1848,10 @@ var es_negatiu;
 		es_negatiu=false;
 	
 	var Q = ''+Math.round(X*Number("1e"+N))
-	while (Q.length<=N) Q='0'+Q
-	if (Q.search(/e/)!=-1) { return X-0; }
+	while (Q.length<=N) 
+		Q='0'+Q
+	if (Q.search(/e/)!=-1) 
+		return X.toString();
 	return ((es_negatiu) ? "-" : "") + Q.substring(0,Q.length-N)+'.'+Q.substring(Q.length-N,Q.length);
 }
 
@@ -2074,7 +2225,7 @@ var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre
 				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"}, 
 				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"}, 
 				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
-				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "Octuber", "fre": "Octobre"},
+				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "October", "fre": "Octobre"},
 				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"}, 
 				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
 
@@ -2087,9 +2238,9 @@ var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvie
 			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"}, 
 			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"}, 
 			   {"cat": "Setembre", "spa": "Setiembre", "eng": "September","fre": "Septembre"},
-			   {"cat": "Octubre", "spa": "Octubre", "eng": "Octuber","fre": "Octobre"},
+			   {"cat": "Octubre", "spa": "Octubre", "eng": "October","fre": "Octobre"},
 			   {"cat": "Novembre", "spa": "Noviembre", "eng": "November","fre": "Novembre"},
-			   {"cat": "Desembre", "spa": "Diciembre", "eng": "Desember","fre": "Décembre"}];
+			   {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}];
 
 function takeYear(theDate) 
 {

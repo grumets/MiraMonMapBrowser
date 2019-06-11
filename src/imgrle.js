@@ -373,7 +373,7 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	{
 		if (estil.categories && estil.atributs)
 			return DonaTextCategoriaDesDeColor(estil, v_c[0]);
-		return (typeof component[0].NDecimals!=="undefined" && component[0].NDecimals!=null) ? OKStrOfNe(v_c[0], component[0].NDecimals) : v_c[0];
+		return (typeof component[0].NDecimals!=="undefined" && component[0].NDecimals!=null) ? OKStrOfNe(v_c[0], component[0].NDecimals) : v_c[0].toString();
 	}
 	var cdns=[];
 	for (i_c=0; i_c<component.length; i_c++)
@@ -386,7 +386,7 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	return cdns.join(", ");
 }
 
-	//Retorna els valors de les compoments com a un array (un per cada component). Els valors es poden obtenir de DonaValorsDeDadesBinariesCapa()
+//Retorna els valors de les compoments com a un array (un per cada component). Els valors es poden obtenir de DonaValorsDeDadesBinariesCapa()
 function DonaValorEstilComArrayDesDeValorsCapa(i_nova_vista, i_capa, i_estil, v)
 {
 var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_v, i_c, i_a, i_valor;

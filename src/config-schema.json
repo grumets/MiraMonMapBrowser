@@ -1230,12 +1230,12 @@
 												"multipleOf": 1
 											},
 											"representacio": {
-												"description": "INTERN: s'afegeix programaticament en definir un combicapa. En un futur podria servir per decidir si fer un histrograma o una pie o altres tipus de representatció. Opcional",
+												"description": "Externament es pot posar '3d' per forçar una visualització 3d al menú. S'afegeix programaticament en definir un combicapa. En un futur podria servir per decidir si fer un histrograma o una pie o altres tipus de representatció. Opcional",
 												"type": "object",
 												"required": ["tipus"],
 												"properties": {
 													"tipus": {
-														"enum": ["histo", "pie", "matriuConfusio"]
+														"enum": ["histo", "pie", "matriuConfusio", "3d"]
 													},
 													"dimMatriu": {
 														"type": "array",
