@@ -1992,7 +1992,7 @@ var calcul=document.CalculadoraCapes.calcul;
 
 function EscriuValorALaReclasssificacioAfegeixCapa(prefix_id)
 {
-var condicion, reclassificacio, valor, text_valor;
+var condicio, reclassificacio, valor, text_valor;
 
 	condicio=LlegeixParametresCondicioCapaDataEstil(prefix_id, "-valor", 0);
 	reclassificacio=document.ReclassificadoraCapes.reclassificacio;

@@ -1011,6 +1011,8 @@ var n_valids=0, delta, i, suma=0, v_i, n=v.length;
 	return Math.sqrt(suma/n_valids);
 }
 
+/* Si param == false (o undefined) retorna la primera moda en cas d'empat (això genera un biaix estadistic però és el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
+   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (això no genera un biaix estadístic i és necessari per a finestres de convolució) */
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
@@ -1018,16 +1020,18 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	if (n==0)
 		return null;
 
-	v.sort(sortAscendingNumberNull);
+	v.sort(sortAscendingNumberNull);  //ordena els null al final de la llista
 	m=v[0];
+	if (!m && m!=0)
+		return null;
 	count_m=1;
 	for(i=1;i<n;i++)
 	{
 		v_i=v[i];
 		if (!v_i && v_i!=0)
 			break;
-		if (sortAscendingNumberNull(m, v_i)==0)
-			count_m++;						
+		if (m==v_i)
+			count_m++;
 		else
 		{
 			if (count_m_previa<count_m)
@@ -1047,19 +1051,17 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 		}
 	}
 	if (count_m_previa<count_m)
-	{
-		count_m_previa=count_m;
-		m_previa[0]=m;
-		n_m_previa=1;
-	}
-	else if (count_m_previa==count_m)
+		return m;
+	if (!param)
+		return m_previa[0];
+	if (count_m_previa==count_m)
 	{
 		m_previa[n_m_previa]=m;
 		n_m_previa++;
 	}
 	if (n_m_previa==1)
 		return m_previa[0];
-	return m_previa[Math.floor(Math.random()*n_m_previa)];
+	return m_previa[Math.floor(Math.random()*n_m_previa)];	
 }
 
 function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, estadistic)
@@ -1116,7 +1118,10 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 	else if (estadistic=="StanDev")
 		f_estad=CalculaStanDevNValues;
 	else if (estadistic=="Moda")
+	{
 		f_estad=CalculaModeNValues;
+		f_estad_param=false;
+	}
 	else if (estadistic.substring(0, 9)=="NDeValor_")
 	{
 		f_estad=CalculaCountClasseNValues;
