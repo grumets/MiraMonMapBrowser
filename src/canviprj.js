@@ -276,7 +276,7 @@ var crs_up=crs.toUpperCase();
     CanviCRS.lambda_0=0.0;
     CanviCRS.fi_1=40.60*FactorGrausARadiants;
   }
-  else if (crs_up=="AUTO2:MERCATOR,1,0,0.0" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785")
+  else if (crs_up=="AUTO2:MERCATOR,1,0,0.0" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
   {
     CanviCRS.offset_mapa_X=0;
     CanviCRS.offset_mapa_Y=0;
@@ -362,7 +362,7 @@ var crs_up=crs.toUpperCase();
         CanviCRS.Cp=4.0*CC;
         CanviCRS.Dp=8.0*DD;
     }
-    else if (crs_up=="EPSG:3785")
+    else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
     {
         CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1);
     }
@@ -593,7 +593,7 @@ var crs_up;
 	if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		     crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
 		return Mercator_Geo(x,y);
-	if (crs_up=="EPSG:3785")
+	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return Mercator_esferica_Geo(x,y);
 	if (EsProjLongLat(crs_up))
 	{
@@ -628,7 +628,7 @@ var crs_up;
 	if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 	     crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
 		return Geo_Mercator(ll_x,ll_y);
-	if (crs_up=="EPSG:3785")
+	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return Geo_Mercator_esferica(ll_x,ll_y);
 	if (EsProjLongLat(crs_up))
 	{
@@ -863,7 +863,7 @@ var crs_up=crs.toUpperCase();
         	crs_up=="EPSG:32736" ||
 		crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41" || crs_up=="AUTO2:MERCATOR,1,0,41.42" || 
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
-		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785")
+		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
         	return "m";
 	else if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
 		return "°";
@@ -954,7 +954,7 @@ var crs_up=crs.toUpperCase();
 	else if (crs_up=="EPSG:3395")
 		return DonaCadenaLang({"cat":"Mercator paral·lel Equador - WGS84", "spa":"Mercator paralelo Ecuador - WGS84", 
 						   "eng":"Mercator parallel Equator - WGS84", "fre":"Mercator parallèle Equateur- WGS84"});		
-	else if (crs_up=="EPSG:3785")
+	else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return DonaCadenaLang({"cat":"Web Mercator", "spa":"Web Mercator", "eng":"Web Mercator", "fre":"Web Mercator"});
 	else if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
 		return "long/lat - WGS84";
