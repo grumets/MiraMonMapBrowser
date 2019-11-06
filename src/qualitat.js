@@ -142,7 +142,7 @@ var i_indicator, cdns=[];
     cdns.push("<form name=\"QualitatCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerQualitatCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\">",
 			DonaCadenaLang({"cat":"Qualitat de la capa", "spa":"Calidad de la capa", "eng":"Quality of the layer", "fre":"Qualité de la couche"}), " \"", 
-			DonaCadena(capa.DescLlegenda));
+			(DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
 	if (i_estil!=-1)
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"<br/>");
@@ -231,7 +231,7 @@ function FinestraFeedbackCapa(elem, capa, i_estil)
 var cdns=[];
 
 	cdns.push(DonaCadenaLang({"cat":"la capa", "spa":"la capa", "eng":"the layer", "fre":"la couche"}), 
-				" \"", DonaCadena(capa.DescLlegenda));
+				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
  	if (i_estil!=-1)
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"");
@@ -247,28 +247,51 @@ var cdns=[];
 
 function CalculaValidessaTemporal(param)
 {
-var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, data_obj;
+var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, data_obj, i_camp, camp;
 
 	if (!capa_digi.objectes.features)
 		return false;
 		
+	for (i_camp=0; i_camp<capa_digi.atributs.length; i_camp++)
+	{
+		if (capa_digi.atributs[i_camp].nom==param.atribut)
+		{
+			camp=capa_digi.atributs[i_camp];
+			break;
+		}
+	}
+	if (i_camp==capa_digi.atributs.length)
+		return false;
+
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
 	{
-		feature=capa_digi.objectes.features[i_obj];
+		var feature=capa_digi.objectes.features[i_obj];
 		DonaCoordenadaPuntCRSActual(punt, capa_digi.objectes.features[i_obj], capa_digi.CRSgeometry);
 		if (!EsPuntDinsEnvolupant(punt, ParamInternCtrl.vista.EnvActual))
 			continue;			
 		n_dins++;		
 		
-		// L'objecte ha de tenir data de mesura sino no ho puc avaluar
+		/* L'objecte ha de tenir data de mesura sino no ho puc avaluar
 		if (typeof feature.properties["__om_time__"]==="undefined" ||
 		    feature.properties.__om_time__=="" ||
 			feature.properties.__om_time__==null)
-			continue;			
+			continue;*/
+		if (typeof feature.properties[param.atribut]==="undefined" ||
+			feature.properties[param.atribut]=="" ||
+			feature.properties[param.atribut]==null)
+			continue;
+
 		n++;
 		
-		// compte com s'ha introduït __om_time__, ara mateix no sembla estar correcte en aquest exemple del RitmeNatura, perquè en comptes de format ISO, s'ha omplert cm a format local 01/12/2018
-		data_obj=new Date(feature.properties.__om_time__);		
+		if (camp.format=="dd/mm/yyyy")
+		{
+			var dateParts = feature.properties[param.atribut].split("/");
+			if (!dateParts || dateParts.length!=3)
+				continue;
+			data_obj=new Date(dateParts[2]+"-"+dateParts[1]+"-"+dateParts[0]);  //fet així pensa que el text és hora UTC que és el mateix que passa amb la lectura dels formularis
+		}
+		else
+			data_obj=new Date(feature.properties[param.atribut]);
 		if(data_obj>= param.data_ini && data_obj<=param.data_fi)
 			n_valids++;
 	}
@@ -281,14 +304,14 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 					"fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la validité temporelle dans ce domaine"}));
 		return false;
 	}
-	quality={
+	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_TemporalValidity",
 		statement: DonaCadenaLang({"cat": "La validessa temporal resumida està basada en la comparació de la data de cada observació individual indicada a l'atribut",
 					"spa": "La validez temporal está basada en la comparación de la fecha de cada observación individual indicada por el atributo",
 					"eng": "The temporal consistency is based on the comparison of the date of each individual observation as indicated in the field",
 					"fre": "The temporal consistency is based on the comparison of the date of each individual observation as indicated in "}) + 
-			" \'__om_time__\' "+
+			" \'"+param.atribut+"\' "+
 			DonaCadenaLang({"cat": "amb l'interval especificat.",
 					"spa": "con el intervalo especificado.",
 					"eng": "against the data interval specified.",
@@ -325,7 +348,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 						value: param.data_fi.toJSON()
 					}],
 					values:{
-						list:["__om_time__"]
+						list:[param.atribut]
 					}
 				}],
 				metrics: [{
@@ -354,7 +377,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n_dins=0;
 		
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
 	{
-		feature=capa_digi.objectes.features[i_obj];
+		var feature=capa_digi.objectes.features[i_obj];
 		DonaCoordenadaPuntCRSActual(punt, capa_digi.objectes.features[i_obj], capa_digi.CRSgeometry);
 		if (!EsPuntDinsEnvolupant(punt, ParamInternCtrl.vista.EnvActual))
 			continue;			
@@ -372,7 +395,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n_dins=0;
 		return false;
 	}
 
-	quality={
+	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_DomainConsistency",
 		statement: DonaCadenaLang({"cat": "La consistència del domini resumida està basada en la localització de cada observació individual present en la vista actual comparada amb l'àmbit especificat.",
@@ -457,14 +480,14 @@ function CercaCombinacioCamps(llista_comb, combinacio)
 
 function CalculaConsistenciaLogicaDeCampsiLlistaValors(param)
 {
-var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistents=0, n=0, n_dins=0, feature;
+var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistents=0, n=0, n_dins=0;
 
 	if (!capa_digi.objectes.features)
 		return false;
 		
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
 	{
-		feature=capa_digi.objectes.features[i_obj];
+		var feature=capa_digi.objectes.features[i_obj];
 		DonaCoordenadaPuntCRSActual(punt, capa_digi.objectes.features[i_obj], capa_digi.CRSgeometry);
 		if (!EsPuntDinsEnvolupant(punt, ParamInternCtrl.vista.EnvActual))
 			continue;			
@@ -492,7 +515,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 					"fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la cohérence logique des attributs dans ce domaine"}));
 		return false;
 	}
-	quality={
+	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_DomainConsistency",
 		statement: DonaCadenaLang({"cat": "La consistència resumida està basada en la comparació dels valors de cada observació pels atribut/s: ",
@@ -563,14 +586,14 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 
 function CalculaQualExacPosicDesDeCampUncertainty(param)
 {
-var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, feature, punt={}, i, unitats;
+var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, i, unitats;
 
 	if (!capa_digi.objectes.features)
 		return false;
 		
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
 	{
-		feature=capa_digi.objectes.features[i_obj];
+		var feature=capa_digi.objectes.features[i_obj];
 		DonaCoordenadaPuntCRSActual(punt, capa_digi.objectes.features[i_obj], capa_digi.CRSgeometry);
 		if (!EsPuntDinsEnvolupant(punt, ParamInternCtrl.vista.EnvActual))
 			continue;			
@@ -745,18 +768,43 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			// Com que la data s'enmagatzema com a hora UTC això fa que si comparo 2018-12-01 < 2018/12/01 en realitat estigui comparant 2018-12-01 1:00 < 2017-01-31 23:00.
 			// Buscant més he trobat que si li passes una cadena amb '-' estas indicant el format UTC i si ho fas amb '/' fas el format local
 			
-			var date_fi=new Date(form.data_final.value);  // form.data_final.value està com a hora UTC en format cadena
+			var sel_camp=form.camp_temporal;
+			if(sel_camp.selectedIndex>=sel_camp.length)
+			{
+				alert(DonaCadenaLang({"cat": "Cal seleccionar un camp", "spa": "Debe seleccionar un campo", "eng": "You must select a field", "fre": "Vous devez sélectionner un champ"}));
+				return;
+			}
+
+			if (!form.data_ini.value)
+			{
+				alert(DonaCadenaLang({"cat": "La data inicial no pot es pot deixar en blanc", 
+									 "spa": "La fecha inicial no puede dejarse en blaco", 
+									 "eng": "The initial date cannot be left blank", 
+									 "fre": "La date finitiale ne peut pas être laissée en blanc"}));
+				return;
+			}
 			var date_ini=new Date(form.data_ini.value);			
+
+			if (!form.data_final.value)
+			{
+				alert(DonaCadenaLang({"cat": "La data final no pot es pot deixar en blanc", 
+									 "spa": "La fecha final no puede dejarse en blaco", 
+									 "eng": "The final date cannot be left blank", 
+									 "fre": "La date finale ne peut pas être laissée en blanc"}));
+				return;
+			}
+			var date_fi=new Date(form.data_final.value+"T23:59:59.999Z");  // form.data_final.value està com a hora UTC en format cadena. Necessito que estigui al final del dia per a fer comparacions.
 			
-			if(date_fi<date_ini)
+			if(date_fi<=date_ini)
 			{
 				alert(DonaCadenaLang({"cat": "La data final no pot ser inferior a la inicial", 
 									 "spa": "La fecha final no puede ser inferior a la inicial", 
-									 "eng": "The final date cannot be less than the inital date", 
+									 "eng": "The final date cannot be less than the initial date", 
 									 "fre": "La date finale ne peut pas être inférieure à la date initiale"}));
 				return;
 			}
-			param= {i_capa: i_capa, intencions: "qualitat", data_ini: date_ini, data_fi: date_fi};
+
+			param= {i_capa: i_capa, intencions: "qualitat", atribut: sel_camp.options[sel_camp.selectedIndex].value, data_ini: date_ini, data_fi: date_fi};
 			if(DescarregaPropietatsCapaDigiVistaSiCal(CalculaValidessaTemporal,param))
 				return;
 			retorn=CalculaValidessaTemporal(param);
@@ -776,8 +824,8 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			alert(DonaCadenaLang({"cat": "El paràmetre de qualitat calculat està disponible a la entrada de menú contextual 'qualitat' de la capa", 
 						"spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa", 
 						"eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer", 
-						"fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"}) + " " +
-				(capa.desc ? DonaCadenaLang(capa.desc) : capa.nom));
+						"fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"}) + " \"" +
+				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : capa.nom) + "\".");
 			TancaFinestraLayer('calculaQualitat');
 		}
 		else
@@ -785,8 +833,8 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			alert(DonaCadenaLang({"cat": "No s'ha pogut calcular la qualitat de la capa", 
 						"spa": "No se ha podido calcular la calidad de la capa", 
 						"eng": "The quality cannot be computed for the layer", 
-						"fre": "The quality cannot be computed for the layer"}) + " " +
-				(capa.desc ? DonaCadenaLang(capa.desc) : capa.nom));
+						"fre": "The quality cannot be computed for the layer"}) + " \"" +
+				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : capa.nom) + "\".");
 		}
 	}
 }
@@ -875,6 +923,18 @@ function DonaCadenaCampsTemporalValidityOfObservationData(capa)
 var cdns=[];	
 
 	cdns.push("<fieldset><legend>",
+				DonaCadenaLang({"cat":"Camp temporal", "spa":"Campo temporal", "eng": "Temporal field", "fre":"Temporal Champ"}), 
+			  "</legend>");
+	cdns.push("<select name=\"camp_temporal\" class=\"Verdana11px\" >");
+	if(capa.atributs)
+	{
+		for(var i=0; i<capa.atributs.length; i++)	
+			cdns.push("<option value=\"",capa.atributs[i].nom,"\"", (i==0 ? " selected ":""), "\>", 
+					(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+	}
+	cdns.push("</select></fieldset>");
+
+	cdns.push("<fieldset><legend>",
 				DonaCadenaLang({"cat":"Interval de les dates d'observació", "spa":"Intervalo de las fechas de observación", "eng": "Range of observation dates", "fre":"Plage de dates d'observation"}), 
 			  "</legend>");
 	
@@ -900,19 +960,19 @@ var cdns=[], es_long_lat;
 	es_long_lat=EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	cdns.push("<table class=\"Verdana11px\"><tr><td align=\"right\"><label id=\"label_xmin\" for=\"coordXmin\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Long mín","spa":"Long mín","eng":"Min long","fre":"Long min"}) : DonaCadenaLang({"cat":"X mín","spa":"X mín","eng":"Min X","fre":"X min"})),
+			  (es_long_lat ? DonaCadenaLang({"cat":"Longitud mínima","spa":"Longitud mínima","eng":"Minimum longitude","fre":"Longitude minimale"}) : DonaCadenaLang({"cat":"X mínima","spa":"X mínima","eng":"Minimum X","fre":"X minimale"})),
 			  ": </label><input class=\"Verdana11px\" id=\"coordXmin\" name=\"coordX\" type=\"text\" size=\"10\" value=\"", 
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),"\"></td>",
 			  "<td align=\"right\"><label id=\"label_xmax\" for=\"coordXmax\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Long màx","spa":"Long máx","eng":"Max long","fre":"Long max"}) : DonaCadenaLang({"cat":"X màx","spa":"X máx","eng":"Max X","fre":"X max"})),
+			  (es_long_lat ? DonaCadenaLang({"cat":"Longitud màxima","spa":"Longitud máxima","eng":"Maximum longitude","fre":"Longitude maximale"}) : DonaCadenaLang({"cat":"X màxima","spa":"X máxima","eng":"Maxima X","fre":"X maximale"})),
 			  ": </label><input class=\"Verdana11px\" id=\"coordXmax\" name=\"coordX\" type=\"text\" size=\"10\" value=\"", 
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX, ParamCtrl.NDecimalsCoordXY),"\"></td></tr>",
 			  "<tr><td align=\"right\"><label id=\"label_ymin\" for=\"coordYmin\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Lat mín","spa":"Lat mín","eng":"Min lat","fre":"Lat min"}) : DonaCadenaLang({"cat":"Y mín","spa":"Y mín","eng":"Min Y","fre":"Y min"})),
+			  (es_long_lat ? DonaCadenaLang({"cat":"Latitud mínima","spa":"Latitud mínima","eng":"Minimum latitude","fre":"Latitude minimale"}) : DonaCadenaLang({"cat":"Y mínima","spa":"Y mínima","eng":"Minimum Y","fre":"Y minimale"})),
 			  ": </label><input class=\"Verdana11px\" id=\"coordYmin\" name=\"coordX\" type=\"text\" size=\"10\" value=\"", 
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY, ParamCtrl.NDecimalsCoordXY),"\"></td>",
 			  "<td align=\"right\"><label id=\"label_ymax\" for=\"coordYmax\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Lat mín","spa":"Lat mín","eng":"Min lat","fre":"Lat min"}) : DonaCadenaLang({"cat":"Y màx","spa":"Y máx","eng":"Max Y","fre":"Y max"})),
+			  (es_long_lat ? DonaCadenaLang({"cat":"Latitud máxima","spa":"Latitud máxima","eng":"Maximum latitude","fre":"Latitude maximale"}) : DonaCadenaLang({"cat":"Y màxima","spa":"Y máxima","eng":"Maximum Y","fre":"Y maximale"})),
 			  ": </label><input class=\"Verdana11px\" id=\"coordYmax\" name=\"coordX\" type=\"text\" size=\"10\" value=\"", 
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),"\"></td></tr></table>");
 
@@ -952,7 +1012,7 @@ var capa;
 	cdns.push("<form name=\"CalculaQualitatCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerCalculaQualitatCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\"><b>",
 			DonaCadenaLang({"cat":"Calcular la qualitat de la capa", "spa":"Calcular la Calidad de la capa", "eng":"Compute the quality of the layer", "fre":"Calculer la qualité de la couche"}), " \"", 
-			DonaCadena(capa.DescLlegenda));
+			(DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
 	if (i_estil!=-1)
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"<b><br/><br/>");
@@ -963,10 +1023,10 @@ var capa;
 
 	cdns.push("<select name=\"metode_eval_qual\" class=\"Verdana11px\" onChange=\"ActualitzaCampsEnFuncioMetodeAvaluacioQualitat(form,",i_capa,",",i_estil,");\" >");	
 	cdns.push("<option value=\"PositionalAccuracyFromUncertainty\" selected \>",
-			DonaCadenaLang({"cat":"Exactitud posicional de la base a partir de la incertessa de l'observació",
-				   "spa":"Exactitud posicional de la base a partir de la incertidumbre de la observación",
-				   "eng":"Positional accuracy of the base from the observation uncertainty",
-				   "fre": "Précision de positionnement de la base par rapport à l'incertitude d'observation"}));
+			DonaCadenaLang({"cat":"Exactitud posicional de la capa a partir de la incertessa de l'observació",
+				   "spa":"Exactitud posicional de la capa a partir de la incertidumbre de la observación",
+				   "eng":"Positional accuracy of the layer from observation uncertainties",
+				   "fre": "Précision de positionnement de la couche par rapport à l'incertitude d'observation"}));
 	cdns.push("<option value=\"LogicalConsistencyFromThematicAttributes\" \>",
 			DonaCadenaLang({"cat":"Consistència lògica dels atributs temàtics",
 				   "spa":"Consistencia lógica de los atributos temáticos",
