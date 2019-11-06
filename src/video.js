@@ -236,8 +236,11 @@ function CanviaTipusClickVideo(event)
 	if (document.video_animacions.TipusClick[0].checked && PuntsSerieTemporal.length==0)
 	{
 		document.getElementById("video_click").style.visibility="hidden";
-		document.video_animacions.veure.selectedIndex=0;
-		PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);
+		if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
+		{			 			
+			document.video_animacions.veure.selectedIndex=0;
+			PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);
+		}
 	}	
 	else
 	{
@@ -257,7 +260,8 @@ function ClickSobreVideo(event_de_click)
 	{
 		if (!EstanTotsElsFotogramesCarregatsVideo())
 			return;
-		document.video_animacions.veure.selectedIndex=1;
+		if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
+			document.video_animacions.veure.selectedIndex=1;
 		PosaEstadisticSerieOAnimacio("x/t", DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY))
 		document.getElementById("video_click").style.visibility="hidden";
 	}
@@ -447,7 +451,7 @@ var cdns=[], capa, i_capa_primer_video;
 		CarregaImatgeIcona(IconaVideoClick);
 	}
 
-	//Desplegable de animació o estadistic.
+	// Desplegable d' animació o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
 
 	//Dibuixar els botons de progrés del video.
@@ -1611,8 +1615,12 @@ function ApagaFotogramaVideo(i_data_video, n)
 
 function ApagaEstadisticsVideo(n)
 {
-	document.getElementById("video_l_raster_stat").style.opacity=0;
-	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
+	var elem=document.getElementById("video_l_raster_stat");
+	if (elem) // potser que no existeix-hi perquè no hi ha cap capa animable tipus IMG
+	{
+		elem.style.opacity=0;
+		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
+	}
 }
 
 function EncenFotogramaRodet(i_data_video, n)
@@ -1638,8 +1646,12 @@ function EncenFotogramaVideo(i_data_video, n)
 
 function EncenEstadisticsVideo(n)
 {
-	document.getElementById("video_l_raster_stat").style.opacity=1;
-	document.getElementById("video_l_raster_stat").style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
+	var elem=document.getElementById("video_l_raster_stat");
+	if (elem) // potser que no existeix-hi perquè no hi ha cap capa animable tipus IMG
+	{
+		elem.style.opacity=1;
+		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
+	}
 }
 
 function MostraFotograma(i_data_video, actualitza_fotograma_video, actualitza_scroll)
@@ -1709,7 +1721,8 @@ var j, img, nom_icona;
 		EncenFotogramaVideo(i_data_video, n);
 		ApagaEstadisticsVideo(n);
 		//Poso el selector a animacions
-		document.video_animacions.veure.selectedIndex=0;
+		if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
+			document.video_animacions.veure.selectedIndex=0;
 	}
 
 	if (actualitza_scroll)
