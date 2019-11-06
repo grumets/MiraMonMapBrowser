@@ -1457,11 +1457,11 @@ function Ajax()
 					{
 						try
 						{
-					         self.handleResp(resp, self.structResp);
+							self.handleResp(resp, self.structResp);
 						}
 						catch(e)
 						{
-							alert("Error on handling server response")
+							alert("Error on handling server response. "+ e)
 						}
 					}
 					else

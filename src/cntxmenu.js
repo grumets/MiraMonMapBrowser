@@ -1702,7 +1702,7 @@ function HiHaAlgunErrorDeParsejat(doc)
 
 function ParsejaRespostaGetCapabilities(doc, servidorGC)
 {
-var root, cadena, node, node2, i, cdns=[];
+var root, cadena, node, node2, i, j, cdns=[];
 	
 	if(!doc) 
 	{

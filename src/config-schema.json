@@ -2302,6 +2302,10 @@
 					"mostrar": {
 						"description": "S'ha de mostrar?",
 						"type": "boolean"
+					},
+					"format": {
+						"description": "Es el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
+						"enum": ["dd/mm/yyyy"]
 					}
 				}
 			}
