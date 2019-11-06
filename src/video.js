@@ -98,8 +98,7 @@ var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
 		capa.estil[DatesVideo[i_data_video].i_estil].component &&
 		capa.estil[DatesVideo[i_data_video].i_estil].component.length>0)
 		return true;
-	else
-		return false;
+	return false;
 }
 
 function DeterminaNombreComponentsSerieTemporal()
@@ -138,8 +137,7 @@ var data=[], v, i_c;
 					for (i_c=0; i_c<n_c; i_c++)
 						data[i_c].push({t:DatesVideo[i_data_video].milisegons, y:""});
 				continue;
-			}
-			
+			}			
 			for (i_c=0; i_c<v.length; i_c++)
 				data[i_c].push({t:DatesVideo[i_data_video].milisegons, y:v[i_c]});
 		}
@@ -377,123 +375,122 @@ function OmpleFinestraVideo(win, name)
 var cdns=[], capa, i_capa_primer_video;
 
 	//Canviar la mida de la finestra.
+	moveFinestraLayer(win, name, -1, -1, ParamInternCtrl.vista.ncol+142, ParamInternCtrl.vista.nfil+140);
+						
+	//Determinar el primer video actiu.
+	for (i_capa_primer_video=0; i_capa_primer_video<ParamCtrl.capa.length; i_capa_primer_video++)
+	{
+		if (EsCapaAptePerVideo(ParamCtrl.capa[i_capa_primer_video]))
+			break;
+	}
+	if (i_capa_primer_video==ParamCtrl.capa.length)
+	{
+		alert(DonaCadenaLang({"cat":"No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.", 
+					"spa":"No hi ha ninguna capa disponible para la animación en este área o zoom.", 
+					"eng":"There is no layer available for the animation in this area or zoom.",
+					"fre":"Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom"}));
+		return;
+	}
 
-		moveFinestraLayer(win, name, -1, -1, ParamInternCtrl.vista.ncol+142, ParamInternCtrl.vista.nfil+140);
-							
-	    //Determinar el primer video actiu.
-		for (i_capa_primer_video=0; i_capa_primer_video<ParamCtrl.capa.length; i_capa_primer_video++)
-		{
-		 	if (EsCapaAptePerVideo(ParamCtrl.capa[i_capa_primer_video]))
-			    break;
-		}
-		if (i_capa_primer_video==ParamCtrl.capa.length)
-		{
-			alert(DonaCadenaLang({"cat":"No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.", 
-						"spa":"No hi ha ninguna capa disponible para la animación en este área o zoom.", 
-						"eng":"There is no layer available for the animation in this area or zoom.",
-						"fre":"Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom"}));
-			return;
-		}
+	//Començo pel selector de capes.
+	cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
+		" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
+			  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+			  DonaCadenaLang({"cat":"Sèries temporals", "spa":"Series temporales", "eng":"Time series", "fre":"Séries chronologiques"}),
+			  ": <select name=\"capa\" onChange=\"CanviaAnimacio(document.video_animacions.capa.value);\">");
 
-		//Començo pel selector de capes.
-		cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
-			" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
-				  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-				  DonaCadenaLang({"cat":"Sèries temporals", "spa":"Series temporales", "eng":"Time series", "fre":"Séries chronologiques"}),
-				  ": <select name=\"capa\" onChange=\"CanviaAnimacio(document.video_animacions.capa.value);\">");
-
-		var i_capa_video_actiu_actual=-1;
-		for (var i_capa_video_actiu=i_capa_primer_video; i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
+	var i_capa_video_actiu_actual=-1;
+	for (var i_capa_video_actiu=i_capa_primer_video; i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
+	{
+		capa=ParamCtrl.capa[i_capa_video_actiu];
+		if (EsCapaAptePerVideo(capa))
 		{
-			capa=ParamCtrl.capa[i_capa_video_actiu];
-		 	if (EsCapaAptePerVideo(capa))
+			cdns.push("<option value=\"",capa.NomVideo,"\"",((i_capa_video_actiu_actual==-1) ? " selected" : ""),">" ,
+					DonaCadena(capa.DescVideo),"</option>");
+			if (i_capa_video_actiu_actual==-1)
+				i_capa_video_actiu_actual=i_capa_video_actiu; 
+			//Salto la resta.
+			for (var i_capa_video_actiu2=i_capa_video_actiu+1; true; i_capa_video_actiu2++)
 			{
-				cdns.push("<option value=\"",capa.NomVideo,"\"",((i_capa_video_actiu_actual==-1) ? " selected" : ""),">" ,
-						DonaCadena(capa.DescVideo),"</option>");
-				if (i_capa_video_actiu_actual==-1)
-					i_capa_video_actiu_actual=i_capa_video_actiu; 
-				//Salto la resta.
-				for (var i_capa_video_actiu2=i_capa_video_actiu+1; true; i_capa_video_actiu2++)
+				if (i_capa_video_actiu2==ParamCtrl.capa.length ||
+					(EsCapaAptePerVideo(ParamCtrl.capa[i_capa_video_actiu2]) && ParamCtrl.capa[i_capa_video_actiu2].NomVideo!=capa.NomVideo))
 				{
-					if (i_capa_video_actiu2==ParamCtrl.capa.length ||
-						(EsCapaAptePerVideo(ParamCtrl.capa[i_capa_video_actiu2]) && ParamCtrl.capa[i_capa_video_actiu2].NomVideo!=capa.NomVideo))
-					{
-						i_capa_video_actiu=i_capa_video_actiu2-1;
-						break;
-					}
+					i_capa_video_actiu=i_capa_video_actiu2-1;
+					break;
 				}
 			}
 		}
-		cdns.push("</select>",
-			"<span id=\"video_estil\"></span></font></td></tr></table>");
-		
-		//Creo la pantalla on es projecte el video.
-		//Segurament això s'ha de canviar radicalment.
-		cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
-			"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
-			"<div id=\"video_click\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></canvas></div>",
-			"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
-			"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
+	}
+	cdns.push("</select>",
+		"<span id=\"video_estil\"></span></font></td></tr></table>");
+	
+	//Creo la pantalla on es projecte el video.
+	//Segurament això s'ha de canviar radicalment.
+	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
+		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
+		"<div id=\"video_click\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></canvas></div>",
+		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
+		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
-		//Dibuixar la data i la barra de progrés del video.
-		cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-				  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
-				"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
-		var n=DonaNPecesBarraVideo();
-		for (var i=0; i<n; i++)
-			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
-		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
+	//Dibuixar la data i la barra de progrés del video.
+	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+			  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
+			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
+	var n=DonaNPecesBarraVideo();
+	for (var i=0; i<n; i++)
+		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
 
-		if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
-		{
-			IconaVideoClick=JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta));
-			CarregaImatgeIcona(IconaVideoClick);
-		}
+	if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
+	{
+		IconaVideoClick=JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta));
+		CarregaImatgeIcona(IconaVideoClick);
+	}
 
-		//Desplegable de animació o estadistic.
-		cdns.push("<center><span id=\"video_veure\"></span>");
+	//Desplegable de animació o estadistic.
+	cdns.push("<center><span id=\"video_veure\"></span>");
 
-		//Dibuixar els botons de progrés del video.
-		cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic();\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\"></button></span>");
-		cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
-			"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\" title=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\"></button>",
-			"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\" title=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\"></button>",
-			"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\"></button>",
-			"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitivamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\"></button>",
-			"<button onClick=\"return VideoMostraEvent(event, 1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_forward.gif"),"\" alt=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\" title=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\"></button>",
-			"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\" title=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\"></button>",
-			"<br />",
-			"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
-			DonaCadenaLang({"cat":"Rapidesa per","spa":"Rapidez por","eng":"Speed by", "fre":"Vitesse pour"}),
-			": <input type=\"radio\" name=\"TipusTemps\">",
-			DonaCadenaLang({"cat":"Escala temporal","spa":"Escala temporal","eng":"Temporal scale", "fre":"Échelle temporelle"}),
-			" 1:<input type=\"text\" name=\"EscalaTemporal\" value=\"1000000\" size=8 onChange=\"document.video_animacions.TipusTemps[0].checked=true\">",
-			"<input type=\"radio\" name=\"TipusTemps\" checked>",
-			DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
-			"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
-			"&nbsp;&nbsp;&nbsp;&nbsp;",
-			DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
-			" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\" checked>",
-			DonaCadenaLang({"cat":"punt/t", "spa":"punto/t", "eng":"point/t", "fre":"point/t"}),
-			" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\">x/t",
-			//"<a href='javascript:TancaFinestraLayer(\"video\");'>",
-			//DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
-			//"</a>",
-			"</font>",
-			"</center>");
-		cdns.push("</div>",
-			"</div>");
+	//Dibuixar els botons de progrés del video.
+	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic();\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\"></button></span>");
+	cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\" title=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\" title=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\"></button>",
+		"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\"></button>",
+		"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitivamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_forward.gif"),"\" alt=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\" title=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\" title=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\"></button>",
+		"<br />",
+		"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		DonaCadenaLang({"cat":"Rapidesa per","spa":"Rapidez por","eng":"Speed by", "fre":"Vitesse pour"}),
+		": <input type=\"radio\" name=\"TipusTemps\">",
+		DonaCadenaLang({"cat":"Escala temporal","spa":"Escala temporal","eng":"Temporal scale", "fre":"Échelle temporelle"}),
+		" 1:<input type=\"text\" name=\"EscalaTemporal\" value=\"1000000\" size=8 onChange=\"document.video_animacions.TipusTemps[0].checked=true\">",
+		"<input type=\"radio\" name=\"TipusTemps\" checked>",
+		DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
+		"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
+		"&nbsp;&nbsp;&nbsp;&nbsp;",
+		DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
+		" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\" checked>",
+		DonaCadenaLang({"cat":"punt/t", "spa":"punto/t", "eng":"point/t", "fre":"point/t"}),
+		" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\">x/t",
+		//"<a href='javascript:TancaFinestraLayer(\"video\");'>",
+		//DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
+		//"</a>",
+		"</font>",
+		"</center>");
+	cdns.push("</div>",
+		"</div>");
 
-		//if (RodetVertical==false)
-		cdns.push("<div id=\"video_rodet\" style=\"overflow:auto;\"></div>",
-			"<div id=\"video_grafic\" style=\"position: absolute; visibility: hidden; top: 25px; width:"+ 460 +"; height:"+ ParamInternCtrl.vista.nfil +";\"></div>",
-			"</form>",
-			DonaTextDivCopiaPortapapersFinestra("VideoDiv"));
-		
-		contentFinestraLayer(win, name, cdns.join("")); 
+	//if (RodetVertical==false)
+	cdns.push("<div id=\"video_rodet\" style=\"overflow:auto;\"></div>",
+		"<div id=\"video_grafic\" style=\"position: absolute; visibility: hidden; top: 25px; width:"+ 460 +"; height:"+ ParamInternCtrl.vista.nfil +";\"></div>",
+		"</form>",
+		DonaTextDivCopiaPortapapersFinestra("VideoDiv"));
+	
+	contentFinestraLayer(win, name, cdns.join("")); 
 
-	    	//Si hi ha un video actiu, activar la seva preparació.
-		CanviaAnimacio(document.video_animacions.capa.value);
+		//Si hi ha un video actiu, activar la seva preparació.
+	CanviaAnimacio(document.video_animacions.capa.value);
 }
 
 function CanviaEstatAnimable(boto, i_data_video)
@@ -521,9 +518,9 @@ var capa=ParamCtrl.capa[i_capa_video_actiu];
 
 	if (capa.estil && capa.estil.length>1 && estil)
 	{
-	        for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
+        for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 		{
-		     	if (estil==((capa.estil[i_estil].nom) ? capa.estil[i_estil].nom : capa.estil[i_estil].desc))
+	     	if (estil==((capa.estil[i_estil].nom) ? capa.estil[i_estil].nom : capa.estil[i_estil].desc))
 				return i_estil;
 		}
 		return null;
@@ -654,16 +651,14 @@ function DonaNColVideoRodet()
 {
 	if (RodetVertical)
 		return 85;
-	else
-		return parseInt(DonaNFilVideoRodet()*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil,10);
+	return parseInt(DonaNFilVideoRodet()*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil,10);
 }
 
 function DonaNFilVideoRodet()
 {
 	if (RodetVertical)
 		return parseInt(DonaNColVideoRodet()*ParamInternCtrl.vista.nfil/ParamInternCtrl.vista.ncol,10);
-	else
-		return 50;
+	return 50;
 }
 
 function DonaCadenaHTMLTitolFotogramaRodet(i_data_video)
@@ -788,8 +783,7 @@ function DonaRatioNodataRodet(i_data_video)
 var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];	
 	if (capa.FormatImatge=="application/x-img")
 		return capa.estil[DatesVideo[i_data_video].i_estil].capa_rodet[DatesVideo[i_data_video].i_data].histograma.classe_nodata/(DonaNColVideoRodet()*DonaNFilVideoRodet());
-	else
-		return 0.0;
+	return 0.0;
 }
 
 var RatioNodataNoTolerat=0.99;
@@ -1316,7 +1310,6 @@ var i_data_fil=[], t, j, i_data_video;
 				i_data_fil[j]=i_data_fil[j-1];
 		}
 	}
-
 	return i_data_fil;
 }
 

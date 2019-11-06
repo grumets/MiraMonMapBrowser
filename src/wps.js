@@ -102,7 +102,7 @@ var index=ajaxExecuteWPS.length;
 	//WARNING: In order this to work, the server has to be configured to expire the content immmendiatelly in this folder
 	ajaxExecuteWPS[index]=new Ajax();
 		
-	var s=AfegeixNomServidorARequest(url, "", true);
+	var s=AfegeixNomServidorARequest(url, "", true, false);
 	ajaxExecuteWPS[index].doGet(s, AvaluaRespostaExecuteWPS, "text/xml", 
 					document);
 }
@@ -477,7 +477,7 @@ var cdns=[];
 	if(ProcessosAExecutar && i_proces<ProcessosAExecutar.length)
 	{
 		var peticio_en_cascada=false;
-		if (location.host && DonaHost(ProcessosAExecutar[i_proces].servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+		if ((typeof ProcessosAExecutar[i_proces].cors==="undefined" || ProcessosAExecutar[i_proces].cors==false) && location.host && DonaHost(ProcessosAExecutar[i_proces].servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 			peticio_en_cascada=true;
 	
 		cdns.push("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");

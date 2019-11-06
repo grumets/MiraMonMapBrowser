@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2016 Xavier Pons
+    Copyright 2001, 2019 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -332,7 +332,7 @@ if(!Date.prototype.toISOString)
 
 		if(data)
 		{
-			//Segons la ISO com a mÃ­nim he de mostrar l'any
+			//Segons la ISO com a mínim he de mostrar l'any
 				cdns.push((data.getFullYear ? data.getFullYear() : takeYear(data)));
 			if(que_mostrar&mostra_mes)
 			{
@@ -2047,6 +2047,15 @@ var s2;
 		else
 			return s;
 	}
+}
+
+function DonaProtocol(s)  // Vull obtenir http: o https:,... d'una url d'un servidor
+{
+var protocol=null;
+
+	if(-1!=s.indexOf(":"))
+		protocol=s.substring(0,s.indexOf(":")+1);
+	return protocol;
 }
 
 //Extret de: http://www.xs4all.nl/~ppk/js/detect.html

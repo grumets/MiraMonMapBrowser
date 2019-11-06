@@ -88,10 +88,9 @@ var atrib_coll_xml, atrib_xml, tag2;
 		atribut=atributs[atributs.length-1];
 
 		//Primer miro si l'atribut és consultable
-		atribut.mostrar=(atrib_xml.getAttribute('mostrar')=="false") ? false : true;
+		atribut.mostrar=(atrib_xml.getAttribute('mostrar')=="false") ? "no": "si";
 
 		//descripció
-
 		tag2=GetXMLChildElementByName(atrib_xml, '*', "descripcio");
 		if(tag2 && tag2.hasChildNodes())
 			atribut.descripcio=tag2.childNodes[0].nodeValue;
@@ -364,7 +363,7 @@ var root, id_obj_buscat, capa, valor, foi_xml;
 	}
 
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
-}// Fi de OmpleCapaDigiAmbPropietatsObjecteDigitalitzat()
+}
 
 function DescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 {
@@ -472,7 +471,7 @@ var root, i_obj, capa, valor, s, ini, fi, observation;
 	}
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 	return 0;
-}// Fi de OmpleCapaDigiAmbPropietatsObjecteDigitalitzat()
+}
 */
 
 function OmpleCapaDigiAmbPropietatsObjectes(doc, consulta)
@@ -1029,7 +1028,7 @@ var c_afegir="";
 			  (simple ? "text/xml;subtype=gml/3.1.1/profiles/gmlsf/1.0.0/0" : "text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes") ,
 			  "&amp;SRSNAME=",ParamCtrl.capa[i].CRSgeometry ,"&amp;TYPENAME=" ,ParamCtrl.capa[i].nom);
 
-	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), true);
+	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), true, ParamCtrl.capa[i].cors==true ? true : false);
 }//Fi de DonaRequestDescribeFeatureTypeInterna()
 
 function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
@@ -1183,7 +1182,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
 			if(camps_implicats[i] && camps_implicats[i]!="") 
 				cdns.push(",",capa.nom , "/", camps_implicats[i]);		
 	}
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
 }//Fi de DonaRequestGetFeature()
 
 
@@ -1206,7 +1205,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push(env2.MinX,",",env2.MinY,",",env2.MaxX,",",env2.MaxY);
 	}	
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
 }
 
 //i_obj pot ser -1 per demanar-los tots
@@ -1231,7 +1230,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push(env2.MinX,",",env2.MinY,",",env2.MaxX,",",env2.MaxY);
 	}
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
 }
 
 

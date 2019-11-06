@@ -137,8 +137,9 @@ var esNODATA, esLink, esImatge;
 					}
 					consulta.Atribut[consulta.Atribut.length]={"nom": tag.attributes[j].name,
 										"descripcio": tag.attributes[j].name,
-										"valor": tag.attributes[j].value,
+										"valor": tag.attributes[j].value,										
 										"unitats": null,
+										"mostrar": "si",
 										"esNODATA": false,
 										"separador": null,
 										"esLink": false,
@@ -199,6 +200,7 @@ var esNODATA, esLink, esImatge;
 										"descripcio": descripcio,
 										"valor": valor,
 										"unitats": unitats,
+										"mostrar": "si",
 										"esNODATA": esNODATA,
 										"separador": separador,
 										"esLink": esLink,
@@ -254,6 +256,7 @@ var i, j;
 			consulta.Atribut.push({"nom": j,
 						"descripcio": j,
 						"valor": doc.features[i].properties[j],
+						"mostrar": "si",
 						"unitats": null,
 						"esNODATA": false,
 						"separador": null,
@@ -279,7 +282,7 @@ function MostraConsultaComHTML(consulta)
 		var elem=getLayer(consulta.win, consulta.nom_layer);
 		cdns.push("<span class='TitolRepostaConsulta'>",
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom )),
-			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
+			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
 			"</span><hr size=\"2\">");
 
 		if(consulta.estat==EstatXMLOmplert)
@@ -420,7 +423,7 @@ function OmpleRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer),
 			"<span class='TitolRepostaConsulta'>"+
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+
-			((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
+			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
 			"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'>" +
 			((consulta.capa.FormatConsulta=="text/html") ? "" : "<pre>") +
 			doc +
@@ -444,7 +447,7 @@ function ErrorRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer),
 		"<span class='TitolRepostaConsulta'>"+
 		(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+
-		((ParamCtrl.capa[consulta.i_capa].AnimableMultiTime && ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
+		(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
 		"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'></span>");
 	}
 	OmpleRespostaConsultaNoHiHaDadesSiCal(consulta.win)
@@ -591,6 +594,7 @@ function TancaFinestra_multi_consulta()
 function MostraConsultaCapaDigitalitzadaComHTML(i_capa_digi, i_obj_digi, cal_titol_capa, cal_class)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa_digi], atributs=capa.atributs, feature, valor;
+var separador=null;
 
 	if(!capa.objectes || !capa.objectes.features || !capa.objectes.features[i_obj_digi].properties || CountPropertiesOfObject(capa.objectes.features[i_obj_digi].properties)==0)
 		return "";
@@ -604,11 +608,20 @@ var cdns=[], capa=ParamCtrl.capa[i_capa_digi], atributs=capa.atributs, feature, 
 	feature=capa.objectes.features[i_obj_digi];
 	for (var i=0; i<atributs.length; i++)
 	{
-		if(atributs[i].mostrar==false)
+		if (atributs[i].separador && DonaCadena(atributs[i].separador))			
+			separador=atributs[i].separador;					
+		if(atributs[i].mostrar=="no")
+			continue;							
+		valor=DeterminaValorAtributObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj_digi, i, PuntConsultat.i, PuntConsultat.j);
+		if(atributs[i].mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 			continue;
-		if(atributs[i].separador && DonaCadena(atributs[i].separador))
-			cdns.push(DonaCadena(atributs[i].separador));
-
+		
+		if(separador)
+		{
+			cdns.push(DonaCadena(separador));
+			separador=null;
+		}
+		
 		cdns.push((cal_class ? "<span class='CampRespostaConsulta'>" : "<b>"),
 			(DonaCadena(atributs[i].descripcio) ?
 					DonaCadena(atributs[i].descripcio):
@@ -617,8 +630,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa_digi], atributs=capa.atributs, feature, 
 		if(atributs[i].unitats)
 			cdns.push("(" , atributs[i].unitats, ")");
 		cdns.push(": ", (cal_class ? "</span><span class='ValorRespostaConsulta'>" : "</b>"));
-
-		valor=DeterminaValorAtributObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj_digi, i, PuntConsultat.i, PuntConsultat.j);
+		
 		if(typeof valor !== "undefined" && valor!=null)
 		{
 			if(atributs[i].esImatge)
@@ -747,7 +759,7 @@ var cdns=[], capa;
 						cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 						cdns.push("<span class='TitolRepostaConsulta'>",
 							(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
-							((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, null) : ""),
+							(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
 							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", v, "</span>");
 						cdns.push("</div>");
 					}
@@ -760,7 +772,7 @@ var cdns=[], capa;
 				cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 				cdns.push("<b>",
 						(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )) ,
-						((capa.AnimableMultiTime && capa.AnimableMultiTime==true)? " "+DonaDataCapaComATextBreu(i, null) : ""),
+						(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
 						"</b><br>", DonaCadenaLang({"cat":"Esperant dades...", "spa":"Esperando datos...", "eng":"Waiting for data...", "fre":"En attente des données..."}));
 				cdns.push("</div>");
 			}
@@ -1102,7 +1114,7 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 	}
 	cdns.push(			  "<Format>", ParamCtrl.capa[i_capa].FormatImatge,"</Format>\n");
 
-	if (ParamCtrl.capa[i_capa].AnimableMultiTime && ParamCtrl.capa[i_capa].AnimableMultiTime==true)
+	if (ParamCtrl.capa[i_capa].AnimableMultiTime==true)
 	{
 			cdns.push(			"<DimensionNameValue name=\"TIME\">",
 					  			DonaDataJSONComATextISO8601(ParamCtrl.capa[i_capa].data[DonaIndexDataCapa(ParamCtrl.capa[i_capa], i_data)], ParamCtrl.capa[i_capa].FlagsData),
@@ -1117,8 +1129,9 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 					"<I>",i,"</I>\n",
 					"<InfoFormat>",ParamCtrl.capa[i_capa].FormatConsulta,"</InfoFormat>\n",
 					"</GetFeatureInfo>\n");
-	//ServerToRequest
-	if (location.host && DonaHost(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor).toLowerCase())!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	//ServerToRequest		
+	if ( (typeof ParamCtrl.capa[i_capa].cors==="undefined" || ParamCtrl.capa[i_capa].cors==false) && 
+		location.host && DonaHost(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor).toLowerCase())!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -1190,7 +1203,7 @@ var s;
 		   	 "&INFOFORMAT=" , capa.FormatConsulta ,
 			 "&I=" , i , "&J=" , j);
 
-		if (capa.AnimableMultiTime && capa.AnimableMultiTime==true)
+		if (capa.AnimableMultiTime==true)
 			cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
 		s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
 		//CreaIOmpleEventConsola("GetFeatureInfo WMTS-KVP, tiled", i_capa, s, TipusEventGetFeatureInfo);
@@ -1209,7 +1222,7 @@ var s;
 			cdns.push("GetFeatureInfo&");
 
 		cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i_capa, -1, false, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil,
-								ParamInternCtrl.vista.EnvActual, ((capa.AnimableMultiTime && capa.AnimableMultiTime==true) ? DonaIndexDataCapa(capa, null) : 0 )));
+								ParamInternCtrl.vista.EnvActual, (capa.AnimableMultiTime==true ? DonaIndexDataCapa(capa, null) : 0 )));
 
 		cdns.push("&QUERY_LAYERS=" , capa.nom , "&INFO_FORMAT=" , capa.FormatConsulta);
 

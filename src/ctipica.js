@@ -1429,7 +1429,6 @@ function CarregaConsultesTipiques()
 var s="";
 
 	NCapesCTipica=0;
-
 	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor)
 	{
 		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
@@ -1452,7 +1451,7 @@ var s="";
 				ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
 				"&INFO_FORMAT=text/xml&QUERY_LAYERS=",
 				ParamCtrl.CapaConsultaPreguntaServidor[i].nom);
-			s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i].servidor), cdns.join(""), true);
+			s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i].servidor), cdns.join(""), true, (ParamCtrl.CapaConsultaPreguntaServidor[i].cors==true? true : false));
 			i_event=CreaIOmpleEventConsola("DonaProjeccioConsultaTipica", -1, s, TipusEventDonaProjeccioConsultaTipica);
 			loadFile(s, "text/xml", 
 					OmpleICarregaConsultaTipica, 

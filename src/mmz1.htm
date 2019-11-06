@@ -58,7 +58,7 @@ var cdns= [];
 				break;
 		}
 		cdns.push("VERSION=1.1.0&REQUEST=DonaEstatProces&IDPROCES=",self.IdProces,"_",self.NIdProces,"&TEMPS_REFRESC=",temps,"&FORMAT=text/html");
-		var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : false);
+		var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, ParamCtrl.capa[i_capa].cors==true ? true : false);
 
 	}
 //    alert(cadena_cgi);
@@ -184,7 +184,7 @@ var cdns=[];
 			//Eliminat el 13-07-2008
 			//if (oferir_vincle)
 			//    cdns.push("&INFO_FORMAT=text/html");
-			var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : false);
+			var cadena_cgi=AfegeixNomServidorARequest(ParamCtrl.capa[i_capa].servidor, cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false,  ParamCtrl.capa[i_capa].cors==true ? true : false);
 			CreaIOmpleEventConsola("GetMapMMZ", i_capa, cadena_cgi, TipusEventGetMap);
 		}
 		

@@ -59,6 +59,7 @@ IncludeScript("imgrle.js");
 IncludeScript("vector.js");
 IncludeScript("video.js");
 IncludeScript("qualitat.js");
+IncludeScript("llinatge.js");
 IncludeScript("cntxmenu.js");
 //IncludeScript("xml.js");   //Ja les carrega el GUF.js
 //IncludeScript("owc_atom.js");  //Ja les carrega el guf.js
@@ -745,9 +746,9 @@ function getISOLanguageTag(language)
 	return "";
 }
 
-function AfegeixNomServidorARequest(servidor, request, es_ajax)
+function AfegeixNomServidorARequest(servidor, request, es_ajax, suporta_cors)
 {
-	if (es_ajax && location.host && DonaHost(servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	if (!suporta_cors && es_ajax && location.host && DonaHost(servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -2154,13 +2155,14 @@ var cdns=[];
 	{
 		cdns.push("<a href=\"javascript:void(0);\" onClick=\"FesPeticioCapacitatsPost(\'", 
 				DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor)),"\', \'",DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\', ",
-				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus), ");\">", ((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa].servidor) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))), "</a>");
+				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus),", ", (ParamCtrl.capa[i_capa].cors==true ? true:false), ");\">", 
+				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa].servidor) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))), "</a>");
 	}
 	else
 	{
 		cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor), 
 				DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)), 
-				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)), "\" target=\"_blank\">", 
+				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus), ParamCtrl.capa[i_capa].cors==true ? true : false), "\" target=\"_blank\">", 
 				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa].servidor) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))), "</a>");
 	}
 	return cdns.join("");
@@ -2172,7 +2174,8 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(capa.servidor), 
 				DonaVersioComAText(capa.versio), 
-				capa.tipus ? capa.tipus : "TipusWFS"), "\" target=\"_blank\">", 
+				capa.tipus ? capa.tipus : "TipusWFS",
+				capa.cors==true ? true:  false), "\" target=\"_blank\">", 
 				((mode==0) ? DonaServidorCapa(capa.servidor) : DonaDescripcioTipusServidor(capa.tipus ? capa.tipus : "TipusWFS")), "</a>");
 	return cdns.join("");
 }
@@ -2293,7 +2296,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 											"spa":"Servidor principal de este navegador", 
 											"eng":"Main Sever of this browser",
 											"fre":"Serveur principal du navigateur"}),":<br><a href=\"",
-					DonaRequestServiceMetadata(ParamCtrl.ServidorLocal, ParamCtrl.VersioServidorLocal, ParamCtrl.TipusServidorLocal), "\" target=\"_blank\">", 
+					DonaRequestServiceMetadata(ParamCtrl.ServidorLocal, ParamCtrl.VersioServidorLocal, ParamCtrl.TipusServidorLocal, ParamCtrl.CorsServidorLocal==true ? true : false), "\" target=\"_blank\">", 
 					ParamCtrl.ServidorLocal, " (", DonaDescripcioTipusServidor(ParamCtrl.TipusServidorLocal), ")","</a><br>");
 			}
 			else
@@ -2656,8 +2659,7 @@ var cdns=[], ll;
 	}
 	if (ParamCtrl.CoordActualLongLatG==true)
 	{
-		if (ParamCtrl.CoordActualProj==true &&
-			ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
+		if (ParamCtrl.CoordActualProj==true && ParamCtrl.EstilCoord=="area")
 			cdns.push("\n");
 		ll=DonaCoordenadesLongLat(x,y,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		cdns.push((negreta ? "<b>" : ""),
@@ -3212,7 +3214,7 @@ function CreaEstatDescarrega(temps, i_capa_wcs, i_event)
 var cdns=[], cadena_cgi;
 
 	cdns.push("VERSION=1.1.0&REQUEST=DonaEstatProces&IDPROCES=", self.IdProces, "_", self.NIdProces, "&FORMAT=text/xml");  //"&TEMPS_REFRESC=", temps
-	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, (ParamCtrl.capa[i_capa_wcs].cors==true? true : false));
 
 	//parent.wcs3.location.href=cadena_cgi;
 	//document.getElementById("finestra_download_status").innerHTML=cadena_cgi;
@@ -3355,7 +3357,7 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	//if (oferir_vincle)
 	//	cdns_req.push("&INFO_FORMAT=text/html");
 	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns_req.join(""), 
-			ParamCtrl.UsaSempreMeuServidor==true ? true : false);	
+			ParamCtrl.UsaSempreMeuServidor==true ? true : false, capa.cors==true? true : false);	
 
 	//Aquest sistema per controlar l'estat no sembla funcionar.
 	var iframe=document.getElementById("finestra_download_hidden");
@@ -4474,7 +4476,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 	if (flag&llegenda_amb_control_capes)
 	{
 		cdns.push("<form name=form_llegenda>");			
-		if (!(ParamCtrl.LlegendaIconesInactivesGrises && ParamCtrl.LlegendaIconesInactivesGrises==true))
+		if (!(ParamCtrl.LlegendaIconesInactivesGrises==true))
 		{
 			alguna.visible=0;
 			alguna.consultable=0;
@@ -4698,7 +4700,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			 //Icona o color general per tota la capa en el cas de símbol únic
 			 if (capa.estil && capa.estil.length>0 && capa.estil[capa.i_estil].ItemLleg && 
 				capa.estil[capa.i_estil].ItemLleg.length==1 &&
-			   (!(ParamCtrl.LlegendaGrisSegonsEscala && ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)))
+			   (!(ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)))
 				cdns.push(DonaCadenaHTMLSimbolUnicLlegenda(capa.estil[capa.i_estil]));
 			 else
 				cdns.push("<td colspan=2 valign=\"middle\" nowrap>");
@@ -4729,9 +4731,9 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			
 				//Icones de + o -:
 				if (capa.estil && capa.estil.length>0 && 
-					(!capa.grup || !(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true) || (capa.visible!="no" && capa.visible!="ara_no")) &&
-					(!(ParamCtrl.LlegendaGrisSegonsEscala && ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-					(!(ParamCtrl.LlegendaGrisSiForaAmbit && ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)) &&
+					(!capa.grup || !(ParamCtrl.LlegendaGrupsComARadials==true) || (capa.visible!="no" && capa.visible!="ara_no")) &&
+					(!(ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
+					(!(ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)) &&
 					((capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length>1) || (capa.estil[capa.i_estil].nItemLlegAuto && capa.estil[capa.i_estil].nItemLlegAuto>1)))
 				{
 					if (capa.LlegDesplegada==true)
@@ -4889,7 +4891,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 							i,", \"consultable\");' onMouseOver=\"if (c_raster",i,".alt) window.status=c_raster",
 							i,".alt; return true;\" onMouseOut=\"if (c_raster",i,".alt) window.status=\'\'; return true;\"></td>");
 				//Icones descarregable:
-				if (!(ParamCtrl.LlegendaLligaVisibleAmbDescarregable && ParamCtrl.LlegendaLligaVisibleAmbDescarregable==true))
+				if (!(ParamCtrl.LlegendaLligaVisibleAmbDescarregable==true))
 					if (capa.descarregable=="no")
 					{
 						if (alguna.descarregable)
@@ -4961,8 +4963,8 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			//Icona o color general per tota la capa en cas de simbol únic.
 			if (capa.estil && capa.estil.length && capa.estil[capa.i_estil].ItemLleg && 
 				capa.estil[capa.i_estil].ItemLleg.length==1 &&
-				(!(ParamCtrl.LlegendaGrisSegonsEscala && ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-					(!(ParamCtrl.LlegendaGrisSiForaAmbit && ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)))
+				(!(ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
+					(!(ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)))
 				cdns.push(DonaCadenaHTMLSimbolUnicLlegenda(capa.estil[capa.i_estil]));
 			else
 				cdns.push("<td colspan=2 valign=\"middle\" nowrap>");
@@ -4988,8 +4990,8 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 
 			//Control del temps si cal
 			if (capa.AnimableMultiTime==true && capa.visible!="no" && capa.visible!="ara_no" &&
-				(!(ParamCtrl.LlegendaGrisSegonsEscala && ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-					(!(ParamCtrl.LlegendaGrisSiForaAmbit && ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)))
+				(!(ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
+					(!(ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa)))
 			{
 				if (flag&llegenda_amb_control_capes)
 				{
@@ -5041,9 +5043,9 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			}
 		}
 		if (capa.estil && capa.estil.length && 
-			(!capa.grup || !(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true) || (capa.visible!="no" && capa.visible!="ara_no" &&
-			(!(ParamCtrl.LlegendaGrisSegonsEscala && ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-		        (!(ParamCtrl.LlegendaGrisSiForaAmbit && ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa))
+			(!capa.grup || !(ParamCtrl.LlegendaGrupsComARadials==true) || (capa.visible!="no" && capa.visible!="ara_no" &&
+			(!(ParamCtrl.LlegendaGrisSegonsEscala==true) || EsCapaDinsRangDEscalesVisibles(capa)) &&
+		        (!(ParamCtrl.LlegendaGrisSiForaAmbit==true) || EsCapaDinsAmbitActual(capa))
 			)))
 		{
 			//Radials d'estil si cal	
@@ -5849,8 +5851,9 @@ var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 						"<TileRow>",j,"</TileRow>\n",
 						"<TileCol>",i,"</TileCol>\n",
 					"</GetTile>\n");
-	//ServerToRequest
-	if (location.host && DonaHost(DonaServidorCapa(capa.servidor)).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	// ServerToRequest	
+	if ( (typeof capa.cors==="undefined" || capa.cors==false) && 
+		 location.host && DonaHost(DonaServidorCapa(capa.servidor)).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -6006,7 +6009,7 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		if (capa.AnimableMultiTime==true)
 			cdns.push("&TIME=",
 				(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData)));
-		var s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+		var s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, capa.cors==true? true : false);
 		//CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
 		return s;
 	}
@@ -6088,14 +6091,14 @@ var cdns=[];
 	return cdns.join("");
 }
 
-function FesPeticioCapacitatsPost(servidor, versio, tipus)
+function FesPeticioCapacitatsPost(servidor, versio, tipus, suporta_cors)
 {
 var servidor_temp;
 
 	ajaxGetCapabilities_POST[ajaxGetCapabilities_POST.length]=new Ajax();
 	RespostaGetCapabilities_POST[RespostaGetCapabilities_POST.length]=new CreaRespostaGetCapabilities_POST(servidor);
 	
-	if (location.host && DonaHost(servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	if (!suporta_cors && location.host && DonaHost(servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -6114,18 +6117,18 @@ var servidor_temp;
 																	RespostaGetCapabilities_POST[RespostaGetCapabilities_POST.length-1]);
 }
 
-function DonaRequestServiceMetadata(servidor, versio, tipus)
+function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 {
 	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
-		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WMS", ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WMS", ParamCtrl.UsaSempreMeuServidor==true ? true : false, suporta_cors);
 	if (tipus=="TipusWMTS_KVP")
-		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.0.0&SERVICE=WMTS", ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.0.0&SERVICE=WMTS", ParamCtrl.UsaSempreMeuServidor==true ? true : false, suporta_cors);
 	if (tipus=="TipusWMTS_REST")
 		return servidor + ((servidor.charAt(servidor.length-1)=="/") ? "": "/") + "1.0.0/WMTSCapabilities.xml";
 	if (tipus=="TipusWFS")
-		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WFS", ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WFS", ParamCtrl.UsaSempreMeuServidor==true ? true : false, suporta_cors);
 	if (tipus=="TipusSOS")
-		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor==true ? true : false, suporta_cors);
 	return "";
 }
 
@@ -6198,7 +6201,7 @@ var cdns=[];
 		
 	cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data));	
 	
-	var s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false);
+	var s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, ParamCtrl.capa[i].cors==true ? true : false);
 	//CreaIOmpleEventConsola("GetMap", i, s, TipusEventGetMap);
 	return s;
 }
@@ -6450,7 +6453,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				if (capa.grup==ParamCtrl.capa[i_capa].grup && 
 				    EsCapaVisibleAAquestNivellDeZoom(i_capa))
 				{
-				   if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
+				   if (!(ParamCtrl.LlegendaGrupsComARadials==true))
 				   {
 					   if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que també format part del grup \"" + ParamCtrl.capa[i_capa].grup + "\", serà desmarcada.",
 													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que también forma parte del grupo \"" + ParamCtrl.capa[i_capa].grup + "\", será desmarcada.",
@@ -6458,7 +6461,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
 						   return;
 				   }
-				   if (ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent")
+				   if (ParamCtrl.capa[i_capa].transparencia=="semitransparent")
 				   {
 						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
 				       	if (ParamCtrl.LlegendaGrupsComARadials==true)
@@ -8425,6 +8428,7 @@ var win, i;
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", "ara_no", false, null, null);
+	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 200, 700, 600, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "mostraQualitat", {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "feedback", {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}, boto_tancar, 220, 180, 500, 400, "Nw", "ara_no", false, null, null);
 	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", "ara_no", false, null, null);
@@ -8884,6 +8888,8 @@ function EndMiraMonMapBrowser(event, reset)
 				if(capa.TileMatrixGeometry.env)
 					delete capa.TileMatrixGeometry.env;
 			}
+			if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
+				delete capa.metadades.provenance.lineage; 
 		}
 		RemoveOtherPropertiesInObjWithRef(ParamCtrl);
 

@@ -999,7 +999,8 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
 	switch(thisRequest)
 	{
 		case "GetCapabilities":
-			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer.servidor),"REQUEST=GetCapabilities&VERSION="+DonaVersioServidorCapa(thisLayer.versio).Vers+"."+DonaVersioServidorCapa(thisLayer.versio).SubVers+"."+DonaVersioServidorCapa(thisLayer.versio).VariantVers+"&SERVICE="+thisService,false);
+			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer.servidor),"REQUEST=GetCapabilities&VERSION="+DonaVersioServidorCapa(thisLayer.versio).Vers+"."+DonaVersioServidorCapa(thisLayer.versio).SubVers+"."+DonaVersioServidorCapa(thisLayer.versio).VariantVers+"&SERVICE="+thisService,
+															   false,  thisLayer.cors==true ? true : false);
 		case "GetMap":
 			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer.servidor),"REQUEST=GetMap"
 				+"&VERSION="+DonaVersioServidorCapa(thisLayer.versio).Vers+"."+DonaVersioServidorCapa(thisLayer.versio).SubVers+"."+DonaVersioServidorCapa(thisLayer.versio).VariantVers
@@ -1012,7 +1013,7 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
  				+"&BBOX="+ParamInternCtrl.vista.EnvActual.MinX+","+ParamInternCtrl.vista.EnvActual.MinY+","+ParamInternCtrl.vista.EnvActual.MaxX+","+ParamInternCtrl.vista.EnvActual.MaxY
 				+"&WIDTH="+ParamInternCtrl.vista.ncol
 				+"&HEIGHT="+ParamInternCtrl.vista.nfil
- 				,false);
+ 				,false, thisLayer.cors==true ? true : false);
 		default:
 			throw "Non supported request type "+thisRequest+".";
 	}

@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2018 Xavier Pons
+    Copyright 2001, 2019 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -40,6 +40,7 @@ var TipusEventWMTSTileSOAP=7;
 var TipusEventExecuteProces=8;
 var TipusEventGetFeatureOfInterest=9;
 var TipusEventGetObservation=10;
+var TipusEventGetRecordByIdLlinatge=11;
 
 var EstarEventPendent=1;
 var EstarEventError=2;

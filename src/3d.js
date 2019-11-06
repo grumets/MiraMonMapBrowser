@@ -53,7 +53,7 @@ var cdns=[];
 	Superficie3DFinestra.vista[Superficie3DFinestra.n]={ height: nfil,
 				width: ncol,
 				vscale: vscale,
-                                i_capa: i_capa,
+                i_capa: i_capa,
 				i_estil: ParamCtrl.capa[i_capa].i_estil,
 				i_grafic3d: Superficie3DFinestra.n};
 

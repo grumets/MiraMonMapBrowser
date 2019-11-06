@@ -94,6 +94,10 @@
 			"description": "Versió en que es faran les peticions OWS al ServidorLocal",
 			"$ref": "#/definitions/versio" 
 		},
+		"CorsServidorLocal": { 
+			"description": "El ServidorLocal suporta CORS (Cross-Origin Resource Sharing)?",
+			"type": "boolean"
+		},
 		"TipusServidorLocal": {
 			"description": "Tipus de servei del ServidorLocal",
 			"$ref": "#/definitions/EnumTipusServidor" 
@@ -425,6 +429,10 @@
 						"description": "Adreça i nom del servidor del MiraMon per a les consultes típiques. Si és null s'agafa el ServidorLocal",
 						"type": ["string", "null"],
 						"format": "uri"
+					},
+					"cors": { 
+						"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+						"type": "boolean"
 					},
 					"nom":	
 					{ 
@@ -881,6 +889,10 @@
 					"versio": { 
 						"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
 						"$ref": "#/definitions/versio" 
+					},
+					"cors": { 
+						"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+						"type": "boolean"
 					},
 					"tipus": {
 						"description": "Tipus de servei per aquesta capa. Si el model és ràster i és null s'agafa el TipusServidorLocal. Si el model és vector i és null s'enten que els objectes estan predefinits i no cal anar a un servidor.",
@@ -1662,6 +1674,10 @@
 											"description": "Versió del servei de processos",
 											"$ref": "#/definitions/versio" 
 										},
+										"cors": { 
+											"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+											"type": "boolean"
+										},
 										"id_operacio": {
 											"description": "Nom i descripció de l'operació",
 											"$ref": "#/definitions/nomDescripcio"
@@ -2300,8 +2316,8 @@
 						"type": "boolean"
 					},
 					"mostrar": {
-						"description": "S'ha de mostrar?",
-						"type": "boolean"
+						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_contingut' (només es mostrarà si l'atribut té contingut)",											
+						"enum": ["si", "no", "si_ple"]
 					}
 				}
 			}
@@ -2371,11 +2387,11 @@
 			}]
 		},
 		"metadades": {
-			"description": "Informació addicional de la capa: metadades standard, quality, documentacio, publicacions, feedback...",
+			"description": "Informació addicional de la capa: metadades standard, quality, documentació, publicacions, feedback...",
 			"type": ["object","null"],
 			"properties": {
 				"standard": {
-					"description": "URL idiomàtica de les metadades en format standard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"document": {
@@ -2385,11 +2401,20 @@
 				"guf": {
 					"description": "DEPRECATED: Tota capa pot tenir feedback. Abans indicava si es pot llegir i proporcionar geospatial user feedback sobre aquest item",
  					"type": "boolean"
-				},
+				},				
 				"provenance": {
-					"description": "Informació sobre el llinarge de les dades",
-					"$ref": "#/definitions/provenance" 
-				},
+					"type": ["object","null"],
+					"properties": {
+						"peticioServCSW": {
+							"description": "Indica si el lineage s'obté dinàmicament del servidor de la capa fent una petició CSW (true) o bé el lineage és estàtic (false) i si n'hi ha, està escrit directament en el config.json ",
+							"type": "boolean"
+						},
+						"lineage": {
+							"description": "Informació sobre el llinatge de les dades",
+							"$ref": "#/definitions/lineage" 
+						}
+					}
+				},							
 				"quality": {
 					"description": "Informació sobre la qualitat de les dades",
 					"type": "array",
@@ -2535,7 +2560,7 @@
 				}
 			}
 		},
-		"provenance": {
+		"lineage": {
 			"description": "Llinatge de les dades",
 			"type": "object",
 			"properties": { 
@@ -2563,10 +2588,11 @@
 			"description": "Process applied to this dataset",
 			"type": "object",
 			"properties": {
-				"processor": {
-					"type": "object",
-					"$ref": "#/definitions/responsability"
-					
+				"processor": {				
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/responsability"					
+					}
 				},
 				"purpose": {
 					"description": "Textual description of the process",
@@ -2607,7 +2633,7 @@
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"direction": {
-					"description": "Sentit del parametre",
+					"description": "Sentit del paràmetre",
 					"enum": ["in", "out", "inOut"]
 				},
 				"valueType": {
@@ -2655,18 +2681,15 @@
 		},
 		"responsability": {
 			"description": "Responsable party",
-			"type": "array",
-			"items": {			
-				"type": "object",
-				"properties": {
-					"role": {
-						"description": "Role of the party" 
-					},
-					"name": {
-						"description": "Name or the individual or the organization",
-						"type": "string"
-					}
-				}
+			"type": "object",
+			 "properties": {
+				"role": {
+					"description": "Role of the party" 
+				},
+				"name": {
+					"description": "Name or the individual or the organization",
+					"type": "string"
+				}			
 			}
 		}
 	}

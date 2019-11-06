@@ -206,10 +206,21 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,", -1);TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}), "</a><br>");		
 	}
-	if (capa.metadades && capa.metadades.quality)
+	if (capa.metadades)
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
+		if(capa.metadades.quality)
+		{
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
+					DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
+		}
+		if (capa.metadades.provenance)
+		{
+			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.llinatge)
+			{
+				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
+						DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
+			}
+		}
 	}
 	/*if (capa.metadades && capa.metadades.guf)
 	{*/
@@ -291,7 +302,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if (capa.estil[i_estil].metadades && capa.estil[i_estil].metadades.quality)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
+			DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
 	}
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			DonaCadenaLang({"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rï¿½troaction"}), "</a><br>");
@@ -1702,7 +1713,7 @@ function HiHaAlgunErrorDeParsejat(doc)
 
 function ParsejaRespostaGetCapabilities(doc, servidorGC)
 {
-var root, cadena, node, node2, i, cdns=[];
+var root, cadena, node, node2, i, j, cdns=[];
 	
 	if(!doc) 
 	{
@@ -2772,7 +2783,7 @@ function LlegeixParametresCondicioCapaDataEstil(prefix_id, prefix_condicio, i_co
 var condicio_capa={};
 	condicio_capa.i_capa=parseInt(document.getElementById(prefix_id + prefix_condicio + "-capa-" + i_condicio).value);
 	var capa=ParamCtrl.capa[condicio_capa.i_capa];
-	if (capa.AnimableMultiTime && capa.AnimableMultiTime==true && capa.data && capa.data.length)
+	if (capa.AnimableMultiTime==true && capa.data && capa.data.length)
 	{
 		var i_time=parseInt(document.getElementById(prefix_id + prefix_condicio + "-data-" + i_condicio).value);
 		if (!isNaN(i_time) && i_time!=null)
@@ -2794,7 +2805,7 @@ var condicio_capa={};
 {
 	condicio.valor_i_capa=parseInt(document.getElementById(prefix_id + "-valor-capa-" + i_condicio).value);
 	var capa=ParamCtrl.capa[condicio.valor_i_capa];
-	if (capa.AnimableMultiTime && capa.AnimableMultiTime==true && capa.data && capa.data.length)
+	if (capa.AnimableMultiTime==true && capa.data && capa.data.length)
 	{
 		var i_time=parseInt(document.getElementById(prefix_id + "-valor-data-" + i_condicio).value;
 		if (!isNaN(i_time) && i_time!=null)
@@ -3401,13 +3412,24 @@ var elem=ObreFinestra(window, "calculaQualitat", DonaCadenaLang({"cat":"de calcu
 }
 
 
+function ObreFinestraMostraLlinatge(i_capa)
+{
+var elem=ObreFinestra(window, "mostraLlinatge", DonaCadenaLang({"cat":"de mostrar la informació del llinatge",
+						  "spa":"de mostrar la información del linaje",
+						  "eng":"for showing the linage information",
+						  "fre":"pour afficher les informations de lignage"}));
+	if (!elem)
+		return;
+	FinestraMostraLlinatgeCapa(elem, i_capa);
+}
+
 function ObreFinestraMostraQualitatCapa(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "mostraQualitat", DonaCadenaLang({"cat":"de mostrar la informació de qualitat",
 						  "spa":"de mostrar la información de calidad",
 						  "eng":"for showing the quality information",
-						  "fre":"pour montrer l'information de qualité"}));
+						  "fre":"pour afficher l'information de qualité"}));
 	if (!elem)
 		return;
 	FinestraMostraQualitatCapa(elem, capa, i_estil);
