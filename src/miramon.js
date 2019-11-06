@@ -3567,7 +3567,7 @@ function DibuixaOpcionsWCS(i_capa_wcs)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa_wcs];
 
-	if ( typeof capa.ParamCoverage!=="undefined" && ParamCtrl.ParGetCoverage && 
+	if ( typeof capa.ParamCoverage!=="undefined" && ParamCtrl.ParGetCoverage!=null &&  // Cal fer !=null perquè ParGetCoverage pot valer 0 i ho interpreta com a false i no entra quan ho hauria de fer
   		ParamCtrl.ParGetCoverage[capa.ParamCoverage].ll)
 	{
 		cdns.push("<form name=\"botons_param_wcs\" onSubmit=\"DibuixaOpcionsDescarregaWCS("+i_capa_wcs+");return false;\">"+
@@ -3723,7 +3723,8 @@ var cdns=[], missatge_mmz=false;
 
 function EsCapaDecarregableIndividualment(capa)
 {
-	if (capa.FormatCoverage || capa.DescarregaTot)
+	if ((typeof capa.FormatCoverage!=="undefined" && capa.FormatCoverage!=null) ||  // Cal fer expressament diferent de null perquè si fem només fem capa.FormatCoverage, com que val 0 és false i no entra
+		 capa.DescarregaTot)
 		return true;
 	return false;
 }
