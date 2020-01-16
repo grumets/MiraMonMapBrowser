@@ -2606,8 +2606,22 @@
 					"description": "When the process was done",
 					"type": "string"
 				},
+				"compilationDate": {
+					"description": "When the executable was produced. It is a way to recognize the version of the executable.",
+					"type": "string"
+				},
 				"executable": {
 					"description": "Name of the executable file or service url",
+					"type": "string",
+					"format": "uri"
+				},
+				"algorithm": {
+					"description": "Algorithm implemented by the executable",
+					"type": "string",
+					"format": "uri"
+				},
+				"functionanlity": {
+					"description": "Functionality given by the algorithm",
 					"type": "string",
 					"format": "uri"
 				},
@@ -2684,16 +2698,47 @@
 			}
 		},
 		"responsability": {
-			"description": "Responsable party",
+			"description": "Responsability",
 			"type": "object",
 			 "properties": {
 				"role": {
-					"description": "Role of the party" 
-				},
-				"name": {
-					"description": "Name or the individual or the organization",
+					"description": "Role of the party", 
 					"type": "string"
-				}			
+				},
+				"party": {
+					"description": "Responsable party",
+					"type": "object",
+					"anyOf":[
+						{
+							"properties": {
+								"organisation":{
+									"description": "Responsable organization",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name or the organization",
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						{
+							"properties": {
+								"individual":{
+									"description": "Responsable individual",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name or the individual",
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		}
 	}

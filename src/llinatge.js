@@ -74,23 +74,45 @@ function ComparaNodesLlinatge(a, b)
 		if (a.source.reference > b.source.reference) return 1;
 		return 0;
 	}
+	/*By definition a process is always different from another because they were executed in different times. 
+	The only exception is a process that generates 2 outputs at the same time.*/
 	if(a.group=="proces")
 	{
 		if (a.proces.purpose < b.proces.purpose) return -1; 
 		if (a.proces.purpose > b.proces.purpose) return 1;
+		if (a.proces.timeDate < b.proces.timeDate) return -1; 
+		if (a.proces.timeDate > b.proces.timeDate) return 1;
 		return 0;
 	}
 	if(a.group=="agent")
 	{
+		/*I believe the role should always be processor, so I decided to ignore it
 		if (a.processor.role < b.processor.role) return -1; 
-		if (a.processor.role > b.processor.role) return 1;
-		if (a.processor.name < b.processor.name) return -1; 
-		if (a.processor.name > b.processor.name) return 1;
+		if (a.processor.role > b.processor.role) return 1;*/
+		if (!a.processor.party && b.processor.party) return -1;
+		if (a.processor.party && !b.processor.party) return 1;
+		if (a.processor.party && b.processor.party)
+		{
+			if (!a.processor.party.organisation && b.processor.party.organisation) return -1;
+			if (a.processor.party.organisation && !b.processor.party.organisation) return 1;
+			if (a.processor.party.organisation && b.processor.party.organisation)
+			{
+				if (a.processor.party.organisation.name < b.processor.party.organisation.name) return -1;
+				if (a.processor.party.organisation.name > b.processor.party.organisation.name) return 1;
+			}
+			if (!a.processor.party.individual && b.processor.party.individual) return -1;
+			if (a.processor.party.individual && !b.processor.party.individual) return 1;
+			if (a.processor.party.individual && b.processor.party.individual)
+			{
+				if (a.processor.party.individual.name < b.processor.party.individual.name) return -1;
+				if (a.processor.party.individual.name > b.processor.party.individual.name) return 1;
+			}
+		}
 		return 0;
 	}
 	if(a.group=="executable")
 	{
-		if (a.executable < b.executable) return -1; 
+		if (a.executable < b.executable) return -1;
 		if (a.executable > b.executable) return 1;
 		return 0;
 	}
@@ -98,130 +120,126 @@ function ComparaNodesLlinatge(a, b)
 }
 
 
-function CreaGrafProcesLlinatge(info_graf)
+function CreaGrafProcesLlinatge(info_graf, proces, id_pare)
 {
-var j, i_node, i_edge, id_proces, id_usar, etiqueta, titol;
+var j, i_node, i_edge, id_proces, id_usar;
 
-	i_node=info_graf.nodes.binarySearch({group:"proces", proces: info_graf.proces}, ComparaNodesLlinatge);
+	i_node=info_graf.nodes.binarySearch({group:"proces", proces: proces}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
 	{
 		id_proces=info_graf.nodes[i_node].id;
 	}
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
-		info_graf.id++;
-		id_proces=info_graf.id;
-		etiqueta=("proces"+id_proces);
-		info_graf.nodes.splice(i_node-1, 0, {id:id_proces, label: etiqueta, title: info_graf.proces.purpose, group:"proces", proces: info_graf.proces});
+		id_proces=info_graf.nodes.length+1;
+		info_graf.nodes.splice(-i_node-1, 0, {id:id_proces, label: "proces"+id_proces, title: proces.purpose, group:"proces", proces: proces});
 	}
-	i_edge=info_graf.edges.binarySearch({from: info_graf.id_pare, to: id_proces, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
+	i_edge=info_graf.edges.binarySearch({from: id_pare, to: id_proces, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
 	if(i_edge<0) // no trobat
 	{
-		info_graf.edges.splice(i_edge-1, 0, {from: info_graf.id_pare, to: id_proces, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
+		info_graf.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_proces, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});
 	}			
-	if(info_graf.proces.processor)
+	if(proces.processor)
 	{
-		for(j=0; j<info_graf.proces.processor.length;j++)
+		for(j=0; j<proces.processor.length;j++)
 		{
-			i_node=info_graf.nodes.binarySearch({group:"agent", processor: info_graf.proces.processor[j]}, ComparaNodesLlinatge);
-			if(i_node>=0) // trobat
+			var pro=proces.processor[j];
+			if (pro.party && 	
+				((pro.party.organisation && pro.party.organisation.name) ||
+				 (pro.party.individual && pro.party.individual.name)) )
 			{
-				id_usar=info_graf.nodes[i_node].id;
-			}
-			else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
-			{
-				info_graf.id++;
-				id_usar=info_graf.id;
-				etiqueta=("agent"+id_usar);
-				titol=(info_graf.proces.processor[j].role ? (info_graf.proces.processor[j].role+": ") : "" )+ info_graf.proces.processor[j].name;
-				info_graf.nodes.splice(i_node-1, 0, {id:id_usar, label: etiqueta, title: titol, group:"agent", processor: info_graf.proces.processor[j]});
-			}			
-			// els segments també he de fer una cerca i inserció ordenada perquè també hi podria haver repeticions
-			i_edge=info_graf.edges.binarySearch({from: id_proces, to: id_usar, label: 'wasAssociatedWith'}, ComparaEdgesLlinatge);
-			if(i_edge<0) // no trobat
-			{
-				info_graf.edges.splice(i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'wasAssociatedWith', font: {align: 'top', size: 10}});					
+				i_node=info_graf.nodes.binarySearch({group:"agent", processor: pro}, ComparaNodesLlinatge);
+				if(i_node>=0) // trobat
+				{
+					id_usar=info_graf.nodes[i_node].id;
+				}
+				else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
+				{
+					id_usar=info_graf.nodes.length+1;
+					info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, 
+									label: "agent"+id_usar, 
+									title: (pro.role ? (pro.role+": ") : "" )+ 
+										(pro.party ? 
+											(
+												((pro.party.organisation && pro.party.organisation.name) ? pro.party.organisation.name : "") + 
+												((pro.party.individual && pro.party.individual.name) ? pro.party.individual.name : "")
+											) : ""
+										), 
+									group: "agent", 
+									processor: pro});
+				}			
+				// els segments també he de fer una cerca i inserció ordenada perquè també hi podria haver repeticions
+				i_edge=info_graf.edges.binarySearch({from: id_proces, to: id_usar, label: 'wasAssociatedWith'}, ComparaEdgesLlinatge);
+				if(i_edge<0) // no trobat
+				{
+					info_graf.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'wasAssociatedWith', font: {align: 'top', size: 10}});
+				}
 			}
 		}
 	}
-	if(info_graf.proces.executable)
+	if(proces.executable)
 	{
-		i_node=info_graf.nodes.binarySearch({group:"executable", executable: info_graf.proces.executable}, ComparaNodesLlinatge);
+		i_node=info_graf.nodes.binarySearch({group:"executable", executable: proces.executable}, ComparaNodesLlinatge);
 		if(i_node>=0) // trobat
 		{
 			id_usar=info_graf.nodes[i_node].id;
 		}
 		else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 		{
-			info_graf.id++;
-			id_usar=info_graf.id;
-			etiqueta=("executable"+id_usar);
-			info_graf.nodes.splice(i_node-1, 0, {id:id_usar, label: etiqueta, title: info_graf.proces.executable, group:"executable", executable: info_graf.proces.executable});
+			id_usar=info_graf.nodes.length+1;
+			info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, label: "executable"+id_usar, title: proces.executable, group:"executable", executable: proces.executable});
 		}
 		i_edge=info_graf.edges.binarySearch({from: id_proces, to: id_usar, label: 'used'}, ComparaEdgesLlinatge);
 		if(i_edge<0) // no trobat
 		{
-			info_graf.edges.splice(i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
+			info_graf.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
 		}
 	}
-	if(info_graf.proces.parameters)
+	if(proces.parameters)
 	{
-		var proces=info_graf.proces;
 		for(j=0; j<proces.parameters.length;j++)
 		{
 			if(proces.parameters[j].valueType=="source" && typeof proces.parameters[j].source!=="undefined" && proces.parameters[j].source!=null)
-			{				
-				info_graf.id_pare=id_proces;
-				info_graf.source=proces.parameters[j].source;
-				info_graf.proces=null;
-				CreaGrafFontLlinatge(info_graf, proces.parameters[j].direction);				
-			}
+				CreaGrafFontLlinatge(info_graf, proces.parameters[j].direction, proces.parameters[j].source, id_proces);
 		}				
 	}	
 	return;
 }
-function CreaGrafFontLlinatge(info_graf, direction)
+
+function CreaGrafFontLlinatge(info_graf, direction, source, id_pare)
 {
-var id_font, i_node, i_edge, etiqueta;
+var id_font, i_node, i_edge;
  
-	i_node=info_graf.nodes.binarySearch({group:"font", source: info_graf.source}, ComparaNodesLlinatge);
+	i_node=info_graf.nodes.binarySearch({group:"font", source: source}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
 	{
 		id_font=info_graf.nodes[i_node].id;
 	}
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
-		info_graf.id++;
-		id_font=info_graf.id;
-		etiqueta=("font"+id_font);
-		info_graf.nodes.splice(i_node-1, 0, {id:id_font, label: etiqueta, title:info_graf.source.reference, group:"font", source: info_graf.source});
+		id_font=info_graf.nodes.length+1;
+		info_graf.nodes.splice(-i_node-1, 0, {id:id_font, label: "font"+id_font, title:source.reference, group:"font", source: source});
 	}
 	if(direction=="in")
 	{
-		i_edge=info_graf.edges.binarySearch({from: info_graf.id_pare, to:id_font, label: 'used'}, ComparaEdgesLlinatge);
+		i_edge=info_graf.edges.binarySearch({from: id_pare, to:id_font, label: 'used'}, ComparaEdgesLlinatge);
 		if(i_edge<0) // no trobat
 		{
-			info_graf.edges.splice(i_edge-1, 0, {from: info_graf.id_pare, to: id_font, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
+			info_graf.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_font, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
 		}
 	}
 	else
 	{
-		i_edge=info_graf.edges.binarySearch({from: id_font, to:info_graf.id_pare, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
+		i_edge=info_graf.edges.binarySearch({from: id_font, to:id_pare, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
 		if(i_edge<0) // no trobat
 		{
-			info_graf.edges.splice(i_edge-1, 0, {from: id_font, to: info_graf.id_pare, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
+			info_graf.edges.splice(-i_edge-1, 0, {from: id_font, to: id_pare, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
 		}	
 	}
-	if(info_graf.source.processes)
+	if (source.processes)
 	{
-		var source=info_graf.source;
-		for(var i=0; i<source.length; i++)
-		{
-			info_graf.proces=source.processes[i];
-			info_graf.id_pare=id_font;
-			info_graf.source=null;
-			CreaGrafProcesLlinatge(info_graf);
-		}
+		for(var i=0; i<source.processes.length; i++)
+			CreaGrafProcesLlinatge(info_graf, source.processes[i], id_font);
 	}
 	return;
 }
@@ -306,58 +324,46 @@ var i;
 		
 	// El primer que he de possar és la capa generada, que és la que estic documentant el llinatge i tot penja d'aquesta capa.	
 	var info_graf={};
-	info_graf.id=1;
-	info_graf.nodes=[{id:info_graf.id, label: capa.nom, group:"resultat", capa: capa}];	
+	info_graf.nodes=[{id:1, label: capa.nom, group:"resultat", capa: capa}];
 	info_graf.edges=[];
 	// Ara miro els processos i les fonts que pengen d'aquesta capa
 	// Aniré afegint els nodes de manera ordenada per nom i group
 	if(lli.processes)
 	{
 		for(i=0; i<lli.processes.length; i++)
-		{
-			info_graf.proces=lli.processes[i];
-			info_graf.id_pare=1;
-			info_graf.source=null;
-			CreaGrafProcesLlinatge(info_graf);
-		}
+			CreaGrafProcesLlinatge(info_graf, lli.processes[i], 1);
 	}	
 	if(lli.sources)
 	{
 		for(i=0; i<lli.sources.length; i++)
-		{
-			info_graf.source=lli.sources[i];
-			info_graf.id_pare=1;
-			info_graf.proces=null;
-			CreaGrafFontLlinatge(info_graf, "in");			
-		}
+			CreaGrafFontLlinatge(info_graf, "in", lli.sources[i], 1);			
 	}
 	
 	GraphsMM.nodesGraf = new vis.DataSet(info_graf.nodes);	
 	GraphsMM.edgesGraf = new vis.DataSet(info_graf.edges);	
 		
-    GraphsMM.options = { 
+	GraphsMM.options = { 
 		"interaction": { "navigationButtons": true, "keyboard": true},
 		"layout": {"improvedLayout": false},
 		"nodes": {"shape": "box", "borderWidth": 2, "shadow":true},
 		"edges": {"font": {"align": "top", "size": 10}},
 		"groups": {
-          "font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},
-          "executable": {"shape": "ellipse","color": {"background":"DarkSeaGreen", "border":"ForestGreen"}},
-          "proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
-          "resultat": {"shape": "ellipse","color": {"background":"LightYellow","border":"GoldenRod"}, "borderWidth": 3},
-          "agent": {"shape":"circle","color":{"background":"DarkSalmon","border":"Bisque"}},
-        }
+			"font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},
+			"executable": {"shape": "ellipse","color": {"background":"DarkSeaGreen", "border":"ForestGreen"}},
+			"proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
+			"resultat": {"shape": "ellipse","color": {"background":"LightYellow","border":"GoldenRod"}, "borderWidth": 3},
+			"agent": {"shape":"circle","color":{"background":"DarkSalmon","border":"Bisque"}},
+	        }
 	};
 	GraphsMM.nodes=info_graf.nodes;
 	GraphsMM.div=nom_div;	
 	GraphsMM.lineageNetWork = new vis.Network(document.getElementById(nom_div), {nodes: GraphsMM.nodesGraf, edges: GraphsMM.edgesGraf},  GraphsMM.options);
 	GraphsMM.lineageNetWork.on("click", function (params) {document.getElementById("InfoLlinatge").innerHTML = DonaInformacioAssociadaANodeLlinatge(params)});
 	GraphsMM.nodes=info_graf.nodes;	
-    GraphsMM.darrerIdUsat=info_graf.id;
+	GraphsMM.darrerIdUsat=info_graf.nodes.length;
 	GraphsMM.hihaElements=true;
 	FesLlistaOrdenaNodesPerId(GraphsMM);
 }
-
 
 function MostraLlinatgeCapa(param)
 {	
@@ -437,7 +443,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if(!capa.metadades || !capa.metadades.provenance)
 		return;
 	var prov=capa.metadades.provenance;
-	if(prov.peticioServCSW==true && (typeof prov.llinatge==="undefined"  || prov.llinatge==null))
+	if(prov.peticioServCSW && !prov.lineage)
 	{
 		//MostraLlinatgeCapa(elem, capa);
 		//return;
@@ -445,7 +451,7 @@ var capa=ParamCtrl.capa[i_capa];
 		DescarregaLlinatgeCapa(i_capa, MostraLlinatgeCapa, {elem: elem, capa: capa});
 		return;
 	}
-	if(prov.llinatge)
+	if(prov.lineage)
 		MostraLlinatgeCapa({elem: elem, capa: capa});
 	return;
 }

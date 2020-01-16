@@ -8358,6 +8358,7 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 		{
 			try 
 			{
+				localStorage.removeItem("EditedParamCtrl_"+param.config_json);  //Avoids that if we exit without saving, the old edited version remains saved and considered valid.
 				localStorage.setItem("StoredParamCtrl_"+param.config_json, original_param_ctrl);
 			} 
 			catch (e) 
@@ -8391,19 +8392,41 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function IniciaVisualitzacio()
 {
-var clau=new Array("BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
-		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS=");  //"CONFIG=" es tracta abans.
+var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
+		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
 var nou_env={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 var nou_CRS="";
-var win, i;
+var win, i, j, l, capa;
 
 	document.getElementById(ParamCtrl.containerName).innerHTML="";
 	if (ParamCtrl.AdrecaBaseSRC)	
-		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  //Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
-
+		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
+		
+	var protocol=location.protocol.toLowerCase();
+	if("https:"==protocol)
+	{
+		// 22-11-2019 (NJ i JM) : Decidim canviar el protocol dels servidors que tenen el mateix host que el navegador
+		// perquè per seguretat els navegadors bloquegen o donen error quan fas una petició http des d'una url(navegador) en htpps
+		var host=location.host.toLowerCase();
+		if(ParamCtrl.ServidorLocal && 
+		   host==DonaHost(ParamCtrl.ServidorLocal).toLowerCase() &&
+		   protocol!=DonaProtocol(ParamCtrl.ServidorLocal).toLowerCase())
+		{			
+			ParamCtrl.ServidorLocal=protocol+ParamCtrl.ServidorLocal.substring(ParamCtrl.ServidorLocal.indexOf("://")+1, ParamCtrl.ServidorLocal.length);
+		}
+		for (i=0; i<ParamCtrl.capa.length; i++)
+		{
+			capa=ParamCtrl.capa[i];
+			if(capa.servidor && host==DonaHost(capa.servidor).toLowerCase() &&
+			   protocol!=DonaProtocol(capa.servidor).toLowerCase())
+			{			
+				capa.servidor=protocol+capa.servidor.substring(capa.servidor.indexOf("://")+1, capa.servidor.length);
+			}
+		}
+	}
 	for (i=0; i<ParamCtrl.Layer.length; i++)
 	{
-		var l=ParamCtrl.Layer[i];
+		l=ParamCtrl.Layer[i];
 		createLayer(window, l.name, l.left, l.top, l.width, l.height, l.ancora, (l.scroll) ? l.scroll : "no", (l.visible) ? l.visible : false, (l.ev) ? l.ev : null, (l.content) ? l.content : null);
 	}
 
@@ -8483,17 +8506,18 @@ var win, i;
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
+		var j, i_clau, i_kvp, i_kvp2, coord, capa_visible, tinc_estils, capa_estil, valor, valor2;
 		var kvp=location.search.substring(1, location.search.length).split("&");
-		for (var i_clau=0; i_clau<clau.length; i_clau++)
+		for (i_clau=0; i_clau<clau.length; i_clau++)
 		{
-			for (var i_kvp=0; i_kvp<kvp.length; i_kvp++)
+			for (i_kvp=0; i_kvp<kvp.length; i_kvp++)
 			{
 				if (kvp[i_kvp].substring(0, clau[i_clau].length).toUpperCase()==clau[i_clau])
 				{
-					var valor=unescape(kvp[i_kvp].substring(clau[i_clau].length,kvp[i_kvp].length));
+					valor=unescape(kvp[i_kvp].substring(clau[i_clau].length,kvp[i_kvp].length));
 					if (i_clau==0)  //BBOX
 					{
-						var coord=valor.split(",");
+						coord=valor.split(",");
 						if (coord.length!=4)
 						{
 							alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
@@ -8508,22 +8532,23 @@ var win, i;
 					else if (i_clau==1)  //LAYERS
 					{
 						//Declaro totes les capes com a ara no visibles.
-						for (var i=0; i<ParamCtrl.capa.length; i++)
+						for (i=0; i<ParamCtrl.capa.length; i++)
 						{
-							if (ParamCtrl.capa[i].visible=="si" || ParamCtrl.capa[i].visible=="semitransparent")
+							capa=ParamCtrl.capa[i];
+							if (capa.visible=="si" || capa.visible=="semitransparent")
 								CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
-							if (ParamCtrl.capa[i].descarregable=="si")
-								ParamCtrl.capa[i].descarregable="ara_no";
+							if (capa.descarregable=="si")
+								capa.descarregable="ara_no";
 						}
 						//Declaro visibles les que m'han dit.
-						var capa_visible=valor.split(",");
-						var tinc_estils=false;
-						for (var i_kvp2=0; i_kvp2<kvp.length; i_kvp2++)
+						capa_visible=valor.split(",");
+						tinc_estils=false;
+						for (i_kvp2=0; i_kvp2<kvp.length; i_kvp2++)
 						{
 							if (kvp[i_kvp2].substring(0, 7).toUpperCase()=="STYLES=")
 							{
-								var valor2=unescape(kvp[i_kvp2].substring(7,kvp[i_kvp2].length));
-								var capa_estil=valor2.split(",");
+								valor2=unescape(kvp[i_kvp2].substring(7,kvp[i_kvp2].length));
+								capa_estil=valor2.split(",");
 								if (capa_visible.length==capa_estil.length)
 									tinc_estils=true;
 								else
@@ -8533,13 +8558,14 @@ var win, i;
 														 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
 							}
 						}
-						for (var j=0; j<capa_visible.length; j++)
+						for (j=0; j<capa_visible.length; j++)
 						{
-							for (var i=0; i<capa.length; i++)
+							for (i=0; i<ParamCtrl.capa.length; i++)
 							{
-								if (capa_visible[j]==ParamCtrl.capa[i].nom)
+								capa=ParamCtrl.capa[i];
+								if (capa_visible[j]==capa.nom)
 								{
-									if (ParamCtrl.capa[i].visible=="ara_no")
+									if (capa.visible=="ara_no")
 										CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
 									else
 										alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
@@ -8547,36 +8573,35 @@ var win, i;
 															   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
 									if (tinc_estils)
 									{
-										if (ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length>1)
+										if (capa.estil && capa.estil.length>1)
 										{
 											//Si a la part del final posa ":SEMITRANSPARENT"
 											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 											{
-												if (ParamCtrl.capa[i].visible!="no")
+												if (capa.visible!="no")
 													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
 											}
 											else
 											{
 												if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
 												{
-													if (ParamCtrl.capa[i].visible!="no")
+													if (capa.visible!="no")
 														CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
 													capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
 												}
-												for (i_estil=0; i_estil<ParamCtrl.capa[i].estil.length; i_estil++)
+												for (i_estil=0; i_estil<capa.estil.length; i_estil++)
 												{													
-													if (ParamCtrl.capa[i].estil[i_estil].nom==capa_estil[j])
+													if (capa.estil[i_estil].nom==capa_estil[j])
 													{
-														ParamCtrl.capa[i].i_estil=i_estil;
+														capa.i_estil=i_estil;
 														break;
 													}
 													
 												}
-												if (i_estil==ParamCtrl.capa[i].estil.length)
+												if (i_estil==capa.estil.length)
 												{
 													if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte													
-														alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
-														
+														alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);														
 												}
 											}
 										}
@@ -8585,7 +8610,7 @@ var win, i;
 											//Només pot dir semitransparent.
 											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 											{
-												if (ParamCtrl.capa[i].visible!="no")
+												if (capa.visible!="no")
 													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
 
 											}
@@ -8597,8 +8622,8 @@ var win, i;
 											}
 										}
 									}
-									if (ParamCtrl.capa[i].descarregable=="ara_no")
-										ParamCtrl.capa[i].descarregable="si";
+									if (capa.descarregable=="ara_no")
+										capa.descarregable="si";
 									break;
 								}
 							}
@@ -8612,16 +8637,16 @@ var win, i;
 					else if (i_clau==2)  //QUERY_LAYERS
 					{
 						//Declaro totes les capes com a ara no consultables.
-						for (var i=0; i<ParamCtrl.capa.length; i++)
+						for (i=0; i<ParamCtrl.capa.length; i++)
 						{
 							if (ParamCtrl.capa[i].consultable=="si")
 								ParamCtrl.capa[i].consultable="ara_no";
 						}
 						//Declaro consultables les que m'han dit.
-						var capa_visible=valor.split(",");
-						for (var j=0; j<capa_visible.length; j++)
+						capa_visible=valor.split(",");
+						for (j=0; j<capa_visible.length; j++)
 						{
-							for (var i=0; i<ParamCtrl.capa.length; i++)
+							for (i=0; i<ParamCtrl.capa.length; i++)
 							{
 								if (capa_visible[j]==ParamCtrl.capa[i].nom)
 								{

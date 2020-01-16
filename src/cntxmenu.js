@@ -215,7 +215,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		}
 		if (capa.metadades.provenance)
 		{
-			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.llinatge)
+			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage)
 			{
 				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
