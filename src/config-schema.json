@@ -2612,18 +2612,22 @@
 				},
 				"executable": {
 					"description": "Name of the executable file or service url",
-					"type": "string",
-					"format": "uri"
-				},
-				"algorithm": {
-					"description": "Algorithm implemented by the executable",
-					"type": "string",
-					"format": "uri"
-				},
-				"functionanlity": {
-					"description": "Functionality given by the algorithm",
-					"type": "string",
-					"format": "uri"
+					"type": "object",
+					"properties": {
+						"reference": {
+							"description": "Name of the executable file or service url",
+							"type": "object",
+							"format": "uri"
+						},
+						"algorithm": {
+							"description": "Algorithm implemented by the executable",
+							"type": ["string", "null"]
+						},
+						"functionanlity": {
+							"description": "Functionality given by the algorithm",
+							"type": "string"
+						}
+					}
 				},
 				"parameters": {
 					"description": "Input ans output parameters submited to the executable",

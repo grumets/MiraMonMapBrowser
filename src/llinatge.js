@@ -112,17 +112,32 @@ function ComparaNodesLlinatge(a, b)
 	}
 	if(a.group=="executable")
 	{
-		if (a.executable < b.executable) return -1;
-		if (a.executable > b.executable) return 1;
+		if (!a.executable.reference && b.executable.reference) return -1;
+		if (a.executable.reference && !b.executable.reference) return 1;
+		if (a.executable.reference < b.executable.reference) return -1;
+		if (a.executable.reference > b.executable.reference) return 1;
+		if (!a.executable.compilationDate && b.executable.compilationDate) return -1;
+		if (a.executable.compilationDate && !b.executable.compilationDate) return 1;
+		if (a.executable.compilationDate < b.executable.compilationDate) return -1;
+		if (a.executable.compilationDate > b.executable.compilationDate) return 1;
+		//	node.executable.algorithm);
+		//	node.executable.functionanlity);
 		return 0;
 	}
 	return 0; 
 }
 
+function GetPartyName(party)
+{
+	if (!party)
+		return "";
+	return ((party.organisation && party.organisation.name) ? party.organisation.name : "") + 
+		((party.individual && party.individual.name) ? party.individual.name : "");
+}
 
 function CreaGrafProcesLlinatge(info_graf, proces, id_pare)
 {
-var j, i_node, i_edge, id_proces, id_usar;
+var j, i_node, i_edge, id_proces, id_usar, exe, name;
 
 	i_node=info_graf.nodes.binarySearch({group:"proces", proces: proces}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
@@ -132,7 +147,12 @@ var j, i_node, i_edge, id_proces, id_usar;
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
 		id_proces=info_graf.nodes.length+1;
-		info_graf.nodes.splice(-i_node-1, 0, {id:id_proces, label: "proces"+id_proces, title: proces.purpose, group:"proces", proces: proces});
+		info_graf.nStep++;
+		info_graf.nodes.splice(-i_node-1, 0, {id:id_proces, 
+					label: DonaCadenaLang({"cat": "Pas", "spa": "Paso", "eng": "Step", "fre": "Étape"})+ " " + info_graf.nStep,
+					title: proces.purpose, 
+					group: "proces", 
+					proces: proces});
 	}
 	i_edge=info_graf.edges.binarySearch({from: id_pare, to: id_proces, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
 	if(i_edge<0) // no trobat
@@ -144,9 +164,8 @@ var j, i_node, i_edge, id_proces, id_usar;
 		for(j=0; j<proces.processor.length;j++)
 		{
 			var pro=proces.processor[j];
-			if (pro.party && 	
-				((pro.party.organisation && pro.party.organisation.name) ||
-				 (pro.party.individual && pro.party.individual.name)) )
+			name=GetPartyName(pro.party);
+			if (name!="")
 			{
 				i_node=info_graf.nodes.binarySearch({group:"agent", processor: pro}, ComparaNodesLlinatge);
 				if(i_node>=0) // trobat
@@ -157,14 +176,8 @@ var j, i_node, i_edge, id_proces, id_usar;
 				{
 					id_usar=info_graf.nodes.length+1;
 					info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, 
-									label: "agent"+id_usar, 
-									title: (pro.role ? (pro.role+": ") : "" )+ 
-										(pro.party ? 
-											(
-												((pro.party.organisation && pro.party.organisation.name) ? pro.party.organisation.name : "") + 
-												((pro.party.individual && pro.party.individual.name) ? pro.party.individual.name : "")
-											) : ""
-										), 
+									label: name.indexOf(' ')==-1 ? name : name.substring(0, name.indexOf(' ')), 
+									title: (pro.role ? (pro.role+": ") : "" ) + name, 
 									group: "agent", 
 									processor: pro});
 				}			
@@ -179,7 +192,8 @@ var j, i_node, i_edge, id_proces, id_usar;
 	}
 	if(proces.executable)
 	{
-		i_node=info_graf.nodes.binarySearch({group:"executable", executable: proces.executable}, ComparaNodesLlinatge);
+		exe=proces.executable;
+		i_node=info_graf.nodes.binarySearch({group:"executable", executable: exe}, ComparaNodesLlinatge);
 		if(i_node>=0) // trobat
 		{
 			id_usar=info_graf.nodes[i_node].id;
@@ -187,12 +201,21 @@ var j, i_node, i_edge, id_proces, id_usar;
 		else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 		{
 			id_usar=info_graf.nodes.length+1;
-			info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, label: "executable"+id_usar, title: proces.executable, group:"executable", executable: proces.executable});
+			j=exe.reference.lastIndexOf('\\');
+			if (j==-1)
+				j=exe.reference.lastIndexOf('/');
+
+			//"executable"+id_usar, 
+			info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, 
+						label: (j==-1) ? exe.reference : exe.reference.substring(j+1), 
+						title: exe.reference, 
+						group: "executable", 
+						executable: exe});
 		}
 		i_edge=info_graf.edges.binarySearch({from: id_proces, to: id_usar, label: 'used'}, ComparaEdgesLlinatge);
 		if(i_edge<0) // no trobat
 		{
-			info_graf.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
+			info_graf.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'executed', font: {align: 'top', size: 10}});					
 		}
 	}
 	if(proces.parameters)
@@ -208,7 +231,7 @@ var j, i_node, i_edge, id_proces, id_usar;
 
 function CreaGrafFontLlinatge(info_graf, direction, source, id_pare)
 {
-var id_font, i_node, i_edge;
+var id_font, i_node, i_edge, j, refe;
  
 	i_node=info_graf.nodes.binarySearch({group:"font", source: source}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
@@ -218,7 +241,15 @@ var id_font, i_node, i_edge;
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
 		id_font=info_graf.nodes.length+1;
-		info_graf.nodes.splice(-i_node-1, 0, {id:id_font, label: "font"+id_font, title:source.reference, group:"font", source: source});
+		refe=source.reference;
+		j=refe.lastIndexOf('\\');
+		if (j==-1)
+			j=refe.lastIndexOf('/');
+		info_graf.nodes.splice(-i_node-1, 0, {id:id_font, 
+					label: (j==-1) ? refe : refe.substring(j+1),  //"font"+id_font, 
+					title: source.reference, 
+					group: "font", 
+					source: source});
 	}
 	if(direction=="in")
 	{
@@ -283,13 +314,14 @@ var cdns=[], node;
 	{
 		node=GraphsMM.nodes[INodFromNetworkId(GraphsMM, params.nodes[i_nod])];
 		if(node.group=="resultat")
-	    {
-			cdns.push("Capa Resultat" );
-	    }
+		{
+			cdns.push(DonaCadenaLang({"cat": "Capa Resultat", "spa": "Capa Resultado", "eng": "Resulting dataset", "fre": "Jeu de données résultant"}), 
+					" ", node.capa.nom);
+		}
 		else if(node.group=="font")
-	    {
+		{
 			cdns.push("Font: "+ node.source.reference);
-	    }
+		}
 		else if(node.group=="proces")
 		{
 			cdns.push("Procés: "+ node.proces.purpose);
@@ -300,11 +332,17 @@ var cdns=[], node;
 				cdns.push(node.processor.role + ": ");
 			else
 				cdns.push("Agent: ");
-			cdns.push(node.processor.name);
+			cdns.push(GetPartyName(node.processor.party));
 		}
 		else if(node.group=="executable")
 		{
-			cdns.push("Executable: "+node.executable);
+			cdns.push(DonaCadenaLang({"cat": "Executable", "spa": "Ejecutable", "eng": "Executable", "fre": "Exécutable"}), ": ", node.executable.reference);
+			if (node.executable.compilationDate)
+				cdns.push("<br>", DonaCadenaLang({"cat": "Data de compilació", "spa": "Fecha de compilación", "eng": "Compilation date", "fre": "Date de compilation"}), ": ", node.executable.compilationDate);
+			if (node.executable.algorithm)
+				cdns.push("<br>", DonaCadenaLang({"cat": "Algoritme", "spa": "Algoritmo", "eng": "Algorithm", "fre": "Algorithme"}), ": ", node.executable.algorithm);
+			if (node.executable.functionanlity)
+				cdns.push("<br>", DonaCadenaLang({"cat": "Funcionalitat", "spa": "Funcionalidad", "eng": "Functionality", "fre": "Fonctionnalité"}), ": ", node.executable.functionanlity);
 		}	
 	}
 	return cdns.join("");
@@ -323,9 +361,9 @@ var i;
 	var lli=capa.metadades.provenance.lineage;
 		
 	// El primer que he de possar és la capa generada, que és la que estic documentant el llinatge i tot penja d'aquesta capa.	
-	var info_graf={};
-	info_graf.nodes=[{id:1, label: capa.nom, group:"resultat", capa: capa}];
-	info_graf.edges=[];
+	var info_graf={nodes: [{id:1, label: capa.nom, group:"resultat", capa: capa}],
+			edges: [],
+			nStep: 0};
 	// Ara miro els processos i les fonts que pengen d'aquesta capa
 	// Aniré afegint els nodes de manera ordenada per nom i group
 	if(lli.processes)
@@ -336,7 +374,7 @@ var i;
 	if(lli.sources)
 	{
 		for(i=0; i<lli.sources.length; i++)
-			CreaGrafFontLlinatge(info_graf, "in", lli.sources[i], 1);			
+			CreaGrafFontLlinatge(info_graf, "in", lli.sources[i], 1);
 	}
 	
 	GraphsMM.nodesGraf = new vis.DataSet(info_graf.nodes);	
