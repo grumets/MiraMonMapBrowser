@@ -32,7 +32,7 @@
 
 var FactorGrausARadiants=0.0174532925199432957692369076848   //M_PI/180
 var FactorRadiantsAGraus=57.295779513082320876798154814105   //180/M_PI
-var FactotGrausAMetres=111319.5
+var FactorGrausAMetres=111319.5
 
 function g_gms(graus_totals, zeros)
 {

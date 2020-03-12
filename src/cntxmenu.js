@@ -32,7 +32,7 @@
 
 function MoureASobreDeTot(i_capa)
 {
-	var n_capes_especials_a_sobre=NumeroDeCapesEspecials(i_capa);
+	var n_capes_especials_a_sobre=NumeroDeCapesVolatils(i_capa);
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa);
 	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1);
@@ -168,13 +168,12 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"}), "</a>");
 	cdns.push("<hr>");
-	var n_capes_especials=((-1!=i_objdigi_consulta)?1:0)+ ((-1!=i_objdigi_anar_coord)?1:0) +((-1!=i_objdigi_edicio)?1:0);
 
-	if (ParamCtrl.capa.length>NumeroDeCapesEspecials(-1))
+	if (ParamCtrl.capa.length>NumeroDeCapesVolatils(-1))
 	{
 		cdns.push("<b><font color=\"#888888\">",
 			  DonaCadenaLang({"cat":"Moure la capa", "spa":"Mover la capa", "eng":"Move layer", "fre":"Déplacer la couche"}), "</b>");
-		if(i_capa>NumeroDeCapesEspecials(i_capa))
+		if(i_capa>NumeroDeCapesVolatils(i_capa))
 		{
 			cdns.push("<br /><a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASobreDeTot(", i_capa, ");TancaContextMenuCapa();\">",
 					DonaCadenaLang({"cat":"A sobre de tot","spa":"Encima de todo", "eng":"To the top", "fre":"En haut de"}), "</a><br>",
@@ -605,7 +604,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 			}
 		}
 	}
-	CanviaIndexosCapesEspecials(n_moviment, i_capa_ini, i_capa_fi_per_sota);
+	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota);
 }
 
 function AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)
@@ -2111,7 +2110,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 	cdns.push("<form name=\"CalculadoraCapes\" onSubmit=\"return false;\">");
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		if (EsIndexCapaEspecial(i))
+		if (EsIndexCapaVolatil(i))
 			continue;
 		capa=ParamCtrl.capa[i];
 		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
@@ -2310,7 +2309,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 		var origen_vector=(i_capa!=-1 && ParamCtrl.capa[i_capa].model==model_vector) ?true: false;
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if(origen_vector)
@@ -2336,7 +2335,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 	{
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
@@ -2643,7 +2642,7 @@ var cdns=[], capa, nc, capa_def, origen_vector;
 		cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\" name=\"",(param.vull_operador? "" : "valor_"),"capa", i_condicio, "\" style=\"width:400px;\" onChange='CanviaCondicioSeleccioCondicional(\"", prefix_id, "\", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\").value), ",i_condicio, ", ", JSON.stringify(param), ");'>");
 		for (var i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||

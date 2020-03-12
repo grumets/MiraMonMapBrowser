@@ -525,49 +525,49 @@
 				"descripcio": "Logo",
 				"esLink": true,
 				"esImatge": true,
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "NAME",
 				"descripcio": "Name",
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "SUBTITLE",
 				"descripcio": "Subtitle",
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "COUNTRY",
 				"descripcio": "Country",
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "DESC",
 				"descripcio": "Description",
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "URL",
 				"descripcio": "Url",
 				"esLink": true,
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "WEB_SITE",
 				"descripcio": "Web site",
 				"esLink": true,
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "TWITTER",
 				"descripcio": "Twitter",
 				"esLink": true,
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "APP",
 				"descripcio": "App",
 				"esLink": true,
-				"mostrar": true
+				"mostrar": "si"
 			},{
 				"nom": "PICTURE",
 				"descripcio": "Picture",
 				"esLink": true,
 				"esImatge": true,
-				"mostrar": true
+				"mostrar": "si"
 			}],
 			"DescLlegenda": "Citizen Observatories",
 			"separa": {
@@ -595,22 +595,23 @@
 						}
 					],
 					"ncol": 1,
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols":[
+						{
+							"simbol":
+							[
 								{
-									"icona": "examples/gt20-img/rm.png",
-									"ncol": 20,
-									"nfil": 30,
-									"i": 3,
-									"j": 29
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm.png",
+										"ncol": 20,
+										"nfil": 30,
+										"i": 3,
+										"j": 29
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"fonts": {
 						"NomCampText": "NAME",
 						"aspecte": [{
@@ -662,340 +663,331 @@
 			[
 				{
 					"separador": {"cat": "<span class=\"CampRespostaConsultaSeparador\">Bàsic</span><br>", "spa": "<span class=\"CampRespostaConsultaSeparador\">Básico</span><br>", "eng": "<span class=\"CampRespostaConsultaSeparador\">Basic</span><br>"},
-					"nom": "__om_time__",
-					"descripcio": {"cat": "Data de la observació", "spa": "Fecha de la observación", "eng": "Observation time"},
-					"mostrar": true
-				},
-				{
-					"nom": "__om_sensor__",
-					"descripcio": {"cat": "Alies de l'observador", "spa": "Alias del observador", "eng": "Observer alias"},
-					"mostrar": true
-				},
-				{
 					"nom": "ID",
 					"descripcio": {"cat": "Identificador", "spa": "Identificador", "eng": "Identifier"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "observed_on_string",
 					"descripcio": {"cat": "Data/hora de l'observació", "spa": "Fecha/hora de la observació", "eng": "Date/hour of the observation"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "observed_on",
 					"descripcio": {"cat": "Data normalitzada", "spa": "Fecha normalizada", "eng": "Normalized date"},
-					"mostrar": true
+					"mostrar": "si",
+					"format": "dd/mm/yyyy"
 				},
 				{
 					"nom": "time_observed_at",
 					"descripcio": {"cat": "Hora normalitzada", "spa": "Hora normalizada", "eng": "Normalized hour"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "TIME_ZONE",
 					"descripcio": {"cat": "Zona horària", "spa": "Zona horaria", "eng": "Time zone"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "out_of_range",
 					"descripcio": {"cat": "És fora de l'àrea geogràfica coneguda del tàxon?", "spa": "¿Está fuera del área geográfica conocida del taxon?", "eng": "Is outsite the known geographical area of the taxon?"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "USER_ID",
 					"descripcio": {"cat": "Identificador d'usuari", "spa": "Identificador de usuario", "eng": "User identifier"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "USER_LOGIN",
 					"descripcio": {"cat": "Nom d'usuari", "spa": "Nombre de usuario", "eng": "User name"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "CREATED_AT",
 					"descripcio": {"cat": "Data de creació", "spa": "Fecha de creación", "eng": "Creation date"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "UPDATED_AT",
 					"descripcio": {"cat": "Última data d'actualització", "spa": "Última fecha de actualitzación", "eng": "Last update date"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "quality_grade",
 					"descripcio": {"cat": "Grau de qualitat", "spa": "Grado de calidad", "eng": "Quality grade"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "LICENSE",
 					"descripcio": {"cat": "Llicència", "spa": "Licencia", "eng": "License"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "URL",
 					"descripcio": "Url",
 					"esLink": true,
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "IMAGE_URL",
 					"descripcio": {"cat": "Imatge", "spa": "Imagen", "eng": "Image"},
 					"esLink": true,
 					"esImatge": true,
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "TAG_LIST",
 					"descripcio": {"cat": "Paraules clau", "spa": "Paraules clave", "eng": "Keywords"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "description",
 					"descripcio": {"cat": "Descripció", "spa": "Descripción", "eng": "Description"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "ID_PLEASE",
 					"descripcio": {"cat": "S'ha sol·licitat ajuda per la identificació?", "spa": "¿Se ha solicitado ayuda para la identificación?", "eng": "Help for identification has been requested?"},
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "num_identification_agreements",
 					"descripcio": {"cat": "Nombre d'identificacions coincidents", "spa": "Número de identificaciones coincidentes", "eng": "Number of identifications in agreement"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "num_identification_disagreements",
 					"descripcio": {"cat": "Nombre d'identificacions no coincidents o en desacord", "spa": "Número de identificaciones no coincidentes o en desacuerdo", "eng": "Number of identifications in disagreement"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "captive_cultivated",
 					"descripcio": {"cat": "Havia estat captiva/conreada?", "spa": "¿Habia sido cautiva/cultivada?", "eng": "Has been captive/cultivated?"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">GeoLocalització</span><br>"},
 					"nom": "place_guess",
 					"descripcio": {"cat": "Descripció de la localitat", "spa": "Descripción de la localidad", "eng": "Description of the location"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "positional_accuracy",
-					"descripcio": {"cat": "Exactitud posicional", "spa": "Exactitud posicional", "eng": "Positional accuracy"},
-					"mostrar": true
+					"descripcio": {"cat": "Incertesa posicional", "spa": "Incertidumbre posicional", "eng": "Positional uncertainty"},
+					"mostrar": "si"
 				},
 				{
 					"nom": "GEOPRIVACY",
 					"descripcio": {"cat": "Geoprivacitat", "spa": "Geoprivacidad", "eng": "Geoprivacy"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "positioning_method",
 					"descripcio": {"cat": "Mètode de posicionament", "spa": "Método de posicionamiento", "eng": "Positioning method"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "positioning_device",
 					"descripcio": {"cat": "Dispositiu de posicionament", "spa": "Dispositivo de posicionamiento", "eng": "Positioning device"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "place_town_name",
 					"descripcio": {"cat": "Localitat", "spa": "Localidad", "eng": "Town name"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "place_county_name",
 					"descripcio": {"cat": "Demarcació regional", "spa": "Demarcación regional", "eng": "County name"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "place_state_name",
 					"descripcio": {"cat": "Estat", "spa": "Estado", "eng": "State"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "place_country_name",
 					"descripcio": {"cat": "País", "spa": "País", "eng": "Country"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{					
 					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Tàxon</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon</span><br>"},
 					"nom": "species_guess",
 					"descripcio": {"cat": "Descripció de l'espècie", "spa": "Descripción de la especie", "eng": "Species description"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "scientific_name",
 					"descripcio": {"cat": "Nom científic", "spa": "Nom científic", "eng": "Scientific name"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "common_name",
 					"descripcio": {"cat": "Nom comú", "spa": "Nom comú", "eng": "Common name"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "iconic_taxon_name",
 					"descripcio": {"cat": "Categoria taxonòmica de nivell superior", "spa": "Categoría taxonómica de nivel superior", "eng": "Taxonomic category of the superior level"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "TAXON_ID",
 					"descripcio": {"cat": "Identificador de tàxon", "spa": "Identificador de tàxon", "eng": "Taxon identifier"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Tàxon extres</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon extras</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Taxon extras</span><br>"},
 					"nom": "taxon_kingdom_name",
 					"descripcio": {"cat": "Regne", "spa": "Reino", "eng": "Kingdom"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_phylum_name",
 					"descripcio": {"cat": "Fílum o divisió", "spa": "Fílum o división", "eng": "Phylum or division"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_subphylum_name",
 					"descripcio": {"cat": "Subfílum o subdivisió", "spa": "Subfilum o subdivisión", "eng": "Subphylum or subdivision"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_superclass_name",
 					"descripcio": {"cat": "Superclasse", "spa": "Superclase", "eng": "Superclass"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_class_name",
 					"descripcio": {"cat": "Classe", "spa": "Classe", "eng": "Class"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_subclass_name",
 					"descripcio": {"cat": "Subclasse", "spa": "Subclase", "eng": "Subclass"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_superorder_name",
 					"descripcio": {"cat": "Superordre", "spa": "Superorden", "eng": "Superorder"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_order_name",
 					"descripcio": {"cat": "Ordre", "spa": "Orden", "eng": "Order"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_suborder_name",
 					"descripcio": {"cat": "Sudordre", "spa": "Suborden", "eng": "Suborder"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_superfamily_name",
 					"descripcio": {"cat": "Superfamília", "spa": "Superfamilia", "eng": "Superfamily"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_family_name",
 					"descripcio": "Familia",
 					"descripcio": {"cat": "Família", "spa": "Familia", "eng": "Family"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_subfamily_name",
 					"descripcio": {"cat": "Subfamília", "spa": "Subfamilia", "eng": "Subfamily"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_supertribe_name",
 					"descripcio": {"cat": "Supertribu", "spa": "Supertribu", "eng": "Supertribe"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_tribe_name",
 					"descripcio": {"cat": "Tribu", "spa": "Tribu", "eng": "Tribe"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_subtribe_name",
 					"descripcio": {"cat": "Subtribu", "spa": "Subtribu", "eng": "Subtribe"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_genus_name",
 					"descripcio": {"cat": "Gènere", "spa": "Género", "eng": "Genus"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_genushybrid_name",
 					"descripcio": {"cat": "Gènere híbrid", "spa": "Género híbrido", "eng": "Genus hybrid"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_species_name",
 					"descripcio": {"cat": "Espècie", "spa": "Especie", "eng": "Species"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_hybrid_name",
 					"descripcio": {"cat": "Híbrid", "spa": "Híbrido", "eng": "Hybrid"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_subspecies_name",
 					"descripcio": {"cat": "Subespècie", "spa": "Subespecie", "eng": "Subspecies"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_variety_name",
 					"descripcio": {"cat": "Varietat o raça", "spa": "Variedad o raza", "eng": "Variety or Race"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "taxon_form_name",
 					"descripcio": {"cat": "Forma", "spa": "Forma", "eng": "Form"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"separador": "<br>",
 					"nom": "FOCASIONAL",
 					"descripcio": {"cat": "Observació ocasional?", "spa": "¿Observación ocasional?", "eng": "Occasional observation"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"separador": {"cat": "<br><span class=\"CampRespostaConsultaSeparador\">Camps d'observació (en observacions recurrents)</span><br>", "spa": "<br><span class=\"CampRespostaConsultaSeparador\">Campos de observación (en observaciones recurrentes)</span><br>", "eng": "<br><span class=\"CampRespostaConsultaSeparador\">Camps d'observació (in recurrent observacions)</span><br>"},
 					"nom": "fid_observador",
 					"descripcio": {"cat": "Codi de l'observador", "spa": "Codigo del observador", "eng": "Observer code"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "FID_POINT",
 					"descripcio": {"cat": "Codi del punt d'observació", "spa": "Código del punto de observación", "eng": "Code of the observation point"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "FFENOFASE",
 					"descripcio": {"cat": "Fenofase", "spa": "Fenofase", "eng": "Phenophase"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "fid_individu",
 					"descripcio": {"cat": "Identificador d'individu", "spa": "Identificador de individuo", "eng": "Individual identifier"},
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "pos_acc_50",
 					"FormulaConsulta": "(p['positional_accuracy']>50)",
 					"descripcio": {"cat": "Exactitut major de 50", "spa": "Exactitud mayor de 50", "eng": "Accuracy bigger than 50"},
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "20_cover",
 					"calcul": "{\"i_capa\": 7, \"i_valor\": 0}>20",
 					"descripcio": {"cat": "Categoria major de 20", "spa": "Categoría mayor de 20", "eng": "Category biggers that 20"},
-					"mostrar": false
+					"mostrar": "no"
 				}
 			],
 			"DescLlegenda": "Ritme Natura",
@@ -1059,144 +1051,167 @@
 						}
 					],
 					"ncol": 1,
-					"simbols":
+					"simbols":[
+						{							
+							"NomCampFEscala": "positional_accuracy",
+							"simbol":
+							[
+								{
+									"icona":
+									{
+										"type": "circle",
+										"r": 1,
+										"unitats": "m" 
+									}
+								}
+							]
+						},
+						{
+							"NomCamp": "scientific_name",
+							"simbol":
+							[
+								{
+									"ValorCamp": "Hirundo rustica",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/hirundo_rustica.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Malus domestica",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/malus_domestica.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},						
+								{
+									"DescColor": "Olea europaea",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/olea_europaea.png",									
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Papaver rhoeas",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/papaver_rhoeas.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Pinus halepensis",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/pinus_halepensis.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Prunus avium",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/prunus_avium.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Prunus dulcis",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/prunus_dulcis.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Prunus persica",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/prunus_persica.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Quercus ilex",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/quercus_ilex.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Robinia pseudoacacia",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/robinia_pseudoacacia.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Rosmarinus officinalis",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/rosmarinus_officinalis.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								},
+								{
+									"ValorCamp": "Spartium junceum",
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm/spartium_junceum.png",
+										"ncol": 25,
+										"nfil": 41,
+										"i": 12,
+										"j": 39
+									}
+								}
+							]
+						}
+					],
+					"vora":
 					{
-						"NomCamp": "scientific_name",
-						"simbol":
-						[
-							{
-								"ValorCamp": "Hirundo rustica",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/hirundo_rustica.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Malus domestica",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/malus_domestica.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},						
-							{
-								"DescColor": "Olea europaea",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/olea_europaea.png",									
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Papaver rhoeas",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/papaver_rhoeas.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Pinus halepensis",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/pinus_halepensis.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Prunus avium",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/prunus_avium.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Prunus dulcis",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/prunus_dulcis.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Prunus persica",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/prunus_persica.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Quercus ilex",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/quercus_ilex.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Robinia pseudoacacia",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/robinia_pseudoacacia.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Rosmarinus officinalis",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/rosmarinus_officinalis.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							},
-							{
-								"ValorCamp": "Spartium junceum",
-								"icona":
-								{
-									"icona": "examples/gt20-img/rm/spartium_junceum.png",
-									"ncol": 25,
-									"nfil": 41,
-									"i": 12,
-									"j": 39
-								}
-							}
-						]
+						"paleta": {
+							"colors": [
+								"#FF0000"
+							]
+						}
 					}
 				},
 				{
@@ -1217,41 +1232,42 @@
 						}
 					],
 					"ncol": 1,
-					"simbols":
-					{
-						"NomCamp": "pos_acc_50",
-						"simbol":
-						[
-							{
-								"ValorCamp": true,
-								"icona":
+					"simbols": [
+						{
+							"NomCamp": "pos_acc_50",
+							"simbol":
+							[
 								{
-									"icona": "examples/gt20-img/rm_red.png",
-									"ncol": 20,
-									"nfil": 30,
-									"i": 3,
-									"j": 29
-								}
-							},
-							{
-								"ValorCamp": false,
-								"icona":
+									"ValorCamp": true,
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm_red.png",
+										"ncol": 20,
+										"nfil": 30,
+										"i": 3,
+										"j": 29
+									}
+								},
 								{
-									"icona": "examples/gt20-img/rm.png",
-									"ncol": 20,
-									"nfil": 30,
-									"i": 3,
-									"j": 29
-								}
-							}							
-						]
-					}
+									"ValorCamp": false,
+									"icona":
+									{
+										"icona": "examples/gt20-img/rm.png",
+										"ncol": 20,
+										"nfil": 30,
+										"i": 3,
+										"j": 29
+									}
+								}							
+							]
+						}
+					]
 				}				
 			],
 			"i_estil": 0,
 			"NColEstil": 1,
 			"FormatImatge": "application/json",
-			"CostatMinim": 0.0000833333333333,
+			"CostatMinim": 0.0000083333333333,
 			"CostatMaxim": 0.0166666666666667,
 			"LlegDesplegada": true,
 			"VisibleALaLlegenda": true,
@@ -1291,164 +1307,164 @@
 				{
 					"nom": "USER_ID",
 					"descripcio": "User ID",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "SAMPLE_ID",
 					"descripcio": "Sample ID",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "CREA_DATE",
 					"descripcio": "Creation Date",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "CHAN_DATE",
 					"descripcio": "Modification date",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "SAMPLEDATE",
 					"descripcio": "Sample date",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "GROUP_ID",
 					"descripcio": "Group ID",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "SITE_NAME",
 					"descripcio": "Site name",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "Sample_date_time",
 					"descripcio": "Sample date/time",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "N_PARTICIPANT",
 					"descripcio": "Total number of participants",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "NOTES",
 					"descripcio": "Notes",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WATER_TYPE",
 					"descripcio": "Freshwater body type",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "OTHER_WATER_TYPE",
 					"descripcio": "Other freshwater body type",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "LAND_USE",
 					"descripcio": "Land use in the immediate surroundings",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "OTHER_LAND_USE",
 					"descripcio": "Other the land use in the immediate surroundings",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "BANK_VEGE",
 					"descripcio": "Bank vegetation",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "OTHER_BANK_VEGE",
 					"descripcio": "Other bank vegetation",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "ON_WATER",
 					"descripcio": "On the water surface",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "POPUT_SOURCES",
 					"descripcio": "Pollution sources in the immediate surroundings",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WaterUses",
 					"descripcio": "Evidence of water uses",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "OTHER_WATER_USE",
 					"descripcio": "Other evidence of water uses",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "AQUATIC_LIVE",
 					"descripcio": "Evidence of aquatic life",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "OTHER_AQUATIC_LIVE",
 					"descripcio": "Other evidence of aquatic life",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "ALGUE",
 					"descripcio": "Algae presence",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WATER_FLOW",
 					"descripcio": "Estimated the water flow",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WATER_LEVEL",
 					"descripcio": "Estimated water level",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "NITRATE",
 					"descripcio": "Nitrate",
 					"unitats": "mg/L",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "PHOSPHATE",
 					"descripcio": "Phosphate",
 					"unitats": "mg/L",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "TURBIDITY",
 					"descripcio": "Water Quality Secchi Tube (Turbidity)",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "RESULT",
 					"descripcio": "Result",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WATER_COLOR",
 					"descripcio": "Estimated water colour",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "WATER_COLOR_NUM",
-					"mostrar": false,
+					"mostrar": "no",
 					"FormulaConsulta": "(p['WATER_COLOR']=='Colourless' ? 0 : (p['WATER_COLOR']=='Brown' ? 1 : (p['WATER_COLOR']=='Yellow' ? 2 :(p['WATER_COLOR']=='Green' ? 3 :(p['WATER_COLOR']=='Other' ? 4 : '')))))"
 				},
 				{
 					"nom": "OTHER_WATER_COLOR",
 					"descripcio": "Other estimated water colour",
-					"mostrar": true
+					"mostrar": "si"
 				}
 			],
 			"DescLlegenda": "Vatten Fokus",
@@ -1476,19 +1492,20 @@
 						}
 					],
 					"ncol": 1,
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 6
+									"icona":
+									{
+										"type": "circle",
+										"r": 6
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "NITRATE",
@@ -1613,19 +1630,20 @@
 						}
 					],
 					"ncol": 1,
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 6
+									"icona":
+									{
+										"type": "circle",
+										"r": 6
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "PHOSPHATE",
@@ -1740,19 +1758,20 @@
 						}						
 					],
 					"ncol": 1,
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 6
+									"icona":
+									{
+										"type": "circle",
+										"r": 6
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "WATER_COLOR_NUM",
@@ -1811,99 +1830,99 @@
 				{
 					"nom": "CAMPAIGN",
 					"descripcio": "Campaign period",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "street_nam",
 					"descripcio": "Street number",
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "time_first",
 					"descripcio": "Date and time of the first observation",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "time_last",
 					"descripcio": "Date and time the last observation",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "bc_aggr",
 					"descripcio": "Mean black carbon concentration",
 					"unitats": "ng/m³",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "bc_aggr_mi",
 					"descripcio": "Minimum black carbon concentration",
 					"unitats": "ng/m³",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "bc_aggr_ma",
 					"descripcio": "Maximum black carbon concentration",
 					"unitats": "ng/m³",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "bc_aggr_st",
 					"descripcio": "Standard deviation of the black carbon concentration",
 					"unitats": "ng/m³",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "number_of_",
 					"descripcio": "Total number of observations",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "number_o_1",
 					"descripcio": "Number of days with observations",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "mean_numbe",
 					"descripcio": " Average time-length per observation",
 					"unitats": "s",
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "uncertaint",
 					"comentari": "t d'student explicada a: https://en.wikipedia.org/wiki/Student%27s_t-distribution considerant 10 mostres",
 					"descripcio": "Uncertainty on average (stan_dev/sqrt(n))* 2.228/mean)",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "uncertaint95",
 					"descripcio": "Uncertainty (half length conf. interval at 95% confidence)",
 					"unitats": "ng/m³",					
 					"FormulaConsulta": "p['uncertaint']*p['bc_aggr']",
-					"mostrar": true
+					"mostrar": "si"
 				},
 				{
 					"nom": "Oct-Nov2017",
 					"descripcio": "Campaign 1 (Oct-Nov2017)",
 					"FormulaConsulta": "p['CAMPAIGN']=='Oct-Nov2017'",
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "Feb-Mar2018",
 					"descripcio": "Campaign 2 (Feb-Mar2018)",
 					"FormulaConsulta": "p['CAMPAIGN']=='Feb-Mar2018'",
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "Jun-Jul2018",
 					"descripcio": "Campaign 3 (Jun-Jul2018)",
 					"FormulaConsulta": "p['CAMPAIGN']=='Jun-Jul2018'",
-					"mostrar": false
+					"mostrar": "no"
 				},
 				{
 					"nom": "Sep2018",
 					"descripcio": "Campaign 4 (Sep2018)",
 					"FormulaConsulta": "p['CAMPAIGN']=='Sep2018'",
-					"mostrar": false
+					"mostrar": "no"
 				}
 			],
 			"DescLlegenda": "Meet Mee Mechelen",
@@ -1940,19 +1959,20 @@
 					],
 					"ncol": 1,
 					"NomCampSel": "Sep2018",
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 3
+									"icona":
+									{
+										"type": "circle",
+										"r": 3
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "bc_aggr",
@@ -2078,19 +2098,20 @@
 					],
 					"ncol": 1,
 					"NomCampSel": "Jun-Jul2018",
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 3
+									"icona":
+									{
+										"type": "circle",
+										"r": 3
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "bc_aggr",
@@ -2216,19 +2237,20 @@
 					],
 					"ncol": 1,
 					"NomCampSel": "Feb-Mar2018",
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 3
+									"icona":
+									{
+										"type": "circle",
+										"r": 3
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "bc_aggr",
@@ -2354,19 +2376,20 @@
 					],
 					"ncol": 1,
 					"NomCampSel": "Oct-Nov2017",
-					"simbols":
-					{
-						"simbol":
-						[
-							{
-								"icona":
+					"simbols": [
+						{
+							"simbol":
+							[
 								{
-									"type": "circle",
-									"r": 3
+									"icona":
+									{
+										"type": "circle",
+										"r": 3
+									}
 								}
-							}
-						]
-					},
+							]
+						}
+					],
 					"interior":
 					{
 						"NomCamp": "bc_aggr",

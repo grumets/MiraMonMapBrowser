@@ -694,7 +694,15 @@
 			}
 		},
 		"IconaAnarCoord": {
-			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi a es posa una per defecte.",
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona" 
+		},
+		"MostraPosicioGPS": {
+			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
+			"type": ["null", "boolean"]
+		},
+		"IconaPosicioGPS": {
+			"description": "Interna, no usar. Actualment actua (i si no es posa, en posem una per defecte). És la icona que representa el lloc on es troba el dispositiu. MiraMon es reserva el dret a canviar el comportament per pintar la ruta GPS (sense icona) i eliminar aquesta entrada.",
 			"$ref": "#/definitions/icona" 
 		},
 		"IconaEdicio": {
@@ -1344,31 +1352,40 @@
 									"type": ["string", "null"]								
 								},
 								"simbols": {
-									"description": "Simbols o formes pels objectes digitalitzats",
-									"type": ["object", "null"],
-									"properties": {
-										"NomCamp": {
-											"description": "Nom del camp per triar el simbol o la forma a presentat a la vista",
-											"type": ["string", "null"]
-										},
-										"simbol": {
-											"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
-											"type": ["array", "null"],
-											"items": {
-												"description": "Símbol o forma i camp",
-												"type": "object",
-												"required": ["icona"],
-												"properties": {
-													"ValorCamp": {
-														"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant"
-													},
-													"icona": {
-														"description": "icona",
-														"$ref": "#/definitions/icona" 
-													},
-													"IconaSel": {
-														"description": "icona quan està seleccionada",
-														"$ref": "#/definitions/icona" 
+									"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+									"type": ["array", "null"],
+									"items": {
+										"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, tots comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
+										"type": "object",
+										"required": ["simbol"],
+										"properties": {
+											"NomCamp": {
+												"description": "Nom del camp per triar el simbol o la forma a presentat a la vista",
+												"type": ["string", "null"]
+											},
+											"NomCampFEscala": {
+												"description": "Nom del camp per triar un factor d'escalat del simbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+												"type": ["string", "null"]
+											},
+											"simbol": {
+												"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
+												"type": ["array", "null"],
+												"items": {
+													"description": "Símbol o forma i camp",
+													"type": "object",
+													"required": ["icona"],
+													"properties": {
+														"ValorCamp": {
+															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant"
+														},
+														"icona": {
+															"description": "icona",
+															"$ref": "#/definitions/icona" 
+														},
+														"IconaSel": {
+															"description": "icona quan està seleccionada",
+															"$ref": "#/definitions/icona" 
+														}
 													}
 												}
 											}
@@ -1377,22 +1394,11 @@
 								},
 								"interior": {
 									"description": "Com omplir l'interior de les icones que són formes",
-									"type": "object",
-									"required": ["paleta"],
-									"properties":{
-										"NomCamp": {
-											"description": "Nom del camp per triar el color d'omplir la forma",
-											"type": ["string", "null"]
-										},
-										"paleta": {
-											"description": "Paleta de colors per omplir l'interior de les formes. Pot ser un sol color per fer les formes de color constant",
-											"$ref": "#/definitions/paleta"
-										},
-										"estiramentPaleta": {
-											"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
-											"$ref": "#/definitions/estiramentPaleta" 											
-										}
-									}
+									"$ref": "#/definitions/colorIndexat"
+								},
+								"vora": { 
+									"description": "Com pintar les vores de les icones que són formes",
+									"$ref": "#/definitions/colorIndexat"
 								},
 								"fonts": {
 									"description": "Fonts per representat textos dels objectes digitalitzats",
@@ -1884,6 +1890,24 @@
 				}
 			}
 		},
+		"colorIndexat": { 
+			"type": "object",
+			"required": ["paleta"],
+			"properties":{
+				"NomCamp": {
+					"description": "Nom del camp per triar el color d'omplir la forma",
+					"type": ["string", "null"]
+				},
+				"paleta": {
+					"description": "Paleta de colors per omplir l'interior de les formes. Pot ser un sol color per fer les formes de color constant",
+					"$ref": "#/definitions/paleta"
+				},
+				"estiramentPaleta": {
+					"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
+					"$ref": "#/definitions/estiramentPaleta" 											
+				}
+			}
+		},
 		"icona": {
 			"oneOf": 
 			[
@@ -1922,17 +1946,23 @@
 					}
 				},
 				{
-					"description": "Cercle renderitzat com un script en el canvas",
+					"description": "Cercle o quadrat renderitzat com un script en el canvas",
 					"type": "object",
 					"required": ["type", "r"],
 					"properties": {
 						"type": {
-							"enum": ["circle"]
+							"description": "És fàcil d'ampliar",
+							"enum": ["circle", "square" ]
 						},						
 						"r": {
-							"description": "Radi (en pixels) del cercle en pixels",
+							"description": "Radi del cercle o costat del quadrat",
 							"type": "number",
 							"multipleOf" : 1
+						},
+						"unitats": 
+						{
+							"description": "Unitats del ràdi. El valors per defecte és 'px' (pixels)",
+							"enum": ["px", "m"]
 						}
 					}
 				},

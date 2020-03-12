@@ -428,7 +428,7 @@ var env=ParamInternCtrl.vista.EnvActual;
 		{
 			if (capa.tipus=="TipusWFS")
 			{
-				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(capa))  //Només hi ha les propietats de simbolització actuals carregades
+				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //Només hi ha les propietats de simbolització actuals carregades
 					break;
 			}
 			else //if (capa.tipus=="TipusSOS")
@@ -905,36 +905,61 @@ function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_cap
 	return capa_digi.objectes.features[i_obj_capa].properties[capa_digi.atributs[i_atrib].nom];
 }
 
-function DeterminaISimbolObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_col, i_fil)
+function AlertaNomAtributIncorrecteSimbolitzar(nom_camp, text_nom_camp, capa_digi)
 {
-var i_simbol, estil, valor, i_atrib;
-	if(capa_digi.estil && capa_digi.estil.length && 
-		capa_digi.estil[capa_digi.i_estil].simbols &&
-		capa_digi.estil[capa_digi.i_estil].simbols.NomCamp &&
-		capa_digi.objectes.features[i_obj_capa].properties &&
-		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
-	{
-		estil=capa_digi.estil[capa_digi.i_estil];
-		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, estil.simbols.NomCamp)
-		if (i_atrib==-1)
-		{
-			alert(DonaCadenaLang({"cat": "Nom d'atribut incorrecte", 
-						"spa": "Nom de atributo incorrecto", 
-						"eng": "Wrong attribute name",
-						"fre": "Nom d'attribut incorrect"}) + 
+	alert(DonaCadenaLang({"cat": "Nom d'atribut incorrecte", 
+				"spa": "Nom de atributo incorrecto", 
+				"eng": "Wrong attribute name",
+				"fre": "Nom d'attribut incorrect"}) + 
 				" " +
-				estil.simbols.NomCamp + " (estil.simbols.NomCamp) " +
+				nom_camp + " (" + text_nom_camp + ") " +
 				DonaCadenaLang({"cat": "per simbolitzar la capa", 
 						"spa": "para simbolizar la capa", 
 						"eng": "to symbolize the layer", 
 						"fre": "por symboliser la couche"}) + " " +
 				(capa_digi.desc ? capa_digi.desc : capa_digi.nom));
+}
+
+function DeterminaValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)
+{
+var estil, valor, i_atrib;
+	if(capa_digi.estil && capa_digi.estil.length && nom_camp &&
+		capa_digi.objectes.features[i_obj_capa].properties &&
+		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	{
+		estil=capa_digi.estil[capa_digi.i_estil];
+		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, nom_camp);
+		if (i_atrib==-1)
+		{
+			AlertaNomAtributIncorrecteSimbolitzar(nom_camp, "NomCamp*", capa_digi);
 			return 0;
 		}
 		valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
-		for(i_simbol=0; i_simbol<estil.simbols.simbol.length; i_simbol++)
+		return valor;
+	}
+	return 0;
+}
+
+function DeterminaISimbolObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil)
+{
+var i_simbol, estil, valor, i_atrib;
+	if(capa_digi.estil && capa_digi.estil.length && 
+		capa_digi.estil[capa_digi.i_estil].simbols && capa_digi.estil[capa_digi.i_estil].simbols.length &&
+		capa_digi.estil[capa_digi.i_estil].simbols[i_simbs].NomCamp &&
+		capa_digi.objectes.features[i_obj_capa].properties &&
+		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	{
+		estil=capa_digi.estil[capa_digi.i_estil];
+		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, estil.simbols[i_simbs].NomCamp)
+		if (i_atrib==-1)
 		{
-			if(valor==estil.simbols.simbol[i_simbol].ValorCamp)
+			AlertaNomAtributIncorrecteSimbolitzar(estil.simbols[i_simbs].NomCamp, "estil.simbols[i_simbs].NomCamp", capa_digi);
+			return 0;
+		}
+		valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+		for(i_simbol=0; i_simbol<estil.simbols[i_simbs].simbol.length; i_simbol++)
+		{
+			if(valor==estil.simbols[i_simbs].simbol[i_simbol].ValorCamp)
 				return i_simbol;
 		}
 	}
@@ -970,46 +995,61 @@ function CarregaImatgeIcona(icona)
 
 function DescarregaSimbolsCapaDigi(capa)
 {
+var simbol;
 	if (!capa.estil)
 		return;
 	for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 	{
-		if (!capa.estil[i_estil].simbols || 
-			!capa.estil[i_estil].simbols.simbol)
+		if (!capa.estil[i_estil].simbols ||
+			!capa.estil[i_estil].simbols.length)
 			continue;
-
-		var simbols=capa.estil[i_estil].simbols.simbol;
-
-		for(var i_simbol=0; i_simbol<simbols.length; i_simbol++)
+		for (var i_simb=0; i_simb<capa.estil[i_estil].simbols.length; i_simb++)
 		{
-			if (simbols[i_simbol].icona && simbols[i_simbol].icona.img)
-				delete simbols[i_simbol].icona.img;
-			if (simbols[i_simbol].IconaSel && simbols[i_simbol].IconaSel.img)
-				delete simbols[i_simbol].IconaSel.img;
+			if (!capa.estil[i_estil].simbols[i_simb].simbol)
+				continue;
+			simbol=capa.estil[i_estil].simbols[i_simb].simbol;
+
+			for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
+			{
+				if (simbol[i_simbol].icona && simbol[i_simbol].icona.img)
+					delete simbol[i_simbol].icona.img;
+				if (simbol[i_simbol].IconaSel && simbol[i_simbol].IconaSel.img)
+					delete simbol[i_simbol].IconaSel.img;
+			}
 		}
 	}
 }
 
 function CarregaSimbolsEstilCapaDigi(capa, i_estil, recarrega)
 {
+var simbol;
+
 	if (!capa.estil || 
-		!capa.estil[i_estil].simbols || 
-		!capa.estil[i_estil].simbols.simbol)
+		!capa.estil[i_estil].simbols)
 		return;
-
-	var simbols=capa.estil[i_estil].simbols.simbol;
-
-	for(var i_simbol=0; i_simbol<simbols.length; i_simbol++)
+	
+	if (!Array.isArray(capa.estil[i_estil].simbols))
+		alert("New in 2020-03-10. In all 'capa's, \"simbols\" should be an array.");
+	 
+	for (var i_simb=0; i_simb<capa.estil[i_estil].simbols.length; i_simb++)
 	{
-		if (simbols[i_simbol].icona)
+		if (!capa.estil[i_estil].simbols[i_simb].simbol)
+			continue;
+
+		simbol=capa.estil[i_estil].simbols[i_simb].simbol;
+
+		for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
 		{
-			if(recarrega || !simbols[i_simbol].icona.img)
-				CarregaImatgeIcona(simbols[i_simbol].icona);
-		}
-		if (simbols[i_simbol].IconaSel)
-		{
-			if(recarrega || !simbols[i_simbol].IconaSel.img)
-				CarregaImatgeIcona(simbols[i_simbol].IconaSel);
+			if (simbol[i_simbol].icona)
+			{
+				if(recarrega || !simbol[i_simbol].icona.img)
+					CarregaImatgeIcona(simbol[i_simbol].icona);
+			}
+			if (simbol[i_simbol].IconaSel)
+			{
+				if(recarrega || !simbol[i_simbol].IconaSel.img)
+					CarregaImatgeIcona(simbol[i_simbol].IconaSel);
+			}
 		}
 	}
 }
@@ -1039,23 +1079,6 @@ function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
 		return DonaRequestGetFeatureOfInterest(i_capa, env)
 	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + ParamCtrl.capa[i_capa].tipus);
 	return "";
-}
-
-function DonaNombrePropietatsSimbolitzacio(capa)
-{
-	var n=0;
-	if(capa.estil && capa.estil.length)
-	{				
-		if(capa.estil[capa.i_estil].simbols && capa.estil[capa.i_estil].simbols.NomCamp)
-			n++;
-		if(capa.estil[capa.i_estil].NomCampSel && (!capa.estil[capa.i_estil].simbols || capa.estil[capa.i_estil].NomCampSel!=capa.estil[capa.i_estil].simbols.NomCamp))
-			n++;
-		if(capa.estil[capa.i_estil].interior && capa.estil[capa.i_estil].interior.NomCamp && capa.estil[capa.i_estil].interior.NomCamp!=capa.estil[capa.i_estil].NomCampSel && (!capa.estil[capa.i_estil].simbols || capa.estil[capa.i_estil].interior.NomCamp!=capa.estil[capa.i_estil].simbols.NomCamp))
-			n++;
-		if(capa.estil[capa.i_estil].fonts && capa.estil[capa.i_estil].fonts.NomCamp && (!capa.estil[capa.i_estil].interior || capa.estil[capa.i_estil].fonts.NomCamp!=capa.estil[capa.i_estil].interior.NomCamp) && capa.estil[capa.i_estil].fonts.NomCamp!=capa.estil[capa.i_estil].NomCampSel && (!capa.estil[capa.i_estil].simbols || capa.estil[capa.i_estil].fonts.NomCamp!=capa.estil[capa.i_estil].simbols.NomCamp))
-			n++;
-	}
-	return n;
 }
 
 function EsCampCalculat(atributs, nom_camp)
@@ -1088,42 +1111,90 @@ var noms_camps=[];
 	return noms_camps;
 }
 
-function DonaLlistaCampsImplicatsVisuCapaWFS(i_capa)
+function HiHaSimbolitzacioIndexadaPerPropietats(estil)
 {
-var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa];	
+var simbols;
+
+	if (estil.simbols && estil.simbols.length)
+	{
+		for (var i_simb=0; i_simb<estil.simbols.length; i_simb++)
+		{
+			if (estil.simbols[i_simb].NomCamp)
+				return true;
+			if (estil.simbols[i_simb].NomCampFEscala)
+				return true;
+		}
+	}
+
+	if (estil.NomCampSel || 
+		(estil.interior && estil.interior.NomCamp) ||
+		(estil.vora && estil.vora.NomCamp) ||
+		(estil.fonts && estil.fonts.NomCamp) )
+		return true;
+	return false;
+}
+
+function DonaNombrePropietatsSimbolitzacio(i_capa)
+{
+	var llista=DonaLlistaPropietatsSimbolitzacio(i_capa);
+	return llista.length;
+}
+
+function DonaLlistaPropietatsSimbolitzacio(i_capa)
+{
+var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, estil;
 	
 	if(capa.estil && capa.estil.length)
 	{			
 		for(var i=0;i<capa.estil.length; i++)
 		{
-			if(capa.estil[i].simbols)
+			estil=capa.estil[i];
+			if(estil.simbols && estil.simbols.length)
 			{
-				if(capa.estil[i].simbols.NomCamp)
+				for (var i_simb=0; i_simb<estil.simbols.length; i_simb++)
 				{
-					if(-1==(i_calculat=EsCampCalculat(capa.atributs, capa.estil[i].simbols.NomCamp)))
-						llista.push(capa.estil[i].simbols.NomCamp);
-					else
-						llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
-				}
-				if(capa.estil[i].simbols.NomCampSel)			
-				{
-					if(-1==(i_calculat=EsCampCalculat(capa.atributs, capa.estil[i].simbols.NomCampSel)))
-						llista.push(capa.estil[i].simbols.NomCampSel);
-					else
-						llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
+					simbols=estil.simbols[i_simb]
+					if(simbols.NomCamp)
+					{
+						if(-1==(i_calculat=EsCampCalculat(capa.atributs, simbols.NomCamp)))
+							llista.push(simbols.NomCamp);
+						else
+							llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
+					}
+					if(simbols.NomCampFEscala)
+					{
+						if(-1==(i_calculat=EsCampCalculat(capa.atributs, simbols.NomCampFEscala)))
+							llista.push(simbols.NomCampFEscala);
+						else
+							llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
+					}
 				}
 			}
-			if(capa.estil[i].interior && capa.estil[i].interior.NomCamp)
+			if(estil.NomCampSel)			
 			{
-				if(-1==(i_calculat=EsCampCalculat(capa.atributs, capa.estil[i].interior.NomCamp)))
-					llista.push(capa.estil[i].simbols.NomCamp);
+				if(-1==(i_calculat=EsCampCalculat(capa.atributs, estil.NomCampSel)))
+					llista.push(estil.NomCampSel);
 				else
 					llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
 			}
-			if(capa.estil[i].fonts && capa.estil[i].fonts.NomCamp)
+			if(estil.interior && estil.interior.NomCamp)
 			{
-				if(-1==(i_calculat=EsCampCalculat(capa.atributs, capa.estil[i].fonts.NomCamp)))
-					llista.push(capa.estil[i].fonts.NomCamp);
+				if(-1==(i_calculat=EsCampCalculat(capa.atributs, estil.interior.NomCamp)))
+					llista.push(estil.interior.NomCamp);
+				else
+					llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
+			}
+			if(estil.vora && estil.vora.NomCamp)
+			{
+				if(-1==(i_calculat=EsCampCalculat(capa.atributs, estil.vora.NomCamp)))
+					llista.push(estil.vora.NomCamp);
+				else
+					llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
+			}
+			if(estil.fonts && estil.fonts.NomCamp)
+			{
+				if(-1==(i_calculat=EsCampCalculat(capa.atributs, estil.fonts.NomCamp)))
+					llista.push(estil.fonts.NomCamp);
 				else
 					llista.push.apply(llista, DonaNomsCampsCapaDeAtributCalculat(i_capa, capa.atributs[i_calculat].FormulaConsulta));
 			}			
@@ -1154,7 +1225,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
 		if(completa==false)
 		{
 			cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
-			camps_implicats=DonaLlistaCampsImplicatsVisuCapaWFS(i_capa);
+			camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
 			for(i=0; i<camps_implicats.length; i++)
 				if(camps_implicats[i] && camps_implicats[i]!="") 
 					cdns.push(",",capa.nom , "/", camps_implicats[i]);
@@ -1177,7 +1248,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
 	else if(completa==false)
 	{
 		cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
-		camps_implicats=DonaLlistaCampsImplicatsVisuCapaWFS(i_capa);
+		camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
 		for(i=0; i<camps_implicats.length; i++)
 			if(camps_implicats[i] && camps_implicats[i]!="") 
 				cdns.push(",",capa.nom , "/", camps_implicats[i]);		
@@ -1502,8 +1573,8 @@ function DonaEnvIcona(punt, icona)
 
 	if (Array.isArray(icona))
 	{
-		env.MinI=MinJ=1000000000;
-		env.MaxI=MaxJ=-1000000000;
+		env.MinI=MinJ=100000;
+		env.MaxI=MaxJ=-100000;
 		for (var i=0; i<icona.length; i++)
 		{
 			if (icona[i].type=="circle")
@@ -1517,15 +1588,25 @@ function DonaEnvIcona(punt, icona)
 				if (env.MaxJ<icona[i].r)
 					env.MaxJ=icona[i].r;
 			}
+			else if (icona.type=="square")
+			{
+				if (env.MinI>-icona[i].r/2)
+					env.MinI=-icona[i].r/2;
+				if (env.MinJ>-icona[i].r/2)
+					env.MinJ=-icona[i].r/2;
+				if (env.MaxI<icona[i].r/2)
+					env.MaxI=icona[i].r/2;
+				if (env.MaxJ<icona[i].r/2)
+					env.MaxJ=icona[i].r/2;
+			}
 			else if (icona[i].type=="arc")
 			{
-				alert("DonaEnvIcona() does not implement arc support yet");
+				alert("DonaEnvIcona() does not implement 'arc' support yet");
 			}
 			else if (icona[i].type=="polyline")
 			{
 				for (var c=0; c<icona[i].coordinates.length; c++)
-				{
-					
+				{					
 					if (env.MinI>icona[i].coordinates[c][0])
 						env.MinI=icona[i].coordinates[c][0];
 					if (env.MinJ>icona[i].coordinates[c][1])
@@ -1543,15 +1624,39 @@ function DonaEnvIcona(punt, icona)
 		env.MinI=env.MinJ=-icona.r;
 		env.MaxI=env.MaxJ=icona.r;
 	}
-	else  //Una icona com a url a una png o similar
+	else if (icona.type=="square")
+	{
+		env.MinI=env.MinJ=-icona.r/2;
+		env.MaxI=env.MaxJ=icona.r/2;
+	}
+	else if (icona.icona) //Una icona com a url a una png o similar
 	{
 		env.MinI=-icona.i;
 		env.MaxI=icona.ncol-icona.i;
 		env.MinJ=-icona.j
 		env.MaxJ=icona.nfil-icona.j;
 	}
-	return {"MinX": punt.x+env.MinI*ParamInternCtrl.vista.CostatZoomActual, 
-		"MaxX": punt.x+env.MaxI*ParamInternCtrl.vista.CostatZoomActual, 
-		"MinY": punt.y-env.MaxJ*ParamInternCtrl.vista.CostatZoomActual, 
-		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual};
+	else
+		env.MaxJ=env.MaxI=env.MinJ=env.MinI=0;
+
+	var fescala=(icona.fescala) ? icona.fescala : 1;
+	if (icona.unitats=="m")
+	{
+		if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+		{
+			env.MinI/=FactorGrausAMetres;
+			env.MaxI/=FactorGrausAMetres;
+			env.MinJ/=FactorGrausAMetres;
+			env.MaxJ/=FactorGrausAMetres;
+		}					
+		return {"MinX": punt.x+env.MinI*fescala, 
+			"MaxX": punt.x+env.MaxI*fescala, 
+			"MinY": punt.y-env.MaxJ*fescala, 
+			"MaxY": punt.y-env.MinJ*fescala};
+	}
+	return {"MinX": punt.x+env.MinI*ParamInternCtrl.vista.CostatZoomActual*fescala, 
+		"MaxX": punt.x+env.MaxI*ParamInternCtrl.vista.CostatZoomActual*fescala, 
+		"MinY": punt.y-env.MaxJ*ParamInternCtrl.vista.CostatZoomActual*fescala, 
+		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual*fescala};
 }
+

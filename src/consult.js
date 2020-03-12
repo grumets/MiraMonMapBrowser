@@ -459,7 +459,7 @@ function ErrorRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 function FesPeticioAjaxConsulta(win)
 {
 var s, resposta_consulta_xml;
-var env_icona;
+var env_icones, env_icona;
 var punt={}, cal_transformar, url;
 
 	for (var i=0; i<ParamCtrl.capa.length; i++)
@@ -496,19 +496,30 @@ var punt={}, cal_transformar, url;
 	{
 		//ajax_consulta_capa_digi[i]=new Ajax();
 		var capa=ParamCtrl.capa[RespostaConsultaObjDigiXML[i].i_capa];
-		if (capa.tipus=="TipusWFS")
+		if (capa.tipus=="TipusWFS" && capa.estil[capa.i_estil].simbols && capa.estil[capa.i_estil].simbols.length)
 		{
 			cal_transformar=DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj], capa.CRSgeometry)
-
-			env_icona=DonaEnvIcona(punt,
-			capa.estil[capa.i_estil].simbols.simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj)].icona, PuntConsultat.i, PuntConsultat.j);
-
+			env_icones=DonaEnvIcona(punt,
+						capa.estil[capa.i_estil].simbols[0].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, 0, PuntConsultat.i, PuntConsultat.j)].icona);
+			for (var i_simb=1; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
+			{
+				env_icona=DonaEnvIcona(punt,
+						capa.estil[capa.i_estil].simbols[i_simb].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona);
+				if (env_icones.MinX>env_icona.MinX)
+					env_icones.MinX=env_icona.MinX;
+				if (env_icones.MaxX<env_icona.MaxX)
+					env_icones.MaxX=env_icona.MaxX;
+				if (env_icones.MinY>env_icona.MinY)
+					env_icones.MinY=env_icona.MinY;
+				if (env_icones.MaxY<env_icona.MaxY)
+					env_icones.MaxY=env_icona.MaxY;
+			}
 			if(cal_transformar)
 			{
 				//Transformo l'envolupant al sistema de referència de la capa
-				env_icona=TransformaEnvolupant(env_icona, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
+				env_icones=TransformaEnvolupant(env_icones, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
 			}
-			url=DonaRequestGetFeature(RespostaConsultaObjDigiXML[i].i_capa, env_icona, null, true);
+			url=DonaRequestGetFeature(RespostaConsultaObjDigiXML[i].i_capa, env_icones, null, true);
 			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("GetFeature", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetFeature);
 		}
 		else if (capa.tipus=="TipusSOS")
@@ -517,7 +528,11 @@ var punt={}, cal_transformar, url;
 			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("GetObservation", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
 		}
 		//ajax_consulta_capa_digi[i].doGet();
-		loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+		//loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+		if (capa.FormatConsulta=="application/json")
+			loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+		else
+			loadFile(url, capa.FormatConsulta, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 	}
 }//Fi de FesPeticioAjaxConsultaObjDigi()
 
@@ -560,10 +575,10 @@ function TancaFinestraEmergent_multi_consulta()
 		pop_down_no_esborra_cons=false;
 		return;
 	}
-	if (i_objdigi_consulta!=-1)
+	if (ICapaVolaPuntConsult!=-1)
 	{
 		TancaFinestra_multi_consulta();
-		//ParamCtrl.capa[i_objdigi_consulta].visible="no";
+		//ParamCtrl.capa[ICapaVolaPuntConsult].visible="no";
 		//CreaVistes();
 	}
 }
@@ -571,23 +586,23 @@ function TancaFinestraEmergent_multi_consulta()
 //No usar sola. Useu TancaFinestraLayer("multi_consulta");
 function TancaFinestra_multi_consulta()
 {
-	if (i_objdigi_consulta!=-1)
+	if (ICapaVolaPuntConsult!=-1)
 	{
 		var elem, i_vista;
-		ParamCtrl.capa[i_objdigi_consulta].visible="no";
+		ParamCtrl.capa[ICapaVolaPuntConsult].visible="no";
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (EsCapaVisibleEnAquestaVista(i_vista, i_objdigi_consulta))
+			if (EsCapaVisibleEnAquestaVista(i_vista, ICapaVolaPuntConsult))
 			{
-				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+i_objdigi_consulta);
+				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+ICapaVolaPuntConsult);
 				if(isLayer(elem))
 					removeLayer(elem);
 			}
 		}
-		//var elem=getLayer(window, "l_obj_digi"+i_objdigi_consulta+"_"+0);
+		//var elem=getLayer(window, "l_obj_digi"+ICapaVolaPuntConsult+"_"+0);
 		//if(isLayer(elem))
 		//	removeLayer(elem);
-		//hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa+i_objdigi_consulta));
+		//hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa+ICapaVolaPuntConsult));
 	}
 }//Fi de TancaFinestra_multi_consulta()
 
@@ -983,7 +998,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 	if (ParamCtrl.IconaConsulta || ParamCtrl.IconaValidacio)
 	{
 		var cal_crear;
-		var capa=ParamCtrl.capa[i_objdigi_consulta];
+		var capa=ParamCtrl.capa[ICapaVolaPuntConsult];
 		capa.objectes.features[0].geometry.coordinates[0]=PuntConsultat.x;
 		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;
 		if (capa.visible=="no")  //Vol dir que CreaVistaImmediata no haurà creat la layer per contenir aquesta creuta de la consulta i s'ha de fer.
@@ -1008,21 +1023,21 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 			var zindex_temp;
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
-				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, i_objdigi_consulta));
+				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), i_objdigi_consulta);
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ICapaVolaPuntConsult);
 				//Canvio el Z order de les capes del tel i de l'slider del zoom.
-				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i_objdigi_consulta));
+				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult));
 				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom");
 				if (elem)
 				{
 					//Poso l'slider a dalt de tot
-					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i_objdigi_consulta), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom")));
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom")));
 					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom"), zindex_temp);
-					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i_objdigi_consulta));
+					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult));
 				}
 				//Poso el tel_tran per sobre de la capa de la consulta.
-				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i_objdigi_consulta), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
 				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans"), zindex_temp);
 			}
 	    }
@@ -1030,9 +1045,9 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 	    {
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
-				//contentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i_objdigi_consulta), DonaCadenaHTMLCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, i_objdigi_consulta));
+				//contentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), DonaCadenaHTMLCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), i_objdigi_consulta);
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ICapaVolaPuntConsult);
 			}
 	    }
 	}
@@ -1252,12 +1267,26 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	else
 	{
-		var env_icona, punt={};
+		var env_icona, env_icones,  punt={};
 
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i_obj], capa.CRSgeometry);
 
-		env_icona=DonaEnvIcona(punt, capa.estil[capa.i_estil].simbols.simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, PuntConsultat.i, PuntConsultat.j)].icona);
-		return (capa.consultable=="si" && EsPuntDinsEnvolupant(PuntConsultat, env_icona));
+		env_icones=DonaEnvIcona(punt,
+						capa.estil[capa.i_estil].simbols[0].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, 0, PuntConsultat.i, PuntConsultat.j)].icona);
+		for (var i_simb=1; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
+		{
+			env_icona=DonaEnvIcona(punt,
+						capa.estil[capa.i_estil].simbols[i_simb].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona);
+			if (env_icones.MinX>env_icona.MinX)
+				env_icones.MinX=env_icona.MinX;
+			if (env_icones.MaxX<env_icona.MaxX)
+				env_icones.MaxX=env_icona.MaxX;
+			if (env_icones.MinY>env_icona.MinY)
+				env_icones.MinY=env_icona.MinY;
+			if (env_icones.MaxY<env_icona.MaxY)
+				env_icones.MaxY=env_icona.MaxY;
+		}
+		return (capa.consultable=="si" && EsPuntDinsEnvolupant(PuntConsultat, env_icones));
 	}
 }
 
