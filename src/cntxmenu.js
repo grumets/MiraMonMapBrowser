@@ -1654,7 +1654,7 @@ var minim, maxim, factor_k, factorpixel;
 					if(temps_defecte)
 					{
 						var data_defecte;
-						OmpleDateAPartirDeDataISO8601(data_defecte, temps_defecte);
+						OmpleDataJSONAPartirDeDataISO8601(data_defecte, temps_defecte);
 					}
 					servidorGC.layer[servidorGC.layer.length-1].data=[];			
 					dates=valors_temps.split(",");
@@ -1663,12 +1663,12 @@ var minim, maxim, factor_k, factorpixel;
 						//servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length]=new Date();
 						if(i==0)
 						{
-							servidorGC.layer[servidorGC.layer.length-1].FlagsData=OmpleDateAPartirDeDataISO8601(
+							servidorGC.layer[servidorGC.layer.length-1].FlagsData=OmpleDataJSONAPartirDeDataISO8601(
 														servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
 														dates[i]);
 						}
 						else
-							OmpleDateAPartirDeDataISO8601(servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
+							OmpleDataJSONAPartirDeDataISO8601(servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
 														dates[i]);
 						if(data_defecte &&
 						   servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length-1]==data_defecte)

@@ -1551,7 +1551,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"url": {
-									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. Les altres dimensions no es contemplen i, si n'hi ha, s'han de representar com a mutiples entrades d'aquest array. Es parteix de la base que les altres dimensions s'empaqueten en un sol fitxer",
+									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions extra s'empaqueten en un sol fitxer",
 									"type": "string"
 								},
 								"format": {
@@ -1956,8 +1956,7 @@
 						},						
 						"r": {
 							"description": "Radi del cercle o costat del quadrat",
-							"type": "number",
-							"multipleOf" : 1
+							"type": "number"
 						},
 						"unitats": 
 						{
@@ -2352,6 +2351,13 @@
 					"format": {
 						"description": "Es el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
 						"enum": ["dd/mm/yyyy"]
+					},
+					"NDecimals": { 
+						"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
+						"type": "number",
+						"minimum": 0,
+						"maximum": 20,
+						"multipleOf" : 1
 					}
 				}
 			}
@@ -2425,11 +2431,11 @@
 			"type": ["object","null"],
 			"properties": {
 				"standard": {
-					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ). {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions es descriuen al mateix fitxer de metadades",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"document": {
-					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"guf": {

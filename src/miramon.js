@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2018 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -58,6 +58,7 @@ IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("vector.js");
 IncludeScript("capavola.js");
+IncludeScript("datahora.js");
 IncludeScript("video.js");
 IncludeScript("qualitat.js");
 IncludeScript("llinatge.js");
@@ -3002,18 +3003,6 @@ var cdns=[], cadena_cgi;
 	loadFile(cadena_cgi, "text/xml", AvaluaRespostaEstatDescarrega, function(text, param_extra) {alert(text); if (param_extra.timeout){ clearTimeout(param_extra.timeout), param_extra.timeout=null}}, {"temps": temps, "i_capa_wcs": i_capa_wcs, "i_event": i_event, "timeout": null});
 }
 
-//Dona un index que es pot aplicar directament a l'array de capes. 'i_data' pot ser null si volem la data per defecte. Com a 'capa' pots fer servir ParamCtrl.capa[i_capa]
-function DonaIndexDataCapa(capa, i_data)
-{
-	if (i_data==null)
-		return capa.i_data<0 ? capa.data.length+capa.i_data : capa.i_data;
-	if (i_data>=capa.data.length)
-		return capa.data.length-1;
-	if (-i_data>capa.data.length)
-		return 0;
-	return (i_data<0) ? capa.data.length+i_data : i_data;
-}
-
 function DescarregaWCS(oferir_vincle, i_capa_wcs)
 {
 var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
@@ -5006,451 +4995,13 @@ function EsCapaVisibleEnAquestaVista(i_vista, i_capa)
 	return EsVisibleEnAquestaVista(i_vista, ParamCtrl.capa[i_capa]);
 }
 
-
-function DonaYearJSON(data)
-{
-	if (data.year)
-		return data.year;
-	return 1970;
-}
-
-function DonaMonthJSON(data)
-{
-	if (data.month)
-		return data.month;
-	return 1;
-}
-
-function DonaDayJSON(data)
-{
-	if (data.day)
-		return data.day;
-	return 1;
-}
-
-function DonaHourJSON(data)
-{
-	if (data.hour)
-		return data.hour;
-	return 0;
-}
-
-function DonaMinuteJSON(data)
-{
-	if (data.minute)
-		return data.minute;
-	return 0;
-}
-
-function DonaSecondJSON(data)
-{
-	if (data.second)
-		return data.second;
-	return 0;
-}
-
-function DonaDataComAText(i_capa, i_data)
-{
-var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
-
-	if (!(capa.FlagsData))
-		return "";
-	if (capa.FlagsData.DataMostraAny==true || 
-	    capa.FlagsData.DataMostraMes==true || 
-	    capa.FlagsData.DataMostraDia==true ||
-	    capa.FlagsData.DataMostraHora==true || 
-	    capa.FlagsData.DataMostraMinut==true || 
-	    capa.FlagsData.DataMostraSegon==true)
-		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
-	
-	if (capa.FlagsData.DataMostraDescLlegenda==true)
-	    cdns.push(DonaCadena(capa.DescLlegenda)," ");
-	if (capa.FlagsData.DataMostraDia==true)
-	    cdns.push(DonaDayJSON(data_a_usar) , " ");
-	if (capa.FlagsData.DataMostraMes==true)
-	{
-		if (capa.FlagsData.DataMostraDia==true)
-		    cdns.push(DonaCadena(PrepMesDeLAny[DonaMonthJSON(data_a_usar)-1]));
-		else
-		    cdns.push(DonaCadena(MesDeLAny[DonaMonthJSON(data_a_usar)-1]));
-	}
-	if (capa.FlagsData.DataMostraAny==true)
-	{
-		if (capa.FlagsData.DataMostraMes==true)
-		    cdns.push((DonaCadenaLang({"cat":" de ","spa":" de ", "eng":" ","fre":" "})));
-		cdns.push(DonaYearJSON(data_a_usar));
-    }
-	return cdns.join("");
-}
-
-function DonaDataComATextBreu(flags_data, data_a_usar)
-{
-var cdns=[];
-
-	if (flags_data.DataMostraDia==true)
-	{
-		if (DonaDayJSON(data_a_usar)<10)
-		    cdns.push("0");
-		cdns.push(DonaDayJSON(data_a_usar));
-	}
-	if (flags_data.DataMostraMes==true)
-	{
-	    if (flags_data.DataMostraDia==true)
-	        cdns.push("-");
-	    if (DonaMonthJSON(data_a_usar)<10)
-			cdns.push("0");
-	    cdns.push(DonaMonthJSON(data_a_usar));
-	}
-	if (flags_data.DataMostraAny==true)
-	{
-	    if (flags_data.DataMostraMes==true)
-			cdns.push("-");
-	    cdns.push(DonaYearJSON(data_a_usar));
-    }
-	if (flags_data.DataMostraHora==true || flags_data.DataMostraMinut==true || flags_data.DataMostraSegon==true)
-	{
-	    if (flags_data.DataMostraAny==true || flags_data.DataMostraMes==true || flags_data.DataMostraDia==true)
-			cdns.push(" ");
-	}
-	if (flags_data.DataMostraHora==true)
-	{
-	    if (DonaHourJSON(data_a_usar)<10)
-			cdns.push("0");
-	    cdns.push(DonaHourJSON(data_a_usar));
-    }
-	if (flags_data.DataMostraMinut==true)
-	{
-	    if (flags_data.DataMostraHora==true)
-			cdns.push(":");
-	    if (DonaMinuteJSON(data_a_usar)<10)
-			cdns.push("0");
-	    cdns.push(DonaMinuteJSON(data_a_usar));
-    }
-	if (flags_data.DataMostraSegon==true)
-	{
-	    if (flags_data.DataMostraMinut==true)
-			cdns.push(":");
-	    if (DonaSecondJSON(data_a_usar)<10)
-			cdns.push("0");
-	    cdns.push(DonaSecondJSON(data_a_usar));
-    }
-	return cdns.join("");
-}
-
-function DonaDataCapaPerLlegenda(i_capa, i_data)
-{
-var data, cdns=[], capa=ParamCtrl.capa[i_capa];
-	cdns.push(DonaDataCapaComATextBreu(i_capa, i_data));
-	if (capa.FlagsData.properties)
-	{
-		data=capa.data[DonaIndexDataCapa(capa, i_data)];
-		for (var i=0; i<capa.FlagsData.properties.length; i++)
-		{
-			var s, prop=capa.FlagsData.properties[i];
-			try  //La formula pot apuntar a membre que no existeixen per una data concreta.
-			{
-				s=eval(prop.formula);
-			}
-			catch(e)
-			{
-				s=null;
-			}
-			if (s)
-				cdns.push(", "+DonaCadena(prop.DescLlegenda)+"="+s+(prop.unitats? prop.unitats : ""));
-		}
-	}
-	return cdns.join("");
-}
-
-function DonaDataCapaComATextBreu(i_capa, i_data)
-{
-var data_a_usar, cdns=[], capa=ParamCtrl.capa[i_capa];
-
-	if (!(capa.FlagsData))
-		return "";
-	if (capa.FlagsData.DataMostraDescLlegenda==true)
-	{
-	    cdns.push(DonaCadena(capa.DescLlegenda));
-	    if (capa.FlagsData.DataMostraAny==true || 
-			capa.FlagsData.DataMostraMes==true || 
-			capa.FlagsData.DataMostraDia==true ||
-			capa.FlagsData.DataMostraHora==true || 
-        	capa.FlagsData.DataMostraMinut==true || 
-			capa.FlagsData.DataMostraSegon==true)
-		        cdns.push(",");
-	}	
-	if (capa.FlagsData.DataMostraAny==true || 
-		capa.FlagsData.DataMostraMes==true || 
-		capa.FlagsData.DataMostraDia==true ||
-		capa.FlagsData.DataMostraHora==true || 
-        capa.FlagsData.DataMostraMinut==true || 
-		capa.FlagsData.DataMostraSegon==true)
-		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
-	else
-		return cdns.join("");
-	cdns.push(DonaDataComATextBreu(capa.FlagsData, data_a_usar));
-	return cdns.join("");
-}
-
-function DonaDataCompacteComAText(data)
-{
-var cdns=[];
-
-	if(data)
-	{
-	    cdns.push(DonaYearJSON(data));
-	    if(DonaMonthJSON(data)<10)
-			cdns.push("0");
-	    cdns.push(DonaMonthJSON(data));
-	    if(DonaDayJSON(data)<10)
-			cdns.push("0");
-	    cdns.push(DonaDayJSON(data));
-
-	    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
-	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
-	    {
-			if(DonaHourJSON(data)<10)
-				cdns.push("0");
-			cdns.push(DonaHourJSON(data));
-			if(DonaMinuteJSON(data)<10)
-				cdns.push("0");
-			cdns.push(DonaMinuteJSON(data));
-			if(DonaSecondJSON(data)<10)
-				cdns.push("0");
-			cdns.push(DonaSecondJSON(data));
-	    }
-	}
-	return cdns.join("");
-}//fi de DonaDataCompacteComAText()
-
-function OmpleDateAPartirDeDataISO8601(o_data, cadena_data)
-{
-	//primer miro els separadors de guions per veure que té de aaaa-mm-dd
-	var tros_data=cadena_data.split("-");	
-	o_data.year=parseInt(tros_data[0],10);					
-
-	if(tros_data.length==1) //Només hi ha any i res més
-		return {"DataMostraAny": true};
-	
-	o_data.month=parseInt(tros_data[1],10);
-	
-	if(tros_data.length==2) //Any i mes	
-		return {"DataMostraAny": true, "DataMostraMes": true};
-
-	//Any, mes i dia i potser time
-	var i_time=tros_data[2].search("[T]");
-	if(i_time==-1)
-	{
-		o_data.day=parseInt(tros_data[2],10);		
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true};
-	}
-	o_data.day=parseInt(tros_data[2].substr(0, i_time),10);					
-		
-	var tros_time=(tros_data[2].substr(i_time+1)).split(":");				
-	if(tros_time.length==1) //només hi ha hora
-	{
-		var i_z=tros_time[0].search("[Z]");
-		if(i_z==-1)
-			o_data.hour=parseInt(tros_time[0],10);
-		else
-			o_data.hour=parseInt(tros_time[0].substr(0,i_z),10);
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true};
-	}
-	o_data.hour=parseInt(tros_time[0],10);
-	if(tros_time.length==2) //hh:mm[Z]
-	{
-		var i_z=tros_time[1].search("[Z]");
-		if(i_z==-1)
-			o_data.minute=parseInt(tros_time[1],10);
-		else
-			o_data.minute=parseInt(tros_time[1].substr(0,i_z),10);
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};	
-	}
-	o_data.minute=parseInt(tros_time[1],10);
-	if(tros_time.length==3) //hh:mm:ss[Z]
-	{
-		var i_ms=tros_time[2].search("[.]");
-		var i_z=tros_time[2].search("[Z]");		
-		if(i_z==-1 && i_ms==-1)
-			o_data.second=parseInt(tros_time[2],10);
-		else if(i_z!=-1 && i_ms==-1)
-			o_data.second=parseInt(tros_time[2].substr(0,i_z),10);				
-		else
-		{
-			o_data.second=parseInt(tros_time[2].substr(0,i_ms),10);
-			o_data.millisecond=parseInt(tros_time[2].substr(i_ms+1,(i_z-i_ms)),10);
-		}
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};	
-	}			
-}
-
-function DonaDateComATextISO8601(data, que_mostrar)
-{
-var cdns=[];
-
-	if (data && que_mostrar)
-	{
-		//Segons la ISO com a mínim he de mostrar l'any
-	    cdns.push(data.getFullYear ? data.getFullYear() : takeYear(data));
-		if(que_mostrar.DataMostraMes==true)
-		{
-			cdns.push("-");
-		    	if( data.getMonth()<9)
-				cdns.push("0");
-			cdns.push((data.getMonth()+1));
-			if (que_mostrar.DataMostraDia==true)
-			{
-				cdns.push("-");
-		    	if(data.getDate()<10)
-					cdns.push("0");
-			    cdns.push((data.getDate()));
-
-			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
-				if(que_mostrar.DataMostraHora==true)
-				{
-	    			if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
-				    {
-						cdns.push("T");
-						if(data.getHours()<10)
-							cdns.push("0");
-						cdns.push(data.getHours());
-						if(que_mostrar.DataMostraMinut==true)
-						{
-							cdns.push(":" );
-							if(data.getMinutes()<10)
-								cdns.push("0");
-							cdns.push(data.getMinutes());
-							if(que_mostrar.DataMostraSegon==true)
-							{
-								cdns.push(":" );
-								if(data.getSeconds()<10)
-									cdns.push("0");
-								cdns.push(data.getSeconds());
-						    }
-						}
-						cdns.push("Z");
-					}
-				}
-			}
-		}
-	}
-	return cdns.join("");
-}//fi de DonaDateComATextISO8601()
-
-function DonaDataJSONComATextISO8601(data, que_mostrar)
-{
-var cdns=[];
-
-	if (data && que_mostrar)
-	{
-		//Segons la ISO com a mínim he de mostrar l'any
-	    cdns.push(DonaYearJSON(data));
-		if(que_mostrar.DataMostraMes==true)
-		{
-			cdns.push("-");
-		    	if( DonaMonthJSON(data)<10)
-				cdns.push("0");
-			cdns.push(DonaMonthJSON(data));
-			if (que_mostrar.DataMostraDia==true)
-			{
-				cdns.push("-");
-		    	if(DonaDayJSON(data)<10)
-					cdns.push("0");
-			    cdns.push(DonaDayJSON(data));
-
-			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
-				if(que_mostrar.DataMostraHora==true)
-				{
-	    			if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
-				    {
-						cdns.push("T");
-						if(DonaHourJSON(data)<10)
-							cdns.push("0");
-						cdns.push(DonaHourJSON(data));
-						if(que_mostrar.DataMostraMinut==true)
-						{
-							cdns.push(":" );
-							if(DonaMinuteJSON(data)<10)
-								cdns.push("0");
-							cdns.push(DonaMinuteJSON(data));
-							if(que_mostrar.DataMostraSegon==true)
-							{
-								cdns.push(":" );
-								if(DonaSecondJSON(data)<10)
-									cdns.push("0");
-								cdns.push(DonaSecondJSON(data));
-						    }
-						}
-						cdns.push("Z");
-					}
-				}
-			}
-		}
-	}
-	return cdns.join("");
-}//fi de DonaDataJSONComATextISO8601()
-
-//Aquest funció, de moment, només canvia les variables {TIME} i {TIME_ISO}
-function CanviaVariablesDeCadena(s, capa, i_data)
-{
-var i;
-
-	if (capa.data && capa.data.length)
-	{
-		var i_data_sel=DonaIndexDataCapa(capa, i_data);
-		while(true)
-		{	
-			i=s.indexOf("{TIME}");  //Abans era %TIME% però prefereixo fer servi una URL template.
-			if (i==-1)
-				break;
-			s=s.substring(0,i) + DonaDataCompacteComAText(capa.data[i_data_sel]) + s.substring(i+6,s.length);
-			
-		}
-		while(true)
-		{	
-			i=s.indexOf("{time}");  //Abans era %TIME% però prefereixo fer servi una URL template.
-			if (i==-1)
-				break;
-			s=s.substring(0,i) + DonaDataCompacteComAText(capa.data[i_data_sel]) + s.substring(i+6,s.length);
-			
-		}
-		while(true)
-		{	
-			i=s.indexOf("{TIME_ISO}");
-			if (i==-1)
-				break;
-			s=s.substring(0,i) + 
-				DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) + 
-				s.substring(i+10,s.length);
-		}
-		while(true)
-		{	
-			i=s.indexOf("{time_ISO}");
-			if (i==-1)
-				break;
-			s=s.substring(0,i) + 
-				DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) + 
-				s.substring(i+10,s.length);
-		}
-		while(true)
-		{	
-			i=s.indexOf("{time_iso}");
-			if (i==-1)
-				break;
-			s=s.substring(0,i) + 
-				DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) + 
-				s.substring(i+10,s.length);
-		}
-	}
-	return s;
-}
-
 function CanviaDataDeCapaMultitime(i_capa, i_data)
 {
 	ParamCtrl.capa[i_capa].i_data=i_data;
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
 }
+
 /*
  * Returns the WMTS TileMatrixSet from a image url of the tile set.
  * The TileMatrixSet produced in this way lacks CRS and TileMatrix list, which
@@ -6722,7 +6273,7 @@ var env=vista.EnvActual;
 		}
 		var fillStylePrevi, a_interior=1, valor_min_interior=0, i_color, ncolors_interior, valor, strokeStylePrevi, a_vora=1, valor_min_vora=0, ncolors_vora, shadowPrevi;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
-		var env_icona, punt={}, i_col, i_fil, icona, font, i_simbol, mida;
+		var env_icona, punt={}, i_col, i_fil, icona, font, i_simbol, mida, text;
 		var win = DonaWindowDesDeINovaVista(vista);
 		var canvas = win.document.getElementById(nom_canvas);
 		var ctx = canvas.getContext('2d');
@@ -6777,14 +6328,8 @@ var env=vista.EnvActual;
 
 							if(icona)
 							{
-								if (simbols.NomCampFEscala)
-								{
-									//if (capa_digi.objectes.features[j].properties.positional_accuracy)
-									//	alert(j); //···
-									icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, simbols.NomCampFEscala);
-								}
-								else
-									icona.fescala=1;
+								icona.fescala=(simbols.NomCampFEscala) ? DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, simbols.NomCampFEscala): 1;
+
 								env_icona=DonaEnvIcona(punt, icona);
 								if (env.MinX < env_icona.MinX &&
 									env.MaxX > env_icona.MaxX &&
@@ -6849,8 +6394,9 @@ var env=vista.EnvActual;
 											if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 												mida/=FactorGrausAMetres;
 											mida/=ParamInternCtrl.vista.CostatZoomActual;
-										}
-								
+										}								
+										if (mida<=0)
+											mida=1;
 										if (icona.type=="square")
 										{
 											ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
@@ -6923,7 +6469,7 @@ var env=vista.EnvActual;
 					}
 					if (font.align)
 						ctx.textAlign=font.align;
-					ctx.fillText(capa_digi.objectes.features[j].properties[estil.fonts.NomCampText], i_col-font.i, i_fil-font.j);
+					ctx.fillText(DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, estil.fonts.NomCampText), i_col-font.i, i_fil-font.j);
 					if (font.color)
 						ctx.fillStyle=fillStylePrevi;
 					DesactivaSombraFonts(ctx, shadowPrevi);
@@ -8032,8 +7578,8 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function IniciaVisualitzacio()
 {
-var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
-		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
+//var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
+//		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
 var nou_env={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 var nou_CRS="";
 var win, i, j, l, capa;
@@ -8146,269 +7692,265 @@ var win, i, j, l, capa;
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
-		var j, i_clau, i_kvp, i_kvp2, coord, capa_visible, tinc_estils, capa_estil, valor, valor2;
+		var acoord, capa_visible, tinc_estils, capa_estil, query={};
 		var kvp=location.search.substring(1, location.search.length).split("&");
-		for (i_clau=0; i_clau<clau.length; i_clau++)
+		for(var i_clau=0; i_clau<kvp.length; i_clau++)
 		{
-			for (i_kvp=0; i_kvp<kvp.length; i_kvp++)
+			var j = kvp[i_clau].indexOf("=");  // Gets the first index where a space occours
+			if (j==-1)
 			{
-				if (kvp[i_kvp].substring(0, clau[i_clau].length).toUpperCase()==clau[i_clau])
-				{
-					valor=unescape(kvp[i_kvp].substring(clau[i_clau].length,kvp[i_kvp].length));
-					if (i_clau==0)  //BBOX
-					{
-						coord=valor.split(",");
-						if (coord.length!=4)
-						{
-							alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
-							break;
-						}
-						//Cal carregar les 4 coordenades i fer el canvi d'àmbit
-						nou_env.MinX=parseFloat(coord[0]); 
-						nou_env.MaxX=parseFloat(coord[2]); 
-						nou_env.MinY=parseFloat(coord[1]);
-						nou_env.MaxY=parseFloat(coord[3]);
-					}
-					else if (i_clau==1)  //LAYERS
-					{
-						//Declaro totes les capes com a ara no visibles.
-						for (i=0; i<ParamCtrl.capa.length; i++)
-						{
-							capa=ParamCtrl.capa[i];
-							if (capa.visible=="si" || capa.visible=="semitransparent")
-								CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
-							if (capa.descarregable=="si")
-								capa.descarregable="ara_no";
-						}
-						//Declaro visibles les que m'han dit.
-						capa_visible=valor.split(",");
-						tinc_estils=false;
-						for (i_kvp2=0; i_kvp2<kvp.length; i_kvp2++)
-						{
-							if (kvp[i_kvp2].substring(0, 7).toUpperCase()=="STYLES=")
-							{
-								valor2=unescape(kvp[i_kvp2].substring(7,kvp[i_kvp2].length));
-								capa_estil=valor2.split(",");
-								if (capa_visible.length==capa_estil.length)
-									tinc_estils=true;
-								else
-									alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.", 
-														 "spa":"El número de estilos no se corresponde con el número de capas.",
-														 "eng":"Style number is no the same of the number of layers.", 
-														 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
-							}
-						}
-						for (j=0; j<capa_visible.length; j++)
-						{
-							for (i=0; i<ParamCtrl.capa.length; i++)
-							{
-								capa=ParamCtrl.capa[i];
-								if (capa_visible[j]==capa.nom)
-								{
-									if (capa.visible=="ara_no")
-										CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
-									else
-										alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
-												DonaCadenaLang({"cat":" indicada a LAYERS= no pot ser activada.", "spa":" indicada en LAYERS= no puede ser activada.", 
-															   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
-									if (tinc_estils)
-									{
-										if (capa.estil && capa.estil.length>1)
-										{
-											//Si a la part del final posa ":SEMITRANSPARENT"
-											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-											{
-												if (capa.visible!="no")
-													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-											}
-											else
-											{
-												if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
-												{
-													if (capa.visible!="no")
-														CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-													capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
-												}
-												for (i_estil=0; i_estil<capa.estil.length; i_estil++)
-												{													
-													if (capa.estil[i_estil].nom==capa_estil[j])
-													{
-														capa.i_estil=i_estil;
-														break;
-													}
-													
-												}
-												if (i_estil==capa.estil.length)
-												{
-													if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte													
-														alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);														
-												}
-											}
-										}
-										else
-										{
-											//Només pot dir semitransparent.
-											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-											{
-												if (capa.visible!="no")
-													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+				alert("Format error in query URL '"+location.search+"', Key and value pair (KVP) '"+kvp[i_clau]+"' without '='.").
+				break;
+			}
+			query[unescape(kvp[i_clau].substring(0, j)).toUpperCase()]=unescape(kvp[i_clau].substring(j+1));
+		}
 
-											}
-											else
-											{
-												if (capa_estil[j]!=null && capa_estil[j]!="")													
-													alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + 
-														DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
-											}
-										}
-									}
-									if (capa.descarregable=="ara_no")
-										capa.descarregable="si";
-									break;
-								}
-							}
-							if (i==ParamCtrl.capa.length)
-								alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ","fre":"Impossible trouver la couche "}) + capa_visible[j] + 
-										DonaCadenaLang({"cat":" indicada a LAYERS=", "spa":" indicada en LAYERS=", "eng":" indicated at LAYERS=", "fre":" indiquée à LAYERS="}));
-						}
-					    //CreaVistes();
-						//CreaLlegenda();
-					}
-					else if (i_clau==2)  //QUERY_LAYERS
-					{
-						//Declaro totes les capes com a ara no consultables.
-						for (i=0; i<ParamCtrl.capa.length; i++)
-						{
-							if (ParamCtrl.capa[i].consultable=="si")
-								ParamCtrl.capa[i].consultable="ara_no";
-						}
-						//Declaro consultables les que m'han dit.
-						capa_visible=valor.split(",");
-						for (j=0; j<capa_visible.length; j++)
-						{
-							for (i=0; i<ParamCtrl.capa.length; i++)
-							{
-								if (capa_visible[j]==ParamCtrl.capa[i].nom)
-								{
-									if (ParamCtrl.capa[i].consultable=="ara_no")
-										ParamCtrl.capa[i].consultable="si";
-									else
-										alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
-											  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS= no pot ser activada.", "spa":" indicada en QUERY_LAYERS= no puede ser activada.", "eng":" indicated at QUERY_LAYERS= cannot be activaded.", "fre":" indiquée à QUERY_LAYERS= ne peut pas être activée."}));
-									break;
-								}
-							}
-							if (i==ParamCtrl.capa.length)
-								alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ", "fre":"Impossible trouver la couche "}) + capa_visible[j] + 
-									  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS=", "spa":" indicada en QUERY_LAYERS=", "eng":" indicated at QUERY_LAYERS=", "fre":" indiquée à QUERY_LAYERS="}));
-						}
-					        //CreaVistes();
-						//CreaLlegenda();
-					}
-					else if (i_clau==3)  //LANGUAGE
-					{
-						//CanviaIdioma(valor);
-						ParamCtrl.idioma=valor.toLowerCase();
-					}
-					else if (i_clau==4)  //CRS
-						nou_CRS=valor;
-					else if(i_clau==5)// REQUEST
-					{
-						if(valor.toLowerCase()=="validaatributscoord")
-						{
-							if(Accio==null)
-								Accio=new CreaAccio(accio_validacio, null, null, 0, null, null, null, null, false);
-							else
-								Accio.accio=accio_validacio;
-						}
-						else if(valor.toLowerCase()=="anarcoord")
-						{
-							if(Accio==null)
-								Accio=new CreaAccio(accio_anar_coord, null, null, 0, null, null, null, null, false);
-							else
-								Accio.accio=accio_anar_coord;
-						}
-						else if(valor.toLowerCase()=="consultaperlocalitzacio")
-						{
-							if(Accio==null)
-								Accio=new CreaAccio(accio_conloc, null, null, 0, null, null, null, null, false);
-							else
-								Accio.accio=accio_conloc;
-						}
-					}
-					else if(i_clau==6) //X=
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, null, {"x": parseFloat(valor), "y": 0}, 0, null, null, null, null, false);
-						else
-						{
-							if(Accio.coord==null)							
-								Accio.coord={"x": parseFloat(valor), "y": 0};
-							else
-								Accio.coord.x=parseFloat(valor);
-						}
-					}
-					else if(i_clau==7) //Y=
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, null, {"x": 0, "y": parseFloat(valor)}, 0, null, null, null, null, false);								
-						else
-						{
-							if(Accio.coord==null)
-								Accio.coord={"x": 0, "y": parseFloat(valor)};
-							else
-								Accio.coord.y=parseFloat(valor);
-						}
-
-					}
-					else if(i_clau==8) //BUFFER
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null,null, null, parseFloat(valor), null, null, null, null,false);
-						else
-							Accio.buffer=parseFloat(valor);
-					}
-					else if(i_clau==9)//TEST_LAYERS
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null,null, null, 0, valor.split(","), null, null, null,false);
-						else
-							Accio.capes=valor.split(",");
-					}
-					else if(i_clau==10)//TEST_FIELDS
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, null, null, 0, null, valor.split(","), null, null, false);
-						else
-							Accio.camps=valor.split(",")
-					}
-					else if(i_clau==11)//TEST_VALUES
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, null, null, 0, null, null, valor.split(","), null, false);
-						else
-							Accio.valors=valor.split(",")
-					}
-					else if(i_clau==12) //SERVERTORESPONSE
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, valor, null, 0, null, null, null, null, false);
-						else
-							Accio.servidor=valor;
-					}
-					else if(i_clau==13)//IDTRANS
-					{
-						if(Accio==null)
-							Accio=new CreaAccio(null, null, null, 0, null, null, null, valor, false);
-						else
-							Accio.id_trans=valor;
-					}
-					//Ara els altres paràmetres.
-					break;
-				}
+		if (query["BBOX"])
+		{
+			coord=query["BBOX"].split(",");
+			if (coord.length!=4)
+			{
+				alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
+			}
+			else
+			{
+				//Cal carregar les 4 coordenades i fer el canvi d'àmbit
+				nou_env.MinX=parseFloat(coord[0]); 
+				nou_env.MaxX=parseFloat(coord[2]); 
+				nou_env.MinY=parseFloat(coord[1]);
+				nou_env.MaxY=parseFloat(coord[3]);
 			}
 		}
+		if (query["LAYERS"])
+		{
+			//Declaro totes les capes com a ara no visibles.
+			for (i=0; i<ParamCtrl.capa.length; i++)
+			{
+				capa=ParamCtrl.capa[i];
+				if (capa.visible=="si" || capa.visible=="semitransparent")
+					CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
+				if (capa.descarregable=="si")
+					capa.descarregable="ara_no";
+			}
+			//Declaro visibles les que m'han dit.
+			capa_visible=query["LAYERS"].split(",");
+			tinc_estils=false;
+			capa_estil=query["STYLES"].split(",");
+			if (capa_visible.length==capa_estil.length)
+				tinc_estils=true;
+			else
+				alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.", 
+							 "spa":"El número de estilos no se corresponde con el número de capas.",
+							 "eng":"Style number is no the same of the number of layers.", 
+							 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
+			for (j=0; j<capa_visible.length; j++)
+			{
+				for (i=0; i<ParamCtrl.capa.length; i++)
+				{
+					capa=ParamCtrl.capa[i];
+					if (capa_visible[j]==capa.nom)
+					{
+						if (capa.visible=="ara_no")
+							CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
+						else
+							alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
+									DonaCadenaLang({"cat":" indicada a LAYERS= no pot ser activada.", "spa":" indicada en LAYERS= no puede ser activada.", 
+												   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
+						if (tinc_estils)
+						{
+							if (capa.estil && capa.estil.length>1)
+							{
+								//Si a la part del final posa ":SEMITRANSPARENT"
+								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
+								{
+									if (capa.visible!="no")
+										CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+								}
+								else
+								{
+									if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
+									{
+										if (capa.visible!="no")
+											CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+										capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
+									}
+									for (i_estil=0; i_estil<capa.estil.length; i_estil++)
+									{													
+										if (capa.estil[i_estil].nom==capa_estil[j])
+										{
+											capa.i_estil=i_estil;
+											break;
+										}
+										
+									}
+									if (i_estil==capa.estil.length)
+									{
+										if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte													
+											alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);														
+									}
+								}
+							}
+							else
+							{
+								//Només pot dir semitransparent.
+								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
+								{
+									if (capa.visible!="no")
+										CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+
+								}
+								else
+								{
+									if (capa_estil[j]!=null && capa_estil[j]!="")													
+										alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + 
+											DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
+								}
+							}
+						}
+						if (capa.descarregable=="ara_no")
+							capa.descarregable="si";
+						break;
+					}
+				}
+				if (i==ParamCtrl.capa.length)
+					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ","fre":"Impossible trouver la couche "}) + capa_visible[j] + 
+							DonaCadenaLang({"cat":" indicada a LAYERS=", "spa":" indicada en LAYERS=", "eng":" indicated at LAYERS=", "fre":" indiquée à LAYERS="}));
+			}
+		    //CreaVistes();
+			//CreaLlegenda();
+		}
+		else if (query["QUERY_LAYERS"])
+		{
+			//Declaro totes les capes com a ara no consultables.
+			for (i=0; i<ParamCtrl.capa.length; i++)
+			{
+				if (ParamCtrl.capa[i].consultable=="si")
+					ParamCtrl.capa[i].consultable="ara_no";
+			}
+			//Declaro consultables les que m'han dit.
+			capa_visible=query["QUERY_LAYERS"].split(",");
+			for (j=0; j<capa_visible.length; j++)
+			{
+				for (i=0; i<ParamCtrl.capa.length; i++)
+				{
+					if (capa_visible[j]==ParamCtrl.capa[i].nom)
+					{
+						if (ParamCtrl.capa[i].consultable=="ara_no")
+							ParamCtrl.capa[i].consultable="si";
+						else
+							alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
+								  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS= no pot ser activada.", "spa":" indicada en QUERY_LAYERS= no puede ser activada.", "eng":" indicated at QUERY_LAYERS= cannot be activaded.", "fre":" indiquée à QUERY_LAYERS= ne peut pas être activée."}));
+						break;
+					}
+				}
+				if (i==ParamCtrl.capa.length)
+					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ", "fre":"Impossible trouver la couche "}) + capa_visible[j] + 
+						  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS=", "spa":" indicada en QUERY_LAYERS=", "eng":" indicated at QUERY_LAYERS=", "fre":" indiquée à QUERY_LAYERS="}));
+			}
+			  //CreaVistes();
+			//CreaLlegenda();
+		}
+		if (query["LANGUAGE"])
+		{
+			ParamCtrl.idioma=query["LANGUAGE"].toLowerCase();
+		}
+		if (query["CRS"])
+			nou_CRS=query["CRS"];
+		if(query["REQUEST"])
+		{
+			if(query["REQUEST"].toLowerCase()=="validaatributscoord")
+			{
+				if(Accio==null)
+					Accio=new CreaAccio(accio_validacio, null, null, 0, null, null, null, null, false);
+				else
+					Accio.accio=accio_validacio;
+			}
+			else if(query["REQUEST"].toLowerCase()=="anarcoord")
+			{
+				if(Accio==null)
+					Accio=new CreaAccio(accio_anar_coord, null, null, 0, null, null, null, null, false);
+				else
+					Accio.accio=accio_anar_coord;
+			}
+			else if(query["REQUEST"].toLowerCase()=="consultaperlocalitzacio")
+			{
+				if(Accio==null)
+					Accio=new CreaAccio(accio_conloc, null, null, 0, null, null, null, null, false);
+				else
+					Accio.accio=accio_conloc;
+			}
+		}
+		if(query["X"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, null, {"x": parseFloat(query["X"]), "y": 0}, 0, null, null, null, null, false);
+			else
+			{
+				if(Accio.coord==null)							
+					Accio.coord={"x": parseFloat(query["X"]), "y": 0};
+				else
+					Accio.coord.x=parseFloat(query["X"]);
+			}
+		}
+		if(query["Y"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, null, {"x": 0, "y": parseFloat(query["Y"])}, 0, null, null, null, null, false);								
+			else
+			{
+				if(Accio.coord==null)
+					Accio.coord={"x": 0, "y": parseFloat(query["Y"])};
+				else
+					Accio.coord.y=parseFloat(query["Y"]);
+			}
+
+		}
+		if(query["BUFFER"]) //BUFFER
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null,null, null, parseFloat(query["BUFFER"]), null, null, null, null,false);
+			else
+				Accio.buffer=parseFloat(query["BUFFER"]);
+		}
+		if(query["TEST_LAYERS"])//TEST_LAYERS
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null,null, null, 0, query["TEST_LAYERS"].split(","), null, null, null,false);
+			else
+				Accio.capes=query["TEST_LAYERS"].split(",");
+		}
+		if(query["TEST_FIELDS"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, null, null, 0, null, query["TEST_FIELDS"].split(","), null, null, false);
+			else
+				Accio.camps=query["TEST_FIELDS"].split(",")
+		}
+		if(query["TEST_VALUES"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, null, null, 0, null, null, query["TEST_VALUES"].split(","), null, false);
+			else
+				Accio.valors=query["TEST_VALUES"].split(",")
+		}
+		if(query["SERVERTORESPONSE"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, query["SERVERTORESPONSE"], null, 0, null, null, null, null, false);
+			else
+				Accio.servidor=query["SERVERTORESPONSE"];
+		}
+		if(query["IDTRANS"])
+		{
+			if(Accio==null)
+				Accio=new CreaAccio(null, null, null, 0, null, null, null, query["IDTRANS"], false);
+			else
+				Accio.id_trans=query["IDTRANS"];
+		}
+
+		//"CONFIG=" es tracta abans.
 	}
+
 	if(Accio && NCapesCTipica < capa_consulta_tipica_intern.length)
 		dades_pendents_accio=true;
 	

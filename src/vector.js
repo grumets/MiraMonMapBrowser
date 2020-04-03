@@ -905,6 +905,14 @@ function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_cap
 	return capa_digi.objectes.features[i_obj_capa].properties[capa_digi.atributs[i_atrib].nom];
 }
 
+function DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil)
+{
+	var valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+	if (capa_digi.atributs[i_atrib].NDecimals || capa_digi.atributs[i_atrib].NDecimals===0)
+		return OKStrOfNe(valor, capa_digi.atributs[i_atrib].NDecimals);
+	return valor;
+}
+
 function AlertaNomAtributIncorrecteSimbolitzar(nom_camp, text_nom_camp, capa_digi)
 {
 	alert(DonaCadenaLang({"cat": "Nom d'atribut incorrecte", 
@@ -922,7 +930,7 @@ function AlertaNomAtributIncorrecteSimbolitzar(nom_camp, text_nom_camp, capa_dig
 
 function DeterminaValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)
 {
-var estil, valor, i_atrib;
+var estil, i_atrib;
 	if(capa_digi.estil && capa_digi.estil.length && nom_camp &&
 		capa_digi.objectes.features[i_obj_capa].properties &&
 		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
@@ -934,8 +942,26 @@ var estil, valor, i_atrib;
 			AlertaNomAtributIncorrecteSimbolitzar(nom_camp, "NomCamp*", capa_digi);
 			return 0;
 		}
-		valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
-		return valor;
+		return DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+	}
+	return 0;
+}
+
+function DeterminaTextValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)
+{
+var estil, i_atrib;
+	if(capa_digi.estil && capa_digi.estil.length && nom_camp &&
+		capa_digi.objectes.features[i_obj_capa].properties &&
+		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	{
+		estil=capa_digi.estil[capa_digi.i_estil];
+		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, nom_camp);
+		if (i_atrib==-1)
+		{
+			AlertaNomAtributIncorrecteSimbolitzar(nom_camp, "NomCamp*", capa_digi);
+			return 0;
+		}
+		return DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
 	}
 	return 0;
 }

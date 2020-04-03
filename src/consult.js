@@ -627,7 +627,7 @@ var separador=null;
 			separador=atributs[i].separador;					
 		if(atributs[i].mostrar=="no")
 			continue;							
-		valor=DeterminaValorAtributObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj_digi, i, PuntConsultat.i, PuntConsultat.j);
+		valor=DeterminaTextValorAtributObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj_digi, i, PuntConsultat.i, PuntConsultat.j);
 		if(atributs[i].mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 			continue;
 		
@@ -1267,16 +1267,21 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	else
 	{
-		var env_icona, env_icones,  punt={};
+		var env_icona, env_icones, punt={}, icona, simbols;
 
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i_obj], capa.CRSgeometry);
 
-		env_icones=DonaEnvIcona(punt,
-						capa.estil[capa.i_estil].simbols[0].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, 0, PuntConsultat.i, PuntConsultat.j)].icona);
+		simbols=capa.estil[capa.i_estil].simbols[0];
+		icona=simbols.simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, 0, PuntConsultat.i, PuntConsultat.j)].icona;
+		icona.fescala=(simbols.NomCampFEscala) ? DeterminaValorObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, 0, PuntConsultat.i, PuntConsultat.j, simbols.NomCampFEscala) : 1;
+		env_icones=DonaEnvIcona(punt, icona);
 		for (var i_simb=1; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
 		{
-			env_icona=DonaEnvIcona(punt,
-						capa.estil[capa.i_estil].simbols[i_simb].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona);
+			simbols=capa.estil[capa.i_estil].simbols[i_simb];
+			icona=simbols.simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona;
+			icona.fescala=(simbols.NomCampFEscala) ? DeterminaValorObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j, simbols.NomCampFEscala) : 1;
+			env_icona=DonaEnvIcona(punt, icona);
+
 			if (env_icones.MinX>env_icona.MinX)
 				env_icones.MinX=env_icona.MinX;
 			if (env_icones.MaxX<env_icona.MaxX)

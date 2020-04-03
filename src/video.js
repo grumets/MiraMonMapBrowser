@@ -636,8 +636,7 @@ var capa, i_estil
 		{				
 			for (var i_data=0; i_data<capa.data.length; i_data++)
 			{
-				var data=capa.data[i_data];
-				var d=new Date(data.year ? data.year : 1970, data.month ? data.month-1 : 0, data.day ? data.day : 1, data.hour ? data.hour : 0, data.minute ? data.minute : 0, data.second ? data.second : 0);
+				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
 				DatesVideo.push({"i_capa": i_capa, 
 						"i_data": i_data, 
 						"i_estil": i_estil, 
