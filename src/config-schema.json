@@ -1580,7 +1580,7 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"FlagsData": {
-						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Només aplica quan el model és ràster.",
+						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Si no s'indica els desplegables de data surten en blanc.",
 						"type": ["object", "null"],
 						"properties": {
 							"DataMostraAny": {
@@ -1658,7 +1658,7 @@
 						"type": ["boolean", "null"]
 					},
 					"AnimableMultiTime": {
-						"description": "La capa usa l'array de data per fer el vídeo. Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false. Només aplica quan el model és ràster.", 
+						"description": "Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false. En el model ràster també indica que cal usar l'array de data per fer el vídeo.", 
 						"type": ["boolean","null"]
 					},
 					"proces": {
@@ -1955,12 +1955,16 @@
 							"enum": ["circle", "square" ]
 						},						
 						"r": {
-							"description": "Radi del cercle o costat del quadrat",
+							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a,",
+							"type": "number"
+						},
+						"a": {
+							"description": "Area del cercle o del quadrat. No compatible amb l'ús de r,",
 							"type": "number"
 						},
 						"unitats": 
 						{
-							"description": "Unitats del ràdi. El valors per defecte és 'px' (pixels)",
+							"description": "Unitats base del ràdi o de l'àrea. El valors per defecte és 'px' (pixels)",
 							"enum": ["px", "m"]
 						}
 					}
@@ -2358,6 +2362,17 @@
 						"minimum": 0,
 						"maximum": 20,
 						"multipleOf" : 1
+					},
+					"serieTemporal": {
+						"description": "Els valors d'aquest atribut formen una series temporal que s'ha de mostrar com una gràfica",
+						"type": "object",
+						"required": ["color"],
+						"properties": {
+							"color": {
+								"description": "Color de la línia de la gràfica",
+								"type": "string"
+							}
+						}
 					}
 				}
 			}

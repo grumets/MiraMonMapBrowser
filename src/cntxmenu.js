@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Núria Julià (n julia at creaf uab cat)
@@ -955,7 +955,7 @@ var env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, i;
 
 function DeterminaCostatMinimDeCapes(i_capes)
 {
-var costat=1e+300;
+var costat=1e300;
 
 	if (!i_capes.length)
 		return ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
@@ -967,7 +967,7 @@ var costat=1e+300;
 		if (costat>ParamCtrl.capa[i_capes[i]].CostatMinim)
 			costat=ParamCtrl.capa[i_capes[i]].CostatMinim;
 	}
-	return (costat==1e+300) ? ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat : costat;
+	return (costat==1e300) ? ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat : costat;
 }
 
 function DeterminaCostatMaximDeCapes(i_capes)

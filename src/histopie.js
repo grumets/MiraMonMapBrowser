@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -969,4 +969,57 @@ var component_name=["R", "G", "B"];
 		});
 	}
 	return color_name;
+}
+
+function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, color)
+{
+	var cfg = {
+		type: 'line',
+		data: {
+			labels: labels,
+			temps: temps,
+			datasets: [{
+				label: y_scale_label,
+				data: data,
+				type: 'line',
+				pointRadius: 0,
+				pointHitRadius: 4,
+				fill: false,
+				lineTension: 0,
+				borderWidth: 3,
+				pointStyle: "line",
+				borderColor: color, 
+				backgroundColor: color
+			}]
+ 		},
+		options: {
+			scales: {
+				xAxes: [{
+			                type: 'time',
+			                distribution: 'linear'
+				}],
+				yAxes: [{
+					scaleLabel: {display: true, labelString: y_scale_label},
+					ticks: { beginAtZero:true }
+				}]
+			},
+			tooltips: { 
+				mode: 'x',
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						var allData = data.datasets[tooltipItem.datasetIndex].data; 
+						var tooltipLabel = data.temps[tooltipItem.index];
+						var tooltipData = allData[tooltipItem.index]; 
+						return tooltipLabel + "," + tooltipData.y; 
+					} 
+				} 
+			},
+	    		legend: { 
+				display: false,
+    				labels: {usePointStyle: true}
+			}
+		}
+	};
+	//var ctx = document.getElementById(nom_canvas);
+	return new Chart(ctx, cfg);
 }

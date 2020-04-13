@@ -151,7 +151,7 @@ var cdns=[];
 	    if (flags_data.DataMostraMes==true)
 			cdns.push("-");
 	    cdns.push(DonaYearJSON(data_a_usar));
-    }
+	}
 	if (flags_data.DataMostraHora==true || flags_data.DataMostraMinut==true || flags_data.DataMostraSegon==true)
 	{
 	    if (flags_data.DataMostraAny==true || flags_data.DataMostraMes==true || flags_data.DataMostraDia==true)
@@ -162,7 +162,7 @@ var cdns=[];
 	    if (DonaHourJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaHourJSON(data_a_usar));
-    }
+	}
 	if (flags_data.DataMostraMinut==true)
 	{
 	    if (flags_data.DataMostraHora==true)
@@ -170,7 +170,7 @@ var cdns=[];
 	    if (DonaMinuteJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaMinuteJSON(data_a_usar));
-    }
+	}
 	if (flags_data.DataMostraSegon==true)
 	{
 	    if (flags_data.DataMostraMinut==true)
@@ -178,7 +178,7 @@ var cdns=[];
 	    if (DonaSecondJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaSecondJSON(data_a_usar));
-    }
+	}
 	return cdns.join("");
 }
 
@@ -186,7 +186,7 @@ function DonaDataCapaPerLlegenda(i_capa, i_data)
 {
 var data, cdns=[], capa=ParamCtrl.capa[i_capa];
 	cdns.push(DonaDataCapaComATextBreu(i_capa, i_data));
-	if (capa.FlagsData.properties)
+	if (capa.FlagsData && capa.FlagsData.properties)
 	{
 		data=capa.data[DonaIndexDataCapa(capa, i_data)];
 		for (var i=0; i<capa.FlagsData.properties.length; i++)

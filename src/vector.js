@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -887,22 +887,29 @@ function DonaIAtributsDesDeNomAtribut(capa_digi, nom_atribut)
 	return -1;
 }
 
-function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil)
+//Determina el valor per una data concreta. Pensada per muntar series temporals
+function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, i_data, i_col, i_fil)
 {
-	if (capa_digi.atributs[i_atrib].calcul && !capa_digi.atributs[i_atrib].FormulaConsulta)
+	if (capa.atributs[i_atrib].calcul && !capa.atributs[i_atrib].FormulaConsulta)
 	{
 		alert("Irregular situation in the code. This needs to be solved in the feature collection level.");
 		return 0;
 	}
 	
-	if (capa_digi.atributs[i_atrib].FormulaConsulta)  
+	if (capa.atributs[i_atrib].FormulaConsulta)  
 	{
-		var p=capa_digi.objectes.features[i_obj_capa].properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
-		if (HiHaValorsNecessarisCapaFormulaconsulta(capa_digi, capa_digi.atributs[i_atrib].FormulaConsulta))
-			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa_digi, null, i_col, i_fil); //idem
-		return eval(capa_digi.atributs[i_atrib].FormulaConsulta);
+		var p=capa.objectes.features[i_obj_capa].properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
+		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, capa.atributs[i_atrib].FormulaConsulta))
+			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i_col, i_fil); //idem
+		return eval(CanviaVariablesDeCadena(capa.atributs[i_atrib].FormulaConsulta, capa, i_data));
 	}
-	return capa_digi.objectes.features[i_obj_capa].properties[capa_digi.atributs[i_atrib].nom];
+	return capa.objectes.features[i_obj_capa].properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data)];
+}
+
+//Determina el valor per la data actual
+function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, i_col, i_fil)
+{
+	return DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, null, i_col, i_fil)
 }
 
 function DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil)
@@ -1593,37 +1600,49 @@ var punt, i;
 		FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(i_capa, cadena_objectes, true);
 }//Fi de SeleccionaObjsCapaDigiPerIdentificador()
 
+function DonaMidaIconaForma(icona)
+{
+	if (icona.a)
+	{
+		if (icona.type=="square")
+			return Math.sqrt(icona.a*icona.fescala);
+		return Math.sqrt(icona.a*icona.fescala/Math.PI);
+	}	
+	return icona.r*icona.fescala;
+}
+
 function DonaEnvIcona(punt, icona)
 {
-	var env={};
+var env={}, mida;
 
 	if (Array.isArray(icona))
 	{
-		env.MinI=MinJ=100000;
-		env.MaxI=MaxJ=-100000;
+		env.MinI=MinJ=+1e300;
+		env.MaxI=MaxJ=-1e300;
 		for (var i=0; i<icona.length; i++)
 		{
+			mida=DonaMidaIconaForma(icona);
 			if (icona[i].type=="circle")
 			{
-				if (env.MinI>-icona[i].r)
-					env.MinI=-icona[i].r;
-				if (env.MinJ>-icona[i].r)
-					env.MinJ=-icona[i].r;
-				if (env.MaxI<icona[i].r)
-					env.MaxI=icona[i].r;
-				if (env.MaxJ<icona[i].r)
-					env.MaxJ=icona[i].r;
+				if (env.MinI>-mida)
+					env.MinI=-mida;
+				if (env.MinJ>-mida)
+					env.MinJ=-mida;
+				if (env.MaxI<mida)
+					env.MaxI=mida;
+				if (env.MaxJ<mida)
+					env.MaxJ=mida;
 			}
 			else if (icona.type=="square")
 			{
-				if (env.MinI>-icona[i].r/2)
-					env.MinI=-icona[i].r/2;
-				if (env.MinJ>-icona[i].r/2)
-					env.MinJ=-icona[i].r/2;
-				if (env.MaxI<icona[i].r/2)
-					env.MaxI=icona[i].r/2;
-				if (env.MaxJ<icona[i].r/2)
-					env.MaxJ=icona[i].r/2;
+				if (env.MinI>-mida/2)
+					env.MinI=-mida/2;
+				if (env.MinJ>-mida/2)
+					env.MinJ=-mida/2;
+				if (env.MaxI<mida/2)
+					env.MaxI=mida/2;
+				if (env.MaxJ<mida/2)
+					env.MaxJ=mida/2;
 			}
 			else if (icona[i].type=="arc")
 			{
@@ -1647,25 +1666,26 @@ function DonaEnvIcona(punt, icona)
 	}
 	else if (icona.type=="circle")
 	{
-		env.MinI=env.MinJ=-icona.r;
-		env.MaxI=env.MaxJ=icona.r;
+		mida=DonaMidaIconaForma(icona);
+		env.MinI=env.MinJ=-mida;
+		env.MaxI=env.MaxJ=mida;
 	}
 	else if (icona.type=="square")
 	{
-		env.MinI=env.MinJ=-icona.r/2;
-		env.MaxI=env.MaxJ=icona.r/2;
+		mida=DonaMidaIconaForma(icona);
+		env.MinI=env.MinJ=-mida/2;
+		env.MaxI=env.MaxJ=mida/2;
 	}
 	else if (icona.icona) //Una icona com a url a una png o similar
 	{
-		env.MinI=-icona.i;
-		env.MaxI=icona.ncol-icona.i;
-		env.MinJ=-icona.j
-		env.MaxJ=icona.nfil-icona.j;
+		env.MinI=-icona.i*icona.fescala;
+		env.MaxI=(icona.ncol-icona.i)*icona.fescala;
+		env.MinJ=-icona.j*icona.fescala;
+		env.MaxJ=(icona.nfil-icona.j)*icona.fescala;
 	}
 	else
 		env.MaxJ=env.MaxI=env.MinJ=env.MinI=0;
 
-	var fescala=(icona.fescala) ? icona.fescala : 1;
 	if (icona.unitats=="m")
 	{
 		if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
@@ -1675,14 +1695,13 @@ function DonaEnvIcona(punt, icona)
 			env.MinJ/=FactorGrausAMetres;
 			env.MaxJ/=FactorGrausAMetres;
 		}					
-		return {"MinX": punt.x+env.MinI*fescala, 
-			"MaxX": punt.x+env.MaxI*fescala, 
-			"MinY": punt.y-env.MaxJ*fescala, 
-			"MaxY": punt.y-env.MinJ*fescala};
+		return {"MinX": punt.x+env.MinI, 
+			"MaxX": punt.x+env.MaxI, 
+			"MinY": punt.y-env.MaxJ, 
+			"MaxY": punt.y-env.MinJ};
 	}
-	return {"MinX": punt.x+env.MinI*ParamInternCtrl.vista.CostatZoomActual*fescala, 
-		"MaxX": punt.x+env.MaxI*ParamInternCtrl.vista.CostatZoomActual*fescala, 
-		"MinY": punt.y-env.MaxJ*ParamInternCtrl.vista.CostatZoomActual*fescala, 
-		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual*fescala};
+	return {"MinX": punt.x+env.MinI*ParamInternCtrl.vista.CostatZoomActual, 
+		"MaxX": punt.x+env.MaxI*ParamInternCtrl.vista.CostatZoomActual, 
+		"MinY": punt.y-env.MaxJ*ParamInternCtrl.vista.CostatZoomActual, 
+		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual};
 }
-
