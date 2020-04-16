@@ -88,11 +88,6 @@ function MoureASotaDeTot(i_capa)
 	return;
 }
 
-/*function AfegirCapa(i_capa)
-{
-	IniciaFinestraAfegeixCapaServidor(i_capa);
-}*/
-
 function EsborrarCapa(i_capa)
 {
 	if (AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)==false)

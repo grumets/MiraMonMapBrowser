@@ -3794,7 +3794,7 @@ function CreaBarra(crs)
 var i, j, k;
 var cdns=[];
 
-	if (ParamCtrl.BarraNomesDescarrega==true)
+	if (ParamCtrl.BarraNomesDescarrega)
 	{
 		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return ObtenirMMZ();\">");
 		ParamCtrl.EstatClickSobreVista="ClickMouMig";
@@ -3807,19 +3807,19 @@ var cdns=[];
 	else // Barra completa
 	{
 		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return PortamANivellDeZoom(document.zoom.nivell.value)\">\n");
-		if (ParamCtrl.BarraBotoMes==true)
+		if (ParamCtrl.BarraBotoMes)
 		   	cdns.push((CadenaBotoPolsable("zoom_in", "zoom_in", DonaCadenaLang({"cat":"acostar", "spa":"acercar", "eng":"zoom in","fre":"rapprocher"}), 	
 				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+1);")));
-		if (ParamCtrl.BarraBotoMenys==true)
+		if (ParamCtrl.BarraBotoMenys)
 			cdns.push((CadenaBotoPolsable("zoomout", "zoomout", DonaCadenaLang({"cat":"allunyar", "spa":"alejar", "eng":"zoom out","fre":"éloigner"}), 
 				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)-1);")));
-		if (ParamCtrl.BarraBotoAnarCoord==true)
+		if (ParamCtrl.BarraBotoAnarCoord)
 			cdns.push((CadenaBotoPolsable("zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), 
 				"MostraFinestraAnarCoordenada()")));
-		if (ParamCtrl.BarraBotoBack==true)
+		if (ParamCtrl.BarraBotoBack)
 			cdns.push((CadenaBotoPolsable("zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), 
 				"RecuperaVistaPrevia();")));
-		if (ParamCtrl.BarraBotoVGeneral==true)
+		if (ParamCtrl.BarraBotoVGeneral)
 			cdns.push((CadenaBotoPolsable("zoomall", "zoomall", DonaCadenaLang({"cat":"vista general", "spa":"vista general", "eng":"general view","fre":"vue générale"}), 
 				"PortamAVistaGeneral();")));
 
@@ -3846,17 +3846,17 @@ var cdns=[];
 			if (ParamCtrl.capa[j].model==model_vector && ParamCtrl.capa[j].editable!="no")
 				break;
 		}
-		if (ParamCtrl.BarraBotonsAlternatius==true)
+		if (ParamCtrl.BarraBotonsAlternatius)
 		{
 			var botons=[];
 			var boto_p;
 
 			//Precaucions previes: S'eviten situacions on ParamCtrl.EstatClickSobreVista és incompatible amb l'estat actual del navegador
-			if (ParamCtrl.EstatClickSobreVista=="ClickMouMig" && !(ParamCtrl.BarraBotoMouMig==true))
+			if (ParamCtrl.EstatClickSobreVista=="ClickMouMig" && !(ParamCtrl.BarraBotoMouMig))
 				ParamCtrl.EstatClickSobreVista="ClickPan1";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && !(ParamCtrl.BarraBotoInsereix==true || (ParamCtrl.capa && j<ParamCtrl.capa.length)))
+			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && !(ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))
 				ParamCtrl.EstatClickSobreVista="ClickConLoc";
-			else if ((ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2") && !(ParamCtrl.BarraBotoNovaVista==true))
+			else if ((ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2") && !(ParamCtrl.BarraBotoNovaVista))
 				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
 			if (ParamCtrl.EstatClickSobreVista=="ClickConLoc" && (!(i<ParamCtrl.capa.length) && (ParamCtrl.capa && !(k<ParamCtrl.capa.length))))
 				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
@@ -3870,7 +3870,7 @@ var cdns=[];
 				boto_p="zoomfin";
 			else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2")
 				boto_p="novavista";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix==true || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
+			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
 				boto_p="inserta";
 			else if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
 				boto_p=(i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? "conval" : "conloc";				
@@ -3880,7 +3880,7 @@ var cdns=[];
 			botons[botons.length]={"src": "pan", 
 				   "alt": DonaCadenaLang({"cat":"mou vista", "spa":"mueve vista", "eng":"pan view", "fre":"déplace vue"}), 
 				   "funcio": "CanviaEstatClickSobreVista(\'ClickPan1\');"};
-	    	if (ParamCtrl.BarraBotoMouMig==true)
+	    	if (ParamCtrl.BarraBotoMouMig)
 	    	{
 				botons[botons.length]={"src": "moumig", 
 					   "alt": DonaCadenaLang({"cat":"centra on faci clic", "spa":"centra donde haga clic", "eng":"center where click", "fre":"centre où cliquer"}),  
@@ -3889,7 +3889,7 @@ var cdns=[];
 			botons[botons.length]={"src": "zoomfin", 
 					   "alt": DonaCadenaLang({"cat":"zoom de finestra", "spa":"zoom de ventana", "eng":"window zoom", "fre":"zoom de fenêtre"}), 
 					   "funcio": "CanviaEstatClickSobreVista(\'ClickZoomRec1\');"};
-			if (ParamCtrl.BarraBotoNovaVista==true)
+			if (ParamCtrl.BarraBotoNovaVista)
 			{
 				botons[botons.length]={"src": "novavista",
 					   "alt": DonaCadenaLang({"cat":"nova vista", "spa":"nova vista", "eng":"new view", "fre":"nouvelle vue"}),
@@ -3898,10 +3898,10 @@ var cdns=[];
 			if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
 			{
 				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? "conval" : "conloc",
-					   "alt": (i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? DonaCadenaLang({"cat":"validació", "spa":"validación", "eng":"validate", "fre":"validation"}) : DonaCadenaLang({"cat":"consulta", "spa":"consulta", "eng":"query", "fre":"reserche"}),
+					   "alt": (i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? DonaCadenaLang({"cat":"validació", "spa":"validación", "eng":"validate", "fre":"validation"}) : DonaCadenaLang({"cat":"consulta per localització", "spa":"consulta por localización", "eng":"query by location", "fre":"requête par emplacement"}),
 					   "funcio": "CanviaEstatClickSobreVista(\'ClickConLoc\');"};
 			}
-			if (ParamCtrl.BarraBotoInsereix==true || (ParamCtrl.capa && j<ParamCtrl.capa.length))
+			if (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length))
 		    {
 				botons[botons.length]={"src": "inserta", 
 					   "alt": DonaCadenaLang({"cat":"editar un nou punt", "spa":"editar un nuevo punto", "eng":"edit a new point", "fre":"éditer un nouveaux point"}),  
@@ -3910,8 +3910,8 @@ var cdns=[];
 			cdns.push(CadenaBotonsAlternatius(boto_p, botons),"\n");
 		}
 
-		if ((typeof ParamCtrl.BarraEscala==="undefined" || ParamCtrl.BarraEscala==true) &&
-			(ParamCtrl.LlistatZoomFraccio==true || ParamCtrl.LlistatZoomMidaPixel==true || ParamCtrl.LlistatZoomEscalaAprox==true))
+		if ((typeof ParamCtrl.BarraEscala==="undefined" || ParamCtrl.BarraEscala) &&
+			(ParamCtrl.LlistatZoomFraccio || ParamCtrl.LlistatZoomMidaPixel || ParamCtrl.LlistatZoomEscalaAprox))
 		{
 			cdns.push("&nbsp;<span class=\"titol_zoom\">",
 			   (ParamCtrl.TitolLlistatNivellZoom ? 
@@ -3928,7 +3928,7 @@ var cdns=[];
 			}
 			cdns.push("</select>\n");
 		}
-		if (ParamCtrl.BarraBotoCTipica==true && ParamCtrl.ConsultaTipica)
+		if (ParamCtrl.BarraBotoCTipica && ParamCtrl.ConsultaTipica)
 			cdns.push((CadenaBotoPolsable("consulta_tipica_i", "ctipica", DonaCadenaLang({"cat":"Consulta típica o per objectes", "spa":"Consulta típica o por objetos", "eng":"Typical or object query","fre":"Recherche typique où par objets"}), "MostraOAmagaCtipiques();")));
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
@@ -3941,7 +3941,7 @@ var cdns=[];
 		}
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-		 	if (ParamCtrl.capa[i].animable==true)
+		 	if (ParamCtrl.capa[i].animable)
 			{
 				cdns.push((CadenaBotoPolsable("video", "video", DonaCadenaLang({"cat":"series temporals i animacions", "spa":"series temporales y animaciones", "eng":"time series and animations", "fre":"séries chronologiques et animations"}), 
 					"MostraFinestraVideo();")),"\n");
@@ -3949,32 +3949,32 @@ var cdns=[];
 			}
 		}
 		
-		if (ParamCtrl.BarraBotoCaixaParam==true)
+		if (ParamCtrl.BarraBotoCaixaParam)
 			cdns.push((CadenaBotoPolsable("param", "param", DonaCadenaLang({"cat":"opcions", "spa":"opciones", "eng":"options","fre":"options"}), "MostraFinestraParametres();")));
-		if (ParamCtrl.BarraBotoConsola==true)
+		if (ParamCtrl.BarraBotoConsola)
 			cdns.push((CadenaBotoPolsable("consola", "consola", DonaCadenaLang({"cat":"consola", "spa":"consola", "eng":"console","fre":"console"}), "MostraFinestraConsola();")));
-		if (ParamCtrl.BarraBotoEnllac==true)
+		if (ParamCtrl.BarraBotoEnllac)
 			cdns.push((CadenaBotoPolsable("enllac", "enllac", DonaCadenaLang({"cat":"enllaç al mapa", "spa":"enlace al mapa", "eng":"link to map", "fre":"lien à la carte"}), "MostraFinestraEnllac();")));
-		if (ParamCtrl.BarraBotoEnllacWMS==true)
+		if (ParamCtrl.BarraBotoEnllacWMS)
 			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", DonaCadenaLang({"cat":"enllaços als servidors", "spa":"enlaces a los servidores", "eng":"links to the servers", "fre":"lien aux serveurs"}), "MostraFinestraEnllacWMS();")));
-		if (ParamCtrl.BarraBotoAfegeixCapa==true)
+		if (ParamCtrl.BarraBotoAfegeixCapa)
 			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", DonaCadenaLang({"cat":"Afegir capes", "spa":"Añadir capas", "eng":"Add layers", "fre":"Ajouter couches"}), "IniciaFinestraAfegeixCapaServidor(0);")));			
-		if (ParamCtrl.BarraBotoCalculadora==true)
+		if (ParamCtrl.BarraBotoCalculadora)
 			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", DonaCadenaLang({"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng":"Layer calculator", "fre":"Calculateur de couches"}), "IniciaFinestraCalculadoraCapes();")));			
 		cdns.push("\n");
 
-		if (ParamCtrl.BarraBotoPrint==true)
+		if (ParamCtrl.BarraBotoPrint)
 			cdns.push((CadenaBotoPolsable("print", "print", DonaCadenaLang({"cat":"imprimir", "spa":"imprimir", "eng":"print", "fre":"imprimer"}), "ObreTriaFullImprimir();")));
-		if (ParamCtrl.BarraBotoPlanaPrincipal==true)
+		if (ParamCtrl.BarraBotoPlanaPrincipal)
 			cdns.push((CadenaBotoPolsable("home", "home", DonaCadenaLang({"cat":"Reiniciar des de servidor", "spa":"Reiniciar desde servidor", "eng":"Restart from server", "fre":"Redémarrer depuis le serveur"}), "RestartMiraMonMapBrowser();")));
-		if (ParamCtrl.BarraBotoInstallarMMZ==true)
+		if (ParamCtrl.BarraBotoInstallarMMZ)
 			cdns.push((CadenaBotoPolsable("instmmr", "instmmr", 
 				DonaCadenaLang({"cat":"instal·lar el Lector Universal de Mapes del MiraMon", "spa":"instalar el Lector Universal de Mapas de MiraMon", "eng":"install MiraMon Universal Map Reader","fre":"installer le Lecteur Universel de Cartes du Miramon"}), 
 				"InstalaLectorMapes();")));
-		if (ParamCtrl.BarraBotoAjuda==true)
+		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", DonaCadenaLang({"cat":"ajuda interactiva", "spa":"ayuda interactiva", "eng":"interactive help","fre":"aide intéractive"}), 
 				"ObreFinestraAjuda();")));
-		if (ParamCtrl.BarraBotonsIdiomes==true && ParamCtrl.idiomes.length>1)
+		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
 			var nom_idioma_alt={"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"};
 			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
@@ -4396,7 +4396,7 @@ var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 	}
 	cdns.push(			  "</Style>\n");
 	cdns.push(			  "<Format>", capa.FormatImatge,"</Format>\n");
-	if (capa.AnimableMultiTime==true)
+	if (capa.AnimableMultiTime)
 	{
 		cdns.push(			"<DimensionNameValue name=\"TIME\">",
 				  			DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData),
@@ -6495,7 +6495,7 @@ var win, i, j, l, capa;
 
 	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", "ara_no", false, null, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", "no", false, null, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa 
-	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 150, "nWSeC", "ara_no", false, null, null);
+	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 300, "nWSeC", "ara_no", false, null, null);
 	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 520, 700, "nWSeC", "ara_no", false, null, null);
 	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", "ara_no", false, null, null);
 	createFinestraLayer(window, "combinacioRGB", {"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}, boto_tancar, 220, 90, 430, 275, "NwCR", "ara_no", false, null, null);

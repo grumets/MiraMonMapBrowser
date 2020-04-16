@@ -327,7 +327,8 @@ a.unmenu:hover {
 les respostes de la consulta per localització de les diverses capes consultades.
 Només s'usa en les consultes per localització de finestra no incrustada */
 
-.layerprincipal{
+@media not print {
+  .layerprincipal{
 	border: 2px solid #666666;
 	background-color: #FFFFFF;
 	width: 97%;
@@ -338,7 +339,9 @@ Només s'usa en les consultes per localització de finestra no incrustada */
 	font-weight: normal;
 	visibility: visible;
 	position: relative;
+  }
 }
+
 .TaulaRespostaConsulta {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
