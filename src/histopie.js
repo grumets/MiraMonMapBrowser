@@ -825,7 +825,7 @@ function TancaFinestraSerieTemp(nom_div, nom_div_click)
 	PuntsSerieTemporal=[];
 }
 
-function ObreGraficSerieTemporal(nom_div, nom_div_click, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label)
+function ObreGraficSerieTemporal(nom_div, nom_div_click, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label, que_mostrar)
 {
 var ncol=460, nfil=260, cdns=[];
 var nom_histograma=perfix_serie_temporal+"serie_temp";
@@ -855,14 +855,14 @@ var chart=[];
 
 	document.getElementById(nom_div).innerHTML=cdns.join("");
 	for (var i_c=0; i_c<data.length; i_c++)
-		chart[i_c]=CreaGraficSerieTemporal(nom_histograma+"_canvas_"+i_c, data[i_c], labels, temps, y_scale_label[i_c]);
+		chart[i_c]=CreaGraficSerieTemporal(nom_histograma+"_canvas_"+i_c, data[i_c], labels, temps, y_scale_label[i_c], que_mostrar);
 
 	document.getElementById(nom_div).style.visibility="visible";
 	document.getElementById(nom_div_click).style.visibility="visible";
 	return chart;
 }
 
-function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
+function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label, que_mostrar)
 {
 	var cfg = {
 		type: 'line',
@@ -875,6 +875,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -888,6 +889,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -900,6 +902,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -913,7 +916,12 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 			scales: {
 				xAxes: [{
 			                type: 'time',
-			                distribution: 'linear'
+			                distribution: 'linear',
+					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+					time: {
+						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
+					}
 				}],
 				yAxes: [{
 					scaleLabel: {display: true, labelString: y_scale_label},
@@ -956,6 +964,7 @@ var component_name=["R", "G", "B"];
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 3,
@@ -971,7 +980,7 @@ var component_name=["R", "G", "B"];
 	return color_name;
 }
 
-function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, color)
+function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, color, que_mostrar)
 {
 	var cfg = {
 		type: 'line',
@@ -984,6 +993,7 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 3,
@@ -996,7 +1006,12 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 			scales: {
 				xAxes: [{
 			                type: 'time',
-			                distribution: 'linear'
+			                distribution: 'linear',
+					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+					time: {
+						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
+					}
 				}],
 				yAxes: [{
 					scaleLabel: {display: true, labelString: y_scale_label},

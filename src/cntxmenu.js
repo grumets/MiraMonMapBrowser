@@ -943,7 +943,7 @@ var env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, i;
 			if (env.MaxY<ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY)
 				env.MaxY=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY;
 		}
-		return {"EnvCRS": env, "CRS": ParamCtrl.capa[i_capes[0]].EnvTotal.EnvCRS.CRS};
+		return {"EnvCRS": env, "CRS": ParamCtrl.capa[i_capes[0]].EnvTotal.CRS};
 	}
 }
 

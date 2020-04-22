@@ -840,11 +840,11 @@ var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], milisegons;
 	for (var i_data=0; i_data<capa.data.length; i_data++)
 	{
 		milisegons=DonaDateDesDeDataJSON(capa.data[i_data]).getTime();
-		data[i_data]={t:milisegons, y:DeterminaValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j)};
+		data[i_data]={t:milisegons, y:parseFloat(DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j))};
 		labels[i_data]=moment(milisegons);
 		temps[i_data]=DonaDataCapaComATextBreu(i_capa, i_data);
 	}
-	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.atributs[i_atr].descripcio, capa.atributs[i_atr].serieTemporal.color);
+	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.atributs[i_atr].descripcio, capa.atributs[i_atr].serieTemporal.color, capa.FlagsData);
 }
 
 //2.- Tradicional
@@ -1304,7 +1304,7 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	else
 	{
-		var env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, env_icona, punt={}, icona, simbols;
+		var env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, env_icona, punt={}, icona, simbols, unitatsMetre=false;
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i_obj], capa.CRSgeometry);
 
 		for (var i_simb=0; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
@@ -1335,8 +1335,27 @@ var capa=ParamCtrl.capa[i_capa];
 				if (env_icones.MaxY<env_icona.MaxY)
 					env_icones.MaxY=env_icona.MaxY;
 			}
+			if (icona.unitats=="m")
+				unitatsMetre=true;
 		}
-		return (env_icones.MinX==+1e300 ? false : EsPuntDinsEnvolupant(PuntConsultat, env_icones));
+		if (env_icones.MinX==+1e300)
+			return false;
+		//Si el simbol és massa petit, i la simbolització no és en unitats mapa, faig que sel simbol tingui una area més gran.
+		if (!unitatsMetre)
+		{
+			var costat4=ParamInternCtrl.vista.CostatZoomActual*4;
+			if ((env_icones.MaxX-env_icones.MinX)<costat4*2)
+			{
+				env_icones.MaxX+=costat4;
+				env_icones.MinX-=costat4;
+			}
+			if ((env_icones.MaxY-env_icones.MinY)<costat4*2)
+			{
+				env_icones.MaxY+=costat4;
+				env_icones.MinY-=costat4;
+			}
+		}
+		return EsPuntDinsEnvolupant(PuntConsultat, env_icones);
 	}
 }
 

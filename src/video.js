@@ -292,7 +292,8 @@ function ConsultaSobreVideo(event_de_click)
 						DonaDadesEstadistiquesFotogramaDeSerieTemporal(), 								
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
 						DonaTempsValorsSerieTemporalLocalitzacio(), 
-						DonaTitolEixYSerieTemporalLocalitzacio());
+						DonaTitolEixYSerieTemporalLocalitzacio(),
+						ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FlagsData);
 	}
 	var color_name=AfegeixGraficSerieTemporal(ChartConsultaSobreVideo, data, /*DonaValorDeCoordActual(x, y, false, false)*/ PuntsSerieTemporal.length+1);
 	PuntsSerieTemporal.push({i:i, j:j, x:x, y:y, color:color_name});

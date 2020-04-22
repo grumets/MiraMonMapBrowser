@@ -630,7 +630,7 @@ function CancelaPosicioGPS()
 		EliminaCapaVolatil(ICapaVolaGPS);
 		ParamCtrl.MostraPosicioGPS=false;
 		if (IdPositionGPS)  
-			clearWatch(IdPositionGPS);
+			navigator.geolocation.clearWatch(IdPositionGPS);
 	}
 }
 

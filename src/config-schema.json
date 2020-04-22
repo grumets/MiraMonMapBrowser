@@ -31,7 +31,7 @@
 			"items": 
 			{
 				"type": "object",
-				"description": "Llista de Layers que es creasrà internament abm createLayer(). Heu d'interpretar el vell concepte de ne netscape de 'layer' com una moderna 'div' en HTML.",
+				"description": "Llista de Layers que es crearà internament amb createLayer(). Heu d'interpretar el vell concepte de netscape de 'layer' com una moderna 'div' en HTML.",
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {

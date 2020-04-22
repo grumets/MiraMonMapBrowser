@@ -100,28 +100,28 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 
 	if (!(capa.FlagsData))
 		return "";
-	if (capa.FlagsData.DataMostraAny==true || 
-	    capa.FlagsData.DataMostraMes==true || 
-	    capa.FlagsData.DataMostraDia==true ||
-	    capa.FlagsData.DataMostraHora==true || 
-	    capa.FlagsData.DataMostraMinut==true || 
-	    capa.FlagsData.DataMostraSegon==true)
+	if (capa.FlagsData.DataMostraAny || 
+	    capa.FlagsData.DataMostraMes || 
+	    capa.FlagsData.DataMostraDia ||
+	    capa.FlagsData.DataMostraHora || 
+	    capa.FlagsData.DataMostraMinut || 
+	    capa.FlagsData.DataMostraSegon)
 		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
 	
-	if (capa.FlagsData.DataMostraDescLlegenda==true)
+	if (capa.FlagsData.DataMostraDescLlegenda)
 	    cdns.push(DonaCadena(capa.DescLlegenda)," ");
-	if (capa.FlagsData.DataMostraDia==true)
+	if (capa.FlagsData.DataMostraDia)
 	    cdns.push(DonaDayJSON(data_a_usar) , " ");
-	if (capa.FlagsData.DataMostraMes==true)
+	if (capa.FlagsData.DataMostraMes)
 	{
-		if (capa.FlagsData.DataMostraDia==true)
+		if (capa.FlagsData.DataMostraDia)
 		    cdns.push(DonaCadena(PrepMesDeLAny[DonaMonthJSON(data_a_usar)-1]));
 		else
 		    cdns.push(DonaCadena(MesDeLAny[DonaMonthJSON(data_a_usar)-1]));
 	}
-	if (capa.FlagsData.DataMostraAny==true)
+	if (capa.FlagsData.DataMostraAny)
 	{
-		if (capa.FlagsData.DataMostraMes==true)
+		if (capa.FlagsData.DataMostraMes)
 		    cdns.push((DonaCadenaLang({"cat":" de ","spa":" de ", "eng":" ","fre":" "})));
 		cdns.push(DonaYearJSON(data_a_usar));
     }
@@ -132,48 +132,48 @@ function DonaDataComATextBreu(flags_data, data_a_usar)
 {
 var cdns=[];
 
-	if (flags_data.DataMostraDia==true)
+	if (flags_data.DataMostraDia)
 	{
 		if (DonaDayJSON(data_a_usar)<10)
 		    cdns.push("0");
 		cdns.push(DonaDayJSON(data_a_usar));
 	}
-	if (flags_data.DataMostraMes==true)
+	if (flags_data.DataMostraMes)
 	{
-	    if (flags_data.DataMostraDia==true)
+	    if (flags_data.DataMostraDia)
 	        cdns.push("-");
 	    if (DonaMonthJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaMonthJSON(data_a_usar));
 	}
-	if (flags_data.DataMostraAny==true)
+	if (flags_data.DataMostraAny)
 	{
-	    if (flags_data.DataMostraMes==true)
+	    if (flags_data.DataMostraMes)
 			cdns.push("-");
 	    cdns.push(DonaYearJSON(data_a_usar));
 	}
-	if (flags_data.DataMostraHora==true || flags_data.DataMostraMinut==true || flags_data.DataMostraSegon==true)
+	if (flags_data.DataMostraHora || flags_data.DataMostraMinut || flags_data.DataMostraSegon)
 	{
-	    if (flags_data.DataMostraAny==true || flags_data.DataMostraMes==true || flags_data.DataMostraDia==true)
+	    if (flags_data.DataMostraAny || flags_data.DataMostraMes || flags_data.DataMostraDia)
 			cdns.push(" ");
 	}
-	if (flags_data.DataMostraHora==true)
+	if (flags_data.DataMostraHora)
 	{
 	    if (DonaHourJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaHourJSON(data_a_usar));
 	}
-	if (flags_data.DataMostraMinut==true)
+	if (flags_data.DataMostraMinut)
 	{
-	    if (flags_data.DataMostraHora==true)
+	    if (flags_data.DataMostraHora)
 			cdns.push(":");
 	    if (DonaMinuteJSON(data_a_usar)<10)
 			cdns.push("0");
 	    cdns.push(DonaMinuteJSON(data_a_usar));
 	}
-	if (flags_data.DataMostraSegon==true)
+	if (flags_data.DataMostraSegon)
 	{
-	    if (flags_data.DataMostraMinut==true)
+	    if (flags_data.DataMostraMinut)
 			cdns.push(":");
 	    if (DonaSecondJSON(data_a_usar)<10)
 			cdns.push("0");
@@ -213,23 +213,23 @@ var data_a_usar, cdns=[], capa=ParamCtrl.capa[i_capa];
 
 	if (!(capa.FlagsData))
 		return "";
-	if (capa.FlagsData.DataMostraDescLlegenda==true)
+	if (capa.FlagsData.DataMostraDescLlegenda)
 	{
 	    cdns.push(DonaCadena(capa.DescLlegenda));
-	    if (capa.FlagsData.DataMostraAny==true || 
-			capa.FlagsData.DataMostraMes==true || 
-			capa.FlagsData.DataMostraDia==true ||
-			capa.FlagsData.DataMostraHora==true || 
-        	capa.FlagsData.DataMostraMinut==true || 
-			capa.FlagsData.DataMostraSegon==true)
+	    if (capa.FlagsData.DataMostraAny || 
+			capa.FlagsData.DataMostraMes || 
+			capa.FlagsData.DataMostraDia ||
+			capa.FlagsData.DataMostraHora || 
+        	capa.FlagsData.DataMostraMinut || 
+			capa.FlagsData.DataMostraSegon)
 		        cdns.push(",");
 	}	
-	if (capa.FlagsData.DataMostraAny==true || 
-		capa.FlagsData.DataMostraMes==true || 
-		capa.FlagsData.DataMostraDia==true ||
-		capa.FlagsData.DataMostraHora==true || 
-        capa.FlagsData.DataMostraMinut==true || 
-		capa.FlagsData.DataMostraSegon==true)
+	if (capa.FlagsData.DataMostraAny || 
+		capa.FlagsData.DataMostraMes || 
+		capa.FlagsData.DataMostraDia ||
+		capa.FlagsData.DataMostraHora || 
+        capa.FlagsData.DataMostraMinut || 
+		capa.FlagsData.DataMostraSegon)
 		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
 	else
 		return cdns.join("");
@@ -369,13 +369,13 @@ var cdns=[];
 	{
 		//Segons la ISO com a mínim he de mostrar l'any
 	    cdns.push(data.getFullYear ? data.getFullYear() : takeYear(data));
-		if(que_mostrar.DataMostraMes==true)
+		if(que_mostrar.DataMostraMes)
 		{
 			cdns.push("-");
 		    	if( data.getMonth()<9)
 				cdns.push("0");
 			cdns.push((data.getMonth()+1));
-			if (que_mostrar.DataMostraDia==true)
+			if (que_mostrar.DataMostraDia)
 			{
 				cdns.push("-");
 		    	if(data.getDate()<10)
@@ -383,7 +383,7 @@ var cdns=[];
 			    cdns.push((data.getDate()));
 
 			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
-				if(que_mostrar.DataMostraHora==true)
+				if(que_mostrar.DataMostraHora)
 				{
 	    			if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
 				    {
@@ -391,13 +391,13 @@ var cdns=[];
 						if(data.getHours()<10)
 							cdns.push("0");
 						cdns.push(data.getHours());
-						if(que_mostrar.DataMostraMinut==true)
+						if(que_mostrar.DataMostraMinut)
 						{
 							cdns.push(":" );
 							if(data.getMinutes()<10)
 								cdns.push("0");
 							cdns.push(data.getMinutes());
-							if(que_mostrar.DataMostraSegon==true)
+							if(que_mostrar.DataMostraSegon)
 							{
 								cdns.push(":" );
 								if(data.getSeconds()<10)
@@ -422,13 +422,13 @@ var cdns=[];
 	{
 		//Segons la ISO com a mínim he de mostrar l'any
 		cdns.push(DonaYearJSON(data));
-		if(que_mostrar.DataMostraMes==true)
+		if(que_mostrar.DataMostraMes)
 		{
 			cdns.push("-");
 		    	if( DonaMonthJSON(data)<10)
 				cdns.push("0");
 			cdns.push(DonaMonthJSON(data));
-			if (que_mostrar.DataMostraDia==true)
+			if (que_mostrar.DataMostraDia)
 			{
 				cdns.push("-");
 		    	if(DonaDayJSON(data)<10)
@@ -436,7 +436,7 @@ var cdns=[];
 			    cdns.push(DonaDayJSON(data));
 
 			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
-				if(que_mostrar.DataMostraHora==true)
+				if(que_mostrar.DataMostraHora)
 				{
 	    			if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
 				    {
@@ -444,13 +444,13 @@ var cdns=[];
 						if(DonaHourJSON(data)<10)
 							cdns.push("0");
 						cdns.push(DonaHourJSON(data));
-						if(que_mostrar.DataMostraMinut==true)
+						if(que_mostrar.DataMostraMinut)
 						{
 							cdns.push(":" );
 							if(DonaMinuteJSON(data)<10)
 								cdns.push("0");
 							cdns.push(DonaMinuteJSON(data));
-							if(que_mostrar.DataMostraSegon==true)
+							if(que_mostrar.DataMostraSegon)
 							{
 								cdns.push(":" );
 								if(DonaSecondJSON(data)<10)
@@ -466,6 +466,118 @@ var cdns=[];
 	}
 	return cdns.join("");
 }//fi de DonaDataJSONComATextISO8601()
+
+//Retorna una cosa com: "DD-MM-YYYY hh:mm:ss" depenent de que_mostrar
+function DonaCadanaFormatDataHora(que_mostrar)
+{
+var cdns=[];
+
+	if (que_mostrar)
+	{
+		//Segons la ISO com a mínim he de mostrar l'any
+		if (que_mostrar.DataMostraDia)
+			cdns.push("DD");
+		if (que_mostrar.DataMostraMes)
+		{
+			if (que_mostrar.DataMostraDia)		
+				cdns.push("-");		
+			cdns.push("MM");
+		}
+		if (que_mostrar.DataMostraAny)
+		{
+			if (que_mostrar.DataMostraMes)		
+				cdns.push("-");
+			cdns.push("YYYY");
+		}
+
+		if(que_mostrar.DataMostraHora)
+		{
+			if (cdns.length>0)
+				cdns.push(" ");
+			cdns.push("hh");
+		}
+		if(que_mostrar.DataMostraMinut)
+		{
+			if(que_mostrar.DataMostraHora)
+				cdns.push(":");
+			cdns.push("mm");
+		}
+		if(que_mostrar.DataMostraSegon)
+		{
+			if(que_mostrar.DataMostraMinut)
+				cdns.push(":");
+			cdns.push("ss");
+		}
+	}
+	return cdns.join("");
+}
+
+function DonaDisplayFormatsChartJSDataHora(que_mostrar)
+{
+var df={}, cdns=[];
+
+	if (que_mostrar)
+	{
+		//Segons la ISO com a mínim he de mostrar l'any
+		if (que_mostrar.DataMostraDia)
+			cdns.push("DD");
+		if (que_mostrar.DataMostraMes)
+		{
+			if (que_mostrar.DataMostraDia)		
+				cdns.push("-");		
+			cdns.push("MM");
+		}
+		if (que_mostrar.DataMostraAny)
+		{
+			if (que_mostrar.DataMostraMes)		
+				cdns.push("-");
+			cdns.push("YYYY");
+		}
+		if (cdns.length)
+			df.day=cdns.join("");
+
+		cdns=[];
+		if(que_mostrar.DataMostraHora)
+		{
+			cdns.push("hh");
+		}
+		if(que_mostrar.DataMostraMinut)
+		{
+			if(que_mostrar.DataMostraHora)
+				cdns.push(":");
+			cdns.push("mm");
+		}
+		if(que_mostrar.DataMostraSegon)
+		{
+			if(que_mostrar.DataMostraMinut)
+				cdns.push(":");
+			cdns.push("ss");
+		}
+		if (cdns.length)
+			df.second=cdns.join("");
+	}
+	return df;	
+}
+
+function DonaUnitTimeChartJSDataHora(que_mostrar)
+{
+	if (que_mostrar)
+	{
+		if (que_mostrar.DataMostraSegon)
+			return "second";
+		if (que_mostrar.DataMostraMinut)
+			return "minute";
+		if (que_mostrar.DataMostraHora)
+			return "hour";
+		if (que_mostrar.DataMostraDia)
+			return "day";
+		if (que_mostrar.DataMostraMes)
+			return "month";
+		if (que_mostrar.DataMostraAny)
+			return "year";
+	}
+	return null;
+}
 
 //Aquest funció, de moment, només canvia les variables {TIME}, {TIME?f=*&year=*&month=*...} i {DIM?name=*}. En el config_schema.json s'explica una mica més.
 function CanviaVariablesDeCadena(s, capa, i_data)

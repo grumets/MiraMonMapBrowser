@@ -914,7 +914,12 @@ function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa, i_obj_capa, i_
 
 function DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil)
 {
-	var valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+	return DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, null, i_col, i_fil);
+}
+
+function DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_data, i_col, i_fil)
+{
+	var valor=DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_data, i_col, i_fil);
 	if (capa_digi.atributs[i_atrib].NDecimals || capa_digi.atributs[i_atrib].NDecimals===0)
 		return OKStrOfNe(valor, capa_digi.atributs[i_atrib].NDecimals);
 	return valor;
