@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2018 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -1157,7 +1157,7 @@ var s;
 			   "</span> <input class=\"InputPetit\" autocomplete=\"off\" type=text name=\"llavor",i_ctipica,
 			   "\" size=\"55\" onkeyup=\"WindowDelEvent=this;TeclaLLavor(event);\" onfocus=\"SeleccionaEditLlavor(this);\"></FORM>\n",
 			   (textHTMLiframeLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, true)),
-			   (textHTMLLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, null, "ara_no", true, null, null, false, "--Waiting--")));
+			   (textHTMLLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, null, {scroll: "ara_no", visible: true, ev: null, save_content: false}, null, "--Waiting--")));
 	    }
 	    else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
 	    {

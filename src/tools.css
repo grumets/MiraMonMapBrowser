@@ -98,6 +98,7 @@ textarea
 	font-weight: bold;
 	color: #000099;
 }
+
 .input_info_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
@@ -429,8 +430,17 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #99CCFF;
-	resize:both;
+	//resize:both;
 }
+
+.cantofinestra {
+	text-align: left;
+	margin: 0px;
+	padding: 0px;
+	overflow: visible;
+	cursor: se-resize;
+}
+
 .barrafinestra {
 	background-image: url(fons_barra.gif);
 	background-repeat: repeat-x;
@@ -439,14 +449,16 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	padding: 0px;
 	overflow: visible;
 }
+
 .titolfinestra{
 	text-align: left;
 	font-weight: bold;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	color: #FFFFFF;
-	cursor:move;
+	cursor: move;
 }
+
 /* Format de la font del text de la layers-finestra d'Anar a Coordenada */
 .Verdana11px{
 	font-family: Verdana, Arial, Helvetica, sans-serif;

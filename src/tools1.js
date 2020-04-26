@@ -322,63 +322,6 @@ if(!String.prototype.trim)
 	};
 }
 
-/*Eliminada en favor DonaDateComATextISO8601() que existeix sempre. Es va crear per IE8 compatibility for toISOString
-if(!Date.prototype.toISOString)
-{
-	Date.prototype.toISOString= function(data) {
-		//Copy of the old DonaDataISO8601ComAText for IE8 compatibility.
-		//Can be deleted once Microsoft target browser raises to IE9
-	var cdns=new Array;
-
-		if(data)
-		{
-			//Segons la ISO com a mínim he de mostrar l'any
-				cdns.push((data.getFullYear ? data.getFullYear() : takeYear(data)));
-			if(que_mostrar&mostra_mes)
-			{
-				cdns.push("-");
-				if(data.getMonth()<9)
-					cdns.push("0");
-				cdns.push((data.getMonth()+1));
-				if(que_mostrar&mostra_dia)
-				{
-					cdns.push("-");
-					if(data.getDate()<10)
-						cdns.push("0");
-					cdns.push((data.getDate()));
-
-						//Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
-					if(que_mostrar&mostra_hora)
-					{
-						if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
-						{
-							cdns.push("T");
-							if(data.getHours()<10)
-								cdns.push("0");
-							cdns.push(data.getHours());
-							if(que_mostrar&mostra_minut)
-							{
-								cdns.push(":" );
-								if(data.getMinutes()<10)
-									cdns.push("0");
-								cdns.push(data.getMinutes());
-								if(que_mostrar&mostra_segon)
-								{
-									cdns.push(":" );
-									if(data.getSeconds()<10)
-										cdns.push("0");
-									cdns.push(data.getSeconds());
-								}
-							}
-							cdns.push("Z");
-						}
-					}
-				}
-			}
-		}
-		return cdns.join("");
-	};
-}*/
 
 /*Older versions of IE will crash when trying to use console.log to debug and
  * the console window (debug tools) is not open.
@@ -402,7 +345,6 @@ function MMgetFileExtension(fileName)
 	var re= /(?:\.([^.]+))?$/;
 	return re.exec(fileName)[1];
 }
-
 
 function DonaAdrecaSenseBarraFinal(s)
 {
@@ -476,21 +418,6 @@ function CreaPropietatsLayer(nom, ancora, contingut)
 	this.nom=nom;
 	this.ancora=ancora;
 	this.contingut=contingut;
-}*/
-
-var moure_desactiu=0x01;
-var moure_actiu=0x02;
-
-/* Aquest constructor no s'usa i es deia només com a documentació del JSON.
-function CreaPropietatsFinestraLayer(nom, titol, botons)
-{
-	this.nom=nom;
-	this.titol=titol;  // Estructura Multidioma o una cadena
-	this.botons=botons;	
-	this.estat_click=moure_desactiu;
-	this.coord_click=null;
-	this.pos_ini_barra={"x": 0, "y": 0};
-	this.pos_ini_finestra={"x": 0, "y": 0};
 }*/
 
 function showOrHideLayer(elem, show)
@@ -767,6 +694,12 @@ function spaceForLayers(win)
 		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight;
 }
 
+var SufixBarra="_barra"
+var SufixFinestra="_finestra"
+var SufixCanto="_canto"
+var AltBarraFinestraLayer=19;
+var MidaCantoFinestraLayer=12;
+
 function changeSizeLayers(win)
 {
 var w_previ,h_previ, delta_w, delta_h, delta, delta1;
@@ -788,12 +721,13 @@ var elem, rect, ancora, nom;
 	for (var i=0; i<layerList.length; i++)
 	{
 		nom=layerList[i].nom;
-		if(-1!=nom.search("_barra"))
+		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
+		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto))
 			continue;
 
 		elem=getLayer(win, nom);
 		rect=getRectLayer(elem);
-		if(-1!=nom.search("_finestra"))
+		if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
 		{
 			rect.alt+=AltBarraFinestraLayer;
 			rect.sup-=AltBarraFinestraLayer;
@@ -913,8 +847,8 @@ var elem, rect, ancora, nom;
 				if (rect.alt<5)    //Impedeiso que les layers desaparexin totalment
 					rect.alt=5;
 
-				if(-1!=nom.search("_finestra"))
-					moveFinestraLayer(win, nom.replace("_finestra", ""), rect.esq, rect.sup, rect.ample, rect.alt);
+				if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
+					moveFinestraLayer(win, nom.substring(0, nom.length-SufixFinestra.length), rect.esq, rect.sup, rect.ample, rect.alt);
 				else					
 					moveLayer(elem, rect.esq, rect.sup, rect.ample, rect.alt);
 			}
@@ -953,16 +887,20 @@ var z;
 	alert("Finestra \""+nom+ "\"no trobada");
 }
 
+var movimentDesactiu=0x01;
+var movimentArrossegant=0x02;
+var movimentRedimensionant=0x04;
+
 function OmpleBarraFinestraLayer(win, i_finestra)
 {
 var cdns=[];
-var nom=layerFinestraList[i_finestra].nom + "_barra";
+var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 
 	cdns.push("<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>",
-			  "<td class=\"titolfinestra\" onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			  "<td class=\"titolfinestra\" onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentArrossegant);\" ",
 			  "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
   			  "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
-			  "onmousemove=\"MouFinestraLayer(event, ",i_finestra,");\" >", 
+			  "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >", 
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
@@ -1003,7 +941,7 @@ var nom=layerFinestraList[i_finestra].nom + "_barra";
 
 function afegeixBotoABarraFinestraLayer(win, name, botons)
 {
-var nom=name+"_barra";
+var nom=name+SufixBarra;
 
 	for (var i=0; i<layerFinestraList.length; i++)
 	{
@@ -1019,7 +957,7 @@ var nom=name+"_barra";
 
 function getFinestraLayer(win, name)
 {
-	return getLayer(win, name+"_finestra");
+	return getLayer(win, name+SufixFinestra);
 }
 
 function isFinestraLayer(win, name)
@@ -1030,13 +968,10 @@ function isFinestraLayer(win, name)
 function setzIndexFinestraLayer(win, name, z)
 {
 	setzIndexLayer(getFinestraLayer(win, name),z);
-	setzIndexLayer(getLayer(win,name+"_barra"),z);
-}
-
-function hideFinestraLayer(win, name) 
-{
-	hideLayer(getFinestraLayer(win, name));
-	hideLayer(getLayer(win,name+"_barra"));
+	setzIndexLayer(getLayer(win,name+SufixBarra),z);
+	var div=getLayer(win,name+SufixCanto);
+	if (div)
+		setzIndexLayer(div,z);
 }
 
 /* això sembla ser un codi perdut que no s'usa i crida una funció que no existeix.
@@ -1058,7 +993,7 @@ function ObreFinestra(win, name, desc_funcionalitat_de)
 	}
 	showFinestraLayer(win, name);
 	setzIndexFinestraLayer(win, name, (layerList.length-1));
-	return getLayer(win, name+"_finestra");
+	return getLayer(win, name+SufixFinestra);
 }
 
 //Returns the floating window position within the floating windows array
@@ -1073,52 +1008,83 @@ function getFloatingWindowId(name)
 	return -1;
 }
 
-//We change the focus of the window so it cames to the top (so it will not be hided by other floating windows)
+//We change the focus of the window so it comes to the top (so it will not be hided by other floating windows)
 //Passing a -1 will make no floating window to have the focus
 function setTopFloatingWindow(i_finestra)
 {
-var floatingWindow;
-var titleBar;
-
+var div, div_canto;
 	if(focusedFloatingWindow!=-1)
 	{		
-		floatingWindow=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+"_finestra");
-		titleBar=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+"_barra");
-
+		div=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+SufixBarra);
 		 //Restore the zIndex
-		setzIndexLayer(titleBar,titleBar.old_zIndex);
-		setzIndexLayer(floatingWindow, titleBar.old_zIndex);
+		setzIndexLayer(div,div.old_zIndex);
+		setzIndexLayer(getLayer(window, layerFinestraList[focusedFloatingWindow].nom+SufixFinestra), div.old_zIndex);
+		div_canto=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+SufixCanto);
+		if (div_canto)
+			setzIndexLayer(div_canto, div.old_zIndex);
 	}
 	if(i_finestra!=-1)
 	{
-		floatingWindow=getLayer(window, layerFinestraList[i_finestra].nom+"_finestra");
-		titleBar=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
+		var div=getLayer(window, layerFinestraList[i_finestra].nom+SufixBarra);
 
 		//Save the current zIndex (as they are the same we only need to save it in the bar)
-		titleBar.old_zIndex= titleBar.style.zIndex;
+		div.old_zIndex= div.style.zIndex;
 
 		//This must be always bigger than the topmost floatingWindow zIndex
-		setzIndexLayer(titleBar, layerList.length);
-		setzIndexLayer(floatingWindow, layerList.length);
+		setzIndexLayer(div, layerList.length);
+		setzIndexLayer(getLayer(window, layerFinestraList[i_finestra].nom+SufixFinestra), layerList.length);
+		div_canto=getLayer(window, layerFinestraList[i_finestra].nom+SufixCanto)
+		if (div_canto)
+			setzIndexLayer(div_canto, layerList.length);
 	}
-	focusedFloatingWindow= i_finestra;
+	focusedFloatingWindow=i_finestra;
 }
 
 function showFinestraLayer(win, name) 
 {
 	showLayer(getFinestraLayer(win, name));
-	showLayer(getLayer(win,name+"_barra"));
+	showLayer(getLayer(win,name+SufixBarra));
+	var div=getLayer(win,name+SufixCanto);
+	if (div)
+		showLayer(div);
 
-	//Set this floating window to be the topmost
-	//·$· extret del DD repassar si funciona
 	setTopFloatingWindow(getFloatingWindowId(name));
+}
+
+function hideFinestraLayer(win, name) 
+{
+	hideLayer(getFinestraLayer(win, name));
+	hideLayer(getLayer(win,name+SufixBarra));
+	var div=getLayer(win,name+SufixCanto);
+	if (div)
+		hideLayer(div);
+}
+
+function showOrHideFinestraLayer(win, name, show)
+{
+	if (show)
+		showFinestraLayer(win, name);
+	else
+		hideFinestraLayer(win, name) 
 }
 
 
 function removeFinestraLayer(win, name) 
 {
 	removeLayer(getFinestraLayer(win, name));
-	removeLayer(getLayer(win,name+"_barra"));
+	removeLayer(getLayer(win,name+SufixBarra));
+	var div=getLayer(win,name+SufixCanto);
+	if (div)
+		removeLayer(div);
+}
+
+function moveFinestraLayer(win, name, x, y, w, h)
+{
+	moveLayer(getLayer(win, name+SufixBarra), x, y, w, AltBarraFinestraLayer);
+	moveLayer(getFinestraLayer(win, name), x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
+	var div=getLayer(win,name+SufixCanto);
+	if (div)
+		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
 }
 
 function isFinestraLayerVisible(win, name)
@@ -1138,7 +1104,7 @@ function getcontentFinestraLayer(win, name)
 function contentFinestraLayer(win, name, content) 
 {
 	contentLayer(getFinestraLayer(win, name), content);
-}//Fi de contentFinestraLayer()
+}
 
 function winMousePos(e) 
 {
@@ -1176,32 +1142,43 @@ function winMousePos(e)
 
 var iFinestraLayerFora=-1;
 
-function ActivaMovimentFinestraLayer(event, i_finestra)
-{	
-	if(layerFinestraList[i_finestra].estat_click!=moure_actiu)
+function ActivaMovimentFinestraLayer(event, i_finestra, tipus)
+{
+var layer_finestra=layerFinestraList[i_finestra];
+	if(layer_finestra.estat_click!=tipus)  
 	{
-		layerFinestraList[i_finestra].estat_click=moure_actiu;
-		var finestra=getFinestraLayer(window, layerFinestraList[i_finestra].nom);
-		var barra=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
-	
-		layerFinestraList[i_finestra].coord_click=winMousePos(event);		
-		
-		layerFinestraList[i_finestra].pos_ini_barra.x=parseInt(barra.style.left,10);
-		layerFinestraList[i_finestra].pos_ini_barra.y=parseInt(barra.style.top,10);
-		layerFinestraList[i_finestra].pos_ini_finestra.x=parseInt(finestra.style.left,10);
-		layerFinestraList[i_finestra].pos_ini_finestra.y=parseInt(finestra.style.top,10);	
+		var div;
+		layer_finestra.coord_click=winMousePos(event);		
+		layer_finestra.estat_click=tipus;
+
+		div=getFinestraLayer(window, layer_finestra.nom);
+		layer_finestra.pos_ini_finestra.x=parseInt(div.style.left, 10);
+		layer_finestra.pos_ini_finestra.y=parseInt(div.style.top, 10);
+		layer_finestra.pos_ini_finestra.w=parseInt(div.style.width, 10);
+		layer_finestra.pos_ini_finestra.h=parseInt(div.style.height, 10);
+
+		div=getLayer(window, layer_finestra.nom+SufixBarra);
+		layer_finestra.pos_ini_barra.x=parseInt(div.style.left,10);
+		layer_finestra.pos_ini_barra.y=parseInt(div.style.top,10);
+		layer_finestra.pos_ini_barra.w=parseInt(div.style.width, 10);
+
+		div=getLayer(window, layer_finestra.nom+SufixCanto);
+		if (div)
+		{
+			layer_finestra.pos_ini_canto.x=parseInt(div.style.left,10);
+			layer_finestra.pos_ini_canto.y=parseInt(div.style.top,10);	
+		}
 	}
-	iFinestraLayerFora=-1	
+	iFinestraLayerFora=-1;
 }
 
-function MouFinestraLayer(event, i_finestra)
+function MovimentFinestraLayerPerLaBarra(event, i_finestra)
 {
-	if(layerFinestraList[i_finestra].estat_click==moure_actiu)
+var layer_finestra=layerFinestraList[i_finestra];
+
+	if(layer_finestra.estat_click!=movimentDesactiu)
 	{
-		var dx, dy;
-		var coordActual;
-		var finestra=getFinestraLayer(window, layerFinestraList[i_finestra].nom);
-		var barra=getLayer(window, layerFinestraList[i_finestra].nom+"_barra");
+		var dx, dy, coordActual, div;
 				
 		coordActual=winMousePos(event);
 		
@@ -1216,54 +1193,72 @@ function MouFinestraLayer(event, i_finestra)
 		else if(coordActual.x>=window.innerWidth)
 			coordActual.x= window.innerWidth;
 		
-		dx=coordActual.x-layerFinestraList[i_finestra].coord_click.x;
-		dy=coordActual.y-layerFinestraList[i_finestra].coord_click.y;
+		dx=coordActual.x-layer_finestra.coord_click.x;
+		dy=coordActual.y-layer_finestra.coord_click.y;
 			
-		barra.style.left=(layerFinestraList[i_finestra].pos_ini_barra.x+dx)+"px";
-		barra.style.top=(layerFinestraList[i_finestra].pos_ini_barra.y+dy)+"px";
-		finestra.style.left=(layerFinestraList[i_finestra].pos_ini_finestra.x+dx)+"px";
-		finestra.style.top=(layerFinestraList[i_finestra].pos_ini_finestra.y+dy)+"px";
-		
+		if(layer_finestra.estat_click==movimentArrossegant)
+		{
+			moveLayer(getFinestraLayer(window, layer_finestra.nom), layer_finestra.pos_ini_finestra.x+dx, layer_finestra.pos_ini_finestra.y+dy, -1, -1);
+			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), layer_finestra.pos_ini_barra.x+dx, layer_finestra.pos_ini_barra.y+dy, -1, -1);
+		}
+		else //if(layer_finestra.estat_click==movimentRedimensionant)
+		{
+			//Impedeixo que la caixa es faci massa petita al redimensionar.
+			if (layer_finestra.pos_ini_finestra.w+dx<100)
+				dx=100-layer_finestra.pos_ini_finestra.w;
+			if (layer_finestra.pos_ini_finestra.h+dy<38)
+				dy=38-layer_finestra.pos_ini_finestra.h;
+			moveLayer(getFinestraLayer(window, layer_finestra.nom), -1, -1, layer_finestra.pos_ini_finestra.w+dx, layer_finestra.pos_ini_finestra.h+dy);
+			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), -1, -1, layer_finestra.pos_ini_finestra.w+dx, -1);
+		}		
+		div=getLayer(window, layer_finestra.nom+SufixCanto);
+		if (div)
+			moveLayer(div, layer_finestra.pos_ini_canto.x+dx, layer_finestra.pos_ini_canto.y+dy, -1, -1);
+
 		//Avoid text being selected while moving...
 		if(window.getSelection)
 			window.getSelection().removeAllRanges();
 	}
 }
 
-function moveFinestraLayer(win, name, x, y, w, h)
-{
-	moveLayer(getLayer(win, name+"_barra"), x, y, w, AltBarraFinestraLayer);
-	moveLayer(getFinestraLayer(win, name), x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
-}
-
 function DesactivaMovimentFinestraLayer(event_on_click, i_finestra)
 {
-	layerFinestraList[i_finestra].estat_click=moure_desactiu;
+	layerFinestraList[i_finestra].estat_click=movimentDesactiu;
 	layerFinestraList[i_finestra].coord_click=null;
 }
 
 function RedirigeixMovimentFinestraLayer(event_on_click, i_finestra)
 {
-	if(layerFinestraList[i_finestra].estat_click==moure_actiu)
+	if(layerFinestraList[i_finestra].estat_click!=movimentDesactiu)
 		iFinestraLayerFora=i_finestra;
 }
 
-
-var AltBarraFinestraLayer=19;
-
-function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, scroll, visible, ev, content) 
+function textHTMLImgCantoFinestra(i_finestra)
 {
-var nom;
+var cdns=[];
 
-  	//layerFinestraList[z]= new CreaPropietatsFinestraLayer(name, titol, botons);
-	layerFinestraList[layerFinestraList.length]={"nom": name, "titol": titol, "botons": botons, "estat_click": moure_desactiu, 
-			"coord_click": null, "pos_ini_barra": {"x": 0, "y": 0}, "pos_ini_finestra": {"x": 0, "y": 0}};
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("canto.png"),
+					 "\" alt=\"", DonaCadenaLang({"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"}), "\" ", 
+					 "title=\"", DonaCadenaLang({"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"}), "\" ", 
+					 "onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentRedimensionant);\" ",
+					 "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
+  			  		 "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			  		 "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,", true);\" >");
+	return cdns.join("");
+}
+
+function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans
+{
+var nom, i_finestra=layerFinestraList.length;
+
+	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, 
+			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
 	//Creo les dos layers que formaran la layer tipus finestra amb títol i botons
 
 	//Creo la barra
-	nom=name+"_barra";
-	createLayer(win, nom, left, top, width, AltBarraFinestraLayer, ancora, "no", visible, ev, null);
+	nom=name+SufixBarra;
+	createLayer(win, nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev}, null);
 
 	//Li assigno el seu estil de visualització
 	classLayer(getLayer(win, nom), "barrafinestra");
@@ -1271,52 +1266,65 @@ var nom;
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
 	
 	//Creo la finestra i li assigno el seu estil de visualització
-	nom=name+"_finestra";
-	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, scroll, visible, ev, content);
+	nom=name+SufixFinestra;
+	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
 	classLayer(getLayer(win, nom), "finestra"); 
+
+	if (param.resizable)
+	{ 
+		nom=name+SufixCanto;
+		param.scroll="no";
+		createLayer(win, nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, param, textHTMLImgCantoFinestra(i_finestra));
+		classLayer(getLayer(win, nom), "cantofinestra");
+		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
+	}
 }//Fi de createFinestraLayer()
 
-function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, ancora, scroll, visible, ev, content) 
+function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, ancora, content) 
 {
-var nom;
-var s;
-var z=layerFinestraList.length;
+var nom, s, i_finestra=layerFinestraList.length;
 
-  	//layerFinestraList[z]= new CreaPropietatsFinestraLayer(name, titol, botons);
-	layerFinestraList[z]={"nom": name, "titol": titol, "botons": botons, "estat_click": moure_desactiu, 
-			"coord_click": null, "pos_ini_barra": {"x": 0, "y": 0}, "pos_ini_finestra": {"x": 0, "y": 0}};
+	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, 
+			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
 	//el text de les dos layers que formaran la layer tipus finestra amb títol i botons
 
 	//Creo la barra
-	nom=name+"_barra";
-	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, "no", visible, "barrafinestra", ev, false, null);
+	nom=name+SufixBarra;
+	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: false, ev: null, save_content: false}, "barrafinestra", null);
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
 	
 	//Creo la finestra i li assigno el seu estil de visualització
-	nom=name+"_finestra";
-	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, scroll, visible, "finestra", ev, true, content);
-
+	nom=name+SufixFinestra;
+	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, {scroll: "no", visible: false, ev: null, save_content: true}, "finestra", content);
+	
+	if (param.resizable)
+	{ 
+		nom=name+SufixCanto;
+		param.scroll="no";
+		s+=textHTMLLayer(nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, param, "cantofinestra", textHTMLImgCantoFinestra(i_finestra));
+		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
+	}
 	return s;
 }//Fi de textHTMLFinestraLayer()
 
 
-function createLayer(win, name, left, top, width, height, ancora, scroll, visible, ev, content) 
+function createLayer(win, name, left, top, width, height, ancora, param, content)  // param --> scroll, visible, ev 
 {
-	//win.document.writeln(textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, null, ev, true, content));
 	var container = document.getElementById(ParamCtrl.containerName);
-	container.innerHTML += textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, null, ev, true, content);
+	param.save_content=true;
+	container.innerHTML += textHTMLLayer(name, left, top, width, height, ancora, param, null, content);
 }
 
-function textHTMLLayer(name, left, top, width, height, ancora, scroll, visible, div_class, ev, save_content, content)
+function textHTMLLayer(name, left, top, width, height, ancora, param, div_class, content)   //param --> scroll, visible, ev, save_content, bg_trans
 {
 
 	var z=layerList.length;
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
-	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((save_content) ? content : null)};
+	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
 	
-	return '<div id="' + name + '" style="position:absolute; overflow:'+((scroll=="si") ? 'scroll' : (scroll=="ara_no"? 'auto':'visible'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + (ev ? ' background-image : url(1tran.gif);' : '') +' z-index:' + z +';" ' + (ev ? ev : '') + (div_class ? 'class='+div_class : '')+'>'+
+	return '<div id="' + name + '" style="position:absolute; overflow:'+((param.scroll=="si") ? 'scroll' : (param.scroll=="ara_no"? 'auto':'visible'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (param.visible ? 'visible;' : 'hidden;') + (param.bg_trans ? ' background-image : url(1tran.gif);' : '') +' z-index:' + z +';" ' + (param.ev ? param.ev+ ' ' : '') + (div_class ? 'class='+div_class : '')+'>'+
 			 ((content) ? ((typeof content == 'object')? '' : content) : '') +
     			'</div>';
 }
@@ -2223,41 +2231,6 @@ function CadenaMultiIdioma(cat,spa,eng,fre)
     this.eng=eng;
 	this.fre=fre;
 }*/
-var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre": "Janvier"}, 
-				   {"cat": "de febrer", "spa": "de febrero", "eng": "February", "fre": "Février"}, 
-				   {"cat": "de març", "spa": "de marzo", "eng": "March", "fre": "Mars"}, 
-				   {"cat": "d\'abril", "spa": "de abril", "eng": "April", "fre": "Avril"}, 
-				   {"cat": "de maig", "spa": "de mayo", "eng": "May", "fre": "Mai"}, 
-				   {"cat": "de juny", "spa": "de junio", "eng": "June", "fre": "Juin"},
-				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"}, 
-				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"}, 
-				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
-				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "October", "fre": "Octobre"},
-				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"}, 
-				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
-
-var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvier"},
-			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"}, 
-			   {"cat": "Març", "spa": "Marzo", "eng": "March", "fre": "Mars"}, 
-			   {"cat": "Abril", "spa": "Abril", "eng": "April","fre": "Avril"}, 
-			   {"cat": "Maig", "spa": "Mayo", "eng": "May","fre": "Mai"}, 
-			   {"cat": "Juny", "spa": "Junio", "eng": "June","fre": "Juin"}, 
-			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"}, 
-			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"}, 
-			   {"cat": "Setembre", "spa": "Setiembre", "eng": "September","fre": "Septembre"},
-			   {"cat": "Octubre", "spa": "Octubre", "eng": "October","fre": "Octobre"},
-			   {"cat": "Novembre", "spa": "Noviembre", "eng": "November","fre": "Novembre"},
-			   {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}];
-
-function takeYear(theDate) 
-{
-	//tret de http://www.quirksmode.org/js/introdate.html
-	var x = theDate.getYear();
-	var y = x % 100;
-	y += (y < 38) ? 2000 : 1900;
-	return y;
-}
-
 
 var ara_canvi_proj_auto=0x01;
 

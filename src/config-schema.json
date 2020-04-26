@@ -35,8 +35,12 @@
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "id de la divisió. Ha de ser únic a la plana HTML.",
+						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord',"
 						"type": "string"
+					},
+					"title": {
+						"description": "Titol de la divisió. Només aplica quan la divisió és 'resizable'",
+						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"left": { 
 						"description": "Distància a la vora dreta quan la finestra medeix SpaceForLayers.width",
@@ -71,11 +75,15 @@
 						"enum": ["no", "ara_no", "si"]
 					},
 					"visible": {
-						"description": "Si la divisió es crea com a visible immediatament?. Pot ser true o false",
+						"description": "La divisió es crea com a visible immediatament?. Pot ser true o false",
 						"type": "boolean"
 					},  
+					"resizable": {
+						"description": "La divisió és una caixa redimensionable?. Pot ser true o false",
+						"type": "boolean"
+					},
 					"ev": {
-						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. Opcional. Pot ser null",
+						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. La propietat 'resizable' activa events de mouse que no es poden redefinir aquí. Opcional. Pot ser null",
 						"type": ["string", "null"]
 					},
 					"content": {
@@ -194,7 +202,7 @@
 			"type": "string"
 		},
 		"TitolCoord": { 
-			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' ",
+			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' . Deprecated. Useu la capacitat de títol de les layers redimensionables en el seu lloc",
 			"$ref": "#/definitions/StringOCadenaLang" 
 		},
 		"EstilCoord": { 

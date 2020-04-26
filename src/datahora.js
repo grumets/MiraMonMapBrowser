@@ -30,6 +30,41 @@
 
 "use strict"
 
+var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre": "Janvier"}, 
+				   {"cat": "de febrer", "spa": "de febrero", "eng": "February", "fre": "Février"}, 
+				   {"cat": "de març", "spa": "de marzo", "eng": "March", "fre": "Mars"}, 
+				   {"cat": "d\'abril", "spa": "de abril", "eng": "April", "fre": "Avril"}, 
+				   {"cat": "de maig", "spa": "de mayo", "eng": "May", "fre": "Mai"}, 
+				   {"cat": "de juny", "spa": "de junio", "eng": "June", "fre": "Juin"},
+				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"}, 
+				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"}, 
+				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
+				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "October", "fre": "Octobre"},
+				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"}, 
+				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
+
+var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvier"},
+			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"}, 
+			   {"cat": "Març", "spa": "Marzo", "eng": "March", "fre": "Mars"}, 
+			   {"cat": "Abril", "spa": "Abril", "eng": "April","fre": "Avril"}, 
+			   {"cat": "Maig", "spa": "Mayo", "eng": "May","fre": "Mai"}, 
+			   {"cat": "Juny", "spa": "Junio", "eng": "June","fre": "Juin"}, 
+			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"}, 
+			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"}, 
+			   {"cat": "Setembre", "spa": "Setiembre", "eng": "September","fre": "Septembre"},
+			   {"cat": "Octubre", "spa": "Octubre", "eng": "October","fre": "Octobre"},
+			   {"cat": "Novembre", "spa": "Noviembre", "eng": "November","fre": "Novembre"},
+			   {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}];
+
+function takeYear(theDate) 
+{
+	//tret de http://www.quirksmode.org/js/introdate.html
+	var x = theDate.getYear();
+	var y = x % 100;
+	y += (y < 38) ? 2000 : 1900;
+	return y;
+}
+
 function DonaDateDesDeDataJSON(data)
 {
 	return new Date(DonaYearJSON(data), DonaMonthJSON(data)-1, DonaDayJSON(data), DonaHourJSON(data), DonaMinuteJSON(data), DonaSecondJSON(data));
@@ -299,6 +334,7 @@ var cdns=[];
 	return cdns.join("");
 }//fi de DonaDataJSONComATextCompacte()
 
+
 //o_data és una sortida en aquesta funció
 function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 {
@@ -360,6 +396,64 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};	
 	}			
 }
+
+/*Eliminada en favor DonaDateComATextISO8601() que existeix sempre. Es va crear per IE8 compatibility for toISOString
+if(!Date.prototype.toISOString)
+{
+	Date.prototype.toISOString= function(data) {
+		//Copy of the old DonaDataISO8601ComAText for IE8 compatibility.
+		//Can be deleted once Microsoft target browser raises to IE9
+	var cdns=[];
+
+		if(data)
+		{
+			//Segons la ISO com a mínim he de mostrar l'any
+				cdns.push((data.getFullYear ? data.getFullYear() : takeYear(data)));
+			if(que_mostrar&mostra_mes)
+			{
+				cdns.push("-");
+				if(data.getMonth()<9)
+					cdns.push("0");
+				cdns.push((data.getMonth()+1));
+				if(que_mostrar&mostra_dia)
+				{
+					cdns.push("-");
+					if(data.getDate()<10)
+						cdns.push("0");
+					cdns.push((data.getDate()));
+
+						//Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
+					if(que_mostrar&mostra_hora)
+					{
+						if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
+						{
+							cdns.push("T");
+							if(data.getHours()<10)
+								cdns.push("0");
+							cdns.push(data.getHours());
+							if(que_mostrar&mostra_minut)
+							{
+								cdns.push(":" );
+								if(data.getMinutes()<10)
+									cdns.push("0");
+								cdns.push(data.getMinutes());
+								if(que_mostrar&mostra_segon)
+								{
+									cdns.push(":" );
+									if(data.getSeconds()<10)
+										cdns.push("0");
+									cdns.push(data.getSeconds());
+								}
+							}
+							cdns.push("Z");
+						}
+					}
+				}
+			}
+		}
+		return cdns.join("");
+	};
+}*/
 
 function DonaDateComATextISO8601(data, que_mostrar)
 {
