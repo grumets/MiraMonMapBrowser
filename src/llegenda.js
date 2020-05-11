@@ -681,7 +681,7 @@ function EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa)
 
 function CanviaEstatVisibleCapa(icon_capa, i)
 {
-var i_vista, capa=ParamCtrl.capa[i];
+var i_vista, capa=ParamCtrl.capa[i], capa2, grup_consultable=false;
 var nom_icona=TreuAdreca(icon_capa.src);
 
 	if (nom_icona=="ara_no_visible.gif" ||
@@ -692,33 +692,40 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		{
 			for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 			{
-			    if (i_capa==i)
-				    continue;
-				if (capa.grup==ParamCtrl.capa[i_capa].grup && 
+				if (i_capa==i)
+					continue;
+				capa2=ParamCtrl.capa[i_capa];
+				if (capa.grup==capa2.grup && 
 				    EsCapaVisibleAAquestNivellDeZoom(i_capa))
 				{
-				   if (!(ParamCtrl.LlegendaGrupsComARadials==true))
-				   {
-					   if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que també format part del grup \"" + ParamCtrl.capa[i_capa].grup + "\", serà desmarcada.",
-													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que también forma parte del grupo \"" + ParamCtrl.capa[i_capa].grup + "\", será desmarcada.",
-													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", that also is member to the group \"" + ParamCtrl.capa[i_capa].grup + "\", will be deselected.", 
-													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
-						   return;
-				   }
-				   if (capa.model!="vector" && ParamCtrl.capa[i_capa].transparencia=="semitransparent")
-				   {
+					//In the case of groups We sincronize the querible (consultable) with the visible property.
+					if (!(ParamCtrl.LlegendaGrupsComARadials==true))
+					{
+						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
+													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
+													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadena(capa2.desc) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.", 
+													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(capa2.desc) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
+							return;
+					}
+					if (capa.model!="vector" && capa2.transparencia=="semitransparent")
+					{
 						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
 				       		if (ParamCtrl.LlegendaGrupsComARadials==true)
-						{
 							window.document["v_ll_capa"+i_capa].src=AfegeixAdrecaBaseSRC("semi_radio.gif");
-						}
-				   }
-				   CanviaEstatVisibleCapa(window.document["v_ll_capa"+i_capa],i_capa);
-				   break;
+					}
+					CanviaEstatVisibleCapa(window.document["v_ll_capa"+i_capa],i_capa);
+					if (capa2.consultable=="si")
+					{
+						CanviaEstatConsultableCapa(window.document["c_ll_capa"+i_capa],i_capa);
+						grup_consultable=true;
+					}
+					break;
 				}
 			}
 		}
 		CanviaEstatVisibleISiCalDescarregableCapa(i,"si");
+		if (grup_consultable && capa.consultable=="ara_no")
+			CanviaEstatConsultableCapa(window.document["c_ll_capa"+i],i);
 		if (capa.model=="vector")
 		{
 			if (EsCapaVisibleAAquestNivellDeZoom(i) && capa.objectes && capa.objectes.features)
