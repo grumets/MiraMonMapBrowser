@@ -1845,6 +1845,8 @@ var a=Math.floor(x);
 function OKStrOfNe(X, N) 
 { 
 var es_negatiu;
+	if (isNaN(X))
+		return "";
 	if (N==0)
 		return Math.round(X).toString();
 	if (X<0)

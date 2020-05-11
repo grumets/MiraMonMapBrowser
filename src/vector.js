@@ -1062,7 +1062,7 @@ function CarregaSimbolsEstilCapaDigi(capa, i_estil, recarrega)
 {
 var simbol;
 
-	if (!capa.estil || 
+	if (!capa.estil || capa.estil.length==0 ||
 		!capa.estil[i_estil].simbols)
 		return;
 	

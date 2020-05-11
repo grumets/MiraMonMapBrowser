@@ -35,7 +35,7 @@
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord',"
+						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord',",
 						"type": "string"
 					},
 					"title": {
@@ -1956,7 +1956,7 @@
 				{
 					"description": "Cercle o quadrat renderitzat com un script en el canvas",
 					"type": "object",
-					"required": ["type", "r"],
+					"required": ["type"],
 					"properties": {
 						"type": {
 							"description": "És fàcil d'ampliar",

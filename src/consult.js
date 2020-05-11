@@ -305,7 +305,7 @@ function MostraConsultaComHTML(consulta)
 				{
 					if(atribut.mostrar=="no")
 						continue;							
-					if(atribut.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
+					if(atribut.mostrar=="si_ple" && (typeof consulta.Atribut[i].valor === "undefined" || consulta.Atribut[i].valor==null || consulta.Atribut[i].valor==""))
 						continue;
 					cdns.push(MostraConsultaAtributComHTML(consulta.i_capa, 0, i, consulta.Atribut[i], consulta.Atribut[i].separador, consulta.Atribut[i].valor, i_capa_validar, true));
 				}
@@ -570,6 +570,49 @@ function TancaFinestra_multi_consulta()
 	}
 }//Fi de TancaFinestra_multi_consulta()
 
+var ConsultaCopiaSerieTemporalMostrat=false;
+
+function ConsultaCopiaSerieTemporal(i_capa, i_obj, i_atr)
+{
+var cdns=[], capa, feature, atribut, atr;
+
+	IniciaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv");
+
+	capa=ParamCtrl.capa[i_capa];
+	if (capa.objectes && capa.objectes.features && i_obj<capa.objectes.features.length)
+		feature=capa.objectes.features[i_obj];
+	else
+		return false;
+	atribut=capa.atributs[i_atr];
+
+	cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), "\t", DonaCadena(capa.desc), "\n");
+	//cdns.push(DonaCadenaLang({"cat": "Objecte", "spa": "Objecto", "eng": "Feature", "fre": "Feature"}), "\t", i_obj, "\n");
+
+	for(var i=0; i<capa.atributs.length; i++)
+	{
+		atr=capa.atributs[i];
+		if(atr.mostrar=="no" || atr.serieTemporal)
+			continue;							
+		cdns.push((DonaCadena(atr.descripcio) ? DonaCadena(atr.descripcio) : atr.nom), "\t", DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i, i_data, PuntConsultat.i, PuntConsultat.j));
+		if (atr.unitats)
+			cdns.push("\t", atr.unitats);
+		cdns.push("\n");
+	}
+
+	cdns.push(DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}), "\t", DonaCadena(atribut.descripcio));
+	if (atribut.unitats)
+		cdns.push(" (", atribut.unitats, ")");
+	cdns.push("\n");
+	for (var i_data=0; i_data<capa.data.length; i_data++)
+		cdns.push(DonaDataCapaComATextBreu(i_capa, i_data), "\t", DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j), "\n");
+
+	FinalitzaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv", cdns.join(""), 
+			ConsultaCopiaSerieTemporalMostrat ? null : DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls en format", "spa": "Los valores del gráfico han sido copiados al portapapeles en formato", "eng": "The values of the chart have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papiers dans le format"}) + " " + DonaCadenaLang({"cat": "text separat per tabulacions", "spa": "texto separado por tabulaciones", "eng": "tab-separated text", "fre": "texte séparé par des tabulations"})+". (" + DonaCadenaLang({"cat": "Aquests missatge no es tornarà a mostrar", "spa": "Este mensaje no se volverá a mostrar", "eng": "These messages will not be displayed again", "fre": "Ces messages ne seront plus affichés"})+")");
+	ConsultaCopiaSerieTemporalMostrat=true;
+
+	return false;
+}
+
 function MostraConsultaAtributComHTML(i_capa, i_obj, i_atr, atribut, separador, valor, i_capa_validar, cal_class)
 {
 var cdns=[], ncol=440, nfil=220;
@@ -626,7 +669,15 @@ var cdns=[], ncol=440, nfil=220;
 	cdns.push((cal_class ? "</span>": ""), "<br>");
 
 	if (atribut.serieTemporal)
-		cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", ("canvas_consulta_" + i_capa + "_" + i_obj + "_" + i_atr), "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
+	{
+		if (cal_class)
+		{
+			cdns.push("<span class='ValorRespostaConsulta' class='invisiblewhenprint'>", 
+				"<a href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ") : ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ")\">", DonaCadenaLang({"cat":"Copia valors de la sèrie", "spa":"Copiar valores de la serie", "eng":"Copy series values","fre":"Copier les valeurs des séries"}), "</a><br>",
+				"</span>");
+		}
+		cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_consulta_", i_capa, "_", i_obj, "_", i_atr, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
+	}
 
 	return cdns.join("");	
 }
@@ -677,7 +728,7 @@ var cdns=[], capa;
 	  altres navegadors). Això està explicat a: http://www.captain.at/howto-ajax-parent-opener-window-close-error.php*/
 	if(ParamCtrl.TipusConsulta=="FinestraDeCop" && isFinestraLayer(window, "multi_consulta"))
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("pop_down.gif"),
-				  "\" alt=\"pop down\" onClick=\"opener.PopDownFinestra_multi_consulta();setTimeout('window.close()', 300);\" align=\"right\">");
+				  "\" alt=\"pop down\" onClick=\"opener.PopDownFinestra_multi_consulta();setTimeout('window.close()', 300);\" align=\"right\" class=\"invisiblewhenprint\">");
 
 	cdns.push("<center>",
 		(Accio && Accio.accio&accio_validacio) ?
@@ -787,7 +838,8 @@ var cdns=[], capa;
 			}
 		}
 	}
-	cdns.push("</center>");
+	cdns.push("</center>",
+		DonaTextDivCopiaPortapapersFinestra("ConsultaDiv"));
 
 	var s=cdns.join("");
 	if(ParamCtrl.TipusConsulta=="IncrustadaDeCop")

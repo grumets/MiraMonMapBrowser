@@ -85,7 +85,7 @@ var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cel
 	i_histo=parseInt(nom_finestra.substring(prefixHistogramaFinestra.length));
 	histograma=HistogramaFinestra.vista[i_histo];
 	prefix_div_copy=prefixHistogramaFinestra+i_histo;
-	IniciaCopiaPortapapersFinestra(prefix_div_copy);
+	IniciaCopiaPortapapersFinestra(window, prefix_div_copy);
 
 	capa=ParamCtrl.capa[histograma.i_capa];
 	estil=capa.estil[histograma.i_estil];
@@ -219,7 +219,8 @@ var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cel
 		}
 		cdns.push("Nodata", "\t", estil.histograma.classe_nodata*area_cella, "\n");
 	}
-	FinalitzaCopiaPortapapersFinestra(prefix_div_copy, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+	FinalitzaCopiaPortapapersFinestra(window, prefix_div_copy, cdns.join(""), 
+			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " " + DonaCadenaLang({"cat": "text separat per tabulacions", "spa": "texto separado por tabulaciones", "eng": "tab-separated text", "fre": "texte séparé par des tabulations"})+".");
 }
 
 function ObreFinestraHistograma(i_capa)
@@ -748,25 +749,26 @@ function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)
 	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\">kk</textarea></form></div>";
 }
 
-function IniciaCopiaPortapapersFinestra(prefix_nom_div)
+function IniciaCopiaPortapapersFinestra(win, prefix_nom_div)
 {
-	var div = document.getElementById(prefix_nom_div+"_copy_form_div");
+	var div = win.document.getElementById(prefix_nom_div+"_copy_form_div");
 	div.style.display="inline";  //Sembla que no es pot fer un select d'un element invisible.
 	return div;
 }
 
 
-function FinalitzaCopiaPortapapersFinestra(prefix_nom_div, text, missatge)
+function FinalitzaCopiaPortapapersFinestra(win, prefix_nom_div, text, missatge)
 {
-	var div=document.getElementById(prefix_nom_div+"_copy_form_div")
-	var textarea = document.getElementById(prefix_nom_div+"_copy_text");
+	var div=win.document.getElementById(prefix_nom_div+"_copy_form_div")
+	var textarea = win.document.getElementById(prefix_nom_div+"_copy_text");
 
 	textarea.value=text;
 
 	textarea.select();
-	document.execCommand("Copy");
+	win.document.execCommand("Copy");
 	div.style.display="none";
-	alert(missatge);
+	if (missatge)
+		win.alert(missatge);
 }
 
 function CopiaPortapapersFinestraSerieTemp(nom_histograma)
@@ -774,7 +776,7 @@ function CopiaPortapapersFinestraSerieTemp(nom_histograma)
 var cdns=[], data=[], temps, estadistics, capa, estil, area_cella;
 var component_name=["R", "G", "B"];
 
-	IniciaCopiaPortapapersFinestra(nom_histograma)
+	IniciaCopiaPortapapersFinestra(window, nom_histograma)
 
 	estadistics=DonaDadesEstadistiquesFotogramaDeSerieTemporal()  //estadistics.mitjana+estadistics.desv_tipica, estadistics.mitjana, estadistics.mitjana-estadistics.desv_tipica
 	temps=DonaTempsValorsSerieTemporalLocalitzacio()
@@ -815,7 +817,8 @@ var component_name=["R", "G", "B"];
 			cdns.push("\n");
 		}
 	}
-	FinalitzaCopiaPortapapersFinestra(nom_histograma, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+	FinalitzaCopiaPortapapersFinestra(window, nom_histograma, cdns.join(""), 
+			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the chart have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
 }
 
 function TancaFinestraSerieTemp(nom_div, nom_div_click)
