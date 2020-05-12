@@ -1247,7 +1247,7 @@ var cdns=[];
 	return cdns.join("");
 }
 
-function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans
+function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
 var nom, i_finestra=layerFinestraList.length;
 
@@ -1258,7 +1258,7 @@ var nom, i_finestra=layerFinestraList.length;
 
 	//Creo la barra
 	nom=name+SufixBarra;
-	createLayer(win, nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev}, null);
+	createLayer(win, nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, null);
 
 	//Li assigno el seu estil de visualització
 	classLayer(getLayer(win, nom), "barrafinestra");
@@ -1273,14 +1273,13 @@ var nom, i_finestra=layerFinestraList.length;
 	if (param.resizable)
 	{ 
 		nom=name+SufixCanto;
-		param.scroll="no";
-		createLayer(win, nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, param, textHTMLImgCantoFinestra(i_finestra));
+		createLayer(win, nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, textHTMLImgCantoFinestra(i_finestra));
 		classLayer(getLayer(win, nom), "cantofinestra");
 		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
 	}
 }//Fi de createFinestraLayer()
 
-function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, ancora, content) 
+function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
 var nom, s, i_finestra=layerFinestraList.length;
 
@@ -1291,19 +1290,18 @@ var nom, s, i_finestra=layerFinestraList.length;
 
 	//Creo la barra
 	nom=name+SufixBarra;
-	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: false, ev: null, save_content: false}, "barrafinestra", null);
+	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "barrafinestra", null);
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
 	
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
-	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, {scroll: "no", visible: false, ev: null, save_content: true}, "finestra", content);
+	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, param, "finestra", content);
 	
 	if (param.resizable)
 	{ 
 		nom=name+SufixCanto;
-		param.scroll="no";
-		s+=textHTMLLayer(nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, param, "cantofinestra", textHTMLImgCantoFinestra(i_finestra));
+		s+=textHTMLLayer(nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "cantofinestra", textHTMLImgCantoFinestra(i_finestra));
 		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
 	}
 	return s;

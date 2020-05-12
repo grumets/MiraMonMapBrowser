@@ -252,7 +252,7 @@ var cdns=[];
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
-	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, 200+HistogramaFinestra.n*10, 200+HistogramaFinestra.n*10, ncol, nfil*component.length+AltBarraFinestraLayer+2, "NW", "no", true, null, cdns.join("")));
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, 200+HistogramaFinestra.n*10, 200+HistogramaFinestra.n*10, ncol, nfil*component.length+AltBarraFinestraLayer+2, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_histograma);
 	HistogramaFinestra.vista[HistogramaFinestra.n]={ "nfil": nfil,
 				"ncol": ncol,

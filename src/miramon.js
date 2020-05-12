@@ -2432,7 +2432,7 @@ var i_vista;
 		dj+=AltBarraFinestraLayer;
 		
 		var nom_nova_vista=prefixNovaVistaFinestra+NovaVistaFinestra.n;
-		insertContentLayer(getLayer(window, event_de_click.target.parentElement.id), "afterEnd", textHTMLFinestraLayer(nom_nova_vista, {"cat": "Vista "+(NovaVistaFinestra.n+1), "spa": "Vista "+(NovaVistaFinestra.n+1), "eng": "View "+(NovaVistaFinestra.n+1), "fre": "Vue "+(NovaVistaFinestra.n+1) }, boto_tancar, min_i-1, min_j-1, di, dj, "NW", "no", true, null, null));
+		insertContentLayer(getLayer(window, event_de_click.target.parentElement.id), "afterEnd", textHTMLFinestraLayer(nom_nova_vista, {"cat": "Vista "+(NovaVistaFinestra.n+1), "spa": "Vista "+(NovaVistaFinestra.n+1), "eng": "View "+(NovaVistaFinestra.n+1), "fre": "Vue "+(NovaVistaFinestra.n+1) }, boto_tancar, min_i-1, min_j-1, di, dj, "NW", {scroll: "no", visible: true, ev: null}, null));
 		OmpleBarraFinestraLayerNom(window, nom_nova_vista);
 		dj-=(AltBarraFinestraLayer+1);
 		di-=1;

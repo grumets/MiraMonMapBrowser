@@ -2357,7 +2357,7 @@
 						"type": "boolean"
 					},
 					"mostrar": {
-						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_contingut' (només es mostrarà si l'atribut té contingut)",											
+						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
 						"enum": ["si", "no", "si_ple"]
 					},
 					"format": {

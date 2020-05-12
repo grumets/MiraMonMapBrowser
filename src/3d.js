@@ -48,7 +48,7 @@ var cdns=[];
 			": <input id=\"", nom_grafic3d, "_3d_fd\" type=\"range\" step=\"0.01\" min=\"0\" max=\"4.29\" value=\"", 5-1.7,"\" onchange=\"CanviaDistanciaSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaDistanciaSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\">",
 		  "</center></form></div>");
 
-	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_grafic3d, titol, boto_tancar, 200+Superficie3DFinestra.n*10, 200+Superficie3DFinestra.n*10, ncol, nfil+AltBarraFinestraLayer+2, "NW", "no", true, null, cdns.join("")));
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_grafic3d, titol, boto_tancar, 200+Superficie3DFinestra.n*10, 200+Superficie3DFinestra.n*10, ncol, nfil+AltBarraFinestraLayer+2, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_grafic3d);
 	Superficie3DFinestra.vista[Superficie3DFinestra.n]={ height: nfil,
 				width: ncol,
