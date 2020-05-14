@@ -463,7 +463,7 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("SERVICE=CSW&REQUEST=GetRecordByID&OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&ELEMENTSETNAME=lineage&ID=", 
 			  capa.nom, ":", 
 			  ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&OUTPUTFORMAT=application/json");
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(cors));
 }
 
 function DescarregaLlinatgeCapa(i_capa, funcio, param)

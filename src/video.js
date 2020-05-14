@@ -58,7 +58,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa.tipus)=="TipusWMS" && 
+	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa)=="TipusWMS" && 
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;

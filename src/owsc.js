@@ -985,7 +985,7 @@ function OpenOWSContext(url_context)
 function getServiceRequestURL(thisLayer,thisRequest)
 {
 var thisService;
-var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
+var tipusServidorCapa=DonaTipusServidorCapa(thisLayer);
 	
 	if (tipusServidorCapa=="TipusWMS" || tipusServidorCapa=="TipusWMS_C")
 		thisService= "WMS";
@@ -994,16 +994,16 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
 	else if (tipusServidorCapa=="TipusWFS") 
 		thisService= "WFS";
 	else
-		throw "Service type "+DonaTipusServidorCapa(thisLayer.tipus)+" not supported.";
+		throw "Service type "+DonaTipusServidorCapa(thisLayer)+" not supported.";
 
 	switch(thisRequest)
 	{
 		case "GetCapabilities":
-			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer.servidor),"REQUEST=GetCapabilities&VERSION="+DonaVersioServidorCapa(thisLayer.versio).Vers+"."+DonaVersioServidorCapa(thisLayer.versio).SubVers+"."+DonaVersioServidorCapa(thisLayer.versio).VariantVers+"&SERVICE="+thisService,
-															   false,  thisLayer.cors==true ? true : false);
+			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer),"REQUEST=GetCapabilities&VERSION="+DonaVersioServidorCapa(thisLayer).Vers+"."+DonaVersioServidorCapa(thisLayer).SubVers+"."+DonaVersioServidorCapa(thisLayer).VariantVers+"&SERVICE="+thisService,
+															   false,  DonaCorsServidorCapa(thisLayer));
 		case "GetMap":
-			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer.servidor),"REQUEST=GetMap"
-				+"&VERSION="+DonaVersioServidorCapa(thisLayer.versio).Vers+"."+DonaVersioServidorCapa(thisLayer.versio).SubVers+"."+DonaVersioServidorCapa(thisLayer.versio).VariantVers
+			return AfegeixNomServidorARequest(DonaServidorCapa(thisLayer),"REQUEST=GetMap"
+				+"&VERSION="+DonaVersioServidorCapa(thisLayer).Vers+"."+DonaVersioServidorCapa(thisLayer).SubVers+"."+DonaVersioServidorCapa(thisLayer).VariantVers
  				+"&SERVICE="+thisService
  				+"&FORMAT="+thisLayer.FormatImatge
  				+"&TRANSPARENT="+(thisLayer.transparencia && thisLayer.transparencia!="opac" ? "TRUE":"FALSE")
@@ -1013,7 +1013,7 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer.tipus);
  				+"&BBOX="+ParamInternCtrl.vista.EnvActual.MinX+","+ParamInternCtrl.vista.EnvActual.MinY+","+ParamInternCtrl.vista.EnvActual.MaxX+","+ParamInternCtrl.vista.EnvActual.MaxY
 				+"&WIDTH="+ParamInternCtrl.vista.ncol
 				+"&HEIGHT="+ParamInternCtrl.vista.nfil
- 				,false, thisLayer.cors==true ? true : false);
+ 				,false, DonaCorsServidorCapa(thisLayer));
 		default:
 			throw "Non supported request type "+thisRequest+".";
 	}

@@ -1106,7 +1106,7 @@ var c_afegir="";
 			  (simple ? "text/xml;subtype=gml/3.1.1/profiles/gmlsf/1.0.0/0" : "text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes") ,
 			  "&amp;SRSNAME=",ParamCtrl.capa[i].CRSgeometry ,"&amp;TYPENAME=" ,ParamCtrl.capa[i].nom);
 
-	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), true, ParamCtrl.capa[i].cors==true ? true : false);
+	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i]), cdns.join(""), true, DonaCorsServidorCapa(ParamCtrl.capa[i]));
 }//Fi de DonaRequestDescribeFeatureTypeInterna()
 
 function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
@@ -1291,7 +1291,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
 			if(camps_implicats[i] && camps_implicats[i]!="") 
 				cdns.push(",",capa.nom , "/", camps_implicats[i]);		
 	}
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }//Fi de DonaRequestGetFeature()
 
 
@@ -1314,7 +1314,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push(env2.MinX,",",env2.MinY,",",env2.MaxX,",",env2.MaxY);
 	}	
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
 //i_obj pot ser -1 per demanar-los tots
@@ -1339,7 +1339,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push(env2.MinX,",",env2.MinY,",",env2.MaxX,",",env2.MaxY);
 	}
-	return AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), true, capa.cors==true ? true : false);
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
 

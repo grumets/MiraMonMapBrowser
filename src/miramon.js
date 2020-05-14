@@ -241,25 +241,32 @@ var elems= DOMElement.children,
 	}
 }
 
-function DonaServidorCapa(s)
+function DonaServidorCapa(capa)
 {
-	if (s==null)
+	if (capa.servidor==null)   //Els servidors vectorials distigeixen entre null i undefined. Caldria analitzar be això per poder canviar a una condició més simple
 		return ParamCtrl.ServidorLocal;
-	return s;
+	return capa.servidor;
 }
 
-function DonaVersioServidorCapa(s)
+function DonaVersioServidorCapa(capa)
 {
-	if (s==null)
+	if (!capa.versio)
 		return ParamCtrl.VersioServidorLocal;
-	return s;
+	return capa.versio;
 }
 
-function DonaTipusServidorCapa(s)
+function DonaTipusServidorCapa(capa)
 {
-	if (s==null)
+	if (!capa.tipus)
 		return ParamCtrl.TipusServidorLocal;
-	return s;
+	return capa.tipus;
+}
+
+function DonaCorsServidorCapa(capa)
+{
+	if (typeof capa.cors==="undefined" || capa.cors==null)
+		return ParamCtrl.CorsServidorLocal;
+	return capa.cors;
 }
 
 function MostraEnllacWMS(finestra)
@@ -441,8 +448,8 @@ function CompletaDefinicioCapa(capa, capa_especial)
 			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
 	}
 
-	if (DonaTipusServidorCapa(capa.tipus)=="TipusWMS_C" || DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP" || 
-		DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_SOAP" /*|| capa.tipus=="TipusGoogle_KVP"*/)
+	if (DonaTipusServidorCapa(capa)=="TipusWMS_C" || DonaTipusServidorCapa(capa)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa)=="TipusWMTS_KVP" || 
+		DonaTipusServidorCapa(capa)=="TipusWMTS_SOAP" /*|| capa.tipus=="TipusGoogle_KVP"*/)
 	{
 		//ParamCtrl.VistaCapaTiled[i]=new CreaParametresVistaCapaTiled(null, 0, 0, 0, 0, 0, 0);
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
@@ -1298,7 +1305,7 @@ var i;
 	    for (i=0; i<ParamCtrl.capa.length; i++)
 	    {
 			if (EsCapaVisibleAAquestNivellDeZoom(i) &&
-				DonaTipusServidorCapa(ParamCtrl.capa[i].tipus)!="TipusWMS")
+				DonaTipusServidorCapa(ParamCtrl.capa[i])!="TipusWMS")
 			{
 				//Hi ha 1 capa (o més) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
 				costat=(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/VistaImprimir.ncol;
@@ -2059,19 +2066,19 @@ function DonaEnllacCapacitatsServidorDeCapa(i_capa, mode)
 {
 var cdns=[];
 
-	if(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)=="TipusWMTS_SOAP")
+	if(DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusWMTS_SOAP")
 	{
 		cdns.push("<a href=\"javascript:void(0);\" onClick=\"FesPeticioCapacitatsPost(\'", 
-				DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor)),"\', \'",DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\', ",
-				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus),", ", (ParamCtrl.capa[i_capa].cors==true ? true:false), ");\">", 
-				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa].servidor) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))), "</a>");
+				DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa])),"\', \'",DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),"\', ",
+				DonaTipusServidorCapa(ParamCtrl.capa[i_capa]),", ", DonaCorsServidorCapa(ParamCtrl.capa[i_capa]), ");\">", 
+				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa]) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa]))), "</a>");
 	}
 	else
 	{
-		cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor), 
-				DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)), 
-				DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus), ParamCtrl.capa[i_capa].cors==true ? true : false), "\" target=\"_blank\">", 
-				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa].servidor) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))), "</a>");
+		cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(ParamCtrl.capa[i_capa]), 
+				DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])), 
+				DonaTipusServidorCapa(ParamCtrl.capa[i_capa]), DonaCorsServidorCapa(ParamCtrl.capa[i_capa])), "\" target=\"_blank\">", 
+				((mode==0) ? DonaServidorCapa(ParamCtrl.capa[i_capa]) : DonaDescripcioTipusServidor(DonaTipusServidorCapa(ParamCtrl.capa[i_capa]))), "</a>");
 	}
 	return cdns.join("");
 }
@@ -2080,11 +2087,11 @@ function DonaEnllacCapacitatsServidorDeCapaDigi(i_capa, mode)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa];
 
-	cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(capa.servidor), 
+	cdns.push("<a href=\"", DonaRequestServiceMetadata(DonaServidorCapa(capa), 
 				DonaVersioComAText(capa.versio), 
 				capa.tipus ? capa.tipus : "TipusWFS",
-				capa.cors==true ? true:  false), "\" target=\"_blank\">", 
-				((mode==0) ? DonaServidorCapa(capa.servidor) : DonaDescripcioTipusServidor(capa.tipus ? capa.tipus : "TipusWFS")), "</a>");
+				DonaCorsServidorCapa(capa)), "\" target=\"_blank\">", 
+				((mode==0) ? DonaServidorCapa(capa) : DonaDescripcioTipusServidor(capa.tipus ? capa.tipus : "TipusWFS")), "</a>");
 	return cdns.join("");
 }
 
@@ -2099,7 +2106,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false;
 		
 		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor));
+			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 		
 		cdns2.push("<center><table border=0 width=95%><tr><td><font size=1>");
 		if(cdns.length>0)
@@ -2115,7 +2122,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 						//Necessito saber el tipus.
 						for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 						{
-							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa].servidor))
+							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 							{
 								if (array_tipus.length==0)
 								{
@@ -2128,7 +2135,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 								}
 								for (var i_tipus=0; i_tipus<array_tipus.length; i_tipus++)
 								{
-									if (DonaTipusServidorCapa(ParamCtrl.capa[array_tipus[i_tipus]].tipus)==DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))
+									if (DonaTipusServidorCapa(ParamCtrl.capa[array_tipus[i_tipus]])==DonaTipusServidorCapa(ParamCtrl.capa[i_capa]))
 										break;
 								}
 								if (i_tipus<array_tipus.length)
@@ -2162,11 +2169,11 @@ var elem=getLayer(window, "enllacWMS_finestra");
 					array_tipus.length=0;
 					for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 					{
-						if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa].servidor))
+						if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 						{
 							for (var i_tipus=0; i_tipus<array_tipus.length; i_tipus++)
 							{
-								if (DonaTipusServidorCapa(ParamCtrl.capa[array_tipus[i_tipus]].tipus)==DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus))
+								if (DonaTipusServidorCapa(ParamCtrl.capa[array_tipus[i_tipus]])==DonaTipusServidorCapa(ParamCtrl.capa[i_capa]))
 									break;
 							}
 							if (i_tipus<array_tipus.length)
@@ -2204,7 +2211,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 											"spa":"Servidor principal de este navegador", 
 											"eng":"Main Sever of this browser",
 											"fre":"Serveur principal du navigateur"}),":<br><a href=\"",
-					DonaRequestServiceMetadata(ParamCtrl.ServidorLocal, ParamCtrl.VersioServidorLocal, ParamCtrl.TipusServidorLocal, ParamCtrl.CorsServidorLocal==true ? true : false), "\" target=\"_blank\">", 
+					DonaRequestServiceMetadata(ParamCtrl.ServidorLocal, ParamCtrl.VersioServidorLocal, ParamCtrl.TipusServidorLocal, ParamCtrl.CorsServidorLocal), "\" target=\"_blank\">", 
 					ParamCtrl.ServidorLocal, " (", DonaDescripcioTipusServidor(ParamCtrl.TipusServidorLocal), ")","</a><br>");
 			}
 			else
@@ -2619,8 +2626,8 @@ var i_pan_vista;
 				if (EsCapaVisibleAAquestNivellDeZoom(i) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
 				{
 					elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+i);
-					if ((DonaTipusServidorCapa(capa.tipus)=="TipusWMS_C" || DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP" 
-						|| DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_SOAP"/* || DonaTipusServidorCapa(capa.tipus)=="TipusGoogle_KVP"*/) && capa.VistaCapaTiled.TileMatrix)
+					if ((DonaTipusServidorCapa(capa)=="TipusWMS_C" || DonaTipusServidorCapa(capa)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa)=="TipusWMTS_KVP" 
+						|| DonaTipusServidorCapa(capa)=="TipusWMTS_SOAP"/* || DonaTipusServidorCapa(capa)=="TipusGoogle_KVP"*/) && capa.VistaCapaTiled.TileMatrix)
 					{
 						moveLayer(elem, xm-capa.VistaCapaTiled.dx, ym-capa.VistaCapaTiled.dy, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil);
 						clipLayer(elem, xc+capa.VistaCapaTiled.dx, yc+capa.VistaCapaTiled.dy, w, h);
@@ -3341,7 +3348,7 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 
 function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 {
-	if(DonaTipusServidorCapa(c.tipus)=="TipusWMS_C" || DonaTipusServidorCapa(c.tipus)=="TipusWMTS_REST" || DonaTipusServidorCapa(c.tipus)=="TipusWMTS_KVP" || DonaTipusServidorCapa(c.tipus)=="TipusWMTS_SOAP")
+	if(DonaTipusServidorCapa(c)=="TipusWMS_C" || DonaTipusServidorCapa(c)=="TipusWMTS_REST" || DonaTipusServidorCapa(c)=="TipusWMTS_KVP" || DonaTipusServidorCapa(c)=="TipusWMTS_SOAP")
 	{
 		if(c.TileMatrixSet)
 		{
@@ -3530,11 +3537,11 @@ var ns;
 	if(!root) return;
 	
 	//Agafo l'element BinaryPayload
-	ns="http://www.opengis.net/wmts/"+DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa].versio));	
+	ns="http://www.opengis.net/wmts/"+DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa]));	
 	elem=DonamElementsNodeAPartirDelNomDelTag(root, ns, "wmts", "BinaryPayload");
 	if(!elem || elem.length<1)
 	{
-		ns="http://www.opengis.net/wmts/"+DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa].versio));	
+		ns="http://www.opengis.net/wmts/"+DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[dades_request.i_capa]));	
 		elem=DonamElementsNodeAPartirDelNomDelTag(root, ns, "wmts", "BinaryPayload");
 		if(!elem || elem.length<1)
 		{
@@ -3621,12 +3628,12 @@ var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 			  "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ",
 			  "xsi:schemaLocation=\"http://www.w3.org/2001/12/soap-envelope http://www.w3.org/2001/12/soap-envelope.xsd\">",
 			  "<soap:Body>",
-			  "<GetTile xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(capa.versio)),"\" ",
+			  "<GetTile xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(capa)),"\" ",
 						"xmlns:ows=\"http://www.opengis.net/ows/1.1\" ",
-						"xsi:schemaLocation=\"http://www.opengis.net/wmts/",DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(capa.versio)),
+						"xsi:schemaLocation=\"http://www.opengis.net/wmts/",DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(capa)),
 						" http://www.miramon.uab.cat/ogc/schemas/wmts/", 
-						DonaVersioComAText(DonaVersioServidorCapa(capa.versio)), "/wmtsGetTile_request.xsd\" ", 
-						"service=\"WMTS\" version=\"",DonaVersioComAText(DonaVersioServidorCapa(capa.versio)),"\">\n",
+						DonaVersioComAText(DonaVersioServidorCapa(capa)), "/wmtsGetTile_request.xsd\" ", 
+						"service=\"WMTS\" version=\"",DonaVersioComAText(DonaVersioServidorCapa(capa)),"\">\n",
 							"<Layer>",capa.nom, "</Layer>\n");						  
 	cdns.push(			  "<Style>");
 	if (capa.estil && capa.estil.length)
@@ -3653,8 +3660,8 @@ var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 						"<TileCol>",i,"</TileCol>\n",
 					"</GetTile>\n");
 	// ServerToRequest	
-	if ( (typeof capa.cors==="undefined" || capa.cors==false) && 
-		 location.host && DonaHost(DonaServidorCapa(capa.servidor)).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	if ( DonaCorsServidorCapa(capa) && 
+		 location.host && DonaHost(DonaServidorCapa(capa)).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -3663,10 +3670,10 @@ var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 							location.host+ParamCtrl.ServidorLocal.substring(pos_host+s_host.length, ParamCtrl.ServidorLocal.length));
 		else
 			servidor_temp=ParamCtrl.ServidorLocal;
-		cdns.push(		"<ServerToRequest>",DonaNomServidorSenseCaracterFinal(DonaServidorCapa(capa.servidor)),"</ServerToRequest>\n");
+		cdns.push(		"<ServerToRequest>",DonaNomServidorSenseCaracterFinal(DonaServidorCapa(capa)),"</ServerToRequest>\n");
 	}
 	else
-		servidor_temp=DonaNomServidorSenseCaracterFinal(DonaServidorCapa(capa.servidor));
+		servidor_temp=DonaNomServidorSenseCaracterFinal(DonaServidorCapa(capa));
 	
 	cdns.push(			"</soap:Body>\n",
 				"</soap:Envelope>\n");	
@@ -3720,7 +3727,7 @@ function DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, i_es
 {
 var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 
-	if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST")
+	if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
 	{
 		//{WMTSBaseURL}/{layer}/{style}/{firstDimension}/{...}/{lastDimension}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}	
 	if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
@@ -3728,7 +3735,7 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		else
 			var s="{WMTSBaseURL}/{layer}/{style}/{time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}";
 
-		s=s.replace("{WMTSBaseURL}", DonaServidorCapa(capa.servidor));
+		s=s.replace("{WMTSBaseURL}", DonaServidorCapa(capa));
 		s=s.replace("{layer}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
@@ -3764,7 +3771,7 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 				s=s.replace("{format_extension}", capa.FormatImatge);
 		}
 		/*
-		cdns.push(DonaServidorCapa(capa.servidor), (DonaServidorCapa(capa.servidor).charAt(DonaServidorCapa(capa.servidor).length-1)=="/") ? "": "/", capa.nom, "/");
+		cdns.push(DonaServidorCapa(capa), (DonaServidorCapa(capa).charAt(DonaServidorCapa(capa).length-1)=="/") ? "": "/", capa.nom, "/");
 
 		if (capa.estil && capa.estil.length)
 		{
@@ -3789,10 +3796,10 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		//CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
 		return s;
 	}
-	else if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP")
+	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 	{
 		//Encara per revisar pq WMTS va diferent que el WMS.
-		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa.versio)), "&REQUEST=GetTile&TileMatrixSet=" , 
+		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=GetTile&TileMatrixSet=" , 
 			capa.TileMatrixSet[i_tile_matrix_set].nom ,
 			 "&TileMatrix=" , capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier , "&TileRow=" , j , "&TileCol=" , i ,
 			 "&LAYER=" , capa.nom , "&FORMAT=" , capa.FormatImatge ,
@@ -3810,16 +3817,16 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		if (capa.AnimableMultiTime==true)
 			cdns.push("&TIME=",
 				(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData)));
-		var s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, capa.cors==true? true : false);
+		var s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
 		//CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
 		return s;
 	}
-	/*if (DonaTipusServidorCapa(capa.tipus)=="TipusGoogle_KVP")
+	/*if (DonaTipusServidorCapa(capa)=="TipusGoogle_KVP")
 	{
 		//http://khm.google.com/maptilecompress/hl=en&s=Gal&t=3&q=25&x=0&y=0&z=0
 		//{WMTSBaseURL}&t={layer}&q={quality_style}&z={TileMatrix}&y={TileRow}&x={TileCol}
 		
-		cdns.push(DonaServidorCapa(capa.servidor), (DonaServidorCapa(capa.servidor).charAt(DonaServidorCapa(capa.servidor).length-1)=="&") ? "": "&", "t=", capa.nom, "&");
+		cdns.push(DonaServidorCapa(capa), (DonaServidorCapa(capa).charAt(DonaServidorCapa(capa).length-1)=="&") ? "": "&", "t=", capa.nom, "&");
 
 		if (capa.estil && capa.estil.length)
 		{
@@ -3945,13 +3952,13 @@ function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, 
 {
 var cdns=[];
 
-	if (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i].versio).SubVers<2))
+	if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers<2))
     	cdns.push("SRS=");
     else
         cdns.push("CRS=");	
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&BBOX=");
 	
-	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, DonaVersioServidorCapa(ParamCtrl.capa[i].versio)))
+	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, DonaVersioServidorCapa(ParamCtrl.capa[i])))
        	cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
     else
         cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
@@ -3989,20 +3996,20 @@ function DonaRequestGetMap(i, i_estil, pot_semitrans, ncol, nfil, env, i_data)
 {
 var cdns=[];
 	
-	if (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i].versio).SubVers==0))
+	if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers==0))
 	    cdns.push("WMTVER=");
     else
 		cdns.push("SERVICE=WMS&VERSION="); 
-	cdns.push(DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i].versio)), "&REQUEST=");
+	cdns.push(DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i])), "&REQUEST=");
 	
-    if (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i].versio).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i].versio).SubVers==0))
+    if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers==0))
     	cdns.push("map&");
     else
     	cdns.push("GetMap&");
 		
 	cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data));	
 	
-	var s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, ParamCtrl.capa[i].cors==true ? true : false);
+	var s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i]), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(ParamCtrl.capa[i]));
 	//CreaIOmpleEventConsola("GetMap", i, s, TipusEventGetMap);
 	return s;
 }
@@ -4035,7 +4042,7 @@ function PortamASeleccio()
 
 function OmpleVistaCapa(nom_vista, vista, i)
 {
-	if (DonaTipusServidorCapa(ParamCtrl.capa[i].tipus)=="TipusWMS")
+	if (DonaTipusServidorCapa(ParamCtrl.capa[i])=="TipusWMS")
 	{
 		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
@@ -4651,9 +4658,9 @@ function AssignaDonaNomImatgeTiledASrc(nom_vista, i_capa, i_tile_matrix_set, i_t
 	var s=DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, -1, true, null);
 
 	img.src=s;
-	if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST")
+	if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
 		img.i_event=CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
-	else if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP")
+	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 		img.i_event=CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
 	else //wms-c
 		img.i_event=CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
@@ -4706,7 +4713,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	{
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
-			if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa].tipus)=="TipusWMTS_SOAP")
+			if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusWMTS_SOAP")
 			{
 				//if(j==vista_tiled.JTileMin && i==vista_tiled.ITileMin)
 				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè el estil i el i_data sempre són null en el WMTS?? 
@@ -4776,9 +4783,9 @@ var cdns=[], tile_matrix;
 			cdns.push("<td width=", tile_matrix.TileWidth, "><img name=\"i_raster", i_capa, "_" , j , "_", i , "\" src=");
 			var s=DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, -1, true, null);
 			var i_event;
-			if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST")
+			if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
 				i_event=CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
-			else if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP")
+			else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 				i_event=CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
 			else //wms-c
 				i_event=CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);

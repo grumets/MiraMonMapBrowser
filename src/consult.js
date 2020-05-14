@@ -435,7 +435,7 @@ var punt={}, cal_transformar, url;
 		{
 			resposta_consulta_xml={"capa": capa, "i_capa": i, "win": win, "nom_layer": "LayerConsulta"+i, "estat": EstatAjaxXMLInit, "Atribut": [], "text": ""};
 
-			if(DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_SOAP")
+			if(DonaTipusServidorCapa(capa)=="TipusWMTS_SOAP")
 				FesRequestGetFeatureInfoSOAP(resposta_consulta_xml);
 			else
 			{
@@ -1200,14 +1200,14 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 			  "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ",
 			  "xsi:schemaLocation=\"http://www.w3.org/2001/12/soap-envelope http://www.w3.org/2001/12/soap-envelope.xsd\">\n",
 			  "<soap:Body>\n",
-			  "<GetFeatureInfo service=\"WMTS\" version=\"", DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\"",
-			  " xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\">\n",
-			  "<GetTile xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\" ",
+			  "<GetFeatureInfo service=\"WMTS\" version=\"", DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),"\"",
+			  " xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),"\">\n",
+			  "<GetTile xmlns=\"http://www.opengis.net/wmts/", DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),"\" ",
 						"xmlns:ows=\"http://www.opengis.net/ows/1.1\" ",
-						"xsi:schemaLocation=\"http://www.opengis.net/wmts/",DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),
+						"xsi:schemaLocation=\"http://www.opengis.net/wmts/",DonaVersioPerNameSpaceComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),
 						" http://www.miramon.uab.cat/ogc/schemas/wmts/",
-						DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)), "/wmtsGetTile_request.xsd\" ",
-						"service=\"WMTS\" version=\"",DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa].versio)),"\">\n",
+						DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])), "/wmtsGetTile_request.xsd\" ",
+						"service=\"WMTS\" version=\"",DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i_capa])),"\">\n",
 							"<Layer>",ParamCtrl.capa[i_capa].nom, "</Layer>\n");
 	if (ParamCtrl.capa[i_capa].estil && ParamCtrl.capa[i_capa].estil.length>0)
 	{
@@ -1234,8 +1234,8 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 					"<InfoFormat>",ParamCtrl.capa[i_capa].FormatConsulta,"</InfoFormat>\n",
 					"</GetFeatureInfo>\n");
 	//ServerToRequest		
-	if ( (typeof ParamCtrl.capa[i_capa].cors==="undefined" || ParamCtrl.capa[i_capa].cors==false) && 
-		location.host && DonaHost(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor).toLowerCase())!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
+	if ( !DonaCorsServidorCapa(ParamCtrl.capa[i_capa]) && 
+		location.host && DonaHost(DonaServidorCapa(ParamCtrl.capa[i_capa]).toLowerCase())!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
@@ -1244,10 +1244,10 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 							location.host+ParamCtrl.ServidorLocal.substring(pos_host+s_host.length, ParamCtrl.ServidorLocal.length));
 		else
 			servidor_temp=ParamCtrl.ServidorLocal;
-		cdns.push(		"<ServerToRequest>",DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor)),"</ServerToRequest>\n");
+		cdns.push(		"<ServerToRequest>",DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa])),"</ServerToRequest>\n");
 	}
 	else
-		servidor_temp=DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa].servidor));
+		servidor_temp=DonaNomServidorSenseCaracterFinal(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
 	cdns.push(			"</soap:Body>\n",
 				"</soap:Envelope>\n");
@@ -1263,21 +1263,21 @@ function DonaRequestGetFeatureInfo(i_capa, es_ajax)
 var cdns=[], capa=ParamCtrl.capa[i_capa];
 var s;
 
-	if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_REST")
+	if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
 	{
 		alert(DonaCadenaLang({"cat":"De moment no implementat per RESTful",
 							 "spa":"De momento no implementado para RESTful",
 							 "eng":"Not implemented yet for RESTful",
 							 "fre":"Pas encore implémenté pour RESTful"}));
 	}
-	/*if (DonaTipusServidorCapa(capa.tipus)=="TipusGoogle_KVP")
+	/*if (DonaTipusServidorCapa(capa)=="TipusGoogle_KVP")
 	{
 		alert(DonaCadenaLang({"cat":"No és possible en Google KVP",
 							 "spa":"No es posible en Google KVP",
 							 "eng":"It is not possible on Google KVP",
 							 "fre":"Il n'est pas possible sur Google KVP"}));
 	}*/
-	else if (DonaTipusServidorCapa(capa.tipus)=="TipusWMTS_KVP")
+	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 	{
 		var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (i_tile_matrix_set==-1) return;
@@ -1300,7 +1300,7 @@ var s;
 		*/
 		tile_col+=ParamCtrl.capa[i_capa].VistaCapaTiled.ITileMin;
 		tile_row+=ParamCtrl.capa[i_capa].VistaCapaTiled.JTileMin;
-		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa.versio)), "&REQUEST=GetFeatureInfo&TileMatrixSet=" ,
+		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=GetFeatureInfo&TileMatrixSet=" ,
 			  capa.TileMatrixSet[i_tile_matrix_set].nom ,
 			 "&TileMatrix=" , ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.Identifier , "&TileRow=" , tile_row , "&TileCol=" , tile_col ,
 			 "&LAYER=" , capa.nom ,
@@ -1309,18 +1309,18 @@ var s;
 
 		if (capa.AnimableMultiTime==true)
 			cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
-		s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+		s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
 		//CreaIOmpleEventConsola("GetFeatureInfo WMTS-KVP, tiled", i_capa, s, TipusEventGetFeatureInfo);
 	}
 	else
 	{
-		if (DonaVersioServidorCapa(capa.versio).Vers<1 || (DonaVersioServidorCapa(capa.versio).Vers==1 && DonaVersioServidorCapa(capa.versio).SubVers==0))
+		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers==0))
 			cdns.push("WMTVER=");
 		else
 			cdns.push("SERVICE=WMS&VERSION=");
-		cdns.push(DonaVersioComAText(DonaVersioServidorCapa(capa.versio)), "&REQUEST=");
+		cdns.push(DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=");
 
-		if (DonaVersioServidorCapa(capa.versio).Vers<1 || (DonaVersioServidorCapa(capa.versio).Vers==1 && DonaVersioServidorCapa(capa.versio).SubVers==0))
+		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers==0))
 			cdns.push("feature_info&");
 		else
 			cdns.push("GetFeatureInfo&");
@@ -1330,7 +1330,7 @@ var s;
 
 		cdns.push("&QUERY_LAYERS=" , capa.nom , "&INFO_FORMAT=" , capa.FormatConsulta);
 
-		if (DonaVersioServidorCapa(capa.versio).Vers<1 || (DonaVersioServidorCapa(capa.versio).Vers==1 && DonaVersioServidorCapa(capa.versio).SubVers<2))
+		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
 			    cdns.push("&X=" , PuntConsultat.i , "&Y=" , PuntConsultat.j);
 	    	else
     			cdns.push("&I=" , PuntConsultat.i , "&J=" , PuntConsultat.j);
@@ -1338,7 +1338,7 @@ var s;
 		if (ParamCtrl.idiomes.length>1)
 			cdns.push("&LANGUAGE=", ParamCtrl.idioma);
 
-		s=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+		s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
 	}
 	return s;
 }

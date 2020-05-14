@@ -129,7 +129,7 @@ function CreaEstatDescarrega(temps, i_capa_wcs, i_event)
 var cdns=[], cadena_cgi;
 
 	cdns.push("VERSION=1.1.0&REQUEST=DonaEstatProces&IDPROCES=", self.IdProces, "_", self.NIdProces, "&FORMAT=text/xml");  //"&TEMPS_REFRESC=", temps
-	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs].servidor), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, (ParamCtrl.capa[i_capa_wcs].cors==true? true : false));
+	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs]), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(ParamCtrl.capa[i_capa_wcs]));
 
 	//parent.wcs3.location.href=cadena_cgi;
 	//document.getElementById("finestra_download_status").innerHTML=cadena_cgi;
@@ -259,8 +259,8 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	//Eliminat el 13-07-2008
 	//if (oferir_vincle)
 	//	cdns_req.push("&INFO_FORMAT=text/html");
-	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa.servidor), cdns_req.join(""), 
-			ParamCtrl.UsaSempreMeuServidor==true ? true : false, capa.cors==true? true : false);	
+	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns_req.join(""), 
+			ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
 
 	//Aquest sistema per controlar l'estat no sembla funcionar.
 	var iframe=document.getElementById("finestra_download_hidden");

@@ -1433,7 +1433,7 @@ var s="";
 	{
 		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 		{
-	   		capa_consulta_tipica_intern[i]={servidor: DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i].servidor), 
+	   		capa_consulta_tipica_intern[i]={servidor: DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]), 
 				nom: ParamCtrl.CapaConsultaPreguntaServidor[i].nom, 
 				camps: ParamCtrl.CapaConsultaPreguntaServidor[i].camps, 
 				CRS: ParamCtrl.CapaConsultaPreguntaServidor[i].CRS, 
@@ -1451,7 +1451,7 @@ var s="";
 				ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
 				"&INFO_FORMAT=text/xml&QUERY_LAYERS=",
 				ParamCtrl.CapaConsultaPreguntaServidor[i].nom);
-			s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i].servidor), cdns.join(""), true, (ParamCtrl.CapaConsultaPreguntaServidor[i].cors==true? true : false));
+			s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]), cdns.join(""), true, DonaCorsServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]));
 			i_event=CreaIOmpleEventConsola("DonaProjeccioConsultaTipica", -1, s, TipusEventDonaProjeccioConsultaTipica);
 			loadFile(s, "text/xml", 
 					OmpleICarregaConsultaTipica, 
