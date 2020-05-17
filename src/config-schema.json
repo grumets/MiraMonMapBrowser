@@ -898,7 +898,7 @@
 				"type": ["object"],
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster(o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
+						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster (o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
 						"type": ["string", "null"],
 						"format": "uri"
 					},

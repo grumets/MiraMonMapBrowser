@@ -1251,7 +1251,7 @@ var cdns=[], coord_visible;
 	if (isFinestraLayer(window, "coord"))
 		coord_visible=isFinestraLayerVisible(window, "coord");
 	else
-		coord_visible=isLayerVisible(window, "coord");
+		coord_visible=isLayerVisible(getLayer(window, "coord"));
 	cdns.push("<input type=\"checkbox\" name=\"param_CoordVisible\" id=\"id_CoordVisible\"", (coord_visible ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordVisible\" accesskey=\"", DonaCadenaLang({"cat":"m", "spa":"m", "eng":"h", "fre":"f"}), "\">", DonaCadenaLang({"cat":"<u>M</u>ostra finestra", "spa":"<u>M</u>uestra ventana", "eng":"S<u>h</u>ow window", "fre":"A<u>f</u>ficher la fenêtre"}), "</label>",
 		   "<hr></div>",
 		"<div id=\"param_colors\">",
