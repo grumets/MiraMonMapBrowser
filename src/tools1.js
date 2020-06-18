@@ -2032,9 +2032,9 @@ function DonaCadenaAmbCometesBarra(cadena)
 function DonaHost(s)
 {
 var s2;
-	if (-1!=s.indexOf("//"))
+	if (-1!=s.indexOf("://"))
 	{
-		s2=s.substring(s.indexOf("//")+2,s.length);
+		s2=s.substring(s.indexOf("://")+3,s.length);
 		if (-1!=s2.indexOf("/"))
 			return s2.substring(0,s2.indexOf("/"));
 		else
@@ -2051,11 +2051,9 @@ var s2;
 
 function DonaProtocol(s)  // Vull obtenir http: o https:,... d'una url d'un servidor
 {
-var protocol=null;
-
-	if(-1!=s.indexOf(":"))
-		protocol=s.substring(0,s.indexOf(":")+1);
-	return protocol;
+	if(-1!=s.indexOf("://"))
+		return s.substring(0,s.indexOf("://")+1);
+	return "";
 }
 
 //Extret de: http://www.xs4all.nl/~ppk/js/detect.html
