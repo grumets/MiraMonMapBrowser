@@ -58,7 +58,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa.tipus)=="TipusWMS" && 
+	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa)=="TipusWMS" && 
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;
@@ -292,7 +292,8 @@ function ConsultaSobreVideo(event_de_click)
 						DonaDadesEstadistiquesFotogramaDeSerieTemporal(), 								
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
 						DonaTempsValorsSerieTemporalLocalitzacio(), 
-						DonaTitolEixYSerieTemporalLocalitzacio());
+						DonaTitolEixYSerieTemporalLocalitzacio(),
+						ParamCtrl.capa[DatesVideo[i_data_video].i_capa].FlagsData);
 	}
 	var color_name=AfegeixGraficSerieTemporal(ChartConsultaSobreVideo, data, /*DonaValorDeCoordActual(x, y, false, false)*/ PuntsSerieTemporal.length+1);
 	PuntsSerieTemporal.push({i:i, j:j, x:x, y:y, color:color_name});
@@ -636,8 +637,7 @@ var capa, i_estil
 		{				
 			for (var i_data=0; i_data<capa.data.length; i_data++)
 			{
-				var data=capa.data[i_data];
-				var d=new Date(data.year ? data.year : 1970, data.month ? data.month-1 : 0, data.day ? data.day : 1, data.hour ? data.hour : 0, data.minute ? data.minute : 0, data.second ? data.second : 0);
+				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
 				DatesVideo.push({"i_capa": i_capa, 
 						"i_data": i_data, 
 						"i_estil": i_estil, 
@@ -1449,11 +1449,12 @@ var cdns=[], nodata=255, i, j, valor0;
 
 function VideoCopiaEstadistic()
 {
-	IniciaCopiaPortapapersFinestra("VideoDiv");
+	IniciaCopiaPortapapersFinestra(window, "VideoDiv");
 
-	FinalitzaCopiaPortapapersFinestra("VideoDiv", 
+	FinalitzaCopiaPortapapersFinestra(window, "VideoDiv", 
 			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
-			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " ESRI ASCII raster format. " + DonaCadenaLang({"cat": "Per importar-ho al MiraMon, guardeu aquest contingut en un fitxer i useu ASCIIImg opció -1", "spa": "Para importarla a MiraMon, guarde este contenido en un fichero y use ASCIIImg opción -1", "eng": "To import it in MiraMon, save this content in a file and use ASCIIImg option -1", "fre": "Pour l'importer dans MiraMon, enregistrez ce contenu dans un fichier et utilisez l'option ASCIIImg -1"}));
+			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls en format", "spa": "Los valores del gráfico han sido copiados al portapapeles en formato", "eng": "The values of the graphic have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " CSV. ");
+			
 
 	return false;
 }

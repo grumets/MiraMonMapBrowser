@@ -31,12 +31,16 @@
 			"items": 
 			{
 				"type": "object",
-				"description": "Llista de Layers que es creasrà internament abm createLayer(). Heu d'interpretar el vell concepte de ne netscape de 'layer' com una moderna 'div' en HTML.",
+				"description": "Llista de Layers que es crearà internament amb createLayer(). Heu d'interpretar el vell concepte de netscape de 'layer' com una moderna 'div' en HTML.",
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "id de la divisió. Ha de ser únic a la plana HTML.",
+						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord',",
 						"type": "string"
+					},
+					"title": {
+						"description": "Titol de la divisió. Només aplica quan la divisió és 'resizable'",
+						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"left": { 
 						"description": "Distància a la vora dreta quan la finestra medeix SpaceForLayers.width",
@@ -71,11 +75,15 @@
 						"enum": ["no", "ara_no", "si"]
 					},
 					"visible": {
-						"description": "Si la divisió es crea com a visible immediatament?. Pot ser true o false",
+						"description": "La divisió es crea com a visible immediatament?. Pot ser true o false",
 						"type": "boolean"
 					},  
+					"resizable": {
+						"description": "La divisió és una caixa redimensionable?. Pot ser true o false",
+						"type": "boolean"
+					},
 					"ev": {
-						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. Opcional. Pot ser null",
+						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. La propietat 'resizable' activa events de mouse que no es poden redefinir aquí. Opcional. Pot ser null",
 						"type": ["string", "null"]
 					},
 					"content": {
@@ -194,7 +202,7 @@
 			"type": "string"
 		},
 		"TitolCoord": { 
-			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' ",
+			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' . Deprecated. Useu la capacitat de títol de les layers redimensionables en el seu lloc",
 			"$ref": "#/definitions/StringOCadenaLang" 
 		},
 		"EstilCoord": { 
@@ -694,7 +702,15 @@
 			}
 		},
 		"IconaAnarCoord": {
-			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi a es posa una per defecte.",
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona" 
+		},
+		"MostraPosicioGPS": {
+			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
+			"type": ["null", "boolean"]
+		},
+		"IconaPosicioGPS": {
+			"description": "Interna, no usar. Actualment actua (i si no es posa, en posem una per defecte). És la icona que representa el lloc on es troba el dispositiu. MiraMon es reserva el dret a canviar el comportament per pintar la ruta GPS (sense icona) i eliminar aquesta entrada.",
 			"$ref": "#/definitions/icona" 
 		},
 		"IconaEdicio": {
@@ -882,7 +898,7 @@
 				"type": ["object"],
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster(o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
+						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster (o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1344,31 +1360,40 @@
 									"type": ["string", "null"]								
 								},
 								"simbols": {
-									"description": "Simbols o formes pels objectes digitalitzats",
-									"type": ["object", "null"],
-									"properties": {
-										"NomCamp": {
-											"description": "Nom del camp per triar el simbol o la forma a presentat a la vista",
-											"type": ["string", "null"]
-										},
-										"simbol": {
-											"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
-											"type": ["array", "null"],
-											"items": {
-												"description": "Símbol o forma i camp",
-												"type": "object",
-												"required": ["icona"],
-												"properties": {
-													"ValorCamp": {
-														"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant"
-													},
-													"icona": {
-														"description": "icona",
-														"$ref": "#/definitions/icona" 
-													},
-													"IconaSel": {
-														"description": "icona quan està seleccionada",
-														"$ref": "#/definitions/icona" 
+									"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+									"type": ["array", "null"],
+									"items": {
+										"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, tots comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
+										"type": "object",
+										"required": ["simbol"],
+										"properties": {
+											"NomCamp": {
+												"description": "Nom del camp per triar el simbol o la forma a presentat a la vista",
+												"type": ["string", "null"]
+											},
+											"NomCampFEscala": {
+												"description": "Nom del camp per triar un factor d'escalat del simbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+												"type": ["string", "null"]
+											},
+											"simbol": {
+												"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
+												"type": ["array", "null"],
+												"items": {
+													"description": "Símbol o forma i camp",
+													"type": "object",
+													"required": ["icona"],
+													"properties": {
+														"ValorCamp": {
+															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant"
+														},
+														"icona": {
+															"description": "icona",
+															"$ref": "#/definitions/icona" 
+														},
+														"IconaSel": {
+															"description": "icona quan està seleccionada",
+															"$ref": "#/definitions/icona" 
+														}
 													}
 												}
 											}
@@ -1377,22 +1402,11 @@
 								},
 								"interior": {
 									"description": "Com omplir l'interior de les icones que són formes",
-									"type": "object",
-									"required": ["paleta"],
-									"properties":{
-										"NomCamp": {
-											"description": "Nom del camp per triar el color d'omplir la forma",
-											"type": ["string", "null"]
-										},
-										"paleta": {
-											"description": "Paleta de colors per omplir l'interior de les formes. Pot ser un sol color per fer les formes de color constant",
-											"$ref": "#/definitions/paleta"
-										},
-										"estiramentPaleta": {
-											"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
-											"$ref": "#/definitions/estiramentPaleta" 											
-										}
-									}
+									"$ref": "#/definitions/colorIndexat"
+								},
+								"vora": { 
+									"description": "Com pintar les vores de les icones que són formes",
+									"$ref": "#/definitions/colorIndexat"
 								},
 								"fonts": {
 									"description": "Fonts per representat textos dels objectes digitalitzats",
@@ -1545,7 +1559,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"url": {
-									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. Les altres dimensions no es contemplen i, si n'hi ha, s'han de representar com a mutiples entrades d'aquest array. Es parteix de la base que les altres dimensions s'empaqueten en un sol fitxer",
+									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions extra s'empaqueten en un sol fitxer",
 									"type": "string"
 								},
 								"format": {
@@ -1574,7 +1588,7 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"FlagsData": {
-						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Només aplica quan el model és ràster.",
+						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Si no s'indica els desplegables de data surten en blanc.",
 						"type": ["object", "null"],
 						"properties": {
 							"DataMostraAny": {
@@ -1652,7 +1666,7 @@
 						"type": ["boolean", "null"]
 					},
 					"AnimableMultiTime": {
-						"description": "La capa usa l'array de data per fer el vídeo. Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false. Només aplica quan el model és ràster.", 
+						"description": "Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false. En el model ràster també indica que cal usar l'array de data per fer el vídeo.", 
 						"type": ["boolean","null"]
 					},
 					"proces": {
@@ -1884,6 +1898,24 @@
 				}
 			}
 		},
+		"colorIndexat": { 
+			"type": "object",
+			"required": ["paleta"],
+			"properties":{
+				"NomCamp": {
+					"description": "Nom del camp per triar el color d'omplir la forma",
+					"type": ["string", "null"]
+				},
+				"paleta": {
+					"description": "Paleta de colors per omplir l'interior de les formes. Pot ser un sol color per fer les formes de color constant",
+					"$ref": "#/definitions/paleta"
+				},
+				"estiramentPaleta": {
+					"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
+					"$ref": "#/definitions/estiramentPaleta" 											
+				}
+			}
+		},
 		"icona": {
 			"oneOf": 
 			[
@@ -1922,17 +1954,26 @@
 					}
 				},
 				{
-					"description": "Cercle renderitzat com un script en el canvas",
+					"description": "Cercle o quadrat renderitzat com un script en el canvas",
 					"type": "object",
-					"required": ["type", "r"],
+					"required": ["type"],
 					"properties": {
 						"type": {
-							"enum": ["circle"]
+							"description": "És fàcil d'ampliar",
+							"enum": ["circle", "square" ]
 						},						
 						"r": {
-							"description": "Radi (en pixels) del cercle en pixels",
-							"type": "number",
-							"multipleOf" : 1
+							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a,",
+							"type": "number"
+						},
+						"a": {
+							"description": "Area del cercle o del quadrat. No compatible amb l'ús de r,",
+							"type": "number"
+						},
+						"unitats": 
+						{
+							"description": "Unitats base del ràdi o de l'àrea. El valors per defecte és 'px' (pixels)",
+							"enum": ["px", "m"]
 						}
 					}
 				},
@@ -2316,12 +2357,30 @@
 						"type": "boolean"
 					},
 					"mostrar": {
-						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_contingut' (només es mostrarà si l'atribut té contingut)",											
+						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
 						"enum": ["si", "no", "si_ple"]
 					},
 					"format": {
 						"description": "Es el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
 						"enum": ["dd/mm/yyyy"]
+					},
+					"NDecimals": { 
+						"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
+						"type": "number",
+						"minimum": 0,
+						"maximum": 20,
+						"multipleOf" : 1
+					},
+					"serieTemporal": {
+						"description": "Els valors d'aquest atribut formen una series temporal que s'ha de mostrar com una gràfica",
+						"type": "object",
+						"required": ["color"],
+						"properties": {
+							"color": {
+								"description": "Color de la línia de la gràfica",
+								"type": "string"
+							}
+						}
 					}
 				}
 			}
@@ -2395,11 +2454,11 @@
 			"type": ["object","null"],
 			"properties": {
 				"standard": {
-					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ). {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions es descriuen al mateix fitxer de metadades",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"document": {
-					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time_ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
 				"guf": {
@@ -2606,10 +2665,28 @@
 					"description": "When the process was done",
 					"type": "string"
 				},
+				"compilationDate": {
+					"description": "When the executable was produced. It is a way to recognize the version of the executable.",
+					"type": "string"
+				},
 				"executable": {
 					"description": "Name of the executable file or service url",
-					"type": "string",
-					"format": "uri"
+					"type": "object",
+					"properties": {
+						"reference": {
+							"description": "Name of the executable file or service url",
+							"type": "object",
+							"format": "uri"
+						},
+						"algorithm": {
+							"description": "Algorithm implemented by the executable",
+							"type": ["string", "null"]
+						},
+						"functionanlity": {
+							"description": "Functionality given by the algorithm",
+							"type": "string"
+						}
+					}
 				},
 				"parameters": {
 					"description": "Input ans output parameters submited to the executable",
@@ -2684,16 +2761,47 @@
 			}
 		},
 		"responsability": {
-			"description": "Responsable party",
+			"description": "Responsability",
 			"type": "object",
 			 "properties": {
 				"role": {
-					"description": "Role of the party" 
-				},
-				"name": {
-					"description": "Name or the individual or the organization",
+					"description": "Role of the party", 
 					"type": "string"
-				}			
+				},
+				"party": {
+					"description": "Responsable party",
+					"type": "object",
+					"anyOf":[
+						{
+							"properties": {
+								"organisation":{
+									"description": "Responsable organization",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name or the organization",
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						{
+							"properties": {
+								"individual":{
+									"description": "Responsable individual",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name or the individual",
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					]
+				}
 			}
 		}
 	}

@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Núria Julià (n julia at creaf uab cat)
@@ -32,7 +32,7 @@
 
 function MoureASobreDeTot(i_capa)
 {
-	var n_capes_especials_a_sobre=NumeroDeCapesEspecials(i_capa);
+	var n_capes_especials_a_sobre=NumeroDeCapesVolatils(i_capa);
 	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa);
 	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1);
@@ -87,11 +87,6 @@ function MoureASotaDeTot(i_capa)
 	RepintaMapesIVistes();
 	return;
 }
-
-/*function AfegirCapa(i_capa)
-{
-	IniciaFinestraAfegeixCapaServidor(i_capa);
-}*/
 
 function EsborrarCapa(i_capa)
 {
@@ -168,13 +163,12 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"}), "</a>");
 	cdns.push("<hr>");
-	var n_capes_especials=((-1!=i_objdigi_consulta)?1:0)+ ((-1!=i_objdigi_anar_coord)?1:0) +((-1!=i_objdigi_edicio)?1:0);
 
-	if (ParamCtrl.capa.length>NumeroDeCapesEspecials(-1))
+	if (ParamCtrl.capa.length>NumeroDeCapesVolatils(-1))
 	{
 		cdns.push("<b><font color=\"#888888\">",
 			  DonaCadenaLang({"cat":"Moure la capa", "spa":"Mover la capa", "eng":"Move layer", "fre":"Déplacer la couche"}), "</b>");
-		if(i_capa>NumeroDeCapesEspecials(i_capa))
+		if(i_capa>NumeroDeCapesVolatils(i_capa))
 		{
 			cdns.push("<br /><a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASobreDeTot(", i_capa, ");TancaContextMenuCapa();\">",
 					DonaCadenaLang({"cat":"A sobre de tot","spa":"Encima de todo", "eng":"To the top", "fre":"En haut de"}), "</a><br>",
@@ -215,7 +209,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		}
 		if (capa.metadades.provenance)
 		{
-			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.llinatge)
+			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage)
 			{
 				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
@@ -605,7 +599,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 			}
 		}
 	}
-	CanviaIndexosCapesEspecials(n_moviment, i_capa_ini, i_capa_fi_per_sota);
+	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota);
 }
 
 function AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)
@@ -949,14 +943,14 @@ var env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, i;
 			if (env.MaxY<ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY)
 				env.MaxY=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY;
 		}
-		return {"EnvCRS": env, "CRS": ParamCtrl.capa[i_capes[0]].EnvTotal.EnvCRS.CRS};
+		return {"EnvCRS": env, "CRS": ParamCtrl.capa[i_capes[0]].EnvTotal.CRS};
 	}
 }
 
 
 function DeterminaCostatMinimDeCapes(i_capes)
 {
-var costat=1e+300;
+var costat=1e300;
 
 	if (!i_capes.length)
 		return ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
@@ -968,7 +962,7 @@ var costat=1e+300;
 		if (costat>ParamCtrl.capa[i_capes[i]].CostatMinim)
 			costat=ParamCtrl.capa[i_capes[i]].CostatMinim;
 	}
-	return (costat==1e+300) ? ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat : costat;
+	return (costat==1e300) ? ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat : costat;
 }
 
 function DeterminaCostatMaximDeCapes(i_capes)
@@ -1655,7 +1649,7 @@ var minim, maxim, factor_k, factorpixel;
 					if(temps_defecte)
 					{
 						var data_defecte;
-						OmpleDateAPartirDeDataISO8601(data_defecte, temps_defecte);
+						OmpleDataJSONAPartirDeDataISO8601(data_defecte, temps_defecte);
 					}
 					servidorGC.layer[servidorGC.layer.length-1].data=[];			
 					dates=valors_temps.split(",");
@@ -1664,12 +1658,12 @@ var minim, maxim, factor_k, factorpixel;
 						//servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length]=new Date();
 						if(i==0)
 						{
-							servidorGC.layer[servidorGC.layer.length-1].FlagsData=OmpleDateAPartirDeDataISO8601(
+							servidorGC.layer[servidorGC.layer.length-1].FlagsData=OmpleDataJSONAPartirDeDataISO8601(
 														servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
 														dates[i]);
 						}
 						else
-							OmpleDateAPartirDeDataISO8601(servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
+							OmpleDataJSONAPartirDeDataISO8601(servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
 														dates[i]);
 						if(data_defecte &&
 						   servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length-1]==data_defecte)
@@ -2111,7 +2105,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 	cdns.push("<form name=\"CalculadoraCapes\" onSubmit=\"return false;\">");
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		if (EsIndexCapaEspecial(i))
+		if (EsIndexCapaVolatil(i))
 			continue;
 		capa=ParamCtrl.capa[i];
 		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
@@ -2310,7 +2304,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 		var origen_vector=(i_capa!=-1 && ParamCtrl.capa[i_capa].model==model_vector) ?true: false;
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if(origen_vector)
@@ -2336,7 +2330,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 	{
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
@@ -2643,7 +2637,7 @@ var cdns=[], capa, nc, capa_def, origen_vector;
 		cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\" name=\"",(param.vull_operador? "" : "valor_"),"capa", i_condicio, "\" style=\"width:400px;\" onChange='CanviaCondicioSeleccioCondicional(\"", prefix_id, "\", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\").value), ",i_condicio, ", ", JSON.stringify(param), ");'>");
 		for (var i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaEspecial(i))
+			if(EsIndexCapaVolatil(i))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||

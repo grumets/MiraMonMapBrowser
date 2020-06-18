@@ -29,6 +29,7 @@
 		"SubVers":	3,		
 		"VariantVers":	0
 	},
+	"CorsServidorLocal": true, 
 	"TipusServidorLocal":	"TipusWMS",
 	"AdrecaBaseSRC":	"",
 	"WPSschemaURL":	"http://schemas.opengis.net",
@@ -642,6 +643,7 @@
 		"i":	5,
 		"j":	5
 	},
+	"MostraPosicioGPS": false,	
 	"IconaEdicio": null,
 	"FuncioIconaEdicio":	null,
 	"FuncioCanviProjeccio":	null,

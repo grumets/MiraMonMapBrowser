@@ -29,6 +29,7 @@
 		"SubVers":	3,		
 		"VariantVers":	0
 	},
+	"CorsServidorLocal": true, 
 	"TipusServidorLocal":	"TipusWMS",
 	"AdrecaBaseSRC":	"",
 	"WPSschemaURL":	"http://schemas.opengis.net",
@@ -642,6 +643,7 @@
 		"i":	5,
 		"j":	5
 	},
+	"MostraPosicioGPS": false,
 	"IconaEdicio": null,
 	"FuncioIconaEdicio":	null,
 	"FuncioCanviProjeccio":	null,
@@ -1223,7 +1225,7 @@
 				{"color": "examples/ecopotential-img/IconesPAs/0001p.png", "DescColor": "Biosphere reserve"}
 			],
 			"ncol": 1,
-			"simbols": {
+			"simbols": [{
 				"NomCamp": "ICON",
 				"simbol": [{
 					"ValorCamp": "0011",
@@ -1286,7 +1288,7 @@
 						"icona": "examples/ecopotential-img/IconesPAs/blueP.png", "ncol": 30,  "nfil": 30, "i": 15, "j": 15
 					}
 				}]
-			},
+			}],
 			"fonts": {
 				"NomCampText": "NAME",
 				"aspecte": [{
@@ -14487,7 +14489,7 @@
 					"statement": "La Palma land cover map of 2007 was manually drawn based on aerial imagesand expert knowledge. No accuracy assessment results have been provided from the respective Management Authority (CERTH, 26/04/2018)"		
 				}]
 			},					
-		"DescarregaTot": [{"desc": "La Palma Landscape Indicators", "url": "download/LaPalma/EO_derived/Landscape/{time_ISO}/{time_ISO}_{METRIC}.{extension}", "format": [0,1]}],			
+		"DescarregaTot": [{"desc": "La Palma Landscape Indicators", "url": "download/LaPalma/EO_derived/Landscape/{time?f=ISO}/{time?f=ISO}_{dim?name=DIM_METRIC}.{extension}", "format": [0,1]}],			
 		"NomVideo":	null,
 		"DescVideo":	null,
 		"FlagsData": {

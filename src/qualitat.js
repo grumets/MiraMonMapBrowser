@@ -241,7 +241,7 @@ var cdns=[];
 			cdns.join(""), 
 			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)), 
 			DonaCodeCapaEstilFeedback(capa, i_estil), 
-			DonaServidorCapa(capa.servidor), 
+			DonaServidorCapa(capa), 
 			ParamCtrl.idioma);
 }
 

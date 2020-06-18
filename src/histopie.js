@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -85,7 +85,7 @@ var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cel
 	i_histo=parseInt(nom_finestra.substring(prefixHistogramaFinestra.length));
 	histograma=HistogramaFinestra.vista[i_histo];
 	prefix_div_copy=prefixHistogramaFinestra+i_histo;
-	IniciaCopiaPortapapersFinestra(prefix_div_copy);
+	IniciaCopiaPortapapersFinestra(window, prefix_div_copy);
 
 	capa=ParamCtrl.capa[histograma.i_capa];
 	estil=capa.estil[histograma.i_estil];
@@ -219,7 +219,8 @@ var i_histo, prefix_div_copy, cdns=[], capa, estil, histograma, i_c, i, area_cel
 		}
 		cdns.push("Nodata", "\t", estil.histograma.classe_nodata*area_cella, "\n");
 	}
-	FinalitzaCopiaPortapapersFinestra(prefix_div_copy, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+	FinalitzaCopiaPortapapersFinestra(window, prefix_div_copy, cdns.join(""), 
+			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " " + DonaCadenaLang({"cat": "text separat per tabulacions", "spa": "texto separado por tabulaciones", "eng": "tab-separated text", "fre": "texte séparé par des tabulations"})+".");
 }
 
 function ObreFinestraHistograma(i_capa)
@@ -251,7 +252,7 @@ var cdns=[];
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
-	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, 200+HistogramaFinestra.n*10, 200+HistogramaFinestra.n*10, ncol, nfil*component.length+AltBarraFinestraLayer+2, "NW", "no", true, null, cdns.join("")));
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, 200+HistogramaFinestra.n*10, 200+HistogramaFinestra.n*10, ncol, nfil*component.length+AltBarraFinestraLayer+2, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_histograma);
 	HistogramaFinestra.vista[HistogramaFinestra.n]={ "nfil": nfil,
 				"ncol": ncol,
@@ -748,25 +749,26 @@ function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)
 	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\">kk</textarea></form></div>";
 }
 
-function IniciaCopiaPortapapersFinestra(prefix_nom_div)
+function IniciaCopiaPortapapersFinestra(win, prefix_nom_div)
 {
-	var div = document.getElementById(prefix_nom_div+"_copy_form_div");
+	var div = win.document.getElementById(prefix_nom_div+"_copy_form_div");
 	div.style.display="inline";  //Sembla que no es pot fer un select d'un element invisible.
 	return div;
 }
 
 
-function FinalitzaCopiaPortapapersFinestra(prefix_nom_div, text, missatge)
+function FinalitzaCopiaPortapapersFinestra(win, prefix_nom_div, text, missatge)
 {
-	var div=document.getElementById(prefix_nom_div+"_copy_form_div")
-	var textarea = document.getElementById(prefix_nom_div+"_copy_text");
+	var div=win.document.getElementById(prefix_nom_div+"_copy_form_div")
+	var textarea = win.document.getElementById(prefix_nom_div+"_copy_text");
 
 	textarea.value=text;
 
 	textarea.select();
-	document.execCommand("Copy");
+	win.document.execCommand("Copy");
 	div.style.display="none";
-	alert(missatge);
+	if (missatge)
+		win.alert(missatge);
 }
 
 function CopiaPortapapersFinestraSerieTemp(nom_histograma)
@@ -774,7 +776,7 @@ function CopiaPortapapersFinestraSerieTemp(nom_histograma)
 var cdns=[], data=[], temps, estadistics, capa, estil, area_cella;
 var component_name=["R", "G", "B"];
 
-	IniciaCopiaPortapapersFinestra(nom_histograma)
+	IniciaCopiaPortapapersFinestra(window, nom_histograma)
 
 	estadistics=DonaDadesEstadistiquesFotogramaDeSerieTemporal()  //estadistics.mitjana+estadistics.desv_tipica, estadistics.mitjana, estadistics.mitjana-estadistics.desv_tipica
 	temps=DonaTempsValorsSerieTemporalLocalitzacio()
@@ -815,7 +817,8 @@ var component_name=["R", "G", "B"];
 			cdns.push("\n");
 		}
 	}
-	FinalitzaCopiaPortapapersFinestra(nom_histograma, cdns.join(""), DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the graphic have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+	FinalitzaCopiaPortapapersFinestra(window, nom_histograma, cdns.join(""), 
+			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the chart have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
 }
 
 function TancaFinestraSerieTemp(nom_div, nom_div_click)
@@ -825,7 +828,7 @@ function TancaFinestraSerieTemp(nom_div, nom_div_click)
 	PuntsSerieTemporal=[];
 }
 
-function ObreGraficSerieTemporal(nom_div, nom_div_click, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label)
+function ObreGraficSerieTemporal(nom_div, nom_div_click, perfix_serie_temporal, data, labels, temps, y_scale_label, legend_label, que_mostrar)
 {
 var ncol=460, nfil=260, cdns=[];
 var nom_histograma=perfix_serie_temporal+"serie_temp";
@@ -855,14 +858,14 @@ var chart=[];
 
 	document.getElementById(nom_div).innerHTML=cdns.join("");
 	for (var i_c=0; i_c<data.length; i_c++)
-		chart[i_c]=CreaGraficSerieTemporal(nom_histograma+"_canvas_"+i_c, data[i_c], labels, temps, y_scale_label[i_c]);
+		chart[i_c]=CreaGraficSerieTemporal(nom_histograma+"_canvas_"+i_c, data[i_c], labels, temps, y_scale_label[i_c], que_mostrar);
 
 	document.getElementById(nom_div).style.visibility="visible";
 	document.getElementById(nom_div_click).style.visibility="visible";
 	return chart;
 }
 
-function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
+function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label, que_mostrar)
 {
 	var cfg = {
 		type: 'line',
@@ -875,6 +878,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -888,6 +892,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -900,6 +905,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 1,
@@ -913,7 +919,12 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label)
 			scales: {
 				xAxes: [{
 			                type: 'time',
-			                distribution: 'linear'
+			                distribution: 'linear',
+					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+					time: {
+						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
+					}
 				}],
 				yAxes: [{
 					scaleLabel: {display: true, labelString: y_scale_label},
@@ -956,6 +967,7 @@ var component_name=["R", "G", "B"];
 				type: 'line',
 				pointRadius: 0,
 				pointHitRadius: 4,
+				borderJoinStyle: "round",
 				fill: false,
 				lineTension: 0,
 				borderWidth: 3,
@@ -969,4 +981,63 @@ var component_name=["R", "G", "B"];
 		});
 	}
 	return color_name;
+}
+
+function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, color, que_mostrar)
+{
+	var cfg = {
+		type: 'line',
+		data: {
+			labels: labels,
+			temps: temps,
+			datasets: [{
+				label: y_scale_label,
+				data: data,
+				type: 'line',
+				pointRadius: 0,
+				pointHitRadius: 4,
+				borderJoinStyle: "round",
+				fill: false,
+				lineTension: 0,
+				borderWidth: 3,
+				pointStyle: "line",
+				borderColor: color, 
+				backgroundColor: color
+			}]
+ 		},
+		options: {
+			scales: {
+				xAxes: [{
+			                type: 'time',
+			                distribution: 'linear',
+					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+					time: {
+						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
+					}
+				}],
+				yAxes: [{
+					scaleLabel: {display: true, labelString: y_scale_label},
+					ticks: { beginAtZero:true }
+				}]
+			},
+			tooltips: { 
+				mode: 'x',
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						var allData = data.datasets[tooltipItem.datasetIndex].data; 
+						var tooltipLabel = data.temps[tooltipItem.index];
+						var tooltipData = allData[tooltipItem.index]; 
+						return tooltipLabel + "," + tooltipData.y; 
+					} 
+				} 
+			},
+	    		legend: { 
+				display: false,
+    				labels: {usePointStyle: true}
+			}
+		}
+	};
+	//var ctx = document.getElementById(nom_canvas);
+	return new Chart(ctx, cfg);
 }
