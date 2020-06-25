@@ -1368,10 +1368,13 @@ var cdns=[];
 			  "\" width=1 height=3 border=0><br><img src=\"",
 			  AfegeixAdrecaBaseSRC("colors/c000000.gif"),
 			  "\" width=", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
-		  " height=2 border=0><br>", escala ," ", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+		  " height=2 border=0><br>", escala ,DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-		cdns.push(" (aprox. " , (DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))) , " m " , 
-			(DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"})) , " " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "°)");
+	{
+		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
+		cdns.push(" (", DonaCadenaLang({"cat":"aprox","spa":"aprox","eng":"approx","fre":"approx"}), ". " , (d_escala>10000 ? d_escala/1000+" km" : d_escala+" m"), " " , 
+			DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"}), " " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "°)");
+	}
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,41.42")
 		cdns.push(" (" , (DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"})) , " 41° 25\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,40.60")
@@ -3411,19 +3414,6 @@ function DonaNomFitxerMetadades(capa, i_estil)
 	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null);
 }
 
-function DonaNomFitxerDescarregaTot(i_capa, i_des, i_format, i_data)
-{
-var capa=ParamCtrl.capa[i_capa];
-var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data);
-
-	if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension)
-	{
-		s=s.replace("{extension}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
-		s=s.replace("{EXTENSION}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
-	}
-	return s;
-}
-
 function EsCapaVisibleAAquestNivellDeZoom(i)
 {
 var capa=ParamCtrl.capa[i];
@@ -3465,7 +3455,7 @@ function CanviaDataDeCapaMultitime(i_capa, i_data)
 var capa=ParamCtrl.capa[i_capa];
 
 	capa.i_data=i_data;
-	if (capa.model=="vector")
+	if (capa.model==model_vector)
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
@@ -4556,7 +4546,11 @@ var env=vista.EnvActual;
 											}
 										}
 										else if (!icona.img.hi_ha_hagut_error || icona.img.hi_ha_hagut_error==false)
-											setTimeout("OmpleVistaCapaDigi(\"" + nom_vista + "\", " + JSON.stringify(vista) + ", " + param.i_capa + ");", 500);
+										{
+											//the icon is not available yet. Let's wait sometime and repeat this
+											setTimeout("OmpleVistaCapaDigi(\"" + nom_vista + "\", " + JSON.stringify(vista) + ", " + param.i_capa + ");", 600);
+											return;
+										}
 									}
 								}
 							}
@@ -5697,13 +5691,8 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function IniciaVisualitzacio()
 {
-<<<<<<< HEAD
-var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
-		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
-=======
 //var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=", 
 //		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 var nou_env={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 var nou_CRS="";
 var win, i, j, l, capa;
@@ -5737,40 +5726,6 @@ var win, i, j, l, capa;
 	for (i=0; i<ParamCtrl.Layer.length; i++)
 	{
 		l=ParamCtrl.Layer[i];
-<<<<<<< HEAD
-		createLayer(window, l.name, l.left, l.top, l.width, l.height, l.ancora, (l.scroll) ? l.scroll : "no", (l.visible) ? l.visible : false, (l.ev) ? l.ev : null, (l.content) ? l.content : null);
-	}
-
-	/*createMiniWinLayer("prova de caixa que es mou", //main context
-				   "prova de caixa que es mou",  //titles
-				   400,250,550,550, //left, topo, width, height
-				   "#00CCCC", //bar colour
-				   "#FFFFFF", //main colour
-				   null,null,null,"tanca_consulta.gif",null,null,1,false,null,true);*/
-
-	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", "ara_no", false, null, null);
-	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", "no", false, null, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa 
-	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 150, "nWSeC", "ara_no", false, null, null);
-	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 520, 700, "nWSeC", "ara_no", false, null, null);
-	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", "ara_no", false, null, null);
-	createFinestraLayer(window, "combinacioRGB", {"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}, boto_tancar, 220, 90, 430, 275, "NwCR", "ara_no", false, null, null);
-	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", "ara_no", false, null, null);
-	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 130, "NwCR", "no", false, null, null);
-	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", "ara_no", false, null, null);
-	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 320, "NwCR", "no", false, null, null);
-	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", "no", false, null, null);
-	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", "no", false, null, null);
-	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 200, 700, 600, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "mostraQualitat", {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "feedback", {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}, boto_tancar, 220, 180, 500, 400, "Nw", "ara_no", false, null, null);
-	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", "ara_no", false, null, null);
-	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", "ara_no", false, null, null);
-	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", "ara_no", false, null, null);
-	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", "ara_no", false, null, null);
-=======
 		if (l.resizable)
 			createFinestraLayer(window, l.name, l.title, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev) ? l.ev : null, resizable:true}, (l.content) ? l.content : null);
 		else
@@ -5799,7 +5754,6 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 
 	if (!ParamCtrl.VistaPermanent)
 		ParamCtrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
@@ -5807,14 +5761,14 @@ var win, i, j, l, capa;
 	if (ParamCtrl.CapaDigi)
 	{
 		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suportada. Useu una \"capa\" amb \"model\": \"vector\".", 
-				"spa": "CapaDigi ya no se soporta. Use una \"capa\" con \"model\": \"vector\".",
+				"spa": "CapaDigi ya no se suporta. Use una \"capa\" con \"model\": \"vector\".",
 				"eng": "CapaDigi no longer supported. Use a \"capa\" with \"model\": \"vector\" instead.",
 				"fre": "CapaDigi n'est plus pris en charge. Utilisez un \"capa\" avec le \"model\": \"vector\"."}));
 		return;
 	}
 	if (ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat>ParamCtrl.zoom[0].costat)
 	{
-		alert(DonaCadenaLang({"cat": "Els costats de zoom han de ser ordenats amb el més gran primer", 
+		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer", 
 				"spa": "Los lados de zoom deben estar ordenados con el más grande primero",
 				"eng": "The zoom sizes must be sorted with the bigger first",
 				"fre": "Les tailles de zoom doivent être triées par ordre croissant"}));
@@ -5847,13 +5801,6 @@ var win, i, j, l, capa;
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
-<<<<<<< HEAD
-		var j, i_clau, i_kvp, i_kvp2, coord, capa_visible, tinc_estils, capa_estil, valor, valor2;
-		var kvp=location.search.substring(1, location.search.length).split("&");
-		for (i_clau=0; i_clau<clau.length; i_clau++)
-		{
-			for (i_kvp=0; i_kvp<kvp.length; i_kvp++)
-=======
 		var acoord, capa_visible, tinc_estils, capa_estil, query={};
 		var kvp=location.search.substring(1, location.search.length).split("&");
 		for(var i_clau=0; i_clau<kvp.length; i_clau++)
@@ -5887,7 +5834,6 @@ var win, i, j, l, capa;
 		{
 			//Declaro totes les capes com a ara no visibles.
 			for (i=0; i<ParamCtrl.capa.length; i++)
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 			{
 				capa=ParamCtrl.capa[i];
 				if (capa.visible=="si" || capa.visible=="semitransparent")
@@ -5910,38 +5856,6 @@ var win, i, j, l, capa;
 			{
 				for (i=0; i<ParamCtrl.capa.length; i++)
 				{
-<<<<<<< HEAD
-					valor=unescape(kvp[i_kvp].substring(clau[i_clau].length,kvp[i_kvp].length));
-					if (i_clau==0)  //BBOX
-					{
-						coord=valor.split(",");
-						if (coord.length!=4)
-						{
-							alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
-							break;
-						}
-						//Cal carregar les 4 coordenades i fer el canvi d'àmbit
-						nou_env.MinX=parseFloat(coord[0]); 
-						nou_env.MaxX=parseFloat(coord[2]); 
-						nou_env.MinY=parseFloat(coord[1]);
-						nou_env.MaxY=parseFloat(coord[3]);
-					}
-					else if (i_clau==1)  //LAYERS
-					{
-						//Declaro totes les capes com a ara no visibles.
-						for (i=0; i<ParamCtrl.capa.length; i++)
-						{
-							capa=ParamCtrl.capa[i];
-							if (capa.visible=="si" || capa.visible=="semitransparent")
-								CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
-							if (capa.descarregable=="si")
-								capa.descarregable="ara_no";
-						}
-						//Declaro visibles les que m'han dit.
-						capa_visible=valor.split(",");
-						tinc_estils=false;
-						for (i_kvp2=0; i_kvp2<kvp.length; i_kvp2++)
-=======
 					capa=ParamCtrl.capa[i];
 					if (capa_visible[j]==capa.nom)
 					{
@@ -5952,85 +5866,9 @@ var win, i, j, l, capa;
 									DonaCadenaLang({"cat":" indicada a LAYERS= no pot ser activada.", "spa":" indicada en LAYERS= no puede ser activada.", 
 												   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
 						if (tinc_estils)
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 						{
 							if (capa.estil && capa.estil.length>1)
 							{
-<<<<<<< HEAD
-								valor2=unescape(kvp[i_kvp2].substring(7,kvp[i_kvp2].length));
-								capa_estil=valor2.split(",");
-								if (capa_visible.length==capa_estil.length)
-									tinc_estils=true;
-								else
-									alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.", 
-														 "spa":"El número de estilos no se corresponde con el número de capas.",
-														 "eng":"Style number is no the same of the number of layers.", 
-														 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
-							}
-						}
-						for (j=0; j<capa_visible.length; j++)
-						{
-							for (i=0; i<ParamCtrl.capa.length; i++)
-							{
-								capa=ParamCtrl.capa[i];
-								if (capa_visible[j]==capa.nom)
-								{
-									if (capa.visible=="ara_no")
-										CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
-									else
-										alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] + 
-												DonaCadenaLang({"cat":" indicada a LAYERS= no pot ser activada.", "spa":" indicada en LAYERS= no puede ser activada.", 
-															   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
-									if (tinc_estils)
-									{
-										if (capa.estil && capa.estil.length>1)
-										{
-											//Si a la part del final posa ":SEMITRANSPARENT"
-											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-											{
-												if (capa.visible!="no")
-													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-											}
-											else
-											{
-												if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
-												{
-													if (capa.visible!="no")
-														CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-													capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
-												}
-												for (i_estil=0; i_estil<capa.estil.length; i_estil++)
-												{													
-													if (capa.estil[i_estil].nom==capa_estil[j])
-													{
-														capa.i_estil=i_estil;
-														break;
-													}
-													
-												}
-												if (i_estil==capa.estil.length)
-												{
-													if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte													
-														alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);														
-												}
-											}
-										}
-										else
-										{
-											//Només pot dir semitransparent.
-											if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-											{
-												if (capa.visible!="no")
-													CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-
-											}
-											else
-											{
-												if (capa_estil[j]!=null && capa_estil[j]!="")													
-													alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + 
-														DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
-											}
-=======
 								//Si a la part del final posa ":SEMITRANSPARENT"
 								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 								{
@@ -6051,7 +5889,6 @@ var win, i, j, l, capa;
 										{
 											capa.i_estil=i_estil;
 											break;
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 										}
 										
 									}
@@ -6060,37 +5897,9 @@ var win, i, j, l, capa;
 										if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte													
 											alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);														
 									}
-<<<<<<< HEAD
-									if (capa.descarregable=="ara_no")
-										capa.descarregable="si";
-									break;
-								}
-							}
-							if (i==ParamCtrl.capa.length)
-								alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ","fre":"Impossible trouver la couche "}) + capa_visible[j] + 
-										DonaCadenaLang({"cat":" indicada a LAYERS=", "spa":" indicada en LAYERS=", "eng":" indicated at LAYERS=", "fre":" indiquée à LAYERS="}));
-						}
-					    //CreaVistes();
-						//CreaLlegenda();
-					}
-					else if (i_clau==2)  //QUERY_LAYERS
-					{
-						//Declaro totes les capes com a ara no consultables.
-						for (i=0; i<ParamCtrl.capa.length; i++)
-						{
-							if (ParamCtrl.capa[i].consultable=="si")
-								ParamCtrl.capa[i].consultable="ara_no";
-						}
-						//Declaro consultables les que m'han dit.
-						capa_visible=valor.split(",");
-						for (j=0; j<capa_visible.length; j++)
-						{
-							for (i=0; i<ParamCtrl.capa.length; i++)
-=======
 								}
 							}
 							else
->>>>>>> 7784df42bc9d2d772db6c7f9d65baad6d2d6cf9e
 							{
 								//Només pot dir semitransparent.
 								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
