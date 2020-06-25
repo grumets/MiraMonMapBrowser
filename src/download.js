@@ -636,7 +636,7 @@ function DeterminaTimeDescarregaCapa(i_capa)
 {
 var i, s, capa=ParamCtrl.capa[i_capa];
 
-	if (capa.data)
+	if (capa.data && capa.model!=model_vector)
 	{
 		if (capa.data.length>8)
 			return OfereixOpcionsDescarregaTot(i_capa, document.botons_descarrega.TIME.selectedIndex);
@@ -701,6 +701,19 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	}
 	else
 		OfereixOpcionsDescarregaTot(i_capa, null);
+}
+
+function DonaNomFitxerDescarregaTot(i_capa, i_des, i_format, i_data)
+{
+var capa=ParamCtrl.capa[i_capa];
+var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data);
+
+	if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension)
+	{
+		s=s.replace("{extension}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
+		s=s.replace("{EXTENSION}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
+	}
+	return s;
 }
 
 function OfereixOpcionsDescarregaTot(i_capa, i_data)

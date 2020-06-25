@@ -578,13 +578,13 @@ ul.disabled:hover
 }
 ul
 {
-	margin: 0px;
-	padding: 1px; /*Avoid too large indentation*/
+	margin: 8px;
+	padding: 8px; /*Avoid too large indentation*/
 }
 ul.field
 {
-	margin: 0px;
-	padding: 1px;
+	margin: 8px;
+	padding: 8px;
 	list-style-type: none; /* Do not use any circle or marck */
 	padding-left: 17px;
 }

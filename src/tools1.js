@@ -1917,47 +1917,6 @@ function DonaNumeroArrodonit125(a)
 	return n*Math.pow(10,e);
 }
 
-function DonaDenominadorDeLEscalaArrodonit(a)
-{
-	if (a<1e-20)
-		return a;
-	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
-        if (e<2)
-		return a;
-	e-=2;
-	var n=Math.abs(a/Math.pow(10,e));
-	
-	//Ara cal arrodinir a l'enter més proper:
-	if (n<112)
-		n=100;
-	else if (n<137)
-		n=125;
-	else if (n<165)
-		n=150;
-	else if (n<187)
-		n=175;
-	else if (n<212)
-		n=200;
-	else if (n<275)
-		n=250;
-	else if (n<325)
-		n=300;
-	else if (n<375)
-		n=350;
-	else if (n<450)
-		n=400;
-	else if (n<550)
-		n=500;
-	else if (n<675)
-		n=600;
-	else if (n<775)
-		n=750;
-	else if (n<900)
-		n=800;
-	else
-		n=1000;
-	return n*Math.pow(10,e);
-}
 
 
 function RGB(r,g,b)

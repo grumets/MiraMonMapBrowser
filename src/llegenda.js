@@ -707,7 +707,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(capa2.desc) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
 							return;
 					}
-					if (capa.model!="vector" && capa2.transparencia=="semitransparent")
+					if (capa.model!=model_vector && capa2.transparencia=="semitransparent")
 					{
 						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
 				       		if (ParamCtrl.LlegendaGrupsComARadials==true)
@@ -726,7 +726,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		CanviaEstatVisibleISiCalDescarregableCapa(i,"si");
 		if (grup_consultable && capa.consultable=="ara_no")
 			CanviaEstatConsultableCapa(window.document["c_ll_capa"+i],i);
-		if (capa.model=="vector")
+		if (capa.model==model_vector)
 		{
 			if (EsCapaVisibleAAquestNivellDeZoom(i) && capa.objectes && capa.objectes.features)
 			{
@@ -764,11 +764,11 @@ var nom_icona=TreuAdreca(icon_capa.src);
 	else if (nom_icona=="semitransparent.gif" || 
 		 nom_icona=="semi_radio.gif"||
 	         (capa.transparencia && capa.transparencia!="semitransparent") ||
-		capa.model=="vector")  //Els vectors no tenen semitranparència (de moment)
+		capa.model==model_vector)  //Els vectors no tenen semitranparència (de moment)
 	{	
 		//pas a no visible
 		CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
-		if (capa.model=="vector")
+		if (capa.model==model_vector)
 		{
 			if(capa.objectes && capa.objectes.features)
 			{
