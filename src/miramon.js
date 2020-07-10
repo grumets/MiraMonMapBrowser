@@ -486,7 +486,7 @@ function CompletaDefinicioCapa(capa, capa_especial)
 function CompletaDefinicioCapes()
 {
 	for (var i=0; i<ParamCtrl.capa.length; i++)
-		CompletaDefinicioCapa(ParamCtrl.capa[i], EsIndexCapaVolatil(i));
+		CompletaDefinicioCapa(ParamCtrl.capa[i], EsIndexCapaVolatil(i,ParamCtrl));
 }
 
 
@@ -1146,7 +1146,7 @@ function ObreFinestraColors(s,text)
 	TextDescDelColor=text;
 	if (ColorWindow==null || ColorWindow.closed)
 	{
-		ColorWindow=window.open("colors.htm","FinestraColors",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=500,height=200');
+		ColorWindow=window.open("colors.htm","FinestraColors",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=520,height=200');
 		ShaObertPopUp(ColorWindow);
 	}
 	else
@@ -1156,51 +1156,63 @@ function ObreFinestraColors(s,text)
 
 function RecuperaValorsFinestraParametres(formul, tancar)
 {
-	if (MidaDePixelPantalla!=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol);
+	if (document.getElementById("textarea_ConfigJSON").style.display!="none")
 	{
-	    MidaDePixelPantalla=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol;
-		CreaBarra(null);
-	}
-	ParamCtrl.psalt=parseInt(formul.param_psalt.value,10);
-	ParamCtrl.ColorFonsVista=param_ColorFonsVista;
-	ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
-	ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value,10);
-	if (formul.param_CoordExtremes[1].checked)
-		ParamCtrl.CoordExtremes="proj";
-	else if (formul.param_CoordExtremes[2].checked)
-	{
-		if (formul.param_CoordExtremesGMS.checked)
-			ParamCtrl.CoordExtremes="longlat_gms";
-		else
-			ParamCtrl.CoordExtremes="longlat_g";
+		if (CarregaiAdoptaConfigJSON(formul.textarea_ConfigJSON.value)) //error
+			return;
 	}
 	else
 	{
-	    delete ParamCtrl.CoordExtremes; 
-	}
-	if (formul.param_CoordActualProj.checked)
-		ParamCtrl.CoordActualProj=true;
-	else 
-		ParamCtrl.CoordActualProj=false;
-	if (formul.param_CoordActualLongLat.checked)
-	{
-		ParamCtrl.CoordActualLongLatG=true;
-		if (formul.param_CoordActualGMS.checked)
-			ParamCtrl.CoordActualLongLatGMS=true;
+		if (MidaDePixelPantalla!=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol);
+		{
+		    MidaDePixelPantalla=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol;
+			CreaBarra(null);
+		}
+		ParamCtrl.psalt=parseInt(formul.param_psalt.value,10);
+		ParamCtrl.ColorFonsVista=param_ColorFonsVista;
+		ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
+		ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value,10);
+		if (formul.param_CoordExtremes[1].checked)
+			ParamCtrl.CoordExtremes="proj";
+		else if (formul.param_CoordExtremes[2].checked)
+		{
+			if (formul.param_CoordExtremesGMS.checked)
+				ParamCtrl.CoordExtremes="longlat_gms";
+			else
+				ParamCtrl.CoordExtremes="longlat_g";
+		}
 		else
+		{
+		    delete ParamCtrl.CoordExtremes; 
+		}
+		if (formul.param_CoordActualProj.checked)
+			ParamCtrl.CoordActualProj=true;
+		else 
+			ParamCtrl.CoordActualProj=false;
+		if (formul.param_CoordActualLongLat.checked)
+		{
+			ParamCtrl.CoordActualLongLatG=true;
+			if (formul.param_CoordActualGMS.checked)
+				ParamCtrl.CoordActualLongLatGMS=true;
+			else
+				ParamCtrl.CoordActualLongLatGMS=false;
+		}
+		else
+		{
+			ParamCtrl.CoordActualLongLatG=false;
 			ParamCtrl.CoordActualLongLatGMS=false;
+		}
+		
+		if (isFinestraLayer(window, "coord"))
+			showOrHideFinestraLayer(window, "coord", formul.param_CoordVisible.checked);
+		else
+			showOrHideLayer(getLayer(window, "coord"), formul.param_CoordVisible.checked);
+	
+		if (formul.param_ZoomUnSolClic[1].checked)
+			ParamCtrl.ZoomUnSolClic=true;
+		else
+			ParamCtrl.ZoomUnSolClic=false;
 	}
-	else
-	{
-		ParamCtrl.CoordActualLongLatG=false;
-		ParamCtrl.CoordActualLongLatGMS=false;
-	}
-	showOrHideFinestraLayer(window, "coord", formul.param_CoordVisible.checked)
-
-	if (formul.param_ZoomUnSolClic[1].checked)
-		ParamCtrl.ZoomUnSolClic=true;
-	else
-		ParamCtrl.ZoomUnSolClic=false;
 
 	GuardaVistaPrevia();
 	//ActualitzaEnvParametresDeControl();
@@ -1208,7 +1220,92 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 	if (tancar==true)
 		TancaFinestraLayer("param");
 	
-    return false;  //per no efectuar l'acció de submit del formulari
+  return false;  //per no efectuar l'acció de submit del formulari
+}
+
+function NetejaConfigJSON(param_ctrl, is_local_storage)
+{
+		param_ctrl.NivellZoomCostat=ParamInternCtrl.vista.CostatZoomActual;  //Recupero el costat de zoom actual
+
+		//Buido les coses grans que he afegit al param_ctrl abans de guardar la configuració.
+		//De fet, tots les elements documentats com "INTERN" al config-schema s'haurien d'esborrar.
+		for (var i_capa=0; i_capa<param_ctrl.capa.length; i_capa++)
+		{
+			if (EsIndexCapaVolatil(i_capa, param_ctrl))
+			{
+				//Esborro la capa calladament:				
+				EliminaCapaVolatil(i_capa, param_ctrl);
+				i_capa--;
+				continue;
+			}
+			var capa=param_ctrl.capa[i_capa];
+			BuidaArrayBufferCapa(capa);
+			//Buida objectes vectorials si han vingut d'un servidor.
+			if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusSOS"))
+				delete capa.objectes; 
+			DescarregaSimbolsCapaDigi(capa);
+			if (capa.TileMatrixGeometry)
+			{
+				if(capa.TileMatrixGeometry.tiles_solicitats)
+					delete capa.TileMatrixGeometry.tiles_solicitats;
+				if(capa.TileMatrixGeometry.env)
+					delete capa.TileMatrixGeometry.env;
+			}
+			
+			//Inici afegit AZ a revisar per JM ·$·$·$·$·$·			
+			if (capa.EnvTotalLL)
+				delete capa.EnvTotalLL;
+			
+			//Fi de Afegit AZ a revisar per JM ·$·$·$·$·$·
+
+			if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
+				delete capa.metadades.provenance.lineage; 
+		}
+		EliminaIndexDeCapesVolatils(param_ctrl);
+				
+		if (is_local_storage==false)
+		{
+			delete param_ctrl.mmn;
+			delete param_ctrl.config_json;
+		}
+		
+		RemoveOtherPropertiesInObjWithRef(param_ctrl);
+}
+
+function CreaDuplicatNetejaiMostraConfigJSON(text_area)
+{		
+	var param_ctrl=JSON.parse(JSON.stringify(ParamCtrl));
+	NetejaConfigJSON(param_ctrl, false);		
+	document.getElementById(text_area).value=JSON.stringify(param_ctrl, null, '\t');		
+}
+
+function MostraConfigJSON(text_area, param_desgranat, button_show)
+{
+	RecuperaValorsFinestraParametres(document.form_param, false);
+	document.getElementById(param_desgranat).style.display="none";
+
+	document.getElementById(text_area).style.display="block";
+	document.getElementById(text_area).value=DonaCadenaLang({"cat":"Processant...", "spa":"Procesando...", "eng":"Working...", "fre":"En traitement..."});	
+	document.getElementById(button_show).style.display="none";
+	document.getElementById("text_canvis_aplicats").style.display="none";	
+	document.getElementById("param_hr_dprs_show").style.display="none";	
+	document.getElementById("param_button_apply").style.display="none";	
+	setTimeout("CreaDuplicatNetejaiMostraConfigJSON(\""+text_area+"\")", 200);	
+}
+
+function CarregaiAdoptaConfigJSON(s)
+{
+	try {
+		var param_ctrl=JSON.parse(s);
+	} 
+	catch (e) {
+			alert("JSON string error: "+ e);
+			return 1;
+	}
+	FinalitzaMiraMonMapBrowser();
+	//La seguent crida tancarà la caixa i reiniciarà el navegador amb els nous parametres
+	IniciaParamCtrlIVisualitzacio(param_ctrl, {div_name: ParamCtrl.containerName, config_json:ParamCtrl.config_json, config_reset: true/*, usa_local_storage: false*/});		
+	return 0;
 }
 
 function OmpleFinestraParametres()
@@ -1218,7 +1315,7 @@ var cdns=[], coord_visible;
 	param_ColorFonsVista=ParamCtrl.ColorFonsVista;
 	param_ColorQuadratSituacio=ParamCtrl.ColorQuadratSituacio;
 
-	cdns.push("<form name=\"form_param\" onSubmit=\"return false;\"><div class=\"Verdana11px\">",
+	cdns.push("<form name=\"form_param\" onSubmit=\"return false;\"><div id=\"param_desgranat\" class=\"Verdana11px\">",
 	        DonaCadenaLang({"cat":"Punt origen central","spa":"Punto origen central", "eng":"Origin central point", "fre":"Point origine central"}),":  x:", OKStrOfNe(ParamCtrl.PuntOri.x, ParamCtrl.NDecimalsCoordXY),
 				  " y: ", OKStrOfNe(ParamCtrl.PuntOri.y, ParamCtrl.NDecimalsCoordXY), "<br>",
 		"<small>", DonaCadenaLang({"cat":"Àmbit disponible", "spa":"Ámbito disponible", "eng":"Available boundary", "fre":"Champ disponible"}), ": x=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),
@@ -1253,16 +1350,23 @@ var cdns=[], coord_visible;
 	else
 		coord_visible=isLayerVisible(getLayer(window, "coord"));
 	cdns.push("<input type=\"checkbox\" name=\"param_CoordVisible\" id=\"id_CoordVisible\"", (coord_visible ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordVisible\" accesskey=\"", DonaCadenaLang({"cat":"m", "spa":"m", "eng":"h", "fre":"f"}), "\">", DonaCadenaLang({"cat":"<u>M</u>ostra finestra", "spa":"<u>M</u>uestra ventana", "eng":"S<u>h</u>ow window", "fre":"A<u>f</u>ficher la fenêtre"}), "</label>",
-		   "<hr></div>",
+		   "<hr>",
 		"<div id=\"param_colors\">",
 		DonaTextParamColors(),		
-		"</div>",
+		"</div><hr></div>",
+		"<div>", 
+		DonaCadenaLang({"cat":"Fitxer de configuració JSON", "spa":"Fichero de configuración JSON", "eng":"JSON configuration file", "fre":"Fichier de configuration JSON)"}),
+		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Mostrar", "spa":"Mostrar", "eng":"Show", "fre":"Afficher"}), 
+		"\" onClick='MostraConfigJSON(\"textarea_ConfigJSON\",\"param_desgranat\", \"button_show_ConfigJSON\");'>&nbsp;<small id=\"text_canvis_aplicats\"><i>(", 
+		DonaCadenaLang({"cat":"s’aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"}),
+		")</i></small>",
+		"<textarea id=\"textarea_ConfigJSON\" name=\"textarea_ConfigJSON\" rows=\"22\" cols=\"65\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" style=\"display:none\"></textarea></div>",		
+		"<div id=\"param_hr_dprs_show\"><hr></div>",
 		"<div align=\"center\">",
-                "<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"D'acord","spa": "Aceptar","eng": "  Ok  ", "fre":"D’accord"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, true);\"> ",
+    "<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"D'acord","spa": "Aceptar","eng": "  Ok  ", "fre":"D'accord"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, true);\"> ",
 		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}), "\" onClick='TancaFinestraLayer(\"param\");'> &nbsp;&nbsp;",
-		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Aplicar", "spa":"Aplicar", "eng":"Apply", "fre":"Appliquer"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, false);\"></div>",
+		"<input id=\"param_button_apply\" TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Aplicar", "spa":"Aplicar", "eng":"Apply", "fre":"Appliquer"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, false);\"></div>",
 	        "</form>");
-
 	contentFinestraLayer(window, "param", cdns.join("")); 
 }
 
@@ -5634,12 +5738,28 @@ function PreparaParamInternCtrl()
 }
 
 
+
+function ComprovaVersioConfigMMN(param_ctrl)
+{
+	if (param_ctrl.VersioConfigMMN.Vers!=VersioToolsMMN.Vers || 
+	    param_ctrl.VersioConfigMMN.SubVers>VersioToolsMMN.SubVers)
+	{
+	    alert(DonaCadenaLang({"cat": "La versió de", "spa": "La versión de", "eng": "The version of", "fre": "La version"}) +
+			" config.json (" + param_ctrl.VersioConfigMMN.Vers+"."+param_ctrl.VersioConfigMMN.SubVers + ") " +
+			DonaCadenaLang({"cat": "no es correspon amb la versió de", "spa": "no se corresponde con la versión de", "eng": "it is not according with the version of", "fre": "ne correspond pas à la version de"}) +
+			" tools.htm (" + VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers + "). "+
+			DonaCadenaLang({"cat": "Actualitza't correctament.", "spa": "Actualicese correctamente.", "eng": "Please, upgrade it correctly.", "fre": "S'il vous plaît, actualisez vous correctement."}));
+			return 1;
+	}	
+	return 0;
+}
+
 var ParamCtrl;
 
 function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 {
 	ParamCtrl=param_ctrl; //Ho necessito aquí perquè funcioni la configuració idiomàtica en cas d'haver de preguntar.
-	if (typeof Storage !== "undefined")
+	if (typeof Storage !== "undefined" && param.usa_local_storage)
 	{
 		if (param.config_reset)
 			localStorage.removeItem("EditedParamCtrl_"+param.config_json);
@@ -5671,22 +5791,50 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 		}
 	}
 
-	if (ParamCtrl.VersioConfigMMN.Vers!=VersioToolsMMN.Vers || 
-	    ParamCtrl.VersioConfigMMN.SubVers>VersioToolsMMN.SubVers)
-	{
-	    alert(DonaCadenaLang({"cat": "La versió de", "spa": "La versión de", "eng": "The version of", "fre": "La version"}) +
-			" config.json (" + ParamCtrl.VersioConfigMMN.Vers+"."+ParamCtrl.VersioConfigMMN.SubVers + ") " +
-			DonaCadenaLang({"cat": "no es correspon amb la versió de", "spa": "no se corresponde con la versión de", "eng": "it is not according with the version of", "fre": "ne correspond pas à la version de"}) +
-			" tools.htm (" + VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers + "). "+
-			DonaCadenaLang({"cat": "Actualitza't correctament.", "spa": "Actualicese correctamente.", "eng": "Please, upgrade it correctly.", "fre": "S'il vous plaît, actualisez vous correctement."}));
+	if (ComprovaVersioConfigMMN(ParamCtrl))
 		return;
-	}
+
 	ParamCtrl.containerName=param.div_name;
 	ParamCtrl.config_json=param.config_json;
 
 	ResolveJSONPointerRefs(ParamCtrl);
 
 	IniciaVisualitzacio();
+}
+
+function ComprovaConsistenciaParamCtrl(param_ctrl)
+{
+	var i;
+	
+	if (param_ctrl.CapaDigi)
+	{
+		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suportada. Useu una \"capa\" amb \"model\": \"vector\".", 
+				"spa": "CapaDigi ya no se suporta. Use una \"capa\" con \"model\": \"vector\".",
+				"eng": "CapaDigi no longer supported. Use a \"capa\" with \"model\": \"vector\" instead.",
+				"fre": "CapaDigi n'est plus pris en charge. Utilisez un \"capa\" avec le \"model\": \"vector\"."}));
+		return 1;
+	}
+	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
+	{
+		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer", 
+				"spa": "Los lados de zoom deben estar ordenados con el más grande primero",
+				"eng": "The zoom sizes must be sorted with the bigger first",
+				"fre": "Les tailles de zoom doivent être triées par ordre croissant"}));
+		return 1;
+	}
+	for (i=0; i<param_ctrl.zoom.length; i++)
+		if (param_ctrl.zoom[i].costat==param_ctrl.NivellZoomCostat)
+			break;
+
+	if (i==param_ctrl.zoom.length)
+	{
+		alert(DonaCadenaLang({"cat": "El NivellZoomCostat no és cap del costats indicats a la llista de zooms", 
+				"spa": "El NivellZoomCostat no es ninguno de los 'costat' indicados en la lista de zooms",
+				"eng": "The NivellZoomCostat is not one of the indicated 'costat' in the zoom array",
+				"fre": "Le NivellZoomCostat n'est pas l'un des 'costat' indiqués dans la matrice de zoom"}));
+		return 1;
+	}
+	return 0;
 }
 
 function IniciaVisualitzacio()
@@ -5741,7 +5889,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 320, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
@@ -5758,34 +5906,8 @@ var win, i, j, l, capa;
 	if (!ParamCtrl.VistaPermanent)
 		ParamCtrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
 
-	if (ParamCtrl.CapaDigi)
-	{
-		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suportada. Useu una \"capa\" amb \"model\": \"vector\".", 
-				"spa": "CapaDigi ya no se suporta. Use una \"capa\" con \"model\": \"vector\".",
-				"eng": "CapaDigi no longer supported. Use a \"capa\" with \"model\": \"vector\" instead.",
-				"fre": "CapaDigi n'est plus pris en charge. Utilisez un \"capa\" avec le \"model\": \"vector\"."}));
+	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
-	}
-	if (ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat>ParamCtrl.zoom[0].costat)
-	{
-		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer", 
-				"spa": "Los lados de zoom deben estar ordenados con el más grande primero",
-				"eng": "The zoom sizes must be sorted with the bigger first",
-				"fre": "Les tailles de zoom doivent être triées par ordre croissant"}));
-		return;
-	}
-	for (i=0; i<ParamCtrl.zoom.length; i++)
-		if (ParamCtrl.zoom[i].costat==ParamCtrl.NivellZoomCostat)
-			break;
-
-	if (i==ParamCtrl.zoom.length)
-	{
-		alert(DonaCadenaLang({"cat": "El NivellZoomCostat no és cap del costats indicats a la llista de zooms", 
-				"spa": "El NivellZoomCostat no es ninguno de los 'costat' indicados en la lista de zooms",
-				"eng": "The NivellZoomCostat is not one of the indicated 'costat' in the zoom array",
-				"fre": "Le NivellZoomCostat n'est pas l'un des 'costat' indiqués dans la matrice de zoom"}));
-		return;
-	}
 
 	window.document.body.onmousemove=MovementMiraMonMapBrowser;
 	window.document.body.onbeforeunload=EndMiraMonMapBrowser;
@@ -6149,14 +6271,13 @@ function ResizeMiraMonMapBrowser()
 	setTimeout(ChangeSizeMiraMonMapBrowser,200);
 }
 
-function EndMiraMonMapBrowser(event, reset)
+function FinalitzaMiraMonMapBrowser()
 {
 	/*if (ParametresWindow!=null)
 	{
 		ParametresWindow.close();
 		ParametresWindow=null;
 	}*/
-
 	if (TriaFullWindow!=null)
 	{
 		TriaFullWindow.close();
@@ -6177,40 +6298,16 @@ function EndMiraMonMapBrowser(event, reset)
 		MMZWindow.close();
 		MMZWindow=null;
 	}
+	layerList=[];
+	ParamInternCtrl={};	
+}
 
+function EndMiraMonMapBrowser(event, reset)
+{
 	if (typeof Storage !== "undefined")  //https://arty.name/localstorage.html
 	{
-		ParamCtrl.NivellZoomCostat=ParamInternCtrl.vista.CostatZoomActual;  //Recupero el costat de zoom actual
-
-		//Buido les coses grans que he afegit al ParamCtrl abans de guardar la configuració.
-		//De fet, tots les elements documentats com "INTERN" al config-schema s'haurien d'esborrar.
-		for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-		{
-			if (EsIndexCapaVolatil(i_capa))
-			{
-				//Esborro la capa calladament:				
-				EliminaCapaVolatil(i_capa);
-				i_capa--;
-				continue;
-			}
-			var capa=ParamCtrl.capa[i_capa];
-			BuidaArrayBufferCapa(capa);
-			//Buida objectes vectorials si han vingut d'un servidor.
-			if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusSOS"))
-				delete capa.objectes; 
-			DescarregaSimbolsCapaDigi(capa);
-			if (capa.TileMatrixGeometry)
-			{
-				if(capa.TileMatrixGeometry.tiles_solicitats)
-					delete capa.TileMatrixGeometry.tiles_solicitats;
-				if(capa.TileMatrixGeometry.env)
-					delete capa.TileMatrixGeometry.env;
-			}
-			if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
-				delete capa.metadades.provenance.lineage; 
-		}
-		RemoveOtherPropertiesInObjWithRef(ParamCtrl);
-
+		NetejaConfigJSON(ParamCtrl, true);
+		
 		if (reset)
 			localStorage.removeItem("EditedParamCtrl_"+ParamCtrl.config_json);
 		else
@@ -6235,8 +6332,7 @@ function EndMiraMonMapBrowser(event, reset)
 		}
 	}
 
-	layerList=[];
-	ParamInternCtrl={};
+	FinalitzaMiraMonMapBrowser()
 	
 	/*return DonaCadenaLang({"cat": "Estat del mapa guardat.(Per recuperar l'estat original afegiu a la URL:",
 					"spa": "Estado del mapa guardado. (Para recuperar el estado original añada a la URL:",
@@ -6263,7 +6359,7 @@ var clau_config="CONFIG=", clau_reset="RESET=";
 	loadJSON(config_json,
 			IniciaParamCtrlIVisualitzacio,
 			function(xhr) { alert(xhr); },
-			{div_name:div_name, config_json:config_json, config_reset: config_reset});
+			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
 }
 
 function RestartMiraMonMapBrowser()

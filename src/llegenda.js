@@ -107,7 +107,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			alguna.WPS=0;
 			for (var i=0; i<ParamCtrl.capa.length; i++)
 			{
-				if (EsIndexCapaVolatil(i))
+				if (EsIndexCapaVolatil(i, ParamCtrl))
 					continue;
 				capa=ParamCtrl.capa[i];
 				/*if (capa.model==model_vector)
@@ -169,7 +169,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 
     for (var i=0; i<ParamCtrl.capa.length; i++)
     {
-		if (EsIndexCapaVolatil(i))
+		if (EsIndexCapaVolatil(i, ParamCtrl))
 			continue;
 		capa=ParamCtrl.capa[i];
 	    if (capa.separa!=null)

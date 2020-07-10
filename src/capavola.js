@@ -37,8 +37,6 @@
 
 "use strict"
 
-var ICapaVolaPuntConsult=-1, ICapaVolaAnarCoord=-1, ICapaVolaEdit=-1, ICapaVolaGPS=-1;
-
 var FormAnarCoord={};
 
 function OmpleFinestraAnarCoordenada()
@@ -52,7 +50,7 @@ var cdns=[];
 			"</label>  <input name=\"proj\" type=\"radio\" value=\"1\" id=\"longlat_anarcoord\"",
 			(FormAnarCoord.proj ? "" : "checked"), 
 			" onClicK=\"CanviaEtiquetesAnarCoord(1);\"><label for=\"longlat_anarcoord\" >Long/Lat</label></td></tr>");
-	if (ICapaVolaGPS!=-1)
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 		cdns.push("<tr><td align=\"center\"><input class=\"Verdana11px\" type=\"button\" name=\"Acceptar\" value=\"",
 			(DonaCadenaLang({"cat":"Ubicació dispositiu", "spa":"Ubicación dispositivo", "eng":"Device location","fre":"Emplacement de l'appareil"})),
 			"\" onClick=\"AnarACoordGPS(form);\"></td></tr>");
@@ -76,9 +74,9 @@ function MostraFinestraAnarCoordenada()
 							  "fre":"pour aller à la coordonnée"})))
 		return;
 	OmpleFinestraAnarCoordenada();
-	if (ICapaVolaAnarCoord!=-1)
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 	{
-		ParamCtrl.capa[ICapaVolaAnarCoord].visible="no";
+		ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord].visible="no";
 		CreaVistes();
 	}
 }
@@ -92,9 +90,9 @@ function MostraFinestraAnarCoordenadaEvent(event) //Afegit Cristian 19/01/2016
 //No usar: Useu TancaFinestraLayer("anarCoord");
 function TancaFinestra_anarCoord()
 {
-	if (ICapaVolaAnarCoord!=-1)
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 	{
-	   ParamCtrl.capa[ICapaVolaAnarCoord].visible="no";
+	   ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord].visible="no";
 	   CreaVistes();
 	}
 }//Fi de TancaFinestra_anarCoord()
@@ -158,9 +156,9 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 	FormAnarCoord.m_voltant=d;
 
 	//Dibuixo la icona per mostrar el punt consultat
-	if (ICapaVolaAnarCoord>=0)
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 	{
-		var capa=ParamCtrl.capa[ICapaVolaAnarCoord];
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord];
 		capa.objectes.features[0].geometry.coordinates[0]=punt_coord.x;
 		capa.objectes.features[0].geometry.coordinates[1]=punt_coord.y;
 		capa.objectes.features[0].properties.radius=d;
@@ -198,63 +196,98 @@ var punt;
 
 function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 {
-	if(ICapaVolaPuntConsult!=-1)
-		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ICapaVolaPuntConsult], crs_ori, crs_dest);
-	if(ICapaVolaAnarCoord!=-1)
-		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ICapaVolaAnarCoord], crs_ori, crs_dest);
-	if(ICapaVolaEdit!=-1)
+	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined")
+		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult], crs_ori, crs_dest);
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
+		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord], crs_ori, crs_dest);
+	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
 	{
-		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ICapaVolaEdit], crs_ori, crs_dest);
+		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit], crs_ori, crs_dest);
 		if(ParamCtrl.BarraBotoInsereix==true && ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
 			eval(ParamCtrl.FuncioIconaEdicio);		
 	}
-	if(ICapaVolaGPS!=-1)
-		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ICapaVolaGPS], crs_ori, crs_dest);
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
+		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaGPS], crs_ori, crs_dest);
 }
 
-function EsIndexCapaVolatil(i_capa)
+function EsIndexCapaVolatil(i_capa, param_ctrl)
 {
-	if (ICapaVolaPuntConsult==i_capa || ICapaVolaAnarCoord==i_capa || ICapaVolaEdit==i_capa || ICapaVolaGPS==i_capa)
+	if (param_ctrl.ICapaVolaPuntConsult==i_capa || param_ctrl.ICapaVolaAnarCoord==i_capa || param_ctrl.ICapaVolaEdit==i_capa || param_ctrl.ICapaVolaGPS==i_capa)
 		return true;
 	else
 		return false;
 }
 
+function EliminaIndexDeCapesVolatils(param_ctrl)
+{
+	if(typeof param_ctrl.ICapaVolaPuntConsult !== "undefined")	
+		delete param_ctrl.ICapaVolaPuntConsult;
+	if(typeof param_ctrl.ICapaVolaAnarCoord !== "undefined")	
+		delete param_ctrl.ICapaVolaAnarCoord;
+	if(typeof param_ctrl.ICapaVolaEdit !== "undefined")	
+		delete param_ctrl.ICapaVolaEdit;
+	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")	
+		delete param_ctrl.ICapaVolaGPS;
+}
+
 function NumeroDeCapesVolatils(i_capa)
-{
+{	
+	var i=0;
+
 	if (i_capa==-1)  //nombre de capes total
-		return ((-1!=ICapaVolaPuntConsult)?1:0) + ((-1!=ICapaVolaAnarCoord)?1:0) + ((-1!=ICapaVolaEdit)?1:0) + ((-1!=ICapaVolaGPS)?1:0) + ((-1!=ICapaVolaGPS)?1:0);
-	else     //nombre de capes per sobre (amb index més baix que i_capa)
-		return ((-1!=ICapaVolaPuntConsult && ICapaVolaPuntConsult<i_capa )?1:0) + ((-1!=ICapaVolaAnarCoord && ICapaVolaAnarCoord<i_capa )?1:0) + ((-1!=ICapaVolaEdit && ICapaVolaEdit<i_capa)?1:0) + ((-1!=ICapaVolaGPS && ICapaVolaGPS<i_capa)?1:0);
+	{		
+		if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined")
+			i++;	
+		if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
+			i++;	
+		if (typeof ParamCtrl.ICapaVolaEdit !== "undefined") 
+			i++;	
+		if (typeof ParamCtrl.ICapaVolaGPS !== "undefined") 
+			i++;			
+		return i;
+	}
+
+	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined" && ParamCtrl.ICapaVolaPuntConsult<i_capa)
+		i++;	
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined" && ParamCtrl.ICapaVolaAnarCoord<i_capa)
+		i++;	
+	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined" && ParamCtrl.ICapaVolaEdit<i_capa) 
+		i++;	
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined" && ParamCtrl.ICapaVolaGPS<i_capa) 
+		i++;
+	return i;
 }
 
-function EliminaCapaVolatil(i_capa)
+function EliminaCapaVolatil(i_capa, param_ctrl)
 {
-	ParamCtrl.capa.splice(i_capa, 1);
-	if (ICapaVolaPuntConsult==i_capa)
-		ICapaVolaPuntConsult=-1;
-	if (ICapaVolaAnarCoord==i_capa)
-		ICapaVolaAnarCoord=-1;
-	if (ICapaVolaEdit==i_capa)
-		ICapaVolaEdit=-1;
-	if (ICapaVolaGPS==i_capa)
-		ICapaVolaGPS=-1;
-	CanviaIndexosCapesSpliceCapa(-1, i_capa, -1);
+	param_ctrl.capa.splice(i_capa, 1);
+	if (param_ctrl.ICapaVolaPuntConsult==i_capa)	 
+		delete param_ctrl.ICapaVolaPuntConsult;
+	if (param_ctrl.ICapaVolaAnarCoord==i_capa)
+		delete param_ctrl.ICapaVolaAnarCoord;
+	if (param_ctrl.ICapaVolaEdit==i_capa)
+		delete param_ctrl.ICapaVolaEdit;
+	if (param_ctrl.ICapaVolaGPS==i_capa)
+		delete param_ctrl.ICapaVolaGPS;
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, param_ctrl);  /* els indexos que apuntin a 'i_capa' ja no existeixen en absolut. Intentar moure'ls no sembla una bona idea i per tant uso i_capa+1.
+						No uso AvisaDeCapaAmbIndexosACapaEsborrada() (tal com recomana CanviaIndexosCapesSpliceCapa() perquè generalment les capes volatils són desconegudes a l'usuari
+						i no hi hauria d'haver índexos des de altres capes) */
 }
 
-function CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota)
+//Generalment, aquesta funcio no resulta útil. Considereu usar CanviaIndexosCapesSpliceCapa() que canvia tots els índexos a totes les capes i crida aquesta funció al final.
+function CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl)
 {
 	if (typeof i_capa_fi_per_sota==="undefined")
 		var i_capa_fi_per_sota=i_capa_ini+1;
 
-	if (ICapaVolaPuntConsult!=-1 && ICapaVolaPuntConsult>=i_capa_ini && ICapaVolaPuntConsult<i_capa_fi_per_sota)
-		ICapaVolaPuntConsult+=n_moviment;
-	if (ICapaVolaAnarCoord!=-1 && ICapaVolaAnarCoord>=i_capa_ini && ICapaVolaAnarCoord<i_capa_fi_per_sota)
-		ICapaVolaAnarCoord+=n_moviment;
-	if (ICapaVolaEdit!=-1 && ICapaVolaEdit>=i_capa_ini && ICapaVolaEdit<i_capa_fi_per_sota)
-		ICapaVolaEdit+=n_moviment;
-	if (ICapaVolaGPS!=-1 && ICapaVolaGPS>=i_capa_ini && ICapaVolaGPS<i_capa_fi_per_sota)
-		ICapaVolaGPS+=n_moviment;
+	if (typeof param_ctrl.ICapaVolaPuntConsult !== "undefined" && param_ctrl.ICapaVolaPuntConsult>=i_capa_ini && param_ctrl.ICapaVolaPuntConsult<i_capa_fi_per_sota)
+		param_ctrl.ICapaVolaPuntConsult+=n_moviment;
+	if (typeof param_ctrl.ICapaVolaAnarCoord !== "undefined" && param_ctrl.ICapaVolaAnarCoord>=i_capa_ini && param_ctrl.ICapaVolaAnarCoord<i_capa_fi_per_sota)
+		param_ctrl.ICapaVolaAnarCoord+=n_moviment;
+	if (typeof param_ctrl.ICapaVolaEdit !== "undefined" && param_ctrl.ICapaVolaEdit>=i_capa_ini && param_ctrl.ICapaVolaEdit<i_capa_fi_per_sota)
+		param_ctrl.ICapaVolaEdit+=n_moviment;
+	if (typeof param_ctrl.ICapaVolaGPS !== "undefined" && param_ctrl.ICapaVolaGPS>=i_capa_ini && param_ctrl.ICapaVolaGPS<i_capa_fi_per_sota)
+		param_ctrl.ICapaVolaGPS+=n_moviment;
 }
 
 function CreaCapesVolatils()
@@ -263,11 +296,11 @@ function CreaCapesVolatils()
 
 	if (!ParamCtrl.IconaConsulta)
 		ParamCtrl.IconaConsulta={"icona": "mes.gif", "ncol": 9, "nfil": 9, "i": 5, "j": 5};
-	if (ICapaVolaPuntConsult==-1)
+	if (typeof ParamCtrl.ICapaVolaPuntConsult === "undefined")
 	{
-		ICapaVolaPuntConsult=i_nova_capa;
+		ParamCtrl.ICapaVolaPuntConsult=i_nova_capa;
 		i_nova_capa++;
-		ParamCtrl.capa.splice(ICapaVolaPuntConsult, 0, {
+		ParamCtrl.capa.splice(ParamCtrl.ICapaVolaPuntConsult, 0, {
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
@@ -310,13 +343,13 @@ function CreaCapesVolatils()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1);
+		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
-	if (ParamCtrl.IconaEdicio && ICapaVolaEdit==-1)
+	if (typeof ParamCtrl.IconaEdicio && ParamCtrl.ICapaVolaEdit === "undefined")
 	{
-		ICapaVolaEdit=i_nova_capa;
+		ParamCtrl.ICapaVolaEdit=i_nova_capa;
 		i_nova_capa++;
-		ParamCtrl.capa.splice(ICapaVolaEdit, 0, {
+		ParamCtrl.capa.splice(ParamCtrl.ICapaVolaEdit, 0, {
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
@@ -362,15 +395,15 @@ function CreaCapesVolatils()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1);
+		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
 	if (!ParamCtrl.IconaAnarCoord)
 		ParamCtrl.IconaAnarCoord={"icona": "mes.gif", "ncol": 9, "nfil": 9, "i": 5, "j": 5};
-	if (ICapaVolaAnarCoord==-1)
+	if (typeof ParamCtrl.ICapaVolaAnarCoord === "undefined")
 	{
-		ICapaVolaAnarCoord=i_nova_capa;
+		ParamCtrl.ICapaVolaAnarCoord=i_nova_capa;
 		i_nova_capa++;
-		ParamCtrl.capa.splice(ICapaVolaAnarCoord, 0, {
+		ParamCtrl.capa.splice(ParamCtrl.ICapaVolaAnarCoord, 0, {
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
@@ -446,17 +479,17 @@ function CreaCapesVolatils()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1);
+		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
-	if (typeof ParamCtrl.MostraPosicioGPS==="undefined" || (ParamCtrl.MostraPosicioGPS!=null && ParamCtrl.MostraPosicioGPS!=false))
+	if (typeof ParamCtrl.MostraPosicioGPS ==="undefined" || (ParamCtrl.MostraPosicioGPS!=null && ParamCtrl.MostraPosicioGPS!=false))
 	{
 		if (!ParamCtrl.IconaPosicioGPS)
 			ParamCtrl.IconaPosicioGPS={"icona": "mesgps.png", "ncol": 24, "nfil": 13, "i": 5, "j": 5};
-		if (ICapaVolaGPS==-1)
+		if (typeof ParamCtrl.ICapaVolaGPS === "undefined")
 		{
-			ICapaVolaGPS=i_nova_capa;
+			ParamCtrl.ICapaVolaGPS=i_nova_capa;
 			i_nova_capa++;
-			ParamCtrl.capa.splice(ICapaVolaGPS, 0, {
+			ParamCtrl.capa.splice(ParamCtrl.ICapaVolaGPS, 0, {
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
@@ -532,7 +565,7 @@ function CreaCapesVolatils()
 					"FuncioEdicio": null,
 					"metadades": null
 				});
-			CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1);
+			CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 		}
 	}
 }
@@ -549,7 +582,7 @@ function EditarPunts(event_de_click, i_nova_vista)
 	
 	if (ParamCtrl.IconaEdicio)
 	{
-	 	var capa=ParamCtrl.capa[ICapaVolaEdit];
+	 	var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaEdit];
 		capa.objectes.features[0].geometry.coordinates[0]=PuntConsultat.x;
 		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;		
 		capa.objectes.features[0].seleccionat=false;	
@@ -559,8 +592,8 @@ function EditarPunts(event_de_click, i_nova_vista)
 	}
 	if (ParamCtrl.BarraBotoInsereix==true && ParamCtrl.FuncioIconaEdicio)
 		eval(ParamCtrl.FuncioIconaEdicio);		
-	else if(ICapaVolaEdit!=-1 && ParamCtrl.capa[ICapaVolaEdit].FuncioEdicio)
-		eval(ParamCtrl.capa[ICapaVolaEdit].FuncioEdicio);		
+	else if(typeof ParamCtrl.ICapaVolaEdit !== "undefined"  && ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio)
+		eval(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio);		
 	
 }//Fi de EditarPunts()
 
@@ -579,7 +612,7 @@ function MostraFinestraInserta()
 var IdPositionGPS=0;
 function IniciaPosicioGPS()
 {
-	if (ICapaVolaGPS>=0)
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
 		if (navigator.geolocation)
 			IdPositionGPS=navigator.geolocation.watchPosition(ActualitzaPosicioGPS, ErrorPosicioGPS, {enableHighAccuracy: true, maximumAge: 8000});
@@ -593,10 +626,10 @@ function IniciaPosicioGPS()
 
 function ActualitzaPosicioGPS(position)
 {
-	if (ICapaVolaGPS>=0)
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
 		var punt=DonaCoordenadesCRS(position.coords.longitude, position.coords.latitude, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		var capa=ParamCtrl.capa[ICapaVolaGPS];
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaGPS];
 		capa.objectes.features[0].geometry.coordinates[0]=punt.x;
 		capa.objectes.features[0].geometry.coordinates[1]=punt.y;
 		//For the moment, a field can not be used to define the radius of the circle, so I have to do it here. This would be fixed.
@@ -609,10 +642,10 @@ function ActualitzaPosicioGPS(position)
 
 function AnarACoordGPS(form)
 {
-	if (ICapaVolaGPS<0)
+	if (typeof ParamCtrl.ICapaVolaGPS === "undefined")
 		return;
 
-	var capa=ParamCtrl.capa[ICapaVolaGPS];
+	var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaGPS];
 
 	form.coordX.value=capa.objectes.features[0].geometry.coordinates[0];
 	form.coordY.value=capa.objectes.features[0].geometry.coordinates[1];
@@ -623,11 +656,11 @@ function AnarACoordGPS(form)
 }
 
 function CancelaPosicioGPS()
-{
-	if (ICapaVolaGPS>=0)
+{	
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
 		//Potser seria millor apagar la visualització de les capes i prou?
-		EliminaCapaVolatil(ICapaVolaGPS);
+		EliminaCapaVolatil(ParamCtrl.ICapaVolaGPS, ParamCtrl);
 		ParamCtrl.MostraPosicioGPS=false;
 		if (IdPositionGPS)  
 			navigator.geolocation.clearWatch(IdPositionGPS);

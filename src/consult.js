@@ -539,10 +539,10 @@ function TancaFinestraEmergent_multi_consulta()
 		pop_down_no_esborra_cons=false;
 		return;
 	}
-	if (ICapaVolaPuntConsult!=-1)
+	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined")
 	{
 		TancaFinestra_multi_consulta();
-		//ParamCtrl.capa[ICapaVolaPuntConsult].visible="no";
+		//ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult].visible="no";
 		//CreaVistes();
 	}
 }
@@ -550,23 +550,23 @@ function TancaFinestraEmergent_multi_consulta()
 //No usar sola. Useu TancaFinestraLayer("multi_consulta");
 function TancaFinestra_multi_consulta()
 {
-	if (ICapaVolaPuntConsult!=-1)
+	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined")
 	{
 		var elem, i_vista;
-		ParamCtrl.capa[ICapaVolaPuntConsult].visible="no";
+		ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult].visible="no";
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (EsCapaVisibleEnAquestaVista(i_vista, ICapaVolaPuntConsult))
+			if (EsCapaVisibleEnAquestaVista(i_vista, ParamCtrl.ICapaVolaPuntConsult))
 			{
-				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+ICapaVolaPuntConsult);
+				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+ParamCtrl.ICapaVolaPuntConsult);
 				if(isLayer(elem))
 					removeLayer(elem);
 			}
 		}
-		//var elem=getLayer(window, "l_obj_digi"+ICapaVolaPuntConsult+"_"+0);
+		//var elem=getLayer(window, "l_obj_digi"+ParamCtrl.ICapaVolaPuntConsult+"_"+0);
 		//if(isLayer(elem))
 		//	removeLayer(elem);
-		//hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa+ICapaVolaPuntConsult));
+		//hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa+ParamCtrl.ICapaVolaPuntConsult));
 	}
 }//Fi de TancaFinestra_multi_consulta()
 
@@ -1087,7 +1087,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 	if (ParamCtrl.IconaConsulta || ParamCtrl.IconaValidacio)
 	{
 		var cal_crear;
-		var capa=ParamCtrl.capa[ICapaVolaPuntConsult];
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult];
 		capa.objectes.features[0].geometry.coordinates[0]=PuntConsultat.x;
 		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;
 		if (capa.visible=="no")  //Vol dir que CreaVistaImmediata no haurà creat la layer per contenir aquesta creuta de la consulta i s'ha de fer.
@@ -1112,21 +1112,21 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 			var zindex_temp;
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
-				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ICapaVolaPuntConsult));
+				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ICapaVolaPuntConsult);
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
 				//Canvio el Z order de les capes del tel i de l'slider del zoom.
-				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult));
+				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
 				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom");
 				if (elem)
 				{
 					//Poso l'slider a dalt de tot
-					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom")));
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom")));
 					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom"), zindex_temp);
-					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult));
+					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
 				}
 				//Poso el tel_tran per sobre de la capa de la consulta.
-				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
 				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans"), zindex_temp);
 			}
 	    }
@@ -1134,9 +1134,9 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 	    {
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
-				//contentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ICapaVolaPuntConsult), DonaCadenaHTMLCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ICapaVolaPuntConsult));
+				//contentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), DonaCadenaHTMLCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ICapaVolaPuntConsult);
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
 			}
 	    }
 	}

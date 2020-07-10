@@ -33,9 +33,9 @@
 function MoureASobreDeTot(i_capa)
 {
 	var n_capes_especials_a_sobre=NumeroDeCapesVolatils(i_capa);
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1, ParamCtrl);
 
 	ParamCtrl.capa.splice(n_capes_especials_a_sobre, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -47,9 +47,9 @@ function MoureASobreDeTot(i_capa)
 
 function MoureASobre(i_capa)
 {
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(1, i_capa-1);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, -1);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(1, i_capa-1, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, -1, ParamCtrl);
 
 	ParamCtrl.capa.splice(i_capa-1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -62,9 +62,9 @@ function MoureASobre(i_capa)
 
 function MoureASota(i_capa)
 {
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, -1);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, -1, ParamCtrl);
 
 	ParamCtrl.capa.splice(i_capa+1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -77,8 +77,8 @@ function MoureASota(i_capa)
 function MoureASotaDeTot(i_capa)
 {
 	//He de pujar totes les capes que estan sota i_capa una posició
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);
 
 	ParamCtrl.capa.push(ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -92,7 +92,7 @@ function EsborrarCapa(i_capa)
 {
 	if (AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)==false)
 		return;
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1);
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no te sentit; i ja hem avisat que no anirà bé.
 	ParamCtrl.capa.splice(i_capa, 1);
 	RevisaEstatsCapes();
 	CreaLlegenda();
@@ -373,7 +373,7 @@ var minim, maxim;
 	else
 	{
 		k=i_on_afegir;
-		CanviaIndexosCapesSpliceCapa(1, k, -1);
+		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
 	}
 	ParamCtrl.capa.splice(k, 0, {"servidor": servidorGC.servidor,
 				"versio": servidorGC.versio,
@@ -489,21 +489,31 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 	}
 }//Fi de AfegirCapesAlNavegador
 
-//n_moviment pot ser negatiu quan elimines capes o positiu quan insereixes. Aquest funció s'ha de cridar despres fer capa.splice() o similars.
-//i_capa_ini és la capa inicial per fer el canvi d'indexos
-//i_capa_fi_per_sota és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length), Opcional; si no s'especifica, només es mouen els index de i_capa_ini.
-function CanviaIndexosCapesSpliceCapa(n_moviment, i_capa_ini, i_capa_fi_per_sota)
+/*Aquest funció s'ha de cridar abans o després fer capa.splice() o similars.
+Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
+de si capa.splice() es fa abans o després de la crida a aquesta funció. Si capa.splice() es fa abans, els indexos encara tenen els valors antics igualment.
+També canvia els indexos de les variables ParamCtrl.ICapaVola* .
+'n_moviment' pot ser negatiu quan elimines capes o positiu quan insereixes. 
+'i_capa_ini' és la capa inicial (inclosa) per fer el canvi d'indexos. En eliminar capes eviteu usar la capa eliminada com a i_capa_ini 
+Si es fa un 'n_moviment' negatiu (eliminació de capes) que es combina amb capa.splice(), es pot fer servir 
+for (i=0 i<-n_moviment; i++)
+    AvisaDeCapaAmbIndexosACapaEsborrada(i_capa_ini+i)
+	return;
+per avisar que hi ha capes que tenen indexos que apunten a capes que s'eliminen. Tot això ja es te en compte a EsborrarCapa().
+'i_capa_fi_per_sota' és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length), 
+	Opcional; si no s'especifica, només es mouen els index que coindideixen amb i_capa_ini.*/
+function CanviaIndexosCapesSpliceCapa(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl)
 {
 var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 
 	if (typeof i_capa_fi_per_sota==="undefined")
 		var i_capa_fi_per_sota=i_capa_ini+1;
 	if (i_capa_fi_per_sota==-1)
-		i_capa_fi_per_sota=ParamCtrl.capa.length;
+		i_capa_fi_per_sota=param_ctrl.capa.length;
 
-	for(var i=0; i<ParamCtrl.capa.length; i++)
+	for(var i=0; i<param_ctrl.capa.length; i++)
 	{
-		capa=ParamCtrl.capa[i];
+		capa=param_ctrl.capa[i];
 		if (capa.valors && capa.valors.length)
 		{
 			for (j=0; j<capa.valors.length; j++)
@@ -599,7 +609,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 			}
 		}
 	}
-	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota);
+	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl);
 }
 
 function AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)
@@ -1039,7 +1049,7 @@ var i_capes=DonaIndexosACapesDeCalcul(document.CalculadoraCapes.calcul.value);
 		"ProcesMostrarTitolCapa" : false
 		});
 
-	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
+	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
 		CanviaIndexosCapesSpliceCapa(1, i_capa, -1);
 
 	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
@@ -2105,7 +2115,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 	cdns.push("<form name=\"CalculadoraCapes\" onSubmit=\"return false;\">");
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		if (EsIndexCapaVolatil(i))
+		if (EsIndexCapaVolatil(i, ParamCtrl))
 			continue;
 		capa=ParamCtrl.capa[i];
 		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
@@ -2304,7 +2314,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 		var origen_vector=(i_capa!=-1 && ParamCtrl.capa[i_capa].model==model_vector) ?true: false;
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaVolatil(i))
+			if(EsIndexCapaVolatil(i, ParamCtrl))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if(origen_vector)
@@ -2330,7 +2340,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 	{
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaVolatil(i))
+			if(EsIndexCapaVolatil(i, ParamCtrl))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
@@ -2637,7 +2647,7 @@ var cdns=[], capa, nc, capa_def, origen_vector;
 		cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\" name=\"",(param.vull_operador? "" : "valor_"),"capa", i_condicio, "\" style=\"width:400px;\" onChange='CanviaCondicioSeleccioCondicional(\"", prefix_id, "\", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "" : "valor-"),"capa-",i_condicio,"\").value), ",i_condicio, ", ", JSON.stringify(param), ");'>");
 		for (var i=0; i<ParamCtrl.capa.length; i++)
 		{
-			if(EsIndexCapaVolatil(i))
+			if(EsIndexCapaVolatil(i, ParamCtrl))
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
