@@ -303,9 +303,9 @@ function MostraConsultaComHTML(consulta)
 				}
 				for(var i=0; i<consulta.Atribut.length; i++)
 				{
-					if(atribut.mostrar=="no")
+					if(consulta.Atribut.mostrar=="no")
 						continue;							
-					if(atribut.mostrar=="si_ple" && (typeof consulta.Atribut[i].valor === "undefined" || consulta.Atribut[i].valor==null || consulta.Atribut[i].valor==""))
+					if(consulta.Atribut.mostrar=="si_ple" && (typeof consulta.Atribut[i].valor === "undefined" || consulta.Atribut[i].valor==null || consulta.Atribut[i].valor==""))
 						continue;
 					cdns.push(MostraConsultaAtributComHTML(consulta.i_capa, 0, i, consulta.Atribut[i], consulta.Atribut[i].separador, consulta.Atribut[i].valor, i_capa_validar, true));
 				}
@@ -806,7 +806,7 @@ var cdns=[], capa;
 				continue;
 
 			NCapesConsultables++;
-			capa=ParamCtrl.capa[i];
+			//capa=ParamCtrl.capa[i]; Ja s'ha fet abans 
 			if (capa.valors)
 			{
 				if (HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i))
@@ -820,7 +820,7 @@ var cdns=[], capa;
 						cdns.push("<span class='TitolRepostaConsulta'>",
 							(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
 							(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
-							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", v, "</span>");
+							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", DonaCadena(v), "</span>");
 						cdns.push("</div>");
 					}
 				}
