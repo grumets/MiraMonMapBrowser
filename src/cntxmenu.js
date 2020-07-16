@@ -1050,7 +1050,7 @@ var i_capes=DonaIndexosACapesDeCalcul(document.CalculadoraCapes.calcul.value);
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
-		CanviaIndexosCapesSpliceCapa(1, i_capa, -1);
+		CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
 
 	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
@@ -1215,7 +1215,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
-		CanviaIndexosCapesSpliceCapa(1, i_capa, -1);
+		CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
 
 	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
