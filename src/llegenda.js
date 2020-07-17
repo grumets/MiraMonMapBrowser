@@ -87,6 +87,89 @@ var cdns=[];
 	return cdns.join("");
 }
 
+function CreaItemLlegDePaletaSiCal(i_capa, i_estil)
+{
+var capa=ParamCtrl.capa[i_capa];
+var estil=capa.estil[i_estil];
+var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample, n_item_lleg_auto;
+
+	if (estil.ItemLleg && estil.ItemLleg.length>0)
+		return;  //No cal fer-la: ja està feta.
+
+	colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors : null;
+	ncolors=colors ? colors.length : 256;
+
+	/*if (estil.categories && estil.atributs)
+	{
+		var desc
+		//La llegenda es pot generar a partir de la llista de categories i la paleta.
+
+		estil.ItemLleg=[];
+		ncolors=(estil.categories.length>ncolors) ? ncolors : estil.categories.length;
+		
+		for (var i=0, i_color=0; i_color<ncolors; i_color++)
+		{
+			if (!estil.categories[i_color])
+				continue;
+			desc=DonaTextCategoriaDesDeColor(estil, i_color);
+			if (desc=="")
+				continue;
+			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": desc};
+			i++;
+		}	
+		return;
+	}*/
+
+	if (!estil.component || estil.component.length==0)
+		return;
+
+	//La llegenda es pot generar a partir d'estirar la paleta.
+	a=DonaFactorAEstiramentPaleta(estil.component[0].estiramentPaleta, ncolors);
+	valor_min=DonaFactorValorMinEstiramentPaleta(estil.component[0].estiramentPaleta);
+	valor_max=DonaFactorValorMaxEstiramentPaleta(estil.component[0].estiramentPaleta, ncolors);
+
+	if (!estil.nItemLlegAuto)
+	{
+		if (estil.nItemLlegAuto===0)
+			return;
+		n_item_lleg_auto=ncolors;
+	}
+	else
+		n_item_lleg_auto=estil.nItemLlegAuto;
+
+	ample=(valor_max-valor_min)/n_item_lleg_auto;
+	if (!estil.ColorMinimPrimer || estil.ColorMinimPrimer==false)
+		ample=-ample;
+
+	estil.ItemLleg=[];
+	for (var i=0, value=(estil.ColorMinimPrimer ? ample/2+valor_min : valor_max+ample/2); i<n_item_lleg_auto;value+=ample)
+	{
+		i_color=Math.floor(a*(value-valor_min));
+		if (i_color>=ncolors)	
+			i_color=ncolors-1;
+		else if (i_color<0)
+			i_color=0;
+
+		if (estil.categories && estil.atributs)
+		{
+			value_text=DonaTextCategoriaDesDeColor(estil, parseInt(value));
+			if (value_text=="")
+				continue;
+		}
+		else
+		{
+			if (estil.descColorMultiplesDe)
+				value_text=multipleOf(value, estil.descColorMultiplesDe) 
+			else
+				value_text=value;
+			if (estil.component[0].NDecimals!=null)
+				value_text=OKStrOfNe(parseFloat(value_text), estil.component[0].NDecimals);
+		}
+		estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": value_text};
+		i++;
+	}
+}
+
 var LlegendaAmbControlDeCapes=0x01;
 var LlegendaAmbCapesNoVisibles=0x02;
 

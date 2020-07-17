@@ -820,7 +820,7 @@ var cdns=[], capa;
 						cdns.push("<span class='TitolRepostaConsulta'>",
 							(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
 							(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
-							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", DonaCadena(v), "</span>");
+							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", v, "</span>");
 						cdns.push("</div>");
 					}
 				}
