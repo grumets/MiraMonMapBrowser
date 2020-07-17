@@ -152,15 +152,20 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 		if (estil.categories && estil.atributs)
 		{
-			value_text=DonaTextCategoriaDesDeColor(estil, i_color);
+			value_text=DonaTextCategoriaDesDeColor(estil, parseInt(value));
 			if (value_text=="")
 				continue;
 		}
-		else if (estil.descColorMultiplesDe)
-			value_text=multipleOf(value, estil.descColorMultiplesDe) 
 		else
-			value_text=value;
-		estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": (estil.component[0].NDecimals!=null ? OKStrOfNe(parseFloat(value_text), estil.component[0].NDecimals): value_text)};
+		{
+			if (estil.descColorMultiplesDe)
+				value_text=multipleOf(value, estil.descColorMultiplesDe) 
+			else
+				value_text=value;
+			if (estil.component[0].NDecimals!=null)
+				value_text=OKStrOfNe(parseFloat(value_text), estil.component[0].NDecimals);
+		}
+		estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": value_text};
 		i++;
 	}
 }
