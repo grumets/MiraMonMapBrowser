@@ -137,12 +137,12 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 	else
 		n_item_lleg_auto=estil.nItemLlegAuto;
 
-	ample=(valor_max-valor_min)/n_item_lleg_auto;
-	if (!estil.ColorMinimPrimer || estil.ColorMinimPrimer==false)
+	ample=(valor_max-valor_min+1)/n_item_lleg_auto;
+	if (estil.ColorMinimASota)
 		ample=-ample;
 
 	estil.ItemLleg=[];
-	for (var i=0, value=(estil.ColorMinimPrimer ? ample/2+valor_min : valor_max+ample/2); i<n_item_lleg_auto;value+=ample)
+	for (var i=0, value=(estil.ColorMinimASota ? valor_max+ample/2: ample/2+valor_min); (estil.ColorMinimASota) ? value>valor_min : value<valor_max+1; value+=ample)
 	{
 		i_color=Math.floor(a*(value-valor_min));
 		if (i_color>=ncolors)	

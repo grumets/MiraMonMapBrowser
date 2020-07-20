@@ -4209,7 +4209,11 @@ var capa=ParamCtrl.capa[i_capa];
 function DonaTextCategoriaDesDeColor(estil, i_color)
 {
 	if (estil.atributs.length==1)
-		return estil.categories[i_color][estil.atributs[0].nom];
+	{
+		if (estil.categories[i_color] && estil.categories[i_color][estil.atributs[0].nom])
+			return estil.categories[i_color][estil.atributs[0].nom];
+		return "";
+	}
 
 	var value_text="[";
 	for (var i_a=0; i_a<estil.atributs.length; i_a++)

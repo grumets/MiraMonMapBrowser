@@ -1347,8 +1347,8 @@
 									"type": "number",
 									"minimum": 0
 								},
-								"ColorMinimPrimer": {
-									"description": "Ordenar els colors generats automàticament a la llegenda posant el valor mínim a sobre de tot (per defecte el valor més alt va a sobre). No aplica si hi ha 3 components",
+								"ColorMinimASota": {
+									"description": "Ordenar els colors generats automàticament a la llegenda posant el valor mínim a sota de tot a la llegenda (per defecte el valor més alt va a sota). No aplica si hi ha 3 components. Això pot ser útil per les capes que mostren elevacions on intuitivament esperes les elevacions més grans a dalt. Abans es deia ColorMinimPrimer (un nom que resultava poc clar i sembla significar el contrari).",
 									"type": "boolean"
 								},
 								"paleta": {
