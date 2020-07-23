@@ -2191,8 +2191,6 @@ function CadenaMultiIdioma(cat,spa,eng,fre)
 	this.fre=fre;
 }*/
 
-var ara_canvi_proj_auto=0x01;
-
 var OrigenEsqSituacio=0;
 var OrigenSupSituacio=0;
 

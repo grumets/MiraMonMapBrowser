@@ -147,8 +147,6 @@ function MouLayerContextMenuCapa(event, s)
 	}
 }
 
-
-
 function OmpleLayerContextMenuCapa(event, i_capa)
 {
 var cdns=[]
@@ -997,67 +995,95 @@ function AfegeixCapaCalcul()
 var alguna_capa_afegida=false;
 
 var i_capes=DonaIndexosACapesDeCalcul(document.CalculadoraCapes.calcul.value);
+var desc_capa=document.CalculadoraCapes.nom_estil.value;
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
-	ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
-		"versio": null,
-		"tipus": null,
-		"nom":	"ComputedLayer",
-		"desc":	"Computed layer",
-		"CRS": (i_capes.length ? JSON.parse(JSON.stringify(ParamCtrl.capa[i_capes[0]].CRS)) : null),
-		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
-		"FormatImatge": "application/x-img",
-		"valors": [],
-		"transparencia": "semitransparent",
-		"CostatMinim": DeterminaCostatMinimDeCapes(i_capes),
-		"CostatMaxim": DeterminaCostatMaximDeCapes(i_capes),
-		"TileMatrixSet": null,
-		"FormatConsulta": null,
-		"grup":	null,
-		"separa": DonaTextSeparadorCapaAfegida(i_capa),
-		"DescLlegenda": "Computed layer",
-		"estil": [{
-			"nom":	null,
-			"desc":	"Computed layer",
-			"TipusObj": "P",
-			"component": [{
-				"calcul": document.CalculadoraCapes.calcul.value,
+	if (i_capes.length>1) //Si en l'expressió entra en joc més d'una capa -> la capa calculada és una capa nova
+	{
+		ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom":	"ComputedLayer",
+			"desc":	(desc_capa) ? desc_capa : "Computed layer",
+			"CRS": (i_capes.length ? JSON.parse(JSON.stringify(ParamCtrl.capa[i_capes[0]].CRS)) : null),
+			"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
+			"FormatImatge": "application/x-img",
+			"valors": [],
+			"transparencia": "semitransparent",
+			"CostatMinim": DeterminaCostatMinimDeCapes(i_capes),
+			"CostatMaxim": DeterminaCostatMaximDeCapes(i_capes),
+			"TileMatrixSet": null,
+			"FormatConsulta": null,
+			"grup":	null,
+			"separa": DonaTextSeparadorCapaAfegida(i_capa),
+			"DescLlegenda": (desc_capa) ? desc_capa : "Computed layer",
+			"estil": [{
+				"nom":	null,
+				"desc":	(desc_capa) ? desc_capa : "Computed layer",
+				"TipusObj": "P",
+				"component": [{
+					"calcul": document.CalculadoraCapes.calcul.value,
+				}],
+				"metadades": null,
+				"nItemLlegAuto": 20,
+				"ncol": 4,
+				"descColorMultiplesDe": 0.01
 			}],
-			"metadades": null,
-			"nItemLlegAuto": 20,
-			"ncol": 4,
-			"descColorMultiplesDe": 0.01
-		}],
-		"i_estil":	0,
-		"NColEstil":	1,
-		"LlegDesplegada":	false,
-		"VisibleALaLlegenda":	true,
-		"visible":	"si",
-		"visible_vista":	null,
-		"consultable":	"si",
-		"descarregable":	"no",
-		"metadades":	null,
-		"NomVideo":	null,
-		"DescVideo":	null,
-		"FlagsData": null,
-		"data": null,
-		"i_data": 0,
-		"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
-		"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
-		"proces":	null,
-		"ProcesMostrarTitolCapa" : false
-		});
+			"i_estil":	0,
+			"NColEstil":	1,
+			"LlegDesplegada":	false,
+			"VisibleALaLlegenda":	true,
+			"visible":	"si",
+			"visible_vista":	null,
+			"consultable":	"si",
+			"descarregable":	"no",
+			"metadades":	null,
+			"NomVideo":	null,
+			"DescVideo":	null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
+			"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
+			"proces":	null,
+			"ProcesMostrarTitolCapa" : false
+			});
+	
+		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
+			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
+	
+		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
-	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
-		CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
-
-	CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
-
-    //Redibuixo el navegador perquè les noves capes siguin visibles
-	RevisaEstatsCapes();
-	CreaLlegenda();
-	RepintaMapesIVistes();
+	  //Redibuixo el navegador perquè les noves capes siguin visibles
+		RevisaEstatsCapes();
+		CreaLlegenda();
+		RepintaMapesIVistes();
+	}
+	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
+	{
+		var capa=ParamCtrl.capa[i_capa];		
+		capa.estil.push({
+				"nom":	null,
+				"desc":	(desc_capa) ? desc_capa : "Computed style",
+				"TipusObj": "P",
+				"component": [{
+					"calcul": document.CalculadoraCapes.calcul.value,
+				}],
+				"metadades": null,
+				"nItemLlegAuto": 20,
+				"ncol": 4,
+				"descColorMultiplesDe": 0.01
+			});
+		
+			if (capa.visible=="ara_no")
+				CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
+			else
+				CreaLlegenda();
+		
+			//Defineix el nou estil com estil actiu
+			CanviaEstilCapa(i_capa, capa.estil.length-1, false);
+	}  
 }//Fi de AfegeixCapaCalcul()
 
 function AfegeixCapaCombicapaCategoric()
@@ -2089,7 +2115,7 @@ var cdns=[], i, capa;
 			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true}),
 			  "</fieldset>");
 			  
-	cdns.push(DonaCadenaLang({"cat":"Fòrmula de reclassificació", "spa":"Fórmula de reclasificación:", "eng":"Reclassifying expression", "fre":"Formule de reclassement"}),
+	cdns.push(DonaCadenaLang({"cat":"Fórmula de reclassificació", "spa":"Fórmula de reclasificación:", "eng":"Reclassifying expression", "fre":"Formule de reclassement"}),
 				"<input type=\"button\" class=\"Verdana11px\" value=\"i\" onClick='IniciaFinestraInformacio(DonaCadenaInfoReclassificacio());'/>",									 
 				":<br><textarea name=\"reclassificacio\" class=\"Verdana11px\" style=\"width:440px;height:100\" ></textarea><br>",
 				"<hr>",
@@ -2134,17 +2160,19 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 			  DonaCadenaLang({"cat":"Afegeix capa calculada a partir de les capes existents", "spa":"Añada capa calculada a partir de las capas existentes", "eng":"Add layer computed from existing layers", "fre":"Rajouter couche calculé à partir de couches existantes"}),
 			  "</legend>",
 			  "<fieldset><legend>",
-			  DonaCadenaLang({"cat":"Capa per a la fòrmula", "spa":"Capa para la fórmula", "eng":"Layer for the expression", "fre":"Couche pour l'expression"}),
+			  DonaCadenaLang({"cat":"Capa per a la fórmula", "spa":"Capa para la fórmula", "eng":"Layer for the expression", "fre":"Couche pour l'expression"}),
 			  "</legend>");
 		//Posar uns desplegables de capes, estils i dates
 		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
-		//Posar un botó d'afegir a la fòrmula
+		//Posar un botó d'afegir a la fórmula
 		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Escriu a la fòrmula", "spa":"Escribe en fórmula", "eng":"Write in expression", "fre":"Ecrire à la formule"}), 
+		     	DonaCadenaLang({"cat":"Escriu a la fórmula", "spa":"Escribe en fórmula", "eng":"Write in expression", "fre":"Ecrire à la formule"}), 
 		        "\" onClick='EscriuCapaALaFormulaAfegeixCapa();' /></fieldset>");
 		//Caixa multilínia per a la formula.
-		cdns.push(DonaCadenaLang({"cat":"Fòrmula", "spa":"Fórmula:", "eng":"Expression", "fre":"Formule"}),
+		cdns.push(DonaCadenaLang({"cat":"Fórmula", "spa":"Fórmula:", "eng":"Expression", "fre":"Formule"}),
 			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:440px;height:100\" ></textarea><br>",
+			DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a una capa/estil nou de nom", "spa":"El resultado de la selección será añadido como una capa/estilo nuevo de nombre", "eng":"The result of the selection will be added as a new layer/style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau couche/style avec le nom"}), 
+			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",				
 		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
 		        "\" onClick='AfegeixCapaCalcul();TancaFinestraLayer(\"calculadoraCapa\");' />",
@@ -2385,7 +2413,7 @@ var estil=capa.estil[i_estil];
 		
 		//Posar un botó d'afegir a l'expressió de reclassificació
 		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Escriu valor a la fòrmula", "spa":"Escribe valor en fórmula", "eng":"Write value in expression", "fre":"Écrire une valeur dans l'expression"}), 
+		     	DonaCadenaLang({"cat":"Escriu valor a la fórmula", "spa":"Escribe valor en fórmula", "eng":"Write value in expression", "fre":"Écrire une valeur dans l'expression"}), 
 		        "\" onClick='EscriuValorALaReclasssificacioAfegeixCapa(\"",prefix_id,"\");' />");
 	}
 	else
@@ -3321,6 +3349,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		"<input type=\"text\" id=\"edita-nom-capa\" name=\"nom_capa\" value=\"", DonaCadena(capa.desc), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
+		"<fieldset><legend>",
+		DonaCadenaLang({"cat":"Nom de la capa a la llegenda", "spa":"Nombre de la capa en la leyenda", "eng":"Name of the layer in the legend", "fre":"Nom de la couche dans la légende"}),
+		":</legend>",
+		"<input type=\"text\" id=\"edita-nom-capa-llegenda\" name=\"nom_capa\" value=\"", DonaCadena(capa.DescLlegenda), "\" style=\"width:400px;\" />",
+		"<br>",
+		"</fieldset>",
 		"<input type=\"button\" class=\"Verdana11px\" value=\"", 
 		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
 	        "\" onClick='ModificaNomCapa(", i_capa, ");TancaFinestraLayer(\"modificaNom\");' />",
@@ -3330,25 +3364,43 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		"</div></form>");
 	return cdns.join("");
 }
-
+   
 function ModificaNomCapa(i_capa)
 {
-var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_capa];
+var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_capa], desc_lleg=document.getElementById("edita-nom-capa-llegenda").value;
 
 	if (ParamCtrl.idioma==null)
-		capa.DescLlegenda=desc;
+	{
+		capa.desc=desc;
+		capa.DescLlegenda=desc_lleg;
+	}
 	else if (capa.DescLlegenda.cat && ParamCtrl.idioma=="cat")
-		capa.DescLlegenda.cat=desc;
+	{
+		capa.desc.cat=desc;
+		capa.DescLlegenda.cat=desc_lleg;
+	}
 	else if (capa.DescLlegenda.spa && ParamCtrl.idioma=="spa")
-		capa.DescLlegenda.spa=desc;
+	{
+		capa.desc.spa=desc;
+		capa.DescLlegenda.spa=desc_lleg;
+	}
 	else if (capa.DescLlegenda.eng && ParamCtrl.idioma=="eng")
-		capa.DescLlegenda.eng=desc;
+	{
+		capa.desc.eng=desc;
+		capa.DescLlegenda.eng=desc_lleg;
+	}
 	else if (capa.DescLlegenda.fre && ParamCtrl.idioma=="fre")
-		capa.DescLlegenda.fre=desc;
+	{
+		capa.desc.fre=desc;
+		capa.DescLlegenda.fre=desc_lleg;
+	}
 	else
-		capa.DescLlegenda=desc;	
+	{
+		capa.desc=desc;
+		capa.DescLlegenda=desc_lleg;	
+	}
 		
-    CreaLlegenda();
+	CreaLlegenda();
 }
 
 function ObreFinestraModificaNomEstil(i_capa, i_estil)

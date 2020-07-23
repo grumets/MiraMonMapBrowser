@@ -1226,6 +1226,7 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 function NetejaConfigJSON(param_ctrl, is_local_storage)
 {
 		param_ctrl.NivellZoomCostat=ParamInternCtrl.vista.CostatZoomActual;  //Recupero el costat de zoom actual
+		param_ctrl.ISituacioOri=ParamInternCtrl.ISituacio; //Recupero el mapa de situació, que indica el CRS
 
 		//Buido les coses grans que he afegit al param_ctrl abans de guardar la configuració.
 		//De fet, tots les elements documentats com "INTERN" al config-schema s'haurien d'esborrar.
@@ -1310,19 +1311,27 @@ function CarregaiAdoptaConfigJSON(s)
 
 function OmpleFinestraParametres()
 {
-var cdns=[], coord_visible;
+var cdns=[], coord_visible, p, unitats_CRS;
 
 	param_ColorFonsVista=ParamCtrl.ColorFonsVista;
 	param_ColorQuadratSituacio=ParamCtrl.ColorQuadratSituacio;
 
+	p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	if (p=="°")
+		unitats_CRS=p;
+	else
+		unitats_CRS=" "+p;
+
 	cdns.push("<form name=\"form_param\" onSubmit=\"return false;\"><div id=\"param_desgranat\" class=\"Verdana11px\">",
-	        DonaCadenaLang({"cat":"Punt origen central","spa":"Punto origen central", "eng":"Origin central point", "fre":"Point origine central"}),":  x:", OKStrOfNe(ParamCtrl.PuntOri.x, ParamCtrl.NDecimalsCoordXY),
-				  " y: ", OKStrOfNe(ParamCtrl.PuntOri.y, ParamCtrl.NDecimalsCoordXY), "<br>",
-		"<small>", DonaCadenaLang({"cat":"Àmbit disponible", "spa":"Ámbito disponible", "eng":"Available boundary", "fre":"Champ disponible"}), ": x=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),
+	        DonaCadenaLang({"cat":"Punt origen central","spa":"Punto origen central", "eng":"Origin central point", "fre":"Point origine central"}),":  x: ", OKStrOfNe(ParamCtrl.PuntOri.x, ParamCtrl.NDecimalsCoordXY),
+	        unitats_CRS, "; y: ", OKStrOfNe(ParamCtrl.PuntOri.y, ParamCtrl.NDecimalsCoordXY), unitats_CRS, "<br>",
+		"<small>&nbsp;&nbsp;&nbsp;", DonaCadenaLang({"cat":"Sistema de referencia actual", "spa":"Sistema de referencia actual", "eng":"Current reference system", "fre":"Système de référence actuel"}) , ": ", 
+			DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), " (", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ")<br>&nbsp;&nbsp;&nbsp;",
+		DonaCadenaLang({"cat":"Àmbit disponible", "spa":"Ámbito disponible", "eng":"Available boundary", "fre":"Champ disponible"}), ": x=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),
 					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX, ParamCtrl.NDecimalsCoordXY),
 					"); y=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY, ParamCtrl.NDecimalsCoordXY),
-					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),")<br>",
-		DonaCadenaLang({"cat":"Costat de píxel actual", "spa":"Lado de píxel actual", "eng":"Current pixel size", "fre":"Côte de pixel actuel"}) , ": ", ParamInternCtrl.vista.CostatZoomActual,
+					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),")<br>&nbsp;&nbsp;&nbsp;",
+				DonaCadenaLang({"cat":"Costat de píxel actual", "spa":"Lado de píxel actual", "eng":"Current pixel size", "fre":"Côte de pixel actuel"}) , ": ", ParamInternCtrl.vista.CostatZoomActual, unitats_CRS,
 		"</small><hr>",
 		DonaCadenaLang({"cat":"Ample", "spa":"Ancho", "eng":"Width", "fre":"Largeur"}) , ": ", ParamInternCtrl.vista.ncol, "px ",
 		DonaCadenaLang({"cat":"Alt", "spa":"Alto", "eng":"Height", "fre":"Hauteur"}) , ": " , ParamInternCtrl.vista.nfil, "px ",
@@ -1337,7 +1346,7 @@ var cdns=[], coord_visible;
 		"</label><hr>",
 		"Coord: &nbsp;&nbsp;&nbsp;&nbsp;" , DonaCadenaLang({"cat":"N. decimals", "spa":"N. decimales", "eng":"N. of figures", "fre":"N. décimales"}) , ": <input type=\"text\" size=\"1\" name=\"param_NDecimalsCoordXY\" value=\"", ParamCtrl.NDecimalsCoordXY, "\" maxlength=\"1\"><br>",
 		"&nbsp;&nbsp;&nbsp;" , DonaCadenaLang({"cat":"Cantonades", "spa":"Esquinas", "eng":"Corners", "fre":"Coins"}) , ": ",
-		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesCap\"", (ParamCtrl.CoordExtremes ? "": " checked=\"checked\""), "> <label for=\"id_CoordExtremesCap\" accesskey=\"a\">", DonaCadenaLang({"cat":"c<u>a</u>p", "spa":"ningun<u>a</u>", "eng":"<u>a</u>ny", "fre":"<u>a</u>ucune"}) ,"</label> ",
+		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesCap\"", (ParamCtrl.CoordExtremes ? "": " checked=\"checked\""), "> <label for=\"id_CoordExtremesCap\" accesskey=\"", DonaCadenaLang({"cat":"a", "spa":"a", "eng":"n", "fre":"a"}), "\">", DonaCadenaLang({"cat":"c<u>a</u>p", "spa":"ningun<u>a</u>", "eng":"<u>n</u>one", "fre":"<u>a</u>ucune"}) ,"</label> ",
 		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesProj\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="proj") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesProj\" accesskey=\"p\">", DonaCadenaLang({"cat":"<u>P</u>roj", "spa":"<u>P</u>roy", "eng":"<u>P</u>roj", "fre":"<u>P</u>roj"}) ,".</label> ",
                    "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesLongLat\"", ((ParamCtrl.CoordExtremes && (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")) ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesLongLat\" accesskey=\"l\"><u>L</u>ong/Lat</label> ",
                    "<input type=\"checkbox\" name=\"param_CoordExtremesGMS\" id=\"id_CoordExtremesGMS\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="longlat_gms") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesGMS\">(° \' \")</label><br>",
@@ -1492,10 +1501,10 @@ var cdns=[];
 function CanviaCRSDeImatgeSituacio(i)
 {
 	if (i==-1)
-		ParamInternCtrl.flags|=ara_canvi_proj_auto;
+		ParamCtrl.araCanviProjAuto=true;
 	else
 	{
-		ParamInternCtrl.flags&=~ara_canvi_proj_auto;
+		ParamCtrl.araCanviProjAuto=false;
 		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=i;
 		if(ParamCtrl.FuncioCanviProjeccio)
@@ -1521,9 +1530,9 @@ var cdns=[], i;
 		cdns.push("<form name=FormulProjeccio onSubmit=\"return false;\"><select CLASS=text_petit name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value,10));\">");
 		if (ParamCtrl.CanviProjAuto==true)
 		{
-			cdns.push("<OPTION VALUE=\"-1\"",((ParamInternCtrl.flags&ara_canvi_proj_auto) ? " SELECTED" : "") ,">", 
+			cdns.push("<OPTION VALUE=\"-1\"",(ParamCtrl.araCanviProjAuto ? " SELECTED" : "") ,">", 
 				DonaCadenaLang({"cat":"automàtic", "spa":"automático", "eng":"automatic","fre":"automatique"}));
-			if (ParamInternCtrl.flags&ara_canvi_proj_auto)
+			if (ParamCtrl.araCanviProjAuto)
 				cdns.push(" (", DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), ")");
 			cdns.push("</OPTION>");
 		}
@@ -1540,7 +1549,7 @@ var cdns=[], i;
 		crs_temp.removeDuplicates(OrdenacioCRSSituacio);		
 		for (i=0; i<crs_temp.length; i++)
 		{
-			cdns.push("<OPTION VALUE=\"", crs_temp[i].i_situacio ,"\"",((!(ParamInternCtrl.flags&ara_canvi_proj_auto) && crs_temp[i].i_situacio==ParamInternCtrl.ISituacio) ? " SELECTED" : ""),">", 
+			cdns.push("<OPTION VALUE=\"", crs_temp[i].i_situacio ,"\"",((!ParamCtrl.araCanviProjAuto && crs_temp[i].i_situacio==ParamInternCtrl.ISituacio) ? " SELECTED" : ""),">", 
 				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[crs_temp[i].i_situacio].EnvTotal.CRS) , "</OPTION>");
 		}
 		cdns.push("</select></form>");
@@ -2583,17 +2592,24 @@ function CanviaEstatClickSobreVistaEvent(event, estat)
 
 function DonaValorDeCoordActual(x,y,negreta,input)
 {
-var cdns=[], ll;
+var cdns=[], ll, p, unitats_CRS;
+
+	p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	if (p=="°")
+		unitats_CRS=p;
+	else
+		unitats_CRS=" "+p;
+
 	if (ParamCtrl.CoordActualProj==true)
 	{
 		cdns.push((negreta ? "<b>" : ""),
 			(input ? " X: " : " X,Y: "),
 			(negreta ? "</b>" : ""),				   
 			(input ? "<input type=\"text\" name=\"coord_e_x\" class=\"input_coord\" value=\"" : ""),
-			OKStrOfNe(x,ParamCtrl.NDecimalsCoordXY),
+			OKStrOfNe(x,ParamCtrl.NDecimalsCoordXY), unitats_CRS,
 			(input ? ( negreta ? "\" readonly>/><b>Y:</b> <input type=\"text\" name=\"coord_e_y\" class=\"input_coord\" value=\"" :
 			"\" readonly/>Y:<input type=\"text\" name=\"coord_e_y\" class=\"input_coord\" value=\"" ) : ", "),
-			OKStrOfNe(y,ParamCtrl.NDecimalsCoordXY),
+			OKStrOfNe(y,ParamCtrl.NDecimalsCoordXY), unitats_CRS,
 			(input ? "\" readonly>" : ""));	
 	}
 	if (ParamCtrl.CoordActualLongLatG==true)
@@ -4869,6 +4885,20 @@ var elem=getLayer(win, nom_vista);
 var cal_vora=(ParamCtrl.VoraVistaGrisa==true && vista.i_nova_vista==NovaVistaPrincipal) ? true : false;
 var cal_coord=(ParamCtrl.CoordExtremes && (vista.i_nova_vista==NovaVistaPrincipal || vista.i_nova_vista==NovaVistaImprimir)) ? true : false;
 var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
+var p, unitats_CRS;
+
+	if (ParamCtrl.CoordExtremes=="longlat_g")
+		unitats_CRS="°";
+	else if (ParamCtrl.CoordExtremes=="proj")
+	{		
+		p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+		if (p=="°")
+			unitats_CRS=p;
+		else
+			unitats_CRS=" "+p;
+	}
+	else //if (ParamCtrl.CoordExtremes=="longlat_gms") -> tant pel cas gms (pq ja les té) com pel cas desconegut no poso unitats
+		unitats_CRS="";
 
 	NCreaVista++;
 	i_crea_vista=NCreaVista;
@@ -4895,22 +4925,22 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 		if (estil_parella_coord)
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
-				cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)) , "," ,
-				  (OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)) , ")");
+				cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
+				  (OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-				cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)) , "," ,
-				  (OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)) , ")");
+				cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS, "," ,
+				  (OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS, ")");
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-				cdns.push("(" , (g_gms(ll.x, true)) , "," , (g_gms(ll.y, true)) , ")");
+				cdns.push("(" , (g_gms(ll.x, true)), unitats_CRS, "," , (g_gms(ll.y, true)), unitats_CRS, ")");
 		}
 		else
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
-			    cdns.push((OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)));
+			    cdns.push((OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS);
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-			    cdns.push((OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)));
+			    cdns.push((OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS);
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-			    cdns.push((g_gms(ll.x, true)));
+			    cdns.push((g_gms(ll.x, true)), unitats_CRS);
 		}
 		cdns.push("</td>\n");
 
@@ -4920,22 +4950,22 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 		if (estil_parella_coord)
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
-				cdns.push("(" , (OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)) , "," ,
-					(OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)) ,")");
+				cdns.push("(" , (OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
+					(OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-				cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)) , "," ,
-					(OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)) , ")");
+				cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS, "," ,
+					(OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS , ")");
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-				cdns.push("(" , (g_gms(ll.x, true)), "," , (g_gms(ll.y, true)) , ")");
+				cdns.push("(" , (g_gms(ll.x, true)), unitats_CRS, ",", (g_gms(ll.y, true)), unitats_CRS , ")");
 		}
 		else
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
-			    cdns.push((OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)));
+			    cdns.push((OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS);
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-			   cdns.push((OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)));
+			   cdns.push((OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS);
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-			    cdns.push((g_gms(ll.x, true)));
+			    cdns.push((g_gms(ll.x, true)), unitats_CRS);
 		}
 		cdns.push("    </td>\n");
 		if (cal_vora)
@@ -4983,11 +5013,11 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 		{
 			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""), " valign=top nowrap><font face=arial size=1>&nbsp;&nbsp;\n");
 			if (ParamCtrl.CoordExtremes=="proj")		
-			    cdns.push((OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)));
+			    cdns.push((OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS);
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-			    cdns.push((OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)));
+			    cdns.push((OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS);
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-			    cdns.push((g_gms(ll.y, true)));
+			    cdns.push((g_gms(ll.y, true)), unitats_CRS);
 			cdns.push("</td>\n");
 		}
 	}		 
@@ -5014,11 +5044,11 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 			if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 			    ll=DonaCoordenadesLongLat(vista.EnvActual.MaxX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 			if (ParamCtrl.CoordExtremes=="proj")
-			    cdns.push((OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)));
+			    cdns.push((OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS);
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
-			    cdns.push((OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)));
+			    cdns.push((OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS);
 			else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-			    cdns.push((g_gms(ll.y, true)));
+			    cdns.push((g_gms(ll.y, true)), unitats_CRS);
 			cdns.push("</td>\n");
 		}
 		cdns.push("  </tr>");
@@ -5050,26 +5080,26 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
 		cdns.push("    <td align=left><font face=arial size=1>\n");
 		if (ParamCtrl.CoordExtremes=="proj")
-			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)) , "," ,
-				  (OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)) , ")");
+			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
+				  (OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
 		else if (ParamCtrl.CoordExtremes=="longlat_g")
-			cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)) , "," ,
+			cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS, "," ,
 				  (OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)) , ")");
 		else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-				cdns.push("(" , (g_gms(ll.x, true)) , "," , (g_gms(ll.y, true)) , ")");
+				cdns.push("(" , (g_gms(ll.x, true)), unitats_CRS, "," , (g_gms(ll.y, true)), unitats_CRS, ")");
 		cdns.push("</td>\n");
 
 		if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MaxX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		cdns.push("    <td"+ (cal_vora ? " colspan=\"2\"" : ""), " align=right><font face=arial size=1>\n");
 		if (ParamCtrl.CoordExtremes=="proj")
-			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)) , "," ,
-					(OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)) ,")");
+			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
+					(OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
 		else if (ParamCtrl.CoordExtremes=="longlat_g")
-			cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)) , "," ,
+			cdns.push("(" , (OKStrOfNe(ll.x,ParamCtrl.NDecimalsCoordXY+4)), unitats_CRS, "," ,
 					(OKStrOfNe(ll.y,ParamCtrl.NDecimalsCoordXY+4)) , ")");
 		else //if (ParamCtrl.CoordExtremes=="longlat_gms")
-			cdns.push("(" , (g_gms(ll.x, true)), "," , (g_gms(ll.y, true)) , ")");
+			cdns.push("(" , (g_gms(ll.x, true)), "," , (g_gms(ll.y, true)), unitats_CRS, ")");
 		cdns.push("    </td>\n");
 		if (cal_vora)
 			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
@@ -5417,7 +5447,7 @@ var i_situacio_anterior=ParamInternCtrl.ISituacio;
 function RepintaMapesIVistes()
 {
 	ActualitzaEnvParametresDeControl();
-	if (ParamInternCtrl.flags&ara_canvi_proj_auto)
+	if (ParamCtrl.araCanviProjAuto)
 	{
 		if (EstableixNouCRSSiCal())
 			ActualitzaEnvParametresDeControl();
@@ -5662,8 +5692,8 @@ function PreparaParamInternCtrl()
 		ParamInternCtrl.EnvLLSituacio[i]=DonaEnvolupantLongLat(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS);
 	}
 
-	if (ParamCtrl.CanviProjAuto==true)
-		ParamInternCtrl.flags|=ara_canvi_proj_auto;
+	if (ParamCtrl.CanviProjAuto==true && typeof ParamCtrl.araCanviProjAuto === "undefined")
+		ParamCtrl.araCanviProjAuto=true;
 
 	for (var i=0; i<ParamCtrl.PlantillaDImpressio.length; i++)
 	{
@@ -5830,7 +5860,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 375, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
