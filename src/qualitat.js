@@ -221,14 +221,216 @@ var i_indicator, cdns=[];
 	return cdns.join("");
 }
 
-function DonaCodeCapaEstilFeedback(capa, i_estil)
+function DonaCodeComponentBasatEnValorParam(valor)
 {
-	return capa.nom + (i_estil==-1 ? "": "_" + (capa.estil[i_estil].desc ? capa.estil[i_estil].desc : DonaCadena(capa.estil[i_estil].desc)));
+	var i, s="";
+	
+	for (i=0; i<valor.param.length; i++)
+	{
+		if (valor.param[i].clau.nom)
+		{
+			s+=valor.param[i].clau.nom;
+			if (valor.param[i].valor.nom)
+				s+="_" + valor.param[i].valor.nom;		
+		}
+		else
+		{
+			if (valor.param[i].valor.nom)
+				s+=valor.param[i].valor.nom;
+		}		
+		if (i!=(valor.param.length-1))
+			s+="_";
+	}
+	return s;	
 }
 
-function FinestraFeedbackCapa(elem, capa, i_estil)
+function DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i_component, descriptiu)
 {
-var cdns=[];
+	var s="";
+		
+	if (typeof capa.estil[i_estil].component[i_component].i_valor !== "undefined") //si tinc i_valor (que pot valdre 0)
+	{
+		if (descriptiu)
+			s=DonaCodeComponentBasatEnValorParam(capa.valors[capa.estil[i_estil].component[i_component].i_valor]);
+		else
+			s="v[" + capa.estil[i_estil].component[i_component].i_valor + "])";
+	}	
+	else if (capa.estil[i_estil].component[i_component].FormulaConsulta)
+	{
+		if (descriptiu)
+		{	//fins que obrim la porta estem segurs que tots els v d'aqui son de la mateixa capa
+			var fragment, cadena, inici, final, nou_valor="", error=false;
+
+			fragment=capa.estil[i_estil].component[i_component].FormulaConsulta;
+			
+			while ((inici=fragment.indexOf("v["))!=-1)
+			{
+				//busco una clau de tancar
+				final=fragment.indexOf("]");
+				if (final==-1)
+				{
+					alert("Character 'v[' without ']' in 'FormulaConsulta' in capa " + capa.desc ? capa.desc : capa.nom + " estil " + i_estil);
+					error=true;
+					break;
+				}
+				nou_valor+=fragment.substring(0, inici);
+				cadena=fragment.substring(inici+2, final); //-> inici+2 perquè no vull ni "v[" ni "]"
+				//aquí "cadena" conté el i_valor que vull				
+				var index = cadena.match(/\d+/g).map(Number);
+				nou_valor+=DonaCodeComponentBasatEnValorParam(capa.valors[index]);
+					
+				fragment=fragment.substring(final+1, fragment.length);
+			}			
+			nou_valor+=fragment; //el que queda		
+			nou_valor=nou_valor.replace(/ /g, "");			
+			if (!error)
+				s=nou_valor;			
+		}	
+		else	
+		{
+			s=capa.estil[i_estil].component[i_component].FormulaConsulta;
+			s=s.replace(/ /g, "");		
+		}
+	}	
+	return s;
+}
+
+var MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL=254;
+
+function DonaCodeCapaEstilFeedback(i_capa, i_estil)
+{
+var capa=ParamCtrl.capa[i_capa];
+var s=capa.nom;
+	
+	if (i_estil==-1)
+		return s;
+
+	//estil antic -> return capa.nom + (i_estil==-1 ? "": "_" + (capa.estil[i_estil].desc ? capa.estil[i_estil].desc : DonaCadena(capa.estil[i_estil].desc)));
+	
+	if (capa.estil[i_estil].component.length==1)
+	{	//pot ser un i_valor o un FormulaConsulta
+		if (typeof capa.estil[i_estil].component[0].i_valor !== "undefined") //si no quan i_valor valia 0 no entrava!
+		{			
+			s+="_VALUE(" + DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, true) + ")";
+			if (s.length < MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL)	
+				return s;
+
+			s+="_VALUE(" + DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, false) + ")";
+				return s;
+		}
+		else if (capa.estil[i_estil].component[0].FormulaConsulta)
+		{
+			var s2=null, i_capes;
+			if (!capa.estil[i_estil].component[0].calcul)	//per indexos predefinits el "calcul" no existeix, però puc entrar perquè segur que la FormulaConsulta només té v[] d'aquesta capa.
+				//s2=capa.estil[i_estil].component[0].FormulaConsulta;		
+				s2=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, true);							
+			else
+			{
+				i_capes=DonaIndexosACapesDeCalcul(capa.estil[i_estil].component[0].calcul, i_capa);
+				if (i_capes.length==1) //per indexos calculats per l'usuari, el "calcul" sí que existeix, i amb el darrer if he comprovat que en aquest càlcul només entren bandes d'aquesta capa (és a dir que i_capes==1)
+					//s2=capa.estil[i_estil].component[0].FormulaConsulta;		
+					s2=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, true);					
+			}
+			
+			if (s2) 
+			{	//ho fem així per unificar la descripció a un sol, lloc, encara que vinguem de dos casos diferents a dalt
+					s+="_CALC(" + s2 + ")";				
+					if (s.length < MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL)	
+						return s;
+						
+					s+="_CALC(" + DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, false) + ")";				
+					return s;
+			}
+			
+			//aquí arribo només si tinc calcul i quan l'analitzo em diu que hi ha capes "externes a la pròpia" implicades
+			alert(DonaCadenaLang({"cat": "En desenvolupament: definició complexa de l'estil que no permet actualment crear el seu identificador ni, per tant, crear valoracions sobre el mateix.", 
+				"spa": "En desarollo: definición compleja del estilo que no permite crear actualmente su identificador ni, por tanto, crear valoraciones sobre el mismo.", 
+				"eng": "To be developed: complex definition of the style that does not allow to create its identifier nor, therefore, to create feedbacks about it.", 
+				"fre": "À développer: définition complexe du style qui ne permet pas de créer son identifiant ni, par conséquent, de créer des valorisations sur le même."}));
+			return null; //si no sé donar identificador a l'estil, no deixo posar feedback sobre ell
+			
+		//només arribo aquí (i.e. no surto) si tinc 1 sol component però aquest no té ni i_valor ni FormulaConsulta
+			
+			/*notes sobre com fer això: 
+			
+			1/ La idea és que si ara filtro espacialment amb una banda de la mateixa capa (p.ex per scl), a formula és 
+				"(v[12]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
+			i a d'alt ja m'ha tornat i_capes=1 i ho he fet
+			
+			2/ si filtro amb una altra capa(pex), la idea és que la formula diu
+					"(v[        13                    ]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
+			pero aquest v[13] s'ha creat pel programa i ha de ser substituit en primera instància per
+					"(v[{\"i_capa\":228,\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
+			però com els índexs de capa son super volàlits, realment hauré d'anar a alguna cosa tipus
+				"(v[{\"servidor\":"http://maps-***.cgi",\"nom_capa\":"SwissNationalParkLULC",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
+			(el servidor al meu config.json pot ser "null" que vol dir el servidor_local que és una variable global. si ñes null puc no posar-lo pq s'entenc que la nom_capa :"SwissNationalParkLULC" és al amteix servidor que la capa de la qual faig el FB/estil (és a dir la que té els v[10], etc). Si relament ve d0un lloc diferent, aleshores si ho poso
+			o bé, en un exemple diferent usar el mapa usos nostres 2019 per a filtra espacial el SwissNationalParkSen2 de \"servidor\":"http://maps-***.cgi"
+				"(v[{\"servidor\":"http://MCSC....***.cgi",\"nom_capa\":"MUSC_2019",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
+			
+			"calcul": "({\"i_valor\":12}!=11)?(({\"i_capa\":232,\"i_valor\":10}-{\"i_capa\":232,\"i_valor\":11})/({\"i_capa\":232,\"i_valor\":10}+{\"i_capa\":232,\"i_valor\":11})):null",
+						
+			capa nova
+			FormulaConsulta -> i_capes diferents -> similar a aaixò -> unic cas amb i_valor
+			"(v[{\"nom_capa\":\"SwissNationalParkLULC\",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null" però amb NOMS CAPES DFE
+						
+			calcul sobre calcul no tinc nom de capa, però no passa res pq les formules s'expandeixen*/
+		}		
+	}
+	else //if (capa.estil[i_estil].component.length==3) //si tinc tres és que és RGB i per tant tres i_valor -> si per alguna no tinc i_valor, cosa teòricament no possible ara, aquell no l'afegeixo i el Identificador quedarà "amb menys components"
+	{	
+		var i, s2;
+		
+		s2="_RGB(";		
+		for (i=0; i<capa.estil[i_estil].component.length; i++)
+		{
+			s2+=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i, true);
+			if (i!=(capa.estil[i_estil].component.length-1))
+				s2+=",";
+		}
+		s2+=")";
+		
+		if ((s2.length + s.length) < MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL)	
+			return s+s2;
+		
+		s2="_RGB(";		
+		for (i=0; i<capa.estil[i_estil].component.length; i++)
+		{
+			s2+=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i, false);
+			if (i!=(capa.estil[i_estil].component.length-1))
+				s2+=",";
+		}
+		s2+=")";
+		return s+s2;
+		/*if (capa.estil[i_estil].component[0].i_valor && capa.estil[i_estil].component[1].i_valor && capa.estil[i_estil].component[2].i_valor)
+		{
+			$$ per cada una de les tres usar el i_valor
+			s+="_RGB(" + "v[" + capa.estil[i_estil].component[0].i_valor + "],"+ "v[" + capa.estil[i_estil].component[1].i_valor + "],"+ "v[" + capa.estil[i_estil].component[2].i_valor + "])";
+			return s;
+		}	*/	
+		//·$· poter salvar aquest cas per si un dia volen fer RGB de formules?
+	}
+	
+	/*Aquí arribo si tinc 1 sol component però aquest no té ni i_valor ni FormulaConsulta; si tinc 3 components però alguna no té i_valor, 
+	o bé si tinc un nombre de components diferent de 1 o de 3 no té sentit
+	
+	-> codi per si un dia volem desar un ID com a llista dels N valors, un darrera l'altre
+	var i;		
+	for (i=0; i<capa.estil[i_estil].component.length; i++)
+	{
+		if (capa.estil[i_estil].component[i].i_valor)
+			s+="_" + "v[" + capa.estil[i_estil].component[i].i_valor + "]";
+	}*/
+	alert(DonaCadenaLang({"cat": "Definició inesperada de l'estil que no permet crear el seu identificador ni, per tant, crear valoracions sobre el mateix.", 
+		"spa": "Definición inesperada del estilo que no permite crear su identificador ni, por tanto, crear valoraciones sobre el mismo.", 
+		"eng": "Unexpected definition of the style that does not allow to create its identifier nor, therefore, to create feedbacks about it.", 
+		"fre": "Définition inattendue du style qui ne permet pas de créer son identifiant ni, par conséquent, de créer des valorisations sur le même."}));
+	return null; //si no sé donar identificador a l'estil, no deixo posar feedback sobre ell
+}
+
+function FinestraFeedbackCapa(elem, i_capa, i_estil)
+{
+var cdns=[], s;
+var capa=ParamCtrl.capa[i_capa];
 
 	cdns.push(DonaCadenaLang({"cat":"la capa", "spa":"la capa", "eng":"the layer", "fre":"la couche"}), 
 				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
@@ -236,11 +438,17 @@ var cdns=[];
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"");
 
+	if (!(s=DonaCodeCapaEstilFeedback(i_capa, i_estil)))
+	{
+		TancaFinestraLayer('feedback');
+		return;
+	}
+		
 	GUFShowFeedbackInHTMLDiv(elem,
 			"LayerFeedbackCapa", 
 			cdns.join(""), 
-			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)), 
-			DonaCodeCapaEstilFeedback(capa, i_estil), 
+			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
+			s, //identificador unic 
 			DonaServidorCapa(capa), 
 			ParamCtrl.idioma);
 }

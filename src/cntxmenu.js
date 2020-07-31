@@ -878,7 +878,11 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 	return true;
 }
 
-function DonaIndexosACapesDeCalcul(calcul)
+function DonaIndexosACapesDeCalcul(calcul, i_capa)
+/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta, 
+per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa 
+en crear un flistre espacial a partir d'una banda de la mateixa capa 
+En contextos on no te sentit (per exemple a AfegirCapaCalculada no es passa i està protegit */ 
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
 
@@ -895,7 +899,10 @@ var fragment, cadena, i_capes=[], inici, final, nou_valor;
 		cadena=fragment.substring(inici, final+1);
 		//interpreto el fragment metajson
 		nou_valor=JSON.parse(cadena);
-		i_capes.push(nou_valor.i_capa);
+		if (typeof nou_valor.i_capa === "undefined" && typeof i_capa !== "undefined")
+			i_capes.push(i_capa);	
+		else
+			i_capes.push(nou_valor.i_capa);
 		fragment=fragment.substring(final+1, fragment.length);
 	}
 	i_capes.sort(sortAscendingNumber);
@@ -3374,31 +3381,32 @@ var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_
 		capa.desc=desc;
 		capa.DescLlegenda=desc_lleg;
 	}
-	else if (capa.DescLlegenda.cat && ParamCtrl.idioma=="cat")
-	{
-		capa.desc.cat=desc;
-		capa.DescLlegenda.cat=desc_lleg;
-	}
-	else if (capa.DescLlegenda.spa && ParamCtrl.idioma=="spa")
-	{
-		capa.desc.spa=desc;
-		capa.DescLlegenda.spa=desc_lleg;
-	}
-	else if (capa.DescLlegenda.eng && ParamCtrl.idioma=="eng")
-	{
-		capa.desc.eng=desc;
-		capa.DescLlegenda.eng=desc_lleg;
-	}
-	else if (capa.DescLlegenda.fre && ParamCtrl.idioma=="fre")
-	{
-		capa.desc.fre=desc;
-		capa.DescLlegenda.fre=desc_lleg;
-	}
 	else
 	{
-		capa.desc=desc;
-		capa.DescLlegenda=desc_lleg;	
-	}
+		//capa.DescLlegenda
+		if (capa.DescLlegenda.cat && ParamCtrl.idioma=="cat")
+			capa.DescLlegenda.cat=desc_lleg;
+		else if (capa.DescLlegenda.spa && ParamCtrl.idioma=="spa")
+			capa.DescLlegenda.spa=desc_lleg;
+		else if (capa.DescLlegenda.eng && ParamCtrl.idioma=="eng")
+			capa.DescLlegenda.eng=desc_lleg;
+		else if (capa.DescLlegenda.fre && ParamCtrl.idioma=="fre")
+			capa.DescLlegenda.fre=desc_lleg;
+		else
+			capa.DescLlegenda=desc_lleg;	
+		
+		//capa.desc
+		if (capa.desc.cat && ParamCtrl.idioma=="cat")
+			capa.desc.cat=desc;
+		else if (capa.desc.spa && ParamCtrl.idioma=="spa")
+			capa.desc.spa=desc;
+		else if (capa.desc.eng && ParamCtrl.idioma=="eng")
+			capa.desc.eng=desc;
+		else if (capa.desc.fre && ParamCtrl.idioma=="fre")
+			capa.desc.fre=desc;
+		else
+			capa.desc=desc;
+	}	
 		
 	CreaLlegenda();
 }
@@ -3493,12 +3501,12 @@ var elem=ObreFinestra(window, "mostraQualitat", DonaCadenaLang({"cat":"de mostra
 
 function ObreFinestraFeedbackCapa(i_capa, i_estil)
 {
-var capa=ParamCtrl.capa[i_capa];
+//var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "feedback", DonaCadenaLang({"cat":"de valoracions dels usuaris",
 						  "spa":"de valoraciones de los usuarios",
 						  "eng":"of user feedback",
 						  "fre":"pour la rétroaction de l'utilisateur"}));
 	if (!elem)
 		return;
-	FinestraFeedbackCapa(elem, capa, i_estil);
+	FinestraFeedbackCapa(elem, i_capa, i_estil);
 }
