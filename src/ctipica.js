@@ -135,7 +135,7 @@ var i_llista;
 	    }
 	    else
 	    {
-			if (DonaCadenaSenseEspaisDavantDarrera(llavor.value)=="" && keycode==40)
+			if (llavor.value.trim()=="" && keycode==40)
 				ActualitzaLlista(llavor, i_llista, keycode);
 			else if (keycode==37 ||  //fletxa esquerra
 			    	keycode==39 ||  //fletxa dreta
@@ -194,7 +194,7 @@ var elem;
 	//llavor=eval("window.document.ctipica"+i_llista+"."+NomEditLlavorLlista[i_llista]);
 	llavor=window.document["ctipica"+i_llista][NomEditLlavorLlista[i_llista]];
 
-	llav=DonaCadenaSenseEspaisDavantDarrera(llavor.value);
+	llav=llavor.value.trim();
 	ICellaLlistaBlau[i_llista]=-1;
 	elem=getLayer(window, NomLayerLlista[i_llista]);
 	if (llav=="")

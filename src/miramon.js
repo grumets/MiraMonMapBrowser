@@ -1861,9 +1861,9 @@ function CentraLaVista(x,y)
     ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.vista.EnvActual.MinY+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual;
 }
 
-function ClickSobreSituacio(event_de_click)
+function ClickSobreSituacio(event)
 {
-	PortamAPunt(DonaCoordXDeCoordSobreSituacio(event_de_click.clientX), DonaCoordYDeCoordSobreSituacio(event_de_click.clientY));
+	PortamAPunt(DonaCoordXDeCoordSobreSituacio(event.clientX), DonaCoordYDeCoordSobreSituacio(event.clientY));
 }
 
 var MidaFletxaInclinada=10;
@@ -2412,29 +2412,29 @@ function EsEnvDinsEnvolupant(currentEnv, bigEnv)
 //Fer un click sobre la vista.
 
 var AmbitZoomRectangle={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
-var ZRec_1PuntClient={"x": 0, "y": 0};
-var HiHaHagutMoviment=false;
-var HiHaHagutPrimerClick=false;
+var ZRec_1PuntClient={"x": 0, "y": 0};  //This is used for store the first point of a zoom window rectangle in desktop but also for a 2 fingers touch event in mobile devices
+var ZRecSize_1Client={"x": 0, "y": 0}, ZRecSize_2Client={"x": 0, "y": 0};   //Only for touch events. I'm allowing for a negative sizes until the very last moment.
+var HiHaHagutMoviment=false, HiHaHagutPrimerClick=false;
 var NovaVistaFinestra={"n": 0, "vista":[]};
 
-function ClickSobreVista(event_de_click, i_nova_vista)
+function ClickSobreVista(event, i_nova_vista)
 {
 var i_vista;
 
 	if (ParamCtrl.EstatClickSobreVista=="ClickConLoc")
-		ConsultaSobreVista(event_de_click, i_nova_vista);
+		ConsultaSobreVista(event, i_nova_vista);
 	else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
-		EditarPunts(event_de_click, i_nova_vista);
+		EditarPunts(event, i_nova_vista);
 	else if (ParamCtrl.EstatClickSobreVista=="ClickMouMig")
 	{
-		PortamAPunt(DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX), DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY));
+		PortamAPunt(DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX), DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY));
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickPan1")
 	{
-		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
-		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
-		ZRec_1PuntClient.x=event_de_click.clientX;
-		ZRec_1PuntClient.y=event_de_click.clientY;
+		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		ZRec_1PuntClient.x=event.clientX;
+		ZRec_1PuntClient.y=event.clientY;
 		
 		ParamCtrl.EstatClickSobreVista="ClickPan2";
 	}
@@ -2443,60 +2443,60 @@ var i_vista;
 		if (!HiHaHagutMoviment)
 			return;
 		//Calculo el moviment que s'ha de produir i el faig.
-		MouLaVista(AmbitZoomRectangle.MinX-DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX),
-		AmbitZoomRectangle.MinY-DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY));
+		MouLaVista(AmbitZoomRectangle.MinX-DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX),
+		AmbitZoomRectangle.MinY-DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY));
 		ParamCtrl.EstatClickSobreVista="ClickPan1";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec1")
 	{
-		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
-		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
-		ZRec_1PuntClient.x=event_de_click.clientX;
-		ZRec_1PuntClient.y=event_de_click.clientY;
+		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		ZRec_1PuntClient.x=event.clientX;
+		ZRec_1PuntClient.y=event.clientY;
 	
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
 			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ event_de_click.clientX-DonaOrigenEsquerraVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+ event_de_click.clientY-DonaOrigenSuperiorVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ event_de_click.clientX-DonaOrigenEsquerraVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+event_de_click.clientY-DonaOrigenSuperiorVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista));
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
 			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
 		}
 		ParamCtrl.EstatClickSobreVista="ClickZoomRec2";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" &&  i_nova_vista==NovaVistaPrincipal)
 	{
-		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
-		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
-		ZRec_1PuntClient.x=event_de_click.clientX;
-		ZRec_1PuntClient.y=event_de_click.clientY;
+		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		ZRec_1PuntClient.x=event.clientX;
+		ZRec_1PuntClient.y=event.clientY;
 	
-		moveLayer2(getLayer(window, event_de_click.target.parentElement.id+"_z_rectangle"), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ event_de_click.clientX-DonaOrigenEsquerraVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+ event_de_click.clientY-DonaOrigenSuperiorVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ event_de_click.clientX-DonaOrigenEsquerraVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+event_de_click.clientY-DonaOrigenSuperiorVista(event_de_click.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista));
-		showLayer(getLayer(window, event_de_click.target.parentElement.id+"_z_rectangle"));
+		moveLayer2(getLayer(window, event.target.parentElement.id+"_z_rectangle"), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
+		showLayer(getLayer(window, event.target.parentElement.id+"_z_rectangle"));
 		ParamCtrl.EstatClickSobreVista="ClickNovaVista2";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2")
 	{
 		if (!HiHaHagutMoviment)
 			return;
-		if (AmbitZoomRectangle.MinX<DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX))
-			AmbitZoomRectangle.MaxX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
+		if (AmbitZoomRectangle.MinX<DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX))
+			AmbitZoomRectangle.MaxX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
 		else
 		{
 			AmbitZoomRectangle.MaxX=AmbitZoomRectangle.MinX;
-			AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
+			AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
 		}
-		if (AmbitZoomRectangle.MinY<DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY))
-			AmbitZoomRectangle.MaxY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
+		if (AmbitZoomRectangle.MinY<DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY))
+			AmbitZoomRectangle.MaxY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		else
 		{
 			AmbitZoomRectangle.MaxY=AmbitZoomRectangle.MinY;
-			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
+			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		}
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
@@ -2509,19 +2509,19 @@ var i_vista;
 	{
 		if (!HiHaHagutMoviment)
 			return;
-		if (AmbitZoomRectangle.MinX<DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX))
-			AmbitZoomRectangle.MaxX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
+		if (AmbitZoomRectangle.MinX<DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX))
+			AmbitZoomRectangle.MaxX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
 		else
 		{
 			AmbitZoomRectangle.MaxX=AmbitZoomRectangle.MinX;
-			AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
+			AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
 		}
-		if (AmbitZoomRectangle.MinY<DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY))
-			AmbitZoomRectangle.MaxY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
+		if (AmbitZoomRectangle.MinY<DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY))
+			AmbitZoomRectangle.MaxY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		else
 		{
 			AmbitZoomRectangle.MaxY=AmbitZoomRectangle.MinY;
-			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
+			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		}
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
@@ -2529,25 +2529,25 @@ var i_vista;
 			PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
 
 		var di, dj, min_i, min_j;
-		if (event_de_click.clientX>ZRec_1PuntClient.x)
+		if (event.clientX>ZRec_1PuntClient.x)
 		{
 			min_i=ZRec_1PuntClient.x;
-			di= event_de_click.clientX-ZRec_1PuntClient.x
+			di= event.clientX-ZRec_1PuntClient.x
 		}
 		else
 		{
-			min_i=event_de_click.clientX;
-			di= ZRec_1PuntClient.x-event_de_click.clientX;
+			min_i=event.clientX;
+			di= ZRec_1PuntClient.x-event.clientX;
 		}
-		if (event_de_click.clientY>ZRec_1PuntClient.y)
+		if (event.clientY>ZRec_1PuntClient.y)
 		{
 			min_j=ZRec_1PuntClient.y;
-			dj= event_de_click.clientY-ZRec_1PuntClient.y
+			dj= event.clientY-ZRec_1PuntClient.y
 		}
 		else
 		{
-			min_j=event_de_click.clientY;
-			dj= ZRec_1PuntClient.y-event_de_click.clientY;
+			min_j=event.clientY;
+			dj= ZRec_1PuntClient.y-event.clientY;
 		}
 		min_i=((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ min_i + DonaMargeEsquerraVista(i_nova_vista);
 		min_j=((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+ min_j + DonaMargeSuperiorVista(i_nova_vista);
@@ -2555,7 +2555,7 @@ var i_vista;
 		dj+=AltBarraFinestraLayer;
 		
 		var nom_nova_vista=prefixNovaVistaFinestra+NovaVistaFinestra.n;
-		insertContentLayer(getLayer(window, event_de_click.target.parentElement.id), "afterEnd", textHTMLFinestraLayer(nom_nova_vista, {"cat": "Vista "+(NovaVistaFinestra.n+1), "spa": "Vista "+(NovaVistaFinestra.n+1), "eng": "View "+(NovaVistaFinestra.n+1), "fre": "Vue "+(NovaVistaFinestra.n+1) }, boto_tancar, min_i-1, min_j-1, di, dj, "NW", {scroll: "no", visible: true, ev: null}, null));
+		insertContentLayer(getLayer(window, event.target.parentElement.id), "afterEnd", textHTMLFinestraLayer(nom_nova_vista, {"cat": "Vista "+(NovaVistaFinestra.n+1), "spa": "Vista "+(NovaVistaFinestra.n+1), "eng": "View "+(NovaVistaFinestra.n+1), "fre": "Vue "+(NovaVistaFinestra.n+1) }, boto_tancar, min_i-1, min_j-1, di, dj, "NW", {scroll: "no", visible: true, ev: null}, null));
 		OmpleBarraFinestraLayerNom(window, nom_nova_vista);
 		dj-=(AltBarraFinestraLayer+1);
 		di-=1;
@@ -2563,7 +2563,7 @@ var i_vista;
 				 "nfil": dj,
 				 "ncol": di,
 				 "CostatZoomActual": ParamInternCtrl.vista.CostatZoomActual,
-				 "i_vista": DonaIVista(event_de_click.target.parentElement.id),
+				 "i_vista": DonaIVista(event.target.parentElement.id),
 				 "i_nova_vista": NovaVistaFinestra.n};
 		//alert(JSON.stringify(NovaVistaFinestra.vista[NovaVistaFinestra.n], null, "\t"));
 		CreaVistaImmediata(window, nom_nova_vista+"_finestra", NovaVistaFinestra.vista[NovaVistaFinestra.n]);
@@ -2664,30 +2664,140 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 	}
 }
 
-function IniciClickSobreVista(event_de_click, i_nova_vista)
+var MapTouchTypeIniciat=0;
+function IniciDitsSobreVista(event, i_nova_vista)
+{
+/*https://stackoverflow.com/questions/11183174/simplest-way-to-detect-a-pinch/11183333#11183333*/
+var i_vista;
+
+	if (event.touches.length == 2 && MapTouchTypeIniciat == 0) 
+	{
+    		MapTouchTypeIniciat = 2;
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		{
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientY)+DonaMargeSuperiorVista(i_nova_vista), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientY)+DonaMargeSuperiorVista(i_nova_vista));
+			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+		}
+		ZRec_1PuntClient.x=(event.touches[1].clientX+event.touches[0].clientX)/2;
+		ZRec_1PuntClient.y=(event.touches[1].clientY+event.touches[0].clientY)/2;
+		ZRecSize_1Client.x=(event.touches[1].clientX-event.touches[0].clientX);
+		ZRecSize_1Client.y=(event.touches[1].clientY-event.touches[0].clientY);
+		HiHaHagutMoviment=false;
+		return false;
+	}
+	else
+	{
+		MapTouchTypeIniciat==0;
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+		return true;
+	}
+	return true;
+}
+
+function MovimentDitsSobreVista(event, i_nova_vista)
+{
+var i_vista;
+
+	if (MapTouchTypeIniciat==2)
+	{
+		/*if (event.touches.length != 2)
+		{
+			MapTouchTypeIniciat==-1;
+			setTimeout("MapTouchTypeIniciat=0", 900);
+			for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+				hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			return false;
+		}*/
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		{
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientY)+DonaMargeSuperiorVista(i_nova_vista), 
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientY)+DonaMargeSuperiorVista(i_nova_vista));
+		}
+		ZRecSize_2Client.x=(event.touches[1].clientX-event.touches[0].clientX);
+		ZRecSize_2Client.y=(event.touches[1].clientY-event.touches[0].clientY);
+		PanVistes((event.touches[1].clientX+event.touches[0].clientX)/2, (event.touches[1].clientY+event.touches[0].clientY)/2, ZRec_1PuntClient.x, ZRec_1PuntClient.y);
+		HiHaHagutMoviment=true;
+		//return false;
+	}
+	return false;
+}
+
+function FiDitsSobreVista(event, i_nova_vista)
+{
+var i_vista, ratio={x:0, y:0};
+
+	if (MapTouchTypeIniciat==2)
+	{
+		MapTouchTypeIniciat=-1;
+		setTimeout("MapTouchTypeIniciat=0;", 200);
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+		if (event.touches.length==1)  //The user has removed one finger and the 2 fingers event has concluded.
+		{
+			//unfortunatelly the data form the event is not useful now because we cannot get the two fingers possition.
+			//This is why there has been stored in advance.
+			if (!HiHaHagutMoviment || ZRecSize_1Client.x==0 || ZRecSize_1Client.y==0 || ZRecSize_2Client.x==0 || ZRecSize_2Client.y==0)
+				return;
+			ratio.x=ZRecSize_1Client.x/ZRecSize_2Client.x;
+			ratio.y=ZRecSize_1Client.y/ZRecSize_2Client.y;
+			if (ratio.x<0)
+				ratio.x=-ratio.x;
+			if (ratio.y<0)
+				ratio.y=-ratio.y;
+
+			AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.x)-(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/2*ratio.x;
+			AmbitZoomRectangle.MaxX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.x)+(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/2*ratio.x;
+			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.y)-(ParamInternCtrl.vista.EnvActual.MaxY-ParamInternCtrl.vista.EnvActual.MinY)/2*ratio.y;
+			AmbitZoomRectangle.MaxY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.y)+(ParamInternCtrl.vista.EnvActual.MaxY-ParamInternCtrl.vista.EnvActual.MinY)/2*ratio.y;
+			if (ParamCtrl.ConsultaTipica)
+				PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
+			PortamAAmbit(AmbitZoomRectangle);
+			//alert("Fer la feina!");
+			return false;
+		}
+		else
+			return true;
+	}
+	return true;
+}
+
+
+function IniciClickSobreVistaUnSolClic(event, i_nova_vista)
 {
 /* http://unixpapa.com/js/mouse.html*/
 
-	if (ParamCtrl.ZoomUnSolClic==true)
+	HiHaHagutPrimerClick=true;
+	if (ParamCtrl.EstatClickSobreVista!="ClickPan2" && ParamCtrl.EstatClickSobreVista!="ClickZoomRec2" && ParamCtrl.EstatClickSobreVista!="ClickNovaVista2")
+		HiHaHagutMoviment=false;
+	if (ParamCtrl.EstatClickSobreVista=="ClickPan1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" && i_nova_vista==NovaVistaPrincipal))
 	{
-	    HiHaHagutPrimerClick=true;
-	    if (ParamCtrl.EstatClickSobreVista!="ClickPan2" && ParamCtrl.EstatClickSobreVista!="ClickZoomRec2" && ParamCtrl.EstatClickSobreVista!="ClickNovaVista2")
-		    HiHaHagutMoviment=false;
-	    if (ParamCtrl.EstatClickSobreVista=="ClickPan1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" && i_nova_vista==NovaVistaPrincipal))
-	    {
-			if (event_de_click.which == null)
-			{
-				if (event_de_click.button==1)
-					ClickSobreVista(event_de_click, i_nova_vista);
-			}
-			else
-			{
-				if (event_de_click.which==1)
-					ClickSobreVista(event_de_click, i_nova_vista);
-			}
+		if (event.which == null)
+		{
+			if (event.button==1)
+				ClickSobreVista(event, i_nova_vista);
+		}
+		else
+		{
+			if (event.which==1)
+				ClickSobreVista(event, i_nova_vista);
 		}
 	}
 }
+
+function IniciClickSobreVista(event, i_nova_vista)
+{
+	if (ParamCtrl.ZoomUnSolClic==true)
+	    	IniciClickSobreVistaUnSolClic(event, i_nova_vista);
+}
+
 
 var NPanVista=0;
 
@@ -2788,10 +2898,10 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_z_rectangle"), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ ZRec_1PuntClient.x-DonaOrigenEsquerraVista(event_de_moure.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+ ZRec_1PuntClient.y-DonaOrigenSuperiorVista(event_de_moure.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista), 
-				 ((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+ event_de_moure.clientX-DonaOrigenEsquerraVista(event_de_moure.target.parentElement, i_nova_vista)+DonaMargeEsquerraVista(i_nova_vista), 
-				 ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+event_de_moure.clientY-DonaOrigenSuperiorVista(event_de_moure.target.parentElement, i_nova_vista)+DonaMargeSuperiorVista(i_nova_vista));
+				DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.x)+DonaMargeEsquerraVista(i_nova_vista), 
+				DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.y)+DonaMargeSuperiorVista(i_nova_vista), 
+				DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event_de_moure.clientX)+DonaMargeEsquerraVista(i_nova_vista), 
+				DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event_de_moure.clientY)+DonaMargeSuperiorVista(i_nova_vista));
 		HiHaHagutMoviment=true;
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickPan2")
@@ -5153,8 +5263,8 @@ var p, unitats_CRS;
 				  AfegeixAdrecaBaseSRC("1tran.gif") + "\" height=\"100%\" width=\"100%\"></td>"+
 				  "  </tr>"+
 				  "</table>"));
-			//Dibuixo el "tel" transparent amb els events de moure i click
-			cdns.push(textHTMLLayer(nom_vista+"_tel_trans", DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
+			//Dibuixo el "tel" transparent amb els events de moure i click. Sembla que si tinc slider aquests esdeveniments no es fan servir i els altres tenen prioritat
+			cdns.push(textHTMLLayer(nom_vista+"_tel_trans", DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 		}
 
 		if (( ParamCtrl.VistaBotonsBruixola==true || ParamCtrl.VistaBotonsZoom==true || ParamCtrl.VistaSliderZoom==true || ParamCtrl.VistaEscalaNumerica==true) && vista.i_nova_vista==NovaVistaPrincipal)
@@ -5202,7 +5312,7 @@ var p, unitats_CRS;
 			}
 			barra_slider.push("</table>");
 			
-			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
+			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
 		}
 
 		contentLayer(elem, cdns.join(""));
@@ -5636,13 +5746,13 @@ function SimulaEventOnClickPerConloc()
 	{
 		PortamAPunt(Accio.coord.x, Accio.coord.y);			
 		ParamCtrl.EstatClickSobreVista="ClickConLoc";
-		var event_de_click= new Object();
+		var event= new Object();
 		
-		event_de_click.clientX=DonaCoordSobreVistaDeCoordX(getLayer(window, ParamCtrl.VistaPermanent[0].nom), Accio.coord.x);
+		event.clientX=DonaCoordSobreVistaDeCoordX(getLayer(window, ParamCtrl.VistaPermanent[0].nom), Accio.coord.x);
 		//+ DonaOrigenEsquerraVista()-((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0);
-		event_de_click.clientY=DonaCoordSobreVistaDeCoordY(getLayer(window, ParamCtrl.VistaPermanent[0].nom), Accio.coord.y);
+		event.clientY=DonaCoordSobreVistaDeCoordY(getLayer(window, ParamCtrl.VistaPermanent[0].nom), Accio.coord.y);
 		//+ DonaOrigenSuperiorVista() -((window.document.body.scrollTop) ? window.document.body.scrollTop : 0);					
-		return event_de_click;
+		return event;
 	}
 	else
 		return null;
@@ -6181,8 +6291,8 @@ var win, i, j, l, capa;
 			{
 				if(Accio.coord)
 				{
-					var event_de_click= SimulaEventOnClickPerConloc();
-					ClickSobreVista(event_de_click);
+					var event= SimulaEventOnClickPerConloc();
+					ClickSobreVista(event);
 				}
 				else
 				{

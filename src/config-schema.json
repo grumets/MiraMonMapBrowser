@@ -261,7 +261,11 @@
 			"type": "boolean"
 		},
 		"CanviProjAuto": {
-			"description": "Si s'han definit més d'una projecció, el navegador de mapes ofereix la possibilitat de canviar automàticament de projecció a la més adient?",
+			"description": "Si s'han definit més d'una projecció, cal que el navegador de mapes ofereix la possibilitat de canviar automàticament de projecció a la més adient?",
+			"type": "boolean"
+		},
+		"araCanviProjAuto": {
+			"description": "Interna, no usar.  Si CanviProjAuto i si s'han definit més d'una projecció, cal que el navegador de mapes sel·leccioni la possibilitat de canviar automàticament de projecció al iniciar?. Si no es declara és el que passa per defecte. Només si és false s'evita que es selleccioni en començar.",
 			"type": "boolean"
 		},
 		"ZoomUnSolClic": {
