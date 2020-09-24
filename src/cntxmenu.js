@@ -357,7 +357,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if (estil_copia.component.length>1 && estil_copia.ItemLleg)
 		delete estil_copia.ItemLleg;
 
-	GUFCreateFeedbackWithReproducibleUsage(DonaCadena(capa.desc), s, DonaServidorCapa(capa), 
+	GUFCreateFeedbackWithReproducibleUsage([{title: DonaCadena(capa.desc), code: s, codespace: DonaServidorCapa(capa)}], 
 			{abstract: DonaCadena(capa.estil[i_estil].desc), specific_usage: DonaCadenaLang({"cat":"Compartir estil", "spa":"Compartir estilo", "eng":"Share style", "fre":"Partager style"}),
 			ru_code: JSON.stringify(estil_copia), ru_code_media_type: "application/json", 
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_estil},

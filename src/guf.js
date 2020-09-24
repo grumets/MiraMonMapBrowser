@@ -47,12 +47,12 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 {
 	for (var i=0; i<targets.length; i++)
 	{	
-		if (target[i].title)
-			target[i].title = DonaCadenaPerValorDeFormulari(target[i].title);
-		if (target[i].code)
-			target[i].code = DonaCadenaPerValorDeFormulari(target[i].code);
-		if (target[i].codespace) 
-			target[i].codespace = DonaCadenaPerValorDeFormulari(target[i].codespace);
+		if (targets[i].title)
+			targets[i].title = DonaCadenaPerValorDeFormulari(targets[i].title);
+		if (targets[i].code)
+			targets[i].code = DonaCadenaPerValorDeFormulari(targets[i].code);
+		if (targets[i].codespace) 
+			targets[i].codespace = DonaCadenaPerValorDeFormulari(targets[i].codespace);
 	}
 	reprod_usage.abstract = DonaCadenaPerValorDeFormulari(reprod_usage.abstract);
 	reprod_usage.ru_code = DonaCadenaPerValorDeFormulari(reprod_usage.ru_code);
@@ -118,6 +118,8 @@ function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targe
 	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK";
 	var url2=url;
 	
+//ara assumeixo que tinc un primari segur i potser un secndari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un farçe un quadradet, suposo ·$·
+
 	//busco el target primari i l'envio a la primera part de la finestra
 	for (var i=0; i<targets.length; i++)	
 	{
@@ -283,10 +285,7 @@ var cdns=[];
 			{
 				var params=JSON.stringify(extra_param.params_function);
 				
-				//while ()
-				//{
 					params=params.replaceAll("\"","\\\"");
-				//}
 				cdns.push("<div class=\"guf_adopt user\"><input type=\"button\" class=\"guf_button user\" value=\"",
 						GUFDonaCadenaLang({"cat":"Adopta", "spa":"Adopta", "eng":"Adopt", "fre":"Adopter"}, extra_param.lang), "\"",
 						//" onClick='", extra_param.callback_function, "(\"", str, "\");' /> ");			
@@ -837,10 +836,10 @@ var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
 
 function GUFAfegirFeedbackCapaMultipleTargets(targets_obj_o_str, lang, access_token_type, reprod_usage)
 {
-	var targets={};
+	var targets=[];
 	
 	if (typeof(targets_obj_o_str) === "string")
-		targets = JSON.parse(targets_obj_o_str);
+		targets.push = JSON.parse(targets_obj_o_str);
 	else if (typeof(targets_obj_o_str) === "object" && Array.isArray(targets_obj_o_str))
 		targets=targets_obj_o_str;
 	else
@@ -860,8 +859,6 @@ function GUFAfegirFeedbackCapaMultipleTargets(targets_obj_o_str, lang, access_to
 		GUFFeedbackWindow.location.href=GUFDonaNomFitxerAddFeedbackMutipleTargets(targets, lang, access_token_type, reprod_usage);
 		GUFFeedbackWindow.focus();
 	}	
-
-	//GUFShowPreviousFeedbackInHTMLDiv(div_id+"Previ", rsc_type, code, codespace, lang, access_token_type);
 }
 
 function GUFDonaCadenaFinestraFeedbackResource(div_id, rsc_type, title, code, codespace, lang, access_token_type)
@@ -912,7 +909,6 @@ var n_targets_secundaris=0;
 		cdns.push(GUFDonaCadenaLang({"cat":"Valoracions prèvies", "spa":"Valoraciones previas", "eng":"Previous user feedback", "fre":"Précédent rétroaction de l'utilisateur"}, lang));
 	cdns.push(" ", rsc_type, "</legend>");
 	
-	//cdns.push("<div id=\"",div_id,"Previ\" style=\"width:98%\">", "</div></fieldset></div>", "</div></form>");
 	cdns.push("<div id=\"",div_id,"Previ\" style=\"width:98%\">", "</div></fieldset>");
 	
 	n_targets_secundaris=TornaNTargetsSecundaris(targets);
