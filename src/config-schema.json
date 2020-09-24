@@ -1487,6 +1487,10 @@
 											}
 										}	
 									}
+								},
+								"origen":{ 
+									"description": "Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
+									"enum": [null, "usuari", "importat"] 
 								}
 							}
 						}
@@ -1729,6 +1733,10 @@
 					"FuncioEdicio": {
 						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el model de dades és vector.",
 						"type": ["null", "string"]
+					},
+					"origen": {
+						"description": "Origen de la capa. Permet saber si és una capa definida al navegador original, si és definida per l'usuari o si és importada. Té implicacions amb les opcions permeses amb aquesta capa (per exemple només es podran esborrar les capes pròpies o importades, o només es podran compartir les capes pròpies)",
+						"enum": [null, "usuari", "importat"] 
 					}
 				}
 			}

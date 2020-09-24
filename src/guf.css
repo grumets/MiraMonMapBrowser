@@ -29,7 +29,7 @@ a.guf_link:visited {
 }
 
 div.guf_widget {
-	font-family: "Gotham Narrow SSm",sans-serif;
+	/*font-family: "Gotham Narrow SSm",sans-serif;*/
 	color: #66757F;
 }
 
@@ -54,11 +54,7 @@ div.guf_add_fb {}
 
 div.guf_report {}
 
-div.guf_fb_id {
-	display: none;
-}
-
-div.guf_title {}
+div.guf_fb_id {}
 
 div.guf_abstract {}
 
@@ -88,6 +84,8 @@ div.guf_response {}
 
 div.guf_add_doc {}
 
+div.guf_reprodUsage {}
+
 div.guf_discovered_issue {}
 
 div.guf_known_problem {}
@@ -112,9 +110,7 @@ span.guf_show_more {
 
 div.guf_edit {}
 
-div.guf_target {
-	display: none;
-}
+div.guf_target {}
 
 /* Citation and publication elements */
 div.guf_cit_edition {}
@@ -127,9 +123,7 @@ div.guf_cit_responsibles {}
 
 div.guf_cit_online_resource {}
 
-div.guf_cit_identifier {
-	display: none;
-}
+div.guf_cit_identifier {}
 
 div.guf_pub_abstract {}
 

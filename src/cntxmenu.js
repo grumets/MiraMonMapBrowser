@@ -158,8 +158,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if(ParamCtrl.BarraBotoAfegeixCapa==true)
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"}), "</a><br>");
-	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
+	if (capa.origen && capa.origen=="usuari")
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
+							DonaCadenaLang({"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"}), "</a>");
+		cdns.push("<br>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"}), "</a>");
+	}
 	cdns.push("<hr>");
 
 	if (ParamCtrl.capa.length>NumeroDeCapesVolatils(-1))
@@ -257,6 +263,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraReclassificaCapa(",i_capa,");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Reclassificació", "spa":"Reclasificación", "eng":"Reclassification", "fre":"Reclassement"}), "</a><br>");
 	}
+	cdns.push("<hr>");
+	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
+				DonaCadenaLang({"cat":"Recupera estils", "spa":"Recupera estilos", "eng":"Retrieve styles", "fre":"Récupérer les styles"}), "</a><br>");
+	
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
@@ -268,19 +278,29 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	return false;
 }
 
+function CompartirCapa(i_capa)
+{	//·$·
+	alert(DonaCadenaLang({"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."}));
+}
+
 function OmpleLayerContextMenuEstil(event, i_capa, i_estil)
 {
 var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
 
-
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraModificaNomEstil(", i_capa,",",i_estil,");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}), "</a><br>");
 	cdns.push("<hr>");
 
-	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-						DonaCadenaLang({"cat":"Esborrar estil", "spa":"Borrar estilo", "eng":"Delete style", "fre":"Effacer style"}), "</a>");
-	cdns.push("<hr>");
+	if (capa.estil[i_estil].origen && capa.estil[i_estil].origen=="usuari")
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+							DonaCadenaLang({"cat":"Compartir estil", "spa":"Compartir estilo", "eng":"Share style", "fre":"Partager style"}), "</a>");
+		cdns.push("<br>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+							DonaCadenaLang({"cat":"Esborrar estil", "spa":"Borrar estilo", "eng":"Delete style", "fre":"Effacer style"}), "</a>");
+		cdns.push("<hr>");
+	}
 	if (capa.estil[i_estil].metadades && capa.estil[i_estil].metadades.standard && DonaCadena(capa.estil[i_estil].metadades.standard))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
@@ -314,6 +334,34 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("</div></div>");
 	MouLayerContextMenuCapa(event, cdns.join(""));
 	return false;
+}
+
+function CompartirEstilCapa(i_capa, i_estil)
+{	
+var s, text="";
+var capa=ParamCtrl.capa[i_capa];
+
+	//el TARGET de l'estil compartit és la seva capa "mare"
+	if (!(s=DonaCodeCapaEstilFeedback(i_capa, -1)))
+		return;
+		
+	//Eliminem els Item de la llegenda quan aquesta és automàtica, per fer el "code" més petit
+	//·$· si això no es pot fer, o quan tenim paleta pròpia (pero ara pels estils propis encara no es pot) haurem de pensar que fer amb les URL llargues
+	
+	//·$· mirar si les funcions de neteja del jason treuen això de sota, i si es pot emancipar una "NetejaEstil" d'allà per usar-la aquí ·$·	
+	var estil_copia=JSON.parse(JSON.stringify(capa.estil[i_estil]));	
+	if (estil_copia.nItemLlegAuto)
+		delete estil_copia.ItemLleg;
+	if (estil_copia.histograma)
+		delete estil_copia.histograma;
+	if (estil_copia.component.length>1 && estil_copia.ItemLleg)
+		delete estil_copia.ItemLleg;
+
+	GUFCreateFeedbackWithReproducibleUsage(DonaCadena(capa.desc), s, DonaServidorCapa(capa), 
+			{abstract: DonaCadena(capa.estil[i_estil].desc), specific_usage: DonaCadenaLang({"cat":"Compartir estil", "spa":"Compartir estilo", "eng":"Share style", "fre":"Partager style"}),
+			ru_code: JSON.stringify(estil_copia), ru_code_media_type: "application/json", 
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_estil},
+			ParamCtrl.idioma, "" /*access_token_type*/);
 }
 
 function DonaTextSeparadorCapaAfegida(i_capa)
@@ -398,7 +446,8 @@ var minim, maxim;
 				"data": servidorGC.layer[i_capa].data,
 				"i_data": servidorGC.layer[i_capa].i_data,
 				"animable": (servidorGC.layer[i_capa].data)? true: false,
-				"AnimableMultiTime": (servidorGC.layer[i_capa].data)? true:false});
+				"AnimableMultiTime": (servidorGC.layer[i_capa].data)? true:false,
+				"origen":"usuari"});
 
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
@@ -882,7 +931,7 @@ function DonaIndexosACapesDeCalcul(calcul, i_capa)
 /* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta, 
 per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa 
 en crear un flistre espacial a partir d'una banda de la mateixa capa 
-En contextos on no te sentit (per exemple a AfegirCapaCalculada no es passa i està protegit */ 
+En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit */ 
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
 
@@ -1008,6 +1057,7 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 
 	if (i_capes.length>1) //Si en l'expressió entra en joc més d'una capa -> la capa calculada és una capa nova
 	{
+		//pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil ·$·	
 		ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
 			"versio": null,
 			"tipus": null,
@@ -1054,7 +1104,8 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 			"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
 			"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 			"proces":	null,
-			"ProcesMostrarTitolCapa" : false
+			"ProcesMostrarTitolCapa" : false,
+			"origen": "usuari"
 			});
 	
 		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
@@ -1080,7 +1131,8 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 				"metadades": null,
 				"nItemLlegAuto": 20,
 				"ncol": 4,
-				"descColorMultiplesDe": 0.01
+				"descColorMultiplesDe": 0.01,
+				"origen": "usuari"
 			});
 		
 			if (capa.visible=="ara_no")
@@ -2983,6 +3035,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(sel_condicional.i_estil) ? sel_condicional.i_estil : 0]));
 	estil=capa.estil[i_estil_nou];	
 	estil.desc=sel_condicional.nom_estil;
+	estil.origen="usuari";
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
 	
 	//Defineix el "calcul" de la selecció que serà de tipus "(capaA<5 || CapaA>capaB)? capa : null"
@@ -3188,7 +3241,7 @@ var combinacio_rgb, i_estil_nou, estil, capa;
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
 	i_estil_nou=capa.estil.length;
-	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil,"TipusObj": "P", "component": []};
+	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil, "TipusObj": "P", "component": [], "origen": "usuari"};
 	estil=capa.estil[i_estil_nou];
 
 	for (var i_c=0; i_c<3; i_c++)
@@ -3509,4 +3562,15 @@ var elem=ObreFinestra(window, "feedback", DonaCadenaLang({"cat":"de valoracions 
 	if (!elem)
 		return;
 	FinestraFeedbackCapa(elem, i_capa, i_estil);
+}
+
+function ObreFinestraFeedbackAmbEstilsDeCapa(i_capa)
+{
+var elem=ObreFinestra(window, "feedbackAmbEstils", DonaCadenaLang({"cat":"de valoracions dels usuaris",
+						  "spa":"de valoraciones de los usuarios",
+						  "eng":"of user feedback",
+						  "fre":"pour la rétroaction de l'utilisateur"}));
+	if (!elem)
+		return;
+	FinestraFeedbackAmbEstilsCapa(elem, i_capa);
 }

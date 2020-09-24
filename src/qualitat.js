@@ -443,14 +443,85 @@ var capa=ParamCtrl.capa[i_capa];
 		TancaFinestraLayer('feedback');
 		return;
 	}
-		
-	GUFShowFeedbackInHTMLDiv(elem,
-			"LayerFeedbackCapa", 
-			cdns.join(""), 
-			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
-			s, //identificador unic 
-			DonaServidorCapa(capa), 
-			ParamCtrl.idioma);
+	
+	/*if (s.search("Sentinel2Level2a")!=-1) //és una Sentinel2
+	{
+		var targets=[{title: DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)), code: s, codespace: DonaServidorCapa(capa), role: "primary"},
+				{title: "Sentinel 2 L2A Collection", code: "Sentinel2Level2aCollection", codespace: "http://datacube.uab.cat/cgi-bin/ecopotential/miramon.cgi", role: "secondary"}];
+			GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, "LayerFeedbackCapa", cdns.join(""), targets, ParamCtrl.idioma);		
+	}
+	else*/
+		GUFShowFeedbackInHTMLDiv(elem,
+				"LayerFeedbackCapa", 
+				cdns.join(""), 
+				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
+				s, //identificador unic 
+				DonaServidorCapa(capa), 
+				ParamCtrl.idioma);
+}
+
+function AdoptaEstil(params_function, guf)
+{
+var i_estil_nou, estil, capa;
+
+	if (!guf)
+	{
+		alert(DonaCadenaLang({"cat": "Definició inesperada de la valoració. No es pot importar l'estil.", 
+		"spa": "Definición inesperada de la valoración. No se puede importar el estilo.", 
+		"eng": "Unexpected definition of the feedback item. The style cannot be imported.", 
+		"fre": "Définition inattendue du élément de rétroaction. Le style ne peut pas être importé."}));
+		TancaFinestraLayer('feedbackAmbEstils');
+		return;
+	}
+	
+	if (guf.usage.usage_descr.platform && guf.usage.usage_descr.platform==encodeURI(ToolsMMN) && 
+			guf.usage.usage_descr.version && guf.usage.usage_descr.version==(VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers) &&
+			guf.usage.usage_descr.schema && guf.usage.usage_descr.schema==config_schema_estil &&
+			guf.usage.usage_descr.code!="")
+	{
+		//Crea un nou estil
+		capa=ParamCtrl.capa[params_function.i_capa];
+		i_estil_nou=capa.estil.length;
+		capa.estil[capa.estil.length]=JSON.parse(guf.usage.usage_descr.code);
+		estil=capa.estil[i_estil_nou];
+	
+		if (capa.visible=="ara_no")
+			CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
+		else
+			CreaLlegenda();
+	
+		//Defineix el nou estil com estil actiu
+		CanviaEstilCapa(params_function.i_capa, i_estil_nou, false);		
+	}
+	else
+	{
+		alert(DonaCadenaLang({"cat": "Aquesta valoració no conté una descripció d'ús reproduible vàlida per a aquest navegador de mapas, versió o esquema. No es pot importar l'estil.", 
+		"spa": "Esta valoración no contiene una descripción de uso reproducible válida para este navegador de mapas, versión o esquema. No se puede importar el estilo.", 
+		"eng": "This feedback item does not contain a valid reproducible usage description for this web map browser, version or schema. The style cannot be imported.", 
+		"fre": "Cet élément de rétroaction ne contient pas de description d'utilisation reproductible valide pour ce navigateur de carte web, cette version ou ce schéma. Le style ne peut pas être importé."}));
+	}
+	TancaFinestraLayer('feedbackAmbEstils');
+	return;
+}
+
+function FinestraFeedbackAmbEstilsCapa(elem, i_capa)
+{
+var cdns=[], s;
+var capa=ParamCtrl.capa[i_capa];
+
+	cdns.push(DonaCadenaLang({"cat":"la capa", "spa":"la capa", "eng":"the layer", "fre":"la couche"}), 
+				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+	cdns.push("\"");
+
+	if (!(s=DonaCodeCapaEstilFeedback(i_capa, -1)))
+	{
+		TancaFinestraLayer('feedbackAmbEstils');
+		return;
+	}
+	
+	GUFShowPreviousFeedbackWithReproducicleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa), 
+		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: encodeURIComponent(config_schema_estil)},
+		ParamCtrl.idioma, "" /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
 
 function CalculaValidessaTemporal(param)
