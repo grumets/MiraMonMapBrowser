@@ -114,21 +114,22 @@ var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
 
 function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targets, lang, access_token_type)
 {
-	var n_targets=0;
+	var tinc_target_secondary=false;
 	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK";
 	var url2=url;
 	
-//ara assumeixo que tinc un primari segur i potser un secndari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un farçe un quadradet, suposo ·$·
+//ara assumeixo que tinc un primari segur i potser un secndari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un faré un quadradet, suposo
 
 	//busco el target primari i l'envio a la primera part de la finestra
 	for (var i=0; i<targets.length; i++)	
 	{
 		if (targets[i].title && targets[i].code && targets[i].codespace && targets[i].role=="primary")
 		{
-			url+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";
+			url+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";			
 			break;
 		}
-	}	
+	}
+	//l'espai de FB previs sobre el target primari el poso sempre, perquè sempre en tinc un	
 	loadFile(url, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: div_id+"Previ", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
 
 	//busco el target secundari i l'envio a la segona part de la finestra
@@ -138,10 +139,12 @@ function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targe
 		{	//la peticio buscarà els que parlin del secondari d'ara, però només com a PRIMARI, per veure tb en el dataset els comentaris generals de la col·lecció (i no tornar a veure els secudaris d'questa o altres imatges!)
 			url2+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ" +
 						"&TRG_NXS_2=AND&TRG_TYPE_3=CITATION&TRG_FLD_3=RSRC_ROLE&TRG_VL_3=primary&TRG_OPR_3=EQ";
+			tinc_target_secondary=TRUE;
 			break;
 		}
 	}	
-	loadFile(url2, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url2, div_id: div_id+"Previ_secundari", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
+	if (tinc_target_secondary)
+		loadFile(url2, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url2, div_id: div_id+"Previ_secundari", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
 }
 
 function GUFDonaCadenaLang(cadena_lang, lang)
@@ -505,7 +508,6 @@ var cdns=[];
 		cdns.push("<div class=\"guf_purpose user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Propòsit", "spa":"Propósito", "eng":"Purpose", "fre":"Raison"}, extra_param.lang), ":</span> ", guf.purpose, "</div>");
 
 	//if (guf.contact)
-	
 	
 	if (guf.contactRole && GUF_UserRoleCode[guf.contactRole])
 		cdns.push("<div class=\"guf_contact_role user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Rol de l'usuari", "spa":"Rol del usuario", "eng":"User role", "fre":"Rôle de user"}, extra_param.lang), ":</span> ", GUFDonaCadenaLang(GUF_UserRoleCode[guf.contactRole], extra_param.lang), "</div>");
