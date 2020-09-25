@@ -836,12 +836,12 @@ var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
 
 function GUFAfegirFeedbackCapaMultipleTargets(targets_obj_o_str, lang, access_token_type, reprod_usage)
 {
-	var targets=[];
+var targets;
 	
 	if (typeof(targets_obj_o_str) === "string")
-		targets.push = JSON.parse(targets_obj_o_str);
+		targets = JSON.parse(targets_obj_o_str);
 	else if (typeof(targets_obj_o_str) === "object" && Array.isArray(targets_obj_o_str))
-		targets=targets_obj_o_str;
+		targets = targets_obj_o_str;
 	else
 	{
 		alert("targets_obj_o_str needs and object or an string");	
