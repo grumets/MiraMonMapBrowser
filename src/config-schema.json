@@ -1730,6 +1730,16 @@
 						"description": "Estat de la capa per l'edició. Possibilitats: mai (no), no està editable però l'usuari la pot activar (ara_no), si (si). Només aplica quan el model de dades és vector.", 
 						"enum": [null, "no", "ara_no", "si"]
 					},
+					"access": { 
+						"description": "En el cas que editable sigui 'si' o 'ara_no', Indica que l'edició està protegida per autentificació", 
+						"type": "object",
+						"properties": {
+							"tokenType": {
+								"description": "Nom del servei d'autentificació.", 
+								"enum": ["authenix"]
+							}
+						}
+					},
 					"FuncioEdicio": {
 						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el model de dades és vector.",
 						"type": ["null", "string"]
@@ -1771,7 +1781,7 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator).",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusOAPI_Maps","TipusOAPI_Features"]
 		},
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",
@@ -2337,7 +2347,7 @@
 						"type": "string"
 					},
 					"FormulaConsulta": { 
-						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component. Useu p['nom'] per indicar el nom de la property dins de properties. Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'",
+						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'",
 						"type": "string"
 					},
 					"nom": { 
@@ -2372,8 +2382,18 @@
 						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
 						"enum": ["si", "no", "si_ple"]
 					},
+					"tipus": { 					
+						"description": "Pendent d'implementació. Tipus d'atribut. Opcional. C: Caràcters, N: Numèric, D: Data-Hora, L: Lògic, B: Binary",											
+						"enum": ["C", "N", "D","L","B"]
+					},
+					"mida":  { 					
+						"description": "Pendent d'implementació. Mida de l'atribut. Opcional. Amplada màxima que pot tenir el tipus de camp. En el cas de tipus numèrics és la màxima precisió. En el cas de cadenes és la màxima longitud en caràcters.En el cas de data-hora és la màxima longitud en caràcters de la representació de la data-hora com a text."
+					},
+					"pDecimals": { 					
+						"description": "Pendent d'implementació. Nombre de decimal de l'atribut. Només aplica si l'atribut és de tipus numèric (N). Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)"
+					},
 					"format": {
-						"description": "Es el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
+						"description": "És el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
 						"enum": ["dd/mm/yyyy"]
 					},
 					"NDecimals": { 

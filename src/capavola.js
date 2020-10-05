@@ -204,7 +204,7 @@ function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 	{
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit], crs_ori, crs_dest);
 		if(ParamCtrl.BarraBotoInsereix==true && ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
-			eval(ParamCtrl.FuncioIconaEdicio);		
+			IniciaFinestraEditarPunts();		
 	}
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaGPS], crs_ori, crs_dest);
@@ -345,7 +345,9 @@ function CreaCapesVolatils()
 				});
 		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
-	if (typeof ParamCtrl.IconaEdicio && ParamCtrl.ICapaVolaEdit === "undefined")
+	if (!ParamCtrl.IconaEdicio)
+		ParamCtrl.IconaEdicio={"icona": "mes.gif", "ncol": 9, "nfil": 9, "i": 5, "j": 5};
+	if (typeof ParamCtrl.ICapaVolaEdit === "undefined")
 	{
 		ParamCtrl.ICapaVolaEdit=i_nova_capa;
 		i_nova_capa++;
@@ -590,12 +592,45 @@ function EditarPunts(event_de_click, i_nova_vista)
 	    
 		CreaVistes();
 	}
-	if (ParamCtrl.BarraBotoInsereix==true && ParamCtrl.FuncioIconaEdicio)
-		eval(ParamCtrl.FuncioIconaEdicio);		
+	if (ParamCtrl.BarraBotoInsereix==true)
+		IniciaFinestraEditarPunts();		
 	else if(typeof ParamCtrl.ICapaVolaEdit !== "undefined"  && ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio)
 		eval(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio);		
 	
 }//Fi de EditarPunts()
+
+function IniciaFinestraEditarPunts()
+{
+	if(!ParamCtrl.FuncioIconaEdicio)
+		 return;
+	
+	var elem=ObreFinestra(window, "editarVector", DonaCadenaLang({"cat":"per inserir punts nous",
+						  "spa":"para insertar puntos nuevos",
+						  "eng":"to insert new points",
+						  "fre":"pour insérer de nouveaux points"}));
+	if (!elem)
+		return;
+	contentLayer(elem, eval(ParamCtrl.FuncioIconaEdicio));
+}
+
+function TancaFinestra_editarVector()
+{
+	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
+	{
+		var elem, i_vista;
+		ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].visible="no";
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		{
+			if (EsCapaVisibleEnAquestaVista(i_vista, ParamCtrl.ICapaVolaEdit))
+			{
+				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+ParamCtrl.ICapaVolaEdit);
+				if(isLayer(elem))
+					removeLayer(elem);
+			}
+		}
+	}
+}
+
 
 
 /* El dia 06-02-2018 descubreixo aquesta funció però no tinc idea de a que es refereix i la esborro. (JM)

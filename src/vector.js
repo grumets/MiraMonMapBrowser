@@ -19,7 +19,7 @@
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del Centre
     de recerca i aplicacions forestals (CREAF) que elabora programari de 
-    Sistema d'Informació Geogràfica i de Teledetecció per a la 
+    Sistema d'Informació Geogràfica i de Teledetecció per a la
     visualització, consulta, edició i anàlisi de mapes ràsters i 
     vectorials. Elabora programari d'escriptori i també servidors i clients 
     per Internet. No tots aquests productes són gratuïts o de codi obert. 
@@ -279,7 +279,7 @@ var valor, tag, tags, property_name, camps, i;
 
 function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
-var root, id_obj_buscat, capa, valor, foi_xml;
+var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_xml, foi_xml;
 
 	if(!doc) 
 	{	 
@@ -288,60 +288,129 @@ var root, id_obj_buscat, capa, valor, foi_xml;
 		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 		return;
 	}
-	root=doc.documentElement;	
-	
-	if(!root)
-	{
-		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
-		NConsultesDigiZero++;
-		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-		return;	
-	}
-
 	capa=ParamCtrl.capa[consulta.i_capa];
-	if (capa.tipus=="TipusWFS")
-		id_obj_buscat=capa.objectes.features[consulta.i_obj].id;
-	else
-		id_obj_buscat=capa.namespace + "/" + capa.nom + "/featureOfInterest/" + capa.objectes.features[consulta.i_obj].id;
-
-	if (capa.tipus=="TipusWFS")
-		var objectes=root.getElementsByTagName(capa.nom);
-	else
-		var objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/om/2.0", "om", "OM_Observation");
-	
-	if(objectes && objectes.length>0)
+	if (capa.FormatImatge!="application/json")
 	{
-		if (capa.tipus=="TipusWFS")
+		root=doc.documentElement;	
+	
+		if(!root)
 		{
-			for(var i_obj=0; i_obj<objectes.length; i_obj++)
-			{
-				valor=objectes[i_obj].getAttribute('gml:id');
-				if(id_obj_buscat==valor)
-				{
-					OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
-					break;
-				}
-			}
+			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+			NConsultesDigiZero++;
+			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+			return;	
 		}
-		else if (capa.tipus="TipusSOS")
+	}
+	
+	features=capa.objectes.features;
+	tipus=DonaTipusServidorCapa(capa);		
+
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+	{
+		id_obj_buscat=features[consulta.i_obj].id;
+		if (capa.FormatImatge=="application/json")
 		{
-			for(var i_obj=0; i_obj<objectes.length; i_obj++)
+			objectes=null;
+			try {
+				var geojson=JSON.parse(doc);
+				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				objectes=geojson.features;
+			} 
+			catch (e) {
+				removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+				NConsultesDigiZero++;
+				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+				return;	
+			}
+			if(objectes && objectes.length>0)
 			{
-				var objecte_xml=objectes[i_obj];
-				var foi_xml=GetXMLChildElementByName(objecte_xml, '*', "featureOfInterest");
-				if (foi_xml)
+				for(i_obj=0; i_obj<objectes.length; i_obj++)
 				{
-					valor=foi_xml.getAttribute('xlink:href');
-					if(id_obj_buscat==valor)
+					objectes[i_obj].id=objectes[i_obj].id.substring(capa.nom.length+1);
+					if(id_obj_buscat==objectes[i_obj].id)
 					{
-						OmpleAtributsObjecteCapaDigiDesDeSOS(objectes_xml, capa, capa.objectes.features[consulta.i_obj]);
+						OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
 						break;
 					}
 				}
 			}
 		}
+		else
+		{
+			objectes=root.getElementsByTagName(capa.nom);
+			if(objectes && objectes.length>0)
+			{
+				for(i_obj=0; i_obj<objectes.length; i_obj++)
+				{
+					//Agafo l'identificador del punt i miro si coincideix amb el de l'objecte que estic buscant.
+					//els objectes estan ordenats per "id"
+					valor=objectes[i_obj].getAttribute('gml:id');
+					if (valor)
+					{
+						valor=valor.substring(capa.nom.length+1); //elimino el nom de la capa de l'id.
+						if(id_obj_buscat==valor)
+						{
+							OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
+							break;
+						}
+					}															
+				}
+			}
+		}
 	}
-
+	else //if (capa.tipus="TipusSOS")
+	{
+		var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
+		id_obj_buscat=prefix_foi + features[consulta.i_obj].id;
+		if (capa.FormatImatge=="application/json")
+		{
+			objectes=null;			
+			try {
+				var geojson=JSON.parse(doc);
+				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				objectes=geojson.observations;
+			} 
+			catch (e) {
+				removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+				NConsultesDigiZero++;
+				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+				return;	
+			}
+			if(objectes && objectes.length>0)
+			{
+				for(i_obj=0; i_obj<objectes.length; i_obj++)
+				{
+					objectes[i_obj].featureOfInterest=objectes[i_obj].featureOfInterest.substring(prefix_foi.length); //elimino el prefix de l'id.
+					if(id_obj_buscat==objectes[i_obj].featureOfInterest)
+					{
+						OmpleAtributsObjecteCapaDigiDesDeGeoJSONDeSOS(objectes[i_obj], capa, capa.objectes.features[consulta.i_obj]);
+						break;
+					}					
+				}
+			}			
+		}
+		else
+		{
+			objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/om/2.0", "om", "OM_Observation");
+			if(objectes && objectes.length>0)
+			{
+				for(i_obj=0; i_obj<objectes.length; i_obj++)
+				{
+					objecte_xml=objectes[i_obj];
+					foi_xml=GetXMLChildElementByName(objecte_xml, '*', "featureOfInterest");
+					if (foi_xml)
+					{
+						valor=foi_xml.getAttribute('xlink:href');
+						if(id_obj_buscat==valor)
+						{
+							OmpleAtributsObjecteCapaDigiDesDeSOS(objecte_xml, capa, capa.objectes.features[consulta.i_obj]);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
 	if (!capa.objectes || !capa.objectes.features || 
 		!capa.objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(capa.objectes.features[consulta.i_obj].properties)==0)
 	{
@@ -407,8 +476,7 @@ function ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 //Retorna false si no cal o si no es pot. Retorno true si he iniciat un procés assincron per descarregar.
 function DescarregaPropietatsCapaDigiVistaSiCal(funcio, param)
 {
-var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={};
-var env=ParamInternCtrl.vista.EnvActual;
+var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=ParamInternCtrl.vista.EnvActual;
 
 	if (!capa.tipus //els objectes empotrats no poden obtenir les properties si no hi són
 		|| !capa.objectes || !capa.objectes.features)  //falten massa coses que hi hauria d'haver
@@ -417,7 +485,7 @@ var env=ParamInternCtrl.vista.EnvActual;
 	/*if (secondTime)
 		return false;
 	secondTime=true;*/
-
+	tipus=DonaTipusServidorCapa(capa);
 	for (j=0; j<capa.objectes.features.length; j++)
 	{				
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[j], capa.CRSgeometry);
@@ -426,12 +494,12 @@ var env=ParamInternCtrl.vista.EnvActual;
 			env.MinY < punt.y &&
 			env.MaxY > punt.y)
 		{
-			if (capa.tipus=="TipusWFS")
+			if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 			{
 				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //Només hi ha les propietats de simbolització actuals carregades
 					break;
 			}
-			else //if (capa.tipus=="TipusSOS")
+			else //if (tipus=="TipusSOS")
 			{
 				if (CountPropertiesOfObject(capa.objectes.features[j].properties)==0)  //No hi ha propietats carregades
 					break;
@@ -440,12 +508,17 @@ var env=ParamInternCtrl.vista.EnvActual;
 	}
 	if (j==capa.objectes.features.length)
 		return false; //no hi ha cap objecte que li faltin les properties.
-	if (capa.tipus=="TipusWFS")
+	if (tipus=="TipusWFS")
 	{
 		url=DonaRequestGetFeature(param.i_capa, ParamInternCtrl.vista.EnvActual, null, true);
 		i_event=CreaIOmpleEventConsola("GetFeature", param.i_capa, url, TipusEventGetFeature);
 	}
-	else //if (capa.tipus=="TipusSOS")
+	else if (tipus=="TipusOAPI_Features")
+	{
+		url=DonaRequestGetFeature(param.i_capa, ParamInternCtrl.vista.EnvActual, null, true);
+		i_event=CreaIOmpleEventConsola("OAPI_Features", param.i_capa, url, TipusEventGetFeature);
+	}
+	else //if (tipus=="TipusSOS")
 	{
 		url=DonaRequestGetObservation(param.i_capa, -1, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("GetObservation", param.i_capa, url, TipusEventGetObservation);
@@ -476,8 +549,7 @@ var root, i_obj, capa, valor, s, ini, fi, observation;
 
 function OmpleCapaDigiAmbPropietatsObjectes(doc, consulta)
 {
-var root, capa, features, valor;
-var i_obj;
+var root, capa, features, valor, tipus, i_obj;
 
 	if(!doc) 
 	{	 
@@ -495,9 +567,9 @@ var i_obj;
 			return 1;	
 		}
 	}
-
 	features=capa.objectes.features;
-	if (capa.tipus=="TipusWFS")
+	tipus=DonaTipusServidorCapa(capa);
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 	{
 		if (capa.FormatImatge=="application/json")
 		{
@@ -538,17 +610,7 @@ var i_obj;
 						i_obj=features.binarySearch({"id":valor}, ComparaObjCapaDigiIdData);
 						if (i_obj>=0)
 							OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj_llegit], capa.atributs, features[i_obj]);
-					}
-					/*valor=objectes[i_obj_llegit].getAttribute('gml:id');
-					for (i_obj=0; i_obj<capa.objectes.features.length; i_obj++)
-					{
-						if (valor==capa.objectes.features[i_obj].id)
-						{
-							OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj_llegit], capa.atributs, features[i_obj]);
-							break;
-						}
-					}
-					*/
+					}										
 				}
 			}
 		}
@@ -597,21 +659,13 @@ var i_obj;
 							valor=valor.substring(prefix_foi.length); //elimino el prefix de l'id.
 							i_obj=features.binarySearch({"id":valor}, ComparaObjCapaDigiIdData);
 							if (i_obj>=0)
-								OmpleAtributsObjecteCapaDigiDesDeSOS(objecte_xml, capa, features[i_obj]);
-	
-							/*
-							feature=capa.objectes.features.find(function(obj) {
-								return (valor==prefix_foi + obj.id);
-							});
-							if (feature)
-								OmpleAtributsObjecteCapaDigiDesDeSOS(objecte_xml, capa, feature);*/
+								OmpleAtributsObjecteCapaDigiDesDeSOS(objecte_xml, capa, features[i_obj]);	
 						}
 					}
 				}
 			}
 		}
 	}
-
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 	return 0;
 }// Fi de OmpleCapaDigiAmbPropietatsObjectes()
@@ -625,7 +679,7 @@ function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 //Els objectes es mantene en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
-var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
+var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus;
 
 	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serà un punt	
 	if(!doc) 
@@ -635,9 +689,10 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 	}
 
 	capa=ParamCtrl.capa[consulta.i_capa_digi];
+	tipus=DonaTipusServidorCapa(capa);
 	if (capa.FormatImatge=="application/json")
 	{
-		if (capa.tipus=="TipusWFS")
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 		{
 			if (capa.objectes && capa.objectes.features)
 			{
@@ -650,8 +705,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 					{
 						for (i=0; i<features.length; i++)
 							features[i].id=features[i].id.substring(capa.nom.length+1);
-						features=capa.objectes.features;
-						features.push.apply(features, geojson.features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
+						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
 					}
 				} 
 				catch (e) {
@@ -674,7 +728,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 				}
 			}
 		}
-		else if (capa.tipus=="TipusSOS")
+		else if (tipus=="TipusSOS")
 		{
 			if (capa.objectes && capa.objectes.features)
 			{
@@ -726,7 +780,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 			return;
 		}
 
-		if (capa.tipus=="TipusWFS")
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 		{
 			if(!capa.namespace || capa.namespace==null)
 			{
@@ -739,7 +793,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 			}
 			objectes=root.getElementsByTagName(capa.nom);
 		}
-		else if (capa.tipus=="TipusSOS")
+		else if (tipus=="TipusSOS")
 			objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/samplingSpatial/2.0", "sams", "SF_SpatialSamplingFeature");
 		else
 		{
@@ -819,7 +873,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes;
 						}
 					}
 	
-					if (capa.tipus=="TipusWFS")
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 					{
 						//ara els atributs
 						OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, feature);
@@ -899,10 +953,13 @@ function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, i_obj_capa
 	if (capa.atributs[i_atrib].FormulaConsulta)  
 	{
 		var p=capa.objectes.features[i_obj_capa].properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
+		var nonPropId=capa.objectes.features[i_obj_capa].id;
 		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, capa.atributs[i_atrib].FormulaConsulta))
 			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i_col, i_fil); //idem
 		return eval(CanviaVariablesDeCadena(capa.atributs[i_atrib].FormulaConsulta, capa, i_data));
 	}
+	if (capa.atributs[i_atrib].nom=="nonPropId")
+		return capa.objectes.features[i_obj_capa].id;
 	return capa.objectes.features[i_obj_capa].properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data)];
 }
 
@@ -1111,11 +1168,12 @@ var c_afegir="";
 
 function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
 {
-	if (ParamCtrl.capa[i_capa].tipus=="TipusWFS")
+var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 		return DonaRequestGetFeature(i_capa, env, cadena_objectes, completa);
-	if (ParamCtrl.capa[i_capa].tipus=="TipusSOS")
+	if (tipus=="TipusSOS")
 		return DonaRequestGetFeatureOfInterest(i_capa, env)
-	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + ParamCtrl.capa[i_capa].tipus);
+	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + tipus);
 	return "";
 }
 
@@ -1249,28 +1307,55 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, estil;
 
 function DonaRequestGetFeature(i_capa, env, cadena_objectes, completa)
 {
-var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
+var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus;
 
-	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=WFS&REQUEST=GetFeature&ATRIBUTFORMAT=complex&SRSNAME=" , 
+	tipus=DonaTipusServidorCapa(capa);
+	if(tipus=="TipusOAPI_Features")	
+	{
+		var plantilla=[];
+		if(capa.URLTemplate)
+			plantilla.push(capa.URLTemplate);
+		else		
+			plantilla.push("/collections/{collectionId}/items");
+			
+		if(cadena_objectes && cadena_objectes.length==1)  // si n'hi ha més caldrà fer-ho d'una altra manera, tot i que crec que de moment mai usem aquesta opció de cadena_objectes
+			plantilla.push("/", cadena_objectes[0], "?");
+		else 
+			plantilla.push("?");		
+		var cp=plantilla.join("");			
+		cp=cp.replace("{collectionId}", capa.nom);	
+		cdns.push(cp);		
+		cdns.push("crs=", capa.CRSgeometry, "&limit=1000&f=");  //·$· hauria json i no application/json
+	}
+	else
+	{
+		cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=WFS&REQUEST=GetFeature&ATRIBUTFORMAT=complex&SRSNAME=" , 
 	          capa.CRSgeometry ,"&TYPENAME=" ,capa.nom, "&OUTPUTFORMAT=");
+	}
 	if (capa.FormatImatge)
 		cdns.push(capa.FormatImatge);
 	else
 		cdns.push("text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes");
+		
 	if(env)  //Està en el mateix sistema de referència que la capa
 	{
 		cdns.push("&BBOX=" , env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
 		if(completa==false)
 		{
-			cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
+			if(tipus=="TipusOAPI_Features")	 //·$· Potser ha de ser més sofisticat i diferent en funció del format (json, gml,...)
+				cdns.push("&PROPERTYNAME=" , capa.nom , "/geometry");
+			else
+				cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
 			camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
 			for(i=0; i<camps_implicats.length; i++)
 				if(camps_implicats[i] && camps_implicats[i]!="") 
 					cdns.push(",",capa.nom , "/", camps_implicats[i]);
 		}
 	}
-	else if(cadena_objectes)
+	else if(cadena_objectes && tipus=="TipusWFS")
 	{
+		// NJ_28-09-2020: Sembla ser que per aquí no hi vinc mai , però de moment no ho elimino perquè potser és necessita per quan vull fer transaccions
+		// Si això al final s''usa caldrà adaptar-ho per a TipusOAPI_Features
 		cdns.push("&FEATUREID=",cadena_objectes.join(","));
 		if(completa==false)
 		{
@@ -1285,15 +1370,17 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i;
 	}
 	else if(completa==false)
 	{
-		cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
+		if(tipus=="TipusOAPI_Features")	 //·$· Potser ha de ser més sofisticat i diferent en funció del format (json, gml,...)
+			cdns.push("&PROPERTYNAME=" , capa.nom , "/geometry");
+		else
+			cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
 		camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
 		for(i=0; i<camps_implicats.length; i++)
 			if(camps_implicats[i] && camps_implicats[i]!="") 
 				cdns.push(",",capa.nom , "/", camps_implicats[i]);		
 	}
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
-}//Fi de DonaRequestGetFeature()
-
+}
 
 function DonaRequestGetFeatureOfInterest(i_capa, env)
 {
@@ -1352,6 +1439,8 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env, null, false);
 	if (capa.tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	else if (capa.tipus=="TipusOAPI_Features")
+		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
 	else if (capa.tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 
@@ -1367,6 +1456,8 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, null, cadena_objectes, false);
 	if (capa.tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	else if (capa.tipus=="TipusOAPI_Features")
+		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
 	else if (capa.tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
@@ -1383,6 +1474,8 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env_sol, null, false);
 	if (capa.tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	else if (capa.tipus=="TipusOAPI_Features")
+		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
 	else if (capa.tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 
@@ -1536,6 +1629,8 @@ var env={"MinX": minx, "MaxX": maxx, "MinY": miny, "MaxY": maxy};
 	FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(i_capa, env, true);
 }//Fi de SeleccionaObjsCapaDigiPerEnvolupant()
 
+
+// Aquesta funció sembla ser que no s'usa enlloc (NJ 28-09-2020)
 function SeleccionaObjsCapaDigiPerIdentificador(id_capa, id_obj, afegir)
 {
 var i_capa;

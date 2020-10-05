@@ -338,7 +338,21 @@ if(!window.console)
 		};
 }
 
+
 /*Funcions d'utilitat general inspirades en codis trobats a la Internet*/
+
+function create_UUID(guions){
+	// Codi inspirat en https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
+    var dt = new Date().getTime();
+	var patro= guions ? 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx' : 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx';
+    var uuid = patro.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+
 
 function MMgetFileExtension(fileName)
 {
@@ -1375,6 +1389,8 @@ function Ajax()
 	this.mimeType = null;  
 	//this.headers = [];
 	this.requestHeaders=[];
+	this.accessToken = null;
+	this.accessTokenType =null;
 
 	this.init = function() {
 		var i = 0;
@@ -1393,11 +1409,12 @@ function Ajax()
 	};
 	this.doGet = function(url, hand, response_format, struct) 
 	{
-		alert(url);  //·$·Per a depurar
+		//alert(url);  //·$·Per a depurar
 		this.url = url;
 		this.handleResp = hand;
 		this.responseFormat = response_format || 'text/plain';
 		this.structResp = struct;
+		this.method = 'GET';
 		this.doReq();
 	};
 
@@ -1412,6 +1429,41 @@ function Ajax()
 		this.method = 'POST';
 		this.doReq();
 	};
+	
+	this.doPut = function(url, request_format, dataPayload, hand, response_format, struct) 
+	{
+		this.url = url;
+		this.requestFormat = request_format || 'application/x-www-form-urlencoded';    
+		this.dataPayload = dataPayload;
+		this.handleResp = hand;
+		this.responseFormat = response_format || 'text/plain';
+		this.structResp = struct;
+		this.method = 'PUT';
+		this.doReq();
+	};
+	
+	this.doDelete = function(url, hand, response_format, struct) 
+	{
+		//alert(url);
+		this.url = url;
+		this.handleResp = hand;
+		this.responseFormat = response_format || 'text/plain';
+		this.structResp = struct;
+		this.method = 'DELETE';
+		this.doReq();
+	};
+	
+	this.doReqIndirect = function(method, url, request_format, dataPayload, hand, response_format, struct)
+	{
+		if (method=="POST")
+			this.doPost(url, request_format, dataPayload, hand, response_format, struct);
+		else if (method=="PUT")
+			this.doPut(url, request_format, dataPayload, hand, response_format, struct);
+		else if (method=="DELETE")
+			this.doDelete(url, hand, response_format, struct);
+		else
+			this.doGet(url, hand, response_format, struct);
+	};	
 
 	this.doReq = function() 
 	{
@@ -1423,10 +1475,19 @@ function Ajax()
 			alert('Could not create XMLHttpRequest object.');
 			return;
 		}
-		req = this.req;
+			   
+		req = this.req;		
 		req.open(this.method, this.url, this.async);
-		if (this.method == 'POST') 
+
+		if (this.accessTokenType && this.accessTokenType.length)
+   			this.setRequestHeader("nb-access-token-type", this.accessTokenType);
+  		if (this.accessToken && this.accessToken.length)
+			this.setRequestHeader("Authorization", "Bearer " + this.accessToken);
+		if ((this.method == 'POST' || this.method == 'PUT') && this.requestFormat) 
 			req.setRequestHeader('Content-Type', this.requestFormat);
+		if ((this.method == 'POST' || this.method == 'PUT') && this.responseFormat)
+			req.setRequestHeader('Accept', this.responseFormat);
+
 		for (var i=0; i<this.requestHeaders.length; i++)
 			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
 
@@ -1441,12 +1502,30 @@ function Ajax()
 				self.responseText = req.responseText;
 				self.responseXML = req.responseXML;
 				switch(self.responseFormat) {
+					default:
 					case 'text/plain':
 						resp = self.responseText;
 						break;
 					case 'text/xml':
 						resp = self.responseXML;
-						break;
+						break;					
+					case 'application/json':
+						if (self.responseText=="")
+						{
+							resp = "";
+							break;
+						}
+						if (self.responseText)
+						{
+							try {
+								resp = JSON.parse(self.responseText);
+							} 
+							catch (e) {
+								self.handleErr("JSON file error: " + self.responseText, self.structResp);
+								return;
+							}
+						}						
+						break;					
 					case 'object':
 						resp = req;
 						break;
@@ -1473,7 +1552,7 @@ function Ajax()
 					else
 						self.handleResp(resp);
 				} else {
-					self.handleErr(resp);
+					self.handleErr(resp, self.structResp);
 				}
 			}
 		}
@@ -1514,14 +1593,23 @@ function Ajax()
 	};
 	this.setRequestHeader = function(headerName, headerValue) {
 		this.requestHeaders.push({"name": headerName, "value": headerValue});
-    		//this.headers.push(headerName + ': ' + headerValue);
-  	};
+		//this.headers.push(headerName + ': ' + headerValue);
+	};
+
+	this.getResponseHeader = function(headerName) {
+		this.req.getResponseHeader(headerName);
+	};
+
+	this.setAccessToken = function(accessToken, accessTokenType) {
+		this.accessToken=accessToken;
+		this.accessTokenType=accessTokenType;
+	};
 }
 
 //See also loadFile() in xml.js
 
 
-//Preparo una funció per descarregar les dades JSON assincronament
+//Preparo una funció per descarregar les dades JSON assíncronament
 //Extreta de: http://stackoverflow.com/questions/9838812/how-can-i-open-a-json-file-in-javascript-without-jquery
 function loadJSON(path, success, error, extra_param)
 {

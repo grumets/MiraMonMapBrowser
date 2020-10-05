@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2018 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -58,7 +58,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa)=="TipusWMS" && 
+	if (capa.NomVideo!=null && DonaTipusServidorCapa(capa)=="TipusWMS" &&   // Segurament les capes en TipusOAPI_Maps també són aptes per a vídeos
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;

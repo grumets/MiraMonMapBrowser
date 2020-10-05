@@ -8,12 +8,27 @@
 *******************************************************/
 /* Estils de visualització usats en diversos elements i més generals */
 .text_petit { font-size: xx-small;}
+
 a:link { text-decoration: none}
 a:visited { text-decoration: none}
 a:active { text-decoration: none}
 a:hover { text-decoration: underline}
 
 /* Estils propis usats per alguns elements del navegador */
+
+.TitolNavegador {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	color: #000099;
+	font-weight: bold;
+}
+.credits{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	font-weight: bold;	
+	color: #000099;
+}
+
 .titol_taronja_gran
 {
 	color: #e28338;
@@ -90,7 +105,6 @@ textarea
 	border: 1px solid #99CCFF;
 	//resize: none;
 }
-
 /* Coordenades */
 .text_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -98,20 +112,16 @@ textarea
 	font-weight: bold;
 	color: #000099;
 }
-
 .input_info_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	width:200px;
 }
-
 .atribucio{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	background: rgba(255, 255, 255, 0.7);
 }
-
-
 /* Llistat Nivells de zoom */
 .titol_zoom{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -195,6 +205,12 @@ textarea
   
 ********************************************************** */
 
+.input_url{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	width: 400px;
+}
+
 .layerselectorcapesafegir {
 	background-color: #FFFFFF;
 	border: 2px solid #C0C0C0;
@@ -205,6 +221,7 @@ textarea
 	width:500px;
 	height:200px;
 	overflow:auto;
+
 }
 
 .MenuContextualCapa{
@@ -218,7 +235,6 @@ textarea
 	border-style:groove;
 	cursor: context-menu;
 }
-
 .llistaMenuContext{
 	padding: 5px;
 	background-color: #FFFFFF;
@@ -329,13 +345,12 @@ a.unmenu:hover {
 	visibility: hidden;
   }
 }
-
 /* 'layerprincipal' és l'estil de la layer que engloba totes les altres layers amb 
 les respostes de la consulta per localització de les diverses capes consultades.
 Només s'usa en les consultes per localització de finestra no incrustada */
 
 @media not print {
-  .layerprincipal{
+.layerprincipal{
 	border: 2px solid #666666;
 	background-color: #FFFFFF;
 	width: 97%;
@@ -346,7 +361,7 @@ Només s'usa en les consultes per localització de finestra no incrustada */
 	font-weight: normal;
 	visibility: visible;
 	position: relative;
-  }
+}
 }
 
 .TaulaRespostaConsulta {
@@ -438,7 +453,6 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	border: 1px solid #99CCFF;
 	//resize:both;
 }
-
 .cantofinestra {
 	text-align: left;
 	margin: 0px;
@@ -446,16 +460,14 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	overflow: visible;
 	cursor: se-resize;
 }
-
 .barrafinestra {
 	background-image: url(fons_barra.gif);
 	background-repeat: repeat-x;
-	border: 1px solid #99CCFF;
+	border: 1px solid #99CCFF;	
 	margin: 0px;
 	padding: 0px;
 	overflow: visible;
 }
-
 .titolfinestra{
 	text-align: left;
 	font-weight: bold;
@@ -464,7 +476,6 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	color: #FFFFFF;
 	cursor: move;
 }
-
 /* Format de la font del text de la layers-finestra d'Anar a Coordenada */
 .Verdana11px{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -513,7 +524,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	font-size: 11px;
 	font-weight: normal;
 	position: relative;
-}
+}  
 
 /* Estil de les classes de tipus 'slider' (bruixola, zoom)*/
 .finestra_superposada 
@@ -526,7 +537,6 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	opacity: 0.9;
 	cursor:pointer;
 }
-
 .text_allus
 {
 	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF, 0 0 3px #FFFFFF;
