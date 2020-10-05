@@ -326,7 +326,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			{
 				for(i_obj=0; i_obj<objectes.length; i_obj++)
 				{
-					objectes[i_obj].id=objectes[i_obj].id.substring(capa.nom.length+1);
+					//objectes[i_obj].id=objectes[i_obj].id.substring(capa.nom.length+1); NJ no sé perquè serveix això
 					if(id_obj_buscat==objectes[i_obj].id)
 					{
 						OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
@@ -587,7 +587,7 @@ var root, capa, features, valor, tipus, i_obj;
 			{
 				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
-					objectes[i_obj_llegit].id=objectes[i_obj_llegit].id.substring(capa.nom.length+1);
+					// objectes[i_obj_llegit].id=objectes[i_obj_llegit].id.substring(capa.nom.length+1); NJ no sé perquè serveix això
 					i_obj=features.binarySearch(objectes[i_obj_llegit], ComparaObjCapaDigiIdData);
 					if (i_obj>=0)
 						OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objectes[i_obj_llegit], capa.atributs, features[i_obj]);
@@ -703,8 +703,9 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 					var features=geojson.features;
 					if(features.length>0)
 					{
+						/*NJ no sé perquè serveix això
 						for (i=0; i<features.length; i++)
-							features[i].id=features[i].id.substring(capa.nom.length+1);
+							features[i].id=features[i].id.substring(capa.nom.length+1); */
 						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
 					}
 				} 
@@ -719,8 +720,9 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 				try {
 					capa.objectes=JSON.parse(doc);
 					var features=capa.objectes.features;
+					/*NJ no sé perquè serveix això
 					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1);			
+						features[i].id=features[i].id.substring(capa.nom.length+1);			*/
 				} 
 				catch (e) {
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -739,8 +741,9 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 					var features=geojson.featureOfInterest;
 					if(features.length>0)
 					{
+						/*NJ no sé perquè serveix això
 						for (i=0; i<features.length; i++)
-							features[i].id=features[i].id.substring(capa.nom.length+1);
+							features[i].id=features[i].id.substring(capa.nom.length+1);*/
 						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
 					}
 				} 
@@ -756,8 +759,9 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 				try {
 					var geojson=JSON.parse(doc);					
 					var features=capa.objectes.features=geojson.featureOfInterest;
+					/*NJ no sé perquè serveix això
 					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1);
+						features[i].id=features[i].id.substring(capa.nom.length+1);*/
 				} 
 				catch (e) {
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);

@@ -35,6 +35,8 @@ var ajaxTransaccio=[];
 var Transaccio=[];
 var i_transaccio=0;
 
+
+
 var tipus_insert=0x0001;
 var tipus_update=0x0002;
 var tipus_delete=0x0004;
@@ -43,23 +45,45 @@ var tipus_delete=0x0004;
 function ErrorAvaluaRespostaTransaccio(doc, param)
 {
 var text=[], trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa];
-
+;
 	// Informo a l'usuari que s'ha produït un error
 	text.push(DonaCadenaLang({"cat": "La transacció d'inserció a la capa \"", "eng":"The insert transaction of the object into the layer \""}), 
 				   capa.nom, DonaCadenaLang({"cat":"\" ha fallat.", "eng":"\" has failed."}));
-	// ·$· Estaria bé d'informar de l'error que s'ha produït
-	if (param.text && param.text.length)
-		text.push(" ", param.text);
-	
+	if(param.text && param.text.length)
+		text.push("<br>More Information about the error: ", param.text);
 	MostraMissatgeTransaccio(text.join(""));	
 	CanviaEstatEventConsola(null, trans.i_event, EstarEventError);
 }
 
 function AvaluaRespostaTransaccio(doc, param)
 {
-var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], objectes=null, feature;
+var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], objectes=null;
 
-	if(!doc) return;	
+	var url_object=ajaxTransaccio[param.i_transaccio].getResponseHeader("Location");
+	if(url_object)
+	{
+		var id=url_object.substring(url_object.lastIndexOf("/")+1);
+		//trans.feature.id=id.substring(capa.nom.length+1);
+		if (!capa.objectes)
+			capa.objectes=[];
+		if(!capa.objectes.features)
+			capa.objectes.features=[];
+		var features=[];
+		features.push(trans.feature);
+		capa.objectes.features.push.apply(capa.objectes.features, features);
+
+	}
+	else
+	{	
+		var d=0.5;
+		if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+			d/=FactorGrausAMetres;
+		var punt={x: trans.feature.geometry.coordinates[0], y: trans.feature.geometry.coordinates[1]};
+		if(capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+			punt=TransformaCoordenadesPunt(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS);
+		FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(trans.i_capa, DonaEnvDeXYAmpleAlt(punt.x, punt.y, d, d), false);
+	}
+	/*if(!doc) return;	
 	try {
 		feature=JSON.parse(doc);
 		feature.id=feature.id.substring(capa.nom.length+1);
@@ -67,18 +91,22 @@ var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], obj
 	catch (e) {
 		CanviaEstatEventConsola(null, trans.i_event, EstarEventError);
 		return;
-	}	
-	if (!capa.objectes)
-		capa.objectes=[];
-	if(!capa.objectes.features)
-		capa.objectes.features=[];
-	capa.objectes.features.push.apply(capa.objectes.features, features);  	
+	}*/
 	
 	// Dibuixo l'objecte i aviso a l'usuari que s?ha afegit un nou objecte
+	CreaVistes();
 	var missatge=[];
-	missatge.push(DonaCadenaLang({"cat": "La transacció d'inserció de l'objecte \"", "eng": "The insert transaction of the object \""}), 
-		features.id, 
-		DonaCadenaLang({"cat":"\" a la capa \"", "eng":"\" into the layer \"" }), capa.nom, DonaCadenaLang({"cat":"\" ha finalitzat amb èxit.", "eng":"\" has successfully completed."}));
+	if(trans.feature.id)
+	{
+	    missatge.push("<br>",DonaCadenaLang({"cat": "La transacció d'inserció de l'objecte \"", "eng": "The insert transaction of the object \""}), 
+		    trans.feature.id, 
+		    DonaCadenaLang({"cat":"\" a la capa \"", "eng":"\" into the layer \"" }), capa.nom, DonaCadenaLang({"cat":"\" ha finalitzat amb èxit.", "eng":"\" has successfully completed."}));
+	}
+	else
+	{
+		missatge.push("<br>",DonaCadenaLang({"cat": "La transacció d'inserció a la capa \"", "eng": "The insert transaction into the layer \""}), 
+					 capa.nom, DonaCadenaLang({"cat":"\" ha finalitzat amb èxit.", "eng":"\" has successfully completed."}));
+	}
 	MostraMissatgeTransaccio(missatge.join(""));
 	CanviaEstatEventConsola(null, trans.i_event, EstarEventTotBe);
 	return;
@@ -91,19 +119,15 @@ function AmagaLayerMissatgeTransaccio()
 
 function MostraMissatgeTransaccio(missatge)
 {
-	alert(missatge);
-	return;
-/*
 var elem=ObreFinestra(window, "misTransaccio", DonaCadenaLang({"cat":"per informar del resultat de la transacció",
 						  "spa":"para informar del resultado de la transacción",
 						  "eng":"to report the result of the transaction",
 						  "fre":"pour rapporter le résultat de la transaction"}));
 	if (!elem)
 		return;
-	classLayer(elem, "mistrans");
+	//classLayer(elem, "mistrans");
 	contentLayer(elem, missatge);
 	//setTimeout("AmagaLayerMissatgeTransaccio();",5000); 
-*/
 }
 
 
@@ -170,7 +194,7 @@ var capa=ParamCtrl.capa[form.i_capa.value], objecte, num, plantilla=[], url, i_e
 	if (window.doAutenticatedHTTPRequest && capa.access)
 		doAutenticatedHTTPRequest(capa.access, "POST", ajaxTransaccio[i_transaccio], url, 'application/json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
 	else		
-		ajaxTransaccio[i_transaccio].doPost(url, 'application/json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
+		ajaxTransaccio[i_transaccio].doPost(url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
 	i_transaccio++;
 	TancaFinestraLayer('editarVector');
 }*/
@@ -197,7 +221,7 @@ var i_capa=parseInt(form.i_capa.value), capa=ParamCtrl.capa[i_capa], objecte, nu
 	url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
 	i_event=CreaIOmpleEventConsola("OAPI_Features_Transactions (POST)", i_capa, url, TipusEventFeatureInsertTransaction);	
 	
-	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_insert};
+	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_insert, feature: objecte};
 	ajaxTransaccio[i_transaccio]=new Ajax();
 	ajaxTransaccio[i_transaccio].setHandlerErr(ErrorAvaluaRespostaTransaccio);
 	if (window.doAutenticatedHTTPRequest && capa.access)
@@ -326,6 +350,25 @@ var cdns=[], i_capa;
 	cdns.push("<input type=\"hidden\" value=\"", i_capa,"\" name=\"i_capa\" id=\"i_capa\">",
 			  "</div></form>");			
 	return cdns.join(""); 
+}
+
+function FesTransaccioEliminarPunt(i_capa, i_feature)
+{
+var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plantilla=[];
+
+	plantilla.push("/collections/",capa.nom, "/items/", feature.id);
+	var url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
+	var i_event=CreaIOmpleEventConsola("OAPI_Features_Transactions (POST)", i_capa, url, TipusEventFeatureInsertTransaction);	
+	
+	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_delete, feature: objecte};
+	ajaxTransaccio[i_transaccio]=new Ajax();
+	ajaxTransaccio[i_transaccio].setHandlerErr(ErrorAvaluaRespostaTransaccioDelete);
+	//if (window.doAutenticatedHTTPRequest && capa.access)
+	//	doAutenticatedHTTPRequest(capa.access, "POST", url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
+	//else
+	ajaxTransaccio[i_transaccio].doDelete(url, AvaluaRespostaTransaccioDelete, 'application/json',  {i_transaccio: i_transaccio});
+	i_transaccio++;
+	TancaFinestraLayer('editarVector');
 }
 
 /*

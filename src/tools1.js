@@ -1487,6 +1487,7 @@ function Ajax()
 			req.setRequestHeader('Content-Type', this.requestFormat);
 		if ((this.method == 'POST' || this.method == 'PUT') && this.responseFormat)
 			req.setRequestHeader('Accept', this.responseFormat);
+		req.setRequestHeader('Access-Control-Expose-Headers', '*');
 
 		for (var i=0; i<this.requestHeaders.length; i++)
 			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
@@ -1496,6 +1497,25 @@ function Ajax()
 		req.onreadystatechange = function() {
 			var resp = null;
 			self.readyState = req.readyState;
+			if (req.readyState == 2)  // this.HEADERS_RECEIVED
+			{
+			    // Get the raw header string
+			    var headers = req.getAllResponseHeaders();
+			
+				// Convert the header string into an array
+				// of individual headers
+				var arr = headers.trim().split(/[\r\n]+/);
+
+				// Create a map of header names to values
+				req.responseHeaders = {};
+				arr.forEach(function (line) {
+				  var parts = line.split(': ');
+				  var header = parts.shift();
+				  var value = parts.join(': ');
+				  req.responseHeaders[header] = value;
+				});
+		    }
+
 			if (req.readyState == 4) {
 				self.status = req.status;
 				self.statusText = req.statusText;
@@ -1597,7 +1617,7 @@ function Ajax()
 	};
 
 	this.getResponseHeader = function(headerName) {
-		this.req.getResponseHeader(headerName);
+		this.req.responseHeaders[headerName];
 	};
 
 	this.setAccessToken = function(accessToken, accessTokenType) {

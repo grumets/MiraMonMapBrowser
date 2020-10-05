@@ -684,6 +684,7 @@ var cdns=[], ncol=440, nfil=220;
 	return cdns.join("");	
 }
 
+
 function MostraConsultaCapaDigitalitzadaComHTML(i_capa_digi, i_obj_digi, cal_titol_capa, cal_class)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa_digi], atributs=capa.atributs, feature, valor, atribut;
@@ -697,7 +698,12 @@ var separador=null;
 				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
 				"</span><hr size=\"2\">");
 	}
-
+	/* Pendent de fer 
+	if(capa.editable=="si")
+	{
+		cdns.push("<a href=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi,);\" onClick=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi, ");\">", 
+				DonaCadenaLang({"cat":"Esborrar l'objecte", "spa":"Borrar el objeto", "eng":"Delete the object","fre":"Supprimer l'objet"}),"</a><br><br>");
+	}*/
 	feature=capa.objectes.features[i_obj_digi];
 	for (var i=0; i<atributs.length; i++)
 	{
@@ -710,9 +716,8 @@ var separador=null;
 
 		if(atribut.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 			continue;
-
+			
 		cdns.push(MostraConsultaAtributComHTML(i_capa_digi, i_obj_digi, i, atribut, separador, valor, -1, cal_class));
-
 		if (separador)
 			separador=null;
 	}
