@@ -4558,7 +4558,7 @@ var env=vista.EnvActual;
 						var simbol=simbols.simbol;
 						if (i_col<0 || i_col>vista.ncol || i_fil<0 || i_fil>vista.nfil)
 							i_simbol=-1;  //Necessari per evitar formules que puguin contenir valors de raster.
-						else if (simbol.length==1) 
+						else if (simbol.length==1 && !simbols.NomCamp) 
 							i_simbol=0;
 						else
 							i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil);

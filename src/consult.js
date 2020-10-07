@@ -422,7 +422,7 @@ function ErrorRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 
 function FesPeticioAjaxConsulta(win)
 {
-var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, url, i, capa, tipus, i_simb;
+var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, url, i, capa, tipus, i_simb, i_simbol;
 
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
@@ -462,12 +462,18 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 		if ((tipus=="TipusWFS" || tipus=="TipusOAPI_Features") && capa.estil[capa.i_estil].simbols && capa.estil[capa.i_estil].simbols.length)
 		{
 			cal_transformar=DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj], capa.CRSgeometry)
-			env_icones=DonaEnvIcona(punt,
-						capa.estil[capa.i_estil].simbols[0].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, 0, PuntConsultat.i, PuntConsultat.j)].icona);
+			i_simbol=DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, 0, PuntConsultat.i, PuntConsultat.j);
+			if (i_simbol==-1)
+				env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
+			else
+				env_icones=DonaEnvIcona(punt, capa.estil[capa.i_estil].simbols[0].simbol[i_simbol].icona);
 			for (i_simb=1; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
 			{
+				i_simbol=DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, i_simb, PuntConsultat.i, PuntConsultat.j);
+				if (i_simbol==-1)
+					continue;				
 				env_icona=DonaEnvIcona(punt,
-						capa.estil[capa.i_estil].simbols[i_simb].simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona);
+						capa.estil[capa.i_estil].simbols[i_simb].simbol[i_simbol].icona);
 				if (env_icones.MinX>env_icona.MinX)
 					env_icones.MinX=env_icona.MinX;
 				if (env_icones.MaxX<env_icona.MaxX)
@@ -1364,7 +1370,10 @@ var capa=ParamCtrl.capa[i_capa];
 		for (var i_simb=0; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
 		{
 			simbols=capa.estil[capa.i_estil].simbols[i_simb];
-			icona=simbols.simbol[DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j)].icona;
+			i_simbol=DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j);
+			if (i_simbol==-1)
+				continue;
+			icona=simbols.simbol[i_simbol].icona;
 			if (simbols.NomCampFEscala)
 			{
 				icona.fescala=DeterminaValorObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_simb, PuntConsultat.i, PuntConsultat.j, simbols.NomCampFEscala);

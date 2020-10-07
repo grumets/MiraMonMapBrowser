@@ -1049,7 +1049,7 @@ var i_simbol, estil, valor, i_atrib;
 		if (i_atrib==-1)
 		{
 			AlertaNomAtributIncorrecteSimbolitzar(estil.simbols[i_simbs].NomCamp, "estil.simbols[i_simbs].NomCamp", capa_digi);
-			return 0;
+			return -1;
 		}
 		valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
 		for(i_simbol=0; i_simbol<estil.simbols[i_simbs].simbol.length; i_simbol++)
@@ -1058,7 +1058,7 @@ var i_simbol, estil, valor, i_atrib;
 				return i_simbol;
 		}
 	}
-	return 0;
+	return -1;
 }
 
 //Discusió de com fer tot això: http://stackoverflow.com/questions/17578280/how-to-pass-parameters-into-image-load-event
