@@ -2383,14 +2383,14 @@
 						"enum": ["si", "no", "si_ple"]
 					},
 					"tipus": { 					
-						"description": "Pendent d'implementació. Tipus d'atribut. Opcional. C: Caràcters, N: Numèric, D: Data-Hora, L: Lògic, B: Binary",											
-						"enum": ["C", "N", "D","L","B"]
+						"description": "Pendent d'implementació. Tipus d'atribut. Opcional. string, number, dateTime, boolean (considerar si té sentit binary, object, array.",											
+						"enum": ["string", "number", "dateTime","boolean"]
 					},
 					"mida":  { 					
 						"description": "Pendent d'implementació. Mida de l'atribut. Opcional. Amplada màxima que pot tenir el tipus de camp. En el cas de tipus numèrics és la màxima precisió. En el cas de cadenes és la màxima longitud en caràcters.En el cas de data-hora és la màxima longitud en caràcters de la representació de la data-hora com a text."
 					},
 					"pDecimals": { 					
-						"description": "Pendent d'implementació. Nombre de decimal de l'atribut. Només aplica si l'atribut és de tipus numèric (N). Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)"
+						"description": "Pendent d'implementació. Nombre de decimals de l'atribut (propietat). Només aplica si l'atribut és de tipus numèric (N). Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)"
 					},
 					"format": {
 						"description": "És el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
