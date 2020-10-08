@@ -117,6 +117,7 @@ function AmagaLayerMissatgeTransaccio()
 	TancaFinestraLayer("misTransaccio");
 }
 
+//$$ Innacabat: Aquest sistema de missatgeria és particular de l'edició però requereix una window nova. Considerar si aquest podria ser el sistema de missatgeria general del navegador (tal com ho fa el GeMM). També cal connectar la transacció amb a línia de comanda de la consula i reportar-lo com un error.
 function MostraMissatgeTransaccio(missatge)
 {
 var elem=ObreFinestra(window, "misTransaccio", DonaCadenaLang({"cat":"per informar del resultat de la transacció",
@@ -352,6 +353,7 @@ var cdns=[], i_capa;
 	return cdns.join(""); 
 }
 
+//$$ Aquesta operació NO ha estat probada mai i segurament cal repassar-la
 function FesTransaccioEliminarPunt(i_capa, i_feature)
 {
 var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plantilla=[];
