@@ -158,10 +158,19 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 
 	var env=DonaEnvolupantDescarregaAmbCTipicaCompleta();
-
 	var res_cov=ParamCtrl.ResGetCoverage[capa.ResCoverage];
+	var crs;
+
+	if (res_cov.CRS && res_cov.CRS!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
+	{
+		crs=res_cov.CRS;
+		env=DonaEnvolupantCRS(env, crs);
+	}
+	else
+		crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;			
+	
 	cdns_req.push("SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&CRS=", 
-				ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, 
+				crs, 
 				"&BBOX=", env.MinX, ",", env.MinY, ",", env.MaxX, ",", env.MaxY, 
 				"&COVERAGE=", capa.nom, 
 				"&RESX=", res_cov.ll.x.sel, "&RESY=", res_cov.ll.y.sel, "&FORMAT=");
@@ -425,7 +434,7 @@ function CanviaParamCoverageIGrisos(i_par,i, i_capa_wcs)
 function CanviaFormatCoverage(i, i_capa_wcs)
 {
 var format_cov=ParamCtrl.FormatGetCoverage[ParamCtrl.capa[i_capa_wcs].FormatCoverage];
-	for (j=0; j<format_cov.ll.length; j++)
+	for (var j=0; j<format_cov.ll.length; j++)
 		format_cov.ll[j].sel=false;
 	format_cov.ll[i].sel=true;
 }
@@ -598,7 +607,7 @@ var cdns=[], missatge_mmz=false;
 	{
 		cdns.push("<input TYPE=\"radio\" NAME=\"format\" ", 
 				((format_cov.ll[i].sel) ? "CHECKED " : ""),
-				"onClick=\"CanviaFormatCoverage("+i+");\"> ",
+				"onClick=\"CanviaFormatCoverage(", i, ", ", i_capa_wcs, ");\"> ",
 				DonaCadena(format_cov.ll[i].desc)+"<br>");
 		if (format_cov.ll[i].nom=="application/x-mmz" || format_cov.ll[i].nom=="application/x-mmzx")
 			missatge_mmz=true;

@@ -859,6 +859,10 @@
 						"description": "Nom de les resolucions del GetCoverage",
 						"type": "string" 
 					},
+					"CRS": {
+						"description": "CRS en que la capa està dispoinble. Opcional, si no s'indica s'assumeix que la cap està disponible en tots els CRSs",
+						"type": "string" 
+					},
 					"ll": {
 						"description": "Resolucions de GetCoverage",
 						"type": "object",
