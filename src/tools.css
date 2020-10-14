@@ -537,6 +537,12 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	opacity: 0.9;
 	cursor:pointer;
 }
+
+.finestra_superposada_opaca 
+{
+	opacity: 0.9;
+}
+
 .text_allus
 {
 	text-shadow: -1px 0 #FFFFFF, 0 1px #FFFFFF, 1px 0 #FFFFFF, 0 -1px #FFFFFF, 0 0 3px #FFFFFF;

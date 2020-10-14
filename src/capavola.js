@@ -659,20 +659,27 @@ function IniciaPosicioGPS()
 	}
 }	
 
+var PreviousGPSPoint={x:1e300, y:1e300}, PreviousGPSCRS="";
+
 function ActualitzaPosicioGPS(position)
 {
-	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
-	{
-		var punt=DonaCoordenadesCRS(position.coords.longitude, position.coords.latitude, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaGPS];
-		capa.objectes.features[0].geometry.coordinates[0]=punt.x;
-		capa.objectes.features[0].geometry.coordinates[1]=punt.y;
-		//For the moment, a field can not be used to define the radius of the circle, so I have to do it here. This would be fixed.
-		capa.objectes.features[0].properties.uncertainty=position.coords.accuracy;
-		//if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-		//	capa.objectes.features[0].properties.uncertainty/=FactorGrausAMetres;
-		CreaVistes();
-	}
+	if (typeof ParamCtrl.ICapaVolaGPS === "undefined")
+		return
+
+	var punt=DonaCoordenadesCRS(position.coords.longitude, position.coords.latitude, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaGPS];
+	capa.objectes.features[0].geometry.coordinates[0]=punt.x;
+	capa.objectes.features[0].geometry.coordinates[1]=punt.y;
+	//For the moment, a field can not be used to define the radius of the circle, so I have to do it here. This would be fixed.
+	capa.objectes.features[0].properties.uncertainty=position.coords.accuracy;
+	//if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	//	capa.objectes.features[0].properties.uncertainty/=FactorGrausAMetres;
+	//Avoiding unnecessary redrawings
+	if (PreviousGPSCRS==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS && Math.abs(PreviousGPSPoint.x-punt.x)<ParamInternCtrl.vista.CostatZoomActual*2 && Math.abs(PreviousGPSPoint.y-punt.y)<ParamInternCtrl.vista.CostatZoomActual*2)
+		return;
+	PreviousGPSPoint={x: punt.x, y: punt.y};
+	PreviousGPSCRS=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+	CreaVistes();
 }
 
 function AnarACoordGPS(form)

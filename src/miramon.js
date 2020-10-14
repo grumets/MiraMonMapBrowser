@@ -5254,7 +5254,7 @@ var p, unitats_CRS;
 		if (( ParamCtrl.VistaBotonsBruixola==true || ParamCtrl.VistaBotonsZoom==true || ParamCtrl.VistaSliderZoom==true || ParamCtrl.VistaEscalaNumerica==true) && vista.i_nova_vista==NovaVistaPrincipal)
 		{
 			var barra_slider=[];
-			barra_slider.push("<table class=\"finestra_superposada\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 			if (ParamCtrl.VistaBotonsBruixola==true && (parseInt(document.getElementById("vista").style.height,10) >= 300))
 			{
 				barra_slider.push("<tr><td align='center'>");
@@ -6407,6 +6407,8 @@ function StartMiraMonMapBrowser(div_name)
 {
 var config_json="config.json", config_reset=false;
 var clau_config="CONFIG=", clau_reset="RESET=";
+
+	FesTestDeNavegador();
 
 	if (window.InitHello)
 		InitHello();
