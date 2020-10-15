@@ -922,7 +922,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label,
 			                distribution: 'linear',
 					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
 					time: {
-						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						tooltipFormat: DonaCadenaFormatDataHora(que_mostrar),
 						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
 					}
 				}],
@@ -1012,7 +1012,7 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 			                distribution: 'linear',
 					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
 					time: {
-						tooltipFormat: DonaCadanaFormatDataHora(que_mostrar),
+						tooltipFormat: DonaCadenaFormatDataHora(que_mostrar),
 						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
 					}
 				}],

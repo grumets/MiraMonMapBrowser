@@ -376,10 +376,20 @@ function AfegeixAdrecaBaseSRC(s)
 
 function TreuAdreca(s)
 {
-	var i=s.lastIndexOf("/");
+	var i=s.lastIndexOf('/');
+	if (i==-1)
+		i=s.lastIndexOf('\\');
 	if (i==-1)
 		return s;
 	return s.substring(i+1);
+}
+
+function TreuExtensio(s)
+{
+	var i=s.lastIndexOf('.');
+	if (i==-1)
+		return s;
+	return s.substring(0, i);
 }
 
 function DonaExtensioFitxerSensePunt(s)
@@ -858,7 +868,7 @@ var elem, rect, ancora, nom;
 					rect.ample=5;
 				if (rect.sup<0)
 					rect.sup=0;
-				if (rect.alt<5)    //Impedeiso que les layers desaparexin totalment
+				if (rect.alt<5)    //Impedeixo que les layers desaparexin totalment
 					rect.alt=5;
 
 				if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
@@ -1514,7 +1524,8 @@ function Ajax()
 				  var value = parts.join(': ');
 				  req.responseHeaders[header] = value;
 				});
-			}
+		    }
+
 			else if (req.readyState == 4) 
 			{
 				self.status = req.status;
@@ -2153,7 +2164,6 @@ function MobileAndTabletCheck()
 }
 
 var MobileWebBrowser=false, MobileAndTabletWebBrowser=false, NecessariLayerIFrame=false;
-
 function FesTestDeNavegador()
 {
     if (!document.getElementById)
@@ -2234,18 +2244,18 @@ function FesTestDeNavegador()
 	   //version = detect.charAt(detect.indexOf(NomNavegador) + 1 + NomNavegador.length);
 	}
 
-	if (!OS)
-	{
+    if (!OS)
+    {
 		if (checkIt('linux')) OS = "Linux";
 		else if (checkIt('x11')) OS = "Unix";
 		else if (checkIt('mac')) OS = "Mac";
 		else if (checkIt('win')) OS = "Windows";
 		else OS = "an unknown operating system";
-	}
+    }
 
-	//Diverses precaucions sobre la versió dels navegadors:
-	if (browser=="Internet Explorer")
-	{
+    //Diverses precaucions sobre la versió dels navegadors:
+    if (browser=="Internet Explorer")
+    {
 		if (version<8)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 8 o posterior per a funcionar correctament.\n" +
@@ -2262,9 +2272,9 @@ function FesTestDeNavegador()
 		} 
 		if (navigator.appName.substring(0,9) == "Microsoft" && is_major <= 6)
 			NecessariLayerIFrame=true;
-	}
-	else if (browser=="Netscape Navigator")
-	{
+    }
+    else if (browser=="Netscape Navigator")
+    {
 		if (version<5)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 5 o posterior per a funcionar correctament (es recomana la versió 7).\n" +
@@ -2272,9 +2282,9 @@ function FesTestDeNavegador()
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 5 o greater to work properly (version 7 is recomended).\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 5 oû postérieure pour bien fonctionner (nous recommandons la version 7).");
 		}
-	}
-	else if (browser=="Opera")
-	{
+    }
+    else if (browser=="Opera")
+    {
 		if (version<7)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Actualment, no hi ha cap versió de Opera que funcioni correctament amb aquest navegador de mapes, malgrat que la versió 7 gairebé resulta compatible.\n" +
@@ -2289,15 +2299,14 @@ function FesTestDeNavegador()
 				"A version " + version + " of " + browser + " has been detected. El performance of this map browser is poor on this version. It is allowed to continue with experimental proposes.\n" +
 				"Une version " + version + " de " + browser + " a été détectée. Le fonctionnement de ce navigateur de couches est réduit en cette version. On le maintient a des fins finalités expérimentales.");
 		}
-	}
-	else if (version<5)
-	{
+    }
+    else if (version<5)
+    {
 		alert("S'ha detectat la versió " + version + " del navegador " + browser + ". Aquest navegador no ha estat testat i la versió indicada és inferior a la 5. Es deixa continuar però no garantim el funcionament correcte d'aquest navegador de mapes.\n" +
 			"Se ha detectado la versión " + version + " del navegador " + browser + ". Este navegador no ha sido testeado y la versión indicada es inferior a la 5. Es deja continuar pero no se garantiza el funcionamento correcto de este navegador de mapas.\n" +
 			"Version " + version + " of the browser " + browser + " has been detected. This browser has not been tested and the indicated version is lower than 5. It is allowed to continue but we cannot guaranty a correct performance of this map browser.\n"+
 			"Une version " + version + " de " + browser + " a été détectée. Ce navigateur n'a pas été testé et la version indiquée est antérieure au la version 5. On laisse poursuivre mais on ne garantit pas le fonctionnement correct de ce navigateur de couches.");
-	}
-	
+    }
 	MobileAndTabletWebBrowser=MobileAndTabletCheck();		
 	MobileWebBrowser=MobileCheck();
 }
