@@ -380,7 +380,8 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};	
 	}
 	o_data.minute=parseInt(tros_time[1],10);
-	if(tros_time.length==3) //hh:mm:ss[Z]
+	if(tros_time.length==3) //hh:mm:ss[Z]  // ·$· NJ-> ? Això no és correcte, hi ha altres formats ISO que tenen una longitud de més de 3 i aquesta funció no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
+	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date és més fàcil passar-ho a JSON i ja tenim funcions per això.
 	{
 		var i_ms=tros_time[2].search("[.]");
 		var i_z=tros_time[2].search("[Z]");		
@@ -394,7 +395,8 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 			o_data.millisecond=parseInt(tros_time[2].substr(i_ms+1,(i_z-i_ms)),10);
 		}
 		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};	
-	}			
+	}
+	return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};	
 }
 
 /*Eliminada en favor DonaDateComATextISO8601() que existeix sempre. Es va crear per IE8 compatibility for toISOString
@@ -562,7 +564,7 @@ var cdns=[];
 }//fi de DonaDataJSONComATextISO8601()
 
 //Retorna una cosa com: "DD-MM-YYYY hh:mm:ss" depenent de que_mostrar
-function DonaCadanaFormatDataHora(que_mostrar)
+function DonaCadenaFormatDataHora(que_mostrar)
 {
 var cdns=[];
 
