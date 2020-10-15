@@ -1116,8 +1116,7 @@ function isFinestraLayerVisible(win, name)
 	var elem=getFinestraLayer(win,name);
 	if(elem && isLayerVisible(elem))
 		return true;
-	else
-		return false;	
+	return false;	
 }
 
 function getcontentFinestraLayer(win, name)

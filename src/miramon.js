@@ -741,61 +741,61 @@ function CanviaIdioma(s)
 		if(layerList[i].contingut!=null)
 			contentLayer(getLayer(window, layerList[i].nom), DonaCadena(layerList[i].contingut));
 	}
-	var elem=getLayer(window, "multi_consulta_finestra");
+	var elem=getFinestraLayer(window, "multi_consulta");
 	if(isLayer(elem) && isLayerVisible(elem))
 		CreaConsulta(window, 0);
 
-	elem=getLayer(window, "executarProces_finestra");
+	elem=getFinestraLayer(window, "executarProces");
 	if(isLayer(elem) && isLayerVisible(elem))
 		TancaFinestraLayer("executarProces");  //Em falta un parametre per iniciar-la IniciaFinestraExecutaProcesCapa(i_capa);
 
-	elem=getLayer(window, "afegirCapa_finestra");
+	elem=getFinestraLayer(window, "afegirCapa");
 	if(isLayer(elem) && isLayerVisible(elem))
 		TancaFinestraLayer("afegirCapa");  //Em falta una parametre per iniciar-la IniciaFinestraAfegeixCapaServidor(i_capa);
 
-	elem=getLayer(window, "seleccioCondicional_finestra");
+	elem=getFinestraLayer(window, "seleccioCondicional");
 	if(isLayer(elem) && isLayerVisible(elem))
 		TancaFinestraLayer("seleccioCondicional");  //Em falta una parametre per iniciar-la ObreFinestraSeleccioCondicional(i_capa);
 
-	elem=getLayer(window, "combinacioRGB_finestra");
+	elem=getFinestraLayer(window, "combinacioRGB");
 	if(isLayer(elem) && isLayerVisible(elem))
-		TancaFinestraLayer("combinacioRGB"); //Em falta una parametre per iniciar-la 
+		TancaFinestraLayer("combinacioRGB"); //Em falta una paràmetre per iniciar-la 
 
-	elem=getLayer(window, "anarCoord_finestra");
+	elem=getFinestraLayer(window, "anarCoord");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraAnarCoordenada();
 
-	elem=getLayer(window, "multi_consulta_finestra");
-	if(isLayer(elem) && isLayerVisible(elem))
-		TancaFinestraLayer("multi_consulta");
-
-	elem=getLayer(window, "param_finestra");
+	elem=getFinestraLayer(window, "param");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraParametres();
 
-	elem=getLayer(window, "download_finestra");
+	elem=getFinestraLayer(window, "download");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraDownload();
 
-	elem=getLayer(window, "video_finestra");
+	elem=getFinestraLayer(window, "video");
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraVideo();
 
-	elem=getLayer(window, "consola_finestra");
+	elem=getFinestraLayer(window, "consola");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraConsola();
 
-	elem=getLayer(window, "enllac");
+	elem=getFinestraLayer(window, "enllac");
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraEnllac();
 
-	elem=getLayer(window, "enllacWMS");
+	elem=getFinestraLayer(window, "enllacWMS");
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraEnllacWMS();
 
-	elem=getLayer(window, "editarVector_finestra");
+	elem=getFinestraLayer(window, "editarVector");
 	if(isLayer(elem) && isLayerVisible(elem))
 		TancaFinestraLayer("editarVector");
+		
+	elem=getFinestraLayer(window, "mostraLlinatge");
+	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
+		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});		
 }
 
 function DonaIndexNivellZoom(costat)

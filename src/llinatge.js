@@ -33,6 +33,7 @@ var LListaCapesGraphsMM=[];
 var GraphsMM={hihaElements:false};
 var IdNodeGraphsMM=0;
 
+
 function EsborraGrafLlinatge()
 {
 	GraphsMM.nodes=null;
@@ -45,7 +46,12 @@ function EsborraGrafLlinatge()
 		GraphsMM.lineageNetWork.setData({nodes:GraphsMM.nodesGraf, edges:GraphsMM.edgesGraf})
 	GraphsMM.hihaElements=false;
 	IdNodeGraphsMM=0;
-	ListaCapesGraphsMM=[];
+}
+
+function EsborraGrafLlinatgeICapes()
+{
+	EsborraGrafLlinatge();
+	LListaCapesGraphsMM=[];	
 }
 
 function ComparaEdgesLlinatge(a, b)
@@ -392,7 +398,7 @@ var i, capa=ParamCtrl.capa[LListaCapesGraphsMM[i_capa_llista].i_capa], lli=capa.
 		GraphsMM.nodesGraf.add(info_graf.nodes);	
 		if(!GraphsMM.nodes)
 			GraphsMM.nodes=[];
-		GraphsMM.nodes.push(info_graf.nodes);	
+		GraphsMM.nodes.push.apply(GraphsMM.nodes, info_graf.nodes);	
 	}
 	if(info_graf.edges)
 		GraphsMM.edgesGraf.add(info_graf.edges);
@@ -402,8 +408,6 @@ function CreaGrafLlinatge(nom_div)
 {
 var i, cdns=[];
 
-	cdns.push("<center><table border=0 width=95%><tr><td><font size=1><a href=\"javascript:void(0);\" onClick=\"EsborraGrafLlinatge();\">", 
-				DonaCadenaLang({"cat":"Esborra-ho tot", "spa":"Borrar todo", "eng":"Delete all","fre":"Tout effacer"}),"</a><br>");
 	
 	GraphsMM.nodesGraf = new vis.DataSet({});
 	GraphsMM.edgesGraf = new vis.DataSet({});
@@ -426,8 +430,7 @@ var i, cdns=[];
 	};
 	GraphsMM.div=nom_div;	
 	GraphsMM.lineageNetWork = new vis.Network(document.getElementById(nom_div), {nodes: GraphsMM.nodesGraf, edges: GraphsMM.edgesGraf},  GraphsMM.options);
-	GraphsMM.lineageNetWork.on("click", function (params) {document.getElementById("InfoLlinatge").innerHTML = DonaInformacioAssociadaANodeLlinatge(params)});
-	// GraphsMM.darrerIdUsat=info_graf.nodes.length;
+	GraphsMM.lineageNetWork.on("click", function (params) {document.getElementById("infoLlinatge").innerHTML = DonaInformacioAssociadaANodeLlinatge(params)});
 	GraphsMM.hihaElements=true;
 	FesLlistaOrdenaNodesPerId(GraphsMM);
 }
@@ -494,18 +497,40 @@ function DescarregaLlinatgeCapa(i_capa, funcio, param)
 
 
 // Funcions que permeten que hi hagi més d'una capa a la mateixa finestra on es mostren els grafs del llinatge
-function MostraLlinatge(param)
+function OmpleFinestraLlinatge(param)
 {	
-	if(GraphsMM.hihaElements)
+	if(!param.redibuixat && GraphsMM.hihaElements && param.i_capa!=-1)
 	{
-		AfegeixCapaAGrafLlinatge("LayerLlinatgeCapa", param.i_capa);
+		if(AfegeixCapaALlistaCapesGrafLLinatge(param.i_capa))
+		{
+			var i_capa_llista=LListaCapesGraphsMM.binarySearch(param.i_capa,findLListaCapesGraphsMMIdCapa);
+			if(i_capa_llista!=-1)
+				AfegeixCapaAGrafLlinatge(i_capa_llista);
+		}
 	}
 	else
 	{
-		contentLayer(param.elem, "<div id=\"LayerLlinatgeCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:500px;height:500px;border: 1px solid lightgray;\"></div><br><div id=\"InfoLlinatge\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:520px;width:500px;height:50px;border: 1px solid lightgray;\"></div>");
-		CreaGrafLlinatge("LayerLlinatgeCapa");
+		if(param.redibuixat)		
+		{	
+			if(LListaCapesGraphsMM.length==0)
+				return;
+			EsborraGrafLlinatge();
+		}
+		var cdns=[];
+		cdns.push(  "<table style=\"width: 97%; height: 97%;position: absolute;top: 50%;left: 50%;margin-right: -50%;transform: translate(-50%, -50%);\">",
+				  	"<tr><td style=\"width:100%;height:5%;border:1px solid lightgray;><p id=\"botonsLlinatge\"><font size=1><a href=\"javascript:void(0);\" onClick=\"EsborraGrafLlinatge();\">", 
+					DonaCadenaLang({"cat":"Esborra-ho tot", "spa":"Borrar todo", "eng":"Delete all","fre":"Tout effacer"}),"</a><p></td></tr>",
+					"<tr><td class=\"Verdana11px\" style=\"width:100%;height:80%;border: 1px solid lightgray;\"><div style=\"border:0;width:98%;height:98%;position:relative;\" id=\"grafLlinatge\"></div></td></tr>",
+				  	"<tr><td style=\"width:100%;height:15%;border:1px solid lightgray;\"><textarea id=\"infoLlinatge\" class=\"Verdana11px\" style=\"border:0;width:98%;height:98%;resize:none;\" readonly=\"readonly\"></textarea></td></tr>",
+				  	"</table>");
+		
+		contentLayer(param.elem, cdns.join(""));
+		if(param.i_capa!=-1) 
+		 	AfegeixCapaALlistaCapesGrafLLinatge(param.i_capa);
+		CreaGrafLlinatge("grafLlinatge");
 	}
 }
+
 
 function sortLListaCapesGraphsMM(a,b) 
 {
@@ -513,7 +538,6 @@ function sortLListaCapesGraphsMM(a,b)
 		return -1;
 	if(a.i_capa > b.i_capa)
 		return 1;
-
 	if(a.nSteps< b.nSteps)
 		return -1;
 	if(a.nSteps > b.nSteps)
@@ -526,13 +550,17 @@ function findLListaCapesGraphsMMIdCapa(i_capa, b)
 	return ((i_capa< b.i_capa) ? -1 : ((i_capa> b.i_capa) ? 1 : 0));
 }
 
-
-function AfegeixCapaALlistaCapesGrafLLinatge(param)
+function AfegeixCapaALlistaCapesGrafLLinatge(i_capa)
 {
-	LListaCapesGraphsMM.push({i_capa: param.i_capa, nSteps: 0});
-	LListaCapesGraphsMM.sort(sortLListaCapesGraphsMM);
-	LListaCapesGraphsMM.removeDuplicates(sortLListaCapesGraphsMM);
-	MostraLlinatge(param);
+	var i_capa_llista=LListaCapesGraphsMM.binarySearch(i_capa,findLListaCapesGraphsMMIdCapa);
+	if(i_capa_llista==-1)
+	{
+		LListaCapesGraphsMM.push({i_capa: i_capa, nSteps: 0});
+		LListaCapesGraphsMM.sort(sortLListaCapesGraphsMM);
+		// LListaCapesGraphsMM.removeDuplicates(sortLListaCapesGraphsMM);
+		return true;
+	}	
+	return false;
 }
 
 function FinestraMostraLlinatgeCapa(elem, i_capa)
@@ -541,7 +569,7 @@ var capa=ParamCtrl.capa[i_capa];
 
 	if(!capa.metadades || !capa.metadades.provenance)
 	{
-		MostraLlinatge({elem: elem, i_capa: -1});
+		OmpleFinestraLlinatge({elem: elem, i_capa: -1});
 		return;
 	}
 		
@@ -549,12 +577,9 @@ var capa=ParamCtrl.capa[i_capa];
 	if(prov.peticioServCSW && !prov.lineage)
 	{
 		// Demano el llinatge al servidor i el carrego a memòria
-		DescarregaLlinatgeCapa(i_capa, AfegeixCapaALlistaCapesGrafLLinatge, {elem: elem, i_capa: i_capa});
+		DescarregaLlinatgeCapa(i_capa, OmpleFinestraLlinatge, {elem: elem, i_capa: i_capa});
 		return;
 	}
-	if(prov.lineage)
-		AfegeixCapaALlistaCapesGrafLLinatge({elem: elem, i_capa: i_capa});
-	else
-		MostraLlinatge({elem: elem, i_capa: -1});
+	OmpleFinestraLlinatge({elem: elem, i_capa: (prov.lineage) ? i_capa : -1});
 	return;
 }
