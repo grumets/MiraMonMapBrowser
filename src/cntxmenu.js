@@ -155,9 +155,15 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraModificaNomCapa(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}), "</a><br>");
 	cdns.push("<hr>");
+	
 	if(ParamCtrl.BarraBotoAfegeixCapa==true)
+	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
+
+	}
 	if (capa.origen && capa.origen=="usuari")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
@@ -165,9 +171,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<br>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"}), "</a>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
-	cdns.push("<hr>");
-
+	if(alguna_opcio)
+	{
+		cdns.push("<hr>");
+		alguna_opcio=false;
+	}
 	if (ParamCtrl.capa.length>NumeroDeCapesVolatils(-1))
 	{
 		cdns.push("<b><font color=\"#888888\">",
@@ -193,16 +204,23 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<br />");
 	}
 	if(alguna_opcio)
+	{
 		cdns.push("<hr>");
+		alguna_opcio=false;
+	}
 	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Metadades", "spa":"Metadatos", "eng":"Metadata", "fre":"Métadonnées"}), "</a><br>");		
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (/*(capa.tipus=="TipusWMS" && capa.FormatImatge=="application/x-img") ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,", -1);TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}), "</a><br>");		
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.metadades)
 	{
@@ -210,26 +228,35 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		{
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
 					DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
+			if(!alguna_opcio)
+				alguna_opcio=true;
 		}
-		if (capa.metadades.provenance)
+		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage))
 		{
-			if(capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage)
-			{
-				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
-						DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
-			}
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
+					DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
+			if(!alguna_opcio)
+				alguna_opcio=true;
 		}
 	}
 	/*if (capa.metadades && capa.metadades.guf)
 	{*/
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	//}
-	cdns.push("<hr>");
+	if(alguna_opcio)
+	{
+		cdns.push("<hr>");
+		alguna_opcio=false;
+	}	
 	if (capa.estil && capa.estil.length==1)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].histograma)
 	{
@@ -242,28 +269,42 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		else
 			cdns.push(DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}));
 		cdns.push("</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio=="3d")
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", DonaCadenaLang({"cat":"Superfície", "spa":"superficie", "eng":"Surface", "fre":"Surface"})," 3D</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.valors && capa.valors.length>2)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCombinacioRGB(", i_capa, ");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.FormatImatge=="application/x-img" || capa.model==model_vector)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioCondicional(", i_capa, ");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Selecció", "spa":"Selección", "eng":"Selection", "fre":"Sélection"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
 	if (capa.FormatImatge=="application/x-img")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraReclassificaCapa(",i_capa,");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Reclassificació", "spa":"Reclasificación", "eng":"Reclassification", "fre":"Reclassement"}), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	}
-	cdns.push("<hr>");
+	if(alguna_opcio)
+	{
+		cdns.push("<hr>");
+		alguna_opcio=false;
+	}	
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Recupera estils", "spa":"Recupera estilos", "eng":"Retrieve styles", "fre":"Récupérer les styles"}), "</a><br>");
 	
