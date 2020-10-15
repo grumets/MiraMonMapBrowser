@@ -13,7 +13,7 @@
     You should have received a copy of the GNU General Public License
     along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
 
-    Copyright 2001, 2019 Xavier Pons
+    Copyright 2001, 2020 Xavier Pons
 
     Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
     (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
@@ -29,13 +29,13 @@
 */
 
 "use strict"
-
+var LListaCapesGraphsMM=[];
 var GraphsMM={hihaElements:false};
+var IdNodeGraphsMM=0;
 
 function EsborraGrafLlinatge()
 {
 	GraphsMM.nodes=null;
-	GraphsMM.edges=null;
 	GraphsMM.sortedNodId=null;
 	if(GraphsMM.nodesGraf)
 		GraphsMM.nodesGraf.clear();
@@ -44,6 +44,8 @@ function EsborraGrafLlinatge()
 	if(GraphsMM.lineageNetWork)
 		GraphsMM.lineageNetWork.setData({nodes:GraphsMM.nodesGraf, edges:GraphsMM.edgesGraf})
 	GraphsMM.hihaElements=false;
+	IdNodeGraphsMM=0;
+	ListaCapesGraphsMM=[];
 }
 
 function ComparaEdgesLlinatge(a, b)
@@ -78,8 +80,8 @@ function ComparaNodesLlinatge(a, b)
 	The only exception is a process that generates 2 outputs at the same time.*/
 	if(a.group=="proces")
 	{
-		if (a.proces.purpose < b.proces.purpose) return -1; 
-		if (a.proces.purpose > b.proces.purpose) return 1;
+		if (DonaCadena(a.proces.purpose) < DonaCadena(b.proces.purpose)) return -1; 
+		if (DonaCadena(a.proces.purpose) > DonaCadena(b.proces.purpose)) return 1;
 		if (a.proces.timeDate < b.proces.timeDate) return -1; 
 		if (a.proces.timeDate > b.proces.timeDate) return 1;
 		return 0;
@@ -87,8 +89,8 @@ function ComparaNodesLlinatge(a, b)
 	if(a.group=="agent")
 	{
 		/*I believe the role should always be processor, so I decided to ignore it
-		if (a.processor.role < b.processor.role) return -1; 
-		if (a.processor.role > b.processor.role) return 1;*/
+		if (DonaCadena(a.processor.role) < DonaCadena(b.processor.role)) return -1; 
+		if (DonaCadena(a.processor.role) > DonaCadena(b.processor.role)) return 1;*/
 		if (!a.processor.party && b.processor.party) return -1;
 		if (a.processor.party && !b.processor.party) return 1;
 		if (a.processor.party && b.processor.party)
@@ -135,9 +137,9 @@ function GetPartyName(party)
 		((party.individual && party.individual.name) ? party.individual.name : "");
 }
 
-function CreaGrafProcesLlinatge(info_graf, proces, id_pare)
+function CreaGrafProcesLlinatge(info_graf, proces, id_pare, i_capa_llista)
 {
-var j, i_node, i_edge, id_proces, id_usar, exe, name;
+var j, i_node, i_edge, id_proces, id_usar, exe, name, pro;
 
 	i_node=info_graf.nodes.binarySearch({group:"proces", proces: proces}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
@@ -146,10 +148,26 @@ var j, i_node, i_edge, id_proces, id_usar, exe, name;
 	}
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
-		id_proces=info_graf.nodes.length+1;
-		info_graf.nStep++;
+		//id_proces=info_graf.nodes.length+1;
+		id_proces=IdNodeGraphsMM;
+		IdNodeGraphsMM++;		
+		name=[];
+	 	name.push(DonaCadenaLang({"cat": "Pas", "spa": "Paso", "eng": "Step", "fre": "Étape"}), " ", LListaCapesGraphsMM[i_capa_llista].nSteps);
+		LListaCapesGraphsMM[i_capa_llista].nSteps++;
+		if(proces.executable && proces.executable.reference)
+			name.push(": ",  TreuExtensio(TreuAdreca(proces.executable.reference)));
+		if(proces.timeDate)
+		{
+			var data_temp=new Date(proces.timeDate);
+			//OmpleDataJSONAPartirDeDataISO8601(data_temp, proces.timeDate);
+			if(proces.executable && proces.executable.reference)
+				name.push("_");
+			else
+				name.push(": ");
+			name.push(DonaDateComATextISO8601(data_temp,{DataMostraAny: true, DataMostraMes: true, DataMostraDia: true, DataMostraHora: true, DataMostraMinut: true}));
+		}
 		info_graf.nodes.splice(-i_node-1, 0, {id:id_proces, 
-					label: DonaCadenaLang({"cat": "Pas", "spa": "Paso", "eng": "Step", "fre": "Étape"})+ " " + info_graf.nStep,
+					label: name.join(""),
 					title: proces.purpose, 
 					group: "proces", 
 					proces: proces});
@@ -163,7 +181,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, name;
 	{
 		for(j=0; j<proces.processor.length;j++)
 		{
-			var pro=proces.processor[j];
+			pro=proces.processor[j];
 			name=GetPartyName(pro.party);
 			if (name!="")
 			{
@@ -174,10 +192,12 @@ var j, i_node, i_edge, id_proces, id_usar, exe, name;
 				}
 				else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 				{
-					id_usar=info_graf.nodes.length+1;
+					//id_usar=info_graf.nodes.length+1;
+					id_usar=IdNodeGraphsMM;
+					IdNodeGraphsMM++;		
 					info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, 
 									label: name.indexOf(' ')==-1 ? name : name.substring(0, name.indexOf(' ')), 
-									title: (pro.role ? (pro.role+": ") : "" ) + name, 
+									title: (DonaCadena(pro.role) ? (DonaCadena(pro.role)+": ") : "" ) + name, 
 									group: "agent", 
 									processor: pro});
 				}			
@@ -199,15 +219,12 @@ var j, i_node, i_edge, id_proces, id_usar, exe, name;
 			id_usar=info_graf.nodes[i_node].id;
 		}
 		else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
-		{
-			id_usar=info_graf.nodes.length+1;
-			j=exe.reference.lastIndexOf('\\');
-			if (j==-1)
-				j=exe.reference.lastIndexOf('/');
-
-			//"executable"+id_usar, 
+		{			
+			//id_usar=info_graf.nodes.length+1;
+			id_usar=IdNodeGraphsMM;
+			IdNodeGraphsMM++;		
 			info_graf.nodes.splice(-i_node-1, 0, {id:id_usar, 
-						label: (j==-1) ? exe.reference : exe.reference.substring(j+1), 
+						label: TreuAdreca(exe.reference), 
 						title: exe.reference, 
 						group: "executable", 
 						executable: exe});
@@ -223,15 +240,15 @@ var j, i_node, i_edge, id_proces, id_usar, exe, name;
 		for(j=0; j<proces.parameters.length;j++)
 		{
 			if(proces.parameters[j].valueType=="source" && typeof proces.parameters[j].source!=="undefined" && proces.parameters[j].source!=null)
-				CreaGrafFontLlinatge(info_graf, proces.parameters[j].direction, proces.parameters[j].source, id_proces);
+				CreaGrafFontLlinatge(info_graf, proces.parameters[j].direction, proces.parameters[j].source, id_proces, i_capa_llista);
 		}				
 	}	
 	return;
 }
 
-function CreaGrafFontLlinatge(info_graf, direction, source, id_pare)
+function CreaGrafFontLlinatge(info_graf, direction, source, id_pare, i_capa_llista)
 {
-var id_font, i_node, i_edge, j, refe;
+var id_font, i_node, i_edge, j;
  
 	i_node=info_graf.nodes.binarySearch({group:"font", source: source}, ComparaNodesLlinatge);
 	if(i_node>=0) // trobat
@@ -240,13 +257,11 @@ var id_font, i_node, i_edge, j, refe;
 	}
 	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 	{
-		id_font=info_graf.nodes.length+1;
-		refe=source.reference;
-		j=refe.lastIndexOf('\\');
-		if (j==-1)
-			j=refe.lastIndexOf('/');
+		//id_font=info_graf.nodes.length+1;
+		id_font=IdNodeGraphsMM;
+		IdNodeGraphsMM++;		
 		info_graf.nodes.splice(-i_node-1, 0, {id:id_font, 
-					label: (j==-1) ? refe : refe.substring(j+1),  //"font"+id_font, 
+					label: TreuAdreca(source.reference),  //"font"+id_font, 
 					title: source.reference, 
 					group: "font", 
 					source: source});
@@ -267,10 +282,11 @@ var id_font, i_node, i_edge, j, refe;
 			info_graf.edges.splice(-i_edge-1, 0, {from: id_font, to: id_pare, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
 		}	
 	}
-	if (source.processes)
+	if (source.processes && source.processes.length>0)
 	{
-		for(var i=0; i<source.processes.length; i++)
-			CreaGrafProcesLlinatge(info_graf, source.processes[i], id_font);
+		for(var i=source.processes.length-1; i>=0; i--)
+		//for(var i=0; i<source.processes.length; i++)
+			CreaGrafProcesLlinatge(info_graf, source.processes[i], id_font, i_capa_llista);
 	}
 	return;
 }
@@ -285,15 +301,15 @@ function findSortedNodId(id, b)
 	return ((id < b.id) ? -1 : ((id > b.id) ? 1 : 0));
 }
 
-
 function FesLlistaOrdenaNodesPerId(graphsMM)
 {
-	graphsMM.sortedNodId=[];
-	for (var i=0; i<graphsMM.nodes.length; i++)
+	if(graphsMM.nodes)
 	{
-		graphsMM.sortedNodId[i]={id: graphsMM.nodes[i].id, i: i};
-	}	
-	graphsMM.sortedNodId.sort(sortSortedNodId);
+		graphsMM.sortedNodId=[];
+		for (var i=0; i<graphsMM.nodes.length; i++)
+			graphsMM.sortedNodId[i]={id: graphsMM.nodes[i].id, i: i};
+		graphsMM.sortedNodId.sort(sortSortedNodId);
+	}
 }
 
 function INodFromNetworkId(graphsMM, id)
@@ -303,7 +319,6 @@ function INodFromNetworkId(graphsMM, id)
 		return -1;
 	return graphsMM.sortedNodId[i].i;
 }
-
 
 function DonaInformacioAssociadaANodeLlinatge(params)
 {
@@ -315,23 +330,22 @@ var cdns=[], node;
 		node=GraphsMM.nodes[INodFromNetworkId(GraphsMM, params.nodes[i_nod])];
 		if(node.group=="resultat")
 		{
-			cdns.push(DonaCadenaLang({"cat": "Capa Resultat", "spa": "Capa Resultado", "eng": "Resulting dataset", "fre": "Jeu de données résultant"}), 
-					" ", node.capa.nom);
+			cdns.push(DonaCadenaLang({"cat": "Capa Resultat", "spa": "Capa Resultado", "eng": "Resulting dataset", "fre": "Jeu de données résultant"}), ": ", node.capa.nom);
 		}
 		else if(node.group=="font")
 		{
-			cdns.push("Font: "+ node.source.reference);
+			cdns.push(DonaCadenaLang({"cat":"Font", "spa":"Fuente", "eng":"Source", "fre":"Source"}),": ", node.source.reference);
 		}
 		else if(node.group=="proces")
 		{
-			cdns.push("Procés: "+ node.proces.purpose);
+			cdns.push(DonaCadenaLang({"cat":"Procés", "spa":"Proceso", "eng":"Process", "fre":"Processus"}),": ", DonaCadena(node.proces.purpose));
 		}
 		else if(node.group=="agent")
 		{
-			if(node.processor.role)
-				cdns.push(node.processor.role + ": ");
+			if(DonaCadena(node.processor.role))
+				cdns.push(DonaCadena(node.processor.role), ": ");
 			else
-				cdns.push("Agent: ");
+				cdns.push(DonaCadenaLang({"cat":"Agent", "spa":"Agente", "eng":"Agent", "fre":"Agent"}), ": ");
 			cdns.push(GetPartyName(node.processor.party));
 		}
 		else if(node.group=="executable")
@@ -342,43 +356,60 @@ var cdns=[], node;
 			if (node.executable.algorithm)
 				cdns.push("<br>", DonaCadenaLang({"cat": "Algoritme", "spa": "Algoritmo", "eng": "Algorithm", "fre": "Algorithme"}), ": ", node.executable.algorithm);
 			if (node.executable.functionanlity)
-				cdns.push("<br>", DonaCadenaLang({"cat": "Funcionalitat", "spa": "Funcionalidad", "eng": "Functionality", "fre": "Fonctionnalité"}), ": ", node.executable.functionanlity);
+				cdns.push("<br>", DonaCadenaLang({"cat": "Funcionalitat", "spa": "Funcionalidad", "eng": "Functionality", "fre": "Fonctionnalité"}), ": ", DonaCadena(node.executable.functionanlity));
 		}	
 	}
 	return cdns.join("");
 }
 
-function CreaGrafLlinatge(nom_div, capa)
+function AfegeixCapaAGrafLlinatge(i_capa_llista)
 {
-var i;
-	
-	if(GraphsMM.hihaElements)
-		EsborraGrafLlinatge();
-	
-	if(!capa || !capa.metadades || !capa.metadades.provenance || !capa.metadades.provenance.lineage)
-		return;
-	GraphsMM.capa=capa;
-	var lli=capa.metadades.provenance.lineage;
+var i, capa=ParamCtrl.capa[LListaCapesGraphsMM[i_capa_llista].i_capa], lli=capa.metadades.provenance.lineage;
 		
-	// El primer que he de possar és la capa generada, que és la que estic documentant el llinatge i tot penja d'aquesta capa.	
-	var info_graf={nodes: [{id:1, label: capa.nom, group:"resultat", capa: capa}],
-			edges: [],
-			nStep: 0};
+	// El primer que he de posar és la capa generada, que és la que estic documentant el llinatge i tot penja d'aquesta capa.	
+	var info_graf={nodes: [{id:IdNodeGraphsMM, label: capa.nom, group: "resultat", capa: capa}], edges: []};
+	var id_node_pare=IdNodeGraphsMM;
+	IdNodeGraphsMM++;
+	
+		
 	// Ara miro els processos i les fonts que pengen d'aquesta capa
-	// Aniré afegint els nodes de manera ordenada per nom i group
-	if(lli.processes)
+	// Aniré afegint els nodes de manera ordenada per nom i group	
+	if(lli.processes && lli.processes.length>0)
 	{
-		for(i=0; i<lli.processes.length; i++)
-			CreaGrafProcesLlinatge(info_graf, lli.processes[i], 1);
+		// Faig l'ordre invers perquè quedi una numeració més intuïtiva de l'odre en que s'ha fet cada procés,
+		// ja que en el llinatge està ordenat a l'inversa
+		//for(i=0; i<lli.processes.length; i++)
+		for(i=lli.processes.length-1; i>=0; i--)
+			CreaGrafProcesLlinatge(info_graf, lli.processes[i], id_node_pare, i_capa_llista);
 	}	
 	if(lli.sources)
 	{
 		for(i=0; i<lli.sources.length; i++)
-			CreaGrafFontLlinatge(info_graf, "in", lli.sources[i], 1);
+			CreaGrafFontLlinatge(info_graf, "in", lli.sources[i], id_node_pare, i_capa_llista);	
 	}
+	if(info_graf.nodes)
+	{
+		GraphsMM.nodesGraf.add(info_graf.nodes);	
+		if(!GraphsMM.nodes)
+			GraphsMM.nodes=[];
+		GraphsMM.nodes.push(info_graf.nodes);	
+	}
+	if(info_graf.edges)
+		GraphsMM.edgesGraf.add(info_graf.edges);
+}
+
+function CreaGrafLlinatge(nom_div)
+{
+var i, cdns=[];
+
+	cdns.push("<center><table border=0 width=95%><tr><td><font size=1><a href=\"javascript:void(0);\" onClick=\"EsborraGrafLlinatge();\">", 
+				DonaCadenaLang({"cat":"Esborra-ho tot", "spa":"Borrar todo", "eng":"Delete all","fre":"Tout effacer"}),"</a><br>");
 	
-	GraphsMM.nodesGraf = new vis.DataSet(info_graf.nodes);	
-	GraphsMM.edgesGraf = new vis.DataSet(info_graf.edges);	
+	GraphsMM.nodesGraf = new vis.DataSet({});
+	GraphsMM.edgesGraf = new vis.DataSet({});
+			
+	for(i=0; i<LListaCapesGraphsMM.length; i++)
+		AfegeixCapaAGrafLlinatge(i);	
 		
 	GraphsMM.options = { 
 		"interaction": { "navigationButtons": true, "keyboard": true},
@@ -389,27 +420,16 @@ var i;
 			"font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},
 			"executable": {"shape": "ellipse","color": {"background":"DarkSeaGreen", "border":"ForestGreen"}},
 			"proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
-			"resultat": {"shape": "ellipse","color": {"background":"LightYellow","border":"GoldenRod"}, "borderWidth": 3},
+			"resultat": {"shape": "ellipse","color": {"background":"Yellow","border":"GoldenRod"}, "borderWidth": 3},
 			"agent": {"shape":"circle","color":{"background":"DarkSalmon","border":"Bisque"}},
 	        }
 	};
-	GraphsMM.nodes=info_graf.nodes;
 	GraphsMM.div=nom_div;	
 	GraphsMM.lineageNetWork = new vis.Network(document.getElementById(nom_div), {nodes: GraphsMM.nodesGraf, edges: GraphsMM.edgesGraf},  GraphsMM.options);
 	GraphsMM.lineageNetWork.on("click", function (params) {document.getElementById("InfoLlinatge").innerHTML = DonaInformacioAssociadaANodeLlinatge(params)});
-	GraphsMM.nodes=info_graf.nodes;	
-	GraphsMM.darrerIdUsat=info_graf.nodes.length;
+	// GraphsMM.darrerIdUsat=info_graf.nodes.length;
 	GraphsMM.hihaElements=true;
 	FesLlistaOrdenaNodesPerId(GraphsMM);
-}
-
-function MostraLlinatgeCapa(param)
-{	
-//	var contingut=[];
-//	contingut.push("<div id=\"LayerLlinatgeCapa\" class=\"Verdana11px\" style=\"position:absolute;left:100px;top:100px;width:95%\">kk</div>");
-
-	contentLayer(param.elem, "<div id=\"LayerLlinatgeCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:500px;height:500px;border: 1px solid lightgray;\"></div><br><div id=\"InfoLlinatge\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:520px;width:500px;height:50px;border: 1px solid lightgray;\"></div>");
-	CreaGrafLlinatge("LayerLlinatgeCapa", param.capa);
 }
 
 function OmpleLlinatgeCapa(doc,info_lli)
@@ -451,15 +471,13 @@ function ErrorOmpleLlinatgeCapa(doc,info_lli)
 	CanviaEstatEventConsola(null, info_lli.i_event, EstarEventError);
 }
 
-
 function DonaRequestCSWGetRecordByIdPerLlinatge(i_capa)
 {
 var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
 
 	// ·$· Cal resoldre el tema del EPSG al servidor, ara per ara no es fa res en el servidor i es busca directament la secció que conté
-	// el valor indicat per ID [capa.nom, ":", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS] i si no existeix falla
-	// caldria fer alguna heurística com en el cas del WMS
+	// el valor indicat per ID [capa.nom, ":", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS] i si no existeix falla	// caldria fer alguna heurística com en el cas del WMS
 	cdns.push("SERVICE=CSW&REQUEST=GetRecordByID&OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&ELEMENTSETNAME=lineage&ID=", 
 			  capa.nom, ":", 
 			  ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&OUTPUTFORMAT=application/json");
@@ -474,23 +492,69 @@ function DescarregaLlinatgeCapa(i_capa, funcio, param)
 	loadFile(url, "application/json", OmpleLlinatgeCapa, ErrorOmpleLlinatgeCapa, {i_capa: i_capa, i_event: i_event, funcio: funcio, param: param});
 }
 
+
+// Funcions que permeten que hi hagi més d'una capa a la mateixa finestra on es mostren els grafs del llinatge
+function MostraLlinatge(param)
+{	
+	if(GraphsMM.hihaElements)
+	{
+		AfegeixCapaAGrafLlinatge("LayerLlinatgeCapa", param.i_capa);
+	}
+	else
+	{
+		contentLayer(param.elem, "<div id=\"LayerLlinatgeCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:500px;height:500px;border: 1px solid lightgray;\"></div><br><div id=\"InfoLlinatge\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:520px;width:500px;height:50px;border: 1px solid lightgray;\"></div>");
+		CreaGrafLlinatge("LayerLlinatgeCapa");
+	}
+}
+
+function sortLListaCapesGraphsMM(a,b) 
+{
+	if(a.i_capa < b.i_capa)
+		return -1;
+	if(a.i_capa > b.i_capa)
+		return 1;
+
+	if(a.nSteps< b.nSteps)
+		return -1;
+	if(a.nSteps > b.nSteps)
+		return 1;
+	return 0;
+}
+
+function findLListaCapesGraphsMMIdCapa(i_capa, b)
+{
+	return ((i_capa< b.i_capa) ? -1 : ((i_capa> b.i_capa) ? 1 : 0));
+}
+
+
+function AfegeixCapaALlistaCapesGrafLLinatge(param)
+{
+	LListaCapesGraphsMM.push({i_capa: param.i_capa, nSteps: 0});
+	LListaCapesGraphsMM.sort(sortLListaCapesGraphsMM);
+	LListaCapesGraphsMM.removeDuplicates(sortLListaCapesGraphsMM);
+	MostraLlinatge(param);
+}
+
 function FinestraMostraLlinatgeCapa(elem, i_capa)
 {
 var capa=ParamCtrl.capa[i_capa];
 
 	if(!capa.metadades || !capa.metadades.provenance)
+	{
+		MostraLlinatge({elem: elem, i_capa: -1});
 		return;
+	}
+		
 	var prov=capa.metadades.provenance;
 	if(prov.peticioServCSW && !prov.lineage)
 	{
-		//MostraLlinatgeCapa(elem, capa);
-		//return;
 		// Demano el llinatge al servidor i el carrego a memòria
-		DescarregaLlinatgeCapa(i_capa, MostraLlinatgeCapa, {elem: elem, capa: capa});
+		DescarregaLlinatgeCapa(i_capa, AfegeixCapaALlistaCapesGrafLLinatge, {elem: elem, i_capa: i_capa});
 		return;
 	}
 	if(prov.lineage)
-		MostraLlinatgeCapa({elem: elem, capa: capa});
+		AfegeixCapaALlistaCapesGrafLLinatge({elem: elem, i_capa: i_capa});
+	else
+		MostraLlinatge({elem: elem, i_capa: -1});
 	return;
 }
-
