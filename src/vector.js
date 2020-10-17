@@ -1061,8 +1061,9 @@ var i_simbol, estil, valor, i_atrib;
 			if(valor==estil.simbols[i_simbs].simbol[i_simbol].ValorCamp)
 				return i_simbol;
 		}
+		return -1;  //The value of the object does not correspond with any simbol
 	}
-	return -1;
+	return 0;  //simbols are not indexed by NomCamp (or there are no properties in the object) so there first simbol should be used
 }
 
 //Discusió de com fer tot això: http://stackoverflow.com/questions/17578280/how-to-pass-parameters-into-image-load-event
