@@ -2718,7 +2718,7 @@
 							"description": "Algorithm implemented by the executable",
 							"type": ["string", "null"]
 						},
-						"functionanlity": {
+						"functionality": {
 							"description": "Functionality given by the algorithm",
 							"type": "string"
 						}
