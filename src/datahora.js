@@ -514,28 +514,32 @@ function DonaDataJSONComATextISO8601(data, que_mostrar)
 {
 var cdns=[];
 
-	if (data && que_mostrar)
+	if (!data)
+		return "";
+	if (que_mostrar)
 	{
-		//Segons la ISO com a mínim he de mostrar l'any
-		cdns.push(DonaYearJSON(data));
+		//Segons la ISO com a mínim he de mostrar l'any però nosaltres permetem altres coses deliveradament
+		if(!DonaYearJSON(data))
+			cdns.push(DonaYearJSON(data));
 		if(que_mostrar.DataMostraMes)
 		{
-			cdns.push("-");
+			if(!DonaYearJSON(data))
+				cdns.push("-");
 		    	if( DonaMonthJSON(data)<10)
 				cdns.push("0");
 			cdns.push(DonaMonthJSON(data));
 			if (que_mostrar.DataMostraDia)
 			{
 				cdns.push("-");
-		    	if(DonaDayJSON(data)<10)
+				if(DonaDayJSON(data)<10)
 					cdns.push("0");
-			    cdns.push(DonaDayJSON(data));
+				cdns.push(DonaDayJSON(data));
 
-			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
+			    	//Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
 				if(que_mostrar.DataMostraHora)
 				{
-	    			if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
-				    {
+	    				if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+					{
 						cdns.push("T");
 						if(DonaHourJSON(data)<10)
 							cdns.push("0");
@@ -559,6 +563,35 @@ var cdns=[];
 				}
 			}
 		}
+	}
+	else
+	{
+		cdns.push(DonaYearJSON(data));
+		cdns.push("-");
+		if( DonaMonthJSON(data)<10)
+			cdns.push("0");
+		cdns.push(DonaMonthJSON(data));
+		cdns.push("-");
+		if(DonaDayJSON(data)<10)
+			cdns.push("0");
+		cdns.push(DonaDayJSON(data));
+
+		if (DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+		{
+			cdns.push("T");
+			if(DonaHourJSON(data)<10)
+				cdns.push("0");
+			cdns.push(DonaHourJSON(data));
+			cdns.push(":" );
+			if(DonaMinuteJSON(data)<10)
+				cdns.push("0");
+			cdns.push(DonaMinuteJSON(data));
+			cdns.push(":" );
+			if(DonaSecondJSON(data)<10)
+				cdns.push("0");
+			cdns.push(DonaSecondJSON(data));
+			cdns.push("Z");
+		}	
 	}
 	return cdns.join("");
 }//fi de DonaDataJSONComATextISO8601()
