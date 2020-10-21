@@ -519,11 +519,11 @@ var cdns=[];
 	if (que_mostrar)
 	{
 		//Segons la ISO com a mínim he de mostrar l'any però nosaltres permetem altres coses deliveradament
-		if(!DonaYearJSON(data))
+		if(que_mostrar.DataMostraAny)
 			cdns.push(DonaYearJSON(data));
 		if(que_mostrar.DataMostraMes)
 		{
-			if(!DonaYearJSON(data))
+			if(que_mostrar.DataMostraAny)
 				cdns.push("-");
 		    	if( DonaMonthJSON(data)<10)
 				cdns.push("0");
