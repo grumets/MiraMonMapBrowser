@@ -2229,7 +2229,7 @@ var cdns=[], i, capa;
 				"<input type=\"button\" class=\"Verdana11px\" value=\"",				
 				DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
 				"\" onClick='AfegeixEstilReclassificacio(\"",prefix_id,"\",",i_capa,");TancaFinestraLayer(\"reclassificaCapa\");' />");			
-	cdns.push("</<fieldset></div></form>");
+	cdns.push("</<fieldset></form>");
 	return cdns.join("");	
 }
 
