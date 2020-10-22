@@ -1571,7 +1571,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"url": {
-									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions extra s'empaqueten en un sol fitxer",
+									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FòrmulaConsulta només si la darrera involucra un sol v[]. Si no hi ha cap parametre DIM es considera que tots els valors de totes les dimensions extra es troben empaquetades en un sol fitxer",
 									"type": "string"
 								},
 								"format": {

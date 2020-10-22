@@ -711,7 +711,7 @@ function DonaUnitTimeChartJSDataHora(que_mostrar)
 //Aquest funció, de moment, només canvia les variables {TIME}, {TIME?f=*&year=*&month=*...} i {DIM?name=*}. En el config_schema.json s'explica una mica més.
 function CanviaVariablesDeCadena(s, capa, i_data)
 {
-var i, ii, k, p, kvp, query;
+var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 
 	if (capa.data && capa.data.length)
 	{
@@ -807,18 +807,55 @@ var i, ii, k, p, kvp, query;
 				alert("Format error in '{DIM?', Key 'name' not found.");
 				break;
 			}
-			var estil=capa.estil[capa.i_estil];
-			if (!estil)
+			estil=capa.estil[capa.i_estil];
+			if (!estil || !estil.component[0])
+			{
+				alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
 				break;
-			if (!estil.component[0])
-				break;
-			var valor=capa.valors[estil.component[0].i_valor];
-			if (!valor)
-				break;
+			}
+			if (estil.component[0].i_valor)
+			{
+				valor=capa.valors[estil.component[0].i_valor];
+				if (!valor)
+				{
+					alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
+					break;
+				}
+			}
+			else if (estil.component[0].FormulaConsulta)
+			{
+				//Determinio si hi ha un sol v[i] a la formula i en aquest cas, no hi ha problema en continuar.
+				num_of_vs=0;
+				v=DeterminaArrayValorsNecessarisCapa(ParamCtrl.capa.indexOf(capa), capa.i_estil);
+				for (i_v=0; i_v<capa.valors.length; i_v++)
+				{
+					if (v[i_v])
+					{
+						valor=capa.valors[i_v];
+						num_of_vs++;
+						if (num_of_vs>1)
+							break;
+					}
+				}
+				if (num_of_vs!=1 || !valor)
+				{
+					alert("There is ambiguity in the values of '" + query.name + "' extracted from the KVP '{DIM?' expression. This is probably because this style is an expression. Try to select another style.");
+					break;
+				}
+			}
+							
 			for (var i_param=0; i_param<valor.param.length; i_param++)
 			{
 				if (query.name==valor.param[i_param].clau.nom)
+				{
 					s=s.substring(0,i) + valor.param[i_param].valor.nom + s.substring(i+5+ii+1);
+					break;
+				}
+			}
+			if (i_param==valor.param.length)
+			{
+				alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
+				break;
 			}
 		}
 	}
