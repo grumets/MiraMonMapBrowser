@@ -914,6 +914,8 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 		}
 	}
 
+	CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+
 	if(consulta.i_tile!=-1)
 		capa.TileMatrixGeometry.tiles_solicitats[consulta.i_tile]="TileRebut";
 	/*if(consulta.seleccionar==false && cal_crear_vista)
@@ -1809,4 +1811,21 @@ var env={}, mida;
 		"MaxX": punt.x+env.MaxI*ParamInternCtrl.vista.CostatZoomActual, 
 		"MinY": punt.y-env.MaxJ*ParamInternCtrl.vista.CostatZoomActual, 
 		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual};
+}
+
+function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
+{
+	if (capa.model==model_vector)
+	{
+		if(capa.CRSgeometry &&
+		   capa.CRSgeometry.toUpperCase()!=crs_dest.toUpperCase() && capa.objectes && capa.objectes.features)
+		{
+			for(var j=0; j<capa.objectes.features.length; j++)
+			{
+				capa.objectes.features[j].puntCRSactual=[];
+				capa.objectes.features[j].puntCRSactual[0]={"x": capa.objectes.features[j].geometry.coordinates[0], "y": capa.objectes.features[j].geometry.coordinates[1]};
+				TransformaCoordenadesPunt(capa.objectes.features[j].puntCRSactual[0], capa.CRSgeometry, crs_dest);
+			}
+		}
+	}
 }

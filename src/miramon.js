@@ -383,18 +383,9 @@ function CompletaDefinicioCapa(capa, capa_especial)
 		{
 			if (!capa.CRSgeometry)
 				capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
-			InicialitzaTilesSolicitatsCapaDigi(capa);				
-	
-			if(capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase() && capa.objectes && capa.objectes.features)
-			{
-				for(var j=0; j<capa.objectes.features.length; j++)
-				{
-					capa.objectes.features[j].puntCRSactual=[];
-					capa.objectes.features[j].puntCRSactual[0]={"x": capa.objectes.features[j].geometry.coordinates[0], 
-													"y": capa.objectes.features[j].geometry.coordinates[1]};
-					TransformaCoordenadesPunt(capa.objectes.features[j].puntCRSactual[0], capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-				}
-			}
+			InicialitzaTilesSolicitatsCapaDigi(capa);
+
+			CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		}		
 	}
 	if (capa.model==model_vector)
@@ -2947,27 +2938,6 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }	
 
-function CanviaCRSITransformaCoordenadesCapaDigi(crs_dest)
-{
-	for(var i=0; i<ParamCtrl.capa.length; i++)
-	{
-		var capa=ParamCtrl.capa[i];
-		if (capa.model==model_vector)
-		{
-			if(capa.CRSgeometry &&
-			   capa.CRSgeometry.toUpperCase()!=crs_dest.toUpperCase() && capa.objectes && capa.objectes.features)
-			{
-				for(var j=0; j<capa.objectes.features.length; j++)
-				{
-					capa.objectes.features[j].puntCRSactual=[];
-					capa.objectes.features[j].puntCRSactual[0]={"x": capa.objectes.features[j].geometry.coordinates[0], "y": capa.objectes.features[j].geometry.coordinates[1]};
-					TransformaCoordenadesPunt(capa.objectes.features[j].puntCRSactual[0], capa.CRSgeometry, crs_dest);
-				}
-			}
-		}
-	}
-}
-
 function CanviaCRS(crs_ori, crs_dest)
 {
 var factor=1;
@@ -2980,7 +2950,8 @@ var i;
 	TransformaCoordenadesCapesVolatils(crs_ori, crs_dest);
 	
 	//i també de les CapesDigitalitzades
-	CanviaCRSITransformaCoordenadesCapaDigi(crs_dest);
+	for (i=0; i<ParamCtrl.capa.length; i++)
+		CanviaCRSITransformaCoordenadesCapaDigi(ParamCtrl.capa[i], crs_dest);
 
 	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && DonaUnitatsCoordenadesProj(crs_dest)=="°")
 	{
