@@ -132,18 +132,22 @@ function MouLayerContextMenuCapa(event, s)
 		contentLayer(menu, s);
 		var menu_marc=getLayer(window, "menuContextualCapa-contingut");
 		var menu_text=getLayer(window, "menuContextualCapa-text");
-
-		var rec=getRectLayer(getLayer(window, "menuContextualCapa-text"));
-
-		var mida=event.clientY+((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+parseInt(rec.alt);
-
-		var rec_naveg=getRectLayer(window.document.body);
-		if(mida>=rec_naveg.alt)
-			y=event.clientY-parseInt(rec.alt);
+		if(menu_text && menu_marc)
+		{
+			var rec=getRectLayer(menu_text);
+	
+			var mida=event.clientY+((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+parseInt(rec.alt);
+	
+			var rec_naveg=getRectLayer(window.document.body);
+			if(mida>=rec_naveg.alt)
+				y=event.clientY-parseInt(rec.alt);
+			else
+				y=event.clientY+5;
+			changePosAndShowLayer(menu, event.clientX, y);
+			moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
+		}
 		else
-			y=event.clientY+5;
-		changePosAndShowLayer(menu, event.clientX, y);
-		moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
+			changePosAndShowLayer(menu, event.clientX, y);
 	}
 }
 
