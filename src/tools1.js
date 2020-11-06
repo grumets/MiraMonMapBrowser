@@ -149,6 +149,28 @@ function MMgetCheckedRadioButton(form,buttonName)
 	return null;
 }
 
+function EsborraTotesOptionDeSelect(selector)	
+{
+	if(selector && selector.length>0)
+	{
+		for(var i=selector.length-1; i>=0; i--)		
+			selector.remove(i); 
+	}
+}
+
+function AfegeixOptionASelect(selector, param, index)
+{
+	var option = document.createElement("option");
+	option.text = param.text;
+	option.selected= param.selected ? true: false;
+	option.value=param.value;
+	if(index)
+		selector.add(option, index);
+	else
+		selector.add(option); 	
+}
+
+
 /*
  * Returns True if the variable is an string constant or an instance of an
  * String class. Otherwise, returns false.
@@ -421,10 +443,15 @@ function MMgetCheckedRadioButton(myForm,groupName)
 	return null;
 }
 
+
 //Inspired in http://stackoverflow.com/questions/126100/how-to-efficiently-count-the-number-of-keys-properties-of-an-object-in-javascrip
 function CountPropertiesOfObject(myobj)
 {
-var count = 0, k;
+	//Object.keys --> Són les propietats enumerables, pròpies de l'objecte
+	//Object.getOwnPropertyNames --> Són les propietats enumerables i no enumerables, pròpies de l'objecte
+	if(Object.prototype.getOwnPropertyNames)
+		return Object.getOwnPropertyNames(myobj).length;
+	var count = 0, k;
 	for (k in myobj) if (myobj.hasOwnProperty(k)) count++;
 	return count;
 }

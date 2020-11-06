@@ -117,7 +117,7 @@ function EsborrarEstilCapa(i_capa, i_estil)
 function TancaContextMenuCapa()
 {
 	var elem=getLayer(window, "menuContextualCapa");
-	hideLayer(elem);
+	hideLayer(elem);	
 }
 
 function MouLayerContextMenuCapa(event, s)
@@ -148,6 +148,12 @@ function MouLayerContextMenuCapa(event, s)
 		}
 		else
 			changePosAndShowLayer(menu, event.clientX, y);
+			
+		setzIndexLayer(menu,(layerList.length-1));
+		if(menu_text)
+			setzIndexLayer(menu_text,(layerList.length-1));
+		if(menu_marc)
+			setzIndexLayer(menu_marc,(layerList.length-1));
 	}
 }
 
@@ -701,6 +707,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 			}
 		}
 	}
+	CanviaIndexosCapesGraphsMM(n_moviment, i_capa_ini, i_capa_fi_per_sota);
 	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl);
 }
 
