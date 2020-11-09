@@ -46,13 +46,6 @@ function EsborraGrafLlinatge()
 	if(GraphsMM.lineageNetWork)
 		GraphsMM.lineageNetWork.setData({nodes:GraphsMM.nodesGraf, edges:GraphsMM.edgesGraf})
 	GraphsMM.hihaElements=false;
-	GraphsMM.elemVisibles.agents=true;
-	GraphsMM.elemVisibles.fontsFulles=true;
-	GraphsMM.elemVisibles.fontsIntermitges=true;
-	GraphsMM.elemVisibles.passos=true;
-	GraphsMM.elemVisibles.eines=true;
-	GraphsMM.elemVisibles.algorismes=true;
-	GraphsMM.elemVisibles.funcions=true;				
 	IdNodeGraphsMM=0;
 	
 	for(var i=0; i<LListaCapesGraphsMM.length; i++)
