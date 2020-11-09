@@ -46,14 +46,13 @@ function EsborraGrafLlinatge()
 	if(GraphsMM.lineageNetWork)
 		GraphsMM.lineageNetWork.setData({nodes:GraphsMM.nodesGraf, edges:GraphsMM.edgesGraf})
 	GraphsMM.hihaElements=false;
-	GraphsMM.elemVisibles.agents=false;
-	GraphsMM.elemVisibles.fontsFulles=false;
-	GraphsMM.elemVisibles.fontsIntermitges=false;
-	GraphsMM.elemVisibles.passos=false;
-	GraphsMM.elemVisibles.eines=false;
-	GraphsMM.elemVisibles.algorismes=false;
-	GraphsMM.elemVisibles.funcions=false;
-				
+	GraphsMM.elemVisibles.agents=true;
+	GraphsMM.elemVisibles.fontsFulles=true;
+	GraphsMM.elemVisibles.fontsIntermitges=true;
+	GraphsMM.elemVisibles.passos=true;
+	GraphsMM.elemVisibles.eines=true;
+	GraphsMM.elemVisibles.algorismes=true;
+	GraphsMM.elemVisibles.funcions=true;				
 	IdNodeGraphsMM=0;
 	
 	for(var i=0; i<LListaCapesGraphsMM.length; i++)
@@ -415,101 +414,108 @@ function CreaGrafProcesLlinatge(in_node, id_pare, id_grup_pare, i_capa_llista)
 var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_nou=null;
 
 	p=in_node.llinatge ? in_node.llinatge : in_node.proces;
-	if(p.grup && p.grup.id && p.grup.id!="")
+	
+	if(GraphsMM.elemVisibles.passos)
 	{
-		if(!id_grup_pare || id_grup_pare=="" || p.grup.id!=id_grup_pare) 
+		if(p.grup && p.grup.id && p.grup.id!="")
 		{
-			i_node=(-GraphsMM.nodes.length-1);
-			id_proces=IdNodeGraphsMM;
-			IdNodeGraphsMM++;		
-			LListaCapesGraphsMM[i_capa_llista].nSteps++;  // Potser més endavant em pot servir per anar desplegant el llinatge		
-			var name=[];			
-			name.push(DonaCadenaLang({"cat": "Grup de processos", "spa": "Grupo de procesos", "eng": "Process group", "fre": "Groupe de processus"}), ": ", 
-									 (DonaCadena (p.grup.desc)?DonaCadena(p.grup.desc):p.grup.id));
-			if(in_node.llinatge)
+			if(!id_grup_pare || id_grup_pare=="" || p.grup.id!=id_grup_pare) 
 			{
-				GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
-						label: name.join(""),
-						title: DonaCadena(p.statement)? DonaCadena(p.statement) : name.join(""), 
-						group: "procesAgrupat", 
-						llinatge: p});
+				i_node=(-GraphsMM.nodes.length-1);
+				id_proces=IdNodeGraphsMM;
+				IdNodeGraphsMM++;		
+				LListaCapesGraphsMM[i_capa_llista].nSteps++;  // Potser més endavant em pot servir per anar desplegant el llinatge		
+				var name=[];			
+				name.push(DonaCadenaLang({"cat": "Grup de processos", "spa": "Grupo de procesos", "eng": "Process group", "fre": "Groupe de processus"}), ": ", 
+										 (DonaCadena (p.grup.desc)?DonaCadena(p.grup.desc):p.grup.id));
+				if(in_node.llinatge)
+				{
+					GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
+							label: name.join(""),
+							title: DonaCadena(p.statement)? DonaCadena(p.statement) : name.join(""), 
+							group: "procesAgrupat", 
+							llinatge: p});
+				}
+				else
+				{
+					GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
+							label: name.join(""),
+							title: name.join(""), 
+							group: "procesAgrupat", 
+							proces: p});			
+				}
+				id_grup_nou=p.grup.id;
+				node_afegit=true;
 			}
-			else
+		}
+		else
+		{
+			i_node=GraphsMM.nodes.binarySearch({group:"proces", proces: p}, ComparaNodesLlinatge);
+			if(i_node>=0) // trobat
 			{
-				GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
-						label: name.join(""),
-						title: name.join(""), 
-						group: "procesAgrupat", 
-						proces: p});			
+				id_proces=GraphsMM.nodes[i_node].id;
 			}
-			id_grup_nou=p.grup.id;
+			else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
+			{
+				//id_proces=GraphsMM.nodes.length+1;
+				id_proces=IdNodeGraphsMM;
+				IdNodeGraphsMM++;					
+				GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
+							label: DonaLabelPerProces(p, LListaCapesGraphsMM[i_capa_llista].nSteps),
+							title: p.purpose, 
+							group: "proces", 
+							proces: p});
+				LListaCapesGraphsMM[i_capa_llista].nSteps++;
+			}
 			node_afegit=true;
 		}
+		if(node_afegit)
+		{
+			i_edge=GraphsMM.edges.binarySearch({from: id_pare, to: id_proces, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
+			if(i_edge<0) // no trobat
+				GraphsMM.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_proces, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});	
+		}
+		else 
+			id_proces=id_pare;
 	}
 	else
-	{
-		p=in_node.proces;
-		i_node=GraphsMM.nodes.binarySearch({group:"proces", proces: p}, ComparaNodesLlinatge);
-		if(i_node>=0) // trobat
-		{
-			id_proces=GraphsMM.nodes[i_node].id;
-		}
-		else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
-		{
-			//id_proces=GraphsMM.nodes.length+1;
-			id_proces=IdNodeGraphsMM;
-			IdNodeGraphsMM++;					
-			GraphsMM.nodes.splice(-i_node-1, 0, {id:id_proces, 
-						label: DonaLabelPerProces(p, LListaCapesGraphsMM[i_capa_llista].nSteps),
-						title: p.purpose, 
-						group: "proces", 
-						proces: p});
-			LListaCapesGraphsMM[i_capa_llista].nSteps++;
-		}
-		node_afegit=true;
-	}
-	if(node_afegit)
-	{
-		i_edge=GraphsMM.edges.binarySearch({from: id_pare, to: id_proces, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
-		if(i_edge<0) // no trobat
-			GraphsMM.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_proces, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});
-
-	}
+		id_proces=id_pare;
 	if(p.grup)
 	{
 		// He de dibuixar les fonts fulles
-		if(in_node.llinatge)
+		if(in_node.llinatge) // no miro p, perquè vull saber si vinc de llinatge o de proces
 		{			
 			if(p.processes && p.processes.length>0)
 			{
 				for(j=p.processes.length-1; j>=0; j--)
 					CreaGrafProcesLlinatge({proces: p.processes[j], nomesSiFulla: true},
-										  (node_afegit? id_proces : id_pare), (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);
+										  id_proces, (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);
 			}	
 			if(p.sources)
 			{
 				for(j=0; j<p.sources.length; j++)
 					CreaGrafFontLlinatge("in",  {font: p.sources[j], nomesSiFulla: true}, 
-										  (node_afegit? id_proces : id_pare), (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);	
+										  id_proces, (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);	
 			}
 		}		
 		else if(in_node.proces)		
 		{
-			if(in_node.proces.parameters)
-			{				
-				for(j=0; j<in_node.proces.parameters.length;j++)
+			if(p.parameters)
+			{
+				var param;
+				for(j=0; j<p.parameters.length;j++)
 				{
-					p=in_node.proces.parameters[j];
-					if(p.valueType=="source" && typeof p.source!=="undefined" && p.source!=null)
-						CreaGrafFontLlinatge(p.direction, {font: p.source, nomesSiFulla: true},
-										  (node_afegit? id_proces : id_pare), (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);	
+					param=p.parameters[j];
+					if(param.valueType=="source" && typeof param.source!=="undefined" && param.source!=null)
+						CreaGrafFontLlinatge(param.direction, {font: param.source, nomesSiFulla: true},
+										  id_proces, (id_grup_nou? id_grup_nou: id_grup_pare), i_capa_llista);	
 				}				
 			}
 		}	
 	}
 	else 
-	{
-		if(p.processor)
+	{	
+		if(GraphsMM.elemVisibles.agents && p.processor)
 		{
 			for(j=0; j<p.processor.length;j++)
 				CreaGrafOrganismeLlinatge(p.processor[j], id_proces);
@@ -517,59 +523,69 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 		if(p.executable)
 		{
 			exe=p.executable;
-			i_node=GraphsMM.nodes.binarySearch({group:"executable", executable: exe}, ComparaNodesLlinatge);
-			if(i_node>=0) // trobat
+			if(GraphsMM.elemVisibles.eines)
 			{
-				id_usar=GraphsMM.nodes[i_node].id;
-			}
-			else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
-			{			
-				//id_usar=GraphsMM.nodes.length+1;
-				id_usar=IdNodeGraphsMM;
-				IdNodeGraphsMM++;		
-				GraphsMM.nodes.splice(-i_node-1, 0, {id:id_usar, 
-							label: TreuAdreca(exe.reference), 
-							title: exe.reference, 
-							group: "executable", 
-							executable: exe});
-			}
-			i_edge=GraphsMM.edges.binarySearch({from: id_proces, to: id_usar, label: 'executed'}, ComparaEdgesLlinatge);
-			if(i_edge<0) // no trobat
-				GraphsMM.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'executed', font: {align: 'top', size: 10}});					
-			if(exe.responsibleParty)
-			{
-				for(j=0; j<exe.responsibleParty.length;j++)
-					CreaGrafOrganismeLlinatge(exe.responsibleParty[j], id_usar);
-			}
-			if(exe.algorithm && DonaCadena(exe.algorithm.name))
-			{
-				i_node=GraphsMM.nodes.binarySearch({group:"algorisme", algorithm: exe.algorithm}, ComparaNodesLlinatge);
-				var id_usar2;
+				i_node=GraphsMM.nodes.binarySearch({group:"executable", executable: exe}, ComparaNodesLlinatge);
 				if(i_node>=0) // trobat
 				{
-					id_usar2=GraphsMM.nodes[i_node].id;
+					id_usar=GraphsMM.nodes[i_node].id;
 				}
 				else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
 				{			
 					//id_usar=GraphsMM.nodes.length+1;
-					id_usar2=IdNodeGraphsMM;
+					id_usar=IdNodeGraphsMM;
 					IdNodeGraphsMM++;		
-					GraphsMM.nodes.splice(-i_node-1, 0, {id:id_usar2, 
-								label: DonaCadena(exe.algorithm.name), 
-								title: DonaCadena(exe.algorithm.name), 
-								group: "algorisme", 
-								algorithm: exe.algorithm});
+					GraphsMM.nodes.splice(-i_node-1, 0, {id:id_usar, 
+								label: TreuAdreca(exe.reference), 
+								title: exe.reference, 
+								group: "executable", 
+								executable: exe});
 				}
-				i_edge=GraphsMM.edges.binarySearch({from: id_usar, to: id_usar2, label: 'implemented'}, ComparaEdgesLlinatge);
+				i_edge=GraphsMM.edges.binarySearch({from: id_proces, to: id_usar, label: 'executed'}, ComparaEdgesLlinatge);
 				if(i_edge<0) // no trobat
-					GraphsMM.edges.splice(-i_edge-1, 0, {from: id_usar, to: id_usar2, arrows:'to', label: 'implemented', font: {align: 'top', size: 10}});
-
-				if(exe.algorithm.responsibleParty)
+					GraphsMM.edges.splice(-i_edge-1, 0, {from: id_proces, to: id_usar, arrows:'to', label: 'executed', font: {align: 'top', size: 10}});					
+			}
+			else 
+				id_usar=id_proces;
+			if(GraphsMM.elemVisibles.agents && exe.responsibleParty)
+			{
+				for(j=0; j<exe.responsibleParty.length;j++)
+					CreaGrafOrganismeLlinatge(exe.responsibleParty[j], id_usar);
+			}
+			if(exe.algorithm)
+			{
+				var id_usar2;
+				if(GraphsMM.elemVisibles.algorismes && DonaCadena(exe.algorithm.name))
+				{
+					i_node=GraphsMM.nodes.binarySearch({group:"algorisme", algorithm: exe.algorithm}, ComparaNodesLlinatge);
+					
+					if(i_node>=0) // trobat
+					{
+						id_usar2=GraphsMM.nodes[i_node].id;
+					}
+					else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
+					{			
+						//id_usar=GraphsMM.nodes.length+1;
+						id_usar2=IdNodeGraphsMM;
+						IdNodeGraphsMM++;		
+						GraphsMM.nodes.splice(-i_node-1, 0, {id:id_usar2, 
+									label: DonaCadena(exe.algorithm.name), 
+									title: DonaCadena(exe.algorithm.name), 
+									group: "algorisme", 
+									algorithm: exe.algorithm});
+					}
+					i_edge=GraphsMM.edges.binarySearch({from: id_usar, to: id_usar2, label: 'implemented'}, ComparaEdgesLlinatge);
+					if(i_edge<0) // no trobat
+						GraphsMM.edges.splice(-i_edge-1, 0, {from: id_usar, to: id_usar2, arrows:'to', label: 'implemented', font: {align: 'top', size: 10}});
+				}
+				else 
+					id_usar2=id_usar;
+				if(GraphsMM.elemVisibles.agents && exe.algorithm.responsibleParty)
 				{
 					for(j=0; j<exe.algorithm.responsibleParty.length;j++)
 						CreaGrafOrganismeLlinatge(exe.algorithm.responsibleParty[j], id_usar2);
 				}
-				if(DonaCadena(exe.algorithm.functionality))
+				if(GraphsMM.elemVisibles.funcions && DonaCadena(exe.algorithm.functionality))
 				{
 					i_node=GraphsMM.nodes.binarySearch({group:"funcionalitat", functionality: exe.algorithm.functionality}, ComparaNodesLlinatge);
 					var id_usar3;
@@ -609,7 +625,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 function CreaGrafFontLlinatge(direction, in_node, id_pare, id_grup_pare, i_capa_llista)
 {
 var id_font, i_node, i_edge, i, j;
- 
+
 	if(in_node.nomesSiFulla)
 	{
 		if(in_node.font.processes && in_node.font.processes.length>0)
@@ -625,35 +641,41 @@ var id_font, i_node, i_edge, i, j;
 		alert("There is a source without properties");
 		return;
 	}
-	i_node=GraphsMM.nodes.binarySearch({group:"font", font: in_node.font}, ComparaNodesLlinatge);
-	if(i_node>=0) // trobat
+	var es_fulla=(in_node.font.processes && in_node.font.processes.length>0) ? false : true;
+	if((es_fulla && GraphsMM.elemVisibles.fontsFulles) || (!es_fulla && GraphsMM.elemVisibles.fontsIntermitges))
 	{
-		id_font=GraphsMM.nodes[i_node].id;
+		i_node=GraphsMM.nodes.binarySearch({group:"font", font: in_node.font}, ComparaNodesLlinatge);
+		if(i_node>=0) // trobat
+		{
+			id_font=GraphsMM.nodes[i_node].id;
+		}
+		else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
+		{
+			//id_font=GraphsMM.nodes.length+1;
+			id_font=IdNodeGraphsMM;
+			IdNodeGraphsMM++;		
+			GraphsMM.nodes.splice(-i_node-1, 0, {id:id_font, 
+						label: TreuAdreca(in_node.font.reference),  //"font"+id_font, 
+						title: in_node.font.reference, 
+						group: "font", 
+						font: in_node.font});
+		}
+		if(direction=="in")
+		{
+			i_edge=GraphsMM.edges.binarySearch({from: id_pare, to:id_font, label: 'used'}, ComparaEdgesLlinatge);
+			if(i_edge<0) // no trobat
+				GraphsMM.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_font, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
+		}
+		else
+		{
+			i_edge=GraphsMM.edges.binarySearch({from: id_font, to:id_pare, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
+			if(i_edge<0) // no trobat
+				GraphsMM.edges.splice(-i_edge-1, 0, {from: id_font, to: id_pare, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
+		}
 	}
-	else // no trobat, retorna (-n-1) on n és la posició on he d'insertar l'element
-	{
-		//id_font=GraphsMM.nodes.length+1;
-		id_font=IdNodeGraphsMM;
-		IdNodeGraphsMM++;		
-		GraphsMM.nodes.splice(-i_node-1, 0, {id:id_font, 
-					label: TreuAdreca(in_node.font.reference),  //"font"+id_font, 
-					title: in_node.font.reference, 
-					group: "font", 
-					font: in_node.font});
-	}
-	if(direction=="in")
-	{
-		i_edge=GraphsMM.edges.binarySearch({from: id_pare, to:id_font, label: 'used'}, ComparaEdgesLlinatge);
-		if(i_edge<0) // no trobat
-			GraphsMM.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_font, arrows:'to', label: 'used', font: {align: 'top', size: 10}});					
-	}
-	else
-	{
-		i_edge=GraphsMM.edges.binarySearch({from: id_font, to:id_pare, label: 'wasGeneratedBy'}, ComparaEdgesLlinatge);
-		if(i_edge<0) // no trobat
-			GraphsMM.edges.splice(-i_edge-1, 0, {from: id_font, to: id_pare, arrows:'to', label: 'wasGeneratedBy', font: {align: 'top', size: 10}});					
-	}
-	if(in_node.font.responsibleParty)
+	else 
+		id_font=id_pare;
+	if(GraphsMM.elemVisibles.agents && in_node.font.responsibleParty)
 	{		
 		for(i=0; i<in_node.font.responsibleParty.length;i++)
 			CreaGrafOrganismeLlinatge(in_node.font.responsibleParty[i], id_font);		
@@ -671,9 +693,9 @@ function AfegeixCapaAGrafLlinatge(i_capa_llista)
 var i, capa=ParamCtrl.capa[LListaCapesGraphsMM[i_capa_llista].i_capa], lli=capa.metadades.provenance.lineage;
 		
 	// El primer que he de posar és la capa generada, que és la que estic documentant el llinatge i tot penja d'aquesta capa.	
-	if(!GraphsMM.nodes)
+	if(GraphsMM.nodes==null)
 		GraphsMM.nodes=[];
-	if(!GraphsMM.edges)
+	if(GraphsMM.edges==null)
 		GraphsMM.edges=[];
 	//var info_graf={nodes: [{id:IdNodeGraphsMM, label: capa.nom, group: "resultat", capa: capa}], edges: []};
 	GraphsMM.nodes.push.apply(GraphsMM.nodes, [{id:IdNodeGraphsMM, label: capa.nom, group: "resultat", capa: capa}]);	
@@ -791,8 +813,7 @@ var i, cdns=[];
 		"nodes": {"shape": "box", "borderWidth": 2, "shadow":true},
 		"edges": {"font": {"align": "top", "size": 10}},
 		"groups": {
-			//"font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},			
-			"font": {"shape": "ellipse","color": {"background":"SeaGreen", "border":"GoldenRod"}},			
+			"font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},			
 			"proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
 			"procesAgrupat": {"shape":"box","color":{"background":"LightSteelBlue", "border":"blue"}, "borderWidth": 3},
 			"resultat": {"shape": "ellipse","color": {"background":"Yellow","border":"GoldenRod"}, "borderWidth": 3},
