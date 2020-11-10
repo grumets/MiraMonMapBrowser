@@ -30,7 +30,7 @@
 
 "use strict"
 var LListaCapesGraphsMM=[];
-var GraphsMM={hihaElements:false, elemVisibles: {agents:true, fontsFulles: true, fontsIntermitges: true, passos: true, eines: true, algorismes: true, funcions: true}};
+var GraphsMM={hihaElements:false, elemVisibles: {agents:true, fontsFulles: true, fontsIntermitges: true, passos: true, eines: true, algorismes: true, funcions: true, conjunts: {union:true, nonUnion:false, intersection:false, complement: false, substraction: false}}};
 var IdNodeGraphsMM=0;
 
 
@@ -949,24 +949,85 @@ var cdns=[],capa;
 	return cdns.join("");
 }
 
+function ActualitzaValorConjuntsVisiblesALlinatge()
+{
+	if(document.LlinatgeCapes.cLl_conjunts.value=="nonUnion")
+	{
+		GraphsMM.elemVisibles.conjunts.union=false;
+		GraphsMM.elemVisibles.conjunts.nonUnion=true;		
+		GraphsMM.elemVisibles.conjunts.intersection=false;
+		GraphsMM.elemVisibles.conjunts.complement=false;
+		GraphsMM.elemVisibles.conjunts.substraction=false;
+	}
+	else if(document.LlinatgeCapes.cLl_conjunts.value=="intersection")
+	{
+		GraphsMM.elemVisibles.conjunts.union=false;
+		GraphsMM.elemVisibles.conjunts.nonUnion=false;		
+		GraphsMM.elemVisibles.conjunts.intersection=true;
+		GraphsMM.elemVisibles.conjunts.complement=false;
+		GraphsMM.elemVisibles.conjunts.substraction=false;
+	}
+	else if(document.LlinatgeCapes.cLl_conjunts.value=="complement")
+	{
+		GraphsMM.elemVisibles.conjunts.union=false;
+		GraphsMM.elemVisibles.conjunts.nonUnion=false;		
+		GraphsMM.elemVisibles.conjunts.intersection=false;
+		GraphsMM.elemVisibles.conjunts.complement=true;
+		GraphsMM.elemVisibles.conjunts.substraction=false;
+	}
+	else if(document.LlinatgeCapes.cLl_conjunts.value=="substraction")
+	{
+		GraphsMM.elemVisibles.conjunts.union=false;
+		GraphsMM.elemVisibles.conjunts.nonUnion=false;		
+		GraphsMM.elemVisibles.conjunts.intersection=false;
+		GraphsMM.elemVisibles.conjunts.complement=false;
+		GraphsMM.elemVisibles.conjunts.substraction=true;
+	}	
+	else//if(document.LlinatgeCapes.cLl_conjunts.value=="union")
+	{
+		GraphsMM.elemVisibles.conjunts.union=true;
+		GraphsMM.elemVisibles.conjunts.nonUnion=false;		
+		GraphsMM.elemVisibles.conjunts.intersection=false;
+		GraphsMM.elemVisibles.conjunts.complement=false;
+		GraphsMM.elemVisibles.conjunts.substraction=false;
+	}
+}
+	
 function DonaCadenaFormElementsVisiblesALlinatge()
 {
 var cdns=[];	
 	cdns.push("<legend>",DonaCadenaLang({"cat":"Elements visibles", "spa":"Elementos visibles", "eng":"Visible elements", "fre":"Éléments visibles"}), "</legend>", 
-			" <input name=\"eLl_fontsIntermitges\" onclick='GraphsMM.elemVisibles.fontsIntermitges=(document.LlinatgeCapes.eLl_fontsIntermitges.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.fontsIntermitges ? " checked" : "", "/>",
-			" <label for=\"eLl_fontsIntermitges\">", DonaCadenaLang({"cat":"Fonts intermitges/temporals", "spa":"Fuentes intermedias/temporales", "eng":"Internal/temporary sources", "fre":"Sources intermédiaires / temporaires"}), "</label>",
-			" <input name=\"eLl_fontsFulles\" onclick='GraphsMM.elemVisibles.fontsFulles=(document.LlinatgeCapes.eLl_fontsFulles.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.fontsFulles ? " checked" : "", "/>",
-			" <label for=\"eLl_fontsFulles\">", DonaCadenaLang({"cat":"Fonts fulles", "spa":"Fuentes hoja", "eng":"Leaf sources", "fre":"Sources feuilles"}), "</label>",
-			" <input name=\"eLl_agents\" onclick='GraphsMM.elemVisibles.agents=(document.LlinatgeCapes.eLl_agents.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.agents ? " checked" : "", "/>",
-			" <label for=\"eLl_agents\">", DonaCadenaLang({"cat":"Agents", "spa":"Agentes", "eng":"Agents", "fre":"Agents"}), "</label><br>",
-			" <input name=\"eLl_passos\" onclick='GraphsMM.elemVisibles.passos=(document.LlinatgeCapes.eLl_passos.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.passos ? " checked" : "", "/>",
-			" <label for=\"eLl_passos\">", DonaCadenaLang({"cat":"Passos del procés", "spa":"Pasos del proceso", "eng":"Process steps", "fre":"Étapes du processus"}), "</label>",
-			" <input name=\"eLl_eines\" onclick='GraphsMM.elemVisibles.eines=(document.LlinatgeCapes.eLl_eines.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.eines ? " checked" : "", "/>",
-			" <label for=\"eLl_eines\">", DonaCadenaLang({"cat":"Eines de processament", "spa":"Herramientas de procesamiento", "eng":"Processing tools", "fre":"Outils de traitement"}), "</label>",
-			" <input name=\"eLl_algorismes\" onclick='GraphsMM.elemVisibles.algorismes=(document.LlinatgeCapes.eLl_algorismes.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.algorismes? " checked" : "", "/>",
-			" <label for=\"eLl_algorismes\">", DonaCadenaLang({"cat": "Algorismes", "spa": "Algoritmos", "eng": "Algorithms", "fre": "Algorithmes"}), "</label>",
-			" <input name=\"eLl_funcions\" onclick='GraphsMM.elemVisibles.funcions=(document.LlinatgeCapes.eLl_funcions.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.funcions ? " checked" : "", "/>",
-			" <label for=\"eLl_funcions\">", DonaCadenaLang({"cat": "Funcionalitats", "spa": "Funcionalidades", "eng": "Functionalities", "fre": "Fonctionnalités"}), "</label>");
+		" <input name=\"eLl_fontsIntermitges\" onclick='GraphsMM.elemVisibles.fontsIntermitges=(document.LlinatgeCapes.eLl_fontsIntermitges.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.fontsIntermitges ? " checked" : "", "/>",
+		" <label for=\"eLl_fontsIntermitges\">", DonaCadenaLang({"cat":"Fonts intermitges/temporals", "spa":"Fuentes intermedias/temporales", "eng":"Internal/temporary sources", "fre":"Sources intermédiaires / temporaires"}), "</label>",
+		" <input name=\"eLl_fontsFulles\" onclick='GraphsMM.elemVisibles.fontsFulles=(document.LlinatgeCapes.eLl_fontsFulles.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.fontsFulles ? " checked" : "", "/>",
+		" <label for=\"eLl_fontsFulles\">", DonaCadenaLang({"cat":"Fonts fulles", "spa":"Fuentes hoja", "eng":"Leaf sources", "fre":"Sources feuilles"}), "</label>",
+		" <input name=\"eLl_agents\" onclick='GraphsMM.elemVisibles.agents=(document.LlinatgeCapes.eLl_agents.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.agents ? " checked" : "", "/>",
+		" <label for=\"eLl_agents\">", DonaCadenaLang({"cat":"Agents", "spa":"Agentes", "eng":"Agents", "fre":"Agents"}), "</label><br>",
+		" <input name=\"eLl_passos\" onclick='GraphsMM.elemVisibles.passos=(document.LlinatgeCapes.eLl_passos.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.passos ? " checked" : "", "/>",
+		" <label for=\"eLl_passos\">", DonaCadenaLang({"cat":"Passos del procés", "spa":"Pasos del proceso", "eng":"Process steps", "fre":"Étapes du processus"}), "</label>",
+		" <input name=\"eLl_eines\" onclick='GraphsMM.elemVisibles.eines=(document.LlinatgeCapes.eLl_eines.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.eines ? " checked" : "", "/>",
+		" <label for=\"eLl_eines\">", DonaCadenaLang({"cat":"Eines de processament", "spa":"Herramientas de procesamiento", "eng":"Processing tools", "fre":"Outils de traitement"}), "</label>",
+		" <input name=\"eLl_algorismes\" onclick='GraphsMM.elemVisibles.algorismes=(document.LlinatgeCapes.eLl_algorismes.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.algorismes? " checked" : "", "/>",
+		" <label for=\"eLl_algorismes\">", DonaCadenaLang({"cat": "Algorismes", "spa": "Algoritmos", "eng": "Algorithms", "fre": "Algorithmes"}), "</label>",
+		" <input name=\"eLl_funcions\" onclick='GraphsMM.elemVisibles.funcions=(document.LlinatgeCapes.eLl_funcions.checked)?true:false;' type=\"checkbox\"", GraphsMM.elemVisibles.funcions ? " checked" : "", "/>",
+		" <label for=\"eLl_funcions\">", DonaCadenaLang({"cat": "Funcionalitats", "spa": "Funcionalidades", "eng": "Functionalities", "fre": "Fonctionnalités"}), "</label>");
+	
+	if(LListaCapesGraphsMM.length>1)
+	{
+		cdns.push("<fieldset id=\"conjuntsLlinatge\">",
+			"<legend>",DonaCadenaLang({"cat":"Quan hi ha més d'una capa, mostrar:", "spa":"Cuando hay más de una capa, mostrar:", "eng":"When more than one dataset, show:", "fre":"Quand il y a plus d'une couche, affichage:"}), "</legend>", 
+			" <input name=\"cLl_conjunts\" value=\"union\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.union ? " checked" : "", "/>",
+			" <label for=\"union\">", DonaCadenaLang({"cat":"La unió", "spa":"La unión", "eng":"The union", "fre":"L'union"}), "</label>",
+			" <input name=\"cLl_conjunts\" value=\"nonUnion\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.nonUnion ? " checked" : "", "/>",
+			" <label for=\"nonUnion\">", DonaCadenaLang({"cat":"Cada capa en un gràfic independent", "spa":"Cada capa en un gráfico independiente", "eng":"Datasets as independents graphs", "fre":"Chaque couche sur un graphique séparé"}), "</label><br>",
+			" <input name=\"cLl_conjunts\" value=\"intersection\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.intersection ? " checked" : "", "/>",
+			" <label for=\"intersection\">", DonaCadenaLang({"cat":"La intersecció", "spa":"La intersección", "eng":"The intersection", "fre":"l'intersection"}), "</label>",
+			" <input name=\"cLl_conjunts\" value=\"complement\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.complement ? " checked" : "", "/>",
+			" <label for=\"complement\">", DonaCadenaLang({"cat":"El complement de la intersecció", "spa":"El complemento de la intersección", "eng":"The complement of the intersection", "fre":"Le complément de l'intersection"}), "</label>",
+			" <input name=\"cLl_conjunts\" value=\"substraction\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.substraction ? " checked" : "", "/>",
+			" <label for=\"substraction\">", DonaCadenaLang({"cat":"La resta de la primera", "spa":"La resta del primero", "eng":"The substraction of the first", "fre":"La soustraction de la première"}), "</label>",
+			"</fieldset>");
+	}
 	return cdns.join("");
 }
 
@@ -1238,13 +1299,14 @@ function OmpleFinestraLlinatge(param)
 				if(GraphsMM.edgesGraf)
 					GraphsMM.edgesGraf.clear();
 				GraphsMM.nodesGraf.add(GraphsMM.nodes);	
-				GraphsMM.edgesGraf.add(GraphsMM.edges);
-				// Modifico la llista de capes
-				document.getElementById("capesLlinatge").innerHTML = DonaCadenaFormCapesALlinatge();
-				document.getElementById("simpleQLlinatge").innerHTML = DonaCadenaFormSimpleQueryLlinatge();
-				document.getElementById("complexQLlinatge").innerHTML = DonaCadenaFormComplexQueryLlinatge();
+				GraphsMM.edgesGraf.add(GraphsMM.edges);				
 			}
 		}
+		// Modifico la llista de capes
+		document.getElementById("capesLlinatge").innerHTML = DonaCadenaFormCapesALlinatge();
+		document.getElementById("elemsLlinatge").innerHTML = DonaCadenaFormElementsVisiblesALlinatge();
+		document.getElementById("simpleQLlinatge").innerHTML = DonaCadenaFormSimpleQueryLlinatge();
+		document.getElementById("complexQLlinatge").innerHTML = DonaCadenaFormComplexQueryLlinatge();
 	}
 	else
 	{
