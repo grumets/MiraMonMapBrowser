@@ -807,14 +807,14 @@ var i, cdns=[];
 		"edges": {"font": {"align": "top", "size": 10}},
 		"groups": {
 			"font": {"shape": "ellipse","color": {"background":"LightYellow", "border":"GoldenRod"}},			
-			"proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
-			"procesAgrupat": {"shape":"box","color":{"background":"LightSteelBlue", "border":"blue"}, "borderWidth": 3},
 			"resultat": {"shape": "ellipse","color": {"background":"Yellow","border":"GoldenRod"}, "borderWidth": 3},
+			"proces": {"shape":"box","color":{"background":"LightSteelBlue", "border":"purple"}},
+			"procesAgrupat": {"shape":"box","color":{"background":"LightSteelBlue", "border":"blue"}, "borderWidth": 3},			
 			"agent": {"shape":"circle","color":{"background":"DarkSalmon","border":"Bisque"}},
 			"executable": {"shape": "box","color": {"background":"DarkSeaGreen", "border":"ForestGreen"}},
-			"algorisme": {"shape": "box","color": {"background":"SeaGreen", "border":"ForestGreen"}},
-			"funcionalitat": {"shape": "box","color": {"background":"LightSeaGreen", "border":"ForestGreen"}},
-	        }
+			"algorisme": {"shape": "box","color": {"background":"MediumOrchid", "border":"#ff34b3"}},
+			"funcionalitat": {"shape": "box","color": {"background":"#66cdaa", "border":"#458b74"}},
+		}
 	};
 	GraphsMM.div=nom_div;	
 	GraphsMM.lineageNetWork = new vis.Network(document.getElementById(nom_div), {nodes: GraphsMM.nodesGraf, edges: GraphsMM.edgesGraf},  GraphsMM.options);
