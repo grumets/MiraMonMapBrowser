@@ -2667,6 +2667,10 @@
 					"description": "Textual information on the lineage of the data",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
+				"grup":{
+					"description":"Grup de processos de llinatge",
+					"$ref": "#/definitions/grupProcessos"
+				},
 				"processes": {
 					"description": "Processes applied to this dataset",
 					"type": "array",
@@ -2687,6 +2691,10 @@
 			"description": "Process applied to this dataset",
 			"type": "object",
 			"properties": {
+				"grup":{
+					"description":"Grup de processos de llinatge. Tots els processos del mateix grup i consecutius es representaran agrupats.",
+					"$ref": "#/definitions/grupProcessos"
+				},
 				"processor": {				
 					"type": "array",
 					"items": {
@@ -2700,11 +2708,7 @@
 				"timeDate": {
 					"description": "When the process was done",
 					"type": "string"
-				},
-				"compilationDate": {
-					"description": "When the executable was produced. It is a way to recognize the version of the executable.",
-					"type": "string"
-				},
+				},				
 				"executable": {
 					"description": "Name of the executable file or service url",
 					"type": "object",
@@ -2714,14 +2718,36 @@
 							"type": "object",
 							"format": "uri"
 						},
+						"compilationDate": {
+							"description": "When the executable was produced. It is a way to recognize the version of the executable.",
+							"type": "string"
+						},
+						"responsibleParty": {				
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/responsability"					
+							}
+						},
 						"algorithm": {
 							"description": "Algorithm implemented by the executable",
-							"type": ["string", "null"]
-						},
-						"functionality": {
-							"description": "Functionality given by the algorithm",
-							"type": "string"
-						}
+							"type": "object",
+							"properties": {
+								"name": {
+									"description": "Name of the algortihm ",
+									"$ref": "#/definitions/StringOCadenaLang" 
+								},
+								"responsibleParty": {				
+									"type": "array",
+									"items": {
+										"$ref": "#/definitions/responsability"					
+									}
+								},
+								"functionality": {
+									"description": "Functionality given by the algorithm",
+									"$ref": "#/definitions/StringOCadenaLang" 
+								}
+							}
+						}						
 					}
 				},
 				"parameters": {
@@ -2780,6 +2806,12 @@
 					"description": "Description of the source",
 					"$ref": "#/definitions/StringOCadenaLang" 
 				},
+				"responsibleParty": {				
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/responsability"					
+					}
+				},
 				"processes": {
 					"description": "Processes applied to this dataset",
 					"type": "array",
@@ -2793,6 +2825,21 @@
 					"items": {
 						"$ref": "#/definitions/source"
 					}
+				}
+			}
+		},
+		"grupProcessos":{
+			"description": "Serveix per definir un grup de processos",
+			"type": "object",
+			 "properties": {
+				"id": {
+					"description": "Identificador del grup", 
+					"type": "string"
+					
+				},
+				"desc":{
+					"description": "Descripció del grup", 
+					"$ref": "#/definitions/StringOCadenaLang" 
 				}
 			}
 		},
@@ -2815,7 +2862,7 @@
 									"type": "object",
 									"properties": {
 										"name": {
-											"description": "Name or the organization",
+											"description": "Name of the organization",
 											"type": "string"
 										}
 									}
@@ -2829,7 +2876,7 @@
 									"type": "object",
 									"properties": {
 										"name": {
-											"description": "Name or the individual",
+											"description": "Name of the individual",
 											"type": "string"
 										}
 									}

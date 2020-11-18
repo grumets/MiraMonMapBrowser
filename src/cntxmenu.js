@@ -117,7 +117,7 @@ function EsborrarEstilCapa(i_capa, i_estil)
 function TancaContextMenuCapa()
 {
 	var elem=getLayer(window, "menuContextualCapa");
-	hideLayer(elem);
+	hideLayer(elem);	
 }
 
 function MouLayerContextMenuCapa(event, s)
@@ -132,18 +132,28 @@ function MouLayerContextMenuCapa(event, s)
 		contentLayer(menu, s);
 		var menu_marc=getLayer(window, "menuContextualCapa-contingut");
 		var menu_text=getLayer(window, "menuContextualCapa-text");
-
-		var rec=getRectLayer(getLayer(window, "menuContextualCapa-text"));
-
-		var mida=event.clientY+((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+parseInt(rec.alt);
-
-		var rec_naveg=getRectLayer(window.document.body);
-		if(mida>=rec_naveg.alt)
-			y=event.clientY-parseInt(rec.alt);
+		if(menu_text && menu_marc)
+		{
+			var rec=getRectLayer(menu_text);
+	
+			var mida=event.clientY+((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+parseInt(rec.alt);
+	
+			var rec_naveg=getRectLayer(window.document.body);
+			if(mida>=rec_naveg.alt)
+				y=event.clientY-parseInt(rec.alt);
+			else
+				y=event.clientY+5;
+			changePosAndShowLayer(menu, event.clientX, y);
+			moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
+		}
 		else
-			y=event.clientY+5;
-		changePosAndShowLayer(menu, event.clientX, y);
-		moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
+			changePosAndShowLayer(menu, event.clientX, y);
+			
+		setzIndexLayer(menu,(layerList.length-1));
+		if(menu_text)
+			setzIndexLayer(menu_text,(layerList.length-1));
+		if(menu_marc)
+			setzIndexLayer(menu_marc,(layerList.length-1));
 	}
 }
 
@@ -697,6 +707,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 			}
 		}
 	}
+	CanviaIndexosCapesGraphsMM(n_moviment, i_capa_ini, i_capa_fi_per_sota);
 	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl);
 }
 

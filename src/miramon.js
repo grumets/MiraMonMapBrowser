@@ -117,8 +117,7 @@ function MMgetEventButton(event)
 {
 	if(typeof event.which === "undefined") //IE8 http://unixpapa.com/js/mouse.html
 		return {first:event.button===1,middle:event.button===4,second:event.button===2};
-	else
-		return {first:event.button===0,middle:event.button===1,second:event.button===2};
+	return {first:event.button===0,middle:event.button===1,second:event.button===2};
 }
 /*
  * Adds a CSS class to the given HTML element.
@@ -384,7 +383,6 @@ function CompletaDefinicioCapa(capa, capa_especial)
 			if (!capa.CRSgeometry)
 				capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
 			InicialitzaTilesSolicitatsCapaDigi(capa);
-
 			CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		}		
 	}
@@ -2545,7 +2543,7 @@ var cdns=[], ll, p, unitats_CRS;
 	if (ParamCtrl.CoordActualLongLatG==true)
 	{
 		if (ParamCtrl.CoordActualProj==true && ParamCtrl.EstilCoord=="area")
-			cdns.push("\n");
+			cdns.push("<br>");
 		ll=DonaCoordenadesLongLat(x,y,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		cdns.push((negreta ? "<b>" : ""),
 			(input ? " Long: " : " Long,Lat: "),
@@ -2583,14 +2581,17 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 					if (s=="")
 						continue;
 					if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-						cdns.push("\n");
+						cdns.push("<br>");
 					else
 						cdns.push("; ");
 					cdns.push(DonaDescripcioValorMostrarCapa(i_capa, true), ": ", s);
 				}
 			}
 		}
-		window.document.form_coord.info_coord.value=cdns.join("");
+		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
+			window.document.form_coord.info_coord.innerHTML=cdns.join("");
+		else
+			window.document.form_coord.info_coord.value=cdns.join("");
 	}
 }
 
@@ -2856,7 +2857,7 @@ var cdns=[], elem;
 				cdns.push("</tr><tr>");
 		}
 		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-			cdns.push("<td><textarea class=\"input_info_coord\" name=\"info_coord\" style=\"width: 97%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></textarea></td>");
+			cdns.push("<td><fieldset class=\"input_info_coord\" name=\"info_coord\" style=\"width: 93%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></fieldset></td>");
 		else
 			cdns.push("<td><input class=\"input_info_coord\" type=\"text\" name=\"info_coord\" style=\"width: 97%\" readonly=\"readonly\"></td>");
 		cdns.push("</tr></table></form>");
@@ -5917,8 +5918,7 @@ var win, i, j, l, capa;
 			createLayer(window, l.name, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev) ? l.ev : null}, (l.content) ? l.content : null);
 	}
 
-	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa 
+	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);	
 	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 520, 700, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
@@ -5932,7 +5932,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
 	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 200, 700, 600, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 20, 800, 600, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraQualitat", {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedback", {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
@@ -5940,6 +5940,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
+	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa 
 	createFinestraLayer(window, "editarVector", {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert a new point", "fre":"Insérer un nouveaux point"}, boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", {"cat":"Informació del resultat de la transacció", "spa":"Información del resulado de la transacción", "eng": "Information about the result of the transaction", "fre":"Informations sur les résultats de la transaction"}, boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);

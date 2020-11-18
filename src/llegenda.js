@@ -671,7 +671,8 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 										AfegeixAdrecaBaseSRC("1tran.gif"), 
 										"\" width=\"2\" height=\"1\"></td>",
 										"<td valign=\"middle\">");
-									cdns.push("<a href=\"javascript:void(0);\" style=\"cursor:context-menu;\" onClick=\"OmpleLayerContextMenuEstil(event,", i, ",", l,");\" onContextMenu=\"return OmpleLayerContextMenuEstil(event,", i, ",", l,");\">");
+									if (isLayer(window, "menuContextualCapa"))
+										cdns.push("<a href=\"javascript:void(0);\" style=\"cursor:context-menu;\" onClick=\"OmpleLayerContextMenuEstil(event,", i, ",", l,");\" onContextMenu=\"return OmpleLayerContextMenuEstil(event,", i, ",", l,");\">");
 									cdns.push(aspecte.PreviDescEstil , DonaCadena(capa.estil[l].desc) , aspecte.PostDescEstil);
 									cdns.push("</a>");
 									cdns.push("</td>");
