@@ -1266,7 +1266,7 @@
 												"multipleOf": 1
 											},
 											"representacio": {
-												"description": "Externament es pot posar '3d' per forçar una visualització 3d al menú. S'afegeix programaticament en definir un combicapa. En un futur podria servir per decidir si fer un histrograma o una pie o altres tipus de representatció. Opcional",
+												"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
 												"type": "object",
 												"required": ["tipus"],
 												"properties": {

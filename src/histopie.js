@@ -549,6 +549,12 @@ function CreaMatriuDeConfusio(nom_div, histograma)
 	document.getElementById(nom_div).innerHTML=CreaTextMatriuDeConfusio(histograma, true);
 }
 
+function DonaTipusGraficHistograma(estil, i_c)
+{
+	if (estil.component[i_c].representacio=='bar' || estil.component[i_c].representacio=='pie')
+		return estil.component[i_c].representacio;
+	return (estil.categories && estil.atributs) ? 'pie' : 'bar';
+}
 function CreaHistograma(nom_canvas, histograma, i_c)
 {
 var ctx, myChart, i, options, labels=[], n_colors, i_color, colors=[], data, area_cella, unitats, valors=[];
@@ -606,6 +612,8 @@ var estil=capa.estil[histograma.i_estil];
 	if (estil.categories && estil.atributs)
 	{
 		//var total_celles=0;
+		var a0=DonaFactorAEstiramentPaleta(estil.component[i_c].estiramentPaleta, n_colors);
+		var valor_min0=DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta);
 		data=[];
 		if (estil.categories.length<n_colors)
 			colors.length=n_colors=estil.categories.length;
@@ -618,7 +626,7 @@ var estil=capa.estil[histograma.i_estil];
 				continue;
 			}
 			data[i]=estil.histograma.component[i_c].classe[i_color]*area_cella;
-			labels[i]=DonaTextCategoriaDesDeColor(estil, i_color);
+			labels[i]=DonaTextCategoriaDesDeColor(estil, estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color);
 			i++;
 		}	
 		options={
@@ -728,7 +736,7 @@ var estil=capa.estil[histograma.i_estil];
 	}
 	ctx = document.getElementById(nom_canvas+i_c);
 	myChart = new Chart(ctx, {
-		type: ((estil.categories && estil.atributs) ? 'pie' : 'bar'),
+		type: DonaTipusGraficHistograma(estil, i_c),
 		data: {
 			labels: labels,
 			valors: (valors ? valors : null),

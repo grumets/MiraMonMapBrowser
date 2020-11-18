@@ -595,37 +595,6 @@ function DonaCadena(a)
 	return null;
 }
 
-function DonaCadenaConcret(a, idioma)
-{
-	if (idioma=="cat" && a!=null && a.cat!=null)
-		return a.cat;
-	if (idioma=="spa" && a!=null && a.spa!=null)
-		return a.spa;
-	if (idioma=="eng" && a!=null && a.eng!=null)
-		return a.eng;
-	if (idioma=="fre" && a!=null && a.fre!=null)
-		return a.fre;
-	return a;
-}
-
-/* Es substitueix aquesta funció pe DonaCadenaLang al 
-	canviar a l'implementació JSON.
-function DonaCadena4(cat,spa,eng,fre)
-{
-	if (ParamCtrl.idioma)
-	{	
-		if (ParamCtrl.idioma=="cat")
-			return cat;
-		if (ParamCtrl.idioma=="spa")
-			return spa;
-		if (ParamCtrl.idioma=="eng")
-			return eng;
-		if (ParamCtrl.idioma=="fre")
-			return fre;
-	}
-	return eng;
-}*/
-
 //S'usa per cadenes definides estàticament definides així: DonaCadenaLang({"cat": "sí", "spa": "sí", "eng": "yes", "fre": "oui"});
 function DonaCadenaLang(cadena_lang)
 {
@@ -646,6 +615,38 @@ function DonaCadenaLang(cadena_lang)
 	}
 	return "";
 }
+
+
+function DonaCadenaConcret(a, idioma)
+{
+	if (idioma=="cat" && a!=null && a.cat!=null)
+		return a.cat;
+	if (idioma=="spa" && a!=null && a.spa!=null)
+		return a.spa;
+	if (idioma=="eng" && a!=null && a.eng!=null)
+		return a.eng;
+	if (idioma=="fre" && a!=null && a.fre!=null)
+		return a.fre;
+	return a;
+}
+
+/* Es substitueix aquesta funció per DonaCadenaLang al 
+	canviar a l'implementació JSON.
+function DonaCadena4(cat,spa,eng,fre)
+{
+	if (ParamCtrl.idioma)
+	{	
+		if (ParamCtrl.idioma=="cat")
+			return cat;
+		if (ParamCtrl.idioma=="spa")
+			return spa;
+		if (ParamCtrl.idioma=="eng")
+			return eng;
+		if (ParamCtrl.idioma=="fre")
+			return fre;
+	}
+	return eng;
+}*/
 
 function getISOLanguageTag(language)
 {
@@ -4279,8 +4280,8 @@ var capa=ParamCtrl.capa[i_capa];
 			);
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, retorna una cadean buida.
-function DonaTextCategoriaDesDeColor(estil, i_color)
+//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, retorna una cadena buida. Si la cadena és multiidioma es retorna un objecte
+function DonaCadenaCategoriaDesDeColor(estil, i_color)
 {
 	if (estil.atributs.length==1)
 	{
@@ -4300,6 +4301,12 @@ function DonaTextCategoriaDesDeColor(estil, i_color)
 	}
 	value_text+="]";
 	return value_text;
+}
+
+//Com la funció anterior però resol la cadena multiidioma en un idioma concret
+function DonaTextCategoriaDesDeColor(estil, i_color)
+{
+	return DonaCadena(DonaCadenaCategoriaDesDeColor(estil, i_color));
 }
 
 function onLoadCanviaImatge(event)

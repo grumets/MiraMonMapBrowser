@@ -372,7 +372,7 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	if (component.length==1)
 	{
 		if (estil.categories && estil.atributs)
-			return DonaCadena(DonaTextCategoriaDesDeColor(estil, v_c[0]));
+			return DonaTextCategoriaDesDeColor(estil, v_c[0]);
 		return (typeof component[0].NDecimals!=="undefined" && component[0].NDecimals!=null) ? OKStrOfNe(v_c[0], component[0].NDecimals) : v_c[0].toString();
 	}
 	var cdns=[];
