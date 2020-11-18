@@ -2542,7 +2542,7 @@ var cdns=[], ll, p, unitats_CRS;
 	if (ParamCtrl.CoordActualLongLatG==true)
 	{
 		if (ParamCtrl.CoordActualProj==true && ParamCtrl.EstilCoord=="area")
-			cdns.push("\n");
+			cdns.push("<br>");
 		ll=DonaCoordenadesLongLat(x,y,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		cdns.push((negreta ? "<b>" : ""),
 			(input ? " Long: " : " Long,Lat: "),
@@ -2580,14 +2580,17 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 					if (s=="")
 						continue;
 					if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-						cdns.push("\n");
+						cdns.push("<br>");
 					else
 						cdns.push("; ");
 					cdns.push(DonaDescripcioValorMostrarCapa(i_capa, true), ": ", s);
 				}
 			}
 		}
-		window.document.form_coord.info_coord.value=cdns.join("");
+		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
+			window.document.form_coord.info_coord.innerHTML=cdns.join("");
+		else
+			window.document.form_coord.info_coord.value=cdns.join("");
 	}
 }
 
@@ -2853,7 +2856,7 @@ var cdns=[], elem;
 				cdns.push("</tr><tr>");
 		}
 		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-			cdns.push("<td><textarea class=\"input_info_coord\" name=\"info_coord\" style=\"width: 97%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></textarea></td>");
+			cdns.push("<td><fieldset class=\"input_info_coord\" name=\"info_coord\" style=\"width: 93%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></fieldset></td>");
 		else
 			cdns.push("<td><input class=\"input_info_coord\" type=\"text\" name=\"info_coord\" style=\"width: 97%\" readonly=\"readonly\"></td>");
 		cdns.push("</tr></table></form>");
