@@ -307,8 +307,31 @@
 						"description": "Envolupant representada pel mapa de situació",
 						"$ref": "#/definitions/envolupantCRS_2D" 
 					},
+					"servidor": { 
+						"description": "URL del servidor WMS. Opcional, si no s'indica, s'assumeix que el nom conté el nom de fitxer directament. Si s'índica null és el servidor local",
+						"type": "string",
+						"format": "uri"
+					},
+					"versio": { 
+						"description": "Versió del servei WMS. Opcional; si no s'indica s'assumeix VersioServidorLocal",
+						"$ref": "#/definitions/versio" 
+					},
+					"tipus": { 
+						"description": "Tipus de servei. Només se suporta 'TipusWMS'.  Opcional; si no s'indica s'assumeix TipusServidorLocal",
+						"$ref": "#/definitions/EnumTipusServidor" 
+					},					
 					"nom":	{ 
-						"description": "Nom del fitxer de la imatge que fa de rectangle de situació",
+						"description": "Nom del fitxer de la imatge que fa de rectangle de situació o el nom de la capa si s'extreu d'un servei WMS",
+						"type": "string",
+						"format": "uri"
+					},
+					"NomEstil": { 
+						"description": "Nom de l'estil usat en la petició WMS per obtenir el rectangle de situació si s'extreu d'un servei WMS",
+						"type": "string",
+						"format": "uri"
+					},
+					"FormatImatge": {
+						"description": "Format en que s'ha de demanar la imatge de situació al servidor si s'extreu d'un servei WMS. És un format MIME. Optional",
 						"type": "string",
 						"format": "uri"
 					},
@@ -319,7 +342,7 @@
 						"multipleOf" : 1
 					},
 					"Alt": { 
-						"description": "Alt del fitxer de la imatge que fa mapa de situació en píxels",
+						"description": "Alt del fitxer de la imatge que fa mapa de situació en píxels. Opcional en el cas servidor WMS o es calcula automaticament.",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1

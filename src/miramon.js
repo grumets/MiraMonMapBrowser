@@ -3122,12 +3122,48 @@ function DonaCadenaHTMLMarcSituacio(ample, alt)
 
 function CreaSituacio()
 {
+var nom_img_src, env, situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio];
+
+	if (!situacio.Alt)
+		situacio.Alt=Math.round(situacio.Ample*(situacio.EnvTotal.EnvCRS.MaxY-situacio.EnvTotal.EnvCRS.MinY)/(situacio.EnvTotal.EnvCRS.MaxX-situacio.EnvTotal.EnvCRS.MinX));
+
 	CalculaMidesSituacio();
 	var rec=OmpleMidesRectangleSituacio(ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, ParamInternCtrl.vista.EnvActual);
 	var elem=getLayer(window, "situacio");
 	if (isLayer(elem))
 	{
-		var s=textHTMLLayer("l_situa", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<img name=\"i_situa\" src=\"" + AfegeixAdrecaBaseSRC(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].nom) + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0>") +"\n";
+		if (typeof situacio.servidor==="undefined")
+			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
+		else if (DonaTipusServidorCapa(situacio)!="TipusWMS")
+		{
+			alert("'situacio' with 'tipus' different of 'TipusWMS' not supported");
+			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
+		}
+		else
+		{
+			nom_img_src="SERVICE=WMS&VERSION=" + DonaVersioComAText(DonaVersioServidorCapa(situacio)) + "&REQUEST=GetMap&";
+			if (DonaVersioServidorCapa(situacio).Vers<1 || (DonaVersioServidorCapa(situacio).Vers==1 && DonaVersioServidorCapa(situacio).SubVers<2))
+		    		nom_img_src+="SRS=";
+			else
+        			nom_img_src+="CRS=";	
+			nom_img_src+=situacio.EnvTotal.CRS + "&BBOX=";
+			env=situacio.EnvTotal.EnvCRS;
+			if (CalGirarCoordenades(situacio.EnvTotal.CRS,  DonaVersioServidorCapa(situacio)))
+				nom_img_src+=env.MinY + "," + env.MinX + "," + env.MaxY + "," + env.MaxX;
+			else
+        			nom_img_src+=env.MinX + "," + env.MinY + "," + env.MaxX + "," + env.MaxY;
+			nom_img_src+="&WIDTH=" + situacio.Ample + "&HEIGHT=" + situacio.Alt + "&LAYERS=" + situacio.nom + "&FORMAT=";
+			if (situacio.FormatImatge)
+				nom_img_src+=situacio.FormatImatge;
+			else
+				nom_img_src+="image/png";
+			nom_img_src+="&TRANPARENT=TRUE&STYLES=";
+			if (situacio.NomEstil)
+				nom_img_src+=situacio.NomEstil;
+			nom_img_src=CombinaURLServidorAmbParamPeticio(DonaServidorCapa(situacio), nom_img_src);
+		}
+
+		var s=textHTMLLayer("l_situa", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<img name=\"i_situa\" src=\"" + nom_img_src + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0>") +"\n";
 		if (EsEnvDinsMapaSituacio(ParamInternCtrl.vista.EnvActual))
 			s+=textHTMLLayer("l_rect", ParamInternCtrl.MargeEsqSituacio+rec.MinX, ParamInternCtrl.MargeSupSituacio+ParamInternCtrl.AltSituacio-rec.MaxY, rec.MaxX-rec.MinX, rec.MaxY-rec.MinY, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY))+ "\n";
 		s+=textHTMLLayer("l_situa_actiu", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content:false}, null, "<a href=\"javascript:void(0);\" onClick=\"ClickSobreSituacio(event);\" onmousemove=\"MovimentSobreSituacio(event);\"><img src=\""+ AfegeixAdrecaBaseSRC("1tran.gif") + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0></a>")+"\n";
@@ -4105,15 +4141,15 @@ var cdns=[], tipus, plantilla, i_estil2;
 	}
 	
 	if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers<2))
-    	cdns.push("SRS=");
-    else
-        cdns.push("CRS=");	
+		cdns.push("SRS=");
+	else
+		cdns.push("CRS=");	
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&BBOX=");
 	
 	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  (tipus=="TipusOAPI_Maps" ? null : DonaVersioServidorCapa(ParamCtrl.capa[i]))))
-       	cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
-    else
-        cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
+		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
+	else
+		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
 	
 	cdns.push("&WIDTH=" , ncol , "&HEIGHT=" , nfil);	 
 	if(tipus=="TipusOAPI_Maps")
