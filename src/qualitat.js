@@ -519,7 +519,7 @@ var capa=ParamCtrl.capa[i_capa];
 		return;
 	}
 	
-	GUFShowPreviousFeedbackWithReproducicleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa), 
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa), 
 		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: encodeURIComponent(config_schema_estil)},
 		ParamCtrl.idioma, "" /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
