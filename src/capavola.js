@@ -714,20 +714,24 @@ function ErrorPosicioGPS(error)
 	switch(error.code) 
 	{
 		case error.PERMISSION_DENIED:
-	      		alert(DonaCadenaLang({"cat":"L'usuari ha denegat la sol·licitud de geolocalització", "spa":"El usuario ha denegado la solicitud de geolocalitzación", "eng":"User denied the request for Geolocation.","fre":"L'utilisateur a refusé la demande de géolocalisation"}));
+	      	alert(DonaCadenaLang({"cat":"L'usuari ha denegat la sol·licitud de geolocalització", "spa":"El usuario ha denegado la solicitud de geolocalización", 
+									 "eng":"User denied the request for geolocation","fre":"L'utilisateur a refusé la demande de géolocalisation"}));				
 			CancelaPosicioGPS();
 			break;
 		case error.POSITION_UNAVAILABLE:
-      			alert(DonaCadenaLang({"cat":"La informació sobre la ubicació no està disponible", "spa":"La información sobre la ubicación no está disponible", "eng":"Location information is unavailable.","fre":"Les informations de localisation ne sont pas disponibles"}));
+      		alert(DonaCadenaLang({"cat":"La informació sobre la ubicació no està disponible", "spa":"La información sobre la ubicación no está disponible", 
+									 "eng":"Location information is unavailable","fre":"Les informations de localisation ne sont pas disponibles"}));
 			CancelaPosicioGPS();
-      			break;
-		case error.TIMEOUT:
-			alert(DonaCadenaLang({"cat":"Temps de sol·licitut de l'obtenció de la ubicació de l’usuari esgotat", "spa":"Tiempo de solicitud de obtención de la ubicación del usuario esgotado", "eng":"Request to get user location timed out.","fre":"Demande pour expiration de l'emplacement de l'utilisateur"}));
+      		break;
+		case error.TIMEOUT:		
+			alert(DonaCadenaLang({"cat":"S'ha esgotat el temps d'espera de la sol·licitud per obtenir la ubicació de l'usuari", "spa":"Se ha agotado el tiempo de espera de la solicitud para obtener la ubicación del usuario", 
+								 "eng":"Request to get user location timed out","fre":"La demande d’obtention de l’emplacement de l’utilisateur a expiré"}));
 			CancelaPosicioGPS();
 			break;
 		case error.UNKNOWN_ERROR:
 		default:
-			alert(DonaCadenaLang({"cat":"S'ha produït un error desconegut", "spa":"Se ha producido un error desconocido", "eng":"An unknown error occurred","fre":"Une erreur inconnue est survenue"})+" (" + error.code + ").");
+			alert(DonaCadenaLang({"cat":"S'ha produït un error desconegut durant l'obtenció de la ubicació", "spa":"Se ha producido un error desconocido durante la obtención de la geolocalización", 
+								 "eng":"An unknown error occurred while obtaining the location","fre":"Une erreur inconnue s'est survenue lors de l'obtention de l'emplacement"})+" (" + error.code + ").");
 			break;
 	}
 }
