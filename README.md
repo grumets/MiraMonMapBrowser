@@ -1,8 +1,8 @@
 # MiraMonMapBrowser
 
-MiraMon Map Browser is based on OGC web services standards. To test it, you can set it up in you web server folder (for example, in Windows IIS, by downloading these files in C:\inetpub\wwwroot\MiraMonMapBrowser). The landing page of the browser is called index.htm. The code of the MiraMon Map Browser can be used with no modification.
+MiraMon Map Browser is based on OGC web services standards. To test it, you can set it up in your web server folder (for example, in Windows IIS, by downloading these files in C:\inetpub\wwwroot\MiraMonMapBrowser). The landing page of the browser is called index.htm. The code of the MiraMon Map Browser can be used with no modification.
 
-The MiraMon Map Browser can be configured to your purposes populating a file named config.json document. Several examples of this document can be found in [the examples](src/examples) folder. You can request a Windows application to edit some parts of config.json in a more user friendly way by sending a request to suport@miramon.uab.cat (it is not able to configure the recent new functionalities)
+The MiraMon Map Browser can be configured to your purposes populating a file named config.json document. Several examples of this document can be found in [the examples](src/examples) folder. You can request a Windows application called Adm_MMN.exe to edit some parts of config.json in a more user friendly way by sending a request to suport@miramon.uab.cat (although it does not allow to configure the recent functionalities).
 
 The config.json file data model is described and can be validated using a [json schema file](src/config-schema.json)
 
