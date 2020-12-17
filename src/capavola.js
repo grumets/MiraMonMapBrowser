@@ -649,6 +649,13 @@ function IniciaPosicioGPS()
 {
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
+		if("https:"!=location.protocol.toLowerCase())
+		{
+			// Decideixo no dir res perquè l'usuari final no en té la culpa de que el navegador sigui http i no https
+			//alert("Geolocation is not supported by this browser.");			
+			CancelaPosicioGPS();
+			return;
+		}
 		if (navigator.geolocation)
 			IdPositionGPS=navigator.geolocation.watchPosition(ActualitzaPosicioGPS, ErrorPosicioGPS, {enableHighAccuracy: true, maximumAge: 8000});
 		else
