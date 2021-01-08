@@ -2142,6 +2142,16 @@ var calcul=document.CalculadoraCapes.calcul;
 	calcul.value = calcul.value.substring(0, calcul.selectionStart)+DonaCadenaEstilCapaPerCalcul(-1, condicio.i_capa, condicio.i_data, condicio.i_estil)+calcul.value.substring(calcul.selectionEnd);
 }
 
+function EscriuOperadorALaFormulaAfegeixCapa(prefix, sufix)
+{
+var calcul=document.CalculadoraCapes.calcul;
+	calcul.focus();
+	if (sufix)
+		calcul.value = calcul.value.substring(0, calcul.selectionStart)+ prefix + calcul.value.substring(calcul.selectionStart, calcul.selectionEnd) + sufix + calcul.value.substring(calcul.selectionEnd);
+	else 
+		calcul.value = calcul.value.substring(0, calcul.selectionStart)+ prefix + calcul.value.substring(calcul.selectionEnd);
+}
+
 function EscriuValorALaReclasssificacioAfegeixCapa(prefix_id)
 {
 var condicio, reclassificacio, valor, text_valor;
@@ -2247,7 +2257,7 @@ var cdns=[], i, capa;
 
 function DonaCadenaCalculadoraCapes()
 {
-var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
+var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 
 	cdns.push("<form name=\"CalculadoraCapes\" onSubmit=\"return false;\">");
 	for (i=0; i<ParamCtrl.capa.length; i++)
@@ -2259,17 +2269,14 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 			capa.FormatImatge!="application/x-img" || !capa.valors)
 			continue;
 		hi_ha_rasters++;
-		if(!EsCapaAmbAlgunEstilAmbCategories(capa))
-			continue;
-		hi_ha_raster_categ++;
-		if(hi_ha_rasters && hi_ha_raster_categ==2)
-			break;
+		break;
 	}
 	if (hi_ha_rasters)
 	{
-		cdns.push("<br><fieldset><legend>",
-			  DonaCadenaLang({"cat":"Afegeix capa calculada a partir de les capes existents", "spa":"Añada capa calculada a partir de las capas existentes", "eng":"Add layer computed from existing layers", "fre":"Rajouter couche calculé à partir de couches existantes"}),
-			  "</legend>",
+		cdns.push("<br>",
+				//"<fieldset><legend>",
+			  //DonaCadenaLang({"cat":"Afegeix capa calculada a partir de les capes existents", "spa":"Añada capa calculada a partir de las capas existentes", "eng":"Add layer computed from existing layers", "fre":"Rajouter couche calculé à partir de couches existantes"}),
+			  //"</legend>",
 			  "<fieldset><legend>",
 			  DonaCadenaLang({"cat":"Capa per a la fórmula", "spa":"Capa para la fórmula", "eng":"Layer for the expression", "fre":"Couche pour l'expression"}),
 			  "</legend>");
@@ -2279,21 +2286,106 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",				
 		     	DonaCadenaLang({"cat":"Escriu a la fórmula", "spa":"Escribe en fórmula", "eng":"Write in expression", "fre":"Ecrire à la formule"}), 
 		        "\" onClick='EscriuCapaALaFormulaAfegeixCapa();' /></fieldset>");
+		cdns.push("<fieldset><legend>",
+		//Botons operadors i funcions per a la fórmula
+				DonaCadenaLang({"cat":"Operadors i funcions per a la fórmula", "spa":"Operadores y funciones para la fórmula", "eng":"Operators and functions for the expression", "fre":"Opérateurs et fonctions pour l'expression"}),
+			  "</legend>");
+				operacio=[{text: "&equals;",prefix: "=",  size: "width:40px"}, 	
+						  {text: ">=", 		prefix:">=",  size: "width:40px"}, 
+						  {text: "<", 		prefix: "<",  size: "width:40px"}, 
+						  {text: "AND", 	prefix: "&&", size: "width:40px"}, 
+						  {text: "XOR", 	prefix: "^",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"}, 
+						  {text: "7", 		prefix: "7",  size: "width:30px"},
+						  {text: "8", 		prefix: "8",  size: "width:30px"},
+						  {text: "9", 		prefix: "9",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "/", 		prefix: "/",  size: "width:30px", separa: "<br>"},
+						  {text: "=/=", 	prefix: "!=", size: "width:40px"}, 	
+						  {text: "<=", 		prefix: "<=", size: "width:40px"}, 
+						  {text: ">", 		prefix: ">",  size: "width:40px"}, 
+						  {text: "OR", 		prefix: "||", size: "width:40px"}, 
+						  {text: "NOT", 	prefix: "!",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "4", 		prefix: "4",  size: "width:30px"},
+						  {text: "5", 		prefix: "5",  size: "width:30px"},
+						  {text: "6", 		prefix: "6",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "&times;", prefix: "*",  size: "width:30px", separa: "<br>"},
+						  {text: "&radic;¯",prefix: "Math.sqrt	(", sufix: ")", size: "width:40px"},
+						  {text: "LOG",     prefix: "Math.log10 (", sufix: ")", size: "width:40px"},
+						  {text: "LN",    	prefix: "Math.log	(", sufix: ")", size: "width:40px"},
+						  {text: "EXP",     prefix: "Math.exp	(", sufix: ")", size: "width:40px"},
+						  {text: "1/x",     prefix: "1/(", sufix: ")", size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "1", 		prefix: "1",  size: "width:30px"},
+						  {text: "2", 		prefix: "2",  size: "width:30px"},
+						  {text: "3", 		prefix: "3",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "-", 		prefix: "-",  size: "width:30px", separa: "<br>"},
+						  {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"}, 
+						  {text: "ABS", 	prefix: "Math.abs   (", sufix: ")", size: "width:40px"}, 
+						  {text: "E", 		prefix: "Math.E", size: "width:40px"},
+						  {text: "(", 		prefix: "(",  size: "width:40px"}, 
+						  {text: ")", 		prefix: ")",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "pi", 		prefix: "Math.PI", size: "width:30px"},
+						  {text: "0", 		prefix: "0",  size: "width:30px"},
+						  {text: ".", 		prefix: ".",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
+						  {text: "&plus;", 	prefix: "+",  size: "width:30px", separa: "<br><br>"},
+						  {text: "SIN",     prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
+						  {text: "ASIN",    prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
+						  {text: "COS",     prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
+						  {text: "ACOS",    prefix: "Math.acos	(", sufix: ")", size: "width:62px"},
+						  {text: "TAN",   	prefix: "Math.tan	(", sufix: ")", size: "width:62px"},
+						  {text: "ATAN",  	prefix: "Math.atan	(", sufix: ")", size: "width:62px", separa: "<br>"},
+						  {text: "SING",    prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
+						  {text: "ASING",   prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
+						  {text: "COSG",    prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
+						  {text: "ACOSG",   prefix: "Math.acos	(", sufix: ")", size: "width:62px"},
+						  {text: "TANG",  	prefix: "Math.tan	(", sufix: ")", size: "width:62px"},
+						  {text: "ATANG", 	prefix: "Math.atan	(", sufix: ")", size: "width:62px"}
+						  ];
+				for (var i=0; i<operacio.length; i++)
+				{
+					cdns.push("<input type=\"button\" style=\"", operacio[i].size, "\", value=\"", operacio[i].text, "\" onclick='EscriuOperadorALaFormulaAfegeixCapa(\"", operacio[i].prefix, "\",\"", operacio[i].sufix, "\")'>");
+					if (operacio[i].separa)
+						cdns.push(operacio[i].separa);
+				}
+			  cdns.push("</fieldset>");
 		//Caixa multilínia per a la formula.
 		cdns.push(DonaCadenaLang({"cat":"Fórmula", "spa":"Fórmula:", "eng":"Expression", "fre":"Formule"}),
-			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:440px;height:100\" ></textarea><br>",
+			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:420px;height:100\" ></textarea><br>",
 			DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a una capa/estil nou de nom", "spa":"El resultado de la selección será añadido como una capa/estilo nuevo de nombre", "eng":"The result of the selection will be added as a new layer/style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau couche/style avec le nom"}), 
 			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",				
 		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
 		        "\" onClick='AfegeixCapaCalcul();TancaFinestraLayer(\"calculadoraCapa\");' />",
-			"</fieldset>");
+			//"</fieldset>"
+			);
 	}
-	if (hi_ha_raster_categ==2)
+	cdns.push("</div></form>");
+	return cdns.join("");
+}
+
+function DonaCadenaCombinacioCapes()
+{
+var cdns=[], i, capa, hi_ha_raster_categ=0;
+
+	cdns.push("<form name=\"CalculadoraCapes\" onSubmit=\"return false;\">");
+	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		cdns.push("<br><fieldset><legend>",
-			  DonaCadenaLang({"cat":"Afegeix capa combinada a partir de dues capes existents", "spa":"Añada capa combinada a partir de dues capas existentes", "eng":"Add layer combined from two existing layers", "fre":"Rajouter couche combiné à partir de deux couches existantes"}),
-			  "</legend>",
+		if (EsIndexCapaVolatil(i, ParamCtrl))
+			continue;
+		capa=ParamCtrl.capa[i];
+		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
+			capa.FormatImatge!="application/x-img" || !capa.valors)
+			continue;
+		if(!EsCapaAmbAlgunEstilAmbCategories(capa))
+			continue;
+		hi_ha_raster_categ++;
+		if(hi_ha_raster_categ==2)
+		break;
+	}
+	if (hi_ha_raster_categ==2) 
+	{
+		cdns.push("<br>",
+				//"<fieldset><legend>",
+			  //DonaCadenaLang({"cat":"Afegeix capa combinada a partir de dues capes existents", "spa":"Añada capa combinada a partir de dues capas existentes", "eng":"Add layer combined from two existing layers", "fre":"Rajouter couche combiné à partir de deux couches existantes"}),
+			  //"</legend>",
 			  "<fieldset><legend>",
 			  DonaCadenaLang({"cat":"Capa 1", "spa":"Capa 1", "eng":"Layer 1", "fre":"Couche 1"}),
 			  "</legend>",
@@ -2305,8 +2397,9 @@ var cdns=[], i, capa, hi_ha_rasters=0, hi_ha_raster_categ=0;
 			  "</fieldset>",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",				
 		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
-		        "\" onClick='AfegeixCapaCombicapaCategoric();TancaFinestraLayer(\"calculadoraCapa\");' />",
-			"</fieldset>");
+		        "\" onClick='AfegeixCapaCombicapaCategoric();TancaFinestraLayer(\"combinacioCapa\");' />",
+			//"</fieldset>"
+			);
 	}
 	cdns.push("</div></form>");
 	return cdns.join("");
@@ -2409,6 +2502,17 @@ var elem=ObreFinestra(window, "calculadoraCapa", DonaCadenaLang({"cat":"per fer 
 	if (!elem)
 		return;
 	contentLayer(elem, DonaCadenaCalculadoraCapes());
+}
+
+function IniciaFinestraCombiCapa()
+{
+var elem=ObreFinestra(window, "combinacioCapa", DonaCadenaLang({"cat":"per combinar capes",
+						  "spa":"para combinar capas",
+						  "eng":"to combine layers",
+						  "fre":"pour correspondre des couches"}));
+	if (!elem)
+		return;
+	contentLayer(elem, DonaCadenaCombinacioCapes());
 }
 
 function ObreFinestraReclassificaCapa(i_capa, i_estil)

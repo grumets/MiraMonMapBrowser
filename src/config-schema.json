@@ -629,7 +629,11 @@
 			"type": "boolean"
 		},
 		"BarraBotoCalculadora": {
-			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer operacions de càlcul i reclassificacions entre capes i afegir el resultat com una capa o estil nou", 
+			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer operacions de càlcul entre capes i afegir el resultat com una capa o estil nou", 
+			"type": "boolean"
+		},
+		"BarraBotoCombiCapa": {
+			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer combinacions analítiques entre capes i afegir el resultat com una capa o estil nou", 
 			"type": "boolean"
 		},
 		"BarraBotoCTipica":	{
