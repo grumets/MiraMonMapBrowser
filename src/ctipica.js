@@ -540,7 +540,7 @@ var i_capa, i_capa_a_activar;
 			    ParamCtrl.capa[i_capa_a_activar].visible!="si")
 			{
 				if (i_capa==ParamCtrl.capa.length)
-					CanviaEstatVisibleISiCalDescarregableCapa(i_capa_activar, "si");
+					CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "si");
 				else
 					CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "semitransparent");
 				retorn=0;  //He tocat
@@ -550,7 +550,7 @@ var i_capa, i_capa_a_activar;
 		{
 			if (ParamCtrl.capa[i_capa_a_activar].visible!="si")
 			{
-				CanviaEstatVisibleISiCalDescarregableCapa(i_capa_activar, "si");
+				CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "si");
 				retorn=0;  //He tocat
 			}
 		}

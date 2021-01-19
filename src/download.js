@@ -568,15 +568,15 @@ function DonaMissatgeSiMMZCalMiraMon()
 var cdns=[];
 	cdns.push("<br><small>");
 	if (ParamCtrl.DescarregesCertificades)
-		cdns.push(DonaCadenaLang({"cat":"Per el format MMZ o MMZX, si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
-					"spa":"Para el formato MMZ o MMZX, si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
-					"eng":"For the MMZ or MMZX format, if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-					"fre":"Pour le format MMZ ou MMZX, si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>"}));
+		cdns.push(DonaCadenaLang({"cat":"Pel format MMZ o MMZX (ISO 19115-2), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
+					"spa":"Para el formato MMZ o MMZX (ISO 19115-2), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
+					"eng":"For the MMZ or MMZX format (ISO 19115-2), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
+					"fre":"Pour le format MMZ ou MMZX (ISO 19115-2), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>"}));
 	else
-		cdns.push(DonaCadenaLang({"cat":"Per poder visualitzar les capes en format MMZ o MMZX cal tenir correctament instal·lat el programa MiraMon.", 
-					"spa":"Para poder visualitzar las capas en formato MMZ o MMZX es necessario tener correctamente instalado el programa MiraMon.", 
-					"eng":"In order to be able to view the layers in MMZ of MMZX format, and installed version of the MiraMon software is required.",
-					"fre":"Pour pouvoir visualiser les couches en MMZ du format MMZX, et la version installée du logiciel MiraMon est nécessaire"}));
+		cdns.push(DonaCadenaLang({"cat":"Per poder visualitzar les capes en format MMZ o MMZX (ISO 19115-2) cal tenir correctament instal·lat el programa MiraMon.", 
+					"spa":"Para poder visualitzar las capas en formato MMZ o MMZX (ISO 19115-2) es necessario tener correctamente instalado el programa MiraMon.", 
+					"eng":"In order to be able to view the layers in MMZ of MMZX format (ISO 19115-2), and installed version of the MiraMon software is required.",
+					"fre":"Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19115-2), et la version installée du logiciel MiraMon est nécessaire"}));
 	cdns.push("</small>");
 	return cdns.join("");
 }
