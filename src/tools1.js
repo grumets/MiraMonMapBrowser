@@ -360,6 +360,65 @@ if(!window.console)
 		};
 }
 
+//From: https://www.w3schools.com/howto/howto_js_fullscreen.asp
+function openFullscreen(elem)
+{
+	if (elem.requestFullscreen)
+		elem.requestFullscreen();
+	else if (elem.mozRequestFullScreen)
+		elem.mozRequestFullScreen();		
+	else if (elem.webkitRequestFullscreen) // Safari
+		elem.webkitRequestFullscreen();
+	else if (elem.msRequestFullscreen) // IE11
+		elem.msRequestFullscreen();
+}
+
+function closeFullscreen(elem)
+{
+	if (document.exitFullscreen)
+		document.exitFullscreen();
+	else if (document.mozExitFullScreen)
+		document.mozExitFullScreen();
+	else if (document.webkitExitFullscreen)  // Safari 
+		document.webkitExitFullscreen();
+	else if (document.msExitFullscreen)  // IE11 
+		document.msExitFullscreen();
+}
+
+/*inspired in https://stackoverflow.com/questions/25126106/capture-esc-event-when-exiting-full-screen-mode
+function addEventFullscreen(exitHandler)
+{
+	if (document.exitFullscreen) 
+		document.addEventListener('fullscreenchange', exitHandler);
+	else if (document.document.mozExitFullScreen)
+		document.addEventListener('webkitfullscreenchange', exitHandler);
+	else if (document.webkitExitFullscreen) // Safari
+		document.addEventListener('webkitfullscreenchange', exitHandler);
+	else if (document.msExitFullscreen) // IE11
+		document.addEventListener('MSFullscreenChange', exitHandler);
+}*/
+
+function isFullscreen()
+{
+	if (window.matchMedia("(display-mode: fullscreen)").matches)
+	{
+		//Això és un truc CSS trobat aquí: https://stackoverflow.com/questions/43392583/fullscreen-api-not-working-if-triggered-with-f11, combinat amb https://www.w3schools.com/jsref/met_win_matchmedia.asp
+		return true;
+	}
+	else
+	{
+		// Aquesta manera no veu F11
+		if (document.exitFullscreen)
+			return (document.fullscreenElement) ? true : false;
+		else if (document.document.mozExitFullScreen)
+			return (document.mozFullScreen) ? true : false;
+		else if (document.webkitExitFullscreen) /* Safari */
+			return (document.webkitIsFullScreen) ? true : false;
+		else if (document.msExitFullscreen) /* IE11 */
+			return (document.msFullscreenElement) ? true : false;
+	}
+	return false;
+}
 
 /*Funcions d'utilitat general inspirades en codis trobats a la Internet*/
 
@@ -445,6 +504,7 @@ function MMgetCheckedRadioButton(myForm,groupName)
 
 
 //Inspired in http://stackoverflow.com/questions/126100/how-to-efficiently-count-the-number-of-keys-properties-of-an-object-in-javascrip
+//També es pot fer així: Object.keys(myobj).length (https://javascript.info/keys-values-entries)
 function CountPropertiesOfObject(myobj)
 {
 	//Object.keys --> Són les propietats enumerables, pròpies de l'objecte

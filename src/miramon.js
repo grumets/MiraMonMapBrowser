@@ -1003,6 +1003,44 @@ function RecuperaVistaPreviaEvent(event) // Afegit Cristian 19/01/2016
 	dontPropagateEvent(event);
 }
 
+var RectVistaAbansFullScreen=null;
+
+function PortaVistaAFullScreen()
+{
+	var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
+	//Guardar la posició de la finestra de la vista.
+	RectVistaAbansFullScreen=getRectLayer(vista);
+
+	//Canviar la posició de la finestra de la vista per ocupar tota la pantalla
+	moveLayer(vista, 0, 0, window.document.body.clientWidth, window.document.body.clientHeight);
+	RepintaMapesIVistes();
+}
+
+function GoFullScreenEvent(event)
+{
+	if (ParamCtrl.fullScreen)  //This should not happen
+		alert("Already in full screen");
+
+	//Moure la caixa de la coordenada actual adientment
+	openFullscreen(document.documentElement);
+
+	//Es produexi un event de resize automaticament RepintaMapesIVistes();
+	dontPropagateEvent(event);
+}
+
+/*function ExitFullScreenESC(event)
+{
+	dontPropagateEvent(event);
+}*/
+
+function ExitFullScreenEvent(event)
+{
+	if (!ParamCtrl.fullScreen)  //This should not happen
+		alert("Not in full screen");
+	closeFullscreen();  //Això provoca un ExitFullScreenESC()
+	dontPropagateEvent(event);
+}
+
 function ShaObertPopUp(wnd)
 {
 	if (wnd==null)
@@ -1797,14 +1835,14 @@ function DonaMargeSuperiorVista(i_nova_vista)
 {
 	if (i_nova_vista!=NovaVistaPrincipal)
 		return 0;
-	return (ParamCtrl.MargeSupVista?ParamCtrl.MargeSupVista:0)+(ParamCtrl.CoordExtremes?AltTextCoordenada:0)+(ParamCtrl.VoraVistaGrisa==true ? MidaFletxaInclinada:0);  //Distancia entre la vista i vora superior del frame
+	return ((ParamCtrl.MargeSupVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeSupVista:0)+(ParamCtrl.CoordExtremes?AltTextCoordenada:0)+(ParamCtrl.VoraVistaGrisa==true ? MidaFletxaInclinada:0);  //Distancia entre la vista i vora superior del frame
 }
 
 function DonaMargeEsquerraVista(i_nova_vista)
 {
 	if (i_nova_vista!=NovaVistaPrincipal)
 		return 0;
-	return (ParamCtrl.MargeEsqVista?ParamCtrl.MargeEsqVista:0)+(ParamCtrl.VoraVistaGrisa==true ? MidaFletxaInclinada:0);      //Distancia entre la vista i vora esquerra del frame
+	return ((ParamCtrl.MargeEsqVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeEsqVista:0)+(ParamCtrl.VoraVistaGrisa==true ? MidaFletxaInclinada:0);      //Distancia entre la vista i vora esquerra del frame
 }
 
 
@@ -5019,9 +5057,9 @@ var p, unitats_CRS;
 	{
 	    cdns.push("  <tr>",
 				"    <td rowspan=", (cal_vora ? (cal_coord ? 8 : 7) : (cal_coord ? 5 : 3)), "><img src=\"",
-				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=1 width=", (ParamCtrl.MargeEsqVista?ParamCtrl.MargeEsqVista:0) , "></td>",
+				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=1 width=", ((ParamCtrl.MargeEsqVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeEsqVista:0) , "></td>",
 				"    <td colspan=", (cal_vora ? (cal_coord ? 6 : 5) : (cal_coord ? 3 : 1)), "><img src=\"",
-				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=" , (ParamCtrl.MargeSupVista?ParamCtrl.MargeSupVista:0) , " width=1></td>",
+				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=" , ((ParamCtrl.MargeSupVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeSupVista:0) , " width=1></td>",
 				"  </tr>");
 	}
 
@@ -5309,6 +5347,11 @@ var p, unitats_CRS;
 				barra_slider.push("<br>");
 				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
+				if (ParamCtrl.fullScreen)
+					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "exitfullscreen", DonaCadenaLang({"cat":"sortir de pantalla completa", "spa":"salir de pantalla completa", "eng":"exit full screen","fre":"Quitter le mode plein écran"}), "ExitFullScreenEvent(event)"));
+				else
+					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "fullscreen", DonaCadenaLang({"cat":"pantalla completa", "spa":"pantalla completa", "eng":"full screen","fre":"plein écran"}), "GoFullScreenEvent(event)"));
+
 				barra_slider.push("</td></tr>");
 			}
 			barra_slider.push("</table>");
@@ -5429,7 +5472,7 @@ var cal_coord=(ParamCtrl.CoordExtremes) ? true : false;
 	}
 	if (w>0)
 	{
-		ParamInternCtrl.vista.ncol=w-((ParamCtrl.MargeEsqVista?ParamCtrl.MargeEsqVista:0)+MidaFletxaInclinada*2+MidaFletxaPlana+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AmpleTextCoordenada : 0));
+		ParamInternCtrl.vista.ncol=w-(((ParamCtrl.MargeEsqVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeEsqVista:0)+MidaFletxaInclinada*2+MidaFletxaPlana+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AmpleTextCoordenada : 0));
 		if (w>200)
 		    ParamInternCtrl.vista.ncol+=10;
 		if (ParamInternCtrl.vista.ncol<MidaFletxaPlana+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AmpleTextCoordenada*2 : 5))
@@ -5437,7 +5480,7 @@ var cal_coord=(ParamCtrl.CoordExtremes) ? true : false;
 	}
 	if (h>0)
 	{
-		ParamInternCtrl.vista.nfil=h-((ParamCtrl.MargeSupVista?ParamCtrl.MargeSupVista:0)+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AltTextCoordenada:0)+MidaFletxaInclinada*2+MidaFletxaPlana+AltTextCoordenada+5);
+		ParamInternCtrl.vista.nfil=h-(((ParamCtrl.MargeSupVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeSupVista:0)+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AltTextCoordenada:0)+MidaFletxaInclinada*2+MidaFletxaPlana+AltTextCoordenada+5);
 		if (h>200)
 		    ParamInternCtrl.vista.nfil+=18;
 		if (ParamInternCtrl.vista.nfil<MidaFletxaPlana+((cal_coord && i_nova_vista==NovaVistaPrincipal) ? AltTextCoordenada*2 : 5))
@@ -6349,6 +6392,28 @@ var win, i, j, l, capa;
 
 function ResizeMiraMonMapBrowser()
 {
+	if (ParamCtrl.fullScreen && !isFullscreen()) 
+	{
+		ParamCtrl.fullScreen=false;
+
+		var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
+
+		//Recuperar la posició de la finestra de la vista.
+		moveLayer(vista, RectVistaAbansFullScreen.esq, RectVistaAbansFullScreen.sup, RectVistaAbansFullScreen.ample, RectVistaAbansFullScreen.alt);
+		//Recuperar la posició de la caixa de coordenades.
+	}
+	else if (!ParamCtrl.fullScreen && isFullscreen())
+	{
+		//Si hi ha més d'una vista avisar que no te sentit fer-ho i plegar
+		if (ParamCtrl.VistaPermanent[0].length>1)
+		{
+			alert(DonaCadenaLang({"cat":"No es possible saltar a pantalla completa en un navegador multivista.", "spa":"No es posible saltar a pantalla completa en un navegador multivista.", 
+							  "eng":"You cannot go full screen in a multiview browser.", "fre":"Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples."}));
+			return;
+		}
+		ParamCtrl.fullScreen=true;
+		setTimeout(PortaVistaAFullScreen, 1000);  //Hi ha un event de ResizeMiraMonMapBrowser() pendent i causat per openFullscreen que s'executa en 200 milisegons i jo demano això després.
+	}
 	setTimeout(ChangeSizeMiraMonMapBrowser,200);
 }
 

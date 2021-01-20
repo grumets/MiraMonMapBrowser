@@ -180,15 +180,19 @@
 			"multipleOf" : 1
 		},
 		"MargeEsqVista": { 
-			"description": "Marge des de la vora esquerra de la divisió (layer) i la caixa de navegació del mapa. Opcional. Es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
+			"description": "Marge des de la vora esquerra de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
 			"type": "number",
 			"multipleOf" : 1
 		},
 		"MargeSupVista": { 
-			"description": "Marge des de la vora superior de la divisió (layer) i la caixa de navegació del mapa. Opcional. Es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
+			"description": "Marge des de la vora superior de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
 			"type": "number",
 			"multipleOf" : 1
 		},
+		"fullScreen": {
+			"description": "Indica si la vista ha estar en pantalla completa. Opcional. El valor per defecte és false. Només té sentit si hi ha una sola vista en el navegador",
+			"type": "boolean",
+		}
 		"ColorFonsVista": { 
 			"description": "Color de fons de la vista. Es sol deixar a gris o blau marí. Típicament amb el format #RRGGBB",
 			"type": "string"
