@@ -273,7 +273,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraHistograma(", i_capa, ");TancaContextMenuCapa();\">");
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
-			cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}));
+		{
+			//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}));
+			cdns.push(DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}));
+		}
 		else if (DonaTipusGraficHistograma(estil, 0)=='pie')
 			cdns.push(DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}));
 		else
