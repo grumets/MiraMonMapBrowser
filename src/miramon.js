@@ -4350,11 +4350,12 @@ var capa=ParamCtrl.capa[i_capa];
 			((capa.estil.length>1 && capa.estil[capa.i_estil].desc) ? " - " + DonaCadena(capa.estil[capa.i_estil].desc) : "") +
 			(capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 	
-	return capa.estil[capa.i_estil].desc ? 
+	return (capa.estil[capa.i_estil].desc ? 
 			DonaCadena(capa.estil[capa.i_estil].desc) : 
 			(
 				(capa.desc) ? DonaCadena(capa.desc) : capa.nom
-			);
+			)
+		) + (capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 }
 
 //Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, retorna una cadena buida. Si la cadena és multiidioma es retorna un objecte
