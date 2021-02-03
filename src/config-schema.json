@@ -191,8 +191,8 @@
 		},
 		"fullScreen": {
 			"description": "Indica si la vista ha estar en pantalla completa. Opcional. El valor per defecte és false. Només té sentit si hi ha una sola vista en el navegador",
-			"type": "boolean",
-		}
+			"type": "boolean"
+		},
 		"ColorFonsVista": { 
 			"description": "Color de fons de la vista. Es sol deixar a gris o blau marí. Típicament amb el format #RRGGBB",
 			"type": "string"
