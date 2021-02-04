@@ -3143,10 +3143,10 @@ var w,h,e,s;
 		if (factor_y<factor)
 			factor=factor_y;
 		factor*=0.97
-		ParamInternCtrl.MargeEsqSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*factor;
-		ParamInternCtrl.AmpleSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample*factor;
-		ParamInternCtrl.MargeSupSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*factor;
-		ParamInternCtrl.AltSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt*factor;
+		ParamInternCtrl.MargeEsqSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*factor);
+		ParamInternCtrl.AmpleSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample*factor);
+		ParamInternCtrl.MargeSupSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*factor);
+		ParamInternCtrl.AltSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt*factor);
 		OrigenEsqSituacio=ParamInternCtrl.MargeEsqSituacio+e;
 		OrigenSupSituacio=ParamInternCtrl.MargeSupSituacio+s;
 	}
@@ -6023,7 +6023,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
 	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 20, 800, 600, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraQualitat", {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedback", {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);

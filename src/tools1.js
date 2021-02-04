@@ -810,7 +810,7 @@ function spaceForLayers(win)
 	if (win.document.body.clientWidth)
 		ParamInternCtrl.realSpaceForLayers.width=win.document.body.clientWidth;
 	if (win.document.body.clientHeight)
-		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight;
+		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla
 }
 
 var SufixBarra="_barra"
