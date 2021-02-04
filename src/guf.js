@@ -1,8 +1,44 @@
-/*
-	This is part of the NiMMbus libraries.
-	The main objective of this library is to expose provide functions that are useful for HTML based GUF applications such us the MiraMon Map Browser and NextGEOSS community portals
-	Developed by Joan Masó and Alaitz Zabala.
-	License: Attribution 4.0 International (CC BY 4.0) http://creativecommons.org/licenses/by/4.0/
+/* 
+    This file is part of NiMMbus system. NiMMbus is a solution for 
+    storing geospatial resources on the MiraMon private cloud. 
+    MiraMon is a family of GIS&RS products developed since 1994 
+    and includes a desktop GIS, a desktop Metadata Manager, a 
+    Web Map Browser and the NiMMbus system. 
+    
+    The NiMMbus JavaScript client is free software: you can redistribute 
+    it and/or modify it under the terms of the GNU Affero General 
+    Public License as published by the Free Software Foundation, 
+    either version 3 of the License, or (at your option) any later version.
+
+    The NiMMbus JavaScript client is distributed in the hope that 
+    it will be useful, but WITHOUT ANY WARRANTY; without even the 
+    implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General 
+    Public License along with the NiMMbus JavaScript Client.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    The NiMMbus JavaScript Client can be updated from
+    https://github.com/grumets/NiMMbus.
+
+    Copyright 2014, 2021 Xavier Pons
+
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de l'Alaitz Zabala (alaitz zabala at uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
+    En particular, el client JavaScript del NiMMbus es distribueix sota 
+    els termes de la llicència GNU Affero General Public License, 
+    mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El client JavaScript del NiMMbus es pot actualitzar des de 
+    https://github.com/grumets/NiMMbus.
 */
 
 "use strict"
@@ -88,12 +124,12 @@ function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targe
 	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK";
 	var url2=url;
 	
-//ara assumeixo que tinc un primari segur i potser un secndari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un faré un quadradet, suposo
+//ara assumeixo que tinc un primari segur i potser un secndari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un farçe un quadradet, suposo
 
 	//busco el target primari i l'envio a la primera part de la finestra
 	for (var i=0; i<targets.length; i++)	
 	{
-		if (targets[i].title && targets[i].code && targets[i].codespace && targets[i].role=="primary")
+		if (targets[i].title && targets[i].code && targets[i].codespace && (typeof(targets[i].role)== "undefined" || targets[i].role=="primary"))
 		{
 			url+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";			
 			break;
@@ -108,7 +144,7 @@ function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targe
 		if (targets[i].title && targets[i].code && targets[i].codespace && targets[i].role=="secondary")
 		{	//la peticio buscarà els que parlin del secondari d'ara, però només com a PRIMARI, per veure tb en el dataset els comentaris generals de la col·lecció (i no tornar a veure els secudaris d'questa o altres imatges!)
 			url2+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ" +
-						"&TRG_NXS_2=AND&TRG_TYPE_3=CITATION&TRG_FLD_3=RSRC_ROLE&TRG_VL_3=primary&TRG_OPR_3=EQ";
+						"&TRG_ROLE=primary";
 			tinc_target_secondary=true;
 			break;
 		}
@@ -888,6 +924,7 @@ var n_targets_secundaris=0;
 	cdns.push("<input type=\"button\" class=\"guf_button user\" value=\"",
 				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}, lang), "\"",
 				  " onClick='GUFAfegirFeedbackCapaMultipleTargets(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
+
 	if (rsc_type != "")
 		cdns.push("</fieldset></div>");
 	else

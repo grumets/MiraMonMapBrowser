@@ -1,17 +1,47 @@
-/*
-	This is part of the NiMMbus libraries.
-  The main objective of this library is to compile a set of functions that makes reading an WPS responses, ISO metadata and GUF a bit easier
-     Developed by Joan Masó.
-     License: Attribution 4.0 International (CC BY 4.0) http://creativecommons.org/licenses/by/4.0/
+/* 
+    This file is part of NiMMbus system. NiMMbus is a solution for 
+    storing geospatial resources on the MiraMon private cloud. 
+    MiraMon is a family of GIS&RS products developed since 1994 
+    and includes a desktop GIS, a desktop Metadata Manager, a 
+    Web Map Browser and the NiMMbus system. 
+    
+    The NiMMbus JavaScript client is free software: you can redistribute 
+    it and/or modify it under the terms of the GNU Affero General 
+    Public License as published by the Free Software Foundation, 
+    either version 3 of the License, or (at your option) any later version.
+
+    The NiMMbus JavaScript client is distributed in the hope that 
+    it will be useful, but WITHOUT ANY WARRANTY; without even the 
+    implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General 
+    Public License along with the NiMMbus JavaScript Client.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    The NiMMbus JavaScript Client can be updated from
+    https://github.com/grumets/NiMMbus.
+
+    Copyright 2014, 2021 Xavier Pons
+
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de l'Alaitz Zabala (alaitz zabala at uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
+    En particular, el client JavaScript del NiMMbus es distribueix sota 
+    els termes de la llicència GNU Affero General Public License, 
+    mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El client JavaScript del NiMMbus es pot actualitzar des de 
+    https://github.com/grumets/NiMMbus.
 */
 
 "use strict"
-
-//http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
-/*function ReplaceAll(s, find, replace) 
-{
-	return s.replace(new RegExp(find, 'g'), replace);
-}*/
 
 /*Aquesta funció fa un subconjunt del que fa encodeURIComponent(), que hem 
   observat que remplaça les lletres accentuades per caràcters unicode i això no va bé.*/
@@ -363,7 +393,7 @@ function TornaBooleaDesDeWPSLiteralOutput(item) //si diu "true" torno true, si n
 	var literal_data=GetXMLElementByName(item, "wps", "LiteralData");
 	if (literal_data && literal_data.childNodes[0] && literal_data.childNodes[0].nodeValue)
 	{
-		if (literal_data.childNodes[0].nodeValue=="true") //·$· JM i si es TRUE, o si és "1"... ??? Ara ho uso per mirar el meu anonymous_shared per tant sempre diu "true" o "false"
+		if (literal_data.childNodes[0].nodeValue=="true")
 			return true;
 	}
 	return false;
@@ -489,9 +519,6 @@ var usage, usage_descr, discov_issue;
 						if (elem)
 							guf.rating=DonaTextDesDeCodeList(elem, "guf", "GUF_RatingCode");
 				
-						//·$· guf:contact -> l'he tret de wps:Output/owner_user, però quan el fem més complert (contacte) caldrà llegir aquí. NO queden a guf!
-						//quan ho pensem caldrà mirar si es individual o no, els application domain, etc... son moltes coses i de moment ho deixo
-						
 						user_comment=GetXMLElementByName(feedback_item, "guf", "userComment");
 						if (user_comment)
 						{
@@ -516,7 +543,7 @@ var usage, usage_descr, discov_issue;
 									var role;
 									
 									role=GetXMLElementByName(target_item, "guf", "role");
-									//resourceRef poden ser diversos, em quedo amb el primer, de moment ·$·
+									//resourceRef poden ser diversos, em quedo amb el primer, de moment
 									resource_ref=GetXMLElementByName(target_item, "guf", "resourceRef");
 
 									if (role && resource_ref)
@@ -566,7 +593,7 @@ var usage, usage_descr, discov_issue;
 												}
 											}
 										}
-										// hi podrien haver més coses com online resources ·$
+										// hi podrien haver més coses com online resources
 									}
 								}
 							}

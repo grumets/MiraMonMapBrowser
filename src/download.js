@@ -1,31 +1,39 @@
 /* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
+    it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Foobar is distributed in the hope that it will be useful,
+    MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with MiraMon Map Browser.  If not, see "http://www.gnu.org/licenses/".
+    You should have received a copy of the GNU Affero General 
+    Public License along with MiraMon Map Browser.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    MiraMon Map Browser can be updated from
+    https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2020 Xavier Pons
+    Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat realitzat per Joan Masó Pau 
-    (joan maso at uab cat) i Nuria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del Centre
-    de recerca i aplicacions forestals (CREAF) que elabora programari de 
-    Sistema d'Informació Geogràfica i de Teledetecció per a la 
-    visualització, consulta, edició i anàlisi de mapes ràsters i 
-    vectorials. Elabora programari d'escriptori i també servidors i clients 
-    per Internet. No tots aquests productes són gratuïts o de codi obert. 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de Nuria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
     En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència "GNU General Public 
-    License". Es pot actualitzar des de www.creaf.uab.cat/miramon/mmn
+    es distribueix sota els termes de la llicència GNU Affero General Public 
+    License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+    https://github.com/grumets/MiraMonMapBrowser.
 */
 
 //Mòduls sobre la descàrrega.
