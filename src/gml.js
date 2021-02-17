@@ -20,7 +20,7 @@
     Copyright 2001, 2021 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
-    amb l'ajut de Nuria Julià (n julia at creaf uab cat)
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del 
     CREAF que elabora programari de Sistema d'Informació Geogràfica 
     i de Teledetecció per a la visualització, consulta, edició i anàlisi 
