@@ -632,7 +632,7 @@ var elem,i,j,
 //Makes the list items to appear
 function unfoldEntry(self,event)
 {
-	if(-1!==self.className.search("unfoldableByClick"))
+	if(-1!==self.className.indexOf("unfoldableByClick"))
 		self.className= self.className.replace("unfoldableByClick","foldableByClick");
 	else
 		self.className= self.className.replace("foldableByClick","unfoldableByClick");

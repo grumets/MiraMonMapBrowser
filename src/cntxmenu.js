@@ -422,7 +422,8 @@ var capa=ParamCtrl.capa[i_capa];
 	GUFCreateFeedbackWithReproducibleUsage([{title: DonaCadena(capa.desc), code: s, codespace: DonaServidorCapa(capa)}], 
 			{abstract: DonaCadena(capa.estil[i_estil].desc), specific_usage: DonaCadenaLang({"cat":"Compartir estil", "spa":"Compartir estilo", "eng":"Share style", "fre":"Partager style"}),
 			ru_code: JSON.stringify(estil_copia), ru_code_media_type: "application/json", 
-			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_estil},
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_estil
+			/*, ru_sugg_app: location.href -> s'afegeix automàticament */},
 			ParamCtrl.idioma, "" /*access_token_type*/);
 }
 
@@ -535,7 +536,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 	{
 		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 		{
-			if(servidorGC.formatGetFeatureInfo[j].search("text/xml"))
+			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
 			{
 				i_get_featureinfo=j;
 				break;
@@ -545,7 +546,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 		{
 			for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 			{
-				if(servidorGC.formatGetFeatureInfo[j].search("text/html"))
+				if(servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
 				{
 					i_get_featureinfo=j;
 					break;
@@ -1420,7 +1421,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		return null;
 	}*/
 	var elem_reclass =linia_reclass.trim();
-	if(-1==(i = elem_reclass.search(/[\s|\t]/i)))
+	if(-1==(i = elem_reclass.search(/[\s|\t]/i))) //no pot ser indexOf perquè és una regular expression
 	{
 		alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
 							 "spa": "Número de elementos incorrecto en la línea",
@@ -1430,12 +1431,12 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 	}
 	old_value=elem_reclass.substring(0,i);
 	elem_reclass=elem_reclass.substring(i+1,elem_reclass.length).trim();
-	i = elem_reclass.search(/[\s|\t]/i);
+	i = elem_reclass.search(/[\s|\t]/i); 	//no pot ser indexOf perquè és una regular expression
 	if(i!=-1)
 	{
 		old_up_value=elem_reclass.substring(0,i);
 		elem_reclass=elem_reclass.substring(i+1,elem_reclass.length).trim();
-		if(-1!=(i = elem_reclass.search(/[\s|\t]/i)))
+		if(-1!=(i = elem_reclass.search(/[\s|\t]/i)))	 //no pot ser indexOf perquè és una regular expression
 		{
 			alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
 							 "spa": "Número de elementos incorrecto en la línea",
@@ -1473,7 +1474,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 	}
 	else
 	{
-		if(-1!=old_value.search(/["|']/i))
+		if(-1!=old_value.search(/["|']/i)) 	//no pot ser indexOf perquè és una regular expression
 		{
 			old_value=TreuCometesDePrincipiIFinalDeCadena(old_value);
 			for(i=0; i<categories.length; i++)
@@ -1493,7 +1494,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 				return null;
 			}
 		}
-		if(-1!=new_value.search(/["|']/i))
+		if(-1!=new_value.search(/["|']/i))  //no pot ser indexOf perquè és una regular expression
 		{
 			new_value=TreuCometesDePrincipiIFinalDeCadena(new_value.trim());			
 			for(i=0; i<categories.length; i++)
@@ -1513,7 +1514,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		}
 		else if(new_value.toUpperCase=="REMOVE")
 			new_value=NaN;
-		if(old_up_value && -1!=old_up_value.search(/["|']/i))
+		if(old_up_value && -1!=old_up_value.search(/["|']/i))	 //no pot ser indexOf perquè és una regular expression
 		{
 			old_up_value=TreuCometesDePrincipiIFinalDeCadena(old_up_value.trim());
 			for(i=0; i<categories.length; i++)
@@ -1703,7 +1704,7 @@ var minim, maxim, factor_k, factorpixel;
 			{
 				cadena=cadena.toUpperCase();
 				cadena2=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase();
-				if(cadena.search(cadena2)!=-1)
+				if(cadena.indexOf(cadena2)!=-1)
 				{
 					//·$·Aqui s'haurà de fer alguna cosa amb els sinònims,...
 					trobat=true;
@@ -1797,7 +1798,7 @@ var minim, maxim, factor_k, factorpixel;
 			}
 			if(valors_temps!=null)
 			{
-				if(valors_temps.search("/")==-1)  //Si és un interval (!=-1) de moment no li dono suport ·$·
+				if(valors_temps.indexOf("/")==-1)  //Si és un interval (!=-1) de moment no li dono suport ·$·
 				{
 					var data_defecte=null;
 					var dates;
@@ -1922,11 +1923,11 @@ var root, cadena, node, node2, i, j, cdns=[];
 		for(i=0; i<node2[0].childNodes.length; i++)
 		{
 			cadena=node2[0].childNodes[i].nodeName;
-			if(cadena.search(/JPEG/i)!=-1)
+			if(cadena.search(/JPEG/i)!=-1)			//no pot ser indexOf perquè és una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/jpeg";
-			else if(cadena.search(/GIF/i)!=-1)
+			else if(cadena.search(/GIF/i)!=-1) 	//no pot ser indexOf perquè és una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/gif";
-			else if(cadena.search(/PNG/i)!=-1)
+			else if(cadena.search(/PNG/i)!=-1)	//no pot ser indexOf perquè és una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/png";
 		}
 	}
@@ -1953,9 +1954,9 @@ var root, cadena, node, node2, i, j, cdns=[];
 				cadena=node2[0].childNodes[i].nodeName;
 				if(cadena)
 				{
-					if(cadena.search(/XML/i)!=-1)
+					if(cadena.search(/XML/i)!=-1)					//no pot ser indexOf perquè és una regular expression
 						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/xml";
-					else if(cadena.search(/HTML/i)!=-1)
+					else if(cadena.search(/HTML/i)!=-1)		//no pot ser indexOf perquè és una regular expression
 						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/html";
 				}
 			}

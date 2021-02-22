@@ -452,7 +452,7 @@ var capa=ParamCtrl.capa[i_capa];
 		return;
 	}
 	
-	/*if (s.search("Sentinel2Level2a")!=-1) //és una Sentinel2
+	/*if (s.indexOf("Sentinel2Level2a")!=-1) //és una Sentinel2
 	{
 		var targets=[{title: DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)), code: s, codespace: DonaServidorCapa(capa), role: "primary"},
 				{title: "Sentinel 2 L2A Collection", code: "Sentinel2Level2aCollection", codespace: "http://datacube.uab.cat/cgi-bin/ecopotential/miramon.cgi", role: "secondary"}];
@@ -528,7 +528,8 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	
 	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa), 
-		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: encodeURIComponent(config_schema_estil)},
+		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, 
+			ru_schema: encodeURIComponent(config_schema_estil) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
 		ParamCtrl.idioma, "" /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
 

@@ -370,7 +370,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	var tros_time=(tros_data[2].substr(i_time+1)).split(":");				
 	if(tros_time.length==1) //només hi ha hora
 	{
-		var i_z=tros_time[0].search("[Z]");
+		var i_z=tros_time[0].indexOf("[Z]");
 		if(i_z==-1)
 			o_data.hour=parseInt(tros_time[0],10);
 		else
@@ -380,7 +380,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	o_data.hour=parseInt(tros_time[0],10);
 	if(tros_time.length==2) //hh:mm[Z]
 	{
-		var i_z=tros_time[1].search("[Z]");
+		var i_z=tros_time[1].indexOf("[Z]");
 		if(i_z==-1)
 			o_data.minute=parseInt(tros_time[1],10);
 		else
@@ -391,8 +391,8 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	if(tros_time.length==3) //hh:mm:ss[Z]  // ·$· NJ-> ? Això no és correcte, hi ha altres formats ISO que tenen una longitud de més de 3 i aquesta funció no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
 	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date és més fàcil passar-ho a JSON i ja tenim funcions per això.
 	{
-		var i_ms=tros_time[2].search("[.]");
-		var i_z=tros_time[2].search("[Z]");		
+		var i_ms=tros_time[2].indexOf("[.]");
+		var i_z=tros_time[2].indexOf("[Z]");		
 		if(i_z==-1 && i_ms==-1)
 			o_data.second=parseInt(tros_time[2],10);
 		else if(i_z!=-1 && i_ms==-1)
