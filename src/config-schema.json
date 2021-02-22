@@ -1816,7 +1816,7 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator).",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusOAPI_Maps","TipusOAPI_Features"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features"]
 		},
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",

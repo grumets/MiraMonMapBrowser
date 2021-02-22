@@ -289,7 +289,7 @@ function AmagaLayerMissatges()
 
 function DonaNomServidorCaracterFinal(s)
 {
-	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&") // ·$· Potser caldria afegir la / ?
+	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&") 
 		return s;
 	if (s.indexOf("?")==-1)
 		s+="?";
@@ -300,7 +300,7 @@ function DonaNomServidorCaracterFinal(s)
 
 function DonaNomServidorSenseCaracterFinal(s)
 {
-	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&")  // ·$· Potser caldria afegir la / ?
+	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&") 
 		return s.substring(0,s.length-1);
 	return s;
 }
@@ -375,7 +375,7 @@ function CompletaDefinicioCapa(capa, capa_especial)
 			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
 	}
 	var tipus=DonaTipusServidorCapa(capa);
-	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" /*|| tipus=="TipusGoogle_KVP"*/)
+	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
 	{
 		//ParamCtrl.VistaCapaTiled[i]=new CreaParametresVistaCapaTiled(null, 0, 0, 0, 0, 0, 0);
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
@@ -674,13 +674,10 @@ function CombinaURLServidorAmbParamPeticio(servidor, request)
 		return 	DonaNomServidorSenseCaracterFinal(servidor) + request;							
 	if (request.indexOf("?")==-1)
 		return 	DonaNomServidorCaracterFinal(servidor) + request;
+	if (servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
+		return 	servidor.substring(0,servidor.length-1)  + request;
 	else
-	{		
-		if (servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
-			return 	servidor.substring(0,servidor.length-1)  + request;
-		else
-			return 	servidor  + request;
-	}
+		return 	servidor  + request;
 }
 
 function AfegeixNomServidorARequest(servidor, request, es_ajax, suporta_cors)
@@ -898,7 +895,6 @@ function DonaIndexTileMatrix(i_capa, i_tile_matrix_set, costat)
 	}
 	return -1;
 }
-
 
 function GuardaVistaPrevia()
 {
@@ -1225,7 +1221,6 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 			delete capa.EnvTotalLL;
 		
 		//Fi de Afegit AZ a revisar per JM ·$·$·$·$·$·
-
 		if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
 			delete capa.metadades.provenance.lineage; 
 	}
@@ -1235,8 +1230,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 	{
 		delete param_ctrl.mmn;
 		delete param_ctrl.config_json;
-	}
-	
+	}	
 	RemoveOtherPropertiesInObjWithRef(param_ctrl);
 }
 
@@ -1349,9 +1343,9 @@ var cdns=[], coord_visible, p, unitats_CRS;
 function MostraFinestraParametres()
 {
 	if (!ObreFinestra(window, "param", DonaCadenaLang({"cat":"de canviar paràmetres", 
-							  "spa":"de cambiar parámetros",
-							  "eng":"of changing parameters",
-							  "fre":"pour changement de paramètres"})))
+													  "spa":"de cambiar parámetros",
+													  "eng":"of changing parameters",
+													  "fre":"pour changement de paramètres"})))
 		return;
 	OmpleFinestraParametres();
 }
@@ -1393,14 +1387,9 @@ var i;
 				//Buscar el costar de pixel que cumplim:
 				var i_zoom=DonaIndexNivellZoomCeil(costat);
 				if (i_zoom==-1)
-				{
 					i=ParamCtrl.capa.length;  //No ha ha cap costat que em serveixi.
-				}
 				else
-				{
-					//Ara amb el nou costat de píxel cal redefinir envolupant per excés donat que no la puc conservar totalment.
-					costat=ParamCtrl.zoom[i_zoom].costat;
-				}
+					costat=ParamCtrl.zoom[i_zoom].costat; //Ara amb el nou costat de píxel cal redefinir envolupant per excés donat que no la puc conservar totalment.
 				break;
 			}
 	    }
@@ -1545,8 +1534,10 @@ var cdns=[];
 
 function DonaCadenaHTMLEscalaImprimir(env)
 {
-	return "<table border=0 cellspacing=0 cellpadding=0><tr><td align=middle>" + DonaCadenaHTMLDibuixEscala(env) + "</td><td><font face=arial size=2> &nbsp;"+
-		DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)+"</font></td></tr></table>"
+var cdns=[];
+	cdns.push("<table border=0 cellspacing=0 cellpadding=0><tr><td align=middle>" , DonaCadenaHTMLDibuixEscala(env) , "</td><td><font face=arial size=2> &nbsp;",
+		DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font></td></tr></table>");
+	return cdns.join("");
 }
 
 function CreaEscalaFullImprimir(win)
@@ -2143,6 +2134,8 @@ function DonaDescripcioTipusServidor(tipus)
 		return "SOS";
 	if(tipus=="TipusOAPI_Maps")
 		return "OAPI Maps";
+	if(tipus=="TipusOAPI_MapTiles")
+		return "OAPI Map Tiles";
 	if(tipus=="TipusOAPI_Features")
 		return "OAPI Features";	
     return "";
@@ -2547,7 +2540,6 @@ var i_vista;
 }
 
 
-
 function CanviaEstatClickSobreVista(estat)
 {
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
@@ -2832,7 +2824,7 @@ var i_pan_vista;
 				{
 					elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+i);
 					if ((DonaTipusServidorCapa(capa)=="TipusWMS_C" || DonaTipusServidorCapa(capa)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa)=="TipusWMTS_KVP" 
-						|| DonaTipusServidorCapa(capa)=="TipusWMTS_SOAP"/* || DonaTipusServidorCapa(capa)=="TipusGoogle_KVP"*/) && capa.VistaCapaTiled.TileMatrix)
+						|| DonaTipusServidorCapa(capa)=="TipusWMTS_SOAP" || DonaTipusServidorCapa(capa)=="TipusOAPI_MapTiles"/* || DonaTipusServidorCapa(capa)=="TipusGoogle_KVP"*/) && capa.VistaCapaTiled.TileMatrix)
 					{
 						moveLayer(elem, xm-capa.VistaCapaTiled.dx, ym-capa.VistaCapaTiled.dy, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil);
 						clipLayer(elem, xc+capa.VistaCapaTiled.dx, yc+capa.VistaCapaTiled.dy, w, h);
@@ -3104,9 +3096,9 @@ function CanviaNivellDeZoom(nivell)
 function MostraFinestraVideo()
 {
 	if (!ObreFinestra(window, "video", DonaCadenaLang({"cat":"de sèries temporals", 
-							  "spa":"de series temporales",
-							  "eng":"of time series",
-							  "fre":"pour séries chronologiques"})))
+													  "spa":"de series temporales",
+													  "eng":"of time series",
+													  "fre":"pour séries chronologiques"})))
 		return;
 	OmpleFinestraVideo(window, "video");
 }
@@ -3154,16 +3146,18 @@ var w,h,e,s;
 
 function DonaCadenaHTMLMarcSituacio(ample, alt)
 {
-    return "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3><img src=\"" +
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) + "\" height=1 width="+ample+
-		"></td></tr><tr><td><img src=\"" + 
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) + "\" height="+(alt-2)+
-		" width=1></td><td><img src=\""+
-		AfegeixAdrecaBaseSRC("1tran.gif")+
-		"\" height=1 width="+(ample-2)+
-		"></td><td><img src=\"" + AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) + "\" height="+(alt-2)+
-		" width=1></td></tr><tr><td colspan=3><img src=\"" + 
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) + "\" height=1 width="+ample+"></td></table>";
+var cdns=[];
+	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3><img src=\"" ,
+		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=1 width=",ample,
+		"></td></tr><tr><td><img src=\"" ,
+		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=",(alt-2),
+		" width=1></td><td><img src=\"",
+		AfegeixAdrecaBaseSRC("1tran.gif"),
+		"\" height=1 width=",(ample-2),
+		"></td><td><img src=\"" , AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=",(alt-2)+
+		" width=1></td></tr><tr><td colspan=3><img src=\"" ,
+		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=1 width=",ample,"></td></table>");
+	return cdns.join("");
 }
 
 function CreaSituacio()
@@ -3574,7 +3568,7 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 
 function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 {
-	if(DonaTipusServidorCapa(c)=="TipusWMS_C" || DonaTipusServidorCapa(c)=="TipusWMTS_REST" || DonaTipusServidorCapa(c)=="TipusWMTS_KVP" || DonaTipusServidorCapa(c)=="TipusWMTS_SOAP")
+	if(DonaTipusServidorCapa(c)=="TipusWMS_C" || DonaTipusServidorCapa(c)=="TipusWMTS_REST" || DonaTipusServidorCapa(c)=="TipusWMTS_KVP" || DonaTipusServidorCapa(c)=="TipusWMTS_SOAP" ||  DonaTipusServidorCapa(c)=="TipusOAPI_MapTiles")
 	{
 		if(c.TileMatrixSet)
 		{
@@ -3938,24 +3932,19 @@ var digit, mask;
 
 function DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, i_estil, pot_semitrans, i_data)
 {
-var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
+var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaTipusServidorCapa(capa);
 
-	if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
+	if (tipus=="TipusWMTS_REST")
 	{
-		//{WMTSBaseURL}/{layer}/{style}/{firstDimension}/{...}/{lastDimension}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}	
-	if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
-			var s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"";
+		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
+			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"";
 		else
-			var s="{WMTSBaseURL}/{layer}/{style}/{time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}";
-
+			s="{WMTSBaseURL}/{layer}/{style}/{time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}";
 		s=s.replace("{WMTSBaseURL}", DonaServidorCapa(capa));
-		s=s.replace("{layer}", capa.nom);
+		s=s.replace("{layer}", capa.nom);		
 		if (capa.estil && capa.estil.length)
 		{
-			if (i_estil==-1)
-				i_estil2=capa.i_estil;
-			else
-				i_estil2=i_estil;
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{style}", capa.estil[i_estil2].nom);
 			else
@@ -3964,14 +3953,12 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		else
 			s=s.replace("{style}/", "");	
 
-
 		if (capa.AnimableMultiTime==true)
-			s=s.replace("{time}", DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
+ 			s=s.replace("{time}", DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
 		else
 			s=s.replace("{time}/", ""); 
 		
-
-		s=s.replace("{TileMatrixSet}", capa.TileMatrixSet[i_tile_matrix_set].nom);
+		s=s.replace("{TileMatrixSet}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
 		s=s.replace("{TileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
 		s=s.replace("{TileRow}", j);
 		s=s.replace("{TileCol}", i);
@@ -3983,41 +3970,50 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 			else		
 				s=s.replace("{format_extension}", capa.FormatImatge);
 		}
-		/*
-		cdns.push(DonaServidorCapa(capa), (DonaServidorCapa(capa).charAt(DonaServidorCapa(capa).length-1)=="/") ? "": "/", capa.nom, "/");
-
+		return s;		
+	}
+	else if (tipus=="TipusOAPI_MapTiles")
+	{		
+		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
+			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"?";
+		else
+			s="collections/{collectionId}/styles/{styleId}/map/tiles/{tileMatrixSetId}/{tileMatrix}/{tileRow}/{tileCol}?";
+			
+		s=s.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			if (i_estil==-1)
-				i_estil2=capa.i_estil;
-			else
-				i_estil2=i_estil;
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
+			
 			if (capa.estil[i_estil2].nom)
-	 			cdns.push(capa.estil[i_estil2].nom, "/");
+	 			s=s.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
- 				cdns.push(estil, "/");
+				s=s.replace("{styleId}/", "default");	
 		}
 		else
-			cdns.push("default/");
-	
+			s=s.replace("{styleId}/", "default");						
+		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
+		s=s.replace("{tileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
+		s=s.replace("{tileRow}", j);
+		s=s.replace("{tileCol}", i);
+		if(capa.FormatImatge.charAt(0)==".")  
+			s=s.replace(".{format_extension}", capa.FormatImatge);
+		else		
+			s=s.replace("{format_extension}", capa.FormatImatge);		
+		cdns.push(s);
+
+		cdns.push("&f=" , capa.FormatImatge ) ;
+		cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
 		if (capa.AnimableMultiTime==true)
-			cdns.push(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData) , "/");
-
-		cdns.push(capa.TileMatrixSet[i_tile_matrix_set].nom, "/", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier, "/", j, "/", i, (capa.FormatImatge.charAt(0)==".") ? "" : ".", capa.FormatImatge);
-
-		var s=cdns.join("");*/
-		//CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
-		return s;
+			cdns.push("&datetime=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
+		return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
 	}
 	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 	{
 		//Encara per revisar pq WMTS va diferent que el WMS.
 		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=GetTile&TileMatrixSet=" , 
 			capa.TileMatrixSet[i_tile_matrix_set].nom ,
-			 "&TileMatrix=" , capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier , "&TileRow=" , j , "&TileCol=" , i ,
-			 "&LAYER=" , capa.nom , "&FORMAT=" , capa.FormatImatge ,
-			 "&STYLE=");
-
+			 "&TileMatrix=",capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier , "&TileRow=",j,"&TileCol=",i,
+			 "&LAYER=", capa.nom , "&FORMAT=", capa.FormatImatge, "&STYLE=");
 		if (capa.estil && capa.estil.length)
 		{
 			if (i_estil==-1)
@@ -4030,9 +4026,7 @@ var cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa];
 		if (capa.AnimableMultiTime==true)
 			cdns.push("&TIME=",
 				(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData)));
-		var s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
-		//CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
-		return s;
+		return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
 	}
 	/*if (DonaTipusServidorCapa(capa)=="TipusGoogle_KVP")
 	{
@@ -4172,19 +4166,19 @@ var cdns=[], tipus, plantilla, i_estil2;
 		if(ParamCtrl.capa[i].URLTemplate)
 			plantilla=ParamCtrl.capa[i].URLTemplate+"?";
 		else
-			plantilla="/collections/{collectionId}/map/{style}?";
+			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
 			
 		plantilla=plantilla.replace("{collectionId}", ParamCtrl.capa[i].nom);
 		if (ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length)
 		{
 			i_estil2=(i_estil==-1) ? ParamCtrl.capa[i].i_estil : i_estil;			
 			if (ParamCtrl.capa[i].estil[i_estil2].nom)
-	 			plantilla=plantilla.replace("{style}", ParamCtrl.capa[i].estil[i_estil2].nom);
+	 			plantilla=plantilla.replace("{styleId}", ParamCtrl.capa[i].estil[i_estil2].nom);
 			else
-				plantilla=plantilla.replace("{style}", "default");	
+				plantilla=plantilla.replace("{styleId}", "default");	
 		}
 		else
-			plantilla=plantilla.replace("{style}", "default");	
+			plantilla=plantilla.replace("{styleId}", "default");	
 		cdns.push(plantilla);
 	}
 	
@@ -4201,13 +4195,10 @@ var cdns=[], tipus, plantilla, i_estil2;
 	
 	cdns.push("&WIDTH=" , ncol , "&HEIGHT=" , nfil);	 
 	if(tipus=="TipusOAPI_Maps")
-	{
 		cdns.push("&f=" , ParamCtrl.capa[i].FormatImatge ) ;
-	}
 	else
-	{
 		 cdns.push("&LAYERS=" , ParamCtrl.capa[i].nom, "&FORMAT=" , ParamCtrl.capa[i].FormatImatge );
-	}
+
 	cdns.push(((ParamCtrl.capa[i].FormatImatge=="image/jpeg") ? "" : "&TRANSPARENT=" + ((ParamCtrl.capa[i].transparencia && ParamCtrl.capa[i].transparencia!="opac")? "TRUE" : "FALSE")));
 
 	if(tipus!="TipusOAPI_Maps")
@@ -4423,7 +4414,7 @@ function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok,
 	{
 		var url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data);
 		if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusOAPI_Maps")
-			imatge.i_event=CreaIOmpleEventConsola("OAPI_MapsTiles", i_capa, url_dades, TipusEventGetMap);
+			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
 		else
 			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
 		if (nom_funcio_ok)
@@ -4871,8 +4862,10 @@ function AssignaDonaNomImatgeTiledASrc(nom_vista, i_capa, i_tile_matrix_set, i_t
 		img.i_event=CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
 	else if (tipus=="TipusWMTS_KVP")
 		img.i_event=CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
+	else if (tipus=="TipusOAPI_MapTiles")
+		img.i_event=CreaIOmpleEventConsola("OAPI_MapTiles", i_capa, s, TipusEventWMTSTile);
 	else if (tipus=="TipusOAPI_Maps")
-			imatge.i_event=CreaIOmpleEventConsola("OAPI_MapsTiles", i_capa, s, TipusEventGetMap);
+		img.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, s, TipusEventGetMap);
 	else //wms-c
 		img.i_event=CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 			
@@ -4998,8 +4991,10 @@ var cdns=[], tile_matrix;
 				i_event=CreaIOmpleEventConsola("WMTS-REST, tiled", i_capa, s, TipusEventWMTSTile);
 			else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
 				i_event=CreaIOmpleEventConsola("WMTS-KVP, tiled", i_capa, s, TipusEventWMTSTile);
+			else if (DonaTipusServidorCapa(capa)=="TipusOAPI_MapTiles")
+				i_event=CreaIOmpleEventConsola("OAPI_MapTiles", i_capa, s, TipusEventWMTSTile);
 			else if (DonaTipusServidorCapa(capa)=="TipusOAPI_Maps")
-				i_event=CreaIOmpleEventConsola("OAPI_MapsTiles", i_capa, s, TipusEventGetMap);
+				i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, s, TipusEventGetMap);
 			else //wms-c
 				i_event=CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 			cdns.push(s);

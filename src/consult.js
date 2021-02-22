@@ -1298,7 +1298,7 @@ var s;
 							 "eng":"It is not possible on Google KVP",
 							 "fre":"Il n'est pas possible sur Google KVP"}));
 	}*/
-	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
+	else if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP" || DonaTipusServidorCapa(capa)=="TipusOAPI_MapTiles")
 	{
 		var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (i_tile_matrix_set==-1) return;
@@ -1306,12 +1306,12 @@ var s;
 		var i_tile_matrix=OmpleMatriuVistaCapaTiled(i_capa, i_tile_matrix_set);
 		if(i_tile_matrix==-1) return;
 		//Determino el tile afectat i les coordenades d'aquest tile.
-		var tile_col = floor_DJ((PuntConsultat.i+ParamCtrl.capa[i_capa].VistaCapaTiled.dx)/ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileWidth);
-		var tile_row = floor_DJ((PuntConsultat.j+ParamCtrl.capa[i_capa].VistaCapaTiled.dy)/ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileHeight);
+		var tile_col = floor_DJ((PuntConsultat.i+capa.VistaCapaTiled.dx)/capa.VistaCapaTiled.TileMatrix.TileWidth);
+		var tile_row = floor_DJ((PuntConsultat.j+capa.VistaCapaTiled.dy)/capa.VistaCapaTiled.TileMatrix.TileHeight);
 		//var tile_col = floor_DJ((PuntConsultat.x - ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TopLeftPoint.x) / (ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.costat*ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileWidth));
 		//var tile_row = floor_DJ((ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TopLeftPoint.y - PuntConsultat.x) / (ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.costat*ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileHeight));
-		var i=PuntConsultat.i+ParamCtrl.capa[i_capa].VistaCapaTiled.dx - tile_col*ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileWidth;
-		var j=PuntConsultat.j+ParamCtrl.capa[i_capa].VistaCapaTiled.dy - tile_row*ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.TileHeight;
+		var i=PuntConsultat.i+capa.VistaCapaTiled.dx - tile_col*capa.VistaCapaTiled.TileMatrix.TileWidth;
+		var j=PuntConsultat.j+capa.VistaCapaTiled.dy - tile_row*capa.VistaCapaTiled.TileMatrix.TileHeight;
 		/*alert("i:" + i + " j:" + j + " PuntConsultat.i:" + PuntConsultat.i + " PuntConsultat.j:" + PuntConsultat.j +
 			" dx:" + ParamCtrl.capa[i_capa].VistaCapaTiled.dx + " dy:" + ParamCtrl.capa[i_capa].VistaCapaTiled.dy +
 			" tile_col:" + tile_col + " tile_row:" + tile_row +
@@ -1319,18 +1319,53 @@ var s;
 			" PuntConsultat.x:" + PuntConsultat.x + " PuntConsultat.y:" + PuntConsultat.y +
 			" ITileMin:" + ParamCtrl.capa[i_capa].VistaCapaTiled.ITileMin +" JTileMin:" + ParamCtrl.capa[i_capa].VistaCapaTiled.JTileMin);
 		*/
-		tile_col+=ParamCtrl.capa[i_capa].VistaCapaTiled.ITileMin;
-		tile_row+=ParamCtrl.capa[i_capa].VistaCapaTiled.JTileMin;
-		cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=GetFeatureInfo&TileMatrixSet=" ,
-			  capa.TileMatrixSet[i_tile_matrix_set].nom ,
-			 "&TileMatrix=" , ParamCtrl.capa[i_capa].VistaCapaTiled.TileMatrix.Identifier , "&TileRow=" , tile_row , "&TileCol=" , tile_col ,
-			 "&LAYER=" , capa.nom ,
-		   	 "&INFOFORMAT=" , capa.FormatConsulta ,
-			 "&I=" , i , "&J=" , j);
+		tile_col+=capa.VistaCapaTiled.ITileMin;
+		tile_row+=capa.VistaCapaTiled.JTileMin;
+		if (DonaTipusServidorCapa(capa)=="TipusWMTS_KVP")
+		{
+			cdns.push("SERVICE=WMTS&VERSION=", DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=GetFeatureInfo&TileMatrixSet=" ,
+				  capa.TileMatrixSet[i_tile_matrix_set].nom ,
+				 "&TileMatrix=" , capa.VistaCapaTiled.TileMatrix.Identifier , "&TileRow=" , tile_row , "&TileCol=" , tile_col ,
+				 "&LAYER=" , capa.nom ,
+				 "&INFOFORMAT=" , capa.FormatConsulta ,
+				 "&I=" , i , "&J=" , j);
+	
+			if (capa.AnimableMultiTime==true)
+				cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
+			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+		}
+		else //if (tipus=="TipusOAPI_MapTiles")
+		{		
+			var plantill;
+			if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
+				plantill=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"/info?";
+			else
+				plantill="collections/{collectionId}/styles/{styleId}/map/tiles/{tileMatrixSetId}/{tileMatrix}/{tileRow}/{tileCol}/info?";
+				
+			plantill=plantill.replace("{collectionId}", capa.nom);
+			if (capa.estil && capa.estil.length)
+			{
+				i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
+				
+				if (capa.estil[i_estil2].nom)
+					plantill=plantill.replace("{styleId}", capa.estil[i_estil2].nom);
+				else
+					plantill=plantill.replace("{styleId}/", "default");	
+			}
+			else
+				plantill=plantill.replace("{styleId}/", "default");						
+			plantill=plantill.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
+			plantill=plantill.replace("{tileMatrix}", capa.VistaCapaTiled.TileMatrix.Identifier);
+			plantill=plantill.replace("{tileRow}", tile_row);
+			plantill=plantill.replace("{tileCol}", tile_col);
+			cdns.push(plantill);
 
-		if (capa.AnimableMultiTime==true)
-			cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
-		s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+			cdns.push("&fTile=",capa.FormatImatge,"&f=",capa.FormatConsulta, "&i=", i, "&j=", j) ;
+			cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
+			if (capa.AnimableMultiTime==true)
+				cdns.push("&datetime=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
+			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
+		}
 		//CreaIOmpleEventConsola("GetFeatureInfo WMTS-KVP, tiled", i_capa, s, TipusEventGetFeatureInfo);
 	}
 	else
@@ -1352,9 +1387,9 @@ var s;
 		cdns.push("&QUERY_LAYERS=" , capa.nom , "&INFO_FORMAT=" , capa.FormatConsulta);
 
 		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
-			    cdns.push("&X=" , PuntConsultat.i , "&Y=" , PuntConsultat.j);
-	    	else
-    			cdns.push("&I=" , PuntConsultat.i , "&J=" , PuntConsultat.j);
+			cdns.push("&X=" , PuntConsultat.i , "&Y=" , PuntConsultat.j);
+		else
+			cdns.push("&I=" , PuntConsultat.i , "&J=" , PuntConsultat.j);
 
 		if (ParamCtrl.idiomes.length>1)
 			cdns.push("&LANGUAGE=", ParamCtrl.idioma);

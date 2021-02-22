@@ -56,7 +56,7 @@ var IDataFilEixXEixT=null;
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
 
-var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"}
+var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"};
 
 function OrdenacioCapesVideoData(x,y) 
 {
