@@ -404,7 +404,7 @@ function TornaBooleaDesDeWPSLiteralOutput(item) //si diu "true" torno true, si n
 	var literal_data=GetXMLElementByName(item, "wps", "LiteralData");
 	if (literal_data && literal_data.childNodes[0] && literal_data.childNodes[0].nodeValue)
 	{
-		if (literal_data.childNodes[0].nodeValue=="true") 
+		if (literal_data.childNodes[0].nodeValue=="true")
 			return true;
 	}
 	return false;
