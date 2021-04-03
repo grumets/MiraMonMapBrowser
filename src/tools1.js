@@ -255,8 +255,11 @@ if(!Array.prototype.find)
  *        a negative number  if a is less than b;
  *        0 if a is equal to b;
  *        a positive number of a is greater than b.
+ *        compare_fn can be null for simple comparisons.
  * Note: The array may contain duplicate elements. 
  * If there are more than one equal elements in the array, the returned value can be the index of any one of the equal elements.
+
+ * Consider using indexOf() if the list is not sorted.
  */
 
 if(!Array.prototype.binarySearch)
@@ -266,7 +269,7 @@ if(!Array.prototype.binarySearch)
 		var n = this.length - 1;
 		while (m <= n) {
         		var k = (n + m) >> 1;
-		        var cmp = compare_fn(elem, this[k]);
+		        var cmp = (compare_fn) ? compare_fn(elem, this[k]) : (elem < this[k] ? -1 : (elem > this[k] ? 1 : 0));
 	        	if (cmp > 0) {
 				m = k + 1;
 	        	} else if(cmp < 0) {
@@ -325,13 +328,27 @@ function EliminaRepeticionsArray(llista, funcio_ordena)
 if(!Array.prototype.removeDuplicates)
 {
 	Array.prototype.removeDuplicates = function (compare_fn) {
-		for (var i=0; i+1<this.length; i++)
+		if (compare_fn)
 		{
-			var n=0;
-			while (i+n+1<this.length && 0==compare_fn(this[i], this[i+n+1]))
-				n++;	
-			if (n)
-				this.splice(i+1, n);
+			for (var i=0; i+1<this.length; i++)
+			{
+				var n=0;
+				while (i+n+1<this.length && 0==compare_fn(this[i], this[i+n+1]))
+					n++;	
+				if (n)
+					this.splice(i+1, n);
+			}
+		}
+		else
+		{
+			for (var i=0; i+1<this.length; i++)
+			{
+				var n=0;
+				while (i+n+1<this.length && (this[i]==this[i+n+1]))
+					n++;	
+				if (n)
+					this.splice(i+1, n);
+			}
 		}
 		return this;
 	}
@@ -2432,24 +2449,6 @@ function CreaParametresVistaCapaTiled(tile_matrix, i_tileMin, i_tileMax, j_tileM
 	this.JTileMax=j_tileMax;
 	this.dx=dx; 
 	this.dy=dy;
-}
-
-function CreaParametresInternsDeControl(env_actual, env_capa, env_ll_situacio, ample_situacio, alt_situacio, marge_esq_situacio, marge_sup_situacio, i_situacio, costat_zoom_actual, zoom_previ, n_zoom_previ_usat, punt_ori, vista, flags)
-{
-	this.EnvActual=env_actual;
-	this.EnvLLCapa=env_capa; 
-	this.EnvLLSituacio=env_ll_situacio;
-	this.AmpleSituacio=ample_situacio;
-	this.AltSituacio=alt_situacio;
-	this.MargeEsqSituacio=marge_esq_situacio;
-	this.MargeSupSituacio=marge_sup_situacio;
-	this.ISituacio=i_situacio;
-	this.CostatZoomActual = costat_zoom_actual;
-	this.ZoomPrevi = zoom_previ;
-	this.NZoomPreviUsat = n_zoom_previ_usat;
-	this.PuntOri=punt_ori;   //Punt del angle inferior esquerra on està actualment la vista
-	this.VistaCapaTiled=vista;  //De moment només útil pel cas tiled. Conté una array de new CreaParametresVistaCapaTiled() per cada capa si és tiled. No té res a veure amb si hi ha més d'una "vista" del mapa.
-	this.flags=flags;
 }
 */
 

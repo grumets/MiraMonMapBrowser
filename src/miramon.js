@@ -1026,7 +1026,8 @@ function GoFullScreenEvent(event)
 		alert("Already in full screen");
 
 	//Moure la caixa de la coordenada actual adientment
-	openFullscreen(document.documentElement);
+	//openFullscreen(document.documentElement);
+	openFullscreen(document.getElementById(ParamCtrl.containerName));
 
 	//Es produexi un event de resize automaticament RepintaMapesIVistes();
 	dontPropagateEvent(event);
@@ -1230,7 +1231,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 	{
 		delete param_ctrl.mmn;
 		delete param_ctrl.config_json;
-	}	
+	}
 	RemoveOtherPropertiesInObjWithRef(param_ctrl);
 }
 
@@ -3058,10 +3059,25 @@ function PortamANivellDeZoom(nivell)
 	GuardaVistaPrevia();
 	return CanviaNivellDeZoom(nivell);
 }
+
 function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 {
 	dontPropagateEvent(event);
 	PortamANivellDeZoom(nivell);
+}
+
+function PortamAData(millisegons)
+{
+	if (ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]==millisegons)
+		return;
+	SincronitzaCapesMillisegons(millisegons);
+	RepintaMapesIVistes();
+}
+
+function PortamADataEvent(event, millisegons)
+{
+	dontPropagateEvent(event);
+	PortamAData(millisegons);
 }
 
 //No crida GuardaVistaPrevia()
@@ -3084,7 +3100,10 @@ function CanviaNivellDeZoom(nivell)
 	{
 		ParamInternCtrl.vista.CostatZoomActual=ParamCtrl.zoom[nivell].costat;
 		RevisaEstatsCapes();
-		CreaLlegenda();
+		if (ParamCtrl.LlegendaAmagaSiForaAmbit==true || ParamCtrl.LlegendaGrisSiForaAmbit==true)
+			;
+		else
+			CreaLlegenda();
 		if (window.document.zoom.nivell)
 			window.document.zoom.nivell.selectedIndex = nivell;
 		CentraLaVista((ParamInternCtrl.vista.EnvActual.MaxX+ParamInternCtrl.vista.EnvActual.MinX)/2,(ParamInternCtrl.vista.EnvActual.MaxY+ParamInternCtrl.vista.EnvActual.MinY)/2);
@@ -5310,9 +5329,9 @@ var p, unitats_CRS;
 			cdns.push(textHTMLLayer(nom_vista+"_tel_trans", DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 		}
 
+		var barra_slider=[];
 		if (( ParamCtrl.VistaBotonsBruixola==true || ParamCtrl.VistaBotonsZoom==true || ParamCtrl.VistaSliderZoom==true || ParamCtrl.VistaEscalaNumerica==true) && vista.i_nova_vista==NovaVistaPrincipal)
 		{
-			var barra_slider=[];
 			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 			if (ParamCtrl.VistaBotonsBruixola==true && (parseInt(document.getElementById("vista").style.height,10) >= 300))
 			{
@@ -5333,21 +5352,21 @@ var p, unitats_CRS;
 			barra_slider.push("<tr><td align='center'>");
 			if (ParamCtrl.VistaBotonsZoom==true)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, ", (DonaIndexNivellZoom(vista.CostatZoomActual)+1), ")"));
 				barra_slider.push("<br>");
 			}
 			if (ParamCtrl.VistaSliderZoom==true && (parseInt(document.getElementById("vista").style.height,10) >= 500))
 			{	
-				barra_slider.push("<input id='latZoom' type='range' step='1' min='0' max='" + (ParamCtrl.zoom.length-1) + "' value='"+DonaIndexNivellZoom(vista.CostatZoomActual)+"' style=';' orient='vertical' onchange='PortamANivellDeZoomEvent(event, this.value);' onclick='dontPropagateEvent(event);'><br>");
+				barra_slider.push("<input id='zoomSlider' type='range' step='1' min='0' max='", (ParamCtrl.zoom.length-1), "' value='", DonaIndexNivellZoom(vista.CostatZoomActual), "' style=';' orient='vertical' onchange='PortamANivellDeZoomEvent(event, this.value);' onclick='dontPropagateEvent(event);'><br>");
 			}
 			if (ParamCtrl.VistaBotonsZoom==true)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, ", (DonaIndexNivellZoom(vista.CostatZoomActual)-1), ")"));
 			}
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 			{
-				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>"+ (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:") +"<br>"+ EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true) +"</span>");	
+				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");	
 				barra_slider.push("<br>");
 				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
@@ -5359,9 +5378,25 @@ var p, unitats_CRS;
 				barra_slider.push("</td></tr>");
 			}
 			barra_slider.push("</table>");
-			
-			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
 		}
+
+		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
+		{
+			barra_slider.push("<span style='position: absolute; bottom: 0; right: 100;' class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\"><font face=arial size=2>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), ":</font>",
+					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
+					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' style=';' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
+					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
+			if (ParamInternCtrl.millisegons.length<300/2)
+			{
+				barra_slider.push("<datalist id='timeticks'>");
+				for (var i=0; i<ParamInternCtrl.millisegons.length; i++)
+					barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
+				barra_slider.push("</datalist>");
+			}
+			barra_slider.push("</span>");			
+		}
+		if (barra_slider.length)
+			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
 
 		contentLayer(elem, cdns.join(""));
 
@@ -5444,7 +5479,10 @@ function PortamAAmbit(env)
 		else
 		{
 			RevisaEstatsCapes();
-			CreaLlegenda();
+			if (ParamCtrl.LlegendaAmagaSiForaAmbit==true || ParamCtrl.LlegendaGrisSiForaAmbit==true)
+				;
+			else
+				CreaLlegenda();
 			RepintaMapesIVistes();
 		}
 	}
@@ -5644,7 +5682,10 @@ function EliminaTotesLesCapes(Redraw)
 	if(Redraw)
 	{
 		RevisaEstatsCapes();
-		CreaLlegenda();
+		if (ParamCtrl.LlegendaAmagaSiForaAmbit==true || ParamCtrl.LlegendaGrisSiForaAmbit==true)
+			;
+		else
+			CreaLlegenda();
 		RepintaMapesIVistes();
 	}
 }
@@ -5818,27 +5859,32 @@ function DonaVistaDesDeINovaVista(i_nova_vista)
 
 function PreparaParamInternCtrl()
 {
-	ParamInternCtrl={"PuntOri": ParamCtrl.PuntOri,
-			 		 "vista": { "EnvActual": {"MinX": 0.0, "MaxX": 0.0, "MinY": 0.0, "MaxY": 0.0},
-					 			"nfil": ParamCtrl.nfil,
-								"ncol": ParamCtrl.ncol,
-								"CostatZoomActual": ParamCtrl.NivellZoomCostat,
-								"i_vista": -1,        //index en l'array ParamCtrl.VistaPermanent[]	
-								"i_nova_vista": NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
-					 "EnvLLSituacio": [],
-					 "AmpleSituacio": 99,
-					 "AltSituacio": 99,
-					 "MargeEsqSituacio": 99,
-					 "MargeSupSituacio": 99,
-					 "ISituacio": ParamCtrl.ISituacioOri,
-					 "LListaCRS": null,
-					 "ZoomPrevi": [{"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}, {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0},
-								   {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}, {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0},
-								   {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}, {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0},
-								   {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}, {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0},
-								   {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}, {"costat": 1, "PuntOri": {"x": 0, "y": 0}, "ISituacio": 0}],
-					 "NZoomPreviUsat": 0, //10 zooms previs, 0 usats 
-					 "flags": 0};
+	ParamInternCtrl={PuntOri: ParamCtrl.PuntOri,
+			 		 vista: { EnvActual: {MinX: 0.0, MaxX: 0.0, MinY: 0.0, MaxY: 0.0},
+					 			nfil: ParamCtrl.nfil,
+								ncol: ParamCtrl.ncol,
+								CostatZoomActual: ParamCtrl.NivellZoomCostat,
+								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]	
+								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
+					 EnvLLSituacio: [],
+					 AmpleSituacio: 99,
+					 AltSituacio: 99,
+					 MargeEsqSituacio: 99,
+					 MargeSupSituacio: 99,
+					 ISituacio: ParamCtrl.ISituacioOri,
+					 LListaCRS: null,
+					 ZoomPrevi: [{costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
+								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
+								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
+								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
+								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}],
+					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats 
+					 millisegons: CarregaDatesCapes(),
+					 FlagsData: DeterminaFlagsDataCapes(),
+					 flags: 0};
+	
+	if (ParamInternCtrl.millisegons.length)
+		ParamInternCtrl.iMillisegonsActual=ParamInternCtrl.millisegons.binarySearch(DeterminaMillisegonsActualCapes());
 
 	for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 	{

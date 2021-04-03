@@ -93,6 +93,14 @@
 				}
 			}
 		},
+		"containerName": {
+			"description": "Nom de la divisió que conté el navegador. INTERN; no usar. S'omple a partir del nom indicat a StartMiraMonMapBrowser(div_name)",
+			"type": "string"
+		},
+		"ParamCtrl.config_json": {
+			"description": "El propi config.json com a text. INTERN; no usar. S'omple al iniciar el navegador",
+			"type": "string"
+		},
 		"ServidorLocal": { 
 			"description": "Adreça i nom del servidor local, típicament una url de la cgi que es fa servir més. Si hi ha alguna capa on servidor és null, llavors es fa servir aquest valor i esdevé obligatori.",
 			"type": "string",
@@ -662,6 +670,10 @@
 		},
 		"VistaSliderZoom": {
 			"description": "Mostrar una barra de desplaçament vertical per acostar-se i allunyar-se sobre el mapa de la vista", 
+			"type": "boolean"
+		},
+		"VistaSliderData": {
+			"description": "Mostrar una barra de desplaçament horitzontal per moure's en el temps sobre el mapa de la vista. No te efecte si no hi ha cap capa amb 'data' definit", 
 			"type": "boolean"
 		},
 		"AltresLinks": {

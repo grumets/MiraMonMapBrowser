@@ -95,6 +95,7 @@ function DonaIndexDataCapa(capa, i_data)
 	return (i_data<0) ? capa.data.length+i_data : i_data;
 }
 
+//Any de 4 xifres (l'equivalment javascript és d.getFullYear())
 function DonaYearJSON(data)
 {
 	if (data.year)
@@ -102,6 +103,7 @@ function DonaYearJSON(data)
 	return 1970;
 }
 
+//Mes de l'any de 1 a 12 (l'equivalment javascript és d.getMonth()+1)
 function DonaMonthJSON(data)
 {
 	if (data.month)
@@ -109,6 +111,7 @@ function DonaMonthJSON(data)
 	return 1;
 }
 
+//Dia del mes de 1 a 31 (l'equivalment javascript és d.getDate())
 function DonaDayJSON(data)
 {
 	if (data.day)
@@ -224,6 +227,62 @@ var cdns=[];
 	}
 	return cdns.join("");
 }
+
+function DonaDataMillisegonsComATextBreu(flags_data, millisegons)
+{
+var cdns=[];
+var d = new Date(millisegons);
+
+	if (flags_data.DataMostraDia)
+	{
+		if (d.getDate()<10)
+		    cdns.push("0");
+		cdns.push(d.getDate());
+	}
+	if (flags_data.DataMostraMes)
+	{
+	    if (flags_data.DataMostraDia)
+	        cdns.push("-");
+	    if (d.getMonth()<9)
+			cdns.push("0");
+	    cdns.push(d.getMonth()+1);
+	}
+	if (flags_data.DataMostraAny)
+	{
+	    if (flags_data.DataMostraMes)
+			cdns.push("-");
+	    cdns.push(d.getFullYear());
+	}
+	if (flags_data.DataMostraHora || flags_data.DataMostraMinut || flags_data.DataMostraSegon)
+	{
+	    if (flags_data.DataMostraAny || flags_data.DataMostraMes || flags_data.DataMostraDia)
+			cdns.push(" ");
+	}
+	if (flags_data.DataMostraHora)
+	{
+	    if (d.getHour()<10)
+			cdns.push("0");
+	    cdns.push(d.getHour());
+	}
+	if (flags_data.DataMostraMinut)
+	{
+	    if (flags_data.DataMostraHora)
+			cdns.push(":");
+	    if (d.getMinutes()<10)
+			cdns.push("0");
+	    cdns.push(d.getMinutes());
+	}
+	if (flags_data.DataMostraSegon)
+	{
+	    if (flags_data.DataMostraMinut)
+			cdns.push(":");
+	    if (d.getSeconds()<10)
+			cdns.push("0");
+	    cdns.push(d.getSeconds());
+	}
+	return cdns.join("");
+}
+
 
 function DonaDataCapaPerLlegenda(i_capa, i_data)
 {
@@ -868,4 +927,126 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 		}
 	}
 	return s;
+}
+
+//Funció simplificada de CarregaDatesVideo() que retorna només un array de dades de totes les capes en milisegons.
+function CarregaDatesCapes()
+{
+var capa, dates=[];
+
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{	
+		capa=ParamCtrl.capa[i_capa];
+		if (capa.data)
+		{				
+			for (var i_data=0; i_data<capa.data.length; i_data++)
+			{
+				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
+				dates.push(d.getTime());
+			}
+		}
+	}
+	dates.sort();
+	dates.removeDuplicates();
+	return dates;
+}
+
+function DeterminaMillisegonsActualCapes()
+{
+var capa, millisegons=0;
+
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{	
+		capa=ParamCtrl.capa[i_capa];
+		if (capa.data)
+		{				
+			var d=DonaDateDesDeDataJSON(capa.data[DonaIndexDataCapa(capa, capa.i_data)]);
+			if (millisegons<d.getTime())
+				millisegons=d.getTime();
+		}
+	}
+	return millisegons;
+}
+
+function SincronitzaCapesMillisegons(millisegons)
+{
+var capa, i_data, i_data_bona, m_bona, m, i;
+
+	i=ParamInternCtrl.millisegons.binarySearch(millisegons);
+	if (i<0)
+		ParamInternCtrl.iMillisegonsActual=-i-1;
+	else
+		ParamInternCtrl.iMillisegonsActual=i;
+
+	//corregeixo el valor.
+	millisegons=ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual];
+
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{	
+		m_bona=ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length]-ParamInternCtrl.millisegons[0]+1;
+		i_data_bona=0;
+		capa=ParamCtrl.capa[i_capa];
+		if (capa.data && capa.data.length>1)
+		{
+			//Decideixo no assumir que estan ordenats.				
+			for (var i_data=0; i_data<capa.data.length; i_data++)
+			{
+				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
+				if (millisegons<d.getTime())
+					continue;
+				if (millisegons==d.getTime())
+				{
+					capa.i_data=i_data;
+					m_bona=0;
+					break;
+				}
+				else
+				{
+					m=millisegons-d.getTime();
+					if (m_bona>m)
+					{
+						m_bona=m;
+						i_data_bona=i_data;
+					}
+				}
+			}
+			if (m_bona>0)
+				capa.i_data=i_data_bona;
+		}
+	}
+}
+
+function DeterminaFlagsDataCapes()
+{
+var capa, flags_data={};
+
+	//Determino quins fotogrames he de fer servir.
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{	
+		capa=ParamCtrl.capa[i_capa];
+		if (!(capa.FlagsData))
+			continue;
+		if (capa.FlagsData.DataMostraAny)
+			flags_data.DataMostraAny=true;
+		if (capa.FlagsData.DataMostraMes)
+			flags_data.DataMostraMes=true;
+		if (capa.FlagsData.DataMostraDia)
+			flags_data.DataMostraDia=true;
+		if (capa.FlagsData.DataMostraHora)
+			flags_data.DataMostraHora=true;
+		if (capa.FlagsData.DataMostraMinut)
+			flags_data.DataMostraMinut=true;
+		if (capa.FlagsData.DataMostraSegon)
+			flags_data.DataMostraSegon=true;
+		if (capa.FlagsData.DataMostraDescLlegenda)
+			flags_data.DataMostraDescLlegenda=true;
+	}
+	return flags_data;
+}
+
+function DonaDescriptorDates(flags_data)
+{
+	if (flags_data.DataMostraHora || flags_data.DataMostraMinut || flags_data.DataMostraSegon)
+		return DonaCadenaLang({"cat":"Data i hora","spa":"Fecha y hora", "eng": "Date and time","fre":"Date et l'heure"});
+	return DonaCadenaLang({"cat":"Data","spa":"Fecha", "eng": "Date","fre":"Date"});
 }
