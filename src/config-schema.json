@@ -1175,10 +1175,14 @@
 									}
 								},
 								"arrayBuffer": {
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal"
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal",
+									"type": "string",
+									"contentEncoding": "binary"
 								},
-								"arrayBuffer": {
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la impressió"
+								"arrayBufferPrint": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la impressió",
+									"type": "string",
+									"contentEncoding": "binary"
 								},
 								"capa_rodet": {
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tot el rodet. N'hi ha tants com capa.data.length",
@@ -1188,7 +1192,9 @@
 										"type": "object",
 										"properties": {
 											"arrayBuffer": {
-												"description": "L'array binari de valors"
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
 											}
 										}
 									}
@@ -1201,7 +1207,9 @@
 										"type": "object",
 										"properties": {
 											"arrayBuffer": {
-												"description": "L'array binari de valors"
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
 											}
 										}
 									}
@@ -1214,7 +1222,9 @@
 										"type": "object",
 										"properties": {
 											"arrayBuffer": {
-												"description": "L'array binari de valors"
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
 											}
 										}
 									}
@@ -1435,7 +1445,8 @@
 													"required": ["icona"],
 													"properties": {
 														"ValorCamp": {
-															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant"
+															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant",
+															"type": "string"
 														},
 														"icona": {
 															"description": "icona",
@@ -1479,7 +1490,8 @@
 												"type": "object",
 												"properties": {
 													"ValorCamp": {
-														"description": "Valor del camp NomCamp per triar l'estil del text per presentat a la vista"
+														"description": "Valor del camp NomCamp per triar l'estil del text per presentat a la vista",
+														"type": "string"
 													},
 													"font": {
 														"description": "Font del text per presentat a la vista",
@@ -1586,21 +1598,33 @@
 					},
 					"ParamCoverage": {
 						"description": "Índex (començant per 0) de ParGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
-						"type": ["number", "null"],
-						"minimum": 0,
-						"multipleOf" : 1
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
 					},
 					"FormatCoverage": {
 						"description": "Índex (començant per 0) de FormatGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
-						"type": ["number", "null"],
-						"minimum": 0,
-						"multipleOf" : 1
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
 					},
 					"ResCoverage":	{
 						"description": "Índex (començant per 0) de ResGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
-						"type": ["number", "null"],
-						"minimum": 0,
-						"multipleOf" : 1
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
 					},
 					"DescarregaTot": {
 						"description": "Array de descàrregues directes per aquesta capa. No existeix quan el model de dades és vector.",
@@ -1635,7 +1659,7 @@
 						"$ref": "#/definitions/metadades"
 					},
 					"NomVideo": { 
-						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el model és ràster.",
+						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el model és ràster.",
 						"type": ["string", "null"]
 					},
 					"DescVideo": { 
@@ -2144,7 +2168,8 @@
 					"type": "string"
 				},
 				"value": {
-					"description": "value of the parameter"
+					"description": "value of the parameter",
+					"type": "string"
 				}
 			}
 		},
@@ -2297,11 +2322,11 @@
 		},
 		"bboxGeoJSON": {
 			"description": "Àmbit format per un array de 4 coordenades",
-			"type": ["array"],
+			"type": "array",
+			"minItems": 4, 
+			"maxItems": 4,
 			"items": {
-				"type": "number",
-				"minItems": 4, 
-				"maxItems": 4
+				"type": "number"
 			}
 		},
 		"propertiesGeoJSON": {
@@ -2386,8 +2411,8 @@
 			"type": ["array", "null"],
 			"items": {
 				"description": "Propietats de l'atribut",
-				"required": [ "nom" ],
 				"type": "object",
+				"required": [ "nom" ],
 				"properties": {
 					"calcul": { 
 						"description": "Fórmula matemàtica per transformar els valors d'una o més properties d'una altra capa vectorial o raster. Per a apuntar a una capa raster consulteu l'explicació dins de 'component' per apuntar a una capa vectorial usarem {'i_capa': 2, 'prop': 'nom_flor'} per referirnos a la capa 2 que és de 'model'='vector'. Només es pot fer servir si hi ha capa.objectes a la capa indicada. Si no indiqueu i_capa s'asumeix la capa actual.",
@@ -2434,10 +2459,12 @@
 						"enum": ["string", "number", "date", "boolean", "binary"]
 					},
 					"mida":  { 					
-						"description": "Pendent d'implementació. Mida de l'atribut. Opcional. Amplada màxima que pot tenir el tipus de camp. En el cas de tipus numèrics és la màxima precisió. En el cas de cadenes és la màxima longitud en caràcters.En el cas de data-hora és la màxima longitud en caràcters de la representació de la data-hora com a text."
+						"description": "Pendent d'implementació. Mida de l'atribut. Opcional. Amplada màxima que pot tenir el tipus de camp. En el cas de tipus numèrics és la màxima precisió. En el cas de cadenes és la màxima longitud en caràcters.En el cas de data-hora és la màxima longitud en caràcters de la representació de la data-hora com a text.",
+						"type": "number" 
 					},
 					"pDecimals": { 					
-						"description": "Pendent d'implementació. Nombre de decimals de l'atribut (propietat). Només aplica si l'atribut és de tipus 'number'. Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)"
+						"description": "Pendent d'implementació. Nombre de decimals de l'atribut (propietat). Només aplica si l'atribut és de tipus 'number'. Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)",
+						"type": "number"						
 					},
 					"format": {
 						"description": "És el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
@@ -2758,7 +2785,7 @@
 					"properties": {
 						"reference": {
 							"description": "Name of the executable file or service url",
-							"type": "object",
+							"type": "string",
 							"format": "uri"
 						},
 						"compilationDate": {
@@ -2827,7 +2854,8 @@
 					"enum": ["string", "number", "boolean", "date", "source", "null"]
 				},
 				"value": {
-					"description": "Value of the parameter except for a source"
+					"description": "Value of the parameter except for a source",
+					"type": "string"
 				},
 				"units" : {"type": "string"},
 				"source": {

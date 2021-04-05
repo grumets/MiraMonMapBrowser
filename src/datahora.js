@@ -418,7 +418,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 		return {"DataMostraAny": true, "DataMostraMes": true};
 
 	//Any, mes i dia i potser time
-	var i_time=tros_data[2].search("[T]");
+	var i_time=tros_data[2].indexOf("[T]");
 	if(i_time==-1)
 	{
 		o_data.day=parseInt(tros_data[2],10);		
@@ -946,8 +946,8 @@ var capa, dates=[];
 			}
 		}
 	}
-	dates.sort();
-	dates.removeDuplicates();
+	dates.sort(sortAscendingNumber);
+	dates.removeDuplicates(sortAscendingNumber);
 	return dates;
 }
 
@@ -970,11 +970,12 @@ var capa, millisegons=0;
 
 function SincronitzaCapesMillisegons(millisegons)
 {
-var capa, i_data, i_data_bona, m_bona, m, i;
+var i_data, i_data_bona, i_capa_bona, m_bona, m, i, es_video_agregat;
+var capa, capa_previa, capa_seguent, capa_visible;
 
-	i=ParamInternCtrl.millisegons.binarySearch(millisegons);
+	i=ParamInternCtrl.millisegons.binarySearch(millisegons, sortAscendingNumber);
 	if (i<0)
-		ParamInternCtrl.iMillisegonsActual=-i-1;
+		ParamInternCtrl.iMillisegonsActual=-i-2;
 	else
 		ParamInternCtrl.iMillisegonsActual=i;
 
@@ -983,35 +984,103 @@ var capa, i_data, i_data_bona, m_bona, m, i;
 
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{	
-		m_bona=ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length]-ParamInternCtrl.millisegons[0]+1;
-		i_data_bona=0;
 		capa=ParamCtrl.capa[i_capa];
-		if (capa.data && capa.data.length>1)
+		if (capa.data && capa.data.length)
 		{
-			//Decideixo no assumir que estan ordenats.				
-			for (var i_data=0; i_data<capa.data.length; i_data++)
+			//Determino si forma part d'un video que no s'ha evaluat abans.
+			if (capa.NomVideo)
 			{
-				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
-				if (millisegons<d.getTime())
-					continue;
-				if (millisegons==d.getTime())
-				{
-					capa.i_data=i_data;
-					m_bona=0;
-					break;
+				//Determino si forma part d'un video "agregat" que no s'ha avaluat abans.
+				for (var i_capa_previa=0; i_capa_previa<i_capa; i_capa_previa++)
+				{	
+					capa_previa=ParamCtrl.capa[i_capa_previa];
+					if (capa_previa.data && capa_previa.data.length && capa_previa.NomVideo==capa.NomVideo)
+						break;
 				}
-				else
+				if (i_capa_previa<i_capa) 
+					continue;  //Ja ha estat evaluada i no cal ara.
+			}
+						
+			m_bona=ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1]-ParamInternCtrl.millisegons[0]+1;
+			i_data_bona=0;
+			i_capa_bona=i_capa;
+
+			//Les capes agregades s'avaluen juntes
+			for (var i_capa_seguent=i_capa; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
+			{	
+				capa_seguent=ParamCtrl.capa[i_capa_seguent];
+				if (capa_seguent.data && capa_seguent.data.length && (!capa.NomVideo || capa_seguent.NomVideo==capa.NomVideo))
 				{
-					m=millisegons-d.getTime();
-					if (m_bona>m)
+					//Decideixo no assumir que estan ordenats.				
+					for (var i_data=0; i_data<capa_seguent.data.length; i_data++)
 					{
-						m_bona=m;
-						i_data_bona=i_data;
+						var d=DonaDateDesDeDataJSON(capa_seguent.data[i_data]);
+						if (millisegons<d.getTime())
+							continue;
+						if (millisegons==d.getTime())
+						{
+							i_data_bona=i_data;
+							i_capa_bona=i_capa_seguent;
+							m_bona=0;
+							break;
+						}
+						else
+						{
+							m=millisegons-d.getTime();
+							if (m_bona>m)
+							{
+								m_bona=m;
+								i_data_bona=i_data;
+								i_capa_bona=i_capa_seguent;
+							}
+						}
+					}
+					if (i_data<capa_seguent.data.length || !capa.NomVideo)
+						break;
+				}
+			}
+
+			es_video_agregat=false;
+			if (capa.NomVideo)
+			{
+				for (var i_capa_seguent=i_capa+1; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
+				{	
+					capa_seguent=ParamCtrl.capa[i_capa_seguent];
+					if (capa_seguent.data && capa_seguent.data.length && (!capa.NomVideo || capa_seguent.NomVideo==capa.NomVideo))
+					{
+						es_video_agregat=true;
+						break;
 					}
 				}
 			}
-			if (m_bona>0)
-				capa.i_data=i_data_bona;
+
+			capa=ParamCtrl.capa[i_capa_bona];
+			capa.i_data=i_data_bona;
+			if (es_video_agregat)
+			{
+				//Ara cal repassar totes les capes agregades en un video i mirar quina es deixa visible (si n'hi ha alguna).
+				for (var i_capa_visible=i_capa; i_capa_visible<ParamCtrl.capa.length; i_capa_visible++)
+				{	
+					capa_visible=ParamCtrl.capa[i_capa_visible];
+					if (capa_visible.data && capa_visible.data.length && capa_visible.NomVideo==capa.NomVideo && (capa_visible.visible=="si" || capa_visible.visible=="semitransparent"))
+						break;
+				}
+				if (i_capa_visible<ParamCtrl.capa.length)  //una capa es visible
+				{
+					var visible=capa_visible.visible;
+					for (var i_capa_seguent=i_capa; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
+					{	
+						var capa_seguent=ParamCtrl.capa[i_capa_seguent];
+						if (capa_seguent.data && capa_seguent.data.length && capa_seguent.NomVideo==capa.NomVideo)
+						{
+							if (i_capa_seguent==i_capa_bona)
+								capa.visible=visible;
+							else
+								capa_seguent.visible="ara_no";
+						}
+					}
+				}
+			}
 		}
 	}
 }

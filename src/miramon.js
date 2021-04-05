@@ -1363,25 +1363,26 @@ function CalculaNColNFilVistaImprimir(ncol,nfil)
 {
 var factor_mapa=(ParamInternCtrl.vista.EnvActual.MaxY-ParamInternCtrl.vista.EnvActual.MinY)/(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX);
 var factor_paper=nfil/ncol;
-var i;
+var i, capa;
 	if (factor_mapa>factor_paper)
 	{
-	    VistaImprimir.nfil=nfil;
-	    VistaImprimir.ncol=floor_DJ(nfil/factor_mapa);
+		VistaImprimir.nfil=nfil;
+		VistaImprimir.ncol=floor_DJ(nfil/factor_mapa);
 	}
 	else
 	{
-	    VistaImprimir.ncol=ncol;
-	    VistaImprimir.nfil=floor_DJ(ncol*factor_mapa);
+		VistaImprimir.ncol=ncol;
+		VistaImprimir.nfil=floor_DJ(ncol*factor_mapa);
 	}
 	var costat;
 	if (!(plantilla_dimpressio_intern[IPlantillaDImpressio].CalImprimir&RespectarResolucioVistaImprimir))
 	{
-	    for (i=0; i<ParamCtrl.capa.length; i++)
-	    {
-			if (EsCapaVisibleAAquestNivellDeZoom(i) &&
-				DonaTipusServidorCapa(ParamCtrl.capa[i])!="TipusWMS" &&
-				DonaTipusServidorCapa(ParamCtrl.capa[i])!="TipusOAPI_Maps")
+		for (i=0; i<ParamCtrl.capa.length; i++)
+		{
+			capa=ParamCtrl.capa[i];
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) &&
+				DonaTipusServidorCapa(capa)!="TipusWMS" &&
+				DonaTipusServidorCapa(capa)!="TipusOAPI_Maps")
 			{
 				//Hi ha 1 capa (o més) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
 				costat=(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/VistaImprimir.ncol;
@@ -2601,7 +2602,7 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 {
 	if (window.document.form_coord && window.document.form_coord.info_coord)
 	{
-		var cdns=[], i, j, vista;
+		var cdns=[], i, j, vista, capa;
 		cdns.push(DonaValorDeCoordActual(x, y, false, false));
 
 		vista=DonaVistaDesDeINovaVista(i_nova_vista);
@@ -2613,10 +2614,11 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 		{
 			for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 			{
-				if (EsCapaVisibleAAquestNivellDeZoom(i_capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
-					ParamCtrl.capa[i_capa].model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
+				capa=ParamCtrl.capa[i_capa];
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
+					capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
 				{
-					var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, ParamCtrl.capa[i_capa], null, i, j));
+					var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j));
 					if (s=="")
 						continue;
 					if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
@@ -2810,7 +2812,7 @@ var i_pan_vista;
 			if (capa.model==model_vector)
 			{
 				//if (capa.visible!="no" &&  EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				if (EsCapaVisibleAAquestNivellDeZoom(i) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
 				{
 					if (!capa.objectes || !capa.objectes.features)
 						continue;
@@ -2821,7 +2823,7 @@ var i_pan_vista;
 		    }
 			else 
 			{
-				if (EsCapaVisibleAAquestNivellDeZoom(i) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
 				{
 					elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+i);
 					if ((DonaTipusServidorCapa(capa)=="TipusWMS_C" || DonaTipusServidorCapa(capa)=="TipusWMTS_REST" || DonaTipusServidorCapa(capa)=="TipusWMTS_KVP" 
@@ -2920,7 +2922,7 @@ var elem=getLayer(window, "atribucio");
 			for (i=0; i<ParamCtrl.capa.length; i++)
 			{
 				var capa=ParamCtrl.capa[i];
-				if (EsCapaVisibleAAquestNivellDeZoom(i) && EsCapaVisibleEnAquestaVista(0/*i_vista*/, i) && capa.atribucio)
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(0/*i_vista*/, i) && capa.atribucio)
 					atrib.push(DonaCadena(capa.atribucio));
 			}
 		}		
@@ -3650,9 +3652,8 @@ function DonaNomFitxerMetadades(capa, i_estil)
 	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null);
 }
 
-function EsCapaVisibleAAquestNivellDeZoom(i)
+function EsCapaVisibleAAquestNivellDeZoom(capa)
 {
-var capa=ParamCtrl.capa[i];
 	if ((capa.visible=="si" || capa.visible=="semitransparent") &&
 	    EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa))
 		return true;
@@ -5309,7 +5310,7 @@ var p, unitats_CRS;
 				if (capa.visible!="no")
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: 
-											((EsCapaVisibleAAquestNivellDeZoom(i) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,  
+											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,  
 											((capa.FormatImatge=="application/x-img") ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
 				}
 			}
@@ -5382,9 +5383,9 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
 		{
-			barra_slider.push("<span style='position: absolute; bottom: 0; right: 100;' class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\"><font face=arial size=2>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), ":</font>",
+			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), ": ",
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
-					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' style=';' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
+					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
 			if (ParamInternCtrl.millisegons.length<300/2)
 			{
@@ -5412,12 +5413,12 @@ var p, unitats_CRS;
 			if (capa.model==model_vector)
 			{
 				//if (EsObjDigiVisibleAAquestNivellDeZoom(capa))
-				if (EsCapaVisibleAAquestNivellDeZoom(i) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
 					setTimeout("OmpleVistaCapaDigi(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 			}
 			else
 			{
-				if (EsCapaVisibleAAquestNivellDeZoom(i) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
+				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
 					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)

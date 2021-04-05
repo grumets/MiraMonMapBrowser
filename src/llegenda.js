@@ -788,7 +788,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 					continue;
 				capa2=ParamCtrl.capa[i_capa];
 				if (capa.grup==capa2.grup && 
-				    EsCapaVisibleAAquestNivellDeZoom(i_capa))
+				    EsCapaVisibleAAquestNivellDeZoom(capa2))
 				{
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
 					if (!(ParamCtrl.LlegendaGrupsComARadials==true))
@@ -820,7 +820,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 			CanviaEstatConsultableCapa(window.document["c_ll_capa"+i],i);
 		if (capa.model==model_vector)
 		{
-			if (EsCapaVisibleAAquestNivellDeZoom(i) && capa.objectes && capa.objectes.features)
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) && capa.objectes && capa.objectes.features)
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
@@ -834,7 +834,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		}
 		else
 		{
-			if (EsCapaVisibleAAquestNivellDeZoom(i))
+			if (EsCapaVisibleAAquestNivellDeZoom(capa))
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
@@ -893,7 +893,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 	{
 		//pas a semitransparent
 		CanviaEstatVisibleISiCalDescarregableCapa(i,"semitransparent");
-		if (EsCapaVisibleAAquestNivellDeZoom(i))
+		if (EsCapaVisibleAAquestNivellDeZoom(capa))
 		{
 			for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
@@ -1057,7 +1057,7 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 	}
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
-		if (EsCapaVisibleAAquestNivellDeZoom(i_capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
+		if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
 		{
 			if (capa.model==model_vector)
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);

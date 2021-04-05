@@ -244,6 +244,12 @@ if(!Array.prototype.find)
   	};
 }
 
+/*Note about .sort(): https://www.w3schools.com/jsref/jsref_sort.asp
+By default, the sort() method sorts the values as strings in alphabetical and ascending order.
+Because of this, the sort() method will produce an incorrect result when sorting numbers.
+You can fix this by providing a "compare function"
+Això és diferent de com funcionen les meves funcions sense funció de comparació.*/
+
 /*
  * Binary search (bsearch) in a sorted array (from https://oli.me.uk/2013/06/08/searching-javascript-arrays-with-a-binary-search   http://jsfiddle.net/aryzhov/pkfst550/
  * Returns 

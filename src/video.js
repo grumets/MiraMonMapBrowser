@@ -638,11 +638,11 @@ var capa, i_estil;
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{	
 		capa=ParamCtrl.capa[i_capa];
-		i_estil=DonaIEstilFotograma(i_capa, estil);
-		if (EsCapaAptePerVideo(capa) &&
-		    capa.NomVideo==nom_video &&
-			i_estil!=null)
-		{				
+		if (EsCapaAptePerVideo(capa) && capa.NomVideo==nom_video)
+		{			
+			i_estil=DonaIEstilFotograma(i_capa, estil);
+			if (i_estil==null)
+				break;
 			for (var i_data=0; i_data<capa.data.length; i_data++)
 			{
 				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
@@ -944,6 +944,7 @@ var capa, estil, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 					}
 				}
 			}
+			break;  //Assumeixo que totes les capes que formen part d'aquest video tenen els mateixos estils.
 		}
 	}
 
