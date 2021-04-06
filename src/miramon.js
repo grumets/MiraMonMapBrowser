@@ -5353,7 +5353,7 @@ var p, unitats_CRS;
 			barra_slider.push("<tr><td align='center'>");
 			if (ParamCtrl.VistaBotonsZoom==true)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, ", (DonaIndexNivellZoom(vista.CostatZoomActual)+1), ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
 				barra_slider.push("<br>");
 			}
 			if (ParamCtrl.VistaSliderZoom==true && (parseInt(document.getElementById("vista").style.height,10) >= 500))
@@ -5362,7 +5362,7 @@ var p, unitats_CRS;
 			}
 			if (ParamCtrl.VistaBotonsZoom==true)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, ", (DonaIndexNivellZoom(vista.CostatZoomActual)-1), ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
 			}
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
@@ -5383,7 +5383,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
 		{
-			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), ": ",
+			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), 
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
