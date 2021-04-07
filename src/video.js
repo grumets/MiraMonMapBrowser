@@ -24,7 +24,7 @@
     dins del grup del MiraMon. MiraMon és un projecte del 
     CREAF que elabora programari de Sistema d'Informació Geogràfica 
     i de Teledetecció per a la visualització, consulta, edició i anàlisi 
-    de mapes ràsters i vectorials. Aquest progamari programari inclou
+    de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
     No tots aquests productes són gratuïts o de codi obert. 
     
@@ -578,13 +578,13 @@ var cdns=[], capa, estil;
 		for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
 		{
 			capa=ParamCtrl.capa[i_capa_video_actiu];
-			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo)
+			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo && capa.estil)
 			{
 				//Em quedo amb el primer i no em complico: Si n'hi ha més d'un haurien de ser iguals.
 				//De fet, cal limitar-ho a animacions d'una sola capa de moment.
 
 				estil=capa.estil[DonaIEstilFotograma(i_capa_video_actiu, estil)];
-				if (capa.FormatImatge=="application/x-img" && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
+				if (capa.FormatImatge=="application/x-img" && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
 				{
 					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
 						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"return PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);\">");
