@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -125,12 +125,12 @@ function EsborrarEstilCapa(i_capa, i_estil)
 function TancaContextMenuCapa()
 {
 	var elem=getLayer(window, "menuContextualCapa");
-	hideLayer(elem);	
+	hideLayer(elem);
 }
 
 function MouLayerContextMenuCapa(event, s)
 {
-	//Crear la layer i mostrar-ho en la posició on s'ha fet el clic amb aquest contingut	
+	//Crear la layer i mostrar-ho en la posició on s'ha fet el clic amb aquest contingut
 	var menu=getLayer(window, "menuContextualCapa");
 
 	if (isLayer(menu))
@@ -143,9 +143,9 @@ function MouLayerContextMenuCapa(event, s)
 		if(menu_text && menu_marc)
 		{
 			var rec=getRectLayer(menu_text);
-	
+
 			var mida=event.clientY+((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+parseInt(rec.alt);
-	
+
 			var rec_naveg=getRectLayer(window.document.body);
 			if(mida>=rec_naveg.alt)
 				y=event.clientY-parseInt(rec.alt);
@@ -156,7 +156,7 @@ function MouLayerContextMenuCapa(event, s)
 		}
 		else
 			changePosAndShowLayer(menu, event.clientX, y);
-			
+
 		setzIndexLayer(menu,(layerList.length-1));
 		if(menu_text)
 			setzIndexLayer(menu_text,(layerList.length-1));
@@ -173,7 +173,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraModificaNomCapa(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}), "</a><br>");
 	cdns.push("<hr>");
-	
+
 	if(ParamCtrl.BarraBotoAfegeixCapa==true)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
@@ -229,14 +229,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Metadades", "spa":"Metadatos", "eng":"Metadata", "fre":"Métadonnées"}), "</a><br>");		
+				DonaCadenaLang({"cat":"Metadades", "spa":"Metadatos", "eng":"Metadata", "fre":"Métadonnées"}), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
 	if (/*(capa.tipus=="TipusWMS" && capa.FormatImatge=="application/x-img") ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}), "</a><br>");		
+				DonaCadenaLang({"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -252,7 +252,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage))
 		{
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");		
+					DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
@@ -268,7 +268,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	{
 		cdns.push("<hr>");
 		alguna_opcio=false;
-	}	
+	}
 	if (capa.estil && capa.estil.length==1)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
@@ -325,10 +325,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	{
 		cdns.push("<hr>");
 		alguna_opcio=false;
-	}	
+	}
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				DonaCadenaLang({"cat":"Recupera estils", "spa":"Recupera estilos", "eng":"Retrieve styles", "fre":"Récupérer les styles"}), "</a><br>");
-	
+
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
@@ -399,19 +399,19 @@ var capa=ParamCtrl.capa[i_capa];
 }
 
 function CompartirEstilCapa(i_capa, i_estil)
-{	
+{
 var s, text="";
 var capa=ParamCtrl.capa[i_capa];
 
 	//el TARGET de l'estil compartit és la seva capa "mare"
 	if (!(s=DonaCodeCapaEstilFeedback(i_capa, -1)))
 		return;
-		
+
 	//Eliminem els Item de la llegenda quan aquesta és automàtica, per fer el "code" més petit
 	//·$· si això no es pot fer, o quan tenim paleta pròpia (pero ara pels estils propis encara no es pot) haurem de pensar que fer amb les URL llargues
-	
-	//·$· mirar si les funcions de neteja del jason treuen això de sota, i si es pot emancipar una "NetejaEstil" d'allà per usar-la aquí ·$·	
-	var estil_copia=JSON.parse(JSON.stringify(capa.estil[i_estil]));	
+
+	//·$· mirar si les funcions de neteja del jason treuen això de sota, i si es pot emancipar una "NetejaEstil" d'allà per usar-la aquí ·$·
+	var estil_copia=JSON.parse(JSON.stringify(capa.estil[i_estil]));
 	if (estil_copia.nItemLlegAuto)
 		delete estil_copia.ItemLleg;
 	if (estil_copia.histograma)
@@ -419,9 +419,9 @@ var capa=ParamCtrl.capa[i_capa];
 	if (estil_copia.component.length>1 && estil_copia.ItemLleg)
 		delete estil_copia.ItemLleg;
 
-	GUFCreateFeedbackWithReproducibleUsage([{title: DonaCadena(capa.desc), code: s, codespace: DonaServidorCapa(capa)}], 
+	GUFCreateFeedbackWithReproducibleUsage([{title: DonaCadena(capa.desc), code: s, codespace: DonaServidorCapa(capa)}],
 			{abstract: DonaCadena(capa.estil[i_estil].desc), specific_usage: DonaCadenaLang({"cat":"Compartir estil", "spa":"Compartir estilo", "eng":"Share style", "fre":"Partager style"}),
-			ru_code: JSON.stringify(estil_copia), ru_code_media_type: "application/json", 
+			ru_code: JSON.stringify(estil_copia), ru_code_media_type: "application/json",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_estil
 			/*, ru_sugg_app: location.href -> s'afegeix automàticament */},
 			ParamCtrl.idioma, "" /*access_token_type*/);
@@ -585,11 +585,11 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 	}
 	if(alguna_capa_afegida)
 	{
-		/*Si s'ha afegit alguna capa de servidor extern, relaxo les 
-                limitacions d'àmbit de navegació per poder-me sortir del mapa 
+		/*Si s'ha afegit alguna capa de servidor extern, relaxo les
+                limitacions d'àmbit de navegació per poder-me sortir del mapa
 		de situació. En realitat, el que voldria programar és que si la
                 capa que afegixo se surt del àmbit "relaxo" però si no, doncs no
-		però no sembla que NJ llegeixi l'àmbit de la capa i per això 
+		però no sembla que NJ llegeixi l'àmbit de la capa i per això
 		decideixo fer-ho més general*/
 		ParamCtrl.RelaxaAmbitVisualitzacio=true;
                 //Redibuixo el navegador perquè les noves capes siguin visibles
@@ -603,14 +603,14 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
 de si capa.splice() es fa abans o després de la crida a aquesta funció. Si capa.splice() es fa abans, els indexos encara tenen els valors antics igualment.
 També canvia els indexos de les variables ParamCtrl.ICapaVola* .
-'n_moviment' pot ser negatiu quan elimines capes o positiu quan insereixes. 
-'i_capa_ini' és la capa inicial (inclosa) per fer el canvi d'indexos. En eliminar capes eviteu usar la capa eliminada com a i_capa_ini 
-Si es fa un 'n_moviment' negatiu (eliminació de capes) que es combina amb capa.splice(), es pot fer servir 
+'n_moviment' pot ser negatiu quan elimines capes o positiu quan insereixes.
+'i_capa_ini' és la capa inicial (inclosa) per fer el canvi d'indexos. En eliminar capes eviteu usar la capa eliminada com a i_capa_ini
+Si es fa un 'n_moviment' negatiu (eliminació de capes) que es combina amb capa.splice(), es pot fer servir
 for (i=0 i<-n_moviment; i++)
     AvisaDeCapaAmbIndexosACapaEsborrada(i_capa_ini+i)
 	return;
 per avisar que hi ha capes que tenen indexos que apunten a capes que s'eliminen. Tot això ja es te en compte a EsborrarCapa().
-'i_capa_fi_per_sota' és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length), 
+'i_capa_fi_per_sota' és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length),
 	Opcional; si no s'especifica, només es mouen els index que coindideixen amb i_capa_ini.*/
 function CanviaIndexosCapesSpliceCapa(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl)
 {
@@ -992,10 +992,10 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 }
 
 function DonaIndexosACapesDeCalcul(calcul, i_capa)
-/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta, 
-per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa 
-en crear un flistre espacial a partir d'una banda de la mateixa capa 
-En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit */ 
+/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
+per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa
+en crear un flistre espacial a partir d'una banda de la mateixa capa
+En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit */
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
 
@@ -1013,7 +1013,7 @@ var fragment, cadena, i_capes=[], inici, final, nou_valor;
 		//interpreto el fragment metajson
 		nou_valor=JSON.parse(cadena);
 		if (typeof nou_valor.i_capa === "undefined" && typeof i_capa !== "undefined")
-			i_capes.push(i_capa);	
+			i_capes.push(i_capa);
 		else
 			i_capes.push(nou_valor.i_capa);
 		fragment=fragment.substring(final+1, fragment.length);
@@ -1121,7 +1121,7 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 
 	if (i_capes.length>1) //Si en l'expressió entra en joc més d'una capa -> la capa calculada és una capa nova
 	{
-		//pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil ·$·	
+		//pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil ·$·
 		ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
 			"versio": null,
 			"tipus": null,
@@ -1171,10 +1171,10 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 			"ProcesMostrarTitolCapa" : false,
 			"origen": "usuari"
 			});
-	
+
 		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
 			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
-	
+
 		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
 	  //Redibuixo el navegador perquè les noves capes siguin visibles
@@ -1184,7 +1184,7 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 	}
 	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
 	{
-		var capa=ParamCtrl.capa[i_capa];		
+		var capa=ParamCtrl.capa[i_capa];
 		capa.estil.push({
 				"nom":	null,
 				"desc":	(desc_capa) ? desc_capa : "Computed style",
@@ -1198,15 +1198,15 @@ var desc_capa=document.CalculadoraCapes.nom_estil.value;
 				"descColorMultiplesDe": 0.01,
 				"origen": "usuari"
 			});
-		
+
 			if (capa.visible=="ara_no")
 				CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
 			else
 				CreaLlegenda();
-		
+
 			//Defineix el nou estil com estil actiu
 			CanviaEstilCapa(i_capa, capa.estil.length-1, false);
-	}  
+	}
 }//Fi de AfegeixCapaCalcul()
 
 function AfegeixCapaCombicapaCategoric()
@@ -1228,7 +1228,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		 (!condicio[0].i_data && !condicio[1].i_data) ||
 		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) )
 	{
-		alert(DonaCadenaLang({"cat":"Cal triar dues capes diferents o la mateixa en estils i/o dates diferents.", 
+		alert(DonaCadenaLang({"cat":"Cal triar dues capes diferents o la mateixa en estils i/o dates diferents.",
 							 "spa":"Es necesario elegir dos capas diferentes o la misma en estilos y/o fechas diferentes.",
 							 "eng":"You should choose two different layers or the same in different styles and/or dates.",
 							 "fre": "You should  choose two different layers or the same in different styles and/or dates."}));
@@ -1237,7 +1237,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 
 	capa[0]=ParamCtrl.capa[i_capes[0]];
 	capa[1]=ParamCtrl.capa[i_capes[1]];
-	
+
 	//Creo la nova descripció de les categories i la nova paleta
 	categories=[capa[0].estil[condicio[0].i_estil].categories, capa[1].estil[condicio[1].i_estil].categories];
 	cat_noves=[];
@@ -1320,7 +1320,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + DonaCadenaLang({"cat": "i", "spa": "y", "eng": "and", "fre": "and"}) + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
 			"TipusObj": "P",
 			"component": [{
-				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil) + "+" + 
+				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil) + "+" +
 					DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil) + "*" + capa[0].estil[condicio[0].i_estil].categories.length,
 				"representacio": {
 					"tipus": "matriuConfusio",
@@ -1389,8 +1389,8 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		desc_value=TreuCometesDePrincipiIFinalDeCadena(linia_reclass.substring(i+1).trim());
 		linia_reclass=linia_reclass.substring(0,i);
 	}
-	
-	// Si faig un split i hi ha dos espais en blanc seguits, m'ho dividirà en un element per cada espai, i 
+
+	// Si faig un split i hi ha dos espais en blanc seguits, m'ho dividirà en un element per cada espai, i
 	// això no és el que vull
 	/* var elem_reclass = (linia_reclass.trim()).split(" ");
 	if(elem_reclass.length<2 || elem_reclass.length>3)
@@ -1398,7 +1398,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
 							 "spa": "Número de elementos incorrecto en la línea",
 							 "eng": "Wrong number of elements in line",
-							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);		
+							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);
 		return null;
 	}
 	old_value=elem_reclass[0];
@@ -1417,7 +1417,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		alert(DonaCadenaLang({"cat": "Format incorrecte dels valors a la línia",
 							 "spa": "Formato incorrecto de los valores en la línea",
 							 "eng": "Wrong values format in line",
-							 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);		
+							 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);
 		return null;
 	}*/
 	var elem_reclass =linia_reclass.trim();
@@ -1426,7 +1426,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 		alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
 							 "spa": "Número de elementos incorrecto en la línea",
 							 "eng": "Wrong number of elements in line",
-							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);		
+							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);
 		return null;
 	}
 	old_value=elem_reclass.substring(0,i);
@@ -1441,15 +1441,15 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
 							 "spa": "Número de elementos incorrecto en la línea",
 							 "eng": "Wrong number of elements in line",
-							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);		
+							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);
 			return null;
 		}
 	}
 	else
 		old_up_value=null;
-	
+
 	new_value=elem_reclass;
-	
+
 	// Ara he de buscar si cal les equivalències entre categories i valors
 	if(!categories)
 	{
@@ -1458,7 +1458,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			alert(DonaCadenaLang({"cat": "Format incorrecte dels valors a la línia",
 								 "spa": "Formato incorrecto de los valores en la línea",
 								 "eng": "Wrong values format in line",
-								 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);		
+								 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);
 			return null;
 		}
 		if(new_value.toUpperCase=="REMOVE")
@@ -1468,7 +1468,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			alert(DonaCadenaLang({"cat": "Format incorrecte dels valors a la línia",
 								 "spa": "Formato incorrecto de los valores en la línea",
 								 "eng": "Wrong values format in line",
-								 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);		
+								 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);
 			return null;
 		}
 	}
@@ -1490,13 +1490,13 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 				alert(DonaCadenaLang({"cat": "Valor a canviar incorrecte a la línia",
 								 "spa": "Valor a cambiar incorrecto en la línea",
 								 "eng": "Wrong old value in line",
-								 "fre": "Wrong old value in line"})+" "+i_linia+": "+linia_reclass);		
+								 "fre": "Wrong old value in line"})+" "+i_linia+": "+linia_reclass);
 				return null;
 			}
 		}
 		if(-1!=new_value.search(/["|']/i))  //no pot ser indexOf perquè és una regular expression
 		{
-			new_value=TreuCometesDePrincipiIFinalDeCadena(new_value.trim());			
+			new_value=TreuCometesDePrincipiIFinalDeCadena(new_value.trim());
 			for(i=0; i<categories.length; i++)
 			{
 				if(categories[i] && categories[i][atributs[0].nom].toLowerCase()==new_value.toLowerCase())
@@ -1530,7 +1530,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 				alert(DonaCadenaLang({"cat": "Valor a canviar incorrecte a la línia",
 								 "spa": "Valor a cambiar incorrecto en la línea",
 								 "eng": "Wrong old value in line",
-								 "fre": "Wrong old value in line"})+" "+i_linia+": "+linia_reclass);		
+								 "fre": "Wrong old value in line"})+" "+i_linia+": "+linia_reclass);
 				return null;
 			}
 		}
@@ -1679,9 +1679,9 @@ var minim, maxim, factor_k, factorpixel;
 	//Començo pel sistema de referència
 	//versió 1.0.0, 1.1.0 i 1.1.1 en l'estil antic --> un únic element amb els diversos sistemes de referència separats per espais (SRS)
     //versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
-	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)	
-	
-	
+	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)
+
+
 	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
 	{
 		factor_k=120000*1000/0.28;  //pas de graus a mm dividit per la mida de píxel
@@ -1693,7 +1693,7 @@ var minim, maxim, factor_k, factorpixel;
 		factorpixel=1; //de m a m
 	}
 
-	//Això no ho puc usar perquè em dona els elements SRS de node i dels seus fills node.getElementsByTagName('SRS');	 
+	//Això no ho puc usar perquè em dona els elements SRS de node i dels seus fills node.getElementsByTagName('SRS');
 	for(i=0; i<node.childNodes.length; i++)
 	{
 		node2=node.childNodes[i];
@@ -1721,7 +1721,7 @@ var minim, maxim, factor_k, factorpixel;
 			if(node2.nodeName=="Name")
 			{
 				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]=new CreaCapaServidor();				
+				servidorGC.layer[servidorGC.layer.length]=new CreaCapaServidor();
 				servidorGC.layer[servidorGC.layer.length-1].nom=node2.childNodes[0].nodeValue;
 				//hereto les coses del pare
 				if(pare)
@@ -1790,11 +1790,11 @@ var minim, maxim, factor_k, factorpixel;
 					if(node2.childNodes.length>0)
 						valors_temps=node2.childNodes[0].nodeValue;
 				}
-			}	
+			}
 			//Miro si és consultable
-			if(node.getAttribute('queryable')=='1') 
+			if(node.getAttribute('queryable')=='1')
 			{
-				servidorGC.layer[servidorGC.layer.length-1].consultable=true;			
+				servidorGC.layer[servidorGC.layer.length-1].consultable=true;
 			}
 			if(valors_temps!=null)
 			{
@@ -1810,7 +1810,7 @@ var minim, maxim, factor_k, factorpixel;
 						var data_defecte;
 						OmpleDataJSONAPartirDeDataISO8601(data_defecte, temps_defecte);
 					}
-					servidorGC.layer[servidorGC.layer.length-1].data=[];			
+					servidorGC.layer[servidorGC.layer.length-1].data=[];
 					dates=valors_temps.split(",");
 					for(i=0; i<dates.length; i++)
 					{
@@ -1831,10 +1831,10 @@ var minim, maxim, factor_k, factorpixel;
 				}
 			}
 		}
-	}	
-	
+	}
+
 	//Si aquesta layer té fills continuo llegint
-	node2=node.getElementsByTagName('Layer');	
+	node2=node.getElementsByTagName('Layer');
 	if(node2)
 	{
 		var pare2=servidorGC.layer[servidorGC.layer.length-1];
@@ -1867,21 +1867,21 @@ function HiHaAlgunErrorDeParsejat(doc)
 function ParsejaRespostaGetCapabilities(doc, servidorGC)
 {
 var root, cadena, node, node2, i, j, cdns=[];
-	
-	if(!doc) 
+
+	if(!doc)
 	{
-		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat", 
+		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat",
 						  "spa":"No se ha obtenido ninguna respuesta válida del servidor solicitado",
 						  "eng":"Cannot obtain any valid response of server",
 						  "fre":"Aucune réponse valide a été obtenue depuis le serveur sollicité"}));
-		return;	
+		return;
 	}
 	if(HiHaAlgunErrorDeParsejat(doc))
 		return;
-	root=doc.documentElement;		
-	if(!root) 
+	root=doc.documentElement;
+	if(!root)
 	{
-		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat", 
+		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat",
 						  "spa":"No se ha obtenido ninguna respuesta válida del servidor solicitado",
 						  "eng":"Cannot obtain any valid response of server",
 						  "fre":"Aucune réponse valide a été obtenue depuis le serveur sollicité"}));
@@ -1891,31 +1891,31 @@ var root, cadena, node, node2, i, j, cdns=[];
 	//Cal comprovar que és un document de capacitats, potser és un error, en aquest cas el llegeix-ho i el mostraré directament
 	if(root.nodeName!="WMT_MS_Capabilities")
 	{
-		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat", 
+		alert(DonaCadenaLang({"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat",
 						  "spa":"No se ha obtenido ninguna respuesta válida del servidor solicitado",
 						  "eng":"Cannot obtain any valid response of server",
 						  "fre":"Aucune réponse valide a été obtenue depuis le serveur sollicité"}));
 		//·$· mirar de possar el que ens ha retornat el servidor
 		return;
 	}
-	
+
 	//Obtinc la versió de les capacitats
-	cadena=root.getAttribute('version');	
+	cadena=root.getAttribute('version');
 	servidorGC.versio={"Vers": parseInt(cadena.substr(0,1),10), "SubVers": parseInt(cadena.substr(2,1),10), "VariantVers": parseInt(cadena.substr(4),10)};
-	
+
 	//Obtinc el títol del servidor, és obligatòri però podria ser que algun servidor posses el tag sense valor
 	servidorGC.titol="";
-	node=root.getElementsByTagName('Service')[0];	
+	node=root.getElementsByTagName('Service')[0];
 	if(node)
 	{
 		node2=node.getElementsByTagName('Title')[0];
-		if(node2 && node2.hasChildNodes())	
+		if(node2 && node2.hasChildNodes())
 			servidorGC.titol=node2.childNodes[0].nodeValue;
 	}
-	
+
 	//Selecciono el node request
 	node=(root.getElementsByTagName('Capability')[0]).getElementsByTagName('Request')[0];
-	
+
 	//Formats de visualització
 	if(servidorGC.versio.Vers==1 && servidorGC.versio.SubVers==0)
 	{
@@ -1976,7 +1976,7 @@ var root, cadena, node, node2, i, j, cdns=[];
 			}
 		}
 	}
-		
+
 	//Llegeix-ho les capes disponibles en el sistema de referència actual del navegador
 	node=root.getElementsByTagName('Capability')[0];
 	for(i=0; i<node.childNodes.length; i++)
@@ -1991,7 +1991,7 @@ var root, cadena, node, node2, i, j, cdns=[];
 	if(servidorGC.layer.length>0)
 	{
 		cdns.push("<b>",
-			  	DonaCadenaLang({"cat":"URL del servidor:", "spa":"URL del servidor:", "eng":"server URL:", "fre":"URL du serveur:"}),			  
+			  	DonaCadenaLang({"cat":"URL del servidor:", "spa":"URL del servidor:", "eng":"server URL:", "fre":"URL du serveur:"}),
 			  	"</b><br><input type=\"text\" name=\"servidor\" readOnly style=\"width:400px;\" value=\"",
 			  	servidorGC.servidor, "\" />",
 				  "<br><br><b>",
@@ -2001,11 +2001,11 @@ var root, cadena, node, node2, i, j, cdns=[];
 	  		cdns.push(" value=\"",servidorGC.titol, "\"");
 		cdns.push(" /><br><br><hr><br><div class=\"layerselectorcapesafegir\">",
 				  "<b>",DonaCadenaLang({"cat":"Capes","spa":"Capas","eng":"Layers","fre":"Couches"}),"</b><br>",
-				  "<input name=\"seltotes_capes\" onclick=\"SeleccionaTotesLesCapesDelServidor(form);\" type=\"checkbox\" />", 
+				  "<input name=\"seltotes_capes\" onclick=\"SeleccionaTotesLesCapesDelServidor(form);\" type=\"checkbox\" />",
 				  DonaCadenaLang({"cat":"Seleccionar totes les capes", "spa":"Seleccionar todas las capas", "eng":"Select all layers", "fre":"Sélectionner toutes les couches"}), "<br><br><table class=\"Verdana11px\">");
 		for(i=0; i<servidorGC.layer.length; i++)
 		{
-			cdns.push("<tr><td><input name=\"sel_capes\" value=\"", i, "\" type=\"checkbox\">", 
+			cdns.push("<tr><td><input name=\"sel_capes\" value=\"", i, "\" type=\"checkbox\">",
 					(servidorGC.layer[i].desc? servidorGC.layer[i].desc : servidorGC.layer[i].nom));
 			cdns.push("</td><td><select name=\"format_capa_", i, "\" class=\"Verdana11px\">");
 			for(j=0; j<servidorGC.formatGetMap.length; j++)
@@ -2013,11 +2013,11 @@ var root, cadena, node, node2, i, j, cdns=[];
 			cdns.push("</select></td></tr>");
 		}
 		cdns.push("</table></div><br>",
-				  "<input type=\"button\" class=\"Verdana11px\" value=\"",				
-				  DonaCadenaLang({"cat":"Afegir\"", "spa":"A&ntilde;adir\"", "eng":"Add\"", "fre":"Ajouter\""}), 
+				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
+				  DonaCadenaLang({"cat":"Afegir\"", "spa":"A&ntilde;adir\"", "eng":"Add\"", "fre":"Ajouter\""}),
 				  " onClick='AfegirCapesAlNavegador(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
-				  "<input type=\"button\" class=\"Verdana11px\" value=\"",				
-				  DonaCadenaLang({"cat":"Cancel·lar\"", "spa":"Cancelar\"", "eng":"Cancel\"", "fre":"Annuler\""}), 
+				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
+				  DonaCadenaLang({"cat":"Cancel·lar\"", "spa":"Cancelar\"", "eng":"Cancel\"", "fre":"Annuler\""}),
 				  " onClick='TancaFinestraLayer(\"afegirCapa\");' />");
 		document.getElementById("LayerAfegeixCapaServidor").innerHTML=cdns.join("");
 	}
@@ -2040,11 +2040,11 @@ var request;
 
 	if(!servidor || servidor=="")
 	{
-		
+
 		//·$· Crec que caldria mirar més a fons que l'adreça sigui vàlida
-		alert(DonaCadenaLang({"cat":"Cal indicar una adreça vàlida", 
-							 "spa":"Se debe indicar una dirección válida", 
-							 "eng":"Its necessary indicated a valid URL", 
+		alert(DonaCadenaLang({"cat":"Cal indicar una adreça vàlida",
+							 "spa":"Se debe indicar una dirección válida",
+							 "eng":"Its necessary indicated a valid URL",
 							 "fre":"Vous devez indiquer une adresse valide"}));
 		return;
 	}
@@ -2079,7 +2079,7 @@ var i, j;
 		i++;
 	j=0;
 	form.llista_serveis_OWS.options[j]=new Option(DonaCadenaLang({"cat":"--Seleccciona'n un de la llista--", "spa":"--Escoja uno de la lista--","eng": "--Choose one from list--", "fre":"--Sélectionnez un objet de la liste--"}), "");
-	j++;	
+	j++;
 	while(i<LlistaServOWS.length && categoria_sel==DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 	{
 		form.llista_serveis_OWS.options[j]=new Option(DonaCadena(LlistaServOWS[i].nom), LlistaServOWS[i].url);
@@ -2101,7 +2101,7 @@ function OrdenacioServOWSPerCategoriaINom(a,b) {
 	//Ascendent per identificador i descendent per data
     var x = DonaCadena(a.categoria.desc);
     var y = DonaCadena(b.categoria.desc);
-	
+
 	//podria ser que en un dels idiomes no estigués indicat
 	if(x==null && y==null)
 		return 0;
@@ -2160,7 +2160,7 @@ var calcul=document.CalculadoraCapes.calcul;
 	calcul.focus();
 	if (sufix)
 		calcul.value = calcul.value.substring(0, calcul.selectionStart)+ prefix + calcul.value.substring(calcul.selectionStart, calcul.selectionEnd) + sufix + calcul.value.substring(calcul.selectionEnd);
-	else 
+	else
 		calcul.value = calcul.value.substring(0, calcul.selectionStart)+ prefix + calcul.value.substring(calcul.selectionEnd);
 }
 
@@ -2198,7 +2198,7 @@ var cdns=[];
 	cdns.push("<br><fieldset><legend>",
 			  "Supported reclassification formats:</legend>",
 			  "<span class=\"Verdana11px\">",
-			  "<b>Unique value or category:</b> old new;new_description<br>",			  
+			  "<b>Unique value or category:</b> old new;new_description<br>",
 			  "<b>Interval:</b> old old_just_below new new_description<br><br>",
 			  "Help in mode \"Unique value\":<br>",
 			  "If you want to assign 3 to values equal to 5 and 2 to values equal to 4, please write:<br>",
@@ -2212,7 +2212,7 @@ var cdns=[];
 			  "<pre>	5	7	9;crops</pre>",
 			  "(please note that in this case 7 is NOT assigned to 9 since the upper limit is always open)<br>",
 			  "If you want to delete the values comprised within the interval [5,7), please write:<br>",
-			  "<pre>	5	7	REMOVE</pre>",			  
+			  "<pre>	5	7	REMOVE</pre>",
 			  "</span></fieldset>");
 	return cdns.join("");
 }
@@ -2236,34 +2236,34 @@ var cdns=[], i, capa;
 
 	cdns.push("<form name=\"ReclassificadoraCapes\" onSubmit=\"return false;\">");
 	capa=ParamCtrl.capa[i_capa];
-	
+
 	cdns.push("<br><fieldset><legend>",
-			  DonaCadenaLang({"cat":"Afegeix capa reclassificada com un nou estil", "spa":"Añada capa reclasificada como un nuevo estilo", 
+			  DonaCadenaLang({"cat":"Afegeix capa reclassificada com un nou estil", "spa":"Añada capa reclasificada como un nuevo estilo",
 							"eng":"Add reclassified layer as a new style", "fre":"Ajouter une couche reclassée en tant que nouveau style"}),
 			  "</legend>",
 			  "<fieldset><legend>",
 			  DonaCadenaLang({"cat":"Capa a reclassificar ", "spa":"Capa a reclasificar ", "eng":"Layer to reclassify", "fre":"Couche à reclassifier"}),
-			  "</legend>", 
-			  "<input type=\"hidden\" value=\"",i_capa,"\" id=\"", prefix_id, "-valor-capa-",0,"\" name=\"","valor_capa", 0, "\" />", DonaCadena(capa.DescLlegenda), "<br>", 
+			  "</legend>",
+			  "<input type=\"hidden\" value=\"",i_capa,"\" id=\"", prefix_id, "-valor-capa-",0,"\" name=\"","valor_capa", 0, "\" />", DonaCadena(capa.DescLlegenda), "<br>",
 			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true}),
 			  "</fieldset>");
-			  
+
 	cdns.push(DonaCadenaLang({"cat":"Fórmula de reclassificació", "spa":"Fórmula de reclasificación:", "eng":"Reclassifying expression", "fre":"Formule de reclassement"}),
-				"<input type=\"button\" class=\"Verdana11px\" value=\"i\" onClick='IniciaFinestraInformacio(DonaCadenaInfoReclassificacio());'/>",									 
+				"<input type=\"button\" class=\"Verdana11px\" value=\"i\" onClick='IniciaFinestraInformacio(DonaCadenaInfoReclassificacio());'/>",
 				":<br><textarea name=\"reclassificacio\" class=\"Verdana11px\" style=\"width:440px;height:100\" ></textarea><br>",
 				"<hr>",
-				DonaCadenaLang({"cat":"El resultat de la reclassificació serà afegit com a un estil nou de nom", "spa":"El resultado de la reclasssificación será añadido como un estilo nuevo de nombre", 
-								"eng":"The result of the reclassification will be added as a new style with name", "fre":"Le résultat du reclassement sera ajouté en tant que nouveau style avec le nom"}), 
+				DonaCadenaLang({"cat":"El resultat de la reclassificació serà afegit com a un estil nou de nom", "spa":"El resultado de la reclasssificación será añadido como un estilo nuevo de nombre",
+								"eng":"The result of the reclassification will be added as a new style with name", "fre":"Le résultat du reclassement sera ajouté en tant que nouveau style avec le nom"}),
 				" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"",
 				DonaNomNouEstilReclassificacio(prefix_id, i_capa, (capa.estil && capa.estil.length>1) ? capa.i_estil : 0),
 				"\" /><br/>",
-				DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}), 
+				DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}),
 				" \"", DonaCadena(capa.DescLlegenda), "\"<br/>",
-				"<input type=\"button\" class=\"Verdana11px\" value=\"",				
-				DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
-				"\" onClick='AfegeixEstilReclassificacio(\"",prefix_id,"\",",i_capa,");TancaFinestraLayer(\"reclassificaCapa\");' />");			
+				"<input type=\"button\" class=\"Verdana11px\" value=\"",
+				DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}),
+				"\" onClick='AfegeixEstilReclassificacio(\"",prefix_id,"\",",i_capa,");TancaFinestraLayer(\"reclassificaCapa\");' />");
 	cdns.push("</<fieldset></form>");
-	return cdns.join("");	
+	return cdns.join("");
 }
 
 
@@ -2277,7 +2277,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 		if (EsIndexCapaVolatil(i, ParamCtrl))
 			continue;
 		capa=ParamCtrl.capa[i];
-		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
+		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 			capa.FormatImatge!="application/x-img" || !capa.valors)
 			continue;
 		hi_ha_rasters++;
@@ -2295,26 +2295,26 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 		//Posar uns desplegables de capes, estils i dates
 		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
 		//Posar un botó d'afegir a la fórmula
-		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Escriu a la fórmula", "spa":"Escribe en fórmula", "eng":"Write in expression", "fre":"Ecrire à la formule"}), 
+		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     	DonaCadenaLang({"cat":"Escriu a la fórmula", "spa":"Escribe en fórmula", "eng":"Write in expression", "fre":"Ecrire à la formule"}),
 		        "\" onClick='EscriuCapaALaFormulaAfegeixCapa();' /></fieldset>");
 		cdns.push("<fieldset><legend>",
 		//Botons operadors i funcions per a la fórmula
 				DonaCadenaLang({"cat":"Operadors i funcions per a la fórmula", "spa":"Operadores y funciones para la fórmula", "eng":"Operators and functions for the expression", "fre":"Opérateurs et fonctions pour l'expression"}),
 			  "</legend>");
-				operacio=[{text: "&equals;",prefix: "=",  size: "width:40px"}, 	
-						  {text: ">=", 		prefix:">=",  size: "width:40px"}, 
-						  {text: "<", 		prefix: "<",  size: "width:40px"}, 
-						  {text: "AND", 	prefix: "&&", size: "width:40px"}, 
-						  {text: "XOR", 	prefix: "^",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"}, 
+				operacio=[{text: "&equals;",prefix: "=",  size: "width:40px"},
+						  {text: ">=", 		prefix:">=",  size: "width:40px"},
+						  {text: "<", 		prefix: "<",  size: "width:40px"},
+						  {text: "AND", 	prefix: "&&", size: "width:40px"},
+						  {text: "XOR", 	prefix: "^",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "7", 		prefix: "7",  size: "width:30px"},
 						  {text: "8", 		prefix: "8",  size: "width:30px"},
 						  {text: "9", 		prefix: "9",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "/", 		prefix: "/",  size: "width:30px", separa: "<br>"},
-						  {text: "=/=", 	prefix: "!=", size: "width:40px"}, 	
-						  {text: "<=", 		prefix: "<=", size: "width:40px"}, 
-						  {text: ">", 		prefix: ">",  size: "width:40px"}, 
-						  {text: "OR", 		prefix: "||", size: "width:40px"}, 
+						  {text: "&NotEqual;", 	prefix: "!=", size: "width:40px"},
+						  {text: "<=", 		prefix: "<=", size: "width:40px"},
+						  {text: ">", 		prefix: ">",  size: "width:40px"},
+						  {text: "OR", 		prefix: "||", size: "width:40px"},
 						  {text: "NOT", 	prefix: "!",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "4", 		prefix: "4",  size: "width:30px"},
 						  {text: "5", 		prefix: "5",  size: "width:30px"},
@@ -2329,27 +2329,27 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 						  {text: "2", 		prefix: "2",  size: "width:30px"},
 						  {text: "3", 		prefix: "3",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "-", 		prefix: "-",  size: "width:30px", separa: "<br>"},
-						  {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"}, 
-						  {text: "ABS", 	prefix: "Math.abs   (", sufix: ")", size: "width:40px"}, 
-						  {text: "E", 		prefix: "Math.E", size: "width:40px"},
-						  {text: "(", 		prefix: "(",  size: "width:40px"}, 
+              {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"},
+						  {text: "Abs", 	prefix: "Math.abs   (", sufix: ")", size: "width:40px"},
+						  {text: "e", 		prefix: "Math.E", size: "width:40px"},
+						  {text: "(", 		prefix: "(",  size: "width:40px"},
 						  {text: ")", 		prefix: ")",  size: "width:40px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "pi", 		prefix: "Math.PI", size: "width:30px"},
 						  {text: "0", 		prefix: "0",  size: "width:30px"},
 						  {text: ".", 		prefix: ".",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "&plus;", 	prefix: "+",  size: "width:30px", separa: "<br><br>"},
-						  {text: "SIN",     prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
-						  {text: "ASIN",    prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
-						  {text: "COS",     prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
-						  {text: "ACOS",    prefix: "Math.acos	(", sufix: ")", size: "width:62px"},
-						  {text: "TAN",   	prefix: "Math.tan	(", sufix: ")", size: "width:62px"},
-						  {text: "ATAN",  	prefix: "Math.atan	(", sufix: ")", size: "width:62px", separa: "<br>"},
-						  {text: "SING",    prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
-						  {text: "ASING",   prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
-						  {text: "COSG",    prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
-						  {text: "ACOSG",   prefix: "Math.acos	(", sufix: ")", size: "width:62px"},
-						  {text: "TANG",  	prefix: "Math.tan	(", sufix: ")", size: "width:62px"},
-						  {text: "ATANG", 	prefix: "Math.atan	(", sufix: ")", size: "width:62px"}
+						  {text: "sin",     prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
+						  {text: "asin",    prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
+						  {text: "cos",     prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
+						  {text: "acos",    prefix: "Math.acos	(", sufix: ")", size: "width:62px"},
+						  {text: "tan",   	prefix: "Math.tan	(", sufix: ")", size: "width:62px"},
+						  {text: "atan",  	prefix: "Math.atan	(", sufix: ")", size: "width:62px", separa: "<br>"},
+						  {text: "sing",    prefix: "Math.sin	(", sufix: "*Math.PI/180)", size: "width:62px"},
+						  {text: "asing",   prefix: "Math.asin	(", sufix: ")*180/Math.PI", size: "width:62px"},
+						  {text: "cosg",    prefix: "Math.cos	(", sufix: "*Math.PI/180)", size: "width:62px"},
+						  {text: "acosg",   prefix: "Math.acos	(", sufix: ")*180/Math.PI", size: "width:62px"},
+						  {text: "tang",  	prefix: "Math.tan	(", sufix: "*Math.PI/180)", size: "width:62px"},
+						  {text: "atang", 	prefix: "Math.atan	(", sufix: ")*180/Math.PI", size: "width:62px"}
 						  ];
 				for (var i=0; i<operacio.length; i++)
 				{
@@ -2361,10 +2361,10 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 		//Caixa multilínia per a la formula.
 		cdns.push(DonaCadenaLang({"cat":"Fórmula", "spa":"Fórmula:", "eng":"Expression", "fre":"Formule"}),
 			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:420px;height:100\" ></textarea><br>",
-			DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a una capa/estil nou de nom", "spa":"El resultado de la selección será añadido como una capa/estilo nuevo de nombre", "eng":"The result of the selection will be added as a new layer/style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau couche/style avec le nom"}), 
+			DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a una capa/estil nou de nom", "spa":"El resultado de la selección será añadido como una capa/estilo nuevo de nombre", "eng":"The result of the selection will be added as a new layer/style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau couche/style avec le nom"}),
 			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
-			"<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
+			"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}),
 		        "\" onClick='AfegeixCapaCalcul();TancaFinestraLayer(\"calculadoraCapa\");' />",
 			//"</fieldset>"
 			);
@@ -2383,7 +2383,7 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 		if (EsIndexCapaVolatil(i, ParamCtrl))
 			continue;
 		capa=ParamCtrl.capa[i];
-		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
+		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 			capa.FormatImatge!="application/x-img" || !capa.valors)
 			continue;
 		if(!EsCapaAmbAlgunEstilAmbCategories(capa))
@@ -2392,7 +2392,7 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 		if(hi_ha_raster_categ==2)
 		break;
 	}
-	if (hi_ha_raster_categ==2) 
+	if (hi_ha_raster_categ==2)
 	{
 		cdns.push("<br>",
 				//"<fieldset><legend>",
@@ -2407,8 +2407,8 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			  "</legend>",
 			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset>",
-			  "<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
+			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}),
 		        "\" onClick='AfegeixCapaCombicapaCategoric();TancaFinestraLayer(\"combinacioCapa\");' />",
 			//"</fieldset>"
 			);
@@ -2430,14 +2430,14 @@ var cdns=[], i;
 			DonaCadenaLang({"cat":"Especifica l'adreça URL del servidor", "spa":"Especifique la dirección URL del servidor", "eng":"Specify the server URL", "fre":"Spécifiez l'adresse URL du serveur"}),
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" value=\"",
 			(url ? url: "http://"), "\" />",
-			"<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}), 
+			"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     	DonaCadenaLang({"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"}),
 		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor,",i_capa,");\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
 			DonaCadenaLang({"cat":"o Seleccciona'n un de la llista de serveis", "spa":"o Escoja uno de la lista de servicios", "eng":"or Choose one from service list", "fre":"ou sélectionnez un des services de la liste"}),
-			"<br>",				  
+			"<br>",
 			"<select name=\"llista_cat_serveis_OWS\" id=\"llista_cat_serveis_OWS\" class=\"Verdana11px\"",
 			" onChange=\"ActualitzaLlistaServSegonsCategoriaSel(form);\">");
 		var categoria_previa="";
@@ -2447,7 +2447,7 @@ var cdns=[], i;
 			{
 				categoria_previa=DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase();
 				if(categoria_previa==DonaCadenaLang({"cat":"ZZAltresZZ", "spa":"ZZOtrosZZ", "eng":"ZZOthersZZ", "fre":"ZZAutresZZ"}).toLowerCase())
-					cdns.push("<option value=\"", categoria_previa, "\">",  DonaCadenaLang({"cat":"Altres", "spa":"Otros", "eng":"Others", "fre":"Autres"}));																		
+					cdns.push("<option value=\"", categoria_previa, "\">",  DonaCadenaLang({"cat":"Altres", "spa":"Otros", "eng":"Others", "fre":"Autres"}));
 				else
 					cdns.push("<option value=\"", categoria_previa, "\">",  DonaCadena(LlistaServOWS[i].categoria.desc));
 			}
@@ -2558,7 +2558,7 @@ function ActivaConstantOCapaSeleccioCondicional(prefix_id, i_condicio, es_capa)
 }
 
 
-/*Retorna un objecte amb "n_capa" que és nombre de capes compatibles amb i_capa i la vista actual (o si i_capa==-1 només amb la vista actual) 
+/*Retorna un objecte amb "n_capa" que és nombre de capes compatibles amb i_capa i la vista actual (o si i_capa==-1 només amb la vista actual)
 i "i_capa_unica" que és la primera capa compatible (o la única si només n'hi ha una)*/
 function DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, considera_vectors)
 {
@@ -2575,14 +2575,14 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 			if(origen_vector)
 			{
 				// Quan l'origen és vector només vull veure les capes ràster o la pròpia i_capa
-				if (i!=i_capa && (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
+				if (i!=i_capa && (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 					!EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa]) || capa.FormatImatge!="application/x-img" || !capa.valors))
 					continue;
 			}
 			else
 			{
 				// Quan l'origen és ràster ho vull tot el que sigui vector o application/x-img
-				if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) || 
+				if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 					((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || (capa.model!=model_vector && (capa.FormatImatge!="application/x-img" || !capa.valors)))
 					continue;
 			}
@@ -2637,10 +2637,10 @@ var estil=capa.estil[i_estil];
 		else
 			cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil, 0));
 		cdns.push("<br>");
-		
+
 		//Posar un botó d'afegir a l'expressió de reclassificació
-		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",				
-		     	DonaCadenaLang({"cat":"Escriu valor a la fórmula", "spa":"Escribe valor en fórmula", "eng":"Write value in expression", "fre":"Écrire une valeur dans l'expression"}), 
+		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     	DonaCadenaLang({"cat":"Escriu valor a la fórmula", "spa":"Escribe valor en fórmula", "eng":"Write value in expression", "fre":"Écrire une valeur dans l'expression"}),
 		        "\" onClick='EscriuValorALaReclasssificacioAfegeixCapa(\"",prefix_id,"\");' />");
 	}
 	else
@@ -2669,7 +2669,7 @@ var estil_o_atrib;
 		estil_o_atrib=capa.estil[i_estil_o_atrib];
 
 	//Una caixa que permeti triar un operador
-	cdns.push("<div id=\"div-", prefix_id, "-operador-",i_condicio,"\" ><label for=\"", prefix_id, "-operador-",i_condicio, "\">", 
+	cdns.push("<div id=\"div-", prefix_id, "-operador-",i_condicio,"\" ><label for=\"", prefix_id, "-operador-",i_condicio, "\">",
 			  DonaCadenaLang({"cat":"Operador", "spa":"Operador", "eng":"Operator", "fre":"Opérateur"}), ":</label>",
 			"<select id=\"", prefix_id, "-operador-",i_condicio,"\" name=\"operador", i_condicio, "\" style=\"width:80px;\">",
 			"<option value=\"==\" selected=\"selected\">=</option>",
@@ -2697,29 +2697,29 @@ var estil_o_atrib;
 	if(capa.model==model_vector)
 	{
 		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>1)
-		{ 
+		{
 			//·$· El més probable és que no tingui els valors de les propietats, només tindrè els que s'han consultat, caldrà fer alguna cosa com es va dfer per la qualitats
 			var feature, atribut=estil_o_atrib.nom, valors_atrib=[],i_obj, i_valor;
 
 			for (i_obj=0; i_obj<capa.objectes.features.length; i_obj++)
-			{	
+			{
 				feature=capa.objectes.features[i_obj];
 				if (typeof feature.properties[atribut]==="undefined" ||
 		    		feature.properties[atribut]=="" ||
 					feature.properties[atribut]==null)
-					continue;	
+					continue;
 				valors_atrib.push(DonaCadena(feature.properties[atribut]));
 			}
 			// pensar de fer una funció específica per nombres si acabo posant tipus als atributs
 			valors_atrib.sort(sortAscendingStringSensible);
 			valors_atrib.removeDuplicates(sortAscendingStringSensible);
-			
+
 			if(valors_atrib.length>0)
 			{
-				cdns.push("<select id=\"", prefix_id, "-valor-select-",i_condicio,"\" name=\"valor-select", i_condicio, 
+				cdns.push("<select id=\"", prefix_id, "-valor-select-",i_condicio,"\" name=\"valor-select", i_condicio,
 						  "\" style=\"width:400px;\" onChange='CanviaValorSeleccionatSeleccioCondicional(\"",prefix_id,"\", ", i_condicio,");'>");
-				for (i_valor = 0; i_valor < valors_atrib.length; i_valor++) 
-				{	
+				for (i_valor = 0; i_valor < valors_atrib.length; i_valor++)
+				{
 					cdns.push("<option value=\"",i_valor,"\"",((i_valor==0) ? " selected=\"selected\"" : ""),">", valors_atrib[i_valor], "</option>");
 				}
 				cdns.push("</select><br>");
@@ -2807,7 +2807,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			{
 				cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"estil-", i_condicio, "\" name=\"",(param.vull_operador? "" : "valor_"),"estil", i_condicio, "\" style=\"width:400px;\"");
 				if (param.vull_operador)
-					cdns.push(" onChange='CanviaOperadorValorSeleccioCondicional(\"", prefix_id, "\", ", i_capa, ", ", i_condicio, ", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "": "valor-"), "estil-", i_condicio, "\").value));'");							
+					cdns.push(" onChange='CanviaOperadorValorSeleccioCondicional(\"", prefix_id, "\", ", i_capa, ", ", i_condicio, ", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "": "valor-"), "estil-", i_condicio, "\").value));'");
 				cdns.push(">");
 				for (var i_atrib=0; i_atrib<capa.atributs.length; i_atrib++)
 				{
@@ -2965,7 +2965,7 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 	capa=ParamCtrl.capa[i_capa];
 	cdns.push("<div style=\"position:absolute; left:10px; top:10px;\">",
 			DonaCadenaLang({"cat":"Mostra només els valors de la capa", "spa":"Muestra solo los valores de la capa",
-						   "eng":"Only show the values of the layer", "fre":"Afficher uniquement les valeurs de la couche"}), " \"", 
+						   "eng":"Only show the values of the layer", "fre":"Afficher uniquement les valeurs de la couche"}), " \"",
 			DonaCadena(capa.DescLlegenda), "\"<br/>");
 	if (capa.estil && capa.estil.length)
 	{
@@ -3008,14 +3008,14 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 	}
 
 	cdns.push("<hr>",
-		DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a un estil nou de nom", "spa":"El resultado de la selección será añadido como un estilo nuevo de nombre", "eng":"The result of the selection will be added as a new style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau style avec le nom"}), 
+		DonaCadenaLang({"cat":"El resultat de la selecció serà afegit com a un estil nou de nom", "spa":"El resultado de la selección será añadido como un estilo nuevo de nombre", "eng":"The result of the selection will be added as a new style with name", "fre":"Le résultat de la sélection sera ajouté en tant que nouveau style avec le nom"}),
 		" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"",
 		DonaNomNouEstilSeleccioCondicional(prefix_id, i_capa, (capa.estil && capa.estil.length>1) ? capa.i_estil : 0),
 		"\" /><br/>",
-		DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}), 
+		DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}),
 		" \"", DonaCadena(capa.DescLlegenda), "\"<br/>",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", 
-		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='CreaBandaSeleccioCondicional(\"", prefix_id, "\",", i_capa,");TancaFinestraLayer(\"seleccioCondicional\");' />",
 		"</div></form>");
 	return cdns.join("");
@@ -3120,7 +3120,7 @@ var sel_condicional={}, condicio, radials;
 }
 
 //Escriu una referencia a una capa, valor i data per un càlcul (format {\"i_capa\":0, \"i_valor\":1, \"i_data\":2})
-function DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data) 
+function DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data)
 {
 var cdns=[];
 
@@ -3166,7 +3166,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 	else
 	{
 		var component_sel=ParamCtrl.capa[i_capa].estil[i_estil].component[0], s_patro, i;
-		
+
 		if (typeof component_sel.calcul!=="undefined")
 			return component_sel.calcul;
 		if (typeof component_sel.FormulaConsulta!=="undefined")
@@ -3193,7 +3193,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
 	i_estil_nou=capa.estil.length;
-	
+
 	if(capa.estil.length==1 && !capa.estil[0].nom && !capa.estil[0].desc)
 	{
 		// Si la capa només té un estil, potser que no tingui ni nom ni descripció perquè és l'estil per defecte
@@ -3201,11 +3201,11 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 		capa.estil[0].desc={"cat":"per defecte","spa":"por defecto","eng":"by default", "fre":"par défaut"};
 	}
 	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(sel_condicional.i_estil) ? sel_condicional.i_estil : 0]));
-	estil=capa.estil[i_estil_nou];	
+	estil=capa.estil[i_estil_nou];
 	estil.desc=sel_condicional.nom_estil;
 	estil.origen="usuari";
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
-	
+
 	//Defineix el "calcul" de la selecció que serà de tipus "(capaA<5 || CapaA>capaB)? capa : null"
 	if(capa.model!=model_vector)
 		calcul="(";
@@ -3235,7 +3235,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	}
 	if(capa.model!=model_vector)
 		calcul+=")?";
-	
+
 	if(capa.model==model_vector)
 	{
 		// Creo un atribut nou que contindrà el càlcul
@@ -3313,10 +3313,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("<form name=\"CombinacioRGB\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerCombinacioRGB\" style=\"position:absolute;left:10px;top:10px;\">",
-			DonaCadenaLang({"cat":"Sel·lecciona les 3 components de la capa", "spa":"Selecciona las 3 componentes de la capa", "eng":"Select the three components of the layer", "fre":"Sélectionnez les trois composants de la couche"}), " \"", 
+			DonaCadenaLang({"cat":"Sel·lecciona les 3 components de la capa", "spa":"Selecciona las 3 componentes de la capa", "eng":"Select the three components of the layer", "fre":"Sélectionnez les trois composants de la couche"}), " \"",
 			DonaCadena(capa.DescLlegenda),
 			"\"<br/>");
-	
+
 	for (var i_c=0; i_c<3; i_c++)
 	{
 		cdns.push("<span id=\"combinacio-rgb-", i_c, "\" class=\"Verdana11px\"><fieldset><legend>",
@@ -3344,10 +3344,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"",
 		DonaNomNouEstilCombinacioRGB(i_capa),
 		"\" /><br/>",
-		DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}), 
+		DonaCadenaLang({"cat":"a la capa", "spa":"a la capa", "eng":"to the layer", "fre":"à la couche"}),
 		" \"", DonaCadena(capa.DescLlegenda), "\"<br/>",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", 
-		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='CreaBandaCombinacioRGB(",i_capa,"); TancaFinestraLayer(\"combinacioRGB\");' />",
 		"</div></form>");
 	return cdns.join("");
@@ -3364,7 +3364,7 @@ var cdns=[];
 	for (var i_param=0; i_param<params.length; i_param++)
 	{
 		cdns.push((params[i_param].clau.desc ? DonaCadena(params[i_param].clau.desc) : params[i_param].clau.nom),
-			 " ", 
+			 " ",
 			(params[i_param].valor.desc ? DonaCadena(params[i_param].valor.desc) : params[i_param].valor.nom));
 		if (i_param+1<params.length)
 			cdns.push(", ");
@@ -3468,7 +3468,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	}
 	cdns.push("<form name=\"EstilCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerEstilCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;\">",
-			DonaCadenaLang({"cat":"Estil de la capa", "spa":"Estilo de la capa", "eng":"Style of the layer", "fre":"Style de la couche"}), " \"", 
+			DonaCadenaLang({"cat":"Estil de la capa", "spa":"Estilo de la capa", "eng":"Style of the layer", "fre":"Style de la couche"}), " \"",
 			DonaCadena(capa.DescLlegenda));
 	if (capa.estil.length>1)
 		cdns.push(" (", DonaCadena(estil.desc), ")");
@@ -3503,26 +3503,26 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			}
 			//Valor mínim i valor màxim
 
-			cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_c, "\">", DonaCadenaLang({"cat":"Mínim", "spa":"Mínimo", "eng":"Minimum", "fre":"Minimum"}), ": </label>", 
-				"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_c, "\" name=\"minim", i_c,"\" value=\"", 
+			cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_c, "\">", DonaCadenaLang({"cat":"Mínim", "spa":"Mínimo", "eng":"Minimum", "fre":"Minimum"}), ": </label>",
+				"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_c, "\" name=\"minim", i_c,"\" value=\"",
 				DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta), "\" style=\"width:50px;\" />",
-				" (", DonaCadenaLang({"cat":"calculat", "spa":"calculado", "eng":"computed", "fre":"calculé"}), " ", estil.histograma.component[i_c].valorMinimReal, " ", 
-				"<input type=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Adoptar", "spa":"Adoptar", "eng":"Adopt", "fre":"Adopter"}), 
+				" (", DonaCadenaLang({"cat":"calculat", "spa":"calculado", "eng":"computed", "fre":"calculé"}), " ", estil.histograma.component[i_c].valorMinimReal, " ",
+				"<input type=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Adoptar", "spa":"Adoptar", "eng":"Adopt", "fre":"Adopter"}),
 			        "\" onClick='document.getElementById(\"edita-estil-capa-valor-minim-", i_c, "\").value=", estil.histograma.component[i_c].valorMinimReal,";' />",")",
 				"<br>");
-			cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_c, "\">", DonaCadenaLang({"cat":"Màxim", "spa":"Máximo", "eng":"Maximum", "fre":"Maximum"}), ": </label>", 
-				"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_c, "\" name=\"maxim", i_c,"\" value=\"", 
+			cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_c, "\">", DonaCadenaLang({"cat":"Màxim", "spa":"Máximo", "eng":"Maximum", "fre":"Maximum"}), ": </label>",
+				"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_c, "\" name=\"maxim", i_c,"\" value=\"",
 				DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, estil.histograma.component[i_c].classe.length), "\" style=\"width:50px;\" />",
-				" (", DonaCadenaLang({"cat":"calculat", "spa":"calculado", "eng":"computed", "fre":"calculé"}), " ", estil.histograma.component[i_c].valorMaximReal, " ", 
-				"<input type=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Adoptar", "spa":"Adoptar", "eng":"Adopt", "fre":"Adopter"}), 
+				" (", DonaCadenaLang({"cat":"calculat", "spa":"calculado", "eng":"computed", "fre":"calculé"}), " ", estil.histograma.component[i_c].valorMaximReal, " ",
+				"<input type=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Adoptar", "spa":"Adoptar", "eng":"Adopt", "fre":"Adopter"}),
 			        "\" onClick='document.getElementById(\"edita-estil-capa-valor-maxim-", i_c, "\").value=", estil.histograma.component[i_c].valorMaximReal,";' />",")");
 			if (estil.component.length>1)
 				cdns.push("</fieldset>");
 		}
 		cdns.push("</fieldset>");
 	}
-	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"", 
-		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
+	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
+		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
 		"</div></form>");
 	return cdns.join("");
@@ -3583,16 +3583,16 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		"<input type=\"text\" id=\"edita-nom-capa-llegenda\" name=\"nom_capa\" value=\"", DonaCadena(capa.DescLlegenda), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", 
-		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='ModificaNomCapa(", i_capa, ");TancaFinestraLayer(\"modificaNom\");' />",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"",				
-			  DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+			  DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),
 			  "\" onClick='TancaFinestraLayer(\"modificaNom\");' />",
 		"</div></form>");
 	return cdns.join("");
 }
-   
+
 function ModificaNomCapa(i_capa)
 {
 var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_capa], desc_lleg=document.getElementById("edita-nom-capa-llegenda").value;
@@ -3614,8 +3614,8 @@ var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_
 		else if (capa.DescLlegenda.fre && ParamCtrl.idioma=="fre")
 			capa.DescLlegenda.fre=desc_lleg;
 		else
-			capa.DescLlegenda=desc_lleg;	
-		
+			capa.DescLlegenda=desc_lleg;
+
 		//capa.desc
 		if (capa.desc.cat && ParamCtrl.idioma=="cat")
 			capa.desc.cat=desc;
@@ -3627,8 +3627,8 @@ var desc=document.getElementById("edita-nom-capa").value, capa=ParamCtrl.capa[i_
 			capa.desc.fre=desc;
 		else
 			capa.desc=desc;
-	}	
-		
+	}
+
 	CreaLlegenda();
 }
 
@@ -3645,7 +3645,7 @@ var elem=ObreFinestra(window, "modificaNom", DonaCadenaLang({"cat":"de modificar
 
 function DonaCadenaModificaNomEstil(i_capa, i_estil)
 {
-var cdns=[], estil=ParamCtrl.capa[i_capa].estil[i_estil];	
+var cdns=[], estil=ParamCtrl.capa[i_capa].estil[i_estil];
 	cdns.push("<form name=\"NomEstil\" onSubmit=\"return false;\">",
 		"<div id=\"LayerNomEstil\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;\">",
 		"<fieldset><legend>",
@@ -3654,11 +3654,11 @@ var cdns=[], estil=ParamCtrl.capa[i_capa].estil[i_estil];
 		"<input type=\"text\" id=\"edita-nom-estil\" name=\"nom_estil\" value=\"", DonaCadena(estil.desc), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", 
-		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='ModificaNomEstil(", i_capa,",", i_estil,");TancaFinestraLayer(\"modificaNom\");' />",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"",				
-			  DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}), 
+		"<input type=\"button\" class=\"Verdana11px\" value=\"",
+			  DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),
 			  "\" onClick='TancaFinestraLayer(\"modificaNom\");' />",
 		"</div></form>");
 	return cdns.join("");
