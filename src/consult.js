@@ -908,13 +908,13 @@ var cdns=[], capa;
 
 function MostraGraficSerieTemporalAtribut(win, nom_canvas, i_capa, i_obj, i_atr)
 {
-var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], milisegons;
+var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons;
 
 	for (var i_data=0; i_data<capa.data.length; i_data++)
 	{
-		milisegons=DonaDateDesDeDataJSON(capa.data[i_data]).getTime();
-		data[i_data]={t:milisegons, y:parseFloat(DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j))};
-		labels[i_data]=moment(milisegons);
+		millisegons=DonaDateDesDeDataJSON(capa.data[i_data]).getTime();
+		data[i_data]={t:millisegons, y:parseFloat(DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j))};
+		labels[i_data]=moment(millisegons);
 		temps[i_data]=DonaDataCapaComATextBreu(i_capa, i_data);
 	}
 	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.atributs[i_atr].descripcio, capa.atributs[i_atr].serieTemporal.color, capa.FlagsData);

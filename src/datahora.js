@@ -929,7 +929,7 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 	return s;
 }
 
-//Funció simplificada de CarregaDatesVideo() que retorna només un array de dades de totes les capes en milisegons.
+//Funció simplificada de CarregaDatesVideo() que retorna només un array de dades de totes les capes en mil·lisegons.
 function CarregaDatesCapes()
 {
 var capa, dates=[];
