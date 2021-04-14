@@ -171,7 +171,7 @@ var i,j;
 		if (process_status && process_status.length>0)
 		{
 			var process_started=process_status[0];
-			percent=parseInt(process_started.getAttribute('percentCompleted'),10);
+			percent=parseInt(process_started.getAttribute('percentCompleted'));
 			
 			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
 			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Iniciat", "spa":"Iniciado", "eng":"Started", "fre":"Initié"})+ 
@@ -182,7 +182,7 @@ var i,j;
 		if (process_status && process_status.length>0)
 		{
 			var process_paused=process_status[0];
-			percent=parseInt(process_paused.getAttribute('percentCompleted'),10);
+			percent=parseInt(process_paused.getAttribute('percentCompleted'));
 			
 			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
 			if(percent!=-1)
@@ -322,7 +322,7 @@ var s1;
 
 				if(sel_opcio==opcio_predefinit)
 				{
-					var i_selec=parseInt(document.getElementById("p_sel_input_"+i).value,10);
+					var i_selec=parseInt(document.getElementById("p_sel_input_"+i).value);
 					s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(operacio.par_input[i].valors[i_selec].nom);
 				}
 				else if(sel_opcio==opcio_editable)
@@ -380,7 +380,7 @@ var s1;
 			}
 			else if(operacio.par_input[i].InputOutputValorPredefinit && operacio.par_input[i].InputOutputValorPredefinit==true)
 			{
-				var i_selec=parseInt(document.getElementById("p_sel_input_"+i).value,10);
+				var i_selec=parseInt(document.getElementById("p_sel_input_"+i).value);
 				s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(operacio.par_input[i].valors[i_selec].nom);
 			}
 			else //if(operacio.par_input[i].InputOutputValorEditable && operacio.par_input[i].InputOutputValorEditable==true)

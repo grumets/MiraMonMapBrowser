@@ -587,7 +587,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 							   "<td valign=\"middle\" colspan=" ,
 							   (alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS) ,
 								   "><select CLASS=text_petit name=\"data_capa_",i,"\" onChange=\"CanviaDataDeCapaMultitime(",
-							   i,", parseInt(document.form_llegenda.data_capa_",i,".value,10));\">\n");
+							   i,", parseInt(document.form_llegenda.data_capa_",i,".value));\">\n");
 						}
 						else
 						{
@@ -600,7 +600,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 							else
 								cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 							cdns.push("><select CLASS=text_petit name=\"data_capa_",i,"\" onChange=\"CanviaDataDeCapaMultitime(",
-							   i,", parseInt(document.form_llegenda.data_capa_",i,".value,10));\">\n");
+							   i,", parseInt(document.form_llegenda.data_capa_",i,".value));\">\n");
 						}
 						var i_data_sel=DonaIndexDataCapa(capa, null);
 						for (var i_data=0; i_data<capa.data.length; i_data++)

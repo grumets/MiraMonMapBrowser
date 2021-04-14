@@ -735,13 +735,13 @@ function DonaNColVideoRodet()
 {
 	if (RodetVertical)
 		return 85;
-	return parseInt(DonaNFilVideoRodet()*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil,10);
+	return parseInt(DonaNFilVideoRodet()*ParamInternCtrl.vista.ncol/ParamInternCtrl.vista.nfil);
 }
 
 function DonaNFilVideoRodet()
 {
 	if (RodetVertical)
-		return parseInt(DonaNColVideoRodet()*ParamInternCtrl.vista.nfil/ParamInternCtrl.vista.ncol,10);
+		return parseInt(DonaNColVideoRodet()*ParamInternCtrl.vista.nfil/ParamInternCtrl.vista.ncol);
 	return 50;
 }
 

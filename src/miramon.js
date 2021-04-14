@@ -1133,10 +1133,10 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 		    MidaDePixelPantalla=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol;
 			CreaBarra(null);
 		}
-		ParamCtrl.psalt=parseInt(formul.param_psalt.value,10);
+		ParamCtrl.psalt=parseInt(formul.param_psalt.value);
 		ParamCtrl.ColorFonsVista=param_ColorFonsVista;
 		ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
-		ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value,10);
+		ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value);
 		if (formul.param_CoordExtremes[1].checked)
 			ParamCtrl.CoordExtremes="proj";
 		else if (formul.param_CoordExtremes[2].checked)
@@ -1548,7 +1548,7 @@ var cdns=[], i;
 
 	if (ParamCtrl.DesplegableProj==true && ParamCtrl.ImatgeSituacio.length>1)
 	{
-		cdns.push("<form name=FormulProjeccio onSubmit=\"return false;\"><select CLASS=text_petit name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value,10));\">");
+		cdns.push("<form name=FormulProjeccio onSubmit=\"return false;\"><select CLASS=text_petit name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value));\">");
 		if (ParamCtrl.CanviProjAuto==true)
 		{
 			cdns.push("<OPTION VALUE=\"-1\"",(ParamCtrl.araCanviProjAuto ? " SELECTED" : "") ,">", 
@@ -2002,7 +2002,7 @@ function TancaFinestraLayer(nom_finestra)
 	{
 		TancaFinestra_novaFinestra(nom_finestra, HistogramaFinestra);						
 		var str_id = nom_finestra.substr(prefixHistogramaFinestra.length);
-		var number_id = parseInt(str_id, 10);
+		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[HistogramaFinestra.vista[number_id].i_capa].estil[HistogramaFinestra.vista[number_id].i_estil];
 	 
 	 	if (estil.diagrama && estil.diagrama.length>0)
@@ -2023,7 +2023,7 @@ function TancaFinestraLayer(nom_finestra)
 	{
 		TancaFinestra_novaFinestra(nom_finestra, Superficie3DFinestra);						
 		var str_id = nom_finestra.substr(prefixSuperficie3DFinestra.length);
-		var number_id = parseInt(str_id, 10);
+		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[Superficie3DFinestra.vista[number_id].i_capa].estil[Superficie3DFinestra.vista[number_id].i_estil];
 	 
 	 	if (estil.diagrama && estil.diagrama.length>0)
@@ -3506,7 +3506,7 @@ var cdns=[];
 					DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : 
 					"Zoom:"),
 			   "</span>",
-			   "<select CLASS=text_petit name=\"nivell\" onChange=\"PortamANivellDeZoom(parseInt(document.zoom.nivell.value,10));\">\n");
+			   "<select CLASS=text_petit name=\"nivell\" onChange=\"PortamANivellDeZoom(parseInt(document.zoom.nivell.value));\">\n");
 
 			for (var i=0; i<ParamCtrl.zoom.length; i++)
 			{
@@ -5433,7 +5433,7 @@ var p, unitats_CRS;
 		if (( ParamCtrl.VistaBotonsBruixola==true || ParamCtrl.VistaBotonsZoom==true || ParamCtrl.VistaSliderZoom==true || ParamCtrl.VistaEscalaNumerica==true) && vista.i_nova_vista==NovaVistaPrincipal)
 		{
 			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-			if (ParamCtrl.VistaBotonsBruixola==true && (parseInt(document.getElementById("vista").style.height,10) >= 300))
+			if (ParamCtrl.VistaBotonsBruixola==true && (parseInt(document.getElementById("vista").style.height) >= 300))
 			{
 				barra_slider.push("<tr><td align='center'>");
 				barra_slider.push(CadenaBotoPolsable('boto_nw', 'nw', DonaCadenaLang({"cat":"mou al Nord-Oest", "spa":"mover al NorOeste", "eng":"move to North-West","fre":"déplacer vers le Nord-Ouest"}), 'MouLaVistaEventDeSalt(event,-1,1)'));
@@ -5455,7 +5455,7 @@ var p, unitats_CRS;
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
 				barra_slider.push("<br>");
 			}
-			if (ParamCtrl.VistaSliderZoom==true && (parseInt(document.getElementById("vista").style.height,10) >= 500))
+			if (ParamCtrl.VistaSliderZoom==true && (parseInt(document.getElementById("vista").style.height) >= 500))
 			{	
 				barra_slider.push("<input id='zoomSlider' type='range' step='1' min='0' max='", (ParamCtrl.zoom.length-1), "' value='", DonaIndexNivellZoom(vista.CostatZoomActual), "' style=';' orient='vertical' onchange='PortamANivellDeZoomEvent(event, this.value);' onclick='dontPropagateEvent(event);'><br>");
 			}
@@ -5464,7 +5464,7 @@ var p, unitats_CRS;
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
 			}
 			barra_slider.push("</td></tr>");
-			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
+			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height) >= 400))
 			{
 				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");	
 				barra_slider.push("<br>");

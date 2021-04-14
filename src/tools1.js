@@ -803,10 +803,10 @@ function getRectLayer(elem)
 {
 	// ? és usat perquè FireFox no té pixelLeft i suposo que left està en píxels.
 	/*var estil=elem.style;
-	RectGetRectLayer.esq=estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left,10));
-	RectGetRectLayer.sup=estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top,10));
-	RectGetRectLayer.ample=estil.pixelWidth ? estil.pixelWidth : ((estil.width=="") ? 0 : parseInt(estil.width,10));
-	RectGetRectLayer.alt=estil.pixelHeight ? estil.pixelHeight : ((estil.height=="") ? 0 : parseInt(estil.height,10));*/
+	RectGetRectLayer.esq=estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left));
+	RectGetRectLayer.sup=estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top));
+	RectGetRectLayer.ample=estil.pixelWidth ? estil.pixelWidth : ((estil.width=="") ? 0 : parseInt(estil.width));
+	RectGetRectLayer.alt=estil.pixelHeight ? estil.pixelHeight : ((estil.height=="") ? 0 : parseInt(estil.height));*/
 	var offsets = elem.getBoundingClientRect();
 	return {"esq": offsets.left + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft, 
 		"sup": offsets.top + window.pageYOffset - elem.ownerDocument.documentElement.clientTop, 
@@ -817,14 +817,14 @@ function getRectLayer(elem)
 function getRectEsqLayer(elem)
 {
 	//var estil=elem.style;
-	//return estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left,10));
+	//return estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left));
 	return Math.round(elem.getBoundingClientRect().left) + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft;
 }
 
 function getRectSupLayer(elem)
 {
 	//var estil=elem.style;
-	//return estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top,10));
+	//return estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top));
 	return Math.round(elem.getBoundingClientRect().top) + window.pageYOffset - elem.ownerDocument.documentElement.clientTop;
 }
 
@@ -2360,7 +2360,7 @@ function FesTestDeNavegador()
 
 		//We retrieve the element [1] (the first group), because [0] is the
 	   //whole matched string.
-	   version= parseInt(detect.match(re)[1],10);
+	   version= parseInt(detect.match(re)[1]);
 	   //This old version only gets the first digit (failing for >9) and is not
 	   //able to handle other inconsistencies.
 	   //version = detect.charAt(detect.indexOf(NomNavegador) + 1 + NomNavegador.length);
@@ -2390,7 +2390,7 @@ function FesTestDeNavegador()
 		if (iePos !=-1) 
 		{
 			var is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos))); 
-			var is_major = parseInt(is_minor,10); 
+			var is_major = parseInt(is_minor); 
 		} 
 		if (navigator.appName.substring(0,9) == "Microsoft" && is_major <= 6)
 			NecessariLayerIFrame=true;
@@ -2473,7 +2473,7 @@ function DonaVersioDeCadena(vers)
 		alert("Version format must follow the pattern #.#.# but got '"+version+"' instead");
 		return {"Vers": 1, "SubVers": 0, "VariantVers": 0};
 	}
-	return {"Vers": parseInt(version[0],10), "SubVers": parseInt(version[1],10), "VariantVers": parseInt(version[2],10)};
+	return {"Vers": parseInt(version[0]), "SubVers": parseInt(version[1]), "VariantVers": parseInt(version[2])};
 }
 
 

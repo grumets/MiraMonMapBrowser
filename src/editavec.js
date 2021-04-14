@@ -416,11 +416,11 @@ var trans_actual;
 	elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "totalInserted");
 	if(elem==null) return;
 
-	if(parseInt(elem[0].childNodes[0].nodeValue,10)==1)
+	if(parseInt(elem[0].childNodes[0].nodeValue)==1)
 	{
 		//Llegeix-ho la info, agafo l'identificador i faig un GetFeature d'aquest nou element
 		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Feature");
-		var i_trans=parseInt(elem[0].getAttribute('handle'),10);
+		var i_trans=parseInt(elem[0].getAttribute('handle'));
 		trans_actual=transaccio[i_trans];
 		trans_actual.estat=estat_fi_exit;
 		
@@ -446,7 +446,7 @@ var trans_actual;
 	{
 		
 		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Action");
-		var i_trans=parseInt(elem[0].getAttribute('locator'),10);
+		var i_trans=parseInt(elem[0].getAttribute('locator'));
 		trans_actual=transaccio[i_trans];
 		trans_actual.estat=estat_fi_error;
 		elem=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/wfs", "wfs", "Message");
