@@ -1102,6 +1102,11 @@ function getFinestraLayer(win, name)
 	return getLayer(win, name+SufixFinestra);
 }
 
+function getBarraLayer(win, name)
+{
+	return getLayer(win, name+SufixBarra);
+}
+
 function isFinestraLayer(win, name)
 {
 	return isLayer(getFinestraLayer(win, name));
@@ -1293,21 +1298,21 @@ var layer_finestra=layerFinestraList[i_finestra];
 		layer_finestra.estat_click=tipus;
 
 		div=getFinestraLayer(window, layer_finestra.nom);
-		layer_finestra.pos_ini_finestra.x=parseInt(div.style.left, 10);
-		layer_finestra.pos_ini_finestra.y=parseInt(div.style.top, 10);
-		layer_finestra.pos_ini_finestra.w=parseInt(div.style.width, 10);
-		layer_finestra.pos_ini_finestra.h=parseInt(div.style.height, 10);
+		layer_finestra.pos_ini_finestra.x=parseInt(div.style.left);
+		layer_finestra.pos_ini_finestra.y=parseInt(div.style.top);
+		layer_finestra.pos_ini_finestra.w=parseInt(div.style.width);
+		layer_finestra.pos_ini_finestra.h=parseInt(div.style.height);
 
 		div=getLayer(window, layer_finestra.nom+SufixBarra);
-		layer_finestra.pos_ini_barra.x=parseInt(div.style.left,10);
-		layer_finestra.pos_ini_barra.y=parseInt(div.style.top,10);
-		layer_finestra.pos_ini_barra.w=parseInt(div.style.width, 10);
+		layer_finestra.pos_ini_barra.x=parseInt(div.style.left);
+		layer_finestra.pos_ini_barra.y=parseInt(div.style.top);
+		layer_finestra.pos_ini_barra.w=parseInt(div.style.width);
 
 		div=getLayer(window, layer_finestra.nom+SufixCanto);
 		if (div)
 		{
-			layer_finestra.pos_ini_canto.x=parseInt(div.style.left,10);
-			layer_finestra.pos_ini_canto.y=parseInt(div.style.top,10);	
+			layer_finestra.pos_ini_canto.x=parseInt(div.style.left);
+			layer_finestra.pos_ini_canto.y=parseInt(div.style.top);	
 		}
 	}
 	iFinestraLayerFora=-1;

@@ -41,43 +41,139 @@
 var prefixSuperficie3DFinestra="graph3d_fin_";
 var Superficie3DFinestra={"n": 0, "vista":[]};
 
-function ObreFinestraSuperficie3D(i_capa)
+function CanviDinamismeGrafic3d(event)
 {
-var ncol=460, nfil=420, titol, vscale=0.5;
-var nom_grafic3d=prefixSuperficie3DFinestra+Superficie3DFinestra.n;
+	var n_histo, i_str, i_str_2, estil;
+	
+	if (event.srcElement)
+	{		
+		i_str=event.srcElement.id.indexOf(prefixSuperficie3DFinestra);
+		i_str_2=event.srcElement.id.indexOf(sufixCheckDinamicHistograma);
+		n_histo=parseInt(event.srcElement.id.substr(i_str+prefixSuperficie3DFinestra.length, i_str_2-i_str+prefixSuperficie3DFinestra.length));
+		if (isNaN(n_histo))
+			return;
+		
+		if (window.document.getElementById(event.srcElement.id).checked)
+				CreaSuperficie3D(n_histo);
+	}
+}
+
+function DonaNomCheckDinamicGrafic3d(i_histo)
+{
+	return DonaNomGrafic3d(i_histo)+sufixCheckDinamicHistograma; //sufixCheckDinamicHistograma de histopie 
+}
+
+function DonaIdDivGrafic3d(n_histograma)
+{
+	return DonaNomGrafic3d(n_histograma)+"_3d";
+}
+
+function DonaNomGrafic3d(n_histograma)
+{
+	return prefixSuperficie3DFinestra+n_histograma;
+}
+
+function DonaNomCheckDinamicLabelGrafic3d(i_histo)
+{
+	return DonaNomCheckDinamicGrafic3d(i_histo)+"_label";
+}
+
+function DonaNomCheckDinamicTextGrafic3d(i_histo)
+{
+	return DonaNomCheckDinamicGrafic3d(i_histo)+"_text";
+}
+
+function ObreFinestraSuperficie3D(i_capa, i_estil)
+{
+var ncol=460, nfil=420, estil, i_estil_intern, titol, vscale=0.5;
+var nom_grafic3d=DonaNomGrafic3d(Superficie3DFinestra.n);
 var cdns=[];
+var def_diagrama_existeix=false;
+var i_diag=-1, des_top=-9999, des_left=-9999;
+
+	if (typeof i_estil !== "undefined")	 
+	{
+		i_estil_intern=i_estil;
+		def_diagrama_existeix=true;
+	}
+	else //si em pasen un estil concret d'aquesta capa, que pot no ser el "actiu", l'uso
+		i_estil_intern=ParamCtrl.capa[i_capa].i_estil;
+	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern]; 
+
+	if (typeof estil.histograma === "undefined") // ara no estic preparat perquè no ha arribat la imatge
+		return;
+
+	//Check per a Gràfic 3d dinàmic i text per a indicar que actualització aturada per capa no visible
+	cdns.push("<input type=\"checkbox\" name=\"", 	(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicGrafic3d(Superficie3DFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeGrafic3d(event);\">")	
+	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", DonaCadenaLang({"cat":"Dinàmic", "spa":"Dinàmico", "eng":"Dynamic", "fre":"Dynamique"}) , "</label>");
+	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextGrafic3d(Superficie3DFinestra.n), "\" style=\"display: none\">", 		
+		DonaCadenaLang({"cat":"Desactivat (capa o estil no visible)", "spa":"Desactivado (capa o estil no visible)", "eng":"Disabled (layer or style not visible)", "fre":"Désactivé (couche or style non visible)"}) , "</span>");
 
 	titol=DonaCadenaLang({"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"})+" " + (Superficie3DFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
-	cdns.push("<div id=\"", nom_grafic3d, "_3d\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"></div>",
-		"<div style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ncol, "\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
+	cdns.push("<div id=\"", DonaIdDivGrafic3d(Superficie3DFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"></div>",
+		"<div style=\"position: absolute; top: 20; margin-left: auto; margin-right: auto; width:", ncol, "\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
 			DonaCadenaLang({"cat":"Escala vertical", "spa":"Escala vertical", "eng":"Vertical scale", "fre":"Échelle verticale"}),
 			": <input id=\"", nom_grafic3d, "_3d_fh\" type=\"range\" step=\"0.01\" min=\"0.1\" max=\"1.0\" value=\"", vscale ,"\" onchange=\"CanviaEscalaVSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaEscalaVSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\"> &nbsp;&nbsp;",
 			"Zoom", //DonaCadenaLang({"cat":"Distància", "spa":"Distancia", "eng":"Distance", "fre":"Distance"}),
 			": <input id=\"", nom_grafic3d, "_3d_fd\" type=\"range\" step=\"0.01\" min=\"0\" max=\"4.29\" value=\"", 5-1.7,"\" onchange=\"CanviaDistanciaSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaDistanciaSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\">",
 		  "</center></form></div>");
 
-	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_grafic3d, titol, boto_tancar, 200+Superficie3DFinestra.n*10, 200+Superficie3DFinestra.n*10, ncol, nfil+AltBarraFinestraLayer+2, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
+	if (def_diagrama_existeix) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadístic en un futur). si tinc més de un del mateix tipus, cada cop faig el primer que trobo
+		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
+		{
+			if (estil.diagrama[i_diag].tipus == "vista3d" && (typeof estil.diagrama[i_diag].i_histograma === "undefined"))
+			{
+				if (typeof estil.diagrama[i_diag].left !== "undefined")
+					des_left=estil.diagrama[i_diag].left;
+				if (typeof estil.diagrama[i_diag].top !== "undefined")
+					des_top=estil.diagrama[i_diag].top;
+				break;
+			}
+		}
+		if (i_diag == estil.diagrama.length) //no l'he trobat
+			i_diag=-1;
+	}
+
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_grafic3d, titol, boto_tancar, (des_left == -9999) ? 200+Superficie3DFinestra.n*10 : des_left, (des_top == -9999) ? 200+Superficie3DFinestra.n*10 : des_top, ncol, nfil+AltBarraFinestraLayer+2, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_grafic3d);
 	Superficie3DFinestra.vista[Superficie3DFinestra.n]={ height: nfil,
 				width: ncol,
 				vscale: vscale,
-                i_capa: i_capa,
-				i_estil: ParamCtrl.capa[i_capa].i_estil,
+				i_capa: i_capa,
+				i_estil: i_estil_intern,
 				i_grafic3d: Superficie3DFinestra.n};
 
-	CreaSuperficie3D(nom_grafic3d+"_3d", Superficie3DFinestra.vista[Superficie3DFinestra.n]);
+	/* Quan s'està creant la finestra per primera vegada, que per exemple estava definida al JSON, pot ser 
+	que la imatge encara no s'hagi carregat mai i per tant no puc visualitzar hitograma encara -> la finestra 
+	s'obrirà però he de posar "no visible" i més endavant quan arribi el nou array binari ja s'omplirà sol*/
+	if (typeof estil.histograma !== "undefined")
+	{		
+		CreaSuperficie3D(Superficie3DFinestra.n);
+			
+		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+			estil.diagrama[i_diag].i_histograma=Superficie3DFinestra.n;				
+		else
+		{
+			if (typeof estil.diagrama === "undefined") //no està creat
+				estil.diagrama=[];
+			estil.diagrama.push({tipus: "vista3d", i_histograma: Superficie3DFinestra.n});
+		}
+	}
 	Superficie3DFinestra.n++;
 }
 
 // Documentació a: http://visjs.org/docs/graph3d/
-//No és posible canvair de color en aquest moment. 
+//No és posible canviar de color en aquest moment. 
 //He après a la internet que per canviar la paleta de colors cal canviar/hack la funció _hsv2rgb quan es cridada des del la llibreria de surfaces.
 //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
-/*La primera component que rep _hsv2rgb() és l'index de color i el darrer la sombra:
+/*La primera component que rep _hsv2rgb() és l'index de color i el darrer l'ombra:
 Caldria traduir la primera component a RGB aplicant la paleta (o el color que vingui d'una altre capa), 
-passar-ho a HSV, aplicar la sombra i tornar filament a RGB.*/
-function CreaSuperficie3D(nom_div, vista_grafic3d)
+passar-ho a HSV, aplicar l'ombra i tornar finalment a RGB.*/
+function CreaSuperficie3D(n_histograma)
 {
+var vista_grafic3d=Superficie3DFinestra.vista[n_histograma];
+var nom_div=DonaIdDivGrafic3d(n_histograma);
 var capa=ParamCtrl.capa[vista_grafic3d.i_capa];
 var estil=capa.estil[vista_grafic3d.i_estil];
 var counter = 0, v, v_c, x, y;
@@ -98,14 +194,14 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 			v_c=DonaValorEstilComArrayDesDeValorsCapa(NovaVistaPrincipal, vista_grafic3d.i_capa, vista_grafic3d.i_estil, v)
 			if (v_c==null)
 				continue;
-            		vista_grafic3d.data.add({id:counter, x:x, y:y, z:v_c[0]});
-	        }
-    	}
+   		vista_grafic3d.data.add({id:counter, x:x, y:y, z:v_c[0]});
+	  }
+  }
 
 	// specify options
 	var options = {
-		width:  vista_grafic3d.width,
-		height: vista_grafic3d.height,
+		width:  vista_grafic3d.width.toString(), //la llibreria espera un string, no un número, i donava un error en executar
+		height: vista_grafic3d.height.toString(), //la llibreria espera un string, no un número, i donava un error en executar
 		style: 'surface',
 		showPerspective: true,
 		showGrid: true,
@@ -137,7 +233,8 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 		}
 	};
 
-    	vista_grafic3d.graph3d = new vis.Graph3d(document.getElementById(nom_div), vista_grafic3d.data, options);
+	//aquesta llibreria no té un update, com la de charts, i per això cada vegada que canvien les dades, creo la vista3d de nou substituint l'anterior
+	vista_grafic3d.graph3d = new vis.Graph3d(document.getElementById(nom_div), vista_grafic3d.data, options);
 	vista_grafic3d.graph3d.estil=estil;  //NOTA: JM20190425: Amb aquest truc faig visible estil dincs de "graph3d", que es converteix en "this" dins de la funció del tooltip.
 
 }

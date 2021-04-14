@@ -852,6 +852,10 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		    icon_capa.src=AfegeixAdrecaBaseSRC("visible.gif");
 		if (icon_capa.alt)
 			icon_capa.alt="visible"; //no cal DonaCadenaLang();
+			
+		//Miro si l'estil actiu té gràfics que estaven "congelats" perquè la capa no era visible
+		//(els altres possibles gràfics d'altres estils de la capa encara han d'estar congelats)
+		DesactivaCheckITextChartsMatriusDinamics(i, i_estil, false);
 	}	
 	else if (nom_icona=="semitransparent.gif" || 
 		 nom_icona=="semi_radio.gif"||
@@ -888,6 +892,10 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_visible.gif");
 		if (icon_capa.alt)
 			icon_capa.alt="no visible";  //no cal DonaCadenaLang();
+			
+		//Miro hi havia estils d'aquesta capa tenien gràfics que cal "congelar" perquè ara la capa no serà visible
+		for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
+			DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
 	}	
 	else
 	{
@@ -913,6 +921,8 @@ var nom_icona=TreuAdreca(icon_capa.src);
 			icon_capa.src=AfegeixAdrecaBaseSRC("semitransparent.gif");
 		if (icon_capa.alt)
 			icon_capa.alt=DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent", "fre":"semi transparent"});
+			
+		// El cas "semitransparent" és només un subtipus de "visible" per tant no afecta als gràfics
 	}
 	CreaAtribucioVista();
 }
@@ -1023,11 +1033,17 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 		for (var i=0; i<capa.estil.length; i++)
 		{
 			if (i==i_estil)
+			{
 				//CanviaEstatLlegendaRadioEstil(eval("window.document.e_raster_vector"+i_capa+"_"+i), true);
 				CanviaEstatLlegendaRadioEstil(window.document["e_raster_vector"+i_capa+"_"+i], true);
+				DesactivaCheckITextChartsMatriusDinamics(i_capa, i, false);
+			}
 			else
+			{
 				//CanviaEstatLlegendaRadioEstil(eval("window.document.e_raster_vector"+i_capa+"_"+i), false);
 				CanviaEstatLlegendaRadioEstil(window.document["e_raster_vector"+i_capa+"_"+i], false);
+				DesactivaCheckITextChartsMatriusDinamics(i_capa, i, true);
+			}
 			if (!redibuixar_llegenda && capa.LlegDesplegada==true && capa.estil[i].ItemLleg && capa.estil[i].ItemLleg.length>1)
 				redibuixar_llegenda=true;
 		}

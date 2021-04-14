@@ -35,6 +35,7 @@
     El Navegador de Mapes del MiraMon es pot actualitzar des de 
     https://github.com/grumets/MiraMonMapBrowser.
 */
+
 "use strict"
 
 /*Aquesta funció transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
@@ -1960,7 +1961,6 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	}
 }
 
-
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
 {
 var i_v, dv=[], mes_duna_v;
@@ -2054,6 +2054,46 @@ var data;
 
 		ctx.putImageData(imgData,0,0);
 	}
+		
+	if (estil.diagrama && estil.diagrama.length>0)
+	{
+		var i_diagrama, i_histo;
+		for (i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
+		{
+			DesactivaCheckITextUnChartMatriuDinamic(extra_param.i_capa, extra_param.i_estil, i_diagrama, false); //depèn de com he "tornat" a la visualització de la capa, potser encara estava "disabled"
+			i_histo=estil.diagrama[i_diagrama].i_histograma;				
+			if (estil.diagrama[i_diagrama].tipus == "chart")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				{
+					var retorn_prep_histo;
+					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
+					for (var i_c=0; i_c<estil.component.length; i_c++)
+					{
+						retorn_prep_histo=PreparaHistograma(i_histo, i_c);
+						HistogramaFinestra.vista[i_histo].chart[i_c].config.data.labels=retorn_prep_histo.labels;
+						HistogramaFinestra.vista[i_histo].chart[i_c].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
+						HistogramaFinestra.vista[i_histo].chart[i_c].config.data.datasets[0].data=retorn_prep_histo.data;
+						HistogramaFinestra.vista[i_histo].chart[i_c].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors;
+						HistogramaFinestra.vista[i_histo].chart[i_c].config.data.datasets[0].unitats=retorn_prep_histo.unitats;
+						HistogramaFinestra.vista[i_histo].chart[i_c].options=retorn_prep_histo.options;
+						HistogramaFinestra.vista[i_histo].chart[i_c].update();
+					}
+				}
+			}
+			else if (estil.diagrama[i_diagrama].tipus == "matriu")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+document.getElementById(DonaNomMatriuConfusio(i_histo)).innerHTML=CreaTextMatriuDeConfusio(i_histo, true);
+			}
+			else if (estil.diagrama[i_diagrama].tipus == "vista3d")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicGrafic3d(i_histo)).checked)				
+					CreaSuperficie3D(i_histo, true);
+			}
+		}
+	}	
+	
 	CanviaCursorSobreVista("auto");
 	if (extra_param.nom_funcio_ok)
 	{

@@ -1765,8 +1765,8 @@ var minim, maxim, factor_k, factorpixel;
 				}
 				else if(node2.nodeName=="ScaleHint")
 				{
-					minim=parseInt(node2.getAttribute('min'),10);
-					maxim=parseInt(node2.getAttribute('max'),10);
+					minim=parseInt(node2.getAttribute('min'));
+					maxim=parseInt(node2.getAttribute('max'));
 					if(minim)
 						servidorGC.layer[servidorGC.layer.length-1].CostatMinim=minim/Math.SQRT2;
 					if(maxim)
@@ -1774,13 +1774,13 @@ var minim, maxim, factor_k, factorpixel;
 				}
 				else if(node2.nodeName=="MinScaleDenominator")
 				{
-					minim=parseInt(node2.childNodes[0].nodeValue, 10);
+					minim=parseInt(node2.childNodes[0].nodeValue);
 					if(minim)
 						servidorGC.layer[servidorGC.layer.length-1].CostatMinim=minim*factorpixel/factor_k;
 				}
 				else if(node2.nodeName=="MaxScaleDenominator")
 				{
-					maxim=parseInt(node2.childNodes[0].nodeValue, 10);
+					maxim=parseInt(node2.childNodes[0].nodeValue);
 					if(maxim)
 						servidorGC.layer[servidorGC.layer.length-1].CostatMaxim=maxim*factorpixel/factor_k;
 				}
@@ -1901,7 +1901,7 @@ var root, cadena, node, node2, i, j, cdns=[];
 
 	//Obtinc la versió de les capacitats
 	cadena=root.getAttribute('version');
-	servidorGC.versio={"Vers": parseInt(cadena.substr(0,1),10), "SubVers": parseInt(cadena.substr(2,1),10), "VariantVers": parseInt(cadena.substr(4),10)};
+	servidorGC.versio={"Vers": parseInt(cadena.substr(0,1)), "SubVers": parseInt(cadena.substr(2,1)), "VariantVers": parseInt(cadena.substr(4))};
 
 	//Obtinc el títol del servidor, és obligatòri però podria ser que algun servidor posses el tag sense valor
 	servidorGC.titol="";

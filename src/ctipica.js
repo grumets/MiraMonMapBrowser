@@ -1279,7 +1279,7 @@ var id_camps_id_tesaure=null;
 	
 			var taula_id=root.getElementsByTagName('TaulaIdentificadors')[0];
 			var camps=taula_id.getElementsByTagName('Camps')[0];
-			var n_camps=parseInt(camps.getAttribute("NombreDeCamps"),10);
+			var n_camps=parseInt(camps.getAttribute("NombreDeCamps"));
 
 	    	if(n_camps>1) //Hi ha registres a la taula d'identificadors
 		    {
@@ -1320,7 +1320,7 @@ var id_camps_id_tesaure=null;
 		     if(n_camps>1)
 	    	 {
 				var registres=taula_id.getElementsByTagName('Registres')[0];
-				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'),10);
+				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 				for(var z=0; z<n_camps; z++)
 				{
 				  capa_consulta_tipica_intern[i_ctipica].id_camp[z]=new Array(num_regs);
@@ -1332,12 +1332,12 @@ var id_camps_id_tesaure=null;
 				
 					if(reg.tagName=="Registre")
 					{			
-						var index=parseInt(reg.getAttribute('id_reg'),10);	
+						var index=parseInt(reg.getAttribute('id_reg'));	
 						var valors=reg.getElementsByTagName('Valor');
 
 						for(var j=0; j<valors.length; j++)
 						{			   
-						   var valor_id=parseInt(valors[j].childNodes[0].nodeValue,10);
+						   var valor_id=parseInt(valors[j].childNodes[0].nodeValue);
 
 						   for(var z=0; z<id_camps_id_tesaure.length; z++)
 						   {
@@ -1371,7 +1371,7 @@ var id_camps_id_tesaure=null;
 
 				//Ja tinc l'índex d'on haig de desar l'estructura projecció del camp
 				var registres=tesaures[i].getElementsByTagName('Registres')[0];
-				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'),10);
+				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 
 				capa_consulta_tipica_intern[i_ctipica].proj_camp[i_camp_ctipica]=new Array(num_regs);
 			
@@ -1382,7 +1382,7 @@ var id_camps_id_tesaure=null;
 						
 					if(reg.tagName=="Registre")
 					{			
-						var index=parseInt(reg.getAttribute('id_reg'),10);	
+						var index=parseInt(reg.getAttribute('id_reg'));	
 						var valor=reg.getElementsByTagName('Valor')[0];
 						var bbox=reg.getElementsByTagName('BoundingBox')[0];			
 						var env_reg={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
