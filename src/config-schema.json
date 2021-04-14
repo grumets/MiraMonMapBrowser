@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
+	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
 	"type": "object",
@@ -778,6 +778,47 @@
 			"type": ["null", "string"],
 			"format": "uri"
 		},
+		"StoryMap": {
+			"type": ["null", "array"],
+			"items": {
+				"type": ["object"],
+				"required": ["desc", "url"],
+				"properties": {
+					"desc": {
+						"description": "Títol de la historia.",
+						"type": "string" 
+					},
+					"src":{
+						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la historia en format JPEG, PNG... Opcional",
+						"type": "string",
+						"format": "uri"
+					},
+					"url": {
+						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-bbox'...",
+						"type": "string",
+						"format": "uri"
+					},
+					"EnvTotal": {
+						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles.",
+						"$ref": "#/definitions/envolupantCRS_2D" 
+					},
+					"ample":
+					{
+						"description": "Ample de la caixa que conté l historìa. Opcional; si no hi és val 500",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"alt":
+					{
+						"description": "Alt de la caixa que conté l historìa. Opcional; si no hi és val 300",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
 		"TempsRefresc": { 
 			"description": "Temps de refresc de l'estat del procés de creació i resposta a una petició d'un MMZ a un WCS. (Implica una nova interacció amb el servidor)",
 			"type": "number",
@@ -944,9 +985,9 @@
 		},
 		"capa":	{
 			"description": "Array de capes del navegador",
-			"type": ["array"],
+			"type": "array",
 			"items": {
-				"type": ["object"],
+				"type": "object",
 				"properties": {									
 					"servidor": { 
 						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster (o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
@@ -1531,6 +1572,48 @@
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el model de dades és ràster",
 									"$ref": "#/definitions/histograma"
 								},
+								"diagrama": 
+								{
+									"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el model de dades és ràster",
+									"type": "array",
+									"items": 
+									{
+										"description": "Estructura que descriu un diagrama, i explica el tipus de diagrama, l'índex de la vista i el component o components de l'estil (si aplica)",
+										"type": "object",
+										"required": ["tipus"],
+										"properties": 
+										{
+											"tipus": 
+											{
+												"description": "Tipus de diagrama descrit en aquest element. És necessari per saber com tractar i actualitzar aquest diagrama",
+												"enum": 
+												[
+													"chart",
+													"matriu",
+													"vista3d"
+												]
+											},	
+											"left": 
+											{
+												"description": "Distància a la vora dreta. Opcional",
+												"type": "integer",
+												"minimum": 0
+											},
+											"top": 
+											{
+												"description": "Distància a la vora superior. Opcional",
+												"type": "integer",
+												"minimum": 0
+											},																	
+											"i_histograma": 
+											{
+												"description": "INTERN: lndex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
+												"type": "integer",
+												"minimum": 0
+											}
+										}
+									}
+								},								
 								"capa_video":
 								{
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el model de dades és ràster",
@@ -1639,7 +1722,8 @@
 								},
 								"url": {
 									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FòrmulaConsulta només si la darrera involucra un sol v[]. Si no hi ha cap parametre DIM es considera que tots els valors de totes les dimensions extra es troben empaquetades en un sol fitxer",
-									"type": "string"
+									"type": "string",
+									"format": "uri"
 								},
 								"format": {
 									"description": "Array d'index de FormatDescarregaTot",
