@@ -290,7 +290,7 @@ function AmagaLayerMissatges()
 
 function DonaNomServidorCaracterFinal(s)
 {
-	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&") 
+	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&")
 		return s;
 	if (s.indexOf("?")==-1)
 		s+="?";
@@ -301,7 +301,7 @@ function DonaNomServidorCaracterFinal(s)
 
 function DonaNomServidorSenseCaracterFinal(s)
 {
-	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&") 
+	if (s.charAt(s.length-1)=="?" || s.charAt(s.length-1)=="&")
 		return s.substring(0,s.length-1);
 	return s;
 }
@@ -1222,7 +1222,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 		//Inici afegit AZ a revisar per JM ·$·$·$·$·$·
 		if (capa.EnvTotalLL)
 			delete capa.EnvTotalLL;
-		
+
 		if (capa.estil && capa.estil.length>0)
 		{
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -1234,17 +1234,17 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 					{	// en tancar el navegador anoto al config les coses que mecessitaré per tornar a obrir la caixa igual, i esborro el i_histograma que és la marca que la fienstra no s'ha obert
 						// posició finestra
 						var nom_finestra="";
-						
+
 						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "matriu" )
 							nom_finestra=DonaNomHistograma(estil.diagrama[i_diagrama].i_histograma);
 						else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 							nom_finestra=DonaNomGrafic3d(estil.diagrama[i_diagrama].i_histograma);
-						
+
 						if (nom_finestra != "")
 						{
 							for (var i_layer_fin=0; i_layer_fin<layerFinestraList.length; i_layer_fin++)
 							{
-								if (layerFinestraList[i_layer_fin].nom == nom_finestra)							
+								if (layerFinestraList[i_layer_fin].nom == nom_finestra)
 									break;
 							}
 							if (i_layer_fin < layerFinestraList.length) //he identificar quina finestra era
@@ -1257,20 +1257,20 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 							}
 							//else -> si no l'he identificat, no anoto res i el proper cop s'obrirà a la posició per defecte
 						}
-						
+
 						// mida finestra -> s'haurà de fer més endavant, si fem que aquestes caixes siguin redimensionables (ara no ho són)
-						
-						/* dades del darrer gràfic visualitzat + estat dianmisme (important per si tinc un gràfic estàtic i he de desar 
-						aquestes dades que ja no surten de la vita actual!, i també important per poder obrir totes les finestres 
-						des del principi encara que no estigui veient aquesta capa/estil concret * / 
+
+						/* dades del darrer gràfic visualitzat + estat dianmisme (important per si tinc un gràfic estàtic i he de desar
+						aquestes dades que ja no surten de la vita actual!, i també important per poder obrir totes les finestres
+						des del principi encara que no estigui veient aquesta capa/estil concret * /
 						if (estil.diagrama[i_diagrama].tipus == "chart")
 						{
 							estil.diagrama[i_diagrama].chart=[];
 							for (var i_c=0; i_c<estil.component.length; i_c++)
 							{
-								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);												
+								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);
 								/*estil.diagrama[i_diagrama].chart.push({labels: retorn_prep_histo.label, valors: (retorn_prep_histo.valors ? retorn_prep_histo.valors : null),
-									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /	
+									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /
 							}
 						}
 						else if (estil.diagrama[i_diagrama].tipus == "matriu")
@@ -1280,10 +1280,10 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 						// esborrar i_histograma
 						delete estil.diagrama[i_diagrama].i_histograma; //en reiniciar serà la marca que no s'ha creat a finestra encara
 					}
-				}	
+				}
 			}
-		}			
-						
+		}
+
 		//Fi de Afegit AZ a revisar per JM ·$·$·$·$·$·
 
 		if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
@@ -2003,19 +2003,19 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_novaFinestra(nom_finestra, NovaVistaFinestra);
 	else if (nom_finestra.length>prefixHistogramaFinestra.length && nom_finestra.substring(0, prefixHistogramaFinestra.length) == prefixHistogramaFinestra)
 	{
-		TancaFinestra_novaFinestra(nom_finestra, HistogramaFinestra);						
+		TancaFinestra_novaFinestra(nom_finestra, HistogramaFinestra);
 		var str_id = nom_finestra.substr(prefixHistogramaFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[HistogramaFinestra.vista[number_id].i_capa].estil[HistogramaFinestra.vista[number_id].i_estil];
-	 
+
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{	
+		{
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id &&
 						(estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "matriu" ))
 				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);				
+					estil.diagrama.splice(i_diagrama, 1);
 					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
@@ -2024,18 +2024,18 @@ function TancaFinestraLayer(nom_finestra)
 	}
 	else if (nom_finestra.length>prefixSuperficie3DFinestra.length && nom_finestra.substring(0, prefixSuperficie3DFinestra.length) == prefixSuperficie3DFinestra)
 	{
-		TancaFinestra_novaFinestra(nom_finestra, Superficie3DFinestra);						
+		TancaFinestra_novaFinestra(nom_finestra, Superficie3DFinestra);
 		var str_id = nom_finestra.substr(prefixSuperficie3DFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[Superficie3DFinestra.vista[number_id].i_capa].estil[Superficie3DFinestra.vista[number_id].i_estil];
-	 
+
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{	
+		{
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id && estil.diagrama[i_diagrama].tipus == "vista3d" )
 				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);				
+					estil.diagrama.splice(i_diagrama, 1);
 					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
@@ -4067,7 +4067,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{layer}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{style}", capa.estil[i_estil2].nom);
 			else
@@ -4095,10 +4095,10 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 			else
 				s=s.replace("{format_extension}", capa.FormatImatge);
 		}
-		return s;		
+		return s;
 		}
 	else if (tipus=="TipusOAPI_MapTiles")
-	{		
+	{
 		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"?";
 		else
@@ -4107,23 +4107,23 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
-			
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
-				s=s.replace("{styleId}/", "default");	
+				s=s.replace("{styleId}/", "default");
 		}
 		else
-			s=s.replace("{styleId}/", "default");						
-		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
+			s=s.replace("{styleId}/", "default");
+		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);
 		s=s.replace("{tileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
 		s=s.replace("{tileRow}", j);
 		s=s.replace("{tileCol}", i);
-		if(capa.FormatImatge.charAt(0)==".")  
+		if(capa.FormatImatge.charAt(0)==".")
 			s=s.replace(".{format_extension}", capa.FormatImatge);
 		else
-			s=s.replace("{format_extension}", capa.FormatImatge);		
+			s=s.replace("{format_extension}", capa.FormatImatge);
 		cdns.push(s);
 
 		cdns.push("&f=" , capa.FormatImatge ) ;
@@ -4301,10 +4301,10 @@ var cdns=[], tipus, plantilla, i_estil2;
 			if (ParamCtrl.capa[i].estil[i_estil2].nom)
 	 			plantilla=plantilla.replace("{styleId}", ParamCtrl.capa[i].estil[i_estil2].nom);
 			else
-				plantilla=plantilla.replace("{styleId}", "default");	
+				plantilla=plantilla.replace("{styleId}", "default");
 		}
 		else
-			plantilla=plantilla.replace("{styleId}", "default");	
+			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
 
@@ -5415,7 +5415,7 @@ var p, unitats_CRS;
 				if (capa.visible!="no")
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
-											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,  
+											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
 											((capa.FormatImatge=="application/x-img") ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
 				}
 			}
@@ -5472,7 +5472,7 @@ var p, unitats_CRS;
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 			{
-				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");	
+				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
 				barra_slider.push("<br>");
 				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
@@ -5488,7 +5488,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
 		{
-			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), 
+			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
@@ -5499,7 +5499,7 @@ var p, unitats_CRS;
 					barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
 				barra_slider.push("</datalist>");
 			}
-			barra_slider.push("</span>");			
+			barra_slider.push("</span>");
 		}
 		if (barra_slider.length)
 			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
@@ -5524,12 +5524,12 @@ var p, unitats_CRS;
 			else
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i); 
+					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
-						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);					
-				}	
+						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
+				}
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)
 				setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
@@ -5975,7 +5975,7 @@ function PreparaParamInternCtrl()
 					 			nfil: ParamCtrl.nfil,
 								ncol: ParamCtrl.ncol,
 								CostatZoomActual: ParamCtrl.NivellZoomCostat,
-								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]	
+								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]
 								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
 					 EnvLLSituacio: [],
 					 AmpleSituacio: 99,
@@ -5989,11 +5989,11 @@ function PreparaParamInternCtrl()
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}],
-					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats 
+					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats
 					 millisegons: CarregaDatesCapes(),
 					 FlagsData: DeterminaFlagsDataCapes(),
 					 flags: 0};
-	
+
 	if (ParamInternCtrl.millisegons.length)
 		ParamInternCtrl.iMillisegonsActual=ParamInternCtrl.millisegons.binarySearch(DeterminaMillisegonsActualCapes());
 
@@ -6182,7 +6182,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
   createFinestraLayer(window, "triaStoryMap", {"cat":"Històries", "spa":"Historias", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-  createFinestraLayer(window, "storyMap", {"cat":"titol de la història", "spa":"título de la historia", "eng": "storie title", "fre":"titol"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisible(event);'", resizable:true}, null);
+  createFinestraLayer(window, "storyMap", {"cat":"titol de la història", "spa":"título de la historia", "eng": "storie title", "fre":"titol"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
   createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa

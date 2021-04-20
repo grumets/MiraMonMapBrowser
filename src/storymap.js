@@ -20,7 +20,7 @@
     Copyright 2001, 2021 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Nuria Julià (n julia at creaf uab cat)
+    amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del
     CREAF que elabora programari de Sistema d'Informació Geogràfica
     i de Teledetecció per a la visualització, consulta, edició i anàlisi
@@ -46,20 +46,17 @@ function MostraFinestraTriaStoryMap()
 	OmpleFinestraTriaStoryMap(window, "triaStoryMap");
 }
 
-//Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
+//Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], storyMap, i_story;
 
-	//StoryMap=ParamCtrl.StoryMap[i_story];
 	cdns.push("<br>",
 		DonaCadenaLang({"cat":"Selecciona una història", "spa":"Selecciona una historia", "eng":"Select a story", "fre":"Sélectionnez une histoire"}), ":" ,
 						"<br>");
 		for (i_story=0; i_story<ParamCtrl.StoryMap.length; i_story++)
 		{
-			cdns.push(//"<a href=\"javascript:void(0)\" onclick=\"IniciaStoryMap(", i_story, ");\">",
-																					//Si trobes src imatge de la story ? ensenya la imatge de la story: sinó ensenya la imatge per defecte 1griscala
-		          "<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150'>",
+			cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150'>",
 							"<a href=\"javascript:void(0)\" onclick=\"IniciaStoryMap(", i_story, ");\">",
 							"<br>",
 							ParamCtrl.StoryMap[i_story].desc,
@@ -68,15 +65,12 @@ var cdns=[], storyMap, i_story;
 	contentFinestraLayer(win, name, cdns.join(""));
 }
 
-//Inicia una storymap
+//Inicia una Storymap
 function IniciaStoryMap(i_story)
 {
  			loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, /*alert,*/ i_story);
-			//alert(ParamCtrl.StoryMap[i_story].url)
-
-			//Mode Pantalla Completa en iniciar la història: OK
+			//Mode Pantalla Completa en iniciar la història:
 			//openFullscreen(document.documentElement);
-
 			//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
 }
 
@@ -84,28 +78,14 @@ function IniciaStoryMap(i_story)
 function CreaStoryMap(text_html, extra_param)
 {
 var i_story=extra_param, elem;
-		//alert(text_html) //Es mostra el codi htm de la història dins l'alerta.
 
-			//amagar caixa triaStoryMap: PENDENT
-
-			//Fer visible Finestra storyMap: OK
-			//JM
 			elem=getFinestraLayer(window, "storyMap")
 			elem.innerHTML=text_html;
-			//AB
+
 			ObreFinestra(window, "storyMap")
+			darrerNodeStoryMapVisibleExecutat=null;
+			ExecutaAttributsStoryMapVisible();
 }
-
-//En el config.js podem afegir una arrar d'histories
-//storyMap: ["desc": "Inicis Covid-19", "src": "inicisCovid.htm"],
-//Necessitem Afegir un array d'històries en el config.json (i el config-schema.json)
-//Necessitem Afegir un botó a la Barra amb un llibre obert (fam-fam-fam)
-//Necessitem Afegir una caixa de dialeg que mostri la llista de les histories (a.k.a. llista dels desc)
-//Necessitem Afegir una caixa on carregar el contingut del html
-//Necessitem Fer una crida ajax() tools1.js per obtenir l'html de la historia i posar-li amb contentFinestraLayer(window, "storyMap", "<div onScroll='ExecutaAttributsStoryMapVisible(this);'>"+contingut_html+"</div>");
-//Necessitem associar la funció ExecutaAttributsStoryMapVisible() a un event onScroll
-
-//https://www.w3schools.com/jsref/prop_node_nodetype.asp
 
 function isScrolledIntoView(el) {
 
@@ -119,6 +99,8 @@ function isScrolledIntoView(el) {
     //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
     return isVisible;
 }
+
+var darrerNodeStoryMapVisibleExecutat=null;
 
 function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 {
@@ -137,51 +119,96 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 			{
 				if (nodes[i].attributes[i_at].name=="mm-center")
 				{
-					var mmcenter = nodes[i].attributes[i_at].value;
-
-					punt=JSON.parse(mmcenter);
-
+					var mmcenter = nodes[i].attributes[i_at].value.trim();
+					if (mmcenter.length)
+					{
+						try {
+							punt=JSON.parse(mmcenter);
+						}
+						catch (e) {
+							alert(DonaCadenaLang({"cat":"Format del paràmetre mm-center incorrecte:  ", "spa":"Formato del parametro mm-center icnorrecto:  ", "eng":"Wrong format in mm-center parameter:  ", "fre":"Format incorrect dans le paramètre mm-center:  "}) + e +
+										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmcenter);
+							break;
+						}
 						if(isNaN(punt.x) || isNaN(punt.y))
 						{
-					  	   alert(DonaCadenaLang({"cat":"Format de les coordenades erroni:\nS'ha d'indicar un valor numèric.",
+					  	alert(DonaCadenaLang({"cat":"Format de les coordenades erroni:\nS'ha d'indicar un valor numèric.",
 											"spa":"Formato de las coordenadas erróneo:\nSe debe indicar un valor numérico.",
 											"eng":"Coordinate format is incorrectly:\nIt Must indicate a numeric value.",
 											"fre":"Format des coordonnées erroné:\nVous devez indiquer une valeur numérique."}));
-						   return;
+						  return;
 						}
 						CentraLaVista(punt.x, punt.y);
 						hihacanvis=true;
+					}
 				}
 				else if (nodes[i].attributes[i_at].name=='mm-zoom')
 				{
-					var costat=parseFloat(nodes[i].attributes[i_at].value);
-
-					for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
+					if (nodes[i].attributes[i_at].value.trim().length)
 					{
-						if (ParamCtrl.zoom[nivell].costat==costat)
+						var costat=parseFloat(nodes[i].attributes[i_at].value.trim());
+
+						if (isNaN(costat))
 						{
-							CanviaNivellDeZoom(nivell);
-							hihacanvis=true;
+							alert(DonaCadenaLang({"cat":"Format del valor del costat de zoom erroni:\nS'ha d'indicar un valor numèric.",
+											"spa":"Formato del lado de zoom erróneo:\nSe debe indicar un valor numérico.",
+											"eng":"Zoom size format is incorrectly:\nIt Must indicate a numeric value.",
+											"fre":"Format des zoom erroné:\nVous devez indiquer une valeur numérique."}));
+							return;
+						}
+						for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
+						{
+							if (ParamCtrl.zoom[nivell].costat==costat)
+							{
+								CanviaNivellDeZoom(nivell);
+								hihacanvis=true;
+								break;
+							}
+						}
+						if (nivell==ParamCtrl.zoom.length)
+							alert(DonaCadenaLang({"cat":"El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.",
+											"spa":"El lado de zoom solicitado no es uno de los lados disponibles en este navegador.",
+											"eng":"The zoom size requested is not available in this browser.",
+											"fre":"	La taille de zoom demandée n'est pas disponible dans ce navigateur."}));
+					}
+				}
+				else if (nodes[i].attributes[i_at].name=="mm-layer")
+				{
+					// Index capa
+				}
+				else if (nodes[i].attributes[i_at].name=="mm-style")
+				{
+					// Estil capa
+				}
+				else if (nodes[i].attributes[i_at].name=="mm-time")
+				{
+					var datejson, date;
+					var mmtime = nodes[i].attributes[i_at].value.trim();
+					if (mmtime.length)
+					{
+						try
+						{
+							datejson=JSON.parse(mmtime);
+						}
+						catch (e)
+						{
+							alert(DonaCadenaLang({"cat":"Format del paràmetre mm-time incorrecte:  ", "spa":"Formato del parámetro mm-time icnorrecto:  ", "eng":"Wrong format in mm-time parameter:  ", "fre":"Format incorrect dans le paramètre mm-time:  "}) + e +
+										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmtime);
 							break;
 						}
+						date=DonaDateDesDeDataJSON(datejson);
+						SincronitzaCapesMillisegons(date.getTime());
+						hihacanvis=true;
 					}
-					if (nivell==ParamCtrl.zoom.length)
-						alert("El costat sol·licitat no és un dels costats disponibles en aquest navegador.");
 				}
-				else if (nodes[i].attributes[i_at].name=="mm-capa")
-				{
-					//alert("capa");
+			}
+			if (hihacanvis)
+			{
+				if (darrerNodeStoryMapVisibleExecutat==nodes[i])
 					return true;
-					// Index de la capa
-				}
-				else if (nodes[i].attributes[i_at].name=="mm-estil")
-				{
-					//alert("estil");
-					return true;
-					// Estil de la capa
-				}
-				if (hihacanvis)
-					RepintaMapesIVistes();
+				darrerNodeStoryMapVisibleExecutat=nodes[i];
+				RepintaMapesIVistes();
+				return true;
 			}
 		}
 		if (nodes[i].childNodes && nodes[i].childNodes.length)
@@ -193,16 +220,18 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 	return false;
 }
 
-function ExecutaAttributsStoryMapVisible(event)
+var timerExecutaAttributsStoryMapVisible=null;
+
+function ExecutaAttributsStoryMapVisibleEvent(event)
+{
+	if (timerExecutaAttributsStoryMapVisible)
+		clearTimeout(timerExecutaAttributsStoryMapVisible);
+	timerExecutaAttributsStoryMapVisible=setTimeout(ExecutaAttributsStoryMapVisible,500);
+}
+
+function ExecutaAttributsStoryMapVisible()
 {
 	var div=getFinestraLayer(window, "storyMap")
-
 	RecorreNodesFillsAttributsStoryMapVisible(div.childNodes);
-	//Donat el node elem mirar, un a un, tots els nodes fills https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_childnodes
-        //Per a cada node:
-        //Mirar si és visible amb isScrolledIntoView()
-        //Mirar si te cap attribut el nom del qual comença per "mm-"
-        //Si en trobo un,
-           //Executar cada atribut a partir de la funció que té associada
-           //Plegar
+	timerExecutaAttributsStoryMapVisible=null;
 }

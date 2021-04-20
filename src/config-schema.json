@@ -794,7 +794,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-bbox'...",
+						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}'...",
 						"type": "string",
 						"format": "uri"
 					},
