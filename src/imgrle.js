@@ -1254,7 +1254,7 @@ var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma ? histograma.c
 		valor0=img_stat[i_cell_ini+i]=f_estad(fila_calc[i], f_estad_param);
 		if (histograma)
 		{
-			if (isNaN(valor0) || valor0==null)
+			if (valor0==null || isNaN(valor0))
 				histograma.classe_nodata++;
 			else
 			{
@@ -1303,7 +1303,7 @@ var j, i, a0, valor_min0, valor0, bigint;
 		for (i=0;i<ncol;i++)
 		{
 			valor0=img_stat[j*ncol+i];
-			if (isNaN(valor0) || valor0==null)
+			if (valor0==null || isNaN(valor0))
 			{
 				if (histograma)	
 					histograma.classe_nodata++;

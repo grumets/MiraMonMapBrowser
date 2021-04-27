@@ -237,15 +237,15 @@ var titol=[], estil;
 	}
 }
 
-function CanviaTipusClickVideo(event)
+/*function CanviaTipusClickVideo(event)
 {
 	if (document.video_animacions.TipusClick[0].checked && PuntsSerieTemporal.length==0)
 	{
 		document.getElementById("video_click").style.visibility="hidden";
-		if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
-		{			 			
+		//if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
+		//{			 			
 			document.video_animacions.veure.selectedIndex=0;
-			PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);
+			PosaEstadisticSerieOAnimacio(null, estadistic, -1);
 		}
 	}	
 	else
@@ -253,22 +253,23 @@ function CanviaTipusClickVideo(event)
 		TancaFinestraSerieTemp("video_grafic", "video_click");
 		document.getElementById("video_click").style.visibility="visible";
 		IFilEixXEixTVideo=-1;
-	}
+		return;
+	}	
 	if (event)
 		dontPropagateEvent(event);
-}
+}*/
 
 function ClickSobreVideo(event_de_click)
 {
-	if (document.video_animacions.TipusClick[0].checked)
+	if (IFilEixXEixTVideo==-1)
 		ConsultaSobreVideo(event_de_click);
-	else //if (document.video_animacions.TipusClick[1].checked)
+	else if (IFilEixXEixTVideo==-2)
 	{
 		if (!EstanTotsElsFotogramesCarregatsVideo())
 			return;
 		if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
 			document.video_animacions.veure.selectedIndex=1;
-		PosaEstadisticSerieOAnimacio("x/t", DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY))
+		PosaEstadisticSerieOAnimacio(null, "x/t", DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY))
 		document.getElementById("video_click").style.visibility="hidden";
 	}
 }
@@ -310,12 +311,12 @@ function MouSobreVideo(event_de_click)
 {
 var ctx, canvas, shadowPrevi;
 
-	if (!document.video_animacions.TipusClick[1].checked)
+	if (IFilEixXEixTVideo==-1)
 		return;
 
 	var j=DonaCoordJDeCoordSobreVista(document.getElementById("video_central"), NovaVistaVideo, event_de_click.clientY)
 
-	if (IFilEixXEixTVideo!=-1)
+	if (IFilEixXEixTVideo>=0)
 	{
 		MostraFotograma(IDataFilEixXEixT[j], false, true);
 		return;
@@ -436,33 +437,17 @@ var cdns=[], capa, i_capa_primer_video;
 		"<span id=\"video_estil\"></span></font></td></tr></table>");
 	
 	//Creo la pantalla on es projecte el video.
-	//Segurament això s'ha de canviar radicalment.
 	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
 		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
 		"<div id=\"video_click\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></canvas></div>",
 		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
 		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
-	//Dibuixar la data i la barra de progrés del video.
-	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-			  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
-			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
-	var n=DonaNPecesBarraVideo();
-	for (var i=0; i<n; i++)
-		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
-	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
-
-	if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
-	{
-		IconaVideoClick=JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta));
-		CarregaImatgeIcona(IconaVideoClick);
-	}
-
 	// Desplegable d' animació o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
 
 	//Dibuixar els botons de progrés del video.
-	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic();\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\"></button></span>");
+	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic(event);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\"></button></span>");
 	cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\" title=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\" title=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\"></button>",
@@ -479,16 +464,32 @@ var cdns=[], capa, i_capa_primer_video;
 		"<input type=\"radio\" name=\"TipusTemps\" checked>",
 		DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
 		"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
-		"&nbsp;&nbsp;&nbsp;&nbsp;",
-		DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
-		" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\" checked>",
-		DonaCadenaLang({"cat":"punt/t", "spa":"punto/t", "eng":"point/t", "fre":"point/t"}),
-		" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\">x/t",
+		//"&nbsp;&nbsp;&nbsp;&nbsp;",
+		//DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
+		//" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\" checked>",
+		//DonaCadenaLang({"cat":"punt/t", "spa":"punto/t", "eng":"point/t", "fre":"point/t"}),
+		//" <input type=\"radio\" name=\"TipusClick\" onClick=\"CanviaTipusClickVideo(event)\">x/t",
 		//"<a href='javascript:TancaFinestraLayer(\"video\");'>",
 		//DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
 		//"</a>",
 		"</font>",
 		"</center>");
+
+	//Dibuixar la data i la barra de progrés del video.
+	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+			  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
+			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
+	var n=DonaNPecesBarraVideo();
+	for (var i=0; i<n; i++)
+		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
+
+	if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
+	{
+		IconaVideoClick=JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta));
+		CarregaImatgeIcona(IconaVideoClick);
+	}
+
 	cdns.push("</div>",
 		"</div>");
 
@@ -648,7 +649,7 @@ var cdns=[], capa, estil;
 				if (capa.FormatImatge=="application/x-img" && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
 				{
 					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
-						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"return PosaEstadisticSerieOAnimacio(document.video_animacions.veure.value, -1);\">");
+						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(event, document.video_animacions.veure.value, -1);\">");
 					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
 					cdns.push("<option value=\"x/t\">", DonaCadenaLang({"cat":"Gràfic", "spa":"Gráfico", "eng":"Graph", "fre":"Graphique"}), " x/t</option>");
 					if (estil.categories && estil.atributs)
@@ -1095,14 +1096,15 @@ var n_valids=0, delta, i, suma=0, v_i, n=v.length;
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
-
-	if (n==0)
+ 
+	if (v.length==0)
 		return null;
 
 	v.sort(sortAscendingNumberNull);  //ordena els null al final de la llista
 	m=v[0];
 	if (!m && m!=0)
 		return null;
+	
 	count_m=1;
 	for(i=1;i<n;i++)
 	{
@@ -1180,8 +1182,8 @@ var capa, estil, valors;
 
 function CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, vista, estadistic)
 {
-var capa, estil, primer_estil=null, valors
-var ctx, imgData, data, dv=[], n_v_plena, mes_duna_v;
+var capa, estil, primer_estil=null, valors;
+var ctx, imgData, data, dv=[], n_v_plena;
 var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
 var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 var f_estad, f_estad_param=null, estiramentPaleta, la_paleta;
@@ -1220,7 +1222,11 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
 			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
+			{
+				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files següents.
+					fila_calc[i][i_data_video]=null;  
 				continue;
+			}
 			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
 			estil=capa.estil[DatesVideo[i_data_video].i_estil];
 			if (!primer_estil)
@@ -1293,8 +1299,8 @@ function CanviaImatgeBinariaEstadisticaEixXEixT(nom_canvas, i_fil)
 function CanviaImatgeBinariaEstadisticaEixXEixTVista(nom_canvas, vista, i_fil)
 {
 var capa, estil, primer_estil=null, valors
-var ctx, imgData, data, dv=[], n_v_plena, mes_duna_v;
-var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
+var ctx, imgData, data, dv=[], n_v_plena;
+var j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
 var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 
 ImgVideoStatHistograma={"classe_nodata": 0,
@@ -1428,13 +1434,17 @@ var i_cell_ini, i_data, i, j, valor0, histo_component0=histograma ? histograma.c
 	return;
 }
 
-function PosaEstadisticSerieOAnimacio(estadistic, i_fil)
+function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 {
+	if (event)
+		dontPropagateEvent(event);
 	if (estadistic=="x/t" && i_fil==-1 && IFilEixXEixTVideo==-1)
 	{	
-		document.video_animacions.TipusClick[0].checked=false;
-		document.video_animacions.TipusClick[1].checked=true;
-		CanviaTipusClickVideo();
+		//document.video_animacions.TipusClick[0].checked=false;
+		//document.video_animacions.TipusClick[1].checked=true;
+		TancaFinestraSerieTemp("video_grafic", "video_click");
+		document.getElementById("video_click").style.visibility="visible";
+		IFilEixXEixTVideo=-2;
 		return;
 	}
 
@@ -1453,11 +1463,15 @@ function PosaEstadisticSerieOAnimacio(estadistic, i_fil)
 		EncenFotogramaVideo(IDataVideoMostrada, n);
 		ApagaEstadisticsVideo(n);
 		IFilEixXEixTVideo=-1;
+		return;
 	}
-	else
-	{
+
 		//Desactivo les caracteristiques de video.
-		VideoMostra(0)  //demano pausa.
+   		if (timeoutVideoID)
+		{
+			clearTimeout(timeoutVideoID);
+			timeoutVideoID=null;
+		}
 		document.getElementById("video_botons_animacio").style.visibility="hidden";
 		document.getElementById("video_botons_estadistics").style.visibility="visible";
 		document.getElementById("video_time_slider").style.visibility="hidden";
@@ -1489,8 +1503,7 @@ function PosaEstadisticSerieOAnimacio(estadistic, i_fil)
 				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
 			}
 		}
-	}
-	return true;
+	return;
 }
 
 //Segons: http://resources.esri.com/help/9.3/arcgisengine/java/GP_ToolRef/spatial_analyst_tools/esri_ascii_raster_format.htm?
@@ -1528,15 +1541,15 @@ var cdns=[], nodata=255, i, j, valor0;
 	return cdns.join("");	
 }
 
-function VideoCopiaEstadistic()
+function VideoCopiaEstadistic(event)
 {
 	IniciaCopiaPortapapersFinestra(window, "VideoDiv");
 
 	FinalitzaCopiaPortapapersFinestra(window, "VideoDiv", 
 			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
 			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls en format", "spa": "Los valores del gráfico han sido copiados al portapapeles en formato", "eng": "The values of the graphic have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " CSV. ");
-			
 
+	dontPropagateEvent(event);
 	return false;
 }
 
@@ -2060,7 +2073,7 @@ function DescarregaVideo()
 	PuntsSerieTemporal=[];
 	ImgVideoStat=[];
 	EstadisticCarregatVideo=null;
-	IFilEixXEixTVideo-1;
+	IFilEixXEixTVideo=-1;
 	TancaFinestraSerieTemp("video_grafic", "video_click");
 }
 
