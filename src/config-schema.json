@@ -2045,18 +2045,54 @@
 				}
 			}
 		},
+		"HexaOrJSONColor": 
+		{
+			"oneOf": [
+				{
+					"description": "Color de la paleta en format #RRGGBB. Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
+					"type": "string"
+				},
+				{
+					"description": "JSON RGB color",
+					"type": "object",
+					"required": ["r", "g", "b"],
+					"properties": {
+						"r": { "type": "integer", "minimum": 0, "maximum": 255},
+						"g": { "type": "integer", "minimum": 0, "maximum": 255},
+						"b": { "type": "integer", "minimum": 0, "maximum": 255}
+					}
+				}
+			]
+		},
 		"paleta": {
 			"description": "Paleta de colors",
 			"type": "object",
-			"required": ["colors"],
 			"properties": {
 				"colors": {
 					"description": "Colors de la paleta",
 					"type": "array",
 					"minItems": 1,
 					"items": {
-						"description": "Color de la paleta en format #RRGGBB. Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
-						"type": "string"
+						"$ref": "#/definitions/HexaOrJSONColor"
+					}
+				},
+				"ramp": {
+					"description": "Palette colors defined by ramps. Internally it will be convered to 'colors'.",
+					"type": "array",
+					"minItems": 2,
+					"items": {
+						"type": "object",
+						"required": ["i_color", "color"],
+						"properties": {
+							"i_color": {
+								"description": "Index of the color in the pallete. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap witht he previous one color in between will be linear interpolated",
+								"type": "integer",
+								"minimum": 0
+							},
+							"color": {
+								"$ref": "#/definitions/HexaOrJSONColor"
+							}
+						} 
 					}
 				}
 			}

@@ -104,6 +104,9 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 	if (estil.ItemLleg && estil.ItemLleg.length>0)
 		return;  //No cal fer-la: ja està feta.
 
+	if (estil.paleta && estil.paleta.ramp && !estil.paleta.colors)
+		TransformRampToColorsArray(estil.paleta);
+
 	colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors : null;
 	ncolors=colors ? colors.length : 256;
 
