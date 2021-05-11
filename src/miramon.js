@@ -67,10 +67,14 @@ IncludeScript("consult.js");
 IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("vector.js");
+IncludeScript("paletes.js");
 IncludeScript("capavola.js");
 IncludeScript("editavec.js", true);
 IncludeScript("datahora.js");
 IncludeScript("video.js");
+IncludeScript("stats.js");
+IncludeScript("gaussian_fit_1d.js");
+IncludeScript("phenology.js");
 IncludeScript("qualitat.js");
 IncludeScript("llinatge.js");
 IncludeScript("cntxmenu.js");
@@ -92,8 +96,6 @@ IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
 
-//La paleta tableau20 surt de https://vega.github.io/vega/docs/schemes/
-var PaletesTematiquesTipiques={"tableau20": ["#4c78a8", "#9ecae9", "#f58518", "#ffbf79", "#54a24b", "#88d27a", "#b79a20", "#f2cf5b", "#439894", "#83bcb6", "#e45756", "#ff9d98", "#79706e", "#bab0ac", "#d67195", "#fcbfd2", "#b279a2", "#d6a5c9", "#9e765f", "#d8b5a5"]};
 var IdProces=Math.random()*100000;
 var NIdProces=0;
 var NConsultesZero, NConsultesDigiZero, NCapesConsultables, NCapesDigiConsultables, NCapesCTipica=0;
@@ -3222,9 +3224,24 @@ function MostraFinestraVideo()
 							  "eng":"of time series",
 							  "fre":"pour séries chronologiques"})))
 		return;
-	OmpleFinestraVideo(window, "video");
+	PreparaIOmpleFinestraVideo();
 }
 
+function PreparaIOmpleFinestraVideo()
+{
+	if (!PaletesGlobals)
+	{
+		loadJSON("paletes.json",
+			function(paletes_globals, extra_param) {
+				PaletesGlobals=paletes_globals;
+				OmpleFinestraVideo(window, "video");
+			},
+			function(xhr) { alert(xhr); },
+			null);
+	}
+	else
+		OmpleFinestraVideo(window, "video");
+}
 
 function CalculaMidesSituacio()
 {
@@ -4445,25 +4462,6 @@ var i_estil, capa=ParamCtrl.capa[i_capa];
 	CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 	return s;
 }
-
-function DonaFactorAEstiramentPaleta(estiramentPaleta, n_colors)
-{
-	if (!estiramentPaleta || estiramentPaleta.valorMaxim==estiramentPaleta.valorMinim)
-		return 1;
-	return n_colors/(estiramentPaleta.valorMaxim-estiramentPaleta.valorMinim);
-}
-
-function DonaFactorValorMinEstiramentPaleta(estiramentPaleta)
-{
-	return (estiramentPaleta && estiramentPaleta.valorMinim) ? estiramentPaleta.valorMinim : 0;
-}
-
-function DonaFactorValorMaxEstiramentPaleta(estiramentPaleta, n_colors)
-{
-	return (estiramentPaleta && (estiramentPaleta.valorMaxim || estiramentPaleta.valorMaxim==0)) ? estiramentPaleta.valorMaxim : n_colors-1;
-}
-
-
 
 function DonaDescripcioValorMostrarCapa(i_capa, una_linia)
 {

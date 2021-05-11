@@ -1457,6 +1457,10 @@
 									"description": "Te dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
 									"$ref": "#/definitions/paleta"
 								},
+								"paletaPrevia": {
+									"description": "INTERN. Usat per guardar la paleta original si l'usuari decideix canviar-la i poder recuperar-la posteriorment.",
+									"$ref": "#/definitions/paleta"
+								},
 								"NomCampSel": {
 									"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit IconaSel els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten icona. Si no hi ha IconaSel els objectes seleccionats (true) presenten icona i els no seleccionats (false) no mostren presenten icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
 									"type": ["string", "null"]								

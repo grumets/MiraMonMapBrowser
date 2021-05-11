@@ -1337,56 +1337,6 @@ var j, i, a0, valor_min0, valor0, bigint;
 	}	
 }
 
-function TransformRampToColorsArray(paleta)
-{
-var ramp=paleta.ramp, color, color0, bigint, bigint0, r, g, b, r0, g0, b0, a_r, a_g, a_b, b_r, b_g, b_b;
-	if (!ramp || !ramp.length)
-		return 1;
-	color0=ramp[0].color;
-	if (typeof color0==="object")
-		color0=RGB_JSON(color0);	
-	if (typeof color0!=="string" || color0.charAt(0)!="#")
-	{
-		alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + color0 + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
-		return 1;
-	}
-	bigint0 = parseInt(color0.substring(1), 16);
-	r0=(bigint0 >> 16) & 255;
-	g0=(bigint0 >> 8) & 255;
-	b0=bigint0 & 255;
-	paleta.colors=[color0];
-	for (var i_ramp=1; i_ramp<ramp.length; i_ramp++)
-	{
-		color=ramp[i_ramp].color;
-		if (typeof color==="object")
-			color=RGB_JSON(color);
-		if (typeof color!=="string" || color.charAt(0)!="#")
-		{
-			alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + color + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
-			return 1;
-		}
-		bigint = parseInt(color.substring(1), 16);
-		r=(bigint >> 16) & 255;
-		g=(bigint >> 8) & 255;
-		b=bigint & 255;
-		a_r=(r-r0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
-		a_g=(g-g0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
-		a_b=(b-b0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
-		b_r=r0-(paleta.colors.length-1)*a_r;
-		b_g=g0-(paleta.colors.length-1)*a_g;
-		b_b=b0-(paleta.colors.length-1)*a_b;
-		while (paleta.colors.length<ramp[i_ramp].i_color)
-			paleta.colors.push(RGB(Math.round(a_r*paleta.colors.length+b_r), Math.round(a_g*paleta.colors.length+b_g), Math.round(a_b*paleta.colors.length+b_b)));
-		bigint0 = bigint;
-		r0=r;
-		g0=g;
-		b0=b;
-		color0=color;
-		paleta.colors.push(color0);
-	}
-	return 0;
-}
-
 /*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255. 
 This is especially handy for Canvas image processing algorithms since now you don’t have to manually clamp your 
 image processing math to avoid overflowing the 8-bit range.
@@ -1425,7 +1375,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			return;
 		}*/
 		component0=component[0];
-		if (paleta.ramp && !paleta.colors)
+		if (paleta && paleta.ramp && !paleta.colors)
 		{
 			if (TransformRampToColorsArray(paleta))
 				return;

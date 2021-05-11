@@ -1,0 +1,115 @@
+{
+	"continuous": 
+	{
+		"DEMScreen":
+		{
+			"desc": {"cat": "MDE pantalla", "spa": "MDE pantalla", "eng": "DEM screen", "fre": "MEN écran"},
+			"source": "http://soliton.vm.bytemark.co.uk/pub/cpt-city/td/tn/DEM_screen.png.index.html",
+			"ramp":[{"i_color": 0, "color": {"r": 0, "g": 132, "b": 53}},
+					{"i_color": 25, "color": {"r": 51, "g": 204, "b": 0}},
+					{"i_color": 50, "color": {"r": 244, "g":240, "b": 113}},
+					{"i_color": 100, "color": {"r": 244, "g":189, "b": 69}},
+					{"i_color": 150, "color": {"r": 153, "g":100, "b": 43}},
+					{"i_color": 200, "color": {"r": 255, "g":255, "b": 255}}]
+		},
+		"PhenoCycle":
+		{
+			"desc": {"cat": "Fenologia", "spa": "Fenología", "eng": "Phenology", "fre": "phénologie"},
+			"ramp":[{"i_color": 0, "color": {"r": 0, "g": 0, "b": 85}},
+					{"i_color": 45, "color": {"r": 0, "g": 85, "b": 255}},
+					{"i_color": 63, "color": {"r": 0, "g": 115, "b": 57}},
+					{"i_color": 81, "color": {"r": 0, "g": 255, "b": 0}},
+					{"i_color": 90, "color": {"r": 170, "g": 255, "b": 0}},
+					{"i_color": 100, "color": {"r": 255, "g": 170, "b": 0}},
+					{"i_color": 129, "color": {"r": 255, "g": 0, "b": 0}},
+					{"i_color": 154, "color": {"r": 255, "g": 170, "b": 0}},
+					{"i_color": 163, "color": {"r": 255, "g": 255, "b": 0}},
+					{"i_color": 209, "color": {"r": 85, "g": 43, "b": 0}},
+					{"i_color": 254, "color": {"r": 0, "g": 0, "b": 85}}]
+		},
+		"MDE256": 
+		{
+			"desc": {"cat": "MDE 256", "spa": "MDE 256", "eng": "DEM 256", "fre": "MEN 256"},
+			"colors":["#000000","#000400","#000C00","#001000","#001800","#001C00","#002000","#002800","#002D00","#003500","#003900","#004100","#004500","#004900","#005100","#005500","#005D00","#006100","#006500","#006900","#006D00","#007100","#007500","#007900","#007D00","#008200","#008200","#008600","#008A00","#008E00","#009200","#009600","#009A00","#009E00","#00A200","#00A600","#00AE00","#00B200","#00B600","#00BE00","#00C200","#00C600","#00CE00","#00D200","#00DB00","#00DF00","#00E300","#00EB00","#00EF00","#00F300","#00FB00","#00FF00","#10FF00","#1CFF00","#2DFF00","#3DFF00","#4DFF00","#59FF00","#69FF00","#79FF00","#86FF00","#96FF00","#A6FF00","#B2FF00","#C2FF00","#D2FF00","#E3FF00","#EFFF00","#FFFF00","#FFFB00","#FFFB00","#FFF700","#FFF300","#FFF300","#FFEF00","#FFEB00","#FFEB00","#FFE700","#FFE700","#FFE300","#FFDF00","#FFDF00","#FFDB00","#FFD700","#FFD700","#FFD200","#FFD200","#FFCE00","#FFCE00","#FFCA00","#FFCA00","#FFCA00","#FFC600","#FFC600","#FFC200","#FFC200","#FFBE00","#FFBE00","#FFBE00","#FFBA00","#FFBA00","#FFB600","#FFB600","#FFB200","#FFB200","#FFAE00","#FFAA00","#FFAA00","#FFA600","#FFA200","#FFA200","#FF9E00","#FF9E00","#FF9A00","#FF9600","#FF9600","#FF9200","#FF8E00","#FF8E00","#FF8A00","#FF8A00","#FF8600","#FF8600","#FF8600","#FF8200","#FF8200","#FF8200","#FF7D00","#FF7D00","#FF7900","#FF7900","#FF7900","#FF7500","#FF7500","#FF7500","#FF7100","#FF7100","#FB7100","#F76D00","#F36D00","#EF6900","#EB6900","#E76900","#E36500","#DF6500","#DB6100","#D76100","#D25D00","#CE5D00","#CA5D00","#C65900","#C25900","#BE5500","#BA5500","#BA5900","#BA5900","#BA5D00","#BA5D00","#BA6100","#BA6500","#BA6500","#BA6900","#B66900","#B66D00","#B66D00","#B67100","#B67500","#B67500","#B67900","#B67900","#B67D00","#B68200","#B68200","#B68600","#B68600","#B68A00","#B68A00","#B68E00","#B68E00","#BA9200","#BA9200","#BA9600","#BA9600","#BA9A00","#BA9A00","#BA9E00","#BA9E00","#BAA200","#B69E00","#B29A00","#AE9600","#AA9200","#A69200","#A28E00","#9E8A00","#9A8600","#9A8200","#967D00","#927900","#8E7500","#8A7500","#867100","#826D00","#7D6900","#796500","#796100","#796100","#795D00","#795D00","#795900","#795900","#795500","#795500","#795100","#795100","#794D00","#794D00","#794900","#794900","#794500","#794500","#794100","#824D10","#8A551C","#8E612D","#966939","#9E7549","#A68255","#AA8A65","#B29671","#BA9E82","#C2AA8E","#C6B29E","#CEBEAA","#D7CABA","#DFD2C6","#E3DFD7","#EBE7E3","#F3F3F3","#F3EFF3","#F3EBF3","#F7E7F7","#F7E3F7","#F7DFF7","#F7DBF7","#F7D7F7","#F7D2F7","#FBD2FB","#FBCEFB","#FBCAFB","#FBC6FB","#FBC2FB","#FBBEFB","#FFBAFF","#FFB6FF","#FFB2FF"]
+		},
+		"rainbow": 
+		{
+			"desc": {"cat": "Arc de sant martí", "spa": "Arco iris", "eng": "Rainbow", "fre": "Arc-en-ciel"},
+			"source": "http://soliton.vm.bytemark.co.uk/pub/cpt-city/oc/tn/rainbow.png.index.html",
+			"colors": ["#90006F","#8D0072","#8A0075","#870078","#84007B","#81007E","#7E0081","#7B0084","#780087","#75008A","#72008D","#6F0090","#6C0093","#690096","#660099","#63009C","#60009F","#5D00A2","#5A00A5","#5700A8","#5400AB","#5100AE","#4E00B1","#4B00B4","#4800B7","#4500BA","#4200BD","#3F00C0","#3C00C3","#3900C6","#3600C9","#3300CC","#3000CF","#2D00D2","#2A00D5","#2700D8","#2400DB","#2100DE","#1E00E1","#1B00E4","#1800E7","#1500EA","#1200ED","#0F00F0","#0C00F3","#0900F6","#0600F9","#0000FC","#0000FF","#0005FF","#000AFF","#0010FF","#0015FF","#001AFF","#0020FF","#0025FF","#002AFF","#0030FF","#0035FF","#003AFF","#0040FF","#0045FF","#004AFF","#0050FF","#0055FF","#005AFF","#0060FF","#0065FF","#006AFF","#0070FF","#0075FF","#007AFF","#0080FF","#0085FF","#008AFF","#0090FF","#0095FF","#009AFF","#00A0FF","#00A5FF","#00AAFF","#00B0FF","#00B5FF","#00BAFF","#00C0FF","#00C5FF","#00CAFF","#00D0FF","#00D5FF","#00DAFF","#00E0FF","#00E5FF","#00EAFF","#00F0FF","#00F5FF","#00FAFF","#00FFFF","#00FFF7","#00FFEF","#00FFE7","#00FFDF","#00FFD7","#00FFCF","#00FFC7","#00FFBF","#00FFB7","#00FFAF","#00FFA7","#00FF9F","#00FF97","#00FF8F","#00FF87","#00FF7F","#00FF77","#00FF6F","#00FF67","#00FF5F","#00FF57","#00FF4F","#00FF47","#00FF3F","#00FF37","#00FF2F","#00FF27","#00FF1F","#00FF17","#00FF0F","#00FF00","#08FF00","#10FF00","#18FF00","#20FF00","#28FF00","#30FF00","#38FF00","#40FF00","#48FF00","#50FF00","#58FF00","#60FF00","#68FF00","#70FF00","#78FF00","#80FF00","#88FF00","#90FF00","#98FF00","#A0FF00","#A8FF00","#B0FF00","#B8FF00","#C0FF00","#C8FF00","#D0FF00","#D8FF00","#E0FF00","#E8FF00","#F0FF00","#F8FF00","#FFFF00","#FFFB00","#FFF700","#FFF300","#FFEF00","#FFEB00","#FFE700","#FFE300","#FFDF00","#FFDB00","#FFD700","#FFD300","#FFCF00","#FFCB00","#FFC700","#FFC300","#FFBF00","#FFBB00","#FFB700","#FFB300","#FFAF00","#FFAB00","#FFA700","#FFA300","#FF9F00","#FF9B00","#FF9700","#FF9300","#FF8F00","#FF8B00","#FF8700","#FF8300","#FF7F00","#FF7B00","#FF7700","#FF7300","#FF6F00","#FF6B00","#FF6700","#FF6300","#FF5F00","#FF5B00","#FF5700","#FF5300","#FF4F00","#FF4B00","#FF4700","#FF4300","#FF3F00","#FF3B00","#FF3700","#FF3300","#FF2F00","#FF2B00","#FF2700","#FF2300","#FF1F00","#FF1B00","#FF1700","#FF1300","#FF0F00","#FF0B00","#FF0700","#FF0300","#FF0000","#FA0000","#F50000","#F00000","#EB0000","#E60000","#E10000","#DC0000","#D70000","#D20000","#CD0000","#C80000","#C30000","#BE0000","#B90000","#B40000","#AF0000","#AA0000","#A50000","#A00000","#9B0000","#960000","#910000","#8C0000","#870000","#820000","#7D0000","#780000","#730000","#6E0000","#690000"]
+		}
+	},
+	"categoric": 
+	{
+		"category10":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors":["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]
+		},
+		"category20":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js", 
+			"colors":["#1f77b4","#aec7e8","#ff7f0e","#ffbb78","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5","#8c564b","#c49c94","#e377c2","#f7b6d2","#7f7f7f","#c7c7c7","#bcbd22","#dbdb8d","#17becf","#9edae5"]
+		},
+		"category20b":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#393b79","#5254a3","#6b6ecf","#9c9ede","#637939","#8ca252","#b5cf6b","#cedb9c","#8c6d31","#bd9e39","#e7ba52","#e7cb94","#843c39","#ad494a","#d6616b","#e7969c","#7b4173","#a55194","#ce6dbd","#de9ed6"]
+		},
+		"category20c":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#3182bd","#6baed6","#9ecae1","#c6dbef","#e6550d","#fd8d3c","#fdae6b","#fdd0a2","#31a354","#74c476","#a1d99b","#c7e9c0","#756bb1","#9e9ac8","#bcbddc","#dadaeb","#636363","#969696","#bdbdbd","#d9d9d9"]
+		},
+		"tableau10":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#4c78a8","#f58518","#e45756","#72b7b2","#54a24b","#eeca3b","#b279a2","#ff9da6","#9d755d","#bab0ac"]
+		},
+		"tableau20":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#4c78a8","#9ecae9","#f58518","#ffbf79","#54a24b","#88d27a","#b79a20","#f2cf5b","#439894","#83bcb6","#e45756","#ff9d98","#79706e","#bab0ac","#d67195","#fcbfd2","#b279a2","#d6a5c9","#9e765f","#d8b5a5"]
+		},
+		"accent":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17","#666666"]
+		},
+		"dark2":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#1b9e77","#d95f02","#7570b3","#e7298a","#66a61e","#e6ab02","#a6761d","#666666"]
+		},
+		"paired":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]
+		},
+		"pastel1":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#fbb4ae","#b3cde3","#ccebc5","#decbe4","#fed9a6","#ffffcc","#e5d8bd","#fddaec","#f2f2f2"]
+		},
+		"pastel2":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#b3e2cd","#fdcdac","#cbd5e8","#f4cae4","#e6f5c9","#fff2ae","#f1e2cc","#cccccc"]
+		},
+		"set1":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33","#a65628","#f781bf","#999999"]
+		},
+		"set2":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+		},
+		"set3":
+		{
+			"source": "https://github.com/vega/vega/blob/master/packages/vega-scale/src/palettes.js",
+			"colors": ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]
+		}
+	}
+}

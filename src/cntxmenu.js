@@ -1215,6 +1215,17 @@ var alguna_capa_afegida=false;
 
 var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib_nous, colors=[], i_color_tipic;
 
+	if (!PaletesGlobals)
+	{
+		loadJSON("paletes.json",
+			function(paletes_globals, extra_param) {
+				PaletesGlobals=paletes_globals;
+				AfegeixCapaCombicapaCategoric();
+			},
+			function(xhr) { alert(xhr); },
+			null);
+	}
+
 	condicio[0]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 0);
 	condicio[1]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 1);
 
@@ -1262,9 +1273,9 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 				for(var prop in categories[1][j])
 					cat_noves[i_cat][prop+"2"]=categories[1][j][prop];
 			}
-			if (i_color_tipic==PaletesTematiquesTipiques.tableau20.length)
+			if (i_color_tipic==PaletesGlobals.categoric.tableau20.colors.length)
 				i_color_tipic=0;
-			colors.push(PaletesTematiquesTipiques.tableau20[i_color_tipic]);
+			colors.push(PaletesGlobals.categoric.tableau20.colors[i_color_tipic]);
 			i_color_tipic++;
 		}
 	}
@@ -1592,9 +1603,9 @@ var condicio, capa, i_estil_nou, estil, i, i_value, i_color, i_color_tipic, cade
 			{
 				for(i_color=estil.paleta.colors.length; i_color<value.new_value+1; i_color++)
 				{
-					if (i_color_tipic==PaletesTematiquesTipiques.tableau20.length)
+					if (i_color_tipic==PaletesGlobals.categoric.tableau20.colors.length)
 						i_color_tipic=0;
-					estil.paleta.colors.push(PaletesTematiquesTipiques.tableau20[i_color_tipic]);
+					estil.paleta.colors.push(PaletesGlobals.categoric.tableau20.colors[i_color_tipic]);
 					i_color_tipic++;
 				}
 			}
@@ -3454,8 +3465,25 @@ var elem=ObreFinestra(window, "editaEstil", DonaCadenaLang({"cat":"de editar l'e
 
 function FinestraEditaEstilCapa(elem, i_capa, i_estil)
 {
+	if (!PaletesGlobals)
+	{
+		loadJSON("paletes.json",
+			function(paletes_globals, extra_param) {
+				PaletesGlobals=paletes_globals;
+				OmpleEditaEstilCapa(extra_param.elem, extra_param.i_capa, extra_param.i_estil);
+			},
+			function(xhr) { alert(xhr); },
+			{elem:elem, i_capa:i_capa, i_estil, i_estil});
+	}
+	else
+		OmpleEditaEstilCapa(elem, i_capa, i_estil);
+}
+
+function OmpleEditaEstilCapa(elem, i_capa, i_estil)
+{
 	contentLayer(elem, DonaCadenaEditaEstilCapa(i_capa, i_estil));
 }
+
 
 function DonaCadenaEditaEstilCapa(i_capa, i_estil)
 {
@@ -3474,14 +3502,14 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		cdns.push(" (", DonaCadena(estil.desc), ")");
 	cdns.push("\"<br/>");
 
-	if (estil.component)
+	if (estil.component && !estil.categories)
 	{
 		cdns.push("<fieldset><legend>",
-			DonaCadenaLang({"cat":"Valors per l'estirament de color", "spa":"Valores para el estiramiento de color", "eng":"Value for stretching of color", "fre":"Valeur pour l'étirement de la couleur"}));
-			cdns.push(":</legend>");
+			DonaCadenaLang({"cat":"Valors per l'estirament de color", "spa":"Valores para el estiramiento de color", "eng":"Value for stretching of color", "fre":"Valeur pour l'étirement de la couleur"}),
+			":</legend>");
 		for (var i_c=0; i_c<estil.component.length; i_c++)
 		{
-			if (estil.component.length>1)
+			if (estil.component.length>2)
 			{
 				cdns.push("<fieldset><legend>",
 					DonaCadenaLang({"cat":"Component", "spa":"Componente", "eng":"Component", "fre":"Composant"}), " ");
@@ -3521,6 +3549,37 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		}
 		cdns.push("</fieldset>");
 	}
+	if (estil.component.length<3)
+	{
+		var paleta;
+		cdns.push("<fieldset><legend>",
+			DonaCadenaLang({"cat":"Paleta de colors", "spa":"Paleta de colores", "eng":"Color palette", "fre":"Palette de couleurs"}),
+			":</legend>",
+			"<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-actual\" checked=\"checked\"><label for=\"edita-estil-capa-paleta-actual\">", DonaCadenaHTMLPintaPaleta(estil.paleta), " (", DonaCadenaLang({cat: "Actual", spa: "Actual", eng: "Current", fre: "Actuel"}), ")</label><br>");
+		if (estil.paletaPrevia)
+			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", DonaCadenaLang({cat: "Prèvia", spa: "Previa", eng: "Previous", fre: "Précédente"}), ")</label><br>");
+		if (estil.categories)
+		{
+			for (paleta in PaletesGlobals.categoric) 
+			{
+				if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
+					continue;
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.categoric[paleta]), " (", (PaletesGlobals.categoric[paleta].desc ? DonaCadena(PaletesGlobals.categoric[paleta].desc) : paleta), ")</label><br>");
+			}
+		}
+		else
+		{
+			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-grisos\"><label for=\"edita-estil-capa-paleta-grisos\">", DonaCadenaHTMLPintaPaleta(null), " (", DonaCadenaLang({cat: "Escala de grisos", spa: "Escala de grises", eng: "Greyscale", fre: "Niveaux de gris"}), ")</label><br>");
+			for (paleta in PaletesGlobals.continuous) 
+			{
+				if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
+					continue;
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.continuous[paleta]), " (", (PaletesGlobals.continuous[paleta].desc ? DonaCadena(PaletesGlobals.continuous[paleta].desc) : paleta), ")</label><br>");
+			}
+		}
+		cdns.push("</fieldset>");
+	}
+	
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
@@ -3532,7 +3591,7 @@ function EditaEstilCapa(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max;
 
-	if (estil.component)
+	if (estil.component && !estil.categories)
 	{
 		for (var i_c=0; i_c<estil.component.length; i_c++)
 		{
@@ -3547,6 +3606,51 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 			{
 				estil.component[i_c].estiramentPaleta={"valorMinim": valor_min,
 								"valorMaxim": valor_max};
+			}
+		}
+	}
+	if (estil.component.length<3)
+	{
+		if (document.getElementById("edita-estil-capa-paleta-actual").checked)
+			; //Nothing to do
+		else if (estil.paletaPrevia && document.getElementById("edita-estil-capa-paleta-previa").checked)
+		{
+			estil.paleta=JSON.parse(JSON.stringify(estil.paletaPrevia));
+			delete estil.paletaPrevia;
+		}
+		else
+		{
+			var paleta;
+			if (estil.categories)
+			{
+				if (!estil.paletaPrevia)
+					estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
+				for (paleta in PaletesGlobals.categoric) 
+				{
+					if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
+						continue;
+					if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+					{
+						estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.categoric[paleta]));
+					}
+				}
+			}
+			else
+			{
+				if (document.getElementById("edita-estil-capa-paleta-grisos").checked)
+					estil.paleta=null;
+				else
+				{
+					if (!estil.paletaPrevia)
+						estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
+					for (paleta in PaletesGlobals.continuous) 
+					{
+						if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
+							continue;
+						if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+							estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.continuous[paleta]));
+					}
+				}
 			}
 		}
 	}

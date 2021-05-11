@@ -39,18 +39,14 @@
 "use strict"
 
 var RodetVertical=false;  // Constant. el mode vertical no s'ha provat mai.
-var DatesVideo=[];  //{"i_capa":, "i_data":, "i_estil:, "millisegons":, "animable":("si", "ara_no", "no"), "carregada":, "carregadaRodet":, "timeoutRodet":, "timeoutFotograma":}
+var DatesVideo=[];  //Un array de propietats de cada "fotograma" de conforma el video: {"i_capa":, "i_data":, "i_estil:, "millisegons":, "animable":("si", "ara_no", "no"), "carregada":, "carregadaRodet":, "timeoutRodet":, "timeoutFotograma":}
 var IDataVideoMostrada;
 var IDataVideoInicial, IDataVideoFinal;  //Només útils al principi de la càrrega. Després DatesVideo és manipulat per eliminar les dates fora de l'interval que desapareixen del array.
 var NomVideoActiu;
-var PuntsSerieTemporal=[], IconaVideoClick={}, ImgVideoStat=[];
-var ImgVideoStatHistograma={"classe_nodata": 0,
-		"component": [{
-			//"classe": [], 
-			"valorMinimReal": +1e300,
-			"valorMaximReal": -1e300}]};
-var EstadisticCarregatVideo=null;
-var IFilEixXEixTVideo=-1, IDataFilEixXEixT=null;
+var PuntsSerieTemporal=[], IconaVideoClick={}, ImgVideoStat, ImgVideoStatHistograma;
+//var EstadisticCarregatVideo=null;
+var IFilEixXEixTVideo=-1    //Index de fila que representa la imatge x/t
+var IDataFilEixXEixT=[];    //Array amb d'index de fotograma que representa cada linia (fila) de la imatge x/t
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
 
@@ -654,6 +650,7 @@ var cdns=[], capa, estil;
 					cdns.push("<option value=\"x/t\">", DonaCadenaLang({"cat":"Gràfic", "spa":"Gráfico", "eng":"Graph", "fre":"Graphique"}), " x/t</option>");
 					if (estil.categories && estil.atributs)
 					{
+						cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
 						for (var i=0; i<estil.categories.length; i++)
 						{
 							if (!estil.categories[i])
@@ -667,8 +664,19 @@ var cdns=[], capa, estil;
 						//Considerar determinar transformades de fourier o wavelet.	
 						cdns.push("<option value=\"Mitjana\">", DonaCadenaLang({"cat":"Mitjana", "spa":"Media", "eng":"Mean", "fre":"Moyenne"}), "</option>");
 						cdns.push("<option value=\"StanDev\">", DonaCadenaLang({"cat":"Desviació típica", "spa":"Desviación típica", "eng":"Standard deviation", "fre":"Déviation standard"}), "</option>");
+						cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
+						cdns.push("<option value=\"Pheno_idxsos\">", DonaCadenaLang({"cat":"Dia d'inici de la temporada", "spa":"Día de inicio de la temporada", "eng":"Start of the Season day", "fre":"Jour de début de saison"}), " (SoS)</option>");
+						cdns.push("<option value=\"Pheno_idxpos\">", DonaCadenaLang({"cat":"Dia el màxim de la temporada", "spa":"Día del máximo de la temporada", "eng":"Peak of the Season day", "fre":"Journée de pointe de la saison"}), " (PoS)</option>");
+						cdns.push("<option value=\"Pheno_idxeos\">", DonaCadenaLang({"cat":"Dia de fi de la temporada", "spa":"Día de final de la temporada", "eng":"End of the Season day", "fre":"Jour de fin de saison"}), " (EoS)</option>");
+						cdns.push("<option value=\"Pheno_idxlos\">", DonaCadenaLang({"cat":"Dies D'allargada de la temporada", "spa":"Días de longitud de la temporada", "eng":"Length of the season (days)", "fre":"Durée de la saison (jours)"}), " (LoS)</option>");
+						cdns.push("<option value=\"Pheno_sos\">", DonaCadenaLang({"cat":"Valor d'inici de la temporada", "spa":"Valor de inicio de la temporada", "eng":"Start of the Season value", "fre":"Valeur de début de saison"}), " (SoS)</option>");
+						cdns.push("<option value=\"Pheno_pos\">", DonaCadenaLang({"cat":"Valor màxim de la temporada", "spa":"Valor máximo de la temporada", "eng":"Peak of the Season value", "fre":"Valeur maximale de la saison"}), " (PoS)</option>");
+						cdns.push("<option value=\"Pheno_eos\">", DonaCadenaLang({"cat":"Valor de fi de la temporada", "spa":"Valor de final de la temporada", "eng":"End of the Season value", "fre":"Valeur de fin de saison"}), " (EoS)</option>");
+						cdns.push("<option value=\"Pheno_base\">", DonaCadenaLang({"cat":"Valor base la temporada", "spa":"Valor base de la temporada", "eng":"Season base value", "fre":"Valeur de base de la saison"}), "</option>");
+						cdns.push("<option value=\"Pheno_aos\">", DonaCadenaLang({"cat":"Amplitud de la temporada", "spa":"Amplitud de la temporada", "eng":"Amplitude of the season", "fre":"Amplitude de la saison"}), " (AoS)</option>");
+						cdns.push("<option value=\"Pheno_rog\">", DonaCadenaLang({"cat":"Taxa de verdor", "spa":"Tasa de verdor", "eng":"Rate of Greening", "fre":"Taux de verdissement"}), " (RoG)</option>");
+						cdns.push("<option value=\"Pheno_ros\">", DonaCadenaLang({"cat":"Taxa de senecència", "spa":"Tasa de sensecencia", "eng":"Rate of Senescing", "fre":"Taux de sénescente"}), " (RoS)</option>");
 					}
-					cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
 					cdns.push("</select>");
 				}
 				break;
@@ -1040,115 +1048,11 @@ var capa, estil, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 	return false;
 }
 
-function CalculaCountClasseNValues(v, param)
-{
-var count=0, i, n=v.length;
-
-	for(i=0;i<n;i++)
-	{
-		if (v[i]==param)
-			count++;
-	}
-	return count;
-}
-
-function CalculaMeanNValues(v, param)
-{
-var n_valids=0, i, suma=0, v_i, n=v.length;
-
-	for(i=0;i<n;i++)
-	{
-		v_i=v[i];
-		if (!v_i && v_i!=0)
-			continue;
-		suma+=v_i;
-		n_valids++;
-	}
-	if (!n_valids)
-		return null;
-	return suma/n_valids;
-}
-
-function CalculaStanDevNValues(v, param)
-{
-var n_valids=0, delta, i, suma=0, v_i, n=v.length;
-
-	var mean=CalculaMeanNValues(v, param);
-	if (mean==null)
-		return null;
-
-	for(i=0;i<n;i++)
-	{
-		v_i=v[i];
-		if (!v_i && v_i!=0)
-			continue;
-		delta=v_i-mean;
-		suma+=delta*delta;
-		n_valids++;
-	}
-	if (!n_valids)
-		return null;
-	return Math.sqrt(suma/n_valids);
-}
-
-/* Si param == false (o undefined) retorna la primera moda en cas d'empat (això genera un biaix estadistic però és el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
-   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (això no genera un biaix estadístic i és necessari per a finestres de convolució) */
-function CalculaModeNValues(v, param)
-{
-var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
- 
-	if (v.length==0)
-		return null;
-
-	v.sort(sortAscendingNumberNull);  //ordena els null al final de la llista
-	m=v[0];
-	if (!m && m!=0)
-		return null;
-	
-	count_m=1;
-	for(i=1;i<n;i++)
-	{
-		v_i=v[i];
-		if (!v_i && v_i!=0)
-			break;
-		if (m==v_i)
-			count_m++;
-		else
-		{
-			if (count_m_previa<count_m)
-			{
-				count_m_previa=count_m;
-				m_previa[0]=m;
-				n_m_previa=1;
-			}
-			else (count_m_previa==count_m)
-			{
-				m_previa[n_m_previa]=m;
-				n_m_previa++;
-			}
-			//else no era una moda
-			m=v_i;  //Nou candidat.
-			count_m=1;
-		}
-	}
-	if (count_m_previa<count_m)
-		return m;
-	if (!param)
-		return m_previa[0];
-	if (count_m_previa==count_m)
-	{
-		m_previa[n_m_previa]=m;
-		n_m_previa++;
-	}
-	if (n_m_previa==1)
-		return m_previa[0];
-	return m_previa[Math.floor(Math.random()*n_m_previa)];	
-}
 
 function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, estadistic)
 {
 	CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, ParamInternCtrl.vista, estadistic);
-	EstadisticCarregatVideo=estadistic;
+	//EstadisticCarregatVideo=estadistic;
 	IFilEixXEixTVideo=-1;
 	document.getElementById("video_info").innerHTML="";
 }
@@ -1187,12 +1091,9 @@ var ctx, imgData, data, dv=[], n_v_plena;
 var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
 var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 var f_estad, f_estad_param=null, estiramentPaleta, la_paleta;
+var primera_data, primer_gener, last_perc=0, perc;
 
-ImgVideoStatHistograma={"classe_nodata": 0,
-		"component": [{
-			//"classe": [], 
-			"valorMinimReal": +1e300,
-			"valorMaximReal": -1e300}]};
+	IniciaImgVideoStat();
 
 	if (estadistic=="Mitjana")
 		f_estad=CalculaMeanNValues;
@@ -1203,6 +1104,10 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		f_estad=CalculaModeNValues;
 		f_estad_param=false;
 	}
+	else if (estadistic=="Pheno_idxsos" || estadistic=="Pheno_idxpos" || estadistic=="Pheno_idxeos" || estadistic=="Pheno_sos" || estadistic=="Pheno_pos" || estadistic=="Pheno_eos" || estadistic=="Pheno_base")
+		f_estad=CalculaPhenologyNValues;
+	else if (estadistic=="Pheno_idxlos" || estadistic=="Pheno_aos" || estadistic=="Pheno_rog" || estadistic=="Pheno_ros")
+		f_estad=CalculaPhenologyDerivNValues;
 	else if (estadistic.substring(0, 9)=="NDeValor_")
 	{
 		f_estad=CalculaCountClasseNValues;
@@ -1214,9 +1119,20 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		return;
 	}
 
+	if (estadistic.substring(0, 6)=="Pheno_")
+	{
+		f_estad_param={t:[], stat: estadistic.substring(6)}
+		primera_data=new Date(DatesVideo[0].millisegons);
+		primer_gener=new Date(primera_data.getFullYear(), 0, 1);
+		primer_gener=primer_gener.getTime()/24/60/60/1000;
+
+		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+			f_estad_param.t[i_data_video]=DatesVideo[i_data_video].millisegons/24/60/60/1000 - primer_gener;
+	}
+
 	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
 
-	//last_perc=0;
+	var last_perc=0;
 	for (j=0;j<nfil;j++)
 	{
 		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
@@ -1249,12 +1165,13 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 		//Tinc una fila per tota la serie fins de file_calc[i_col]
 		//Calculo l'estadistic i el guardo en al imatge de floats
 		CalculaImatgeEstadisticaDesDesDeFilaCalc(ImgVideoStat, j, ImgVideoStatHistograma, fila_calc, ncol, f_estad, f_estad_param);
-		/*perc=Math.floor(j*10/nfil)*10;
+		perc=Math.floor(j*100/nfil);
 		if (perc!=last_perc)
 		{
-			document.getElementById("video_nodata_max_tx").innerHTML=perc;
-			last_perc=perc;
-		}*/
+			document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
+					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
+					". " + perc + "% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+		}
 	}
 	//document.getElementById("video_nodata_max_tx").innerHTML=100;
 	var imatge=document.getElementById(nom_canvas);
@@ -1269,10 +1186,15 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 	data=[]; //Empty the array;
 	
 	//Determino com estirar la paleta i quina paleta
-	if (estadistic=="Mitjana" || estadistic=="Moda")
+	if (estadistic=="Mitjana" || estadistic=="Moda" || estadistic=="Pheno_sos" || estadistic=="Pheno_pos" || estadistic=="Pheno_eos" || estadistic=="Pheno_base" || estadistic=="Pheno_aos")
 	{
 		estiramentPaleta=primer_estil.component[0].estiramentPaleta;
 		la_paleta=primer_estil.paleta;
+	}
+	else if (estadistic=="Pheno_idxsos" || estadistic=="Pheno_idxpos" || estadistic=="Pheno_idxeos" || estadistic=="Pheno_idxlos")
+	{
+		estiramentPaleta={"valorMaxim": 366, "valorMinim": 0};
+		la_paleta=PaletesGlobals.continuous.PhenoCycle;
 	}
 	else
 	{
@@ -1291,7 +1213,7 @@ ImgVideoStatHistograma={"classe_nodata": 0,
 function CanviaImatgeBinariaEstadisticaEixXEixT(nom_canvas, i_fil)
 {
 	CanviaImatgeBinariaEstadisticaEixXEixTVista(nom_canvas, ParamInternCtrl.vista, i_fil);
-	EstadisticCarregatVideo="x/t";
+	//EstadisticCarregatVideo="x/t";
 	IFilEixXEixTVideo=i_fil;
 	document.getElementById("video_info").innerHTML="";
 }
@@ -1303,11 +1225,7 @@ var ctx, imgData, data, dv=[], n_v_plena;
 var j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
 var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 
-ImgVideoStatHistograma={"classe_nodata": 0,
-		"component": [{
-			//"classe": [], 
-			"valorMinimReal": +1e300,
-			"valorMaximReal": -1e300}]};
+	IniciaImgVideoStat();
 
 	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
 
@@ -1481,12 +1399,13 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 		if (estadistic=="x/t")
 		{
 			document.getElementById("video_time_text").style.visibility="visible";
-			if (EstadisticCarregatVideo!=estadistic || (IFilEixXEixTVideo!=i_fil && i_fil!=-1))
+			//if (EstadisticCarregatVideo!=estadistic || (IFilEixXEixTVideo!=i_fil && i_fil!=-1))
+			if (i_fil!=-1)
 			{
 				//Demano l'execució del perfil x/t
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					DonaCadenaLang({"cat":"Calculant grafic x/t de la sèrie", "spa":"Calculando gráfico x/t de la serie", "eng":"Computing graphic x/t of the series", "fre":"Informatique graphique x / t de la série"})+
-					". " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 			}
 		}
@@ -1494,14 +1413,14 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 		{
 			document.getElementById("video_time_text").style.visibility="hidden";
 			IFilEixXEixTVideo=-1;
-			if (EstadisticCarregatVideo!=estadistic)
-			{
+			//if (EstadisticCarregatVideo!=estadistic)
+			//{
 				//Demano l'execució del càlcul estadístic
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
 					". " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
-			}
+			//}
 		}
 	return;
 }
@@ -2043,6 +1962,16 @@ var i_capa_previa;
 	return 0;
 }
 
+function IniciaImgVideoStat()
+{
+	ImgVideoStat=[];
+	ImgVideoStatHistograma={"classe_nodata": 0,
+		"component": [{
+			//"classe": [], 
+			"valorMinimReal": +1e300,
+			"valorMaximReal": -1e300}]};
+}
+
 function DescarregaVideo()
 {
 	if (timeoutVideoID)
@@ -2071,8 +2000,9 @@ function DescarregaVideo()
 	DatesVideo=[];
 	IDataVideoMostrada=-1;
 	PuntsSerieTemporal=[];
-	ImgVideoStat=[];
-	EstadisticCarregatVideo=null;
+	IniciaImgVideoStat();
+	//EstadisticCarregatVideo=null;
+	IDataFilEixXEixT=[];
 	IFilEixXEixTVideo=-1;
 	TancaFinestraSerieTemp("video_grafic", "video_click");
 }

@@ -720,6 +720,7 @@ function CancelaPosicioGPS()
 		ParamCtrl.MostraPosicioGPS=false;
 		if (IdPositionGPS)  
 			navigator.geolocation.clearWatch(IdPositionGPS);
+		CreaLlegenda();  //La llegenda te indexos que han quedat malament.
 	}
 }
 

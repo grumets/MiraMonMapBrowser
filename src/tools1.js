@@ -2159,39 +2159,6 @@ function DonaNumeroArrodonit125(a)
 }
 
 
-
-function RGB(r,g,b)
-{
-	if (r<0 || r>255 || g<0 || g>255 || b<0 || b>255)
-	{
-		alert(DonaCadenaLang({"cat": "Índex de color incorrecte: " + r + "," + g + "," + b +". Els índexs de color han d\'anar de 0 a 255.\n",
-			"spa": "Índice de color incorrecto: " + r + "," + g + "," + b +". Los índices de color deberian ir entre 0 y 255.\n",
-			"eng": "Wrong color index: " + r + "," + g + "," + b +". Color indices have to be between 0 and 255.\n",
-			"fre": "Index de couleur incorrect: " + r + "," + g + "," + b +". Les valeurs des index de couleurs doivent être comprises entre 0 et 255."}));
-		return "#000000";
-	}
-	return "#" + (r.toString(16).length==1 ? "0"+r.toString(16) : r.toString(16))
-			+ (g.toString(16).length==1 ? "0"+g.toString(16) : g.toString(16))
-			+ (b.toString(16).length==1 ? "0"+b.toString(16) : b.toString(16));
-}
-
-function RGB_JSON(color)
-{
-	if (typeof color!=="object" || typeof color.r!=="number" || typeof color.b!=="number" || typeof color.r!=="number")
-	{
-		alert(DonaCadenaLang({"cat": "Aquest color no es un objecte RGB en format", "spa": "Este color no es un objecto RGB en formato",
-			"eng": "This color is not an object in the format",
-			"fre": "Cette couleur n'est pas un objet au format"}) + 
-			" {r: ###, g: ###, b: ###}. "+
-			DonaCadenaLang({"cat": "Els ### són índexs de color que han d\'anar de 0 a 255.", 
-			"spa": "Los ### són índices de color deberian ir entre 0 y 255.",
-			"eng": "The ### are Color indices that have to be between 0 and 255.",
-			"fre": "Les ### sont des indices de couleur qui doivent être compris entre 0 et 255"}));
-		return color;
-	}
-	return RGB(color.r, color.g, color.b);
-}
-
 function DonaCaracterHexaMultiple3(s)
 {
 	if (s=='1')
