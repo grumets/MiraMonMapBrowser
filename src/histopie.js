@@ -1141,7 +1141,7 @@ function CreaHistograma(n_histograma, i_c)
 function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)
 {
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
-	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\">kk</textarea></form></div>";
+	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\">kk</textarea></form></div>";
 }
 
 function IniciaCopiaPortapapersFinestra(win, prefix_nom_div)

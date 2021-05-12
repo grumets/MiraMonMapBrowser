@@ -227,6 +227,7 @@ var stats={}, y_len=y.length;
 		else
 		        stats.idxsos = stats.idxpos;
 	}
+	stats.sos=y[stats.idxsos];
 
 	// Determine EOS: the first positive inflection point after the POS.
 	// If that point does not exist, choose the last negative first derivative point after the POS. 
@@ -267,6 +268,7 @@ var stats={}, y_len=y.length;
 		else
 		        stats.idxeos = stats.idxpos;
 	}
+	stats.eos=y[stats.idxeos];
 
 	// Determine BASE.
     	stats.base = Math.min.apply(null, y);
@@ -281,9 +283,15 @@ Phenology.derivates = function(stats)
 	// Determine AMP.
 	stats.idxlos = stats.idxeos-stats.idxsos;
 	//  ROG = Rate of Greening (Days)
-	stats.rog = (stats.pos-stats.sos)/(stats.idxpos-stats.idxsos);
+	if (stats.idxpos-stats.idxsos<1)
+		stats.rog = stats.pos-stats.sos;
+	else
+		stats.rog = (stats.pos-stats.sos)/(stats.idxpos-stats.idxsos);
 	//  ROS = Rate of Senescing (Days)
-	stats.ros = (stats.eos-stats.pos)/(stats.idxeos-stats.idxpos);
+	if (stats.idxeos-stats.idxpos<1)
+		stats.ros = stats.eos-stats.pos;
+	else
+		stats.ros = (stats.eos-stats.pos)/(stats.idxeos-stats.idxpos);
 }
 
 /*Based on: https://github.com/GeoscienceAustralia/dea-notebooks/blob/eb65dcc6d70d3d59655eacd7f38415e017b0c37b/Tools/dea_tools/temporal.py#L136

@@ -1862,7 +1862,7 @@ var xhr = new XMLHttpRequest();
 
 
 //Modifyed as sugested in: http://www.html5rocks.com/en/tutorials/webgl/typed_arrays/ and http://www.html5rocks.com/en/tutorials/file/xhr2/
-function loadBinaryFile(path, mimetype, success, error, extra_param)
+function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function()
@@ -1873,7 +1873,7 @@ function loadBinaryFile(path, mimetype, success, error, extra_param)
 			{
 				if (mimetype!=xhr.getResponseHeader('content-type'))
 				{
-			        if (error)
+					if (error)
 					{
 						var s=null;
 						if (xhr.response)
@@ -1887,13 +1887,18 @@ function loadBinaryFile(path, mimetype, success, error, extra_param)
 				}
 				else
 				{
-	                if (success)
+					if (success)
 						success(xhr.response, extra_param);
 				}
 			} 
 			else 
 			{
-		        if (error)
+				if (retry && retry<200)
+				{
+					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry*2 + " seconds");
+					setTimeout(loadBinaryFile, retry*1000, path, mimetype, success, retry*2, error, extra_param);
+				}
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)

@@ -1052,9 +1052,6 @@ var capa, estil, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 function CanviaImatgeBinariaEstadisticaSerieTemporal(nom_canvas, estadistic)
 {
 	CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, ParamInternCtrl.vista, estadistic);
-	//EstadisticCarregatVideo=estadistic;
-	IFilEixXEixTVideo=-1;
-	document.getElementById("video_info").innerHTML="";
 }
 
 function PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol)
@@ -1084,14 +1081,85 @@ var capa, estil, valors;
 	}
 }
 
+function CanviaImatgeBinariaEstadisticaSerieTemporalVistaProgressiva(nom_canvas, f_estad, f_estad_param, j_ini, paquet_j, nfil, ncol, i_cell, i_byte, fila, fila_calc, estiramentPaleta, paleta)
+{
+var n_j=j_ini+paquet_j;
+var capa, estil, valors;
+var ctx, imgData, data, dv=[], n_v_plena;
+var i, j, i_data_video;
+
+	if (n_j>nfil)
+		n_j=nfil;
+
+	for (var j=j_ini;j<n_j;j++)
+	{
+		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+		{
+			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
+			{
+				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files següents.
+					fila_calc[i][i_data_video]=null;  
+				continue;
+			}
+			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+			estil=capa.estil[DatesVideo[i_data_video].i_estil];
+			valors=capa.valors;
+			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
+			if (n_v_plena==0)
+				return;  //Això no hauria d'haver passat mai
+
+			if (n_v_plena>1)
+			{
+				OmpleMultiFilaDVDesDeBinaryArray(fila[i_data_video], dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video]);
+				FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, null, fila[i_data_video], dv, valors, ncol, estil.component[0]);
+			}
+			else
+			{
+				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
+			}
+		}
+		//Tinc una fila per tota la serie fins de file_calc[i_col]
+		//Calculo l'estadistic i el guardo en al imatge de floats
+		CalculaImatgeEstadisticaDesDesDeFilaCalc(ImgVideoStat, j, ImgVideoStatHistograma, fila_calc, ncol, f_estad, f_estad_param);
+	}
+
+	if (n_j<nfil)
+		document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
+				DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
+				". " + Math.floor(j*100/nfil) + "% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+	else
+		document.getElementById("video_info").innerHTML="";
+
+	//document.getElementById("video_nodata_max_tx").innerHTML=100;
+	var imatge=document.getElementById(nom_canvas);
+	imatge.width=ncol;
+	imatge.height=nfil;	
+
+	ctx=imatge.getContext("2d");
+	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+	imgData=ctx.createImageData(imatge.width,imatge.height);
+
+	data=[]; //Empty the array;
+	
+	//Aplico la paleta i obtinc l'array de dades dins de 'data'
+	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, ImgVideoStat, ncol, nfil, estiramentPaleta, paleta);
+	
+	imgData.data.set(data);
+
+	ctx.putImageData(imgData,0,0);
+	if (n_j<nfil)
+		setTimeout(CanviaImatgeBinariaEstadisticaSerieTemporalVistaProgressiva, 50, nom_canvas, f_estad, f_estad_param, n_j, paquet_j, nfil, ncol, i_cell, i_byte, fila, fila_calc, estiramentPaleta, paleta);
+}
+
 function CanviaImatgeBinariaEstadisticaSerieTemporalVista(nom_canvas, vista, estadistic)
 {
-var capa, estil, primer_estil=null, valors;
-var ctx, imgData, data, dv=[], n_v_plena;
-var i, j, ncol=vista.ncol, nfil=vista.nfil, i_data_video;
+var capa, primer_estil=null;
+var ncol=vista.ncol, nfil=vista.nfil;
 var i_cell=[], i_byte=[], fila=[], fila_calc=[];
-var f_estad, f_estad_param=null, estiramentPaleta, la_paleta;
-var primera_data, primer_gener, last_perc=0, perc;
+var f_estad, f_estad_param=null;
+var primera_data, primer_gener;
+var estiramentPaleta, paleta;
 
 	IniciaImgVideoStat();
 
@@ -1130,84 +1198,41 @@ var primera_data, primer_gener, last_perc=0, perc;
 			f_estad_param.t[i_data_video]=DatesVideo[i_data_video].millisegons/24/60/60/1000 - primer_gener;
 	}
 
-	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
-
-	var last_perc=0;
-	for (j=0;j<nfil;j++)
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-		{
-			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
-			{
-				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files següents.
-					fila_calc[i][i_data_video]=null;  
-				continue;
-			}
-			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
-			estil=capa.estil[DatesVideo[i_data_video].i_estil];
-			if (!primer_estil)
-				primer_estil=estil
-			valors=capa.valors;
-			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
-			if (n_v_plena==0)
-				return;  //Això no hauria d'haver passat mai
-
-			if (n_v_plena>1)
-			{
-				OmpleMultiFilaDVDesDeBinaryArray(fila[i_data_video], dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video]);
-				FilaFormulaConsultaDesDeMultiFila(fila_calc, i_data_video, null, fila[i_data_video], dv, valors, ncol, estil.component[0]);
-			}
-			else
-			{
-				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
-			}
-		}
-		//Tinc una fila per tota la serie fins de file_calc[i_col]
-		//Calculo l'estadistic i el guardo en al imatge de floats
-		CalculaImatgeEstadisticaDesDesDeFilaCalc(ImgVideoStat, j, ImgVideoStatHistograma, fila_calc, ncol, f_estad, f_estad_param);
-		perc=Math.floor(j*100/nfil);
-		if (perc!=last_perc)
-		{
-			document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
-					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
-					". " + perc + "% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
-		}
+		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
+			continue;
+		capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
+		primer_estil=capa.estil[DatesVideo[i_data_video].i_estil];
+		break;
 	}
-	//document.getElementById("video_nodata_max_tx").innerHTML=100;
-	var imatge=document.getElementById(nom_canvas);
-	imatge.width=ncol;
-	imatge.height=nfil;	
 
-	ctx=imatge.getContext("2d");
-	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
-
-	imgData=ctx.createImageData(imatge.width,imatge.height);
-
-	data=[]; //Empty the array;
-	
 	//Determino com estirar la paleta i quina paleta
 	if (estadistic=="Mitjana" || estadistic=="Moda" || estadistic=="Pheno_sos" || estadistic=="Pheno_pos" || estadistic=="Pheno_eos" || estadistic=="Pheno_base" || estadistic=="Pheno_aos")
 	{
 		estiramentPaleta=primer_estil.component[0].estiramentPaleta;
-		la_paleta=primer_estil.paleta;
+		paleta=primer_estil.paleta;
 	}
 	else if (estadistic=="Pheno_idxsos" || estadistic=="Pheno_idxpos" || estadistic=="Pheno_idxeos" || estadistic=="Pheno_idxlos")
 	{
 		estiramentPaleta={"valorMaxim": 366, "valorMinim": 0};
-		la_paleta=PaletesGlobals.continuous.PhenoCycle;
+		paleta=PaletesGlobals.continuous.PhenoCycle;
+		if (paleta.ramp && !paleta.colors)
+		{
+			if (TransformRampToColorsArray(paleta))
+				return;
+		}
 	}
 	else
 	{
 		estiramentPaleta={"valorMaxim": ImgVideoStatHistograma.component[0].valorMaximReal,
 				"valorMinim": ImgVideoStatHistograma.component[0].valorMinimReal};
-		la_paleta=null;
+		paleta=null;
 	}
-	//Aplico la paleta i obtinc l'array de dades dins de 'data'
-	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, ImgVideoStat, ncol, nfil, estiramentPaleta, la_paleta);
-	
-	imgData.data.set(data);
 
-	ctx.putImageData(imgData,0,0);
+	PreparaArraysEstadisticaSerieTemporal(i_cell, i_byte, fila, fila_calc, ncol);
+
+	setTimeout(CanviaImatgeBinariaEstadisticaSerieTemporalVistaProgressiva, 50, nom_canvas, f_estad, f_estad_param, 0, 30, nfil, ncol, i_cell, i_byte, fila, fila_calc, estiramentPaleta, paleta);
 }
 
 function CanviaImatgeBinariaEstadisticaEixXEixT(nom_canvas, i_fil)
@@ -1403,10 +1428,10 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			if (i_fil!=-1)
 			{
 				//Demano l'execució del perfil x/t
+				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					DonaCadenaLang({"cat":"Calculant grafic x/t de la sèrie", "spa":"Calculando gráfico x/t de la serie", "eng":"Computing graphic x/t of the series", "fre":"Informatique graphique x / t de la série"})+
 					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
-				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 			}
 		}
 		else
@@ -1416,10 +1441,10 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			//if (EstadisticCarregatVideo!=estadistic)
 			//{
 				//Demano l'execució del càlcul estadístic
+				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
-					". " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
-				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
+					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 			//}
 		}
 	return;
@@ -1451,7 +1476,7 @@ var cdns=[], nodata=255, i, j, valor0;
 			if (isNaN(valor0) || valor0==null)
 				cdns.push(nodata);
 			else
-				cdns.push(valor0);
+				cdns.push(valor0);   //cdns.push(valor0.toPrecision(3));
 			if (i+1<ncol)
 				cdns.push(" ");
 		}
@@ -1466,7 +1491,7 @@ function VideoCopiaEstadistic(event)
 
 	FinalitzaCopiaPortapapersFinestra(window, "VideoDiv", 
 			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
-			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls en format", "spa": "Los valores del gráfico han sido copiados al portapapeles en formato", "eng": "The values of the graphic have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " CSV. ");
+			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format ràster ASCII", "spa": "Los valores de la imagen han sido copiados al portapapeles en formato ráster ASCII", "eng": "The values of the image have been copied to clipboard in ASCII raster format", "fre": "Les valeurs de l'image ont été copiées dans le presse-papier dans le format raster ASCII"}));
 
 	dontPropagateEvent(event);
 	return false;

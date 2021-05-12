@@ -2243,7 +2243,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 						url_dades+="&"+valors2[i_valor].param[i_param].clau.nom+"="+valors2[i_valor].param[i_param].valor.nom;
 				}
 				i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
-				loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, ErrorImatgeBinariaCapaCallback, {"imatge": imatge, "vista": vista, "i_capa": i_capa, "i_data": i_data2, "i_estil": i_estil2, "i_valor": i, "i_event": i_event, "nom_funcio_ok" : nom_funcio_ok, "funcio_ok_param" : funcio_ok_param});
+				loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {"imatge": imatge, "vista": vista, "i_capa": i_capa, "i_data": i_data2, "i_estil": i_estil2, "i_valor": i, "i_event": i_event, "nom_funcio_ok" : nom_funcio_ok, "funcio_ok_param" : funcio_ok_param});
 			}
 		}
 		CanviaCursorSobreVista("progress");
