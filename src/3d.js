@@ -41,6 +41,18 @@
 var prefixSuperficie3DFinestra="graph3d_fin_";
 var Superficie3DFinestra={"n": 0, "vista":[]};
 
+function CanviaIndexosCapes3DFinestra(n_moviment, i_capa_ini, i_capa_fi_per_sota)
+{
+	if (Superficie3DFinestra && Superficie3DFinestra.n && Superficie3DFinestra.vista.length>0)
+	{
+		for (var i=0; i<Superficie3DFinestra.vista.length; i++)
+		{
+			if (Superficie3DFinestra.vista[i].i_capa>=i_capa_ini && Superficie3DFinestra.vista[i].i_capa<i_capa_fi_per_sota)
+				Superficie3DFinestra.vista[i].i_capa+=n_moviment;
+		}
+	}
+}
+
 function CanviDinamismeGrafic3d(event)
 {
 	var n_histo, i_str, i_str_2, estil;

@@ -362,7 +362,7 @@ var valors=capa.valors;
 }
 
 //Retorna els valors de les compoments com a text. Els valors es poden obtenir de DonaValorsDeDadesBinariesCapa()
-function DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, v)
+function DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, v, compacte)
 {
 var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_v, i_c, i_a, i_valor, v_c;
 
@@ -377,10 +377,10 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	if (v_c==null)
 		return "";
 
-	if (component.length==1)
+	if (component.length==1 || component.length==2)
 	{
 		if (estil.categories && estil.atributs)
-			return DonaTextCategoriaDesDeColor(estil, v_c[0]);
+			return DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, v_c[0], false, compacte);
 		return (typeof component[0].NDecimals!=="undefined" && component[0].NDecimals!=null) ? OKStrOfNe(v_c[0], component[0].NDecimals) : v_c[0].toString();
 	}
 	var cdns=[];
@@ -1022,6 +1022,8 @@ var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
 						histo_component0.valorMinimReal=valor0;
 					if (histo_component0.valorMaximReal<valor0)
 						histo_component0.valorMaximReal=valor0;
+					if (histo_component0.sumaValorsReal) //si s'ha inicialitzat és que estic en un context que té sentit
+						histo_component0.sumaValorsReal+=valor0;
 				}
 				fila_calc[i][i_data_video]=valor0;
 			}
@@ -1106,6 +1108,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 										histo_component0.valorMinimReal=valor0;
 									if (histo_component0.valorMaximReal<valor0)
 										histo_component0.valorMaximReal=valor0;
+									if (histo_component0.sumaValorsReal) //si s'ha inicialitzat és que estic en un context que té sentit
+										histo_component0.sumaValorsReal+=valor0;
 								}
 								fila_calc[i_col][i_data_video]=valor0;
 							}
@@ -1172,6 +1176,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 									histo_component0.valorMinimReal=valor0;
 								if (histo_component0.valorMaximReal<valor0)
 									histo_component0.valorMaximReal=valor0;
+								if (histo_component0.sumaValorsReal) //si s'ha inicialitzat és que estic en un context que té sentit
+									histo_component0.sumaValorsReal+=valor0*comptador;
 							}
 							for ( ; i<acumulat; i++)
 							{
@@ -1236,6 +1242,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 								histo_component0.valorMinimReal=valor0;
 							if (histo_component0.valorMaximReal<valor0)
 								histo_component0.valorMaximReal=valor0;
+							if (histo_component0.sumaValorsReal) //si s'ha inicialitzat és que estic en un context que té sentit
+								histo_component0.sumaValorsReal+=valor0;
 						}
 						fila_calc[i][i_data_video]=valor0;
 					}
@@ -1262,6 +1270,8 @@ var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma ? histograma.c
 					histo_component0.valorMinimReal=valor0;
 				if (histo_component0.valorMaximReal<valor0)
 					histo_component0.valorMaximReal=valor0;
+				if (histo_component0.sumaValorsReal) //si s'ha inicialitzat és que estic en un context que té sentit
+					histo_component0.sumaValorsReal+=valor0;
 			}
 		}
 	}
@@ -1290,7 +1300,8 @@ var j, i, a0, valor_min0, valor0, bigint;
 		histograma.component=[{
 					"classe": [], 
 					"valorMinimReal": +1e300,
-					"valorMaximReal": -1e300
+					"valorMaximReal": -1e300,
+					"sumaValorsReal": 0 //·$· quan passo per aquesta funció segur que és QC i té sentit fer això, oi?
 				}];
 		histo_component0=histograma.component[0];
 		classe0=histo_component0.classe;
@@ -1317,6 +1328,7 @@ var j, i, a0, valor_min0, valor0, bigint;
 						histo_component0.valorMinimReal=valor0;
 					if (histo_component0.valorMaximReal<valor0)
 						histo_component0.valorMaximReal=valor0;
+					histo_component0.sumaValorsReal+=valor0;	//·$· quan passo per aquesta funció segur que és QC i té sentit fer això, oi?
 				}
 				i_color0=Math.floor(a0*(valor0-valor_min0));
 				if (i_color0>=ncolors)
@@ -1337,6 +1349,7 @@ var j, i, a0, valor_min0, valor0, bigint;
 	}	
 }
 
+
 /*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255. 
 This is especially handy for Canvas image processing algorithms since now you don’t have to manually clamp your 
 image processing math to avoid overflowing the 8-bit range.
@@ -1347,10 +1360,10 @@ image processing math to avoid overflowing the 8-bit range.
 'component' és capa.estil[i_estil].component
 'valors' és capa.valors. No es mira la part on hi ha els arrays binaris perquè això està a dv.
 'paleta' és capa.estil[i_estil].paleta*/
-function ConstrueixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta)
+function ConstrueixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta, categories)
 {
-var i_cell=[], i_byte=[], j, i, CalculaFilaDesDeBinaryArraydv_i, i_c, valor0, i_color=[], i_color0, a=[], a0, valor_min=[], valor_min0, comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0;
-var histo_component0, component0, n_v=valors.length, dv_i, v=[];
+var i_cell=[], i_byte=[], j, i, CalculaFilaDesDeBinaryArraydv_i, i_c, valor0, valor1, i_color=[], i_color0, i_color1, a=[], a0, a1, valor_min=[], valor_min0, valor_min1, comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0, classe1;
+var histo_component0, component0, component1, n_v=valors.length, dv_i, v=[];
 var colors, ncolors, valors_i, nodata, dtype, una_component;
 
 	for (var i_v=0; i_v<n_v; i_v++)
@@ -1364,7 +1377,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			fila[i]=[];
 	}
 
-	if (component.length==1)
+	if (component.length==1 || component.length==2)
 	{
 		/*if (!estil.paleta || !estil.paleta.colors)
 		{
@@ -1402,24 +1415,62 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 		{
 			//cal_histo=true;
 			//component0.histograma=[];
-			//component0.valorMinimReal=+1e300;
-			histograma.component=[{
+			//component0.valorMinimReal=+1e300;			
+			if (categories) //si la component0 té categories, no cal calcular sumaValorsReal
+			{
+				histograma.component=[{
 						"classe": [], 
 						"valorMinimReal": +1e300,
 						"valorMaximReal": -1e300
+					}];		
+			}
+			else
+			{
+				histograma.component=[{
+						"classe": [], 
+						"valorMinimReal": +1e300,
+						"valorMaximReal": -1e300,
+						"sumaValorsReal": 0	
 					}];
+			}
 			histo_component0=histograma.component[0];
 			classe0=histo_component0.classe;
 			for (i_color0=0; i_color0<ncolors; i_color0++)
 				classe0[i_color0]=0;
 		}
-	}
-	else if (component.length==2)
-	{
-		alert(DonaCadenaLang({"cat":"Una capa no pot tenir 2 components. Ha de tenir definides 1 o 3 components.", 
+		if (component.length==2)
+		{
+			if (categories) //és una capa de transferència de camps estadístics a unes categories
+			{	
+				component1=component[1];
+				a1=DonaFactorAEstiramentPaleta(component1.estiramentPaleta, component1.herenciaOrigen.nColors);
+				valor_min1=DonaFactorValorMinEstiramentPaleta(component1.estiramentPaleta);
+	
+				for (var i_categ=0; i_categ<categories.length; i_categ++)
+				{
+					if (!categories[i_categ])
+						continue;
+					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ·$· l'estructura de "pisos" és diferent en aquest histograma que en el "normal". És important? potser si si més endavant volem fer servir altres funcions? 
+					if (!component1.herenciaOrigen.categories)
+					{
+						categories[i_categ]["$stat$_sum"]=0;
+						categories[i_categ]["$stat$_min"]=1e300;
+						categories[i_categ]["$stat$_max"]=-1e300;
+					}				
+					var classe1=categories[i_categ]["$stat$_histo"].classe;
+					for (i_color1=0; i_color1<component1.herenciaOrigen.nColors; i_color1++)
+						classe1[i_color1]=0;
+				}
+			}
+			else
+			{
+				alert(DonaCadenaLang({"cat":"Una capa no pot tenir 2 components. Ha de tenir definides 1 o 3 components.", 
 						"spa":"Una capa no puede tener 2 componentes. Debe tener definidas 1 o 3 componentes", 
 						"eng":"A layer can not have 2 component. It must have defined 1 or 3 components",
-						"fre":"Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants"}) + ". (" + (capa.desc ? capa.desc: capa.nom) + ")");
+						"fre":"Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants"}));
+				return;
+			}
+		}
 	}
 	else
 	{
@@ -1435,6 +1486,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				component[i_c].histograma=[];
 				component[i_c].valorMinimReal=+1e300;
 				component[i_c].valorMaximReal=-1e300;
+				component[i_c].sumaValorsReal=0;
 				for (i_color0=0; i_color0<256; i_color0++)
 					component[i_c].histograma[i_color0]=0;
 			}*/
@@ -1443,7 +1495,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				histograma.component[i_c]={
 							"classe": [], 
 							"valorMinimReal": +1e300,
-							"valorMaximReal": -1e300
+							"valorMaximReal": -1e300,
+							"sumaValorsReal": 0		//si tinc tres components és que la variables és QC segur
 						};
 				classe0=histograma.component[i_c].classe;
 				for (i_color0=0; i_color0<256; i_color0++)
@@ -1474,7 +1527,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					i_nodata=-1;
 					for (i_v=0;i_v<n_v;i_v++)
 					{
-					        if (dv[i_v]==null)
+						if (dv[i_v]==null)
 							continue;
 						nodata=valors[i_v].nodata;
 						if (nodata)
@@ -1507,6 +1560,109 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									histo_component0.valorMinimReal=valor0;
 								if (histo_component0.valorMaximReal<valor0)
 									histo_component0.valorMaximReal=valor0;
+								if (!categories)
+									histo_component0.sumaValorsReal+=valor0;
+							}
+							i_color0=Math.floor(a0*(valor0-valor_min0));
+							if (i_color0>=ncolors)
+								i_color0=ncolors-1;
+							else if (i_color0<0)
+								i_color0=0;
+							if (histograma)
+								classe0[i_color0]++;
+							if (colors)
+							{
+								bigint = parseInt(colors[i_color0].substring(1), 16);
+								data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
+							}
+							else
+								data.push(i_color0, i_color0, i_color0, 255);
+						}
+					}
+				}
+			}
+			else if (component.length==2)
+			{
+				//Aquest codi és igual que FilaFormulaConsultaDesDeMultiFila() però sense passar a colors sino a una fila_calc
+				for (i=0;i<ncol;i++)
+				{
+					v=fila[i];
+					i_nodata=-1;
+					for (i_v=0;i_v<n_v;i_v++)
+					{
+					  if (dv[i_v]==null)
+							continue;
+						nodata=valors[i_v].nodata;
+						if (nodata)
+						{
+							i_nodata=nodata.indexOf(v[i_v]);
+							if (i_nodata>=0)
+								break;
+						}
+					}
+					if (i_nodata>=0)
+					{
+						if (histograma)
+							histograma.classe_nodata++;
+						data.push(255,255,255,0);
+					}
+					else
+					{
+						if (component0.FormulaConsulta)
+							valor0=eval(component0.FormulaConsulta);
+						else if (component0.i_valor)
+							valor0=v[component0.i_valor];
+						else
+							valor0=v[0];
+								
+						if (isNaN(valor0) || valor0==null)
+						{
+							if (histograma)	
+								histograma.classe_nodata++;
+							data.push(255,255,255,0);
+						}
+						else
+						{
+							if (component1.FormulaConsulta)
+								valor1=eval(component1.FormulaConsulta);
+							else if (component1.i_valor)
+								valor1=v[component1.i_valor];
+							else
+								valor1=v[1];
+						
+							if (isNaN(valor1) || valor1==null)
+								categories[valor0]["$stat$_histo"].classe_nodata++
+							else //if (!isNaN(valor1) && valor1!=null)
+							{
+								// ara valor0 conté el valor de l'array de categories i valor1 conté la variable de la qual s'han de fer estadístiques					 
+								
+								// creo histograma de la component1 per la categoria categories[valor0]
+								i_color1=Math.floor(a1*(valor1-valor_min1));
+								if (i_color1>=component1.herenciaOrigen.nColors)
+									i_color1=component1.herenciaOrigen.nColors-1;
+								else if (i_color1<0)
+									i_color1=0;								
+								categories[valor0]["$stat$_histo"].classe[i_color1]++;
+
+								//calculo el min, max i sum de la component1 per la categoria categories[valor0]
+								if (!component1.herenciaOrigen.categories)
+								{
+									if (categories[valor0]["$stat$_min"]>valor1)
+										categories[valor0]["$stat$_min"]=valor1;
+									if (categories[valor0]["$stat$_max"]<valor1)
+										categories[valor0]["$stat$_max"]=valor1;
+									categories[valor0]["$stat$_sum"]+=valor1;									
+								}
+							}
+
+							if (histograma)
+							{
+								if (histo_component0.valorMinimReal>valor0)
+									histo_component0.valorMinimReal=valor0;
+								if (histo_component0.valorMaximReal<valor0)
+									histo_component0.valorMaximReal=valor0;
+								if (!categories)
+									histo_component0.sumaValorsReal+=valor0;
 							}
 							i_color0=Math.floor(a0*(valor0-valor_min0));
 							if (i_color0>=ncolors)
@@ -1577,6 +1733,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									histograma.component[i_c].valorMinimReal=valor0;
 								if (histograma.component[i_c].valorMaximReal<valor0)
 									histograma.component[i_c].valorMaximReal=valor0;
+								histograma.component[i_c].sumaValorsReal+=valor0;													
 							}
 							i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 							if (i_color0>=256)
@@ -1589,6 +1746,50 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							if (i_c==2)
 								data.push(255);
 						}
+					}
+				}
+			}
+	  } //End of for
+
+ 		if (component.length==2) //és una capa de transferència de camps estadístics a unes categories
+		{			
+			var area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY}, 
+					ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
+			for (var i_categ=0; i_categ<categories.length; i_categ++)
+			{
+				if (!categories[i_categ])
+					continue;
+				
+				if (component1.herenciaOrigen.categories)
+				{
+					var estad_cat=CalculaEstadisticsCategorics(categories[i_categ]["$stat$_histo"].classe);
+					if (estad_cat.recompte)
+					{
+						categories[i_categ]["$stat$_mode"]=DonaTextCategoriaDesDeColor(component1.herenciaOrigen.categories, component1.herenciaOrigen.atributs, estad_cat.i_moda, true);
+						categories[i_categ]["$stat$_percent_mode"]=categories[i_categ]["$stat$_histo"].classe[estad_cat.i_moda]/estad_cat.recompte*100;
+					}
+				}	
+				else
+				{		
+					var stat=CalculaEstadisticsHistograma(categories[i_categ]["$stat$_histo"].classe, categories[i_categ]["$stat$_min"], categories[i_categ]["$stat$_max"], categories[i_categ]["$stat$_sum"]);
+					if (stat.recompte!=0)
+					{
+						categories[i_categ]["$stat$_count"]=stat.recompte;
+						categories[i_categ]["$stat$_sum_area"]=categories[i_categ]["$stat$_sum"]*area_cella;
+						categories[i_categ]["$stat$_sum"]=categories[i_categ]["$stat$_sum"];
+						categories[i_categ]["$stat$_range"]=categories[i_categ]["$stat$_max"]-categories[i_categ]["$stat$_min"]+1;
+						categories[i_categ]["$stat$_min"]=categories[i_categ]["$stat$_min"];
+						categories[i_categ]["$stat$_max"]=categories[i_categ]["$stat$_max"];
+						categories[i_categ]["$stat$_mean"]=stat.mitjana;
+						categories[i_categ]["$stat$_variance"]=stat.varianca;
+						categories[i_categ]["$stat$_stdev"]=stat.desv_tipica;
+					}
+					else
+					{
+						delete categories[i_categ]["$stat$_histo"];
+						delete categories[i_categ]["$stat$_sum"];
+						delete categories[i_categ]["$stat$_min"];
+						delete categories[i_categ]["$stat$_max"];
 					}
 				}
 			}
@@ -1672,6 +1873,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 													histo_component0.valorMinimReal=valor0;
 												if (histo_component0.valorMaximReal<valor0)
 													histo_component0.valorMaximReal=valor0;
+												if (!categories)
+													histo_component0.sumaValorsReal+=valor0;													
 											}
 											i_color0=Math.floor(a0*(valor0-valor_min0));
 											if (i_color0>=ncolors)
@@ -1716,6 +1919,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 													histograma.component[i_c].valorMinimReal=valor0;
 												if (histograma.component[i_c].valorMaximReal<valor0)
 													histograma.component[i_c].valorMaximReal=valor0;
+												histograma.component[i_c].sumaValorsReal+=valor0;
 											}
 											i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 											if (i_color0>=256)
@@ -1730,7 +1934,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										}
 									}
 								}
-		                    			}
+		          }
 						}
 						else
 						{
@@ -1787,6 +1991,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												histo_component0.valorMinimReal=valor0;
 											if (histo_component0.valorMaximReal<valor0)
 												histo_component0.valorMaximReal=valor0;
+											if (!categories)
+												histo_component0.sumaValorsReal+=valor0*comptador;
 										}
 										i_color0=Math.floor(a0*(valor0-valor_min0));
 										if (i_color0>=ncolors)
@@ -1826,6 +2032,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												histograma.component[i_c].valorMinimReal=valor0;
 											if (histograma.component[i_c].valorMaximReal<valor0)
 												histograma.component[i_c].valorMaximReal=valor0;
+											histograma.component[i_c].sumaValorsReal+=valor0*comptador;													
 										}										
 										i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 										if (i_color0>=256)
@@ -1908,6 +2115,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 											histo_component0.valorMinimReal=valor0;
 										if (histo_component0.valorMaximReal<valor0)
 											histo_component0.valorMaximReal=valor0;
+										if (!categories)
+											histo_component0.sumaValorsReal+=valor0;
 									}
 									i_color0=Math.floor(a0*(valor0-valor_min0));
 									if (i_color0>=ncolors)
@@ -1950,6 +2159,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 											histograma.component[i_c].valorMinimReal=valor0;
 										if (histograma.component[i_c].valorMaximReal<valor0)
 											histograma.component[i_c].valorMaximReal=valor0;
+										histograma.component[i_c].sumaValorsReal+=valor0;
 									}
 									i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 									if (i_color0>=256)
@@ -2058,7 +2268,7 @@ var data;
 
 		data=[]; //Empty the array;
 
-		ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, capa.estil[extra_param.i_estil].component, valors, estil.paleta)
+		ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
 
 		imgData.data.set(data);
 
@@ -2091,10 +2301,36 @@ var data;
 					}
 				}
 			}
+			else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				{
+					var retorn_prep_histo;
+					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
+					retorn_prep_histo=PreparaHistogramaPerCategories(i_histo);
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data;
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors;
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats;
+					HistogramaFinestra.vista[i_histo].chart[0].options=retorn_prep_histo.options;
+					HistogramaFinestra.vista[i_histo].chart[0].update();
+				}
+			}
 			else if (estil.diagrama[i_diagrama].tipus == "matriu")
 			{
 				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
-document.getElementById(DonaNomMatriuConfusio(i_histo)).innerHTML=CreaTextMatriuDeConfusio(i_histo, true);
+					document.getElementById(DonaNomMatriuConfusio(i_histo)).innerHTML=CreaTextMatriuDeConfusio(i_histo, true);
+			}
+			else if (estil.diagrama[i_diagrama].tipus == "stat")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+					document.getElementById(DonaNomEstadistic(i_histo)).innerHTML=CreaTextEstadistic(i_histo, estil.diagrama[i_diagrama].stat);
+			}
+			else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
+			{
+				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+					document.getElementById(DonaNomEstadistic(i_histo)).innerHTML=CreaTextEstadisticPerCategories(i_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			{

@@ -1171,7 +1171,7 @@
 						"$ref": "#/definitions/featureCollection"
 					},
 					"atributs": {
-						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostre mai a les consultes. A més l'ordre dels atributs aquí mana ordre. Només aplica quan el model de dades és vector. En el model raster està dins de cada estil.",
+						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre. Només aplica quan el model de dades és vector. En el model raster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
 					},
 					"valors": {
@@ -1400,28 +1400,37 @@
 												"multipleOf" : 1
 											},
 											"estiramentPaleta": {
-												"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depén severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
+												"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
 												"$ref": "#/definitions/estiramentPaleta" 
+											},											
+											"herenciaOrigen": { 
+												"description": "INTERN: Propietats generalment de simbolització heratades de la capa original. De moment només s'utilitza per la transferència de camps estadístics.",
+												"type": "object",
+												"properties": {	
+													"nColors": {
+														"type": "number",
+														"minimum": 0,
+														"multipleOf" : 1
+													},
+													"categories" : { 
+														"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
+														"$ref": "#/definitions/descripcioCategories"
+													},
+													"atributs": {
+														"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el model de dades és ràster en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+														"$ref": "#/definitions/descripcioAtributs"			
+													}
+												}
 											}
 										}
 									}
 								},
 								"categories": {
 									"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
-									"type": ["array", "null"],
-									"items": {
-										"description": "Descripció alfanumèrica del valor i-essim (o null). Object és equivalment a propertiesGeoJSON",
-										"oneOf":[{
-												"type": ["null"]
-											},
-											{
-												"$ref": "#/definitions/propertiesGeoJSON"
-											}
-										]
-									}
+									"$ref": "#/definitions/descripcioCategories"
 								},
 								"atributs": {
-									"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostre mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el model de dades és ràster en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+									"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el model de dades és ràster en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 									"$ref": "#/definitions/descripcioAtributs"
 								},
 								"metadades": { 
@@ -1593,10 +1602,42 @@
 												"enum": 
 												[
 													"chart",
+													"chart_categ",
 													"matriu",
-													"vista3d"
+													"vista3d",
+													"stat",
+													"stat_categ" 
 												]
 											},	
+											"stat": 
+											{
+												"description": "Tipus d'estadístic a representar en aquest element. Només existeix si el tipus de diagrama (propietat anterior) és stat o stat_categ. Els seus tres primers valors apliquen si és una variable categòrica, i els altres si és quantitativa",
+												"enum": 
+												[
+													"mode",
+													"percent_mode",
+													"mode_and_percent",
+													"sum",
+													"sum_area",
+													"mean", 
+													"variance",
+													"stdev",
+													"min",
+													"max",
+													"range"
+												]
+											},	
+											"order": 
+											{
+												"description": "Tipus d'ordenació per als valors a representar en els estadístics/gràfic per categories. Només aplica si tipus és chart_categ o stat_categ",
+												"enum": 
+												[
+													"ascend",
+													"descend",
+													"unsorted"
+												],
+												"default": "unsorted"
+											},
 											"left": 
 											{
 												"description": "Distància a la vora dreta. Opcional",
@@ -2530,8 +2571,22 @@
 				}
 			}
 		},
+		"descripcioCategories": { 
+			"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
+			"type": ["array", "null"],
+			"items": {
+				"description": "Descripció alfanumèrica del valor i-essim (o null). Object és equivalment a propertiesGeoJSON",
+				"oneOf":[{
+						"type": ["null"]
+					},
+					{
+						"$ref": "#/definitions/propertiesGeoJSON"
+					}
+				]
+			}
+		},		
 		"descripcioAtributs": {
-			"description": "Array que descriu els atributs. Si un atribut no és aquí descrit no es mostre mai a les consultes. A més, l'ordre de la defició de l'array d'atributs (aquests array) mana ordre en que les propietats es veuen a les consultes.",
+			"description": "Array que descriu els atributs. Si un atribut no és aquí descrit no es mostra mai a les consultes. A més, l'ordre de la defició de l'array d'atributs (aquests array) mana ordre en que les propietats es veuen a les consultes.",
 			"type": ["array", "null"],
 			"items": {
 				"description": "Propietats de l'atribut",
@@ -2554,6 +2609,10 @@
 						"description": "Descripció de l'atribut",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
+					"simbol": { 
+						"description": "Símbol de l'atribut, per exemple la lletra sigma per a la desviació estàndard (no és el símbol de les unitats). S'usarà en la visualització compacta (caixa de coordenades) si està definit. Creat per als atributs estadístics, però es pot usar per tots.",
+						"type": ["string", "null"]
+					},
 					"unitats": { 
 						"description": "Unitats de l'atribut",
 						"type": ["string", "null"]
@@ -2575,7 +2634,7 @@
 						"type": "boolean"
 					},
 					"mostrar": {
-						"description": "S'ha de mostrar? Pot ser Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
+						"description": "S'ha de mostrar? Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
 						"enum": ["si", "no", "si_ple"]
 					},
 					"tipus": { 					
@@ -2640,7 +2699,11 @@
 								"type": "number"
 							},
 							"valorMaximReal": {
-								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Es el valor màxim de l'array",
+								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. És el valor màxim de l'array",
+								"type": "number"
+							},
+							"sumaValorsReal": {
+								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. És la suma de tots els valors de l'array",
 								"type": "number"
 							}
 						}

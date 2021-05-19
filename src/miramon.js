@@ -759,6 +759,10 @@ function CanviaIdioma(s)
 	if(isLayer(elem) && isLayerVisible(elem))
 		TancaFinestraLayer("combinacioRGB"); //Em falta una paràmetre per iniciar-la
 
+	elem=getFinestraLayer(window, "seleccioEstadistic");
+	if(isLayer(elem) && isLayerVisible(elem))
+		TancaFinestraLayer("seleccioEstadistic"); //Em falta una paràmetre per iniciar-la
+
 	elem=getFinestraLayer(window, "anarCoord");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraAnarCoordenada();
@@ -1224,7 +1228,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 		//Inici afegit AZ a revisar per JM ·$·$·$·$·$·
 		if (capa.EnvTotalLL)
 			delete capa.EnvTotalLL;
-
+		
 		if (capa.estil && capa.estil.length>0)
 		{
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -1236,17 +1240,18 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 					{	// en tancar el navegador anoto al config les coses que mecessitaré per tornar a obrir la caixa igual, i esborro el i_histograma que és la marca que la fienstra no s'ha obert
 						// posició finestra
 						var nom_finestra="";
-
-						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "matriu" )
+						
+						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" || 
+								estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
 							nom_finestra=DonaNomHistograma(estil.diagrama[i_diagrama].i_histograma);
 						else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 							nom_finestra=DonaNomGrafic3d(estil.diagrama[i_diagrama].i_histograma);
-
+						
 						if (nom_finestra != "")
 						{
 							for (var i_layer_fin=0; i_layer_fin<layerFinestraList.length; i_layer_fin++)
 							{
-								if (layerFinestraList[i_layer_fin].nom == nom_finestra)
+								if (layerFinestraList[i_layer_fin].nom == nom_finestra)							
 									break;
 							}
 							if (i_layer_fin < layerFinestraList.length) //he identificar quina finestra era
@@ -1254,38 +1259,42 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 								var div=getBarraLayer(window, nom_finestra);
 								estil.diagrama[i_diagrama].left=parseInt(div.style.left);
 								estil.diagrama[i_diagrama].top=parseInt(div.style.top);
-								//estil.diagrama[i_diagrama].width=parseInt(div.style.width); //encara no s'usa en recarregar la finestra
-								//estil.diagrama[i_diagrama].height=parseInt(div.style.height); //encara no s'usa en recarregar la finestra
+								if (estil.diagrama[i_diagrama].tipus == "matriu" || estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
+								{	//les uniques redimensionables
+									div=getFinestraLayer(window, nom_finestra);
+									estil.diagrama[i_diagrama].width=parseInt(div.style.width); //encara no s'usa en recarregar la finestra
+									estil.diagrama[i_diagrama].height=parseInt(div.style.height); //encara no s'usa en recarregar la finestra
+								}
 							}
 							//else -> si no l'he identificat, no anoto res i el proper cop s'obrirà a la posició per defecte
 						}
-
+						
 						// mida finestra -> s'haurà de fer més endavant, si fem que aquestes caixes siguin redimensionables (ara no ho són)
-
-						/* dades del darrer gràfic visualitzat + estat dianmisme (important per si tinc un gràfic estàtic i he de desar
-						aquestes dades que ja no surten de la vita actual!, i també important per poder obrir totes les finestres
-						des del principi encara que no estigui veient aquesta capa/estil concret * /
+						
+						/* dades del darrer gràfic visualitzat + estat dianmisme (important per si tinc un gràfic estàtic i he de desar 
+						aquestes dades que ja no surten de la vita actual!, i també important per poder obrir totes les finestres 
+						des del principi encara que no estigui veient aquesta capa/estil concret * / 
 						if (estil.diagrama[i_diagrama].tipus == "chart")
 						{
 							estil.diagrama[i_diagrama].chart=[];
 							for (var i_c=0; i_c<estil.component.length; i_c++)
 							{
-								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);
+								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);												
 								/*estil.diagrama[i_diagrama].chart.push({labels: retorn_prep_histo.label, valors: (retorn_prep_histo.valors ? retorn_prep_histo.valors : null),
-									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /
+									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /	
 							}
 						}
 						else if (estil.diagrama[i_diagrama].tipus == "matriu")
 							estil.diagrama[i_diagrama].matriu=CreaTextMatriuDeConfusio(estil.diagrama[i_diagrama].i_histograma, true);
-						//else if
+						//else if (estil.diagrama[i_diagrama].tipus == "stat")
 							//··*/
 						// esborrar i_histograma
 						delete estil.diagrama[i_diagrama].i_histograma; //en reiniciar serà la marca que no s'ha creat a finestra encara
 					}
-				}
+				}	
 			}
-		}
-
+		}			
+						
 		//Fi de Afegit AZ a revisar per JM ·$·$·$·$·$·
 
 		if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
@@ -2009,15 +2018,16 @@ function TancaFinestraLayer(nom_finestra)
 		var str_id = nom_finestra.substr(prefixHistogramaFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[HistogramaFinestra.vista[number_id].i_capa].estil[HistogramaFinestra.vista[number_id].i_estil];
-
+	 
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{
+		{	
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id &&
-						(estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "matriu" ))
+						(estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" || 
+						estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ"))
 				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);
+					estil.diagrama.splice(i_diagrama, 1);				
 					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
@@ -2030,14 +2040,14 @@ function TancaFinestraLayer(nom_finestra)
 		var str_id = nom_finestra.substr(prefixSuperficie3DFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[Superficie3DFinestra.vista[number_id].i_capa].estil[Superficie3DFinestra.vista[number_id].i_estil];
-
+	 
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{
+		{	
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id && estil.diagrama[i_diagrama].tipus == "vista3d" )
 				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);
+					estil.diagrama.splice(i_diagrama, 1);				
 					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
@@ -2722,7 +2732,7 @@ function MostraValorDeCoordActual(i_nova_vista, x, y)
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
 					capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
 				{
-					var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j));
+					var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j), true);
 					if (s=="")
 						continue;
 					if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
@@ -4084,7 +4094,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{layer}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{style}", capa.estil[i_estil2].nom);
 			else
@@ -4112,10 +4122,10 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 			else
 				s=s.replace("{format_extension}", capa.FormatImatge);
 		}
-		return s;
+		return s;		
 		}
 	else if (tipus=="TipusOAPI_MapTiles")
-	{
+	{		
 		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"?";
 		else
@@ -4124,23 +4134,23 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
-
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
+			
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
-				s=s.replace("{styleId}/", "default");
+				s=s.replace("{styleId}/", "default");	
 		}
 		else
-			s=s.replace("{styleId}/", "default");
-		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);
+			s=s.replace("{styleId}/", "default");						
+		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
 		s=s.replace("{tileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
 		s=s.replace("{tileRow}", j);
 		s=s.replace("{tileCol}", i);
-		if(capa.FormatImatge.charAt(0)==".")
+		if(capa.FormatImatge.charAt(0)==".")  
 			s=s.replace(".{format_extension}", capa.FormatImatge);
 		else
-			s=s.replace("{format_extension}", capa.FormatImatge);
+			s=s.replace("{format_extension}", capa.FormatImatge);		
 		cdns.push(s);
 
 		cdns.push("&f=" , capa.FormatImatge ) ;
@@ -4318,10 +4328,10 @@ var cdns=[], tipus, plantilla, i_estil2;
 			if (ParamCtrl.capa[i].estil[i_estil2].nom)
 	 			plantilla=plantilla.replace("{styleId}", ParamCtrl.capa[i].estil[i_estil2].nom);
 			else
-				plantilla=plantilla.replace("{styleId}", "default");
+				plantilla=plantilla.replace("{styleId}", "default");	
 		}
 		else
-			plantilla=plantilla.replace("{styleId}", "default");
+			plantilla=plantilla.replace("{styleId}", "default");	
 		cdns.push(plantilla);
 	}
 
@@ -4463,6 +4473,8 @@ var i_estil, capa=ParamCtrl.capa[i_capa];
 	return s;
 }
 
+
+
 function DonaDescripcioValorMostrarCapa(i_capa, una_linia)
 {
 var capa=ParamCtrl.capa[i_capa];
@@ -4480,33 +4492,80 @@ var capa=ParamCtrl.capa[i_capa];
 		) + (capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, retorna una cadena buida. Si la cadena és multiidioma es retorna un objecte
-function DonaCadenaCategoriaDesDeColor(estil, i_color)
+//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
+function DonaTextCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
 {
-	if (estil.atributs.length==1)
+	if (atributs.length==1)
 	{
-		if (estil.categories[i_color] && estil.categories[i_color][estil.atributs[0].nom])
-			return estil.categories[i_color][estil.atributs[0].nom];
+		if (categories[i_color] && categories[i_color][atributs[0].nom])
+			return categories[i_color][atributs[0].nom];
 		return "";
 	}
+	if (!categories[i_color])
+		return "";
 
-	var value_text="[";
-	for (var i_a=0; i_a<estil.atributs.length; i_a++)
+	var value_text;	
+	var i_ple=0;
+	var desc_atrib;
+	
+	if (compacte)
+		value_text="[";
+	else
+		value_text="<br>";
+	
+	for (var i_a=0; i_a<atributs.length; i_a++)
 	{
-		if (!estil.categories[i_color][estil.atributs[i_a].nom])
-			return "";
-		value_text+=(estil.atributs[i_a].desc ? DonaCadena(estil.atributs[i_a].desc) : estil.atributs[i_a].nom) + ": " + estil.categories[i_color][estil.atributs[i_a].nom];
-		if (i_a+1<estil.atributs.length)
-			value_text+="; "
+		if (!categories[i_color][atributs[i_a].nom])
+			continue; //return ""; -> per algun atribut pot no haver valor però puc mostrar els altres
+						
+		if (filtra_stats && atributs[i_a].nom.substring(0,7) == "$stat$_")
+			continue; //en un context de "nomes_atrib_simples" els stat no els vull mostrar
+		
+		if (atributs[i_a].mostrar == "no" || (atributs[i_a].mostrar == "si_ple" && 
+				(!categories[i_color][atributs[i_a].nom] || categories[i_color][atributs[i_a].nom].length==0)))
+			continue; //si és no mostrable o és si_ple i buit no el mostro
+			
+		if (compacte)
+			desc_atrib=(atributs[i_a].simbol ? atributs[i_a].simbol : (atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : atributs[i_a].nom));
+		else
+			desc_atrib=(atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : (atributs[i_a].simbol ? atributs[i_a].simbol : atributs[i_a].nom));
+		
+		if (atributs[i_a].NDecimals)
+			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][atributs[i_a].nom], atributs[i_a].NDecimals);		
+		else
+			value_text+= desc_atrib + ": " + categories[i_color][atributs[i_a].nom];
+		if (atributs[i_a].unitats)
+			value_text+=" "+atributs[i_a].unitats;
+		i_ple++;
+		if (i_a+1<atributs.length)
+		{
+			if (compacte)
+				value_text+="; "
+			else
+				value_text+="<br>"				
+		}
 	}
-	value_text+="]";
+	if (compacte)
+	{
+		if (value_text.length>2 && value_text.substr(value_text.length-2)=="; ")
+			value_text=value_text.substring(0, value_text.length-2);
+	}
+	else
+	{
+		if (value_text.length>4 && value_text.substr(value_text.length-4)=="<br>")
+			value_text=value_text.substring(0, value_text.length-4);	
+	}
+	
+	if (i_ple==1) 
+	{
+		if (compacte) //si només hi ha un atribut no cal posar-lo entre "[", ni tampoc posar la descripció abans
+			value_text=value_text.substr(desc_atrib.length+2);
+		else //treure el primer <br> ·$· provar
+			value_text=value_text.substr(desc_atrib.length+4);
+	}
+	else if (compacte)
+		value_text+="]";
 	return value_text;
-}
-
-//Com la funció anterior però resol la cadena multiidioma en un idioma concret
-function DonaTextCategoriaDesDeColor(estil, i_color)
-{
-	return DonaCadena(DonaCadenaCategoriaDesDeColor(estil, i_color));
 }
 
 function onLoadCanviaImatge(event)
@@ -5413,7 +5472,7 @@ var p, unitats_CRS;
 				if (capa.visible!="no")
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
-											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
+											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,  
 											((capa.FormatImatge=="application/x-img") ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
 				}
 			}
@@ -5470,7 +5529,7 @@ var p, unitats_CRS;
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 			{
-				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
+				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");	
 				barra_slider.push("<br>");
 				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
@@ -5486,7 +5545,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
 		{
-			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
+			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), 
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
@@ -5497,7 +5556,7 @@ var p, unitats_CRS;
 					barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
 				barra_slider.push("</datalist>");
 			}
-			barra_slider.push("</span>");
+			barra_slider.push("</span>");			
 		}
 		if (barra_slider.length)
 			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
@@ -5522,12 +5581,12 @@ var p, unitats_CRS;
 			else
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
+					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i); 
 				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
-						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
-				}
+						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);					
+				}	
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)
 				setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
@@ -5973,7 +6032,7 @@ function PreparaParamInternCtrl()
 					 			nfil: ParamCtrl.nfil,
 								ncol: ParamCtrl.ncol,
 								CostatZoomActual: ParamCtrl.NivellZoomCostat,
-								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]
+								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]	
 								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
 					 EnvLLSituacio: [],
 					 AmpleSituacio: 99,
@@ -5987,11 +6046,11 @@ function PreparaParamInternCtrl()
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}],
-					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats
+					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats 
 					 millisegons: CarregaDatesCapes(),
 					 FlagsData: DeterminaFlagsDataCapes(),
 					 flags: 0};
-
+	
 	if (ParamInternCtrl.millisegons.length)
 		ParamInternCtrl.iMillisegonsActual=ParamInternCtrl.millisegons.binarySearch(DeterminaMillisegonsActualCapes());
 
@@ -6082,16 +6141,119 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
-	var i;
+	var i, j, k;
+
+	if (!param_ctrl.VistaPermanent)
+		param_ctrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
 
 	if (param_ctrl.CapaDigi)
 	{
-		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suportada. Useu una \"capa\" amb \"model\": \"vector\".",
-				"spa": "CapaDigi ya no se suporta. Use una \"capa\" con \"model\": \"vector\".",
+		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suporta. Useu una \"capa\" amb \"model\": \"vector\".",
+				"spa": "CapaDigi ya no se soporta. Use una \"capa\" con \"model\": \"vector\".",
 				"eng": "CapaDigi no longer supported. Use a \"capa\" with \"model\": \"vector\" instead.",
 				"fre": "CapaDigi n'est plus pris en charge. Utilisez un \"capa\" avec le \"model\": \"vector\"."}));
 		return 1;
 	}
+	
+	// arreglem els config.json que deien mostrar: true false errònimament
+	var avis_mostrar_atributs=false;
+	var capa, estil;
+	for (i=0; i<param_ctrl.capa.length; i++)
+	{
+		capa=param_ctrl.capa[i];
+		if (capa.atributs && capa.atributs.length)
+		{
+			for (j=0; j<capa.atributs.length; j++)
+			{
+				if (capa.atributs[j].mostrar)
+				{
+					if (capa.atributs[j].mostrar != "si" && capa.atributs[j].mostrar != "si_ple" && capa.atributs[j].mostrar != "no")
+					{
+						if (capa.atributs[j].mostrar == true || capa.atributs[j].mostrar == false)
+						{	
+							if (!avis_mostrar_atributs)
+							{
+								alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
+										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
+										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
+										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
+										+ " capa = " + (capa.desc ? DonaCadena(capa.desc) : capa.nom));											
+								avis_mostrar_atributs=true;
+							}
+							if (capa.atributs[j].mostrar)
+								capa.atributs[j].mostrar = "si";
+							else						
+								capa.atributs[j].mostrar = "no";						
+						}
+						else 
+						{
+							if (!avis_mostrar_atributs)
+							{
+								alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definida d'una altra manera. El valor serà ignorat i l'atribut marcat com a mostrable. Es deixa continuar.",
+										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
+										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
+										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
+										+ " capa = " + (capa.desc ? DonaCadena(capa.desc) : capa.nom));
+								avis_mostrar_atributs=true;
+							}
+							capa.atributs[j].mostrar = "si";
+						}						
+					}
+				}
+			}
+		}
+			
+		if (capa.estil && capa.estil.length)
+		{ 	
+			var estil;
+			for (j=0; j<capa.estil.length; j++)
+			{
+				estil=capa.estil[j];
+				if (estil.atributs && estil.atributs.length)
+				{
+					for (k=0; k<estil.atributs.length; k++)
+					{
+						if (estil.atributs[k].mostrar)
+						{
+							if (estil.atributs[k].mostrar != "si" && estil.atributs[k].mostrar != "si_ple" && estil.atributs[k].mostrar != "no")
+							{
+								if (estil.atributs[k].mostrar == true || estil.atributs[k].mostrar == false)
+								{	
+									if (!avis_mostrar_atributs)
+									{
+										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
+												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
+												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
+												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
+												+ " estil = " + (estil.desc ? DonaCadena(estil.desc) : estil.nom));
+												avis_mostrar_atributs=true;
+									}
+									if (estil.atributs[k].mostrar)
+										estil.atributs[k].mostrar = "si";
+									else
+										estil.atributs[k].mostrar = "no";						
+								}
+								else 
+								{
+									if (!avis_mostrar_atributs)
+									{
+										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definida d'una altra manera. El valor serà ignorat i l'atribut marcat com a mostrable. Es deixa continuar.",
+												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
+												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
+												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
+												+ " estil = " + (estil.desc ? DonaCadena(estil.desc) : estil.nom));
+										avis_mostrar_atributs=true;
+									}
+									estil.atributs[k].mostrar = "si";
+								}						
+							}
+						}
+					}
+				}			
+			}					
+		}
+	}
+	
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
 	{
 		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer",
@@ -6103,7 +6265,6 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	for (i=0; i<param_ctrl.zoom.length; i++)
 		if (param_ctrl.zoom[i].costat==param_ctrl.NivellZoomCostat)
 			break;
-
 	if (i==param_ctrl.zoom.length)
 	{
 		alert(DonaCadenaLang({"cat": "El NivellZoomCostat no és cap del costats indicats a la llista de zooms",
@@ -6164,6 +6325,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "combinacioCapa", {"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng": "Analytical combination of layers", "fre":"Combinaison analytique de couches"}, boto_tancar, 420, 150, 520, 400, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "combinacioRGB", {"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}, boto_tancar, 220, 90, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "seleccioEstadistic", {"cat":"Selecció del valor estadístic", "spa":"Selección del valor estadístico", "eng":"Selection of statistic value", "fre":"Sélection de la valeur statistique"}, boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
@@ -6187,9 +6349,6 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editarVector", {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert a new point", "fre":"Insérer un nouveaux point"}, boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", {"cat":"Informació del resultat de la transacció", "spa":"Información del resulado de la transacción", "eng": "Information about the result of the transaction", "fre":"Informations sur les résultats de la transaction"}, boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-
-	if (!ParamCtrl.VistaPermanent)
-		ParamCtrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
 
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;

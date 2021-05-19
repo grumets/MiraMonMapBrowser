@@ -19,17 +19,17 @@
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat) 
-    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ã©s un projecte del 
-    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica 
-    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi 
-    de mapes rÃ sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
-    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert. 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
     
     En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public 
+    es distribueix sota els termes de la llicència GNU Affero General Public 
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
     
     El Navegador de Mapes del MiraMon es pot actualitzar des de 
@@ -37,6 +37,53 @@
 */
 
 "use strict"
+
+//Definits aquí i usats a histpie.js i a cntxmenu.js
+var str_lang_mode={"cat": "Classe modal", "spa": "Clase modal", "eng": "Modal class", "fre": "Classe modale"};
+var str_lang_percent_mode={"cat": "Percentatge de la moda", "spa": "Porcentaje de la moda", "eng": "Percentage of the mode", "fre": "Pourcentage de mode"};
+var str_lang_sum={"cat": "Suma", "spa": "Suma", "eng": "Sum", "fre": "Somme"};
+var str_lang_sum_area={"cat": "Suma àrea", "spa": "Suma área", "eng": "Sum area", "fre": "Somme area"};
+var str_lang_mean={"cat": "Mitjana", "spa": "Media", "eng": "Mean", "fre": "Moyenne"};
+var str_lang_variance={"cat": "Variança", "spa": "Varianza", "eng": "Variance", "fre": "Variance"};
+var str_lang_stdev={"cat": "Desviació estàndard", "spa": "Desviació estándar", "eng": "Standard deviation", "fre": "Écart-type"};
+var str_lang_min={"cat": "Mínim", "spa": "Mínimo", "eng": "Minimum", "fre": "Minimum"};
+var str_lang_max={"cat": "Màxim", "spa": "Máximo", "eng": "Maximum", "fre": "Maximum"};
+var str_lang_range={"cat": "Rang", "spa": "Rango", "eng": "Range", "fre": "Gamme"};
+
+function DonaTitolEstadistic(categories, atributs, tipus_estad)
+{
+var titol="";
+	
+	if (categories && atributs) //cas categòric
+	{
+		if (tipus_estad == "mode")
+			titol=DonaCadenaLang(str_lang_mode);
+		else if (tipus_estad == "percent_mode")
+			titol=DonaCadenaLang(str_lang_percent_mode);
+		else if (tipus_estad == "mode_and_percent")
+			titol=DonaCadenaLang(str_lang_mode)+" ("+DonaCadenaLang(str_lang_percent_mode)+")";
+	}
+	else
+	{
+		if (tipus_estad == "sum")
+			titol=DonaCadenaLang(str_lang_sum);
+		else if (tipus_estad == "sum_area")
+			titol=DonaCadenaLang(str_lang_sum_area);
+		else if (tipus_estad == "mean")
+			titol=DonaCadenaLang(str_lang_mean);
+		else if (tipus_estad == "variance")
+			titol=DonaCadenaLang(str_lang_variance);
+		else if (tipus_estad == "stdev")
+			titol=DonaCadenaLang(str_lang_stdev);
+		else if (tipus_estad == "min")
+			titol=DonaCadenaLang(str_lang_min);
+		else if (tipus_estad == "max")
+			titol=DonaCadenaLang(str_lang_max);
+		else if (tipus_estad == "range")
+			titol=DonaCadenaLang(str_lang_range);
+	}
+	return titol;		
+}
 
 function CalculaCountClasseNValues(v, param)
 {
@@ -89,8 +136,8 @@ var n_valids=0, delta, i, suma=0, v_i, n=v.length;
 	return Math.sqrt(suma/n_valids);
 }
 
-/* Si param == false (o undefined) retorna la primera moda en cas d'empat (aixÃ² genera un biaix estadistic perÃ² Ã©s el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
-   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (aixÃ² no genera un biaix estadÃ­stic i Ã©s necessari per a finestres de convoluciÃ³) */
+/* Si param == false (o undefined) retorna la primera moda en cas d'empat (això genera un biaix estadistic però és el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
+   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (això no genera un biaix estadístic i és necessari per a finestres de convolució) */
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
@@ -141,4 +188,64 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	if (n_m_previa==1)
 		return m_previa[0];
 	return m_previa[Math.floor(Math.random()*n_m_previa)];	
+}
+
+//Calcula estadistics categòrics a partir de les classes
+function CalculaEstadisticsCategorics(classe)
+{
+var i, max_recompte=0;
+var estadistics_categorics={
+			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
+			i_moda: 0};    //categoria modal			
+		
+	for (i=0; i<classe.length; i++)
+	{
+		if (!classe[i])
+			continue;
+		estadistics_categorics.recompte+=classe[i];
+		if (max_recompte < classe[i]) //el nou recompte és més gran
+		{
+			max_recompte = classe[i];
+			estadistics_categorics.i_moda = i;		
+		}	
+	}
+	return estadistics_categorics;
+}
+
+//Calcula estadistics quantitatius continus a partir de les clases del histograma
+function CalculaEstadisticsHistograma(classe, valor_min, valor_max, suma_real)
+{
+var ncolors=classe.length, value, i, suma_v_menys_mitj_quad_per_n=0;
+
+var estadistics={valor_min: valor_min,   //Valor mínim cosiderat al histograma. Useu estil.histograma.component[].valorMinimReal per saber el valor mínim real
+			valor_max: valor_max,  //Valor màxim cosiderat al histograma. Useu estil.histograma.component[].valorMaximReal per saber el valor màxim real
+			ample: (valor_max-valor_min)/ncolors,           //Ample de cada clase
+			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
+			suma: suma_real ? suma_real : 0,       //Suma de TOTS els valors de la imatge
+			mitjana: 0,    //Mitjana de tots els valors de la imatge
+			varianca: 0,   //Variança de tots els valors de la imatge
+			desv_tipica: 0};  //Desviació estàndard de tots els valors de la imatge
+
+	for (i=0, value=estadistics.ample/2+estadistics.valor_min; i<ncolors; i++, value+=estadistics.ample)
+	{
+		estadistics.recompte+=classe[i];
+		if (!suma_real)
+			estadistics.suma+=classe[i]*value;
+	}
+
+	if (estadistics.recompte>0)
+		estadistics.mitjana=estadistics.suma/estadistics.recompte;
+
+	for (i=0; i<ncolors; i++)
+	{
+		value=estadistics.ample/2+estadistics.valor_min+estadistics.ample*i;
+		suma_v_menys_mitj_quad_per_n+=(value-estadistics.mitjana)*(value-estadistics.mitjana)*classe[i];
+	}
+
+	if (estadistics.recompte>0)
+	{
+		estadistics.varianca=suma_v_menys_mitj_quad_per_n/estadistics.recompte;
+		estadistics.desv_tipica=Math.sqrt(estadistics.varianca);
+	}
+	return estadistics;
 }

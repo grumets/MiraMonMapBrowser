@@ -38,65 +38,6 @@
 
 "use strict"
 
-//Calcula estadistics categòrics a partir de les classes
-function CalculaEstadisticsCategorics(classe)
-{
-var i, max_recompte=0;
-var estadistics_categorics={
-			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
-			i_moda: 0};       //categoria modal			
-		
-	for (i=0; i<classe.length; i++)
-	{
-		if (!classe[i])
-			continue;
-		estadistics_categorics.recompte+=classe[i];
-		if (max_recompte < classe[i]) //el nou recompte és més gran
-		{
-			max_recompte = classe[i];
-			estadistics_categorics.i_moda = i;		
-		}	
-	}
-	return estadistics_categorics;
-}
-
-//Calcula estadistics a partir de les clases del histograma.
-function CalculaEstadisticsHistograma(classe, valor_min, valor_max)
-{
-var ncolors=classe.length, value, i, suma_v_menys_mitj_quad_per_n=0;
-
-var estadistics={valor_min: valor_min,   //Valor mínim cosiderat al histograma. Useu estil.histograma.component[].valorMinimReal per saber el valor mínim real
-			valor_max: valor_max,  //Valor màxim cosiderat al histograma. Useu estil.histograma.component[].valorMaximReal per saber el valor màxim real
-			ample: (valor_max-valor_min)/ncolors,           //Ample de cada clase
-			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
-			suma: 0,       //Suma de TOTS els valors de la imatge
-			mitjana: 0,    //Mitjana de tots els valors de la imatge
-			varianca: 0,   //Variança de tots els valors de la imatge
-			desv_tipica: 0};  //Desviació estàndard de tots els valors de la imatge
-
-	for (i=0, value=estadistics.ample/2+estadistics.valor_min; i<ncolors; i++, value+=estadistics.ample)
-	{
-		estadistics.recompte+=classe[i];
-		estadistics.suma+=classe[i]*value;
-	}
-
-	if (estadistics.recompte>0)
-		estadistics.mitjana=estadistics.suma/estadistics.recompte;
-
-	for (i=0; i<ncolors; i++)
-	{
-		value=estadistics.ample/2+estadistics.valor_min+estadistics.ample*i;
-		suma_v_menys_mitj_quad_per_n+=(value-estadistics.mitjana)*(value-estadistics.mitjana)*classe[i];
-	}
-
-	if (estadistics.recompte>0)
-	{
-		estadistics.varianca=suma_v_menys_mitj_quad_per_n/estadistics.recompte;
-		estadistics.desv_tipica=Math.sqrt(estadistics.varianca);
-	}
-	return estadistics;
-}
-
 var prefixNovaVistaFinestra="nova_vista_fin_";
 var prefixHistogramaFinestra="histo_fin_";
 var sufixCheckDinamicHistograma="_dinamic";
@@ -122,7 +63,19 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 
 var HistogramaFinestra={"n": 0, "vista":[]};
 
-function OmpleTextPortapapersFinestraHistogramaADivisio(i_histo)
+function CanviaIndexosCapesHistogramaFinestra(n_moviment, i_capa_ini, i_capa_fi_per_sota)
+{
+	if (HistogramaFinestra && HistogramaFinestra.n && HistogramaFinestra.vista.length>0)
+	{
+		for (var i=0; i<HistogramaFinestra.vista.length; i++)
+		{
+			if (HistogramaFinestra.vista[i].i_capa>=i_capa_ini && HistogramaFinestra.vista[i].i_capa<i_capa_fi_per_sota)
+				HistogramaFinestra.vista[i].i_capa+=n_moviment;
+		}
+	}
+}
+
+function OmpleTextPortapapersFinestraHistogramaADivisio(i_histo, tipus_chart)
 {
 var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cella, cdns=[], div, textarea;
 
@@ -147,28 +100,29 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		"MinY", "\t", env.MinY, "\n", 
 		"MaxY", "\t", env.MaxY, "\n");
 
-	if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
+	if (tipus_chart == "matriu") //else if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 	{
-		cdns.push(CreaTextMatriuDeConfusio(i_histo, false)); /*no es pot posar el segon paràmetre a TRUE, o es crearà un bucle infinit. Si en algun moment es vol copiar al portatapers en format hml, cal repensar
+		cdns.push(CreaTextMatriuDeConfusio(i_histo, false)); /*no es pot posar el segon paràmetre a true, o es crearà un bucle infinit. Si en algun moment es vol copiar al portatapers en format hml, cal repensar
 		com CreaTextMatriuDeConfusio crida a OmpleTextPortapapersFinestraHistogramaADivisio per evitar-ho (matenint que CreaTextMatriuDeConfusió actualitizi el OmpleTextPortapapers...*/
 	}
-	else	
+	else // "stat" o "chart" -> en els dos casos el portapapers té tots els estadístics
 	{
 		var i_c, i, columna_perc=false;
 		if (estil.categories && estil.atributs) //cas categòric
 		{
+			var n_comp_usar = estil.component.length==2 ? 1 : estil.component.length;		
 			var estadistics_categorics=[];
-			for (i_c=0; i_c<estil.component.length; i_c++)
+			for (i_c=0; i_c<n_comp_usar; i_c++)
 				estadistics_categorics[i_c]=CalculaEstadisticsCategorics(estil.histograma.component[i_c].classe);
 			cdns.push(DonaCadenaLang({"cat": "Recompte", "spa": "Cuenta", "eng": "Count", "fre": "Compter"}));
 			
-			var un_recompte=estadistics_categorics[0].recompte
-			for (i_c=1; i_c<estil.component.length; i_c++)
+			var un_recompte=estadistics_categorics[0].recompte;
+			for (i_c=1; i_c<n_comp_usar; i_c++)
 			{
 				if (un_recompte!=estadistics_categorics[i_c].recompte)
 					break;
 			}
-			if (i_c==estil.component.length) //tots són iguals
+			if (i_c==n_comp_usar) //tots són iguals
 			{
 					cdns.push("\t", un_recompte);		
 					cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
@@ -176,49 +130,50 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			}
 			else
 			{
-				for (i_c=0; i_c<estil.component.length; i_c++)
+				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte);
 				cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
-				for (i_c=0; i_c<estil.component.length; i_c++)
+				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte*area_cella);
 			}
 			cdns.push("\n",
 				DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
-			for (i_c=0; i_c<estil.component.length; i_c++)
+			for (i_c=0; i_c<n_comp_usar; i_c++)
 				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
 
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Classe modal", "spa": "Clase modal", "eng": "Mode class", "fre": "Mode classe"}));
-			for (i_c=0; i_c<estil.component.length; i_c++)
-				cdns.push("\t", DonaTextCategoriaDesDeColor(estil, estadistics_categorics[i_c].i_moda));
+			cdns.push("\n",	DonaCadenaLang(str_lang_mode));
+			for (i_c=0; i_c<n_comp_usar; i_c++)
+				cdns.push("\t", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true));
 
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Percentatge de la moda", "spa": "Porcentaje de la moda", "eng": "Mode percentage", "fre": "Pourcentage de mode"}));
-			for (i_c=0; i_c<estil.component.length; i_c++)
-				cdns.push("\t", estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100);
+			cdns.push("\n",	DonaCadenaLang(str_lang_percent_mode));
+			for (i_c=0; i_c<n_comp_usar; i_c++)
+				cdns.push("\t", estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, " %");
 
-			cdns.push("\n",	DonaCadenaLang({"cat": "Valor de classe", "spa": "Valor de classe", "eng": "Class value", "fre": "Valeur de classe"}), 
-					"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
-			
-			if (estil.component.length == 1) //si només tinc una component, habitual en classes, a la segona columna poso el % de l'àrea d'aquella categoria
-				columna_perc=true;
-			if (columna_perc)
-				cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 
-				
-			cdns.push("\n");		
-			
-			for (i=0; i<estil.categories.length; i++)
+			if (tipus_chart == "chart") //per chart poso histograma, per stat no
 			{
-				if (!estil.categories[i])
-					continue;
-				cdns.push(DonaTextCategoriaDesDeColor(estil, i));
-				for (i_c=0; i_c<estil.component.length; i_c++)
+				cdns.push("\n",	DonaCadenaLang({"cat": "Valor de classe", "spa": "Valor de classe", "eng": "Class value", "fre": "Valeur de classe"}), 
+						"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+				
+				if (n_comp_usar == 1) //si només tinc una component, habitual en classes, a la segona columna poso el % de l'àrea d'aquella categoria
+					columna_perc=true;
+				if (columna_perc)
+					cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 
+					
+				cdns.push("\n");		
+				
+				for (i=0; i<estil.categories.length; i++)
 				{
-					cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);
-					if (columna_perc)
-						cdns.push("\t", estil.histograma.component[i_c].classe[i]/estadistics_categorics[i_c].recompte*100);
+					if (!estil.categories[i])
+						continue;
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true));
+					for (i_c=0; i_c<n_comp_usar; i_c++)
+					{
+						cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);
+						if (columna_perc)
+							cdns.push("\t", estil.histograma.component[i_c].classe[i]/estadistics_categorics[i_c].recompte*100);
+					}
+					cdns.push("\n");
 				}
-				cdns.push("\n");
 			}
 		}
 		else
@@ -230,7 +185,8 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
 				estadistics[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe, 
 							DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
-							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors));
+							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
+							estil.histograma.component[i_c].sumaValorsReal);
 			}
 			cdns.push(DonaCadenaLang({"cat": "Recompte", "spa": "Cuenta", "eng": "Count", "fre": "Compter"}));
 			
@@ -258,112 +214,111 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Suma", "spa": "Suma", "eng": "Sum", "fre": "Somme"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_sum));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].suma);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Suma àrea", "spa": "Suma área", "eng": "Sum area", "fre": "Somme area"}), " (*m²)");
+			cdns.push("\n",	DonaCadenaLang(str_lang_sum_area), " (*m²)");
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].suma*area_cella);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Mitjana", "spa": "Media", "eng": "Mean", "fre": "Moyenne"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_mean));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].mitjana);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Variança", "spa": "Varianza", "eng": "Variance", "fre": "Variance"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_variance));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].varianca);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Desviació estàndard", "spa": "Desviació estándar", "eng": "Standard deviation", "fre": "Écart-type"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_stdev));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].desv_tipica);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Mínim", "spa": "Mínimo", "eng": "Minimum", "fre": "Minimum"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_min));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estil.histograma.component[i_c].valorMinimReal);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Màxim", "spa": "Máximo", "eng": "Maximum", "fre": "Maximum"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_max));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estil.histograma.component[i_c].valorMaximReal);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Rang", "spa": "Rango", "eng": "Range", "fre": "Gamme"}));
+			cdns.push("\n",	DonaCadenaLang(str_lang_range));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1);
-			cdns.push("\n",
-				DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
-			for (i_c=0; i_c<estil.component.length; i_c++)
-				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
-
-			for (i_c=1; i_c<estil.component.length; i_c++)
+				
+			if (tipus_chart == "chart") //per chart poso histograma, per stat no
 			{
-				if (estadistics[i_c-1].valor_min!=estadistics[i_c].valor_min || estadistics[i_c-1].ample!=estadistics[i_c].ample)
-					break;
-			}	
-			if (i_c==estil.component.length)
-			{
-				//el valor màxim i mínim (i l'ample) són iguals per totes les components
 				cdns.push("\n",
-					DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la classe", "eng": "Class cental value", "fre": "Classe valeur centrale"}));
+					DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push("\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
-				if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
+					cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
+	
+				for (i_c=1; i_c<estil.component.length; i_c++)
 				{
-					columna_perc=true;
-					cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 					
-				}
-				cdns.push("\n"); 
-
-				//Tots els estiraments són iguals
-				for (i=0, value=estadistics[0].ample/2+estadistics[0].valor_min; i<ncolors; i++, value+=estadistics[0].ample)
+					if (estadistics[i_c-1].valor_min!=estadistics[i_c].valor_min || estadistics[i_c-1].ample!=estadistics[i_c].ample)
+						break;
+				}	
+				if (i_c==estil.component.length)
 				{
-					/*if (estil.descColorMultiplesDe)
-						cdns.push(multipleOf(value, estil.descColorMultiplesDe));
-					else*/
-						cdns.push(value);
+					//el valor màxim i mínim (i l'ample) són iguals per totes les components
+					cdns.push("\n",
+						DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la classe", "eng": "Class cental value", "fre": "Classe valeur centrale"}));
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);	
-						
-					if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
-						cdns.push("\t", estil.histograma.component[0].classe[i]/un_recompte*100);
-
-					cdns.push("\n");
-				}
-			}
-			else
-			{
-				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push("\t", DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la clase", "eng": "Class central value", "fre": "Classe valeur centrale"}),
-						"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
-				if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
-				{
-					columna_perc=true;
-					cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 					
-				}
-				cdns.push("\n"); 
-
-				for (i=0; i<ncolors; i++)
-				{
-					cdns.push(i); 
-					for (i_c=0; i_c<estil.component.length; i_c++)
+						cdns.push("\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
 					{
-						value=estadistics[i_c].ample/2+estadistics[i_c].valor_min+estadistics[i_c].ample*i
-						cdns.push("\t", value, "\t", estil.histograma.component[i_c].classe[i]*area_cella);
+						columna_perc=true;
+						cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 					
 					}
-
-					if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
+					cdns.push("\n"); 
+	
+					//Tots els estiraments són iguals
+					for (i=0, value=estadistics[0].ample/2+estadistics[0].valor_min; i<ncolors; i++, value+=estadistics[0].ample)
+					{
+						/*if (estil.descColorMultiplesDe)
+							cdns.push(multipleOf(value, estil.descColorMultiplesDe));
+						else*/
+							cdns.push(value);
+						for (i_c=0; i_c<estil.component.length; i_c++)
+							cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);	
+							
+						if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
 							cdns.push("\t", estil.histograma.component[0].classe[i]/un_recompte*100);
-
-					cdns.push("\n");
+	
+						cdns.push("\n");
+					}
+				}
+				else
+				{
+					for (i_c=0; i_c<estil.component.length; i_c++)
+						cdns.push("\t", DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la clase", "eng": "Class central value", "fre": "Classe valeur centrale"}),
+							"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
+					{
+						columna_perc=true;
+						cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"})); 					
+					}
+					cdns.push("\n"); 
+	
+					for (i=0; i<ncolors; i++)
+					{
+						cdns.push(i); 
+						for (i_c=0; i_c<estil.component.length; i_c++)
+						{
+							value=estadistics[i_c].ample/2+estadistics[i_c].valor_min+estadistics[i_c].ample*i
+							cdns.push("\t", value, "\t", estil.histograma.component[i_c].classe[i]*area_cella);
+						}
+	
+						if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
+								cdns.push("\t", estil.histograma.component[0].classe[i]/un_recompte*100);
+	
+						cdns.push("\n");
+					}
 				}
 			}
-		}		
-		cdns.push(DonaCadenaLang({"cat": "Sense dades", "spa": "Sin datos", "eng": "No data", "fre": "Pas de données"}),
-				"\t", estil.histograma.classe_nodata*area_cella);		
-		if (columna_perc)
-			cdns.push("\t - \n");		
-		else
-			cdns.push("\n");		
+		}
+		if (tipus_chart == "chart") //per chart poso histograma, per stat no
+		{		
+			cdns.push(DonaCadenaLang({"cat": "Sense dades", "spa": "Sin datos", "eng": "No data", "fre": "Pas de données"}),
+					"\t", estil.histograma.classe_nodata*area_cella);		
+			if (columna_perc)
+				cdns.push("\t - \n");		
+			else
+				cdns.push("\n");		
+		}
 	}
 
 	div=window.document.getElementById(prefix_div_copy+"_copy_form_div")
@@ -407,8 +362,23 @@ function CanviDinamismeHistograma(event)
 							HistogramaFinestra.vista[n_histo].chart[i_c].update();					
 						}
 					}
+					else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
+					{
+						retorn_prep_histo=PreparaHistogramaPerCategories(n_histo);												
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data;
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors;
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats;
+						HistogramaFinestra.vista[n_histo].chart[0].options=retorn_prep_histo.options;
+						HistogramaFinestra.vista[n_histo].chart[0].update();											
+					}
 					else if (estil.diagrama[i_diagrama].tipus == "matriu")
 						document.getElementById(DonaNomMatriuConfusio(n_histo)).innerHTML=CreaTextMatriuDeConfusio(n_histo, true);
+					else if (estil.diagrama[i_diagrama].tipus == "stat")
+						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadistic(n_histo, estil.diagrama[i_diagrama].stat);						
+					else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
+						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadisticPerCategories(n_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
 				}
 			}			
 		}
@@ -423,6 +393,11 @@ function DonaNomHistograma(i_histo)
 function DonaNomMatriuConfusio(i_histo)
 {
 	return DonaNomHistograma(i_histo)+"_matriu";
+}
+
+function DonaNomEstadistic(i_histo)
+{
+	return DonaNomHistograma(i_histo)+"_estad";
 }
 
 function DonaNomCanvasHistograma(i_histo)
@@ -445,16 +420,16 @@ function DonaNomCheckDinamicTextHistograma(i_histo)
 	return DonaNomCheckDinamicHistograma(i_histo)+"_text";
 }
 
-function ObreFinestraHistograma(i_capa, i_estil)
+function ObreFinestraHistograma(i_capa, i_estil, tipus_estad, presentacio, order)
 {
 var ncol=460, nfil=260, estil, i_estil_intern, component, titol;
 var nom_histograma=DonaNomHistograma(HistogramaFinestra.n);
 var cdns=[];
 var def_diagrama_existeix=false;
-var i_diag=-1, des_top=-9999, des_left=-9999;
-var es_matriu;
+var i_diag=-1, des_top=-9999, des_left=-9999, des_width=-9999, des_height=-9999;
+var tipus_chart;
 
-	if (typeof i_estil !== "undefined")	 
+	if (typeof i_estil !== "undefined" && i_estil != -1)	 	
 	{
 		i_estil_intern=i_estil;
 		def_diagrama_existeix=true;		
@@ -473,18 +448,61 @@ var es_matriu;
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">", 
 		DonaCadenaLang({"cat":"Desactivat (capa o estil no visible)", "spa":"Desactivado (capa o estil no visible)", "eng":"Disabled (layer or style not visible)", "fre":"Désactivé (couche or style non visible)"}) , "</span>");
 
-	if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
+	if (tipus_estad)
 	{
-		es_matriu=true;
-		//titol=DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+		var tip_est_intern;				
+		if (tipus_estad.substr(tipus_estad.length-2, 2) == "_2")
+		{
+			tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
+			if (presentacio == "graphic")
+			{
+				tipus_chart="chart_categ";
+				alert("pendent");
+				return; 
+				tipus_chart="chart_categ";
+				tipus_chart="chart";
+				titol=DonaCadenaLang({"cat":"Estadístics per categeoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+				cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
+			}			
+			else //"text"
+			{
+				tipus_chart="stat_categ";
+				var s=DonaTitolEstadistic(estil.categories, estil.atributs, tip_est_intern);					
+				titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s)) + 
+					", " + DonaCadena(ParamCtrl.capa[ParamCtrl.capa[i_capa].valors[1].i_capa].estil[ParamCtrl.capa[i_capa].valors[1].i_valor].desc) + " " + 
+					DonaCadenaLang({"cat":"per categories", "spa":"para categorías", "eng":"by category", "fre":"par catégories"});
+				
+				//·$· pensar mida que cal per aquesta representació textual per categories
+				ncol/=1.3;
+				nfil/=2;
+				cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\"></p>");
+				//cdns.push("<div id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");				
+			}										
+		}
+		else
+		{
+			tipus_chart="stat";
+			tip_est_intern=tipus_estad;
+			var s=DonaTitolEstadistic(estil.categories, estil.atributs, tip_est_intern);					
+			titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
+			ncol/=1.3;
+			nfil/=2;
+			cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"font-size: 4vw\"></p>");
+			//cdns.push("<div id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
+		}
+	}
+	else if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
+	{
+		tipus_chart="matriu";
 		titol=DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		ncol*=2;
 		nfil*=2;
-		cdns.push("<div id=\"", nom_histograma, "_matriu\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
+		cdns.push("<div id=\"", DonaNomMatriuConfusio(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
 	}
 	else
 	{
-		es_matriu=false;
+		tipus_chart="chart";
 		titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
@@ -493,8 +511,7 @@ var es_matriu;
 			nfil*=2;
 			nfil=Math.round(nfil/component.length);
 			for (var i_c=0; i_c<component.length; i_c++)
-				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
-				//aquí és on he de posar la posició de la caixa de histograma si tinc anotada una posició diferent a la per defecte
+				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");				
 		}
 	}
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
@@ -504,21 +521,25 @@ var es_matriu;
 	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadístic en un futur). si tinc més de un del mateix tipus, cada cop faig el primer que trobo
 		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
 		{
-			if ((!es_matriu && estil.diagrama[i_diag].tipus ==  "chart" && (typeof estil.diagrama[i_diag].i_histograma === "undefined")) ||
-					( es_matriu && estil.diagrama[i_diag].tipus == "matriu" && (typeof estil.diagrama[i_diag].i_histograma === "undefined"))  )
+			if (estil.diagrama[i_diag].tipus == tipus_chart && (typeof estil.diagrama[i_diag].i_histograma === "undefined"))
 			{
 				if (typeof estil.diagrama[i_diag].left !== "undefined")
-					des_left=estil.diagrama[i_diag].left;
+					des_left=estil.diagrama[i_diag].left; //ho deixo encara que no ho usaré més
 				if (typeof estil.diagrama[i_diag].top !== "undefined")
-					des_top=estil.diagrama[i_diag].top;
+					des_top=estil.diagrama[i_diag].top; //ho deixo encara que no ho usaré més
+				if (typeof estil.diagrama[i_diag].width !== "undefined")
+					des_width=estil.diagrama[i_diag].width; //ho deixo encara que no ho usaré més
+				if (typeof estil.diagrama[i_diag].height !== "undefined")
+					des_height=estil.diagrama[i_diag].height; //ho deixo encara que no ho usaré més
 				break;
 			}
 		}
 		if (i_diag == estil.diagrama.length) //no l'he trobat
 			i_diag=-1;
 	}
-
-	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, (des_left == -9999 ) ? 200+HistogramaFinestra.n*10 : des_left, (des_top == -9999) ? 200+HistogramaFinestra.n*10 : des_top, ncol, nfil*component.length+AltBarraFinestraLayer+2+20, "NW", {scroll: "no", visible: true, ev: null}, cdns.join("")));
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd", 
+		textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, (des_left == -9999 ) ? 200+HistogramaFinestra.n*10 : des_left, (des_top == -9999) ? 200+HistogramaFinestra.n*10 : des_top, 
+			(des_width == -9999) ? ncol : des_width, (des_height == -9999) ? nfil*component.length+AltBarraFinestraLayer+2+20 : des_height+20, "NW", (tipus_chart == "matriu" || tipus_chart == "stat" || tipus_chart == "stat_categ") ? {scroll: "ara_no", visible: true, ev: null, resizable:true} : {scroll: "no", visible: true, ev: null}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_histograma);	
 	HistogramaFinestra.vista[HistogramaFinestra.n]={ //"nfil": nfil,
 				//"ncol": ncol,
@@ -529,11 +550,17 @@ var es_matriu;
 				//"i_situacio": ParamInternCtrl.ISituacio,
 				"i_histograma": HistogramaFinestra.n};
 
-	if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
+	//if (tipus_chart == "matrestil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
+	if (tipus_chart == "stat")
+		CreaEstadistic(HistogramaFinestra.n, i_diag, tipus_estad); //dins ja omple estil.diagrama
+	else if (tipus_chart == "stat_categ")
+		CreaEstadisticPerCategories(HistogramaFinestra.n, i_diag, tip_est_intern, order); //dins ja omple estil.diagrama
+	else if (tipus_chart == "matriu")
 		CreaMatriuDeConfusio(HistogramaFinestra.n, i_diag); //dins ja omple estil.diagrama
-	else	
+	else if (tipus_chart == "chart")	
 	{
-		for (var i_c=0; i_c<component.length; i_c++)
+		var n_comp_usar = estil.component.length==2 ? 1 : estil.component.length;
+		for (var i_c=0; i_c<n_comp_usar; i_c++)
 			CreaHistograma(HistogramaFinestra.n, i_c);
 
 		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
@@ -544,7 +571,19 @@ var es_matriu;
 				estil.diagrama = []; //array de objectes
 			estil.diagrama.push({tipus: "chart", i_histograma: HistogramaFinestra.n});
 		}
-	}	
+	}
+	else	// "chart_categ"	
+	{
+		CreaHistogramaPerCategories(HistogramaFinestra.n);
+		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+			estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
+		else			
+		{
+			if (typeof estil.diagrama === "undefined") //no està creat (i.e. obertura de nova finestra de gràfic des del menú)
+				estil.diagrama = []; //array de objectes
+			estil.diagrama.push({tipus: "chart_categ", stat: tip_est_intern, order: order, i_histograma: HistogramaFinestra.n});
+		}		
+	}
 	HistogramaFinestra.n++;
 }
 
@@ -558,7 +597,7 @@ function SonCategoriesIguals(estil1, estil2)
 			continue;
 		if (!estil1.categories[i_cat] || !estil2.categories[i_cat])
 			return false;
-		if (DonaTextCategoriaDesDeColor(estil1, i_cat)!=DonaTextCategoriaDesDeColor(estil2, i_cat))
+		if (DonaTextCategoriaDesDeColor(estil1.categories, estil1.atributs, i_cat, true)!=DonaTextCategoriaDesDeColor(estil2.categories, estil2.atributs, i_cat, true))
 			return false;
 	}
 	return true;
@@ -687,8 +726,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 		if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 			continue;
 		if (es_html)
-			cdns.push("<th style=\"vertical-align: bottom; text-align: center; height:", DonaTextCategoriaDesDeColor(estil[0], i_cat).length*4, "px;\"><div class=\"text_vertical\" style=\"width: 15px;\">");
-		cdns.push(DonaTextCategoriaDesDeColor(estil[0], i_cat));
+			cdns.push("<th style=\"vertical-align: bottom; text-align: center; height:", DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].atributs, i_cat, true).length*4, "px;\"><div class=\"text_vertical\" style=\"width: 15px;\">");
+		cdns.push(DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].atributs, i_cat, true));
 		if (es_html)
 			cdns.push("</div></th>");
 		else
@@ -724,7 +763,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			//Categories de la capa 2
 			cdns.push("<td style=\"white-space: nowrap; text-align: right;\">");
 		}
-		cdns.push(DonaTextCategoriaDesDeColor(estil[1], j_cat));
+		cdns.push(DonaTextCategoriaDesDeColor(estil[1].categories, estil[1].atributs, j_cat, true));
 		cdns.push(es_html ? "</td>" : "\t");
 		for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 		{
@@ -823,8 +862,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	{
 		cdns.push("</table>");
 		//vol dir que estic a omplint el HTML de la finestra, i per tant també m'he de preocupar de omplir el text ocult que es copiarà al portapapers
-	//la funció OmpleTextPortapapersFinestraHistogramaADivisio() crida a aquesta funció a la que estic però amb es_html=false, per tant no entraré en bucle infinit
-		OmpleTextPortapapersFinestraHistogramaADivisio(i_histograma)		
+		//la funció OmpleTextPortapapersFinestraHistogramaADivisio() crida a aquesta funció a la que estic però amb es_html=false, per tant no entraré en bucle infinit
+		OmpleTextPortapapersFinestraHistogramaADivisio(i_histograma, "matriu");
 	}
 	return cdns.join("");
 }
@@ -842,6 +881,338 @@ function CreaMatriuDeConfusio(n_histograma, i_diag)
 			estil.diagrama =[]; //array de objectes
 		estil.diagrama.push({tipus: "matriu", i_histograma: n_histograma});
 	}	
+}
+
+function CreaTextEstadistic(i_histograma, tipus_estad)
+{
+var histograma=HistogramaFinestra.vista[i_histograma];
+var estil=ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
+var cdns=[];
+var i_c, ncolors, area_cella, unitats;
+var costat=ParamInternCtrl.vista.CostatZoomActual;
+var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
+var i_situacio=ParamInternCtrl.ISituacio;
+
+	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	
+	//cdns.push("<span style=\"font-size: 4vw\">"); 
+	//·$· depen del text a posar caldrà més curt o llarg, fer alguna cosa com posar-ho a una cadena deduir el numero segons la longitud de la cadena?
+	
+	if (estil.categories && estil.atributs) //cas categòric
+	{		
+			var n_comp_usar;	
+			var estadistics_categorics=[];			
+			if (estil.component.length==2)
+				n_comp_usar = 1;
+			else
+				n_comp_usar = estil.component.length;
+			
+			for (i_c=0; i_c<n_comp_usar; i_c++)
+				estadistics_categorics[i_c]=CalculaEstadisticsCategorics(estil.histograma.component[i_c].classe);
+			
+			if (tipus_estad == "mode")
+			{
+				for (i_c=0; i_c<n_comp_usar; i_c++)
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), "<br>");
+			}
+			else if (tipus_estad == "percent_mode")
+			{
+				for (i_c=0; i_c<n_comp_usar; i_c++)
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %<br>");
+			}
+			else if (tipus_estad == "mode_and_percent")
+			{
+				for (i_c=0; i_c<n_comp_usar; i_c++)
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), " ("+ OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %)<br>");
+			}
+			// if (estil.component.length==2) cas especial --> cal pensar com ho fem
+	}
+	else
+	{
+			var estadistics=[];
+			var str_ini="";
+			var str_fi_array=[];
+			
+			for (i_c=0; i_c<estil.component.length; i_c++)
+			{
+				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
+				estadistics[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe, 
+							DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
+							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
+							estil.histograma.component[i_c].sumaValorsReal);
+			}
+	
+			if (tipus_estad == "sum")
+			{		
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estadistics[i_c].suma, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");			
+			}
+			else if (tipus_estad == "sum_area")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estadistics[i_c].suma*area_cella, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}	
+			else if (tipus_estad == "mean")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estadistics[i_c].mitjana, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}
+			else if (tipus_estad == "variance")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estadistics[i_c].varianca, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}
+			else if (tipus_estad == "stdev")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estadistics[i_c].desv_tipica, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}
+			else if (tipus_estad == "min")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMinimReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}
+			else if (tipus_estad == "max")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}
+			else if (tipus_estad == "range")
+			{
+				for (i_c=0; i_c<estil.component.length; i_c++)
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+			}			
+			//decidim no donar mediana i quartils perquè ja tenim agrupat per classes i pot tenir molt poc sentit si ni han poques (o encara que n'hagi moltes, pel fet que ja tinc les classe de l'histograma)
+	}
+
+	//cdns.push("</span>");
+	OmpleTextPortapapersFinestraHistogramaADivisio(i_histograma, "stat");
+	return cdns.join("");
+}
+
+function CreaEstadistic(n_histograma, i_diag, tipus_estad)
+{
+	var estil = ParamCtrl.capa[HistogramaFinestra.vista[n_histograma].i_capa].estil[HistogramaFinestra.vista[n_histograma].i_estil];	
+	document.getElementById(DonaNomEstadistic(n_histograma)).innerHTML=CreaTextEstadistic(n_histograma, tipus_estad /*, true*/);
+
+	if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+		estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;				
+	else		
+	{
+		if (typeof estil.diagrama === "undefined") //no està creat
+			estil.diagrama =[]; //array de objectes
+		estil.diagrama.push({tipus: "stat", stat: tipus_estad, i_histograma: n_histograma});
+	}		
+}
+
+function OrdenacioCategoriesPerValorAscendent(x,y) {
+	//Ascendent per valor
+	if ( x.valor < y.valor ) return -1;
+	if ( x.valor > y.valor ) return 1;
+	return 0;
+}
+
+function OrdenacioCategoriesPerValorDescendent(x,y) {
+	//Descendent per valor
+	if ( x.valor < y.valor ) return 1;
+	if ( x.valor > y.valor ) return -1;
+	return 0;
+}
+
+function CreaTextEstadisticPerCategories(i_histograma, tipus_estad, order)
+{
+var histograma=HistogramaFinestra.vista[i_histograma];
+var capa=ParamCtrl.capa[histograma.i_capa];
+var estil=capa.estil[histograma.i_estil];
+var cdns=[];
+var area_cella, i_cat, i_atrib, unitats_espai;
+var tinc_dec=false, n_dec;
+var ordre_cat=[], tipus_intern, count_total=0;
+				
+	if (!estil.categories || !estil.atributs || estil.component.length != 2) //cas d'estadistics de categories
+		return cdns.join("");
+
+	area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY},
+		ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	
+	unitats_espai="";
+	if (tipus_estad == "mode_and_percent")
+		tipus_intern = "percent_mode";
+	else
+		tipus_intern = tipus_estad;
+	for (i_atrib=0; i_atrib<estil.atributs.length; i_atrib++)
+	{
+			if (estil.atributs[i_atrib].nom == ("$stat$_"+tipus_intern)) //per "mode_and_percent" miro unitats i decimals de percent_mode :)	
+			{
+				if (estil.atributs[i_atrib].unitats)
+					unitats_espai=" "+estil.atributs[i_atrib].unitats;
+					
+				if (estil.atributs[i_atrib].NDecimals)
+				{
+					tinc_dec=true;
+					n_dec=estil.atributs[i_atrib].NDecimals;
+				}
+				break;
+			}
+	}
+					
+	for (i_cat=0; i_cat<estil.categories.length; i_cat++)
+	{	
+		if (tipus_estad == "mode_and_percent")
+		{
+			if (!estil.categories[i_cat] || !estil.categories[i_cat]["$stat$_mode"] || !estil.categories[i_cat]["$stat$_percent_mode"])					
+				continue;				
+			ordre_cat.push({valor: estil.categories[i_cat]["$stat$_percent_mode"], valor2: estil.categories[i_cat]["$stat$_mode"], i_cat: i_cat});
+		}
+		else
+		{
+			if (!estil.categories[i_cat] || !estil.categories[i_cat]["$stat$_"+tipus_estad])					
+				continue;
+			ordre_cat.push({valor: estil.categories[i_cat]["$stat$_"+tipus_estad], i_cat: i_cat});
+		
+		}
+		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+		{
+			ordre_cat[ordre_cat.length-1].count=0;
+			for (var i_segona_cat=0; i_segona_cat<estil.categories[i_cat]["$stat$_histo"].classe.length; i_segona_cat++)
+				ordre_cat[ordre_cat.length-1].count+=estil.categories[i_cat]["$stat$_histo"].classe[i_segona_cat];
+			count_total+=ordre_cat[ordre_cat.length-1].count;
+		}		
+		else
+			count_total+=estil.categories[i_cat]["$stat$_count"];
+			
+	}
+	if (order)
+	{
+		if (order == "descend")
+			ordre_cat.sort(OrdenacioCategoriesPerValorDescendent);							
+		else if (order == "ascend")
+			ordre_cat.sort(OrdenacioCategoriesPerValorAscendent);							
+	}		
+	
+	//capçalera, lletra una mica més gran
+	cdns.push("<p style=\"font-size: 2em; text-align: center;\">", DonaTitolEstadistic(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, tipus_estad), 
+			DonaCadenaLang({"cat":" de ", "spa":" de ", "eng":" of ", "fre":" des "}), DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc));				
+	if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+	{
+		cdns.push("</p>"); //·$· pendent de calcular, he de pensar-ho be pq no ho tinc clar
+		//·$· per la catergoric també es pot fer, però tambñé ho he de pensar una mica, i ara de moment ho deixo
+		/*var stat=0;
+		if (tipus_estad == "mode")
+			titol=DonaCadenaLang(str_lang_mode);
+		else if (tipus_estad == "percent_mode")
+			titol=DonaCadenaLang(str_lang_percent_mode);
+		else if (tipus_estad == "mode_and_percent")
+			titol=DonaCadenaLang(str_lang_mode)+" ("+DonaCadenaLang(str_lang_percent_mode)+")";
+		cdns.push("valor_qie_sigui cat", "</p>");*/		
+	}
+	else
+	{
+		var stat=0;
+		if (tipus_estad == "sum" || tipus_estad == "sum_area")
+		{
+			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
+			{
+				if (!estil.categories[i_cat] || !estil.categories[i_cat]["$stat$_"+tipus_estad])
+					continue;
+				stat+=estil.categories[i_cat]["$stat$_"+tipus_estad];
+			}
+		}
+		else if (tipus_estad == "mean")
+		{
+			var sum=0, count=0;
+			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
+			{
+				if (!estil.categories[i_cat] || !estil.categories[i_cat]["$stat$_sum"] || !estil.categories[i_cat]["$stat$_count"])
+					continue;
+				sum+=estil.categories[i_cat]["$stat$_sum"];
+				count+=estil.categories[i_cat]["$stat$_count"];
+			}
+			stat=sum/count;					
+		}
+		/*//else if (tipus_estad == "variance" ||  tipus_estad == "stdev")
+		{
+			/*for (i_cat=0; i_cat<estil.categories.length; i_cat++)
+			{
+				value=estadistics.ample/2+estadistics.valor_min+estadistics.ample*i;
+				suma_v_menys_mitj_quad_per_n+=(value-estadistics.mitjana)*(value-estadistics.mitjana)*classe[i];
+			}
+		
+			if (estadistics.recompte>0)
+			{
+				estadistics.varianca=suma_v_menys_mitj_quad_per_n/estadistics.recompte;
+				estadistics.desv_tipica=Math.sqrt(estadistics.varianca);
+			}
+		}*/
+		else if (tipus_estad == "min" || tipus_estad == "max" || tipus_estad == "range")
+		{
+			var min=+1e300;
+			var max=-1e300;
+			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
+			{
+				if (!estil.categories[i_cat] || !estil.categories[i_cat]["$stat$_min"] || !estil.categories[i_cat]["$stat$_max"])
+					continue;
+				if (estil.categories[i_cat]["$stat$_min"] < min)
+					min = estil.categories[i_cat]["$stat$_min"];
+				if (estil.categories[i_cat]["$stat$_max"] > max)
+					max = estil.categories[i_cat]["$stat$_max"];
+			}
+			if (tipus_estad == "min")
+				stat=min;
+			else if (tipus_estad == "max")
+				stat=max;
+			else if (tipus_estad == "range")
+				stat=max-min+1;
+		}
+		if (tipus_estad == "variance" ||  tipus_estad == "stdev")		
+			cdns.push("</p>"); //·$· pendent de calcular, he de pensar-ho be pq no ho tinc clar
+		else			
+			cdns.push(": ", tinc_dec ? OKStrOfNe(stat, n_dec) : stat, unitats_espai,"</p>");
+	}
+	
+	//taula per categories
+	cdns.push("<table style=\"width:100%;text-align:left;font-size:inherit\">");
+	cdns.push("<tr><th style=\"text-align:center;\">", DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc), "</th><th style=\"text-align:center;\">",DonaCadenaLang({"cat":"Àrea", "spa":"Área", "eng":"Area", "fre":"Zone"}),
+		"</th><th style=\"text-align:center;\">", DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc), "</th></th>");	
+
+	for (i_cat=0; i_cat<ordre_cat.length; i_cat++)
+	{
+		cdns.push("<tr><td>", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, ordre_cat[i_cat].i_cat, true), "</td>");
+		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+		{
+			cdns.push("<td style=\"text-align:right;\">",	OKStrOfNe(ordre_cat[i_cat].count/count_total*100, tinc_dec ? n_dec : 2), " %</td>");		
+			if (tipus_estad == "mode_and_percent")
+				cdns.push("<td style=\"text-align:right;\">", ordre_cat[i_cat].valor2," (", OKStrOfNe(ordre_cat[i_cat].valor, tinc_dec ? n_dec : 2), unitats_espai, ")</td>");					
+			else
+				cdns.push("<td style=\"text-align:right;\">", ordre_cat[i_cat].valor, "</td>");					
+		}
+		else
+		{
+			cdns.push("<td style=\"text-align:right;\">",	OKStrOfNe(estil.categories[ordre_cat[i_cat].i_cat]["$stat$_count"]/count_total*100, tinc_dec ? n_dec : 2), " %</td>");		
+			cdns.push("<td style=\"text-align:right;\">", tinc_dec ? OKStrOfNe(ordre_cat[i_cat].valor, n_dec) : ordre_cat[i_cat].valor, unitats_espai, "</td>");					
+		}
+	}
+	cdns.push("</table>");
+	
+	//·$· això no fa el que toca
+	OmpleTextPortapapersFinestraHistogramaADivisio(i_histograma, "stat");
+	return cdns.join("");
+}
+
+function CreaEstadisticPerCategories(n_histograma, i_diag, tipus_estad, order)
+{
+	var estil = ParamCtrl.capa[HistogramaFinestra.vista[n_histograma].i_capa].estil[HistogramaFinestra.vista[n_histograma].i_estil];	
+	document.getElementById(DonaNomEstadistic(n_histograma)).innerHTML=CreaTextEstadisticPerCategories(n_histograma, tipus_estad, order/*, true*/);
+
+	if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+		estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;				
+	else		
+	{
+		if (typeof estil.diagrama === "undefined") //no està creat
+			estil.diagrama =[]; //array de objectes
+		estil.diagrama.push({tipus: "stat_categ", stat: tipus_estad, order: order, i_histograma: n_histograma});
+	}		
 }
 
 function DonaTipusGraficHistograma(estil, i_c)
@@ -863,13 +1234,20 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 	{
 		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "matriu")
 			ObreFinestraHistograma(i_capa, i_estil);
+		else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
+			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat+"_2", "graphic", estil.diagrama[i_diagrama].order);
+		else if (estil.diagrama[i_diagrama].tipus == "stat")
+			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat);
+		else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
+			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat+"_2", "text", estil.diagrama[i_diagrama].order);
 		else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			ObreFinestraSuperficie3D(i_capa, i_estil);
 	}
 		
 	if (typeof estil.histograma !== "undefined" ) //potser encara no ho puc fer perquè no tinc les dades i ObreFinestraHistograma no ha acabat creant el chart encara
 	{
-		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "matriu")
+		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" || 
+					estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
 			part_id=DonaNomCheckDinamicHistograma(estil.diagrama[i_diagrama].i_histograma);
 		else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			part_id=DonaNomCheckDinamicGrafic3d(estil.diagrama[i_diagrama].i_histograma);
@@ -893,7 +1271,7 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 
 function DesactivaCheckITextChartsMatriusDinamics(i_capa, i_estil, disabled)
 {		
-	var estil=ParamCtrl.capa[i_capa].estil[ParamCtrl.capa[i_capa].i_estil];
+	var estil=ParamCtrl.capa[i_capa].estil[i_estil];
 	
 	if (typeof estil.diagrama === "undefined")	
 		return;
@@ -911,12 +1289,8 @@ var estil=capa.estil[histograma.i_estil];
 var costat=ParamInternCtrl.vista.CostatZoomActual;
 var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
 var i_situacio=ParamInternCtrl.ISituacio;
-var retorn_prep_histo={};
+var retorn_prep_histo={labels: [], valors: [], colors: []};
 
-	retorn_prep_histo.labels=[];
-	retorn_prep_histo.valors=[];
-	retorn_prep_histo.colors=[];
-	
 	if (estil.paleta && estil.paleta.colors)
 	{
 		n_colors=estil.paleta.colors.length;
@@ -982,7 +1356,7 @@ var retorn_prep_histo={};
 				continue;
 			}
 			data[i]=estil.histograma.component[i_c].classe[i_color]*area_cella;
-			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil, estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color);
+			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color, true);
 			i++;
 		}	
 
@@ -1101,8 +1475,212 @@ var retorn_prep_histo={};
 		
 		retorn_prep_histo.data=data;
 	}	
-	OmpleTextPortapapersFinestraHistogramaADivisio(n_histograma);
+	OmpleTextPortapapersFinestraHistogramaADivisio(n_histograma, "chart");
 	return retorn_prep_histo;
+}
+
+
+function PreparaHistogramaPerCategories(n_histograma, i_c)
+{
+var histograma=HistogramaFinestra.vista[n_histograma];
+var i, n_colors, i_color, area_cella;
+var capa=ParamCtrl.capa[histograma.i_capa];
+var estil=capa.estil[histograma.i_estil];
+var costat=ParamInternCtrl.vista.CostatZoomActual;
+var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
+var i_situacio=ParamInternCtrl.ISituacio;
+var retorn_prep_histo={labels: [], valors: [], colors: []};
+
+/*	·$· i_c -> no se li passa pq sempre és 0
+	·$· repensar-la del tot
+
+	if (estil.paleta && estil.paleta.colors)
+	{
+		n_colors=estil.paleta.colors.length;
+		for (i=0; i<n_colors; i++)
+			retorn_prep_histo.colors[i]=estil.paleta.colors[i];
+	}
+	else if (estil.component.length==1)
+	{
+		n_colors=256;
+		for (i=0; i<n_colors; i++)
+			retorn_prep_histo.colors[i]=RGB(i,i,i);
+	}
+	else
+	{
+		n_colors=256;
+		if (i_c==0)
+		{
+			for (i=0; i<n_colors; i++)
+				retorn_prep_histo.colors[i]=RGB(i,0,0);
+		}
+		else if (i_c==1)
+		{
+			for (i=0; i<n_colors; i++)
+				retorn_prep_histo.colors[i]=RGB(0,i,0);
+		}
+		else if (i_c==2)
+		{
+			for (i=0; i<n_colors; i++)
+				retorn_prep_histo.colors[i]=RGB(0,0,i);
+		}
+		else
+		{
+			retorn_prep_histo.colors[0]="#888888";
+			for (i=1; i<n_colors; i++)
+				retorn_prep_histo.colors[i]=colors[0];
+		}
+	}
+
+	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	retorn_prep_histo.unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	if (retorn_prep_histo.unitats=="°")
+		retorn_prep_histo.unitats="m";
+	if (area_cella>20 && retorn_prep_histo.unitats=="m")
+	{
+		area_cella*=0.000001;
+		retorn_prep_histo.unitats="km";
+	}
+
+	if (estil.categories && estil.atributs)
+	{
+		//var total_celles=0;
+		var a0=DonaFactorAEstiramentPaleta(estil.component[i_c].estiramentPaleta, n_colors);
+		var valor_min0=DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta);
+		var data=[];
+		if (estil.categories.length<n_colors)
+			retorn_prep_histo.colors.length=n_colors=estil.categories.length;
+		
+		for (i=0, i_color=0; i_color<n_colors; i_color++)
+		{
+			if (!estil.categories[i_color])
+			{
+				retorn_prep_histo.colors.splice(i, 1);
+				continue;
+			}
+			data[i]=estil.histograma.component[i_c].classe[i_color]*area_cella;
+			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color, true);
+			i++;
+		}	
+
+		var str=DonaCadena(estil.desc);		
+		if (capa.data)
+			str+=" ("+DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data)+")";
+		retorn_prep_histo.options={
+			title: {
+				display: true,
+				text: str
+			},
+			tooltips: { 
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						var allData = data.datasets[tooltipItem.datasetIndex].data; 
+						var unitats = data.datasets[tooltipItem.datasetIndex].unitats; 
+						var tooltipLabel = data.labels[tooltipItem.index]; 
+						var tooltipData = allData[tooltipItem.index];
+						var total = 0; 
+						for (i=0; i<allData.length; i++) { 
+							total += allData[i]; 
+						} 
+						var tooltipPercentage = OKStrOfNe(tooltipData / total * 100, 2); 
+						return tooltipLabel + ": " + tooltipPercentage + "%, "+ tooltipData +unitats+"²"; 
+					} 
+				} 
+			} 
+		};
+
+		retorn_prep_histo.data=data;
+		if (retorn_prep_histo.labels.join("").length<800)  //Protencció contra llegendes massa grans.
+		{
+			for (i=0; i<retorn_prep_histo.labels.length; i++)
+			{
+				if (retorn_prep_histo.labels[i]>80/(retorn_prep_histo.labels.length/20+1))
+					break;  //Protencció contra llegendes massa grans.
+			}
+		}
+		else 
+			i=-1;
+		if (i==retorn_prep_histo.labels.length)
+		{
+			retorn_prep_histo.options.legend={
+				position: "right",
+				labels: {
+					fontSize: 10,
+					padding: 3
+				}
+			};
+		}
+		else
+		{
+			retorn_prep_histo.options.legend={
+				display: false
+			};
+		}
+	}	
+	else
+	{
+		//data=estil.component[i_c].histograma;
+		var data=[];
+		for (i=0; i<n_colors; i++)
+		{
+			if (i==0)
+				retorn_prep_histo.labels[i]=(estil.component[i_c].estiramentPaleta) ? estil.component[i_c].estiramentPaleta.valorMinim : 0;
+			else if (n_colors>4 && i==n_colors/2)
+				retorn_prep_histo.labels[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim+estil.component[i_c].estiramentPaleta.valorMinim)/2 : n_colors/2;
+			else if (i==n_colors-1)
+				retorn_prep_histo.labels[i]=(estil.component[i_c].estiramentPaleta) ? estil.component[i_c].estiramentPaleta.valorMaxim : n_colors;
+			else
+				retorn_prep_histo.labels[i]="";
+			retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
+			if (typeof estil.component[i_c].NDecimals!=="undefined" && estil.component[i_c].NDecimals!=null) 
+				retorn_prep_histo.valors[i]=OKStrOfNe(retorn_prep_histo.valors[i], estil.component[i_c].NDecimals);
+			data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
+		}
+		//En poso un de més deliveradament per tancar l'interval de útil cas.
+		retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
+		
+		var str=DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? ", " + DonaCadena(estil.component[i_c].desc) : "")
+		if (capa.data)
+			str+=" ("+DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data)+")";
+		retorn_prep_histo.options={
+			legend: {
+				display: false
+			},
+			title: {
+				display: true,
+				text: str
+			},
+			scales: {
+				xAxes: [{
+					//scaleLabel: {display: true, labelString: DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? " (" + DonaCadena(estil.component[i_c].desc) + ")" : "")},
+					categoryPercentage: 1+0.2*n_colors/256,
+					barPercentage: 1+0.2*n_colors/256,
+					gridLines: { display: false },
+					ticks: { autoSkip: false, maxRotation: 0 }
+				}],
+				yAxes: [{
+					//type: "logarithmic",
+					scaleLabel: {display: true, labelString: retorn_prep_histo.unitats+"²"}, //aquesta és retorn_prep_histo.unitats o unitats sol? crec que lo primer
+					ticks: { beginAtZero:true }
+				}]
+			},
+			tooltips: { 
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						var allData = data.datasets[tooltipItem.datasetIndex].data; 
+						var tooltipLabel = "("+data.valors[tooltipItem.index]+","+data.valors[tooltipItem.index+1]+")";
+						var tooltipData = allData[tooltipItem.index]; 
+						return tooltipLabel + "," + tooltipData; 
+					} 
+				} 
+			} 
+		};
+		
+		retorn_prep_histo.data=data;
+	}	
+	OmpleTextPortapapersFinestraHistogramaADivisio(n_histograma, "chart");
+	return retorn_prep_histo;*/
+	alert("pendent");
 }
 
 function CreaHistograma(n_histograma, i_c)
@@ -1136,6 +1714,38 @@ function CreaHistograma(n_histograma, i_c)
 		HistogramaFinestra.vista[n_histograma].chart[i_c]=myChart; //però fent això la length s'amplia, es inteligent?
 	else //no haria de passar i vol dir que ordre és diferent a l'esperat, però almenys faig algo
 		HistogramaFinestra.vista[n_histograma].chart[HistogramaFinestra.vista[n_histograma].chart.length]=myChart;
+}
+
+function CreaHistogramaPerCategories(n_histograma)
+{
+	/*
+	var histograma=HistogramaFinestra.vista[n_histograma];
+	var retorn_prep_histo=PreparaHistogramaPerCategories(n_histograma);	
+	var ctx = document.getElementById(DonaNomCanvasHistograma(HistogramaFinestra.n));
+	var estil = ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
+	
+	var myChart = new Chart(ctx, {
+		type: 'horizontalBar',
+		data: {
+			labels: retorn_prep_histo.labels,
+			//valors: (retorn_prep_histo.valors ? retorn_prep_histo.valors : null),
+			datasets: [{
+				data: retorn_prep_histo.data,
+				backgroundColor: retorn_prep_histo.colors,
+				borderWidth: 0,
+				unitats: retorn_prep_histo.unitats //·$·
+			}]
+		},
+		options: retorn_prep_histo.options
+	});
+	
+	//per a una finestra amb tres histogrames, el ordre en que es crida e EsHistograma és el que toca
+	//per tant el i de HistogramaFinestra.vista[n_histograma].chart hauria de coincidir amb i_c	
+	if (typeof HistogramaFinestra.vista[n_histograma].chart === "undefined") //no està creat
+		HistogramaFinestra.vista[n_histograma].chart=[];
+
+	HistogramaFinestra.vista[n_histograma].chart[0]=myChart; //però fent això la length s'amplia, es inteligent?*/
+	alert("pendent");
 }
 
 function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)

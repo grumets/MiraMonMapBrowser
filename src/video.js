@@ -655,7 +655,7 @@ var cdns=[], capa, estil;
 						{
 							if (!estil.categories[i])
 								continue;
-							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. photos with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil, i), "</option>");
+							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. photos with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true), "</option>");
 						}
 					}
 					else

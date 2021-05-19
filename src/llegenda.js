@@ -106,7 +106,6 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 	if (estil.paleta && estil.paleta.ramp && !estil.paleta.colors)
 		TransformRampToColorsArray(estil.paleta);
-
 	colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors : null;
 	ncolors=colors ? colors.length : 256;
 
@@ -122,7 +121,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		{
 			if (!estil.categories[i_color])
 				continue;
-			desc=DonaCadenaCategoriaDesDeColor(estil, i_color);
+			desc=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
 			if (desc=="")
 				continue;
 			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": desc};
@@ -163,7 +162,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 		if (estil.categories && estil.atributs)
 		{
-			value_text=DonaCadenaCategoriaDesDeColor(estil, parseInt(value));
+			value_text=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, parseInt(value), true);
 			if (value_text=="")
 				continue;
 		}
@@ -858,7 +857,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 			
 		//Miro si l'estil actiu té gràfics que estaven "congelats" perquè la capa no era visible
 		//(els altres possibles gràfics d'altres estils de la capa encara han d'estar congelats)
-		DesactivaCheckITextChartsMatriusDinamics(i, i_estil, false);
+		DesactivaCheckITextChartsMatriusDinamics(i, capa.i_estil, false);
 	}	
 	else if (nom_icona=="semitransparent.gif" || 
 		 nom_icona=="semi_radio.gif"||

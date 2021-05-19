@@ -832,7 +832,7 @@ var cdns=[], capa;
 			{
 				if (HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i))
 				{
-					var v=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa, null, PuntConsultat.i, PuntConsultat.j));
+					var v=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa, null, PuntConsultat.i, PuntConsultat.j, false));
 					if (v=="")
 						NConsultesZero++;
 					else
