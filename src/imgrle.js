@@ -1765,6 +1765,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					var estad_cat=CalculaEstadisticsCategorics(categories[i_categ]["$stat$_histo"].classe);
 					if (estad_cat.recompte)
 					{
+						categories[i_categ]["$stat$_i_mode"]=estad_cat.i_moda;
 						categories[i_categ]["$stat$_mode"]=DonaTextCategoriaDesDeColor(component1.herenciaOrigen.categories, component1.herenciaOrigen.atributs, estad_cat.i_moda, true);
 						categories[i_categ]["$stat$_percent_mode"]=categories[i_categ]["$stat$_histo"].classe[estad_cat.i_moda]/estad_cat.recompte*100;
 					}

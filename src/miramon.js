@@ -4558,10 +4558,10 @@ function DonaTextCategoriaDesDeColor(categories, atributs, i_color, filtra_stats
 	
 	if (i_ple==1) 
 	{
-		if (compacte) //si només hi ha un atribut no cal posar-lo entre "[", ni tampoc posar la descripció abans
-			value_text=value_text.substr(desc_atrib.length+2);
-		else //treure el primer <br> ·$· provar
-			value_text=value_text.substr(desc_atrib.length+4);
+		if (compacte) //si només hi ha un atribut no cal posar-lo entre "[", ni tampoc posar la descripció abans ni els ": "
+			value_text=value_text.substr(desc_atrib.length+2+2);
+		else
+			value_text=value_text.substr(desc_atrib.length+2+4);
 	}
 	else if (compacte)
 		value_text+="]";
@@ -6321,8 +6321,8 @@ var win, i, j, l, capa;
 
 	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 450, 500, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "combinacioCapa", {"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng": "Analytical combination of layers", "fre":"Combinaison analytique de couches"}, boto_tancar, 420, 150, 520, 400, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 450, 500, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "combinacioCapa", {"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng": "Analytical combination of layers", "fre":"Combinaison analytique de couches"}, boto_tancar, 420, 150, 520, 400, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "combinacioRGB", {"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}, boto_tancar, 220, 90, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioEstadistic", {"cat":"Selecció del valor estadístic", "spa":"Selección del valor estadístico", "eng":"Selection of statistic value", "fre":"Sélection de la valeur statistique"}, boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);

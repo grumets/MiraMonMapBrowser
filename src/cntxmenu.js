@@ -1240,6 +1240,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			},
 			function(xhr) { alert(xhr); },
 			null);
+		return;
 	}
 	condicio[0]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 0);
 	condicio[1]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 1);
@@ -1441,6 +1442,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	// b/ afegir els estadístics
 	if (capa[1].estil[condicio[1].i_estil].categories && capa[1].estil[condicio[1].i_estil].atributs) //cas categòric
 	{
+		atrib_nous.push({nom: "$stat$_i_mode", descripcio: DonaCadenaLang(str_lang_mode), mostrar: "no"});
 		atrib_nous.push({nom: "$stat$_mode", descripcio: DonaCadenaLang(str_lang_mode), mostrar: "si_ple"});
 		atrib_nous.push({nom: "$stat$_percent_mode", descripcio: DonaCadenaLang(str_lang_percent_mode), mostrar: "si_ple", unitats: "%", NDecimals: n_dec_estad});			
 	}
@@ -1726,6 +1728,18 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 function AfegeixEstilReclassificacio(prefix_id, i_capa)
 {
 var condicio, capa, i_estil_nou, estil, i, i_value, i_color, i_color_tipic, cadena_reclass, linia_reclass, v, value, cadena_calcul;
+
+	if (!PaletesGlobals)
+	{
+		loadJSON("paletes.json",
+			function(paletes_globals, extra_param) {
+				PaletesGlobals=paletes_globals;
+				AfegeixEstilReclassificacio(extra_param.prefix_id, extra_param.i_capa);
+			},
+			function(xhr) { alert(xhr); },
+			{prefix_id : prefix_id, i_capa: i_capa});
+		return;
+	}
 
 	condicio=LlegeixParametresCondicioCapaDataEstil(prefix_id, "-valor", 0);
 	capa=ParamCtrl.capa[condicio.i_capa];
@@ -3602,7 +3616,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	  	var value_text="";
 	  	value_text="<br><fieldset><legend>"+DonaCadenaLang({"cat":"Valor estadístic de", "spa":"Valor estadístico de", "eng":"Statistical value of", "fre":"Valeur statistique des"})+" "+
 	  					DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc)+" "+DonaCadenaLang({"cat":"per les categories de", "spa":"para las categorías de", "eng":"by category of", "fre":"par catégorie des"})+ 
-	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc), ":</legend>";
+	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc)+":</legend>";
 	    value_text+="<table style=\"width:100%;text-align:left;font-size:inherit\"><tr><td rowspan=\"2\">";
 	    
 	    //només poso per triar els que els atributs de la capa categorica inicial indiquen com a mostrables
@@ -3612,6 +3626,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    	{
 	    		if (!estil.atributs[i_atrib].nom || estil.atributs[i_atrib].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
 	    			continue;
+	    		//if (estil.atributs[i_atrib].nom == "$stat$_i_mode") -> no la miro perquè ja inicialment es declara com a mostrar = "no"
 	    		if (estil.atributs[i_atrib].nom == "$stat$_mode")
 	    		{
 	    			value_text+="<input type=\"radio\" id=\"stat_mode_2\" name=\"stat\" value=\"mode_2\"><label for=\"mode\">"+DonaCadenaLang(str_lang_mode)+"</label><br>";

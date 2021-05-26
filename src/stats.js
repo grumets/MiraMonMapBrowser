@@ -61,7 +61,8 @@ var titol="";
 		else if (tipus_estad == "percent_mode")
 			titol=DonaCadenaLang(str_lang_percent_mode);
 		else if (tipus_estad == "mode_and_percent")
-			titol=DonaCadenaLang(str_lang_mode)+" ("+DonaCadenaLang(str_lang_percent_mode)+")";
+			//titol=DonaCadenaLang(str_lang_mode)+" ("+DonaCadenaLang(str_lang_percent_mode)+")";
+			titol=DonaCadenaLang(str_lang_mode)+" (%)";
 	}
 	else
 	{
