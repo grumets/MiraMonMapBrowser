@@ -495,7 +495,8 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 	secondTime=true;*/
 	tipus=DonaTipusServidorCapa(capa);
 	for (j=0; j<capa.objectes.features.length; j++)
-	{				
+	{	
+		//Només vàlid per a fitxers de punts.			
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[j], capa.CRSgeometry);
 		if (env.MinX < punt.x &&
 			env.MaxX > punt.x &&
@@ -856,15 +857,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 							feature.geometry.coordinates[0]=parseFloat(coord[0]);
 							feature.geometry.coordinates[1]=parseFloat(coord[1]);
 						}
-						if(capa.CRSgeometry  && 
-						   capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-						{
-							feature.puntCRSactual=[];
-							feature.puntCRSactual[0]={"x": feature.geometry.coordinates[0], 
-																	"y": feature.geometry.coordinates[1]}
-							TransformaCoordenadesPunt(feature.puntCRSactual[0], 
-												capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-						}					
+						CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 						if(consulta.seleccionar==true)
 						{
 							//Actualitzar EnvSelec, que sempre està en el sistema de coordenades actual
@@ -1830,9 +1823,20 @@ function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
 		{
 			for(var j=0; j<capa.objectes.features.length; j++)
 			{
-				capa.objectes.features[j].puntCRSactual=[];
-				capa.objectes.features[j].puntCRSactual[0]={"x": capa.objectes.features[j].geometry.coordinates[0], "y": capa.objectes.features[j].geometry.coordinates[1]};
-				TransformaCoordenadesPunt(capa.objectes.features[j].puntCRSactual[0], capa.CRSgeometry, crs_dest);
+				var feature=capa.objectes.features[j];
+				feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
+				//feature.puntCRSactual[0]={"x": feature.geometry.coordinates[0], "y": feature.geometry.coordinates[1]};
+				if (feature.geometryCRSactual.type=="LineString")
+				{
+					for(var c1=0; c1<feature.geometryCRSactual.coordinates.length; c1++)
+					{	
+						TransformaCoordenadesArray(feature.geometryCRSactual.coordinates[c1], capa.CRSgeometry, crs_dest);
+					}
+				}
+				else
+				{
+					TransformaCoordenadesArray(feature.geometryCRSactual.coordinates, capa.CRSgeometry, crs_dest);
+				}
 			}
 		}
 	}

@@ -1228,7 +1228,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 		//Inici afegit AZ a revisar per JM ·$·$·$·$·$·
 		if (capa.EnvTotalLL)
 			delete capa.EnvTotalLL;
-		
+
 		if (capa.estil && capa.estil.length>0)
 		{
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -1974,7 +1974,7 @@ function DonaCoordYDeCoordSobreSituacio(y)
 	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/(ParamInternCtrl.AltSituacio-1)*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-OrigenSupSituacio);
 }
 
-//consulta per localització
+//Només útils per la consulta per localització de punts
 function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 {
 	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
@@ -1985,9 +1985,17 @@ function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 	}
 
 	//En un futur proper, quan se suportin linies i polígons això s'haurà de canviar de lloc
-	punt.x=feature.puntCRSactual[0].x;
-	punt.y=feature.puntCRSactual[0].y;
+	punt.x=feature.geometryCRSactual.coordinates[0];
+	punt.y=feature.geometryCRSactual.coordinates[1];
 	return false;
+}
+
+function DonaGeometryCRSActual(feature, crs_capa)
+{
+	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+		return feature.geometry;
+
+	return feature.geometryCRSactual;
 }
 
 function EsCapaConsultable(i)
@@ -3095,6 +3103,18 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }
 
+function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
+{
+	if (crs_ori!=crs_dest)
+	{
+		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		coord[0]=crs_xy.x;
+		coord[1]=crs_xy.y;
+	}
+}
+
+
 function CanviaCRS(crs_ori, crs_dest)
 {
 var factor=1;
@@ -4094,7 +4114,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{layer}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{style}", capa.estil[i_estil2].nom);
 			else
@@ -4122,10 +4142,10 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 			else
 				s=s.replace("{format_extension}", capa.FormatImatge);
 		}
-		return s;		
+		return s;
 		}
 	else if (tipus=="TipusOAPI_MapTiles")
-	{		
+	{
 		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"?";
 		else
@@ -4134,23 +4154,23 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		s=s.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
-			
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+
 			if (capa.estil[i_estil2].nom)
 	 			s=s.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
-				s=s.replace("{styleId}/", "default");	
+				s=s.replace("{styleId}/", "default");
 		}
 		else
-			s=s.replace("{styleId}/", "default");						
-		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
+			s=s.replace("{styleId}/", "default");
+		s=s.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);
 		s=s.replace("{tileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
 		s=s.replace("{tileRow}", j);
 		s=s.replace("{tileCol}", i);
-		if(capa.FormatImatge.charAt(0)==".")  
+		if(capa.FormatImatge.charAt(0)==".")
 			s=s.replace(".{format_extension}", capa.FormatImatge);
 		else
-			s=s.replace("{format_extension}", capa.FormatImatge);		
+			s=s.replace("{format_extension}", capa.FormatImatge);
 		cdns.push(s);
 
 		cdns.push("&f=" , capa.FormatImatge ) ;
@@ -4328,10 +4348,10 @@ var cdns=[], tipus, plantilla, i_estil2;
 			if (ParamCtrl.capa[i].estil[i_estil2].nom)
 	 			plantilla=plantilla.replace("{styleId}", ParamCtrl.capa[i].estil[i_estil2].nom);
 			else
-				plantilla=plantilla.replace("{styleId}", "default");	
+				plantilla=plantilla.replace("{styleId}", "default");
 		}
 		else
-			plantilla=plantilla.replace("{styleId}", "default");	
+			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
 
@@ -4472,8 +4492,6 @@ var i_estil, capa=ParamCtrl.capa[i_capa];
 	CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 	return s;
 }
-
-
 
 function DonaDescripcioValorMostrarCapa(i_capa, una_linia)
 {
@@ -4669,6 +4687,43 @@ function DesactivaSombraFonts(ctx, shadowPrevi)
 	ctx.shadowColor=shadowPrevi.color;
 }
 
+function PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, ctx_style, estil_interior_o_vora, i_atri, a, valor_min, ncolors, i_col, i_fil)
+{
+	var i_color, valor;
+	if (!estil_interior_o_vora || !estil_interior_o_vora)
+		return;
+	previ[ctx_style]=ctx[ctx_style];
+	if (typeof i_atri==="undefined")
+	{
+		ctx[ctx_style]=estil_interior_o_vora.paleta.colors[0];
+		return;
+	}
+	valor=DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri, i_col, i_fil)
+	if (isNaN(valor))
+	{
+		ctx[ctx_style]="rgba(255,255,255,0)";
+		return;
+	}
+	i_color=Math.floor(a*(valor-valor_min));
+	if (i_color>=ncolors)
+		i_color=ncolors-1;
+	else if (i_color<0)
+		i_color=0;
+	ctx[ctx_style]=estil_interior_o_vora.paleta.colors[i_color];
+}
+
+function PintaCtxColorVoraIInterior(estil_vora, estil_interior, ctx, previ)
+{
+	if (estil_interior)
+		ctx.fill(); // Close the path and fill
+	if (estil_vora)
+		ctx.stroke();
+	if (estil_interior && estil_interior.paleta)
+		ctx.fillStyle=previ.fillStyle;
+	if (estil_vora && estil_vora.paleta)
+		ctx.strokeStyle=previ.strokeStyle;
+}
+
 function OmpleVistaCapaDigiIndirect(param)
 {
 var nom_vista=param.nom_vista, vista=param.vista;
@@ -4759,9 +4814,9 @@ var env=vista.EnvActual;
 			if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
 				return;  //ja es tornarà a cridar a si mateixa quan la crida assincrona acabi
 		}
-		var fillStylePrevi, a_interior=1, valor_min_interior=0, i_color, ncolors_interior, valor, strokeStylePrevi, a_vora=1, valor_min_vora=0, ncolors_vora, shadowPrevi;
+		var previ={}, a_interior=1, valor_min_interior=0, ncolors_interior, valor, a_vora=1, valor_min_vora=0, ncolors_vora;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
-		var env_icona, punt={}, i_col, i_fil, icona, font, i_simbol, mida, text;
+		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString;
 		var win = DonaWindowDesDeINovaVista(vista);
 		var canvas = win.document.getElementById(nom_canvas);
 		var ctx = canvas.getContext('2d');
@@ -4782,201 +4837,190 @@ var env=vista.EnvActual;
 
 		for (var j=capa_digi.objectes.features.length-1; j>=0; j--)
 		{
-			DonaCoordenadaPuntCRSActual(punt, capa_digi.objectes.features[j], capa_digi.CRSgeometry);
-			i_col=Math.round((punt.x-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-			i_fil=Math.round((env.MaxY-punt.y)/(env.MaxY-env.MinY)*vista.nfil);
-			if (estil.simbols && estil.simbols.length)
+			geometry=DonaGeometryCRSActual(capa_digi.objectes.features[j], capa_digi.CRSgeometry);
+			if (geometry.type=="LineString" || geometry.type=="MultiLineString")
 			{
-				for(i_simb=0; i_simb<estil.simbols.length; i_simb++)
+				for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
 				{
-					var simbols=estil.simbols[i_simb];
-				 	if (simbols.simbol)
+					if (geometry.type=="MultiLineString")
+						lineString=geometry.coordinates[c1];
+					else
+						lineString=geometry.coordinates;
+
+					i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+					i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", estil.vora, i_atri_vora, a_vora, valor_min_vora, ncolors_vora, i_col, i_fil);
+					ctx.beginPath();
+					ctx.moveTo(i_col, i_fil);
+					for (var c1=1; c1<lineString.length; c1++)
 					{
-						var simbol=simbols.simbol;
-						if (i_col<0 || i_col>vista.ncol || i_fil<0 || i_fil>vista.nfil)
-							i_simbol=-1;  //Necessari per evitar formules que puguin contenir valors de raster.
-						else if (simbol.length==1 && !simbols.NomCamp)
-							i_simbol=0;
-						else
-							i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil);
-
-						if (i_simbol!=-1)
+						i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+						i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
+						ctx.lineTo(i_col, i_fil);
+					}
+					PintaCtxColorVoraIInterior(estil.vora, null, ctx, previ);
+				}
+			}
+			if (geometry.type=="Polygon" || geometry.type=="MultiPolygon" || geometry.type=="GeometryCollection")
+			{
+				//http://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
+				alert("Type of feature geometry: " + geometry.type + " not supported yet");
+			}
+			else
+			{
+				for (var c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
+				{
+					if (geometry.type=="MultiPoint")
+						coord=geometry.coordinates[c1];
+					else
+						coord=geometry.coordinates;
+					i_col=Math.round((coord[0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+					i_fil=Math.round((env.MaxY-coord[1])/(env.MaxY-env.MinY)*vista.nfil);
+					if (estil.simbols && estil.simbols.length)
+					{
+						for(i_simb=0; i_simb<estil.simbols.length; i_simb++)
 						{
-							if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
-								icona=simbol[i_simbol].IconaSel;
-							else if (estil.NomCampSel)
+							var simbols=estil.simbols[i_simb];
+						 	if (simbols.simbol)
 							{
-								if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
-									icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].IconaSel: simbol[i_simbol].icona);
+								var simbol=simbols.simbol;
+								if (i_col<0 || i_col>vista.ncol || i_fil<0 || i_fil>vista.nfil)
+									i_simbol=-1;  //Necessari per evitar formules que puguin contenir valors de raster.
+								else if (simbol.length==1 && !simbols.NomCamp)
+									i_simbol=0;
 								else
-									icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].icona: null);
-							}
-							else
-								icona=simbol[i_simbol].icona;
+									i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil);
 
-							if(icona)
-							{
-								if (simbols.NomCampFEscala)
+								if (i_simbol!=-1)
 								{
-									icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, simbols.NomCampFEscala);
-									if (typeof icona.fescala==="undefined" || isNaN(icona.fescala) || icona.fescala<=0)
-										icona.fescala=-1;
-								}
-								else
-									icona.fescala=1;
-
-								if (icona.fescala>0)
-									env_icona=DonaEnvIcona(punt, icona);
-
-								if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
-								{
-									//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa_digi --> No he de considerar ni els marges de la vista ni els scrolls.
-									//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-
-									if (Array.isArray(icona))
+									if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
+										icona=simbol[i_simbol].IconaSel;
+									else if (estil.NomCampSel)
 									{
-										alert("OmpleVistaCapaDigiIndirect() does not implement arrays of shapes yet");
-									}
-									else if (icona.type=="circle" || icona.type=="square")
-									{
-										if (estil.interior && estil.interior.paleta)
-										{
-											fillStylePrevi=ctx.fillStyle;
-											if (typeof i_atri_interior==="undefined")
-												ctx.fillStyle=estil.interior.paleta.colors[0];
-											else
-											{
-												valor=DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_interior, i_col, i_fil)
-												if (isNaN(valor))
-													ctx.fillStyle="rgba(255,255,255,0)";
-												else
-												{
-													i_color=Math.floor(a_interior*(valor-valor_min_interior));
-													if (i_color>=ncolors_interior)
-														i_color=ncolors_interior-1;
-													else if (i_color<0)
-														i_color=0;
-													ctx.fillStyle=estil.interior.paleta.colors[i_color];
-												}
-											}
-										}
-										if (estil.vora && estil.vora.paleta)
-										{
-											strokeStylePrevi=ctx.strokeStyle;
-											if (typeof i_atri_vora==="undefined")
-												ctx.strokeStyle=estil.vora.paleta.colors[0];
-											else
-											{
-												valor=DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_vora, i_col, i_fil)
-												if (isNaN(valor))
-													ctx.strokeStyle="rgba(255,255,255,0)";
-												else
-												{
-													i_color=Math.floor(a_vora*(valor-valor_min_vora));
-													if (i_color>=ncolors_vora)
-														i_color=ncolors_vora-1;
-													else if (i_color<0)
-														i_color=0;
-													ctx.strokeStyle=estil.vora.paleta.colors[i_color];
-												}
-											}
-										}
-										ctx.beginPath();
-										mida=DonaMidaIconaForma(icona);
-										if (icona.unitats=="m")
-										{
-											if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-												mida/=FactorGrausAMetres;
-											mida/=ParamInternCtrl.vista.CostatZoomActual;
-										}
-										if (mida<=0)
-											mida=1;
-										if (icona.type=="square")
-										{
-											ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
-										}
+										if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+											icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].IconaSel: simbol[i_simbol].icona);
 										else
-											ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
-
-										if (estil.interior)
-											ctx.fill(); // Close the path and fill
-										if (estil.vora)
-											ctx.stroke();
-										if (estil.interior && estil.interior.paleta)
-											ctx.fillStyle=fillStylePrevi;
-										if (estil.vora && estil.vora.paleta)
-											ctx.strokeStyle=strokeStylePrevi;
+											icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].icona: null);
 									}
 									else
-									{
-										//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que està en un altre window. El problema ha estat analitzat aquí:
-										//https://stackoverflow.com/questions/34402718/img-from-opener-is-not-img-type-for-canvas-drawimage-in-ie-causing-type-mismatch
-										//In IE there is a problem "img from opener is not img type for canvas drawImage (DispHTMLImg, being HTMLImageElement instead) in IE causing TYPE_MISMATCH_ERR"
-										//Després d'invertir dies, he estat incapaç de trobar una manera de resoldre això en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
+										icona=simbol[i_simbol].icona;
 
-										if (icona.img.sha_carregat==true)
+									if(icona)
+									{
+										if (simbols.NomCampFEscala)
 										{
-											try
+											icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, simbols.NomCampFEscala);
+											if (typeof icona.fescala==="undefined" || isNaN(icona.fescala) || icona.fescala<=0)
+												icona.fescala=-1;
+										}
+										else
+											icona.fescala=1;
+
+										if (icona.fescala>0)
+											env_icona=DonaEnvIcona({x: coord[0],y: coord[1]}, icona);
+										if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
+										{
+											//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa_digi --> No he de considerar ni els marges de la vista ni els scrolls.
+											//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+
+											if (Array.isArray(icona))
 											{
-												ctx.drawImage(icona.img, i_col-icona.i*icona.fescala,
-															i_fil-icona.j*icona.fescala, icona.img.ncol*icona.fescala, icona.img.nfil*icona.fescala);
+												alert("OmpleVistaCapaDigiIndirect() does not implement arrays of shapes yet");
 											}
-											catch (e)
+											else if (icona.type=="circle" || icona.type=="square")
 											{
-												if (!ErrorInRenderingIconsPresented)
+												PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", estil.interior, i_atri_interior, a_interior, valor_min_interior, ncolors_interior, i_col, i_fil);
+												PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", estil.vora, i_atri_vora, a_vora, valor_min_vora, ncolors_vora, i_col, i_fil);
+												ctx.beginPath();
+												mida=DonaMidaIconaForma(icona);
+												if (icona.unitats=="m")
 												{
-													if (e.message=="TypeMismatchError")
-														win.alert("In Internet Explorer is not possible to render icons when printing. We recommed to print with Chrome or to deactivate layers with icons (" + e.message +")");
-													else
-														win.alert(e.message);
-													ErrorInRenderingIconsPresented=true;
+													if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+														mida/=FactorGrausAMetres;
+													mida/=ParamInternCtrl.vista.CostatZoomActual;
+												}
+												if (mida<=0)
+													mida=1;
+												if (icona.type=="square")
+												{
+													ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
+												}
+												else
+													ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
+
+												PintaCtxColorVoraIInterior(estil.vora, estil.interior, ctx, previ);
+											}
+											else
+											{
+												//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que està en un altre window. El problema ha estat analitzat aquí:
+												//https://stackoverflow.com/questions/34402718/img-from-opener-is-not-img-type-for-canvas-drawimage-in-ie-causing-type-mismatch
+												//In IE there is a problem "img from opener is not img type for canvas drawImage (DispHTMLImg, being HTMLImageElement instead) in IE causing TYPE_MISMATCH_ERR"
+												//Després d'invertir dies, he estat incapaç de trobar una manera de resoldre això en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
+
+												if (icona.img.sha_carregat==true)
+												{
+													try
+													{
+														ctx.drawImage(icona.img, i_col-icona.i*icona.fescala,
+																	i_fil-icona.j*icona.fescala, icona.img.ncol*icona.fescala, icona.img.nfil*icona.fescala);
+													}
+													catch (e)
+													{
+														if (!ErrorInRenderingIconsPresented)
+														{
+															if (e.message=="TypeMismatchError")
+																win.alert("In Internet Explorer is not possible to render icons when printing. We recommed to print with Chrome or to deactivate layers with icons (" + e.message +")");
+															else
+																win.alert(e.message);
+															ErrorInRenderingIconsPresented=true;
+														}
+													}
+												}
+												else if (!icona.img.hi_ha_hagut_error || icona.img.hi_ha_hagut_error==false)
+												{
+													//the icon is not available yet. Let's wait sometime and repeat this
+													setTimeout("OmpleVistaCapaDigi(\"" + nom_vista + "\", " + JSON.stringify(vista) + ", " + param.i_capa + ");", 600);
+													return;
 												}
 											}
-										}
-										else if (!icona.img.hi_ha_hagut_error || icona.img.hi_ha_hagut_error==false)
-										{
-											//the icon is not available yet. Let's wait sometime and repeat this
-											setTimeout("OmpleVistaCapaDigi(\"" + nom_vista + "\", " + JSON.stringify(vista) + ", " + param.i_capa + ");", 600);
-											return;
 										}
 									}
 								}
 							}
 						}
 					}
-				}
-			}
-			if (estil.fonts)
-			{
-				if (env.MinX < punt.x &&
-					env.MaxX > punt.x &&
-					env.MinY < punt.y &&
-					env.MaxY > punt.y)
-				{
-					valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, estil.fonts.NomCampText);
-					if (typeof valor!=="undefined" && (typeof valor!=="string" || valor!="") && (typeof valor!=="number" || !isNaN(valor)))
+					if (estil.fonts)
 					{
-						shadowPrevi=ActivaSombraFonts(ctx);
-						if(estil.fonts.aspecte.length==1)
-							font=estil.fonts.aspecte[0].font;
-						else
-							font=estil.fonts.aspecte[capa_digi.objectes.features[j].i_aspecte].font;  //No acabat implementar encara. Caldria generar index d'estils a cada objecte.
-						ctx.font=font.font;
-						if (font.color)
+						if (env.MinX < coord[0] &&
+							env.MaxX > coord[0] &&
+							env.MinY < coord[1] &&
+							env.MaxY > coord[1])
 						{
-							fillStylePrevi=ctx.fillStyle;
-							ctx.fillStyle=font.color;
+							valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, estil.fonts.NomCampText);
+							if (typeof valor!=="undefined" && (typeof valor!=="string" || valor!="") && (typeof valor!=="number" || !isNaN(valor)))
+							{
+								previ.shadow=ActivaSombraFonts(ctx);
+								if(estil.fonts.aspecte.length==1)
+									font=estil.fonts.aspecte[0].font;
+								else
+									font=estil.fonts.aspecte[capa_digi.objectes.features[j].i_aspecte].font;  //No acabat implementar encara. Caldria generar index d'estils a cada objecte.
+								ctx.font=font.font;
+								if (font.color)
+								{
+									previ.fillStyle=ctx.fillStyle;
+									ctx.fillStyle=font.color;
+								}
+								if (font.align)
+									ctx.textAlign=font.align;
+								ctx.fillText(valor, i_col-font.i, i_fil-font.j);
+								if (font.color)
+									ctx.fillStyle=previ.fillStyle;
+								DesactivaSombraFonts(ctx, previ.shadow);
+							}
 						}
-						if (font.align)
-							ctx.textAlign=font.align;
-						ctx.fillText(valor, i_col-font.i, i_fil-font.j);
-						if (font.color)
-							ctx.fillStyle=fillStylePrevi;
-						DesactivaSombraFonts(ctx, shadowPrevi);
 					}
 				}
 			}
-			//http://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
 		}
 	}
 }
@@ -5472,7 +5516,7 @@ var p, unitats_CRS;
 				if (capa.visible!="no")
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
-											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,  
+											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
 											((capa.FormatImatge=="application/x-img") ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
 				}
 			}
@@ -5529,7 +5573,7 @@ var p, unitats_CRS;
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica==true && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 			{
-				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");	
+				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
 				barra_slider.push("<br>");
 				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
 				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
@@ -5545,7 +5589,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.VistaSliderData==true && ParamInternCtrl.millisegons.length)
 		{
-			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]), 
+			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 					"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
@@ -5556,7 +5600,7 @@ var p, unitats_CRS;
 					barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
 				barra_slider.push("</datalist>");
 			}
-			barra_slider.push("</span>");			
+			barra_slider.push("</span>");
 		}
 		if (barra_slider.length)
 			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic==true ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
@@ -5581,12 +5625,12 @@ var p, unitats_CRS;
 			else
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i); 
+					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
-						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);					
-				}	
+						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
+				}
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)
 				setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
@@ -6032,7 +6076,7 @@ function PreparaParamInternCtrl()
 					 			nfil: ParamCtrl.nfil,
 								ncol: ParamCtrl.ncol,
 								CostatZoomActual: ParamCtrl.NivellZoomCostat,
-								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]	
+								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]
 								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
 					 EnvLLSituacio: [],
 					 AmpleSituacio: 99,
@@ -6046,11 +6090,11 @@ function PreparaParamInternCtrl()
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0},
 								   {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}, {costat: 1, PuntOri: {x: 0, y: 0}, ISituacio: 0}],
-					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats 
+					 NZoomPreviUsat: 0, //10 zooms previs, 0 usats
 					 millisegons: CarregaDatesCapes(),
 					 FlagsData: DeterminaFlagsDataCapes(),
 					 flags: 0};
-	
+
 	if (ParamInternCtrl.millisegons.length)
 		ParamInternCtrl.iMillisegonsActual=ParamInternCtrl.millisegons.binarySearch(DeterminaMillisegonsActualCapes());
 

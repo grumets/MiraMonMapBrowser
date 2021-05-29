@@ -2498,6 +2498,44 @@
 			"description": "Caraterístiques no geomètriques de l'objecte GeoJSON.",
 			"type": "object"
 		},
+		"coordinate" :{
+			"description": "Un vèrtex",
+			"type": ["array"],
+			"minItems": 2,
+			"maxItems": 3,
+			"items": {
+				"description": "coordenada com un double",
+				"type": "number"
+			}
+		},
+		"geometryGeoJSON": {
+			"description": "Caraterístiques geomètriques de l'objecte",
+			"type": "object",
+			"required": ["type", "coordinates"],
+			"oneOf": [
+				{
+					"properties": {
+						"type": {"enum": ["Point"]},
+						"coordinates": {
+							"$ref": "#/definitions/coordinate"
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["LineString"]},
+						"coordinates": {
+							"description": "Una linia",
+							"type": ["array"],
+							"minItems": 2,
+							"items": {
+								"$ref": "#/definitions/coordinate"
+							}
+						}
+					}
+				}
+			]
+		},
 		"featureCollection": {
 			"description": "La col·lecció d'objectes vectorial en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84",
 			"type": ["object", "null"],
@@ -2525,22 +2563,7 @@
 								"$ref": "#/definitions/bboxGeoJSON"
 							},									
 							"geometry": {
-								"description": "Caraterístiques geomètriques de l'objecte",
-								"type": "object",
-								"required": ["type", "coordinates"],
-								"properties": {
-									"type": {"enum": ["Point"]},
-									"coordinates": {
-										"description": "Un vèrtex",
-										"type": ["array"],
-										"minItems": 2,
-										"maxItems": 3,
-										"items": {
-											"description": "coordenada com un double",
-											"type": "number"
-										}
-									}
-								}
+								"$ref": "#/definitions/geometryGeoJSON"
 							},
 							"properties": {
 								"description": "Caraterístiques no geomètriques de l'objecte GeoJSON. El contingut és lliure però els noms de les propietats són els atributs.nom i estil.NomCamp",
@@ -2554,13 +2577,9 @@
 									"$ref": "#/definitions/data" 
 								}
 							},
-							"puntCRSactual": {
-								"description": "Interna. No usar. Array de punts igual que punt però en el CRS actual de navegació. Si CRS capa i crs navegació són iguals aquests contingut no és vàlid.",
-								"type": ["array", "null"],
-								"items": {
-									"description": "Vèrtex",
-									"$ref": "#/definitions/punt2D" 
-								}
+							"geometryCRSactual": {
+								"description": "Interna. No usar. Geometria igual que 'geometry' però en el CRS actual de navegació. Si CRS capa i crs navegació són iguals aquests contingut no és vàlid.",
+								"$ref": "#/definitions/geometryGeoJSON"
 							},
 							"seleccionat": {
 								"description": "L'objecte es simbolitza com a seleccionat. Per defecte és false",
