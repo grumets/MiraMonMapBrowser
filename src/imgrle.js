@@ -2308,14 +2308,23 @@ var data;
 				{
 					var retorn_prep_histo;
 					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
-					retorn_prep_histo=PreparaHistogramaPerCategories(i_histo);
+					retorn_prep_histo=PreparaHistogramaPerCategories(i_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
+					//Gràfic de l'àrea
 					HistogramaFinestra.vista[i_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
-					HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
-					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data;
-					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors;
-					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats;
-					HistogramaFinestra.vista[i_histo].chart[0].options=retorn_prep_histo.options;
+					//HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data_area;
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors_area;
+					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats_area;
+					HistogramaFinestra.vista[i_histo].chart[0].options=retorn_prep_histo.options_area;
 					HistogramaFinestra.vista[i_histo].chart[0].update();
+					//Gràfic de l'estadístic
+					HistogramaFinestra.vista[i_histo].chart[1].config.data.labels=retorn_prep_histo.labels;
+					//HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
+					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].data=retorn_prep_histo.data_estad;
+					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors_estad;
+					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].unitats=retorn_prep_histo.unitats_estad;
+					HistogramaFinestra.vista[i_histo].chart[1].options=retorn_prep_histo.options_estad;
+					HistogramaFinestra.vista[i_histo].chart[1].update();
 				}
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "matriu")

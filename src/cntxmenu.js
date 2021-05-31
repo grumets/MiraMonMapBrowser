@@ -1491,14 +1491,15 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	categ_noves=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].categories));
 	
 	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),{"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "}),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
-	
+	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + DonaCadenaLang({"cat":" per categoria de","spa":" por categorías de ","eng":" by category of ", "fre":" par catégorie de "}) + capa[0].estil[condicio[0].i_estil].desc;
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
 	ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
 		"versio": null,
 		"tipus": null,
-		"nom":	"LayerWithStatistics",
-		"desc":	(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + DonaCadenaLang({"cat":" amb estadistics per categoria de ","spa":" con estadísticos por categoría de ","eng":" with statistic by category of ", "fre":" avec statistiques par catégorie des "}) + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		//"nom":	"LayerWithStatistics", //capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc;
+		"nom":	capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc,
+		"desc":	(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + DonaCadenaLang({"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistics of ", "fre":" avec statistiques par "}) + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
@@ -1513,7 +1514,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"DescLlegenda": cadena_desc,
 		"estil": [{
 			"nom":	null,
-			"desc":	cadena_desc,
+			"desc":	desc_estil,
 			"TipusObj": "P",			
 			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil)},
 										{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
@@ -3598,7 +3599,7 @@ function DonaCadenaSelecioEstadistic(i_capa)
 var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 
 	cdns.push("<form name=\"SeleccioEstadistic\" onSubmit=\"return false;\">");
-	cdns.push("<div id=\"LayerSeleccioEstadistic\" style=\"position:absolute;left:10px;top:10px;\">",
+	cdns.push("<div style=\"position:absolute;left:10px;top:10px;\">",
 			DonaCadenaLang({"cat":"Valor estadístic a mostrar per la capa", "spa":"Valor estadístico para mostrar para la capa", 
 			"eng":"Statistical value to display for the layer", "fre":"Valeur statistique à afficher pour la couche"}), " \"",
 			DonaCadena(capa.DescLlegenda),
@@ -3704,11 +3705,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
   		}
   		if (recompte > 0)
   		{
-				/*value_text+="<td><fieldset><legend>"+DonaCadenaLang({"cat":"Presentació", "spa":"Presentación","eng":"Presentation", "fre":"présentation"})+"</legend>"+
+				value_text+="<td><fieldset><legend>"+DonaCadenaLang({"cat":"Presentació", "spa":"Presentación","eng":"Presentation", "fre":"présentation"})+"</legend>"+
 								"<input type=\"radio\" id=\"stat_graphic\" name=\"presentacio\" value=\"graphic\"><label for=\"graphic\">"+DonaCadenaLang({"cat":"Gràfica", "spa":"Gráfica", "eng":"Graphical", "fre":"graphique"})+"</label><br>"+
 								"<input type=\"radio\" id=\"stat_text\" name=\"presentacio\" value=\"text\" checked=\"true\"><label for=\"sum_area_2\">"+DonaCadenaLang({"cat":"Textual", "spa":"Textual", "eng":"Textual", "fre":"textuelle"})+"</label><br>"+
-	    					"</fieldset></td></tr><tr>";*/
-				value_text+="<td></td></tr>";
+	    					"</fieldset></td></tr>";
 	    	value_text+="<tr><td><fieldset><legend>"+DonaCadenaLang({"cat":"Ordre", "spa":"Orden","eng":"Sorting order", "fre":"Ordre de tri"})+"</legend>"+
 	    					"<input type=\"radio\" id=\"stat_unsorted\" name=\"order\" value=\"unsorted\" checked=\"true\"><label for=\"stat_unsorted\">"+DonaCadenaLang({"cat":"Cap", "spa":"Ninguno", "eng":"Unsorted", "fre":"Non trié"})+"</label><br>"+
 	    					"<input type=\"radio\" id=\"stat_ascend\" name=\"order\" value=\"ascend\"><label for=\"stat_ascend\">"+DonaCadenaLang({"cat":"Ascendent", "spa":"Ascendiente", "eng":"Ascending", "fre":"Ascendant"})+"</label><br>"+
@@ -3745,8 +3745,7 @@ function CridaCreacioEstadistic(i_capa)
 	TancaFinestraLayer("seleccioEstadistic");	
 	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")
 	//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
-		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value, "text", document.SeleccioEstadistic.order.value);
-		//return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value, document.SeleccioEstadistic.presentacio.value, document.SeleccioEstadistic.order.value);
+		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value, document.SeleccioEstadistic.presentacio.value, document.SeleccioEstadistic.order.value);
 	else //cas normal, només necessito saber el estadístic a mostrar
 		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value);
 }
