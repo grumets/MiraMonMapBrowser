@@ -507,9 +507,14 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			url=DonaRequestGetObservation(RespostaConsultaObjDigiXML[i].i_capa, RespostaConsultaObjDigiXML[i].i_obj, null);
 			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("GetObservation", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
 		}
+		else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		{
+			url=DonaRequestSTAObservationsFeatureOfInterest(RespostaConsultaObjDigiXML[i].i_capa, RespostaConsultaObjDigiXML[i].i_obj, null);
+			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("STA Observations", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
+		}
 		//ajax_consulta_capa_digi[i].doGet();
 		//loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
-		if (capa.FormatConsulta=="application/json")
+		if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 			loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 		else
 			loadFile(url, capa.FormatConsulta, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
@@ -664,14 +669,30 @@ var cdns=[], ncol=440, nfil=220;
 
 	if(typeof valor !== "undefined" && valor!=null)
 	{
+		if(atribut.FormatVideo)
+		{
+			if (valor)
+			{
+				if(atribut.esLink)
+					cdns.push("<a href='",valor,"' target='_blank'>", DonaCadenaLang({"cat":"Enllaç", "spa":"Enlace", "eng":"Link", "fre":"Relier"}),"</a>");
+				cdns.push("<br>");
+				cdns.push("<video controls width='320'>",
+						"<source src='", valor, "' type='", atribut.FormatVideo, "'>",
+						"Your browser does not support a video tag",
+					"</video>");
+			}
+		}
 		if(atribut.esImatge)
 		{
-			if(valor)
+			if (valor)
+			{
 				cdns.push("<br>");
-			if(atribut.esLink)
-				cdns.push("<a href='",valor,"' target='_blank'><img src='", valor ,"' border='0' align='bottom' class='max-width: 220;'></a></span><br>");
-			else
-				cdns.push("<img src='",	valor,"' border='0' align='bottom' class='max-width: 220;>");
+				if(atribut.esLink)
+					cdns.push("<a href='",valor,"' target='_blank'>");
+				cdns.push("<img src='",	valor,"' border='0' align='bottom' class='max-width: 320;'>");
+				if(atribut.esLink)
+					cdns.push("</a><br>");
+			}
 		}
 		else if (atribut.esLink)
 	 	{

@@ -310,7 +310,10 @@ function DonaNomServidorSenseCaracterFinal(s)
 
 function DonaVersioComAText(v)
 {
-    return v.Vers+"."+v.SubVers+"."+v.VariantVers;
+	if (v.VariantVers===0 || v.VariantVers)
+		return v.Vers+"."+v.SubVers+"."+v.VariantVers;
+	else
+		return v.Vers+"."+v.SubVers
 }
 
 function DonaVersioPerNameSpaceComAText(v)
@@ -673,15 +676,15 @@ function getISOLanguageTag(language)
 
 function CombinaURLServidorAmbParamPeticio(servidor, request)
 {
-	if(request.indexOf("=")==-1)
-		return 	DonaNomServidorSenseCaracterFinal(servidor) + request;
+	if(request.indexOf("=")==-1)	
+		return DonaNomServidorSenseCaracterFinal(servidor) + request;
 	if (request.indexOf("?")==-1)
-		return 	DonaNomServidorCaracterFinal(servidor) + request;
-		if (servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
-			return 	servidor.substring(0,servidor.length-1)  + request;
-		else
-			return 	servidor  + request;
-	}
+		return DonaNomServidorCaracterFinal(servidor) + request;
+	if ((servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
+		|| (servidor.charAt(servidor.length-1)=="/" &&  request.charAt(0)=="/"))
+		returnservidor.substring(0, servidor.length-1) + request;
+	return servidor + request;
+}
 
 function AfegeixNomServidorARequest(servidor, request, es_ajax, suporta_cors)
 {

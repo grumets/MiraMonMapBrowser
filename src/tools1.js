@@ -375,6 +375,20 @@ if(!String.prototype.trim)
 	};
 }
 
+function isalpha(c) 
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+}
+
+function isdigit(c) 
+{
+	return (c >= '0' && c <= '9');
+}
+
+function isalnum(c) 
+{
+	return (isalpha(c) || isdigit(c));
+}
 
 /*Older versions of IE will crash when trying to use console.log to debug and
  * the console window (debug tools) is not open.
@@ -1818,9 +1832,10 @@ var xhr = new XMLHttpRequest();
 		{
 	        if (xhr.status === 200) 
 			{
-				if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
+				//if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
+				if (!ResponseHeaderContentTypeConteMimeType(mimetype, xhr))
 				{
-			        if (error)
+			        	if (error)
 					{
 						var s=null;
 						if (xhr.response)
@@ -1871,7 +1886,8 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 		{
 			if (xhr.status === 200) 
 			{
-				if (mimetype!=xhr.getResponseHeader('content-type'))
+				//if (mimetype!=xhr.getResponseHeader('content-type'))
+				if (!ResponseHeaderContentTypeConteMimeType(mimetype, xhr))
 				{
 					if (error)
 					{

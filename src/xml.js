@@ -137,20 +137,27 @@ function IsXMLMimeType(mimetype)
 	return false;
 }
 
-
 function ResponseHeaderContentTypeConteMimeType(mimetype, xhr)
 {
-	if(typeof mimetype==="undefined" || !mimetype || mimetype=="")
+	//if(typeof mimetype==="undefined" || !mimetype || mimetype=="")
+	if (!mimetype)
 		return true;
+
 	var content_type=xhr.getResponseHeader('content-type');
 	if(mimetype==content_type)
 		return true;
 	
-	if(mimetype.length<content_type.length)
+	var mimetype_only=(mimetype.indexOf(";")>1) ? mimetype.substring(0, mimetype.indexOf(";")) : mimetype;
+	var content_type_only=(content_type.indexOf(";")>1) ? content_type.substring(0, content_type.indexOf(";")) : content_type;
+
+	if(mimetype_only==content_type_only)
+		return true;
+
+	/*if(mimetype.length<content_type.length)
 	{
 		if(mimetype==content_type.substring(0,mimetype.length))
 			return true;
-	}
+	}*/
 	return false;
 }
 

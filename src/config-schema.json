@@ -1167,7 +1167,7 @@
 						"type": "string"
 					},
 					"objectes": {
-						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el model de dades és vector. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és tipusSOS o tipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
+						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el model de dades és vector. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
 						"$ref": "#/definitions/featureCollection"
 					},
 					"atributs": {
@@ -1981,7 +1981,7 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator).",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features"]
 		},
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",
@@ -2651,6 +2651,11 @@
 					"esImatge": {
 						"description": "És una imatge?",
 						"type": "boolean"
+					},
+					"FormatVideo": {
+						"description": "Si és un link a un video, el dormat del video. Això farà que es mostri com un video amb un botó de play. És un format MIME. Exemple video/mp4. Optional",
+						"type": "string",
+						"format": "uri"
 					},
 					"mostrar": {
 						"description": "S'ha de mostrar? Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											

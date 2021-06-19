@@ -284,6 +284,17 @@ var valor, tag, tags, property_name, camps, i;
 	}
 }//Fi de OmpleAtributsObjecteCapaDigiDesDeSOS()
 
+function OmpleAtributsObjecteCapaDigiDesDeObservacionsDeSTA(obs, feature)
+{
+	feature.properties=ExtreuTransformaSTAObservations(obs);
+}
+
+function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
+{
+	removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+	NConsultesDigiZero++;
+	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+}
 
 function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
@@ -319,17 +330,17 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 		if (capa.FormatImatge=="application/json")
 		{
 			objectes=null;
-			try {
-				var geojson=JSON.parse(doc);
+			//try {
+				//var geojson=JSON.parse(doc);
 				//si hi ha una bbox es podria actualitzar però com que no la uso...
-				objectes=geojson.features;
-			} 
+				objectes=doc.features;
+			/*} 
 			catch (e) {
 				removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 				NConsultesDigiZero++;
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 				return;	
-			}
+			}*/
 			if(objectes && objectes.length>0)
 			{
 				for(i_obj=0; i_obj<objectes.length; i_obj++)
@@ -366,24 +377,24 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			}
 		}
 	}
-	else //if (capa.tipus="TipusSOS")
+	else if (capa.tipus=="TipusSOS")
 	{
 		var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
 		id_obj_buscat=prefix_foi + features[consulta.i_obj].id;
 		if (capa.FormatImatge=="application/json")
 		{
 			objectes=null;			
-			try {
-				var geojson=JSON.parse(doc);
+			//try {
+				//var geojson=JSON.parse(doc);
 				//si hi ha una bbox es podria actualitzar però com que no la uso...
-				objectes=geojson.observations;
-			} 
+				objectes=doc.observations;
+			/*} 
 			catch (e) {
 				removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 				NConsultesDigiZero++;
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 				return;	
-			}
+			}*/
 			if(objectes && objectes.length>0)
 			{
 				for(i_obj=0; i_obj<objectes.length; i_obj++)
@@ -419,6 +430,27 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			}
 		}
 	}
+	else if (capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+	{
+		id_obj_buscat=features[consulta.i_obj].id;
+		objectes=null;			
+		//try {
+		//	var geojson=JSON.parse(doc);
+			//si hi ha una bbox es podria actualitzar però com que no la uso...
+		/*} 
+		catch (e) {
+			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+			NConsultesDigiZero++;
+			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+			return;	
+		}*/
+		if(doc)
+		{
+			if(id_obj_buscat==doc["@iot.id"])
+				OmpleAtributsObjecteCapaDigiDesDeObservacionsDeSTA(doc.Observations, capa.objectes.features[consulta.i_obj]);
+		}			
+	}
+
 	if (!capa.objectes || !capa.objectes.features || 
 		!capa.objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(capa.objectes.features[consulta.i_obj].properties)==0)
 	{
@@ -438,7 +470,6 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			contentLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj), text_resposta);
 		}
 	}
-
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 }
 
@@ -508,7 +539,7 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //Només hi ha les propietats de simbolització actuals carregades
 					break;
 			}
-			else //if (tipus=="TipusSOS")
+			else //if (tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 			{
 				if (CountPropertiesOfObject(capa.objectes.features[j].properties)==0)  //No hi ha propietats carregades
 					break;
@@ -527,12 +558,20 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		url=DonaRequestGetFeature(param.i_capa, ParamInternCtrl.vista.EnvActual, null, true);
 		i_event=CreaIOmpleEventConsola("OAPI_Features", param.i_capa, url, TipusEventGetFeature);
 	}
-	else //if (tipus=="TipusSOS")
+	else if (tipus=="TipusSOS")
 	{
-		url=DonaRequestGetObservation(param.i_capa, -1, ParamInternCtrl.vista.EnvActual);
+		url=DonaRequestGetObservation(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("GetObservation", param.i_capa, url, TipusEventGetObservation);
 	}
-	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
+	else //if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	{
+		url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
+		i_event=CreaIOmpleEventConsola("STA Observations", param.i_capa, url, TipusEventGetObservation);
+	}
+	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		loadJSON(url, DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
+	else
+		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
 	return true;
 }
 
@@ -583,15 +622,15 @@ var root, capa, features, valor, tipus, i_obj;
 		if (capa.FormatImatge=="application/json")
 		{
 			var objectes=null;
-			try {
-				var geojson=JSON.parse(doc);
+			//try {
+			//	var geojson=JSON.parse(doc);
 				//si hi ha una bbox es podria actualitzar però com que no la uso...
-				objectes=geojson.features;
-			} 
+				objectes=doc.features;
+			/*} 
 			catch (e) {
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 				return;
-			}
+			}*/
 			if(objectes && objectes.length>0)
 			{
 				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
@@ -624,21 +663,21 @@ var root, capa, features, valor, tipus, i_obj;
 			}
 		}
 	}
-	else //if (capa.tipus="TipusSOS")
+	else if (capa.tipus=="TipusSOS")
 	{
 		if (capa.FormatImatge=="application/json")
 		{
 			var objectes=null;
 			var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
-			try {
-				var geojson=JSON.parse(doc);
+			//try {
+			//	var geojson=JSON.parse(doc);
 				//si hi ha una bbox es podria actualitzar però com que no la uso...
-				objectes=geojson.observations;
-			} 
+				objectes=doc.observations;
+			/*} 
 			catch (e) {
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 				return;
-			}
+			}*/
 			if(objectes && objectes.length>0)
 			{
 				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
@@ -675,15 +714,94 @@ var root, capa, features, valor, tipus, i_obj;
 			}
 		}
 	}
+	else if (capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+	{
+		/*try {
+			var geojson=JSON.parse(doc);
+			//si hi ha una bbox es podria actualitzar però com que no la uso...
+		} 
+		catch (e) {
+			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+			return;
+		}*/
+		if(doc && doc.length>0)
+		{
+			for(var i_obj_llegit=0; i_obj_llegit<doc.length; i_obj_llegit++)
+			{
+				i_obj=features.binarySearch({"id":doc[i_obj_llegit]["@oit.id"]}, ComparaObjCapaDigiIdData);
+				if (i_obj>=0)
+					OmpleAtributsObjecteCapaDigiDesDeObservacionsDeSTA(doc[i_obj_llegit].Observations, features[i_obj]);
+			}
+		}
+	}
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 	return 0;
 }// Fi de OmpleCapaDigiAmbPropietatsObjectes()
 
-
-function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
+function AddPropertyAndTime(prop, uom, time, value)
 {
-	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+var key;
+	if ((!uom.name || uom.name=="n/a") && uom.definition)
+	{
+		if (uom.definition.lastIndexOf("/")>0)
+			key=uom.definition.substring(uom.definition.lastIndexOf("/")+1);
+		else
+			key=uom.definition;
+	}
+	else if (!uom.name)
+		key="name";
+	else
+	{
+		key=uom.name;
+		for (var i=0; i<key.length; i++)
+		{
+			if (!isalnum(key.charAt(i)))
+				key=key.substring(0, i) + "_" + key.substring(i+1);
+		}
+	}
+	/*if (time)  //Mirar bé com s'ha de fer.
+		prop[key+"_"+time]=value;
+	else*/
+	prop[key]=value;
 }
+
+function ExtreuTransformaSTAObservations(obs)
+{
+var ob, prop={};
+
+	for (var i=0; i<obs.length; i++)
+	{
+		ob=obs[i];
+		if (ob.phenomenonTime)
+			prop["time"]=ob.phenomenonTime;
+		if (ob.MultiDatastream)
+		{
+			for (var j=0; j<ob.MultiDatastream.unitOfMeasurements.length; j++)
+				AddPropertyAndTime(prop, ob.MultiDatastream.unitOfMeasurements[j], ob.phenomenonTime, ob.result[j]);
+		}
+		else // if (ob.Datastream)
+		{
+			AddPropertyAndTime(prop, ob.Datastream.unitOfMeasurement, ob.phenomenonTime, ob.result);
+		}
+	}
+	return prop;
+}
+
+function ExtreuITransformaSTAfeatures(fois)
+{
+var features=[], foi;
+	for (var i=0; i<fois.value.length; i++)
+	{
+		foi=fois.value[i];
+		features.push({type: "Feature", 
+				id: foi["@iot.id"], 
+				geometry: foi.feature, 
+				//properties: ExtreuTransformaSTAObservations(foi.Observations)}
+				properties: []});
+	}
+	return features;
+}
+
 
 //Els objectes es mantene en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
@@ -701,15 +819,20 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 	tipus=DonaTipusServidorCapa(capa);
 	if (capa.FormatImatge=="application/json")
 	{
-		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		{
 			if (capa.objectes && capa.objectes.features)
 			{
 				hi_havia_objectes=true;
-				try {
-					var geojson=JSON.parse(doc);
+				//try {
+					//var geojson=JSON.parse(doc);
 					//si hi ha una bbox es podria actualitzar però com que no la uso...
-					var features=geojson.features;
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+						var features=doc.features;
+					else if (tipus=="TipusSOS")
+						var features=doc.featureOfInterest;
+					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+						var features=ExtreuITransformaSTAfeatures(doc);
 					if(features.length>0)
 					{
 						/*NJ no sé perquè serveix això
@@ -717,65 +840,41 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 							features[i].id=features[i].id.substring(capa.nom.length+1); */
 						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
 					}
-				} 
+				/*} 
 				catch (e) {
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 					return;
-				}
+				}*/
 			}
 			else
 			{
 				hi_havia_objectes=false;
-				try {
-					capa.objectes=JSON.parse(doc);
-					var features=capa.objectes.features;
-					/*NJ no sé perquè serveix això
-					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1);			*/
-				} 
-				catch (e) {
-					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-					return;
-				}
-			}
-		}
-		else if (tipus=="TipusSOS")
-		{
-			if (capa.objectes && capa.objectes.features)
-			{
-				hi_havia_objectes=true;
-				try {
-					var geojson=JSON.parse(doc);
-					//si hi ha una bbox es podria actualitzar però com que no la uso...
-					var features=geojson.featureOfInterest;
-					if(features.length>0)
+				//try {
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 					{
-						/*NJ no sé perquè serveix això
-						for (i=0; i<features.length; i++)
-							features[i].id=features[i].id.substring(capa.nom.length+1);*/
-						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
+						//capa.objectes=JSON.parse(doc);
+						capa.objectes=doc;
 					}
-				} 
-				catch (e) {
-					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-					return;
-				}
-			}
-			else
-			{
-				hi_havia_objectes=false;
-				capa.objectes={"type": "FeatureCollection", "features": []};
-				try {
-					var geojson=JSON.parse(doc);					
-					var features=capa.objectes.features=geojson.featureOfInterest;
+					if (tipus=="TipusSOS")
+					{
+						//var geojson=JSON.parse(doc);					
+						capa.objectes={"type": "FeatureCollection", "features": doc.featureOfInterest};
+					}
+					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+					{
+						//var geojson=JSON.parse(doc);					
+						var features=ExtreuITransformaSTAfeatures(doc);
+						capa.objectes={"type": "FeatureCollection", "features": features};
+					}
 					/*NJ no sé perquè serveix això
+					var features=capa.objectes.features;
 					for (i=0; i<features.length; i++)
 						features[i].id=features[i].id.substring(capa.nom.length+1);*/
-				} 
+				/*} 
 				catch (e) {
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 					return;
-				}
+				}*/
 			}
 		}
 		else
@@ -1177,10 +1276,14 @@ var c_afegir="";
 function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
 {
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
+
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 		return DonaRequestGetFeature(i_capa, env, cadena_objectes, completa);
-	if (tipus=="TipusSOS")
-		return DonaRequestGetFeatureOfInterest(i_capa, env)
+	if (tipus=="TipusSOS") 
+		return DonaRequestSOSGetFeatureOfInterest(i_capa, env);
+	if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		return DonaRequestSTAFeaturesOfInterest(i_capa, env);
+
 	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + tipus);
 	return "";
 }
@@ -1390,7 +1493,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
-function DonaRequestGetFeatureOfInterest(i_capa, env)
+function DonaRequestSOSGetFeatureOfInterest(i_capa, env)
 {
 var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
@@ -1412,7 +1515,33 @@ var capa=ParamCtrl.capa[i_capa];
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
-//i_obj pot ser -1 per demanar-los tots
+function DonaRequestSTAFeaturesOfInterest(i_capa, env)
+{
+	return DonaRequestSTAObservationsFeatureOfInterest(i_capa, null, env);
+}
+
+function DonaRequestSTAObservationsFeatureOfInterest(i_capa, i_obj, env)
+{
+var cdns=[], cdns_datastream=[];
+var capa=ParamCtrl.capa[i_capa];
+
+	cdns_datastream.push(",name;$expand=Thing($select=name)");
+	if (capa.tipus=="TipusSTAplus")
+		cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
+	cdns.push("/v",DonaVersioComAText(capa.versio),"/FeaturesOfInterest");
+	if (i_obj==null)
+	        cdns.push("?$top=10000000&");
+	else
+		cdns.push("('", capa.objectes.features[i_obj].id, "')?");
+	cdns.push("$select=feature,@iot.id&$expand=Observations($select=result,phenomenonTime;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), "),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), "))");
+	if (env!=null)
+	{
+		alert("STA will env not implemented yet");
+	}	
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
+}
+
+//i_obj pot ser null per demanar-los tots
 //env està en el CRS actual
 function DonaRequestGetObservation(i_capa, i_obj, env)
 {
@@ -1420,7 +1549,7 @@ var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=SOS&REQUEST=GetObservation&featureOfInterest=", 
-											capa.namespace, "/", capa.nom, "/featureOfInterest/", (i_obj==-1 ? "" : capa.objectes.features[i_obj].id));
+											capa.namespace, "/", capa.nom, "/featureOfInterest/", (i_obj==null ? "" : capa.objectes.features[i_obj].id));
 	if (env!=null)
 	{
 		var env2=null;
@@ -1437,7 +1566,6 @@ var capa=ParamCtrl.capa[i_capa];
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
-
 function FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(i_capa_digi, env, seleccionar)
 {
 var i_event, capa=ParamCtrl.capa[i_capa_digi];
@@ -1445,14 +1573,21 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	//env està en el CRS de la capa
 
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env, null, false);
-	if (capa.tipus=="TipusWFS")
-		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusOAPI_Features")
-		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusSOS")
-		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	var tipus=DonaTipusServidorCapa(capa);	
 
-	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+	if (tipus=="TipusWFS")
+		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
+	else if (tipus=="TipusOAPI_Features")
+		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
+	else if (tipus=="TipusSOS")
+		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		i_event=CreaIOmpleEventConsola("STA FeaturesOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+
+	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+	else
+		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant()
 
 function FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(i_capa_digi, cadena_objectes, seleccionar)
@@ -1468,6 +1603,9 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
 	else if (capa.tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	else if (capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+		i_event=CreaIOmpleEventConsola("STA FeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerIdentificador()
 
@@ -1477,19 +1615,26 @@ function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, env_sol, selec
 	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar);
 var i_event, capa=ParamCtrl.capa[i_capa_digi];
 
-	capa.TileMatrixGeometry.tiles_solicitats[i_tile]="TileSolicitat";	
+	capa.TileMatrixGeometry.tiles_solicitats[i_tile]="TileSolicitat";
+	var tipus=DonaTipusServidorCapa(capa);	
 
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env_sol, null, false);
-	if (capa.tipus=="TipusWFS")
+	if (tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusOAPI_Features")
+	else if (tipus=="TipusOAPI_Features")
 		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusSOS")
+	else if (tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		i_event=CreaIOmpleEventConsola("STA FeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 
 	//env_sol està ja en el CRS de la capa
 	//ajax_capa_digi[i_consulta].doGet(url, OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "seleccionar": seleccionar, "i_event": i_event});
-	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
+	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
+			 {i_capa_digi: i_capa_digi, i_tile: i_tile, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
+	else
+		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {i_capa_digi: i_capa_digi, i_tile: i_tile, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
 
 }//Fi de FesPeticioAjaxObjectesDigitalitzats()
@@ -1582,7 +1727,7 @@ var ha_calgut=false, vaig_a_carregar=false;
 						if(vaig_a_carregar)
 						{
 							ha_calgut=true;
-							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && capa.tipus=="TipusSOS")
+							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && (capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus"))
 							{
 								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
 								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, null, false, funcio, param);
