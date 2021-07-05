@@ -1119,3 +1119,20 @@ function DonaDescriptorDates(flags_data)
 		return DonaCadenaLang({"cat":"Data i hora","spa":"Fecha y hora", "eng": "Date and time","fre":"Date et l'heure"});
 	return DonaCadenaLang({"cat":"Data","spa":"Fecha", "eng": "Date","fre":"Date"});
 }
+
+function sortAscendingISOiData(milliseg_a, data_json)
+{
+var milliseg_b;
+	milliseg_b=DonaDateDesDeDataJSON(data_json).getTime();
+	return sortAscendingNumber(milliseg_a, milliseg_b);
+}
+
+//Aquesta funció insereix una data a l'array de dades de la capa
+function InsereixDataISOaCapa(data_iso, data_capa)
+{
+var d=new Date(data_iso);
+var milliseg_a=d.getTime();
+	var i=data_capa.binarySearch(milliseg_a, sortAscendingISOiData);
+	if (i<0)  //Not present in the array
+		data_capa.splice(-i-1, 0, DonaDataJSONDesDeDate(d));
+}

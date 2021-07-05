@@ -1516,13 +1516,59 @@
 										}
 									}
 								},
-								"interior": {
-									"description": "Com omplir l'interior de les icones que són formes",
-									"$ref": "#/definitions/colorIndexat"
-								},
-								"vora": { 
-									"description": "Com pintar les vores de les icones que són formes",
-									"$ref": "#/definitions/colorIndexat"
+								"formes": {
+									"description": "Com pintar les icones que són formes o objectes de línies i polígons",
+									"type": ["array", "null"],
+									"items": {
+										"type": "object",
+										"properties": {
+											"interior": {
+												"description": "Com omplir l'interior de les icones que són formes",
+												"$ref": "#/definitions/colorIndexat"
+											},
+											"vora": { 
+												"description": "Com pintar les vores de les icones que són formes o de les línies",
+												"allOf": [
+													{ "$ref": "#/definitions/colorIndexat"},
+													{
+														"properties": {
+															"gruix": 
+															{
+																"description": "L'ample de la línia. És una array en preparació per possible indexat per camp",
+																"type": "object",
+																"properties": {
+																	"amples": {
+																		"type": ["array"],
+																		"items": {
+																			"type": "integer", 
+																			"minimum": 0
+																		}
+																	}
+																} 
+															},
+															"patro": {
+																"description": "Patró de la línia. És una array en preparació per possible indexat per camp",
+																"type": "object",
+																"properties": {
+																	"separacions": {
+																		"type": ["array"],
+																		"items": {
+																			"description": "The same content as in canvas setLineDash. An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units)  (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash).",
+																			"type": "array",
+																			"items": {
+																				"type": "integer", 
+																				"minimum": 0
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												]
+											}
+										}
+									}
 								},
 								"fonts": {
 									"description": "Fonts per representat textos dels objectes digitalitzats",

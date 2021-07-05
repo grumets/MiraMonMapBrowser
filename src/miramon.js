@@ -66,6 +66,7 @@ IncludeScript("ctipica.js");
 IncludeScript("consult.js");
 IncludeScript("consola.js");
 IncludeScript("imgrle.js");
+IncludeScript("geomet.js");
 IncludeScript("vector.js");
 IncludeScript("paletes.js");
 IncludeScript("capavola.js");
@@ -2478,29 +2479,6 @@ function EsPuntDinsAmbitNavegacio(punt)
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
 }//Fi de EsPuntDinsAmbitNavegacio()
 
-function EsPuntDinsEnvolupant(punt, env)
-{
-	if (punt.x>env.MaxX ||
-	    punt.x<env.MinX ||
-	    punt.y>env.MaxY ||
-	    punt.y<env.MinY)
-		return false;
-
-	return true;
-}//Fi de EsPuntDinsEnvolupant()
-
-//Contesta que sí fins i tots si és parcialment dins.
-function EsEnvDinsEnvolupant(currentEnv, bigEnv)
-{
-	if (currentEnv.MinX>bigEnv.MaxX ||
-	    currentEnv.MaxX<bigEnv.MinX ||
-	    currentEnv.MinY>bigEnv.MaxY ||
-	    currentEnv.MaxY<bigEnv.MinY)
-		return false;
-
-	return true;
-}//Fi de EsEnvDinsEnvolupant()
-
 //Fer un click sobre la vista.
 
 var AmbitZoomRectangle={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
@@ -4742,7 +4720,7 @@ var env=vista.EnvActual;
 	if (capa_digi.objectes && capa_digi.objectes.features)
 	{
 		var estil=capa_digi.estil[capa_digi.i_estil];
-		var i_atri_sel, i_atri_interior, i_atri_vora;
+		var i_atri_sel, i_atri_interior=[], i_atri_vora=[];
 		if (estil.simbols && estil.simbols.length)
 		{
 			for (var i_simb=0; i_simb<estil.simbols.length; i_simb++)
@@ -4786,38 +4764,45 @@ var env=vista.EnvActual;
 			if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_sel, OmpleVistaCapaDigiIndirect, param))
 				return;
 		}
-		if (estil.interior &&
-			estil.interior.NomCamp)
+		if (estil.formes && estil.formes.length)
 		{
-			//Precàrrega de valors si hi ha referencies ràster.
-			i_atri_interior=DonaIAtributsDesDeNomAtribut(capa_digi, estil.interior.NomCamp)
-			if (i_atri_interior==-1)
+			for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 			{
-				AlertaNomAtributIncorrecteSimbolitzar(estil.interior.NomCamp, "estil.interior.NomCamp", capa_digi);
-				return ;
+				forma=estil.formes[i_forma];
+				if (forma.interior &&
+					forma.interior.NomCamp)
+				{
+					//Precàrrega de valors si hi ha referencies ràster.
+					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.interior.NomCamp)
+					if (i_atri_interior[i_forma]==-1)
+					{
+						AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa_digi);
+						return ;
+					}
+					if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_interior[i_forma], OmpleVistaCapaDigiIndirect, param))
+						return;
+				}
+				if (forma.vora &&
+					forma.vora.NomCamp)
+				{
+					//Precàrrega de valors si hi ha referencies ràster.
+					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.vora.NomCamp)
+					if (i_atri_vora[i_forma]==-1)
+					{
+						AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa_digi);
+						return ;
+					}
+					if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_vora[i_forma], OmpleVistaCapaDigiIndirect, param))
+						return;
+				}
 			}
-			if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_interior, OmpleVistaCapaDigiIndirect, param))
-				return;
-		}
-		if (estil.vora &&
-			estil.vora.NomCamp)
-		{
-			//Precàrrega de valors si hi ha referencies ràster.
-			i_atri_vora=DonaIAtributsDesDeNomAtribut(capa_digi, estil.vora.NomCamp)
-			if (i_atri_vora==-1)
-			{
-				AlertaNomAtributIncorrecteSimbolitzar(estil.vora.NomCamp, "estil.vora.NomCamp", capa_digi);
-				return ;
-			}
-			if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_vora, OmpleVistaCapaDigiIndirect, param))
-				return;
 		}
 		if (HiHaSimbolitzacioIndexadaPerPropietats(estil))
 		{
 			if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
 				return;  //ja es tornarà a cridar a si mateixa quan la crida assincrona acabi
 		}
-		var previ={}, a_interior=1, valor_min_interior=0, ncolors_interior, valor, a_vora=1, valor_min_vora=0, ncolors_vora;
+		var previ={}, a_interior=[], valor_min_interior=[], ncolors_interior=[], valor, a_vora=[], valor_min_vora=[], ncolors_vora=[], forma;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
 		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString;
 		var win = DonaWindowDesDeINovaVista(vista);
@@ -4825,17 +4810,24 @@ var env=vista.EnvActual;
 		var ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		if (estil.interior && estil.interior.paleta)
+		if (estil.formes && estil.formes.length)
 		{
-			ncolors_interior=estil.interior.paleta.colors.length;
-			a_interior=DonaFactorAEstiramentPaleta(estil.interior.estiramentPaleta, ncolors_interior);
-			valor_min_interior=DonaFactorValorMinEstiramentPaleta(estil.interior.estiramentPaleta);
-		}
-		if (estil.vora && estil.vora.paleta)
-		{
-			ncolors_vora=estil.vora.paleta.colors.length;
-			a_vora=DonaFactorAEstiramentPaleta(estil.vora.estiramentPaleta, ncolors_vora);
-			valor_min_vora=DonaFactorValorMinEstiramentPaleta(estil.vora.estiramentPaleta);
+			for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
+			{
+				forma=estil.formes[i_forma];
+				if (forma.interior && forma.interior.paleta)
+				{
+					ncolors_interior[i_forma]=forma.interior.paleta.colors.length;
+					a_interior[i_forma]=DonaFactorAEstiramentPaleta(forma.interior.estiramentPaleta, ncolors_interior[i_forma]);
+					valor_min_interior[i_forma]=DonaFactorValorMinEstiramentPaleta(forma.interior.estiramentPaleta);
+				}
+				if (forma.vora && forma.vora.paleta)
+				{
+					ncolors_vora[i_forma]=forma.vora.paleta.colors.length;
+					a_vora[i_forma]=DonaFactorAEstiramentPaleta(forma.vora.estiramentPaleta, ncolors_vora[i_forma]);
+					valor_min_vora[i_forma]=DonaFactorValorMinEstiramentPaleta(forma.vora.estiramentPaleta);
+				}
+			}
 		}
 
 		for (var j=capa_digi.objectes.features.length-1; j>=0; j--)
@@ -4846,22 +4838,38 @@ var env=vista.EnvActual;
 				for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
 				{
 					if (geometry.type=="MultiLineString")
-						lineString=geometry.coordinates[c1];
+						lineString=geometry.coordinates[c2];
 					else
 						lineString=geometry.coordinates;
 
-					i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-					i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
-					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", estil.vora, i_atri_vora, a_vora, valor_min_vora, ncolors_vora, i_col, i_fil);
-					ctx.beginPath();
-					ctx.moveTo(i_col, i_fil);
-					for (var c1=1; c1<lineString.length; c1++)
+					for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 					{
-						i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-						i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
-						ctx.lineTo(i_col, i_fil);
+						forma=estil.formes[i_forma];
+						if (!forma.vora)
+							continue;
+						PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
+						if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+							ctx.lineWidth = 1;
+						else
+							ctx.lineWidth = forma.vora.gruix.amples[0];
+
+						ctx.beginPath();
+						if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+							ctx.setLineDash([]);
+						else
+							ctx.setLineDash(forma.vora.patro.separacions[0]);
+
+						i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+						i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
+						ctx.moveTo(i_col, i_fil);
+						for (var c1=1; c1<lineString.length; c1++)
+						{
+							i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+							i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
+							ctx.lineTo(i_col, i_fil);
+						}
+						PintaCtxColorVoraIInterior(forma.vora, null, ctx, previ);
 					}
-					PintaCtxColorVoraIInterior(estil.vora, null, ctx, previ);
 				}
 			}
 			if (geometry.type=="Polygon" || geometry.type=="MultiPolygon" || geometry.type=="GeometryCollection")
@@ -4932,26 +4940,40 @@ var env=vista.EnvActual;
 											}
 											else if (icona.type=="circle" || icona.type=="square")
 											{
-												PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", estil.interior, i_atri_interior, a_interior, valor_min_interior, ncolors_interior, i_col, i_fil);
-												PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", estil.vora, i_atri_vora, a_vora, valor_min_vora, ncolors_vora, i_col, i_fil);
-												ctx.beginPath();
-												mida=DonaMidaIconaForma(icona);
-												if (icona.unitats=="m")
+												for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 												{
-													if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-														mida/=FactorGrausAMetres;
-													mida/=ParamInternCtrl.vista.CostatZoomActual;
-												}
-												if (mida<=0)
-													mida=1;
-												if (icona.type=="square")
-												{
-													ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
-												}
-												else
-													ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
+													forma=estil.formes[i_forma];
+													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma.interior, i_atri_interior[i_forma], a_interior[i_forma], valor_min_interior[i_forma], ncolors_interior[i_forma], i_col, i_fil);
+													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
+													if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+														ctx.lineWidth = 1;
+													else
+														ctx.lineWidth = forma.vora.gruix.amples[0];
 
-												PintaCtxColorVoraIInterior(estil.vora, estil.interior, ctx, previ);
+													ctx.beginPath();
+													if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+														ctx.setLineDash([]);
+													else
+														ctx.setLineDash(forma.vora.patro.separacions[0]);
+
+													mida=DonaMidaIconaForma(icona);
+													if (icona.unitats=="m")
+													{
+														if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+															mida/=FactorGrausAMetres;
+														mida/=ParamInternCtrl.vista.CostatZoomActual;
+													}
+													if (mida<=0)
+														mida=1;
+													if (icona.type=="square")
+													{
+														ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
+													}
+													else
+														ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
+
+													PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
+												}
 											}
 											else
 											{
@@ -4959,7 +4981,6 @@ var env=vista.EnvActual;
 												//https://stackoverflow.com/questions/34402718/img-from-opener-is-not-img-type-for-canvas-drawimage-in-ie-causing-type-mismatch
 												//In IE there is a problem "img from opener is not img type for canvas drawImage (DispHTMLImg, being HTMLImageElement instead) in IE causing TYPE_MISMATCH_ERR"
 												//Després d'invertir dies, he estat incapaç de trobar una manera de resoldre això en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
-
 												if (icona.img.sha_carregat==true)
 												{
 													try

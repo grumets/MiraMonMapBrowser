@@ -465,14 +465,18 @@ function CreaCapesVolatils()
 							"simbol": [{"ValorCamp": null, "icona": JSON.parse(JSON.stringify(ParamCtrl.IconaAnarCoord))}]
 							}
 						],
-						"vora":
-						{
-							"paleta": {
-								"colors": [
-									"#BB8888"
-								]
+						"formes":[
+							{
+								"vora":
+								{
+									"paleta": {
+										"colors": [
+											"#BB8888"
+										]
+									}
+								}
 							}
-						},
+						],
 						"ItemLleg": null,
 						"ncol": 1
 					}],
@@ -551,14 +555,18 @@ function CreaCapesVolatils()
 								"simbol": [{"ValorCamp": null, "icona": JSON.parse(JSON.stringify(ParamCtrl.IconaPosicioGPS))}]
 							}
 						],
-						"vora":
-						{
-							"paleta": {
-								"colors": [
-									"#FF0000"
-								]
+						"formes": [
+							{
+								"vora":
+								{
+									"paleta": {
+										"colors": [
+											"#FF0000"
+										]
+									}
+								}
 							}
-						},
+						],
 						"ItemLleg": null,
 						"ncol": 1
 					}],

@@ -1145,7 +1145,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 		}
 		else if (ParamCtrl.IconaConsulta)
 		{
-	    	capa.objectes.features[0].seleccionat=false;
+			capa.objectes.features[0].seleccionat=false;
 			capa.visible="si";
 		}
 		if (cal_crear)
@@ -1171,16 +1171,16 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
 				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans"), zindex_temp);
 			}
-	    }
-	    else
-	    {
+		}
+		else
+		{
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
 				//contentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), DonaCadenaHTMLCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
 			}
-	    }
+		}
 	}
 
 	if (ParamCtrl.TipusConsulta=="IncrustadaDeCop" && isFinestraLayer(window, "multi_consulta")) //consulta incrustada en una layer del estil finestra
@@ -1427,12 +1427,15 @@ var capa=ParamCtrl.capa[i_capa];
 	//Quan no té atributs només retorno fals si és una capa estàtica, perquè sinó pot voler dir que haig de sol·licitar els atributs
 	if(capa.consultable!="si" || !capa.objectes || 
 		(!capa.tipus && (!capa.objectes.features || CountPropertiesOfObject(capa.objectes.features[i_obj].properties)==0)) ||
-		capa.estil==null || !capa.estil.length || !capa.estil[capa.i_estil].simbols)
+		capa.estil==null || !capa.estil.length)
 	{
 		return false;
 	}
-	else
+
+	if (capa.objectes.features[i_obj].geometry.type=="Point")
 	{
+		if (!capa.estil[capa.i_estil].simbols)
+			return false;
 		var env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, env_icona, punt={}, icona, simbols, unitatsMetre=false;
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i_obj], capa.CRSgeometry);
 
@@ -1489,6 +1492,43 @@ var capa=ParamCtrl.capa[i_capa];
 		}
 		return EsPuntDinsEnvolupant(PuntConsultat, env_icones);
 	}
+	else if (capa.objectes.features[i_obj].geometry.type=="LineString")
+	{
+		var p1={}, p2={}, p={x:PuntConsultat.i, y:PuntConsultat.j}, max_width=2, forma;
+		var env=ParamInternCtrl.vista.EnvActual, ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
+
+		if (!capa.estil[capa.i_estil].formes || !capa.estil[capa.i_estil].formes.length)
+			return false;
+			
+		for (var i_forma=0; i_forma<capa.estil[capa.i_estil].formes.length; i_forma++)
+		{
+			forma=capa.estil[capa.i_estil].formes[i_forma];
+			if (!forma.vora || !forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+				continue;
+			if (max_width<forma.vora.gruix.amples[0])
+				max_width<forma.vora.gruix.amples[0];
+		}
+		var geometry=DonaGeometryCRSActual(capa.objectes.features[i_obj], capa.CRSgeometry);
+		for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+		{
+			if (geometry.type=="MultiLineString")
+				lineString=geometry.coordinates[c2];
+			else
+				lineString=geometry.coordinates;
+
+			p1.x=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+			p1.y=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil);
+			for (var c1=1; c1<lineString.length; c1++)
+			{
+				p2.x=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+				p2.y=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil);
+				if (EsPuntSobreSegment(p1, p2, p, max_width))
+					return true;
+				p1.x=p2.x;
+				p1.y=p2.y;
+			}
+		}
+		return false;
+	}
+	return false;
 }
-
-
