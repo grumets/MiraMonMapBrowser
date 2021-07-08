@@ -2000,20 +2000,41 @@ function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
 		{
 			for(var j=0; j<capa.objectes.features.length; j++)
 			{
-				var feature=capa.objectes.features[j];
+				var feature=capa.objectes.features[j], coordinates2, coordinates3;
 				feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
-				//feature.puntCRSactual[0]={"x": feature.geometry.coordinates[0], "y": feature.geometry.coordinates[1]};
-				if (feature.geometryCRSactual.type=="LineString")
+				if (feature.geometryCRSactual.type=="MultiPolygon")
+				{
+					for(var c3=0; c3<feature.geometryCRSactual.coordinates.length; c3++)
+					{	
+						coordinates3=feature.geometryCRSactual.coordinates[c3];
+						for(var c2=0; c2<coordinates3.length; c2++)
+						{	
+							coordinates2=coordinates3[c2];
+							for(var c1=0; c1<coordinates2.length; c1++)
+								TransformaCoordenadesArray(coordinates2[c1], capa.CRSgeometry, crs_dest);
+						}
+					}
+				}
+				else if (feature.geometryCRSactual.type=="MultiLineString" || feature.geometryCRSactual.type=="Polygon")
+				{
+					for(var c2=0; c2<feature.geometryCRSactual.coordinates.length; c2++)
+					{	
+						coordinates2=feature.geometryCRSactual.coordinates[c2];
+						for(var c1=0; c1<coordinates2.length; c1++)
+							TransformaCoordenadesArray(coordinates2[c1], capa.CRSgeometry, crs_dest);
+					}
+				}
+				else if (feature.geometryCRSactual.type=="LineString" || feature.geometryCRSactual.type=="Multipoint")
 				{
 					for(var c1=0; c1<feature.geometryCRSactual.coordinates.length; c1++)
 					{	
 						TransformaCoordenadesArray(feature.geometryCRSactual.coordinates[c1], capa.CRSgeometry, crs_dest);
 					}
 				}
-				else
-				{
+				else if (feature.geometryCRSactual.type=="Point")
 					TransformaCoordenadesArray(feature.geometryCRSactual.coordinates, capa.CRSgeometry, crs_dest);
-				}
+				else
+					feature.geometryCRSactual.coordinates=null;
 			}
 		}
 	}

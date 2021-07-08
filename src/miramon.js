@@ -4696,7 +4696,11 @@ function PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, ctx_style
 function PintaCtxColorVoraIInterior(estil_vora, estil_interior, ctx, previ)
 {
 	if (estil_interior)
-		ctx.fill(); // Close the path and fill
+	{
+		//https://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
+		ctx.mozFillRule = 'evenodd'; //for old firefox 1~30
+		ctx.fill('evenodd'); //for firefox 31+, IE 11+, chrome
+	}
 	if (estil_vora)
 		ctx.stroke();
 	if (estil_interior && estil_interior.paleta)
@@ -4804,7 +4808,7 @@ var env=vista.EnvActual;
 		}
 		var previ={}, a_interior=[], valor_min_interior=[], ncolors_interior=[], valor, a_vora=[], valor_min_vora=[], ncolors_vora=[], forma;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
-		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString;
+		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString, polygon;
 		var win = DonaWindowDesDeINovaVista(vista);
 		var canvas = win.document.getElementById(nom_canvas);
 		var ctx = canvas.getContext('2d');
@@ -4835,30 +4839,32 @@ var env=vista.EnvActual;
 			geometry=DonaGeometryCRSActual(capa_digi.objectes.features[j], capa_digi.CRSgeometry);
 			if (geometry.type=="LineString" || geometry.type=="MultiLineString")
 			{
-				for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+				if (!estil.formes)
+					alert("No symbology for lineString found: 'formes' found");
+
+				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
-					if (geometry.type=="MultiLineString")
-						lineString=geometry.coordinates[c2];
+					forma=estil.formes[i_forma];
+					if (!forma.vora)
+						continue;
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
+				 	if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+						ctx.lineWidth = 1;
 					else
-						lineString=geometry.coordinates;
+						ctx.lineWidth = forma.vora.gruix.amples[0];
 
-					for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
+					ctx.beginPath();
+					if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+						ctx.setLineDash([]);
+					else
+						ctx.setLineDash(forma.vora.patro.separacions[0]);
+
+					for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
 					{
-						forma=estil.formes[i_forma];
-						if (!forma.vora)
-							continue;
-						PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
-						if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
-							ctx.lineWidth = 1;
+						if (geometry.type=="MultiLineString")
+							lineString=geometry.coordinates[c2];
 						else
-							ctx.lineWidth = forma.vora.gruix.amples[0];
-
-						ctx.beginPath();
-						if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
-							ctx.setLineDash([]);
-						else
-							ctx.setLineDash(forma.vora.patro.separacions[0]);
-
+							lineString=geometry.coordinates;
 						i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
 						i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
 						ctx.moveTo(i_col, i_fil);
@@ -4872,12 +4878,54 @@ var env=vista.EnvActual;
 					}
 				}
 			}
-			if (geometry.type=="Polygon" || geometry.type=="MultiPolygon" || geometry.type=="GeometryCollection")
+			else if (geometry.type=="Polygon" || geometry.type=="MultiPolygon")
 			{
 				//http://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
-				alert("Type of feature geometry: " + geometry.type + " not supported yet");
+				if (!estil.formes)
+					alert("No symbology for polygon found: 'formes' found");
+
+				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
+				{
+					forma=estil.formes[i_forma];
+					if (!forma.vora)
+						continue;
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma.interior, i_atri_interior[i_forma], a_interior[i_forma], valor_min_interior[i_forma], ncolors_interior[i_forma], i_col, i_fil);
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
+					if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+						ctx.lineWidth = 1;
+					else
+						ctx.lineWidth = forma.vora.gruix.amples[0];
+
+					ctx.beginPath();
+					if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+						ctx.setLineDash([]);
+					else
+						ctx.setLineDash(forma.vora.patro.separacions[0]);
+
+					for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+					{
+						if (geometry.type=="MultiPolygon")
+							polygon=geometry.coordinates[c3];
+						else
+							polygon=geometry.coordinates;
+						for (var c2=0; c2<polygon.length; c2++)
+						{
+							lineString=polygon[c2];
+							i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+							i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
+							ctx.moveTo(i_col, i_fil);
+							for (var c1=1; c1<lineString.length; c1++)
+							{
+								i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
+								i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
+								ctx.lineTo(i_col, i_fil);
+							}
+							PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
+						}
+					}
+				}
 			}
-			else
+			else if (geometry.type=="Point" || geometry.type=="MultiPoint")
 			{
 				for (var c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
 				{
@@ -4940,6 +4988,9 @@ var env=vista.EnvActual;
 											}
 											else if (icona.type=="circle" || icona.type=="square")
 											{
+												if (!estil.formes)
+													alert("No symbology for circle of squere found: 'formes' found");
+
 												for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 												{
 													forma=estil.formes[i_forma];
@@ -5044,6 +5095,10 @@ var env=vista.EnvActual;
 						}
 					}
 				}
+			}
+			else
+			{
+				alert("Type of feature geometry: " + geometry.type + " not supported yet");
 			}
 		}
 	}
