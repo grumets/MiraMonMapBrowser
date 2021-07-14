@@ -36,6 +36,8 @@
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
+"use strict"
+
 //1.- XML
 
 //Valors de l'estat de la consulta
@@ -1436,7 +1438,7 @@ var capa=ParamCtrl.capa[i_capa];
 	{
 		if (!capa.estil[capa.i_estil].simbols)
 			return false;
-		var env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, env_icona, punt={}, icona, simbols, unitatsMetre=false;
+		var env_icones={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, env_icona, punt={}, icona, simbols, unitatsMetre=false, i_simbol;
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i_obj], capa.CRSgeometry);
 
 		for (var i_simb=0; i_simb<capa.estil[capa.i_estil].simbols.length; i_simb++)
@@ -1492,9 +1494,9 @@ var capa=ParamCtrl.capa[i_capa];
 		}
 		return EsPuntDinsEnvolupant(PuntConsultat, env_icones);
 	}
-	else if (capa.objectes.features[i_obj].geometry.type=="LineString")
+	else if (capa.objectes.features[i_obj].geometry.type=="LineString" || capa.objectes.features[i_obj].geometry.type=="MultiLineString")
 	{
-		var p1={}, p2={}, p={x:PuntConsultat.i, y:PuntConsultat.j}, max_width=2, forma;
+		var p1={}, p2={}, p={x:PuntConsultat.i, y:PuntConsultat.j}, max_width=2, forma, lineString;
 		var env=ParamInternCtrl.vista.EnvActual, ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 
 		if (!capa.estil[capa.i_estil].formes || !capa.estil[capa.i_estil].formes.length)
@@ -1529,6 +1531,24 @@ var capa=ParamCtrl.capa[i_capa];
 			}
 		}
 		return false;
+	}
+	else if (capa.objectes.features[i_obj].geometry.type=="Polygon" || capa.objectes.features[i_obj].geometry.type=="MultiPolygon")
+	{
+		//Aquest cop, decideixo fer-la en coordenades terreny i no en coordenades pantalla.
+		var p=[PuntConsultat.x, PuntConsultat.y], poligon;
+		if (!capa.estil[capa.i_estil].formes || !capa.estil[capa.i_estil].formes.length)
+			return false;
+		var geometry=DonaGeometryCRSActual(capa.objectes.features[i_obj], capa.CRSgeometry);
+		for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+		{
+			if (geometry.type=="MultiPolygon")
+				poligon=geometry.coordinates[c3];
+			else
+				poligon=geometry.coordinates;
+
+			if (-1!=PuntEnElPoligon(p, poligon))
+				return true;
+		}
 	}
 	return false;
 }
