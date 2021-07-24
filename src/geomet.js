@@ -139,7 +139,7 @@ function PuntEnElPoligon(p, polygon)
 		contour = polygon[i];
 
 		currentP = contour[0];
-		if (currentP[0] !== contour[contourLen][0] && currentP[1] !== contour[contourLen][1])
+		if (currentP[0] != contour[contourLen][0] && currentP[1] != contour[contourLen][1])
 		{
 		    alert("First and last coordinates in a ring must be the same");
 				return -1;
@@ -171,10 +171,10 @@ function PuntEnElPoligon(p, polygon)
 			}
 			else if (v1 > 0 && v2 <= 0)
 			{
-			        f = u1*v2 - u2*v1;
-			        if (f < 0)
+				f = u1*v2 - u2*v1;
+				if (f < 0)
 					k++;
-			        else if (f == 0)
+				else if (f == 0)
 					return 0;
 			}
 			else if (v2 == 0 && v1 < 0)
@@ -185,13 +185,13 @@ function PuntEnElPoligon(p, polygon)
 			}
 			else if (v1 == 0 && v2 < 0)
 			{
-			        f = u1*v2 - u2*v1
+				f = u1*v2 - u2*v1
 				if (f === 0)
 					return 0;
 			}
 			else if (v1 == 0 && v2 == 0)
 			{
-			        if (u2 <= 0 && u1 >= 0)
+				if (u2 <= 0 && u1 >= 0)
 					return 0;
 				else if (u1 <= 0 && u2 >= 0)
 					return 0;

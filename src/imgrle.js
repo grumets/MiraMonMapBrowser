@@ -1259,7 +1259,7 @@ var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma ? histograma.c
 
 	for (i=0;i<ncol;i++)
 	{
-		valor0=img_stat[i_cell_ini+i]=f_estad(fila_calc[i], f_estad_param);
+		valor0=img_stat[i_cell_ini+i]=f_estad ? f_estad(fila_calc[i], f_estad_param) : fila_calc[i][0];
 		if (histograma)
 		{
 			if (valor0==null || isNaN(valor0))
@@ -1347,6 +1347,94 @@ var j, i, a0, valor_min0, valor0, bigint;
 			}
 		}
 	}	
+}
+
+function PrepararCalculIlluminacio(costat, f, elev_graus, az_graus)
+{
+	var dist=2.0*costat/(f?f:1);
+	var elev=(elev_graus?elev_graus:45)*Math.PI/180;
+	var az=((typeof az_graus==="undefined" || az_graus===null)?45:az_graus)*Math.PI/180;
+
+	return {dist2: dist*dist,
+		k1: Math.cos(elev)*Math.cos(Math.PI-az), 
+		k2: Math.cos(elev)*Math.sin(Math.PI-az),
+		k3: Math.cos(elev)*Math.tan(elev)*dist}
+}
+
+function CalculaIlluminacioPunt(n, s, e, w, param)
+{
+	if (n==null || s==null || e==null || w==null)
+		return null;
+	var difv = n-s;
+        var difh = w-e;
+	var illum = (param.k1*difv+param.k2*difh+param.k3)/Math.sqrt(difv*difv+difh*difh+param.dist2);
+
+	return illum<0 ? 0 : illum;
+}
+
+function CalculaIlluminacioImatge(imatge, ncol, nfil, param)
+{
+var img_illum=[];
+	//Calculo els illuminacions de tota la imatge
+	for (var j=1;j<nfil-1;j++)
+	{
+		var i_cell_ini=j*ncol, i_cell_ini_n=(j-1)*ncol, i_cell_ini_s=(j+1)*ncol;
+		var ncol_1=ncol-1;
+		for (var i=1; i<ncol_1; i++)
+			img_illum[i_cell_ini+i]=CalculaIlluminacioPunt(imatge[i_cell_ini_n+i], imatge[i_cell_ini_s+i], imatge[i_cell_ini+i+1], imatge[i_cell_ini+i-1], param);
+		img_illum[i_cell_ini]=img_illum[i_cell_ini+1]; //El primer punt repeteix del segon
+		img_illum[i_cell_ini+i]=img_illum[i_cell_ini+i-1]; //El darrer punt repeteix del penúltim
+	}
+	//La primera final es repeteix de la segona. La darrera es repeteix de la penúltima
+	var i_cell_ini=(nfil-1)*ncol; i_cell_ini_n=(nfil-2)*ncol;
+	for (var i=0; i<ncol; i++)
+	{
+		img_illum[i]=img_illum[ncol+i]; //El primer punt repeteix del segon
+		img_illum[i_cell_ini+i]=img_illum[i_cell_ini_n+i]; //El darrer punt repeteix del penúltim
+	}
+	return img_illum;
+}
+
+function ConstrueixImatgeCanvasIllum(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta, categories)
+{
+var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
+
+	histograma.classe_nodata=0;
+	histograma.component=[{
+			//"classe": [], 
+			"valorMinimReal": +1e300,
+			"valorMaximReal": -1e300}];
+
+	var param=PrepararCalculIlluminacio(ParamInternCtrl.vista.CostatZoomActual, component[0].illum.f, component[0].illum.elev, component[0].illum.az);
+
+	for (var i_v=0; i_v<valors.length; i_v++)
+	{
+		i_cell[i_v]=0;
+		i_byte[i_v]=0;
+	}
+	for (var i=0; i<ncol; i++)
+	{
+		fila_calc[i]=[];
+		fila[i]=[];
+	}
+	for (var j=0;j<nfil;j++)
+	{
+		if (mes_duna_v)
+		{
+			OmpleMultiFilaDVDesDeBinaryArray(fila, dv, valors, ncol, i_byte, i_cell);
+			FilaFormulaConsultaDesDeMultiFila(fila_calc, 0, null, fila, dv, valors, ncol, component[0]);
+		}
+		else
+		{
+			CalculaFilaDesDeBinaryArrays(fila_calc, 0, null, dv, valors, ncol, i_byte, i_cell, component[0]);
+		}
+		CalculaImatgeEstadisticaDesDesDeFilaCalc(imatge, j, histograma, fila_calc, ncol, null, null);
+	}
+
+	img_illum=CalculaIlluminacioImatge(imatge, ncol, nfil, param);
+
+	//Aplico la paleta i obtinc l'array de dades dins de 'data'
+	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, img_illum, ncol, nfil, component[0].estiramentPaleta, paleta);	
 }
 
 
@@ -2269,7 +2357,10 @@ var data;
 
 		data=[]; //Empty the array;
 
-		ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
+		if (estil.component && estil.component.length==1 && estil.component[0].illum)
+			ConstrueixImatgeCanvasIllum(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
+		else
+			ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
 
 		imgData.data.set(data);
 

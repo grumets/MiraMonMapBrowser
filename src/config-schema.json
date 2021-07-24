@@ -1359,6 +1359,29 @@
 												"minimum": 0,
 												"multipleOf": 1
 											},
+											"illum": {
+												"type": "object",
+												"description": "The sun illuminates the DEM and generates an illumination effect. The result are numbers from 1 to -1. Anything below 0 means that it is illumnated 'form the opposite side' and it is considered 0 (so, no negative values). If this object is present a DEM is simplozed as illuminations that can be used to create shadows if a semitransparent layer is added on top.",
+												"properties": {
+													"az": {
+														"description": "Azimuth: Position of the sun versus the north expressen in degress. It is clockwise. Default value is  225 (sw)",
+														"type": "number",
+														"minimum": 0,
+														"maximum": 360 
+													},
+													"elev": {
+														"description": "Elevation from the ground in degress. 0 is sunset or sunrise. 90 is the maximum elevation possible. Default value is 45",
+														"type": "number",
+														"minimum": 0,
+														"maximum": 90
+													},
+													"f":{
+														"description": "The values of the DEM exageration factor. Default value is 1",
+														"type": "number",
+														"minimum": 1
+													} 
+												}
+											},
 											"representacio": {
 												"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
 												"type": "object",
