@@ -1353,7 +1353,7 @@ function PrepararCalculIlluminacio(costat, f, elev_graus, az_graus)
 {
 	var dist=2.0*costat/(f?f:1);
 	var elev=(elev_graus?elev_graus:45)*Math.PI/180;
-	var az=((typeof az_graus==="undefined" || az_graus===null)?45:az_graus)*Math.PI/180;
+	var az=((typeof az_graus==="undefined" || az_graus===null)?225:az_graus)*Math.PI/180;
 
 	return {dist2: dist*dist,
 		k1: Math.cos(elev)*Math.cos(Math.PI-az), 

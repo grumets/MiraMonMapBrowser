@@ -715,7 +715,7 @@ var cdns=[], ncol=440, nfil=220;
 				"<a href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ") : ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ")\">", DonaCadenaLang({"cat":"Copia valors de la sèrie", "spa":"Copiar valores de la serie", "eng":"Copy series values","fre":"Copier les valeurs des séries"}), "</a><br>",
 				"</span>");
 		}
-		cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_consulta_", i_capa, "_", i_obj, "_", i_atr, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
+		cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_cnsl_serie", i_capa, "_", i_obj, "_", i_atr, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 	}
 
 	return cdns.join("");	
@@ -765,7 +765,7 @@ var RespostaConsultaObjDigiXML;
 
 function IniciaFinestraConsulta(win)
 {
-var cdns=[], capa;
+var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false, ncol=440, nfil=220;
 
 	/*L'us del següent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
 	  es necessari en Netscape per evitar 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status] (i potser també en els
@@ -839,6 +839,8 @@ var cdns=[], capa;
 					else
 					{
 						cdns.push("<div align=\"left\" id=\"LayerObjDigiConsulta",i,"_",j,"\" class=\"layerresposta\">", MostraConsultaCapaDigitalitzadaComHTML(i, j, true, true),"</div>");
+						if (!clic_sobre_elem_lineal && (capa.objectes.features[j].geometry.type=="MultiLineString" || capa.objectes.features[j].geometry.type=="LineString"))
+							clic_sobre_elem_lineal=true;
 						NCapesDigiConsultables++;
 					}
 				}
@@ -855,6 +857,8 @@ var cdns=[], capa;
 			{
 				if (HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i))
 				{
+					if (capa.estil[capa.i_estil].component.length==1)
+						hi_ha_capes_perfil=true;
 					var v=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa, null, PuntConsultat.i, PuntConsultat.j, false));
 					if (v=="")
 						NConsultesZero++;
@@ -917,7 +921,69 @@ var cdns=[], capa;
 						for (var a=0; a<capa.atributs.length; a++)
 						{
 							if (capa.atributs[a].serieTemporal)
-								MostraGraficSerieTemporalAtribut(win, "canvas_consulta_" + i + "_" + j + "_" + a, i, j, a);
+								MostraGraficSerieTemporalAtribut(win, "canvas_cnsl_serie_" + i + "_" + j + "_" + a, i, j, a);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (clic_sobre_elem_lineal && hi_ha_capes_perfil)
+	{
+		for (var i=0; i<ParamCtrl.capa.length; i++)
+		{
+			capa=ParamCtrl.capa[i];
+			if (capa.model==model_vector)
+			{
+				if(!capa.objectes || !capa.objectes.features)
+					continue;
+				for(var j=0, k=0; j<capa.objectes.features.length; j++)
+				{
+					if ((capa.objectes.features[j].geometry.type=="MultiLineString" || capa.objectes.features[j].geometry.type=="LineString") && 
+						EsObjDigiConsultable(i,j))
+					{
+						k++;
+						//Determino la bateria de punts per l'objecte en questió.
+						var v_c;
+						var vista=DonaVistaDesDeINovaVista(PuntConsultat.i_nova_vista);
+						var perfil=DonaArrayCoordsPerfilDeLineString(DonaGeometryCRSActual(capa.objectes.features[j], capa.CRSgeometry).coordinates, ParamInternCtrl.vista.CostatZoomActual);
+
+						for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+						{
+							perfil.coord[i_coord].i=Math.round((perfil.coord[i_coord].x-vista.EnvActual.MinX)/vista.CostatZoomActual);
+							perfil.coord[i_coord].j=Math.round((vista.EnvActual.MaxY-perfil.coord[i_coord].y)/vista.CostatZoomActual);
+							if (perfil.coord[i_coord].i<0 || perfil.coord[i_coord].i>=vista.ncol || perfil.coord[i_coord].j<0 || perfil.coord[i_coord].j>=vista.nfil)
+								perfil.coord[i_coord].i=perfil.coord[i_coord].j=null;
+						}
+
+						for (var i2=0; i2<ParamCtrl.capa.length; i2++)
+						{
+							capa2=ParamCtrl.capa[i2];
+							if (capa2.model==model_vector || !EsCapaConsultable(i2))
+								continue;
+
+							if (capa2.valors && HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i2) && capa2.estil[capa2.i_estil].component.length==1)
+							{
+								//Determino l'array de valors per a tots els punts
+								if (capa2.estil[capa2.i_estil].categories)
+								{
+									for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+										perfil.coord[i_coord].v=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
+								}
+								else
+								{
+									for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+									{
+										v_c=DonaValorEstilComArrayDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, capa2.i_estil, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
+										perfil.coord[i_coord].v=(perfil.coord[i_coord].i==null || v_c==null) ? null : v_c[0];
+									}
+								}
+								//Creo un canvas al final del valor de atribut que s'ha indicat abans
+								win.document.getElementById("LayerConsulta"+i2).insertAdjacentHTML("afterend", "<div style=\"width: " + ncol + "px;height: " + nfil + "px;\"><canvas id=\"" + "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j + "\" width=\"" + ncol + "\" height=\"" + nfil + "\"></canvas></div>");
+								//Afegeixo el grafic del perfil
+								MostraGraficPerfilConsula(win, "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j, capa2, perfil, DonaCadenaLang({"cat": "Perfil del tall transversal de la línia consultada", "spa": "Perfil del corte transversal de la línea consultada", "eng": "Profile of the transversal cut of the queried line", "fra": "Profil de la coupe transversale de la ligne interrogée"}) + " " + k + " " + DonaCadenaLang({"cat": "de la capa", "spa": "de la capa", "eng": "of the layer", "fra": "de la couche"}) + " " + (capa.estil[capa.i_estil].desc ? capa.estil[capa.i_estil].desc : capa.desc));
+							}
 						}
 					}
 				}
@@ -941,6 +1007,44 @@ var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons;
 		temps[i_data]=DonaDataCapaComATextBreu(i_capa, i_data);
 	}
 	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.atributs[i_atr].descripcio, capa.atributs[i_atr].serieTemporal.color, capa.FlagsData);
+}
+
+function MostraGraficPerfilConsula(win, nom_canvas, capa, perfil, titol_perfil)
+{
+var data=[], categories=[], labels=[], colors=[], i_color0;
+
+	var estil=capa.estil[capa.i_estil];
+	var paleta=estil.paleta;
+	var colorsPaleta=(paleta && paleta.colors) ? paleta.colors : null;
+	var ncolors=colorsPaleta ? colorsPaleta.length : 256;
+	var estiramentPaleta=estil.component[0].estiramentPaleta;
+	var a0=DonaFactorAEstiramentPaleta(estiramentPaleta, ncolors);
+	var valor_min0=DonaFactorValorMinEstiramentPaleta(estiramentPaleta);
+
+	for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+	{
+		labels[i_coord]=OKStrOfNe(perfil.step*i_coord, ParamCtrl.NDecimalsCoordXY);
+		i_color0=Math.floor(a0*(perfil.coord[i_coord].v-valor_min0));
+		if (i_color0>=ncolors)
+			i_color0=ncolors-1;
+		else if (i_color0<0)
+			i_color0=0;
+
+		colors[i_coord]=(colorsPaleta) ? colorsPaleta[i_color0] : RGB(i_color0, i_color0, i_color0);
+	}
+
+	if (estil.categories)
+	{
+		for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+			categories[i_coord]=perfil.coord[i_coord].v;
+		CreaGraficPerfilCategoricSimple(win.document.getElementById(nom_canvas), categories, labels, colors, titol_perfil);
+	}
+	else
+	{	
+		for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
+			data[i_coord]=(typeof estil.component[0].NDecimals!=="undefined" && estil.component[0].NDecimals!=null) ? parseFloat(OKStrOfNe(perfil.coord[i_coord].v, estil.component[0].NDecimals)) : perfil.coord[i_coord].v;
+		CreaGraficPerfilContinuSimple(win.document.getElementById(nom_canvas), data, labels, colors, titol_perfil);
+	}
 }
 
 //2.- Tradicional

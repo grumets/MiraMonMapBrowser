@@ -2316,3 +2316,98 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 	//var ctx = document.getElementById(nom_canvas);
 	return new Chart(ctx, cfg);
 }
+
+function CreaGraficPerfilContinuSimple(ctx, valors, labels, colors, title)
+{
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			valors: valors,
+			datasets: [{			
+				data: valors,
+				backgroundColor: colors,
+				borderWidth: 0,
+			}]
+		},
+		options: {
+			legend: {
+				display: false
+			},
+			title: {
+				display: true,
+				text: title
+			},
+			scales: {
+				xAxes: [{
+					categoryPercentage: 1,
+					barPercentage: 1,
+					gridLines: { display: false },
+					ticks: { autoSkip: true, autoSkipPadding: 10, maxRotation: 0 }
+				}],
+				yAxes: [{
+					scaleLabel: {display: true}, 
+					//ticks: { beginAtZero:true }
+				}]
+			},
+			tooltips: { 
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+					} 
+				} 
+			} 
+		}
+	
+	});	
+}
+
+function CreaGraficPerfilCategoricSimple(ctx, categories, labels, colors, title)
+{
+var data=[]
+
+	for (var i_coord=0; i_coord<colors.length; i_coord++)
+		data[i_coord]=1;  //faig totes les barres iguals.
+
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: labels,
+			categories: categories,
+			datasets: [{			
+				data: data,
+				backgroundColor: colors,
+				borderWidth: 0,
+			}]
+		},
+		options: {
+			legend: {
+				display: false
+			},
+			title: {
+				display: true,
+				text: title
+			},
+			scales: {
+				xAxes: [{
+					categoryPercentage: 1,
+					barPercentage: 1,
+					gridLines: { display: false },
+					ticks: { autoSkip: true, autoSkipPadding: 10, maxRotation: 0 }
+				}],
+				yAxes: [{
+					scaleLabel: {display: true}, 
+					ticks: { beginAtZero:true }
+				}]
+			},
+			tooltips: { 
+				callbacks: { 
+					label: function(tooltipItem, data) { 
+						return data.categories[tooltipItem.index]; 
+					} 
+				} 
+			} 
+		}
+	
+	});	
+}

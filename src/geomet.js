@@ -206,3 +206,42 @@ function PuntEnElPoligon(p, polygon)
 		return -1;
 	return 1;
 }
+
+//'geom' és un array de coordenades de tipus "LineString".
+//Retorna un objecte amb array de coord que són objectes amb una x i una y
+function DonaArrayCoordsPerfilDeLineString(geom, costat)
+{
+var coord=[], step=costat*Math.SQRT2, sx, sy, lx, ly, l;
+var d2=0, d, pendent=0;
+
+	for (var j=1, k=0; j<geom.length; j++)
+	{
+		lx=geom[j][0]-geom[j-1][0];
+		ly=geom[j][1]-geom[j-1][1];
+		l=Math.sqrt(lx*lx+ly*ly);
+		sx=lx/l*step;
+		sy=ly/l*step;
+		
+		if (pendent>l)
+		{
+			pendent-=l;
+			continue;
+		}
+
+		coord[k]={x: geom[j-1][0]+lx/l*pendent, 
+			  y: geom[j-1][1]+ly/l*pendent};
+		
+		for (d=pendent+step, k++; d<l; d+=step, k++)
+		{
+			coord[k]={x: coord[k-1].x+sx, y:coord[k-1].y+sy};
+		}
+		pendent=d-l;
+	}
+	
+	if (pendent>step/20)
+	{
+		coord[k]={x: geom[j-1][0], y: geom[j-1][1]};
+	}
+
+	return {coord: coord, step: step};
+}

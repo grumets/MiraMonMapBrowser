@@ -206,9 +206,9 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 			v_c=DonaValorEstilComArrayDesDeValorsCapa(NovaVistaPrincipal, vista_grafic3d.i_capa, vista_grafic3d.i_estil, v)
 			if (v_c==null)
 				continue;
-   		vista_grafic3d.data.add({id:counter, x:x, y:y, z:v_c[0]});
-	  }
-  }
+			vista_grafic3d.data.add({id:counter, x:x, y:y, z:v_c[0]});
+		}
+	}
 
 	// specify options
 	var options = {
