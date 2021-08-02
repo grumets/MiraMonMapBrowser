@@ -765,7 +765,7 @@ var RespostaConsultaObjDigiXML;
 
 function IniciaFinestraConsulta(win)
 {
-var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false, ncol=440, nfil=220;
+var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false, ncol=440, nfil=220, nfilCat=110;
 
 	/*L'us del següent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
 	  es necessari en Netscape per evitar 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status] (i potser també en els
@@ -966,21 +966,15 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 							if (capa2.valors && HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i2) && capa2.estil[capa2.i_estil].component.length==1)
 							{
 								//Determino l'array de valors per a tots els punts
-								if (capa2.estil[capa2.i_estil].categories)
+								for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
 								{
-									for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
-										perfil.coord[i_coord].v=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
-								}
-								else
-								{
-									for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
-									{
-										v_c=DonaValorEstilComArrayDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, capa2.i_estil, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
-										perfil.coord[i_coord].v=(perfil.coord[i_coord].i==null || v_c==null) ? null : v_c[0];
-									}
+									v_c=DonaValorEstilComArrayDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, capa2.i_estil, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
+									perfil.coord[i_coord].v=(perfil.coord[i_coord].i==null || v_c==null) ? null : v_c[0];
+									if (capa2.estil[capa2.i_estil].categories)
+										perfil.coord[i_coord].cat=DonaValorEstilComATextDesDeValorsCapa(PuntConsultat.i_nova_vista, i2, DonaValorsDeDadesBinariesCapa(PuntConsultat.i_nova_vista, capa2, null, perfil.coord[i_coord].i, perfil.coord[i_coord].j, false));
 								}
 								//Creo un canvas al final del valor de atribut que s'ha indicat abans
-								win.document.getElementById("LayerConsulta"+i2).insertAdjacentHTML("afterend", "<div style=\"width: " + ncol + "px;height: " + nfil + "px;\"><canvas id=\"" + "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j + "\" width=\"" + ncol + "\" height=\"" + nfil + "\"></canvas></div>");
+								win.document.getElementById("LayerConsulta"+i2).insertAdjacentHTML("beforeend", "<div style=\"width: " + ncol + "px;height: " + (capa2.estil[capa2.i_estil].categories ? nfilCat : nfil) + "px;\"><canvas id=\"" + "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j + "\" width=\"" + ncol + "\" height=\"" + (capa2.estil[capa2.i_estil].categories ? nfilCat : nfil) + "\"></canvas></div>");
 								//Afegeixo el grafic del perfil
 								MostraGraficPerfilConsula(win, "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j, capa2, perfil, DonaCadenaLang({"cat": "Perfil del tall transversal de la línia consultada", "spa": "Perfil del corte transversal de la línea consultada", "eng": "Profile of the transversal cut of the queried line", "fra": "Profil de la coupe transversale de la ligne interrogée"}) + " " + k + " " + DonaCadenaLang({"cat": "de la capa", "spa": "de la capa", "eng": "of the layer", "fra": "de la couche"}) + " " + (capa.estil[capa.i_estil].desc ? capa.estil[capa.i_estil].desc : capa.desc));
 							}
@@ -1036,7 +1030,7 @@ var data=[], categories=[], labels=[], colors=[], i_color0;
 	if (estil.categories)
 	{
 		for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
-			categories[i_coord]=perfil.coord[i_coord].v;
+			categories[i_coord]=perfil.coord[i_coord].cat;
 		CreaGraficPerfilCategoricSimple(win.document.getElementById(nom_canvas), categories, labels, colors, titol_perfil);
 	}
 	else

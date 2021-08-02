@@ -509,9 +509,9 @@ function CanviDinamismeHistograma(event)
 							retorn_prep_histo=PreparaHistograma(n_histo, i_c);												
 							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.labels=retorn_prep_histo.labels;
 							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
-							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.datasets[0].data=retorn_prep_histo.data;
-							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors;
-							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.datasets[0].unitats=retorn_prep_histo.unitats;
+							HistogramaFinestra.vista[n_histo].chart[i_c].config.data.datasets=[{data: retorn_prep_histo.data, 
+															backgroundColor: retorn_prep_histo.colors,
+															unitats: retorn_prep_histo.unitats}];
 							HistogramaFinestra.vista[n_histo].chart[i_c].options=retorn_prep_histo.options;
 							HistogramaFinestra.vista[n_histo].chart[i_c].update();					
 						}
@@ -523,17 +523,17 @@ function CanviDinamismeHistograma(event)
 						//Gràfic de l'àrea
 						HistogramaFinestra.vista[n_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
-						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data_area;
-						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors_area;
-						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats_area;
+						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets=[{data: retorn_prep_histo.data_area,
+														backgroundColor: retorn_prep_histo.colors_area,
+														unitats: retorn_prep_histo.unitats_area}];
 						HistogramaFinestra.vista[n_histo].chart[0].options=retorn_prep_histo.options_area;
 						HistogramaFinestra.vista[n_histo].chart[0].update();
 						//Gràfic de l'estadístic
 						HistogramaFinestra.vista[n_histo].chart[1].config.data.labels=retorn_prep_histo.labels;
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
-						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets[0].data=retorn_prep_histo.data_estad;
-						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors_estad;
-						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets[0].unitats=retorn_prep_histo.unitats_estad;
+						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets=[{data: retorn_prep_histo.data_estad,
+														backgroundColor: retorn_prep_histo.colors_estad,
+														unitats: retorn_prep_histo.unitats_estad}];
 						HistogramaFinestra.vista[n_histo].chart[1].options=retorn_prep_histo.options_estad;
 						HistogramaFinestra.vista[n_histo].chart[1].update();
 					}
@@ -676,7 +676,7 @@ var tipus_chart;
 			nfil*=2;
 			nfil=Math.round(nfil/component.length);
 			for (var i_c=0; i_c<component.length; i_c++)
-				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");				
+				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 		}
 	}
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
@@ -1685,8 +1685,8 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 			scales: {
 				xAxes: [{
 					//scaleLabel: {display: true, labelString: DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? " (" + DonaCadena(estil.component[i_c].desc) + ")" : "")},
-					categoryPercentage: 1+0.2*n_colors/256,
-					barPercentage: 1+0.2*n_colors/256,
+					categoryPercentage: 1,
+					barPercentage: 1.01+0.002*n_colors,   //Si no faig aquesta formula rara es veuen espais entre les barres.
 					gridLines: { display: false },
 					ticks: { autoSkip: false, maxRotation: 0 }
 				}],
@@ -1858,7 +1858,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		tooltips: { 
 			callbacks: { 
 				label: function(tooltipItem, data) { 
-					var allData = data.datasets[tooltipItem.datasetIndex].data	; 
+					var allData = data.datasets[tooltipItem.datasetIndex].data; 
 					var unitats = data.datasets[tooltipItem.datasetIndex].unitats.replace("&sdot;","·"); 
 					var tooltipData = estad_categ.tinc_dec ? OKStrOfNe(allData[tooltipItem.index], estad_categ.n_dec) :  allData[tooltipItem.index];
 					if (tipus_intern == "mode_and_percent")
@@ -1909,8 +1909,8 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 			scales: {
 				xAxes: [{
 					//scaleLabel: {display: true, labelString: DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? " (" + DonaCadena(estil.component[i_c].desc) + ")" : "")},
-					categoryPercentage: 1+0.2*n_colors/256,
-					barPercentage: 1+0.2*n_colors/256,
+					categoryPercentage: 1,
+					barPercentage: 1.01+0.002*n_colors,    //Si no faig aquesta formula rara es veuen espais entre les barres.
 					gridLines: { display: false },
 					ticks: { autoSkip: false, maxRotation: 0 }
 				}],
@@ -2326,6 +2326,8 @@ function CreaGraficPerfilContinuSimple(ctx, valors, labels, colors, title)
 			valors: valors,
 			datasets: [{			
 				data: valors,
+				categoryPercentage: 1,
+				barPercentage: 1.01+0.002*colors.length,  //Si no faig aquesta formula rara es veuen espais entre les barres
 				backgroundColor: colors,
 				borderWidth: 0,
 			}]
@@ -2340,8 +2342,6 @@ function CreaGraficPerfilContinuSimple(ctx, valors, labels, colors, title)
 			},
 			scales: {
 				xAxes: [{
-					categoryPercentage: 1,
-					barPercentage: 1,
 					gridLines: { display: false },
 					ticks: { autoSkip: true, autoSkipPadding: 10, maxRotation: 0 }
 				}],
@@ -2376,6 +2376,8 @@ var data=[]
 			categories: categories,
 			datasets: [{			
 				data: data,
+				categoryPercentage: 1,
+				barPercentage: 1.01+0.002*colors.length,  //Si no faig aquesta formula rara es veuen espais entre les barres.
 				backgroundColor: colors,
 				borderWidth: 0,
 			}]
@@ -2390,13 +2392,12 @@ var data=[]
 			},
 			scales: {
 				xAxes: [{
-					categoryPercentage: 1,
-					barPercentage: 1,
 					gridLines: { display: false },
 					ticks: { autoSkip: true, autoSkipPadding: 10, maxRotation: 0 }
 				}],
 				yAxes: [{
-					scaleLabel: {display: true}, 
+					display: false,
+					scaleLabel: {display: false}, 
 					ticks: { beginAtZero:true }
 				}]
 			},
