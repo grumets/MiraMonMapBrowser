@@ -137,7 +137,7 @@ function CreaEstatDescarrega(temps, i_capa_wcs, i_event)
 var cdns=[], cadena_cgi;
 
 	cdns.push("VERSION=1.1.0&REQUEST=DonaEstatProces&IDPROCES=", self.IdProces, "_", self.NIdProces, "&FORMAT=text/xml");  //"&TEMPS_REFRESC=", temps
-	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs]), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(ParamCtrl.capa[i_capa_wcs]));
+	cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i_capa_wcs]), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(ParamCtrl.capa[i_capa_wcs]));
 
 	//parent.wcs3.location.href=cadena_cgi;
 	//document.getElementById("finestra_download_status").innerHTML=cadena_cgi;
@@ -277,7 +277,7 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	//if (oferir_vincle)
 	//	cdns_req.push("&INFO_FORMAT=text/html");
 	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns_req.join(""), 
-			ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
+			ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));	
 
 	//Aquest sistema per controlar l'estat no sembla funcionar.
 	var iframe=document.getElementById("finestra_download_hidden");

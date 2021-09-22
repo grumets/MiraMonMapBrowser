@@ -758,7 +758,7 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 	{
 		CTipicaCapa[i_ctipica]=i_ctipica_capa;
 		CTipicaValor=valor;
-		if (ParamCtrl.LlegendaLligaVisibleAmbCtipica==true)
+		if (ParamCtrl.LlegendaLligaVisibleAmbCtipica)
 		{
 			if (PosaVisibleIConsultableCapaConsultaTipica(i_ctipica)==0)
 			{

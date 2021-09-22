@@ -210,7 +210,7 @@ function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
 	{
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit], crs_ori, crs_dest);
-		if(ParamCtrl.BarraBotoInsereix==true && ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
+		if(ParamCtrl.BarraBotoInsereix && ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
 			IniciaFinestraEditarPunts();		
 	}
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
@@ -607,7 +607,7 @@ function EditarPunts(event_de_click, i_nova_vista)
 	    
 		CreaVistes();
 	}
-	if (ParamCtrl.BarraBotoInsereix==true)
+	if (ParamCtrl.BarraBotoInsereix)
 		IniciaFinestraEditarPunts();		
 	else if(typeof ParamCtrl.ICapaVolaEdit !== "undefined"  && ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio)
 		eval(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio);		

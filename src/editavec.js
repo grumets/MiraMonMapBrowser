@@ -194,7 +194,7 @@ var capa=ParamCtrl.capa[form.i_capa.value], objecte, num, plantilla=[], url, i_e
 		objecte.properties.map_sel_fr=form.map_sel_fr.value;
 				
 	plantilla.push("/collections/",capa.nom, "/items");
-	url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
+	url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));	
 	i_event=CreaIOmpleEventConsola("OAPI_Features_Transactions (POST)", param.i_capa, url, TipusEventFeatureInsertTransaction);	
 	
 	Transaccio[i_transaccio]={i_capa: form.i_capa.value, i_event : i_event, tipus: tipus_insert};
@@ -227,7 +227,7 @@ var i_capa=parseInt(form.i_capa.value), capa=ParamCtrl.capa[i_capa], objecte, nu
 	};
 				
 	plantilla.push("/collections/",capa.nom, "/items");
-	url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
+	url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));	
 	i_event=CreaIOmpleEventConsola("OAPI_Features_Transactions (POST)", i_capa, url, TipusEventFeatureInsertTransaction);	
 	
 	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_insert, feature: objecte};
@@ -367,7 +367,7 @@ function FesTransaccioEliminarPunt(i_capa, i_feature)
 var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plantilla=[];
 
 	plantilla.push("/collections/",capa.nom, "/items/", feature.id);
-	var url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));	
+	var url=AfegeixNomServidorARequest(DonaServidorCapa(capa), plantilla.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));	
 	var i_event=CreaIOmpleEventConsola("OAPI_Features_Transactions (POST)", i_capa, url, TipusEventFeatureInsertTransaction);	
 	
 	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_delete, feature: objecte};

@@ -793,7 +793,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				    EsCapaVisibleAAquestNivellDeZoom(capa2))
 				{
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
-					if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
+					if (!(ParamCtrl.LlegendaGrupsComARadials))
 					{
 						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
 													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",

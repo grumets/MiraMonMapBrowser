@@ -292,7 +292,7 @@ function MostraConsultaComHTML(consulta)
 		var elem=getLayer(consulta.win, consulta.nom_layer);
 		cdns.push("<span class='TitolRepostaConsulta'>",
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom )),
-			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
+			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
 			"</span><hr size=\"2\">");
 
 		if(consulta.estat==EstatXMLOmplert)
@@ -397,7 +397,7 @@ function OmpleRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer),
 			"<span class='TitolRepostaConsulta'>"+
 			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+
-			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
+			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
 			"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'>" +
 			((consulta.capa.FormatConsulta=="text/html") ? "" : "<pre>") +
 			doc +
@@ -421,7 +421,7 @@ function ErrorRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 		contentLayer(getLayer(consulta.win, consulta.nom_layer),
 		"<span class='TitolRepostaConsulta'>"+
 		(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom ))+
-		(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
+		(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : "")+
 		"</span><hr size=\"2\">" + "<span class='ValorRespostaConsulta'></span>");
 	}
 	OmpleRespostaConsultaNoHiHaDadesSiCal(consulta.win)
@@ -867,7 +867,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 						cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 						cdns.push("<span class='TitolRepostaConsulta'>",
 							(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
-							(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
+							(capa.AnimableMultiTime? " "+DonaDataCapaComATextBreu(i, null) : ""),
 							"</span><hr size=\"2\"><span class='CampRespostaConsulta'>", DonaDescripcioValorMostrarCapa(i, false), "</span>: <span class='ValorRespostaConsulta'>", v, "</span>");
 						cdns.push("</div>");
 					}
@@ -880,7 +880,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				cdns.push("<div align=\"left\" id=\"LayerConsulta",i,"\" class=\"layerresposta\">");
 				cdns.push("<b>",
 						(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )) ,
-						(capa.AnimableMultiTime==true? " "+DonaDataCapaComATextBreu(i, null) : ""),
+						(capa.AnimableMultiTime? " "+DonaDataCapaComATextBreu(i, null) : ""),
 						"</b><br>", DonaCadenaLang({"cat":"Esperant dades...", "spa":"Esperando datos...", "eng":"Waiting for data...", "fre":"En attente des données..."}));
 				cdns.push("</div>");
 			}
@@ -1360,7 +1360,7 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 	}
 	cdns.push(			  "<Format>", ParamCtrl.capa[i_capa].FormatImatge,"</Format>\n");
 
-	if (ParamCtrl.capa[i_capa].AnimableMultiTime==true)
+	if (ParamCtrl.capa[i_capa].AnimableMultiTime)
 	{
 			cdns.push(			"<DimensionNameValue name=\"TIME\">",
 					  			DonaDataJSONComATextISO8601(ParamCtrl.capa[i_capa].data[DonaIndexDataCapa(ParamCtrl.capa[i_capa], i_data)], ParamCtrl.capa[i_capa].FlagsData),
@@ -1451,9 +1451,9 @@ var s;
 				 "&INFOFORMAT=" , capa.FormatConsulta ,
 				 "&I=" , i , "&J=" , j);
 	
-			if (capa.AnimableMultiTime==true)
+			if (capa.AnimableMultiTime)
 				cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
-			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor) ? true : es_ajax);
 		}
 		else //if (tipus=="TipusOAPI_MapTiles")
 		{		
@@ -1483,9 +1483,9 @@ var s;
 
 			cdns.push("&fTile=",capa.FormatImatge,"&f=",capa.FormatConsulta, "&i=", i, "&j=", j) ;
 			cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
-			if (capa.AnimableMultiTime==true)
+			if (capa.AnimableMultiTime)
 				cdns.push("&datetime=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
-			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor==true ? true : false, DonaCorsServidorCapa(capa));
+			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
 		}
 		//CreaIOmpleEventConsola("GetFeatureInfo WMTS-KVP, tiled", i_capa, s, TipusEventGetFeatureInfo);
 	}
@@ -1503,7 +1503,7 @@ var s;
 			cdns.push("GetFeatureInfo&");
 
 		cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i_capa, -1, false, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil,
-								ParamInternCtrl.vista.EnvActual, (capa.AnimableMultiTime==true ? DonaIndexDataCapa(capa, null) : 0 )));
+								ParamInternCtrl.vista.EnvActual, (capa.AnimableMultiTime ? DonaIndexDataCapa(capa, null) : 0 )));
 
 		cdns.push("&QUERY_LAYERS=" , capa.nom , "&INFO_FORMAT=" , capa.FormatConsulta);
 
@@ -1515,7 +1515,7 @@ var s;
 		if (ParamCtrl.idiomes.length>1)
 			cdns.push("&LANGUAGE=", ParamCtrl.idioma);
 
-		s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor==true) ? true : es_ajax);
+		s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor) ? true : es_ajax);
 	}
 	return s;
 }

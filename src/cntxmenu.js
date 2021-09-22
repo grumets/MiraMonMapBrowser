@@ -174,7 +174,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 						DonaCadenaLang({"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}), "</a><br>");
 	cdns.push("<hr>");
 
-	if(ParamCtrl.BarraBotoAfegeixCapa==true)
+	if(ParamCtrl.BarraBotoAfegeixCapa)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
 						DonaCadenaLang({"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"}), "</a><br>");
@@ -249,7 +249,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
-		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW==true || capa.metadades.provenance.lineage))
+		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW || capa.metadades.provenance.lineage))
 		{
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
 					DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");
@@ -527,7 +527,7 @@ var minim, maxim;
 
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	if (ParamCtrl.LlegendaAmagaSegonsEscala==true && !EsCapaDinsRangDEscalesVisibles(ParamCtrl.capa[k]))
+	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(ParamCtrl.capa[k]))
 		   alert(DonaCadenaLang({"cat":"La nova capa afegida, \'"+ParamCtrl.capa[k].nom+"\' no és visible al nivell de zoom actual del navegador",
 							 "spa":"La nueva capa añadida, \'"+ParamCtrl.capa[k].nom+"\' no es visible al nivel de zoom actual del navegador",
 							 "eng":"The new layer added, \'"+ParamCtrl.capa[k].nom+"\' is not visible in the current zoom level of the browser",
@@ -2995,7 +2995,7 @@ function DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param)
 var cdns=[], capa=ParamCtrl.capa[i_capa];
 
 	//Desplegable de dates si s'escau.
-	if (capa.AnimableMultiTime==true && capa.data && capa.data.length)
+	if (capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
 		cdns.push("<label for=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"data-",i_condicio, "\">", DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"}), ": </label>");
 		if (capa.data.length>1)
@@ -3260,7 +3260,7 @@ function LlegeixParametresCondicioCapaDataEstil(prefix_id, prefix_condicio, i_co
 var condicio_capa={};
 	condicio_capa.i_capa=parseInt(document.getElementById(prefix_id + prefix_condicio + "-capa-" + i_condicio).value);
 	var capa=ParamCtrl.capa[condicio_capa.i_capa];
-	if (capa.AnimableMultiTime==true && capa.data && capa.data.length)
+	if (capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
 		var i_time=parseInt(document.getElementById(prefix_id + prefix_condicio + "-data-" + i_condicio).value);
 		if (!isNaN(i_time) && i_time!=null)
@@ -3282,7 +3282,7 @@ var condicio_capa={};
 {
 	condicio.valor_i_capa=parseInt(document.getElementById(prefix_id + "-valor-capa-" + i_condicio).value);
 	var capa=ParamCtrl.capa[condicio.valor_i_capa];
-	if (capa.AnimableMultiTime==true && capa.data && capa.data.length)
+	if (capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
 		var i_time=parseInt(document.getElementById(prefix_id + "-valor-data-" + i_condicio).value;
 		if (!isNaN(i_time) && i_time!=null)

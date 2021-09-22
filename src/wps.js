@@ -260,11 +260,11 @@ var s1;
 		var form_activat=document.getElementById("p_form_input_"+i);
 		if(form_activat.disabled==false)
 		{
-			if(operacio.par_input[i].InputOutputValorCapaWPS && operacio.par_input[i].InputOutputValorCapaWPS==true)
+			if(operacio.par_input[i].InputOutputValorCapaWPS && operacio.par_input[i].InputOutputValorCapaWPS)
 			{
 				s1=ParamCtrl.capa[i_capa].proces[i_proces].capa_wps;			
 			}
-			else if(operacio.par_input[i].InputOutputValorBoolea && operacio.par_input[i].InputOutputValorBoolea==true)
+			else if(operacio.par_input[i].InputOutputValorBoolea && operacio.par_input[i].InputOutputValorBoolea)
 			{
 				var opcio=document.getElementById("p_check_"+i);
 				var i_valor;
@@ -304,8 +304,7 @@ var s1;
 					return -1;
 				}
 			}
-			else if(operacio.par_input[i].InputOutputValorEditable && operacio.par_input[i].InputOutputValorEditable==true &&
-				operacio.par_input[i].InputOutputValorPredefinit && operacio.par_input[i].InputOutputValorPredefinit==true)
+			else if(operacio.par_input[i].InputOutputValorEditable && operacio.par_input[i].InputOutputValorPredefinit)
 			{
 				var opcio=document.getElementById("e_opcio_"+i);
 				var sel_opcio;
@@ -378,14 +377,14 @@ var s1;
 					}
 				}
 			}
-			else if(operacio.par_input[i].InputOutputValorPredefinit && operacio.par_input[i].InputOutputValorPredefinit==true)
+			else if(operacio.par_input[i].InputOutputValorPredefinit)
 			{
 				var i_selec=parseInt(document.getElementById("p_sel_input_"+i).value);
 				s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(operacio.par_input[i].valors[i_selec].nom);
 			}
-			else //if(operacio.par_input[i].InputOutputValorEditable && operacio.par_input[i].InputOutputValorEditable==true)
+			else //if(operacio.par_input[i].InputOutputValorEditable)
 			{
-				if(operacio.par_input[i].InputOutputTipusRefFitxer && operacio.par_input[i].InputOutputTipusRefFitxer==true)
+				if(operacio.par_input[i].InputOutputTipusRefFitxer)
 				{
 					var opcio=document.getElementById("e_opcio_"+i);
 					if(opcio.checked)
@@ -512,8 +511,7 @@ var cdns=[];
 				cdns.push("		<Input>\n",
 						"			<ows:Identifier>",ProcessosAExecutar[i_proces].input[i].identificador,"</ows:Identifier>\n");
 				
-				if((ProcessosAExecutar[i_proces].input[i].InputOutputTipusReferencia && ProcessosAExecutar[i_proces].input[i].InputOutputTipusReferencia==true) || 
-					(ProcessosAExecutar[i_proces].input[i].InputOutputTipusRefFitxer && ProcessosAExecutar[i_proces].input[i].InputOutputTipusRefFitxer==true))
+				if(ProcessosAExecutar[i_proces].input[i].InputOutputTipusReferencia || ProcessosAExecutar[i_proces].input[i].InputOutputTipusRefFitxer)
 				{
 					cdns.push("			<Reference xlink:href=\"" , ProcessosAExecutar[i_proces].input[i].valor , "\" schema=\"\"/>\n");
 				}
@@ -774,10 +772,8 @@ var opcio_u=document.getElementById("u_opcio_"+i_input);
 var opcio_p=document.getElementById("u_opcio_"+i_input);
 var sel_opcio=0;
 
-	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable && 
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable==true &&
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer && 
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer==true)
+	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable &&
+	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 	{
 		
 		if(opcio_e && opcio_e.checked)
@@ -810,9 +806,7 @@ var sel_opcio=0;
 	id_file.value=id_proces;
 		
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable && 
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable==true &&
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer && 
-	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer==true)
+	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 	{
 		if(sel_opcio==opcio_predefinit)
 		{
@@ -1170,8 +1164,7 @@ var cdns=[];
 		for(var i_input=0; i_input<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input.length; i_input++)
 		{
 			
-			if( ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorCapaWPS && 
-				ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorCapaWPS==true)
+			if( ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorCapaWPS)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
@@ -1179,8 +1172,7 @@ var cdns=[];
 						  i_input, "\" id=\"p_text_", i_input, "\" value=\"", DonaCadena(ParamCtrl.capa[i_capa].desc),"\" />",
 						  "</form>");
 			}
-			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorBoolea && 
-					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorBoolea==true)
+			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorBoolea)
 			{
 				var i_valor=0;
 				var i;
@@ -1225,18 +1217,15 @@ var cdns=[];
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc),
 						  "</form>");
 			}
-			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable && 
-					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable==true &&
-					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit && 
-					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit==true)
+			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable &&
+					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				//Formulari de la part de l'input predefinida
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<input class=\"Verdana11px\" type=\"radio\" id=\"p_opcio_", i_input, "\" name=\"p_opcio_", i_input, 
 						  "\" value=\"predefinit\" onClick=\"ActivaTextPredefinit(",i_input, ");\" checked />");
-				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer && 
-				   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer==true)
+				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 					cdns.push("<label for=\"p_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Predefinit","spa":"Predefinido","eng":"Predefined","fre":"Prédéfinie"}),": </label>");
 				
 				cdns.push("<select class=\"Verdana11px\" name=\"p_sel_input_", i_input, "\" id=\"p_sel_input_", i_input,"\">");
@@ -1249,8 +1238,7 @@ var cdns=[];
 				cdns.push("</select></form>");
 				
 				//Formulari de la part de l'input editable				
-				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer && 
-				   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer==true)
+				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 				{					
 	  				NIdProces++;
 					var id_proces=IdProces+"_"+NIdProces;
@@ -1299,8 +1287,7 @@ var cdns=[];
 							  "</form>");
 				}
 			}
-			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit && 
-					ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit==true)
+			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
@@ -1314,13 +1301,11 @@ var cdns=[];
 				}
 				cdns.push("</select></form>");				
 			}
-			else //if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable &&
-				 // ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable==true)
+			else //if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				//Formulari de la part de l'input editable				
-				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer && 
-				   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer==true)
+				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 				{
 					NIdProces++;
 					var id_proces=IdProces+"_"+NIdProces;
