@@ -1752,7 +1752,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		var a1=DonaFactorAEstiramentPaleta(estil.component[1].estiramentPaleta, ncolors1);
 		var valor_min1=DonaFactorValorMinEstiramentPaleta(estil.component[1].estiramentPaleta);		
 		//deduir la paleta de colors des de estil.component[1]
-		var colors1=ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].paleta.colors;
+		var colors1=(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].paleta && ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].paleta.colors) ? ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].paleta.colors : 256;
 	}
 	else if (tipus_estad =="mode" || tipus_estad == "percent_mode" || tipus_estad == "mode_and_percent")
 	{

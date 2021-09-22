@@ -1764,7 +1764,7 @@ function Ajax()
 	};
 
 	this.getResponseHeader = function(headerName) {
-		this.req.responseHeaders[headerName];
+		return this.req.responseHeaders[headerName.toLowerCase()];
 	};
 
 	this.setAccessToken = function(accessToken, accessTokenType) {

@@ -1519,7 +1519,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil)},
 										{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
 											"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null, 
-										 	"herenciaOrigen": {"nColors": capa[1].estil[condicio[1].i_estil].paleta.colors ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256, 
+										 	"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256, 
 										 		"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
 										 		"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null}
 										}],
@@ -1527,9 +1527,9 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 			"atributs": atrib_nous,
 			"metadades": null,
 			"ncol": 1,
-			"paleta": {
+			"paleta": (capa[0].estil[condicio[0].i_estil].paleta && capa[0].estil[condicio[0].i_estil].paleta.colors) ? {
 				"colors": capa[0].estil[condicio[0].i_estil].paleta.colors
-			}
+			} : null
 		}],
 		"i_estil":	0,
 		"NColEstil":	1,
@@ -4003,7 +4003,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 			var paleta;
 			if (estil.categories)
 			{
-				if (!estil.paletaPrevia)
+				if (!estil.paletaPrevia && estil.paleta)
 					estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
 				for (paleta in PaletesGlobals.categoric) 
 				{
@@ -4021,7 +4021,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 					estil.paleta=null;
 				else
 				{
-					if (!estil.paletaPrevia)
+					if (!estil.paletaPrevia && estil.paleta)
 						estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
 					for (paleta in PaletesGlobals.continuous) 
 					{

@@ -3594,7 +3594,7 @@ var cdns=[];
 				DonaCadenaLang({"cat":"instal·lar el Lector Universal de Mapes del MiraMon", "spa":"instalar el Lector Universal de Mapas de MiraMon", "eng":"install MiraMon Universal Map Reader","fre":"installer le Lecteur Universel de Cartes du Miramon"}),
 				"InstalaLectorMapes();")));
     if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
-    	cdns.push((CadenaBotoPolsable("storyMap", "storyMap", DonaCadenaLang({"cat":"Storymaps", "spa":"Storymaps", "eng":"Storymaps", "fre":"Storymaps"}), "MostraFinestraTriaStoryMap();")));
+    	cdns.push((CadenaBotoPolsable("storyMap", "storyMap", DonaCadenaLang({"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"}), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", DonaCadenaLang({"cat":"ajuda interactiva", "spa":"ayuda interactiva", "eng":"interactive help","fre":"aide intéractive"}),
 				"ObreFinestraAjuda();")));
@@ -6464,8 +6464,8 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "feedbackAmbEstils", {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-  createFinestraLayer(window, "triaStoryMap", {"cat":"Històries", "spa":"Historias", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-  createFinestraLayer(window, "storyMap", {"cat":"titol de la història", "spa":"título de la historia", "eng": "storie title", "fre":"titol"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
+  createFinestraLayer(window, "triaStoryMap", {"cat":"Relats", "spa":"Relatos", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+  createFinestraLayer(window, "storyMap", {"cat":"titol del relat", "spa":"título del ralato", "eng": "story title", "fre":"titre de l'histoire"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
   createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
