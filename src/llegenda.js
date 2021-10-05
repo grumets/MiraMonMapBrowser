@@ -121,7 +121,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		{
 			if (!estil.categories[i_color])
 				continue;
-			desc=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
+			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
 			if (desc=="")
 				continue;
 			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": desc};
@@ -162,7 +162,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 		if (estil.categories && estil.atributs)
 		{
-			value_text=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, parseInt(value), true);
+			value_text=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, parseInt(value), true);
 			if (value_text=="")
 				continue;
 		}

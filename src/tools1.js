@@ -2206,7 +2206,11 @@ function DonaFitxerColor(c)
 	else
 	{
 		if (s.charAt(0)=='#')
+		{
+			if (s.length!=7)
+				alert("Unsupported hexadecimal format color \"" + s +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
 			s="colors/c"+DonaCaracterHexaMultiple3(s.substring(1,2))+DonaCaracterHexaMultiple3(s.charAt(1))+DonaCaracterHexaMultiple3(s.substring(3,4))+DonaCaracterHexaMultiple3(s.charAt(3))+DonaCaracterHexaMultiple3(s.substring(5,6))+DonaCaracterHexaMultiple3(s.charAt(5))+".gif";
+		}
 	}
 	return s;
 }

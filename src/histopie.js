@@ -107,7 +107,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 	}
 	else if (tipus_chart == "stat" || tipus_chart == "chart") //en els dos casos el portapapers té tots els estadístics
 	{
-		var i_c, i, columna_perc=false;
+		var i_c, i, i_cat, columna_perc=false;
 		if (estil.categories && estil.atributs) //cas categòric
 		{
 			var n_comp_usar = estil.component.length==2 ? 1 : estil.component.length;		
@@ -161,11 +161,18 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					
 				cdns.push("\n");		
 				
-				for (i=0; i<estil.categories.length; i++)
+				var n_colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors.length : 256;
+				var a0=DonaFactorAEstiramentPaleta(estil.component[0].estiramentPaleta, n_colors);
+				var valor_min0=DonaFactorValorMinEstiramentPaleta(estil.component[0].estiramentPaleta);
+
+				//for (i=0; i<estil.categories.length; i++)
+				for (i=0; i<estil.histograma.component[0].classe.length; i++)
 				{
-					if (!estil.categories[i])
+					i_cat=estil.component[0].estiramentPaleta ? Math.floor(i/a0+valor_min0) : i;
+					if (!estil.categories[i_cat])
 						continue;
-					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true));
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true));
+
 					for (i_c=0; i_c<n_comp_usar; i_c++)
 					{
 						cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);
@@ -1449,8 +1456,8 @@ function CreaEstadisticPerCategories(n_histograma, i_diag, tipus_estad, order)
 
 function DonaTipusGraficHistograma(estil, i_c)
 {
-	if (estil.component[i_c].representacio=='bar' || estil.component[i_c].representacio=='pie')
-		return estil.component[i_c].representacio;
+	if (estil.component[i_c].representacio && (estil.component[i_c].representacio.tipus=='bar' || estil.component[i_c].representacio.tipus=='pie'))
+		return estil.component[i_c].representacio.tipus;
 	return (estil.categories && estil.atributs) ? 'pie' : 'bar';
 }
 
@@ -1576,19 +1583,20 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 		//var total_celles=0;
 		var a0=DonaFactorAEstiramentPaleta(estil.component[i_c].estiramentPaleta, n_colors);
 		var valor_min0=DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta);
-		var data=[];
+		var data=[], i_cat;
 		if (estil.categories.length<n_colors)
 			retorn_prep_histo.colors.length=n_colors=estil.categories.length;
 		
 		for (i=0, i_color=0; i_color<n_colors; i_color++)
 		{
-			if (!estil.categories[i_color])
+			i_cat=estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color;
+			if (!estil.categories[i_cat])
 			{
 				retorn_prep_histo.colors.splice(i, 1);
 				continue;
 			}
 			data[i]=estil.histograma.component[i_c].classe[i_color]*area_cella;
-			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estil.component[i_c].estiramentPaleta ? Math.floor(i_color/a0+valor_min0) : i_color, true);
+			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true);
 			i++;
 		}	
 

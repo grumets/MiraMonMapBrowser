@@ -1383,12 +1383,13 @@
 												}
 											},
 											"representacio": {
-												"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
+												"description": "Tipus de representació gràfica. Opcional",
 												"type": "object",
 												"required": ["tipus"],
 												"properties": {
 													"tipus": {
-														"enum": ["histo", "pie", "matriuConfusio", "3d"]
+														"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
+														"enum": ["bar", "pie", "matriuConfusio", "3d"]
 													},
 													"dimMatriu": {
 														"type": "array",
@@ -2199,7 +2200,7 @@
 						"required": ["i_color", "color"],
 						"properties": {
 							"i_color": {
-								"description": "Index of the color in the pallete. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap witht he previous one color in between will be linear interpolated",
+								"description": "Index of the color in the pallete. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap with the previous index, in between colors will be linear interpolated",
 								"type": "integer",
 								"minimum": 0
 							},

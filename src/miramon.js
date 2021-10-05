@@ -4491,8 +4491,14 @@ var capa=ParamCtrl.capa[i_capa];
 		) + (capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
+//Igual que la funció posterior però retorna sempre un text
 function DonaTextCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
+{
+	return DonaCadena(DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte));
+}
+
+//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
+function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
 {
 	if (atributs.length==1)
 	{
