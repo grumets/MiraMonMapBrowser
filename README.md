@@ -17,4 +17,4 @@ Commit descriptions provide information about other updates and corrections not 
 ## Attribution
 The Miramon Map Browser is part of the MiraMon project managed by CREAF.
 
-More information about this product can be found in the [MiraMon website](http://www.miramon.cat/USA/Prod-NavegadorServidor.htm#MiraMonMapBrowser) with some [examples of applications](http://www.miramon.cat/CAT/Servidors.htm)
+More information about this product can be found in the [MiraMon website](https://www.miramon.cat/USA/Prod-NavegadorServidor.htm#MiraMonMapBrowser) with some [examples of applications](https://www.miramon.cat/CAT/Servidors.htm)
