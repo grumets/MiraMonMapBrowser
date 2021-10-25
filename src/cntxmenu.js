@@ -3929,7 +3929,30 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		}
 		cdns.push("</fieldset>");
 	}
-	if (estil.component.length<3)
+
+	if (estil.component && estil.component.length==1 && estil.component[0].illum)
+	{
+		cdns.push("<fieldset><legend>",
+			DonaCadenaLang({"cat":"Posició del sol pel càlcul de la il·luminació", "spa":"Posició del sol para el cálculo de la iluminación", "eng":"Position of the sun for the computation of the illumination", "fre":"Position du soleil par le calcul de l'éclairement"}),
+			":</legend>");
+		//Deixo canviar les propietats az, elev i f
+		cdns.push("<label for=\"edita-estil-capa-illum-az\">", DonaCadenaLang({"cat":"Azimut", "spa":"Azimut", "eng":"Azimuth", "fre":"Azimut"}), ": </label>",
+				"<input type=\"text\" id=\"edita-estil-capa-illum-az\" name=\"az\" value=\"",
+				(estil.component[0].illum.az ? estil.component[0].illum.az : 225), "\" style=\"width:50px;\" />",
+				" (", DonaCadenaLang({"cat":"origen al nord nord i en sentit horari (en graus)", "spa":"origen en el norte norte y en el sentido de las agujas del reloj (en grados)", "eng":"origin in the north north and clockwise (in degress)", "fre":"origine au nord nord et dans le sens des aiguilles d'une montre (en degrés)"}), ")",
+				"<br>");
+		cdns.push("<label for=\"edita-estil-capa-illum-elev\">", DonaCadenaLang({"cat":"Elevació", "spa":"Elevación", "eng":"Elevation", "fre":"Élévation"}), ": </label>",
+				"<input type=\"text\" id=\"edita-estil-capa-illum-elev\" name=\"elev\" value=\"",
+				(estil.component[0].illum.elev ? estil.component[0].illum.elev: 45), "\" style=\"width:50px;\" />",
+				" (", DonaCadenaLang({"cat":"des del terra (en graus)", "spa":"desde el suelo (en grados)", "eng":"from the ground (in degress)", "fre":"à partir du sol (en degrés)"}), ")",
+				"<br>");		
+		cdns.push("<label for=\"edita-estil-capa-illum-f\">", DonaCadenaLang({"cat":"Factor d'exageració del relleu", "spa":"Factor de exageración del relieve", "eng":"Relief exaggeration factor", "fre":"Facteur d'exagération du relief"}), ": </label>",
+				"<input type=\"text\" id=\"edita-estil-capa-illum-f\" name=\"f\" value=\"",
+				(estil.component[0].illum.f ? estil.component[0].illum.f : 1) , "\" style=\"width:50px;\" />",
+				"<br>");		
+		cdns.push("</fieldset>");
+	}
+	else if (estil.component.length<3)
 	{
 		var paleta;
 		cdns.push("<fieldset><legend>",
@@ -3938,6 +3961,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			"<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-actual\" checked=\"checked\"><label for=\"edita-estil-capa-paleta-actual\">", DonaCadenaHTMLPintaPaleta(estil.paleta), " (", DonaCadenaLang({cat: "Actual", spa: "Actual", eng: "Current", fre: "Actuel"}), ")</label><br>");
 		if (estil.paletaPrevia)
 			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", DonaCadenaLang({cat: "Prèvia", spa: "Previa", eng: "Previous", fre: "Précédente"}), ")</label><br>");
+		//Paletes generals
 		if (estil.categories)
 		{
 			for (paleta in PaletesGlobals.categoric) 
@@ -3955,6 +3979,16 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 				if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
 					continue;
 				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.continuous[paleta]), " (", (PaletesGlobals.continuous[paleta].desc ? DonaCadena(PaletesGlobals.continuous[paleta].desc) : paleta), ")</label><br>");
+			}
+		}
+		//Paletes d'altres estils d'aquesta mateixa capa si existen
+		if (capa.estil.length>1)
+		{
+			for (var i=0; i<capa.estil.length; i++)
+			{
+				if (i==i_estil || !capa.estil[i].paleta)
+					continue;
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-estil-", i, "\"><label for=\"edita-estil-capa-paleta-estil-", i, "\">", DonaCadenaHTMLPintaPaleta(capa.estil[i].paleta), " (", (capa.estil[i].desc ? DonaCadena(capa.estil[i].desc) : capa.estil[i].nom), ")</label><br>");
 			}
 		}
 		cdns.push("</fieldset>");
@@ -3989,8 +4023,34 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 			}
 		}
 	}
-	if (estil.component.length<3)
+	if (estil.component && estil.component.length==1 && estil.component[0].illum)
 	{
+		var valor=parseFloat(document.getElementById("edita-estil-capa-illum-az").value);
+		if (valor<0 || valor>=360)
+		{
+			valor=225;
+			alert(DonaCadenaLang({"cat":"Azimut incorrecte. Hauria de ser un número entre 0 i 360. Aplicant el valor per defecte", "spa":"Azimut incorrecto. Debería ser un número entre 0 y 360. Aplicando el valor por defecto", "eng":"Incorrect azimuth. It should be a number between 0 and 360. Applying the default value", "fre":"Azimut incorrect. Il doit s'agir d'un nombre compris entre 0 et 360. Application de la valeur par défaut"})+": "+valor);
+		}
+		estil.component[0].illum.az=valor;		
+		var valor=parseFloat(document.getElementById("edita-estil-capa-illum-elev").value);
+		if (valor<0 || valor>90)
+		{
+			valor=45;
+			alert(DonaCadenaLang({"cat":"Elevació incorrecta. Hauria de ser un número entre 0 i 90. Aplicant el valor per defecte", "spa":"Elevación incorrecta. Debería ser un número entre 0 y 90. Aplicando el valor por defecto", "eng":"Incorrect azimuth. It should be a number between 0 and 90. Applying the default value", "fre":"Élévation incorrect. Il doit s'agir d'un nombre compris entre 0 et 90. Application de la valeur par défaut"})+": "+valor);
+		}
+		estil.component[0].illum.elev=valor;
+		var valor=parseFloat(document.getElementById("edita-estil-capa-illum-f").value);
+		if (valor<0.0001)
+		{
+			valor=1;
+			alert(DonaCadenaLang({"cat":"Factor d'exageració del relleu incorrecte. Hauria de ser un número major de 0.0001. Aplicant el valor per defecte", "spa":"Factor de exageración del relieve incorrecta. Debería ser un número mayor que 0.0001. Aplicando el valor por defecto", "eng":"Incorrect relief exaggeration factor. It should be a number bigger than 0.0001. Applying the default value", "fre":"Facteur d'exagération du relief incorrect. Il doit s'agir d'un nombre supérieur à 0,0001. Application de la valeur par défaut"})+": "+1);
+		}
+		else
+			estil.component[0].illum.f=valor;
+	}
+	else if (estil.component.length<3)
+	{
+		var paleta_de_estil_capa=false;
 		if (document.getElementById("edita-estil-capa-paleta-actual").checked)
 			; //Nothing to do
 		else if (estil.paletaPrevia && document.getElementById("edita-estil-capa-paleta-previa").checked)
@@ -4000,35 +4060,53 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 		}
 		else
 		{
-			var paleta;
-			if (estil.categories)
+			if (capa.estil.length>1)
 			{
-				if (!estil.paletaPrevia && estil.paleta)
-					estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
-				for (paleta in PaletesGlobals.categoric) 
+				for (var i=0; i<capa.estil.length; i++)
 				{
-					if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
+					if (i==i_estil || !capa.estil[i].paleta)
 						continue;
-					if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+					if (document.getElementById("edita-estil-capa-paleta-estil-"+i).checked)
 					{
-						estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.categoric[paleta]));
+						paleta_de_estil_capa=true;
+						if (!estil.paletaPrevia && estil.paleta)
+							estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
+						estil.paleta=JSON.parse(JSON.stringify(capa.estil[i].paleta));
 					}
 				}
 			}
-			else
+			if (!paleta_de_estil_capa)
 			{
-				if (document.getElementById("edita-estil-capa-paleta-grisos").checked)
-					estil.paleta=null;
-				else
+				var paleta;
+				if (estil.categories)
 				{
 					if (!estil.paletaPrevia && estil.paleta)
 						estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
-					for (paleta in PaletesGlobals.continuous) 
+					for (paleta in PaletesGlobals.categoric) 
 					{
-						if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
+						if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
 							continue;
 						if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
-							estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.continuous[paleta]));
+						{
+							estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.categoric[paleta]));
+						}
+					}
+				}
+				else
+				{
+					if (document.getElementById("edita-estil-capa-paleta-grisos").checked)
+						estil.paleta=null;
+					else
+					{
+						if (!estil.paletaPrevia && estil.paleta)
+							estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
+						for (paleta in PaletesGlobals.continuous) 
+						{
+							if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
+								continue;
+							if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+								estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.continuous[paleta]));
+						}
 					}
 				}
 			}

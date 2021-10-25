@@ -1282,6 +1282,7 @@ function DonaDataCanvasDesDeArrayNumericIPaleta(data, histograma, img_stat, ncol
 {
 var colors, ncolors, i_color0;
 var j, i, a0, valor_min0, valor0, bigint;
+var histo_component0, classe0;
 
 	colors=(paleta && paleta.colors) ? paleta.colors : null;
 	ncolors=colors ? colors.length : 256;
@@ -1297,6 +1298,7 @@ var j, i, a0, valor_min0, valor0, bigint;
 	valor_min0=DonaFactorValorMinEstiramentPaleta(estiramentPaleta);
 	if (histograma)
 	{
+		histograma.classe_nodata=0;
 		histograma.component=[{
 					"classe": [], 
 					"valorMinimReal": +1e300,
@@ -1399,12 +1401,6 @@ function ConstrueixImatgeCanvasIllum(data, histograma, ncol, nfil, dv, mes_duna_
 {
 var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
 
-	histograma.classe_nodata=0;
-	histograma.component=[{
-			//"classe": [], 
-			"valorMinimReal": +1e300,
-			"valorMaximReal": -1e300}];
-
 	var param=PrepararCalculIlluminacio(ParamInternCtrl.vista.CostatZoomActual, component[0].illum.f, component[0].illum.elev, component[0].illum.az);
 
 	for (var i_v=0; i_v<valors.length; i_v++)
@@ -1428,13 +1424,14 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
 		{
 			CalculaFilaDesDeBinaryArrays(fila_calc, 0, null, dv, valors, ncol, i_byte, i_cell, component[0]);
 		}
-		CalculaImatgeEstadisticaDesDesDeFilaCalc(imatge, j, histograma, fila_calc, ncol, null, null);
+		CalculaImatgeEstadisticaDesDesDeFilaCalc(imatge, j, null, fila_calc, ncol, null, null);
 	}
 
 	img_illum=CalculaIlluminacioImatge(imatge, ncol, nfil, param);
 
 	//Aplico la paleta i obtinc l'array de dades dins de 'data'
-	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, img_illum, ncol, nfil, component[0].estiramentPaleta, paleta);	
+	DonaDataCanvasDesDeArrayNumericIPaleta(data, histograma, img_illum, ncol, nfil, component[0].estiramentPaleta, paleta);
+	//Ara caldria guardar l'array de valors nous com una altre i_valor en l'array.
 }
 
 

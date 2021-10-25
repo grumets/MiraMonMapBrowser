@@ -691,7 +691,7 @@ var cdns=[], ncol=440, nfil=220;
 				cdns.push("<br>");
 				if(atribut.esLink)
 					cdns.push("<a href='",valor,"' target='_blank'>");
-				cdns.push("<img src='",	valor,"' border='0' align='bottom' class='max-width: 320;'>");
+				cdns.push("<img src='",	valor,"' border='0' align='bottom' style='max-width: 320;'>");
 				if(atribut.esLink)
 					cdns.push("</a><br>");
 			}

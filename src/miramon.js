@@ -4995,20 +4995,20 @@ var env=vista.EnvActual;
 											else if (icona.type=="circle" || icona.type=="square")
 											{
 												if (!estil.formes)
-													alert("No symbology for circle of squere found: 'formes' found");
+													alert("No symbology for 'circle' or 'squere' was found: 'formes' is required");
 
 												for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 												{
 													forma=estil.formes[i_forma];
 													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma.interior, i_atri_interior[i_forma], a_interior[i_forma], valor_min_interior[i_forma], ncolors_interior[i_forma], i_col, i_fil);
 													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
-													if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+													if (!forma.vora || !forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
 														ctx.lineWidth = 1;
 													else
 														ctx.lineWidth = forma.vora.gruix.amples[0];
 
 													ctx.beginPath();
-													if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+													if (!forma.vora || !forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
 														ctx.setLineDash([]);
 													else
 														ctx.setLineDash(forma.vora.patro.separacions[0]);

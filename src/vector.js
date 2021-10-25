@@ -767,7 +767,7 @@ var key;
 
 function ExtreuTransformaSTAObservations(obs, data_capa)
 {
-var ob, prop={};
+var ob, prop={}, nom_param;
 
 	for (var i=0; i<obs.length; i++)
 	{
@@ -777,12 +777,20 @@ var ob, prop={};
 			prop["time"]=ob.phenomenonTime;
 			//InsereixDataISOaCapa(ob.phenomenonTime, data_capa);
 		}
+		if (ob.parameters)
+		{
+			for (nom_param in ob.parameters) 
+			{
+				if (ob.parameters.hasOwnProperty(nom_param) && typeof ob.parameters[nom_param]!=="object")
+					prop[nom_param]=ob.parameters[nom_param];
+			}
+		}
 		if (ob.MultiDatastream)
 		{
 			for (var j=0; j<ob.MultiDatastream.unitOfMeasurements.length; j++)
 				AddPropertyAndTime(prop, ob.MultiDatastream.unitOfMeasurements[j], ob.phenomenonTime, ob.result[j]);
 			prop["thing"]=ob.MultiDatastream.Thing.name;
-			prop["party"]=ob.MultiDatastream.Party.name;
+			prop["party"]=ob.MultiDatastream.Party.nickName;
 			prop["project"]=ob.MultiDatastream.Project.name;
 			prop["license"]=ob.MultiDatastream.License.description;
 		}
@@ -790,7 +798,7 @@ var ob, prop={};
 		{
 			AddPropertyAndTime(prop, ob.Datastream.unitOfMeasurement, ob.phenomenonTime, ob.result);
 			prop["thing"]=ob.Datastream.Thing.name;
-			prop["party"]=ob.Datastream.Party.name;
+			prop["party"]=ob.Datastream.Party.nickName;
 			prop["project"]=ob.Datastream.Project.name;
 			prop["license"]=ob.Datastream.License.description;
 		}
@@ -804,11 +812,21 @@ var features=[], foi;
 	for (var i=0; i<fois.value.length; i++)
 	{
 		foi=fois.value[i];
-		features.push({type: "Feature", 
-				id: foi["@iot.id"], 
-				geometry: foi.feature, 
-				//properties: ExtreuTransformaSTAObservations(foi.Observations)}
-				properties: []});
+		if (foi.feature.type=="Feature")
+		{
+			features.push(foi.feature);
+			features[features.length-1].id=foi["@iot.id"];
+			features[features.length-1].properties=[];
+		}
+		else
+		{
+			//Following https://developers.sensorup.com/docs/#featureOfInterest_post a STA feature is actually a geometry.
+			features.push({type: "Feature", 
+					id: foi["@iot.id"], 
+					geometry: foi.feature, 
+					//properties: ExtreuTransformaSTAObservations(foi.Observations)}
+					properties: []});
+		}
 	}
 	return features;
 }
@@ -1554,13 +1572,13 @@ var capa=ParamCtrl.capa[i_capa];
 
 	cdns_datastream.push(",name;$expand=Thing($select=name)");
 	if (capa.tipus=="TipusSTAplus")
-		cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
+		cdns_datastream.push(",Party($select=nickName),Project($select=name),License($select=description)");
 	cdns.push("/v",DonaVersioComAText(capa.versio),"/FeaturesOfInterest");
 	if (i_obj==null)
 	        cdns.push("?$top=10000000&");
 	else
 		cdns.push("('", capa.objectes.features[i_obj].id, "')?");
-	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), "),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), "))");
+	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime,parameters;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), "),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), "))");
 	if (env!=null)
 	{
 		var env2=null;
