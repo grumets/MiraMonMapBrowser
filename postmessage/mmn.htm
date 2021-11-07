@@ -1,0 +1,58 @@
+<html>
+<script>
+//https://javascript.info/cross-window-communication
+
+/*El flux és:
+La primera plana demana la obertura de la segona
+La segona diu a la primera: Ja estic apunt de rebre missatges (en l'event onLoad())
+La primera rep el missatge i envia el text que vol enviar
+La segona rep el missatge i mostra el text
+
+No es pot fer directament des de la primera perquè quan obres la segona plana; 
+des de la primera, no pots estat segur de quan la segona s'haurà carregat i 
+per tant cal espera a que la segona on notifiqui a la primera.
+*/
+
+var mmn=null;
+
+function OpenAnotherWindow()
+{
+	mmn=window.open("http://localhost/covid19/?config=laia.json", "_blank", "width=1400,height=800");
+}
+
+function ZoomMap(costat)
+{
+	mmn.postMessage("CommandMMNChangeZoom("+costat+")", "http://localhost/covid19");
+}
+
+function CentraMap(punt)
+{
+	mmn.postMessage("CommandMMNCenterCoord("+JSON.stringify(punt)+")", "http://localhost/covid19");
+}
+
+function ProcessMessageFromMiraMonMapBrowser(event)
+{
+	// Do we trust the sender of this message?
+	if (event.origin !== "http://localhost")
+		return;
+
+	if (event.data === "MiraMon Map Browser is listening")
+		document.getElementById("commands").style.display='block';
+	if (event.data === "MiraMon Map Browser closed")
+	{
+		document.getElementById("commands").style.display='none';
+		mmn=null;
+	}
+}
+
+</script>
+<body onMessage="ProcessMessageFromMiraMonMapBrowser(event);">
+<button type="button" onClick="OpenAnotherWindow();">Open the map browser</button>
+<div id="commands" style="display: none;">
+The Map Browser is ready to receive commands:<br>
+	<button type="button" onClick="ZoomMap(10);">Zoom 10</button>
+	<button type="button" onClick="ZoomMap(5);">Zoom 5</button>
+	<button type="button" onClick="CentraMap({x:432736.47,y:4582522.45});">Centra BCN</button>
+</div>
+</body>
+</html>

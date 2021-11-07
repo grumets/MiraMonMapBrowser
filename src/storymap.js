@@ -104,7 +104,7 @@ var darrerNodeStoryMapVisibleExecutat=null;
 
 function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 {
-	var punt, hihacanvis;
+	var hihacanvis;
 	for (var i = 0; i < nodes.length; i++)
 	{
 		if (nodes[i].nodeType!=Node.ELEMENT_NODE)
@@ -122,6 +122,7 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 					var mmcenter = nodes[i].attributes[i_at].value.trim();
 					if (mmcenter.length)
 					{
+						var punt;
 						try {
 							punt=JSON.parse(mmcenter);
 						}
@@ -130,46 +131,18 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmcenter);
 							break;
 						}
-						if(isNaN(punt.x) || isNaN(punt.y))
-						{
-					  	alert(DonaCadenaLang({"cat":"Format de les coordenades erroni:\nS'ha d'indicar un valor numèric.",
-											"spa":"Formato de las coordenadas erróneo:\nSe debe indicar un valor numérico.",
-											"eng":"Coordinate format is incorrectly:\nIt Must indicate a numeric value.",
-											"fre":"Format des coordonnées erroné:\nVous devez indiquer une valeur numérique."}));
-						  return;
-						}
-						CentraLaVista(punt.x, punt.y);
-						hihacanvis=true;
+						if (0==CommandMMNCenterCoord(punt))
+							hihacanvis=true;
 					}
+					else
+						alert(DonaCadenaLang({"cat":"Format del paràmetre mm-center incorrecte", "spa":"Formato del parametro mm-center icnorrecto", "eng":"Wrong format in mm-center parameter", "fre":"Format incorrect dans le paramètre mm-center"}));
 				}
 				else if (nodes[i].attributes[i_at].name=='mm-zoom')
 				{
 					if (nodes[i].attributes[i_at].value.trim().length)
 					{
-						var costat=parseFloat(nodes[i].attributes[i_at].value.trim());
-
-						if (isNaN(costat))
-						{
-							alert(DonaCadenaLang({"cat":"Format del valor del costat de zoom erroni:\nS'ha d'indicar un valor numèric.",
-											"spa":"Formato del lado de zoom erróneo:\nSe debe indicar un valor numérico.",
-											"eng":"Zoom size format is incorrectly:\nIt Must indicate a numeric value.",
-											"fre":"Format des zoom erroné:\nVous devez indiquer une valeur numérique."}));
-							return;
-						}
-						for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
-						{
-							if (ParamCtrl.zoom[nivell].costat==costat)
-							{
-								CanviaNivellDeZoom(nivell);
-								hihacanvis=true;
-								break;
-							}
-						}
-						if (nivell==ParamCtrl.zoom.length)
-							alert(DonaCadenaLang({"cat":"El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.",
-											"spa":"El lado de zoom solicitado no es uno de los lados disponibles en este navegador.",
-											"eng":"The zoom size requested is not available in this browser.",
-											"fre":"	La taille de zoom demandée n'est pas disponible dans ce navigateur."}));
+						if (0==CommandMMNChangeZoom(parseFloat(nodes[i].attributes[i_at].value.trim())))
+							hihacanvis=true;
 					}
 				}
 				else if (nodes[i].attributes[i_at].name=="mm-layer")
@@ -235,3 +208,4 @@ function ExecutaAttributsStoryMapVisible()
 	RecorreNodesFillsAttributsStoryMapVisible(div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
+

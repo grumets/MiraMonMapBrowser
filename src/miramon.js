@@ -82,6 +82,7 @@ IncludeScript("cntxmenu.js");
 IncludeScript("llegenda.js");
 IncludeScript("download.js");
 IncludeScript("storymap.js");
+IncludeScript("commands.js");
 //IncludeScript("xml.js");   //Ja les carrega el GUF.js
 //IncludeScript("owc_atom.js");  //Ja les carrega el guf.js
 //IncludeScript("wps_iso_guf.js", true);  //Ja les carrega el GUF.js
@@ -3160,13 +3161,12 @@ var i_max;
 			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_max].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=i_max;
 	}*/
-    CentraLaVista((ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/2,
-    	(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/2);
+	CentraLaVista((ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/2,
+	    	(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/2);
 
-    if (ParamInternCtrl.vista.CostatZoomActual!=ParamCtrl.zoom[0].costat)
-	    CanviaNivellDeZoom(0);
-    else
-		RepintaMapesIVistes();
+	if (ParamInternCtrl.vista.CostatZoomActual!=ParamCtrl.zoom[0].costat)
+		CanviaNivellDeZoom(0, false);
+	RepintaMapesIVistes();
 }
 
 function PortamANivellDeZoom(nivell)
@@ -3174,7 +3174,7 @@ function PortamANivellDeZoom(nivell)
 	if (ParamCtrl.ConsultaTipica)
 		PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
 	GuardaVistaPrevia();
-	return CanviaNivellDeZoom(nivell);
+	return CanviaNivellDeZoom(nivell, true);
 }
 function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 {
@@ -3197,7 +3197,7 @@ function PortamADataEvent(event, millisegons)
 }
 
 //No crida GuardaVistaPrevia()
-function CanviaNivellDeZoom(nivell)
+function CanviaNivellDeZoom(nivell, redibuixa)
 {
 	if (nivell<0)
 	{
@@ -5772,7 +5772,7 @@ function PortamAAmbit(env)
 		}
 		CentraLaVista((env.MaxX+env.MinX)/2,(env.MaxY+env.MinY)/2);
 		if (j!=DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual))  //Evito canviar de nivell al nivell actual.
-			CanviaNivellDeZoom(j);
+			CanviaNivellDeZoom(j, true);
 		else
 		{
 			RevisaEstatsCapes();
@@ -6482,10 +6482,6 @@ var win, i, j, l, capa;
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
 
-	window.document.body.onmousemove=MovementMiraMonMapBrowser;
-	window.document.body.onbeforeunload=EndMiraMonMapBrowser;
-	window.document.body.onresize=ResizeMiraMonMapBrowser;
-
 	PreparaParamInternCtrl();
 	CreaCapesVolatils();
 
@@ -6493,6 +6489,13 @@ var win, i, j, l, capa;
 
 	changeSizeLayers(window);
 	CarregaConsultesTipiques();
+
+	window.document.body.onmousemove=MovementMiraMonMapBrowser;
+	window.document.body.onbeforeunload=EndMiraMonMapBrowser;
+	window.document.body.onresize=ResizeMiraMonMapBrowser;
+	window.document.body.onmessage=ProcessMessageMiraMonMapBrowser;
+	if (window.opener)
+		window.opener.postMessage("MiraMon Map Browser is listening", "*");
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
@@ -6893,6 +6896,9 @@ function FinalitzaMiraMonMapBrowser()
 		MMZWindow.close();
 		MMZWindow=null;
 	}
+	if (window.opener)
+		window.opener.postMessage("MiraMon Map Browser closed", "*");
+
 	layerList=[];
 	ParamInternCtrl={};
 }
@@ -6975,4 +6981,12 @@ function MovementMiraMonMapBrowser(event)
 		iFinestraLayerFora=-1;
 	if (iFinestraLayerFora!=-1)
 		MovimentFinestraLayerPerLaBarra(event, iFinestraLayerFora);
+}
+
+function ProcessMessageMiraMonMapBrowser(event)
+{
+	if (event.data.substring(0, 10)!="CommandMMN")
+		return;
+	eval(event.data);
+	RepintaMapesIVistes();
 }
