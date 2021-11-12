@@ -630,6 +630,20 @@ function DonaCadenaLang(cadena_lang)
 	return "";
 }
 
+function GetMessage(msg_id, section)
+{
+	if (section)
+	{
+		if (-1!=section.indexOf("."))
+		{
+			var sections=section.split(".");
+			for (var i=0; i<sections.length; i++)
+				;
+		}
+		return MessageLang[section][msg_id];
+	}	
+	return MessageLang[msg_id];
+}
 
 function DonaCadenaConcret(a, idioma)
 {
