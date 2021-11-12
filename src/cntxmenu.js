@@ -280,7 +280,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraHistograma(", i_capa, ");TancaContextMenuCapa();\">");
-		
+
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 		{
 			//cdns.push(GetMessage("ConfusionMatrix", "cntxmenu"));
@@ -295,12 +295,12 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 			;
 		else if (estil.component)
-		{			
+		{
 			if (estil.component.length==2 && estil.component[1].herenciaOrigen) //capa especial: "estadistics (per categoria)"
-				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">", 
+				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">",
 					GetMessage("StatisticByCategory", "cntxmenu"), "</a><br>");
 			else
-				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">", 
+				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">",
 					GetMessage("Statistic", "cntxmenu"), "</a><br>");
 		}
 		if(!alguna_opcio)
@@ -323,7 +323,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.FormatImatge=="application/x-img" || capa.model==model_vector)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioCondicional(", i_capa, ");TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Selecció", "spa":"Selección", "eng":"Selection", "fre":"Sélection"}), "</a><br>");
+				GetMessage("Selection"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -732,7 +732,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 				}
 			}
 		}
-	}	
+	}
 	CanviaIndexosCapesGraphsMM(n_moviment, i_capa_ini, i_capa_fi_per_sota);
 	CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl);
 	CanviaIndexosCapesHistogramaFinestra(n_moviment, i_capa_ini, i_capa_fi_per_sota);
@@ -1427,15 +1427,15 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	}
 
 	capa[0]=ParamCtrl.capa[i_capes[0]];
-	capa[1]=ParamCtrl.capa[i_capes[1]];	
+	capa[1]=ParamCtrl.capa[i_capes[1]];
 
 	//La descripció de les categories i la paleta és igual que la de la capa categòrica, la primera de la combinació
 	//cat_noves=capa[0].estil[condicio[0].i_estil].categories;
 	//colors=capa[0].estil[condicio[0].i_estil].paleta.colors;
 
 	var n_dec_estad=4;
-	
-	//Creo la descripció dels atributs 
+
+	//Creo la descripció dels atributs
 	// a/ les categories com a primer atribut i tots els estadístics de la segona capa després
 	for (var i_atrib_capa_0=0; i_atrib_capa_0<capa[0].estil[condicio[0].i_estil].atributs.length; i_atrib_capa_0++)
 		atrib_nous.push(JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].atributs[i_atrib_capa_0])));
@@ -1444,10 +1444,10 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	{
 		atrib_nous.push({nom: "$stat$_i_mode", descripcio: DonaCadenaLang(str_lang_mode), mostrar: "no"});
 		atrib_nous.push({nom: "$stat$_mode", descripcio: DonaCadenaLang(str_lang_mode), mostrar: "si_ple"});
-		atrib_nous.push({nom: "$stat$_percent_mode", descripcio: DonaCadenaLang(str_lang_percent_mode), mostrar: "si_ple", unitats: "%", NDecimals: n_dec_estad});			
+		atrib_nous.push({nom: "$stat$_percent_mode", descripcio: DonaCadenaLang(str_lang_percent_mode), mostrar: "si_ple", unitats: "%", NDecimals: n_dec_estad});
 	}
 	else
-	{	
+	{
 		var n_atrib_ori=atrib_nous.length;
 		/* marco alguns a mostrar "no" per provar que lo de darrera va, però després la idea és que quan s'esculli que vols crear estadístics
 		quins vols que es mostrin (es calculen sempre tots)*/
@@ -1462,21 +1462,21 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 
 		if (capa[1].estil[condicio[1].i_estil].DescItems)
 		{
-			for (var i=n_atrib_ori; i<atrib_nous.length; i++) 
-				atrib_nous[i].unitats=capa[1].estil[condicio[1].i_estil].DescItems;			
-			
+			for (var i=n_atrib_ori; i<atrib_nous.length; i++)
+				atrib_nous[i].unitats=capa[1].estil[condicio[1].i_estil].DescItems;
+
 			//per la sum_area les unitats són diferents -> buscar DonaUnitatsCoordenadesProj(crs) per mirar quines unitats he de concatenar al darrera
 			atrib_nous[n_atrib_ori+1].unitats=capa[1].estil[condicio[1].i_estil].DescItems+"&sdot;m²";
 			//la variança són les unitats al quadrat :)
-			atrib_nous[n_atrib_ori+3].unitats="("+atrib_nous[n_atrib_ori+3].unitats+")²"; 
+			atrib_nous[n_atrib_ori+3].unitats="("+atrib_nous[n_atrib_ori+3].unitats+")²";
 		}
 		else //per la sum_area les unitats són les "no unitats"*m2 :)
 			atrib_nous[n_atrib_ori+1].unitats="m²";
-			
+
 		if (capa[1].estil[condicio[1].i_estil].component[0].NDecimals)
 		{
-			for (var i=n_atrib_ori; i<atrib_nous.length; i++) 
-				atrib_nous[i].NDecimals=capa[1].estil[condicio[1].i_estil].component[0].NDecimals;			
+			for (var i=n_atrib_ori; i<atrib_nous.length; i++)
+				atrib_nous[i].NDecimals=capa[1].estil[condicio[1].i_estil].component[0].NDecimals;
 		}
 		else /*si no hi havien decimals definits, en poso "2" pels camps calculats (on ens sortiran), però no als
 			altres (així la suma, el rang, etc. els veure sesne decimals com la cpa original, pex DTM en m enters)*/
@@ -1486,10 +1486,10 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 			atrib_nous[n_atrib_ori+4].NDecimals=n_dec_estad;	//stdev
 		}
 	}
-	
+
 	//Creo la descripció de les categories, de moment només la original, les altres ja s'afegiran després
 	categ_noves=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].categories));
-	
+
 	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),{"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "}),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
 	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + DonaCadenaLang({"cat":" per categoria de","spa":" por categorías de ","eng":" by category of ", "fre":" par catégorie de "}) + capa[0].estil[condicio[0].i_estil].desc;
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
@@ -1515,11 +1515,11 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"estil": [{
 			"nom":	null,
 			"desc":	desc_estil,
-			"TipusObj": "P",			
+			"TipusObj": "P",
 			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil)},
 										{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
-											"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null, 
-										 	"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256, 
+											"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
+										 	"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
 										 		"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
 										 		"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null}
 										}],
@@ -2577,7 +2577,7 @@ function DonaCadenaCombinacioCapes()
 {
 var cdns=[], i, capa, hi_ha_raster_categ=0;
 
-	cdns.push("<form name=\"CombinacioCapes\" onSubmit=\"return false;\">");	
+	cdns.push("<form name=\"CombinacioCapes\" onSubmit=\"return false;\">");
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
 		if (EsIndexCapaVolatil(i, ParamCtrl))
@@ -2612,8 +2612,8 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 		        "\" onClick='AfegeixCapaCombicapaCategoric();TancaFinestraLayer(\"combinacioCapa\");' /><br>",
 			"</fieldset>"
 			);
-	}	
-		 
+	}
+
 	cdns.push("<div>",
 		"<fieldset><legend>",
 	  DonaCadenaLang({"cat":"Afegir camps estadístics a una capa categòrica des d'una altra capa (de qualsevol tipus)", "spa":"Añada capa combinada a partir de dues capas existentes", "eng":"Add statistical fields to a categorical layer from another layer (of any type)", "fre":"Ajouter des champs statistiques à une couche catégorielle à partir d'une autre couche (de tout type)"}),
@@ -3600,7 +3600,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 
 	cdns.push("<form name=\"SeleccioEstadistic\" onSubmit=\"return false;\">");
 	cdns.push("<div style=\"position:absolute;left:10px;top:10px;\">",
-			DonaCadenaLang({"cat":"Valor estadístic a mostrar per la capa", "spa":"Valor estadístico para mostrar para la capa", 
+			DonaCadenaLang({"cat":"Valor estadístic a mostrar per la capa", "spa":"Valor estadístico para mostrar para la capa",
 			"eng":"Statistical value to display for the layer", "fre":"Valeur statistique à afficher pour la couche"}), " \"",
 			DonaCadena(capa.DescLlegenda),
 			"\":<br/><br/>");
@@ -3610,16 +3610,16 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 		cdns.push("<input type=\"radio\" id=\"stat_mode\" name=\"stat\" value=\"mode\"><label for=\"mode\">", DonaCadenaLang(str_lang_mode), "</label><br>",
 	  					"<input type=\"radio\" id=\"stat_percent_mode\" name=\"stat\" value=\"percent_mode\"><label for=\"percent_mode\">", DonaCadenaLang(str_lang_percent_mode), "</label><br>",
 	  					"<input type=\"radio\" id=\"stat_mode_and_percent\" name=\"stat\" value=\"mode_and_percent\"><label for=\"mode_and_percent\">", DonaCadenaLang(str_lang_mode), " (", DonaCadenaLang(str_lang_percent_mode), ")</label><br>");
-	  					
+
 	  if (estil.component.length==2 && estil.component[1].herenciaOrigen) //capa especial: "estadistics (per categoria)"
-	  {	  	
+	  {
 	  	var i_atrib, recompte;
 	  	var value_text="";
 	  	value_text="<br><fieldset><legend>"+DonaCadenaLang({"cat":"Valor estadístic de", "spa":"Valor estadístico de", "eng":"Statistical value of", "fre":"Valeur statistique des"})+" "+
-	  					DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc)+" "+DonaCadenaLang({"cat":"per les categories de", "spa":"para las categorías de", "eng":"by category of", "fre":"par catégorie des"})+ 
+	  					DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc)+" "+DonaCadenaLang({"cat":"per les categories de", "spa":"para las categorías de", "eng":"by category of", "fre":"par catégorie des"})+
 	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc)+":</legend>";
 	    value_text+="<table style=\"width:100%;text-align:left;font-size:inherit\"><tr><td rowspan=\"2\">";
-	    
+
 	    //només poso per triar els que els atributs de la capa categorica inicial indiquen com a mostrables
 	    if (estil.component[1].herenciaOrigen.categories) //la segona és categòrica també
 	    {
@@ -3631,14 +3631,14 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    		if (estil.atributs[i_atrib].nom == "$stat$_mode")
 	    		{
 	    			value_text+="<input type=\"radio\" id=\"stat_mode_2\" name=\"stat\" value=\"mode_2\"><label for=\"mode\">"+DonaCadenaLang(str_lang_mode)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 	    		if (estil.atributs[i_atrib].nom == "$stat$_percent_mode")
 	    		{
 	    			value_text+="<input type=\"radio\" id=\"stat_percent_mode_2\" name=\"stat\" value=\"percent_mode_2\"><label for=\"percent_mode\">"+DonaCadenaLang(str_lang_percent_mode)+"</label><br>";
-	    			recompte++;	
-	    			//break; -> no cal 
+	    			recompte++;
+	    			//break; -> no cal
 	    		}
 	    	}
     		if (recompte == 2)
@@ -3651,54 +3651,54 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    	{
 	    		if (!estil.atributs[i_atrib].nom || estil.atributs[i_atrib].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
 	    			continue;
-	    				    		
-	    		//primer mirar sui_ple, pq si es que no no cal q em proecupi si él nom és un dles que m¡0interessa , oq igualment no es mostrara	    		
+
+	    		//primer mirar sui_ple, pq si es que no no cal q em proecupi si él nom és un dles que m¡0interessa , oq igualment no es mostrara
 					if (estil.atributs[i_atrib].nom == "$stat$_sum")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"sum_2\">"+DonaCadenaLang(str_lang_sum)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_sum_area")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_sum_area_2\" name=\"stat\" value=\"sum_area_2\"><label for=\"sum_area_2\">"+DonaCadenaLang(str_lang_sum_area)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_mean")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_mean_2\" name=\"stat\" value=\"mean_2\" checked=\"true\"><label for=\"mean_2\">"+DonaCadenaLang(str_lang_mean)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_variance")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_variance_2\" name=\"stat\" value=\"variance_2\"><label for=\"variance_2\">"+DonaCadenaLang(str_lang_variance)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
-	    		}		
+	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_stdev")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_stdev_2\" name=\"stat\" value=\"stdev_2\"><label for=\"stdev_2\">"+DonaCadenaLang(str_lang_stdev)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_min")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_min_2\" name=\"stat\" value=\"min_2\"><label for=\"min_2\">"+DonaCadenaLang(str_lang_min)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_max")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_max_2\" name=\"stat\" value=\"max_2\"><label for=\"max_2\">"+DonaCadenaLang(str_lang_max)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_range")
 					{
 						value_text+="<input type=\"radio\" id=\"stat_range_2\" name=\"stat\" value=\"range_2\"><label for=\"range_2\">"+DonaCadenaLang(str_lang_range)+"</label><br>";
-	    			recompte++;	
+	    			recompte++;
 	    			continue;
 	    		}
 				}
@@ -3715,8 +3715,8 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    					"<input type=\"radio\" id=\"stat_descend\" name=\"order\" value=\"descend\"><label for=\"stat_descend\">"+DonaCadenaLang({"cat":"Descendent", "spa":"Descendiente", "eng":"Descending", "fre":"Descendant"})+"</label><br>";
 		    value_text+="</fieldset></td></tr></table></fieldset>";
 		    cdns.push(value_text);
-		   }	    
-	  }	 
+		   }
+	  }
 	}
 	else
 		cdns.push("<input type=\"radio\" id=\"sum\" name=\"stat\" value=\"sum\"><label for=\"sum\">", DonaCadenaLang(str_lang_sum), "</label><br>",
@@ -3741,8 +3741,8 @@ function CridaCreacioEstadistic(i_capa)
 	{
 		alert(GetMessage("StatisticalDescriptorDisplayNeedSelected", "cntxmenu")+".");
 		return;
-	}		
-	TancaFinestraLayer("seleccioEstadistic");	
+	}
+	TancaFinestraLayer("seleccioEstadistic");
 	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")
 	//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
 		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value, document.SeleccioEstadistic.presentacio.value, document.SeleccioEstadistic.order.value);
@@ -3945,11 +3945,11 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 				"<input type=\"text\" id=\"edita-estil-capa-illum-elev\" name=\"elev\" value=\"",
 				(estil.component[0].illum.elev ? estil.component[0].illum.elev: 45), "\" style=\"width:50px;\" />",
 				" (", DonaCadenaLang({"cat":"des del terra (en graus)", "spa":"desde el suelo (en grados)", "eng":"from the ground (in degress)", "fre":"à partir du sol (en degrés)"}), ")",
-				"<br>");		
+				"<br>");
 		cdns.push("<label for=\"edita-estil-capa-illum-f\">", DonaCadenaLang({"cat":"Factor d'exageració del relleu", "spa":"Factor de exageración del relieve", "eng":"Relief exaggeration factor", "fre":"Facteur d'exagération du relief"}), ": </label>",
 				"<input type=\"text\" id=\"edita-estil-capa-illum-f\" name=\"f\" value=\"",
 				(estil.component[0].illum.f ? estil.component[0].illum.f : 1) , "\" style=\"width:50px;\" />",
-				"<br>");		
+				"<br>");
 		cdns.push("</fieldset>");
 	}
 	else if (estil.component.length<3)
@@ -3964,7 +3964,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		//Paletes generals
 		if (estil.categories)
 		{
-			for (paleta in PaletesGlobals.categoric) 
+			for (paleta in PaletesGlobals.categoric)
 			{
 				if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
 					continue;
@@ -3974,7 +3974,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		else
 		{
 			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-grisos\"><label for=\"edita-estil-capa-paleta-grisos\">", DonaCadenaHTMLPintaPaleta(null), " (", DonaCadenaLang({cat: "Escala de grisos", spa: "Escala de grises", eng: "Greyscale", fre: "Niveaux de gris"}), ")</label><br>");
-			for (paleta in PaletesGlobals.continuous) 
+			for (paleta in PaletesGlobals.continuous)
 			{
 				if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
 					continue;
@@ -3993,7 +3993,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		}
 		cdns.push("</fieldset>");
 	}
-	
+
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		DonaCadenaLang({"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"}),
 	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
@@ -4031,7 +4031,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 			valor=225;
 			alert(DonaCadenaLang({"cat":"Azimut incorrecte. Hauria de ser un número entre 0 i 360. Aplicant el valor per defecte", "spa":"Azimut incorrecto. Debería ser un número entre 0 y 360. Aplicando el valor por defecto", "eng":"Incorrect azimuth. It should be a number between 0 and 360. Applying the default value", "fre":"Azimut incorrect. Il doit s'agir d'un nombre compris entre 0 et 360. Application de la valeur par défaut"})+": "+valor);
 		}
-		estil.component[0].illum.az=valor;		
+		estil.component[0].illum.az=valor;
 		var valor=parseFloat(document.getElementById("edita-estil-capa-illum-elev").value);
 		if (valor<0 || valor>90)
 		{
@@ -4082,7 +4082,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 				{
 					if (!estil.paletaPrevia && estil.paleta)
 						estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
-					for (paleta in PaletesGlobals.categoric) 
+					for (paleta in PaletesGlobals.categoric)
 					{
 						if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
 							continue;
@@ -4100,7 +4100,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 					{
 						if (!estil.paletaPrevia && estil.paleta)
 							estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
-						for (paleta in PaletesGlobals.continuous) 
+						for (paleta in PaletesGlobals.continuous)
 						{
 							if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
 								continue;
