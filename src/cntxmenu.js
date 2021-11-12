@@ -171,13 +171,13 @@ var cdns=[]
 var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraModificaNomCapa(", i_capa, ");TancaContextMenuCapa();\">",
-						DonaCadenaLang({"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}), "</a><br>");
+						GetMessage("ModifyName"), "</a><br>");
 	cdns.push("<hr>");
 
 	if(ParamCtrl.BarraBotoAfegeixCapa)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
-						DonaCadenaLang({"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"}), "</a><br>");
+						GetMessage("AddLayer"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 
@@ -185,10 +185,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.origen && capa.origen=="usuari")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
-							DonaCadenaLang({"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"}), "</a>");
+							GetMessage(ShareLayer, "cntxmenu"), "</a>");
 		cdns.push("<br>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
-						DonaCadenaLang({"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"}), "</a>");
+							GetMessage("RemoveLayer", "cntxmenu"), "</a>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -200,22 +200,22 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (ParamCtrl.capa.length>NumeroDeCapesVolatils(-1))
 	{
 		cdns.push("<b><font color=\"#888888\">",
-			  DonaCadenaLang({"cat":"Moure la capa", "spa":"Mover la capa", "eng":"Move layer", "fre":"Déplacer la couche"}), "</b>");
+			  GetMessage("MoveLayer", "cntxmenu"), "</b>");
 		if(i_capa>NumeroDeCapesVolatils(i_capa))
 		{
 			cdns.push("<br /><a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASobreDeTot(", i_capa, ");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"A sobre de tot","spa":"Encima de todo", "eng":"To the top", "fre":"En haut de"}), "</a><br>",
+					GetMessage("ToTheTop", "cntxmenu"), "</a><br>",
 					"<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASobre(", i_capa,");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"A sobre","spa":"Encima", "eng":"Up", "fre":"Au-dessus"}), "</a>");
+					GetMessage("Up", "cntxmenu"), "</a>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
 		if(i_capa<(ParamCtrl.capa.length-1))
 		{
 			cdns.push("<br/><a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASota(", i_capa, ");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"A sota", "spa":"Debajo", "eng":"Down", "fre":"Au-dessous"}), "</a><br>",
+					GetMessage("Down", "cntxmenu"), "</a><br>",
 					"<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MoureASotaDeTot(", i_capa,");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"A sota de tot", "spa":"Debajo de todo", "eng":"To the end", "fre":"En bas"}), "</a>");
+					GetMessage("ToTheEnd", "cntxmenu"), "</a>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
@@ -229,14 +229,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Metadades", "spa":"Metadatos", "eng":"Metadata", "fre":"Métadonnées"}), "</a><br>");
+				GetMessage("Metadata"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
 	if (/*(capa.tipus=="TipusWMS" && capa.FormatImatge=="application/x-img") ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}), "</a><br>");
+				GetMessage("ComputeQuality", "cntxmenu"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -245,14 +245,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(capa.metadades.quality)
 		{
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}), "</a><br>");
+					GetMessage("Quality"), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
 		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW || capa.metadades.provenance.lineage))
 		{
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraLlinatge(", i_capa, ");TancaContextMenuCapa();\">",
-					DonaCadenaLang({"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}), "</a><br>");
+					GetMessage("Lineage"), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
 		}
@@ -260,7 +260,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	/*if (capa.metadades && capa.metadades.guf)
 	{*/
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}), "</a><br>");
+				GetMessage("Feedback"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	//}
@@ -272,7 +272,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.estil && capa.estil.length==1)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}), "</a><br>");
+				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -283,13 +283,13 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 		{
-			//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}));
-			cdns.push(DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}));
+			//cdns.push(GetMessage("ConfusionMatrix", "cntxmenu"));
+			cdns.push(GetMessage("ContingencyTable", "cntxmenu"));
 		}
 		else if (DonaTipusGraficHistograma(estil, 0)=='pie')
-			cdns.push(DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}));
+			cdns.push(GetMessage("PieChart"));
 		else
-			cdns.push(DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}));
+			cdns.push(GetMessage("Histogram"));
 		cdns.push("</a><br>");
 
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
@@ -298,10 +298,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		{			
 			if (estil.component.length==2 && estil.component[1].herenciaOrigen) //capa especial: "estadistics (per categoria)"
 				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">", 
-					DonaCadenaLang({"cat": "Estadístic per categoria", "spa": "Estadístico por categoria", "eng": "Statistic by category", "fre": "Statistique par catégorie"}), "</a><br>");
+					GetMessage("StatisticByCategory", "cntxmenu"), "</a><br>");
 			else
 				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">", 
-					DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"}), "</a><br>");
+					GetMessage("Statistic", "cntxmenu"), "</a><br>");
 		}
 		if(!alguna_opcio)
 			alguna_opcio=true;
@@ -309,14 +309,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio && capa.estil[capa.i_estil].component[0].representacio.tipus=="3d")
 	{
 		var estil=capa.estil[capa.i_estil];
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", DonaCadenaLang({"cat":"Superfície", "spa":"superficie", "eng":"Surface", "fre":"Surface"})," 3D</a><br>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", GetMessage("Surface", "cntxmenu"), " 3D</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
 	if (capa.valors && capa.valors.length>2)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCombinacioRGB(", i_capa, ");TancaContextMenuCapa();\">",
-				DonaCadenaLang({"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}), "</a><br>");
+				GetMessage("RGBCombination", "cntxmenu"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
@@ -3739,7 +3739,7 @@ function CridaCreacioEstadistic(i_capa)
 {
 	if (document.SeleccioEstadistic.stat.value=="")
 	{
-		alert(DonaCadenaLang({"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa.", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa.", "eng":"The statistical descriptor to display for the layer needs to be selected.", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné."}));
+		alert(GetMessage("StatisticalDescriptorDisplayNeedSelected", "cntxmenu")+".");
 		return;
 	}		
 	TancaFinestraLayer("seleccioEstadistic");	

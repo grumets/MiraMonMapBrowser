@@ -98,6 +98,8 @@ IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
 
+IncludeScript("msg.js", true);
+
 var IdProces=Math.random()*100000;
 var NIdProces=0;
 var NConsultesZero, NConsultesDigiZero, NCapesConsultables, NCapesDigiConsultables, NCapesCTipica=0;
@@ -636,13 +638,43 @@ function GetMessage(msg_id, section)
 	{
 		if (-1!=section.indexOf("."))
 		{
-			var sections=section.split(".");
+			var sections=section.split("."), place=MessageLang;
 			for (var i=0; i<sections.length; i++)
-				;
+			{
+				if (!place[sections[i]])
+				{
+					alert("MessageLang Error: I cannot found section "+sections[i]+" in "+section);
+					return "["+GetMessage("MissingMessage")+"]";
+				}
+				place=place[sections[i]];
+			}
+			if (!place[msg_id])
+			{
+				alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+				return "["+GetMessage("MissingMessage")+"]";
+			}
+			return DonaCadenaLang(place[msg_id]);
 		}
-		return MessageLang[section][msg_id];
+		if (!MessageLang[section])
+		{
+			alert("MessageLang Error: I cannot found section "+section);
+			return "["+GetMessage("MissingMessage")+"]";
+		}
+		if (!MessageLang[section][msg_id])
+		{
+			alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+			return "["+GetMessage("MissingMessage")+"]";
+		}
+		return DonaCadenaLang(MessageLang[section][msg_id]);
 	}	
-	return MessageLang[msg_id];
+	if (!MessageLang[msg_id])
+	{
+		alert("MessageLang Error: I cannot found message id "+msg_id+" as a root message");
+		if (msg_id=="MissingMessage")
+			return "[Missing message]"
+		return "["+GetMessage("MissingMessage")+"]";
+	}
+	return DonaCadenaLang(MessageLang[msg_id]);
 }
 
 function DonaCadenaConcret(a, idioma)
