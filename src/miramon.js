@@ -2702,41 +2702,51 @@ var cdns=[], ll, p, unitats_CRS;
 	return cdns.join("");
 }
 
-function MostraValorDeCoordActual(i_nova_vista, x, y)
+function DonaValorsDePosicioActual(i_nova_vista, x, y)
 {
-	if (window.document.form_coord && window.document.form_coord.info_coord)
+var cdns=[], i, j, vista, capa;
+
+	cdns.push(DonaValorDeCoordActual(x, y, false, false));
+
+	vista=DonaVistaDesDeINovaVista(i_nova_vista);
+
+	i=Math.round((x-vista.EnvActual.MinX)/vista.CostatZoomActual);
+	j=Math.round((vista.EnvActual.MaxY-y)/vista.CostatZoomActual);
+
+	if (i>=0 && i<vista.ncol && j>=0 && j<vista.nfil)
 	{
-		var cdns=[], i, j, vista, capa;
-		cdns.push(DonaValorDeCoordActual(x, y, false, false));
-
-		vista=DonaVistaDesDeINovaVista(i_nova_vista);
-
-		i=Math.round((x-vista.EnvActual.MinX)/vista.CostatZoomActual);
-		j=Math.round((vista.EnvActual.MaxY-y)/vista.CostatZoomActual);
-
-		if (i>=0 && i<vista.ncol && j>=0 && j<vista.nfil)
+		for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 		{
-			for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+			capa=ParamCtrl.capa[i_capa];
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
+				capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
 			{
-				capa=ParamCtrl.capa[i_capa];
-				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
-					capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
-				{
-					var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j), true);
-					if (s=="")
-						continue;
-					if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-						cdns.push("<br>");
-					else
-						cdns.push("; ");
-					cdns.push(DonaDescripcioValorMostrarCapa(i_capa, true), ": ", s);
-				}
+				var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j), true);
+				if (s=="")
+					continue;
+				if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
+					cdns.push("<br>");
+				else
+					cdns.push("; ");
+				cdns.push(DonaDescripcioValorMostrarCapa(i_capa, true), ": ", s);
 			}
 		}
+	}
+	return cdns.join("");
+}
+
+function MostraValorDeCoordActual(i_nova_vista, x, y)
+{
+	var text=DonaValorsDePosicioActual(i_nova_vista, x, y);
+	if (window.opener)
+		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser current location text", text: text}), "*");
+
+	if (window.document.form_coord && window.document.form_coord.info_coord)
+	{
 		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-			window.document.form_coord.info_coord.innerHTML=cdns.join("");
+			window.document.form_coord.info_coord.innerHTML=text;
 		else
-			window.document.form_coord.info_coord.value=cdns.join("");
+			window.document.form_coord.info_coord.value=text;
 	}
 }
 
@@ -6495,7 +6505,7 @@ var win, i, j, l, capa;
 	window.document.body.onresize=ResizeMiraMonMapBrowser;
 	window.document.body.onmessage=ProcessMessageMiraMonMapBrowser;
 	if (window.opener)
-		window.opener.postMessage("MiraMon Map Browser is listening", "*");
+		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser is listening"}), "*");
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
@@ -6897,7 +6907,7 @@ function FinalitzaMiraMonMapBrowser()
 		MMZWindow=null;
 	}
 	if (window.opener)
-		window.opener.postMessage("MiraMon Map Browser closed", "*");
+		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser closed"}), "*");
 
 	layerList=[];
 	ParamInternCtrl={};
