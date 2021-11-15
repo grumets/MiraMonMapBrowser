@@ -131,7 +131,7 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmcenter);
 							break;
 						}
-						if (0==CommandMMNCenterCoord(punt))
+						if (0==CommandMMNSetCenterCoord(punt))
 							hihacanvis=true;
 					}
 					else
@@ -141,7 +141,7 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 				{
 					if (nodes[i].attributes[i_at].value.trim().length)
 					{
-						if (0==CommandMMNChangeZoom(parseFloat(nodes[i].attributes[i_at].value.trim())))
+						if (0==CommandMMNSetZoom(parseFloat(nodes[i].attributes[i_at].value.trim())))
 							hihacanvis=true;
 					}
 				}
@@ -155,7 +155,7 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 				}
 				else if (nodes[i].attributes[i_at].name=="mm-time")
 				{
-					var datejson, date;
+					var datejson;
 					var mmtime = nodes[i].attributes[i_at].value.trim();
 					if (mmtime.length)
 					{
@@ -169,9 +169,8 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmtime);
 							break;
 						}
-						date=DonaDateDesDeDataJSON(datejson);
-						SincronitzaCapesMillisegons(date.getTime());
-						hihacanvis=true;
+						if (0==CommandMMNSetChangeDateTime(datejson))
+							hihacanvis=true;						
 					}
 				}
 			}

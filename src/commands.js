@@ -40,7 +40,7 @@
 
 //----
 
-function CommandMMNChangeZoom(costat)
+function CommandMMNSetZoom(costat)
 {
 	if (isNaN(costat))
 	{
@@ -66,7 +66,7 @@ function CommandMMNChangeZoom(costat)
 	return 1;
 }
 
-function CommandMMNCenterCoord(punt)
+function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
 	{
@@ -77,5 +77,12 @@ function CommandMMNCenterCoord(punt)
 			return 1;
 	}
 	CentraLaVista(punt.x, punt.y);
+	return 0;
+}
+
+function CommandMMNSetDateTime(datejson)
+{
+	var date=DonaDateDesDeDataJSON(datejson);
+	SincronitzaCapesMillisegons(date.getTime());
 	return 0;
 }
