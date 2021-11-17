@@ -432,7 +432,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					cdns.push("\t", estil.categories[i_cat]["$stat$_sum"] ?  estil.categories[i_cat]["$stat$_sum"] : 0);
 			}
 
-			cdns.push("\n",	GetMessage("SumArea")), " (*m²)\t", estadistics.suma*area_cella);
+			cdns.push("\n",	GetMessage("SumArea"), " (*m²)\t", estadistics.suma*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])

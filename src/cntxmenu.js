@@ -1314,7 +1314,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			//DonaCadena(atrib_nous[atrib_nous.length-1].descripcio)+ " ("+ (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom) + ")";
 	}
 
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),{"cat":" i ","spa":" y ","eng":" and ", "fre":" et "}),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
@@ -1482,16 +1482,16 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	//Creo la descripció de les categories, de moment només la original, les altres ja s'afegiran després
 	categ_noves=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].categories));
 
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),{"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "}),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
-	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + GetMessage("byCategoryOf", "cntxmenu" ) + capa[0].estil[condicio[0].i_estil].desc;
+	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),GetMessageJSON("_withStatisticOf_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + " " + GetMessage("byCategoryOf", "cntxmenu" ) + " " + capa[0].estil[condicio[0].i_estil].desc;
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
 	ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
 		"versio": null,
 		"tipus": null,
 		//"nom":	"LayerWithStatistics", //capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc;
-		"nom":	capa[1].estil[condicio[1].i_estil].desc + "withStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc,
-		"desc":	(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + GetMessage("withStatisticsOf", "cntxmenu") + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		"nom":	capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc,
+		"desc":	(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + GetMessageJSON("_withStatisticOf_", "cntxmenu") + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
@@ -2160,7 +2160,7 @@ var root, cadena, node, node2, i, j, cdns=[];
 			  	"</b><br><input type=\"text\" name=\"servidor\" readOnly style=\"width:400px;\" value=\"",
 			  	servidorGC.servidor, "\" />",
 				  "<br><br><b>",
-				  GetMessage("Title", "cntxmenu"),
+				  GetMessage("Title"),
 				  "</b><br><input type=\"text\" name=\"TitolServidor\" style=\"width:400px;\"");
 		if(servidorGC.titol)
 	  		cdns.push(" value=\"",servidorGC.titol, "\"");
@@ -2179,10 +2179,12 @@ var root, cadena, node, node2, i, j, cdns=[];
 		}
 		cdns.push("</table></div><br>",
 				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
-				  GetMessage("AddBar"),
+				  GetMessage("Add"),
+				  "\"",
 				  " onClick='AfegirCapesAlNavegador(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
 				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 				  GetMessage("Cancel"),
+				  "\"",
 				  " onClick='TancaFinestraLayer(\"afegirCapa\");' />");
 		document.getElementById("LayerAfegeixCapaServidor").innerHTML=cdns.join("");
 	}
@@ -2237,7 +2239,7 @@ var i, j;
 	while( i<LlistaServOWS.length && categoria_sel!=DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 		i++;
 	j=0;
-	form.llista_serveis_OWS.options[j]=new Option(GetMessage("ChooseOneFromList", "cntxmenu"), "");
+	form.llista_serveis_OWS.options[j]=new Option("--"+GetMessage("ChooseOneFromList", "cntxmenu")+"--", "");
 	j++;
 	while(i<LlistaServOWS.length && categoria_sel==DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 	{
@@ -2300,7 +2302,7 @@ function PreparaLlistaServidorsOWS()
 	for(var i=0; i<LlistaServOWS.length; i++)
 	{
 		if(!LlistaServOWS[i].categoria || DonaCadena(LlistaServOWS[i].categoria.desc)==null)
-			LlistaServOWS[i].categoria={"nom": "Altres", "desc": {"cat": "ZZAltresZZ", "spa": "ZZOtrosZZ", "eng": "ZZOthersZZ", "fre": "ZZAutresZZ"}};
+			LlistaServOWS[i].categoria={"nom": "Altres", "desc": "ZZ"+GetMessage("Others")+"ZZ"};
 	}
 	LlistaServOWS.sort(OrdenacioServOWSPerCategoriaINom);
 }
@@ -2398,7 +2400,7 @@ var cdns=[], i, capa;
 			  "</legend>",
 			  "<fieldset><legend>",
 			  GetMessage("LayerToReclassify", "cntxmenu"),
-			  "</legend>",
+			  " </legend>",
 			  "<input type=\"hidden\" value=\"",i_capa,"\" id=\"", prefix_id, "-valor-capa-",0,"\" name=\"","valor_capa", 0, "\" />", DonaCadena(capa.DescLlegenda), "<br>",
 			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true}),
 			  "</fieldset>");
@@ -2553,12 +2555,12 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			  GetMessage("AddGeometricOverlayLayerBetweenTwoCategoricalLayers", "cntxmenu"),
 			  "</legend>",
 			  "<fieldset><legend>",
-			  GetMessage("Layer_1", "cntxmenu"),
-			  "</legend>",
+			  GetMessage("Layer", "cntxmenu"),
+			  "_1 </legend>",
 				DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 0, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset><fieldset><legend>",
-			  GetMessage("Layer_2", "cntxmenu"),
-			  "</legend>",
+			  GetMessage("Layer", "cntxmenu"),
+			  "_2 </legend>",
 			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset>",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
@@ -2573,12 +2575,12 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	  GetMessage("AddStatisticalFieldsToCategoricalLayerFromAnotherLayer", "cntxmenu"),
 	  "</legend>",
 	  "<fieldset><legend>",
-	  GetMessage("Layer_1", "cntxmenu"),
-	  "</legend>",
+	  GetMessage("Layer", "cntxmenu"),
+	  "_1 </legend>",
 		DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 2, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 	  "</fieldset><fieldset><legend>",
-	  GetMessage("Layer_2", "cntxmenu"),
-	  "</legend>",
+	  GetMessage("Layer", "cntxmenu"),
+	  "_2 </legend>",
 	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false}),
 	  "</fieldset>",
 	  "<input type=\"button\" class=\"Verdana11px\" value=\"",
@@ -2618,8 +2620,8 @@ var cdns=[], i;
 			if(categoria_previa!=DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 			{
 				categoria_previa=DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase();
-				if(categoria_previa==GetMessage("ZZOthersZZ", "cntxmenu").toLowerCase())
-					cdns.push("<option value=\"", categoria_previa, "\">",  GetMessage("Others", "cntxmenu"));
+				if(categoria_previa=="zz"+GetMessage("Others").toLowerCase()+"zz")
+					cdns.push("<option value=\"", categoria_previa, "\">",  GetMessage("Others"));
 				else
 					cdns.push("<option value=\"", categoria_previa, "\">",  DonaCadena(LlistaServOWS[i].categoria.desc));
 			}
@@ -2629,7 +2631,7 @@ var cdns=[], i;
 				  " onChange=\"MostraServidorSeleccionatDeLlistaOWSAEdit(form);\">");
 		var categoria_sel=DonaCadena(LlistaServOWS[0].categoria.desc).toLowerCase();
 		i=0;
-		cdns.push("<option value=\"\">",  GetMessage("ChooseOneFromList", "cntxmenu"));
+		cdns.push("<option value=\"\">--",  GetMessage("ChooseOneFromList", "cntxmenu"), "--");
 		while(categoria_sel==DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 		{
 			cdns.push("<option value=\"", LlistaServOWS[i].url, "\">",  DonaCadena(LlistaServOWS[i].nom));
@@ -2847,7 +2849,7 @@ var estil_o_atrib;
 	cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-qualsevol\" name=\"cc",i_condicio, "\" value=\"qualsevol\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", null);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("anyValue", "cntxmenu"), "</label>",
 			"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-constant\" name=\"cc",i_condicio, "\" value=\"constant\" checked=\"checked\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", false);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("constant", "cntxmenu"), "</label>");
 	if (nc.n_capa>1)
-		cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-capa\" name=\"cc",i_condicio, "\" value=\"capa\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", true);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-capa\">", GetMessage("layer", "cntxmenu"), "</label>");
+		cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-capa\" name=\"cc",i_condicio, "\" value=\"capa\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", true);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-capa\">", GetMessage("layer"), "</label>");
 
 	cdns.push("<br>");
 
@@ -3353,7 +3355,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	{
 		// Si la capa només té un estil, potser que no tingui ni nom ni descripció perquè és l'estil per defecte
 		// com que ara n'afegeix-ho un de nou li he de possar com a mínim la descripció
-		capa.estil[0].desc={"cat":"per defecte","spa":"por defecto","eng":"by default", "fre":"par défaut"};
+		capa.estil[0].desc=GetMessageJSON("byDefault","cntxmenu");
 	}
 	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(sel_condicional.i_estil) ? sel_condicional.i_estil : 0]));
 	estil=capa.estil[i_estil_nou];
@@ -4170,10 +4172,7 @@ var desc=document.getElementById("edita-nom-estil").value,  estil=ParamCtrl.capa
 
 function ObreFinestraCalculaQualitatCapa(i_capa, i_estil)
 {
-var elem=ObreFinestra(window, "calculaQualitat", GetMessage({"cat":"de calcular la qualitat",
-						  "spa":"de calcular la calidad",
-						  "eng":"to compute the quality",
-						  "fre":"pour calculer la qualité"}));
+var elem=ObreFinestra(window, "calculaQualitat", GetMessage("toComputeTheQuality", "cntxmenu"));
 	if (!elem)
 		return;
 	FinestraCalculaQualitatCapa(elem, i_capa, i_estil);
