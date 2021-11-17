@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,83 +7,73 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
 "use strict"
 
 //Definits aquí i usats a histpie.js i a cntxmenu.js
-var str_lang_mode={"cat": "Classe modal", "spa": "Clase modal", "eng": "Modal class", "fre": "Classe modale"};
-var str_lang_percent_mode={"cat": "Percentatge de la moda", "spa": "Porcentaje de la moda", "eng": "Percentage of the mode", "fre": "Pourcentage de mode"};
-var str_lang_sum={"cat": "Suma", "spa": "Suma", "eng": "Sum", "fre": "Somme"};
-var str_lang_sum_area={"cat": "Suma àrea", "spa": "Suma área", "eng": "Sum area", "fre": "Somme area"};
-var str_lang_mean={"cat": "Mitjana", "spa": "Media", "eng": "Mean", "fre": "Moyenne"};
-var str_lang_variance={"cat": "Variança", "spa": "Varianza", "eng": "Variance", "fre": "Variance"};
-var str_lang_stdev={"cat": "Desviació estàndard", "spa": "Desviació estándar", "eng": "Standard deviation", "fre": "Écart-type"};
-var str_lang_min={"cat": "Mínim", "spa": "Mínimo", "eng": "Minimum", "fre": "Minimum"};
-var str_lang_max={"cat": "Màxim", "spa": "Máximo", "eng": "Maximum", "fre": "Maximum"};
-var str_lang_range={"cat": "Rang", "spa": "Rango", "eng": "Range", "fre": "Gamme"};
 
 function DonaTitolEstadistic(categories, atributs, tipus_estad)
 {
 var titol="";
-	
+
 	if (categories && atributs) //cas categòric
 	{
 		if (tipus_estad == "mode")
-			titol=DonaCadenaLang(str_lang_mode);
+			titol=GetMessage("ModalClass");
 		else if (tipus_estad == "percent_mode")
-			titol=DonaCadenaLang(str_lang_percent_mode);
+			titol=GetMessage("PercentageMode");
 		else if (tipus_estad == "mode_and_percent")
-			//titol=DonaCadenaLang(str_lang_mode)+" ("+DonaCadenaLang(str_lang_percent_mode)+")";
-			titol=DonaCadenaLang(str_lang_mode)+" (%)";
+			//titol=GetMessage("ModalClass")+" ("+GetMessage("PercentageMode")+")";
+			titol=GetMessage("ModalClass")+" (%)";
 	}
 	else
 	{
 		if (tipus_estad == "sum")
-			titol=DonaCadenaLang(str_lang_sum);
+			titol=GetMessage("Sum");
 		else if (tipus_estad == "sum_area")
-			titol=DonaCadenaLang(str_lang_sum_area);
+			titol=GetMessage("SumArea");
 		else if (tipus_estad == "mean")
-			titol=DonaCadenaLang(str_lang_mean);
+			titol=GetMessage("Mean");
 		else if (tipus_estad == "variance")
-			titol=DonaCadenaLang(str_lang_variance);
+			titol=GetMessage("Variance");
 		else if (tipus_estad == "stdev")
-			titol=DonaCadenaLang(str_lang_stdev);
+			titol=GetMessage("StandardDeviation");
 		else if (tipus_estad == "min")
-			titol=DonaCadenaLang(str_lang_min);
+			titol=GetMessage("Minimum");
 		else if (tipus_estad == "max")
-			titol=DonaCadenaLang(str_lang_max);
+			titol=GetMessage("Maximum");
 		else if (tipus_estad == "range")
-			titol=DonaCadenaLang(str_lang_range);
+			titol=GetMessage("Range");
 	}
-	return titol;		
+	return titol;
 }
 
 function CalculaCountClasseNValues(v, param)
@@ -142,7 +132,7 @@ var n_valids=0, delta, i, suma=0, v_i, n=v.length;
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
- 
+
 	if (v.length==0)
 		return null;
 
@@ -150,7 +140,7 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	m=v[0];
 	if (!m && m!=0)
 		return null;
-	
+
 	count_m=1;
 	for(i=1;i<n;i++)
 	{
@@ -188,7 +178,7 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	}
 	if (n_m_previa==1)
 		return m_previa[0];
-	return m_previa[Math.floor(Math.random()*n_m_previa)];	
+	return m_previa[Math.floor(Math.random()*n_m_previa)];
 }
 
 //Calcula estadistics categòrics a partir de les classes
@@ -197,8 +187,8 @@ function CalculaEstadisticsCategorics(classe)
 var i, max_recompte=0;
 var estadistics_categorics={
 			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
-			i_moda: 0};    //categoria modal			
-		
+			i_moda: 0};    //categoria modal
+
 	for (i=0; i<classe.length; i++)
 	{
 		if (!classe[i])
@@ -207,8 +197,8 @@ var estadistics_categorics={
 		if (max_recompte < classe[i]) //el nou recompte és més gran
 		{
 			max_recompte = classe[i];
-			estadistics_categorics.i_moda = i;		
-		}	
+			estadistics_categorics.i_moda = i;
+		}
 	}
 	return estadistics_categorics;
 }
