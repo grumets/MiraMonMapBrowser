@@ -52,7 +52,7 @@ function OmpleFinestraTriaStoryMap(win, name)
 var cdns=[], storyMap, i_story;
 
 	cdns.push("<br>",
-		DonaCadenaLang({"cat":"Selecciona una història", "spa":"Selecciona una historia", "eng":"Select a story", "fre":"Sélectionnez une histoire"}), ":" ,
+		GetMessage("SelectStory", "storymap"), ":" ,
 						"<br>");
 		for (i_story=0; i_story<ParamCtrl.StoryMap.length; i_story++)
 		{
@@ -127,15 +127,15 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 							punt=JSON.parse(mmcenter);
 						}
 						catch (e) {
-							alert(DonaCadenaLang({"cat":"Format del paràmetre mm-center incorrecte:  ", "spa":"Formato del parametro mm-center icnorrecto:  ", "eng":"Wrong format in mm-center parameter:  ", "fre":"Format incorrect dans le paramètre mm-center:  "}) + e +
-										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmcenter);
+							alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap") + e +
+										GetMessage("_ParameterValueFoundIs", "storymap") + mmcenter);
 							break;
 						}
 						if (0==CommandMMNSetCenterCoord(punt))
 							hihacanvis=true;
 					}
 					else
-						alert(DonaCadenaLang({"cat":"Format del paràmetre mm-center incorrecte", "spa":"Formato del parametro mm-center icnorrecto", "eng":"Wrong format in mm-center parameter", "fre":"Format incorrect dans le paramètre mm-center"}));
+						alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap"));
 				}
 				else if (nodes[i].attributes[i_at].name=='mm-zoom')
 				{
@@ -165,12 +165,12 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 						}
 						catch (e)
 						{
-							alert(DonaCadenaLang({"cat":"Format del paràmetre mm-time incorrecte:  ", "spa":"Formato del parámetro mm-time icnorrecto:  ", "eng":"Wrong format in mm-time parameter:  ", "fre":"Format incorrect dans le paramètre mm-time:  "}) + e +
-										DonaCadenaLang({"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"}) + mmtime);
+							alert(GetMessage("WrongFormat_mm_time_Parameter", "storymap") + e +
+										GetMessage("_ParameterValueFoundIs", "storymap") + mmtime);
 							break;
 						}
 						if (0==CommandMMNSetChangeDateTime(datejson))
-							hihacanvis=true;						
+							hihacanvis=true;
 					}
 				}
 			}
@@ -207,4 +207,3 @@ function ExecutaAttributsStoryMapVisible()
 	RecorreNodesFillsAttributsStoryMapVisible(div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
-

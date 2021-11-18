@@ -52,7 +52,7 @@ var MessageLang={
   close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
   UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
   layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
-  Layer: {"cat":"Capa", "spa":"Capa", "eng":"Layer", "fre":"Couche"},  
+  Layer: {"cat":"Capa", "spa":"Capa", "eng":"Layer", "fre":"Couche"},
   Layers: {"cat":"Capes","spa":"Capas","eng":"Layers","fre":"Couches"},
   Add: {"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"},
 	Cancel: {"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"},
@@ -196,6 +196,13 @@ var MessageLang={
 		ofUserFeedback: {"cat":"de valoracions dels usuaris", "spa":"de valoraciones de los usuarios", "eng":"of user feedback", "fre":"pour la rétroaction de l'utilisateur"},
 	_withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
 		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
+	},
+  storymap:{
+		SelectStory: {"cat":"Selecciona una història", "spa":"Selecciona una historia", "eng":"Select a story", "fre":"Sélectionnez une histoire"},
+		WrongFormat_mm_center_Parameter: {"cat":"Format del paràmetre mm-center incorrecte:  ", "spa":"Formato del parametro mm-center icnorrecto:  ", "eng":"Wrong format in mm-center parameter:  ", "fre":"Format incorrect dans le paramètre mm-center:  "},
+		_ParameterValueFoundIs: {"cat":". El valor del paràmetre indicat és:", "spa":". El valor del parámetro indicado es:", "eng":". The parameter value found is:", "fre":". La valeur de paramètre trouvée est:"},
+		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte:  ", "spa":"Formato del parámetro mm-time icnorrecto:  ", "eng":"Wrong format in mm-time parameter:  ", "fre":"Format incorrect dans le paramètre mm-time:  "},
+
 	},
 	cntxmenu2:{
 		statistics:
