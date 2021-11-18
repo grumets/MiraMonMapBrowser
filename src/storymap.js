@@ -127,8 +127,8 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 							punt=JSON.parse(mmcenter);
 						}
 						catch (e) {
-							alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap") + e +
-										GetMessage("_ParameterValueFoundIs", "storymap") + mmcenter);
+							alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap") + ": " + e + ". " +
+										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
 							break;
 						}
 						if (0==CommandMMNSetCenterCoord(punt))
@@ -165,8 +165,8 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 						}
 						catch (e)
 						{
-							alert(GetMessage("WrongFormat_mm_time_Parameter", "storymap") + e +
-										GetMessage("_ParameterValueFoundIs", "storymap") + mmtime);
+							alert(GetMessage("WrongFormat_mm_time_Parameter", "storymap") + ": " + e + ". "+
+										GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
 							break;
 						}
 						if (0==CommandMMNSetChangeDateTime(datejson))
