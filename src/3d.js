@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -56,15 +56,15 @@ function CanviaIndexosCapes3DFinestra(n_moviment, i_capa_ini, i_capa_fi_per_sota
 function CanviDinamismeGrafic3d(event)
 {
 	var n_histo, i_str, i_str_2, estil;
-	
+
 	if (event.srcElement)
-	{		
+	{
 		i_str=event.srcElement.id.indexOf(prefixSuperficie3DFinestra);
 		i_str_2=event.srcElement.id.indexOf(sufixCheckDinamicHistograma);
 		n_histo=parseInt(event.srcElement.id.substr(i_str+prefixSuperficie3DFinestra.length, i_str_2-i_str+prefixSuperficie3DFinestra.length));
 		if (isNaN(n_histo))
 			return;
-		
+
 		if (window.document.getElementById(event.srcElement.id).checked)
 				CreaSuperficie3D(n_histo);
 	}
@@ -72,7 +72,7 @@ function CanviDinamismeGrafic3d(event)
 
 function DonaNomCheckDinamicGrafic3d(i_histo)
 {
-	return DonaNomGrafic3d(i_histo)+sufixCheckDinamicHistograma; //sufixCheckDinamicHistograma de histopie 
+	return DonaNomGrafic3d(i_histo)+sufixCheckDinamicHistograma; //sufixCheckDinamicHistograma de histopie
 }
 
 function DonaIdDivGrafic3d(n_histograma)
@@ -103,28 +103,28 @@ var cdns=[];
 var def_diagrama_existeix=false;
 var i_diag=-1, des_top=-9999, des_left=-9999;
 
-	if (typeof i_estil !== "undefined")	 
+	if (typeof i_estil !== "undefined")
 	{
 		i_estil_intern=i_estil;
 		def_diagrama_existeix=true;
 	}
 	else //si em pasen un estil concret d'aquesta capa, que pot no ser el "actiu", l'uso
 		i_estil_intern=ParamCtrl.capa[i_capa].i_estil;
-	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern]; 
+	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern];
 
 	if (typeof estil.histograma === "undefined") // ara no estic preparat perquè no ha arribat la imatge
 		return;
 
 	//Check per a Gràfic 3d dinàmic i text per a indicar que actualització aturada per capa no visible
-	cdns.push("<input type=\"checkbox\" name=\"", 	(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicGrafic3d(Superficie3DFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeGrafic3d(event);\">")	
-	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", DonaCadenaLang({"cat":"Dinàmic", "spa":"Dinàmico", "eng":"Dynamic", "fre":"Dynamique"}) , "</label>");
-	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextGrafic3d(Superficie3DFinestra.n), "\" style=\"display: none\">", 		
-		DonaCadenaLang({"cat":"Desactivat (capa o estil no visible)", "spa":"Desactivado (capa o estil no visible)", "eng":"Disabled (layer or style not visible)", "fre":"Désactivé (couche or style non visible)"}) , "</span>");
+	cdns.push("<input type=\"checkbox\" name=\"", 	(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicGrafic3d(Superficie3DFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeGrafic3d(event);\">")
+	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", GetMessage("Dynamic", "tresD") , "</label>");
+	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextGrafic3d(Superficie3DFinestra.n), "\" style=\"display: none\">",
+		GetMessage("Disabled", "tresD") , "</span>");
 
-	titol=DonaCadenaLang({"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"})+" " + (Superficie3DFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+	titol=GetMessage("Graphic_3D", "tresD")+" " + (Superficie3DFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 	cdns.push("<div id=\"", DonaIdDivGrafic3d(Superficie3DFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"></div>",
 		"<div style=\"position: absolute; top: 20; margin-left: auto; margin-right: auto; width:", ncol, "\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
-			DonaCadenaLang({"cat":"Escala vertical", "spa":"Escala vertical", "eng":"Vertical scale", "fre":"Échelle verticale"}),
+			GetMessage("VerticalScale", "tresD"),
 			": <input id=\"", nom_grafic3d, "_3d_fh\" type=\"range\" step=\"0.01\" min=\"0.1\" max=\"1.0\" value=\"", vscale ,"\" onchange=\"CanviaEscalaVSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaEscalaVSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\"> &nbsp;&nbsp;",
 			"Zoom", //DonaCadenaLang({"cat":"Distància", "spa":"Distancia", "eng":"Distance", "fre":"Distance"}),
 			": <input id=\"", nom_grafic3d, "_3d_fd\" type=\"range\" step=\"0.01\" min=\"0\" max=\"4.29\" value=\"", 5-1.7,"\" onchange=\"CanviaDistanciaSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaDistanciaSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\">",
@@ -156,15 +156,15 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 				i_estil: i_estil_intern,
 				i_grafic3d: Superficie3DFinestra.n};
 
-	/* Quan s'està creant la finestra per primera vegada, que per exemple estava definida al JSON, pot ser 
-	que la imatge encara no s'hagi carregat mai i per tant no puc visualitzar hitograma encara -> la finestra 
+	/* Quan s'està creant la finestra per primera vegada, que per exemple estava definida al JSON, pot ser
+	que la imatge encara no s'hagi carregat mai i per tant no puc visualitzar hitograma encara -> la finestra
 	s'obrirà però he de posar "no visible" i més endavant quan arribi el nou array binari ja s'omplirà sol*/
 	if (typeof estil.histograma !== "undefined")
-	{		
+	{
 		CreaSuperficie3D(Superficie3DFinestra.n);
-			
+
 		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
-			estil.diagrama[i_diag].i_histograma=Superficie3DFinestra.n;				
+			estil.diagrama[i_diag].i_histograma=Superficie3DFinestra.n;
 		else
 		{
 			if (typeof estil.diagrama === "undefined") //no està creat
@@ -176,11 +176,11 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 }
 
 // Documentació a: http://visjs.org/docs/graph3d/
-//No és posible canviar de color en aquest moment. 
+//No és posible canviar de color en aquest moment.
 //He après a la internet que per canviar la paleta de colors cal canviar/hack la funció _hsv2rgb quan es cridada des del la llibreria de surfaces.
 //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
 /*La primera component que rep _hsv2rgb() és l'index de color i el darrer l'ombra:
-Caldria traduir la primera component a RGB aplicant la paleta (o el color que vingui d'una altre capa), 
+Caldria traduir la primera component a RGB aplicant la paleta (o el color que vingui d'una altre capa),
 passar-ho a HSV, aplicar l'ombra i tornar finalment a RGB.*/
 function CreaSuperficie3D(n_histograma)
 {
@@ -198,9 +198,9 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 	if (axisDelta<env.MaxY-env.MinY)
 		axisDelta=env.MaxY-env.MinY;
 	var axisStep = axisDelta / 120;  //120 is the number of steps. Cannot be bigger due to performance limitations
-       	for (y = env.MaxY, counter=0; y > env.MinY; y-=axisStep) 
+       	for (y = env.MaxY, counter=0; y > env.MinY; y-=axisStep)
 	{
-		for (x = env.MinX; x < env.MaxX; x+=axisStep, counter++) 
+		for (x = env.MinX; x < env.MaxX; x+=axisStep, counter++)
 		{
 			v=DonaValorsDeDadesBinariesCapa(NovaVistaPrincipal, capa, null, parseInt((x-env.MinX)/costat), parseInt((env.MaxY-y)/costat))
 			v_c=DonaValorEstilComArrayDesDeValorsCapa(NovaVistaPrincipal, vista_grafic3d.i_capa, vista_grafic3d.i_estil, v)
@@ -254,7 +254,7 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 //El slider té més sentit com a zoom però llavors el valor s'ha de invertir per convertir-lo en un valor entre 0.71 (	aprop) i 5.0 (lluny) tal com ha de ser.
 function CanviaDistanciaSuperficie3D(event, z, i)
 {
-	Superficie3DFinestra.vista[i].graph3d.setCameraPosition({distance: 4.29-z+0.71});		
+	Superficie3DFinestra.vista[i].graph3d.setCameraPosition({distance: 4.29-z+0.71});
 }
 
 function CanviaEscalaVSuperficie3D(event, vscale, i)

@@ -203,6 +203,12 @@ var MessageLang={
 		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és:", "spa":"El valor del parámetro indicado es:", "eng":"The parameter value found is:", "fre":"La valeur de paramètre trouvée est:"},
 		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte", "spa":"Formato del parámetro mm-time icnorrecto", "eng":"Wrong format in mm-time parameter", "fre":"Format incorrect dans le paramètre mm-time"}
 	},
+	tresD:{
+		Dynamic: {"cat":"Dinàmic", "spa":"Dinámico", "eng":"Dynamic", "fre":"Dynamique"},
+		Disabled: {"cat":"Desactivat (capa o estil no visible)", "spa":"Desactivado (capa o estil no visible)", "eng":"Disabled (layer or style not visible)", "fre":"Désactivé (couche or style non visible)"},
+		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},
+		VerticalScale: {"cat":"Escala vertical", "spa":"Escala vertical", "eng":"Vertical scale", "fre":"Échelle verticale"},
+  },
 	cntxmenu2:{
 		statistics:
 		{
