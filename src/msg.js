@@ -53,6 +53,7 @@ var MessageLang={
   UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
   layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
   Layer: {"cat":"Capa", "spa":"Capa", "eng":"Layer", "fre":"Couche"},
+  LayerId: {"cat":"Identificador de la capa", "spa":"Identificador de la capa", "eng":"Layer identifier", "fre":"Identificateur de couche"},
   Layers: {"cat":"Capes","spa":"Capas","eng":"Layers","fre":"Couches"},
   Add: {"cat":"Afegir", "spa":"Añadir", "eng":"Add", "fre":"Ajouter"},
 	Cancel: {"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"},

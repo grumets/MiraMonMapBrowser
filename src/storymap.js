@@ -104,22 +104,24 @@ var darrerNodeStoryMapVisibleExecutat=null;
 
 function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 {
-	var hihacanvis;
+var hihacanvis, node, attribute, i_styles
 	for (var i = 0; i < nodes.length; i++)
 	{
-		if (nodes[i].nodeType!=Node.ELEMENT_NODE)
+		node=nodes[i];
+		if (node.nodeType!=Node.ELEMENT_NODE)
 			continue;
-		if (!isScrolledIntoView(nodes[i]))
+		if (!isScrolledIntoView(node))
 			continue;
 		hihacanvis=false;
 
-		if (nodes[i].attributes)
+		if (node.attributes)
 		{
-			for (var i_at = 0; i_at < nodes[i].attributes.length; i_at++)
+			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
-				if (nodes[i].attributes[i_at].name=="mm-center")
+				attribute=node.attributes[i_at];
+				if (attribute.name=="mm-center")
 				{
-					var mmcenter = nodes[i].attributes[i_at].value.trim();
+					var mmcenter = attribute.value.trim();
 					if (mmcenter.length)
 					{
 						var punt;
@@ -137,26 +139,30 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 					else
 						alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap"));
 				}
-				else if (nodes[i].attributes[i_at].name=='mm-zoom')
+				else if (attribute.name=='mm-zoom')
 				{
-					if (nodes[i].attributes[i_at].value.trim().length)
+					if (attribute.value.trim().length)
 					{
-						if (0==CommandMMNSetZoom(parseFloat(nodes[i].attributes[i_at].value.trim())))
+						if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
 							hihacanvis=true;
 					}
 				}
-				else if (nodes[i].attributes[i_at].name=="mm-layer")
+				else if (attribute.name=="mm-layers")
 				{
-					// Index capa
+					for (i_styles = 0; i_styles < node.attributes.length; i_styles++)
+					{
+						if (node.attributes[i_styles].name=="mm-styles")
+							break;
+					}
+					CommandMMNSetLayersAndStyles(attribute.value.trim(), 
+							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(), 
+							"mm-layers");
+					hihacanvis=true;
 				}
-				else if (nodes[i].attributes[i_at].name=="mm-style")
-				{
-					// Estil capa
-				}
-				else if (nodes[i].attributes[i_at].name=="mm-time")
+				else if (attribute.name=="mm-time")
 				{
 					var datejson;
-					var mmtime = nodes[i].attributes[i_at].value.trim();
+					var mmtime = attribute.value.trim();
 					if (mmtime.length)
 					{
 						try
@@ -176,16 +182,16 @@ function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 			}
 			if (hihacanvis)
 			{
-				if (darrerNodeStoryMapVisibleExecutat==nodes[i])
+				if (darrerNodeStoryMapVisibleExecutat==node)
 					return true;
-				darrerNodeStoryMapVisibleExecutat=nodes[i];
+				darrerNodeStoryMapVisibleExecutat=node;
 				RepintaMapesIVistes();
 				return true;
 			}
 		}
-		if (nodes[i].childNodes && nodes[i].childNodes.length)
+		if (node.childNodes && node.childNodes.length)
 		{
-			if (RecorreNodesFillsAttributsStoryMapVisible(nodes[i].childNodes))
+			if (RecorreNodesFillsAttributsStoryMapVisible(node.childNodes))
 				return true;
 		}
 	}

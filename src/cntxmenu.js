@@ -4059,6 +4059,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("<form name=\"NomCapa\" onSubmit=\"return false;\">",
 		"<div id=\"LayerNomCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;\">",
+		GetMessage("LayerId"), ": ", capa.id, "<p>",
 		"<fieldset><legend>",
 		GetMessage("LayerName"),
 		":</legend>",

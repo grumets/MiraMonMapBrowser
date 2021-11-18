@@ -86,3 +86,9 @@ function CommandMMNSetDateTime(datejson)
 	SincronitzaCapesMillisegons(date.getTime());
 	return 0;
 }
+
+function CommandMMNSetLayersAndStyles(layers, styles)
+{
+	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, "CommandMMNSetLayersAndStyles");
+	return 0;
+}

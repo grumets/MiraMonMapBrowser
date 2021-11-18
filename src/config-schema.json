@@ -794,7 +794,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}'...",
+						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}' mm-layers='layerId1,layerId2' mm-styles='styleNom1,styleNom2'",
 						"type": "string",
 						"format": "uri"
 					},
@@ -1022,6 +1022,10 @@
 						"description": "Espai de noms utilitzat. Només s'usa quan el model és vector. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
 						"type": ["string", "null"]
 					},
+					"id":	{ 
+						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de la capa a l'array. Indiqueu un 'id' si la capa no te nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors",
+						"type": ["string", "null"]
+					},					
 					"nom":	{ 
 						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan model és ràster.",
 						"type": ["string", "null"]

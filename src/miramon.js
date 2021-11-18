@@ -6089,6 +6089,110 @@ function EliminaTotesLesCapes(Redraw)
 	}
 }
 
+function FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, param_name_layers)
+{
+var capa_visible=layers.split(","), capa_estil=styles ? styles.split(",") : null;
+var capa, j, i, i_estil;
+
+	if (capa_estil && capa_visible.length!=capa_estil.length)
+	{
+		alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.",
+					 "spa":"El número de estilos no se corresponde con el número de capas.",
+					 "eng":"Style number is no the same of the number of layers.",
+					 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
+		capa_estil=null;
+	}
+
+	//Declaro totes les capes com a ara no visibles.
+	for (i=0; i<ParamCtrl.capa.length; i++)
+	{
+		capa=ParamCtrl.capa[i];
+		if (capa.visible=="si" || capa.visible=="semitransparent")
+			CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
+		if (capa.descarregable=="si")
+			capa.descarregable="ara_no";
+	}
+	//Declaro visibles les que m'han dit.
+	for (j=0; j<capa_visible.length; j++)
+	{
+		for (i=0; i<ParamCtrl.capa.length; i++)
+		{
+			capa=ParamCtrl.capa[i];
+			if (capa_visible[j]==capa.id)
+			{
+				if (capa.visible=="ara_no")
+					CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
+				else
+				{
+					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) + " " + capa_visible[j] + " " +
+						DonaCadenaLang({"cat":"indicada a", "spa":"indicada en", "eng":"indicated at", "fre":"indiquée à"}) + " " + param_name_layers +  " " +
+						DonaCadenaLang({"cat":"no pot ser activada", "spa":"no puede ser activada", "eng":"cannot be activaded", "fre":"ne peut pas être activée"}) + ".");
+					continue;
+				}
+				if (capa_estil && capa_estil[j])
+				{
+					if (capa.estil && capa.estil.length>1)
+					{
+					    //Si a la part del final posa ":SEMITRANSPARENT"
+					    if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
+					    {
+						    if (capa.visible!="no")
+							    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+					    }
+					    else
+					    {
+						    if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
+						    {
+							    if (capa.visible!="no")
+								    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+							    capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
+						    }
+						    for (i_estil=0; i_estil<capa.estil.length; i_estil++)
+						    {
+							    if (capa.estil[i_estil].nom==capa_estil[j])
+							    {
+								    capa.i_estil=i_estil;
+								    break;
+							    }
+
+						    }
+						    if (i_estil==capa.estil.length)
+						    {
+							    if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir l'estil per defecte
+								    alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"})+ " " + capa_estil[j] + " " +DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
+						    }
+					    }
+					}
+					else
+					{
+					    //Només pot dir semitransparent.
+					    if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
+					    {
+						    if (capa.visible!="no")
+							    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+
+					    }
+					    else
+					    {
+						    if (capa_estil[j]!=null && capa_estil[j]!="")
+							    alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"}) + " " + capa_estil[j] + " " +
+								    DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
+					    }
+					}
+				}
+
+				if (capa.descarregable=="ara_no")
+					capa.descarregable="si";
+				break;
+			}
+		}
+		if (i==ParamCtrl.capa.length)
+			alert(DonaCadenaLang({"cat":"No trobo la capa", "spa":"No encuentro la capa", "eng":"Cannot find layer","fre":"Impossible trouver la couche"}) + " " + capa_visible[j] + " " +
+					DonaCadenaLang({"cat":"indicada a", "spa":"indicada en", "eng":"indicated at", "fre":"indiquée à"}) + " " +  param_name_layers);
+	}
+}
+
+
 function ComprovaOpcionsAccio()
 {
 	if(Accio.accio==null)
@@ -6392,6 +6496,13 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
+		if (!capa.id)
+		{
+			if (capa.nom)
+				capa.id=capa.nom;
+			else
+				capa.id=i.toString;
+		}
 		if (capa.atributs && capa.atributs.length)
 		{
 			for (j=0; j<capa.atributs.length; j++)
@@ -6511,7 +6622,7 @@ function IniciaVisualitzacio()
 {
 //var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=",
 //		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
-var nou_env={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
+var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
 var nou_CRS="";
 var win, i, j, l, capa;
 
@@ -6572,9 +6683,9 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "feedbackAmbEstils", {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-  createFinestraLayer(window, "triaStoryMap", {"cat":"Relats", "spa":"Relatos", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-  createFinestraLayer(window, "storyMap", {"cat":"titol del relat", "spa":"título del ralato", "eng": "story title", "fre":"titre de l'histoire"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
-  createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "triaStoryMap", {"cat":"Relats", "spa":"Relatos", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	createFinestraLayer(window, "storyMap", {"cat":"titol del relat", "spa":"título del ralato", "eng": "story title", "fre":"titre de l'histoire"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
+	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
 	createFinestraLayer(window, "editarVector", {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert a new point", "fre":"Insérer un nouveaux point"}, boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
@@ -6605,7 +6716,7 @@ var win, i, j, l, capa;
 		var kvp=location.search.substring(1, location.search.length).split("&");
 		for(var i_clau=0; i_clau<kvp.length; i_clau++)
 		{
-			var j = kvp[i_clau].indexOf("=");  // Gets the first index where a space occours
+			j = kvp[i_clau].indexOf("=");  // Gets the first index where a space occours
 			if (j==-1)
 			{
 				alert("Format error in query URL '"+location.search+"', Key and value pair (KVP) '"+kvp[i_clau]+"' without '='.").
@@ -6632,101 +6743,7 @@ var win, i, j, l, capa;
 		}
 		if (query["LAYERS"])
 		{
-			//Declaro totes les capes com a ara no visibles.
-			for (i=0; i<ParamCtrl.capa.length; i++)
-			{
-				capa=ParamCtrl.capa[i];
-				if (capa.visible=="si" || capa.visible=="semitransparent")
-					CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
-				if (capa.descarregable=="si")
-					capa.descarregable="ara_no";
-			}
-			//Declaro visibles les que m'han dit.
-			capa_visible=query["LAYERS"].split(",");
-			tinc_estils=false;
-			capa_estil=query["STYLES"].split(",");
-			if (capa_visible.length==capa_estil.length)
-				tinc_estils=true;
-			else
-				alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.",
-							 "spa":"El número de estilos no se corresponde con el número de capas.",
-							 "eng":"Style number is no the same of the number of layers.",
-							 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
-			for (j=0; j<capa_visible.length; j++)
-			{
-				for (i=0; i<ParamCtrl.capa.length; i++)
-				{
-					capa=ParamCtrl.capa[i];
-					if (capa_visible[j]==capa.nom)
-					{
-						if (capa.visible=="ara_no")
-							CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
-						else
-							alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] +
-									DonaCadenaLang({"cat":" indicada a LAYERS= no pot ser activada.", "spa":" indicada en LAYERS= no puede ser activada.",
-												   "eng":" indicated at LAYERS= cannot be activaded.", "fre":" indiquée à LAYERS= ne peut pas être activée."}));
-						if (tinc_estils)
-						{
-							if (capa.estil && capa.estil.length>1)
-							{
-								//Si a la part del final posa ":SEMITRANSPARENT"
-								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-								{
-									if (capa.visible!="no")
-										CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-								}
-								else
-								{
-									if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
-									{
-										if (capa.visible!="no")
-											CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-										capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
-									}
-									for (i_estil=0; i_estil<capa.estil.length; i_estil++)
-									{
-										if (capa.estil[i_estil].nom==capa_estil[j])
-										{
-											capa.i_estil=i_estil;
-											break;
-										}
-
-									}
-									if (i_estil==capa.estil.length)
-									{
-										if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir estil per defecte
-											alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] + DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
-									}
-								}
-							}
-							else
-							{
-								//Només pot dir semitransparent.
-								if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-								{
-									if (capa.visible!="no")
-										CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
-
-								}
-								else
-								{
-									if (capa_estil[j]!=null && capa_estil[j]!="")
-										alert(DonaCadenaLang({"cat":"No trobo l\'estil ", "spa":"No encuentro el estilo ", "eng":"Cannot find style ", "fre":"Impossible trouver le style "}) + capa_estil[j] +
-											DonaCadenaLang({"cat":" per a la capa ", "spa":" para la capa ", "eng":" for the layer ", "fre":" pour cette couche "}) + capa_visible[j]);
-								}
-							}
-						}
-						if (capa.descarregable=="ara_no")
-							capa.descarregable="si";
-						break;
-					}
-				}
-				if (i==ParamCtrl.capa.length)
-					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ","fre":"Impossible trouver la couche "}) + capa_visible[j] +
-							DonaCadenaLang({"cat":" indicada a LAYERS=", "spa":" indicada en LAYERS=", "eng":" indicated at LAYERS=", "fre":" indiquée à LAYERS="}));
-			}
-		    //CreaVistes();
-			//CreaLlegenda();
+			FesVisiblesNomesAquestesCapesAmbEstils(query["LAYERS"], query["STYLES"], "LAYERS=");
 		}
 		else if (query["QUERY_LAYERS"])
 		{
@@ -6756,8 +6773,6 @@ var win, i, j, l, capa;
 					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ", "fre":"Impossible trouver la couche "}) + capa_visible[j] +
 						  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS=", "spa":" indicada en QUERY_LAYERS=", "eng":" indicated at QUERY_LAYERS=", "fre":" indiquée à QUERY_LAYERS="}));
 			}
-			  //CreaVistes();
-			//CreaLlegenda();
 		}
 		if (query["LANGUAGE"])
 		{
@@ -6863,9 +6878,8 @@ var win, i, j, l, capa;
 	if(Accio && NCapesCTipica < capa_consulta_tipica_intern.length)
 		dades_pendents_accio=true;
 
-	if (nou_env.MinX!=0.0 || nou_env.MaxX!=0.0 || nou_env.MinY!=0.0 || nou_env.MaxY!=0.0)
+	if (nou_env.MinX<1e300 && nou_env.MaxX>-1e300 && nou_env.MinY<1e300 && nou_env.MaxY>-1e300)
 	{
-
 		if (nou_CRS!="")
 			EstableixNouCRSEnv(nou_CRS, nou_env);
 		CanviaIdioma(ParamCtrl.idioma);
