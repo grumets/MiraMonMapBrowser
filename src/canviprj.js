@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -46,7 +46,7 @@ function g_gms(graus_totals, zeros)
 {
 var cdns= [];
 var graus_no_signe=Math.abs(graus_totals);
-	
+
 	if (graus_totals<0)
 		cdns.push("-");
 	var minuts=(graus_no_signe-floor_DJ(graus_no_signe))*60;
@@ -76,7 +76,7 @@ function DonaDenominadorDeLEscalaArrodonit(a)
 		return a;
 	e-=2;
 	var n=Math.abs(a/Math.pow(10,e));
-	
+
 	//Ara cal arrodinir a l'enter més proper:
 	if (n<112)
 		n=100;
@@ -118,8 +118,8 @@ function sign(x)
 }
 
 var CanviCRS={"darrerCRS": "",
-		"offset_mapa_X": 0.0, 
-		"offset_mapa_Y": 0.0, 
+		"offset_mapa_X": 0.0,
+		"offset_mapa_Y": 0.0,
 		"lambda_0": 0.0,
 		"fi_0": 0.0,
 		"fi_1": 0.0,
@@ -305,7 +305,7 @@ var crs_up=crs.toUpperCase();
   }
   else if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
   {
-    CanviCRS.offset_mapa_X=0;  
+    CanviCRS.offset_mapa_X=0;
     CanviCRS.offset_mapa_Y=0;
     CanviCRS.lambda_0=14.5*FactorGrausARadiants;
     CanviCRS.fi_0=38*FactorGrausARadiants;
@@ -333,7 +333,7 @@ var crs_up=crs.toUpperCase();
     CanviCRS.lambda_0=0.0;
     CanviCRS.fi_1=0*FactorGrausARadiants;
   }
-  
+
 	if (crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031")
 	{
 		CanviCRS.radi_a=6378388.0;
@@ -394,9 +394,9 @@ var crs_up=crs.toUpperCase();
         CanviCRS.t0=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_0);
         CanviCRS.ro_0=CanviCRS.radi_a*CanviCRS.F*Math.pow(CanviCRS.t0, CanviCRS.n);
     }
-    else if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || 
-		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || 
-		crs_up=="AUTO2:MERCATOR,1,0,40.60" || 
+    else if (crs_up=="AUTO2:MERCATOR,1,0,41.42" ||
+		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" ||
+		crs_up=="AUTO2:MERCATOR,1,0,40.60" ||
 		crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="EPSG:3395")
     {
@@ -436,13 +436,13 @@ var ll_x, ll_y;
         var R1=CanviCRS.radi_a*(1.0-CanviCRS.e2)/Math.pow(1.0-CanviCRS.e2*Math.sin(fi1)*Math.sin(fi1), 1.5);
 		var e2_sin2_lat=CanviCRS.e2*Math.sin(fi1)*Math.sin(fi1);
 		var N1;
-		
+
 		if (e2_sin2_lat+0.00001<1.0)
 		    N1=CanviCRS.radi_a/Math.sqrt(1.0-e2_sin2_lat);
         else
     	    N1=CanviCRS.radi_a;
-			
-		var D;		
+
+		var D;
         if (N1-0.00001>0.0)
 	    	D=x/(N1*CanviCRS.c_tissot);
         else
@@ -500,7 +500,7 @@ var p=llr_x-CanviCRS.lambda_0, crs_x, crs_y;
 			crs_y = I1+ p*p*I2+ p*p*p*p*I3;
 	}
 	crs_y += CanviCRS.offset_mapa_Y;
-	
+
 	return {"x": crs_x, "y": crs_y};
 }
 
@@ -651,10 +651,7 @@ var crs_up;
 	}
 	if (CantaNoImplemCoordLongLat)
 	{
-		alert(DonaCadenaLang({"cat":"Pas a longitud/latitud no implementat per aquest sistema de referència", 
-								  "spa":"Paso a longitud/latitud no implementado para este sistema de referencia",
-								  "eng":"Longitude/latitude conversion has not been implemented in this reference system",
-								  "fre":"Conversion à longitude/latitude pas implémenté pour ce système de référence"})+" (CRS/SRS=" + crs +").");
+		alert(GetMessage("LongLatitudeConversionNotImplementedInReferenceSystem", "canviprj")+" (CRS/SRS=" + crs +").");
 		CantaNoImplemCoordLongLat=false;
 	}
 	return {"x": 0.0, "y": 0.0};
@@ -674,7 +671,7 @@ var crs_up;
 	        crs_up=="EPSG:32736")
         	return Geo_UTM(ll_x,ll_y);
 	if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
-		return Geo_LambertConicaConforme(ll_x,ll_y);		
+		return Geo_LambertConicaConforme(ll_x,ll_y);
 	if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 	     crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
 		return Geo_Mercator(ll_x,ll_y);
@@ -686,10 +683,7 @@ var crs_up;
 		//crs_y=ll_y;
 		return {"x": ll_x, "y": ll_y};
 	}
-	alert(DonaCadenaLang({"cat":"Pas a coordenades mapa no implementat per aquest sistema de referència", 
-							  "spa":"Paso a coordenades mapa no implementado para este sistema de referencia", 
-							  "eng":"Map coordinates conversion has not been implemented in this reference system",
-							  "fre":"Conversion à coordonnées de la carte pas implémenté pour ce système de référence."})+" (CRS/SRS=" + crs +").");
+	alert(GetMessage("MapCoordinatesConversionNotImplementedInReferenceSystem", "canviprj")+" (CRS/SRS=" + crs +").");
 	return {"x": 0.0, "y": 0.0};
 }
 
@@ -911,7 +905,7 @@ var crs_up=crs.toUpperCase();
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
 	        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
         	crs_up=="EPSG:32736" ||
-		crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41" || crs_up=="AUTO2:MERCATOR,1,0,41.42" || 
+		crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41" || crs_up=="AUTO2:MERCATOR,1,0,41.42" ||
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
         	return "m";
@@ -978,34 +972,25 @@ var crs_up=crs.toUpperCase();
 	else if (crs_up=="EPSG:32736")
 		return "UTM36S - WGS84";
 	else if (crs_up=="EPSG:27563")
-		return DonaCadenaLang({"cat":"Lambert Cònica Conforme Zona III - NTF", "spa":"Lambert Cónica Conforme Zona III - NTF", 
-							   "eng":"Lambert Conformal Conic Zone III - NTF", "fre":"Lambert Conique Conforme Zone III –NTF"});
+		return GetMessage("LambertConformalConicZoneIII_NTF", "canviprj");
 	else if (crs_up=="EPSG:27572")
-		return DonaCadenaLang({"cat":"Lambert Cònica Conforme Zona IIext - NTF", "spa":"Lambert Cónica Conforme Zona IIext - NTF", 
-						  	   "eng":"Lambert Conformal Conic Zone IIext - NTF", "fre":"Lambert Conique Conforme Zone IIext–NTF"});
+		return GetMessage("LambertConformalConicZoneIIext_NTF", "canviprj");
 	else if (crs_up=="EPSG:27573")
-		return DonaCadenaLang({"cat":"Lambert Cònica Conforme Zona IIIext - NTF", "spa":"Lambert Cónica Conforme Zona IIIext - NTF", 
-						   	   "eng":"Lambert Conformal Conic Zone IIIext - NTF", "fre":"Lambert Conique Conforme Zone IIIext –NTF"});
+		return GetMessage("LambertConformalConicZoneIIIext_NTF", "canviprj");
 	else if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
-		return DonaCadenaLang({"cat":"Lambert Cònica Conforme ICC Regió Mediterrània", "spa":"Lambert Cónica Conforme ICC Región Mediterránea", 
-						   "eng":"Lambert Conformal Conic ICC Mediterranian Region", "fre":"Lambert Conique Conforme ICC Région Méditerranéenne"});
+		return GetMessage("LambertConformalConicICCMediterranianRegion", "canviprj");
 	else if (crs_up=="AUTO2:MERCATOR,1,0,41.42")
-		return DonaCadenaLang({"cat":"Mercator paral·lel 41° 25\' - ED50", "spa":"Mercator paralelo 41°25\' - ED50", 
-						   "eng":"Mercator parallel 41°25\' - ED50",  "fre":"Mercator parallèle 41°25\' - ED50"});
+		return GetMessage("MercatorParallel_41d25m_ED50", "canviprj");
 	else if (crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42")
-		return DonaCadenaLang({"cat":"Mercator paral·lel 41° 25\' - WGS84", "spa":"Mercator paralelo 41°25\' - WGS84", 
-						   "eng":"Mercator parallel 41°25\' - WGS84", "fre":"Mercator parallèle 41°25\' - WGS84"});
+		return GetMessage("MercatorParallel_41d25m_WGS84", "canviprj");
 	else if (crs_up=="AUTO2:MERCATOR,1,0,40.60")
-		return DonaCadenaLang({"cat":"Mercator paral·lel 40° 36\' - ED50", "spa":"Mercator paralelo 40°36\' - ED50", 
-						   "eng":"Mercator parallel 40°36\' - ED50", "fre":"Mercator parallèle 40°36\' – ED50"});
+		return GetMessage("MercatorParallel_40d36m_ED50", "canviprj");
 	else if (crs_up=="AUTO2:MERCATOR,1,0,0.0")
-		return DonaCadenaLang({"cat":"Mercator paral·lel Equador - ED50", "spa":"Mercator paralelo Ecuador - ED50", 
-						   "eng":"Mercator parallel Equator - ED50", "fre":"Mercator parallèle Equateur – ED50"});
+		return GetMessage("MercatorParallelEquator_ED50", "canviprj");
 	else if (crs_up=="EPSG:3395")
-		return DonaCadenaLang({"cat":"Mercator paral·lel Equador - WGS84", "spa":"Mercator paralelo Ecuador - WGS84", 
-						   "eng":"Mercator parallel Equator - WGS84", "fre":"Mercator parallèle Equateur- WGS84"});		
+		return GetMessage("MercatorParallelEquator_WGS84", "canviprj");
 	else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
-		return DonaCadenaLang({"cat":"Web Mercator", "spa":"Web Mercator", "eng":"Web Mercator", "fre":"Web Mercator"});
+		return GetMessage("WebMercator", "canviprj");
 	else if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
 		return "long/lat - WGS84";
 	else if (crs_up=="EPSG:4258")

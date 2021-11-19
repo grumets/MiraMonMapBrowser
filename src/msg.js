@@ -210,6 +210,20 @@ var MessageLang={
 		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},
 		VerticalScale: {"cat":"Escala vertical", "spa":"Escala vertical", "eng":"Vertical scale", "fre":"Échelle verticale"},
   },
+	canviprj:{
+		LongLatitudeConversionNotImplementedInReferenceSystem: {"cat":"Pas a longitud/latitud no implementat per aquest sistema de referència", "spa":"Paso a longitud/latitud no implementado para este sistema de referencia", "eng":"Longitude/latitude conversion has not been implemented in this reference system", "fre":"Conversion à longitude/latitude pas implémenté pour ce système de référence"},
+		MapCoordinatesConversionNotImplementedInReferenceSystem: {"cat":"Pas a coordenades mapa no implementat per aquest sistema de referència", "spa":"Paso a coordenades mapa no implementado para este sistema de referencia", "eng":"Map coordinates conversion has not been implemented in this reference system", "fre":"Conversion à coordonnées de la carte pas implémenté pour ce système de référence."},
+		LambertConformalConicZoneIII_NTF: {"cat":"Lambert Cònica Conforme Zona III - NTF", "spa":"Lambert Cónica Conforme Zona III - NTF", "eng":"Lambert Conformal Conic Zone III - NTF", "fre":"Lambert Conique Conforme Zone III –NTF"},
+		LambertConformalConicZoneIIext_NTF: {"cat":"Lambert Cònica Conforme Zona IIext - NTF", "spa":"Lambert Cónica Conforme Zona IIext - NTF", "eng":"Lambert Conformal Conic Zone IIext - NTF", "fre":"Lambert Conique Conforme Zone IIext–NTF"},
+		LambertConformalConicZoneIIIext_NTF: {"cat":"Lambert Cònica Conforme Zona IIIext - NTF", "spa":"Lambert Cónica Conforme Zona IIIext - NTF", "eng":"Lambert Conformal Conic Zone IIIext - NTF", "fre":"Lambert Conique Conforme Zone IIIext –NTF"},
+		LambertConformalConicICCMediterranianRegion: {"cat":"Lambert Cònica Conforme ICC Regió Mediterrània", "spa":"Lambert Cónica Conforme ICC Región Mediterránea", "eng":"Lambert Conformal Conic ICC Mediterranian Region", "fre":"Lambert Conique Conforme ICC Région Méditerranéenne"},
+		MercatorParallel_41d25m_ED50: {"cat":"Mercator paral·lel 41° 25' - ED50", "spa":"Mercator paralelo 41°25' - ED50", "eng":"Mercator parallel 41°25' - ED50",  "fre":"Mercator parallèle 41°25' - ED50"},
+		MercatorParallel_41d25m_WGS84: {"cat":"Mercator paral·lel 41° 25' - WGS84", "spa":"Mercator paralelo 41°25' - WGS84", "eng":"Mercator parallel 41°25' - WGS84", "fre":"Mercator parallèle 41°25' - WGS84"},
+		MercatorParallel_40d36m_ED50: {"cat":"Mercator paral·lel 40° 36' - ED50", "spa":"Mercator paralelo 40°36' - ED50", "eng":"Mercator parallel 40°36' - ED50", "fre":"Mercator parallèle 40°36' – ED50"},
+		MercatorParallelEquator_ED50: {"cat":"Mercator paral·lel Equador - ED50", "spa":"Mercator paralelo Ecuador - ED50", "eng":"Mercator parallel Equator - ED50", "fre":"Mercator parallèle Equateur – ED50"},
+		MercatorParallelEquator_WGS84: {"cat":"Mercator paral·lel Equador - WGS84", "spa":"Mercator paralelo Ecuador - WGS84", "eng":"Mercator parallel Equator - WGS84", "fre":"Mercator parallèle Equateur- WGS84"},
+		WebMercator: {"cat":"Web Mercator", "spa":"Web Mercator", "eng":"Web Mercator", "fre":"Web Mercator"},
+	},
 	cntxmenu2:{
 		statistics:
 		{
