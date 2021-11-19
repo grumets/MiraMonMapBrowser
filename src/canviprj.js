@@ -651,7 +651,7 @@ var crs_up;
 	}
 	if (CantaNoImplemCoordLongLat)
 	{
-		alert(GetMessage("LongLatitudeConversionNotImplementedInReferenceSystem", "canviprj")+" (CRS/SRS=" + crs +").");
+		alert(GetMessage("LongLatConversionNotImplementedforRefSys", "canviprj")+" (CRS/SRS=" + crs +").");
 		CantaNoImplemCoordLongLat=false;
 	}
 	return {"x": 0.0, "y": 0.0};
@@ -683,7 +683,7 @@ var crs_up;
 		//crs_y=ll_y;
 		return {"x": ll_x, "y": ll_y};
 	}
-	alert(GetMessage("MapCoordinatesConversionNotImplementedInReferenceSystem", "canviprj")+" (CRS/SRS=" + crs +").");
+	alert(GetMessage("MapCoordConversionNotImplementedInRefSys", "canviprj")+" (CRS/SRS=" + crs +").");
 	return {"x": 0.0, "y": 0.0};
 }
 

@@ -68,10 +68,23 @@ var cdns=[], storyMap, i_story;
 //Inicia una Storymap
 function IniciaStoryMap(i_story)
 {
- 			loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, /*alert,*/ i_story);
-			//Mode Pantalla Completa en iniciar la història:
-			//openFullscreen(document.documentElement);
-			//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
+	loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, /*alert,*/ i_story);
+	//Mode Pantalla Completa en iniciar la història:
+	//openFullscreen(document.documentElement);
+	//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
+}
+
+//removes the <base> tag if it exists.
+function RemoveBaseHTMLTag(text_html)
+{
+var base;
+	if (-1!=(base=text_html.indexOf("<base ")) || -1!=(base=text_html.indexOf("<Base ")) || -1!=(base=text_html.indexOf("<BASE ")))
+	{
+		var endbase=text_html.indexOf('>', base+6);
+		if (-1!=endbase)
+			return text_html.substring(0, base) + text_html.substring(endbase+1);
+	}
+	return text_html;
 }
 
 //Crea Storymap
@@ -79,12 +92,12 @@ function CreaStoryMap(text_html, extra_param)
 {
 var i_story=extra_param, elem;
 
-			elem=getFinestraLayer(window, "storyMap")
-			elem.innerHTML=text_html;
+	elem=getFinestraLayer(window, "storyMap")
+	elem.innerHTML=RemoveBaseHTMLTag(text_html);
 
-			ObreFinestra(window, "storyMap")
-			darrerNodeStoryMapVisibleExecutat=null;
-			ExecutaAttributsStoryMapVisible();
+	ObreFinestra(window, "storyMap")
+	darrerNodeStoryMapVisibleExecutat=null;
+	ExecutaAttributsStoryMapVisible();
 }
 
 function isScrolledIntoView(el) {
