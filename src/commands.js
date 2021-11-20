@@ -44,10 +44,7 @@ function CommandMMNSetZoom(costat)
 {
 	if (isNaN(costat))
 	{
-		alert(DonaCadenaLang({"cat":"Format del valor del costat de zoom erroni:\nS'ha d'indicar un valor numèric.",
-					"spa":"Formato del lado de zoom erróneo:\nSe debe indicar un valor numérico.",
-					"eng":"Zoom size format is incorrectly:\nIt Must indicate a numeric value.",
-					"fre":"Format des zoom erroné:\nVous devez indiquer une valeur numérique."}));
+		alert(GetMessage("ZoomSizeFormatIncorrectly", "commmands"));
 		return;
 	}
 	for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
@@ -59,10 +56,7 @@ function CommandMMNSetZoom(costat)
 		}
 	}
 	if (nivell==ParamCtrl.zoom.length)
-		alert(DonaCadenaLang({"cat":"El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.",
-					"spa":"El lado de zoom solicitado no es uno de los lados disponibles en este navegador.",
-					"eng":"The zoom size requested is not available in this browser.",
-					"fre":"	La taille de zoom demandée n'est pas disponible dans ce navigateur."}));
+		alert(GetMessage("ZoomSizeRequestedNotAvailableBrowser", "commands"));
 	return 1;
 }
 
@@ -70,10 +64,7 @@ function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
 	{
-		alert(DonaCadenaLang({"cat":"Format de les coordenades erroni:\nS'ha d'indicar dos valors numèrics en el format: ",
-					"spa":"Formato de las coordenadas erróneo:\nSe debe indicar dos valores numéricos en el formato: ",
-					"eng":"Coordinate format is incorrectly:\nTwo numerical values are required in the format: ",
-					"fre":"Format des coordonnées erroné:\nDeux valeurs numériques sont requises dans le format: "}) + "{x: ##, y: ##}");
+		alert(GetMessage("CoordFormatIncorrectly", "commands") + "{x: ##, y: ##}");
 			return 1;
 	}
 	CentraLaVista(punt.x, punt.y);

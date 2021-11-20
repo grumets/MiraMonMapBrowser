@@ -50,6 +50,7 @@ var MessageLang={
 	Histogram: {"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"},
   Selection:{"cat":"Selecció", "spa":"Selección", "eng":"Selection", "fre":"Sélection"},
   close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
+	Close: {"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"},
   UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
   layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
   Layer: {"cat":"Capa", "spa":"Capa", "eng":"Layer", "fre":"Couche"},
@@ -62,7 +63,7 @@ var MessageLang={
   Operator: {"cat":"Operador", "spa":"Operador", "eng":"Operator", "fre":"Opérateur"},
   Date: {"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},
   Field: {"cat":"Camp", "spa":"Camp", "eng":"Field", "fre":"Champ"},
-    Title: {"cat":"T&iacute;tol", "spa":"T&iacute;tulo", "eng":"Title", "fre":"Titre"},
+  Title: {"cat":"T&iacute;tol", "spa":"T&iacute;tulo", "eng":"Title", "fre":"Titre"},
   Condition: {"cat":"Condició", "spa":"Condición", "eng":"Condition", "fre":"Condition"},
   OK: {"cat":"Acceptar", "spa":"Aceptar", "eng":"OK", "fre":"Accepter"},
   Presentation: {"cat":"Presentació", "spa":"Presentación","eng":"Presentation", "fre":"Présentation"},
@@ -195,7 +196,7 @@ var MessageLang={
 		forShowingLinageInformation: {"cat":"de mostrar la informació del llinatge", "spa":"de mostrar la información del linaje", "eng":"for showing the linage information", "fre":"pour afficher les informations de lignage"},
 		forShowingQualityInformation: {"cat":"de mostrar la informació de qualitat", "spa":"de mostrar la información de calidad", "eng":"for showing the quality information", "fre":"pour afficher l'information de qualité"},
 		ofUserFeedback: {"cat":"de valoracions dels usuaris", "spa":"de valoraciones de los usuarios", "eng":"of user feedback", "fre":"pour la rétroaction de l'utilisateur"},
-	_withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
+	  _withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
 		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
 	},
   storymap:{
@@ -223,6 +224,25 @@ var MessageLang={
 		MercatorParallelEquator_ED50: {"cat":"Mercator paral·lel Equador - ED50", "spa":"Mercator paralelo Ecuador - ED50", "eng":"Mercator parallel Equator - ED50", "fre":"Mercator parallèle Equateur – ED50"},
 		MercatorParallelEquator_WGS84: {"cat":"Mercator paral·lel Equador - WGS84", "spa":"Mercator paralelo Ecuador - WGS84", "eng":"Mercator parallel Equator - WGS84", "fre":"Mercator parallèle Equateur- WGS84"},
 		WebMercator: {"cat":"Web Mercator", "spa":"Web Mercator", "eng":"Web Mercator", "fre":"Web Mercator"},
+	},
+	capavola:{
+    Proj: {"cat":"Proj", "spa":"Proy", "eng":"Proj","fre":"Proj"},
+		DeviceLocation: {"cat":"Ubicació dispositiu", "spa":"Ubicación dispositivo", "eng":"Device location","fre":"Emplacement de l'appareil"},
+		AroundZone: {"cat":"Zona al voltant (m):", "spa":"Zona alrededor (m):", "eng":"Around zone (m):","fre":"Zone autour (m):"},
+		GoTo: {"cat":"Anar-hi", "spa":"Ir", "eng":"Go to","fre":"Aller à"},
+		ofGoToCoordinate: {"cat":"d'anar a coordenada", "spa":"de ir a coordenada", "eng":"of go-to coordinate", "fre":"pour aller à la coordonnée"},
+		RequestedPointOutsideBrowserEnvelope: {"cat":"El punt sol·licitat està fora de l'àmbit de navegació", "spa":"El punto solicitado está fuera del ámbito de navegación", "eng":"The requested point is outside browser envelope", "fre":"Le point requis se trouve dehors le milieu de navigation"},
+		toInsertNewPoints: {"cat":"per inserir punts nous", "spa":"para insertar puntos nuevos", "eng":"to insert new points", "fre":"pour insérer de nouveaux points"},
+		UserDeniedRequestGeolocation: {"cat":"L'usuari ha denegat la sol·licitud de geolocalització", "spa":"El usuario ha denegado la solicitud de geolocalización", "eng":"User denied the request for geolocation","fre":"L'utilisateur a refusé la demande de géolocalisation"},
+		LocationInfoUnavailable: {"cat":"La informació sobre la ubicació no està disponible", "spa":"La información sobre la ubicación no está disponible", "eng":"Location information is unavailable","fre":"Les informations de localisation ne sont pas disponibles"},
+		RequestGetUserLocationTimedOut: {"cat":"S'ha esgotat el temps d'espera de la sol·licitud per obtenir la ubicació de l'usuari", "spa":"Se ha agotado el tiempo de espera de la solicitud para obtener la ubicación del usuario", "eng":"Request to get user location timed out","fre":"La demande d’obtention de l’emplacement de l’utilisateur a expiré"},
+		UnknownErrorObtainingLocation: {"cat":"S'ha produït un error desconegut durant l'obtenció de la ubicació", "spa":"Se ha producido un error desconocido durante la obtención de la geolocalización", "eng":"An unknown error occurred while obtaining the location","fre":"Une erreur inconnue s'est survenue lors de l'obtention de l'emplacement"},
+		CoordFormatIncorrectly: {"cat":"Format de les coordenades erroni:S'ha d'indicar un valor numèric.", "spa":"Formato de las coordenadas erróneo:Se debe indicar un valor numérico.", "eng":"Coordinate format is incorrectly:It must indicate a numeric value.", "fre":"Format des coordonnées erroné:Vous devez indiquer une valeur numérique."},
+  },
+	commands:{
+		ZoomSizeFormatIncorrectly: {"cat":"Format del valor del costat de zoom erroni:S'ha d'indicar un valor numèric.", "spa":"Formato del lado de zoom erróneo:Se debe indicar un valor numérico.", "eng":"Zoom size format is incorrectly:It Must indicate a numeric value.", "fre":"Format des zoom erroné:Vous devez indiquer une valeur numérique."},
+		ZoomSizeRequestedNotAvailableBrowser: {"cat":"El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.", "spa":"El lado de zoom solicitado no es uno de los lados disponibles en este navegador.", "eng":"The zoom size requested is not available in this browser.", "fre":"	La taille de zoom demandée n'est pas disponible dans ce navigateur."},
+		CoordFormatIncorrectly: {"cat":"Format de les coordenades erroni:S'ha d'indicar dos valors numèrics en el format: ", "spa":"Formato de las coordenadas erróneo:Se debe indicar dos valores numéricos en el formato: ", "eng":"Coordinate format is incorrectly:Two numerical values are required in the format: ", "fre":"Format des coordonnées erroné:Deux valeurs numériques sont requises dans le format: "},
 	},
 	cntxmenu2:{
 		statistics:

@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,35 +7,35 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
-/*This module deals with "capa" that are volatile such as 
+/*This module deals with "capa" that are volatile such as
    * the query by location "cross" (most of the code is in consult.js)
    * the goto a coordinate
    * edition (the status of this code is uncertain due to the time we do not use it (last used in the cetatis map browser
@@ -53,32 +53,29 @@ var cdns=[];
 			"<input name=\"proj\" type=\"radio\" value=\"0\" id=\"proj_anarcoord\"",
 			(FormAnarCoord.proj ? "checked" : "") ,
 			" onClicK=\"CanviaEtiquetesAnarCoord(0);\"><label for=\"proj_anarcoord\" >",
-			(DonaCadenaLang({"cat":"Proj", "spa":"Proy", "eng":"Proj","fre":"Proj"})),
+			(GetMessage("Proj", "capavola")),
 			"</label>  <input name=\"proj\" type=\"radio\" value=\"1\" id=\"longlat_anarcoord\"",
-			(FormAnarCoord.proj ? "" : "checked"), 
+			(FormAnarCoord.proj ? "" : "checked"),
 			" onClicK=\"CanviaEtiquetesAnarCoord(1);\"><label for=\"longlat_anarcoord\" >Long/Lat</label></td></tr>");
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 		cdns.push("<tr><td align=\"center\"><input class=\"Verdana11px\" type=\"button\" name=\"Acceptar\" value=\"",
-			(DonaCadenaLang({"cat":"Ubicació dispositiu", "spa":"Ubicación dispositivo", "eng":"Device location","fre":"Emplacement de l'appareil"})),
+			(GetMessage("DeviceLocation", "capavola")),
 			"\" onClick=\"AnarACoordGPS(form);\"></td></tr>");
 	cdns.push("<tr><td align=\"right\"><label id=\"X_anarcoord\" for=\"coordX_anarcoord\">X: </label><input class=\"Verdana11px\" id=\"coordX_anarcoord\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.x,"\"><label id=\"Y_anarcoord\" for=\"coordY_anarcoord\"> Y: </label><input class=\"Verdana11px\" id=\"coordY_anarcoord\" name=\"coordY\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.y,"\"></td></tr><tr><td align=\"right\"><label for=\"mVoltant_anarcoord\">",
-			(DonaCadenaLang({"cat":"Zona al voltant (m):", "spa":"Zona alrededor (m):", "eng":"Round zone (m):","fre":"Zone autour (m):"})),
+			(GetMessage("AroundZone", "capavola")),
 			" </label><input class=\"Verdana11px\" id=\"mVoltant_anarcoord\" name=\"mVoltant\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.m_voltant,"\"></td></tr>",
 		"<tr><td align=\"center\"><input class=\"Verdana11px\" type=\"button\" name=\"Acceptar\" value=\"",
-			(DonaCadenaLang({"cat":"Anar-hi", "spa":"Ir", "eng":"Go to","fre":"Aller à"})),
+			(GetMessage("GoTo", "capavola")),
 			"\" onClick=\"AnarACoordenada(form);\">",
 			"<input class=\"Verdana11px\" type=\"button\" name=\"Tancar\" value=\"",
-			(DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"})),
+			(GetMessage("Close")),
 			"\" onClick='TancaFinestraLayer(\"anarCoord\");'></td></tr></table></form>");
-	contentFinestraLayer(window, "anarCoord", cdns.join("")); 
+	contentFinestraLayer(window, "anarCoord", cdns.join(""));
 }//Fi de OmpleFinestraAnarCoordenada()
 
 function MostraFinestraAnarCoordenada()
 {
-	if (!ObreFinestra(window, "anarCoord", DonaCadenaLang({"cat":"d'anar a coordenada", 
-							  "spa":"de ir a coordenada",
-							  "eng":"of go-to coordenate",
-							  "fre":"pour aller à la coordonnée"})))
+	if (!ObreFinestra(window, "anarCoord", GetMessage("ofGoToCoordinate", "capavola")))
 		return;
 	OmpleFinestraAnarCoordenada();
 	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
@@ -122,17 +119,14 @@ function CanviaEtiquetesAnarCoord(sel)
 
 function AnarACoordenada(form)
 {
-var d, crs_xy;	
+var d, crs_xy;
 var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.value)};
 
 	if(isNaN(punt_coord.x) || isNaN(punt_coord.y))
 	{
-  	   alert(DonaCadenaLang({"cat":"Format de les coordenades erroni:\nS'ha d'indicar un valor numèric.", 
-						"spa":"Formato de las coordenadas erróneo:\nSe debe indicar un valor numérico.", 
-						"eng":"Coordinate format is incorrectly:\nIt Must indicate a numeric value.",
-						"fre":"Format des coordonnées erroné:\nVous devez indiquer une valeur numérique."}));
-	   return;	  
-	}	
+  	   alert(GetMessage("CoordFormatIncorrectly", "capavola"));
+	   return;
+	}
 
 	FormAnarCoord.x=punt_coord.x;
 	FormAnarCoord.y=punt_coord.y;
@@ -150,10 +144,7 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 
 	if(!EsPuntDinsAmbitNavegacio(punt_coord))
 	{
-  	   alert(DonaCadenaLang({"cat":"El punt sol·licitat està fora de l'àmbit de navegació", 
-						 "spa":"El punto solicitado está fuera del ámbito de navegación", 
-						 "eng":"The requested point is outside browser envelope",
-						 "fre":"Le point requis se trouve dehors le milieu de navigation"}));
+  	   alert(GetMessage("RequestedPointOutsideBrowserEnvelope", "capavola"));
 	   return;
 	}
 
@@ -174,26 +165,26 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 		capa.visible="si";
 		CreaVistes();
 	}
-	
+
 	if(d>0)
 	{
 		d*=1.7;
 		if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			d/=FactorGrausAMetres;
-		var env=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);   
+		var env=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
 		//env=AjustaAmbitAAmbitNavegacio(env);
-		PortamAAmbit(env);	
+		PortamAAmbit(env);
 	}
 	else
 	{
-	   PortamAPunt(punt_coord.x,punt_coord.y);	
+	   PortamAPunt(punt_coord.x,punt_coord.y);
 	}
-}//Fi de AnarACoordenada() 
+}//Fi de AnarACoordenada()
 
 function TransformaCoordenadesCapaVolatil(capa, crs_ori, crs_dest)
 {
-var punt; 
-	punt={"x": capa.objectes.features[0].geometry.coordinates[0], 
+var punt;
+	punt={"x": capa.objectes.features[0].geometry.coordinates[0],
 		"y": capa.objectes.features[0].geometry.coordinates[1]}
 	TransformaCoordenadesPunt(punt, crs_ori, crs_dest);
 	capa.objectes.features[0].geometry.coordinates[0]=punt.x;
@@ -211,7 +202,7 @@ function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 	{
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit], crs_ori, crs_dest);
 		if(ParamCtrl.BarraBotoInsereix && ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
-			IniciaFinestraEditarPunts();		
+			IniciaFinestraEditarPunts();
 	}
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaGPS], crs_ori, crs_dest);
@@ -227,40 +218,40 @@ function EsIndexCapaVolatil(i_capa, param_ctrl)
 
 function EliminaIndexDeCapesVolatils(param_ctrl)
 {
-	if(typeof param_ctrl.ICapaVolaPuntConsult !== "undefined")	
+	if(typeof param_ctrl.ICapaVolaPuntConsult !== "undefined")
 		delete param_ctrl.ICapaVolaPuntConsult;
-	if(typeof param_ctrl.ICapaVolaAnarCoord !== "undefined")	
+	if(typeof param_ctrl.ICapaVolaAnarCoord !== "undefined")
 		delete param_ctrl.ICapaVolaAnarCoord;
-	if(typeof param_ctrl.ICapaVolaEdit !== "undefined")	
+	if(typeof param_ctrl.ICapaVolaEdit !== "undefined")
 		delete param_ctrl.ICapaVolaEdit;
-	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")	
+	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")
 		delete param_ctrl.ICapaVolaGPS;
 }
 
 function NumeroDeCapesVolatils(i_capa)
-{	
+{
 	var i=0;
 
 	if (i_capa==-1)  //nombre de capes total
-	{		
+	{
 		if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined")
-			i++;	
+			i++;
 		if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
-			i++;	
-		if (typeof ParamCtrl.ICapaVolaEdit !== "undefined") 
-			i++;	
-		if (typeof ParamCtrl.ICapaVolaGPS !== "undefined") 
-			i++;			
+			i++;
+		if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
+			i++;
+		if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
+			i++;
 		return i;
 	}
 
 	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined" && ParamCtrl.ICapaVolaPuntConsult<i_capa)
-		i++;	
+		i++;
 	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined" && ParamCtrl.ICapaVolaAnarCoord<i_capa)
-		i++;	
-	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined" && ParamCtrl.ICapaVolaEdit<i_capa) 
-		i++;	
-	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined" && ParamCtrl.ICapaVolaGPS<i_capa) 
+		i++;
+	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined" && ParamCtrl.ICapaVolaEdit<i_capa)
+		i++;
+	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined" && ParamCtrl.ICapaVolaGPS<i_capa)
 		i++;
 	return i;
 }
@@ -268,7 +259,7 @@ function NumeroDeCapesVolatils(i_capa)
 function EliminaCapaVolatil(i_capa, param_ctrl)
 {
 	param_ctrl.capa.splice(i_capa, 1);
-	if (param_ctrl.ICapaVolaPuntConsult==i_capa)	 
+	if (param_ctrl.ICapaVolaPuntConsult==i_capa)
 		delete param_ctrl.ICapaVolaPuntConsult;
 	if (param_ctrl.ICapaVolaAnarCoord==i_capa)
 		delete param_ctrl.ICapaVolaAnarCoord;
@@ -311,7 +302,7 @@ function CreaCapesVolatils()
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
-					"nom": null,	
+					"nom": null,
 					"desc": null,
 					"CRSgeometry": ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
 					"objectes": {
@@ -330,18 +321,18 @@ function CreaCapesVolatils()
 					"estil": [{
 						"nom": null,
 						"desc":	null,
-						"DescItems": null, 
+						"DescItems": null,
 						"simbols": [{
 							"NomCamp": null,
 							"simbol": [{"ValorCamp": null, "icona": JSON.parse(JSON.stringify(ParamCtrl.IconaConsulta)), "IconaSel": (ParamCtrl.IconaValidacio ? JSON.parse(JSON.stringify(ParamCtrl.IconaValidacio)) : null)}]
 						}],
 						"ItemLleg": null,
-						"ncol": 1					
+						"ncol": 1
 					}],
 					"i_estil": 0,
 					"NColEstil": 1,
 					"separa": null,
-					"DescLlegenda": null, 
+					"DescLlegenda": null,
 					"LlegDesplegada": false,
 					"VisibleALaLlegenda": false,
 					"visible": "no",
@@ -362,7 +353,7 @@ function CreaCapesVolatils()
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
-					"nom": null,	
+					"nom": null,
 					"desc": null,
 					"CRSgeometry": ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
 					"objectes": {
@@ -381,11 +372,11 @@ function CreaCapesVolatils()
 					"estil": [{
 						"nom": null,
 						"desc":	null,
-						"DescItems": null, 
+						"DescItems": null,
 						"simbols": [{
 							"NomCamp": null,
 							"simbol":[{
-								"ValorCamp": null, 
+								"ValorCamp": null,
 								"icona": JSON.parse(JSON.stringify(ParamCtrl.IconaEdicio))
 							}]
 						}],
@@ -395,7 +386,7 @@ function CreaCapesVolatils()
 					"i_estil": 0,
 					"NColEstil": 1,
 					"separa": null,
-					"DescLlegenda": null, 
+					"DescLlegenda": null,
 					"LlegDesplegada": false,
 					"VisibleALaLlegenda": false,
 					"visible": "no",
@@ -416,7 +407,7 @@ function CreaCapesVolatils()
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
-					"nom": null,	
+					"nom": null,
 					"desc": null,
 					"CRSgeometry": ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
 					"objectes": {
@@ -445,7 +436,7 @@ function CreaCapesVolatils()
 					"estil": [{
 						"nom": null,
 						"desc":	null,
-						"DescItems": null, 
+						"DescItems": null,
 						"simbols": [
 							{
 								"NomCampFEscala": "radius",
@@ -456,7 +447,7 @@ function CreaCapesVolatils()
 										{
 											"type": "circle",
 											"r": 1,
-											"unitats": "m" 
+											"unitats": "m"
 										}
 									}
 								]
@@ -483,7 +474,7 @@ function CreaCapesVolatils()
 					"i_estil": 0,
 					"NColEstil": 1,
 					"separa": null,
-					"DescLlegenda": null, 
+					"DescLlegenda": null,
 					"LlegDesplegada": false,
 					"VisibleALaLlegenda": false,
 					"visible": "no",
@@ -506,7 +497,7 @@ function CreaCapesVolatils()
 					"servidor": null,
 					"versio": null,
 					"model": model_vector,
-					"nom": null,	
+					"nom": null,
 					"desc": null,
 					"CRSgeometry": ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
 					"objectes": {
@@ -535,7 +526,7 @@ function CreaCapesVolatils()
 					"estil": [{
 						"nom": null,
 						"desc":	null,
-						"DescItems": null, 
+						"DescItems": null,
 						"simbols": [
 							{
 								"NomCampFEscala": "uncertainty",
@@ -546,7 +537,7 @@ function CreaCapesVolatils()
 										{
 											"type": "circle",
 											"r": 1,
-											"unitats": "m" 
+											"unitats": "m"
 										}
 									}
 								]
@@ -573,7 +564,7 @@ function CreaCapesVolatils()
 					"i_estil": 0,
 					"NColEstil": 1,
 					"separa": null,
-					"DescLlegenda": null, 
+					"DescLlegenda": null,
 					"LlegDesplegada": false,
 					"VisibleALaLlegenda": false,
 					"visible": "si",
@@ -588,7 +579,7 @@ function CreaCapesVolatils()
 }
 
 function EditarPunts(event_de_click, i_nova_vista)
-{	
+{
 //	PuntConsultat.i=DonaCoordIDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX)
 //	PuntConsultat.j=DonaCoordJDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY)
 
@@ -596,33 +587,30 @@ function EditarPunts(event_de_click, i_nova_vista)
 	PuntConsultat.x=DonaCoordXDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientX);
 	PuntConsultat.y=DonaCoordYDeCoordSobreVista(event_de_click.target.parentElement, i_nova_vista, event_de_click.clientY);
 	PuntConsultat.i_nova_vista=i_nova_vista;
-	
+
 	if (ParamCtrl.IconaEdicio)
 	{
 	 	var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaEdit];
 		capa.objectes.features[0].geometry.coordinates[0]=PuntConsultat.x;
-		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;		
-		capa.objectes.features[0].seleccionat=false;	
+		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;
+		capa.objectes.features[0].seleccionat=false;
 		capa.visible="si";
-	    
+
 		CreaVistes();
 	}
 	if (ParamCtrl.BarraBotoInsereix)
-		IniciaFinestraEditarPunts();		
+		IniciaFinestraEditarPunts();
 	else if(typeof ParamCtrl.ICapaVolaEdit !== "undefined"  && ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio)
-		eval(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio);		
-	
+		eval(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit].FuncioEdicio);
+
 }//Fi de EditarPunts()
 
 function IniciaFinestraEditarPunts()
 {
 	if(!ParamCtrl.FuncioIconaEdicio)
 		 return;
-	
-	var elem=ObreFinestra(window, "editarVector", DonaCadenaLang({"cat":"per inserir punts nous",
-						  "spa":"para insertar puntos nuevos",
-						  "eng":"to insert new points",
-						  "fre":"pour insérer de nouveaux points"}));
+
+	var elem=ObreFinestra(window, "editarVector", GetMessage("toInsertNewPoints", "capavola"));
 	if (!elem)
 		return;
 	contentLayer(elem, eval(ParamCtrl.FuncioIconaEdicio));
@@ -651,7 +639,7 @@ function TancaFinestra_editarVector()
 /* El dia 06-02-2018 descubreixo aquesta funció però no tinc idea de a que es refereix i la esborro. (JM)
 function MostraFinestraInserta()
 {
-	if (!ObreFinestra(window, "inserta", DonaCadenaLang({"cat":"d'inserir", 
+	if (!ObreFinestra(window, "inserta", DonaCadenaLang({"cat":"d'inserir",
 							  "spa":"de insertar",
 							  "eng":"of inserting",
 							  "fre":"d'insertion"})))
@@ -667,7 +655,7 @@ function IniciaPosicioGPS()
 		if("https:"!=location.protocol.toLowerCase())
 		{
 			// Decideixo no dir res perquè l'usuari final no en té la culpa de que el navegador sigui http i no https
-			//alert("Geolocation is not supported by this browser.");			
+			//alert("Geolocation is not supported by this browser.");
 			CancelaPosicioGPS();
 			return;
 		}
@@ -675,11 +663,11 @@ function IniciaPosicioGPS()
 			IdPositionGPS=navigator.geolocation.watchPosition(ActualitzaPosicioGPS, ErrorPosicioGPS, {enableHighAccuracy: true, maximumAge: 8000});
 		else
 		{
-			alert("Geolocation is not supported by this browser.");			
+			alert("Geolocation is not supported by this browser.");
 			CancelaPosicioGPS();
 		}
 	}
-}	
+}
 
 var PreviousGPSPoint={x:1e300, y:1e300}, PreviousGPSCRS="";
 
@@ -720,13 +708,13 @@ function AnarACoordGPS(form)
 }
 
 function CancelaPosicioGPS()
-{	
+{
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
 		//Potser seria millor apagar la visualització de les capes i prou?
 		EliminaCapaVolatil(ParamCtrl.ICapaVolaGPS, ParamCtrl);
 		ParamCtrl.MostraPosicioGPS=false;
-		if (IdPositionGPS)  
+		if (IdPositionGPS)
 			navigator.geolocation.clearWatch(IdPositionGPS);
 		CreaLlegenda();  //La llegenda te indexos que han quedat malament.
 	}
@@ -734,27 +722,23 @@ function CancelaPosicioGPS()
 
 function ErrorPosicioGPS(error)
 {
-	switch(error.code) 
+	switch(error.code)
 	{
 		case error.PERMISSION_DENIED:
-	      	alert(DonaCadenaLang({"cat":"L'usuari ha denegat la sol·licitud de geolocalització", "spa":"El usuario ha denegado la solicitud de geolocalización", 
-									 "eng":"User denied the request for geolocation","fre":"L'utilisateur a refusé la demande de géolocalisation"}));				
+	      	alert(GetMessage("UserDeniedRequestGeolocation", "capavola"));
 			CancelaPosicioGPS();
 			break;
 		case error.POSITION_UNAVAILABLE:
-      		alert(DonaCadenaLang({"cat":"La informació sobre la ubicació no està disponible", "spa":"La información sobre la ubicación no está disponible", 
-									 "eng":"Location information is unavailable","fre":"Les informations de localisation ne sont pas disponibles"}));
+      		alert(GetMessage("LocationInfoUnavailable", "capavola"));
 			CancelaPosicioGPS();
       		break;
-		case error.TIMEOUT:		
-			alert(DonaCadenaLang({"cat":"S'ha esgotat el temps d'espera de la sol·licitud per obtenir la ubicació de l'usuari", "spa":"Se ha agotado el tiempo de espera de la solicitud para obtener la ubicación del usuario", 
-								 "eng":"Request to get user location timed out","fre":"La demande d’obtention de l’emplacement de l’utilisateur a expiré"}));
+		case error.TIMEOUT:
+			alert(GetMessage("RequestGetUserLocationTimedOut", "capavola"));
 			CancelaPosicioGPS();
 			break;
 		case error.UNKNOWN_ERROR:
 		default:
-			alert(DonaCadenaLang({"cat":"S'ha produït un error desconegut durant l'obtenció de la ubicació", "spa":"Se ha producido un error desconocido durante la obtención de la geolocalización", 
-								 "eng":"An unknown error occurred while obtaining the location","fre":"Une erreur inconnue s'est survenue lors de l'obtention de l'emplacement"})+" (" + error.code + ").");
+			alert(GetMessage("UnknownErrorObtainingLocation", "capavola")+" (" + error.code + ").");
 			break;
 	}
 }
