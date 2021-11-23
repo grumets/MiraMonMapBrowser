@@ -408,7 +408,7 @@ var elem;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
 	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>"+
-	   GetMessage("UpdatingList", "ctipica")+
+	   GetMessage("UpdatingList", "ctipica")+GetMessage("PleaseWait")+
 	   "...</td></tr></table>";
 	contentLayer(elem, s);
 	showLayer(elem);
@@ -726,7 +726,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			opcio.selected=true;
 			InsertaOpcioEnSelect(select_ctipica, opcio, null);
 			opcio=document_ctipica.createElement('option');
-			opcio.text=DonaCadenaLang({"cat":"---------------","spa": "---------------", "eng":"----------", "fre":"----------------"});
+			opcio.text="---------------";
 			opcio.value=-1;
 			opcio.selected=false;
 			InsertaOpcioEnSelect(select_ctipica, opcio, null);
@@ -1042,11 +1042,11 @@ var s;
 						}
 						if (i==capa_consulta_tipica_intern.length)
 						{
-							s=GetMessage("TheLayer_") +
-							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] +
-							GetMessage("_toBeShownInFrame_", "ctipica") +
-							ParamCtrl.ConsultaTipica[i_ctipica].nom +
-							GetMessage("_notInTypicalQueryLayerList", "ctipica");
+							s=GetMessage("TheLayer") + " " +
+							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " "
+							GetMessage("toBeShownInFrame", "ctipica") + " "
+							ParamCtrl.ConsultaTipica[i_ctipica].nom + " "
+							GetMessage("notInTypicalQueryLayerList", "ctipica");
 							alert(s);
 						}
 						else
@@ -1127,7 +1127,7 @@ var s;
 								   ", ",valor_opcio,");\">" ,
 								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
 								   ("--" + GetMessage("Select") + "--") , "</option>" ,
-								   "  <option VALUE=\"-1\">" , (DonaCadenaLang({"cat":"---------------", "spa":"---------------", "eng":"----------","fre":"----------------"})) , "</option>");
+								   "  <option VALUE=\"-1\">" , "---------------", "</option>");
 							for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j].length; i++)
 								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
 									capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j][i].valor , "</option>");
@@ -1145,7 +1145,7 @@ var s;
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
 					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
 					   ("--" + GetMessage("Select") + "--") , "</option>" ,
-					   "  <option VALUE=\"-1\">" , (DonaCadenaLang({"cat":"---------------", "spa":"---------------", "eng":"----------","fre":"----------------"})) , "</option>");
+					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
 					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
 						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
 							capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor , "</option>");
@@ -1511,7 +1511,7 @@ var trobat=false;
 								}
 								if(i_valor==capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
 								{
-									alert(GetMessage("TheValue_") + Accio.valors[i_capa_accio]+ GetMessage("_ofTheField_") +Accio.camps[i_capa_accio]+ GetMessage("_ofTheLayer_") +Accio.capes[i_capa_accio]+ GetMessage("_isIncorrect", "ctipica"));
+									alert(GetMessage("TheValue") + " " + Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + " " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + " " + Accio.capes[i_capa_accio]+ " " + GetMessage("isIncorrect", "ctipica"));
 								}
 							}
 							break;
@@ -1546,12 +1546,11 @@ var valor;
 				}
 				if (CTipicaCapa[i_ctipica]==capa_consulta_tipica_intern.length)
 				{
-					var s=GetMessage("TheLayer") +
-						ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0] +
-						GetMessage("_toBeShownInFrame_", "ctipica") +
-						ParamCtrl.ConsultaTipica[i_ctipica].nom +
-						GetMessage("_notInTypicalQueryLayerList", "ctipica");
-					alert(s);
+					alert(GetMessage("TheLayer") + " " +
+						ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0] + " " +
+						GetMessage("toBeShownInFrame", "ctipica") + " " +
+						ParamCtrl.ConsultaTipica[i_ctipica].nom + " " +
+						GetMessage("notInTypicalQueryLayerList", "ctipica") + ".");
 				}
 			}
 			else
@@ -1653,12 +1652,11 @@ var valor;
 						}
 						if (i_tipica_capa==capa_consulta_tipica_intern.length)
 						{
-							var s=GetMessage("TheLayer") +
-							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] +
-							GetMessage("_toBeShownInFrame_", "ctipica") +
-							ParamCtrl.ConsultaTipica[i_ctipica].nom +
-							GetMessage("_notInTypicalQueryLayerList", "ctipica");
-							alert(s);
+							alert(GetMessage("TheLayer") + " " +
+								ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " " +
+								GetMessage("toBeShownInFrame", "ctipica") + " " +
+								ParamCtrl.ConsultaTipica[i_ctipica].nom + " " +
+								GetMessage("notInTypicalQueryLayerList", "ctipica") + " ");
 						}
 						else
 						{

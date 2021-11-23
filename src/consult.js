@@ -365,7 +365,7 @@ function OmpleRespostaConsultaNoHiHaDadesSiCal(win)
 	  		s=getContentLayer(getLayer(win, "multi_consulta"), s);
 	 	s+="<center><div class=\"layerresposta\">" +
 	 	   GetMessage("NoDataForRequestedPoint", "consult")+
-		   (HiHaCapesConsultablesNoActives() ? GetMessage("_andActiveQueryableLayers", "consult") : "" )+
+		   (HiHaCapesConsultablesNoActives() ? " " + GetMessage("andActiveQueryableLayers", "consult") : "" )+
 	  	   "</div></center>";
 	  	if(ParamCtrl.TipusConsulta=="IncrustadaDeCop")
 	  		contentFinestraLayer(win, "multi_consulta", s);
@@ -777,7 +777,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 		(Accio && Accio.accio&accio_validacio) ?
 		    ("<div align=\"left\" class=\"TextValidacio\">" +
 		     GetMessage("FollowingCoordinateSelected", "consult") +
-		     "</div>") : "",
+		     ":</div>") : "",
 		"<div align=\"center\" id=\"LayerPuntConsulta\" class=\"layerpuntconsultat\">",
 		"<b>", GetMessage("Point"),"</b>",
 		 (DonaValorDeCoordActual(PuntConsultat.x,PuntConsultat.y,true,false)), "</div>");
@@ -823,7 +823,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 						cdns.push("<div align=\"left\" id=\"LayerObjDigiConsulta",i,"_",j,"\" class=\"layerresposta\">",
 						   "<span class='TitolRepostaConsulta'>",
 						   (DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
-						   "</span><br>",(GetMessage("WaitingForData_", "consult")),"</div>");
+						   "</span><br>",(GetMessage("WaitingForData", "consult")),"...</div>");
 
 						RespostaConsultaObjDigiXML[RespostaConsultaObjDigiXML.length]={"i_capa": i, "i_obj": j, "win": win /*, "nom_layer"="LayerObjDigiConsulta"+i+"_"+j*/};
 					}
@@ -872,8 +872,8 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				cdns.push("<b>",
 						(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )) ,
 						(capa.AnimableMultiTime? " "+DonaDataCapaComATextBreu(i, null) : ""),
-						"</b><br>", GetMessage("WaitingForData_", "consult"));
-				cdns.push("</div>");
+						"</b><br>", GetMessage("WaitingForData", "consult"));
+				cdns.push("...</div>");
 			}
 		}
 	}

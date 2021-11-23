@@ -62,7 +62,7 @@ var cdns=[];
 			(GetMessage("DeviceLocation", "capavola")),
 			"\" onClick=\"AnarACoordGPS(form);\"></td></tr>");
 	cdns.push("<tr><td align=\"right\"><label id=\"X_anarcoord\" for=\"coordX_anarcoord\">X: </label><input class=\"Verdana11px\" id=\"coordX_anarcoord\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.x,"\"><label id=\"Y_anarcoord\" for=\"coordY_anarcoord\"> Y: </label><input class=\"Verdana11px\" id=\"coordY_anarcoord\" name=\"coordY\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.y,"\"></td></tr><tr><td align=\"right\"><label for=\"mVoltant_anarcoord\">",
-			(GetMessage("AroundZone", "capavola")),
+			(GetMessage("AroundZone", "capavola")), " (m):",
 			" </label><input class=\"Verdana11px\" id=\"mVoltant_anarcoord\" name=\"mVoltant\" type=\"text\" size=\"10\" value=\"",FormAnarCoord.m_voltant,"\"></td></tr>",
 		"<tr><td align=\"center\"><input class=\"Verdana11px\" type=\"button\" name=\"Acceptar\" value=\"",
 			(GetMessage("GoTo", "capavola")),
@@ -124,7 +124,7 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 
 	if(isNaN(punt_coord.x) || isNaN(punt_coord.y))
 	{
-  	   alert(GetMessage("CoordFormatIncorrectly", "capavola"));
+  	   alert(GetMessage("CoordFormatIncorrectly", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
 
@@ -663,7 +663,7 @@ function IniciaPosicioGPS()
 			IdPositionGPS=navigator.geolocation.watchPosition(ActualitzaPosicioGPS, ErrorPosicioGPS, {enableHighAccuracy: true, maximumAge: 8000});
 		else
 		{
-			alert("Geolocation is not supported by this browser.");
+			alert(GetMessage("GeolocationNotSupportedByBrowser","capavola"));
 			CancelaPosicioGPS();
 		}
 	}
