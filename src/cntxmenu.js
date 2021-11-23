@@ -752,7 +752,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 			{
 				if (typeof capa.valors[j].i_capa!=="undefined" &&  capa.valors[j].i_capa!= null && capa.valors[j].i_capa==i_capa)
 				{
-					if (false==confirm(GetMessage("TheLayer", "cntxmenu") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"));
+					if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"));
 						return false;
 				}
 			}
@@ -778,7 +778,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 					nou_valor=JSON.parse(cadena);
 					if (nou_valor.i_capa==i_capa)
 					{
-						if (false==confirm(GetMessage("TheLayer", "cntxmenu") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
+						if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
 							return false;
 					}
 					fragment=fragment.substring(final+1, fragment.length);
@@ -810,7 +810,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 							nou_valor=JSON.parse(cadena);
 							if (nou_valor.i_capa==i_capa)
 							{
-								if (false==confirm(GetMessage("TheLayer", "cntxmenu") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
+								if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
 									return false;
 							}
 							fragment=fragment.substring(final+1, fragment.length);
@@ -960,7 +960,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 					nou_valor=JSON.parse(cadena);
 					if (nou_valor.i_capa==i_capa && nou_valor.i_estil==i_estil)
 					{
-						if (false==confirm(GetMessage("TheLayer", "cntxmenu") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
+						if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
 							return false;
 					}
 					fragment=fragment.substring(final+1, fragment.length);
@@ -992,7 +992,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 							nou_valor=JSON.parse(cadena);
 							if (nou_valor.i_capa==i_capa  && nou_valor.i_estil==i_estil)
 							{
-								if (false==confirm(GetMessage("TheLayer", "cntxmenu") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
+								if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
 									return false;
 							}
 							fragment=fragment.substring(final+1, fragment.length);

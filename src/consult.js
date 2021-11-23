@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -147,7 +147,7 @@ var esNODATA, esLink, esImatge;
 					}
 					consulta.Atribut[consulta.Atribut.length]={"nom": tag.attributes[j].name,
 										"descripcio": tag.attributes[j].name,
-										"valor": tag.attributes[j].value,										
+										"valor": tag.attributes[j].value,
 										"unitats": null,
 										"mostrar": "si",
 										"esNODATA": false,
@@ -314,7 +314,7 @@ function MostraConsultaComHTML(consulta)
 				for(var i=0; i<consulta.Atribut.length; i++)
 				{
 					if(consulta.Atribut.mostrar=="no")
-						continue;							
+						continue;
 					if(consulta.Atribut.mostrar=="si_ple" && (typeof consulta.Atribut[i].valor === "undefined" || consulta.Atribut[i].valor==null || consulta.Atribut[i].valor==""))
 						continue;
 					cdns.push(MostraConsultaAtributComHTML(consulta.i_capa, 0, i, consulta.Atribut[i], consulta.Atribut[i].separador, consulta.Atribut[i].valor, i_capa_validar, true));
@@ -364,9 +364,8 @@ function OmpleRespostaConsultaNoHiHaDadesSiCal(win)
 	  	else //Consulta en finestra
 	  		s=getContentLayer(getLayer(win, "multi_consulta"), s);
 	 	s+="<center><div class=\"layerresposta\">" +
-	 	   DonaCadenaLang({"cat":"No hi ha dades pel punt consultat", "spa":"No hay datos para el punto consultado",
-					   "eng":"There are not data for requested point", "fre":"Pas de données au point consulté"})+
-		   (HiHaCapesConsultablesNoActives() ? DonaCadenaLang({"cat":" i les capes consultables actives", "spa":" y las capas consultables activas", "eng":" and active queryable layers", "fre":" et les couches consultables activées"}) : "" )+
+	 	   GetMessage("NoDataForRequestedPoint", "consult")+
+		   (HiHaCapesConsultablesNoActives() ? GetMessage("_andActiveQueryableLayers", "consult") : "" )+
 	  	   "</div></center>";
 	  	if(ParamCtrl.TipusConsulta=="IncrustadaDeCop")
 	  		contentFinestraLayer(win, "multi_consulta", s);
@@ -481,7 +480,7 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			{
 				i_simbol=DeterminaISimbolObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, RespostaConsultaObjDigiXML[i].i_obj, i_simb, PuntConsultat.i, PuntConsultat.j);
 				if (i_simbol==-1)
-					continue;				
+					continue;
 				env_icona=DonaEnvIcona(punt,
 						capa.estil[capa.i_estil].simbols[i_simb].simbol[i_simbol].icona);
 				if (env_icones.MinX>env_icona.MinX)
@@ -608,29 +607,29 @@ var cdns=[], capa, feature, atribut, atr;
 		return false;
 	atribut=capa.atributs[i_atr];
 
-	cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), "\t", DonaCadena(capa.desc), "\n");
+	cdns.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n");
 	//cdns.push(DonaCadenaLang({"cat": "Objecte", "spa": "Objecto", "eng": "Feature", "fre": "Feature"}), "\t", i_obj, "\n");
 
 	for(var i=0; i<capa.atributs.length; i++)
 	{
 		atr=capa.atributs[i];
 		if(atr.mostrar=="no" || atr.serieTemporal)
-			continue;							
+			continue;
 		cdns.push((DonaCadena(atr.descripcio) ? DonaCadena(atr.descripcio) : atr.nom), "\t", DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i, i_data, PuntConsultat.i, PuntConsultat.j));
 		if (atr.unitats)
 			cdns.push("\t", atr.unitats);
 		cdns.push("\n");
 	}
 
-	cdns.push(DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}), "\t", DonaCadena(atribut.descripcio));
+	cdns.push(GetMessage("Date"), "\t", DonaCadena(atribut.descripcio));
 	if (atribut.unitats)
 		cdns.push(" (", atribut.unitats, ")");
 	cdns.push("\n");
 	for (var i_data=0; i_data<capa.data.length; i_data++)
 		cdns.push(DonaDataCapaComATextBreu(i_capa, i_data), "\t", DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j), "\n");
 
-	FinalitzaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv", cdns.join(""), 
-			ConsultaCopiaSerieTemporalMostrat ? null : DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls en format", "spa": "Los valores del gráfico han sido copiados al portapapeles en formato", "eng": "The values of the chart have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papiers dans le format"}) + " " + DonaCadenaLang({"cat": "text separat per tabulacions", "spa": "texto separado por tabulaciones", "eng": "tab-separated text", "fre": "texte séparé par des tabulations"})+". (" + DonaCadenaLang({"cat": "Aquests missatge no es tornarà a mostrar", "spa": "Este mensaje no se volverá a mostrar", "eng": "These messages will not be displayed again", "fre": "Ces messages ne seront plus affichés"})+")");
+	FinalitzaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv", cdns.join(""),
+			ConsultaCopiaSerieTemporalMostrat ? null : GetMessage("ChartValueCopiedClipboardFormat", "consult") + " " + GetMessage("tabSeparatedText", "consult")+". (" + GetMessage("MessagesNotDisplayedAgain", "consult")+")");
 	ConsultaCopiaSerieTemporalMostrat=true;
 
 	return false;
@@ -642,7 +641,7 @@ var cdns=[], ncol=440, nfil=220;
 
 	if(separador)
 		cdns.push(DonaCadena(separador));
-	
+
 	if (cal_class)
 	{
 		if (i_capa_validar!=-1 && atribut.nom==Accio.camps[i_capa_validar])
@@ -652,20 +651,20 @@ var cdns=[], ncol=440, nfil=220;
 	}
 	else
 		cdns.push("<b>");
-			
+
 	cdns.push((DonaCadena(atribut.descripcio) ? DonaCadena(atribut.descripcio) : atribut.nom ));
 
 	if(atribut.unitats)
 		cdns.push("(" , atribut.unitats, ")");
 	cdns.push(": ");
-	
+
 	if (cal_class)
 	{
 		if (i_capa_validar!=-1 && atribut.nom==Accio.camps[i_capa_validar])
 			cdns.push("</span><span class='ValorRespostaConsultaValidacio'>");
 		else
 			cdns.push("</span><span class='ValorRespostaConsulta'>");
-	}		
+	}
 	else
 		cdns.push("</b>")
 
@@ -676,7 +675,7 @@ var cdns=[], ncol=440, nfil=220;
 			if (valor)
 			{
 				if(atribut.esLink)
-					cdns.push("<a href='",valor,"' target='_blank'>", DonaCadenaLang({"cat":"Enllaç", "spa":"Enlace", "eng":"Link", "fre":"Relier"}),"</a>");
+					cdns.push("<a href='",valor,"' target='_blank'>", GetMessage("Link"),"</a>");
 				cdns.push("<br>");
 				cdns.push("<video controls width='320'>",
 						"<source src='", valor, "' type='", atribut.FormatVideo, "'>",
@@ -711,14 +710,14 @@ var cdns=[], ncol=440, nfil=220;
 	{
 		if (cal_class)
 		{
-			cdns.push("<span class='ValorRespostaConsulta' class='invisiblewhenprint'>", 
-				"<a href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ") : ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ")\">", DonaCadenaLang({"cat":"Copia valors de la sèrie", "spa":"Copiar valores de la serie", "eng":"Copy series values","fre":"Copier les valeurs des séries"}), "</a><br>",
+			cdns.push("<span class='ValorRespostaConsulta' class='invisiblewhenprint'>",
+				"<a href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ") : ConsultaCopiaSerieTemporal(", i_capa, ", ", i_obj, ", ", i_atr, ")\">", GetMessage("CopySeriesValues", "consult"), "</a><br>",
 				"</span>");
 		}
 		cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_cnsl_serie", i_capa, "_", i_obj, "_", i_atr, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 	}
 
-	return cdns.join("");	
+	return cdns.join("");
 }
 
 
@@ -735,25 +734,25 @@ var separador=null;
 				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
 				"</span><hr size=\"2\">");
 	}
-	/* Pendent de fer 
+	/* Pendent de fer
 	if(capa.editable=="si")
 	{
-		cdns.push("<a href=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi,);\" onClick=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi, ");\">", 
+		cdns.push("<a href=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi,);\" onClick=\"EliminaPuntDesdeConsulta(", i_capa_digi,",", i_obj_digi, ");\">",
 				DonaCadenaLang({"cat":"Esborrar l'objecte", "spa":"Borrar el objeto", "eng":"Delete the object","fre":"Supprimer l'objet"}),"</a><br><br>");
 	}*/
 	feature=capa.objectes.features[i_obj_digi];
 	for (var i=0; i<atributs.length; i++)
 	{
 		atribut=atributs[i];
-		if (atribut.separador && DonaCadena(atribut.separador))			
-			separador=atribut.separador;					
+		if (atribut.separador && DonaCadena(atribut.separador))
+			separador=atribut.separador;
 		if(atribut.mostrar=="no")
-			continue;							
+			continue;
 		valor=DeterminaTextValorAtributObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj_digi, i, PuntConsultat.i, PuntConsultat.j);
 
 		if(atribut.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 			continue;
-			
+
 		cdns.push(MostraConsultaAtributComHTML(i_capa_digi, i_obj_digi, i, atribut, separador, valor, -1, cal_class));
 		if (separador)
 			separador=null;
@@ -777,11 +776,10 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 	cdns.push("<center>",
 		(Accio && Accio.accio&accio_validacio) ?
 		    ("<div align=\"left\" class=\"TextValidacio\">" +
-		     DonaCadenaLang({"cat":"S'ha seleccionat la següent coordenada:","spa":"Se ha seleccionado la siguiente coordenada:",
-							 "eng":"The following coordinate has been selected:", "fre":"La coordonnée suivante a été sélectionnée:"}) +
+		     GetMessage("FollowingCoordinateSelected", "consult") +
 		     "</div>") : "",
 		"<div align=\"center\" id=\"LayerPuntConsulta\" class=\"layerpuntconsultat\">",
-		"<b>", DonaCadenaLang({"cat":"Punt", "spa":"Punto", "eng":"Point", "fre":"Point"}),"</b>",
+		"<b>", GetMessage("Point"),"</b>",
 		 (DonaValorDeCoordActual(PuntConsultat.x,PuntConsultat.y,true,false)), "</div>");
 
 	if(Accio && Accio.accio&accio_validacio)
@@ -791,22 +789,15 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 	   Accio.coord.y=PuntConsultat.y;
 
 	   cdns.push("<div align=\"left\" class=\"TextValidacio\"><ul><li>",
-		     DonaCadenaLang({"cat":"Si és correcte, ja la pot validar.", "spa":"Si es correcta, ya la puede validar.",
-							 "eng":"If it is correct, already can validate it.", "fre":"Si correcte, vous pouvez la valider."}),
-			 "<br>",  DonaCadenaLang({"cat":"Es tancarà la finestra de navegació i tornarà al formulari.",
-									 "spa":"Se cerrará la ventana de navegación y volverá al formulario.",
-									 "eng":"Browser window will be closed and will return to form.",
-									 "fre":"La fenêtre du navigateur va se fermer et vous serez redirigés vers le formulaire."}),
-		     "<br><br><li>", DonaCadenaLang({"cat":"Si és incorrecte, torni a clicar sobre la vista.",
-							     			 "spa":"Si es incorrecta, vuelva a cliquear sobre la vista.",
-											 "eng":"If it is incorrect, it clicks on the view again.",
-											 "fre":"Si incorrecte, cliquez une autre fois sur la vue."}),
+		     GetMessage("IfCorrectValidateIt", "consult"),
+			 "<br>",  GetMessage("BrowserClosedReturnForm", "consult"),
+		     "<br><br><li>", GetMessage("IfIncorrectClicksViewAgain", "consult"),
 		     "</ul><form name=\"Validar\" onSubmit=\"return false;\"><input type=\"button\" value=\"",
-		     DonaCadenaLang({"cat":"Validar Coordenada\"","spa": "Validar Coordenada\"", "eng":"Validated Coordinate\"","fre":"Valider coordonnée\""}),
+		     GetMessage("ValidateCoordinate", "consult"),
 		     (ParamCtrl.TipusConsulta=="IncrustadaDeCop" ?
 			     " onClick=\"EnviarRespostaAccioValidacio(true);\"> <input type=\"button\" value=\"" :
 			     " onClick=\"opener.EnviarRespostaAccioValidacio(true);\"> <input type=\"button\" value=\""),
-		     DonaCadenaLang({"cat":"Cancel·lar\"","spa":"Cancelar\"", "eng":"Cancel\"", "fre":"Annuler\""}),
+		     GetMessage("Cancel"),
      		     (ParamCtrl.TipusConsulta=="IncrustadaDeCop" ?
 			     " onClick=\"EnviarRespostaAccioValidacio(false);\"></form></div>" :
 			     " onClick=\"opener.EnviarRespostaAccioValidacio(false);\"></form></div>"));
@@ -832,7 +823,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 						cdns.push("<div align=\"left\" id=\"LayerObjDigiConsulta",i,"_",j,"\" class=\"layerresposta\">",
 						   "<span class='TitolRepostaConsulta'>",
 						   (DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
-						   "</span><br>",(DonaCadenaLang({"cat":"Esperant dades...", "spa":"Esperando datos...", "eng":"Waiting for data...", "fre":"En attente des données..."})),"</div>");
+						   "</span><br>",(GetMessage("WaitingForData_", "consult")),"</div>");
 
 						RespostaConsultaObjDigiXML[RespostaConsultaObjDigiXML.length]={"i_capa": i, "i_obj": j, "win": win /*, "nom_layer"="LayerObjDigiConsulta"+i+"_"+j*/};
 					}
@@ -852,7 +843,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				continue;
 
 			NCapesConsultables++;
-			//capa=ParamCtrl.capa[i]; Ja s'ha fet abans 
+			//capa=ParamCtrl.capa[i]; Ja s'ha fet abans
 			if (capa.valors)
 			{
 				if (HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i))
@@ -881,7 +872,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				cdns.push("<b>",
 						(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )) ,
 						(capa.AnimableMultiTime? " "+DonaDataCapaComATextBreu(i, null) : ""),
-						"</b><br>", DonaCadenaLang({"cat":"Esperant dades...", "spa":"Esperando datos...", "eng":"Waiting for data...", "fre":"En attente des données..."}));
+						"</b><br>", GetMessage("WaitingForData_", "consult"));
 				cdns.push("</div>");
 			}
 		}
@@ -940,7 +931,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 					continue;
 				for(var j=0, k=0; j<capa.objectes.features.length; j++)
 				{
-					if ((capa.objectes.features[j].geometry.type=="MultiLineString" || capa.objectes.features[j].geometry.type=="LineString") && 
+					if ((capa.objectes.features[j].geometry.type=="MultiLineString" || capa.objectes.features[j].geometry.type=="LineString") &&
 						EsObjDigiConsultable(i,j))
 					{
 						k++;
@@ -976,7 +967,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 								//Creo un canvas al final del valor de atribut que s'ha indicat abans
 								win.document.getElementById("LayerConsulta"+i2).insertAdjacentHTML("beforeend", "<div style=\"width: " + ncol + "px;height: " + (capa2.estil[capa2.i_estil].categories ? nfilCat : nfil) + "px;\"><canvas id=\"" + "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j + "\" width=\"" + ncol + "\" height=\"" + (capa2.estil[capa2.i_estil].categories ? nfilCat : nfil) + "\"></canvas></div>");
 								//Afegeixo el grafic del perfil
-								MostraGraficPerfilConsula(win, "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j, capa2, perfil, DonaCadenaLang({"cat": "Perfil del tall transversal de la línia consultada", "spa": "Perfil del corte transversal de la línea consultada", "eng": "Profile of the transversal cut of the queried line", "fra": "Profil de la coupe transversale de la ligne interrogée"}) + " " + k + " " + DonaCadenaLang({"cat": "de la capa", "spa": "de la capa", "eng": "of the layer", "fra": "de la couche"}) + " " + (capa.estil[capa.i_estil].desc ? capa.estil[capa.i_estil].desc : capa.desc));
+								MostraGraficPerfilConsula(win, "canvas_cnsl_perfil_" + i2 + "_" + i + "_" + j, capa2, perfil, GetMessage("ProfileTransversalCutQueriedLine", "consult") + " " + k + " " + GetMessage("ofTheLayer") + " " + (capa.estil[capa.i_estil].desc ? capa.estil[capa.i_estil].desc : capa.desc));
 							}
 						}
 					}
@@ -1034,7 +1025,7 @@ var data=[], categories=[], labels=[], colors=[], i_color0;
 		CreaGraficPerfilCategoricSimple(win.document.getElementById(nom_canvas), categories, labels, colors, titol_perfil);
 	}
 	else
-	{	
+	{
 		for (var i_coord=0; i_coord<perfil.coord.length; i_coord++)
 			data[i_coord]=(typeof estil.component[0].NDecimals!=="undefined" && estil.component[0].NDecimals!=null) ? parseFloat(OKStrOfNe(perfil.coord[i_coord].v, estil.component[0].NDecimals)) : perfil.coord[i_coord].v;
 		CreaGraficPerfilContinuSimple(win.document.getElementById(nom_canvas), data, labels, colors, titol_perfil);
@@ -1051,7 +1042,7 @@ function CreaPuntConsultat(win)  //Escriu la coordenada del punt consultat.
 				((parent.tools) ? " BGCOLOR=\"" + ParamCtrl.ColorFonsPlana + "\"" : "") +
 	    	           " TOPMARGIN=\"0\" LEFTMARGIN=\"2\" MARGINWIDTH=\"2\" MARGINHEIGHT=\"2\">"+
 			//"Punt consultat", "Punto consultado", "Queried point"
-    	           "<PRE>"+DonaCadenaLang({"cat":"Punt", "spa":"Punto", "eng":"Point", "fre":"Point"}) +": ("+
+    	           "<PRE>"+GetMessage("Point") +": ("+
 				   OKStrOfNe(PuntConsultat.x,ParamCtrl.NDecimalsCoordXY)+
 				   ", "+
 				   OKStrOfNe(PuntConsultat.y,ParamCtrl.NDecimalsCoordXY)+
@@ -1076,15 +1067,15 @@ var cdns=[];
 							   "><center>");
 			if (anterior)
 				cdns.push("<input TYPE=\"button\" VALUE=\"",
-					(DonaCadenaLang({"cat":"Anterior capa", "spa":"Anterior capa", "eng":"Previous layer", "fre":"Précédente couche"})),
+					(GetMessage("PreviousLayer", "consult")),
 					"\" onClick=\"((parent.tools)?CreaConsulta(parent, -1):parent.opener.CreaConsulta(parent, -1));\">");
 			if (posterior)
 				cdns.push("<input TYPE=\"button\" VALUE=\"",
-					(DonaCadenaLang({"cat":"Següent capa", "spa":"Siguiente capa", "eng":"Next layer", "fre":"Suivant couche"})),
+					(GetMessage("NextLayer", "consult")),
 					"\" onClick=\"((parent.tools)?CreaConsulta(parent, 1):parent.opener.CreaConsulta(parent, 1));\">");
 			if (!parent.tools)
 				cdns.push("&nbsp;&nbsp;&nbsp;<input TYPE=\"submit\" VALUE=\"",
-				(DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"})),"\">");
+				(GetMessage("Close")),"\">");
 			cdns.push("</center></form></body></html>");
 	win.document.write(cdns.join(""));
 	win.document.close();
@@ -1118,7 +1109,7 @@ var punt={};
 	win.document.open();
 	win.document.write("<html><body BOTTOMMARGIN=\"0\" TOPMARGIN=\"0\" LEFTMARGIN=\"2\" MARGINWIDTH=\"2\" MARGINHEIGHT=\"2\"><PRE><b>"+
 			DonaCadena(capa.desc)+"</b><br>"+
-			DonaCadenaLang({"cat":"Punt", "spa":"Punto", "eng":"Point", "fre":"Point"}) +": ("+
+			GetMessage("Point") +": ("+
 			OKStrOfNe(punt.x,ParamCtrl.NDecimalsCoordXY)+
 			", "+
 			OKStrOfNe(punt.y,ParamCtrl.NDecimalsCoordXY)+
@@ -1181,7 +1172,7 @@ var n_elem=ParamCtrl.capa.length;
 	if (increment==0)  //Estem al principi.
 	{
 		if (!parent.tools)
-			document.title=DonaCadenaLang({"cat":"Consulta", "spa":"Consulta", "eng":"Query","fre":"Recherche"}) + "; " + DonaCadena(ParamCtrl.titol);
+			document.title=GetMessage("Query") + "; " + DonaCadena(ParamCtrl.titol);
 		CreaPuntConsultat(win.consulta_punt);
 		IElemActual=-1;
 		increment=1;
@@ -1198,7 +1189,7 @@ var n_elem=ParamCtrl.capa.length;
 		}
 	}
 	else
-	    win.consulta_info.location.href=DonaCadenaLang({"cat":"noconsul.htm", "spa":"noconsul_spa.htm", "eng":"noconsul_eng.htm", "fre":"noconsul_fre.htm"});
+	    win.consulta_info.location.href=GetMessage("noconsul_htm", "consult");
 
 	var anterior=true;
 	var posterior=true;
@@ -1375,8 +1366,8 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 					"<I>",i,"</I>\n",
 					"<InfoFormat>",ParamCtrl.capa[i_capa].FormatConsulta,"</InfoFormat>\n",
 					"</GetFeatureInfo>\n");
-	//ServerToRequest		
-	if ( !DonaCorsServidorCapa(ParamCtrl.capa[i_capa]) && 
+	//ServerToRequest
+	if ( !DonaCorsServidorCapa(ParamCtrl.capa[i_capa]) &&
 		location.host && DonaHost(DonaServidorCapa(ParamCtrl.capa[i_capa]).toLowerCase())!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
@@ -1407,10 +1398,7 @@ var s;
 
 	if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
 	{
-		alert(DonaCadenaLang({"cat":"De moment no implementat per RESTful",
-							 "spa":"De momento no implementado para RESTful",
-							 "eng":"Not implemented yet for RESTful",
-							 "fre":"Pas encore implémenté pour RESTful"}));
+		alert(GetMessage("NotImplementedYetRESTful", "consult"));
 	}
 	/*if (DonaTipusServidorCapa(capa)=="TipusGoogle_KVP")
 	{
@@ -1450,32 +1438,32 @@ var s;
 				 "&LAYER=" , capa.nom ,
 				 "&INFOFORMAT=" , capa.FormatConsulta ,
 				 "&I=" , i , "&J=" , j);
-	
+
 			if (capa.AnimableMultiTime)
 				cdns.push("&TIME=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], capa.FlagsData));
 			s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), (ParamCtrl.UsaSempreMeuServidor && ParamCtrl.UsaSempreMeuServidor) ? true : es_ajax);
 		}
 		else //if (tipus=="TipusOAPI_MapTiles")
-		{		
+		{
 			var plantill;
 			if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 				plantill=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"/info?";
 			else
 				plantill="collections/{collectionId}/styles/{styleId}/map/tiles/{tileMatrixSetId}/{tileMatrix}/{tileRow}/{tileCol}/info?";
-				
+
 			plantill=plantill.replace("{collectionId}", capa.nom);
 			if (capa.estil && capa.estil.length)
 			{
-				i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;	
-				
+				i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+
 				if (capa.estil[i_estil2].nom)
 					plantill=plantill.replace("{styleId}", capa.estil[i_estil2].nom);
 				else
-					plantill=plantill.replace("{styleId}/", "default");	
+					plantill=plantill.replace("{styleId}/", "default");
 			}
 			else
-				plantill=plantill.replace("{styleId}/", "default");						
-			plantill=plantill.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);			
+				plantill=plantill.replace("{styleId}/", "default");
+			plantill=plantill.replace("{tileMatrixSetId}", capa.TileMatrixSet[i_tile_matrix_set].nom);
 			plantill=plantill.replace("{tileMatrix}", capa.VistaCapaTiled.TileMatrix.Identifier);
 			plantill=plantill.replace("{tileRow}", tile_row);
 			plantill=plantill.replace("{tileCol}", tile_col);
@@ -1525,7 +1513,7 @@ function EsObjDigiConsultable(i_capa, i_obj)
 var capa=ParamCtrl.capa[i_capa];
 
 	//Quan no té atributs només retorno fals si és una capa estàtica, perquè sinó pot voler dir que haig de sol·licitar els atributs
-	if(capa.consultable!="si" || !capa.objectes || 
+	if(capa.consultable!="si" || !capa.objectes ||
 		(!capa.tipus && (!capa.objectes.features || CountPropertiesOfObject(capa.objectes.features[i_obj].properties)==0)) ||
 		capa.estil==null || !capa.estil.length)
 	{
@@ -1599,7 +1587,7 @@ var capa=ParamCtrl.capa[i_capa];
 
 		if (!capa.estil[capa.i_estil].formes || !capa.estil[capa.i_estil].formes.length)
 			return false;
-			
+
 		for (var i_forma=0; i_forma<capa.estil[capa.i_estil].formes.length; i_forma++)
 		{
 			forma=capa.estil[capa.i_estil].formes[i_forma];

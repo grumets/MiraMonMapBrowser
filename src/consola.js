@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -68,7 +68,7 @@ function CreaIOmpleEventConsola(titol, i_capa, desc, tipus)
 		EventConsola.push({"id": i_EventConsola,
 						"titol": titol,
 						"i_capa": i_capa,
-						"desc": desc, 
+						"desc": desc,
 						"tipus": tipus,
 						"estat": EstarEventPendent,
 						"timeRequest": new Date(),
@@ -101,10 +101,7 @@ function CanviaEstatEventConsola(event, i_event, estat)
 
 function MostraFinestraConsola()
 {
-	if (!ObreFinestra(window, "consola", DonaCadenaLang({"cat":"de veure els informes de la consola", 
-							  "spa":"de ver los informes de la consola",
-							  "eng":"of watching the reports in the console",
-							  "fre":"pour regarder les rapports dans la console"})))
+	if (!ObreFinestra(window, "consola", GetMessage("ofWatchingReportsConsole", "consola")))
 		return;
 	OmpleFinestraConsola();
 }
@@ -113,8 +110,8 @@ function OmpleFinestraConsola()
 {
 var cdns=[];
 var temp, event_consola;
-	cdns.push("<center><table border=0 width=95%><tr><td><font size=1><a href=\"javascript:void(0);\" onClick=\"EsborraTotIOmpleEventConsola();\">", 
-				DonaCadenaLang({"cat":"Esborra-ho tot", "spa":"Borrar todo", "eng":"Delete all","fre":"Tout effacer"}),"</a><br>");
+	cdns.push("<center><table border=0 width=95%><tr><td><font size=1><a href=\"javascript:void(0);\" onClick=\"EsborraTotIOmpleEventConsola();\">",
+				GetMessage("DeleteAll", "consola"),"</a><br>");
 	for (var i=0; i<EventConsola.length; i++)
 	{
 		event_consola=EventConsola[i];
@@ -126,7 +123,7 @@ var temp, event_consola;
 		}
 		temp=temp.replace("<", "&lt;");
 		temp=temp.replace(">", "&gt;");
-		temp=temp.replace("\n", "<br>");			
+		temp=temp.replace("\n", "<br>");
 		cdns.push("<b>", event_consola.titol);
 		if (event_consola.tipus==TipusEventGetFeature || event_consola.tipus==TipusEventGetFeatureOfInterest || event_consola.tipus==TipusEventGetObservation)
 		{

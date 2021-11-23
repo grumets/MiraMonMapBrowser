@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -80,7 +80,7 @@ var i_llista;
 			keycode = window.event.keyCode;
 			llavor = window.event.srcElement;
         }
-	    else if (e) 
+	    else if (e)
 	    {
 			keycode = e.which;
 			llavor=e.target;
@@ -130,7 +130,7 @@ var i_llista;
 				EscriuLlavor(llavor, i_llista, a, i);
 				vScrollLayer(getLayer(window, NomLayerLlista[i_llista]), i, NCellaLlista[i_llista]);
 			}
-			else 
+			else
 			{
 				if (ICellaLlistaBlau[i_llista]!=-1)
 				{
@@ -149,7 +149,7 @@ var i_llista;
 			    	keycode==39 ||  //fletxa dreta
 				    keycode==40 ||  //fletxa avall
 		    		keycode==38 ||  //fletxa amunt
-				    keycode==16) 
+				    keycode==16)
 					;
 			else
 				ActualitzaLlista(llavor, i_llista, keycode);
@@ -254,7 +254,7 @@ var elem;
 		{
 			k=LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase());
 			if (k>0 && (LlistaCadenes[i_llista][i].substring(k-1,k)==" " || LlistaCadenes[i_llista][i].substring(k-1,k)=="\'") &&
-				(k+llav.length==LlistaCadenes[i_llista][i].length || LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)==" " || 
+				(k+llav.length==LlistaCadenes[i_llista][i].length || LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)==" " ||
 				LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)=="\'"))
 			{
 				ILlistaDeICellaLlista[i_llista][NCellaLlista[i_llista]]=i;
@@ -274,7 +274,7 @@ var elem;
 		{
 			k=LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase());
 			if (k>0 && (LlistaCadenes[i_llista][i].substring(k-1,k)==" " || LlistaCadenes[i_llista][i].substring(k-1,k)=="\'") &&
-				k+llav.length!=LlistaCadenes[i_llista][i].length && LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!=" " && 
+				k+llav.length!=LlistaCadenes[i_llista][i].length && LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!=" " &&
 				LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!="\'")
 			{
 				ILlistaDeICellaLlista[i_llista][NCellaLlista[i_llista]]=i;
@@ -305,7 +305,7 @@ var elem;
 		for (i=0; i<LlistaCadenes[i_llista].length; i++)
 		{
 			k=LlistaSenzilla[i_llista][i].indexOf(llav_senzilla);
-			if (k==0 && 
+			if (k==0 &&
 				LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase())!=0)
 			{
 				ILlistaDeICellaLlista[i_llista][NCellaLlista[i_llista]]=i;
@@ -320,9 +320,9 @@ var elem;
 		for (i=0; i<LlistaCadenes[i_llista].length; i++)
 		{
 			k=LlistaSenzilla[i_llista][i].indexOf(llav_senzilla);
-			if (k>0 && LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase())<1 && 
+			if (k>0 && LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase())<1 &&
 				(LlistaCadenes[i_llista][i].substring(k-1,k)==" " || LlistaCadenes[i_llista][i].substring(k-1,k)=="\'") &&
-				(k+llav.length==LlistaCadenes[i_llista][i].length || LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)==" " || 
+				(k+llav.length==LlistaCadenes[i_llista][i].length || LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)==" " ||
 				LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)=="\'") &&
 				LlistaSenzilla[i_llista][i].substring(k,k+llav_senzilla.length)!=LlistaCadenes[i_llista][i].toLowerCase().substring(k,k+llav_senzilla.length))
 			{
@@ -330,7 +330,7 @@ var elem;
 				cdns.push("<tr><td id=\"CellaLlista_",i_llista,"_",NCellaLlista[i_llista],"\" onClick=\'EscriuLlavorIActualitza(\"",
 					llavor.name,"\", ",i_llista,", ",NCellaLlista[i_llista],");\' onMouseOver=\"CellaABlau(window,",i_llista,", ",
 					NCellaLlista[i_llista],");\" onMouseOut=\"CellaATransparent(window)\">",(LlistaCadenes[i_llista][i].substring(0,k)),"<b>",
-					(LlistaCadenes[i_llista][i].substring(k,k+llav.length)),"</b>",				
+					(LlistaCadenes[i_llista][i].substring(k,k+llav.length)),"</b>",
 					(LlistaCadenes[i_llista][i].substring(k+llav.length,LlistaCadenes[i_llista][i].length)),"<br></td></tr>");
 				NCellaLlista[i_llista]++;
 			}
@@ -340,7 +340,7 @@ var elem;
 			k=LlistaSenzilla[i_llista][i].indexOf(llav_senzilla);
 			if (k>0 && LlistaCadenes[i_llista][i].toLowerCase().indexOf(llav.toLowerCase())<1 &&
 				(LlistaCadenes[i_llista][i].substring(k-1,k)==" " || LlistaCadenes[i_llista][i].substring(k-1,k)=="\'") &&
-				k+llav.length!=LlistaCadenes[i_llista][i].length && LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!=" " && 
+				k+llav.length!=LlistaCadenes[i_llista][i].length && LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!=" " &&
 				LlistaCadenes[i_llista][i].substring(k+llav.length,k+llav.length+1)!="\'" &&
 				LlistaSenzilla[i_llista][i].substring(k,k+llav_senzilla.length)!=LlistaCadenes[i_llista][i].toLowerCase().substring(k,k+llav_senzilla.length))
 			{
@@ -382,7 +382,7 @@ var elem;
 			}
 			else if (NCellaLlista[i_llista]==0)
 			{
-				cdns.push("<tr><td>--",(DonaCadenaLang({"cat":"Cap coincidència", "spa":"Ninguna coincidencia", "eng":"Any match", "fre":"Aucune coïncidence"})),"--</td></tr>");
+				cdns.push("<tr><td>--",(GetMessage("AnyMatch", "ctipica")),"--</td></tr>");
 				showLayer(elem);
 			}
 			else
@@ -390,7 +390,7 @@ var elem;
 		}
 		cdns.push("</table>");
 	}
-	contentLayer(elem, cdns.join("")); 
+	contentLayer(elem, cdns.join(""));
 }//Fi de ActualitzaLlistaTimeOut()
 
 var timeoutActualitzaLLista=null;
@@ -408,8 +408,7 @@ var elem;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
 	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>"+
-	   DonaCadenaLang({"cat":"Actualitzant la llista, espereu", "spa":"Actualizando la lista, espere", 
-					   "eng":"Updating the list, please wait","fre":"La liste est en train d'être actualisée, attendez."})+
+	   GetMessage("UpdatingList", "ctipica")+
 	   "...</td></tr></table>";
 	contentLayer(elem, s);
 	showLayer(elem);
@@ -446,7 +445,7 @@ function OmpleXYAmpleAltEnvConsultaTipicaCompleta(win, i_ctipica, env)
 				form_ctipica.y.value=OKStrOfNe((env.MaxY+env.MinY)/2,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.ample.value=OKStrOfNe(env.MaxX-env.MinX,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.alt.value=OKStrOfNe(env.MaxY-env.MinY,ParamCtrl.NDecimalsCoordXY);
-	
+
 				form_ctipica.MinX.value=OKStrOfNe(env.MinX,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.MaxX.value=OKStrOfNe(env.MaxX,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.MinY.value=OKStrOfNe(env.MinY,ParamCtrl.NDecimalsCoordXY);
@@ -462,7 +461,7 @@ function OmpleXYAmpleAltEnvConsultaTipicaCompleta(win, i_ctipica, env)
 							ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.alt.value=OKStrOfNe(
 							ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual,ParamCtrl.NDecimalsCoordXY);
-	
+
 				form_ctipica.MinX.value=OKStrOfNe(
 							ParamInternCtrl.PuntOri.x-ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual/2,ParamCtrl.NDecimalsCoordXY);
 				form_ctipica.MinY.value=OKStrOfNe(
@@ -512,7 +511,7 @@ var i_capa, i_capa_a_activar;
 			{
 				if (i_tipica!=CTipicaCapa[i_ctipica])
 				{
-					//Revisa si hi ha capes consultables-tipica visibles o consultables i apaga-les 
+					//Revisa si hi ha capes consultables-tipica visibles o consultables i apaga-les
 					if (ParamCtrl.capa[i_capa].visible!="no")
 					{
 			       		if (ParamCtrl.capa[i_capa].visible!="ara_no")
@@ -591,14 +590,14 @@ var i_ctipica_capa, i_valor;
 				if(capa_consulta_tipica_intern[0].id_camp)
 					i_valor=capa_consulta_tipica_intern[0].id_camp[0][i_llista_buscar].id;
 				else
-					i_valor==i_llista_buscar;				
+					i_valor==i_llista_buscar;
 				PortamAAmbitConsultaTipica(i_ctipica, 0, 0, i_valor);
 				return;
 			}
 			else
 			{
 				for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
-				{		    	    
+				{
 					if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
 					{
 						for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
@@ -608,8 +607,8 @@ var i_ctipica_capa, i_valor;
 								i_valor=capa_consulta_tipica_intern[0].id_camp[0][i].id;
 								PortamAAmbitConsultaTipica(i_ctipica, i_tipica_capa, 0, i_valor);
 								return 0;
-							}	
-						}								
+							}
+						}
 					}
 					else
 					{
@@ -645,8 +644,8 @@ var i_ctipica_capa, i_valor;
 								i_valor=capa_consulta_tipica_intern[0].id_camp[0][i].id;
 								PortamAAmbitConsultaTipica(i_ctipica, i_tipica_capa, 0, i_valor);
 								return 0;
-							}	
-						}								
+							}
+						}
 					}
 					else
 					{
@@ -669,11 +668,11 @@ var i_ctipica_capa, i_valor;
 function InsertaOpcioEnSelect(selector, opcio, posicio)
 {
 	try
-	{						
+	{
 		selector.add(opcio, posicio);// standards compliant
 	}
 	catch(ex)
-	{						
+	{
 		selector.add(opcio); //IE only
 	}
 }
@@ -682,7 +681,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 {
 	if (capa_consulta_tipica_intern.length && i_camp_ctipica>0)
 	{
-		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo			
+		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo
 		var document_ctipica=window.document;
 		var i_camp_selec=i_camp_ctipica;
 		if(valor<0 && i_camp_selec<capa_consulta_tipica_intern[i_ctipica_capa].camps.length)  // S'ha escollit l'opció de --Seleccionar ---
@@ -702,16 +701,16 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			var array_index= [];
 			//var select_ctipica=eval("window.document.ctipica"+i_ctipica+".valor"+i);
 			var select_ctipica=window.document.ctipica[i_ctipica]["valor"+i];
-			
+
 			//Esborro el select
 			select_ctipica.options.length=0;
-			
+
 			//Construeixo una llista amb els índexs dels camps que cumpleixen la selecció actual i les anteriors
 			for(var j=0; j<capa_consulta_tipica_intern[i_ctipica_capa].id_camp[0].length; j++)
-			{													
+			{
 				for(var z=i_camp_selec; z<capa_consulta_tipica_intern[i_ctipica_capa].camps.length; z++)
 				{
-					if(valor_seleccionat[z]>=0 && capa_consulta_tipica_intern[i_ctipica_capa].id_camp[z][j].id!=valor_seleccionat[z])													
+					if(valor_seleccionat[z]>=0 && capa_consulta_tipica_intern[i_ctipica_capa].id_camp[z][j].id!=valor_seleccionat[z])
 						break;
 				}
 				if(z==capa_consulta_tipica_intern[i_ctipica_capa].camps.length)
@@ -719,10 +718,10 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			}
 			//Haig ordenar array_index
 			array_index.sort(sortAscendingNumber);
-			//Tornor a omplir el combo 				
+			//Tornor a omplir el combo
 			//Afegeix-ho el seleccionar tots
 			opcio=document_ctipica.createElement('option');
-			opcio.text=DonaCadenaLang({"cat":"--Seleccionar--", "spa":"--Seleccionar--", "eng":"--Select--", "fre":"--Sélectionner--"});
+			opcio.text="--" + GetMessage("Select") + "--";
 			opcio.value=-2;
 			opcio.selected=true;
 			InsertaOpcioEnSelect(select_ctipica, opcio, null);
@@ -731,12 +730,12 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			opcio.value=-1;
 			opcio.selected=false;
 			InsertaOpcioEnSelect(select_ctipica, opcio, null);
-			
+
 			//I ara els valors
 			var ultim_valor_usat=-1;
 			for(var j=0; j<array_index.length; j++)
-			{					
-				//En l'array hi poden haver-hi repeticions					
+			{
+				//En l'array hi poden haver-hi repeticions
 				if(ultim_valor_usat!=array_index[j])
 				{
 					opcio=document_ctipica.createElement('option');
@@ -747,7 +746,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 					ultim_valor_usat=array_index[j];
 				}
 			}
-		}			
+		}
 	}
 }
 
@@ -833,7 +832,7 @@ function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 			return DonaEnvDeMinMaxXY(parseFloat(form_ctipica.MinX.value), parseFloat(form_ctipica.MaxX.value), parseFloat(form_ctipica.MinY.value), parseFloat(form_ctipica.MaxY.value));
 		return ParamCtrl.EnvTotal;
 	}
-	return ParamInternCtrl.vista.EnvActual;		
+	return ParamInternCtrl.vista.EnvActual;
 }
 
 function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
@@ -880,7 +879,7 @@ function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 			{
 				if (form_ctipica.retallar[2].checked)
 				{
-					form_ctipica.retallar[2].checked=false;	    		
+					form_ctipica.retallar[2].checked=false;
 					form_ctipica.retallar[1].checked=true;
 				}
 				form_ctipica.retallar[2].disabled=true;
@@ -908,7 +907,7 @@ function CanviaLlistaCapaConsultaTipica(i_ctipica)
 		if (form_ctipica && form_ctipica.capa)
 		{
 			CTipicaCapa[i_ctipica]=form_ctipica.capa.selectedIndex;
-			CTipicaValor=-CTipicaOffset;		
+			CTipicaValor=-CTipicaOffset;
 			CreaConsultaTipica(i_ctipica);
 		}
     }
@@ -923,7 +922,7 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica)
 		{
-			if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].id_camp)		
+			if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].id_camp)
 			{
 				//var form_ctipica_valor=eval("form_ctipica.valor"+(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1));
 				var form_ctipica_valor=form_ctipica["valor"+(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1)];
@@ -931,7 +930,7 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 				{
 					CTipicaValor=-CTipicaOffset;
 					form_ctipica_valor.selectedIndex=0;
-					ActualitzaComboConsultaTipicaSeguents(i_ctipica, CTipicaCapa[i_ctipica], 
+					ActualitzaComboConsultaTipicaSeguents(i_ctipica, CTipicaCapa[i_ctipica],
 						(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1), -2);
 				}
 			}
@@ -953,7 +952,7 @@ function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
-		
+
 		if (form_ctipica)
 		{
 			//var valor=eval("window.document.ctipica"+i_ctipica+".llavor"+i_ctipica);
@@ -987,7 +986,7 @@ function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 {
 	if (capa_consulta_tipica_intern.length)
 	{
-		InicialConsultaTipica=s;		
+		InicialConsultaTipica=s;
 		CreaConsultaTipica(i_ctipica);
 	}
 }
@@ -998,14 +997,14 @@ var cdns=[];
 var s;
 
 	cdns.push("<FORM NAME=\"ctipica",i_ctipica,"\" onSubmit=\"return false;\">\n\n");
-	
+
 	if (CTipicaCapa.length)
 	{
-	    if ((ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables" || ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials") 
+	    if ((ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables" || ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
 			&& capa_consulta_tipica_intern.length)
 	    {
 			//Camp final seleccionable Anar a ""
-			if ((ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null && capa_consulta_tipica_intern.length==1) || 
+			if ((ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null && capa_consulta_tipica_intern.length==1) ||
 			   (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa!=null && ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length==1))
 			{
 				cdns.push("<span class=\"text_general_consulta\">",
@@ -1020,7 +1019,7 @@ var s;
 				cdns.push("</span>");
 			}
 			else //Hi ha més d'una capa
-			{	
+			{
 				cdns.push("<span class=\"text_general_consulta\">",
 				   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ), " </span>" ,
 				   "  <select name=\"capa\" class=\"desplegable\" onChange=\'CanviaLlistaCapaConsultaTipica(",i_ctipica,");\'>");
@@ -1035,30 +1034,27 @@ var s;
 				else
 				{
 					for (var i_nom_capa=0; i_nom_capa<ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length; i_nom_capa++)
-					{			        	
+					{
 						for (var i=0; i<capa_consulta_tipica_intern.length; i++)
 						{
 							if (capa_consulta_tipica_intern[i].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
 								break;
 						}
 						if (i==capa_consulta_tipica_intern.length)
-						{						
-							s=DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + 
+						{
+							s=GetMessage("TheLayer_") +
 							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] +
-							DonaCadenaLang({"cat":" per a mostrar al frame ", "spa":" para mostrar en el frame ", "eng":" to be shown in the frame ", "fre":" à montrer au frame "}) +
-							ParamCtrl.ConsultaTipica[i_ctipica].nom + 
-							DonaCadenaLang({"cat":" no és a la llista de capes amb consulta típica.", 
-									"spa":" no está en la lista de capas con consulta típica.", 
-									"eng":" is not in the typical query layer list.",
-									"fre":" ne se trouve pas dans la liste de couches avec recherche typique"});
-							alert(s);								 
+							GetMessage("_toBeShownInFrame_", "ctipica") +
+							ParamCtrl.ConsultaTipica[i_ctipica].nom +
+							GetMessage("_notInTypicalQueryLayerList", "ctipica");
+							alert(s);
 						}
 						else
 						{
-							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") , 
+							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") ,
 							   ">" , DonaCadena(capa_consulta_tipica_intern[i].camps[0].desc) , "</option>");
 						}
-					}	
+					}
 				}
 				cdns.push("  </SELECT><span class=\"text_general_consulta\">");
 				if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length>1 && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
@@ -1068,8 +1064,8 @@ var s;
 					cdns.push("&nbsp;",DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].post));
 				cdns.push("</span>");
 			}
-			
-			//Valors del camp si només ni ha un o valors del camp n, n-1,...1 
+
+			//Valors del camp si només ni ha un o valors del camp n, n-1,...1
 			if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]])
 			{
 				if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
@@ -1088,13 +1084,13 @@ var s;
 							   cdns.push("<b>");
 							cdns.push("<a href=\"javascript:void(0);\" onClick=\'CanviaInicialCapaConsultaTipica(",i_ctipica,
 							   ",\"" , (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)) , "\");\'>",
-							   (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)) ,"</a>");									
+							   (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)) ,"</a>");
 							if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
 								cdns.push("</b>");
 						}
 					}
 					cdns.push("<br></span><span class=\"valors_consulta_inicials\"><ul>");
-		
+
 					//Crear les llistes d'atributs de la inicial seleccionada.
 					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
 					{
@@ -1129,11 +1125,11 @@ var s;
 								   CTipicaCapa[i_ctipica],", ",j,", ",valor_opcio,");",
 								   "ActualitzaComboConsultaTipicaSeguents(",i_ctipica,", ",CTipicaCapa[i_ctipica],", ",j,
 								   ", ",valor_opcio,");\">" ,
-								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" , 
-								   (DonaCadenaLang({"cat":"--Seleccionar--", "spa":"--Seleccionar--", "eng":"--Select--", "fre":"--Sélectionner--"})) , "</option>" ,
+								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
+								   ("--" + GetMessage("Select") + "--") , "</option>" ,
 								   "  <option VALUE=\"-1\">" , (DonaCadenaLang({"cat":"---------------", "spa":"---------------", "eng":"----------","fre":"----------------"})) , "</option>");
 							for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j].length; i++)
-								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" , 
+								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
 									capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j][i].valor , "</option>");
 							cdns.push("  </SELECT>");
 							if(j>1)
@@ -1147,11 +1143,11 @@ var s;
 					valor_opcio="document.ctipica"+i_ctipica+".valor"+0+".options[document.ctipica"+i_ctipica+".valor"+0+".selectedIndex].value";
 					cdns.push("  <select name=\"valor0\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
-					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" , 
-					   (DonaCadenaLang({"cat":"--Seleccionar--", "spa":"--Seleccionar--", "eng":"--Select--", "fre":"--Sélectionner--"})) , "</option>" ,
+					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
+					   ("--" + GetMessage("Select") + "--") , "</option>" ,
 					   "  <option VALUE=\"-1\">" , (DonaCadenaLang({"cat":"---------------", "spa":"---------------", "eng":"----------","fre":"----------------"})) , "</option>");
 					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" , 
+						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
 							capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor , "</option>");
 					cdns.push("  </SELECT>");
 				}
@@ -1161,7 +1157,7 @@ var s;
 	    else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
 	    {
 			cdns.push("<span class=\"text_general_consulta\">",
-			   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ), 
+			   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ),
 			   "</span> <input class=\"InputPetit\" autocomplete=\"off\" type=text name=\"llavor",i_ctipica,
 			   "\" size=\"55\" onkeyup=\"WindowDelEvent=this;TeclaLLavor(event);\" onfocus=\"SeleccionaEditLlavor(this);\"></FORM>\n",
 			   (textHTMLiframeLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, true)),
@@ -1172,26 +1168,26 @@ var s;
 			cdns.push("<table border=0 cellspacing=0 cellpadding=0>" ,
 			   "<tr><td rowspan=",(capa_consulta_tipica_intern.length+4),
 			   "><img src=\"",
-			   AfegeixAdrecaBaseSRC("1tran.gif"), 
+			   AfegeixAdrecaBaseSRC("1tran.gif"),
 			   "\" height=1 width=5></td>",
 			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>Selecció de l'àmbit:</b></td></tr>");
 			//(*) Per ··· [    ][v]
 			var i;
 			for (i=0; i<capa_consulta_tipica_intern.length; i++)
 			{
-				cdns.push("<tr><td><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i , 
+				cdns.push("<tr><td><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 					"\" onClick='PortamAAmbitConsultaTipicaCompleta(",i_ctipica,", ",i,", 0, document.ctipica",i_ctipica,".valor",i,
 					".selectedIndex);'> Per " , DonaCadena(capa_consulta_tipica_intern[i].camps[0].desc) , ": </td>" ,
 					"<td><select name=\"valor",i,"\" onChange='PortamAAmbitConsultaTipicaCompleta(",i_ctipica,", ",i,
 					", 0, document.ctipica",i_ctipica,".valor",i,".selectedIndex);'>");
 				for (var j=0; j<capa_consulta_tipica_intern[i].proj_camp[0].length; j++)
-					cdns.push("  <option VALUE=\"" , j , "\"" , ((i==CTipicaCapa[i_ctipica] && j==CTipicaValor) ? " SELECTED" : "") , ">" , 
+					cdns.push("  <option VALUE=\"" , j , "\"" , ((i==CTipicaCapa[i_ctipica] && j==CTipicaValor) ? " SELECTED" : "") , ">" ,
 						capa_consulta_tipica_intern[i].proj_camp[0][j].valor , "</option>");
 				cdns.push("  </SELECT></td></tr>");
 			}
-		
+
     		//(*) Per punt central: x:[ ] y:[ ] ample: [ ] alt: [ ] [Anar-hi] [+10%][x2][/2]
-			cdns.push("<tr><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i , 
+			cdns.push("<tr><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 				"\" CHECKED onClick='PosaAGrisRetallPerObjecteConsultaTipica(this);'> Per punt central:</td><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2>x: <input type=\"text\" size=\"15\" name=\"x\" value=\"\"> y: <input type=\"text\" size=\"15\" name=\"y\" value=\"\"><br>" ,
 				"ample: <input type=\"text\" size=\"8\" name=\"ample\" value=\"\"> alt: <input type=\"text\" size=\"8\" name=\"alt\" value=\"\">" ,
 				"<input TYPE=\"button\" VALUE=\"Anar-hi\" onClick=\"PortamAAmbit(DonaEnvDeXYAmpleAlt(parseFloat(document.ctipica",i_ctipica,".x.value), parseFloat(document.ctipica",i_ctipica,".y.value), parseFloat(document.ctipica",i_ctipica,".ample.value), parseFloat(document.ctipica",i_ctipica,".alt.value)));document.ctipica",i_ctipica,".capa[",i,"].checked=true;\">" ,
@@ -1199,16 +1195,16 @@ var s;
 				"<input TYPE=\"button\" VALUE=\"*2\" onClick=\"ModificaAmpleIAltFactor(document.ctipica",i_ctipica,", 2.0);PortamAAmbit(DonaEnvDeXYAmpleAlt(parseFloat(document.ctipica",i_ctipica,".x.value), parseFloat(document.ctipica",i_ctipica,".y.value), parseFloat(document.ctipica",i_ctipica,".ample.value), parseFloat(document.ctipica",i_ctipica,".alt.value)));document.ctipica",i_ctipica,".capa[",i,"].checked=true;\">" ,
 				"<input TYPE=\"button\" VALUE=\"/2\" onClick=\"ModificaAmpleIAltFactor(document.ctipica",i_ctipica,", 0.5);PortamAAmbit(DonaEnvDeXYAmpleAlt(parseFloat(document.ctipica",i_ctipica,".x.value), parseFloat(document.ctipica",i_ctipica,".y.value), parseFloat(document.ctipica",i_ctipica,".ample.value), parseFloat(document.ctipica",i_ctipica,".alt.value)));document.ctipica",i_ctipica,".capa[",i,"].checked=true;\"></td></tr>");
 			i++;
-			
+
 			//(*) Per envolupant X min: [  ] X max: []  Y min: [] X max: [] [Anar-hi]
-			cdns.push("<tr><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i , 
+			cdns.push("<tr><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 				"\" onClick='PosaAGrisRetallPerObjecteConsultaTipica(this);'> Per envolupant:</td><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2>mín X: <input type=\"text\" size=\"15\" name=\"MinX\" value=\"\"> màx X: <input type=\"text\" size=\"15\" name=\"MaxX\" value=\"\"><br>mín Y: <input type=\"text\" size=\"15\" name=\"MinY\" value=\"\"> màx Y: <input type=\"text\" size=\"15\" name=\"MaxY\" value=\"\"> <input TYPE=\"button\" VALUE=\"Anar-hi\" onClick=\"PortamAAmbit({\'MinX\': parseFloat(document.ctipica",
 				i_ctipica,".MinX.value), \'MaxX\': parseFloat(document.ctipica",i_ctipica,".MaxX.value), \'MinY\': parseFloat(document.ctipica",i_ctipica,
 				".MinY.value), \'MaxY\': parseFloat(document.ctipica",i_ctipica,".MaxY.value)});document.ctipica",i_ctipica,".capa[",i,"].checked=true;\"></td></tr>");
 			i++;
-		
+
 			//(*) Tot l'ambit disponible
-			cdns.push("<tr><td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i , 
+			cdns.push("<tr><td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 				"\" onClick=\"PortamAVistaGeneral();document.ctipica",i_ctipica,".capa[",i,
 				"].checked=true;\"> Tot l'àmbit disponible <small>(només per a les capes més lleugeres)</small></td></tr>" ,
 				"<table>" ,
@@ -1260,23 +1256,23 @@ var id_camps_id_tesaure=null;
 	if(root && root.hasChildNodes)
   	{
 		if(root.tagName=="ConsultaTipica")
-		{				    
+		{
 			//Obtinc el nom i CRS identificador de la capa consulta típica
 			nom_capa=root.getAttribute('id_capa');
 				//Busco quin index de consulta li pertoca per començar a omplir l'estructura
 			for(var i=0; i<capa_consulta_tipica_intern.length; i++)
 			{
 				if(capa_consulta_tipica_intern[i].nom==nom_capa)
-				{	
+				{
 					i_ctipica=i;
 					break;
 				}
 			}
 			if(i_ctipica==-1)
 				return;
-	
+
 			//Obtinc la taula de identificadors
-	
+
 			var taula_id=root.getElementsByTagName('TaulaIdentificadors')[0];
 			var camps=taula_id.getElementsByTagName('Camps')[0];
 			var n_camps=parseInt(camps.getAttribute("NombreDeCamps"));
@@ -1301,18 +1297,18 @@ var id_camps_id_tesaure=null;
 			{
 				i_camp_ctipica=-1;
 				nom_camp=camp[i].getAttribute('id_camp');
-	
+
 				for(var j=0; j<capa_consulta_tipica_intern[i_ctipica].camps.length; j++)
 				{
 				   if(capa_consulta_tipica_intern[i_ctipica].camps[j].nom==nom_camp)
 				   {
 						i_camp_ctipica=j;
 						break;
-				   }				
+				   }
 				}
 				if(i_camp_ctipica==-1)
 				   return;
-	
+
 				id_camps_id_tesaure[i_camp_ctipica]={"nom": nom_camp, "desc": camp[i].getAttribute('id_tesaure')};
 			 }
 
@@ -1329,20 +1325,20 @@ var id_camps_id_tesaure=null;
 				for(var i=0; i<registres.childNodes.length; i++)
 				{
 					var reg=registres.childNodes[i];
-				
+
 					if(reg.tagName=="Registre")
-					{			
-						var index=parseInt(reg.getAttribute('id_reg'));	
+					{
+						var index=parseInt(reg.getAttribute('id_reg'));
 						var valors=reg.getElementsByTagName('Valor');
 
 						for(var j=0; j<valors.length; j++)
-						{			   
+						{
 						   var valor_id=parseInt(valors[j].childNodes[0].nodeValue);
 
 						   for(var z=0; z<id_camps_id_tesaure.length; z++)
 						   {
 								if(id_camps_id_tesaure[z].nom==valors[j].getAttribute('id_camp'))
-								{				    
+								{
 									capa_consulta_tipica_intern[i_ctipica].id_camp[z][index]=new CreaItemIdentificadorConsultaTipica(index, valor_id);
 									break;
 								}
@@ -1374,28 +1370,28 @@ var id_camps_id_tesaure=null;
 				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 
 				capa_consulta_tipica_intern[i_ctipica].proj_camp[i_camp_ctipica]=new Array(num_regs);
-			
+
 				//Començo a llegir els registres de tesaure
 				for(var z=0; z<registres.childNodes.length; z++)
 				{
 					var reg=registres.childNodes[z];
-						
+
 					if(reg.tagName=="Registre")
-					{			
-						var index=parseInt(reg.getAttribute('id_reg'));	
+					{
+						var index=parseInt(reg.getAttribute('id_reg'));
 						var valor=reg.getElementsByTagName('Valor')[0];
-						var bbox=reg.getElementsByTagName('BoundingBox')[0];			
+						var bbox=reg.getElementsByTagName('BoundingBox')[0];
 						var env_reg={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
 						env_reg.MinX=parseFloat(bbox.getAttribute('minx'));
 						env_reg.MinY=parseFloat(bbox.getAttribute('miny'));
 						env_reg.MaxX=parseFloat(bbox.getAttribute('maxx'));
 						env_reg.MaxY=parseFloat(bbox.getAttribute('maxy'));
-			
+
 						capa_consulta_tipica_intern[i_ctipica].proj_camp[i_camp_ctipica][index]={"valor": valor.childNodes[0].nodeValue,
 													"env": env_reg};
 					}
 				}
-			}						
+			}
 			NCapesCTipica++;
 		}
 	}
@@ -1408,8 +1404,8 @@ var id_camps_id_tesaure=null;
 		{
 			dades_pendents_accio=false;
 			if(Accio && Accio.accio&accio_validacio)
-			{			
-				//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes						
+			{
+				//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes
 				CreaLlegenda();
 				BuscaValorAConsultesTipiques();
 				if(Accio.coord)
@@ -1417,13 +1413,10 @@ var id_camps_id_tesaure=null;
 					var event_de_click= SimulaEventOnClickPerConloc();
 					ClickSobreVista(event_de_click);
 				}
-				else 
+				else
 				{
 					//Mostro un missatge de que comencin a buscar amb les eines del navegador
-					alert(DonaCadenaLang({"cat":"Usa les eines del navegador per situar-te sobre la vista.\nA continuació fés clic sobre la vista per determinar la coordenada i la informació del punt a validar.\nPer finalitzar, prem [Validar Coordenada] o [Cancel·lar] des de la finestra de validació.",
-										"spa":"Utiliza las herramientas del navegador para situarte sobre la vista.\nA continuación haz clic sobre la vista para determinar la coordenada y la información del punto a validar.\nPara finalizar aprieta [Validar Coordenada] o [Cancelar] desde la ventana de validación.",
-										"eng":"You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.",
-										"fre":"Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\net l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation."})); 				
+					alert(GetMessage("UseBrowserToolsPlaceOnView", "ctipica"));
 					Accio.coord={"x": 0, "y": 0};
 				}
 			}
@@ -1441,15 +1434,15 @@ var s="";
 	{
 		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 		{
-	   		capa_consulta_tipica_intern[i]={servidor: DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]), 
-				nom: ParamCtrl.CapaConsultaPreguntaServidor[i].nom, 
-				camps: ParamCtrl.CapaConsultaPreguntaServidor[i].camps, 
-				CRS: ParamCtrl.CapaConsultaPreguntaServidor[i].CRS, 
-				proj_camp: null, 
+	   		capa_consulta_tipica_intern[i]={servidor: DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]),
+				nom: ParamCtrl.CapaConsultaPreguntaServidor[i].nom,
+				camps: ParamCtrl.CapaConsultaPreguntaServidor[i].camps,
+				CRS: ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
+				proj_camp: null,
 				id_camp: null};
 		}
 		//Primer creo las capes i desprès torno a fer un bucle per demanar-les
-		//sinó em trobava amb problemes de que no estaven totes creades i algunes 
+		//sinó em trobava amb problemes de que no estaven totes creades i algunes
 		//coses es feien massa vegades
 		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 		{
@@ -1461,8 +1454,8 @@ var s="";
 				ParamCtrl.CapaConsultaPreguntaServidor[i].nom);
 			s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]), cdns.join(""), true, DonaCorsServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]));
 			i_event=CreaIOmpleEventConsola("DonaProjeccioConsultaTipica", -1, s, TipusEventDonaProjeccioConsultaTipica);
-			loadFile(s, "text/xml", 
-					OmpleICarregaConsultaTipica, 
+			loadFile(s, "text/xml",
+					OmpleICarregaConsultaTipica,
 					function(text, i_event) {
 						CanviaEstatEventConsola(null, i_event, EstarEventError);
 					},
@@ -1479,14 +1472,14 @@ function DonaCoordYCentralDeEnv(env)
 {
 	return ((env.MaxY-env.MinY)/2)+env.MinY;
 }
-					
+
 function BuscaValorAConsultesTipiques()
 {
 var trobat=false;
 
 	if(Accio && capa_consulta_tipica_intern.length>0 && Accio.valors && Accio.valors.length>0)
 	{
-		//Per cada una de les capes a validar	   
+		//Per cada una de les capes a validar
 		for(var i_capa_accio=0; i_capa_accio<Accio.valors.length; i_capa_accio++)
 		{
 			for(var i_tipica=0; i_tipica<capa_consulta_tipica_intern.length; i_tipica++)
@@ -1506,33 +1499,30 @@ var trobat=false;
 								for(var i_valor=0; i_valor<capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp].length; i_valor++)
 								{
 									if(Accio.valors[i_capa_accio]==capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].valor)
-									{						
+									{
 										if(Accio.coord==null)
 										{
 											Accio.coord={"x": DonaCoordXCentralDeEnv(capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].env),
 												"y": DonaCoordYCentralDeEnv(capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].env)};
-										}						
+										}
 										trobat=true;
 										break;
 									}
 								}
 								if(i_valor==capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
 								{
-									alert(DonaCadenaLang({"cat":"El valor "+Accio.valors[i_capa_accio]+" del camp "+Accio.camps[i_capa_accio]+" de la capa "+Accio.capes[i_capa_accio]+" és incorrecte",
-													"spa":"El valor "+Accio.valors[i_capa_accio]+" del campo "+Accio.camps[i_capa_accio]+" de la capa "+Accio.capes[i_capa_accio]+" es incorrecto",
-													"eng":"The value "+Accio.valors[i_capa_accio]+" of the field "+Accio.camps[i_capa_accio]+" of the layer "+Accio.capes[i_capa_accio]+" is incorrect",
-													"fre":"La valeur "+Accio.valors[i_capa_accio]+" du champ "+Accio.camps[i_capa_accio]+" de la couche "+Accio.capes[i_capa_accio]+" est incorrecte"}));
-								}   
+									alert(GetMessage("TheValue_") + Accio.valors[i_capa_accio]+ GetMessage("_ofTheField_") +Accio.camps[i_capa_accio]+ GetMessage("_ofTheLayer_") +Accio.capes[i_capa_accio]+ GetMessage("_isIncorrect", "ctipica"));
+								}
 							}
 							break;
-						}			
-					}		     
+						}
+					}
 					break; //aquest camp ja l'he validat i haig de passar a validar la següent capa
 					//else if(i_camp==capa_consulta_tipica_intern[i_tipica].camps.length)
-					//No he trobat el camp a dins de la consulta típica i per tant no he pogut validar		     
-					//Si he arribat aquí és perquè el valor indicat és incorrecte, he trobat la capa però no he trobat el valor	     	    
+					//No he trobat el camp a dins de la consulta típica i per tant no he pogut validar
+					//Si he arribat aquí és perquè el valor indicat és incorrecte, he trobat la capa però no he trobat el valor
 				}
-			}	      	      
+			}
 		}
 	}
 	return trobat;
@@ -1556,20 +1546,17 @@ var valor;
 				}
 				if (CTipicaCapa[i_ctipica]==capa_consulta_tipica_intern.length)
 				{
-					var s=DonaCadenaLang({"cat":"La capa","spa":"La capa", "eng":"Layer", "fre":"La couche"}) + 
+					var s=GetMessage("TheLayer") +
 						ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0] +
-						DonaCadenaLang({"cat":" per a mostrar al frame ", "spa":" para mostrar en el frame ", "eng":" to be shown in the frame ", "fre":" à montrer au frame "}) +
-						ParamCtrl.ConsultaTipica[i_ctipica].nom + 
-						DonaCadenaLang({"cat":" no és a la llista de capes amb consulta típica.", 
-										"spa":" no está en la lista de capas con consulta típica.", 
-										"eng":" is not in the typical query layer list.",
-										"fre":" ne se trouve pas dans la liste de couches avec recherche typique."});
+						GetMessage("_toBeShownInFrame_", "ctipica") +
+						ParamCtrl.ConsultaTipica[i_ctipica].nom +
+						GetMessage("_notInTypicalQueryLayerList", "ctipica");
 					alert(s);
 				}
 			}
 			else
 				CTipicaCapa[i_ctipica]=0;
-		
+
 			if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
 			{
 				var i_llista=0;
@@ -1579,11 +1566,11 @@ var valor;
 					if (capa_consulta_tipica_intern.length==1)
 					{
 						if(capa_consulta_tipica_intern[0].id_camp)
-						{							
+						{
 							var i_proj=0;
 							//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 							for (var i=0; i<capa_consulta_tipica_intern[0].id_camp[0].length; i++, i_llista++)
-							{								
+							{
 								//Per cada camp busco el seu valor que possarè a llista
 								valor="";
 								for(var j=0; j<capa_consulta_tipica_intern[0].camps.length; j++)
@@ -1617,11 +1604,11 @@ var valor;
 						for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
 						{
 							if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
-							{							
+							{
 								var i_proj=0;
 								//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
-								{								
+								{
 									//Per cada camp busco el seu valor que possarè a llista
 									valor="";
 									for(var j=0; j<capa_consulta_tipica_intern[i_tipica_capa].camps.length; j++)
@@ -1638,7 +1625,7 @@ var valor;
 											else
 												valor+=" (" + capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor + ")";
 										}
-									}									
+									}
 									LlistaCadenes[i_ctipica][i_llista]=valor + " ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
@@ -1647,7 +1634,7 @@ var valor;
 								//La consulta només té un camps
 								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
-									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor + 
+									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor +
 									" ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
@@ -1656,7 +1643,7 @@ var valor;
 				}
 				else
 				{
-					//Per totes les capes de la finestra i_ctipica 
+					//Per totes les capes de la finestra i_ctipica
 					for (var i_nom_capa=0; i_nom_capa<ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length; i_nom_capa++)
 					{
 						for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
@@ -1666,28 +1653,25 @@ var valor;
 						}
 						if (i_tipica_capa==capa_consulta_tipica_intern.length)
 						{
-							var s=DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) + 
+							var s=GetMessage("TheLayer") +
 							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] +
-							DonaCadenaLang({"cat":" per a mostrar al frame ", "spa":" para mostrar en el frame ", "eng":" to be shown in the frame ", "fre":" à montrer au frame "}) +
-							ParamCtrl.ConsultaTipica[i_ctipica].nom + 
-							DonaCadenaLang({"cat":" no és a la llista de capes amb consulta típica.", 
-											"spa":" no está en la lista de capas con consulta típica.", 
-											"eng":" is not in the typical query layer list.",
-											"fre":" ne se trouve pas dans la liste de couches avec recherche typique."});
+							GetMessage("_toBeShownInFrame_", "ctipica") +
+							ParamCtrl.ConsultaTipica[i_ctipica].nom +
+							GetMessage("_notInTypicalQueryLayerList", "ctipica");
 							alert(s);
 						}
 						else
 						{
 							if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
-							{							
+							{
 								//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 								var i_proj=0;
 								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
-								{								
+								{
 									//Per cada camp busco el seu valor que possarè a llista
-									valor="";									
+									valor="";
 									for(var j=0; j<capa_consulta_tipica_intern[i_tipica_capa].camps.length; j++)
-									{										
+									{
 										i_proj=capa_consulta_tipica_intern[i_tipica_capa].id_camp[j][i].id;
 										if(i_proj>=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j].length || i_proj<0)
 											alert("Error: Índex de registre de projecció incorrecte "+
@@ -1696,14 +1680,14 @@ var valor;
 										else
 										{
 											if(j==0)
-											{											
+											{
 												valor=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor;
 											}
 											else
 											{
-												valor+=" (" + 
-												capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor + 
-												")";											
+												valor+=" (" +
+												capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor +
+												")";
 											}
 										}
 									}
@@ -1715,7 +1699,7 @@ var valor;
 								//La consulta només té un camps
 								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
-									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor + 
+									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor +
 									" ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
@@ -1756,5 +1740,5 @@ function MostraOAmagaCtipiques()
 		}
 		MostraCTipiques=!MostraCTipiques;
 	}
-	return;	
+	return;
 }
