@@ -284,7 +284,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 		{
 			//cdns.push(GetMessage("ConfusionMatrix", "cntxmenu"));
-			cdns.push(GetMessage("ContingencyTable", "cntxmenu"));
+			cdns.push(GetMessage("ContingencyTable"));
 		}
 		else if (DonaTipusGraficHistograma(estil, 0)=='pie')
 			cdns.push(GetMessage("PieChart"));

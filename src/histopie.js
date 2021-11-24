@@ -57,7 +57,7 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 		textarea.select();
 		window.document.execCommand("Copy");
 		div.style.display="none";
-		window.alert(DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format", "spa": "Los valores de la image han sido copiados al portapapeles en formato", "eng": "The values of the image have been copied to clipboard in the format", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier dans le format"}) + " " + DonaCadenaLang({"cat": "text separat per tabulacions", "spa": "texto separado por tabulaciones", "eng": "tab-separated text", "fre": "texte séparé par des tabulations"})+".");
+		window.alert(GetMessage("ImageValuesCopiedClipboardFormat", "histopie") + " " + GetMessage("tabSeparatedText")+".");
 	}
 }
 
@@ -89,12 +89,12 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 
-	cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), "\t", DonaCadena(capa.desc), "\n",
-		DonaCadenaLang({"cat": "Data", "spa": "Fecha", "eng": "Date", "fre": "Date"}), "\t", capa.data ? DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data) : "", "\n",
+	cdns.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
+		GetMessage("Date"), "\t", capa.data ? DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data) : "", "\n",
 		//DonaCadenaLang({"cat": "Estil", "spa": "Estilo", "eng": "Style", "fre": "Style"}), "\t", DonaCadena(estil.desc), "\t", ((estil.DescItems) ? DonaCadena(estil.DescItems) : ""), "\n",
-		DonaCadenaLang({"cat": "Estil", "spa": "Estilo", "eng": "Style", "fre": "Style"}), "\t", DonaCadena(estil.desc), "\n",
-		DonaCadenaLang({"cat": "Costat de cel·la", "spa": "Lado de celda", "eng": "Cell size", "fre": "Taille de la cellule"}), " (", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS), ")\t", costat, "\n",
-		DonaCadenaLang({"cat": "Àrea de la cel·la", "spa": "Área de celda", "eng": "Cell area", "fre": "Zone de la cellule"}), " (m²)\t", area_cella, "\n",
+		GetMessage("Style"), "\t", DonaCadena(estil.desc), "\n",
+		GetMessage("CellSize", "histopie"), " (", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS), ")\t", costat, "\n",
+		GetMessage("CellArea", "histopie"), " (m²)\t", area_cella, "\n",
 		"MinX", "\t", env.MinX, "\n",
 		"MaxX", "\t", env.MaxX, "\n",
 		"MinY", "\t", env.MinY, "\n",
@@ -114,7 +114,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			var estadistics_categorics=[];
 			for (i_c=0; i_c<n_comp_usar; i_c++)
 				estadistics_categorics[i_c]=CalculaEstadisticsCategorics(estil.histograma.component[i_c].classe);
-			cdns.push(DonaCadenaLang({"cat": "Recompte", "spa": "Cuenta", "eng": "Count", "fre": "Compter"}));
+			cdns.push(GetMessage("Count"));
 
 			var un_recompte=estadistics_categorics[0].recompte;
 			for (i_c=1; i_c<n_comp_usar; i_c++)
@@ -125,19 +125,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			if (i_c==n_comp_usar) //tots són iguals
 			{
 					cdns.push("\t", un_recompte);
-					cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+					cdns.push("\n", GetMessage("Area"), " (m²)");
 					cdns.push("\t", un_recompte*area_cella);
 			}
 			else
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte);
-				cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+				cdns.push("\n", GetMessage("Area"), " (m²)");
 				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte*area_cella);
 			}
 			cdns.push("\n",
-				DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
+				GetMessage("ClassDescription", "histopie"));
 			for (i_c=0; i_c<n_comp_usar; i_c++)
 				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
 
@@ -151,13 +151,13 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 			if (tipus_chart == "chart") //per chart poso histograma, per stat no
 			{
-				cdns.push("\n",	DonaCadenaLang({"cat": "Valor de classe", "spa": "Valor de classe", "eng": "Class value", "fre": "Valeur de classe"}),
-						"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+				cdns.push("\n",	GetMessage("ClassValue", "histopie"),
+						"\t", GetMessage("Area"), " (m²)");
 
 				if (n_comp_usar == 1) //si només tinc una component, habitual en classes, a la segona columna poso el % de l'àrea d'aquella categoria
 					columna_perc=true;
 				if (columna_perc)
-					cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"}));
+					cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
 
 				cdns.push("\n");
 
@@ -195,7 +195,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
 							estil.histograma.component[i_c].sumaValorsReal);
 			}
-			cdns.push(DonaCadenaLang({"cat": "Recompte", "spa": "Cuenta", "eng": "Count", "fre": "Compter"}));
+			cdns.push(GetMessage("Count"));
 
 			var un_recompte=estadistics[0].recompte
 			for (i_c=1; i_c<estil.component.length; i_c++)
@@ -206,19 +206,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			if (i_c==estil.component.length) //tots són iguals
 			{
 					cdns.push("\t", un_recompte);
-					cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+					cdns.push("\n", GetMessage("Area"), " (m²)");
 					cdns.push("\t", un_recompte*area_cella);
 			}
 			else
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push("\t", estadistics[i_c].recompte);
-				cdns.push("\n", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+				cdns.push("\n", GetMessage("Area"), " (m²)");
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push("\t", estadistics[i_c].recompte*area_cella);
 			}
 			cdns.push("\n",
-				DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
+				GetMessage("ClassDescription", "histopie"));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
 			cdns.push("\n",	GetMessage("Sum"));
@@ -249,7 +249,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			if (tipus_chart == "chart") //per chart poso histograma, per stat no
 			{
 				cdns.push("\n",
-					DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}));
+					GetMessage("ClassDescription", "histopie"));
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
 
@@ -262,13 +262,13 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				{
 					//el valor màxim i mínim (i l'ample) són iguals per totes les components
 					cdns.push("\n",
-						DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la classe", "eng": "Class cental value", "fre": "Classe valeur centrale"}));
+						GetMessage("ClassCentalValue", "histopie"));
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+						cdns.push("\t", GetMessage("Area"), " (m²)");
 					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
 					{
 						columna_perc=true;
-						cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"}));
+						cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
 					}
 					cdns.push("\n");
 
@@ -291,12 +291,12 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				else
 				{
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", DonaCadenaLang({"cat": "Valor central de la classe", "spa": "Valor central de la clase", "eng": "Class central value", "fre": "Classe valeur centrale"}),
-							"\t", DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}), " (m²)");
+						cdns.push("\t", GetMessage("ClassCentalValue", "histopie"),
+							"\t", GetMessage("Area"), " (m²)");
 					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
 					{
 						columna_perc=true;
-						cdns.push("\t",	DonaCadenaLang({"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"}));
+						cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
 					}
 					cdns.push("\n");
 
@@ -319,7 +319,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		}
 		if (tipus_chart == "chart") //per chart poso histograma, per stat no
 		{
-			cdns.push(DonaCadenaLang({"cat": "Sense dades", "spa": "Sin datos", "eng": "No data", "fre": "Pas de données"}),
+			cdns.push(GetMessage("NoData"),
 					"\t", estil.histograma.classe_nodata*area_cella);
 			if (columna_perc)
 				cdns.push("\t - \n");
@@ -334,7 +334,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		var estadistics_categorics=CalculaEstadisticsCategorics(estil.histograma.component[0].classe);
 
 		//primer poso les unitats de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les unitats dels atributs estadístics són la descripció de la segona categoria
-		cdns.push(DonaCadenaLang({"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"}), "\t");
+		cdns.push(GetMessage("ClassDescription", "histopie"), "\t");
 				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
 		if (estil.component[1].herenciaOrigen.categories && estil.component[1].herenciaOrigen.atributs) //la segona també es categòrica
 			cdns.push(estil.component[1].herenciaOrigen.atributs[0].descripcio ? estil.component[1].herenciaOrigen.atributs[0].descripcio : estil.component[1].herenciaOrigen.atributs[0].nom);
@@ -351,7 +351,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		}
 
 		//després poso la capçalera de la separació per classes
-		cdns.push("\n", DonaCadenaLang({"cat": "Classe", "spa": "Clase", "eng": "Class", "fre": "Classe"}), "\t", DonaCadenaLang({"cat": "Totes", "spa": "Todas", "eng": "All", "fre": "Toutes"}));
+		cdns.push("\n", GetMessage("Class"), "\t", GetMessage("All"));
 		for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 		{
 				if (estil.categories[i_cat])
@@ -364,21 +364,21 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
 		{
 			estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
-			cdns.push("\n", DonaCadenaLang({"cat": "Recompte per categoria", "spa": "Cuenta por categoría", "eng": "Count by category", "fre": "Compter par catégorie"}), " (m²)", "\t", estadistics_categorics.recompte);
+			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (m²)", "\t", estadistics_categorics.recompte);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]);
 			}
 
-			cdns.push("\n",	DonaCadenaLang({"cat": "Àrea per categoria", "spa": "Área por categoría", "eng": "Area by category", "fre": "Zone par catégorie"}), " (m²)", "\t", estadistics_categorics.recompte*area_cella);
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (m²)", "\t", estadistics_categorics.recompte*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]*area_cella);
 			}
 
-			cdns.push("\n",	DonaCadenaLang({"cat": "Àrea per categoria", "spa": "Área por categoría", "eng": "Area by category", "fre": "Zone par catégorie"}), " (%)", "\t", "100");
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (%)", "\t", "100");
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
@@ -404,21 +404,21 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			estadistics=CalculaEstadisticsHistograma_AgrupatsDesDeCategories(estil.categories, DonaFactorValorMinEstiramentPaleta(estil.component[1].estiramentPaleta),
 					DonaFactorValorMaxEstiramentPaleta(estil.component[1].estiramentPaleta, estil.component[1].herenciaOrigen.ncolors));
 
-			cdns.push("\n", DonaCadenaLang({"cat": "Recompte per categoria", "spa": "Cuenta por categoría", "eng": "Count by category", "fre": "Compter par catégorie"}), " (m²)", "\t", estadistics.recompte);
+			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (m²)", "\t", estadistics.recompte);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]);
 			}
 
-			cdns.push("\n",	DonaCadenaLang({"cat": "Àrea per categoria", "spa": "Área por categoría", "eng": "Area by category", "fre": "Zone par catégorie"}), " (m²)", "\t", estadistics.recompte*area_cella);
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (m²)", "\t", estadistics.recompte*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]*area_cella);
 			}
 
-			cdns.push("\n",	DonaCadenaLang({"cat": "Àrea per categoria", "spa": "Área por categoría", "eng": "Area by category", "fre": "Zone par catégorie"}), " (%)", "\t", "100");
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (%)", "\t", "100");
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
@@ -615,9 +615,9 @@ var tipus_chart;
 
 	//Check per a Histograma dinàmic i text per a indicar que actualització aturada per capa no visible
 	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeHistograma(event);\">")
-	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", DonaCadenaLang({"cat":"Dinàmic", "spa":"Dinàmico", "eng":"Dynamic", "fre":"Dynamique"}) , "</label>");
+	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
-		DonaCadenaLang({"cat":"Desactivat (capa o estil no visible)", "spa":"Desactivado (capa o estil no visible)", "eng":"Disabled (layer or style not visible)", "fre":"Désactivé (couche or style non visible)"}) , "</span>");
+		GetMessage("Disabled") , "</span>");
 
 	if (tipus_estad)
 	{
@@ -625,7 +625,7 @@ var tipus_chart;
 		if (tipus_estad.substr(tipus_estad.length-2, 2) == "_2")
 		{
 			tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
-			titol=DonaCadenaLang({"cat":"Estadístics", "spa":"Estadísticos", "eng":"Statistics", "fre":"Statistique"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+			titol=GetMessage("Statistics")+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 			//titol=DonaCadenaLang({"cat":"Estadístics per categoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			if (presentacio == "graphic")
 			{
@@ -653,7 +653,7 @@ var tipus_chart;
 			tipus_chart="stat";
 			tip_est_intern=tipus_estad;
 			var s=DonaTitolEstadistic(estil.categories, estil.atributs, tip_est_intern);
-			titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
+			titol=GetMessage("Statistic")+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
 			//titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
 			ncol/=1.3;
@@ -665,7 +665,7 @@ var tipus_chart;
 	else if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 	{
 		tipus_chart="matriu";
-		titol=DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+		titol=GetMessage("ContingencyTable") + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 		//titol=DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		ncol*=2;
 		nfil*=2;
@@ -674,7 +674,7 @@ var tipus_chart;
 	else
 	{
 		tipus_chart="chart";
-		titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+		titol=((estil.categories && estil.atributs) ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
@@ -780,7 +780,7 @@ function CreaTextMatriuDeConfusio(i_histograma, es_html)
 {
 var histograma=HistogramaFinestra.vista[i_histograma];
 var cdns=[], ncol, nfil, j, v, cella, capa=[], estil=[], estil_nou, categories_iguals, suma_fil=[], suma_col=[], suma_total, encert, creuament, acumulat, area_cella, unitats, n_decimals, kappa, ncol_mostrades, nfil_mostrades;
-var literal_total="Total", literal_sembla=DonaCadenaLang({"cat": "Semblança", "spa": "Similitud", "eng": "Similarity", "fra": "Similitude"});
+var literal_total="Total", literal_sembla=GetMessage("Similarity", "histopie");
 var costat=ParamInternCtrl.vista.CostatZoomActual;
 var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
 var i_situacio=ParamInternCtrl.ISituacio;
@@ -880,16 +880,16 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	}
 	else
 	{
-		cdns.push(DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 1 (", DonaCadenaLang({"cat": "columnes", "spa": "columnas", "eng": "columns", "fre": "colonnes"}), ")\t", (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom),
+		cdns.push(GetMessage("Layer"), " 1 (", GetMessage("columns"), ")\t", (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom),
 			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), "\n",
-			DonaCadenaLang({"cat": "Capa", "spa": "Capa", "eng": "Layer", "fre": "Couche"}), " 2 (", DonaCadenaLang({"cat": "files", "spa": "filas", "eng": "rows", "fre": "lignes"}), ")\t", (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom),
+			GetMessage("Layer"), " 2 (", GetMessage("rows"), ")\t", (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom),
 			(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), "\n");
-		cdns.push(DonaCadenaLang({"cat": "Columnes", "spa": "Columnas", "eng": "Columns", "fre": "Colonnes"}), "\t", ncol, "\t", DonaCadenaLang({"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"}), "\t", ncol_mostrades, "\n");
-		cdns.push(DonaCadenaLang({"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"}), "\t", nfil, "\t", DonaCadenaLang({"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"}), "\t", nfil_mostrades, "\n");
+		cdns.push(GetMessage("Columns"), "\t", ncol, "\t", GetMessage("Shown"), "\t", ncol_mostrades, "\n");
+		cdns.push(GetMessage("Rows"), "\t", nfil, "\t", GetMessage("Shown"), "\t", nfil_mostrades, "\n");
 		if (categories_iguals)
-			cdns.push(DonaCadenaLang({"cat": "Index Kappa", "spa": "Indice Kappa", "eng": "Kappa coefficient", "fre": "Coefficient kappa"}), "\t", kappa, "\n");
+			cdns.push(GetMessage("KappaCoef"), "\t", kappa, "\n");
 		//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats, "²\n");
-		cdns.push(DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}), "\t", "Units", "\t", unitats, "²\n");
+		cdns.push(GetMessage("ContingencyTable"), "\t", "Units", "\t", unitats, "²\n");
 		cdns.push("\t");
 	}
 
@@ -1299,7 +1299,7 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 	estad_categ.n_dec=2;
 	estad_categ.unitats=null;
 	estad_categ.desc=DonaTitolEstadistic(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, tipus_estad) +
-			DonaCadenaLang({"cat":" de ", "spa":" de ", "eng":" of ", "fre":" des "}) + desc_capa2;
+			" " + GetMessage("of") + " " + desc_capa2;
 
 	var tipus_intern;
 	if (tipus_estad == "mode_and_percent")
@@ -1414,7 +1414,7 @@ var area_cella, i_cat;
 	//taula per categories
 	cdns.push("</p>");
 	cdns.push("<table style=\"width:100%;text-align:left;font-size:inherit\">");
-	cdns.push("<tr><th style=\"text-align:center;\">", DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc), "</th><th style=\"text-align:center;\">",DonaCadenaLang({"cat":"Àrea", "spa":"Área", "eng":"Area", "fre":"Zone"}),
+	cdns.push("<tr><th style=\"text-align:center;\">", DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc), "</th><th style=\"text-align:center;\">",GetMessage("Area"),
 		"</th><th style=\"text-align:center;\">", estad_categ.desc, "</th></th>");
 
 	for (i_cat=0; i_cat<estad_categ.ordre_cat.length; i_cat++)
@@ -1837,7 +1837,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 					var unitats = data.datasets[tooltipItem.datasetIndex].unitats;
 					var tooltipData = estad_categ.tinc_dec ? OKStrOfNe(allData[tooltipItem.index], estad_categ.n_dec) :  allData[tooltipItem.index];
 					var tooltipPercentage = OKStrOfNe(estad_categ.ordre_cat[tooltipItem.index].count / estad_categ.count_total * 100, estad_categ.tinc_dec ? estad_categ.n_dec : 2);
-					return DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}) + ": " + tooltipPercentage + "%, "+ tooltipData +" "+ unitats+"²";
+					return GetMessage("Area") + ": " + tooltipPercentage + "%, "+ tooltipData +" "+ unitats+"²";
 				}
 			}
 		}
@@ -1993,7 +1993,7 @@ function CreaHistogramesPerCategories(n_histograma, tip_est_intern, order)
 		data: {
 			labels: retorn_prep_histo.labels,
 			datasets: [{
-				label: DonaCadenaLang({"cat": "Àrea", "spa": "Área", "eng": "Area", "fre": "Zone"}),
+				label: GetMessage("Area"),
 				data: retorn_prep_histo.data_area,
 				backgroundColor: retorn_prep_histo.colors_area,
 				borderWidth: 0,
@@ -2070,11 +2070,11 @@ var component_name=["R", "G", "B"];
 	estil=capa.estil[DatesVideo[0].i_estil];
 	area_cella=DonaAreaCella(ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
-	cdns.push(DonaCadenaLang({"cat": "Nom", "spa": "Nombre", "eng": "Name", "fre": "Name"}), "\t", DonaCadena(capa.DescVideo), "\n",
-		DonaCadenaLang({"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"}), "\t", estil.desc, "\t", ((estil.DescItems) ? estil.DescItems : ""), "\n",
-		DonaCadenaLang({"cat": "Mesura", "spa": "Medida", "eng": "Measure", "fre": "Measure"}), "\t", DonaTitolEixYSerieTemporalLocalitzacio(), "\n",
-		DonaCadenaLang({"cat": "Costat de cel·la", "spa": "Lado de celda", "eng": "Cell size", "fre": "Taille de la cellule"}), "\t", ParamInternCtrl.vista.CostatZoomActual, "\t", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), "\n",
-		DonaCadenaLang({"cat": "Àrea de la cel·la", "spa": "Área de celda", "eng": "Cell area", "fre": "Zone de la cellule"}), "\t", area_cella, "\tm²\n",
+	cdns.push(GetMessage("Name"), "\t", DonaCadena(capa.DescVideo), "\n",
+		GetMessage("Band"), "\t", estil.desc, "\t", ((estil.DescItems) ? estil.DescItems : ""), "\n",
+		GetMessage("Measure"), "\t", DonaTitolEixYSerieTemporalLocalitzacio(), "\n",
+		GetMessage("CellSize", "histopie"), "\t", ParamInternCtrl.vista.CostatZoomActual, "\t", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), "\n",
+		GetMessage("CellArea", "histopie"), "\t", area_cella, "\tm²\n",
 		"MinX", "\t", ParamInternCtrl.vista.EnvActual.MinX, "\n",
 		"MaxX", "\t", ParamInternCtrl.vista.EnvActual.MaxX, "\n",
 		"MinY", "\t", ParamInternCtrl.vista.EnvActual.MinY, "\n",
@@ -2086,9 +2086,9 @@ var component_name=["R", "G", "B"];
 		if (estadistics.length==3)
 			cdns.push(component_name[i_c], "\n");
 		cdns.push("t", "\t",
-			DonaCadenaLang({"cat": "Mitjana+desv", "spa": "Media+desv", "eng": "Mean+dev", "fre": "Moyenne+écart"}), "\t",
-			DonaCadenaLang({"cat": "Mitjana", "spa": "Media", "eng": "Mean", "fre": "Moyenne"}), "\t",
-			DonaCadenaLang({"cat": "Mitjana-desv", "spa": "Media-desv", "eng": "Mean-dev", "fre": "Moyenne-écart"}), "\t");
+			GetMessage("MeanPlusDev", "histopie"), "\t",
+			GetMessage("Mean"), "\t",
+			GetMessage("MeanMinusDev", "histopie"), "\t");
 		for (var p=0; p<PuntsSerieTemporal.length; p++)
 			cdns.push(DonaValorDeCoordActual(PuntsSerieTemporal[p].x, PuntsSerieTemporal[p].y, false, false).replace("\n", " - "), "\t");
 		cdns.push("\n");
@@ -2101,7 +2101,7 @@ var component_name=["R", "G", "B"];
 		}
 	}
 	FinalitzaCopiaPortapapersFinestra(window, nom_histograma, cdns.join(""),
-			DonaCadenaLang({"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the chart have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"}));
+			GetMessage("ChartValuesCopiedClipboard", "histopie"));
 }
 
 function TancaFinestraSerieTemp(nom_div, nom_div_click)
@@ -2132,11 +2132,11 @@ var chart=[];
 	 	"</div>",
 		"<div style=\"width: ", ncol, "px; position:absolute; opacity: 0.7;\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("tanca_consulta.gif"), "\" ",
-				"alt=\"",DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}) , "\" ",
-				"title=\"",DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"','",nom_div_click,"');\">",
+				"alt=\"",GetMessage("close") , "\" ",
+				"title=\"",GetMessage("close"), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"','",nom_div_click,"');\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("boto_copiar.gif"), "\" ",
-				"alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" ",
-				"title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" onClick=\"CopiaPortapapersFinestraSerieTemp('",nom_histograma,"');\">",
+				"alt=\"",GetMessage({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" ",
+				"title=\"",GetMessage("copy"), "\" onClick=\"CopiaPortapapersFinestraSerieTemp('",nom_histograma,"');\">",
 		"</div>");
 
 	document.getElementById(nom_div).innerHTML=cdns.join("");
@@ -2156,7 +2156,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label,
 			labels: labels,
 			temps: temps,
 			datasets: [{
-				label: DonaCadenaLang({"cat": "Mitjana+desv", "spa": "Media+desv", "eng": "Mean+dev", "fre": "Moyenne+écart"}),
+				label: GetMessage("MeanPlusDev", "histopie"),
 				data: data[0],
 				type: 'line',
 				pointRadius: 0,
@@ -2170,7 +2170,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label,
 				borderColor: "#888888",
 				backgroundColor: "#888888"
 			},{
-				label: DonaCadenaLang({"cat": "Mitjana", "spa": "Media", "eng": "Mean", "fre": "Moyenne"}),
+				label: GetMessage("Mean"),
 				data: data[1],
 				type: 'line',
 				pointRadius: 0,
@@ -2183,7 +2183,7 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label,
 				borderColor: "#888888",
 				backgroundColor: "#888888"
 			},{
-				label: DonaCadenaLang({"cat": "Mitjana-desv", "spa": "Media-desv", "eng": "Mean-dev", "fre": "Moyenne-écart"}),
+				label: GetMessage("MeanMinusDev", "histopie"),
 				data: data[2],
 				type: 'line',
 				pointRadius: 0,

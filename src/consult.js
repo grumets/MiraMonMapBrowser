@@ -629,7 +629,7 @@ var cdns=[], capa, feature, atribut, atr;
 		cdns.push(DonaDataCapaComATextBreu(i_capa, i_data), "\t", DeterminaTextValorAtributObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, i_obj, i_atr, i_data, PuntConsultat.i, PuntConsultat.j), "\n");
 
 	FinalitzaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv", cdns.join(""),
-			ConsultaCopiaSerieTemporalMostrat ? null : GetMessage("ChartValueCopiedClipboardFormat", "consult") + " " + GetMessage("tabSeparatedText", "consult")+". (" + GetMessage("MessagesNotDisplayedAgain", "consult")+")");
+			ConsultaCopiaSerieTemporalMostrat ? null : GetMessage("ChartValueCopiedClipboardFormat", "consult") + " " + GetMessage("tabSeparatedText")+". (" + GetMessage("MessagesNotDisplayedAgain", "consult")+")");
 	ConsultaCopiaSerieTemporalMostrat=true;
 
 	return false;

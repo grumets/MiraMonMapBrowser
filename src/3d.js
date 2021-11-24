@@ -117,9 +117,9 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 
 	//Check per a Gràfic 3d dinàmic i text per a indicar que actualització aturada per capa no visible
 	cdns.push("<input type=\"checkbox\" name=\"", 	(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicGrafic3d(Superficie3DFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeGrafic3d(event);\">")
-	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", GetMessage("Dynamic", "tresD") , "</label>");
+	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextGrafic3d(Superficie3DFinestra.n), "\" style=\"display: none\">",
-		GetMessage("Disabled", "tresD") , "</span>");
+		GetMessage("Disabled") , "</span>");
 
 	titol=GetMessage("Graphic_3D", "tresD")+" " + (Superficie3DFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 	cdns.push("<div id=\"", DonaIdDivGrafic3d(Superficie3DFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"></div>",
