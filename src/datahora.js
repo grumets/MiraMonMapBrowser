@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,64 +7,64 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
 "use strict"
 
-var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre": "Janvier"}, 
-				   {"cat": "de febrer", "spa": "de febrero", "eng": "February", "fre": "Février"}, 
-				   {"cat": "de març", "spa": "de marzo", "eng": "March", "fre": "Mars"}, 
-				   {"cat": "d\'abril", "spa": "de abril", "eng": "April", "fre": "Avril"}, 
-				   {"cat": "de maig", "spa": "de mayo", "eng": "May", "fre": "Mai"}, 
+var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre": "Janvier"},
+				   {"cat": "de febrer", "spa": "de febrero", "eng": "February", "fre": "Février"},
+				   {"cat": "de març", "spa": "de marzo", "eng": "March", "fre": "Mars"},
+				   {"cat": "d\'abril", "spa": "de abril", "eng": "April", "fre": "Avril"},
+				   {"cat": "de maig", "spa": "de mayo", "eng": "May", "fre": "Mai"},
 				   {"cat": "de juny", "spa": "de junio", "eng": "June", "fre": "Juin"},
-				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"}, 
-				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"}, 
+				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"},
+				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"},
 				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
 				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "October", "fre": "Octobre"},
-				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"}, 
+				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"},
 				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
 
 var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvier"},
-			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"}, 
-			   {"cat": "Març", "spa": "Marzo", "eng": "March", "fre": "Mars"}, 
-			   {"cat": "Abril", "spa": "Abril", "eng": "April","fre": "Avril"}, 
-			   {"cat": "Maig", "spa": "Mayo", "eng": "May","fre": "Mai"}, 
-			   {"cat": "Juny", "spa": "Junio", "eng": "June","fre": "Juin"}, 
-			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"}, 
-			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"}, 
+			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"},
+			   {"cat": "Març", "spa": "Marzo", "eng": "March", "fre": "Mars"},
+			   {"cat": "Abril", "spa": "Abril", "eng": "April","fre": "Avril"},
+			   {"cat": "Maig", "spa": "Mayo", "eng": "May","fre": "Mai"},
+			   {"cat": "Juny", "spa": "Junio", "eng": "June","fre": "Juin"},
+			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"},
+			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"},
 			   {"cat": "Setembre", "spa": "Setiembre", "eng": "September","fre": "Septembre"},
 			   {"cat": "Octubre", "spa": "Octubre", "eng": "October","fre": "Octobre"},
 			   {"cat": "Novembre", "spa": "Noviembre", "eng": "November","fre": "Novembre"},
 			   {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}];
 
-function takeYear(theDate) 
+function takeYear(theDate)
 {
 	//tret de http://www.quirksmode.org/js/introdate.html
 	var x = theDate.getYear();
@@ -146,14 +146,14 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 
 	if (!(capa.FlagsData))
 		return "";
-	if (capa.FlagsData.DataMostraAny || 
-	    capa.FlagsData.DataMostraMes || 
+	if (capa.FlagsData.DataMostraAny ||
+	    capa.FlagsData.DataMostraMes ||
 	    capa.FlagsData.DataMostraDia ||
-	    capa.FlagsData.DataMostraHora || 
-	    capa.FlagsData.DataMostraMinut || 
+	    capa.FlagsData.DataMostraHora ||
+	    capa.FlagsData.DataMostraMinut ||
 	    capa.FlagsData.DataMostraSegon)
 		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
-	
+
 	if (capa.FlagsData.DataMostraDescLlegenda)
 	    cdns.push(DonaCadena(capa.DescLlegenda)," ");
 	if (capa.FlagsData.DataMostraDia)
@@ -168,7 +168,7 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 	if (capa.FlagsData.DataMostraAny)
 	{
 		if (capa.FlagsData.DataMostraMes)
-		    cdns.push((DonaCadenaLang({"cat":" de ","spa":" de ", "eng":" ","fre":" "})));
+		    cdns.push(" ",(GetMessage("of"), " "));
 		cdns.push(DonaYearJSON(data_a_usar));
     }
 	return cdns.join("");
@@ -318,19 +318,19 @@ var data_a_usar, cdns=[], capa=ParamCtrl.capa[i_capa];
 	if (capa.FlagsData.DataMostraDescLlegenda)
 	{
 	    cdns.push(DonaCadena(capa.DescLlegenda));
-	    if (capa.FlagsData.DataMostraAny || 
-			capa.FlagsData.DataMostraMes || 
+	    if (capa.FlagsData.DataMostraAny ||
+			capa.FlagsData.DataMostraMes ||
 			capa.FlagsData.DataMostraDia ||
-			capa.FlagsData.DataMostraHora || 
-        	capa.FlagsData.DataMostraMinut || 
+			capa.FlagsData.DataMostraHora ||
+        	capa.FlagsData.DataMostraMinut ||
 			capa.FlagsData.DataMostraSegon)
 		        cdns.push(",");
-	}	
-	if (capa.FlagsData.DataMostraAny || 
-		capa.FlagsData.DataMostraMes || 
+	}
+	if (capa.FlagsData.DataMostraAny ||
+		capa.FlagsData.DataMostraMes ||
 		capa.FlagsData.DataMostraDia ||
-		capa.FlagsData.DataMostraHora || 
-        capa.FlagsData.DataMostraMinut || 
+		capa.FlagsData.DataMostraHora ||
+        capa.FlagsData.DataMostraMinut ||
 		capa.FlagsData.DataMostraSegon)
 		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
 	else
@@ -354,7 +354,7 @@ var cdns=[];
 	    cdns.push(DonaDayJSON(data));
 
 	    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
-	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 	    {
 			if(DonaHourJSON(data)<10)
 				cdns.push("0");
@@ -385,7 +385,7 @@ var cdns=[];
 	    cdns.push(d.getDate());
 
 	    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
-	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 	    {
 			if(d.getHours()<10)
 				cdns.push("0");
@@ -406,27 +406,27 @@ var cdns=[];
 function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 {
 	//primer miro els separadors de guions per veure que té de aaaa-mm-dd
-	var tros_data=cadena_data.split("-");	
-	o_data.year=parseInt(tros_data[0]);					
+	var tros_data=cadena_data.split("-");
+	o_data.year=parseInt(tros_data[0]);
 
 	if(tros_data.length==1) //Només hi ha any i res més
 		return {"DataMostraAny": true};
-	
+
 	o_data.month=parseInt(tros_data[1]);
-	
-	if(tros_data.length==2) //Any i mes	
+
+	if(tros_data.length==2) //Any i mes
 		return {"DataMostraAny": true, "DataMostraMes": true};
 
 	//Any, mes i dia i potser time
 	var i_time=tros_data[2].indexOf("[T]");
 	if(i_time==-1)
 	{
-		o_data.day=parseInt(tros_data[2]);		
+		o_data.day=parseInt(tros_data[2]);
 		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true};
 	}
-	o_data.day=parseInt(tros_data[2].substr(0, i_time));					
-		
-	var tros_time=(tros_data[2].substr(i_time+1)).split(":");				
+	o_data.day=parseInt(tros_data[2].substr(0, i_time));
+
+	var tros_time=(tros_data[2].substr(i_time+1)).split(":");
 	if(tros_time.length==1) //només hi ha hora
 	{
 		var i_z=tros_time[0].indexOf("[Z]");
@@ -444,26 +444,26 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 			o_data.minute=parseInt(tros_time[1]);
 		else
 			o_data.minute=parseInt(tros_time[1].substr(0,i_z));
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};	
+		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};
 	}
 	o_data.minute=parseInt(tros_time[1]);
 	if(tros_time.length==3) //hh:mm:ss[Z]  // ·$· NJ-> ? Això no és correcte, hi ha altres formats ISO que tenen una longitud de més de 3 i aquesta funció no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
 	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date és més fàcil passar-ho a JSON i ja tenim funcions per això.
 	{
 		var i_ms=tros_time[2].indexOf("[.]");
-		var i_z=tros_time[2].indexOf("[Z]");		
+		var i_z=tros_time[2].indexOf("[Z]");
 		if(i_z==-1 && i_ms==-1)
 			o_data.second=parseInt(tros_time[2]);
 		else if(i_z!=-1 && i_ms==-1)
-			o_data.second=parseInt(tros_time[2].substr(0,i_z));				
+			o_data.second=parseInt(tros_time[2].substr(0,i_z));
 		else
 		{
 			o_data.second=parseInt(tros_time[2].substr(0,i_ms));
 			o_data.millisecond=parseInt(tros_time[2].substr(i_ms+1,(i_z-i_ms)));
 		}
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};	
+		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};
 	}
-	return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};	
+	return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};
 }
 
 /*Eliminada en favor DonaDateComATextISO8601() que existeix sempre. Es va crear per IE8 compatibility for toISOString
@@ -494,7 +494,7 @@ if(!Date.prototype.toISOString)
 						//Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
 					if(que_mostrar&mostra_hora)
 					{
-						if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
+						if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0)
 						{
 							cdns.push("T");
 							if(data.getHours()<10)
@@ -548,7 +548,7 @@ var cdns=[];
 			    //Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s¡omple com 00:00:00.
 				if(que_mostrar.DataMostraHora)
 				{
-	    			if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0) 
+	    			if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0)
 				    {
 						cdns.push("T");
 						if(data.getHours()<10)
@@ -605,7 +605,7 @@ var cdns=[];
 			    	//Vol dir que hi ha temps, perquè en la creació sinó es diu hora, l'estructura s'omple com 00:00:00.
 				if(que_mostrar.DataMostraHora)
 				{
-	    				if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+	    				if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 					{
 						cdns.push("T");
 						if(DonaHourJSON(data)<10)
@@ -643,7 +643,7 @@ var cdns=[];
 			cdns.push("0");
 		cdns.push(DonaDayJSON(data));
 
-		if (DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0) 
+		if (DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 		{
 			cdns.push("T");
 			if(DonaHourJSON(data)<10)
@@ -658,7 +658,7 @@ var cdns=[];
 				cdns.push("0");
 			cdns.push(DonaSecondJSON(data));
 			cdns.push("Z");
-		}	
+		}
 	}
 	return cdns.join("");
 }//fi de DonaDataJSONComATextISO8601()
@@ -675,13 +675,13 @@ var cdns=[];
 			cdns.push("DD");
 		if (que_mostrar.DataMostraMes)
 		{
-			if (que_mostrar.DataMostraDia)		
-				cdns.push("-");		
+			if (que_mostrar.DataMostraDia)
+				cdns.push("-");
 			cdns.push("MM");
 		}
 		if (que_mostrar.DataMostraAny)
 		{
-			if (que_mostrar.DataMostraMes)		
+			if (que_mostrar.DataMostraMes)
 				cdns.push("-");
 			cdns.push("YYYY");
 		}
@@ -719,13 +719,13 @@ var df={}, cdns=[];
 			cdns.push("DD");
 		if (que_mostrar.DataMostraMes)
 		{
-			if (que_mostrar.DataMostraDia)		
-				cdns.push("-");		
+			if (que_mostrar.DataMostraDia)
+				cdns.push("-");
 			cdns.push("MM");
 		}
 		if (que_mostrar.DataMostraAny)
 		{
-			if (que_mostrar.DataMostraMes)		
+			if (que_mostrar.DataMostraMes)
 				cdns.push("-");
 			cdns.push("YYYY");
 		}
@@ -752,7 +752,7 @@ var df={}, cdns=[];
 		if (cdns.length)
 			df.second=cdns.join("");
 	}
-	return df;	
+	return df;
 }
 
 function DonaUnitTimeChartJSDataHora(que_mostrar)
@@ -784,25 +784,25 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 	{
 		var i_data_sel=DonaIndexDataCapa(capa, i_data);
 		while(true)
-		{	
+		{
 			i=s.toUpperCase().indexOf("{TIME}");  //Abans era %TIME% però prefereixo fer servir una URL template.
 			if (i==-1)
 				break;
 			s=s.substring(0,i) + DonaDataJSONComATextCompacte(capa.data[i_data_sel]) + s.substring(i+6);
-			
+
 		}
 		while(true)
-		{	
-			i=s.toUpperCase().indexOf("{TIME_ISO}");  //Deprecated. Please use 
+		{
+			i=s.toUpperCase().indexOf("{TIME_ISO}");  //Deprecated. Please use
 			if (i==-1)
 				break;
 			alert("'{TIME_ISO}' has been deprecated. Please use '{TIME?f=ISO}'");
-			s=s.substring(0,i) + 
-				DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) + 
+			s=s.substring(0,i) +
+				DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) +
 				s.substring(i+10);
 		}
 		while(true)
-		{	
+		{
 			i=s.toUpperCase().indexOf("{TIME?");  //Abans era %TIME% però prefereixo fer servir una URL template.
 			if (i==-1)
 				break;
@@ -824,30 +824,30 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 				}
 				query[kvp[k].substring(0, p).toLowerCase()]=kvp[k].substring(p+1);
 			}
-			
+
 			if (query["year"] || query["month"] || query["day"] || query["hour"] || query["minute"] || query["second"])
 			{
 				//All these parametres can be positive or negative
 				var d=DonaDateDesDeDataJSON(capa.data[i_data_sel])
 				if (query["year"])
-					d.setFullYear(d.getFullYear()+parseInt(query["year"])); 
+					d.setFullYear(d.getFullYear()+parseInt(query["year"]));
 				if (query["month"])
-					d.setMonth(d.getMonth()+parseInt(query["month"])); 
+					d.setMonth(d.getMonth()+parseInt(query["month"]));
 				if (query["day"])
-					d.setDate(d.getDate()+parseInt(query["day"])); 
+					d.setDate(d.getDate()+parseInt(query["day"]));
 				if (query["hour"])
-					d.setHours(d.getHours()+parseInt(query["hour"])); 
+					d.setHours(d.getHours()+parseInt(query["hour"]));
 				if (query["minute"])
-					d.setMinutes(d.getMinutes()+parseInt(query["minute"])); 
+					d.setMinutes(d.getMinutes()+parseInt(query["minute"]));
 				if (query["second"])
 					d.setSeconds(d.getSeconds()+parseInt(query["second"]));
 				s=s.substring(0,i) + (query.f=="ISO" ? DonaDateComATextISO8601(d, capa.FlagsData) : DonaDateComATextCompacte(d)) + s.substring(i+6+ii+1);
 			}
 			else
-				s=s.substring(0,i) + (query.f=="ISO" ? DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) : DonaDataJSONComATextCompacte(capa.data[i_data_sel])) + s.substring(i+6+ii+1);	
+				s=s.substring(0,i) + (query.f=="ISO" ? DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) : DonaDataJSONComATextCompacte(capa.data[i_data_sel])) + s.substring(i+6+ii+1);
 		}
 		while(true)
-		{	
+		{
 			i=s.toUpperCase().indexOf("{DIM?");
 			if (i==-1)
 				break;
@@ -910,7 +910,7 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 					break;
 				}
 			}
-							
+
 			for (var i_param=0; i_param<valor.param.length; i_param++)
 			{
 				if (query.name==valor.param[i_param].clau.nom)
@@ -935,10 +935,10 @@ function CarregaDatesCapes()
 var capa, dates=[];
 
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-	{	
+	{
 		capa=ParamCtrl.capa[i_capa];
 		if (capa.data)
-		{				
+		{
 			for (var i_data=0; i_data<capa.data.length; i_data++)
 			{
 				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
@@ -956,10 +956,10 @@ function DeterminaMillisegonsActualCapes()
 var capa, millisegons=0;
 
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-	{	
+	{
 		capa=ParamCtrl.capa[i_capa];
 		if (capa.data)
-		{				
+		{
 			var d=DonaDateDesDeDataJSON(capa.data[DonaIndexDataCapa(capa, capa.i_data)]);
 			if (millisegons<d.getTime())
 				millisegons=d.getTime();
@@ -983,7 +983,7 @@ var capa, capa_previa, capa_seguent, capa_visible;
 	millisegons=ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual];
 
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-	{	
+	{
 		capa=ParamCtrl.capa[i_capa];
 		if (capa.data && capa.data.length)
 		{
@@ -992,26 +992,26 @@ var capa, capa_previa, capa_seguent, capa_visible;
 			{
 				//Determino si forma part d'un video "agregat" que no s'ha avaluat abans.
 				for (var i_capa_previa=0; i_capa_previa<i_capa; i_capa_previa++)
-				{	
+				{
 					capa_previa=ParamCtrl.capa[i_capa_previa];
 					if (capa_previa.data && capa_previa.data.length && capa_previa.NomVideo==capa.NomVideo)
 						break;
 				}
-				if (i_capa_previa<i_capa) 
+				if (i_capa_previa<i_capa)
 					continue;  //Ja ha estat evaluada i no cal ara.
 			}
-						
+
 			m_bona=ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1]-ParamInternCtrl.millisegons[0]+1;
 			i_data_bona=0;
 			i_capa_bona=i_capa;
 
 			//Les capes agregades s'avaluen juntes
 			for (var i_capa_seguent=i_capa; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
-			{	
+			{
 				capa_seguent=ParamCtrl.capa[i_capa_seguent];
 				if (capa_seguent.data && capa_seguent.data.length && (!capa.NomVideo || capa_seguent.NomVideo==capa.NomVideo))
 				{
-					//Decideixo no assumir que estan ordenats.				
+					//Decideixo no assumir que estan ordenats.
 					for (var i_data=0; i_data<capa_seguent.data.length; i_data++)
 					{
 						var d=DonaDateDesDeDataJSON(capa_seguent.data[i_data]);
@@ -1044,7 +1044,7 @@ var capa, capa_previa, capa_seguent, capa_visible;
 			if (capa.NomVideo)
 			{
 				for (var i_capa_seguent=i_capa+1; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
-				{	
+				{
 					capa_seguent=ParamCtrl.capa[i_capa_seguent];
 					if (capa_seguent.data && capa_seguent.data.length && (!capa.NomVideo || capa_seguent.NomVideo==capa.NomVideo))
 					{
@@ -1060,7 +1060,7 @@ var capa, capa_previa, capa_seguent, capa_visible;
 			{
 				//Ara cal repassar totes les capes agregades en un video i mirar quina es deixa visible (si n'hi ha alguna).
 				for (var i_capa_visible=i_capa; i_capa_visible<ParamCtrl.capa.length; i_capa_visible++)
-				{	
+				{
 					capa_visible=ParamCtrl.capa[i_capa_visible];
 					if (capa_visible.data && capa_visible.data.length && capa_visible.NomVideo==capa.NomVideo && (capa_visible.visible=="si" || capa_visible.visible=="semitransparent"))
 						break;
@@ -1069,7 +1069,7 @@ var capa, capa_previa, capa_seguent, capa_visible;
 				{
 					var visible=capa_visible.visible;
 					for (var i_capa_seguent=i_capa; i_capa_seguent<ParamCtrl.capa.length; i_capa_seguent++)
-					{	
+					{
 						var capa_seguent=ParamCtrl.capa[i_capa_seguent];
 						if (capa_seguent.data && capa_seguent.data.length && capa_seguent.NomVideo==capa.NomVideo)
 						{
@@ -1091,7 +1091,7 @@ var capa, flags_data={};
 
 	//Determino quins fotogrames he de fer servir.
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-	{	
+	{
 		capa=ParamCtrl.capa[i_capa];
 		if (!(capa.FlagsData))
 			continue;
@@ -1116,8 +1116,8 @@ var capa, flags_data={};
 function DonaDescriptorDates(flags_data)
 {
 	if (flags_data.DataMostraHora || flags_data.DataMostraMinut || flags_data.DataMostraSegon)
-		return DonaCadenaLang({"cat":"Data i hora","spa":"Fecha y hora", "eng": "Date and time","fre":"Date et l'heure"});
-	return DonaCadenaLang({"cat":"Data","spa":"Fecha", "eng": "Date","fre":"Date"});
+		return GetMessage("DateTime");
+	return GetMessage("Date");
 }
 
 function sortAscendingISOiData(milliseg_a, data_json)

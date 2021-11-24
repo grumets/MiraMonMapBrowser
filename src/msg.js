@@ -94,7 +94,16 @@ var MessageLang={
 	Point: {"cat":"Punt", "spa":"Punto", "eng":"Point", "fre":"Point"},
 	Query: {"cat":"Consulta", "spa":"Consulta", "eng":"Query","fre":"Recherche"},
 	Select: {"cat":"Seleccionar", "spa":"Seleccionar", "eng":"Select", "fre":"Sélectionner"},
-    pleaseWait: {"cat":"espereu", "spa":"espere", "eng":"please wait","fre":"attendez"},
+  pleaseWait: {"cat":"espereu", "spa":"espere", "eng":"please wait","fre":"attendez"},
+	PleaseWait: {"cat":"Espereu si us plau", "spa":"Espere por favor", "eng":"Please, wait", "fre":"Attendez, s'il-vous-plaît"},
+	DateTime: {"cat":"Data i hora","spa":"Fecha y hora", "eng": "Date and time","fre":"Date et l'heure"},
+	Next: {"cat":"Següent", "spa":"Siguiente", "eng":"Next", "fre":"Suivant"},
+	Format: {"cat": "Format", "spa": "Formato", "eng": "Format", "fre": "Format"},
+	Download: {"cat":"Descarregar","spa":"Descargar","eng":"Download","fre":"Télécharger"},
+	of: {"cat":"de","spa":"de", "eng":"of","fre":"de"},
+	Time: {"cat": "Hora", "spa": "Hora", "eng": "Time", "fre": "L'heure"},
+	Option: {"cat": "Opció", "spa": "Opición", "eng": "Option", "fre": "Option"},
+	Status: {"cat":"Estat", "spa":"Estado", "eng":"Status", "fre":"Statut"},
 	cntxmenu:{
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -284,6 +293,20 @@ var MessageLang={
 		notInTypicalQueryLayerList: {"cat":"no és a la llista de capes amb consulta típica", "spa":"no está en la lista de capas con consulta típica", "eng":"is not in the typical query layer list", "fre":"ne se trouve pas dans la liste de couches avec recherche typique"},
 		UseBrowserToolsPlaceOnView: {"cat":"Usa les eines del navegador per situar-te sobre la vista.\nA continuació fés clic sobre la vista per determinar la coordenada i la informació del punt a validar.\nPer finalitzar, prem [Validar Coordenada] o [Cancel·lar] des de la finestra de validació.", "spa":"Utiliza las herramientas del navegador para situarte sobre la vista.\nA continuación haz clic sobre la vista para determinar la coordenada y la información del punto a validar.\nPara finalizar aprieta [Validar Coordenada] o [Cancelar] desde la ventana de validación.", "eng":"You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.", "fre":"Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\net l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation."},
 		isIncorrect: { "cat": "és incorrecte", "spa": "es incorrecta", "eng": "is incorrect", "fre": "est incorrecte"},
+  },
+	download:{
+		ErrorWhileSendingTryAgain: {"cat":"S'ha produït algun error durant l'enviament del fitxer. Torna-ho a intentar", "spa":"Se ha producido algun error durante el envío del fichero. Vuélvalo a intentar", "eng":"An error has been occurred while sending the file. Try again", "fre":"Une erreur vient de se produire pendant l'envoi du fichier. Réessayez"},
+		LayerDownloadedTakeMinutes: {"cat":"La generació de la descàrrega de la capa podria trigar alguns minuts", "spa":"La generación de la descarga de la capa podría demorarse algunos minutos", "eng":"Generation of layer to be downloaded can take some minutes", "fre":"La création du téléchargement de la couche pourrai prendre quelques minutes"},
+		PreparingRequestedLayer: {"cat":"Preparant la capa sol·licitada", "spa":"Preparando la capa solicitada", "eng":"Preparing the requested layer", "fre":"En préparant la couche demandée"},
+		SelectiveDownloadZone: {"cat": "Descàrrega selectiva de la zona", "spa": "Descarga selectiva de la zona", "eng": "Selective download of the zone", "fre": "Téléchargement sélectif de la zone"},
+		MMZ_MMZX_NotInstalledDownload: {"cat":"Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>", "spa":"Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>", "eng":"For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>", "fre":"Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>"},
+		ViewLayers_MMZ_MMZX_InstalledMM: {"cat":"Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.", "spa":"Para poder visualitzar las capas en formato MMZ o MMZX (ISO 19165-1) es necessario tener correctamente instalado el programa MiraMon.", "eng":"In order to be able to view the layers in MMZ or MMZX format (ISO 19165-1), an installed version of the MiraMon software is required.", "fre":"Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19165-1), et la version installée du logiciel MiraMon est nécessaire"},
+		DownloadLayerCompleted: {"cat": "Descàrrega la capa completa", "spa": "Descarga de la capa completa", "eng": "Download layer completed", "fre": "Téléchargement de la couche complète"},
+		ofDownloading: {"cat":"de descarregar", "spa":"de descargar", "eng":"of downloading", "fre":"de téléchargement"},
+  },
+	editavec:{
+  },
+	datahora:{
   },
 	cntxmenu2:{
 		statistics:

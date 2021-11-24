@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -51,7 +51,7 @@ function ObtenirMMZ()
 	else
 	{
 	    MMZWindow.focus();
-	    MMZWindow.mmz1.RedibuixaMMZ();    
+	    MMZWindow.mmz1.RedibuixaMMZ();
 	}
 }
 
@@ -69,8 +69,8 @@ function ObreFinestraWCS(i)
     else
     {
         WCSWindow.focus();
-		WCSWindow.wcs1.DibuixaOpcionsWCS();    
-    }	
+		WCSWindow.wcs1.DibuixaOpcionsWCS();
+    }
 }
 */
 
@@ -83,7 +83,7 @@ var node, node2;
 	//en cas d'error crec que hauria de modificar el formulari perquè no estigui esperant indefinidament el fitxer
 	if(doc)
 	{
-		var root=doc.documentElement;	
+		var root=doc.documentElement;
 		if(root)
 		{
 			node=root.getElementsByTagName('status');
@@ -113,13 +113,10 @@ var node, node2;
 			}
 		}
 	}
-	
+
 	if(percentatge==-1)
 	{
-		alert(DonaCadenaLang({"cat":"S'ha produït algun error durant l'enviament del fitxer. Torna-ho a intentar",
-						  "spa":"Se ha producido algun error durante el envío del fichero. Vuélvalo a intentar",
-						  "eng":"Has been occurred an error while sending the file. Try again",
-						  "fre":"Une erreur vient de se produire pendant l'envoi du fichier. Réessayez"}));
+		alert(GetMessage("ErrorWhileSendingTryAgain", "download"));
 		CanviaEstatEventConsola(null, param_extra.i_event, EstarEventError);
 		return;
 	}
@@ -148,17 +145,11 @@ function DescarregaWCS(oferir_vincle, i_capa_wcs)
 {
 var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 
-	cdns.push("<CENTER>"+DonaCadenaLang({"cat":"Espereu si us plau", "spa":"Espere por favor", "eng":"Please, wait", "fre":"Attendez, s'il-vous-plaît"})+"...<br>"+
+	cdns.push("<CENTER>"+GetMessage("PleaseWait")+"...<br>"+
 						   "<small>("+
-						DonaCadenaLang({"cat":"La generació de la descàrrega de la capa podria trigar alguns minuts",
-										"spa":"La generación de la descarga de la capa podría demorarse algunos minutos",
-										"eng":"Generación of layer to be download can be take some minutes",
-										"fre":"La création du téléchargement de la couche pourrai prendre quelques minutes"}) +
+						GetMessage("LayerDownloadedTakeMinutes", "download") +
 						")</small><br>"+
-						DonaCadenaLang({"cat":"Preparant la capa sol·licitada", 
-									"spa":"Preparando la capa solicitada",
-									"eng":"Preparing the requeried layer",
-									"fre":"En préparant la couche demandée"}) +
+						GetMessage("PreparingRequestedLayer", "download") +
 						":<br>");
 //canvi d'ambit si la consulta és completa i hi ha sel·leccionat x,y o ambit.
 	cdns.push(DonaCadena(capa.desc));
@@ -175,12 +166,12 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 		env=DonaEnvolupantCRS(env, crs);
 	}
 	else
-		crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;			
-	
-	cdns_req.push("SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&CRS=", 
-				crs, 
-				"&BBOX=", env.MinX, ",", env.MinY, ",", env.MaxX, ",", env.MaxY, 
-				"&COVERAGE=", capa.nom, 
+		crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+
+	cdns_req.push("SERVICE=WCS&VERSION=1.0.0&REQUEST=GetCoverage&CRS=",
+				crs,
+				"&BBOX=", env.MinX, ",", env.MinY, ",", env.MaxX, ",", env.MaxY,
+				"&COVERAGE=", capa.nom,
 				"&RESX=", res_cov.ll.x.sel, "&RESY=", res_cov.ll.y.sel, "&FORMAT=");
 	var format_cov=ParamCtrl.FormatGetCoverage[capa.FormatCoverage];
 	for (var i=0; i<format_cov.ll.length; i++)
@@ -227,9 +218,9 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 			{
 	  		 	if (param_cov.ll[0].nom.nom=="RADIOMET" &&
 					(((param_cov.ll[0].valors[0].nom=="opti_nat" || param_cov.ll[0].valors[0].nom=="opti_fals") &&
-							 param_cov.ll[0].valors[0].sel) || 
+							 param_cov.ll[0].valors[0].sel) ||
 						(((param_cov.ll[0].valors.length>0 && param_cov.ll[0].valors[1].nom=="opti_fals") ||
-								(param_cov.ll[0].valors.length>0 && param_cov.ll[0].valors[1].nom=="opti_nat")) && 
+								(param_cov.ll[0].valors.length>0 && param_cov.ll[0].valors[1].nom=="opti_nat")) &&
 							 (param_cov.ll[0].valors.length>0 && param_cov.ll[0].valors[1].sel))))
 				{
 					cdns_req.push("RGB");
@@ -248,7 +239,7 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 						}
 					}
 				}
-			}			
+			}
 		}
 	}
 	var form_ctipica=DonaFormulariCTipicaCompleta();
@@ -267,7 +258,7 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 				}
 			}
 		}
-	}	
+	}
 	if (self.IdProces)
 	{
 		self.NIdProces++;
@@ -276,8 +267,8 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	//Eliminat el 13-07-2008
 	//if (oferir_vincle)
 	//	cdns_req.push("&INFO_FORMAT=text/html");
-	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns_req.join(""), 
-			ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));	
+	var cadena_cgi=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns_req.join(""),
+			ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
 
 	//Aquest sistema per controlar l'estat no sembla funcionar.
 	var iframe=document.getElementById("finestra_download_hidden");
@@ -320,10 +311,10 @@ function CanviaParamCoverage(i_par,i_sel, i_capa_wcs)
 		{
 			for (var j=0; j<param_cov.ll[i_par].valors.length; j++)
 				param_cov.ll[i_par].valors[j].sel=false;
-			
+
 			if(i_sel<param_cov.ll[i_par].valors.length)
 				param_cov.ll[i_par].valors[i_sel].sel=true;
-		}		
+		}
 	}
 	else //"n"
 		param_cov.ll[i_par].valors[i_sel].sel=!param_cov.ll[i_par].valors[i_sel].sel;
@@ -333,7 +324,7 @@ function CanviaParamCoverage(i_par,i_sel, i_capa_wcs)
 function ParamCoverageGrisos(i_par, i_capa_wcs)
 {
 	var param_cov=ParamCtrl.ParGetCoverage[ParamCtrl.capa[i_capa_wcs].ParamCoverage];
-	
+
 	if (param_cov.ll.length>i_par+1 &&
 	    	param_cov.ll[i_par].nom.nom=="RADIOMET" &&
 		param_cov.ll[i_par+1].nom.nom=="BAND")
@@ -370,12 +361,12 @@ function ParamCoverageGrisos(i_par, i_capa_wcs)
 				{
 					for (var k=0; k<param_cov.ll[i_par+1].valors.length; k++)
 					{
-						if (param_cov.ll[i_par+1].valors[k].nom=="4-IRp"  || //TM o ETM						
+						if (param_cov.ll[i_par+1].valors[k].nom=="4-IRp"  || //TM o ETM
 						        param_cov.ll[i_par+1].valors[k].nom=="5-IRm1" ||
 							param_cov.ll[i_par+1].valors[k].nom=="3-R"    ||
 							param_cov.ll[i_par+1].valors[k].nom=="4-IRp2" || //MSS45
 							param_cov.ll[i_par+1].valors[k].nom=="1-G"    ||
-							param_cov.ll[i_par+1].valors[k].nom=="2-R"    ||							
+							param_cov.ll[i_par+1].valors[k].nom=="2-R"    ||
 							param_cov.ll[i_par+1].valors[k].nom=="7-IRp2" || //MSS13
 							param_cov.ll[i_par+1].valors[k].nom=="4-G"    ||
 							param_cov.ll[i_par+1].valors[k].nom=="5-R"    ||
@@ -434,9 +425,9 @@ function ParamCoverageGrisos(i_par, i_capa_wcs)
 }
 
 function CanviaParamCoverageIGrisos(i_par,i, i_capa_wcs)
-{    
+{
 	CanviaParamCoverage(i_par,i, i_capa_wcs);
-	ParamCoverageGrisos(i_par, i_capa_wcs);	
+	ParamCoverageGrisos(i_par, i_capa_wcs);
 }
 
 function CanviaFormatCoverage(i, i_capa_wcs)
@@ -464,7 +455,7 @@ var cdns=[], i_data_sel=DonaIndexDataCapa(ParamCtrl.capa[i_capa_wcs], null);
 			"\"",
 			((i_par==-1) ? "" : " onChange=\"ParamCtrl.capa["+i_capa_wcs+"].i_data=parseInt(document.botons_param_wcs."+nom+".value);\""),
 			">");
-													
+
 		for (var i=0; i<ParamCtrl.capa[i_capa_wcs].data.length; i++)
 			cdns.push("<option value=\""+i+"\""+
 				 ((i_data_sel==i) ? " SELECTED" : "") + "> "+
@@ -493,19 +484,16 @@ var cdns=[], capa=ParamCtrl.capa[i_capa_wcs];
 		cdns.push("<form name=\"botons_param_wcs\" onSubmit=\"DibuixaOpcionsDescarregaWCS("+i_capa_wcs+");return false;\">"+
 				   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
 		var param_cov=ParamCtrl.ParGetCoverage[capa.ParamCoverage];
-		cdns.push("<center><font size=\"3\"><b>"+DonaCadenaLang({"cat":"Capa","spa":"Capa","eng":"Layer","fre":"Couche"})+" "+
+		cdns.push("<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
 			DonaCadena(capa.desc)+"</b></font><br>",
-			DonaCadenaLang({"cat": "Descàrrega selectiva de la zona",
-						"spa": "Descarga selectiva de la zona",
-						"eng": "Selective download of the zone",
-						"fre": "Téléchargement sélectif de la zone"})," (OGC-WCS)",
+			GetMessage("SelectiveDownloadZone", "download")," (OGC-WCS)",
 			"</center>");
 		for (var i_par=0; i_par<param_cov.ll.length; i_par++)
 		{
 			cdns.push("<fieldset><legend><b>"+DonaCadena(param_cov.ll[i_par].nom.desc));
 			if (param_cov.ll[i_par].cardin=="i")
 			{
-				cdns.push(" ["+ param_cov.ll[i_par].valors.v1 +"  </b><small>("+ 
+				cdns.push(" ["+ param_cov.ll[i_par].valors.v1 +"  </b><small>("+
 					DonaCadena(param_cov.ll[i_par].valors.desc1) +")</small><b>-"+
 					param_cov.ll[i_par].valors.v2 +"</b><small>("+
 					DonaCadena(param_cov.ll[i_par].valors.desc2) +
@@ -524,20 +512,20 @@ var cdns=[], capa=ParamCtrl.capa[i_capa_wcs];
 				else
 				{
 			  		for (var i=0; i<param_cov.ll[i_par].valors.length; i++)
-                		cdns.push("<input TYPE=\"radio\" NAME=\""+ 
-							param_cov.ll[i_par].nom.nom + "\" "+ 
-							((param_cov.ll[i_par].valors[i].sel) ? "CHECKED " : "") + 
+                		cdns.push("<input TYPE=\"radio\" NAME=\""+
+							param_cov.ll[i_par].nom.nom + "\" "+
+							((param_cov.ll[i_par].valors[i].sel) ? "CHECKED " : "") +
 							"onClick=\"CanviaParamCoverageIGrisos("+i_par+","+i+","+i_capa_wcs+");\"> "+
 							DonaCadena(param_cov.ll[i_par].valors[i].desc)+"<br>");
 				}
-			}			 	 
+			}
 			else
 			{
 				cdns.push(":</b></legend>");
 				for (var i=0; i<param_cov.ll[i_par].valors.length; i++)
 		    	{
-		            cdns.push("<input TYPE=\"checkbox\" NAME=\"" + 
-						param_cov.ll[i_par].nom.nom + "_" + i + "\" " + 
+		            cdns.push("<input TYPE=\"checkbox\" NAME=\"" +
+						param_cov.ll[i_par].nom.nom + "_" + i + "\" " +
 						((param_cov.ll[i_par].valors[i].sel) ? "CHECKED " : "")  +
 						"onClick=\"CanviaParamCoverageIGrisos("+i_par+","+i+","+i_capa_wcs+");\"> "+
 						DonaCadena(param_cov.ll[i_par].valors[i].desc)+"<br>");
@@ -545,7 +533,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa_wcs];
 			}
 			cdns.push("</fieldset>");
 		}
-		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+DonaCadenaLang({"cat":"Següent", "spa":"Siguiente", "eng":"Next", "fre":"Suivant"})+"\"></center>"+
+		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+GetMessage("Next")+"\"></center>"+
 						   "</font></form>");
 		contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 
@@ -576,15 +564,9 @@ function DonaMissatgeSiMMZCalMiraMon()
 var cdns=[];
 	cdns.push("<br><small>");
 	if (ParamCtrl.DescarregesCertificades)
-		cdns.push(DonaCadenaLang({"cat":"Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
-					"spa":"Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
-					"eng":"For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-					"fre":"Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>"}));
+		cdns.push(GetMessage("MMZ_MMZX_NotInstalledDownload", "download"));
 	else
-		cdns.push(DonaCadenaLang({"cat":"Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.", 
-					"spa":"Para poder visualitzar las capas en formato MMZ o MMZX (ISO 19165-1) es necessario tener correctamente instalado el programa MiraMon.", 
-					"eng":"In order to be able to view the layers in MMZ of MMZX format ISO 19165-1), and installed version of the MiraMon software is required.",
-					"fre":"Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19165-1), et la version installée du logiciel MiraMon est nécessaire"}));
+		cdns.push(GetMessage("ViewLayers_MMZ_MMZX_InstalledMM", "download"));
 	cdns.push("</small>");
 	return cdns.join("");
 }
@@ -597,23 +579,17 @@ var cdns=[], missatge_mmz=false;
 
 	cdns.push("<form name=\"botons_descarrega\" onSubmit=\"DescarregaWCS(false, "+i_capa_wcs+");return false;\">"+
 				   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
-				   
-	cdns.push("<center><font size=\"3\"><b>"+DonaCadenaLang({"cat":"Capa","spa":"Capa","eng":"Layer","fre":"Couche"})+" "+
+
+	cdns.push("<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
 			DonaCadena(ParamCtrl.capa[i_capa_wcs].desc)+"</b></font><br>",
-			DonaCadenaLang({"cat": "Descàrrega selectiva de la zona",
-						"spa": "Descarga selectiva de la zona",
-						"eng": "Selective download of the zone",
-						"fre": "Téléchargement sélectif de la zone"})," (OGC-WCS)<br>",
+			GetMessage("SelectiveDownloadZone", "download")," (OGC-WCS)<br>",
 			"</center>");
 	var format_cov=ParamCtrl.FormatGetCoverage[ParamCtrl.capa[i_capa_wcs].FormatCoverage];
-	cdns.push("<fieldset><legend><b>", DonaCadenaLang({"cat": "Format",
-				"spa": "Formato",
-				"eng": "Format",
-				"fre": "Format"}), ":</b></legend>");
+	cdns.push("<fieldset><legend><b>", GetMessage("Format"), ":</b></legend>");
 
 	for (var i=0; i<format_cov.ll.length; i++)
 	{
-		cdns.push("<input TYPE=\"radio\" NAME=\"format\" ", 
+		cdns.push("<input TYPE=\"radio\" NAME=\"format\" ",
 				((format_cov.ll[i].sel) ? "CHECKED " : ""),
 				"onClick=\"CanviaFormatCoverage(", i, ", ", i_capa_wcs, ");\"> ",
 				DonaCadena(format_cov.ll[i].desc)+"<br>");
@@ -634,7 +610,7 @@ var cdns=[], missatge_mmz=false;
 			" (",DonaCadenaLang({"cat":"per a guardar el fitxer", "spa":"para guardar el fichero", "eng":"to save file", "fre":"pour enregistrer le fichier"}),")</center>");*/
 
 	cdns.push("<br><center><input TYPE=\"button\" VALUE=\"",
-			DonaCadenaLang({"cat":"Descarregar","spa":"Descargar","eng":"Download","fre":"Télécharger"}),
+			GetMessage("Download"),
 			"\" onClick=\"DescarregaWCS(true, ",i_capa_wcs,")\"></center>");
 
 	cdns.push("</font></form>");
@@ -679,40 +655,28 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	{
 		cdns.push("<form name=\"botons_descarrega\" onSubmit=\"DeterminaTimeDescarregaCapa("+i_capa+");return false;\">"+
 				   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
-		cdns.push("<center><font size=\"3\"><b>"+DonaCadenaLang({"cat":"Capa","spa":"Capa","eng":"Layer","fre":"Couche"})+" "+
+		cdns.push("<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
 				DonaCadena(capa.desc)+"</b></font><br>",
-				DonaCadenaLang({"cat": "Descàrrega de la capa completa",
-							"spa": "Descarga de la capa completa",
-							"eng": "Download the full layer",
-							"fre": "Téléchargement de la couche complète"}),"<br>",
+				GetMessage("DownloadLayerCompleted", "download"),"<br>",
 				"</center>");
 
 		if (capa.data)
 		{
 			//Aquesta part es part fer millor
 			cdns.push("<fieldset><legend><b>")
-		
-			if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null || 
+
+			if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null ||
 				(capa.DataMostraDia && capa.DataMostraHora))
-				cdns.push(DonaCadenaLang({"cat": "Data i hora",
-					"spa": "Fecha y hora",
-					"eng": "Date and time",
-					"fre": "Date et l'heure"}));
+				cdns.push(GetMessage("DateTime"));
 			else if (capa.DataMostraHora)
-				cdns.push(DonaCadenaLang({"cat": "Hora",
-					"spa": "Hora",
-					"eng": "Time",
-					"fre": "L'heure"}));
-			else	
-				cdns.push(DonaCadenaLang({"cat": "Data",
-					"spa": "Fecha",
-					"eng": "Date",
-					"fre": "Date"}));
+				cdns.push(GetMessage("Time"));
+			else
+				cdns.push(GetMessage("Date"));
 			cdns.push(":</b></legend>");
 			cdns.push(CreaSelectorAPartirDeLesDatesCapa(i_capa, "TIME", -1));
 			cdns.push("</fieldset>")
 		}
-		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+DonaCadenaLang({"cat":"Següent", "spa":"Siguiente", "eng":"Next", "fre":"Suivant"})+"\"></center>"+
+		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+GetMessage("Next")+"\"></center>"+
 						   "</font></form>");
 		contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 	}
@@ -739,18 +703,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false;
 
 	cdns.push("<form name=\"botons_descarrega\" onSubmit=\"DescarregaFitxerCapa("+i_capa+");return false;\">"+
 				   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
-	cdns.push("<center><font size=\"3\"><b>"+DonaCadenaLang({"cat":"Capa","spa":"Capa","eng":"Layer","fre":"Couche"})+" "+
+	cdns.push("<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
 			DonaCadena(capa.desc)+"</b></font><br>",
-			DonaCadenaLang({"cat": "Descàrrega de la capa completa",
-						"spa": "Descarga de la capa completa",
-						"eng": "Download the full layer",
-						"fre": "Téléchargement de la couche complète"}),"<br>",
+			GetMessage("DownloadLayerCompleted", "download"),"<br>",
 			"</center>");
 
-	cdns.push("<fieldset><legend><b>", DonaCadenaLang({"cat": "Opció",
-				"spa": "Opición",
-				"eng": "Option",
-				"fre": "Option"}), ":</b></legend>");
+	cdns.push("<fieldset><legend><b>", GetMessage("Option"), ":</b></legend>");
 
 
 	for (var i=0; i<capa.DescarregaTot.length; i++)
@@ -761,7 +719,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false;
 			cdns.push("<a href=\"", DonaNomFitxerDescarregaTot(i_capa, i, i_format, i_data), "\" target=\"_blank\">",DonaCadena(capa.DescarregaTot[i].desc),
 				"</a> (",DonaCadena(ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.desc),
 				")<br>");
-			if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.nom=="application/x-mmz" || 
+			if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.nom=="application/x-mmz" ||
 			    ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.nom=="application/x-mmzx")
 				missatge_mmz=true;
 		}
@@ -769,7 +727,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false;
 	cdns.push("</fieldset>");
 	if (missatge_mmz)
 		cdns.push(DonaMissatgeSiMMZCalMiraMon())
-	
+
 	cdns.push("</font></form>");
 
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
@@ -781,21 +739,15 @@ var cdns=[];
 
 	cdns.push("<form name=\"botons_descarrega\" onSubmit=\"if (document.botons_descarrega.protocol[0].checked==true){ DibuixaTimeDescarregaTot("+i_capa+");return false;}else{DibuixaOpcionsWCS("+i_capa+");return false;}\">"+
 		   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
-				   
-	cdns.push("<center><font size=\"3\"><b>"+DonaCadenaLang({"cat":"Capa","spa":"Capa","eng":"Layer","fre":"Couche"})+" "+
+
+	cdns.push("<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
 			DonaCadena(ParamCtrl.capa[i_capa].desc)+"</b></font><br></center>");
 	cdns.push("<input TYPE=\"radio\" NAME=\"protocol\" checked=\"checked\"> ",
-				DonaCadenaLang({"cat": "Descàrrega de la capa completa",
-						"spa": "Descarga de la capa completa",
-						"eng": "Download the full layer",
-						"fre": "Téléchargement de la couche complète"}),"<br>");
+				GetMessage("DownloadLayerCompleted", "download"),"<br>");
 	cdns.push("<input TYPE=\"radio\" NAME=\"protocol\"> ",
-				DonaCadenaLang({"cat": "Descàrrega selectiva de la zona",
-						"spa": "Descarga selectiva de la zona",
-						"eng": "Selective download of the zone",
-						"fre": "Téléchargement sélectif de la zone"}),"<br>");
+				GetMessage("SelectiveDownloadZone", "download"),"<br>");
 
-	cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+DonaCadenaLang({"cat":"Següent", "spa":"Siguiente", "eng":"Next", "fre":"Suivant"})+"\"></center>"+
+	cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+GetMessage("Next")+"\"></center>"+
 						   "</font></form>");
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 	return;
@@ -809,31 +761,28 @@ var cdns=[], capa;
 	cdns.push("<center>", DonaCadena(ParamCtrl.TitolCaixa), "</center>");
 	cdns.push("<div id=\"finestra_download_opcions\" style=\"overflow-y: auto; height:250px;\"></div>");
 	cdns.push("<iframe id=\"finestra_download_hidden\" width=\"1\" height=\"1\" style=\"display:none\"></iframe>");
-	cdns.push(DonaCadenaLang({"cat":"Estat", "spa":"Estado", "eng":"Status", "fre":"statut"}), ":<div id=\"finestra_download_status\" style=\"height: 52px; width: 98%; background-color: #EEEEEE\"></div>");
+	cdns.push(GetMessage("Status"), ":<div id=\"finestra_download_status\" style=\"height: 52px; width: 98%; background-color: #EEEEEE\"></div>");
 	cdns.push("<div align=\"right\"><a href=\"javascript:void(0);\" onclick='TancaFinestraLayer(\"download\");'>",
-		DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),"</a></div>");
+		GetMessage("Close"),"</a></div>");
 
 	contentFinestraLayer(window, "download", cdns.join(""));
 
 	capa=ParamCtrl.capa[i_capa];
 
-	if (typeof capa.FormatCoverage!=="undefined" && capa.FormatCoverage!=null && 
+	if (typeof capa.FormatCoverage!=="undefined" && capa.FormatCoverage!=null &&
 	    typeof capa.DescarregaTot!=="undefined" && capa.DescarregaTot!=null)
 		DibuixaTriaDescarregaWCSoTot(i_capa)
 	else if (typeof capa.FormatCoverage!=="undefined" && capa.FormatCoverage!=null)
 		DibuixaOpcionsWCS(i_capa);
 	else if (typeof capa.DescarregaTot!=="undefined" && capa.DescarregaTot!=null)
 		DibuixaTimeDescarregaTot(i_capa);
-	
+
 	return;
 }
 
 function MostraFinestraDownload(i_capa)
 {
-	if (!ObreFinestra(window, "download", DonaCadenaLang({"cat":"de descarregar", 
-							  "spa":"de descargar",
-							  "eng":"of downloading",
-							  "fre":"de téléchargement"})))
+	if (!ObreFinestra(window, "download", GetMessage("ofDownloading", "download")))
 		return;
 	OmpleFinestraDownload(i_capa);
 }
