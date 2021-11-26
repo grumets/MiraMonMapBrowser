@@ -137,7 +137,7 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 		if (capa.FlagsData.DataMostraDia)
 		    cdns.push(GetMessage("PrepMonthOfTheYear"+(DonaMonthJSON(data_a_usar)-1), "datahora"));
 		else
-		    cdns.push(GetMessage("MonthOfTheYear"+(DonaMonthJSON(data_a_usar)-1), , "datahora"));
+		    cdns.push(GetMessage("MonthOfTheYear"+(DonaMonthJSON(data_a_usar)-1), "datahora"));
 	}
 	if (capa.FlagsData.DataMostraAny)
 	{

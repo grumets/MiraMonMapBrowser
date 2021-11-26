@@ -407,8 +407,8 @@ var elem;
 		timeoutActualitzaLLista=null;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
-	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>"+
-	   GetMessage("UpdatingList", "ctipica")+", "GetMessage("PleaseWait")+
+	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>" +
+	   GetMessage("UpdatingList", "ctipica") + ", " + GetMessage("PleaseWait") +
 	   "...</td></tr></table>";
 	contentLayer(elem, s);
 	showLayer(elem);
