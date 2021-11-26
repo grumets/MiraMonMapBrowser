@@ -44,7 +44,7 @@ function CommandMMNSetZoom(costat)
 {
 	if (isNaN(costat))
 	{
-		alert(GetMessage("ZoomSizeFormatIncorrectly", "commmands"));
+		alert(GetMessage("ZoomSizeFormatIncorrect", "commmands") + ":\n" + GetMessage("NumericalValueIsRequired", "commmands") +".");
 		return;
 	}
 	for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
@@ -64,7 +64,7 @@ function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
 	{
-		alert(GetMessage("CoordFormatIncorrectly", "commands") + "{x: ##, y: ##}");
+		alert(GetMessage("CoordFormatIncorrect", "commands") + GetMessage("TwoNumericalValuesRequiredFormat", "commands") + ": {x: ##, y: ##}");
 			return 1;
 	}
 	CentraLaVista(punt.x, punt.y);

@@ -408,7 +408,7 @@ var elem;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
 	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>"+
-	   GetMessage("UpdatingList", "ctipica")+GetMessage("PleaseWait")+
+	   GetMessage("UpdatingList", "ctipica")+", "GetMessage("PleaseWait")+
 	   "...</td></tr></table>";
 	contentLayer(elem, s);
 	showLayer(elem);

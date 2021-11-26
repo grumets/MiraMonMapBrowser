@@ -38,32 +38,6 @@
 
 "use strict"
 
-var PrepMesDeLAny=[{"cat": "de gener", "spa": "de enero", "eng": "January", "fre": "Janvier"},
-				   {"cat": "de febrer", "spa": "de febrero", "eng": "February", "fre": "Février"},
-				   {"cat": "de març", "spa": "de marzo", "eng": "March", "fre": "Mars"},
-				   {"cat": "d\'abril", "spa": "de abril", "eng": "April", "fre": "Avril"},
-				   {"cat": "de maig", "spa": "de mayo", "eng": "May", "fre": "Mai"},
-				   {"cat": "de juny", "spa": "de junio", "eng": "June", "fre": "Juin"},
-				   {"cat": "de juliol", "spa": "de julio", "eng": "July", "fre": "Juillet"},
-				   {"cat": "d\'agost", "spa": "de agosto", "eng": "August", "fre": "Août"},
-				   {"cat": "de setembre", "spa": "de setiembre", "eng": "September", "fre": "Septembre"},
-				   {"cat": "d\'octubre", "spa": "de octubre", "eng": "October", "fre": "Octobre"},
-				   {"cat": "de novembre", "spa": "de noviembre", "eng": "November", "fre": "Novembre"},
-				   {"cat": "de desembre", "spa": "de diciembre", "eng": "December", "fre": "Décembre"}];
-
-var MesDeLAny=[{"cat": "Gener", "spa": "Enero", "eng": "January", "fre": "Janvier"},
-			   {"cat": "Febrer", "spa": "Febrero", "eng": "February", "fre": "Février"},
-			   {"cat": "Març", "spa": "Marzo", "eng": "March", "fre": "Mars"},
-			   {"cat": "Abril", "spa": "Abril", "eng": "April","fre": "Avril"},
-			   {"cat": "Maig", "spa": "Mayo", "eng": "May","fre": "Mai"},
-			   {"cat": "Juny", "spa": "Junio", "eng": "June","fre": "Juin"},
-			   {"cat": "Juliol", "spa": "Julio", "eng": "July","fre": "Juillet"},
-			   {"cat": "Agost", "spa": "Agosto", "eng": "August","fre": "Août"},
-			   {"cat": "Setembre", "spa": "Setiembre", "eng": "September","fre": "Septembre"},
-			   {"cat": "Octubre", "spa": "Octubre", "eng": "October","fre": "Octobre"},
-			   {"cat": "Novembre", "spa": "Noviembre", "eng": "November","fre": "Novembre"},
-			   {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}];
-
 function takeYear(theDate)
 {
 	//tret de http://www.quirksmode.org/js/introdate.html
@@ -161,14 +135,14 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 	if (capa.FlagsData.DataMostraMes)
 	{
 		if (capa.FlagsData.DataMostraDia)
-		    cdns.push(DonaCadena(PrepMesDeLAny[DonaMonthJSON(data_a_usar)-1]));
+		    cdns.push(GetMessage("PrepMonthOfTheYear"+(DonaMonthJSON(data_a_usar)-1), "datahora"));
 		else
-		    cdns.push(DonaCadena(MesDeLAny[DonaMonthJSON(data_a_usar)-1]));
+		    cdns.push(GetMessage("MonthOfTheYear"+(DonaMonthJSON(data_a_usar)-1), , "datahora"));
 	}
 	if (capa.FlagsData.DataMostraAny)
 	{
 		if (capa.FlagsData.DataMostraMes)
-		    cdns.push(" ",(GetMessage("of"), " "));
+		    cdns.push(" ",(GetMessage("ofData"), " "));
 		cdns.push(DonaYearJSON(data_a_usar));
     }
 	return cdns.join("");

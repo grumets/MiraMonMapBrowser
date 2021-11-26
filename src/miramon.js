@@ -5713,12 +5713,8 @@ var p, unitats_CRS;
 		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
 		{
 			//Dibuixo el rectangle de zoom sobre la vista (inicialment invisible)
-			cdns.push(textHTMLLayer(nom_vista+"_z_rectangle", DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, ev: null, save_content: false}, null,
-				  "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" height=\"100%\" style=\"border: 1px solid "+ ParamCtrl.ColorQuadratSituacio +";\">"+
-				  "  <tr><td><img src=\"" +
-				  AfegeixAdrecaBaseSRC("1tran.gif") + "\" height=\"100%\" width=\"100%\"></td>"+
-				  "  </tr>"+
-				  "</table>"));
+			cdns.push(textHTMLLayer(nom_vista+"_z_rectangle", DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
+
 			//Dibuixo el "tel" transparent amb els events de moure i click. Sembla que si tinc slider aquests esdeveniments no es fan servir i els altres tenen prioritat
 			cdns.push(textHTMLLayer(nom_vista+"_tel_trans", DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 		}

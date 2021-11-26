@@ -55,8 +55,8 @@ function ErrorAvaluaRespostaTransaccio(doc, param)
 var text=[], trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa];
 ;
 	// Informo a l'usuari que s'ha produït un error
-	text.push(GetMessage("InsertTransactionObjectIntoLayer", "editavec"),
-				   capa.nom, GetMessage("hasFailed", "editavec"));
+	text.push(GetMessage("InsertTransactionObjectIntoLayer", "editavec"), " \"",
+				   capa.nom, "\" ", GetMessage("hasFailed", "editavec"), ".");
 	if(param.text && param.text.length)
 		text.push("<br>More Information about the error: ", param.text);
 	MostraMissatgeTransaccio(text.join(""));
@@ -106,14 +106,14 @@ var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], obj
 	var missatge=[];
 	if(trans.feature.id)
 	{
-	    missatge.push("<br>",GetMessage("InsertTransactionObject", "editavec"),
-		    trans.feature.id,
-		    DonaCadenaLang({"cat":"\" a la capa \"", "eng":"\" into the layer \"" }), capa.nom, " " + GetMessage("successfullyCompleted", "editavec"));
+	    missatge.push("<br>",GetMessage("InsertTransactionObject", "editavec"), " \"",
+		    trans.feature.id, "\" ",
+		    GetMessage("toTheLayer"), " \"", capa.nom, "\" ", GetMessage("successfullyCompleted", "editavec"), ".");
 	}
 	else
 	{
-		missatge.push("<br>",DonaCadenaLang({"cat": "La transacció d'inserció a la capa \"", "eng": "The insert transaction into the layer \""}),
-					 capa.nom, " " + GetMessage("successfullyCompleted", "editavec"));
+		missatge.push("<br>", GetMessage("InsertTransactionObjectIntoLayer", "editavec"), " \"",
+					 capa.nom, "\" " + GetMessage("successfullyCompleted", "editavec"), ".");
 	}
 	MostraMissatgeTransaccio(missatge.join(""));
 	CanviaEstatEventConsola(null, trans.i_event, EstarEventTotBe);
@@ -262,18 +262,18 @@ var any=new Date(), cdns=[], i;
 		var mesactual=1+any.getMonth();
 		//selector de mes
 		cdns.push("<select name=\"",nom_form,"_mes\" class=\"Verdana11px\">",
-				  "<option", (mesactual==1 ? " selected" : "")," value=\"01\">",  DonaCadena(MesDeLAny[0]),
-				  "<option", (mesactual==2 ? " selected" : "")," value=\"02\">",  DonaCadena(MesDeLAny[1]),
-				  "<option", (mesactual==3 ? " selected" : "")," value=\"03\">",  DonaCadena(MesDeLAny[2]),
-				  "<option", (mesactual==4 ? " selected" : "")," value=\"04\">",  DonaCadena(MesDeLAny[3]),
-				  "<option", (mesactual==5 ? " selected" : "")," value=\"05\">",  DonaCadena(MesDeLAny[4]),
-				  "<option", (mesactual==6 ? " selected" : "")," value=\"06\">",  DonaCadena(MesDeLAny[5]),
-				  "<option", (mesactual==7 ? " selected" : "")," value=\"07\">",  DonaCadena(MesDeLAny[6]),
-				  "<option", (mesactual==8 ? " selected" : "")," value=\"08\">",  DonaCadena(MesDeLAny[7]),
-				  "<option", (mesactual==9 ? " selected" : "")," value=\"09\">",  DonaCadena(MesDeLAny[8]),
-				  "<option", (mesactual==10 ? " selected" : "")," value=\"10\">", DonaCadena(MesDeLAny[9]),
-				  "<option", (mesactual==11 ? " selected" : "")," value=\"11\">", DonaCadena(MesDeLAny[10]),
-				  "<option", (mesactual==12 ? " selected" : "")," value=\"12\">", DonaCadena(MesDeLAny[11]),
+				  "<option", (mesactual==1 ? " selected" : "")," value=\"01\">",  GetMessage("MonthOfTheYear0", "datahora"),
+				  "<option", (mesactual==2 ? " selected" : "")," value=\"02\">",  GetMessage("MonthOfTheYear1", "datahora"),
+				  "<option", (mesactual==3 ? " selected" : "")," value=\"03\">",  GetMessage("MonthOfTheYear2", "datahora"),
+				  "<option", (mesactual==4 ? " selected" : "")," value=\"04\">",  GetMessage("MonthOfTheYear3", "datahora"),
+				  "<option", (mesactual==5 ? " selected" : "")," value=\"05\">",  GetMessage("MonthOfTheYear4", "datahora"),
+				  "<option", (mesactual==6 ? " selected" : "")," value=\"06\">",  GetMessage("MonthOfTheYear5", "datahora"),
+				  "<option", (mesactual==7 ? " selected" : "")," value=\"07\">",  GetMessage("MonthOfTheYear6", "datahora"),
+				  "<option", (mesactual==8 ? " selected" : "")," value=\"08\">",  GetMessage("MonthOfTheYear7", "datahora"),
+				  "<option", (mesactual==9 ? " selected" : "")," value=\"09\">",  GetMessage("MonthOfTheYear8", "datahora"),
+				  "<option", (mesactual==10 ? " selected" : "")," value=\"10\">", GetMessage("MonthOfTheYear9", "datahora"),
+				  "<option", (mesactual==11 ? " selected" : "")," value=\"11\">", GetMessage("MonthOfTheYear10", "datahora"),
+				  "<option", (mesactual==12 ? " selected" : "")," value=\"12\">", GetMessage("MonthOfTheYear11", "datahora"),
 				  "</select>");
 
 	}

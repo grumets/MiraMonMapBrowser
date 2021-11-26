@@ -1475,14 +1475,14 @@ function createLayer(win, name, left, top, width, height, ancora, param, content
 	container.innerHTML += textHTMLLayer(name, left, top, width, height, ancora, param, null, content);
 }
 
-function textHTMLLayer(name, left, top, width, height, ancora, param, div_class, content)   //param --> scroll, visible, ev, save_content, bg_trans
+function textHTMLLayer(name, left, top, width, height, ancora, param, div_class, content)   //param --> scroll, visible, ev, save_content, bg_trans, border
 {
 
 	var z=layerList.length;
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
 	
-	return '<div id="' + name + '" style="position:absolute; overflow:'+((param.scroll=="si") ? 'scroll' : (param.scroll=="ara_no"? 'auto':'visible'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (param.visible ? 'visible;' : 'hidden;') + (param.bg_trans ? ' background-image : url(1tran.gif);' : '') +' z-index:' + z +';" ' + (param.ev ? param.ev+ ' ' : '') + (div_class ? 'class='+div_class : '')+'>'+
+	return '<div id="' + name + '" style="position:absolute; overflow:'+((param.scroll=="si") ? 'scroll' : (param.scroll=="ara_no"? 'auto':'visible'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (param.visible ? 'visible;' : 'hidden;') + (param.bg_trans ? ' background-image:url(1tran.gif);' : '') + (param.border ? (' border:' +param.border + ';') : '') + ' z-index:' + z +';" ' + (param.ev ? param.ev+ ' ' : '') + (div_class ? 'class='+div_class : '')+'>'+
 			 ((content) ? ((typeof content == 'object')? '' : content) : '') +
     			'</div>';
 }

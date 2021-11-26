@@ -617,7 +617,7 @@ var tipus_chart;
 	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeHistograma(event);\">")
 	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
-		GetMessage("Disabled") , "</span>");
+		GetMessage("Disabled"), " (", GetMessage(layerOrStyleNotVisible), ")</span>");
 
 	if (tipus_estad)
 	{
@@ -2135,7 +2135,7 @@ var chart=[];
 				"alt=\"",GetMessage("close") , "\" ",
 				"title=\"",GetMessage("close"), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"','",nom_div_click,"');\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("boto_copiar.gif"), "\" ",
-				"alt=\"",GetMessage({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}), "\" ",
+				"alt=\"",GetMessage("copy"), "\" ",
 				"title=\"",GetMessage("copy"), "\" onClick=\"CopiaPortapapersFinestraSerieTemp('",nom_histograma,"');\">",
 		"</div>");
 
