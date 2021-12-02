@@ -3278,10 +3278,17 @@ function PortamANivellDeZoom(nivell)
 	GuardaVistaPrevia();
 	return CanviaNivellDeZoom(nivell, true);
 }
+
 function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 {
 	dontPropagateEvent(event);
 	PortamANivellDeZoom(nivell);
+}
+
+//sz=1 will "zoom in" and sz=-1 will "zoom out"
+function MouNivellDeZoomEvent(event, sz)
+{
+	PortamANivellDeZoomEvent(event, DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+sz);
 }
 
 function PortamAData(millisegons)
@@ -3297,6 +3304,18 @@ function PortamADataEvent(event, millisegons)
 	dontPropagateEvent(event);
 	PortamAData(millisegons);
 }
+
+//dt=1 will "goto the future" and dt=-1 will "goto the past"
+function MouDataEvent(event, dt)
+{
+	if (!ParamInternCtrl.millisegons)
+		return;
+	if (dt<0)
+		PortamADataEvent(event, ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual<-dt) ? 0 : ParamInternCtrl.iMillisegonsActual+dt]);
+	else if (dt>0)
+		PortamADataEvent(event, ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual<ParamInternCtrl.millisegons.length-dt) ? ParamInternCtrl.iMillisegonsActual+dt : ParamInternCtrl.millisegons.length-1]);
+}
+
 
 //No crida GuardaVistaPrevia()
 function CanviaNivellDeZoom(nivell, redibuixa)
@@ -6703,6 +6722,8 @@ var win, i, j, l, capa;
 	window.document.body.onbeforeunload=EndMiraMonMapBrowser;
 	window.document.body.onresize=ResizeMiraMonMapBrowser;
 	window.document.body.onmessage=ProcessMessageMiraMonMapBrowser;
+	window.document.addEventListener('wheel', WheelMiraMonMapBrowser, {passive: false});  //https://stackoverflow.com/questions/56465207/how-can-i-prevent-full-page-zoom-on-mousewheel-event-in-javascript
+
 	if (window.opener)
 		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser is listening"}), "*");
 
@@ -7093,6 +7114,20 @@ function MovementMiraMonMapBrowser(event)
 		iFinestraLayerFora=-1;
 	if (iFinestraLayerFora!=-1)
 		MovimentFinestraLayerPerLaBarra(event, iFinestraLayerFora);
+}
+
+//https://stackoverflow.com/questions/33083484/on-ctrlmousewheel-event
+function WheelMiraMonMapBrowser(event)
+{
+	if (event.shiftKey)
+		MouLaVistaEventDeSalt(event, Math.sign(event.deltaY)*0.1, (event.altKey) ? -Math.sign(event.deltaY)*0.1 : (event.ctrlKey ? Math.sign(event.deltaY)*0.1 : 0));
+	else if (event.ctrlKey)
+		MouNivellDeZoomEvent(event, -Math.sign(event.deltaY));
+	else if (event.altKey)
+		MouDataEvent(event, -Math.sign(event.deltaY));
+	else
+		MouLaVistaEventDeSalt(event, 0, -Math.sign(event.deltaY)*0.1);
+	event.preventDefault();
 }
 
 function ProcessMessageMiraMonMapBrowser(event)
