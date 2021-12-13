@@ -142,7 +142,7 @@ var cdns=[], data_a_usar, capa=ParamCtrl.capa[i_capa];
 	if (capa.FlagsData.DataMostraAny)
 	{
 		if (capa.FlagsData.DataMostraMes)
-		    cdns.push(" ",(GetMessage("ofData"), " "));
+		    cdns.push(" ",(GetMessage("ofData", "datahora"), " "));
 		cdns.push(DonaYearJSON(data_a_usar));
     }
 	return cdns.join("");

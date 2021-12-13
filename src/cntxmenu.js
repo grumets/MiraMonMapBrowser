@@ -3287,9 +3287,9 @@ var cdns=[];
 	if (cdns.length!=1)
 		cdns.push(",");
 	if(ParamCtrl.capa[i_capa].model==model_vector)
-		cdns.push("\"prop\": \"", (i_valor) ? ParamCtrl.capa[i_capa].atributs[i_valor].nom : "", "\"");
+		cdns.push("\"prop\": \"", (typeof i_valor!=="undefined" && i_valor!=null) ? ParamCtrl.capa[i_capa].atributs[i_valor].nom : "", "\"");
 	else
-		cdns.push("\"i_valor\":", (i_valor) ? i_valor : 0);
+		cdns.push("\"i_valor\":", (typeof i_valor!=="undefined" && i_valor!=null) ? i_valor : 0);
 	if (typeof i_data!=="undefined" && i_data!=null /*&& DonaIndexDataCapa(ParamCtrl.capa[i_capa], null)!=i_data*/)
 	{
 		if (cdns.length!=1)
@@ -3399,7 +3399,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	{
 		// Creo un atribut nou que contindrà el càlcul
 		var i_atrib_nou=capa.atributs.length;
-		var i=0, index=0, nom_proposat=sel_condicional.nom_estil.replace(/ /g, "_");
+		var i=0, index=0, nom_proposat=sel_condicional.nom_estil.replaceAll(' ', '_');
 
 		while(i<capa.atributs.length)
 		{

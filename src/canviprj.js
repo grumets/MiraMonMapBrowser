@@ -356,13 +356,13 @@ var crs_up=crs.toUpperCase();
     CanviCRS.e1_sobre3=CanviCRS.e1_sobre2*CanviCRS.e1;
     CanviCRS.e1_sobre4=CanviCRS.e1_sobre2*CanviCRS.e1_sobre2;
 
-    if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
+	if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
-        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
-        crs_up=="EPSG:32736")
-    {
-        CanviCRS.m0=CanviCRS.radi_a*((1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0)*(CanviCRS.fi_0)-((3.0*CanviCRS.e2/8.0+3.0*CanviCRS.e4/32.0+45.0*CanviCRS.e6/1024.0)*Math.sin(2.0*CanviCRS.fi_0)) +
-    		(15.0*CanviCRS.e4/256.0+45.0*CanviCRS.e6/1024.0)*Math.sin(4.0*CanviCRS.fi_0)-((35.0*CanviCRS.e6/3072.0)*Math.sin(6.0*CanviCRS.fi_0)));
+	crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
+	crs_up=="EPSG:32736")
+	{
+		CanviCRS.m0=CanviCRS.radi_a*((1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0)*(CanviCRS.fi_0)-((3.0*CanviCRS.e2/8.0+3.0*CanviCRS.e4/32.0+45.0*CanviCRS.e6/1024.0)*Math.sin(2.0*CanviCRS.fi_0)) +
+    			(15.0*CanviCRS.e4/256.0+45.0*CanviCRS.e6/1024.0)*Math.sin(4.0*CanviCRS.fi_0)-((35.0*CanviCRS.e6/3072.0)*Math.sin(6.0*CanviCRS.fi_0)));
 		CanviCRS.ap = CanviCRS.radi_a*CanviCRS.c_tissot;
 		CanviCRS.bp = CanviCRS.radi_b*CanviCRS.c_tissot;
 
@@ -376,47 +376,48 @@ var crs_up=crs.toUpperCase();
 		CanviCRS._1_sobre_a2_b2=1 / (CanviCRS.radi_a*CanviCRS.radi_a+CanviCRS.radi_b*CanviCRS.radi_b);  //No sembla servir per res?
 
 		CanviCRS.mapa_Y_max=(CanviCRS.ap+CanviCRS.bp)*Math.PI/4-1300;
-    }
-    else if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
-    {
+	}
+	else if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
+	{
 		CanviCRS.e=Math.sqrt(CanviCRS.e2);
-        CanviCRS.m1=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_1);
-        CanviCRS.t1=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_1);
-        if (CanviCRS.fi_1==CanviCRS.fi_2)
-            CanviCRS.n=Math.sin(CanviCRS.fi_1);
-        else
-        {
-            CanviCRS.m2=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_2);
-            CanviCRS.t2=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_2);
-            CanviCRS.n=(log(CanviCRS.m1)-log(CanviCRS.m2))/(log(CanviCRS.t1)-log(CanviCRS.t2));
-        }
-        CanviCRS.F=CanviCRS.m1/(CanviCRS.n*Math.pow(CanviCRS.t1,CanviCRS.n));
-        CanviCRS.t0=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_0);
-        CanviCRS.ro_0=CanviCRS.radi_a*CanviCRS.F*Math.pow(CanviCRS.t0, CanviCRS.n);
-    }
-    else if (crs_up=="AUTO2:MERCATOR,1,0,41.42" ||
+		CanviCRS.m1=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_1);
+		CanviCRS.t1=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_1);
+		if (CanviCRS.fi_1==CanviCRS.fi_2)
+			CanviCRS.n=Math.sin(CanviCRS.fi_1);
+		else
+		{
+			CanviCRS.m2=LambertConformal_Funcio_14_15_Snyder(CanviCRS.e2, CanviCRS.fi_2);
+			CanviCRS.t2=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_2);
+			CanviCRS.n=(Math.log(CanviCRS.m1)-Math.log(CanviCRS.m2))/(Math.log(CanviCRS.t1)-Math.log(CanviCRS.t2));
+		}
+		CanviCRS.F=CanviCRS.m1/(CanviCRS.n*Math.pow(CanviCRS.t1,CanviCRS.n));
+		CanviCRS.t0=LambertConformal_Funcio_15_9a_Snyder(CanviCRS.e, CanviCRS.fi_0);
+		CanviCRS.ro_0=CanviCRS.radi_a*CanviCRS.F*Math.pow(CanviCRS.t0, CanviCRS.n);
+	}
+	else if (crs_up=="AUTO2:MERCATOR,1,0,41.42" ||
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" ||
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" ||
 		crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="EPSG:3395")
-    {
+	{
 		CanviCRS.e=Math.sqrt(CanviCRS.e2);
-        CanviCRS.a_NUM_PI=CanviCRS.radi_a*Math.PI;
+		CanviCRS.a_NUM_PI=CanviCRS.radi_a*Math.PI;
 
-        CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1)/Math.sqrt((1-CanviCRS.e2*Math.sin(CanviCRS.fi_1)*Math.sin(CanviCRS.fi_1)));
+		CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1)/Math.sqrt((1-CanviCRS.e2*Math.sin(CanviCRS.fi_1)*Math.sin(CanviCRS.fi_1)));
 
-        var CC=7.0*CanviCRS.e6/120.0+81.0*CanviCRS.e8/1120.0;
-        var DD=4279.0*CanviCRS.e8/161280.0;
-        CanviCRS.Ap=(CanviCRS.e2/2.0+5.0*CanviCRS.e4/24.0+CanviCRS.e6/12.0+13.0*CanviCRS.e8/360.0) - CC;
-        CanviCRS.Bp=2.0*(7.0*CanviCRS.e4/48.0+29.0*CanviCRS.e6/240.0+811.0*CanviCRS.e8/11520.0)-4.0*DD;
-        CanviCRS.Cp=4.0*CC;
-        CanviCRS.Dp=8.0*DD;
-    }
-    else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
-    {
-        CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1);
-    }
-    CanviCRS.darrerCRS=crs_up;
+		var CC=7.0*CanviCRS.e6/120.0+81.0*CanviCRS.e8/1120.0;
+		var DD=4279.0*CanviCRS.e8/161280.0;
+		CanviCRS.Ap=(CanviCRS.e2/2.0+5.0*CanviCRS.e4/24.0+CanviCRS.e6/12.0+13.0*CanviCRS.e8/360.0) - CC;
+		CanviCRS.Bp=2.0*(7.0*CanviCRS.e4/48.0+29.0*CanviCRS.e6/240.0+811.0*CanviCRS.e8/11520.0)-4.0*DD;
+		CanviCRS.Cp=4.0*CC;
+		CanviCRS.Dp=8.0*DD;
+	}
+	else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
+	{
+		CanviCRS.a_factor_fi1=CanviCRS.radi_a*Math.cos(CanviCRS.fi_1);
+		CanviCRS.a_NUM_PI=CanviCRS.radi_a*Math.PI;
+	}
+	CanviCRS.darrerCRS=crs_up;
 }
 
 //var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecció.
@@ -559,19 +560,19 @@ var crs_x, crs_y;
 var llr_x=ll_x*FactorGrausARadiants;
 var llr_y=ll_y*FactorGrausARadiants;
 
-  crs_x=CanviCRS.a_factor_fi1*(llr_x-CanviCRS.lambda_0)+CanviCRS.offset_mapa_X;
+	crs_x=CanviCRS.a_factor_fi1*(llr_x-CanviCRS.lambda_0)+CanviCRS.offset_mapa_X;
 
-    var sin_lat=Math.sin(llr_y);
-    if (sin_lat>=0.999999)
-    	crs_y=CanviCRS.a_NUM_PI;
-    else if (sin_lat<=-0.999999)
-    	crs_y=-CanviCRS.a_NUM_PI;
-    else
-		crs_y=CanviCRS.a_factor_fi1/2*log((1+sin_lat)/(1-sin_lat))+CanviCRS.offset_mapa_Y;
+	var sin_lat=Math.sin(llr_y);
+	if (sin_lat>=0.999999)
+    		crs_y=CanviCRS.a_NUM_PI;
+	else if (sin_lat<=-0.999999)
+		crs_y=-CanviCRS.a_NUM_PI;
+	else
+		crs_y=CanviCRS.a_factor_fi1/2*Math.log((1+sin_lat)/(1-sin_lat))+CanviCRS.offset_mapa_Y;
 
-    if (crs_y>CanviCRS.a_NUM_PI)
-		crs_y=CanviCRS.a_NUM_PI;
-    else if (crs_y<-CanviCRS.a_NUM_PI)
+	if (crs_y>CanviCRS.a_NUM_PI)
+		crs_y=CanviCRS.a_NUM_PI;	
+	else if (crs_y<-CanviCRS.a_NUM_PI)
 		crs_y=-CanviCRS.a_NUM_PI;
 	return {"x": crs_x, "y": crs_y};
 }
@@ -611,7 +612,7 @@ var llr_y=ll_y*FactorGrausARadiants;
             crs_y=-CanviCRS.a_NUM_PI;
         else
 		{
-            crs_y=CanviCRS.a_factor_fi1*log(r)+CanviCRS.offset_mapa_Y;
+            crs_y=CanviCRS.a_factor_fi1*Math.log(r)+CanviCRS.offset_mapa_Y;
             if (crs_y>CanviCRS.a_NUM_PI)
                 crs_y=CanviCRS.a_NUM_PI;
             else if (crs_y<-CanviCRS.a_NUM_PI)

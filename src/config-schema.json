@@ -277,7 +277,7 @@
 			"type": "boolean"
 		},
 		"araCanviProjAuto": {
-			"description": "Interna, no usar.  Si CanviProjAuto i si s'han definit més d'una projecció, cal que el navegador de mapes sel·leccioni la possibilitat de canviar automàticament de projecció al iniciar?. Si no es declara és el que passa per defecte. Només si és false s'evita que es selleccioni en començar.",
+			"description": "Interna, no usar.  Si CanviProjAuto i si s'han definit més d'una projecció, cal que el navegador de mapes seleccioni la possibilitat de canviar automàticament de projecció al iniciar?. Si no es declara és el que passa per defecte. Només si és false s'evita que es seleccioni en començar.",
 			"type": "boolean"
 		},
 		"ZoomUnSolClic": {
@@ -1499,7 +1499,7 @@
 									"$ref": "#/definitions/paleta"
 								},
 								"NomCampSel": {
-									"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit IconaSel els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten icona. Si no hi ha IconaSel els objectes seleccionats (true) presenten icona i els no seleccionats (false) no mostren presenten icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
+									"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit 'IconaSel' els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten 'icona'. Si no hi ha 'IconaSel' els objectes seleccionats (true) presenten 'icona' i els no seleccionats (false) no mostren icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
 									"type": ["string", "null"]								
 								},
 								"simbols": {
@@ -1535,7 +1535,7 @@
 															"$ref": "#/definitions/icona" 
 														},
 														"IconaSel": {
-															"description": "icona quan està seleccionada",
+															"description": "icona quan està seleccionada a partir de 'NomCampSel'",
 															"$ref": "#/definitions/icona" 
 														}
 													}

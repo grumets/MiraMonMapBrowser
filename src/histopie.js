@@ -617,7 +617,7 @@ var tipus_chart;
 	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeHistograma(event);\">")
 	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
-		GetMessage("Disabled"), " (", GetMessage(layerOrStyleNotVisible), ")</span>");
+		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
 
 	if (tipus_estad)
 	{
