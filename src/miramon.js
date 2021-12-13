@@ -5000,9 +5000,9 @@ var env=vista.EnvActual;
 							i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
 							i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
 							ctx.lineTo(i_col, i_fil);
-						}
-						PintaCtxColorVoraIInterior(forma.vora, null, ctx, previ);
+						}						
 					}
+					PintaCtxColorVoraIInterior(forma.vora, null, ctx, previ);
 				}
 			}
 			else if (geometry.type=="Polygon" || geometry.type=="MultiPolygon")
@@ -5047,9 +5047,9 @@ var env=vista.EnvActual;
 								i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
 								ctx.lineTo(i_col, i_fil);
 							}
-							PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
 						}
 					}
+					PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
 				}
 			}
 			else if (geometry.type=="Point" || geometry.type=="MultiPoint")

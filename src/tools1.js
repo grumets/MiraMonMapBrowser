@@ -375,6 +375,13 @@ if(!String.prototype.trim)
 	};
 }
 
+if(!String.prototype.replaceAll)
+{
+	String.prototype.replaceAll= function(find, replace) {
+		return this.replace(new RegExp(find, 'g'), replace);
+	};
+}
+
 function isalpha(c) 
 {
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
