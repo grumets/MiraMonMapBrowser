@@ -3349,21 +3349,9 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 	sel_condicional=LlegeixParametresSeleccioCondicional(prefix_id, i_capa);
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
-	i_estil_nou=capa.estil.length;
 
-	if(capa.estil.length==1 && !capa.estil[0].nom && !capa.estil[0].desc)
-	{
-		// Si la capa només té un estil, potser que no tingui ni nom ni descripció perquè és l'estil per defecte
-		// com que ara n'afegeix-ho un de nou li he de possar com a mínim la descripció
-		capa.estil[0].desc=GetMessageJSON("byDefault","cntxmenu");
-	}
-	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(sel_condicional.i_estil) ? sel_condicional.i_estil : 0]));
+	i_estil_nou=DuplicaEstilCapa(capa, sel_condicional.i_estil, sel_condicional.nom_estil);
 	estil=capa.estil[i_estil_nou];
-	if (estil.diagrama)
-		delete estil.diagrama;
-	estil.desc=sel_condicional.nom_estil;
-	estil.origen="usuari";
-	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
 
 	//Defineix el "calcul" de la selecció que serà de tipus "(capaA<5 || CapaA>capaB)? capa : null"
 	if(capa.model!=model_vector)

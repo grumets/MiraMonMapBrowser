@@ -124,7 +124,7 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 
 	if(isNaN(punt_coord.x) || isNaN(punt_coord.y))
 	{
-  	   alert(GetMessage("CoordFormatIncorrectly", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
+  	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
 

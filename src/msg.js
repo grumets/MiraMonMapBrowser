@@ -243,7 +243,8 @@ var MessageLang={
 		SelectStory: {"cat":"Selecciona una història", "spa":"Selecciona una historia", "eng":"Select a story", "fre":"Sélectionnez une histoire"},
 		WrongFormat_mm_center_Parameter: {"cat":"Format del paràmetre mm-center incorrecte", "spa":"Formato del parametro mm-center icnorrecto", "eng":"Wrong format in mm-center parameter", "fre":"Format incorrect dans le paramètre mm-center"},
 		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és:", "spa":"El valor del parámetro indicado es:", "eng":"The parameter value found is:", "fre":"La valeur de paramètre trouvée est:"},
-		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte", "spa":"Formato del parámetro mm-time icnorrecto", "eng":"Wrong format in mm-time parameter", "fre":"Format incorrect dans le paramètre mm-time"}
+		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte", "spa":"Formato del parámetro mm-time icnorrecto", "eng":"Wrong format in mm-time parameter", "fre":"Format incorrect dans le paramètre mm-time"},
+		WrongFormat_mm_sels_Parameter: {"cat":"Format del paràmetre mm-sels incorrecte", "spa":"Formato del parametro mm-sels icnorrecto", "eng":"Wrong format in mm-sels parameter", "fre":"Format incorrect dans le paramètre mm-sels"},
 	},
 	tresD:{
 		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},
@@ -264,7 +265,7 @@ var MessageLang={
 		WebMercator: {"cat":"Web Mercator", "spa":"Web Mercator", "eng":"Web Mercator", "fre":"Web Mercator"},
 	},
 	capavola:{
-    Proj: {"cat":"Proj", "spa":"Proy", "eng":"Proj","fre":"Proj"},
+    		Proj: {"cat":"Proj", "spa":"Proy", "eng":"Proj","fre":"Proj"},
 		DeviceLocation: {"cat":"Ubicació dispositiu", "spa":"Ubicación dispositivo", "eng":"Device location","fre":"Emplacement de l'appareil"},
 		AroundZone: {"cat":"Zona al voltant", "spa":"Zona alrededor", "eng":"Around zone","fre":"Zone autour"},
 		GoTo: {"cat":"Anar-hi", "spa":"Ir", "eng":"Go to","fre":"Aller à"},
@@ -275,16 +276,18 @@ var MessageLang={
 		LocationInfoUnavailable: {"cat":"La informació sobre la ubicació no està disponible", "spa":"La información sobre la ubicación no está disponible", "eng":"Location information is unavailable","fre":"Les informations de localisation ne sont pas disponibles"},
 		RequestGetUserLocationTimedOut: {"cat":"S'ha esgotat el temps d'espera de la sol·licitud per obtenir la ubicació de l'usuari", "spa":"Se ha agotado el tiempo de espera de la solicitud para obtener la ubicación del usuario", "eng":"Request to get user location timed out","fre":"La demande d’obtention de l’emplacement de l’utilisateur a expiré"},
 		UnknownErrorObtainingLocation: {"cat":"S'ha produït un error desconegut durant l'obtenció de la ubicació", "spa":"Se ha producido un error desconocido durante la obtención de la geolocalización", "eng":"An unknown error occurred while obtaining the location","fre":"Une erreur inconnue s'est survenue lors de l'obtention de l'emplacement"},
-		CoordFormatIncorrectly: {"cat":"Format de les coordenades erroni", "spa":"Formato de las coordenadas erróneo", "eng":"Coordinate format is incorrectly", "fre":"Format des coordonnées erroné"},
+		CoordIncorrectFormat: {"cat":"Format de les coordenades erroni", "spa":"Formato de las coordenadas erróneo", "eng":"Coordinate format is incorrect", "fre":"Format des coordonnées erroné"},
 		NumericalValueMustBeIndicated: {"cat":"S'ha d'indicar un valor numèric", "spa":"Se debe indicar un valor numérico", "eng":"A numerical value must be indicated", "fre":"Vous devez indiquer une valeur numérique"},
 		GeolocationNotSupportedByBrowser: {"cat":"La geolocalització no està suportada en aquest navegador", "spa":"La geolocalización no está soportada en este navegador", "eng":"Geolocation is not supported by this browser", "fre":"La géolocalisation n'est pas prise en charge dans ce navigateur"},
   },
 	commands:{
-		ZoomSizeFormatIncorrect: {"cat":"Format del valor del costat de zoom erroni", "spa":"Formato del lado de zoom erróneo", "eng":"Zoom size format is incorrect.", "fre":"Format des zoom erroné"},
+		ZoomSizeIncorrectFormat: {"cat":"Format del valor del costat de zoom erroni", "spa":"Formato del lado de zoom erróneo", "eng":"Zoom size format is incorrect.", "fre":"Format des zoom erroné"},
 		NumericalValueIsRequired: {"cat":"S'ha d'indicar un valor numèric", "spa":"Se debe indicar un valor numérico", "eng":"A numerical value is required", "fre":"Vous devez indiquer une valeur numérique"},
 		ZoomSizeRequestedNotAvailableBrowser: {"cat":"El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.", "spa":"El lado de zoom solicitado no es uno de los lados disponibles en este navegador.", "eng":"The zoom size requested is not available in this browser.", "fre":"La taille de zoom demandée n'est pas disponible dans ce navigateur."},
-		CoordFormatIncorrect: {"cat":"Format de les coordenades erroni", "spa":"Formato de las coordenadas erróneo", "eng":"Coordinate format is incorrect", "fre":"Format des coordonnées erroné"},
+		CoordIncorrectFormat: {"cat":"Format de les coordenades erroni", "spa":"Formato de las coordenadas erróneo", "eng":"Coordinate format is incorrect", "fre":"Format des coordonnées erroné"},
 		TwoNumericalValuesRequiredFormat: {"cat":"S'ha d'indicar dos valors numèrics en el format", "spa":"Se debe indicar dos valores numéricos en el formato", "eng":"Two numerical values are required with the format", "fre":"Deux valeurs numériques sont requises dans le format"},
+		SelectionsIncorrectFormat: {"cat":"Format de les consultes erroni", "spa":"Formato de las consultas erróneo", "eng":"Query format is incorrect", "fre":"Format des requete erroné"},
+		LyQNameRequired: {"cat":"S'han d'indicar l'identificador de la capa, la consulta i el nom del nou estil en el format", "spa":"Se debe indicar el identificador de la capa, la consulta y el nombre del nuevo estilo en el formato", "eng":"The layer identifier, query, and new style name must be specified in the format", "fre":"L'identifiant de la couche, la requête et le nom du nouveau style doivent être spécifiés dans le format"},
 	},
 	consola:{
 		ofWatchingReportsConsole: {"cat":"de veure els informes de la consola",  "spa":"de ver los informes de la consola", "eng":"of watching the reports in the console", "fre":"pour regarder les rapports dans la console"},

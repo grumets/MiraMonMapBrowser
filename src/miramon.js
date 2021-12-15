@@ -1044,6 +1044,50 @@ function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
 	ParamCtrl.capa[i_capa].visible=nou_estat;
 }
 
+//A diferència de CanviaEstatVisibleCapaLlegenda, aquesta funció no toca res de la llegenda ni força un redibuixat
+function CanviaEstatVisibleCapa(i_capa, nou_estat)
+{
+var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
+
+	if (nou_estat=="si" || nou_estat=="semitransparent")
+	{
+		if (capa.grup)
+		{
+			for (var i_capa2=0; i_capa2<ParamCtrl.capa.length; i_capa2++)
+			{
+				if (i_capa2==i_capa)
+					continue;
+				capa2=ParamCtrl.capa[i_capa2];
+				if (capa.grup==capa2.grup && 
+				    EsCapaVisibleAAquestNivellDeZoom(capa2))
+				{
+					//In the case of groups We sincronize the querible (consultable) with the visible property.
+					if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
+					{
+						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
+													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
+													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadena(capa2.desc) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.", 
+													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(capa2.desc) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
+							return;
+					}
+					if (nou_estat=="si" || nou_estat=="semitransparent")
+						CanviaEstatVisibleISiCalDescarregableCapa(i_capa2, "ara_no"); 
+
+					if (capa2.consultable=="si")
+					{
+						capa2.consultable=="ara_no"
+						grup_consultable=true;
+					}
+					break;
+				}
+			}
+		}
+	}
+	CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat);
+	if (grup_consultable && capa.consultable=="ara_no")
+		capa.consultable=="si"
+}
+
 function RevisaEstatsCapes()
 {
 var capa, capa2;
@@ -4933,7 +4977,7 @@ var env=vista.EnvActual;
 			if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
 				return;  //ja es tornarà a cridar a si mateixa quan la crida assincrona acabi
 		}
-		var previ={}, a_interior=[], valor_min_interior=[], ncolors_interior=[], valor, a_vora=[], valor_min_vora=[], ncolors_vora=[], forma;
+		var previ={}, a_vmin_ncol_interior=[], a_vmin_ncol_interiorSel=[], un_a_vmin_ncol_interior, valor, a_vmin_ncol_vora=[], a_vmin_ncol_voraSel=[], un_a_vmin_ncol_vora, forma, forma_interior, forma_vora;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
 		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString, polygon;
 		var win = DonaWindowDesDeINovaVista(vista);
@@ -4948,15 +4992,31 @@ var env=vista.EnvActual;
 				forma=estil.formes[i_forma];
 				if (forma.interior && forma.interior.paleta)
 				{
-					ncolors_interior[i_forma]=forma.interior.paleta.colors.length;
-					a_interior[i_forma]=DonaFactorAEstiramentPaleta(forma.interior.estiramentPaleta, ncolors_interior[i_forma]);
-					valor_min_interior[i_forma]=DonaFactorValorMinEstiramentPaleta(forma.interior.estiramentPaleta);
+					a_vmin_ncol_interior[i_forma]={};
+					a_vmin_ncol_interior[i_forma].ncolors=forma.interior.paleta.colors.length;
+					a_vmin_ncol_interior[i_forma].a=DonaFactorAEstiramentPaleta(forma.interior.estiramentPaleta, a_vmin_ncol_interior[i_forma].ncolors);
+					a_vmin_ncol_interior[i_forma].valor_min=DonaFactorValorMinEstiramentPaleta(forma.interior.estiramentPaleta);
+				}
+				if (forma.interiorSel && forma.interiorSel.paleta)
+				{
+					a_vmin_ncol_interiorSel[i_forma]={};
+					a_vmin_ncol_interiorSel[i_forma].ncolors=forma.interiorSel.paleta.colors.length;
+					a_vmin_ncol_interiorSel[i_forma].a=DonaFactorAEstiramentPaleta(forma.interiorSel.estiramentPaleta, a_vmin_ncol_interiorSel[i_forma].ncolors);
+					a_vmin_ncol_interiorSel[i_forma].valor_min=DonaFactorValorMinEstiramentPaleta(forma.interiorSel.estiramentPaleta);
 				}
 				if (forma.vora && forma.vora.paleta)
 				{
-					ncolors_vora[i_forma]=forma.vora.paleta.colors.length;
-					a_vora[i_forma]=DonaFactorAEstiramentPaleta(forma.vora.estiramentPaleta, ncolors_vora[i_forma]);
-					valor_min_vora[i_forma]=DonaFactorValorMinEstiramentPaleta(forma.vora.estiramentPaleta);
+					a_vmin_ncol_vora[i_forma]={};
+					a_vmin_ncol_vora[i_forma].ncolors=forma.vora.paleta.colors.length;
+					a_vmin_ncol_vora[i_forma].a=DonaFactorAEstiramentPaleta(forma.vora.estiramentPaleta, a_vmin_ncol_vora[i_forma].ncolors);
+					a_vmin_ncol_vora[i_forma].valor_min=DonaFactorValorMinEstiramentPaleta(forma.vora.estiramentPaleta);
+				}
+				if (forma.voraSel && forma.voraSel.paleta)
+				{
+					a_vmin_ncol_voraSel[i_forma]={};
+					a_vmin_ncol_voraSel[i_forma].ncolors=forma.voraSel.paleta.colors.length;
+					a_vmin_ncol_voraSel[i_forma].a=DonaFactorAEstiramentPaleta(forma.voraSel.estiramentPaleta, a_vmin_ncol_voraSel[i_forma].ncolors);
+					a_vmin_ncol_voraSel[i_forma].valor_min=DonaFactorValorMinEstiramentPaleta(forma.voraSel.estiramentPaleta);
 				}
 			}
 		}
@@ -4972,19 +5032,60 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (!forma.vora)
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edició
+					{
+						forma_vora=forma.voraSel;
+						un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+					}
+					else if (estil.NomCampSel)
+					{
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.voraSel;
+								un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+							}
+							else
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+						}
+						else
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+							else
+							{
+								forma_vora=null;
+								un_a_vmin_ncol_vora=null;
+							}
+						}
+					}
+					else
+					{
+						forma_vora=forma.vora;
+						un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+					}
+
+
+					if (!forma_vora)
 						continue;
-					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
-				 	if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+				 	if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 						ctx.lineWidth = 1;
 					else
-						ctx.lineWidth = forma.vora.gruix.amples[0];
+						ctx.lineWidth = forma_vora.gruix.amples[0];
 
 					ctx.beginPath();
-					if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+					if (!forma_vora.patro || !forma_vora.patro.separacions || !forma_vora.patro.separacions.length)
 						ctx.setLineDash([]);
 					else
-						ctx.setLineDash(forma.vora.patro.separacions[0]);
+						ctx.setLineDash(forma_vora.patro.separacions[0]);
 
 					for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
 					{
@@ -5002,7 +5103,7 @@ var env=vista.EnvActual;
 							ctx.lineTo(i_col, i_fil);
 						}						
 					}
-					PintaCtxColorVoraIInterior(forma.vora, null, ctx, previ);
+					PintaCtxColorVoraIInterior(forma_vora, null, ctx, previ);
 				}
 			}
 			else if (geometry.type=="Polygon" || geometry.type=="MultiPolygon")
@@ -5014,20 +5115,84 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (!forma.vora)
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					{
+						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
+						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
+						forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
+						un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
+					}
+					else if (estil.NomCampSel)
+					{
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.voraSel;
+								un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+							}
+							else
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+							if (forma.interiorSel)
+							{
+								forma_interior=forma.interiorSel;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
+							}
+							else
+							{
+								forma_interior=forma.interior;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+							}
+						}
+						else
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+							else
+							{
+								forma_vora=null;
+								un_a_vmin_ncol_vora=null;
+							}
+							if (forma.interiorSel)
+							{
+								forma_interior=forma.interior;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+							}
+							else
+							{
+								forma_interior=null;
+								un_a_vmin_ncol_interior=null;
+							}
+						}
+					}
+					else
+					{
+						forma_vora=forma.vora;
+						un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+						forma_interior=forma.interior;
+						un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+					}
+
+					if (!forma_vora || !forma_interior)
 						continue;
-					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma.interior, i_atri_interior[i_forma], a_interior[i_forma], valor_min_interior[i_forma], ncolors_interior[i_forma], i_col, i_fil);
-					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
-					if (!forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+					if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 						ctx.lineWidth = 1;
 					else
-						ctx.lineWidth = forma.vora.gruix.amples[0];
+						ctx.lineWidth = forma_vora.gruix.amples[0];
 
 					ctx.beginPath();
-					if (!forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+					if (!forma_vora.patro || !forma_vora.patro.separacions || !forma_vora.patro.separacions.length)
 						ctx.setLineDash([]);
 					else
-						ctx.setLineDash(forma.vora.patro.separacions[0]);
+						ctx.setLineDash(forma_vora.patro.separacions[0]);
 
 					for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
 					{
@@ -5049,7 +5214,7 @@ var env=vista.EnvActual;
 							}
 						}
 					}
-					PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
+					PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
 				}
 			}
 			else if (geometry.type=="Point" || geometry.type=="MultiPoint")
@@ -5121,18 +5286,86 @@ var env=vista.EnvActual;
 												for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 												{
 													forma=estil.formes[i_forma];
-													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma.interior, i_atri_interior[i_forma], a_interior[i_forma], valor_min_interior[i_forma], ncolors_interior[i_forma], i_col, i_fil);
-													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma.vora, i_atri_vora[i_forma], a_vora[i_forma], valor_min_vora[i_forma], ncolors_vora[i_forma], i_col, i_fil);
-													if (!forma.vora || !forma.vora.gruix || !forma.vora.gruix.amples || !forma.vora.gruix.amples.length)
+
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					{
+						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
+						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
+						forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
+						un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
+					}
+					else if (estil.NomCampSel)
+					{
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.voraSel;
+								un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+							}
+							else
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+							if (forma.interiorSel)
+							{
+								forma_interior=forma.interiorSel;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
+							}
+							else
+							{
+								forma_interior=forma.interior;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+							}
+						}
+						else
+						{
+							if (forma.voraSel)
+							{
+								forma_vora=forma.vora;
+								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+							}
+							else
+							{
+								forma_vora=null;
+								un_a_vmin_ncol_vora=null;
+							}
+							if (forma.interiorSel)
+							{
+								forma_interior=forma.interior;
+								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+							}
+							else
+							{
+								forma_interior=null;
+								un_a_vmin_ncol_interior=null;
+							}
+						}
+					}
+					else
+					{
+						forma_vora=forma.vora;
+						un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+						forma_interior=forma.interior;
+						un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+					}
+
+					if (!forma_vora || !forma_interior)
+						continue;
+
+													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+													if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 														ctx.lineWidth = 1;
 													else
-														ctx.lineWidth = forma.vora.gruix.amples[0];
+														ctx.lineWidth = forma_vora.gruix.amples[0];
 
 													ctx.beginPath();
-													if (!forma.vora || !forma.vora.patro || !forma.vora.patro.separacions || !forma.vora.patro.separacions.length)
+													if (!forma_vora || !forma_vora.patro || !forma_vora.patro.separacions || !forma_vora.patro.separacions.length)
 														ctx.setLineDash([]);
 													else
-														ctx.setLineDash(forma.vora.patro.separacions[0]);
+														ctx.setLineDash(forma_vora.patro.separacions[0]);
 
 													mida=DonaMidaIconaForma(icona);
 													if (icona.unitats=="m")
@@ -5150,7 +5383,7 @@ var env=vista.EnvActual;
 													else
 														ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
 
-													PintaCtxColorVoraIInterior(forma.vora, forma.interior, ctx, previ);
+													PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
 												}
 											}
 											else
@@ -6102,6 +6335,52 @@ function EliminaTotesLesCapes(Redraw)
 		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
+}
+
+function DonaCapaDesDeIdCapa(id)
+{
+var capa;
+	for (var i=0; i<ParamCtrl.capa.length; i++)
+	{
+		capa=ParamCtrl.capa[i];
+		if (id==capa.id)
+			return capa;
+	}
+	return null;
+}
+
+function DonaEstilDesDeNomEstil(capa, nom)
+{
+var estil;
+	for (var i=0; i<capa.estil.length; i++)
+	{
+		estil=capa.estil[i];
+		if (nom==estil.nom)
+			return estil;
+	}
+	return null;
+}
+
+function DuplicaEstilCapa(capa, i_estil_patro, nom_nou)
+{
+var i_estil_nou=capa.estil.length, estil;
+
+	if(capa.estil.length==1 && !capa.estil[0].nom && !capa.estil[0].desc)
+	{
+		// Si la capa només té un estil, potser que no tingui ni nom ni descripció perquè és l'estil per defecte
+		// com que ara n'afegeix-ho un de nou li he de possar com a mínim la descripció
+		capa.estil[0].desc=GetMessageJSON("byDefault","cntxmenu");
+	}
+	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(i_estil_patro) ? i_estil_patro : 0]));
+	estil=capa.estil[i_estil_nou];
+	if (estil.diagrama)
+		delete estil.diagrama;
+	estil.nom=nom_nou;
+	estil.desc=nom_nou;
+	estil.origen="usuari";  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
+	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
+
+	return i_estil_nou;
 }
 
 function FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, param_name_layers)

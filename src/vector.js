@@ -683,7 +683,7 @@ var root, capa, features, valor, tipus, i_obj;
 				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
 					objectes[i_obj_llegit].featureOfInterest=objectes[i_obj_llegit].featureOfInterest.substring(prefix_foi.length); //elimino el prefix de l'id.
-					i_obj=features.binarySearch({"id":objectes[i_obj_llegit].featureOfInterest}, ComparaObjCapaDigiIdData);
+					i_obj=features.binarySearch({"id":capa.nom+"_"+objectes[i_obj_llegit].featureOfInterest}, ComparaObjCapaDigiIdData);
 					if (i_obj>=0)
 						OmpleAtributsObjecteCapaDigiDesDeGeoJSONDeSOS(objectes[i_obj_llegit], capa, features[i_obj]);
 				}

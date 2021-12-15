@@ -794,7 +794,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté la historia en format HTML. Les histories poden contenir elements (tags) html amb atributs que controlen el mapa. P.ex. 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}' mm-layers='layerId1,layerId2' mm-styles='styleNom1,styleNom2'",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}' mm-layers='layerId1,layerId2' mm-styles='styleNom1,styleNom2' mm-sels='{'ly': NomDeCapa, 'q': FormulaConsulta, 'name': NomEstil}' (si la FormulaConsulta necessita cometes aquestes poden ser una dieresis (¨))",
 						"type": "string",
 						"format": "uri"
 					},
@@ -1350,15 +1350,15 @@
 										"type": "object",
 										"properties": {
 											"calcul": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altre data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc. Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix la capa actual; si no indiqueu i_data d'assumeix la data actual (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc. Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
 												"type": "string"
 											},
 											"FormulaConsulta": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en aquests i_data (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
 												"type": "string"
 											},
 											"i_valor": { 
-												"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha FormulaConsulta o calcul. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: v[{i_valor}]. El valor per defecte és 0",
+												"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha FormulaConsulta o calcul. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
 												"type": "number",
 												"minimum": 0,
 												"multipleOf": 1
@@ -2687,11 +2687,11 @@
 				"required": [ "nom" ],
 				"properties": {
 					"calcul": { 
-						"description": "Fórmula matemàtica per transformar els valors d'una o més properties d'una altra capa vectorial o raster. Per a apuntar a una capa raster consulteu l'explicació dins de 'component' per apuntar a una capa vectorial usarem {'i_capa': 2, 'prop': 'nom_flor'} per referirnos a la capa 2 que és de 'model'='vector'. Només es pot fer servir si hi ha capa.objectes a la capa indicada. Si no indiqueu i_capa s'asumeix la capa actual.",
+						"description": "Fórmula matemàtica per transformar els valors d'una o més properties d'una altra capa vectorial o raster. Per a apuntar a una capa raster consulteu l'explicació dins de 'component' per apuntar a una capa vectorial usarem {'i_capa': 2, 'prop': 'nom_flor'} per referirnos a la capa 2 que és de 'model'='vector'. Només es pot fer servir si hi ha capa.objectes a la capa indicada. Si no indiqueu i_capa s'asumeix 'aquesta' capa. Per a cada objecte {'i_capa': 2, 'prop': 'nom_flor'} (o l'equivalment per capes raster per cada píxel) es transforma en el valor i un cop fet la fórmula es evaluada com una sintàxi JavaScript.",
 						"type": "string"
 					},
 					"FormulaConsulta": { 
-						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'",
+						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component'. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'. Intenament, 'FormulaConsulta' es transforma en 'calcul'.",
 						"type": "string"
 					},
 					"nom": { 

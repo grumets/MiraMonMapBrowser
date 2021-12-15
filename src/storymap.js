@@ -56,8 +56,8 @@ var cdns=[], storyMap, i_story;
 						"<br>");
 		for (i_story=0; i_story<ParamCtrl.StoryMap.length; i_story++)
 		{
-			cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150'>",
-							"<a href=\"javascript:void(0)\" onclick=\"IniciaStoryMap(", i_story, ");\">",
+			cdns.push("<a href=\"javascript:void(0)\" onclick=\"IniciaStoryMap(", i_story, ");\">",
+					"<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 							"<br>",
 							ParamCtrl.StoryMap[i_story].desc,
 							"</a><br><br>");
@@ -68,6 +68,8 @@ var cdns=[], storyMap, i_story;
 //Inicia una Storymap
 function IniciaStoryMap(i_story)
 {
+	//Tancar la caixa de les histories
+	TancaFinestraLayer("triaStoryMap");
 	loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, /*alert,*/ i_story);
 	//Mode Pantalla Completa en iniciar la història:
 	//openFullscreen(document.documentElement);
@@ -191,6 +193,26 @@ var hihacanvis, node, attribute, i_styles
 						if (0==CommandMMNSetChangeDateTime(datejson))
 							hihacanvis=true;
 					}
+				}
+				else if (attribute.name=='mm-sels')
+				{
+					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
+					if (mmsels.length>3)
+					{
+						var sels;
+						try {
+							sels=JSON.parse(mmsels);
+						}
+						catch (e) {
+							alert(GetMessage("WrongFormat_mm_sels_Parameter", "storymap") + ": " + e + ". " +
+										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
+							break;
+						}
+						if (0==CommandMMNSelections(sels))
+							hihacanvis=true;
+					}
+					else
+						alert(GetMessage("WrongFormat_mm_sels_Parameter", "storymap"));
 				}
 			}
 			if (hihacanvis)

@@ -44,7 +44,7 @@ function CommandMMNSetZoom(costat)
 {
 	if (isNaN(costat))
 	{
-		alert(GetMessage("ZoomSizeFormatIncorrect", "commmands") + ":\n" + GetMessage("NumericalValueIsRequired", "commmands") +".");
+		alert(GetMessage("ZoomSizeIncorrectFormat", "commmands") + ":\n" + GetMessage("NumericalValueIsRequired", "commmands") +".");
 		return;
 	}
 	for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
@@ -64,7 +64,7 @@ function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
 	{
-		alert(GetMessage("CoordFormatIncorrect", "commands") + GetMessage("TwoNumericalValuesRequiredFormat", "commands") + ": {x: ##, y: ##}");
+		alert(GetMessage("CoordIncorrectFormat", "commands") + GetMessage("TwoNumericalValuesRequiredFormat", "commands") + ": {x: ##, y: ##}");
 			return 1;
 	}
 	CentraLaVista(punt.x, punt.y);
@@ -82,4 +82,62 @@ function CommandMMNSetLayersAndStyles(layers, styles)
 {
 	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, "CommandMMNSetLayersAndStyles");
 	return 0;
+}
+
+function CommandMMNSelections(selections)
+{
+var sel, capa, estil, i_estil;
+
+	for (var i_sel=0; i_sel<selections.length; i_sel++)
+	{	
+		sel=selections[i_sel];
+
+		if(typeof sel.ly === 'undefined' || typeof sel.q === 'undefined' || typeof sel.name === 'undefined')
+		{
+			alert(GetMessage("SelectionsIncorrectFormat", "commands") + GetMessage("LyQNameRequired", "commands") + ": {ly: NomCapa, q: FormulaConsulta, name: NomEstil}");
+				return 1;
+		}
+		if (null==(capa=DonaCapaDesDeIdCapa(sel.ly)))
+			continue;
+
+		estil=DonaEstilDesDeNomEstil(capa, sel.name);
+		if (estil)
+			i_estil=capa.estil.indexOf(estil);
+		else
+		{
+			i_estil=DuplicaEstilCapa(capa, 0, sel.name);
+			estil=capa.estil[i_estil];
+		}
+		
+		if(capa.model==model_vector)
+		{
+			for (var i_atr=0; i_atr<capa.atributs.length; i_atr++)
+			{
+				if(sel.name==capa.atributs[i_atr].nom)
+					continue;
+			}
+			capa.atributs[i_atr]={"nom": sel.name,
+						"FormulaConsulta": sel.q,
+						"desc": sel.name};
+			estil.NomCampSel=sel.name;
+		}
+		else
+		{
+			for (var i_c=0; i_c<estil.component.length; i_c++)
+			{
+				if (typeof estil.component[i_c].calcul!=="undefined" && estil.component[i_c].calcul!=null)
+					delete estil.component[i_c].calcul;
+				else if (typeof estil.component[i_c].FormulaConsulta!=="undefined" && estil.component[i_c].FormulaConsulta!=null)
+					delete estil.component[i_c].FormulaConsulta;
+				else //if (typeof estil.component[i_c].i_valor!=="undefined")
+					delete estil.component[i_c].i_valor;
+				estil.component[i_c].FormulaConsulta=sel.q;
+			}
+		}
+		if (capa.visible=="ara_no")
+			CanviaEstatVisibleCapa(i_capa, "si");
+
+		//Defineix el nou estil com estil actiu
+		capa.i_estil=i_estil;
+	}
 }

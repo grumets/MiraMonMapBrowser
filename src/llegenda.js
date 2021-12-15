@@ -773,7 +773,7 @@ function EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa)
 	return true;
 }
 
-function CanviaEstatVisibleCapa(icon_capa, i)
+function CanviaEstatVisibleCapaLlegenda(icon_capa, i)
 {
 var i_vista, capa=ParamCtrl.capa[i], capa2, grup_consultable=false;
 var nom_icona=TreuAdreca(icon_capa.src);
@@ -807,7 +807,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				       		if (ParamCtrl.LlegendaGrupsComARadials)
 							window.document["v_ll_capa"+i_capa].src=AfegeixAdrecaBaseSRC("semi_radio.gif");
 					}
-					CanviaEstatVisibleCapa(window.document["v_ll_capa"+i_capa],i_capa);
+					CanviaEstatVisibleCapaLlegenda(window.document["v_ll_capa"+i_capa],i_capa);
 					if (capa2.consultable=="si")
 					{
 						CanviaEstatConsultableCapa(window.document["c_ll_capa"+i_capa],i_capa);
@@ -999,7 +999,7 @@ function CanviaEstatCapa(i, estat)
 	if (estat=="visible")
 	{
 		var capa=ParamCtrl.capa[i];
-		CanviaEstatVisibleCapa(window.document["v_ll_capa"+i], i);
+		CanviaEstatVisibleCapaLlegenda(window.document["v_ll_capa"+i], i);
 		if ((capa.estil && capa.estil.length>1) || 
 			(capa.grup && ParamCtrl.LlegendaGrupsComARadials) ||
 			capa.AnimableMultiTime)
