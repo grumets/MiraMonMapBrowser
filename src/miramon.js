@@ -104,7 +104,10 @@ var IdProces=Math.random()*100000;
 var NIdProces=0;
 var NConsultesZero, NConsultesDigiZero, NCapesConsultables, NCapesDigiConsultables, NCapesCTipica=0;
 var timeoutCreaVistes=null;
-var Accio=null;
+var Accio={};
+var AccioAnarCoord=0x0001;
+var AccioConLoc=0x0002;
+var AccioValidacio=0x0004;
 
 //constants per i_nova_vista
 var NovaVistaPrincipal=-1;
@@ -3608,7 +3611,7 @@ var cdns=[];
 				"PortamAVistaGeneral();")));
 
 		// Activació de les consultes perquè hi ha alguna capa consultable
-		if(Accio==null || (Accio && ~Accio.accio&accio_validacio))
+		if(~Accio.accio&AccioValidacio)
 		{
 			for (i=0; i<ParamCtrl.capa.length; i++)
 			{
@@ -3658,7 +3661,7 @@ var cdns=[];
 			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
 				boto_p="inserta";
 			else if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
-				boto_p=(i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? "conval" : "conloc";
+				boto_p=(i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc";
 			else
 				boto_p="zoomfin";
 
@@ -3682,8 +3685,8 @@ var cdns=[];
 			}
 			if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
 			{
-				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? "conval" : "conloc",
-					   "alt": (i<ParamCtrl.capa.length && Accio && Accio.accio&accio_validacio) ? DonaCadenaLang({"cat":"validació", "spa":"validación", "eng":"validate", "fre":"validation"}) : DonaCadenaLang({"cat":"consulta per localització", "spa":"consulta por localización", "eng":"query by location", "fre":"requête par emplacement"}),
+				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc",
+					   "alt": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? DonaCadenaLang({"cat":"validació", "spa":"validación", "eng":"validate", "fre":"validation"}) : DonaCadenaLang({"cat":"consulta per localització", "spa":"consulta por localización", "eng":"query by location", "fre":"requête par emplacement"}),
 					   "funcio": "CanviaEstatClickSobreVista(\'ClickConLoc\');"};
 			}
 			if (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length))
@@ -6491,13 +6494,13 @@ function ComprovaOpcionsAccio()
 {
 	if(Accio.accio==null)
 	{
-		alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'REQUEST'",
+		/*alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'REQUEST'",
 							  "spa":"No se ha encontrado el parámetro 'REQUEST'",
 							  "eng":"Cannot find the 'REQUEST' parameter",
-							  "fre":"Le paramètre 'REQUEST' n'a pas été trouvé"}));
+							  "fre":"Le paramètre 'REQUEST' n'a pas été trouvé"}));*/
 		return false;
 	}
-	if(Accio.accio&accio_validacio)
+	if(Accio.accio&AccioValidacio)
 	{
 		if(Accio.servidor==null)
 		{
@@ -6586,22 +6589,22 @@ function ComprovaOpcionsAccio()
 				Accio.coord=null;
 			}
 			else
-				Accio.accio|=accio_conloc;
+				Accio.accio|=AccioConLoc;
 		}
 		if(Accio.valors)
 		{
 			//Intento buscar un punt on anar mitjançant els valors dels camps
 			// i si el trobo marco
-			if(dades_pendents_accio==false && BuscaValorAConsultesTipiques())
-				Accio.accio|=accio_conloc;
+			if(DadesPendentsAccio==false && BuscaValorAConsultesTipiques())
+				Accio.accio|=AccioConLoc;
 		}
 		else
 		{
-			dades_pendents_accio=true;
+			DadesPendentsAccio=true;
 			Accio.valors=new Array(Accio.capes.length);
 		}
 	}
-	else if(Accio.accio&accio_anar_coord || Accio.accio&accio_conloc)
+	else if(Accio.accio&AccioAnarCoord || Accio.accio&AccioConLoc)
 	{
 		if(Accio.coord==null)
 		{
@@ -6626,7 +6629,7 @@ function ComprovaOpcionsAccio()
 
 function SimulaEventOnClickPerConloc()
 {
-	if(Accio && Accio.coord)
+	if(Accio.coord)
 	{
 		PortamAPunt(Accio.coord.x, Accio.coord.y);
 		ParamCtrl.EstatClickSobreVista="ClickConLoc";
@@ -6641,7 +6644,7 @@ function SimulaEventOnClickPerConloc()
 	return null;
 }//Fi de SimulaEventOnClickPerConloc()
 
-var dades_pendents_accio=false;
+var DadesPendentsAccio=false;
 
 var ParamInternCtrl;
 
@@ -6914,8 +6917,6 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 
 function IniciaVisualitzacio()
 {
-//var clau=["BBOX=", "LAYERS=", "QUERY_LAYERS=", "LANGUAGE=", "CRS=" , "REQUEST=", "X=", "Y=", "BUFFER=",
-//		   "TEST_LAYERS=", "TEST_FIELDS=",  "TEST_VALUES=", "SERVERTORESPONSE=", "IDTRANS="];  //"CONFIG=" es tracta abans.
 var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
 var nou_CRS="";
 var win, i, j, l, capa;
@@ -7080,99 +7081,64 @@ var win, i, j, l, capa;
 		{
 			if(query["REQUEST"].toLowerCase()=="validaatributscoord")
 			{
-				if(Accio==null)
-					Accio=new CreaAccio(accio_validacio, null, null, 0, null, null, null, null, false);
-				else
-					Accio.accio=accio_validacio;
+				Accio.accio=AccioValidacio;
 			}
 			else if(query["REQUEST"].toLowerCase()=="anarcoord")
 			{
-				if(Accio==null)
-					Accio=new CreaAccio(accio_anar_coord, null, null, 0, null, null, null, null, false);
-				else
-					Accio.accio=accio_anar_coord;
+				Accio.accio=AccioAnarCoord;
 			}
 			else if(query["REQUEST"].toLowerCase()=="consultaperlocalitzacio")
 			{
-				if(Accio==null)
-					Accio=new CreaAccio(accio_conloc, null, null, 0, null, null, null, null, false);
-				else
-					Accio.accio=accio_conloc;
+				Accio.accio=AccioConLoc;
 			}
 		}
-		if(query["X"])
+		if(query["X"])  //Coordenada Y demanada per AnarACoordenada()
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, null, {"x": parseFloat(query["X"]), "y": 0}, 0, null, null, null, null, false);
+			if(!Accio.coord)
+				Accio.coord={"x": parseFloat(query["X"]), "y": 0};
 			else
-			{
-				if(Accio.coord==null)
-					Accio.coord={"x": parseFloat(query["X"]), "y": 0};
-				else
-					Accio.coord.x=parseFloat(query["X"]);
-			}
+				Accio.coord.x=parseFloat(query["X"]);
 		}
-		if(query["Y"])
+		if(query["Y"])  //Coordenada Y demanada per AnarACoordenada()
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, null, {"x": 0, "y": parseFloat(query["Y"])}, 0, null, null, null, null, false);
+			if(!Accio.coord)
+				Accio.coord={"x": 0, "y": parseFloat(query["Y"])};
 			else
-			{
-				if(Accio.coord==null)
-					Accio.coord={"x": 0, "y": parseFloat(query["Y"])};
-				else
-					Accio.coord.y=parseFloat(query["Y"]);
-			}
-
+				Accio.coord.y=parseFloat(query["Y"]);
 		}
-		if(query["BUFFER"]) //BUFFER
+		if(query["BUFFER"])  //Buffer al voltant de la coordenada X,Y demanada per AnarACoordenada()
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null,null, null, parseFloat(query["BUFFER"]), null, null, null, null,false);
-			else
-				Accio.buffer=parseFloat(query["BUFFER"]);
+			Accio.buffer=parseFloat(query["BUFFER"]);
 		}
-		if(query["TEST_LAYERS"])//TEST_LAYERS
+		if (query["STORYMAP"])
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null,null, null, 0, query["TEST_LAYERS"].split(","), null, null, null,false);
-			else
-				Accio.capes=query["TEST_LAYERS"].split(",");
+			Accio.storymap=parseInt(query["STORYMAP"]);
+		}
+		if(query["TEST_LAYERS"])
+		{
+			Accio.capes=query["TEST_LAYERS"].split(",");
 		}
 		if(query["TEST_FIELDS"])
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, null, null, 0, null, query["TEST_FIELDS"].split(","), null, null, false);
-			else
-				Accio.camps=query["TEST_FIELDS"].split(",")
+			Accio.camps=query["TEST_FIELDS"].split(",")
 		}
 		if(query["TEST_VALUES"])
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, null, null, 0, null, null, query["TEST_VALUES"].split(","), null, false);
-			else
-				Accio.valors=query["TEST_VALUES"].split(",")
+			Accio.valors=query["TEST_VALUES"].split(",")
 		}
 		if(query["SERVERTORESPONSE"])
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, query["SERVERTORESPONSE"], null, 0, null, null, null, null, false);
-			else
-				Accio.servidor=query["SERVERTORESPONSE"];
+			Accio.servidor=query["SERVERTORESPONSE"];
 		}
 		if(query["IDTRANS"])
 		{
-			if(Accio==null)
-				Accio=new CreaAccio(null, null, null, 0, null, null, null, query["IDTRANS"], false);
-			else
-				Accio.id_trans=query["IDTRANS"];
+			Accio.id_trans=query["IDTRANS"];
 		}
-
 		//"CONFIG=" es tracta abans.
 	}
 
-	if(Accio && NCapesCTipica < capa_consulta_tipica_intern.length)
-		dades_pendents_accio=true;
+	if(NCapesCTipica < capa_consulta_tipica_intern.length)
+		DadesPendentsAccio=true;
 
 	if (nou_env.MinX<1e300 && nou_env.MaxX>-1e300 && nou_env.MinY<1e300 && nou_env.MaxY>-1e300)
 	{
@@ -7188,13 +7154,13 @@ var win, i, j, l, capa;
 		RepintaMapesIVistes();
 	}
 	document.body.bgColor=ParamCtrl.ColorFonsPlana;
-	if(Accio && ComprovaOpcionsAccio())
+	if(ComprovaOpcionsAccio())
 	{
-		if(Accio.accio&accio_validacio || Accio.accio&accio_conloc)
+		if(Accio.accio&AccioValidacio || Accio.accio&AccioConLoc)
 		{
 			//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes
 			CreaLlegenda();
-			if(dades_pendents_accio==false)
+			if(DadesPendentsAccio==false)
 			{
 				if(Accio.coord)
 				{
@@ -7216,9 +7182,9 @@ var win, i, j, l, capa;
 					"y": ParamInternCtrl.PuntOri.y,
 					"m_voltant": ParamInternCtrl.vista.CostatZoomActual};
 		}
-		else if(Accio.accio&accio_anar_coord)
+		else if(Accio.accio&AccioAnarCoord)
 		{
-			dades_pendents_accio=false;
+			DadesPendentsAccio=false;
 			FormAnarCoord={"proj": true,
 					"x": Accio.coord.x,
 					"y": Accio.coord.y,
@@ -7227,18 +7193,23 @@ var win, i, j, l, capa;
 			var formulari=getLayer(window, "anarCoord_finestra").getElementsByTagName("form")[0];
 			if(formulari)
 				AnarACoordenada(formulari);
-		}
+		}		
 	}
 	else
 	{
-		if(Accio)
+		if(Accio.accio&AccioValidacio)
 		{
-			if(Accio.accio&accio_validacio)
-				EnviarRespostaAccioValidacio(false);
-			Accio=null;
-			dades_pendents_accio=false;
+			EnviarRespostaAccioValidacio(false);
 			CreaBarra(null);
 		}
+		if (typeof Accio.storymap !== "undefined")
+		{
+			if (Accio.storymap<0)
+				MostraFinestraTriaStoryMap();
+			else
+				IniciaStoryMap(Accio.storymap);
+		}
+		DadesPendentsAccio=false;
 		FormAnarCoord={"proj": true,
 					"x": ParamInternCtrl.PuntOri.x,
 					"y": ParamInternCtrl.PuntOri.y,

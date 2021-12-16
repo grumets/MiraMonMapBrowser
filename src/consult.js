@@ -113,7 +113,7 @@ var esNODATA, esLink, esImatge;
 		if(arrel.hasChildNodes())
 		{
 			var i_capa_validar=-1;
-			if(Accio && Accio.accio&accio_validacio && Accio.capes)
+			if(Accio && Accio.accio&AccioValidacio && Accio.capes)
 			{
 				for(i=0; i<Accio.capes.length; i++)
 				{
@@ -300,7 +300,7 @@ function MostraConsultaComHTML(consulta)
 			if(consulta.Atribut.length>0)
 			{
 				var i_capa_validar=-1;
-				if(Accio && Accio.accio&accio_validacio && Accio.capes)
+				if(Accio && Accio.accio&AccioValidacio && Accio.capes)
 				{
 					for(var i=0; i<Accio.capes.length; i++)
 					{
@@ -774,7 +774,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				  "\" alt=\"pop down\" onClick=\"opener.PopDownFinestra_multi_consulta();setTimeout('window.close()', 300);\" align=\"right\" class=\"invisiblewhenprint\">");
 
 	cdns.push("<center>",
-		(Accio && Accio.accio&accio_validacio) ?
+		(Accio && Accio.accio&AccioValidacio) ?
 		    ("<div align=\"left\" class=\"TextValidacio\">" +
 		     GetMessage("FollowingCoordinateSelected", "consult") +
 		     ":</div>") : "",
@@ -782,7 +782,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 		"<b>", GetMessage("Point"),"</b>",
 		 (DonaValorDeCoordActual(PuntConsultat.x,PuntConsultat.y,true,false)), "</div>");
 
-	if(Accio && Accio.accio&accio_validacio)
+	if(Accio && Accio.accio&AccioValidacio)
 	{
 	   //Actualitzo el punt consultat
 	   Accio.coord.x=PuntConsultat.x;
@@ -1229,7 +1229,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 			cal_crear=false;
 		capa.visible="ara_no";
 
-		if(Accio && Accio.accio&accio_validacio && ParamCtrl.IconaValidacio)
+		if(Accio && Accio.accio&AccioValidacio && ParamCtrl.IconaValidacio)
 		{
 			capa.objectes.features[0].seleccionat=true;
 			capa.visible="si";

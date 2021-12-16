@@ -56,7 +56,7 @@ var cdns=[], storyMap, i_story;
 						"<br>");
 		for (i_story=0; i_story<ParamCtrl.StoryMap.length; i_story++)
 		{
-			cdns.push("<a href=\"javascript:void(0)\" onclick=\"IniciaStoryMap(", i_story, ");\">",
+			cdns.push("<a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_story, ");\">",
 					"<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 							"<br>",
 							ParamCtrl.StoryMap[i_story].desc,
@@ -65,16 +65,22 @@ var cdns=[], storyMap, i_story;
 	contentFinestraLayer(win, name, cdns.join(""));
 }
 
-//Inicia una Storymap
-function IniciaStoryMap(i_story)
+function TancaIIniciaStoryMap(i_story)
 {
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
-	loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, /*alert,*/ i_story);
+	IniciaStoryMap(i_story);
+}
+
+//Inicia una Storymap
+function IniciaStoryMap(i_story)
+{
+	loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, null /*error*/, i_story);
 	//Mode Pantalla Completa en iniciar la història:
 	//openFullscreen(document.documentElement);
 	//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
 }
+
 
 //removes the <base> tag if it exists.
 function RemoveBaseHTMLTag(text_html)
@@ -94,8 +100,11 @@ function CreaStoryMap(text_html, extra_param)
 {
 var i_story=extra_param, elem;
 
-	elem=getFinestraLayer(window, "storyMap")
-	elem.innerHTML=RemoveBaseHTMLTag(text_html);
+	titolFinestraLayer(window, "storyMap", ParamCtrl.StoryMap[i_story].desc);
+
+	//elem=getFinestraLayer(window, "storyMap")
+	//elem.innerHTML=RemoveBaseHTMLTag(text_html);
+	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
 	ObreFinestra(window, "storyMap")
 	darrerNodeStoryMapVisibleExecutat=null;

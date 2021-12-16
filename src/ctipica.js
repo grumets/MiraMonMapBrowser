@@ -1403,7 +1403,7 @@ var id_camps_id_tesaure=null;
 		if(dades_pendents_accio)
 		{
 			dades_pendents_accio=false;
-			if(Accio && Accio.accio&accio_validacio)
+			if(Accio && Accio.accio&AccioValidacio)
 			{
 				//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes
 				CreaLlegenda();

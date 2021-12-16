@@ -1118,6 +1118,23 @@ var nom=name+SufixBarra;
 	}
 }//Fi de afegeixBotoABarraFinestraLayer()
 
+function titolFinestraLayer(win, name, titol)
+{
+var nom=name+SufixBarra;
+
+	for (var i=0; i<layerFinestraList.length; i++)
+	{
+	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
+	    {
+			layerFinestraList[i].titol=titol;		
+			//Omplo la layer barra amb els botons i el títol
+			OmpleBarraFinestraLayer(win,i);
+			return;
+	    }
+	}
+}//Fi de CanviaTitolBarraFinestraLayer()
+
+
 function getFinestraLayer(win, name)
 {
 	return getLayer(win, name+SufixFinestra);
@@ -2554,10 +2571,7 @@ var RespectarResolucioVistaImprimir=0x0020;  //Per contraposició a respectar àmb
 
 
 
-var accio_anar_coord=0x0001;
-var accio_conloc=0x0002;
-var accio_validacio=0x0004;
-
+/*
 function CreaAccio(accio,servidor, coord, buffer, capes, camps, valors, id_trans, feta)
 {
 	this.accio=accio;
@@ -2570,7 +2584,7 @@ function CreaAccio(accio,servidor, coord, buffer, capes, camps, valors, id_trans
 	this.id_trans=id_trans; //Identificador de la transacció
 	this.feta=feta; //feta:true--> acció despatxada, feta:false --> acció cancel·lada
 }
-
+*/
 /*LlistaServOWS=[]; es deixa només com a documentació del JSON
 function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 {
