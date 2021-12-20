@@ -108,10 +108,19 @@ function CreaStoryMap(text_html, extra_param)
 {
 var i_story=extra_param, elem;
 
-	titolFinestraLayer(window, "storyMap", DonaCadena(ParamCtrl.StoryMap[i_story].desc));
+	if (ParamCtrl.StoryMap[i_story].desc)
+		titolFinestraLayer(window, "storyMap", DonaCadena(ParamCtrl.StoryMap[i_story].desc));
 
-	//elem=getFinestraLayer(window, "storyMap")
-	//elem.innerHTML=RemoveBaseHTMLTag(text_html);
+	if (typeof ParamCtrl.StoryMap[i_story].MargeEsq!=="undefined" || typeof ParamCtrl.StoryMap[i_story].MargeSup!=="undefined" ||
+	    ParamCtrl.StoryMap[i_story].Ample || ParamCtrl.StoryMap[i_story].Alt)
+	{
+		var rect=getRectFinestraLayer(window, "storyMap");
+		moveFinestraLayer(window, "storyMap", (typeof ParamCtrl.StoryMap[i_story].MargeEsq!=="undefined" && ParamCtrl.StoryMap[i_story].MargeEsq>=0) ? ParamCtrl.StoryMap[i_story].MargeEsq : rect.esq, 
+				(typeof ParamCtrl.StoryMap[i_story].MargeSup!=="undefined" && ParamCtrl.StoryMap[i_story].MargeSup>=0) ? ParamCtrl.StoryMap[i_story].MargeSup : rect.sup, 
+				(ParamCtrl.StoryMap[i_story].Ample) ? ParamCtrl.StoryMap[i_story].Ample : rect.ample, 
+				(ParamCtrl.StoryMap[i_story].Alt) ? ParamCtrl.StoryMap[i_story].Alt : rect.alt);
+	}
+
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
 	ObreFinestra(window, "storyMap")

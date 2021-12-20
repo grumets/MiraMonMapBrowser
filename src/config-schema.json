@@ -190,11 +190,13 @@
 		"MargeEsqVista": { 
 			"description": "Marge des de la vora esquerra de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
 			"type": "number",
+			"minimum": 0,
 			"multipleOf" : 1
 		},
 		"MargeSupVista": { 
 			"description": "Marge des de la vora superior de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
 			"type": "number",
+			"minimum": 0,
 			"multipleOf" : 1
 		},
 		"fullScreen": {
@@ -350,23 +352,25 @@
 					"Ample": { 
 						"description": "Ample del fitxer de la imatge que fa mapa de situació en píxels",
 						"type": "number",
-						"minimum": 0,
+						"minimum": 1,
 						"multipleOf" : 1
 					},
 					"Alt": { 
 						"description": "Alt del fitxer de la imatge que fa mapa de situació en píxels. Opcional en el cas servidor WMS o es calcula automaticament.",
 						"type": "number",
-						"minimum": 0,
+						"minimum": 1,
 						"multipleOf" : 1
 					},
 					"MargeEsq": {
 						"description": "Marge des de la vora esquerra de la divisió (layer) i el mapa de situació. Opcional",
 						"type": "number",
+						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"MargeSup": {
 						"description": "Marge des de la vora superior de la divisió (layer) i el mapa de situació. Opcional",
 						"type": "number",
+						"minimum": 0,
 						"multipleOf" : 1
 					}
 				}
@@ -798,19 +802,29 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
-						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles",
+						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. No implementat encara",
 						"$ref": "#/definitions/envolupantCRS_2D" 
 					},
-					"ample":
-					{
-						"description": "Ample de la caixa que conté l historìa. Opcional; si no hi és val 500",
+					"Ample": {
+						"description": "Ample de la caixa que conté la historìa. Opcional; si no hi és val 500",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"Alt": {
+						"description": "Alt de la caixa que conté la historìa. Opcional; si no hi és val 400",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MargeEsq": {
+						"description": "Marge esquerra de la caixa que conté la historìa. Opcional",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
-					"alt":
-					{
-						"description": "Alt de la caixa que conté l historìa. Opcional; si no hi és val 300",
+					"MargeSup": {
+						"description": "Marge superior de la caixa que conté la historìa. Opcional",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1

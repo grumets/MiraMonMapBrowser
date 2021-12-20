@@ -1171,6 +1171,14 @@ var RectVistaAbansFullScreen=null;
 
 function PortaVistaAFullScreen()
 {
+	//Si hi ha més d'una vista avisar que no te sentit fer-ho i plegar
+	if (ParamCtrl.VistaPermanent[0].length>1)
+	{
+		alert(DonaCadenaLang({"cat":"No es possible saltar a pantalla completa en un navegador multivista.", "spa":"No es posible saltar a pantalla completa en un navegador multivista.",
+						  "eng":"You cannot go full screen in a multiview browser.", "fre":"Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples."}));
+		ParamCtrl.fullScreen=0;
+		return;
+	}
 	var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
 	//Guardar la posició de la finestra de la vista.
 	RectVistaAbansFullScreen=getRectLayer(vista);
@@ -1178,6 +1186,18 @@ function PortaVistaAFullScreen()
 	//Canviar la posició de la finestra de la vista per ocupar tota la pantalla
 	moveLayer(vista, 0, 0, window.document.body.clientWidth, window.document.body.clientHeight);
 	RepintaMapesIVistes();
+}
+
+function PortaVistaANormalScreen()
+{
+	if (!RectVistaAbansFullScreen)
+		return;
+	var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
+
+	//Recuperar la posició de la finestra de la vista.
+	moveLayer(vista, RectVistaAbansFullScreen.esq, RectVistaAbansFullScreen.sup, RectVistaAbansFullScreen.ample, RectVistaAbansFullScreen.alt);
+	RectVistaAbansFullScreen=null;
+	//Recuperar la posició de la caixa de coordenades.
 }
 
 function GoFullScreenEvent(event)
@@ -1193,16 +1213,17 @@ function GoFullScreenEvent(event)
 	dontPropagateEvent(event);
 }
 
-/*function ExitFullScreenESC(event)
-{
-	dontPropagateEvent(event);
-}*/
-
 function ExitFullScreenEvent(event)
 {
 	if (!ParamCtrl.fullScreen)  //This should not happen
 		alert("Not in full screen");
-	closeFullscreen();  //Això provoca un ExitFullScreenESC()
+	if (ParamCtrl.fullScreen==2)
+		closeFullscreen();
+	else if (ParamCtrl.fullScreen==1)
+	{
+		ParamCtrl.fullScreen=0;
+		ResizeMiraMonMapBrowser()
+	}
 	dontPropagateEvent(event);
 }
 
@@ -7146,6 +7167,10 @@ var win, i, j, l, capa;
 		{
 			Accio.id_trans=query["IDTRANS"];
 		}
+		if(query["FULLSCR"])
+		{
+			Accio.fullscreen=(query["FULLSCR"]) ? true: false;
+		}
 		//"CONFIG=" es tracta abans.
 	}
 
@@ -7221,6 +7246,12 @@ var win, i, j, l, capa;
 			else
 				IniciaStoryMap(Accio.storymap);
 		}
+		if (Accio.fullscreen)
+		{
+			ParamCtrl.fullScreen=1;
+			setTimeout(PortaVistaAFullScreen, 1000);
+		}
+
 		DadesPendentsAccio=false;
 		FormAnarCoord={"proj": true,
 					"x": ParamInternCtrl.PuntOri.x,
@@ -7239,26 +7270,16 @@ var win, i, j, l, capa;
 
 function ResizeMiraMonMapBrowser()
 {
-	if (ParamCtrl.fullScreen && !isFullscreen())
+	if ((ParamCtrl.fullScreen==2 && !isFullscreen()) || 
+		(RectVistaAbansFullScreen && ParamCtrl.fullScreen==0))
 	{
-		ParamCtrl.fullScreen=false;
-
-		var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
-
-		//Recuperar la posició de la finestra de la vista.
-		moveLayer(vista, RectVistaAbansFullScreen.esq, RectVistaAbansFullScreen.sup, RectVistaAbansFullScreen.ample, RectVistaAbansFullScreen.alt);
-		//Recuperar la posició de la caixa de coordenades.
+		ParamCtrl.fullScreen=0;
+		PortaVistaANormalScreen();
 	}
-	else if (!ParamCtrl.fullScreen && isFullscreen())
+	else if (!ParamCtrl.fullScreen!=2 && isFullscreen())
 	{
 		//Si hi ha més d'una vista avisar que no te sentit fer-ho i plegar
-		if (ParamCtrl.VistaPermanent[0].length>1)
-		{
-			alert(DonaCadenaLang({"cat":"No es possible saltar a pantalla completa en un navegador multivista.", "spa":"No es posible saltar a pantalla completa en un navegador multivista.",
-							  "eng":"You cannot go full screen in a multiview browser.", "fre":"Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples."}));
-			return;
-		}
-		ParamCtrl.fullScreen=true;
+		ParamCtrl.fullScreen=2;
 		setTimeout(PortaVistaAFullScreen, 1000);  //Hi ha un event de ResizeMiraMonMapBrowser() pendent i causat per openFullscreen que s'executa en 200 mil·lisegons i jo demano això després.
 	}
 	setTimeout(ChangeSizeMiraMonMapBrowser,200);
@@ -7381,6 +7402,12 @@ function MovementMiraMonMapBrowser(event)
 //https://stackoverflow.com/questions/33083484/on-ctrlmousewheel-event
 function WheelMiraMonMapBrowser(event)
 {
+var elem;
+	if (IStoryActive!==null)
+		return;
+	elem=getFinestraLayer(window, "video");
+	if(isLayer(elem) && isLayerVisible(elem))
+		return;
 	if (event.shiftKey)
 		MouLaVistaEventDeSalt(event, Math.sign(event.deltaY)*0.1, (event.altKey) ? -Math.sign(event.deltaY)*0.1 : (event.ctrlKey ? Math.sign(event.deltaY)*0.1 : 0));
 	else if (event.ctrlKey)

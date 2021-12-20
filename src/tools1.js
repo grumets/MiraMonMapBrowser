@@ -1263,6 +1263,15 @@ function removeFinestraLayer(win, name)
 		removeLayer(div);
 }
 
+function getRectFinestraLayer(win, name)
+{
+	var elem=getFinestraLayer(win, name)
+	var rect=getRectLayer(elem);
+	rect.alt+=AltBarraFinestraLayer;
+	rect.sup-=AltBarraFinestraLayer;
+	return rect;
+}
+
 function moveFinestraLayer(win, name, x, y, w, h)
 {
 	moveLayer(getLayer(win, name+SufixBarra), x, y, w, AltBarraFinestraLayer);
