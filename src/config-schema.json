@@ -785,8 +785,8 @@
 				"required": ["desc", "url"],
 				"properties": {
 					"desc": {
-						"description": "Títol de la historia.",
-						"type": "string" 
+						"description": "Títol de la historia",
+						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"src":{
 						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la historia en format JPEG, PNG... Opcional",
@@ -795,11 +795,10 @@
 					},
 					"url": {
 						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}' mm-layers='layerId1,layerId2' mm-styles='styleNom1,styleNom2' mm-sels='{'ly': NomDeCapa, 'q': FormulaConsulta, 'name': NomEstil}' (si la FormulaConsulta necessita cometes aquestes poden ser una dieresis (¨))",
-						"type": "string",
-						"format": "uri"
+						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
-						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles.",
+						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles",
 						"$ref": "#/definitions/envolupantCRS_2D" 
 					},
 					"ample":
@@ -1290,7 +1289,7 @@
 						}
 					},
 					"transparencia":	{
-						"description": "Indica si la capa pot ser potencialment transparent o semitransparent en la visualització: no (opac), si (transparent), semitransparent (semitransparent, propi de MiraMon. Opcional",
+						"description": "Indica si la capa pot ser potencialment transparent o semitransparent en la visualització: no (opac), si (transparent), semitransparent (semitransparent, propi de MiraMon). Opcional",
 						"enum": ["opac", "transparent", "semitransparent"]
 					},															
 					"CostatMinim": {

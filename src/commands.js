@@ -135,7 +135,7 @@ var sel, capa, estil, i_estil;
 			}
 		}
 		if (capa.visible=="ara_no")
-			CanviaEstatVisibleCapa(i_capa, "si");
+			CanviaEstatVisibleCapa(ParamCtrl.capa.indexOf(capa), "si");
 
 		//Defineix el nou estil com estil actiu
 		capa.i_estil=i_estil;

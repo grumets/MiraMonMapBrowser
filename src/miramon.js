@@ -898,6 +898,14 @@ function CanviaIdioma(s)
 	elem=getFinestraLayer(window, "mostraLlinatge");
 	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
 		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});
+
+	if (IStoryActive!==null)
+	{
+		if (IStoryActive<0)
+			MostraFinestraTriaStoryMap();
+		else
+			IniciaStoryMap(IStoryActive);
+	}
 }
 
 function DonaIndexNivellZoom(costat)
@@ -2159,9 +2167,13 @@ function TancaFinestraLayer(nom_finestra)
 	else if (nom_finestra=="anarCoord")
 		TancaFinestra_anarCoord();
 	else if (nom_finestra=="video")
-		TancaFinestra_video();
-	if (nom_finestra=="editarVector")
+		TancaFinestra_video();	
+	else if (nom_finestra=="editarVector")
 		TancaFinestra_editarVector();
+	else if (nom_finestra=="triaStoryMap")
+		TancaFinestra_triaStoryMap();
+	else if (nom_finestra=="storyMap")
+		TancaFinestra_storyMap();
 	else if (nom_finestra.length>prefixNovaVistaFinestra.length && nom_finestra.substring(0, prefixNovaVistaFinestra.length) == prefixNovaVistaFinestra)
 		TancaFinestra_novaFinestra(nom_finestra, NovaVistaFinestra);
 	else if (nom_finestra.length>prefixHistogramaFinestra.length && nom_finestra.substring(0, prefixHistogramaFinestra.length) == prefixHistogramaFinestra)

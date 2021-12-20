@@ -38,12 +38,19 @@
 
 "use strict"
 
+var IStoryActive=null;
+
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
 {
 	if (!ObreFinestra(window, "triaStoryMap"))
 		return;
 	OmpleFinestraTriaStoryMap(window, "triaStoryMap");
+}
+
+function TancaFinestra_triaStoryMap()
+{
+	IStoryActive=null;
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
@@ -59,10 +66,11 @@ var cdns=[], storyMap, i_story;
 			cdns.push("<a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_story, ");\">",
 					"<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 							"<br>",
-							ParamCtrl.StoryMap[i_story].desc,
+							DonaCadena(ParamCtrl.StoryMap[i_story].desc),
 							"</a><br><br>");
 		}
 	contentFinestraLayer(win, name, cdns.join(""));
+	IStoryActive=-1;
 }
 
 function TancaIIniciaStoryMap(i_story)
@@ -75,7 +83,7 @@ function TancaIIniciaStoryMap(i_story)
 //Inicia una Storymap
 function IniciaStoryMap(i_story)
 {
-	loadFile(ParamCtrl.StoryMap[i_story].url, "text/html", CreaStoryMap, null /*error*/, i_story);
+	loadFile(DonaCadena(ParamCtrl.StoryMap[i_story].url), "text/html", CreaStoryMap, null /*error*/, i_story);
 	//Mode Pantalla Completa en iniciar la història:
 	//openFullscreen(document.documentElement);
 	//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
@@ -100,15 +108,21 @@ function CreaStoryMap(text_html, extra_param)
 {
 var i_story=extra_param, elem;
 
-	titolFinestraLayer(window, "storyMap", ParamCtrl.StoryMap[i_story].desc);
+	titolFinestraLayer(window, "storyMap", DonaCadena(ParamCtrl.StoryMap[i_story].desc));
 
 	//elem=getFinestraLayer(window, "storyMap")
 	//elem.innerHTML=RemoveBaseHTMLTag(text_html);
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
 	ObreFinestra(window, "storyMap")
+	IStoryActive=i_story;
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
+}
+
+function TancaFinestra_storyMap()
+{
+	IStoryActive=null;
 }
 
 function isScrolledIntoView(el) {
