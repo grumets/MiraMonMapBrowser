@@ -134,17 +134,20 @@ function TancaFinestra_storyMap()
 	IStoryActive=null;
 }
 
-function isScrolledIntoView(el) {
+function isElemScrolledIntoViewDiv(el, div, partial) 
+{
+	var rect_el = el.getBoundingClientRect();
+	var rect_div=div.getBoundingClientRect();
 
-    var rect = el.getBoundingClientRect();
-    var elemTop = rect.top;
-    var elemBottom = rect.bottom;
-
-    // Only completely visible elements return true:
-    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-    // Partially visible elements return true:
-    //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
-    return isVisible;
+	if (partial)
+	{
+		//Partially visible elements return true:
+		//return rect_div.top < rect_el.bottom && rect_div.bottom > rect_el.top;
+		return rect_div.top <= rect_el.top+rect_el.height*partial && rect_div.bottom >= rect_el.top;
+	}
+	//Only completely visible elements return true:
+	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
+	return rect_div.top <= rect_el.top && rect_div.bottom >= rect_el.bottom;
 }
 
 var darrerNodeStoryMapVisibleExecutat=null;
@@ -152,12 +155,15 @@ var darrerNodeStoryMapVisibleExecutat=null;
 function RecorreNodesFillsAttributsStoryMapVisible(nodes)
 {
 var hihacanvis, node, attribute, i_styles
+
+	var div=getFinestraLayer(window, "storyMap");
+
 	for (var i = 0; i < nodes.length; i++)
 	{
 		node=nodes[i];
 		if (node.nodeType!=Node.ELEMENT_NODE)
 			continue;
-		if (!isScrolledIntoView(node))
+		if (!isElemScrolledIntoViewDiv(node, div, 0.85))
 			continue;
 		hihacanvis=false;
 

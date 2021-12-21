@@ -6954,6 +6954,8 @@ var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
 var nou_CRS="";
 var win, i, j, l, capa;
 
+	document.getElementById(ParamCtrl.containerName).style.overflow="hidden";
+	document.getElementById(ParamCtrl.containerName).style.width="100%";
 	document.getElementById(ParamCtrl.containerName).innerHTML="";
 	if (ParamCtrl.AdrecaBaseSRC)
 		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
