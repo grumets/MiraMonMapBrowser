@@ -66,6 +66,7 @@ IncludeScript("ctipica.js");
 IncludeScript("consult.js");
 IncludeScript("consola.js");
 IncludeScript("imgrle.js");
+IncludeScript("imgtiff.js");
 IncludeScript("geomet.js");
 IncludeScript("vector.js");
 IncludeScript("paletes.js");
@@ -2417,21 +2418,21 @@ function MostraFinestraEnllacWMS()
 
 function DonaDescripcioTipusServidor(tipus)
 {
-    if (tipus=="TipusWMS")
+	if (tipus=="TipusWMS")
 		return "WMS";
-    if (tipus=="TipusWMS_C")
+	if (tipus=="TipusWMS_C")
 		return "WMS-C";
-    if (tipus=="TipusWMTS_REST")
+	if (tipus=="TipusWMTS_REST")
 		return "WMTS RESTful";
-    if (tipus=="TipusWMTS_KVP")
+	if (tipus=="TipusWMTS_KVP")
 		return "WMTS KVP";
-    if (tipus=="TipusWMTS_SOAP")
+	if (tipus=="TipusWMTS_SOAP")
 		return "WMTS SOAP";
-    /*if (tipus=="TipusGoogle_KVP")
+	/*if (tipus=="TipusGoogle_KVP")
 		return "Google KVP";*/
-    if (tipus=="TipusWFS")
+	if (tipus=="TipusWFS")
 		return "WFS";
-    if (tipus=="TipusSOS")
+	if (tipus=="TipusSOS")
 		return "SOS";
 	if(tipus=="TipusOAPI_Maps")
 		return "OAPI Maps";
@@ -2439,7 +2440,7 @@ function DonaDescripcioTipusServidor(tipus)
 		return "OAPI Map Tiles";
 	if(tipus=="TipusOAPI_Features")
 		return "OAPI Features";
-    return "";
+	return "";
 }
 
 //Si mode==0 dona un enllaç amb la URL com a text subratllat
@@ -4640,7 +4641,7 @@ function PortamASeleccio()
 function OmpleVistaCapa(nom_vista, vista, i)
 {
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
-	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps")
+	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET")
 	{
 		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
@@ -4793,10 +4794,16 @@ function onErrorCanviaImatge(event)
 	this.src="1tran.gif";
 }
 
+function CalImatgeBinaria(capa)
+{
+	return capa.FormatImatge=="application/x-img" || 
+	    (capa.FormatImatge=="image/tiff" && capa.tipus=="TipusHTTP_GET")
+}
+
 
 function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
-	if (ParamCtrl.capa[i_capa].FormatImatge=="application/x-img")
+	if (CalImatgeBinaria(ParamCtrl.capa[i_capa]))
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
 	{
@@ -5992,7 +5999,7 @@ var p, unitats_CRS;
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
 											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
-											((capa.FormatImatge=="application/x-img") ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
+											(CalImatgeBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
 				}
 			}
 		}
@@ -7017,7 +7024,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "storyMap", {"cat":"titol del relat", "spa":"título del ralato", "eng": "story title", "fre":"titre de l'histoire"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
 	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createLayer(window, "menuContextualCapa", 277, 168, 140, 140, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
+	createLayer(window, "menuContextualCapa", 277, 168, 145, 240, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
 	createFinestraLayer(window, "editarVector", {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert a new point", "fre":"Insérer un nouveaux point"}, boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", {"cat":"Informació del resultat de la transacció", "spa":"Información del resulado de la transacción", "eng": "Information about the result of the transaction", "fre":"Informations sur les résultats de la transaction"}, boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);

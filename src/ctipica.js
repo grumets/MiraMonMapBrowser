@@ -1400,9 +1400,9 @@ var id_camps_id_tesaure=null;
 		//Ja les tinc totes carregades i ja puc iniciar les consultes típiques
 		IniciaConsultesTipiques();
 		CreaConsultesTipiques();
-		if(dades_pendents_accio)
+		if(DadesPendentsAccio)
 		{
-			dades_pendents_accio=false;
+			DadesPendentsAccio=false;
 			if(Accio && Accio.accio&AccioValidacio)
 			{
 				//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes

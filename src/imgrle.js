@@ -570,9 +570,12 @@ var j, i, comptador, acumulat, i_byte=0;
 
 function ErrorImatgeBinariaCapaCallback(text, extra_param)
 {
-var valors=ParamCtrl.capa[extra_param.i_capa].valors
-
 	alert(text);
+
+	if (!extra_param)
+		return;
+
+	var valors=ParamCtrl.capa[extra_param.i_capa].valors
 	CanviaEstatEventConsola(null, extra_param.i_event, EstarEventError);
 
 	//arrayBuffer és "undefined" si la banda no està implicada al dibuixat. No em queda més remei que fer això.
@@ -2267,6 +2270,11 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	}
 }
 
+function CanviaImatgeBinariaCapaIndirectCallback(param)
+{
+	CanviaImatgeBinariaCapaCallback(param.dades, param.extra_param);
+}
+
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
 {
 var i_v, dv=[], mes_duna_v;
@@ -2276,7 +2284,8 @@ var histograma=null, imgData, ctx;
 var data;
 //cal_histo=false;
 
-	CanviaEstatEventConsola(null, extra_param.i_event, EstarEventTotBe);
+	if (typeof extra_param.i_event!=="undefined")
+		CanviaEstatEventConsola(null, extra_param.i_event, EstarEventTotBe);
 
 	//Carrego la banda que m'ha passat
 	if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
@@ -2448,6 +2457,11 @@ var data;
 	}
 }
 
+function CanviaImatgeBinariaCapaIndirect(param)
+{
+	return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+}
+
 //Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per atributs calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
@@ -2566,18 +2580,30 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				//Pot ser que aquesta v[i] ens envii a una altre capa i un altre temps i amb uns altres parametres addicionals si hi ha un calcul en aquesta banda.
 				var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
 				var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
-				var i_valor=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
+				var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
 				var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
 
-				var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2);
-				//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
-				if (valors2[i_valor].param)
+				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET")
 				{
-					for (var i_param=0; i_param<valors2[i_valor].param.length; i_param++)
-						url_dades+="&"+valors2[i_valor].param[i_param].clau.nom+"="+valors2[i_valor].param[i_param].valor.nom;
+					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, vista))
+					{
+						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirect);
+						return;
+					}
+					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 				}
-				i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
-				loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {"imatge": imatge, "vista": vista, "i_capa": i_capa, "i_data": i_data2, "i_estil": i_estil2, "i_valor": i, "i_event": i_event, "nom_funcio_ok" : nom_funcio_ok, "funcio_ok_param" : funcio_ok_param});
+				else
+				{
+					var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2);
+					//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
+					if (valors2[i_valor2].param)
+					{
+						for (var i_param=0; i_param<valors2[i_valor2].param.length; i_param++)
+							url_dades+="&"+valors2[i_valor2].param[i_param].clau.nom+"="+valors2[i_valor2].param[i_param].valor.nom;
+					}
+					i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
+					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
+				}
 			}
 		}
 		CanviaCursorSobreVista("progress");

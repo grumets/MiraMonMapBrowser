@@ -763,7 +763,6 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 			if (i==-1)
 				break;
 			s=s.substring(0,i) + DonaDataJSONComATextCompacte(capa.data[i_data_sel]) + s.substring(i+6);
-
 		}
 		while(true)
 		{
