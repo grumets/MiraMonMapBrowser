@@ -2457,11 +2457,6 @@ var data;
 	}
 }
 
-function CanviaImatgeBinariaCapaIndirect(param)
-{
-	return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
-}
-
 //Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per atributs calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
@@ -2587,7 +2582,18 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				{
 					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, vista))
 					{
-						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirect);
+						//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2), TipusEventHttpGet),
+								CanviaImatgeTiFFIndirect: function (param){
+									CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
+									return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+								},
+								ErrorImatgeTIFF: function (error){
+									alert(error);
+									CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+								}
+							};								
+						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
 						return;
 					}
 					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);

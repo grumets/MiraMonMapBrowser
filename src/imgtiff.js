@@ -78,10 +78,8 @@ async function loadGeoTIFF() {
 	window.GeoTIFFfromUrl = fromUrl;
 }
 
-async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+function DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2)
 {
-	if (!window.GeoTIFFfromUrl)
-		await loadGeoTIFF();
 	var capa = ParamCtrl.capa[i_capa2];
 	var url = capa.servidor;
 	var valor2 = capa.valors[i_valor2];
@@ -91,7 +89,16 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			url += '/';
 		url += valor2.url;
 	}
-	url=CanviaVariablesDeCadena(url, capa, i_data2);
+	return CanviaVariablesDeCadena(url, capa, i_data2);
+}
+
+async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+{
+	if (!window.GeoTIFFfromUrl)
+		await loadGeoTIFF();
+	var capa = ParamCtrl.capa[i_capa2];
+	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2);
+	var valor2 = capa.valors[i_valor2];
 
 	var tiff = await GeoTIFFfromUrl(url);
 

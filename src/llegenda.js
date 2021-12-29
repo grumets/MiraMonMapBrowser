@@ -130,7 +130,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		return;
 	}*/
 
-	if (!estil.component || estil.component.length==0)
+	if (!estil.component || estil.component.length==0 || estil.component.length>2)
 		return;
 
 	//La llegenda es pot generar a partir d'estirar la paleta.
@@ -544,6 +544,9 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 							"</td>");
 	
 
+			//Si la capa té una paleta, defineixo els colors de la llegenda aquí.
+			CreaItemLlegDePaletaSiCal(i, capa.i_estil); 
+
 			//Icona o color general per tota la capa en cas de simbol únic.
 			if (capa.estil && capa.estil.length && capa.estil[capa.i_estil].ItemLleg && 
 				capa.estil[capa.i_estil].ItemLleg.length==1 &&
@@ -704,9 +707,6 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 				//}				
 			}
 
-			//Si la capa té una paleta, defineixo els colors de la llegenda aquí.
-			CreaItemLlegDePaletaSiCal(i, capa.i_estil); 
-		
 			//Llegenda si hi ha més d'un item
 			estil=capa.estil[capa.i_estil];
 			if (estil.ItemLleg && estil.ItemLleg.length>1 && 

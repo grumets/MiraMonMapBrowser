@@ -52,6 +52,7 @@ var TipusEventGetRecordByIdLlinatge=11;
 var TipusEventFeatureInsertTransaction=12;
 var TipusEventFeatureUpdateTransaction=13;
 var TipusEventFeatureDeleteTransaction=14;
+var TipusEventHttpGet=15;
 
 var EstarEventPendent=1;
 var EstarEventError=2;

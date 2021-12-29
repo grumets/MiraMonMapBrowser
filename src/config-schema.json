@@ -1360,7 +1360,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"TipusObj":{ 
-									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Quan el model de dades és vector només està disponible per S (símbols-punts) però en un futur es suportaran L (línies) o P (polígons)",
+									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
 									"enum": [null, "L", "P", "S", "I"] 
 								},
 								"component": {
