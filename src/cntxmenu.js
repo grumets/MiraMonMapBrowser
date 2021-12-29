@@ -233,7 +233,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (/*(capa.tipus=="TipusWMS" && capa.FormatImatge=="application/x-img") ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+	if (/*((capa.tipus=="TipusWMS" || capa.tipus=="TipusHTTP_GET") && EsCapaBinaria(capa)) ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,", -1);TancaContextMenuCapa();\">",
 				GetMessage("ComputeQuality", "cntxmenu"), "</a><br>");
@@ -276,7 +276,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].histograma)
+	if (EsImatgeBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].histograma)
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraHistograma(", i_capa, ");TancaContextMenuCapa();\">");
@@ -306,7 +306,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.FormatImatge=="application/x-img" && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio && capa.estil[capa.i_estil].component[0].representacio.tipus=="3d")
+	if (EsImatgeBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio && capa.estil[capa.i_estil].component[0].representacio.tipus=="3d")
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", GetMessage("Surface", "cntxmenu"), " 3D</a><br>");
@@ -320,14 +320,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.FormatImatge=="application/x-img" || capa.model==model_vector)
+	if (EsImatgeBinaria(capa) || capa.model==model_vector)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioCondicional(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("Selection"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.FormatImatge=="application/x-img")
+	if (EsImatgeBinaria(capa))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraReclassificaCapa(",i_capa,");TancaContextMenuCapa();\">",
 				GetMessage("Reclassification", "cntxmenu"), "</a><br>");
@@ -381,7 +381,7 @@ var capa=ParamCtrl.capa[i_capa];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 				GetMessage("Metadata"), "</a><br>");
 	}
-	if (/*(capa.tipus=="TipusWMS" && capa.FormatImatge=="application/x-img") || */capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+	if (/*((capa.tipus=="TipusWMS" || capa.tipus=="TipusHTTP_GET") && EsImatgeBinaria(capa)) || */capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,",",i_estil,");TancaContextMenuCapa();\">",
 				GetMessage("ComputeQuality", "cntxmenu"), "</a><br>");
@@ -2434,7 +2434,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			continue;
 		capa=ParamCtrl.capa[i];
 		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
-			capa.FormatImatge!="application/x-img" || !capa.valors)
+			!EsCapaBinaria(capa) || !capa.valors)
 			continue;
 		hi_ha_rasters++;
 		break;
@@ -2540,7 +2540,7 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			continue;
 		capa=ParamCtrl.capa[i];
 		if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
-			capa.FormatImatge!="application/x-img" || !capa.valors)
+			!EsCapaBinaria(capa) || !capa.valors)
 			continue;
 		if(!EsCapaAmbAlgunEstilAmbCategories(capa))
 			continue;
@@ -2738,14 +2738,14 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 			{
 				// Quan l'origen és vector només vull veure les capes ràster o la pròpia i_capa
 				if (i!=i_capa && (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
-					!EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa]) || capa.FormatImatge!="application/x-img" || !capa.valors))
+					!EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa]) || !EsCapaBinaria(capa) || !capa.valors))
 					continue;
 			}
 			else
 			{
-				// Quan l'origen és ràster ho vull tot el que sigui vector o application/x-img
+				// Quan l'origen és ràster ho vull tot el que sigui vector o capa binària
 				if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
-					((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || (capa.model!=model_vector && (capa.FormatImatge!="application/x-img" || !capa.valors)))
+					((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || (capa.model!=model_vector && (!EsCapaBinaria(capa) || !capa.valors)))
 					continue;
 			}
 			n_capa++;
@@ -2761,7 +2761,7 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 			   continue;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
-				((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || capa.FormatImatge!="application/x-img" || !capa.valors)
+				((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || !EsCapaBinaria(capa) || !capa.valors)
 				continue;
 			n_capa++;
 			if (i_capa_unica==-1)
@@ -3074,17 +3074,17 @@ var cdns=[], capa, nc, capa_def, origen_vector;
 			{
 				if(origen_vector)
 				{
-					if (i!=i_capa && (capa.FormatImatge!="application/x-img" || !capa.valors))
+					if (i!=i_capa && (!EsCapaBinaria(capa) || !capa.valors))
 						continue;
 				}
 				else
 				{
-					// Quan l'origen és ràster ho vull tot el que sigui vector o application/x-img
-					if (capa.model!=model_vector && (capa.FormatImatge!="application/x-img" || !capa.valors))
+					// Quan l'origen és ràster ho vull tot el que sigui vector o capa binària
+					if (capa.model!=model_vector && (!EsCapaBinaria(capa) || !capa.valors))
 						continue;
 				}
 			}
-			else if(capa.FormatImatge!="application/x-img" || !capa.valors)
+			else if(!EsCapaBinaria(capa) || !capa.valors)
 				continue;
 			if (param.nomes_categoric && !EsCapaAmbAlgunEstilAmbCategories(capa))
 				continue;
