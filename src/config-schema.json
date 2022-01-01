@@ -1003,7 +1003,7 @@
 				"type": "object",
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si el model és ràster (o null) i és null s'agafa el ServidorLocal. Si el model és vector i no és null s'assumeix un WFS amb GML, i si no existeix servidor, és a dir, l'objecte és undefined, vol dir que els objectes estan definits directament al config.json del navegador i no es demanen a cap servidor",					
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i els model és vector vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON); i en aquest cas, si el model és raster i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1233,13 +1233,14 @@
 									}
 								},
 								"url": {
-									"description": "Part final del nom del fitxer llegit amb TipusHTTP_GET que es concatena amb 'servidor'. Només aplica per TIFF. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre llegir una capa multitime. Opcional. Si no s'indica es fa servir 'servidor' sense afegir res",
-									"type": "string"
+									"description": "Si cada valor està contingut en un fitxer diferent, part final del nom del fitxer llegit amb TipusHTTP_GET que es concatena amb 'servidor'. Només aplica per TIFF. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre llegir una capa multitime. Opcional. Si no s'indica es fa servir 'servidor' sense afegir res",
+									"type": "string",
+									"format": "uri"
 								},
 								"iBand": {
 									"description": "Index de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
-									"type": "number",
-								}
+									"type": "number"
+								},
 								"arrayBuffer": {
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal",
 									"type": "string",
@@ -1850,7 +1851,7 @@
 						}] 
 					},
 					"DescarregaTot": {
-						"description": "Array de descàrregues directes per aquesta capa. No existeix quan el model de dades és vector.",
+						"description": "Array de descàrregues directes per aquesta capa. Si la capa és TipusHTTP_GET i no s'indica, es construeix automàticament",
 						"type": ["array", "null"],
 						"items": {
 							"required": ["url", "format"],
@@ -1861,7 +1862,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"url": {
-									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FòrmulaConsulta només si la darrera involucra un sol v[]. Si no hi ha cap parametre DIM es considera que tots els valors de totes les dimensions extra es troben empaquetades en un sol fitxer",
+									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FormulaConsulta només si la darrera involucra un sol v[].. Si no hi ha cap parametre DIM, s'assumeix que totes les dimensions extra s'empaqueten en un sol fitxer.",
 									"type": "string",
 									"format": "uri"
 								},

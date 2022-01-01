@@ -354,7 +354,7 @@ function IniciaLayerPropiaPlantillaDImpressio(i_plantilla, i_layer_propia,
 						"ILayer": i_layer};
 }
 
-function CompletaDefinicioCapa(capa, capa_especial)
+function CompletaDefinicioCapa(capa, capa_vola)
 {
 	//Càlcul de la envolupant el·lipsoidal
 	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
@@ -391,14 +391,66 @@ function CompletaDefinicioCapa(capa, capa_especial)
 	var tipus=DonaTipusServidorCapa(capa);
 	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
 	{
-		//ParamCtrl.VistaCapaTiled[i]=new CreaParametresVistaCapaTiled(null, 0, 0, 0, 0, 0, 0);
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
 
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (capa.objectes && capa.objectes.features))
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features) )
 		capa.model=model_vector;
 
-	if (!capa_especial)
+	if (tipus=="TipusHTTP_GET" && !capa.DescarregaTot)
+	{
+		var i_format;
+		//Contrueixo la manera de descarregar automàticament.
+		if (!ParamCtrl.FormatDescarregaTot)
+			ParamCtrl.FormatDescarregaTot=[];
+		if (capa.model==model_vector)
+		{
+			//Hi ha el format que toca la l'array de formats?
+			for (i_format=0; i_format<ParamCtrl.FormatDescarregaTot.length; i_format++)
+			{
+				if ((capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json") && 
+					(ParamCtrl.FormatDescarregaTot.extension=="json" || ParamCtrl.FormatDescarregaTot.extension=="geojson"))
+					break;
+			}
+			if (i_format==ParamCtrl.FormatDescarregaTot.length)
+				ParamCtrl.FormatDescarregaTot.push({format: {nom:"geojson", desc:"GeoJSON"}, extension:"json"});
+			capa.DescarregaTot=[{desc: "GeoJSON", url:capa.servidor, format:[i_format]}];
+		}
+		else
+		{
+			//Hi ha el format que toca la l'array de formats?
+			for (i_format=0; i_format<ParamCtrl.FormatDescarregaTot.length; i_format++)
+			{
+				if (capa.FormatImatge=="image/tiff" && 
+					(ParamCtrl.FormatDescarregaTot.extension=="tif" || ParamCtrl.FormatDescarregaTot.extension=="tiff"))
+					break;
+			}
+			if (i_format==ParamCtrl.FormatDescarregaTot.length)
+				ParamCtrl.FormatDescarregaTot.push({format: {nom: "geotiff", desc:"GeoTIFF (COG)"}, extension:"tif"});
+			if (!capa.valors || !capa.valors[0].url)
+				capa.DescarregaTot=[{desc: "GeoTIFF", url:capa.servidor, format:[i_format]}];
+			else
+			{
+				var url, valor;
+				capa.DescarregaTot=[];
+				for (var i_v=0; i_v<capa.valors.length; i_v++)
+				{
+					url = capa.servidor;
+					valor = capa.valors[i_v];
+					if (valor.url)
+					{
+						if (url.charAt(url.length-1)!='/' && valor.url.charAt(0)!='/')
+						url += '/';
+						url += valor.url;
+					}
+					capa.DescarregaTot.push({desc: GetMessage("Band")+" "+(i_v+1)+" (GeoTIFF, COG)", url:url, format:[i_format]});
+				}
+			}
+		}		
+		//Poso una descarrega per tot o una descàrrega per a cada valor segons calgui.
+	}
+
+	if (!capa_vola)
 	{
 		if (capa.model==model_vector)
 		{
@@ -1388,7 +1440,7 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 		var capa=param_ctrl.capa[i_capa];
 		BuidaArrayBufferCapa(capa);
 		//Buida objectes vectorials si han vingut d'un servidor.
-		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS"))
+		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
 			delete capa.objectes;
 		DescarregaSimbolsCapaDigi(capa);
 		if (capa.TileMatrixGeometry)
@@ -2440,6 +2492,8 @@ function DonaDescripcioTipusServidor(tipus)
 		return "OAPI Map Tiles";
 	if(tipus=="TipusOAPI_Features")
 		return "OAPI Features";
+	if(tipus=="TipusHTTP_GET")
+		return "HTTP GET";
 	return "";
 }
 
@@ -3250,6 +3304,7 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 	PortamAVistaGeneral();
 	dontPropagateEvent(event);
 }
+
 function TransformaEnvolupant(env, crs_ori, crs_dest)
 {
 var env_ll;

@@ -308,7 +308,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 		return;
 	}
 	capa=ParamCtrl.capa[consulta.i_capa];
-	if (capa.FormatImatge!="application/json")
+	if (capa.FormatImatge!="application/json" && capa.FormatImatge!="application/geo+json")
 	{
 		root=doc.documentElement;	
 	
@@ -327,7 +327,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 	{
 		id_obj_buscat=features[consulta.i_obj].id;
-		if (capa.FormatImatge=="application/json")
+		if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 		{
 			objectes=null;
 			//try {
@@ -568,7 +568,7 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("STA Observations", param.i_capa, url, TipusEventGetObservation);
 	}
-	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		loadJSON(url, DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
 	else
 		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
@@ -605,7 +605,7 @@ var root, capa, features, valor, tipus, i_obj;
 		return 1;
 	}
 	capa=ParamCtrl.capa[consulta.param.i_capa];
-	if (capa.FormatImatge!="application/json")
+	if (capa.FormatImatge!="application/json" && capa.FormatImatge=="application/geo+json")
 	{
 		root=doc.documentElement;	
 	
@@ -617,9 +617,9 @@ var root, capa, features, valor, tipus, i_obj;
 	}
 	features=capa.objectes.features;
 	tipus=DonaTipusServidorCapa(capa);
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="tipusHTTP_GET")
 	{
-		if (capa.FormatImatge=="application/json")
+		if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 		{
 			var objectes=null;
 			//try {
@@ -846,9 +846,9 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 
 	capa=ParamCtrl.capa[consulta.i_capa_digi];
 	tipus=DonaTipusServidorCapa(capa);
-	if (capa.FormatImatge=="application/json")
+	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 	{
-		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
 		{
 			if (capa.objectes && capa.objectes.features)
 			{
@@ -856,7 +856,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 				//try {
 					//var geojson=JSON.parse(doc);
 					//si hi ha una bbox es podria actualitzar però com que no la uso...
-					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
 						var features=doc.features;
 					else if (tipus=="TipusSOS")
 						var features=doc.featureOfInterest;
@@ -879,7 +879,7 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 			{
 				hi_havia_objectes=false;
 				//try {
-					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
 					{
 						//capa.objectes=JSON.parse(doc);
 						capa.objectes=doc;
@@ -1312,6 +1312,8 @@ var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
 		return DonaRequestSOSGetFeatureOfInterest(i_capa, env);
 	if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		return DonaRequestSTAFeaturesOfInterest(i_capa, env);
+	if (tipus=="TipusHTTP_GET")
+		return ParamCtrl.capa[i_capa].servidor;
 
 	alert(DonaCadenaLang({"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"}) + ": " + tipus);
 	return "";
@@ -1548,7 +1550,7 @@ var capa=ParamCtrl.capa[i_capa];
 	{
 		var env2=null;
 		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-			env2=DonaEnvolupantCRS(env, capa.CRSgeometry)
+			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
 		else
 			env2=env;
 		cdns.push("&SRSNAME=",capa.CRSgeometry,"&BBOX=");
@@ -1583,7 +1585,7 @@ var capa=ParamCtrl.capa[i_capa];
 	{
 		var env2=null;
 		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-			env2=DonaEnvolupantCRS(env, capa.CRSgeometry)
+			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
 		else
 			env2=env;
 		cdns.push("&$filter=st_within(feature,geography'POLYGON((", env2.MinX, " ", env2.MinY, ",", env2.MaxX, " ", env2.MinY, ",", env2.MaxX, " ", env2.MaxY, ",", env2.MinX, " ", env2.MaxY, ",", env2.MinX, " ", env2.MinY, "))')");
@@ -1604,7 +1606,7 @@ var capa=ParamCtrl.capa[i_capa];
 	{
 		var env2=null;
 		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-			env2=DonaEnvolupantCRS(env, capa.CRSgeometry)
+			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
 		else
 			env2=env;
 		cdns.push("&SRSNAME=",capa.CRSgeometry,"&BBOX=");
@@ -1633,8 +1635,10 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 	else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		i_event=CreaIOmpleEventConsola("STA FeaturesOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	else if (tipus=="TipusHTTP_GET")
+		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
 
-	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 	else
 		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
@@ -1659,7 +1663,6 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerIdentificador()
 
-//var ajax_capa_digi=[];
 function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, env_sol, seleccionar, funcio, param)
 {
 	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar);
@@ -1677,10 +1680,11 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 	else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		i_event=CreaIOmpleEventConsola("STA FeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
+	else if (tipus=="TipusHTTP_GET")
+		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
 
 	//env_sol està ja en el CRS de la capa
-	//ajax_capa_digi[i_consulta].doGet(url, OmpleCapaDigiAmbObjectesDigitalitzats, "text/xml", {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "seleccionar": seleccionar, "i_event": i_event});
-	if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {i_capa_digi: i_capa_digi, i_tile: i_tile, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
 	else
@@ -1717,16 +1721,17 @@ var ha_calgut=false, vaig_a_carregar=false;
 			for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 			{
 				if (ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS.toUpperCase()==tiles.env.CRS.toUpperCase())
-				{
-					if (tiles.env.EnvCRS.MinX>ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)
-						tiles.env.EnvCRS.MinX=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX;
-					if (tiles.env.EnvCRS.MaxX<ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX)
-						tiles.env.EnvCRS.MaxX=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX;
-					if (tiles.env.EnvCRS.MinY>ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)
-						tiles.env.EnvCRS.MinY=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY;
-					if (tiles.env.EnvCRS.MaxY<ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY)
-						tiles.env.EnvCRS.MaxY=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY;
-				}
+					env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX;
+				else
+					env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS.toUpperCase())
+				if (tiles.env.EnvCRS.MinX>env_temp.MinX)
+					tiles.env.EnvCRS.MinX=env_temp.MinX;
+				if (tiles.env.EnvCRS.MaxX<env_temp.MaxX)
+					tiles.env.EnvCRS.MaxX=env_temp.MaxX;
+				if (tiles.env.EnvCRS.MinY>env_temp.MinY)
+					tiles.env.EnvCRS.MinY=env_temp.MinY;
+				if (tiles.env.EnvCRS.MaxY<env_temp.MaxY)
+					tiles.env.EnvCRS.MaxY=env_temp.MaxY;
 			}
 		}
 	}
@@ -1777,13 +1782,14 @@ var ha_calgut=false, vaig_a_carregar=false;
 						if(vaig_a_carregar)
 						{
 							ha_calgut=true;
+							/*Se suporten env a tot arreu ara (JM)
 							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && (capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus"))
 							{
 								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
 								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, null, false, funcio, param);
 							}
-							else
-								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
+							else*/
+							FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
 						}
 						else
 							return true;
