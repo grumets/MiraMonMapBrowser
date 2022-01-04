@@ -80,6 +80,7 @@ IncludeScript("phenology.js");
 IncludeScript("qualitat.js");
 IncludeScript("llinatge.js");
 IncludeScript("cntxmenu.js");
+IncludeScript("novacapa.js");
 IncludeScript("llegenda.js");
 IncludeScript("download.js");
 IncludeScript("storymap.js");
@@ -2678,10 +2679,10 @@ function OmpleFinestraEnllac()
 						"eng":"OWS context document",
 						"fre":"Document de contexte OWS"}),
 			":<br><input type=\"text\" name=\"url_context\" value=\"\"><input type=\"submit\" value=\"",
-			DonaCadenaLang({"cat":"Obrir", "spa":"Abrir", "eng":"Open","fre":"Ouvrir"}),
+			GetMessage("Open"),
 			"\">",
 			"<input type=\"button\" value=\"",
-			DonaCadenaLang({"cat":"Desar","spa":"Guardar","eng":"Save","fre":"Sauvegarder"}),
+			GetMessage("Save"),
 			"\" onClick=\"SaveOWSContext(document.OWSContext.url_context.value);\"><br>",
 			//OWSC previewer (here will appear the info about the OWSC when loaded)
 			//Direct link to de view (until the OWSC is loaded, a link to the current view)
@@ -6475,7 +6476,7 @@ var i_estil_nou=capa.estil.length, estil;
 		delete estil.diagrama;
 	estil.nom=nom_nou;
 	estil.desc=nom_nou;
-	estil.origen="usuari";  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
+	estil.origen=OriginUsuari;  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
 
 	return i_estil_nou;
@@ -7054,7 +7055,7 @@ var win, i, j, l, capa;
 	}
 
 	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al navegador", "spa":"Añadir capa al navegador", "eng": "Add layer to browser", "fre":"Rajouter couche au navigateur"}, boto_tancar, 420, 150, 520, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al mapa", "spa":"Añadir capa al mapa", "eng": "Add layer to map", "fre":"Ajouter une couche à la carte"}, boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 450, 500, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "combinacioCapa", {"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng": "Analytical combination of layers", "fre":"Combinaison analytique de couches"}, boto_tancar, 420, 150, 520, 400, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);

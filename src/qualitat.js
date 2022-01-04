@@ -303,10 +303,10 @@ function DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i_component, descri
 	return s;
 }
 
-var MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL=254;
 
 function DonaCodeCapaEstilFeedback(i_capa, i_estil)
 {
+var MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL=254;
 var capa=ParamCtrl.capa[i_capa];
 var s=capa.nom;
 	

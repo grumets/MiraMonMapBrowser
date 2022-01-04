@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -182,7 +182,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 			alguna_opcio=true;
 
 	}
-	if (capa.origen && capa.origen=="usuari")
+	if (capa.origen && capa.origen==OriginUsuari)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
 							GetMessage(ShareLayer, "cntxmenu"), "</a>");
@@ -367,7 +367,7 @@ var capa=ParamCtrl.capa[i_capa];
 						GetMessage("ModifyName"), "</a><br>");
 	cdns.push("<hr>");
 
-	if (capa.estil[i_estil].origen && capa.estil[i_estil].origen=="usuari")
+	if (capa.estil[i_estil].origen && capa.estil[i_estil].origen==OriginUsuari)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 							GetMessage("ShareStyle", "cntxmenu"), "</a>");
@@ -456,82 +456,6 @@ var separa_capa_afegida;
 	return null;
 }
 
-function AfegirCapaAlNavegador(form, servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap)
-{
-var j, k;
-var alguna_capa_afegida=false;
-var estil;
-var minim, maxim;
-
-	var format=eval("form.format_capa_"+i_capa);
-	var format_get_map=servidorGC.formatGetMap[format.options[format.selectedIndex].value];
-	if(servidorGC.layer[i_capa].estil && servidorGC.layer[i_capa].estil.length>0)
-	{
-		estil=[];
-		for(j=0; j<servidorGC.layer[i_capa].estil.length; j++)
-		{
-			estil[estil.length]={"nom": servidorGC.layer[i_capa].estil[j].nom,
-						"desc": (servidorGC.layer[i_capa].estil[j].desc ? servidorGC.layer[i_capa].estil[j].desc: servidorGC.layer[i_capa].estil[j].nom),
-						"DescItems": null,
-						"TipusObj": "I",
-						"metadades": null,
-						"ItemLleg": null,
-						"ncol": 0};
-		}
-	}
-	else
-		estil=null;
-	if(servidorGC.layer[i_capa].CostatMinim && servidorGC.layer[i_capa].CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
-		minim=servidorGC.layer[i_capa].CostatMinim;
-	else
-		minim=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
-	if(servidorGC.layer[i_capa].CostatMaxim && servidorGC.layer[i_capa].CostatMaxim<=ParamCtrl.zoom[0].costat)
-		maxim=servidorGC.layer[i_capa].CostatMaxim;
-	else
-		maxim=ParamCtrl.zoom[0].costat;
-
-	if(i_on_afegir==-1)
-		k=ParamCtrl.capa.length;
-	else
-	{
-		k=i_on_afegir;
-		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
-	}
-	ParamCtrl.capa.splice(k, 0, {"servidor": servidorGC.servidor,
-				"versio": servidorGC.versio,
-				"tipus": servidorGC.tipus,
-				"nom": servidorGC.layer[i_capa].nom,
-				"desc": servidorGC.layer[i_capa].desc,
-				"CRS": [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
-				"FormatImatge": format_get_map,
-				"transparencia": (format_get_map=="image/jpeg") ? "opac" : "transparent",
-				"CostatMinim": minim,
-				"CostatMaxim": maxim,
-				"FormatConsulta": (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
-				"separa": DonaTextSeparadorCapaAfegida(k),
-				"DescLlegenda": (servidorGC.layer[i_capa].desc ? servidorGC.layer[i_capa].desc : servidorGC.layer[i_capa].nom),
-				"estil": estil,
-				"i_estil": 0,
-				"NColEstil": (estil && estil.length>0) ? 1: 0,
-				"LlegDesplegada": false,
-				"VisibleALaLlegenda": true,
-				"visible": "si",
-				"consultable": (i_get_featureinfo!=-1 && servidorGC.layer[i_capa].consultable)? "si" : "no",
-				"descarregable": "no",
-				"FlagsData": servidorGC.layer[i_capa].FlagsData,
-				"data": servidorGC.layer[i_capa].data,
-				"i_data": servidorGC.layer[i_capa].i_data,
-				"animable": (servidorGC.layer[i_capa].data)? true: false,
-				"AnimableMultiTime": (servidorGC.layer[i_capa].data)? true:false,
-				"origen":"usuari"});
-
-	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-
-	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(ParamCtrl.capa[k]))
-		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+ParamCtrl.capa[k].nom+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
-
-}
-
 function AfegirCapesAlNavegador(form, i_serv)
 {
 var i, j, i_capa, i_get_featureinfo, i_getmap;
@@ -577,7 +501,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegirCapaAlNavegador(form, servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+				AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[format.selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -591,7 +515,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegirCapaAlNavegador(form, servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+			AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[format.selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 		}
 	}
 	if(alguna_capa_afegida)
@@ -1005,223 +929,6 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 	return true;
 }
 
-function DonaIndexosACapesDeCalcul(calcul, i_capa)
-/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
-per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa
-en crear un flistre espacial a partir d'una banda de la mateixa capa
-En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit */
-{
-var fragment, cadena, i_capes=[], inici, final, nou_valor;
-
-	fragment=calcul;
-	while ((inici=fragment.indexOf("{"))!=-1)
-	{
-		//busco una clau de tancar
-		final=fragment.indexOf("}");
-		if (final==-1)
-		{
-			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
-			break;
-		}
-		cadena=fragment.substring(inici, final+1);
-		//interpreto el fragment metajson
-		nou_valor=JSON.parse(cadena);
-		if (typeof nou_valor.i_capa === "undefined" && typeof i_capa !== "undefined")
-			i_capes.push(i_capa);
-		else
-			i_capes.push(nou_valor.i_capa);
-		fragment=fragment.substring(final+1, fragment.length);
-	}
-	i_capes.sort(sortAscendingNumber);
-	//EliminaRepeticionsArray(i_capes, sortAscendingNumber);
-	i_capes.removeDuplicates(sortAscendingNumber);
-
-	return i_capes;
-}
-
-function DeterminaEnvTotalDeCapes(i_capes)
-{
-var env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, i;
-
-	if (!i_capes.length || !ParamCtrl.capa[i_capes[0]].EnvTotal)
-		return null;
-	if (i_capes.length==1)
-		return JSON.parse(JSON.stringify(ParamCtrl.capa[i_capes[0]].EnvTotal));
-	for (i=0; i<i_capes.length; i++)
-	{
-		if (!ParamCtrl.capa[i_capes[i]].EnvTotal)
-			return null;
-		if (i<0 && ParamCtrl.capa[i_capes[i]].EnvTotal.CRS!=ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS)
-			break;
-	}
-	if (i<i_capes.length)  //Hi ha ambits en CRSs diferents. Ho faig amb LongLat
-	{
-		for (i=0; i<i_capes.length; i++)
-		{
-			if (ParamCtrl.capa[i_capes[i]].EnvTotalLL)
-			{
-				if (env.MinX>ParamCtrl.capa[i_capes[i]].EnvTotalLL.MinX)
-					env.MinX=ParamCtrl.capa[i_capes[i]].EnvTotalLL.MinX;
-				if (env.MaxX<ParamCtrl.capa[i_capes[i]].EnvTotalLL.MaxX)
-					env.MaxX=ParamCtrl.capa[i_capes[i]].EnvTotalLL.MaxX;
-				if (env.MinY>ParamCtrl.capa[i_capes[i]].EnvTotalLL.MinY)
-					env.MinY=ParamCtrl.capa[i_capes[i]].EnvTotalLL.MinY;
-				if (env.MaxY<ParamCtrl.capa[i_capes[i]].EnvTotalLL.MaxY)
-					env.MaxY=ParamCtrl.capa[i_capes[i]].EnvTotalLL.MaxY;
-			}
-		}
-		return {"EnvCRS": env, "CRS": "EPSG:4326"};
-	}
-	else
-	{
-		for (i=0; i<i_capes.length; i++)
-		{
-			if (env.MinX>ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MinX)
-				env.MinX=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MinX;
-			if (env.MaxX<ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxX)
-				env.MaxX=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxX;
-			if (env.MinY>ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MinY)
-				env.MinY=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MinY;
-			if (env.MaxY<ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY)
-				env.MaxY=ParamCtrl.capa[i_capes[i]].EnvTotal.EnvCRS.MaxY;
-		}
-		return {"EnvCRS": env, "CRS": ParamCtrl.capa[i_capes[0]].EnvTotal.CRS};
-	}
-}
-
-
-function DeterminaCostatMinimDeCapes(i_capes)
-{
-var costat=1e300;
-
-	if (!i_capes.length)
-		return ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
-
-	for (var i=0; i<i_capes.length; i++)
-	{
-		if (!ParamCtrl.capa[i_capes[i]].CostatMinim)
-			return ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
-		if (costat>ParamCtrl.capa[i_capes[i]].CostatMinim)
-			costat=ParamCtrl.capa[i_capes[i]].CostatMinim;
-	}
-	return (costat==1e300) ? ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat : costat;
-}
-
-function DeterminaCostatMaximDeCapes(i_capes)
-{
-var costat=1e-300;
-
-	if (!i_capes.length)
-		return ParamCtrl.zoom[0].costat;
-
-	for (var i=0; i<i_capes.length; i++)
-	{
-		if (!ParamCtrl.capa[i_capes[i]].CostatMaxim)
-			return ParamCtrl.zoom[0].costat;
-		if (costat<ParamCtrl.capa[i_capes[i]].CostatMaxim)
-			costat=ParamCtrl.capa[i_capes[i]].CostatMaxim;
-	}
-	return (costat==1e-300) ? ParamCtrl.zoom[0].costat : costat;
-}
-
-function AfegeixCapaCalcul()
-{
-var alguna_capa_afegida=false;
-
-var i_capes=DonaIndexosACapesDeCalcul(document.CalculadoraCapes.calcul.value);
-var desc_capa=document.CalculadoraCapes.nom_estil.value;
-
-	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
-
-	if (i_capes.length>1) //Si en l'expressió entra en joc més d'una capa -> la capa calculada és una capa nova
-	{
-		//pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil ·$·
-		ParamCtrl.capa.splice(i_capa, 0, {"servidor": null,
-			"versio": null,
-			"tipus": null,
-			"nom":	"ComputedLayer",
-			"desc":	(desc_capa) ? desc_capa : "Computed layer",
-			"CRS": (i_capes.length ? JSON.parse(JSON.stringify(ParamCtrl.capa[i_capes[0]].CRS)) : null),
-			"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
-			"FormatImatge": "application/x-img",
-			"valors": [],
-			"transparencia": "semitransparent",
-			"CostatMinim": DeterminaCostatMinimDeCapes(i_capes),
-			"CostatMaxim": DeterminaCostatMaximDeCapes(i_capes),
-			"TileMatrixSet": null,
-			"FormatConsulta": null,
-			"grup":	null,
-			"separa": DonaTextSeparadorCapaAfegida(i_capa),
-			"DescLlegenda": (desc_capa) ? desc_capa : "Computed layer",
-			"estil": [{
-				"nom":	null,
-				"desc":	(desc_capa) ? desc_capa : "Computed layer",
-				"TipusObj": "P",
-				"component": [{
-					"calcul": document.CalculadoraCapes.calcul.value,
-				}],
-				"metadades": null,
-				"nItemLlegAuto": 20,
-				"ncol": 4,
-				"descColorMultiplesDe": 0.01
-			}],
-			"i_estil":	0,
-			"NColEstil":	1,
-			"LlegDesplegada":	false,
-			"VisibleALaLlegenda":	true,
-			"visible":	"si",
-			"visible_vista":	null,
-			"consultable":	"si",
-			"descarregable":	"no",
-			"metadades":	null,
-			"NomVideo":	null,
-			"DescVideo":	null,
-			"FlagsData": null,
-			"data": null,
-			"i_data": 0,
-			"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
-			"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
-			"proces":	null,
-			"ProcesMostrarTitolCapa" : false,
-			"origen": "usuari"
-			});
-
-		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
-			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
-
-		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
-
-	  //Redibuixo el navegador perquè les noves capes siguin visibles
-		RevisaEstatsCapes();
-		CreaLlegenda();
-		RepintaMapesIVistes();
-	}
-	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
-	{
-		var capa=ParamCtrl.capa[i_capa];
-		capa.estil.push({
-				"nom":	null,
-				"desc":	(desc_capa) ? desc_capa : "Computed style",
-				"TipusObj": "P",
-				"component": [{
-					"calcul": document.CalculadoraCapes.calcul.value,
-				}],
-				"metadades": null,
-				"nItemLlegAuto": 20,
-				"ncol": 4,
-				"descColorMultiplesDe": 0.01,
-				"origen": "usuari"
-			});
-
-			if (capa.visible=="ara_no")
-				CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
-			else
-				CreaLlegenda();
-
-			//Defineix el nou estil com estil actiu
-			CanviaEstilCapa(i_capa, capa.estil.length-1, false);
-	}
-}//Fi de AfegeixCapaCalcul()
 
 function AfegeixCapaCombicapaCategoric()
 {
@@ -1852,7 +1559,7 @@ var minim, maxim, factor_k, factorpixel;
 	//Llegeixo les capacitats d'aquesta capa
 	//Començo pel sistema de referència
 	//versió 1.0.0, 1.1.0 i 1.1.1 en l'estil antic --> un únic element amb els diversos sistemes de referència separats per espais (SRS)
-    //versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
+	//versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
 	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)
 
 
@@ -2521,7 +2228,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick='AfegeixCapaCalcul();TancaFinestraLayer(\"calculadoraCapa\");' />",
+		        "\" onClick='AfegeixCapaCalcul(document.CalculadoraCapes.calcul.value, document.CalculadoraCapes.nom_estil.value);TancaFinestraLayer(\"calculadoraCapa\");' />",
 			//"</fieldset>"
 			);
 	}
@@ -2592,12 +2299,44 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	return cdns.join("");
 }
 
+function CarregaFitxerLocalSeleccionat(form)
+{
+	if (form.nom_fitxer.files.length<1)
+		return;
+	if (form.nom_fitxer.files[0].type=="application/json" || form.nom_fitxer.files[0].type=="application/geo+json")
+	{
+		//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
+		var fileread = new FileReader();
+		fileread.onload = function(e) {
+			var objectes;
+			try{    	
+				objectes=JSON.parse(e.target.result);
+			}
+			catch (e){
+				alert("JSON file error. " + e);
+			}
+			AfegeixCapaGeoJSON(form.nom_fitxer.files[0].name, objectes, -1);
+		};
+		fileread.readAsText(form.nom_fitxer.files[0]);
+		TancaFinestraLayer("afegirCapa");
+		return;
+	}
+	if (form.nom_fitxer.files[0].type=="image/tiff")
+	{
+		alert("tiff");
+		TancaFinestraLayer("afegirCapa");
+		return;
+	}
+	//Alerta sobre fitxer no reconegut.
+}
+
 function DonaCadenaAfegeixCapaServidor(url, i_capa)
 {
 var cdns=[], i;
 
-	cdns.push("<form name=\"AfegeixCapaServidor\" onSubmit=\"return false;\">");
-	cdns.push("<div id=\"LayerAfegeixCapaServidor\" class=\"Verdana11px\" style=\"position:absolute; left:10px; top:10px;\">",
+	cdns.push("<div class=\"Verdana11px\" style=\"position:absolute; left:10px; top:10px;\">",
+		"<form name=\"AfegeixCapaServidor\" onSubmit=\"return false;\">");
+	cdns.push("<div id=\"LayerAfegeixCapaServidor\">",
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromServer", "cntxmenu"),
 			"</legend>",
@@ -2639,8 +2378,16 @@ var cdns=[], i;
 		}
 		cdns.push("</select>");
 	}
-	cdns.push("</fieldset>");
-	cdns.push("</div></form>");
+	cdns.push("</fieldset>",
+	          "</div></form>");
+	cdns.push("<form name=\"AfegeixCapaLocal\" onSubmit=\"return false;\">",
+			"<fieldset><legend>",
+			GetMessage("NewLayerFromDisk", "cntxmenu"),
+			"</legend>",
+			"<button style=\"display:block\" class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button>",
+			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" onChange=\"CarregaFitxerLocalSeleccionat(form)\">");
+	cdns.push("</fieldset>",
+		  "</form></div>");
 	return cdns.join("");
 }
 
@@ -3721,7 +3468,7 @@ var combinacio_rgb, i_estil_nou, estil, capa;
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
 	i_estil_nou=capa.estil.length;
-	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil, "TipusObj": "P", "component": [], "origen": "usuari"};
+	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil, "TipusObj": "P", "component": [], "origen": OriginUsuari};
 	estil=capa.estil[i_estil_nou];
 
 	for (var i_c=0; i_c<3; i_c++)

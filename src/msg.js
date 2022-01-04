@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
@@ -48,8 +48,10 @@ var MessageLang={
 	Feedback: {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"},
 	PieChart: {"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"},
 	Histogram: {"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"},
-  Selection:{"cat":"Selecció", "spa":"Selección", "eng":"Selection", "fre":"Sélection"},
-  close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
+	Selection:{"cat":"Selecció", "spa":"Selección", "eng":"Selection", "fre":"Sélection"},
+	Open: {"cat":"Obrir", "spa":"Abrir", "eng":"Open","fre":"Ouvrir"},
+	Save: {"cat":"Desar","spa":"Guardar","eng":"Save","fre":"Sauvegarder"},
+	close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
 	Close: {"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"},
   UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
   layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
@@ -183,7 +185,8 @@ var MessageLang={
     AddGeometricOverlay: {"cat":"Afegir superposició geomètrica", "spa":"Añadir superposición geométrica", "eng":"Add geometric overlay", "fre":"Ajouter une superposition géométrique"},
     AddStatisticalFieldsToCategoricalLayerFromAnotherLayer: {"cat":"Afegir camps estadístics a una capa categòrica des d'una altra capa (de qualsevol tipus)", "spa":"Añada capa combinada a partir de dues capas existentes", "eng":"Add statistical fields to a categorical layer from another layer (of any type)", "fre":"Ajouter des champs statistiques à une couche catégorielle à partir d'une autre couche (de tout type)"},
     AddStatisticalFields: {"cat":"Afegir camps estadíscs", "spa":"Añadir campos estadísticos", "eng":"Add statistical fields", "fre":"Ajouter des champs statistiques"},
-    NewLayerFromServer:{"cat":"Capa nova de servidor", "spa":"Capa nueva de servidor:", "eng":"New layer from server", "fre":"Nouvelle couche du serveur"},
+	NewLayerFromServer:{"cat":"Capa nova de servidor", "spa":"Capa nueva de servidor:", "eng":"New layer from server", "fre":"Nouvelle couche du serveur"},
+	NewLayerFromDisk:{"cat":"Capa nova de disc local", "spa":"Capa nueva de disco local:", "eng":"New layer from local drive", "fre":"Nouvelle couche du lecteur local"},
     SpecifyServerURL: {"cat":"Especifica l'adreça URL del servidor", "spa":"Especifique la dirección URL del servidor", "eng":"Specify the server URL", "fre":"Spécifiez l'adresse URL du serveur"},
     orChooseOnFromServiceList: {"cat":"o Seleccciona'n un de la llista de serveis", "spa":"o Escoja uno de la lista de servicios", "eng":"or Choose one from service list", "fre":"ou sélectionnez un des services de la liste"},
 		ofAddingLayerToBrowser: {"cat":"d'afegir capes al navegador", "spa":"de añadir capas al navegador", "eng":"of adding a layer to browser", "fre":"pour ajouter des couches au navigateur"},

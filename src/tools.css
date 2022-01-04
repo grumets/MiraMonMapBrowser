@@ -76,16 +76,17 @@ input
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	border-color: #99CCFF;
 }
-input[type="button"],[type="submit"]
+input[type="button"],[type="submit"],button
 {
 	font-weight:bold;
 	color:white;
 	background-color:#BDDAFF;
+	border-color: #99CCFF;
 	border-radius: 7px;
 	border-width: 2px;
 	border-style: solid;/*none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset*/
 }
-input[type="button"]:hover,[type="submit"]:hover
+input[type="button"]:hover,[type="submit"]:hover,button:hover
 {
 	border-style: outset;
 	cursor:pointer;

@@ -1772,8 +1772,8 @@
 									}
 								},
 								"origen":{ 
-									"description": "Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
-									"enum": [null, "usuari", "importat"] 
+									"description": "INTERN: s'afegeix programaticament. Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
+									"enum": [null, "usuari"] 
 								}
 							}
 						}
@@ -1817,7 +1817,7 @@
 						"enum": [null, "no", "ara_no", "si"]
 					},																				
 					"descarregable": {
-						"description": "Estat de si la capa per a ser descarregada com a part d'un MMZ. Possibilitats: mai (no), no està descarregable però l'usuari la pot activar (ara_no), si (si). Opcional. Per defecte és 'no', No té sentit quan el model de dades és vector.", 						
+						"description": "La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage". Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no', No té sentit quan el model de dades és vector.", 						
 						"enum": [null, "no", "ara_no", "si"]
 					},
 					"ParamCoverage": {
@@ -1858,7 +1858,7 @@
 							"type": ["object"],
 							"properties": {
 								"desc": { 
-									"description": "Descripció del cotingut de la descàrrega",
+									"description": "Descripció del contingut de la descàrrega",
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"url": {
@@ -2041,8 +2041,8 @@
 						"type": ["null", "string"]
 					},
 					"origen": {
-						"description": "Origen de la capa. Permet saber si és una capa definida al navegador original, si és definida per l'usuari o si és importada. Té implicacions amb les opcions permeses amb aquesta capa (per exemple només es podran esborrar les capes pròpies o importades, o només es podran compartir les capes pròpies)",
-						"enum": [null, "usuari", "importat"] 
+						"description": "INTERN: s'afegeix programaticament. Origen de la capa. Permet saber si és una capa definida al navegador original, si és definida per l'usuari o si és importada. Té implicacions amb les opcions permeses amb aquesta capa (per exemple només es podran esborrar les capes pròpies o importades, o només es podran compartir les capes pròpies)",
+						"enum": [null, "usuari"] 
 					}
 				}
 			}
