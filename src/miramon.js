@@ -4853,7 +4853,7 @@ function onErrorCanviaImatge(event)
 function EsCapaBinaria(capa)
 {
 	return capa.FormatImatge=="application/x-img" || 
-	    (capa.FormatImatge=="image/tiff" && capa.tipus=="TipusHTTP_GET")
+	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 }
 
 

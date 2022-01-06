@@ -80,16 +80,26 @@ async function loadGeoTIFF() {
 
 function DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2)
 {
-	var capa = ParamCtrl.capa[i_capa2];
-	var url = capa.servidor;
-	var valor2 = capa.valors[i_valor2];
-	if (valor2.url)
+var capa = ParamCtrl.capa[i_capa2], url;
+
+	if (capa.servidor)
 	{
-		if (url.charAt(url.length-1)!='/' && valor2.url.charAt(0)!='/')
-			url += '/';
-		url += valor2.url;
+		url = capa.servidor;
+		var valor2 = capa.valors[i_valor2];
+		if (valor2.url)
+		{
+			if (url.charAt(url.length-1)!='/' && valor2.url.charAt(0)!='/')
+				url += '/';
+			url += valor2.url;
+		}
 	}
-	return CanviaVariablesDeCadena(url, capa, i_data2);
+	else
+		url = capa.valors[i_valor2];
+
+	if (url)
+		return CanviaVariablesDeCadena(url, capa, i_data2);
+	else
+		return "";
 }
 
 async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)

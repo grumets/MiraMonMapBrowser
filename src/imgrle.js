@@ -2578,7 +2578,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
 				var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
 
-				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET")
+				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
 				{
 					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, vista))
 					{

@@ -997,7 +997,7 @@ var crs_up=crs.toUpperCase();
 	else if (crs_up=="EPSG:4258")
 		return "long/lat - ETRS89";
 	else
-		return "";
+		return crs;  // si no hi ha descripció poso el codi.
 }
 
 //Es pot posar v=null si el servei no és un WMS

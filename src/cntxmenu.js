@@ -2299,35 +2299,49 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	return cdns.join("");
 }
 
-function CarregaFitxerLocalSeleccionat(form)
+function CarregaFitxersLocalsSeleccionats(form)
 {
+var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
+
 	if (form.nom_fitxer.files.length<1)
 		return;
-	if (form.nom_fitxer.files[0].type=="application/json" || form.nom_fitxer.files[0].type=="application/geo+json")
+	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
 	{
-		//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
-		var fileread = new FileReader();
-		fileread.onload = function(e) {
-			var objectes;
-			try{    	
-				objectes=JSON.parse(e.target.result);
-			}
-			catch (e){
-				alert("JSON file error. " + e);
-			}
-			AfegeixCapaGeoJSON(form.nom_fitxer.files[0].name, objectes, -1);
-		};
-		fileread.readAsText(form.nom_fitxer.files[0]);
-		TancaFinestraLayer("afegirCapa");
-		return;
+		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json")
+		{
+			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
+			fileread[i_fitxer] = new FileReader();
+			fileread[i_fitxer].onload = function(e) {
+				var objectes;
+				try{    	
+					objectes=JSON.parse(e.target.result);
+				}
+				catch (e){
+					alert("JSON file error. " + e);
+				}
+				AfegeixCapaGeoJSON(form.nom_fitxer.files[i_fitxer].name, objectes, -1);
+				algun_fitxer_ok=true;
+			};
+			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
+		}
+		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff")
+		{
+			alert("Unrecognized file type '"+form.nom_fitxer.files[i_fitxer].type+ "' for the file '"+ form.nom_fitxer.files[i_fitxer].name + "'");
+		}
 	}
-	if (form.nom_fitxer.files[0].type=="image/tiff")
+	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
 	{
-		alert("tiff");
-		TancaFinestraLayer("afegirCapa");
-		return;
+		if (form.nom_fitxer.files[i_fitxer].type=="image/tiff")
+			tiff_blobs.push(form.nom_fitxer.files[i_fitxer]);
 	}
-	//Alerta sobre fitxer no reconegut.
+	if (tiff_blobs.length>0)
+	{
+		//AfegeixCapaGeoTIFF és asincrona.
+		AfegeixCapaGeoTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : "TIFFs", tiff_blobs, -1);
+		algun_fitxer_ok=true;
+	}
+	if (algun_fitxer_ok)
+		TancaFinestraLayer("afegirCapa");
 }
 
 function DonaCadenaAfegeixCapaServidor(url, i_capa)
@@ -2380,12 +2394,13 @@ var cdns=[], i;
 	}
 	cdns.push("</fieldset>",
 	          "</div></form>");
+	//https://stackoverflow.com/questions/5138719/change-default-text-in-input-type-file
 	cdns.push("<form name=\"AfegeixCapaLocal\" onSubmit=\"return false;\">",
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromDisk", "cntxmenu"),
 			"</legend>",
 			"<button style=\"display:block\" class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button>",
-			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" onChange=\"CarregaFitxerLocalSeleccionat(form)\">");
+			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" multiple=\"multiple\" onChange=\"CarregaFitxersLocalsSeleccionats(form)\">");
 	cdns.push("</fieldset>",
 		  "</form></div>");
 	return cdns.join("");

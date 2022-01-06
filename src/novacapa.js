@@ -430,3 +430,156 @@ var k;
 	RepintaMapesIVistes();
 }
 
+async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
+{
+var i_v=0, i_fitxer, datatype;
+
+	var capa={servidor: (tiff_blobs.length==1) ? tiff_blobs[0].name : null,
+				versio: null,
+				tipus: null,
+				nom: null,
+				desc: desc,
+				CRS: null,
+				FormatImatge: "image/tiff",
+				valors: [],
+				transparencia: "semitrasparent",
+				CostatMinim: null,
+				CostatMaxim: null,
+				FormatConsulta: null,
+				separa: null,
+				DescLlegenda: desc,
+				estil: [],
+				i_estil: 0,
+				NColEstil: 1,
+				LlegDesplegada: false,
+				VisibleALaLlegenda: true,
+				visible: "si",
+				consultable: "si",
+				descarregable: "no",
+				FlagsData: null,
+				data: null,
+				i_data: 0,
+				animable: false,
+				AnimableMultiTime: false,
+				origen: OriginUsuari};
+	
+
+	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
+	{
+		if (!window.GeoTIFFfromBlob)
+			await loadGeoTIFF();
+		
+		var tiff = await GeoTIFFfromBlob(tiff_blobs[i_fitxer]);
+		var image = await tiff.getImage();
+
+		if (image.getGeoKeys() && image.getGeoKeys().ProjectedCSTypeGeoKey)
+		{
+			if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey)
+			{
+				alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
+				return;
+			}
+			capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
+		}
+
+		//Ara, amb aquestes metadades podem crec millor valors i components.
+		if (image.getArrayForSample() instanceof Int8Array)
+			datatype="int8";
+		else if (image.getArrayForSample() instanceof Uint8Array)
+			datatype="uint8";
+		else if (image.getArrayForSample() instanceof Int16Array)
+			datatype="int16";
+		else if (image.getArrayForSample() instanceof Uint16Array)
+			datatype="uint16";
+		else if (image.getArrayForSample() instanceof Int32Array)
+			datatype="int32";
+		else if (image.getArrayForSample() instanceof Uint32Array)
+			datatype="uint32";
+		else if (image.getArrayForSample() instanceof Float32Array)
+			datatype="float32";
+		else if (image.getArrayForSample() instanceof Float64Array)
+			datatype="float64";
+		else
+		{
+			alert("Unsuported tiff data type");
+			return;
+		}
+	
+		if (tiff_blobs.length==1)
+		{
+			capa.tiff=tiff;
+			capa.i_data_tiff=0;
+		}
+
+		for (var i=0; i<image.getSamplesPerPixel(); i++)
+		{
+			capa.valors.push({
+					url: (tiff_blobs.length==1) ? null : tiff_blobs[i_fitxer].name,
+					datatype: datatype,
+					nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
+				});
+
+			if (tiff_blobs.length!=1)
+			{
+				capa.valors[i_v+i].tiff=tiff;
+				capa.valors[i_v+i].i_data_tiff=0;
+			}
+		}
+		if (image.getSamplesPerPixel()==3)
+		{
+			capa.estil.push({nom: null,
+						desc: tiff_blobs[i_fitxer].name,
+						DescItems: null,
+						TipusObj: "I",
+						metadades: null,
+						component: [
+							{
+								i_valor: i_v,
+							},{
+								i_valor: i_v+1,
+							},{
+								i_valor: i_v+2,
+							}
+						]
+					});
+		}
+		else
+		{
+			for (var i=0; i<image.getSamplesPerPixel(); i++)
+			{
+				capa.estil.push({nom: null,
+						desc: tiff_blobs[i_fitxer].name,
+						DescItems: null,
+						TipusObj: "P",
+						metadades: null,
+						component: [
+							{
+								i_valor: i_v+i,
+							}
+						],
+						nItemLlegAuto: 20,
+						ncol: 4,
+						descColorMultiplesDe: 0.01,
+						ColorMinimPrimer: false
+					});
+			}
+		}
+		i_v+=image.getSamplesPerPixel();						
+	}
+
+	var k;
+	if(i_on_afegir==-1)
+		k=ParamCtrl.capa.length;
+	else
+	{
+		k=i_on_afegir;
+		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
+	}
+	ParamCtrl.capa.splice(k, 0, capa);
+	CompletaDefinicioCapa(ParamCtrl.capa[k]);
+	CreaLlegenda();
+	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+		alert("The added layer has a CRS '"+ DonaDescripcioCRS(capa.CRS[0]) + "' that is no visible in the current CRS '" + DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) + "'");
+	else
+		RepintaMapesIVistes();
+}
