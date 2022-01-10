@@ -185,7 +185,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (capa.origen && capa.origen==OriginUsuari)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
-							GetMessage(ShareLayer, "cntxmenu"), "</a>");
+							GetMessage("ShareLayer", "cntxmenu"), "</a>");
 		cdns.push("<br>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarCapa(", i_capa,");TancaContextMenuCapa();\">",
 							GetMessage("RemoveLayer", "cntxmenu"), "</a>");
@@ -1021,7 +1021,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			//DonaCadena(atrib_nous[atrib_nous.length-1].descripcio)+ " ("+ (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom) + ")";
 	}
 
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")), (capa[1].DescLlegenda?capa[1].DescLlegenda : capa[1].nom));
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
@@ -1029,7 +1029,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"versio": null,
 		"tipus": null,
 		"nom":	"CombinedLayer",
-		"desc":	GetMessage("CombinationOf", "cntxmenu") + (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + GetMessage("and", "cntxmenu") + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		"desc":	GetMessage("CombinationOf", "cntxmenu") + (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
@@ -1042,11 +1042,11 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"grup":	null,
 		"separa": DonaTextSeparadorCapaAfegida(i_capa),
 		"DescLlegenda": cadena_desc,
-		//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + DonaCadenaLang({"cat": "i", "spa": "y", "eng": "and", "fre": "and"}) + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
+		//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
 		"estil": [{
 			"nom":	null,
 			"desc":	cadena_desc,
-			//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + DonaCadenaLang({"cat": "i", "spa": "y", "eng": "and", "fre": "and"}) + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
+			//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
 			"TipusObj": "P",
 			"component": [{
 				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil) + "+" +
@@ -2311,6 +2311,7 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			fileread[i_fitxer] = new FileReader();
+			fileread[i_fitxer].nom_json=form.nom_fitxer.files[i_fitxer].name;  //Així onload pot saber el nom del fitxer
 			fileread[i_fitxer].onload = function(e) {
 				var objectes;
 				try{    	
@@ -2319,10 +2320,10 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 				catch (e){
 					alert("JSON file error. " + e);
 				}
-				AfegeixCapaGeoJSON(form.nom_fitxer.files[i_fitxer].name, objectes, -1);
-				algun_fitxer_ok=true;
+				AfegeixCapaGeoJSON(this.nom_json, objectes, -1);
 			};
 			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
+			algun_fitxer_ok=true;
 		}
 		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff")
 		{
@@ -2342,6 +2343,17 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 	}
 	if (algun_fitxer_ok)
 		TancaFinestraLayer("afegirCapa");
+}
+
+function CarregaFitxerURLSeleccionat(form)
+{
+	if (form.url_fitxer.value.length<1)
+		return;
+	if (form.url_type.value=="geojson")
+		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, -1);
+	else
+		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), -1);
+	TancaFinestraLayer("afegirCapa");
 }
 
 function DonaCadenaAfegeixCapaServidor(url, i_capa)
@@ -2399,10 +2411,21 @@ var cdns=[], i;
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromDisk", "cntxmenu"),
 			"</legend>",
-			"<button style=\"display:block\" class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button>",
-			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" multiple=\"multiple\" onChange=\"CarregaFitxersLocalsSeleccionats(form)\">");
-	cdns.push("</fieldset>",
-		  "</form></div>");
+			"<button class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button> (GeoJSON, GeoTIFF ",GetMessage("or")," COG)",
+			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" multiple=\"multiple\" onChange=\"CarregaFitxersLocalsSeleccionats(form)\">",
+		"</fieldset></form>");
+	cdns.push("<form name=\"AfegeixCapaURL\" onSubmit=\"return false;\">",
+			"<fieldset><legend>",
+			GetMessage("NewLayerFromURL", "cntxmenu"),
+			"</legend>",
+			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoJSON\" name=\"url_type\" value=\"geojson\" checked=\"checked\"><label for=\"RadioAddUrlTypeGeoJSON\">GeoJSON</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoTIFF\" name=\"url_type\" value=\"geotiff\"><label for=\"RadioAddUrlTypeGeoTIFF\">GeoTIFF ",GetMessage("or")," COG</label><br>",
+			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" />",
+			"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		     		GetMessage("Add"),
+			"\" onClick=\"CarregaFitxerURLSeleccionat(form)\" />",
+		"</fieldset></form>");
+	cdns.push("</div>");
 	return cdns.join("");
 }
 
@@ -2922,8 +2945,8 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 		{
 			/*(Eventualment Un nexe... i altre cop el mateix)*/
 			cdns.push(GetMessage("NexusWithNextCondition", "cntxmenu"), ":",
-				"<input type=\"radio\" id=\"", prefix_id, "-nexe-",i_condicio, "-none\" name=\"nexe",i_condicio, "\" value=\"\" checked=\"checked\" onClick='ActivaCondicioSeleccioCondicional(\"", prefix_id, "\", ", i_condicio+1, ", false);' />", "<label for=\"", prefix_id, "-nexe-",i_condicio, "-none\">", GetMessage("none", "cntxmenu"), "</label>",
-				"<input type=\"radio\" id=\"", prefix_id, "-nexe-",i_condicio, "-and\" name=\"nexe",i_condicio, "\" value=\"and\" onClick='ActivaCondicioSeleccioCondicional(\"", prefix_id, "\", ", i_condicio+1, ", true);' />", "<label for=\"", prefix_id, "-nexe-",i_condicio, "-and\">", GetMessage("and", "cntxmenu"), "</label>",
+				"<input type=\"radio\" id=\"", prefix_id, "-nexe-",i_condicio, "-none\" name=\"nexe",i_condicio, "\" value=\"\" checked=\"checked\" onClick='ActivaCondicioSeleccioCondicional(\"", prefix_id, "\", ", i_condicio+1, ", false);' />", "<label for=\"", prefix_id, "-nexe-",i_condicio, "-none\">", GetMessage("none"), "</label>",
+				"<input type=\"radio\" id=\"", prefix_id, "-nexe-",i_condicio, "-and\" name=\"nexe",i_condicio, "\" value=\"and\" onClick='ActivaCondicioSeleccioCondicional(\"", prefix_id, "\", ", i_condicio+1, ", true);' />", "<label for=\"", prefix_id, "-nexe-",i_condicio, "-and\">", GetMessage("and"), "</label>",
 				"<input type=\"radio\" id=\"", prefix_id, "-nexe-",i_condicio, "-or\" name=\"nexe",i_condicio, "\" value=\"or\" onClick='ActivaCondicioSeleccioCondicional(\"", prefix_id, "\", ", i_condicio+1, ", true);' />",  "<label for=\"", prefix_id, "-nexe-",i_condicio, "-or\">", GetMessage("or", "cntxmenu"), "</label><br>");
 		}
 		cdns.push("</span>");
@@ -3700,6 +3723,12 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 				estil.component[i_c].estiramentPaleta={"valorMinim": valor_min,
 								"valorMaxim": valor_max};
 			}
+			//Cal passar a llegenda automàtica per força
+			estil.ItemLleg=null //això força a tornar a genera els colors de la llegenda i aquest eren automàtics.
+			if (!estil.nItemLlegAuto)
+				estil.nItemLlegAuto=20;
+			if (!estil.ncol)
+				estil.ncol=4;
 		}
 	}
 	if (estil.component && estil.component.length==1 && estil.component[0].illum)
@@ -3792,6 +3821,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 		}
 	}
 	CanviaEstilCapa(i_capa, i_estil, true);
+	CreaLlegenda();
 }
 
 

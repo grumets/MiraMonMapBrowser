@@ -1003,7 +1003,7 @@
 				"type": "object",
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i els model és vector vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON); i en aquest cas, si el model és raster i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1016,7 +1016,7 @@
 						"type": "boolean"
 					},
 					"tipus": {
-						"description": "Tipus de servei per aquesta capa. Si el model és ràster i és null s'agafa el TipusServidorLocal. Si el model és vector i és null s'enten que els objectes estan predefinits i no cal anar a un servidor.",
+						"description": "Tipus de servei per aquesta capa. Si el 'model' és 'ràster' i és null s'agafa el TipusServidorLocal. Si el 'model' és 'vector' i és null s'enten que els objectes estan predefinits i no cal anar a un servidor.",
 						"oneOf":[{
 							"type": "null"
 						},{
@@ -1032,7 +1032,7 @@
 						}]
 					},
 					"namespace": {
-						"description": "Espai de noms utilitzat. Només s'usa quan el model és vector. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
+						"description": "Espai de noms utilitzat. Només s'usa quan el 'model' és 'vector'. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
 						"type": ["string", "null"]
 					},
 					"id":	{ 
@@ -1040,7 +1040,7 @@
 						"type": ["string", "null"]
 					},					
 					"nom":	{ 
-						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan model és ràster.",
+						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan 'model' és 'ràster'.",
 						"type": ["string", "null"]
 					},
 					"desc": { 
@@ -1066,7 +1066,7 @@
 						"format": "uri"
 					},
 					"TileMatrixGeometry": {
-						"description": "Definició de la tesselació vectorial per a les peticions vectorials al servidor. Opcional. Només aplica quan el model de dades és vector.",
+						"description": "Definició de la tesselació vectorial per a les peticions vectorials al servidor. Opcional. Només aplica quan el 'model' és 'vector'.",
 						"type": "object",
 						"properties": {								
 							"MatrixWidth": {
@@ -1096,7 +1096,7 @@
 						}
 					},
 					"TileMatrixSet":	{
-						"description": "Descripció de les TileMatrixSet suportades per la capa o null si la capa no és WMTS. Només aplica quan el model de dades és ràster.",
+						"description": "Descripció de les TileMatrixSet suportades per la capa o null si la capa no és WMTS. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció i paràmetres de la TileMatrixSet",
@@ -1184,15 +1184,15 @@
 						"type": "string"
 					},
 					"objectes": {
-						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el model de dades és vector. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
+						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
 						"$ref": "#/definitions/featureCollection"
 					},
 					"atributs": {
-						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre. Només aplica quan el model de dades és vector. En el model raster està dins de cada estil.",
+						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model raster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
 					},
 					"valors": {
-						"description": "Descripció dels valors. És un array perquè en un futur podríem fer servir l'estil WMS per comunicar multibandes i en necessitarem més d'un. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el model de dades és ràster.",
+						"description": "Descripció dels valors. És un array perquè en un futur podríem fer servir l'estil WMS per comunicar multibandes i en necessitarem més d'un. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció dels valors",
@@ -1365,7 +1365,7 @@
 									"enum": [null, "L", "P", "S", "I"] 
 								},
 								"component": {
-									"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el model de dades és ràster",
+									"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
 									"type": "array",
 									"items": {
 										"description": "Membre de l'array de components del estil",
@@ -1467,7 +1467,7 @@
 														"$ref": "#/definitions/descripcioCategories"
 													},
 													"atributs": {
-														"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el model de dades és ràster en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+														"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 														"$ref": "#/definitions/descripcioAtributs"			
 													}
 												}
@@ -1480,7 +1480,7 @@
 									"$ref": "#/definitions/descripcioCategories"
 								},
 								"atributs": {
-									"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el model de dades és ràster en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+									"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 									"$ref": "#/definitions/descripcioAtributs"
 								},
 								"metadades": { 
@@ -1678,12 +1678,12 @@
 									}
 								},
 								"histograma": {
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el model de dades és ràster",
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
 									"$ref": "#/definitions/histograma"
 								},
 								"diagrama": 
 								{
-									"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el model de dades és ràster",
+									"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el 'model' és 'raster'",
 									"type": "array",
 									"items": 
 									{
@@ -1757,7 +1757,7 @@
 								},								
 								"capa_video":
 								{
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el model de dades és ràster",
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
 									"type": "array",
 									"items": 
 									{
@@ -1817,11 +1817,11 @@
 						"enum": [null, "no", "ara_no", "si"]
 					},																				
 					"descarregable": {
-						"description": "La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage". Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no', No té sentit quan el model de dades és vector.", 						
+						"description": "La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage'. Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no', No té sentit quan el 'model' és 'vector'.", 						
 						"enum": [null, "no", "ara_no", "si"]
 					},
 					"ParamCoverage": {
-						"description": "Índex (començant per 0) de ParGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
+						"description": "Índex (començant per 0) de ParGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
 						"oneOf": [{
 							"type": "integer",
 							"minimum": 0
@@ -1831,7 +1831,7 @@
 						}] 
 					},
 					"FormatCoverage": {
-						"description": "Índex (començant per 0) de FormatGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
+						"description": "Índex (començant per 0) de FormatGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
 						"oneOf": [{
 							"type": "integer",
 							"minimum": 0
@@ -1841,7 +1841,7 @@
 						}] 
 					},
 					"ResCoverage":	{
-						"description": "Índex (començant per 0) de ResGetCoverage que se suporta en aquesta capa. No existeix quan el model de dades és vector.",
+						"description": "Índex (començant per 0) de ResGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
 						"oneOf": [{
 							"type": "integer",
 							"minimum": 0
@@ -1884,11 +1884,11 @@
 						"$ref": "#/definitions/metadades"
 					},
 					"NomVideo": { 
-						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el model és ràster.",
+						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el 'model' és 'raster'.",
 						"type": ["string", "null"]
 					},
 					"DescVideo": { 
-						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.desc. Només aplica quan el model és ràster.",
+						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.desc. Només aplica quan el 'model' és 'raster'.",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"FlagsData": {
@@ -1952,7 +1952,7 @@
 						}
 					},
 					"data":	{
-						"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo. Només aplica quan el model és ràster.",
+						"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Data disponible per la capa",
@@ -1960,13 +1960,13 @@
 						}
 					},
 					"i_data": { 
-						"description": "Índex de data seleccionada per començar la visualització. Si s'indica -1 s'usarà el darrer element del array de dates. Només aplica quan el model és ràster.",
+						"description": "Índex de data seleccionada per començar la visualització. Si s'indica -1 s'usarà el darrer element del array de dates. Només aplica quan el 'model' és 'raster'.",
 						"type": ["number", "null"],
 						"minimum": -1,
 						"multipleOf" : 1
 					},
 					"animable":	{
-						"description": "La capa participa d'un vídeo. Opcional. Per defecte val false. Només aplica quan el model és ràster.", 
+						"description": "La capa participa d'un vídeo. Opcional. Per defecte val false. Només aplica quan el 'model' és 'raster'.", 
 						"type": ["boolean", "null"]
 					},
 					"AnimableMultiTime": {
@@ -1974,7 +1974,7 @@
 						"type": ["boolean","null"]
 					},
 					"proces": {
-						"description": "Array de processos a serveis WPS 1.0.0 lligats a aquesta capa. Només aplica quan el model és ràster. Opcional",
+						"description": "Array de processos a serveis WPS 1.0.0 lligats a aquesta capa. Només aplica quan el 'model' és 'raster'. Opcional",
 						"type": ["array", "null"],
 						"items": {
 							"type": ["object"],
@@ -2019,11 +2019,11 @@
 						}
 					},
 					"ProcesMostrarTitolCapa": {
-						"description": "Mostrar el títol del capa en el procés. Només aplica quan el model és ràster.", 
+						"description": "Mostrar el títol del capa en el procés. Només aplica quan el 'model' és 'raster'.", 
 						"type": ["boolean","null"]
 					},
 					"editable": {
-						"description": "Estat de la capa per l'edició. Possibilitats: mai (no), no està editable però l'usuari la pot activar (ara_no), si (si). Només aplica quan el model de dades és vector.", 
+						"description": "Estat de la capa per l'edició. Possibilitats: mai (no), no està editable però l'usuari la pot activar (ara_no), si (si). Només aplica quan el 'model' és 'vector'.", 
 						"enum": [null, "no", "ara_no", "si"]
 					},
 					"access": { 
@@ -2037,7 +2037,7 @@
 						}
 					},
 					"FuncioEdicio": {
-						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el model de dades és vector.",
+						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el 'model' és 'vector'.",
 						"type": ["null", "string"]
 					},
 					"origen": {

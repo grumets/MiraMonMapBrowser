@@ -329,6 +329,104 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 	}
 }//Fi de AfegeixCapaCalcul()
 
+function AfegeixSimbolitzacioVectorDefecteCapa(capa)
+{
+	capa.estil=[{nom: null,
+			desc: capa.desc,
+			DescItems: null,
+			TipusObj: "P",
+			metadades: null,
+			ItemLleg: [
+				{
+					color: "#377200",
+					DescColor: capa.desc
+				}
+			],
+			ncol: 1,
+			simbols:
+			[{
+				simbol:
+				[
+					{
+						icona:
+						{
+							type: "circle",
+							r: 6
+						}
+					}
+				]
+			}],
+			formes: [
+				{
+					vora: {
+						paleta: {
+							colors: [
+								"#377200"
+							]
+						}
+					},
+					interior: {
+						paleta: {
+							colors: [
+								"rgba(25,48,0,0.3)"
+							]
+						}
+					}
+				}	
+			]
+		}];
+
+	capa.separa=null;
+	capa.DescLlegenda=capa.desc;
+	capa.i_estil=0;
+	capa.NColEstil=1;
+	capa.LlegDesplegada=false;
+	capa.VisibleALaLlegenda=true;
+}
+
+function AfegeixCapaGeoJSON_URL(url, i_on_afegir)
+{
+var k;
+	if(i_on_afegir==-1)
+		k=ParamCtrl.capa.length;
+	else
+	{
+		k=i_on_afegir;
+		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
+	}
+	ParamCtrl.capa.splice(k, 0, {servidor: url,
+				versio: null,
+				tipus: "TipusHTTP_GET",
+				model: model_vector,
+				nom: null,
+				desc: TreuAdreca(url),
+				CRSgeometry: "EPSG:4326",
+				objectes: null,
+				atributs: null,
+				FormatImatge: "application/json",
+				transparencia: "opac",
+				CostatMinim: null,
+				CostatMaxim: null,
+				FormatConsulta: null,
+				visible: "si",
+				consultable: "si",
+				descarregable: "no",
+				FlagsData: null,
+				data: null,
+				i_data: 0,
+				animable: false,
+				AnimableMultiTime: false,
+				origen: OriginUsuari});
+
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
+	CompletaDefinicioCapa(ParamCtrl.capa[k]);
+
+	//Redibuixo el navegador perquè les noves capes siguin visibles
+	//RevisaEstatsCapes();
+	CreaLlegenda();
+	RepintaMapesIVistes();
+}
+
 function AfegeixCapaGeoJSON(desc, objectes, i_on_afegir)
 {
 var k;
@@ -353,56 +451,6 @@ var k;
 				CostatMinim: null,
 				CostatMaxim: null,
 				FormatConsulta: null,
-				separa: null,
-				DescLlegenda: desc,
-				estil: [{nom: null,
-					desc: desc,
-					DescItems: null,
-					TipusObj: "P",
-					metadades: null,
-					ItemLleg: [
-						{
-							color: "#377200",
-							DescColor: desc
-						}
-					],
-					ncol: 1,
-					simbols:
-					[{
-						simbol:
-						[
-							{
-								icona:
-								{
-									type: "circle",
-									r: 6
-								}
-							}
-						]
-					}],
-					formes: [
-						{
-							vora: {
-								paleta: {
-									colors: [
-										"#377200"
-									]
-								}
-							},
-							interior: {
-								paleta: {
-									colors: [
-										"rgba(25,48,0,0.3)"
-									]
-								}
-							}
-						}	
-					]
-				}],
-				i_estil: 0,
-				NColEstil: 1,
-				LlegDesplegada: false,
-				VisibleALaLlegenda: true,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -413,15 +461,7 @@ var k;
 				AnimableMultiTime: false,
 				origen: OriginUsuari});
 	
-	if (objectes.features[0].properties)
-	{
-		for (var j in objectes.features[0].properties)
-		{
-			ParamCtrl.capa[k].atributs.push({"nom": j,
-						"descripcio": j,
-						"mostrar": "si_ple"});
-		}
-	}
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
@@ -430,11 +470,9 @@ var k;
 	RepintaMapesIVistes();
 }
 
-async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
+function IniciaDefinicioCapaTIFF(url, desc)
 {
-var i_v=0, i_fitxer, datatype;
-
-	var capa={servidor: (tiff_blobs.length==1) ? tiff_blobs[0].name : null,
+	return {servidor: url,
 				versio: null,
 				tipus: null,
 				nom: null,
@@ -462,112 +500,113 @@ var i_v=0, i_fitxer, datatype;
 				animable: false,
 				AnimableMultiTime: false,
 				origen: OriginUsuari};
-	
+}
 
-	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
+async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
+{
+	var image = await tiff.getImage();
+
+	if (capa.servidor)
 	{
-		if (!window.GeoTIFFfromBlob)
-			await loadGeoTIFF();
-		
-		var tiff = await GeoTIFFfromBlob(tiff_blobs[i_fitxer]);
-		var image = await tiff.getImage();
-
-		if (image.getGeoKeys() && image.getGeoKeys().ProjectedCSTypeGeoKey)
-		{
-			if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey)
-			{
-				alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
-				return;
-			}
-			capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
-		}
-
-		//Ara, amb aquestes metadades podem crec millor valors i components.
-		if (image.getArrayForSample() instanceof Int8Array)
-			datatype="int8";
-		else if (image.getArrayForSample() instanceof Uint8Array)
-			datatype="uint8";
-		else if (image.getArrayForSample() instanceof Int16Array)
-			datatype="int16";
-		else if (image.getArrayForSample() instanceof Uint16Array)
-			datatype="uint16";
-		else if (image.getArrayForSample() instanceof Int32Array)
-			datatype="int32";
-		else if (image.getArrayForSample() instanceof Uint32Array)
-			datatype="uint32";
-		else if (image.getArrayForSample() instanceof Float32Array)
-			datatype="float32";
-		else if (image.getArrayForSample() instanceof Float64Array)
-			datatype="float64";
-		else
-		{
-			alert("Unsuported tiff data type");
-			return;
-		}
-	
-		if (tiff_blobs.length==1)
-		{
-			capa.tiff=tiff;
-			capa.i_data_tiff=0;
-		}
-
-		for (var i=0; i<image.getSamplesPerPixel(); i++)
-		{
-			capa.valors.push({
-					url: (tiff_blobs.length==1) ? null : tiff_blobs[i_fitxer].name,
-					datatype: datatype,
-					nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
-				});
-
-			if (tiff_blobs.length!=1)
-			{
-				capa.valors[i_v+i].tiff=tiff;
-				capa.valors[i_v+i].i_data_tiff=0;
-			}
-		}
-		if (image.getSamplesPerPixel()==3)
-		{
-			capa.estil.push({nom: null,
-						desc: tiff_blobs[i_fitxer].name,
-						DescItems: null,
-						TipusObj: "I",
-						metadades: null,
-						component: [
-							{
-								i_valor: i_v,
-							},{
-								i_valor: i_v+1,
-							},{
-								i_valor: i_v+2,
-							}
-						]
-					});
-		}
-		else
-		{
-			for (var i=0; i<image.getSamplesPerPixel(); i++)
-			{
-				capa.estil.push({nom: null,
-						desc: tiff_blobs[i_fitxer].name,
-						DescItems: null,
-						TipusObj: "P",
-						metadades: null,
-						component: [
-							{
-								i_valor: i_v+i,
-							}
-						],
-						nItemLlegAuto: 20,
-						ncol: 4,
-						descColorMultiplesDe: 0.01,
-						ColorMinimPrimer: false
-					});
-			}
-		}
-		i_v+=image.getSamplesPerPixel();						
+		capa.tiff=tiff;
+		capa.i_data_tiff=0;
 	}
 
-	var k;
+	if (image.getGeoKeys() && image.getGeoKeys().ProjectedCSTypeGeoKey)
+	{
+		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey)
+		{
+			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
+			return;
+		}
+		capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
+	}
+
+	var datatype;
+
+	//Ara, amb aquestes metadades podem creo millor els valors i components.
+	if (image.getArrayForSample() instanceof Int8Array)
+		datatype="int8";
+	else if (image.getArrayForSample() instanceof Uint8Array)
+		datatype="uint8";
+	else if (image.getArrayForSample() instanceof Int16Array)
+		datatype="int16";
+	else if (image.getArrayForSample() instanceof Uint16Array)
+		datatype="uint16";
+	else if (image.getArrayForSample() instanceof Int32Array)
+		datatype="int32";
+	else if (image.getArrayForSample() instanceof Uint32Array)
+		datatype="uint32";
+	else if (image.getArrayForSample() instanceof Float32Array)
+		datatype="float32";
+	else if (image.getArrayForSample() instanceof Float64Array)
+		datatype="float64";
+	else
+	{
+		alert("Unsuported tiff data type");
+		return;
+	}
+
+	var i_v=capa.valors.length;
+	for (var i=0; i<image.getSamplesPerPixel(); i++)
+	{
+		capa.valors.push({
+				url: capa.servidor ? null : url,
+				datatype: datatype,
+				nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
+			});
+		if (!capa.servidor)
+		{
+			capa.valors[i_v+i].tiff=tiff;
+			capa.valors[i_v+i].i_data_tiff=0;
+		}
+	}
+
+	if (image.getSamplesPerPixel()==3)
+	{
+		capa.estil.push({nom: null,
+					desc: desc,
+					DescItems: null,
+					TipusObj: "I",
+					metadades: null,
+					component: [
+						{
+							i_valor: i_v,
+						},{
+							i_valor: i_v+1,
+						},{
+							i_valor: i_v+2,
+						}
+					]
+				});
+	}
+	else
+	{
+		for (var i=0; i<image.getSamplesPerPixel(); i++)
+		{
+			capa.estil.push({nom: null,
+					desc: desc,
+					DescItems: null,
+					TipusObj: "P",
+					metadades: null,
+					component: [
+						{
+							i_valor: i_v+i,
+						}
+					],
+					nItemLlegAuto: 20,
+					ncol: 4,
+					descColorMultiplesDe: 0.01,
+					ColorMinimPrimer: false
+				});
+		}
+	}
+	//i_v+=image.getSamplesPerPixel();						
+}
+
+function AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir)
+{
+var k;
 	if(i_on_afegir==-1)
 		k=ParamCtrl.capa.length;
 	else
@@ -582,4 +621,53 @@ var i_v=0, i_fitxer, datatype;
 		alert("The added layer has a CRS '"+ DonaDescripcioCRS(capa.CRS[0]) + "' that is no visible in the current CRS '" + DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) + "'");
 	else
 		RepintaMapesIVistes();
+}
+
+async function AfegeixCapaGeoTIFF_URL(urls, i_on_afegir)
+{
+var i_fitxer, i_event;
+
+	if (!urls.length)
+		return;
+
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]));
+
+	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
+	{
+		if (!window.GeoTIFFfromUrl)
+			await loadGeoTIFF();
+
+		i_event=CreaIOmpleEventConsola("HTTP GET", -1, urls[i_fitxer], TipusEventHttpGet);
+		try{
+			var tiff = await GeoTIFFfromUrl(urls[i_fitxer]);
+			CanviaEstatEventConsola(null, i_event, EstarEventTotBe);
+		}catch(e){
+			alert(e);
+			CanviaEstatEventConsola(null, i_event, EstarEventError);
+			return;
+		}
+
+
+		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer]));
+	}
+
+	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);
+}
+
+async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
+{
+var i_fitxer;
+
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc); 	
+
+	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
+	{
+		if (!window.GeoTIFFfromBlob)
+			await loadGeoTIFF();
+		
+		var tiff = await GeoTIFFfromBlob(tiff_blobs[i_fitxer]);
+		await CompletaDefinicioCapaTIFF(capa, tiff, tiff_blobs[i_fitxer].name, tiff_blobs[i_fitxer].name);
+	}
+
+	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);
 }

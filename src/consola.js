@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -59,7 +59,7 @@ var EstarEventError=2;
 var EstarEventTotBe=3;
 
 var EventConsola=[];
-var i_EventConsola=0; //Actual d¡identificador perquè sepre augmenta i ningú el torna a posar mai a 0
+var i_EventConsola=0; //Actual d'identificador perquè sempre augmenta i ningú el torna a posar mai a 0
 
 function CreaIOmpleEventConsola(titol, i_capa, desc, tipus)
 {
@@ -117,7 +117,7 @@ var temp, event_consola;
 	{
 		event_consola=EventConsola[i];
 		temp=event_consola.desc;
-		if (event_consola.tipus!=TipusEventDonaProjeccioConsultaTipica && ParamCtrl.capa[event_consola.i_capa].tipus=="TipusSOS" && ParamCtrl.capa[event_consola.i_capa].FormatImatge=="application/json")
+		if (event_consola.tipus!=TipusEventDonaProjeccioConsultaTipica && event_consola.i_capa!=-1 && ParamCtrl.capa[event_consola.i_capa].tipus=="TipusSOS" && ParamCtrl.capa[event_consola.i_capa].FormatImatge=="application/json")
 		{
 			//Afegeixo un nou paràmetre, perquè es pugui veure realment que la petició és JSON, ja que és va per la via HTTP_ACCEPT i això no es pot reproduir en un link
 			temp=temp+"&responseFormat=application/json";
@@ -128,7 +128,9 @@ var temp, event_consola;
 		cdns.push("<b>", event_consola.titol);
 		if (event_consola.tipus==TipusEventGetFeature || event_consola.tipus==TipusEventGetFeatureOfInterest || event_consola.tipus==TipusEventGetObservation)
 		{
-			if (ParamCtrl.capa[event_consola.i_capa].desc)
+			if (event_consola.i_capa==-1)
+				;
+			else if (ParamCtrl.capa[event_consola.i_capa].desc)
 				cdns.push(" ", DonaCadena(ParamCtrl.capa[event_consola.i_capa].desc));
 			else
 				cdns.push(" ", ParamCtrl.capa[event_consola.i_capa].nom);
@@ -139,7 +141,9 @@ var temp, event_consola;
 		}
 		else
 		{
-			if (ParamCtrl.capa[event_consola.i_capa].desc)
+			if (event_consola.i_capa==-1)
+				;
+			else if (ParamCtrl.capa[event_consola.i_capa].desc)
 				cdns.push(" ", DonaCadena(ParamCtrl.capa[event_consola.i_capa].desc));
 			else
 				cdns.push(" ", ParamCtrl.capa[event_consola.i_capa].nom);

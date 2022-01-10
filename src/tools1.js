@@ -507,6 +507,7 @@ function AfegeixAdrecaBaseSRC(s)
 	return s;
 }
 
+//Es podria haver fet millor a partir d'usar url=new URL(s) i url.pathname abans de fer això que es fa ara.
 function TreuAdreca(s)
 {
 	var i=s.lastIndexOf('/');

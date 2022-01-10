@@ -853,57 +853,37 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 			if (capa.objectes && capa.objectes.features)
 			{
 				hi_havia_objectes=true;
-				//try {
-					//var geojson=JSON.parse(doc);
-					//si hi ha una bbox es podria actualitzar però com que no la uso...
-					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
-						var features=doc.features;
-					else if (tipus=="TipusSOS")
-						var features=doc.featureOfInterest;
-					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-						var features=ExtreuITransformaSTAfeatures(doc);
-					if(features.length>0)
-					{
-						/*NJ no sé perquè serveix això
-						for (i=0; i<features.length; i++)
-							features[i].id=features[i].id.substring(capa.nom.length+1); */
-						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
-					}
-				/*} 
-				catch (e) {
-					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-					return;
-				}*/
+				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
+					var features=doc.features;
+				else if (tipus=="TipusSOS")
+					var features=doc.featureOfInterest;
+				else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+					var features=ExtreuITransformaSTAfeatures(doc);
+				if(features.length>0)
+				{
+					/*NJ no sé perquè serveix això
+					for (i=0; i<features.length; i++)
+						features[i].id=features[i].id.substring(capa.nom.length+1); */
+					capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
+				}
 			}
 			else
 			{
 				hi_havia_objectes=false;
-				//try {
-					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
-					{
-						//capa.objectes=JSON.parse(doc);
-						capa.objectes=doc;
-					}
-					if (tipus=="TipusSOS")
-					{
-						//var geojson=JSON.parse(doc);					
-						capa.objectes={"type": "FeatureCollection", "features": doc.featureOfInterest};
-					}
-					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-					{
-						//var geojson=JSON.parse(doc);					
-						var features=ExtreuITransformaSTAfeatures(doc);
-						capa.objectes={"type": "FeatureCollection", "features": features};
-					}
-					/*NJ no sé perquè serveix això
-					var features=capa.objectes.features;
-					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1);*/
-				/*} 
-				catch (e) {
-					CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-					return;
-				}*/
+				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
+					capa.objectes=doc;
+				if (tipus=="TipusSOS")
+					capa.objectes={"type": "FeatureCollection", "features": doc.featureOfInterest};
+				else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+				{
+					var features=ExtreuITransformaSTAfeatures(doc);
+					capa.objectes={"type": "FeatureCollection", "features": features};
+				}
+				/*NJ no sé perquè serveix això
+				var features=capa.objectes.features;
+				for (i=0; i<features.length; i++)
+					features[i].id=features[i].id.substring(capa.nom.length+1);*/
 			}
 		}
 		else
@@ -1040,6 +1020,19 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 					i++;
 				}
 			}
+		}
+	}
+
+	if (!hi_havia_objectes && !capa.atributs && capa.objectes && capa.objectes.features && capa.objectes.features.length && 
+		capa.objectes.features[0].properties)
+	{
+		//Si els atributs no estaven definits es defineixen de manera trivial
+		capa.atributs=[];
+		for (var j in capa.objectes.features[0].properties)
+		{
+			capa.atributs.push({"nom": j,
+						"descripcio": j,
+						"mostrar": "si_ple"});
 		}
 	}
 
