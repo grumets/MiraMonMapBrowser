@@ -427,6 +427,22 @@ var k;
 	RepintaMapesIVistes();
 }
 
+function DefineixAtributsCapaVectorSiCal(capa)
+{
+	if (!capa.atributs && capa.objectes && capa.objectes.features && capa.objectes.features.length && 
+		capa.objectes.features[0].properties)
+	{
+		//Si els atributs no estaven definits es defineixen de manera trivial
+		capa.atributs=[];
+		for (var j in capa.objectes.features[0].properties)
+		{
+			capa.atributs.push({"nom": j,
+						"descripcio": j,
+						"mostrar": "si_ple"});
+		}
+	}
+}
+
 function AfegeixCapaGeoJSON(desc, objectes, i_on_afegir)
 {
 var k;
@@ -445,7 +461,7 @@ var k;
 				desc: desc,
 				CRSgeometry: "EPSG:4326",
 				objectes: objectes,
-				atributs: [],
+				atributs: null,
 				FormatImatge: "application/json",
 				transparencia: "opac",
 				CostatMinim: null,
@@ -461,6 +477,7 @@ var k;
 				AnimableMultiTime: false,
 				origen: OriginUsuari});
 	
+	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 

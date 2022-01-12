@@ -41,9 +41,9 @@
 function MoureASobreDeTot(i_capa)
 {
 	var n_capes_especials_a_sobre=NumeroDeCapesVolatils(i_capa);
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, null, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(1, n_capes_especials_a_sobre, i_capa, ParamCtrl);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+n_capes_especials_a_sobre, -1, null, ParamCtrl);
 
 	ParamCtrl.capa.splice(n_capes_especials_a_sobre, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -55,9 +55,9 @@ function MoureASobreDeTot(i_capa)
 
 function MoureASobre(i_capa)
 {
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(1, i_capa-1, ParamCtrl);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, -1, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, null, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(1, i_capa-1, null, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa-1, -1, null, ParamCtrl);
 
 	ParamCtrl.capa.splice(i_capa-1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -70,9 +70,9 @@ function MoureASobre(i_capa)
 
 function MoureASota(i_capa)
 {
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, ParamCtrl);
-	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, -1, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, null, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, null, ParamCtrl);
+	CanviaIndexosCapesSpliceCapa(-ParamCtrl.capa.length+i_capa+1, -1, null, ParamCtrl);
 
 	ParamCtrl.capa.splice(i_capa+1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
@@ -85,7 +85,7 @@ function MoureASota(i_capa)
 function MoureASotaDeTot(i_capa)
 {
 	//He de pujar totes les capes que estan sota i_capa una posició
-	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
+	CanviaIndexosCapesSpliceCapa(ParamCtrl.capa.length-i_capa, i_capa, null, ParamCtrl);  //els moc fora de rang per no barrejar-los amb els nous
 	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);
 
 	ParamCtrl.capa.push(ParamCtrl.capa.splice(i_capa, 1)[0]);
@@ -546,13 +546,13 @@ for (i=0 i<-n_moviment; i++)
 	return;
 per avisar que hi ha capes que tenen indexos que apunten a capes que s'eliminen. Tot això ja es te en compte a EsborrarCapa().
 'i_capa_fi_per_sota' és la capa fi (no incluent ella mateixa) on cal fer el canvi d'indexos. Si voleu fins al final especifiqueu -1 (o ParamCtrl.capa.length),
-	Opcional; si no s'especifica, només es mouen els index que coindideixen amb i_capa_ini.
+	Si voleu moure només els index que coindideixen amb i_capa_ini useu null o i_capa_ini+1
 Des que els histogrames són dinàmics també ha de revisar els HistogramaFinestra[] i Superficie3DFinestra[]*/
 function CanviaIndexosCapesSpliceCapa(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl)
 {
 var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 
-	if (typeof i_capa_fi_per_sota==="undefined")
+	if (typeof i_capa_fi_per_sota==="undefined" || i_capa_fi_per_sota==null)
 		var i_capa_fi_per_sota=i_capa_ini+1;
 	if (i_capa_fi_per_sota==-1)
 		i_capa_fi_per_sota=param_ctrl.capa.length;
@@ -751,12 +751,12 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 //n_moviment pot ser negatiu quan elimines capes o positiu quan insereixes. Aquest funció s'ha de cridar despres fer capa.splice() o similars.
 //i_capa índex de la capa que conté l'estil a esborrar o a inserir
 //i_estil_ini és l'índex de l'estil inicial per fer el canvi d'indexos
-//i_estil_fi_per_sota és l'índex de l'estil  fi (no incluent ell mateixa) on cal fer el canvi d'indexos. Opcional; si no s'especifica, val i_estil_ini+1
+//i_estil_fi_per_sota és l'índex de l'estil  fi (no incluent ell mateixa) on cal fer el canvi d'indexos. Opcional; si no s'especifica (o es posa null), val i_estil_ini+1
 function CanviaIndexosCapesSpliceEstil(n_moviment, i_capa, i_estil_ini, i_estil_fi_per_sota)
 {
 var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 
-	if (typeof i_estil_fi_per_sota==="undefined")
+	if (typeof i_estil_fi_per_sota==="undefined" || i_estil_fi_per_sota==null)
 		var i_estil_fi_per_sota=i_estil_ini+1;
 
 	for(var i=0; i<ParamCtrl.capa.length; i++)

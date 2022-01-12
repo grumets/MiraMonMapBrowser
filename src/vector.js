@@ -1023,18 +1023,8 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 		}
 	}
 
-	if (!hi_havia_objectes && !capa.atributs && capa.objectes && capa.objectes.features && capa.objectes.features.length && 
-		capa.objectes.features[0].properties)
-	{
-		//Si els atributs no estaven definits es defineixen de manera trivial
-		capa.atributs=[];
-		for (var j in capa.objectes.features[0].properties)
-		{
-			capa.atributs.push({"nom": j,
-						"descripcio": j,
-						"mostrar": "si_ple"});
-		}
-	}
+	if (!hi_havia_objectes)
+		DefineixAtributsCapaVectorSiCal(capa);
 
 	CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
