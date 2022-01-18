@@ -222,7 +222,15 @@ function InicialitzaCRS(crs)
 {
 var crs_up=crs.toUpperCase();
 
-	if (crs_up=="EPSG:32628")
+	if (crs_up=="EPSG:32616")
+	{
+		CanviCRS.offset_mapa_X=500000;
+		CanviCRS.offset_mapa_Y=0;    //hemisferi N
+		CanviCRS.lambda_0=-87*FactorGrausARadiants;  //fus 28
+		CanviCRS.fi_0=0*FactorGrausARadiants;
+		CanviCRS.c_tissot=0.9996;
+	}
+	else if (crs_up=="EPSG:32628")
 	{
 		CanviCRS.offset_mapa_X=500000;
 		CanviCRS.offset_mapa_Y=0;    //hemisferi N
@@ -389,7 +397,7 @@ var crs_up=crs.toUpperCase();
 	CanviCRS.e1_sobre3=CanviCRS.e1_sobre2*CanviCRS.e1;
 	CanviCRS.e1_sobre4=CanviCRS.e1_sobre2*CanviCRS.e1_sobre2;
 
-	if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
+	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
 		crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
 		crs_up=="EPSG:32736")
@@ -729,7 +737,7 @@ var crs_up;
 
 	crs_up=crs.toUpperCase();
 
-	if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
+	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
         	crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
 	        crs_up=="EPSG:32736")
@@ -763,7 +771,7 @@ var crs_up;
 		InicialitzaCRS(crs);
 
 	crs_up=crs.toUpperCase();
-	if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
+	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
         	crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
 	        crs_up=="EPSG:32736")
@@ -1001,7 +1009,7 @@ function DonaUnitatsCoordenadesProj(crs)
 {
 var crs_up=crs.toUpperCase();
 
-	if (crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
+	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
 	        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
         	crs_up=="EPSG:32736" ||
@@ -1020,7 +1028,9 @@ function DonaDescripcioCRS(crs)
 {
 var crs_up=crs.toUpperCase();
 
-	if (crs_up=="EPSG:32628")
+	if (crs_up=="EPSG:32616")
+		return "UTM16N - WGS84";
+	else if (crs_up=="EPSG:32628")
 		return "UTM28N - WGS84";
 	else if (crs_up=="EPSG:32629")
 		return "UTM29N - WGS84";
