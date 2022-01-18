@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -98,6 +98,10 @@ var cdns=[];
 function CreaItemLlegDePaletaSiCal(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
+
+	if (!capa.estil)
+		return;
+
 var estil=capa.estil[i_estil];
 var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample, n_item_lleg_auto;
 

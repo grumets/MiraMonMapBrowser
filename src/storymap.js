@@ -56,19 +56,50 @@ function TancaFinestra_triaStoryMap()
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], storyMap, i_story;
+var cdns=[], storyMap, i_story, i, j;
+var ncol=2, nstory, i_real_story=[];
+
+	for (i_story=0, nstory=0; i_story<ParamCtrl.StoryMap.length; i_story++)
+	{
+		if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[i_story].EnvTotal))
+			continue;
+		i_real_story[nstory]=i_story;  //This transforms filtered story index into unfiltered index.
+		nstory++;
+	}
+	
+	if (nstory==0)
+	{
+		contentFinestraLayer(win, name, GetMessage("NoStoryInThisArea", "storymap"));
+		IStoryActive=-1;
+		return 0;
+	}
 
 	cdns.push("<br>",
-		GetMessage("SelectStory", "storymap"), ":" ,
-						"<br>");
-		for (i_story=0; i_story<ParamCtrl.StoryMap.length; i_story++)
-		{
-			cdns.push("<a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_story, ");\">",
-					"<img align='middle' src='",(ParamCtrl.StoryMap[i_story].src)?ParamCtrl.StoryMap[i_story].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
-							"<br>",
-							DonaCadena(ParamCtrl.StoryMap[i_story].desc),
-							"</a><br><br>");
-		}
+				GetMessage("SelectStory", "storymap"), ":" ,
+				"<br><table class=\"Verdana11px\">");
+	for (i_story=0, j=0; j<parseInt(nstory/ncol); j++)
+	{
+		cdns.push("<tr>");
+		for (i=0; i<ncol; i++, i_story++)
+			cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_real_story[i_story], ");\">",
+				"<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
+				"<br>",
+				DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
+				"</a><br></td>");
+		cdns.push("</tr>");
+	}
+	if (nstory%ncol)
+	{
+		cdns.push("<tr>");
+		for (;i_story<nstory; i_story++)
+			cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_real_story[i_story], ");\">",
+				"<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
+				"<br>",
+				DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
+				"</a></td>");
+		cdns.push("</tr>");
+	}
+	cdns.push("</table>");
 	contentFinestraLayer(win, name, cdns.join(""));
 	IStoryActive=-1;
 }

@@ -244,7 +244,8 @@ var MessageLang={
 		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
 	},
   storymap:{
-		SelectStory: {"cat":"Selecciona una història", "spa":"Selecciona una historia", "eng":"Select a story", "fre":"Sélectionnez une histoire"},
+		SelectStory: {"cat":"Selecciona un relat", "spa":"Selecciona un relato", "eng":"Select a story", "fre":"Sélectionnez une histoire"},
+		NoStoryInThisArea: {"cat":"No hi ha cap relat associat a aquesta zona", "spa":"No hay ningún relato asociado a esta zona", "eng":"There are no stories associated with this area", "fre":"Il n'y a pas d'histoires associées à cette zone"},
 		WrongFormat_mm_center_Parameter: {"cat":"Format del paràmetre mm-center incorrecte", "spa":"Formato del parametro mm-center icnorrecto", "eng":"Wrong format in mm-center parameter", "fre":"Format incorrect dans le paramètre mm-center"},
 		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és:", "spa":"El valor del parámetro indicado es:", "eng":"The parameter value found is:", "fre":"La valeur de paramètre trouvée est:"},
 		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte", "spa":"Formato del parámetro mm-time icnorrecto", "eng":"Wrong format in mm-time parameter", "fre":"Format incorrect dans le paramètre mm-time"},

@@ -3899,7 +3899,7 @@ var cdns=[];
 
 function EsCapaDinsAmbitActual(capa)
 {
-	if (capa.EnvTotal==null || capa.EnvTotal.EnvCRS==null)
+	if (!capa.EnvTotal || !capa.EnvTotal.EnvCRS)
 		return true;
 	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==capa.EnvTotal.CRS.toUpperCase())
 	{
@@ -3915,8 +3915,8 @@ function EsCapaDinsAmbitActual(capa)
 	else
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
-		var env_ll=DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		if (!EsEnvDinsEnvolupant(env_ll,capa.EnvTotalLL))
+		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
+					capa.EnvTotalLL))
 			return false;
 	}
 	return true;
@@ -3924,7 +3924,7 @@ function EsCapaDinsAmbitActual(capa)
 
 function EsCapaDinsAmbitCapa(c, c2)
 {
-	if (c.EnvTotal==null || c.EnvTotal.EnvCRS==null || c2.EnvTotal==null || c2.EnvTotal.EnvCRS==null)
+	if (!c.EnvTotal || !c.EnvTotal.EnvCRS || !c2.EnvTotal || !c2.EnvTotal.EnvCRS)
 		return true;
 	if (c.EnvTotal.CRS.toUpperCase()==c2.EnvTotal.CRS.toUpperCase())
 	{
@@ -3940,13 +3940,35 @@ function EsCapaDinsAmbitCapa(c, c2)
 	else
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
-		var env_ll=DonaEnvolupantLongLat(c.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		var env_ll2=DonaEnvolupantLongLat(c2.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		if (!EsEnvDinsEnvolupant(env_ll,env_ll2))
+		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(c.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
+				DonaEnvolupantLongLat(c2.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)))
 			return false;
 	}
 	return true;
 }
+
+function EsEnvDinsAmbitActual(env)
+{
+//var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal;
+
+	if (!env || !env.CRS)
+		return true;
+	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==env.CRS.toUpperCase())
+	{
+		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env.EnvCRS))
+			return false;
+	}
+	else
+	{
+		//Paso l'envolupant actual a lat/long i comparo.
+		if (!EsEnvDinsEnvolupant(
+					DonaEnvolupantLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamInternCtrl.vista.EnvActual), 
+					DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
+			return false;
+	}
+	return true;
+}
+
 
 function EsImatgeSituacioDinsAmbitActual(i)
 {
@@ -3954,7 +3976,7 @@ var env_situa=ParamCtrl.ImatgeSituacio[i].EnvTotal;
 var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal;
 
 	if (ParamInternCtrl.ISituacio==i)
-		true;
+		return true;
 	if (env_situa_actual.CRS.toUpperCase()==env_situa.CRS.toUpperCase())
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env_situa.EnvCRS))
@@ -3968,13 +3990,12 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 	else
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
-		var env_ll=DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		if (!EsEnvDinsEnvolupant(env_ll, ParamInternCtrl.EnvLLSituacio[i]))
+		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), 
+			ParamInternCtrl.EnvLLSituacio[i]))
 			return false;
 	}
 	return true;
 }
-
 
 function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 {
