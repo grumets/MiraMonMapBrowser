@@ -104,7 +104,7 @@ IncludeScript("msg.js", true);
 
 var IdProces=Math.random()*100000;
 var NIdProces=0;
-var NConsultesZero, NConsultesDigiZero, NCapesConsultables, NCapesDigiConsultables, NCapesCTipica=0;
+var NConsultesZero, NConsultesDigiZero, NCapesConsultables, NCapesDigiConsultables;
 var timeoutCreaVistes=null;
 var Accio={};
 var AccioAnarCoord=0x0001;
@@ -875,7 +875,7 @@ function CanviaIdioma(s)
 	CreaTitolNavegador();
 	CreaLlegenda();
 
-	if (ParamCtrl.ConsultaTipica && capa_consulta_tipica_intern.length>0 && NCapesCTipica==capa_consulta_tipica_intern.length)
+	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		IniciaConsultesTipiques();
 		CreaConsultesTipiques();
@@ -1452,7 +1452,6 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 				delete capa.TileMatrixGeometry.env;
 		}
 
-		//Inici afegit AZ a revisar per JM ·$·$·$·$·$·
 		if (capa.EnvTotalLL)
 			delete capa.EnvTotalLL;
 
@@ -1522,12 +1521,12 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 			}
 		}			
 						
-		//Fi de Afegit AZ a revisar per JM ·$·$·$·$·$·
-
 		if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
 			delete capa.metadades.provenance.lineage;
 	}
 	EliminaIndexDeCapesVolatils(param_ctrl);
+
+	EliminaProjCampIIdCampSiServidor(param_ctrl);
 
 	if (is_local_storage==false)
 	{
@@ -7266,7 +7265,7 @@ var win, i, j, l, capa;
 		//"CONFIG=" es tracta abans.
 	}
 
-	if(NCapesCTipica < capa_consulta_tipica_intern.length)
+	if(ParamCtrl.CapaConsultaPreguntaServidor && NCapesCTipicaCarregades < ParamCtrl.CapaConsultaPreguntaServidor.length)
 		DadesPendentsAccio=true;
 
 	if (nou_env.MinX<1e300 && nou_env.MaxX>-1e300 && nou_env.MinY<1e300 && nou_env.MaxY>-1e300)

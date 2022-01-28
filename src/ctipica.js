@@ -48,6 +48,7 @@ var ICellaLlistaBlau=[];
 var NomEditLlavorLlista=[];
 var NomLayerLlista=[];
 var CTipicaCapa=[];
+var NCapesCTipicaCarregades=0;
 
 //var WindowDelEvent=parent.ctipica;
 
@@ -491,7 +492,7 @@ var i_capa, i_capa_a_activar;
 
 	for(i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{
-		if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].nom==ParamCtrl.capa[i_capa].nom)
+		if (ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].nom==ParamCtrl.capa[i_capa].nom)
 		{
 			if (ParamCtrl.capa[i_capa].visible=="no")
 				return retorn;
@@ -502,12 +503,12 @@ var i_capa, i_capa_a_activar;
 	if (i_capa==ParamCtrl.capa.length)
 		return retorn;
 
-	for(var i_tipica=0; i_tipica<capa_consulta_tipica_intern.length; i_tipica++)
+	for(var i_tipica=0; i_tipica<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica++)
 	{
 		for(i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 		{
 			if (i_capa!=i_capa_a_activar &&
-				capa_consulta_tipica_intern[i_tipica].nom==ParamCtrl.capa[i_capa].nom)
+				ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].nom==ParamCtrl.capa[i_capa].nom)
 			{
 				if (i_tipica!=CTipicaCapa[i_ctipica])
 				{
@@ -585,10 +586,10 @@ var i_ctipica_capa, i_valor;
 		var i_llista=0;
 		if (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null)
 		{
-			if (capa_consulta_tipica_intern.length==1)
+			if (ParamCtrl.CapaConsultaPreguntaServidor.length==1)
 			{
-				if(capa_consulta_tipica_intern[0].id_camp)
-					i_valor=capa_consulta_tipica_intern[0].id_camp[0][i_llista_buscar].id;
+				if(ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp)
+					i_valor=ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[0][i_llista_buscar].id;
 				else
 					i_valor==i_llista_buscar;
 				PortamAAmbitConsultaTipica(i_ctipica, 0, 0, i_valor);
@@ -596,15 +597,15 @@ var i_ctipica_capa, i_valor;
 			}
 			else
 			{
-				for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
+				for (var i_tipica_capa=0; i_tipica_capa<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica_capa++)
 				{
-					if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
+					if(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp)
 					{
-						for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
+						for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 						{
 							if (i_llista==i_llista_buscar)
 							{
-								i_valor=capa_consulta_tipica_intern[0].id_camp[0][i].id;
+								i_valor=ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[0][i].id;
 								PortamAAmbitConsultaTipica(i_ctipica, i_tipica_capa, 0, i_valor);
 								return 0;
 							}
@@ -612,7 +613,7 @@ var i_ctipica_capa, i_valor;
 					}
 					else
 					{
-						for (var i_valor=0; i_valor<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i_valor++, i_llista++)
+						for (var i_valor=0; i_valor<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i_valor++, i_llista++)
 						{
 							if (i_llista==i_llista_buscar)
 							{
@@ -628,20 +629,20 @@ var i_ctipica_capa, i_valor;
 		{
 			for (i_nom_capa=0; i_nom_capa<ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length; i_nom_capa++)
 			{
-				for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
+				for (var i_tipica_capa=0; i_tipica_capa<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica_capa++)
 				{
-					if (capa_consulta_tipica_intern[i_tipica_capa].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
+					if (ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
 						break;
 				}
-				if (i_tipica_capa<capa_consulta_tipica_intern.length)
+				if (i_tipica_capa<ParamCtrl.CapaConsultaPreguntaServidor.length)
 				{
-					if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
+					if(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp)
 					{
-						for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
+						for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 						{
 							if (i_llista==i_llista_buscar)
 							{
-								i_valor=capa_consulta_tipica_intern[0].id_camp[0][i].id;
+								i_valor=ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[0][i].id;
 								PortamAAmbitConsultaTipica(i_ctipica, i_tipica_capa, 0, i_valor);
 								return 0;
 							}
@@ -649,7 +650,7 @@ var i_ctipica_capa, i_valor;
 					}
 					else
 					{
-						for (var i_valor=0; i_valor<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i_valor++, i_llista++)
+						for (var i_valor=0; i_valor<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i_valor++, i_llista++)
 						{
 							if (i_llista==i_llista_buscar)
 							{
@@ -679,17 +680,17 @@ function InsertaOpcioEnSelect(selector, opcio, posicio)
 
 function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
-	if (capa_consulta_tipica_intern.length && i_camp_ctipica>0)
+	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>0)
 	{
 		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo
 		var document_ctipica=window.document;
 		var i_camp_selec=i_camp_ctipica;
-		if(valor<0 && i_camp_selec<capa_consulta_tipica_intern[i_ctipica_capa].camps.length)  // S'ha escollit l'opció de --Seleccionar ---
+		if(valor<0 && i_camp_selec<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length)  // S'ha escollit l'opció de --Seleccionar ---
 			i_camp_selec++;
 
 		var select_ctipica_anterior;
 		var valor_seleccionat=[];
-		for(var z=i_camp_selec; z<capa_consulta_tipica_intern[i_ctipica_capa].camps.length; z++)
+		for(var z=i_camp_selec; z<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length; z++)
 		{
 			//select_ctipica_anterior=eval("window.document.ctipica"+i_ctipica+".valor"+z);
 			select_ctipica_anterior=window.document["ctipica"+i_ctipica]["valor"+z];
@@ -706,15 +707,15 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			select_ctipica.options.length=0;
 
 			//Construeixo una llista amb els índexs dels camps que cumpleixen la selecció actual i les anteriors
-			for(var j=0; j<capa_consulta_tipica_intern[i_ctipica_capa].id_camp[0].length; j++)
+			for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].id_camp[0].length; j++)
 			{
-				for(var z=i_camp_selec; z<capa_consulta_tipica_intern[i_ctipica_capa].camps.length; z++)
+				for(var z=i_camp_selec; z<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length; z++)
 				{
-					if(valor_seleccionat[z]>=0 && capa_consulta_tipica_intern[i_ctipica_capa].id_camp[z][j].id!=valor_seleccionat[z])
+					if(valor_seleccionat[z]>=0 && ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].id_camp[z][j].id!=valor_seleccionat[z])
 						break;
 				}
-				if(z==capa_consulta_tipica_intern[i_ctipica_capa].camps.length)
-					array_index[array_index.length]=capa_consulta_tipica_intern[i_ctipica_capa].id_camp[i][j].id;
+				if(z==ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length)
+					array_index[array_index.length]=ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].id_camp[i][j].id;
 			}
 			//Haig ordenar array_index
 			array_index.sort(sortAscendingNumber);
@@ -739,7 +740,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 				if(ultim_valor_usat!=array_index[j])
 				{
 					opcio=document_ctipica.createElement('option');
-					opcio.text=capa_consulta_tipica_intern[i_ctipica_capa].proj_camp[i][array_index[j]].valor;
+					opcio.text=ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].proj_camp[i][array_index[j]].valor;
 					opcio.value=array_index[j];
 					opcio.selected=false;
 					InsertaOpcioEnSelect(select_ctipica, opcio, null);
@@ -753,7 +754,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
 
-	if (capa_consulta_tipica_intern.length && i_camp_ctipica>=0 && valor>=0)
+	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
 	{
 		CTipicaCapa[i_ctipica]=i_ctipica_capa;
 		CTipicaValor=valor;
@@ -765,8 +766,8 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 				CreaLlegenda();
 			}
 		}
-		EstableixNouCRSEnv(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].CRS, capa_consulta_tipica_intern[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
-		PortamAAmbit(capa_consulta_tipica_intern[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
+		EstableixNouCRSEnv(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].CRS, ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
+		PortamAAmbit(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
 		PosaLlistaValorsConsultesTipiquesAlPrincipi(i_ctipica);
 	}
 }
@@ -781,7 +782,7 @@ function PortamAAmbitConsultaTipicaCompleta(i_ctipica, capa, valor)
 		{
 			CTipicaCapa[i_ctipica]=capa;
 			PortamAAmbitConsultaTipica(i_ctipica, capa, 0, valor);
-			for (var i=0; i<capa_consulta_tipica_intern.length+3; i++)
+			for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length+3; i++)
 			{
 				if (i==CTipicaCapa[i_ctipica])
 					form_ctipica.capa[i].checked=true;
@@ -843,9 +844,9 @@ function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica && form_ctipica.capa)
 		{
-			for (var i=0; i<capa_consulta_tipica_intern.length+3; i++)
+			for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length+3; i++)
 				form_ctipica.capa[i].checked=false;
-			form_ctipica.capa[capa_consulta_tipica_intern.length].checked=true;
+			form_ctipica.capa[ParamCtrl.CapaConsultaPreguntaServidor.length].checked=true;
 		}
     }
 }
@@ -870,12 +871,12 @@ function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica && form_ctipica.capa)
 		{
-			for (var i=0; i<capa_consulta_tipica_intern.length; i++)
+			for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 			{
 				if (form_ctipica.capa[i].checked)
 					break;
 			}
-			if (i==capa_consulta_tipica_intern.length)
+			if (i==ParamCtrl.CapaConsultaPreguntaServidor.length)
 			{
 				if (form_ctipica.retallar[2].checked)
 				{
@@ -900,7 +901,7 @@ var CTipicaValor=-CTipicaOffset;
 
 function CanviaLlistaCapaConsultaTipica(i_ctipica)
 {
-    if (capa_consulta_tipica_intern.length)
+    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -916,22 +917,21 @@ function CanviaLlistaCapaConsultaTipica(i_ctipica)
 
 function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 {
-    if (capa_consulta_tipica_intern.length)
+    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica)
 		{
-			if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].id_camp)
+			if(ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].id_camp)
 			{
-				//var form_ctipica_valor=eval("form_ctipica.valor"+(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1));
-				var form_ctipica_valor=form_ctipica["valor"+(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1)];
+				var form_ctipica_valor=form_ctipica["valor"+(ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].camps.length-1)];
 				if(form_ctipica_valor)
 				{
 					CTipicaValor=-CTipicaOffset;
 					form_ctipica_valor.selectedIndex=0;
 					ActualitzaComboConsultaTipicaSeguents(i_ctipica, CTipicaCapa[i_ctipica],
-						(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1), -2);
+						(ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].camps.length-1), -2);
 				}
 			}
 			else
@@ -948,7 +948,7 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 
 function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 {
-    if (win && win.document && capa_consulta_tipica_intern.length)
+    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -984,7 +984,7 @@ function PosaLlistaValorsConsultesTipiquesAlPrincipi(excepte_i_ctipica)
 var InicialConsultaTipica="A";
 function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 {
-	if (capa_consulta_tipica_intern.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		InicialConsultaTipica=s;
 		CreaConsultaTipica(i_ctipica);
@@ -993,132 +993,131 @@ function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 
 function CreaConsultaTipica(i_ctipica)
 {
-var cdns=[];
-var s;
+var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]], ctipica=ParamCtrl.ConsultaTipica[i_ctipica];
 
 	cdns.push("<FORM NAME=\"ctipica",i_ctipica,"\" onSubmit=\"return false;\">\n\n");
 
 	if (CTipicaCapa.length)
 	{
-	    if ((ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables" || ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
-			&& capa_consulta_tipica_intern.length)
-	    {
+		if ((ctipica.TipusConsultaTipica=="CTipicaDesplegables" || ctipica.TipusConsultaTipica=="CTipicaInicials")
+			&& ParamCtrl.CapaConsultaPreguntaServidor.length)
+		{
 			//Camp final seleccionable Anar a ""
-			if ((ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null && capa_consulta_tipica_intern.length==1) ||
-			   (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa!=null && ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length==1))
+			if ((ctipica.NomCapa==null && ParamCtrl.CapaConsultaPreguntaServidor.length==1) ||
+			   (ctipica.NomCapa!=null && ctipica.NomCapa.length==1))
 			{
 				cdns.push("<span class=\"text_general_consulta\">",
-					DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ) , " </span><span class=\"nom_capa_consulta\">" ,
-					DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].desc) , "</span> ");
+					DonaCadena(capa_pregunta_svr.camps[0].previ) , " </span><span class=\"nom_capa_consulta\">" ,
+					DonaCadena(capa_pregunta_svr.camps[0].desc) , "</span> ");
 
 				cdns.push("<span class=\"text_general_consulta\">");
-				if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length>1  && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
-					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1].previ));
+				if(capa_pregunta_svr.camps.length>1  && ctipica.TipusConsultaTipica=="CTipicaDesplegables")
+					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",DonaCadena(capa_pregunta_svr.camps[capa_pregunta_svr.camps.length-1].previ));
 				else
-					cdns.push(DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].post));
+					cdns.push(DonaCadena(capa_pregunta_svr.camps[0].post));
 				cdns.push("</span>");
 			}
 			else //Hi ha més d'una capa
 			{
 				cdns.push("<span class=\"text_general_consulta\">",
-				   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ), " </span>" ,
+				   DonaCadena(capa_pregunta_svr.camps[0].previ), " </span>" ,
 				   "  <select name=\"capa\" class=\"desplegable\" onChange=\'CanviaLlistaCapaConsultaTipica(",i_ctipica,");\'>");
-				if (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null)
+				if (ctipica.NomCapa==null)
 				{
-					for (var i=0; i<capa_consulta_tipica_intern.length; i++)
+					for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 					{
 						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") , ">" ,
-						   DonaCadena(capa_consulta_tipica_intern[i].camps[0].desc) , "</option>");
+						   DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 					}
 				}
 				else
 				{
-					for (var i_nom_capa=0; i_nom_capa<ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length; i_nom_capa++)
+					for (var i_nom_capa=0; i_nom_capa<ctipica.NomCapa.length; i_nom_capa++)
 					{
-						for (var i=0; i<capa_consulta_tipica_intern.length; i++)
+						for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 						{
-							if (capa_consulta_tipica_intern[i].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
+							if (ParamCtrl.CapaConsultaPreguntaServidor[i].nom==ctipica.NomCapa[i_nom_capa])
 								break;
 						}
-						if (i==capa_consulta_tipica_intern.length)
+						if (i==ParamCtrl.CapaConsultaPreguntaServidor.length)
 						{
 							s=GetMessage("TheLayer") + " " +
-							ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " "
+							ctipica.NomCapa[i_nom_capa] + " "
 							GetMessage("toBeShownInFrame", "ctipica") + " "
-							ParamCtrl.ConsultaTipica[i_ctipica].nom + " "
+							ctipica.nom + " "
 							GetMessage("notInTypicalQueryLayerList", "ctipica");
 							alert(s);
 						}
 						else
 						{
 							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") ,
-							   ">" , DonaCadena(capa_consulta_tipica_intern[i].camps[0].desc) , "</option>");
+							   ">" , DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 						}
 					}
 				}
 				cdns.push("  </SELECT><span class=\"text_general_consulta\">");
-				if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length>1 && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
+				if(capa_pregunta_svr.camps.length>1 && ctipica.TipusConsultaTipica=="CTipicaDesplegables")
 					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",
-						 DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1].previ));
+						 DonaCadena(capa_pregunta_svr.camps[capa_pregunta_svr.camps.length-1].previ));
 				else
-					cdns.push("&nbsp;",DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].post));
+					cdns.push("&nbsp;",DonaCadena(capa_pregunta_svr.camps[0].post));
 				cdns.push("</span>");
 			}
 
 			//Valors del camp si només ni ha un o valors del camp n, n-1,...1
-			if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]])
+			if (capa_pregunta_svr)
 			{
-				if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
+				if (ctipica.TipusConsultaTipica=="CTipicaInicials")
 				{
 					//Crear les llistes de lletres.
 					cdns.push("<br><span class=\"lletres_consulta_inicials\">");
-					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
+					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
 					{
-						if (i==0 || capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)!=
-									 capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i-1].valor.substring(0,1))
+						if (i==0 || capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)!=
+									 capa_pregunta_svr.proj_camp[0][i-1].valor.substring(0,1))
 						{
 							if (i!=0)
 							   cdns.push("\n");
 							//Faig que la lletres seleccionada estigui en negreta.
-							if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
+							if (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
 							   cdns.push("<b>");
 							cdns.push("<a href=\"javascript:void(0);\" onClick=\'CanviaInicialCapaConsultaTipica(",i_ctipica,
-							   ",\"" , (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)) , "\");\'>",
-							   (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)) ,"</a>");
-							if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
+							   ",\"" , (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)) , "\");\'>",
+							   (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)) ,"</a>");
+							if (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
 								cdns.push("</b>");
 						}
 					}
 					cdns.push("<br></span><span class=\"valors_consulta_inicials\"><ul>");
 
 					//Crear les llistes d'atributs de la inicial seleccionada.
-					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
+					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
 					{
-						if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
+						if (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)==InicialConsultaTipica)
 						   break;
 					}
-					for (; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
+					for (; i<capa_pregunta_svr.proj_camp[0].length; i++)
 					{
-						if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor.substring(0,1)!=InicialConsultaTipica)
+						if (capa_pregunta_svr.proj_camp[0][i].valor.substring(0,1)!=InicialConsultaTipica)
 						   break;
 						cdns.push("\n<li><a href=\"javascript:void(0);\" onClick=\"PortamAAmbitConsultaTipica(",
 						   i_ctipica,", ",CTipicaCapa[i_ctipica],", 0, ",i,");\">",
-						   capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor,
+						   capa_pregunta_svr.proj_camp[0][i].valor,
 						   "</a>");
 					}
 					cdns.push("\n</ul></span>");
 				}
-				else  //  if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
+				else  //  if (ctipica.TipusConsultaTipica=="CTipicaDesplegables")
 				{
 					var valor_opcio="";
-					if(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length>1)
+					if(capa_pregunta_svr.camps.length>1)
 					{
-						for (var j=capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps.length-1; j>0; j--)
+						for (var j=capa_pregunta_svr.camps.length-1; j>0; j--)
 						{
 							cdns.push("<span class=\"nom_camp_consulta\">&nbsp;" ,
-							  DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[j].desc) ,
+							  DonaCadena(capa_pregunta_svr.camps[j].desc) ,
 							  " </span><span class=\"text_general_consulta\">",
-							  DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[j].post),
+							  DonaCadena(capa_pregunta_svr.camps[j].post),
 							  "</span>");
 							valor_opcio="document.ctipica"+i_ctipica+".valor"+j+".options[document.ctipica"+i_ctipica+".valor"+j+".selectedIndex].value";
 							cdns.push("  <select name=\"valor",j,"\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
@@ -1128,16 +1127,16 @@ var s;
 								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
 								   ("--" + GetMessage("Select") + "--") , "</option>" ,
 								   "  <option VALUE=\"-1\">" , "---------------", "</option>");
-							for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j].length; i++)
+							for (var i=0; i<capa_pregunta_svr.proj_camp[j].length; i++)
 								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
-									capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[j][i].valor , "</option>");
+									capa_pregunta_svr.proj_camp[j][i].valor , "</option>");
 							cdns.push("  </SELECT>");
 							if(j>1)
 							   cdns.push("<br><span class=\"text_general_consulta\">&nbsp;&nbsp;&nbsp;&nbsp;",
-								   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[j-1].previ),"</span>");
+								   DonaCadena(capa_pregunta_svr.camps[j-1].previ),"</span>");
 						}
 						cdns.push("<br><span class=\"text_general_consulta\">",
-							DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].post),
+							DonaCadena(capa_pregunta_svr.camps[0].post),
 							"</span>");
 					}
 					valor_opcio="document.ctipica"+i_ctipica+".valor"+0+".options[document.ctipica"+i_ctipica+".valor"+0+".selectedIndex].value";
@@ -1146,43 +1145,43 @@ var s;
 					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
 					   ("--" + GetMessage("Select") + "--") , "</option>" ,
 					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
-					for (var i=0; i<capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0].length; i++)
+					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
 						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
-							capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].proj_camp[0][i].valor , "</option>");
+							capa_pregunta_svr.proj_camp[0][i].valor , "</option>");
 					cdns.push("  </SELECT>");
 				}
 			}
 			cdns.push("</FORM>");
 	    }
-	    else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
+	    else if (ctipica.TipusConsultaTipica=="CTipicaCercador")
 	    {
 			cdns.push("<span class=\"text_general_consulta\">",
-			   DonaCadena(capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].camps[0].previ),
+			   DonaCadena(capa_pregunta_svr.camps[0].previ),
 			   "</span> <input class=\"InputPetit\" autocomplete=\"off\" type=text name=\"llavor",i_ctipica,
 			   "\" size=\"55\" onkeyup=\"WindowDelEvent=this;TeclaLLavor(event);\" onfocus=\"SeleccionaEditLlavor(this);\"></FORM>\n",
 			   (textHTMLiframeLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, true)),
 			   (textHTMLLayer("AreaLlista"+i_ctipica, 60, 20, 364, 70, null, {scroll: "ara_no", visible: true, ev: null, save_content: false}, null, "--Waiting--")));
 	    }
-	    else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+	    else if (ctipica.TipusConsultaTipica=="CTipicaCompleta")
 	    {
 			cdns.push("<table border=0 cellspacing=0 cellpadding=0>" ,
-			   "<tr><td rowspan=",(capa_consulta_tipica_intern.length+4),
+			   "<tr><td rowspan=",(ParamCtrl.CapaConsultaPreguntaServidor.length+4),
 			   "><img src=\"",
 			   AfegeixAdrecaBaseSRC("1tran.gif"),
 			   "\" height=1 width=5></td>",
 			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>Selecció de l'àmbit:</b></td></tr>");
 			//(*) Per ··· [    ][v]
 			var i;
-			for (i=0; i<capa_consulta_tipica_intern.length; i++)
+			for (i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 			{
 				cdns.push("<tr><td><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 					"\" onClick='PortamAAmbitConsultaTipicaCompleta(",i_ctipica,", ",i,", 0, document.ctipica",i_ctipica,".valor",i,
-					".selectedIndex);'> Per " , DonaCadena(capa_consulta_tipica_intern[i].camps[0].desc) , ": </td>" ,
+					".selectedIndex);'> Per " , DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , ": </td>" ,
 					"<td><select name=\"valor",i,"\" onChange='PortamAAmbitConsultaTipicaCompleta(",i_ctipica,", ",i,
 					", 0, document.ctipica",i_ctipica,".valor",i,".selectedIndex);'>");
-				for (var j=0; j<capa_consulta_tipica_intern[i].proj_camp[0].length; j++)
+				for (var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i].proj_camp[0].length; j++)
 					cdns.push("  <option VALUE=\"" , j , "\"" , ((i==CTipicaCapa[i_ctipica] && j==CTipicaValor) ? " SELECTED" : "") , ">" ,
-						capa_consulta_tipica_intern[i].proj_camp[0][j].valor , "</option>");
+						ParamCtrl.CapaConsultaPreguntaServidor[i].proj_camp[0][j].valor , "</option>");
 				cdns.push("  </SELECT></td></tr>");
 			}
 
@@ -1217,15 +1216,15 @@ var s;
 	    }
 	}
 	s=cdns.join("");
-	if(isFinestraLayer(window, ParamCtrl.ConsultaTipica[i_ctipica].nom))
-		contentFinestraLayer(window, ParamCtrl.ConsultaTipica[i_ctipica].nom, s);
+	if(isFinestraLayer(window, ctipica.nom))
+		contentFinestraLayer(window, ctipica.nom, s);
 	else
 	{
-		var elem=getLayer(window, ParamCtrl.ConsultaTipica[i_ctipica].nom);
+		var elem=getLayer(window, ctipica.nom);
 		if (elem && isLayer(elem))
 			contentLayer(elem, s);
 	}
-	if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
+	if (ctipica.TipusConsultaTipica=="CTipicaCercador")
 	{
 		elem=getLayer(window, "AreaLlista"+i_ctipica);
 		borderLayer(elem, "1.0px solid #000000");
@@ -1242,9 +1241,6 @@ function CreaConsultesTipiques()
 		CreaConsultaTipica(i);
 }
 
-//var ajax_ctipica= [];
-var capa_consulta_tipica_intern=[];
-
 function OmpleICarregaConsultaTipica(doc, i_event)
 {
 var root=doc.documentElement;
@@ -1260,9 +1256,9 @@ var id_camps_id_tesaure=null;
 			//Obtinc el nom i CRS identificador de la capa consulta típica
 			nom_capa=root.getAttribute('id_capa');
 				//Busco quin index de consulta li pertoca per començar a omplir l'estructura
-			for(var i=0; i<capa_consulta_tipica_intern.length; i++)
+			for(var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 			{
-				if(capa_consulta_tipica_intern[i].nom==nom_capa)
+				if(ParamCtrl.CapaConsultaPreguntaServidor[i].nom==nom_capa)
 				{
 					i_ctipica=i;
 					break;
@@ -1277,34 +1273,34 @@ var id_camps_id_tesaure=null;
 			var camps=taula_id.getElementsByTagName('Camps')[0];
 			var n_camps=parseInt(camps.getAttribute("NombreDeCamps"));
 
-	    	if(n_camps>1) //Hi ha registres a la taula d'identificadors
-		    {
-				capa_consulta_tipica_intern[i_ctipica].id_camp=new Array(n_camps);
-				capa_consulta_tipica_intern[i_ctipica].proj_camp=new Array(n_camps);
+			if(n_camps>1) //Hi ha registres a la taula d'identificadors
+			{
+				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].id_camp=new Array(n_camps);
+				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp=new Array(n_camps);
 				id_camps_id_tesaure=new Array(n_camps);
 			}
-		    else //Només tinc un tesaure
-		    {
-				capa_consulta_tipica_intern[i_ctipica].id_camp=null;
-				capa_consulta_tipica_intern[i_ctipica].proj_camp=new Array(1);
+			else //Només tinc un tesaure
+			{
+				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].id_camp=null;
+				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp=new Array(1);
 				id_camps_id_tesaure=new Array(1);
 			}
 
 			/*Busco el nom dels camps a omplir i els seus tesaures corresponents i els deso en
-			  una estructura amb igual ordre que camps de capa_consulta_tipica_intern[i_ctipica] */
+			  una estructura amb igual ordre que camps de ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica] */
 			var camp=camps.getElementsByTagName('Camp');
 			for(var i=0; i<camp.length; i++)
 			{
 				i_camp_ctipica=-1;
 				nom_camp=camp[i].getAttribute('id_camp');
 
-				for(var j=0; j<capa_consulta_tipica_intern[i_ctipica].camps.length; j++)
+				for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].camps.length; j++)
 				{
-				   if(capa_consulta_tipica_intern[i_ctipica].camps[j].nom==nom_camp)
-				   {
+					if(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].camps[j].nom==nom_camp)
+					{
 						i_camp_ctipica=j;
 						break;
-				   }
+					}
 				}
 				if(i_camp_ctipica==-1)
 				   return;
@@ -1312,14 +1308,14 @@ var id_camps_id_tesaure=null;
 				id_camps_id_tesaure[i_camp_ctipica]={"nom": nom_camp, "desc": camp[i].getAttribute('id_tesaure')};
 			 }
 
-		     //Llegeixo els registres de la Taula d'Identificadors
-		     if(n_camps>1)
-	    	 {
+			//Llegeixo els registres de la Taula d'Identificadors
+			if(n_camps>1)
+	    	 	{
 				var registres=taula_id.getElementsByTagName('Registres')[0];
 				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 				for(var z=0; z<n_camps; z++)
 				{
-				  capa_consulta_tipica_intern[i_ctipica].id_camp[z]=new Array(num_regs);
+				  ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].id_camp[z]=new Array(num_regs);
 				}
 
 				for(var i=0; i<registres.childNodes.length; i++)
@@ -1339,7 +1335,7 @@ var id_camps_id_tesaure=null;
 						   {
 								if(id_camps_id_tesaure[z].nom==valors[j].getAttribute('id_camp'))
 								{
-									capa_consulta_tipica_intern[i_ctipica].id_camp[z][index]=new CreaItemIdentificadorConsultaTipica(index, valor_id);
+									ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].id_camp[z][index]=new CreaItemIdentificadorConsultaTipica(index, valor_id);
 									break;
 								}
 							}
@@ -1369,7 +1365,7 @@ var id_camps_id_tesaure=null;
 				var registres=tesaures[i].getElementsByTagName('Registres')[0];
 				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 
-				capa_consulta_tipica_intern[i_ctipica].proj_camp[i_camp_ctipica]=new Array(num_regs);
+				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp[i_camp_ctipica]=new Array(num_regs);
 
 				//Començo a llegir els registres de tesaure
 				for(var z=0; z<registres.childNodes.length; z++)
@@ -1387,15 +1383,15 @@ var id_camps_id_tesaure=null;
 						env_reg.MaxX=parseFloat(bbox.getAttribute('maxx'));
 						env_reg.MaxY=parseFloat(bbox.getAttribute('maxy'));
 
-						capa_consulta_tipica_intern[i_ctipica].proj_camp[i_camp_ctipica][index]={"valor": valor.childNodes[0].nodeValue,
+						ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp[i_camp_ctipica][index]={"valor": valor.childNodes[0].nodeValue,
 													"env": env_reg};
 					}
 				}
 			}
-			NCapesCTipica++;
+			NCapesCTipicaCarregades++;
 		}
 	}
-   	if(capa_consulta_tipica_intern.length>0 && NCapesCTipica==capa_consulta_tipica_intern.length)
+   	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
    	{
 		//Ja les tinc totes carregades i ja puc iniciar les consultes típiques
 		IniciaConsultesTipiques();
@@ -1429,25 +1425,18 @@ function CarregaConsultesTipiques()
 {
 var s="";
 
-	NCapesCTipica=0;
+	NCapesCTipicaCarregades=0;
 	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor)
 	{
 		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 		{
-	   		capa_consulta_tipica_intern[i]={servidor: DonaServidorCapa(ParamCtrl.CapaConsultaPreguntaServidor[i]),
-				nom: ParamCtrl.CapaConsultaPreguntaServidor[i].nom,
-				camps: ParamCtrl.CapaConsultaPreguntaServidor[i].camps,
-				CRS: ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
-				proj_camp: null,
-				id_camp: null};
-		}
-		//Primer creo las capes i desprès torno a fer un bucle per demanar-les
-		//sinó em trobava amb problemes de que no estaven totes creades i algunes
-		//coses es feien massa vegades
-		for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
-		{
 			var cdns=[], i_event;
-		   	//ajax_ctipica[i]=new Ajax();
+			if (ParamCtrl.CapaConsultaPreguntaServidor[i].proj_camp)
+			{
+				//El resultat ha es troba a l'estructura i no cal demanar-lo
+				NCapesCTipicaCarregades++;
+				continue;
+			}	
 			cdns.push("VERSION=1.2.0&REQUEST=DonaProjeccioConsultaTipica&CRS=",
 				ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
 				"&INFO_FORMAT=text/xml&QUERY_LAYERS=",
@@ -1477,39 +1466,39 @@ function BuscaValorAConsultesTipiques()
 {
 var trobat=false;
 
-	if(Accio && capa_consulta_tipica_intern.length>0 && Accio.valors && Accio.valors.length>0)
+	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
 	{
 		//Per cada una de les capes a validar
 		for(var i_capa_accio=0; i_capa_accio<Accio.valors.length; i_capa_accio++)
 		{
-			for(var i_tipica=0; i_tipica<capa_consulta_tipica_intern.length; i_tipica++)
+			for(var i_tipica=0; i_tipica<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica++)
 			{
 				//Busco si té una consulta típica amb la que pugui validar el valor demanat
-				if(Accio.capes[i_capa_accio]==capa_consulta_tipica_intern[i_tipica].nom)
+				if(Accio.capes[i_capa_accio]==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].nom)
 				{
 					//Ara haig de buscar el camp a dins de la consulta típica
 					//Busco el camp a validar dins dels camps de la consulta típica de la capa
-					for(var i_camp=0; i_camp<capa_consulta_tipica_intern[i_tipica].camps.length; i_camp++)
+					for(var i_camp=0; i_camp<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps.length; i_camp++)
 					{
-						if(Accio.camps[i_capa_accio]==capa_consulta_tipica_intern[i_tipica].camps[i_camp].nom)
+						if(Accio.camps[i_capa_accio]==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps[i_camp].nom)
 						{
 							//he trobat el camp
-							if(capa_consulta_tipica_intern[i_tipica].proj_camp && capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp])
+							if(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp && ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp])
 							{
-								for(var i_valor=0; i_valor<capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp].length; i_valor++)
+								for(var i_valor=0; i_valor<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp].length; i_valor++)
 								{
-									if(Accio.valors[i_capa_accio]==capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].valor)
+									if(Accio.valors[i_capa_accio]==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp][i_valor].valor)
 									{
 										if(Accio.coord==null)
 										{
-											Accio.coord={"x": DonaCoordXCentralDeEnv(capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].env),
-												"y": DonaCoordYCentralDeEnv(capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp][i_valor].env)};
+											Accio.coord={"x": DonaCoordXCentralDeEnv(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp][i_valor].env),
+												"y": DonaCoordYCentralDeEnv(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp][i_valor].env)};
 										}
 										trobat=true;
 										break;
 									}
 								}
-								if(i_valor==capa_consulta_tipica_intern[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
+								if(i_valor==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
 								{
 									alert(GetMessage("TheValue") + " " + Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + " " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + " " + Accio.capes[i_capa_accio]+ " " + GetMessage("isIncorrect", "ctipica"));
 								}
@@ -1518,7 +1507,7 @@ var trobat=false;
 						}
 					}
 					break; //aquest camp ja l'he validat i haig de passar a validar la següent capa
-					//else if(i_camp==capa_consulta_tipica_intern[i_tipica].camps.length)
+					//else if(i_camp==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps.length)
 					//No he trobat el camp a dins de la consulta típica i per tant no he pogut validar
 					//Si he arribat aquí és perquè el valor indicat és incorrecte, he trobat la capa però no he trobat el valor
 				}
@@ -1532,19 +1521,19 @@ function IniciaConsultesTipiques()
 {
 var valor;
 
-	if(capa_consulta_tipica_intern.length>0)
+	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0)
 	{
 		//Per cada finestra de consulta típica
 		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
 		{
 			if (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa)
 			{
-				for (CTipicaCapa[i_ctipica]=0; CTipicaCapa[i_ctipica]<capa_consulta_tipica_intern.length; CTipicaCapa[i_ctipica]++)
+				for (CTipicaCapa[i_ctipica]=0; CTipicaCapa[i_ctipica]<ParamCtrl.CapaConsultaPreguntaServidor.length; CTipicaCapa[i_ctipica]++)
 				{
-					if (capa_consulta_tipica_intern[CTipicaCapa[i_ctipica]].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0])
+					if (ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0])
 						break;
 				}
-				if (CTipicaCapa[i_ctipica]==capa_consulta_tipica_intern.length)
+				if (CTipicaCapa[i_ctipica]==ParamCtrl.CapaConsultaPreguntaServidor.length)
 				{
 					alert(GetMessage("TheLayer") + " " +
 						ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[0] + " " +
@@ -1562,29 +1551,29 @@ var valor;
 				LlistaCadenes[i_ctipica]=[];
 				if (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa==null)
 				{
-					if (capa_consulta_tipica_intern.length==1)
+					if (ParamCtrl.CapaConsultaPreguntaServidor.length==1)
 					{
-						if(capa_consulta_tipica_intern[0].id_camp)
+						if(ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp)
 						{
 							var i_proj=0;
 							//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
-							for (var i=0; i<capa_consulta_tipica_intern[0].id_camp[0].length; i++, i_llista++)
+							for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[0].length; i++, i_llista++)
 							{
 								//Per cada camp busco el seu valor que possarè a llista
 								valor="";
-								for(var j=0; j<capa_consulta_tipica_intern[0].camps.length; j++)
+								for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[0].camps.length; j++)
 								{
-									i_proj=capa_consulta_tipica_intern[0].id_camp[j][i].id;
-									if(i_proj>=capa_consulta_tipica_intern[0].proj_camp[j].length || i_proj<0)
+									i_proj=ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[j][i].id;
+									if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[j].length || i_proj<0)
 										alert("Error: Índex de registre de projecció incorrecte "+
-											capa_consulta_tipica_intern[0].id_camp[j][i].id +
+											ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[j][i].id +
 											"de camp "+ j);
 									else
 									{
 										if(j==0)
-											valor=capa_consulta_tipica_intern[0].proj_camp[j][i_proj].valor;
+											valor=ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[j][i_proj].valor;
 										else
-											valor+=" (" + capa_consulta_tipica_intern[0].proj_camp[j][i_proj].valor + ")";
+											valor+=" (" + ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[j][i_proj].valor + ")";
 									}
 								}
 								LlistaCadenes[i_ctipica][i_llista]=valor;
@@ -1592,49 +1581,49 @@ var valor;
 						}
 						else
 						{
-							for (var i=0; i<capa_consulta_tipica_intern[0].proj_camp[0].length; i++, i_llista++)
+							for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[0].length; i++, i_llista++)
 							{
-								LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[0].proj_camp[0][i].valor;
+								LlistaCadenes[i_ctipica][i_llista]=ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[0][i].valor;
 							}
 						}
 					}
 					else
 					{
-						for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
+						for (var i_tipica_capa=0; i_tipica_capa<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica_capa++)
 						{
-							if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
+							if(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp)
 							{
 								var i_proj=0;
 								//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
-								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
+								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 								{
 									//Per cada camp busco el seu valor que possarè a llista
 									valor="";
-									for(var j=0; j<capa_consulta_tipica_intern[i_tipica_capa].camps.length; j++)
+									for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps.length; j++)
 									{
-										i_proj=capa_consulta_tipica_intern[i_tipica_capa].id_camp[j][i].id;
-										if(i_proj>=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j].length || i_proj<0)
+										i_proj=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id;
+										if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j].length || i_proj<0)
 											alert("Error: Índex de registre de projecció incorrecte "+
-												capa_consulta_tipica_intern[i_tipica_capa].id_camp[j][i].id +
+												ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id +
 												"de camp "+ j);
 										else
 										{
 											if(j==0)
-												valor=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor;
+												valor=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j][i_proj].valor;
 											else
-												valor+=" (" + capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor + ")";
+												valor+=" (" + ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j][i_proj].valor + ")";
 										}
 									}
-									LlistaCadenes[i_ctipica][i_llista]=valor + " ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
+									LlistaCadenes[i_ctipica][i_llista]=valor + " ("+DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
 							else
 							{
 								//La consulta només té un camps
-								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
+								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
-									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor +
-									" ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
+									LlistaCadenes[i_ctipica][i_llista]=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0][i].valor +
+									" ("+DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
 						}
@@ -1645,12 +1634,12 @@ var valor;
 					//Per totes les capes de la finestra i_ctipica
 					for (var i_nom_capa=0; i_nom_capa<ParamCtrl.ConsultaTipica[i_ctipica].NomCapa.length; i_nom_capa++)
 					{
-						for (var i_tipica_capa=0; i_tipica_capa<capa_consulta_tipica_intern.length; i_tipica_capa++)
+						for (var i_tipica_capa=0; i_tipica_capa<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica_capa++)
 						{
-							if (capa_consulta_tipica_intern[i_tipica_capa].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
+							if (ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].nom==ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa])
 								break;
 						}
-						if (i_tipica_capa==capa_consulta_tipica_intern.length)
+						if (i_tipica_capa==ParamCtrl.CapaConsultaPreguntaServidor.length)
 						{
 							alert(GetMessage("TheLayer") + " " +
 								ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " " +
@@ -1660,45 +1649,45 @@ var valor;
 						}
 						else
 						{
-							if(capa_consulta_tipica_intern[i_tipica_capa].id_camp)
+							if(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp)
 							{
 								//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 								var i_proj=0;
-								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].id_camp[0].length; i++, i_llista++)
+								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 								{
 									//Per cada camp busco el seu valor que possarè a llista
 									valor="";
-									for(var j=0; j<capa_consulta_tipica_intern[i_tipica_capa].camps.length; j++)
+									for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps.length; j++)
 									{
-										i_proj=capa_consulta_tipica_intern[i_tipica_capa].id_camp[j][i].id;
-										if(i_proj>=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j].length || i_proj<0)
+										i_proj=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id;
+										if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j].length || i_proj<0)
 											alert("Error: Índex de registre de projecció incorrecte "+
-												capa_consulta_tipica_intern[i_tipica_capa].id_camp[j][i].id +
+												ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id +
 												"de camp "+ j);
 										else
 										{
 											if(j==0)
 											{
-												valor=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor;
+												valor=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j][i_proj].valor;
 											}
 											else
 											{
 												valor+=" (" +
-												capa_consulta_tipica_intern[i_tipica_capa].proj_camp[j][i_proj].valor +
+												ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j][i_proj].valor +
 												")";
 											}
 										}
 									}
-									LlistaCadenes[i_ctipica][i_llista]=valor + " ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
+									LlistaCadenes[i_ctipica][i_llista]=valor + " ("+DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
 							else
 							{
 								//La consulta només té un camps
-								for (var i=0; i<capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
+								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
-									LlistaCadenes[i_ctipica][i_llista]=capa_consulta_tipica_intern[i_tipica_capa].proj_camp[0][i].valor +
-									" ("+DonaCadena(capa_consulta_tipica_intern[i_tipica_capa].camps[0].desc)+")";
+									LlistaCadenes[i_ctipica][i_llista]=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0][i].valor +
+									" ("+DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps[0].desc)+")";
 								}
 							}
 						}
@@ -1739,4 +1728,20 @@ function MostraOAmagaCtipiques()
 		MostraCTipiques=!MostraCTipiques;
 	}
 	return;
+}
+
+function EliminaProjCampIIdCampSiServidor(param_ctrl)
+{
+	//Elimino les consultes típiques si venen d'un servidor
+	for (var i=0; i<param_ctrl.CapaConsultaPreguntaServidor.length; i++)
+	{
+		var cdns=[], i_event;
+		if (typeof param_ctrl.CapaConsultaPreguntaServidor[i].servidor !== "undefined")
+		{
+			if (param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp)
+				delete param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp;
+			if (param_ctrl.CapaConsultaPreguntaServidor[i].id_camp)
+				delete param_ctrl.CapaConsultaPreguntaServidor[i].id_camp;
+		}
+	}
 }

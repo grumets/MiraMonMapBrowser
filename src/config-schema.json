@@ -520,6 +520,49 @@
 						"description": "Sistema de referència de la capa sobre la que es fa la consulta típica",
 						"type": "string",
 						"format": "uri"
+					},
+					"proj_camp": { 
+						"description": "Projecció per a cada camp. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor",
+						"type": "array",
+						"items": {
+							"description": "Projecció d'un camp",
+							"type": "array",
+							"items": {
+								"description": "Element de la projecció d'un camp",
+								"type": "object",
+								"properties": {
+									"valor": {
+										"description": "Valor únic dins de la projecció",
+										"type": "string" 
+									},
+									"env": { 
+										"description": "Envolupant ocupat pels objectes que tenen aquest valor únic dins de la projecció",
+										"$ref": "#/definitions/envolupant2D" 
+									}
+								}
+							}
+						}
+					},
+					"id_camp": { 
+						"description": "Array de camps. Pot ser null si només n'hi ha un. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor. Caldria documentar-ho millor però ara no ho entenc del tot",
+						"type": "array",
+						"items": {
+							"description": "Array de registres",
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"description": "Id de projecció de camp",
+										"type": "number" 
+									},
+									"valor": {
+										"description": "Valor a la projecció",
+										"type": "string" 
+									}
+								}
+							}
+						}
 					}
 				}
 			}
