@@ -2213,42 +2213,6 @@ function DonaNumeroArrodonit125(a)
 	return n*Math.pow(10,e);
 }
 
-
-function DonaCaracterHexaMultiple3(s)
-{
-	if (s=='1')
-		return '0';
-	if (s=='2' || s=='4')
-		return '3';
-	if (s=='5' || s=='7')
-		return '6';
-	if (s=='8' || s=='a' || s=='A')
-		return '9';
-	if (s=='b' || s=='B' || s=='C' || s=='d' || s=='D')
-		return 'c';
-	if (s=='e' || s=='E' || s=='F')
-		return 'f';
-	return s;
-}
-
-function DonaFitxerColor(c)
-{
-	//Arrodoneix el valor del color
-	var s=new String(c)	
-	if (s.toLowerCase()=="#e6f2ff")
-		s="colors/c"+s.substring(1,7)+".gif";	
-	else
-	{
-		if (s.charAt(0)=='#')
-		{
-			if (s.length!=7)
-				alert("Unsupported hexadecimal format color \"" + s +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
-			s="colors/c"+DonaCaracterHexaMultiple3(s.substring(1,2))+DonaCaracterHexaMultiple3(s.charAt(1))+DonaCaracterHexaMultiple3(s.substring(3,4))+DonaCaracterHexaMultiple3(s.charAt(3))+DonaCaracterHexaMultiple3(s.substring(5,6))+DonaCaracterHexaMultiple3(s.charAt(5))+".gif";
-		}
-	}
-	return s;
-}
-
 function DonaCadenaAmbCometesBarra(cadena)
 {
 	s=new String(cadena);

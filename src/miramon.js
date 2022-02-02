@@ -84,6 +84,7 @@ IncludeScript("novacapa.js");
 IncludeScript("llegenda.js");
 IncludeScript("download.js");
 IncludeScript("storymap.js");
+IncludeScript("params.js");
 IncludeScript("commands.js");
 //IncludeScript("xml.js");   //Ja les carrega el GUF.js
 //IncludeScript("owc_atom.js");  //Ja les carrega el guf.js
@@ -1294,133 +1295,6 @@ function ShaObertPopUp(wnd)
 	return true;
 }
 
-/*var ParametresWindow=null;
-function ObreFinestraParametres()
-{
-    if (ParametresWindow==null || ParametresWindow.closed)
-    {
-        ParametresWindow=window.open("param.htm","FinestraParam",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=430,height=400');
-		ShaObertPopUp(ParametresWindow);
-    }
-    else
-        ParametresWindow.focus();
-}*/
-
-function RedibuixaParamColors()
-{
-	contentLayer(getLayer(window, "param_colors"), DonaTextParamColors());
-}
-
-var param_ColorFonsVista;  //Copia de la variable local a la caixa de paràmetres
-var param_ColorQuadratSituacio; //Copia de la variable local a la caixa de paràmetres
-
-function DonaTextParamColors()
-{
-var cdns=[];
-	cdns.push(
-		"<table class=\"Verdana11px\" border=0 cellspacing=0 cellpadding=0>",
-               "<tr>",
-	           "<td>", DonaCadenaLang({"cat":"Color de fons de la vista", "spa":"Color de fondo de la vista", "eng":"View area background color", "fre":"Couleur du fond"}) ,": </td>",
-	           "<td bgcolor=",param_ColorFonsVista,"><img src=1tran.gif height=6 width=20></td>",
-                   "<td>&nbsp;<button onClick=\"return ObreFinestraColors('param_ColorFonsVista', '", DonaCadenaLang({"cat":"Color de fons de la vista", "spa":"Color de fondo de la vista", "eng":"View area background color", "fre":"Couleur du fond"}) ,"');\"><img align=middle src=colors.gif></button></td>",
-		"</tr>",
-               "<tr>",
-	           "<td colspan=3><img src=1tran.gif height=1 width=2></td>",
-			   "</tr>",
-			   "<tr>",
-	           "<td>", DonaCadenaLang({"cat":"Color del quadrat de situació", "spa":"Color del cuadrado de situación", "eng":"Situation square color", "fre":"Couleur du carré de situation"}), ":&nbsp;&nbsp; </td>",
-	           "<td bgcolor=",param_ColorQuadratSituacio,"><img src=1tran.gif height=6 width=20></td>",
-                   "<td>&nbsp;<button onClick=\"return ObreFinestraColors('param_ColorQuadratSituacio', '", DonaCadenaLang({"cat":"Color del quadrat de situació", "spa":"Color del cuadrado de situación", "eng":"Situation square color", "fre":"Couleur du carré de situation"}) ,"');\"><img align=middle src=colors.gif></button></td>",
-               "</tr></table>");
-	return cdns.join("");
-}
-
-var ColorWindow=null;
-var CadenaVariableTreball="";
-var TextDescDelColor="";
-
-function ObreFinestraColors(s,text)
-{
-	CadenaVariableTreball=s;
-	TextDescDelColor=text;
-	if (ColorWindow==null || ColorWindow.closed)
-	{
-		ColorWindow=window.open("colors.htm","FinestraColors",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=520,height=200');
-		ShaObertPopUp(ColorWindow);
-	}
-	else
-	    ColorWindow.focus();
-	return false;
-}
-
-function RecuperaValorsFinestraParametres(formul, tancar)
-{
-	if (document.getElementById("textarea_ConfigJSON").style.display!="none")
-	{
-		if (CarregaiAdoptaConfigJSON(formul.textarea_ConfigJSON.value)) //error
-			return;
-	}
-	else
-	{
-		if (MidaDePixelPantalla!=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol);
-		{
-		    MidaDePixelPantalla=parseFloat(formul.param_MidaAmplePantalla.value)/ParamInternCtrl.vista.ncol;
-			CreaBarra(null);
-		}
-		ParamCtrl.psalt=parseInt(formul.param_psalt.value);
-		ParamCtrl.ColorFonsVista=param_ColorFonsVista;
-		ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
-		ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value);
-		if (formul.param_CoordExtremes[1].checked)
-			ParamCtrl.CoordExtremes="proj";
-		else if (formul.param_CoordExtremes[2].checked)
-		{
-			if (formul.param_CoordExtremesGMS.checked)
-				ParamCtrl.CoordExtremes="longlat_gms";
-			else
-				ParamCtrl.CoordExtremes="longlat_g";
-		}
-		else
-		{
-		    delete ParamCtrl.CoordExtremes;
-		}
-		if (formul.param_CoordActualProj.checked)
-			ParamCtrl.CoordActualProj=true;
-		else
-			ParamCtrl.CoordActualProj=false;
-		if (formul.param_CoordActualLongLat.checked)
-		{
-			ParamCtrl.CoordActualLongLatG=true;
-			if (formul.param_CoordActualGMS.checked)
-				ParamCtrl.CoordActualLongLatGMS=true;
-			else
-				ParamCtrl.CoordActualLongLatGMS=false;
-		}
-		else
-		{
-			ParamCtrl.CoordActualLongLatG=false;
-			ParamCtrl.CoordActualLongLatGMS=false;
-		}
-
-		if (isFinestraLayer(window, "coord"))
-			showOrHideFinestraLayer(window, "coord", formul.param_CoordVisible.checked);
-		else
-			showOrHideLayer(getLayer(window, "coord"), formul.param_CoordVisible.checked);
-
-		if (formul.param_ZoomUnSolClic[1].checked)
-			ParamCtrl.ZoomUnSolClic=true;
-		else
-			ParamCtrl.ZoomUnSolClic=false;
-	}
-
-	GuardaVistaPrevia();
-	//ActualitzaEnvParametresDeControl();
-	RepintaMapesIVistes();
-	if (tancar==true)
-		TancaFinestraLayer("param");
-
-  return false;  //per no efectuar l'acció de submit del formulari
-}
 
 function NetejaConfigJSON(param_ctrl, is_local_storage)
 {
@@ -1544,20 +1418,6 @@ function CreaDuplicatNetejaiMostraConfigJSON(text_area)
 	document.getElementById(text_area).value=JSON.stringify(param_ctrl, null, '\t');
 }
 
-function MostraConfigJSON(text_area, param_desgranat, button_show)
-{
-	RecuperaValorsFinestraParametres(document.form_param, false);
-	document.getElementById(param_desgranat).style.display="none";
-
-	document.getElementById(text_area).style.display="block";
-	document.getElementById(text_area).value=DonaCadenaLang({"cat":"Processant...", "spa":"Procesando...", "eng":"Working...", "fre":"En traitement..."});
-	document.getElementById(button_show).style.display="none";
-	document.getElementById("text_canvis_aplicats").style.display="none";
-	document.getElementById("param_hr_dprs_show").style.display="none";
-	document.getElementById("param_button_apply").style.display="none";
-	setTimeout("CreaDuplicatNetejaiMostraConfigJSON(\""+text_area+"\")", 200);
-}
-
 function CarregaiAdoptaConfigJSON(s)
 {
 	try {
@@ -1571,86 +1431,6 @@ function CarregaiAdoptaConfigJSON(s)
 	//La seguent crida tancarà la caixa i reiniciarà el navegador amb els nous parametres
 	IniciaParamCtrlIVisualitzacio(param_ctrl, {div_name: ParamCtrl.containerName, config_json:ParamCtrl.config_json, config_reset: true/*, usa_local_storage: false*/});
 	return 0;
-}
-
-function OmpleFinestraParametres()
-{
-var cdns=[], coord_visible, p, unitats_CRS;
-
-	param_ColorFonsVista=ParamCtrl.ColorFonsVista;
-	param_ColorQuadratSituacio=ParamCtrl.ColorQuadratSituacio;
-
-	p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-	if (p=="°")
-		unitats_CRS=p;
-	else
-		unitats_CRS=" "+p;
-
-	cdns.push("<form name=\"form_param\" onSubmit=\"return false;\"><div id=\"param_desgranat\" class=\"Verdana11px\">",
-	        DonaCadenaLang({"cat":"Punt origen central","spa":"Punto origen central", "eng":"Origin central point", "fre":"Point origine central"}),":  x: ", OKStrOfNe(ParamCtrl.PuntOri.x, ParamCtrl.NDecimalsCoordXY),
-	        unitats_CRS, "; y: ", OKStrOfNe(ParamCtrl.PuntOri.y, ParamCtrl.NDecimalsCoordXY), unitats_CRS, "<br>",
-		"<small>&nbsp;&nbsp;&nbsp;", DonaCadenaLang({"cat":"Sistema de referència actual", "spa":"Sistema de referencia actual", "eng":"Current reference system", "fre":"Système de référence actuel"}) , ": ",
-			DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), " (", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ")<br>&nbsp;&nbsp;&nbsp;",
-		DonaCadenaLang({"cat":"Àmbit disponible", "spa":"Ámbito disponible", "eng":"Available boundary", "fre":"Champ disponible"}), ": x=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),
-					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX, ParamCtrl.NDecimalsCoordXY),
-					"); y=(",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY, ParamCtrl.NDecimalsCoordXY),
-					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),")<br>&nbsp;&nbsp;&nbsp;",
-				DonaCadenaLang({"cat":"Costat de píxel actual", "spa":"Lado de píxel actual", "eng":"Current pixel size", "fre":"Côte de pixel actuel"}) , ": ", ParamInternCtrl.vista.CostatZoomActual, unitats_CRS,
-		"</small><hr>",
-		DonaCadenaLang({"cat":"Ample", "spa":"Ancho", "eng":"Width", "fre":"Largeur"}) , ": ", ParamInternCtrl.vista.ncol, "px ",
-		DonaCadenaLang({"cat":"Alt", "spa":"Alto", "eng":"Height", "fre":"Hauteur"}) , ": " , ParamInternCtrl.vista.nfil, "px ",
-		DonaCadenaLang({"cat":"Mida de l\'ample de la vista", "spa":"Tamaño del ancho de la vista", "eng":"Width of the view", "fre":"Dimensions de la largeur de la vue"}) , ": <input type=\"text\" size=\"8\" name=\"param_MidaAmplePantalla\" value=\"", OKStrOfNe(MidaDePixelPantalla*ParamInternCtrl.vista.ncol,1), "\" maxlength=\"8\"> mm<br>",
-		DonaCadenaLang({"cat":"Perc. de salt", "spa":"Porc. de salto", "eng":"Jump Perc.", "fre":"Pourc. de saut"}) , ": <input type=\"text\" size=\"3\" name=\"param_psalt\" value=\"", ParamCtrl.psalt, "\" maxlength=\"3\"> %<br>",
-		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicNo\"", (ParamCtrl.ZoomUnSolClic ? "" : " checked=\"checked\""),"><label for=\"id_ZoomUnSolClicNo\" accesskey=\"2\"> ",
-		DonaCadenaLang({"cat":"Zoom i pan basat en <u>2</u> simples clics (ergonòmic)", "spa":"Zoom y pan basado en <u>2</u> simples clics (ergonómico)",
-			   "eng": "Zoom and pan based in <u>2</u> simples clicks (ergonomic)", "fre":"Zoom et pan basé en <u>2</u> simples clics (ergonomique)"}) , "</label><br>" ,
-		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicSi\"", (ParamCtrl.ZoomUnSolClic ? " checked=\"checked\"" : ""), "><label for=\"id_ZoomUnSolClicSi\" accesskey=\"1\"> ",
-		DonaCadenaLang({"cat":"Zoom i pan en <u>1</u> clic i arrossegant", "spa":"Zoom y pan en <u>1</u> clic y arrastrando",
-			    "eng":"Zoom and pan with <u>1</u> click and dragging", "fre":"Zoom et pan en <u>1</u> cliques et glisser"}) ,
-		"</label><hr>",
-		"Coord: &nbsp;&nbsp;&nbsp;&nbsp;" , DonaCadenaLang({"cat":"N. decimals", "spa":"N. decimales", "eng":"N. of figures", "fre":"N. décimales"}) , ": <input type=\"text\" size=\"1\" name=\"param_NDecimalsCoordXY\" value=\"", ParamCtrl.NDecimalsCoordXY, "\" maxlength=\"1\"><br>",
-		"&nbsp;&nbsp;&nbsp;" , DonaCadenaLang({"cat":"Cantonades", "spa":"Esquinas", "eng":"Corners", "fre":"Coins"}) , ": ",
-		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesCap\"", (ParamCtrl.CoordExtremes ? "": " checked=\"checked\""), "> <label for=\"id_CoordExtremesCap\" accesskey=\"", DonaCadenaLang({"cat":"a", "spa":"a", "eng":"n", "fre":"a"}), "\">", DonaCadenaLang({"cat":"c<u>a</u>p", "spa":"ningun<u>a</u>", "eng":"<u>n</u>one", "fre":"<u>a</u>ucune"}) ,"</label> ",
-		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesProj\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="proj") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesProj\" accesskey=\"p\">", DonaCadenaLang({"cat":"<u>P</u>roj", "spa":"<u>P</u>roy", "eng":"<u>P</u>roj", "fre":"<u>P</u>roj"}) ,".</label> ",
-                   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesLongLat\"", ((ParamCtrl.CoordExtremes && (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")) ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesLongLat\" accesskey=\"l\"><u>L</u>ong/Lat</label> ",
-                   "<input type=\"checkbox\" name=\"param_CoordExtremesGMS\" id=\"id_CoordExtremesGMS\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="longlat_gms") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesGMS\">(° \' \")</label><br>",
-		"&nbsp;&nbsp;&nbsp;" , DonaCadenaLang({"cat":"Actual", "spa":"Actual", "eng":"Current", "fre":"Actuel"}) , ": ",
-                   "<input type=\"checkbox\" name=\"param_CoordActualProj\" id=\"id_CoordActualProj\"", (ParamCtrl.CoordActualProj ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualProj\" accesskey=\"r\">", DonaCadenaLang({"cat":"P<u>r</u>oj", "spa":"P<u>r</u>oy", "eng":"P<u>r</u>oj", "fre":"P<u>r</u>oj"}) ,".</label> ",
-		   "<input type=\"checkbox\" name=\"param_CoordActualLongLat\" id=\"id_CoordActualLongLat\"", ((ParamCtrl.CoordActualLongLatG || ParamCtrl.CoordActualLongLatGMS) ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualLongLat\" accesskey=\"o\">L<u>o</u>ng/Lat</label> ",
-		   "(<input type=\"checkbox\" name=\"param_CoordActualGMS\" id=\"id_CoordActualGMS\"", (ParamCtrl.CoordActualLongLatGMS ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualGMS\">(° \' \")</label>) ");
-	if (isFinestraLayer(window, "coord"))
-		coord_visible=isFinestraLayerVisible(window, "coord");
-	else
-		coord_visible=isLayerVisible(getLayer(window, "coord"));
-	cdns.push("<input type=\"checkbox\" name=\"param_CoordVisible\" id=\"id_CoordVisible\"", (coord_visible ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordVisible\" accesskey=\"", DonaCadenaLang({"cat":"m", "spa":"m", "eng":"h", "fre":"f"}), "\">", DonaCadenaLang({"cat":"<u>M</u>ostra finestra", "spa":"<u>M</u>uestra ventana", "eng":"S<u>h</u>ow window", "fre":"A<u>f</u>ficher la fenêtre"}), "</label>",
-		   "<hr>",
-		"<div id=\"param_colors\">",
-		DonaTextParamColors(),
-		"</div><hr></div>",
-		"<div>",
-		DonaCadenaLang({"cat":"Fitxer de configuració JSON", "spa":"Fichero de configuración JSON", "eng":"JSON configuration file", "fre":"Fichier de configuration JSON)"}),
-		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Mostrar", "spa":"Mostrar", "eng":"Show", "fre":"Afficher"}),
-		"\" onClick='MostraConfigJSON(\"textarea_ConfigJSON\",\"param_desgranat\", \"button_show_ConfigJSON\");'>&nbsp;<small id=\"text_canvis_aplicats\"><i>(",
-		DonaCadenaLang({"cat":"s'’aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"}),
-		")</i></small>",
-		"<textarea id=\"textarea_ConfigJSON\" name=\"textarea_ConfigJSON\" rows=\"22\" cols=\"65\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" style=\"display:none\"></textarea></div>",
-		"<div id=\"param_hr_dprs_show\"><hr></div>",
-		"<div align=\"center\">",
-    "<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"D'acord","spa": "Aceptar","eng": "  Ok  ", "fre":"D'accord"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, true);\"> ",
-		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}), "\" onClick='TancaFinestraLayer(\"param\");'> &nbsp;&nbsp;",
-		"<input id=\"param_button_apply\" TYPE=\"button\" class=\"Verdana11px\" value=\"", DonaCadenaLang({"cat":"Aplicar", "spa":"Aplicar", "eng":"Apply", "fre":"Appliquer"}), "\" onClick=\"RecuperaValorsFinestraParametres(document.form_param, false);\"></div>",
-	        "</form>");
-	contentFinestraLayer(window, "param", cdns.join(""));
-}
-
-function MostraFinestraParametres()
-{
-	if (!ObreFinestra(window, "param", DonaCadenaLang({"cat":"de canviar paràmetres",
-							  "spa":"de cambiar parámetros",
-							  "eng":"of changing parameters",
-							  "fre":"pour changement de paramètres"})))
-		return;
-	OmpleFinestraParametres();
 }
 
 var nfilVistaImprimir;
@@ -3554,16 +3334,17 @@ var w,h,e,s;
 function DonaCadenaHTMLMarcSituacio(ample, alt)
 {
 var cdns=[];
-	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3><img src=\"" ,
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=1 width=",ample,
-		"></td></tr><tr><td><img src=\"" ,
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=",(alt-2),
+	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
+		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,
+		"></td></tr><tr><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
+		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
 		" width=1></td><td><img src=\"",
 		AfegeixAdrecaBaseSRC("1tran.gif"),
 		"\" height=1 width=",(ample-2),
-		"></td><td><img src=\"" , AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=",(alt-2)+
-		" width=1></td></tr><tr><td colspan=3><img src=\"" ,
-		AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorQuadratSituacio)) , "\" height=1 width=",ample,"></td></table>");
+		"></td><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" , 
+		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
+		" width=1></td></tr><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
+		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,"></td></table>");
 	return cdns.join("");
 }
 
@@ -5941,8 +5722,8 @@ var p, unitats_CRS;
 		cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
 	   		"\" width=",MidaFletxaInclinada," height=",Math.floor((vista.nfil-MidaFletxaPlana)/2),"></td>");
 	cdns.push(
-	   "    <td colspan=", ((cal_vora) ? 3 : (cal_coord? 2: 1)), " rowspan=", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), "><img src=\"",
-	   AfegeixAdrecaBaseSRC(DonaFitxerColor(ParamCtrl.ColorFonsVista)),"\" width=",vista.ncol," height=",vista.nfil,"></td>");
+	   "    <td colspan=", ((cal_vora) ? 3 : (cal_coord? 2: 1)), " rowspan=", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), " style=\"background-color:", ParamCtrl.ColorFonsVista ,";\"><img src=\"",
+	   AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=",vista.ncol," height=",vista.nfil,"></td>");
 
 	if (cal_vora)
 	  cdns.push(
@@ -6097,7 +5878,8 @@ var p, unitats_CRS;
 		}
 
 		var barra_slider=[];
-		if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) && vista.i_nova_vista==NovaVistaPrincipal)
+		if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) && 
+			vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
 		{
 			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 			if (ParamCtrl.VistaBotonsBruixola && (parseInt(document.getElementById("vista").style.height) >= 300))
@@ -6147,7 +5929,7 @@ var p, unitats_CRS;
 			barra_slider.push("</table>");
 		}
 
-		if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length)
+		if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length && !ParamCtrl.hideLayersOverVista)
 		{
 			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
@@ -7090,7 +6872,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 375, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 430, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);

@@ -38,6 +38,72 @@
 
 "use strict"
 
+//https://www.freecodecamp.org/news/css-shapes-explained-how-to-draw-a-circle-triangle-and-more-using-pure-css
+
+function DonaCaracterHexaMultiple3(s)
+{
+	if (s=='1')
+		return '0';
+	if (s=='2' || s=='4')
+		return '3';
+	if (s=='5' || s=='7')
+		return '6';
+	if (s=='8' || s=='a' || s=='A')
+		return '9';
+	if (s=='b' || s=='B' || s=='C' || s=='d' || s=='D')
+		return 'c';
+	if (s=='e' || s=='E' || s=='F')
+		return 'f';
+	return s;
+}
+
+/*function DonaFitxerColor(c)
+{
+	//Arrodoneix el valor del color
+	var s=new String(c)	
+	if (s.toLowerCase()=="#e6f2ff")
+		s="colors/c"+s.substring(1,7)+".gif";	
+	else
+	{
+		if (s.charAt(0)=='#')
+		{
+			if (s.length!=7)
+				alert("Unsupported hexadecimal format color \"" + s +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
+			s="colors/c"+DonaCaracterHexaMultiple3(s.substring(1,2))+DonaCaracterHexaMultiple3(s.charAt(1))+DonaCaracterHexaMultiple3(s.substring(3,4))+DonaCaracterHexaMultiple3(s.charAt(3))+DonaCaracterHexaMultiple3(s.substring(5,6))+DonaCaracterHexaMultiple3(s.charAt(5))+".gif";
+		}
+	}
+	return s;
+}*/
+
+function EsColorSimilar(c, c2)
+{
+	if (!c || !c2 || !c.length || !c2.length)
+		return false;
+	if (c.charAt(0)!="#"  || c.length!=7 )
+	{
+		alert("Unsupported hexadecimal format color \"" + c +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
+		return false;
+	}
+	if (c2.charAt(0)!="#" || c2.length!=7)
+	{
+		alert("Unsupported hexadecimal format color \"" + c +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
+		return false;
+	}
+	if (DonaCaracterHexaMultiple3(c.charAt(1))==DonaCaracterHexaMultiple3(c2.charAt(1)) && 
+	    DonaCaracterHexaMultiple3(c.charAt(3))==DonaCaracterHexaMultiple3(c2.charAt(3)) &&
+	    DonaCaracterHexaMultiple3(c.charAt(5))==DonaCaracterHexaMultiple3(c2.charAt(5)))
+		return true;
+	return false;
+}
+
+//https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
+//Note that it "mirrors over the middle of the color", so colors close to the middle get a color very close to it. e.g. invertHex('808080'); produces '7F7F7F' which is almost the same color.
+function invertColor(c) {
+	if (c.charAt(0)!="#"  || c.length!=7 )
+		return c;
+	return "#" + (Number(`0x1${c.substring(1)}`) ^ 0xFFFFFF).toString(16).substr(1).toLowerCase();
+}
+
 function DonaCadenaHTMLSimbolUnicLlegenda(estil)
 {
 var cdns=[];
@@ -45,9 +111,12 @@ var cdns=[];
 	if (estil.TipusObj=="S")
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(estil.ItemLleg[0].color), "\">");
 	else if (estil.TipusObj=="L" || estil.TipusObj=="P")
-		cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td><img src=\"" ,
+	{
+		cdns.push('<span style="width:' , 16 - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[0].color, (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1;border-style:solid' : '') , ';display:inline-block;vertical-align:middle"></span>');
+		/*cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td><img src=\"" ,
 					AfegeixAdrecaBaseSRC(DonaFitxerColor(estil.ItemLleg[0].color)), "\" width=\"18\" height=\"",
-					((estil.TipusObj=="P") ? 10 : 2), "\"></td></tr></table>");
+					((estil.TipusObj=="P") ? 10 : 2), "\"></td></tr></table>");*/
+	}
 	cdns.push("</td><td valign=\"middle\" nowrap>");
 	return cdns.join("");
 }
@@ -72,11 +141,14 @@ var cdns=[];
 				if (estil.TipusObj=="S")
 					cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(estil.ItemLleg[l].color), "\">");
 				else if (estil.TipusObj=="L" || estil.TipusObj=="P")
-					cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td><img src=\"",
+				{
+					cdns.push('<span style="width:', 12 - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0),'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[l].color, (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1;border-style:solid' : ''), ';display:inline-block;vertical-align:middle"></span>');
+					/*cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td><img src=\"",
 						AfegeixAdrecaBaseSRC(DonaFitxerColor(estil.ItemLleg[l].color)),
 						"\" width=\"10\" height=\"",
 						((estil.TipusObj=="P") ? 6 : 2),
-						"\"></td></tr></table>");
+						"\"></td></tr></table>");*/
+				}
 				cdns.push("</td>",
 					"<td valign=\"middle\"><img src=\"",
 					AfegeixAdrecaBaseSRC("1tran.gif"), 

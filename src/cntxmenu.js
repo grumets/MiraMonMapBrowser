@@ -2064,7 +2064,7 @@ function DonaCadenaInfoReclassificacio()
 var cdns=[];
 
 	cdns.push("<br><fieldset><legend>",
-			  "Supported reclassification formats:</legend>",
+			  "Supported reclassification formats: </legend>",
 			  "<span class=\"Verdana11px\">",
 			  "<b>Unique value or category:</b> old new;new_description<br>",
 			  "<b>Interval:</b> old old_just_below new new_description<br><br>",
@@ -2103,11 +2103,11 @@ var cdns=[], i, capa;
 	capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("<br><fieldset><legend>",
-			  GetMessage("AddReclassifiedLayerAsNewStyle", "cntxmenu"),
-			  "</legend>",
+			  GetMessage("AddReclassifiedLayerAsNewStyle", "cntxmenu"), 
+			  ": </legend>",
 			  "<fieldset><legend>",
 			  GetMessage("LayerToReclassify", "cntxmenu"),
-			  " </legend>",
+			  ": </legend>",
 			  "<input type=\"hidden\" value=\"",i_capa,"\" id=\"", prefix_id, "-valor-capa-",0,"\" name=\"","valor_capa", 0, "\" />", DonaCadena(capa.DescLlegenda), "<br>",
 			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true}),
 			  "</fieldset>");
@@ -2153,8 +2153,8 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  //DonaCadenaLang({"cat":"Afegeix capa calculada a partir de les capes existents", "spa":"Añada capa calculada a partir de las capas existentes", "eng":"Add layer computed from existing layers", "fre":"Rajouter couche calculé à partir de couches existantes"}),
 			  //"</legend>",
 			  "<fieldset><legend>",
-			  GetMessage("LayerForExpression", "cntxmenu"),
-			  "</legend>");
+			  GetMessage("LayerForExpression", "cntxmenu"), 
+			  ": </legend>");
 		//Posar uns desplegables de capes, estils i dates
 		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
 		//Posar un botó d'afegir a la fórmula
@@ -2164,7 +2164,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 		cdns.push("<fieldset><legend>",
 		//Botons operadors i funcions per a la fórmula
 				GetMessage("OperatorsFunctionsForExpression", "cntxmenu"),
-			  "</legend>");
+			  ": </legend>");
 				operacio=[{text: "&equals;",prefix: "=",  size: "width:40px"},
 						  {text: ">=", 		prefix:">=",  size: "width:40px"},
 						  {text: "<", 		prefix: "<",  size: "width:40px"},
@@ -2260,14 +2260,14 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			cdns.push("<div>",
 				"<fieldset><legend>",
 			  GetMessage("AddGeometricOverlayLayerBetweenTwoCategoricalLayers", "cntxmenu"),
-			  "</legend>",
+			  ": </legend>",
 			  "<fieldset><legend>",
 			  GetMessage("Layer", "cntxmenu"),
-			  "_1 </legend>",
+			  "_1: </legend>",
 				DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 0, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset><fieldset><legend>",
 			  GetMessage("Layer", "cntxmenu"),
-			  "_2 </legend>",
+			  "_2: </legend>",
 			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset>",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
@@ -2280,14 +2280,14 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	cdns.push("<div>",
 		"<fieldset><legend>",
 	  GetMessage("AddStatisticalFieldsToCategoricalLayerFromAnotherLayer", "cntxmenu"),
-	  "</legend>",
+	  ": </legend>",
 	  "<fieldset><legend>",
 	  GetMessage("Layer", "cntxmenu"),
-	  "_1 </legend>",
+	  "_1: </legend>",
 		DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 2, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 	  "</fieldset><fieldset><legend>",
 	  GetMessage("Layer", "cntxmenu"),
-	  "_2 </legend>",
+	  "_2: </legend>",
 	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false}),
 	  "</fieldset>",
 	  "<input type=\"button\" class=\"Verdana11px\" value=\"",
@@ -2365,7 +2365,7 @@ var cdns=[], i;
 	cdns.push("<div id=\"LayerAfegeixCapaServidor\">",
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromServer", "cntxmenu"),
-			"</legend>",
+			": </legend>",
 			GetMessage("SpecifyServerURL", "cntxmenu"),
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" value=\"",
 			(url ? url: "http://"), "\" />",
@@ -2410,14 +2410,14 @@ var cdns=[], i;
 	cdns.push("<form name=\"AfegeixCapaLocal\" onSubmit=\"return false;\">",
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromDisk", "cntxmenu"),
-			"</legend>",
+			": </legend>",
 			"<button class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button> (GeoJSON, GeoTIFF ",GetMessage("or")," COG)",
 			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" multiple=\"multiple\" onChange=\"CarregaFitxersLocalsSeleccionats(form)\">",
 		"</fieldset></form>");
 	cdns.push("<form name=\"AfegeixCapaURL\" onSubmit=\"return false;\">",
 			"<fieldset><legend>",
 			GetMessage("NewLayerFromURL", "cntxmenu"),
-			"</legend>",
+			": </legend>",
 			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoJSON\" name=\"url_type\" value=\"geojson\" checked=\"checked\"><label for=\"RadioAddUrlTypeGeoJSON\">GeoJSON</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
 			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoTIFF\" name=\"url_type\" value=\"geotiff\"><label for=\"RadioAddUrlTypeGeoTIFF\">GeoTIFF ",GetMessage("or")," COG</label><br>",
 			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" />",
@@ -2938,7 +2938,7 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 	for (var i_condicio=0; i_condicio<10; i_condicio++)
 	{
 		cdns.push("<span id=\"", prefix_id, "-nexe-", i_condicio, "\" class=\"Verdana11px\" style=\"display: "+((i_condicio==0) ? "inline" : "none")+"\"><fieldset><legend>",
-			GetMessage("Condition"), " ", i_condicio+1, ":</legend>",
+			GetMessage("Condition"), " ", i_condicio+1, ": </legend>",
 			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false}),
 			"</fieldset>");
 		if (i_condicio<(10-1))
@@ -3263,7 +3263,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				break;
 		}
 
-		cdns.push(":</legend>",
+		cdns.push(": </legend>",
 			DonaCadenaComponentDeCombinacioRGB(i_capa, i_c),
 			"</fieldset>");
 		cdns.push("</span>");
@@ -3322,7 +3322,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	  	var value_text="";
 	  	value_text="<br><fieldset><legend>"+GetMessage("StatisticalValueOf", "cntxmenu")+" "+
 	  					DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc)+" "+GetMessage("byCategoriesOf", "cntxmenu")+
-	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc)+":</legend>";
+	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc)+": </legend>";
 	    value_text+="<table style=\"width:100%;text-align:left;font-size:inherit\"><tr><td rowspan=\"2\">";
 
 	    //només poso per triar els que els atributs de la capa categorica inicial indiquen com a mostrables
@@ -3410,11 +3410,11 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
   		}
   		if (recompte > 0)
   		{
-				value_text+="<td><fieldset><legend>"+GetMessage("Presentation")+"</legend>"+
+				value_text+="<td><fieldset><legend>"+GetMessage("Presentation")+": </legend>"+
 								"<input type=\"radio\" id=\"stat_graphic\" name=\"presentacio\" value=\"graphic\"><label for=\"graphic\">"+GetMessage("Graphical")+"</label><br>"+
 								"<input type=\"radio\" id=\"stat_text\" name=\"presentacio\" value=\"text\" checked=\"true\"><label for=\"sum_area_2\">"+GetMessage("Textual")+"</label><br>"+
 	    					"</fieldset></td></tr>";
-	    	value_text+="<tr><td><fieldset><legend>"+GetMessage("SortingOrder")+"</legend>"+
+	    	value_text+="<tr><td><fieldset><legend>"+GetMessage("SortingOrder")+": </legend>"+
 	    					"<input type=\"radio\" id=\"stat_unsorted\" name=\"order\" value=\"unsorted\" checked=\"true\"><label for=\"stat_unsorted\">"+GetMessage("Unsorted")+"</label><br>"+
 	    					"<input type=\"radio\" id=\"stat_ascend\" name=\"order\" value=\"ascend\"><label for=\"stat_ascend\">"+GetMessage("Ascending", "cntxmenu")+"</label><br>"+
 	    					"<input type=\"radio\" id=\"stat_descend\" name=\"order\" value=\"descend\"><label for=\"stat_descend\">"+GetMessage("Descending", "cntxmenu")+"</label><br>";
@@ -3588,7 +3588,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	{
 		cdns.push("<fieldset><legend>",
 			GetMessage("ValueForStretchingColor", "cntxmenu"),
-			":</legend>");
+			": </legend>");
 		for (var i_c=0; i_c<estil.component.length; i_c++)
 		{
 			if (estil.component.length>2)
@@ -3609,7 +3609,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 					default:
 						cdns.push(i_c);
 				}
-				cdns.push(":</legend>");
+				cdns.push(": </legend>");
 			}
 			//Valor mínim i valor màxim
 
@@ -3636,7 +3636,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	{
 		cdns.push("<fieldset><legend>",
 			GetMessage("SunPositionForComputationIllumination", "cntxmenu"),
-			":</legend>");
+			": </legend>");
 		//Deixo canviar les propietats az, elev i f
 		cdns.push("<label for=\"edita-estil-capa-illum-az\">", GetMessage("Azimuth", "cntxmenu"), ": </label>",
 				"<input type=\"text\" id=\"edita-estil-capa-illum-az\" name=\"az\" value=\"",
@@ -3659,7 +3659,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		var paleta;
 		cdns.push("<fieldset><legend>",
 			GetMessage("ColorPalette"),
-			":</legend>",
+			": </legend>",
 			"<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-actual\" checked=\"checked\"><label for=\"edita-estil-capa-paleta-actual\">", DonaCadenaHTMLPintaPaleta(estil.paleta), " (", GetMessage("Current"), ")</label><br>");
 		if (estil.paletaPrevia)
 			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", GetMessage("Previous"), ")</label><br>");
@@ -3842,13 +3842,13 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		GetMessage("LayerId"), ": ", capa.id, "<p>",
 		"<fieldset><legend>",
 		GetMessage("LayerName"),
-		":</legend>",
+		": </legend>",
 		"<input type=\"text\" id=\"edita-nom-capa\" name=\"nom_capa\" value=\"", DonaCadena(capa.desc), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
 		"<fieldset><legend>",
 		GetMessage("LayerNameInLegend", "cntxmenu"),
-		":</legend>",
+		": </legend>",
 		"<input type=\"text\" id=\"edita-nom-capa-llegenda\" name=\"nom_capa\" value=\"", DonaCadena(capa.DescLlegenda), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
@@ -3916,7 +3916,7 @@ var cdns=[], estil=ParamCtrl.capa[i_capa].estil[i_estil];
 		"<div id=\"LayerNomEstil\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;\">",
 		"<fieldset><legend>",
 		GetMessage("StyleName", "cntxmenu"),
-		":</legend>",
+		": </legend>",
 		"<input type=\"text\" id=\"edita-nom-estil\" name=\"nom_estil\" value=\"", DonaCadena(estil.desc), "\" style=\"width:400px;\" />",
 		"<br>",
 		"</fieldset>",
