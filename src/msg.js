@@ -356,7 +356,7 @@ var MessageLang={
 		ShowCleanMap_View: {"cat":"Mostra <u>v</u>ista del mapa neta", "spa":"Muestra <u>v</u>ista del mapa limpia", "eng":"Show a clean map <u>v</u>iew", "fre":"Afficher une <u>v</u>ue de carte propre"},
 		ZoomPan_2Clicks: {"cat":"Zoom i pan basat en <u>2</u> simples clics (ergonòmic)", "spa":"Zoom y pan basado en <u>2</u> simples clics (ergonómico)", "eng": "Zoom and pan based in <u>2</u> simples clicks (ergonomic)", "fre":"Zoom et pan basé en <u>2</u> simples clics (ergonomique)"},
 		ZoomPan_1ClickDrag: {"cat":"Zoom i pan en <u>1</u> clic i arrossegant", "spa":"Zoom y pan en <u>1</u> clic y arrastrando", "eng":"Zoom and pan with <u>1</u> click and dragging", "fre":"Zoom et pan en <u>1</u> cliques et glisser"},
-		NOfFigures: {"cat":"N. decimals", "spa":"N. decimales", "eng":"N. of figures", "fre":"N. décimales"},
+		NOfFigures: {"cat":"N. decimals", "spa":"N. decimales", "eng":"N. of decimal figures", "fre":"N. décimales"},
 		Corners: {"cat":"Cantonades", "spa":"Esquinas", "eng":"Corners", "fre":"Coins"},
 		None_underlined: {"cat":"c<u>a</u>p", "spa":"ningun<u>a</u>", "eng":"<u>n</u>one", "fre":"<u>a</u>ucune"},
 		None_underlined_char: {"cat":"a", "spa":"a", "eng":"n", "fre":"a"},

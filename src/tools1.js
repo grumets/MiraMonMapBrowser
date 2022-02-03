@@ -864,6 +864,50 @@ var SufixCanto="_canto"
 var AltBarraFinestraLayer=19;
 var MidaCantoFinestraLayer=12;
 
+function showOrHideLayersOnTopOfLayer(win, mainNom, show, excepcioNoms)
+{
+var elem, rect, x, y, nom;
+
+	//Get rectangle of the elem window
+	var mainElem=getLayer(win, mainNom);
+	var mainRect=getRectLayer(mainElem);
+	for (var i=0; i<layerList.length; i++)
+	{
+		nom=layerList[i].nom;
+
+		if (excepcioNoms)
+		{
+			for (var j=0; j<excepcioNoms.length; j++)
+			{
+				if (nom==excepcioNoms[j])
+					break;
+			}
+		}
+		if (j<excepcioNoms.length)
+			continue;
+
+		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
+		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto) ||
+		   (nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra))
+			continue;
+	
+		elem=getLayer(win, nom);
+		
+		if (!elem || elem==mainElem) //Avoid comparing with the elem layer
+			continue;
+
+		//Get the rect of the new element
+		rect=getRectLayer(elem);
+		x=rect.esq+rect.ample/2;
+		y=rect.sup+rect.alt/2;
+
+		//Is the Layer on top of the layer?
+		if (mainRect.esq<x && mainRect.esq+mainRect.ample>x && 
+			mainRect.sup<y && mainRect.sup+mainRect.alt>y)
+			showOrHideLayer(elem, show);
+	}	
+}
+
 function changeSizeLayers(win)
 {
 var w_previ,h_previ, delta_w, delta_h, delta, delta1;
@@ -890,6 +934,8 @@ var elem, rect, ancora, nom;
 			continue;
 
 		elem=getLayer(win, nom);
+		if (!elem)
+			contunue;
 		rect=getRectLayer(elem);
 		if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
 		{

@@ -35,7 +35,7 @@
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord',",
+						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord' i 'ctipica' ",
 						"type": "string"
 					},
 					"title": {
@@ -92,6 +92,10 @@
 					}
 				}
 			}
+		},
+		"hideLayersOverVista": {
+			"description": "Mostra les layers que hi ha sobre la/les vista/es. Si es true, la vista es veu neta (sense cap botó o finestra superposada). Per defecte és 'false'",
+			"type": "boolean"
 		},
 		"containerName": {
 			"description": "Nom de la divisió que conté el navegador. INTERN; no usar. S'omple a partir del nom indicat a StartMiraMonMapBrowser(div_name)",

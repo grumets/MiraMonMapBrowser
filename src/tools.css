@@ -449,6 +449,8 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	background-color: #FFFFFF;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #99CCFF;
@@ -461,14 +463,18 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	overflow: visible;
 	cursor: se-resize;
 }
+
 .barrafinestra {
 	background-image: url(fons_barra.gif);
 	background-repeat: repeat-x;
-	border: 1px solid #99CCFF;	
+	border: 1px solid #99CCFF;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
 	margin: 0px;
 	padding: 0px;
 	overflow: visible;
 }
+
 .titolfinestra{
 	text-align: left;
 	font-weight: bold;
