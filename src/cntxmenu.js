@@ -1928,7 +1928,7 @@ var request;
 								"formatGetFeatureInfo": [],
 								"layer": []};
 
-	request=AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS", true);
+	request=AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS", true, true  /*Cal posar-ho a la caixa en lloc de definir-ho constant ·$·*/);
 	ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
 				ParsejaRespostaGetCapabilities, "text/xml",
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);

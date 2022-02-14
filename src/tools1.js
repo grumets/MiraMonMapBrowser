@@ -935,7 +935,7 @@ var elem, rect, ancora, nom;
 
 		elem=getLayer(win, nom);
 		if (!elem)
-			contunue;
+			continue;
 		rect=getRectLayer(elem);
 		if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
 		{

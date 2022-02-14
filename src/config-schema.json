@@ -611,6 +611,36 @@
 				}
 			}
 		},
+		"BarraEstil": {
+			"description": "Estil de la barra de botons", 
+			"type": "object",
+			"properties": {		
+				"classic": {
+					"description": "Cal que els botons de la barra siguin clàssics (en base a GIFs multicolor). Si 'false'', null o absent, els botons seran vectorials de colors plans (SVG)", 
+					"type": "boolean"
+				},
+				"ncol": { 
+					"description": "Amplada de cada botó. Opcional. Per defecte val 23",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"nfil": { 
+					"description": "Alçada de cada botó. Opcional. Per defecte val 22",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"colors": {
+					"description": "Colors a aplicar als botons de la barra. Només aplica per botons vectorials de colors plans (SVG). Properties are names of an SVG element classes",
+					"type": "object",
+					"additionalProperties": { 
+						"description": "The color of this element class",
+						"type": "string"
+					}
+				}
+			}
+		},
 		"BarraBotoMes": {
 			"description": "Mostrar el botó d'acostar-se a la barra de botons", 
 			"type": "boolean"

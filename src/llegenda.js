@@ -539,19 +539,47 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 								  "\" align=middle></td>");
 				}
 				else
-					cdns.push("<td valign=\"middle\"><img src=\"",
-						((capa.consultable=="si") ? 
-							(AfegeixAdrecaBaseSRC("consultable.gif") +
-							"\" alt=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+
-							"\" title=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+ "\"") : 
-							(AfegeixAdrecaBaseSRC("ara_no_consultable.gif") +
-							"\" alt=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+
-							"\" title=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+ "\" align=middle")),
-								" name=\"", "c_ll_capa", i,"\" border=\"0\" onClick='CanviaEstatCapa(",
-							i,", \"consultable\");' onMouseOver=\"if (", "c_ll_capa", i,".alt) window.status=", "c_ll_capa", 
-							i,".alt; return true;\" onMouseOut=\"if (", "c_ll_capa", i,".alt) window.status=\'\'; return true;\"></td>");
+				{
+					cdns.push("<td valign=\"middle\">",
+						"<img width=\"14\" ",
+							"id=\"c_ll_capa", i, "\" name=\"c_ll_capa", i, "\" border=\"0\" ",
+							"src=\"");
+					if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+					{
+						cdns.push(((capa.consultable=="si") ? 
+								(AfegeixAdrecaBaseSRC("consultable.gif") +
+								"\" alt=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+
+								"\" title=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+ "\"") : 
+								(AfegeixAdrecaBaseSRC("ara_no_consultable.gif") +
+								"\" alt=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+
+								"\" title=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+ "\" align=middle")), " ");
+					}
+					else
+					{
+						cdns.push(AfegeixAdrecaBaseSRC("consultable.svg"),"\" ");
+					}
+					cdns.push("onClick='CanviaEstatCapa(", i,", \"consultable\");' ");
+					if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+						cdns.push("onMouseOver=\"if (", "c_ll_capa", i,".alt) window.status=", "c_ll_capa", i,".alt; return true;\" ",
+							"onMouseOut=\"if (", "c_ll_capa", i,".alt) window.status=\'\'; return true;\" ");
+					else
+					{
+						cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"",
+								(capa.consultable=="si" ? 
+									DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"}) :
+									DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})),
+							"\", colors: ", JSON.stringify((capa.consultable!="si" && ParamCtrl.BarraEstil.colorsGrey) ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+							"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
+						if (capa.consultable=="si")
+							cdns.push("onmouseover='ChangeTitleColorsSVG(\"c_ll_capa", i, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
+								"onmouseout='ChangeTitleColorsSVG(\"c_ll_capa", i, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+					}
+					cdns.push(">",
+						"</td>");
+				}
 				//Icones descarregable:
 				if (!ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
+				{
 					if (capa.descarregable=="no")
 					{
 						if (alguna.descarregable)
@@ -579,6 +607,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 									  "\" align=middle></td>");
 					}
 					else
+					{
 						cdns.push("<td valign=\"middle\"><img src=\"",
 								((capa.descarregable=="si") ? 
 											(AfegeixAdrecaBaseSRC("descarregable.gif") +
@@ -587,14 +616,16 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 											"\" alt=\""+DonaCadenaLang({"cat":"no descarregable", "spa":"no descargable", "eng":"no downloadable", "fre":"non téléchargeable"})+"\" align=middle")),
 									" name=\"","z_ll_capa", i,"\" border=\"0\" onClick='CanviaEstatCapa(",i,
 								", \"descarregable\");' onMouseOver=\"if (","z_ll_capa" ,i,".alt) window.status=","z_ll_capa", i,
-								".alt; return true;\" onMouseOut=\"if (","z_ll_raster", i,".alt) window.status=\'\'; return true;\"></td>");
+								".alt; return true;\" onMouseOut=\"if (","z_ll_capa", i,".alt) window.status=\'\'; return true;\"></td>");
+					}
+				}
 			}
 			//Botó de GetCovergage:
 			if (EsCapaDecarregableIndividualment(capa))
 			{
 				cdns.push("<td valign=\"middle\">",
-				(CadenaBotoPolsable("getcov"+i, "getcov", DonaCadenaLang({"cat":"descarregar", "spa":"descargar", "eng":"download", "fre":"téléchargeable"}), "MostraFinestraDownload("+i+")")),
-				"</td>");
+					CadenaBotoPolsable("getcov"+i, "getcov", DonaCadenaLang({"cat":"descarregar", "spa":"descargar", "eng":"download", "fre":"téléchargeable"}), "MostraFinestraDownload("+i+")", 14),
+					"</td>");
 			}
 			else
 			{
@@ -1007,19 +1038,41 @@ var nom_icona=TreuAdreca(icon_capa.src);
 
 function CanviaEstatConsultableCapa(icon_capa, i)
 {
-	if (TreuAdreca(icon_capa.src)=="ara_no_consultable.gif")
+	if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
 	{
-		ParamCtrl.capa[i].consultable="si";
-		icon_capa.src=AfegeixAdrecaBaseSRC("consultable.gif");
-		if (icon_capa.alt)
-			icon_capa.alt=DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"});
+		if (TreuAdreca(icon_capa.src)=="ara_no_consultable.gif")
+		{
+			ParamCtrl.capa[i].consultable="si";
+			icon_capa.src=AfegeixAdrecaBaseSRC("consultable.gif");
+			if (icon_capa.alt)
+				icon_capa.alt=DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"});
+			if (icon_capa.title)
+				icon_capa.title=DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"});
+		}
+		else 
+		{
+			ParamCtrl.capa[i].consultable="ara_no";
+			icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_consultable.gif");
+			if (icon_capa.alt)
+				icon_capa.alt=DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"});
+			if (icon_capa.title)
+				icon_capa.title=DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"});
+		}
 	}
-	else 
+	else
 	{
-		ParamCtrl.capa[i].consultable="ara_no";
-		icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_consultable.gif");
-		if (icon_capa.alt)
-			icon_capa.alt=DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"});
+		if (ParamCtrl.capa[i].consultable=="ara_no")
+		{
+			ParamCtrl.capa[i].consultable="si";
+			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, true);
+			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"}), colors: ParamCtrl.BarraEstil.colors});
+		}
+		else 
+		{
+			ParamCtrl.capa[i].consultable="ara_no";
+			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, false);
+			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"}), colors: ParamCtrl.BarraEstil.colorsGrey});
+		}
 	}
 }
 

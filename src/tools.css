@@ -500,6 +500,80 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	font-weight: normal;
 }
 
+/* *******************************************************
+ Styles for SCROLLS
+ Based on https://stackoverflow.com/questions/47576815/how-to-add-arrows-with-webkit-scrollbar-button
+ https://stackoverflow.com/questions/40512026/no-arrow-buttons-in-scrollbar-after-writing-webkit-css/46229219#46229219
+********************************************************** */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #b0b0b0;
+	background-clip: padding-box;
+	border: 0.05em solid #eeeeee;
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #777777;
+}
+
+::-webkit-scrollbar-track {
+	background-color: #dddddd;
+}
+/* Buttons */
+::-webkit-scrollbar-button:single-button {
+  background-color: #dddddd;
+  display: block;
+  border-style: solid;
+  height: 8px;
+  width: 10px;
+}
+
+/* Up */
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  border-width: 0 4px 6px 4px;
+  border-color: transparent transparent #555555 transparent;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+  border-color: transparent transparent #777777 transparent;
+}
+
+/* Down */
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  border-width: 6px 4px 0 4px;
+  border-color: #555555 transparent transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-buttonvertical::increment:hover {
+  border-color: #777777 transparent transparent transparent;
+}
+
+
+/* Left */
+::-webkit-scrollbar-button:single-button:horizontal:decrement {
+  border-width: 4px 6px 4px 0;
+  border-color: transparent #555555 transparent transparent;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:decrement:hover {
+  border-color: transparent #777777 transparent transparent;
+}
+
+/* Right */
+::-webkit-scrollbar-button:single-button:horizontal:increment {
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent #555555;
+}
+
+::-webkit-scrollbar-button:single-button:horizontal:increment:hover {
+  border-color: transparent transparent transparent #777777;
+}
 
 /* *******************************************************
  Estils de visualització dels diferents elements de la 

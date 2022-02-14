@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -82,6 +82,8 @@ IncludeScript("llinatge.js");
 IncludeScript("cntxmenu.js");
 IncludeScript("novacapa.js");
 IncludeScript("llegenda.js");
+IncludeScript("situacio.js");
+IncludeScript("barra.js");
 IncludeScript("download.js");
 IncludeScript("storymap.js");
 IncludeScript("params.js");
@@ -1520,7 +1522,7 @@ var cdns=[];
 	cdns.push("<font face=arial size=1><img src=\"",
 			  AfegeixAdrecaBaseSRC("1tran.gif"),
 			  "\" width=1 height=3 border=0><br><img src=\"",
-			  AfegeixAdrecaBaseSRC("colors/c000000.gif"),
+			  AfegeixAdrecaBaseSRC("1negre.gif"),
 			  "\" width=", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
 		  " height=2 border=0><br>", escala ,DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
@@ -1629,44 +1631,6 @@ function CreaEscalaFullImprimir(win)
     var elem=getLayer(win, "escala");
     if (isLayer(elem))
 		contentLayer(elem, DonaCadenaHTMLEscalaImprimir(VistaImprimir.EnvActual));
-}
-
-function CreaSituacioFullImprimir(win, esq, sup, ample, alt)
-{
-var factor_imatge=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt/ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample;
-var factor_paper=alt/ample;
-var elem=getLayer(win, "situacio");
-
-    if (isLayer(elem))
-    {
-		if (factor_imatge>factor_paper)
-			ample=floor_DJ(alt/factor_imatge);
-		else
-			alt=floor_DJ(ample*factor_imatge);
-
-		var rec=OmpleMidesRectangleSituacio(ample,alt,VistaImprimir.EnvActual);
-		contentLayer(elem,
-				"<img src=\"" +
-				AfegeixAdrecaBaseSRC(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].nom) + "\" width="+ample+" height="+alt+" border=0>"+
-				"<br><img src=\""+
-				AfegeixAdrecaBaseSRC("1tran.gif")+
-				"\" height=\"15\" width=\"1\"><br>"+
-				textHTMLLayer("l_rect", esq+rec.MinX,
-						sup+alt-rec.MaxY,
-						rec.MaxX-rec.MinX,
-						rec.MaxY-rec.MinY,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null,
-						DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY)));
-    }
-}//Fi de CreaSituacioFullImprimir()
-
-
-function OmpleMidesRectangleSituacio(ncol,nfil, env)
-{
-	return {"MinX": Math.max(0,Math.floor((env.MinX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)*ncol/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX))),
-		"MaxX": Math.min(ncol,Math.floor((env.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)*ncol/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)+1)),
-		"MinY": Math.max(0,Math.floor((env.MinY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)*nfil/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY))),
-		"MaxY": Math.min(nfil,Math.floor((env.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)*nfil/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)+1))};
 }
 
 var TriaFullWindow=null;
@@ -1906,11 +1870,6 @@ function CentraLaVista(x,y)
     ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.vista.EnvActual.MinY+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual;
 }
 
-function ClickSobreSituacio(event)
-{
-	PortamAPunt(DonaCoordXDeCoordSobreSituacio(event.clientX), DonaCoordYDeCoordSobreSituacio(event.clientY));
-}
-
 var MidaFletxaInclinada=10;
 var MidaFletxaPlana=15;
 
@@ -1969,15 +1928,6 @@ function DonaCoordIDeCoordSobreVista(elem, i_nova_vista, x)
 function DonaCoordJDeCoordSobreVista(elem, i_nova_vista, y)
 {
 	return ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0) + y-DonaOrigenSuperiorVista(elem, i_nova_vista);
-}
-
-function DonaCoordXDeCoordSobreSituacio(x)
-{
-	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX+(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/(ParamInternCtrl.AmpleSituacio-1)*(((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+x-OrigenEsqSituacio);
-}
-function DonaCoordYDeCoordSobreSituacio(y)
-{
-	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/(ParamInternCtrl.AltSituacio-1)*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-OrigenSupSituacio);
 }
 
 //Només útils per la consulta per localització de punts
@@ -3066,12 +3016,6 @@ var elem=getLayer(window, "atribucio");
 	}
 }
 
-
-function MovimentSobreSituacio(event_de_moure)
-{
-	MostraValorDeCoordActual(-1, DonaCoordXDeCoordSobreSituacio(event_de_moure.clientX), DonaCoordYDeCoordSobreSituacio(event_de_moure.clientY));
-}
-
 function PortamAVistaGeneral()
 {
 	if (ParamCtrl.ConsultaTipica)
@@ -3290,392 +3234,6 @@ function PreparaIOmpleFinestraVideo()
 	else
 		OmpleFinestraVideo(window, "video");
 }
-
-function CalculaMidesSituacio()
-{
-var factor, factor_y;
-var w,h,e,s;
-
-	ParamInternCtrl.MargeEsqSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq;
-	ParamInternCtrl.AmpleSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample;
-	ParamInternCtrl.MargeSupSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup;
-	ParamInternCtrl.AltSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt;
-	OrigenEsqSituacio=ParamInternCtrl.MargeEsqSituacio;
-	OrigenSupSituacio=ParamInternCtrl.MargeSupSituacio;
-
-	if (ParamCtrl.AmpleAltSituacioAuto)
-	{
-		var elem=getLayer(window, "situacio");
-		if (isLayer(elem))
-		{
-			var rect=getRectLayer(elem);
-			w=rect.ample;
-			h=rect.alt;
-			e=rect.esq;
-			s=rect.sup;
-		}
-		else
-			return;
-
-		factor=w/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample);
-		factor_y=h/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt);
-		if (factor_y<factor)
-			factor=factor_y;
-		factor*=0.97
-		ParamInternCtrl.MargeEsqSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*factor);
-		ParamInternCtrl.AmpleSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample*factor);
-		ParamInternCtrl.MargeSupSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*factor);
-		ParamInternCtrl.AltSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt*factor);
-		OrigenEsqSituacio=ParamInternCtrl.MargeEsqSituacio+e;
-		OrigenSupSituacio=ParamInternCtrl.MargeSupSituacio+s;
-	}
-}
-
-function DonaCadenaHTMLMarcSituacio(ample, alt)
-{
-var cdns=[];
-	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,
-		"></td></tr><tr><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
-		" width=1></td><td><img src=\"",
-		AfegeixAdrecaBaseSRC("1tran.gif"),
-		"\" height=1 width=",(ample-2),
-		"></td><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" , 
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
-		" width=1></td></tr><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,"></td></table>");
-	return cdns.join("");
-}
-
-function CreaSituacio()
-{
-var nom_img_src, env, situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio];
-
-	if (!situacio.Alt)
-		situacio.Alt=Math.round(situacio.Ample*(situacio.EnvTotal.EnvCRS.MaxY-situacio.EnvTotal.EnvCRS.MinY)/(situacio.EnvTotal.EnvCRS.MaxX-situacio.EnvTotal.EnvCRS.MinX));
-
-	CalculaMidesSituacio();
-	var rec=OmpleMidesRectangleSituacio(ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, ParamInternCtrl.vista.EnvActual);
-	var elem=getLayer(window, "situacio");
-	if (isLayer(elem))
-	{
-		if (typeof situacio.servidor==="undefined")
-			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
-		else if (DonaTipusServidorCapa(situacio)!="TipusWMS")
-		{
-			alert("'situacio' with 'tipus' different of 'TipusWMS' not supported");
-			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
-		}
-		else
-		{
-			nom_img_src="SERVICE=WMS&VERSION=" + DonaVersioComAText(DonaVersioServidorCapa(situacio)) + "&REQUEST=GetMap&";
-			if (DonaVersioServidorCapa(situacio).Vers<1 || (DonaVersioServidorCapa(situacio).Vers==1 && DonaVersioServidorCapa(situacio).SubVers<2))
-		    		nom_img_src+="SRS=";
-			else
-        			nom_img_src+="CRS=";
-			nom_img_src+=situacio.EnvTotal.CRS + "&BBOX=";
-			env=situacio.EnvTotal.EnvCRS;
-			if (CalGirarCoordenades(situacio.EnvTotal.CRS,  DonaVersioServidorCapa(situacio)))
-				nom_img_src+=env.MinY + "," + env.MinX + "," + env.MaxY + "," + env.MaxX;
-			else
-        			nom_img_src+=env.MinX + "," + env.MinY + "," + env.MaxX + "," + env.MaxY;
-			nom_img_src+="&WIDTH=" + situacio.Ample + "&HEIGHT=" + situacio.Alt + "&LAYERS=" + situacio.nom + "&FORMAT=";
-			if (situacio.FormatImatge)
-				nom_img_src+=situacio.FormatImatge;
-			else
-				nom_img_src+="image/png";
-			nom_img_src+="&TRANPARENT=TRUE&STYLES=";
-			if (situacio.NomEstil)
-				nom_img_src+=situacio.NomEstil;
-			nom_img_src=CombinaURLServidorAmbParamPeticio(DonaServidorCapa(situacio), nom_img_src);
-		}
-
-		var s=textHTMLLayer("l_situa", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<img name=\"i_situa\" src=\"" + nom_img_src + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0>") +"\n";
-		if (EsEnvDinsMapaSituacio(ParamInternCtrl.vista.EnvActual))
-			s+=textHTMLLayer("l_rect", ParamInternCtrl.MargeEsqSituacio+rec.MinX, ParamInternCtrl.MargeSupSituacio+ParamInternCtrl.AltSituacio-rec.MaxY, rec.MaxX-rec.MinX, rec.MaxY-rec.MinY, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY))+ "\n";
-		s+=textHTMLLayer("l_situa_actiu", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content:false}, null, "<a href=\"javascript:void(0);\" onClick=\"ClickSobreSituacio(event);\" onmousemove=\"MovimentSobreSituacio(event);\"><img src=\""+ AfegeixAdrecaBaseSRC("1tran.gif") + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0></a>")+"\n";
-		contentLayer(elem, s);
-	}
-}
-
-function CanviaImageBotoPolsable(event, img, nom)
-{
-	img.src=nom;
-	dontPropagateEvent(event);  //Si el botó està sobre altres coses no propaga aquest event
-	return true;
-}
-
-function CadenaBotoPolsable(nom, fitxer, text_groc, funcio)
-{
-	return "<img align=absmiddle src=\"" + AfegeixAdrecaBaseSRC(fitxer + ".gif") + "\" name=\"" + nom + "\" border=\"0\" alt=\"" + text_groc + "\" title=\"" + text_groc + "\" onClick=\"this.src=\'" + AfegeixAdrecaBaseSRC(fitxer + ".gif") + "\';" + funcio + "\" onmousedown=\"CanviaImageBotoPolsable(event, this, '" + AfegeixAdrecaBaseSRC(fitxer + "p.gif") + "');\" onMouseOver=\"if (this.alt) window.status=this.alt; return true;\" onMouseOut=\"this.src=\'" + AfegeixAdrecaBaseSRC(fitxer + ".gif") + "\';if (this.alt) window.status=\'\'; return true;\">";
-}
-
-//Els arguments són parelles de 'nom_img', 'nom_fitxer_img'...
-function CanviaPolsatEnBotonsAlternatius()
-{
-	for (var i=0; i<arguments.length; i+=2)
-		//eval("window.document." + arguments[i] + ".src=" + "\"" + AfegeixAdrecaBaseSRC(arguments[i+1]) + "\"");
-		window.document[arguments[i]].src=AfegeixAdrecaBaseSRC(arguments[i+1]);
-	return true;
-}
-
-//Els arguments són: l'índex del botó premut al inici + trios de 'nom_img', 'text_groc', 'funcio'...
-function CadenaBotonsAlternatius(boto_p, botons)
-{
-var j,l;
-var cdns=[];
-	for (j=0; j<botons.length; j++)
-	{
-		cdns.push("<IMG align=absmiddle name=\"" , botons[j].src , "\" SRC=\"" ,
-			AfegeixAdrecaBaseSRC(botons[j].src) ,
-			((boto_p==botons[j].src) ? "p" : "") ,
-			".gif\" alt=\"" , botons[j].alt ,
-			"\" title=\"" , botons[j].alt ,
-			"\" onClick=\"CanviaPolsatEnBotonsAlternatius(");
-
-		for (l=0; l<botons.length; l++)
-		{
-            if (l!=0)
-				cdns.push(",");
-			cdns.push("\'" , botons[l].src , "\',\'" , botons[l].src , ((j==l) ? "p" : "") , ".gif\'");
-		}
-		cdns.push(");" , botons[j].funcio , "\" onMouseOver=\"if (document." , botons[j].src , ".alt) window.status=document." , botons[j].src , ".alt; return true;\" onMouseOut=\"if (document." , botons[j].src , ".alt) window.status=''; return true;\">");
-	}
-	return cdns.join("");
-}
-
-
-function CreaBarra(crs)
-{
-var i, j, k;
-var cdns=[];
-
-	if (ParamCtrl.BarraNomesDescarrega)
-	{
-		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return ObtenirMMZ();\">");
-		ParamCtrl.EstatClickSobreVista="ClickMouMig";
-		cdns.push("<CENTER>",
-		   (CadenaBotoPolsable("getmmz_text", "getmmz_text", DonaCadenaLang({"cat":"descarregar", "spa":"descargar", "eng":"download", "fre":"télécharger"}), "ObtenirMMZ();")),
-		   "&nbsp;&nbsp;&nbsp;",
-		   (CadenaBotoPolsable("ajuda", "ajuda", DonaCadenaLang({"cat":"ajuda interactiva", "spa":"ayuda interactiva", "eng":"interactive help", "fre":"aide intéractive"}), "ObreFinestraAjuda();")),
-		   "</CENTER>");
-	}
-	else // Barra completa
-	{
-		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return PortamANivellDeZoom(document.zoom.nivell.value)\">\n");
-		if (ParamCtrl.BarraBotoMes)
-		   	cdns.push((CadenaBotoPolsable("zoom_in", "zoom_in", DonaCadenaLang({"cat":"acostar", "spa":"acercar", "eng":"zoom in","fre":"rapprocher"}),
-				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+1);")));
-		if (ParamCtrl.BarraBotoMenys)
-			cdns.push((CadenaBotoPolsable("zoomout", "zoomout", DonaCadenaLang({"cat":"allunyar", "spa":"alejar", "eng":"zoom out","fre":"éloigner"}),
-				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)-1);")));
-		if (ParamCtrl.BarraBotoAnarCoord)
-			cdns.push((CadenaBotoPolsable("zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}),
-				"MostraFinestraAnarCoordenada()")));
-		if (ParamCtrl.BarraBotoBack)
-			cdns.push((CadenaBotoPolsable("zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}),
-				"RecuperaVistaPrevia();")));
-		if (ParamCtrl.BarraBotoVGeneral)
-			cdns.push((CadenaBotoPolsable("zoomall", "zoomall", DonaCadenaLang({"cat":"vista general", "spa":"vista general", "eng":"general view","fre":"vue générale"}),
-				"PortamAVistaGeneral();")));
-
-		// Activació de les consultes perquè hi ha alguna capa consultable
-		if(~Accio.accio&AccioValidacio)
-		{
-			for (i=0; i<ParamCtrl.capa.length; i++)
-			{
-				if (ParamCtrl.capa[i].consultable!="no")
-				    break;
-			}
-		}
-		else
-			i=0;
-
-		// Activació de les consultes perquè hi ha alguna vector consultable
-		for (k=0; k<ParamCtrl.capa.length; k++)
-		{
-			if (ParamCtrl.capa[k].model==model_vector && ParamCtrl.capa[k].consultable!="no")
-				break;
-		}
-		// Activació de les consultes perquè hi ha alguna vector editable
-		for (j=0; j<ParamCtrl.capa.length; j++)
-		{
-			if (ParamCtrl.capa[j].model==model_vector && ParamCtrl.capa[j].editable!="no")
-				break;
-		}
-		if (ParamCtrl.BarraBotonsAlternatius)
-		{
-			var botons=[];
-			var boto_p;
-
-			//Precaucions previes: S'eviten situacions on ParamCtrl.EstatClickSobreVista és incompatible amb l'estat actual del navegador
-			if (ParamCtrl.EstatClickSobreVista=="ClickMouMig" && !(ParamCtrl.BarraBotoMouMig))
-				ParamCtrl.EstatClickSobreVista="ClickPan1";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && !(ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))
-				ParamCtrl.EstatClickSobreVista="ClickConLoc";
-			else if ((ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2") && !(ParamCtrl.BarraBotoNovaVista))
-				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
-			if (ParamCtrl.EstatClickSobreVista=="ClickConLoc" && (!(i<ParamCtrl.capa.length) && (ParamCtrl.capa && !(k<ParamCtrl.capa.length))))
-				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
-
-
-			if (ParamCtrl.EstatClickSobreVista=="ClickPan1" || ParamCtrl.EstatClickSobreVista=="ClickPan2")
-				boto_p="pan";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickMouMig" )
-				boto_p="moumig";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec2")
-				boto_p="zoomfin";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2")
-				boto_p="novavista";
-			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
-				boto_p="inserta";
-			else if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
-				boto_p=(i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc";
-			else
-				boto_p="zoomfin";
-
-			botons[botons.length]={"src": "pan",
-				   "alt": DonaCadenaLang({"cat":"mou vista", "spa":"mueve vista", "eng":"pan view", "fre":"déplace vue"}),
-				   "funcio": "CanviaEstatClickSobreVista(\'ClickPan1\');"};
-	    	if (ParamCtrl.BarraBotoMouMig)
-	    	{
-				botons[botons.length]={"src": "moumig",
-					   "alt": DonaCadenaLang({"cat":"centra on faci clic", "spa":"centra donde haga clic", "eng":"center where click", "fre":"centre où cliquer"}),
-					   "funcio": "CanviaEstatClickSobreVista(\'ClickMouMig\');"};
- 			}
-			botons[botons.length]={"src": "zoomfin",
-					   "alt": DonaCadenaLang({"cat":"zoom de finestra", "spa":"zoom de ventana", "eng":"window zoom", "fre":"zoom de fenêtre"}),
-					   "funcio": "CanviaEstatClickSobreVista(\'ClickZoomRec1\');"};
-			if (ParamCtrl.BarraBotoNovaVista)
-			{
-				botons[botons.length]={"src": "novavista",
-					   "alt": DonaCadenaLang({"cat":"nova vista", "spa":"nova vista", "eng":"new view", "fre":"nouvelle vue"}),
-					   "funcio": "CanviaEstatClickSobreVista(\'ClickNovaVista1\');"};
-			}
-			if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
-			{
-				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc",
-					   "alt": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? DonaCadenaLang({"cat":"validació", "spa":"validación", "eng":"validate", "fre":"validation"}) : DonaCadenaLang({"cat":"consulta per localització", "spa":"consulta por localización", "eng":"query by location", "fre":"requête par emplacement"}),
-					   "funcio": "CanviaEstatClickSobreVista(\'ClickConLoc\');"};
-			}
-			if (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length))
-		    {
-				botons[botons.length]={"src": "inserta",
-					   "alt": DonaCadenaLang({"cat":"editar un nou punt", "spa":"editar un nuevo punto", "eng":"edit a new point", "fre":"éditer un nouveaux point"}),
-					   "funcio": "CanviaEstatClickSobreVista(\'ClickEditarPunts\');"};
- 			}
-			cdns.push(CadenaBotonsAlternatius(boto_p, botons),"\n");
-		}
-
-		if ((typeof ParamCtrl.BarraEscala==="undefined" || ParamCtrl.BarraEscala) &&
-			(ParamCtrl.LlistatZoomFraccio || ParamCtrl.LlistatZoomMidaPixel || ParamCtrl.LlistatZoomEscalaAprox))
-		{
-			cdns.push("&nbsp;<span class=\"titol_zoom\">",
-			   (ParamCtrl.TitolLlistatNivellZoom ?
-					DonaCadena(ParamCtrl.TitolLlistatNivellZoom) :
-					"Zoom:"),
-			   "</span>",
-			   "<select CLASS=text_petit name=\"nivell\" onChange=\"PortamANivellDeZoom(parseInt(document.zoom.nivell.value));\">\n");
-
-			for (var i=0; i<ParamCtrl.zoom.length; i++)
-			{
-			    cdns.push("<OPTION VALUE=\"",i,"\"",
-			    	((i==DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)) ? " SELECTED" : "") ,">",
-				(EscriuDescripcioNivellZoom(i, crs ? crs : ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, false)), "</OPTION>\n");
-			}
-			cdns.push("</select>\n");
-		}
-		if (ParamCtrl.BarraBotoCTipica && ParamCtrl.ConsultaTipica)
-			cdns.push((CadenaBotoPolsable("consulta_tipica_i", "ctipica", DonaCadenaLang({"cat":"Consulta típica o per objectes", "spa":"Consulta típica o por objetos", "eng":"Typical or object query","fre":"Recherche typique où par objets"}), "MostraOAmagaCtipiques();")));
-		for (i=0; i<ParamCtrl.capa.length; i++)
-		{
-		 	if (ParamCtrl.capa[i].descarregable!="no")
-			{
-			    //window.document.write("&nbsp;");
-				cdns.push((CadenaBotoPolsable("getmmz", "getmmz", DonaCadenaLang({"cat":"descarregar", "spa":"descargar", "eng":"download", "fre":"télécharger"}), "ObtenirMMZ();")),"\n");
-				break;
-			}
-		}
-		for (i=0; i<ParamCtrl.capa.length; i++)
-		{
-		 	if (ParamCtrl.capa[i].animable)
-			{
-				cdns.push((CadenaBotoPolsable("video", "video", DonaCadenaLang({"cat":"series temporals i animacions", "spa":"series temporales y animaciones", "eng":"time series and animations", "fre":"séries chronologiques et animations"}),
-					"MostraFinestraVideo();")),"\n");
-				break;
-			}
-		}
-
-		if (ParamCtrl.BarraBotoCaixaParam)
-			cdns.push((CadenaBotoPolsable("param", "param", DonaCadenaLang({"cat":"opcions", "spa":"opciones", "eng":"options","fre":"options"}), "MostraFinestraParametres();")));
-		if (ParamCtrl.BarraBotoConsola)
-			cdns.push((CadenaBotoPolsable("consola", "consola", DonaCadenaLang({"cat":"consola", "spa":"consola", "eng":"console","fre":"console"}), "MostraFinestraConsola();")));
-		if (ParamCtrl.BarraBotoEnllac)
-			cdns.push((CadenaBotoPolsable("enllac", "enllac", DonaCadenaLang({"cat":"enllaç al mapa", "spa":"enlace al mapa", "eng":"link to map", "fre":"lien à la carte"}), "MostraFinestraEnllac();")));
-		if (ParamCtrl.BarraBotoEnllacWMS)
-			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", DonaCadenaLang({"cat":"enllaços als servidors", "spa":"enlaces a los servidores", "eng":"links to the servers", "fre":"lien aux serveurs"}), "MostraFinestraEnllacWMS();")));
-		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", DonaCadenaLang({"cat":"Afegir capes", "spa":"Añadir capas", "eng":"Add layers", "fre":"Ajouter couches"}), "IniciaFinestraAfegeixCapaServidor(0);")));
-		if (ParamCtrl.BarraBotoCalculadora)
-			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", DonaCadenaLang({"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng":"Layer calculator", "fre":"Calculateur de couches"}), "IniciaFinestraCalculadoraCapes();")));
-		if (ParamCtrl.BarraBotoCombiCapa)
-			cdns.push((CadenaBotoPolsable("combicapa", "combicapa", DonaCadenaLang({"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng":"Analytical combination of layers", "fre":"Combinaison analytique de couches"}), "IniciaFinestraCombiCapa();")));
-		cdns.push("\n");
-
-		if (ParamCtrl.BarraBotoPrint)
-			cdns.push((CadenaBotoPolsable("print", "print", DonaCadenaLang({"cat":"imprimir", "spa":"imprimir", "eng":"print", "fre":"imprimer"}), "ObreTriaFullImprimir();")));
-		if (ParamCtrl.BarraBotoPlanaPrincipal)
-			cdns.push((CadenaBotoPolsable("home", "home", DonaCadenaLang({"cat":"Reiniciar des de servidor", "spa":"Reiniciar desde servidor", "eng":"Restart from server", "fre":"Redémarrer depuis le serveur"}), "RestartMiraMonMapBrowser();")));
-		if (ParamCtrl.BarraBotoInstallarMMZ)
-			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
-				DonaCadenaLang({"cat":"instal·lar el Lector Universal de Mapes del MiraMon", "spa":"instalar el Lector Universal de Mapas de MiraMon", "eng":"install MiraMon Universal Map Reader","fre":"installer le Lecteur Universel de Cartes du Miramon"}),
-				"InstalaLectorMapes();")));
-    if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
-    	cdns.push((CadenaBotoPolsable("storyMap", "storyMap", DonaCadenaLang({"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"}), "MostraFinestraTriaStoryMap();")));
-		if (ParamCtrl.BarraBotoAjuda)
-			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", DonaCadenaLang({"cat":"ajuda interactiva", "spa":"ayuda interactiva", "eng":"interactive help","fre":"aide intéractive"}),
-				"ObreFinestraAjuda();")));
-		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
-		{
-			var nom_idioma_alt={"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"};
-			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
-			var boto_per_defecte;
-			for (boto_per_defecte=0; boto_per_defecte<ParamCtrl.idiomes.length; boto_per_defecte++)
-			{
-				if (ParamCtrl.idiomes[boto_per_defecte]==ParamCtrl.idioma)
-					break;
-			}
-			if (boto_per_defecte==ParamCtrl.idiomes.length)
-				boto_per_defecte=0;
-			if (ParamCtrl.idiomes.length==2)
-				cdns.push((CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte],
-					[{"src": "idioma_"+ParamCtrl.idiomes[0], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[0]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[0]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[1], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[1]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[1]+"\');"}])),"\n");
-			else if (ParamCtrl.idiomes.length==3)
-				cdns.push((CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte],
-					[{"src": "idioma_"+ParamCtrl.idiomes[0], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[0]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[0]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[1], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[1]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[1]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[2], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[2]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[2]+"\');"}]))+"\n");
-			else //if (ParamCtrl.idiomes.length==4)
-				cdns.push((CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte],
-					[{"src": "idioma_"+ParamCtrl.idiomes[0], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[0]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[0]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[1], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[1]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[1]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[2], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[2]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[2]+"\');"},
-					 {"src": "idioma_"+ParamCtrl.idiomes[3], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[3]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[3]+"\');"}]))+"\n");
-		}
-		if (ParamCtrl.AltresLinks)
-			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
-	}
-	cdns.push("</FORM>\n");
-	var elem=getLayer(window, "barra");
-	if (isLayer(elem))
-	{
-		contentLayer(elem, cdns.join(""));
-		if (window.document.zoom.nivell)
-			window.document.zoom.nivell.focus();
-	}
-}//Fi de CreaBarra()
 
 function EsCapaDinsAmbitActual(capa)
 {
