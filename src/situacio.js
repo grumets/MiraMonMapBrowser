@@ -40,32 +40,20 @@
 
 function CalculaMidesSituacio()
 {
-var factor, factor_y;
-var w,h,e,s;
-
 	ParamInternCtrl.MargeEsqSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq;
 	ParamInternCtrl.AmpleSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample;
 	ParamInternCtrl.MargeSupSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup;
 	ParamInternCtrl.AltSituacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt;
-	OrigenEsqSituacio=ParamInternCtrl.MargeEsqSituacio;
-	OrigenSupSituacio=ParamInternCtrl.MargeSupSituacio;
 
 	if (ParamCtrl.AmpleAltSituacioAuto)
 	{
-		var elem=getLayer(window, "situacio");
-		if (isLayer(elem))
-		{
-			var rect=getRectLayer(elem);
-			w=rect.ample;
-			h=rect.alt;
-			e=rect.esq;
-			s=rect.sup;
-		}
-		else
-			return;
+		var elem=getResizableLayer(window, "situacio");
+		if (!isLayer(elem))
+			return
+		var rect=getRectLayer(elem);
 
-		factor=w/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample);
-		factor_y=h/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt);
+		var factor=rect.ample/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeEsq*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample);
+		var factor_y=rect.alt/(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*2+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt);
 		if (factor_y<factor)
 			factor=factor_y;
 		factor*=0.97
@@ -73,12 +61,10 @@ var w,h,e,s;
 		ParamInternCtrl.AmpleSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Ample*factor);
 		ParamInternCtrl.MargeSupSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].MargeSup*factor);
 		ParamInternCtrl.AltSituacio=Math.floor(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].Alt*factor);
-		OrigenEsqSituacio=ParamInternCtrl.MargeEsqSituacio+e;
-		OrigenSupSituacio=ParamInternCtrl.MargeSupSituacio+s;
 	}
 }
 
-function DonaCadenaHTMLMarcSituacio(ample, alt)
+/*function DonaCadenaHTMLMarcSituacio(ample, alt)
 {
 var cdns=[];
 	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
@@ -93,20 +79,23 @@ var cdns=[];
 		" width=1></td></tr><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
 		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,"></td></table>");
 	return cdns.join("");
-}
+}*/
 
 function CreaSituacio()
 {
-var nom_img_src, env, situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio];
+var nom_img_src;
 
-	if (!situacio.Alt)
-		situacio.Alt=Math.round(situacio.Ample*(situacio.EnvTotal.EnvCRS.MaxY-situacio.EnvTotal.EnvCRS.MinY)/(situacio.EnvTotal.EnvCRS.MaxX-situacio.EnvTotal.EnvCRS.MinX));
-
-	CalculaMidesSituacio();
-	var rec=OmpleMidesRectangleSituacio(ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, ParamInternCtrl.vista.EnvActual);
-	var elem=getLayer(window, "situacio");
+	var elem=getResizableLayer(window, "situacio");
 	if (isLayer(elem))
 	{
+		var situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio];
+		if (!situacio.Alt)
+			situacio.Alt=Math.round(situacio.Ample*(situacio.EnvTotal.EnvCRS.MaxY-situacio.EnvTotal.EnvCRS.MinY)/(situacio.EnvTotal.EnvCRS.MaxX-situacio.EnvTotal.EnvCRS.MinX));
+
+		CalculaMidesSituacio();
+		var rec=OmpleMidesRectangleSituacio(ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, ParamInternCtrl.vista.EnvActual);
+
+		//Determino el nom de la imatge de sitaució.
 		if (typeof situacio.servidor==="undefined")
 			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
 		else if (DonaTipusServidorCapa(situacio)!="TipusWMS")
@@ -122,7 +111,7 @@ var nom_img_src, env, situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituaci
 			else
         			nom_img_src+="CRS=";
 			nom_img_src+=situacio.EnvTotal.CRS + "&BBOX=";
-			env=situacio.EnvTotal.EnvCRS;
+			var env=situacio.EnvTotal.EnvCRS;
 			if (CalGirarCoordenades(situacio.EnvTotal.CRS,  DonaVersioServidorCapa(situacio)))
 				nom_img_src+=env.MinY + "," + env.MinX + "," + env.MaxY + "," + env.MaxX;
 			else
@@ -138,10 +127,16 @@ var nom_img_src, env, situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituaci
 			nom_img_src=CombinaURLServidorAmbParamPeticio(DonaServidorCapa(situacio), nom_img_src);
 		}
 
-		var s=textHTMLLayer("l_situa", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<img name=\"i_situa\" src=\"" + nom_img_src + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0>") +"\n";
+		//Contrueixo les 3 divisions (el mapa, el rectangle i el tel sensible). La divisió del mapa conté les altres.
+		var s='<div style="overflow:hidden; left:' + ParamInternCtrl.MargeEsqSituacio + 'px; top:' + ParamInternCtrl.MargeSupSituacio + 'px; width:' + ParamInternCtrl.AmpleSituacio+ 'px; height:' + ParamInternCtrl.AltSituacio  + 'px;">'+
+			 '<img src="' + nom_img_src + '" width="' + ParamInternCtrl.AmpleSituacio + '" height="' + ParamInternCtrl.AltSituacio+'" border="0">';
 		if (EsEnvDinsMapaSituacio(ParamInternCtrl.vista.EnvActual))
-			s+=textHTMLLayer("l_rect", ParamInternCtrl.MargeEsqSituacio+rec.MinX, ParamInternCtrl.MargeSupSituacio+ParamInternCtrl.AltSituacio-rec.MaxY, rec.MaxX-rec.MinX, rec.MaxY-rec.MinY, null, {scroll: "no", visible: true, ev: null, save_content: false}, null, DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY))+ "\n";
-		s+=textHTMLLayer("l_situa_actiu", ParamInternCtrl.MargeEsqSituacio, ParamInternCtrl.MargeSupSituacio, ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, null, {scroll: "no", visible: true, ev: null, save_content:false}, null, "<a href=\"javascript:void(0);\" onClick=\"ClickSobreSituacio(event);\" onmousemove=\"MovimentSobreSituacio(event);\"><img src=\""+ AfegeixAdrecaBaseSRC("1tran.gif") + "\" width="+ParamInternCtrl.AmpleSituacio+" height="+ParamInternCtrl.AltSituacio+" border=0></a>")+"\n";
+			s+='<div style="position:absolute; overflow:hidden; left:' + (ParamInternCtrl.MargeEsqSituacio+rec.MinX) + 'px; top:' + (ParamInternCtrl.MargeSupSituacio+ParamInternCtrl.AltSituacio-rec.MaxY) + 'px; width:' + (rec.MaxX-rec.MinX) + 'px; height:' + (rec.MaxY-rec.MinY) + 'px; border: 1px solid ' + ParamCtrl.ColorQuadratSituacio + ';">'+
+				//DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY)+
+				'</div>';
+		s+='<div style="position:absolute; overflow:hidden; left:' + ParamInternCtrl.MargeEsqSituacio + 'px; top:' + ParamInternCtrl.MargeSupSituacio + 'px; width:' + ParamInternCtrl.AmpleSituacio+ 'px; height:' + ParamInternCtrl.AltSituacio  + 'px;" onClick="ClickSobreSituacio(event);" onmousemove="MovimentSobreSituacio(event);">'+
+			'</div>'+
+			'</div>';
 		contentLayer(elem, s);
 	}
 }
@@ -170,8 +165,8 @@ var elem=getLayer(win, "situacio");
 						sup+alt-rec.MaxY,
 						rec.MaxX-rec.MinX,
 						rec.MaxY-rec.MinY,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null,
-						DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY)));
+						null, {scroll: "no", visible: true, ev: null, save_content: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio}, null,
+						/*DonaCadenaHTMLMarcSituacio(rec.MaxX-rec.MinX, rec.MaxY-rec.MinY)*/null));
     }
 }//Fi de CreaSituacioFullImprimir()
 
@@ -188,18 +183,36 @@ function ClickSobreSituacio(event)
 {
 	//Aquesta línia no es pot fer així perquè activa l'antivirus defender DragDrop.B. 10 anys més tard encara passa!! (https://joanma747.blogspot.com/2012/02/false-dragdropb-trojan-detected-by.html)
 	//Portam A Punt(  DonaC oordXDeC oordSobreSituacio(event.c lientX),   DonaC oordYDeC oordSobreSituacio(event.c lientY));
-	var x = DonaCoordXDeCoordSobreSituacio (event_de_click.clientX);
-    	var y = DonaCoordYDeCoordSobreSituacio (event_de_click.clientY);
-	PortamAPunt (x, y);
+	var x = DonaCoordXDeCoordSobreSituacio(event.clientX);
+    	var y = DonaCoordYDeCoordSobreSituacio(event.clientY);
+	PortamAPunt(x, y);
 }
+
+function DonaOrigenSuperiorSituacio()
+{
+	var elem=getResizableLayer(window, "situacio");
+	if (isLayer(elem))
+		return ParamInternCtrl.MargeSupSituacio+getRectSupLayer(elem);
+	return ParamInternCtrl.MargeSupSituacio;
+}
+
+function DonaOrigenEsquerraSituacio()
+{
+	var elem=getResizableLayer(window, "situacio");
+	if (isLayer(elem))
+		return ParamInternCtrl.MargeEsqSituacio+getRectEsqLayer(elem);
+	else
+		return ParamInternCtrl.MargeEsqSituacio;
+}
+
 
 function DonaCoordXDeCoordSobreSituacio(x)
 {
-	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX+(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/(ParamInternCtrl.AmpleSituacio-1)*(((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+x-OrigenEsqSituacio);
+	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX+(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/(ParamInternCtrl.AmpleSituacio-1)*(((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+x-DonaOrigenEsquerraSituacio());
 }
 function DonaCoordYDeCoordSobreSituacio(y)
 {
-	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/(ParamInternCtrl.AltSituacio-1)*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-OrigenSupSituacio);
+	return ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/(ParamInternCtrl.AltSituacio-1)*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-DonaOrigenSuperiorSituacio());
 }
 
 
@@ -207,4 +220,3 @@ function MovimentSobreSituacio(event_de_moure)
 {
 	MostraValorDeCoordActual(-1, DonaCoordXDeCoordSobreSituacio(event_de_moure.clientX), DonaCoordYDeCoordSobreSituacio(event_de_moure.clientY));
 }
-

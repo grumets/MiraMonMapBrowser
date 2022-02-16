@@ -1181,6 +1181,14 @@ var nom=name+SufixBarra;
 	}
 }//Fi de CanviaTitolBarraFinestraLayer()
 
+//This suports a layer created with the "resizable" attribute or not.
+function getResizableLayer(win, name)
+{
+	if (isFinestraLayer(win, name))
+		return getFinestraLayer(win, name);
+	else
+		return getLayer(win, name);
+}
 
 function getFinestraLayer(win, name)
 {
@@ -1450,6 +1458,8 @@ var layer_finestra=layerFinestraList[i_finestra];
 				dy=38-layer_finestra.pos_ini_finestra.h;
 			moveLayer(getFinestraLayer(window, layer_finestra.nom), -1, -1, layer_finestra.pos_ini_finestra.w+dx, layer_finestra.pos_ini_finestra.h+dy);
 			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), -1, -1, layer_finestra.pos_ini_finestra.w+dx, -1);
+			if (layer_finestra.onresize && typeof layer_finestra.onresize==="function");
+				layer_finestra.onresize();
 		}		
 		div=getLayer(window, layer_finestra.nom+SufixCanto);
 		if (div)
@@ -1473,6 +1483,15 @@ function RedirigeixMovimentFinestraLayer(event_on_click, i_finestra)
 		iFinestraLayerFora=i_finestra;
 }
 
+function ExecutaMovimentRedirigitFinestraLayer(event)
+{
+	if (!layerFinestraList || iFinestraLayerFora>=layerFinestraList.length)
+		iFinestraLayerFora=-1;
+	if (iFinestraLayerFora!=-1)
+		MovimentFinestraLayerPerLaBarra(event, iFinestraLayerFora);
+}
+
+
 function textHTMLImgCantoFinestra(i_finestra)
 {
 var cdns=[];
@@ -1483,7 +1502,7 @@ var cdns=[];
 					 "onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentRedimensionant);\" ",
 					 "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
   			  		 "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
-			  		 "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,", true);\" >");
+			  		 "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >");
 	return cdns.join("");
 }
 
@@ -1491,7 +1510,7 @@ function createFinestraLayer(win, name, titol, botons, left, top, width, height,
 {
 var nom, i_finestra=layerFinestraList.length;
 
-	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, 
+	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
 	//Creo les dos layers que formaran la layer tipus finestra amb títol i botons
@@ -2486,9 +2505,6 @@ function CadenaMultiIdioma(cat,spa,eng,fre)
     this.eng=eng;
 	this.fre=fre;
 }*/
-
-var OrigenEsqSituacio=0;
-var OrigenSupSituacio=0;
 
 var MidaDePixelPantalla=0.28;  //Mida del píxel de pantalla en metres. Això es podria tenir com un paràmetre igual que en MiraMon
 

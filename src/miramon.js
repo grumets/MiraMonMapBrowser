@@ -2951,13 +2951,9 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 
 function CreaCoordenades()
 {
-var cdns=[], elem;
+var cdns=[];
 
-	if (isFinestraLayer(window, "coord"))
-		elem=getFinestraLayer(window, "coord");
-	else
-		elem=getLayer(window, "coord");
-
+	var elem=getResizableLayer(window, "coord");
 	if (elem)
 	{
 		cdns.push("<form name=\"form_coord\" onSubmit=\"return false;\"><table style=\"width: 100%; height: 100%;\"><tr>");
@@ -4242,7 +4238,7 @@ function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
 	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
-		imatge.src.indexOf("espereu.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
+		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
 	    for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
@@ -5033,7 +5029,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
 			cdns.push("<td width=", vista_tiled.TileMatrix.TileWidth, "><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"})) +"\"></td>");
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -5420,7 +5416,7 @@ var p, unitats_CRS;
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
 											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
-											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC(DonaCadenaLang({"cat":"espereu.gif", "spa":"espereu_spa.gif", "eng":"espereu_eng.gif","fre":"espereu_fre.gif"}))+"\">")));
+											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">")));
 				}
 			}
 		}
@@ -6415,10 +6411,11 @@ var win, i, j, l, capa;
 	{
 		l=ParamCtrl.Layer[i];
 		if (l.resizable)
-			createFinestraLayer(window, l.name, l.title, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev) ? l.ev : null, resizable:true}, (l.content) ? l.content : null);
+			createFinestraLayer(window, l.name, l.title, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev ? l.ev : null), resizable:true, onresize: (l.name=="situacio" ? CreaSituacio : null)}, (l.content) ? l.content : null);
 		else
 			createLayer(window, l.name, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev) ? l.ev : null}, (l.content) ? l.content : null);
 	}
+
 
 	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al mapa", "spa":"Añadir capa al mapa", "eng": "Add layer to map", "fre":"Ajouter une couche à la carte"}, boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
@@ -6824,10 +6821,7 @@ function RestartMiraMonMapBrowser()
 
 function MovementMiraMonMapBrowser(event)
 {
-	if (!layerFinestraList || iFinestraLayerFora>=layerFinestraList.length)
-		iFinestraLayerFora=-1;
-	if (iFinestraLayerFora!=-1)
-		MovimentFinestraLayerPerLaBarra(event, iFinestraLayerFora);
+	ExecutaMovimentRedirigitFinestraLayer(event);
 }
 
 //https://stackoverflow.com/questions/33083484/on-ctrlmousewheel-event

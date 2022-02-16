@@ -861,7 +861,9 @@ function CreaLlegenda()
 var salt_entre_columnes;
 
 	var s=DonaCadenaHTMLLlegenda(ParamCtrl.AspecteLlegenda, LlegendaAmbControlDeCapes|LlegendaAmbCapesNoVisibles);
-	var elem=getLayer(window, "llegenda");
+
+	var elem=getResizableLayer(window, "llegenda");
+
 	if (isLayer(elem))
 	{
 		contentLayer(elem, s);
