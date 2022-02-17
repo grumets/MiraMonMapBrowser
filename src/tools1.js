@@ -534,6 +534,24 @@ function DonaExtensioFitxerSensePunt(s)
 	return s.substring(i+1);
 }
 
+function DonaAdreca(s)
+{
+	if (s.charAt(s.length-1)=='/')
+		return s;
+	var i=s.lastIndexOf('/');
+	if (i==-1)
+		return "";
+	return s.substring(0, i);
+}
+
+function DonaAdrecaAbsoluta(url)
+{
+	if (url.length>8 && (url.substring(0, 7)=="http://" || url.substring(0, 8)=="https://"))
+		return url;
+	if (url.charAt(0)=="/")
+		return location.protocol+"//"+location.host+url;
+	return location.protocol+"//"+location.host+DonaAdreca(location.pathname)+url;
+}
 
 
 /*

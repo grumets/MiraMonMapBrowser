@@ -464,7 +464,7 @@ var capa=ParamCtrl.capa[i_capa];
 				cdns.join(""), 
 				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
 				s, //identificador unic 
-				DonaServidorCapa(capa), 
+				DonaAdrecaAbsoluta(DonaServidorCapa(capa)), 
 				ParamCtrl.idioma);
 }
 
