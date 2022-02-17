@@ -322,7 +322,7 @@
 				"required": ["EnvTotal", "nom", "Ample", "Alt"],
 				"properties": {
 					"EnvTotal":	{
-						"description": "Envolupant representada pel mapa de situació",
+						"description": "Envolupant representada pel mapa de situació. El CRS és també el CRS de la pròpia imatge de situació",
 						"$ref": "#/definitions/envolupantCRS_2D" 
 					},
 					"servidor": { 
@@ -875,7 +875,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles 'mm-center='{'x': number, 'y': number}' mm-zoom=number' mm-time='{'year': number..., 'second': number}' mm-layers='layerId1,layerId2' mm-styles='styleNom1,styleNom2' mm-sels='{'ly': NomDeCapa, 'q': FormulaConsulta, 'name': NomEstil}' (si la FormulaConsulta necessita cometes aquestes poden ser una dieresis (¨))",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles: mm-center='{'x': `number`, 'y': `number`}' mm-zoom=`number` mm-crs=`crs_name` mm-time='{'year': `number`..., 'second': `number`}' mm-layers='`IdCapa1`,`IdCapa2`,...' mm-styles='`styleNom1`,`styleNom2`...' mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'name': `NomEstil`}' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {

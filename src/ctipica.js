@@ -766,6 +766,7 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 				CreaLlegenda();
 			}
 		}
+		ParamCtrl.araCanviProjAuto=true;
 		EstableixNouCRSEnv(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].CRS, ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
 		PortamAAmbit(ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].proj_camp[i_camp_ctipica][valor].env);
 		PosaLlistaValorsConsultesTipiquesAlPrincipi(i_ctipica);

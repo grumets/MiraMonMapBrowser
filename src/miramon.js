@@ -5700,50 +5700,68 @@ var env_ll;
 	return 0;
 }
 
+/*'env' pot ser null
+Retorna: 2 si no troba el 'crs'
+	1 si no necessita canviar ni el crs ni la imatge de situació.
+Compte que si ParamCtrl.araCanviProjAuto==true RepintaMapesIVistes pot canviar les coses altre cop.
+*/
 function EstableixNouCRSEnv(crs, env)
 {
 var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
-var i_situacio_anterior=ParamInternCtrl.ISituacio;
 
-	for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
+	if (env)
 	{
-		if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
-		    ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15<env.MinX &&
-			ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15>env.MaxX &&
-			ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15<env.MinY &&
-			ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15>env.MaxY &&
-            (i_min==ParamCtrl.ImatgeSituacio.length ||
-				(ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MinX)+(ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MinY)>
-				(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY) ))
-				i_min=i;
+		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
+		{
+			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
+			    ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15<env.MinX &&
+				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15>env.MaxX &&
+				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15<env.MinY &&
+				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15>env.MaxY &&
+				(i_min==ParamCtrl.ImatgeSituacio.length ||
+					(ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MinX)+(ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i_min].EnvTotal.EnvCRS.MinY)>
+					(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY) ))
+					i_min=i;
+		}
 	}
 
 	if (i_min==ParamCtrl.ImatgeSituacio.length)
 	{
-	    //Agafo la més general en aquest cas.
-	    i_max=0;
-	    for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
-	    {
+		//Agafo la més general en aquest cas.
+		//Busco el primer per començar
+		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
+		{
+			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS)
+			{
+				i_max=i;
+				break;
+			}
+		}
+		if (i==ParamCtrl.ImatgeSituacio.length)
+			return 2;  //No és possible canviar al CRS que m'han demanat perquè no hi ha mapa de situació en aquest CRS.
+		//Ara miro si n'hi ha un de més general.
+		for (var i=i_max+1; i<ParamCtrl.ImatgeSituacio.length; i++)
+		{
 			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
 		    	((ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinX)+
 				 (ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinY)<
 				 (ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)+
 				 (ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)))
 				i_max=i;
-	    }
-        i_min=i_max;
+		}
+		i_min=i_max;
 	}
 
-	if (ParamInternCtrl.ISituacio!=i_min)
+	if (ParamInternCtrl.ISituacio!=i_min)  //En cas contrari ja estem en el CRS que toca i no hi ha canvis.
 	{
-	    if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
+		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
 			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
-	    ParamInternCtrl.ISituacio=i_min;
+		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
-	    return 1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
 
 function RepintaMapesIVistes()
@@ -5920,7 +5938,7 @@ var capa, j, i, i_estil;
 					}
 					else
 					{
-					    //Només pot dir semitransparent.
+					    //Si é sun servidor de MiraMon només pot dir semitransparent.
 					    if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 					    {
 						    if (capa.visible!="no")
@@ -5929,7 +5947,7 @@ var capa, j, i, i_estil;
 					    }
 					    else
 					    {
-						    if (capa_estil[j]!=null && capa_estil[j]!="")
+						    if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].nom!=capa_estil[j])
 							    alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"}) + " " + capa_estil[j] + " " +
 								    DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
 					    }

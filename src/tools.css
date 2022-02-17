@@ -479,8 +479,8 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	text-align: left;
 	font-weight: bold;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #FFFFFF;
+	font-size: 12px;
+	color: #223b74;
 	cursor: move;
 }
 /* Format de la font del text de la layers-finestra d'Anar a Coordenada */

@@ -203,6 +203,18 @@ var hihacanvis, node, attribute, i_styles
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
+				if (attribute.name=='mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
+				{
+					if (attribute.value.trim().length)
+					{
+						if (0==CommandMMNSetCRS(attribute.value.trim()))
+							hihacanvis=true;
+					}
+				}
+			}
+			for (var i_at = 0; i_at < node.attributes.length; i_at++)
+			{
+				attribute=node.attributes[i_at];
 				if (attribute.name=="mm-center")
 				{
 					var mmcenter = attribute.value.trim();

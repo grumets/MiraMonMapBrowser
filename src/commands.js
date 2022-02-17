@@ -56,8 +56,20 @@ function CommandMMNSetZoom(costat)
 		}
 	}
 	if (nivell==ParamCtrl.zoom.length)
-		alert(GetMessage("ZoomSizeRequestedNotAvailableBrowser", "commands"));
+		alert(GetMessage("ZoomSizeNotAvailableBrowser", "commands"));
 	return 1;
+}
+
+function CommandMMNSetCRS(crs)
+{
+	ParamCtrl.araCanviProjAuto=false;
+	var retorn=EstableixNouCRSEnv(crs, null);
+	if (retorn==2)
+	{
+		alert(GetMessage("CRSNotAvailableBrowser", "commands"));
+		return 1;
+	}
+	return retorn;
 }
 
 function CommandMMNSetCenterCoord(punt)
