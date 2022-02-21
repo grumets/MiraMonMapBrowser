@@ -771,7 +771,7 @@ var cdns=[];
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
-			  "<img align=\"right\" src=\"tanca_consulta.gif\" alt=\"",
+			  "<img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
 				DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"}) , "\" onClick=\"TancaContextMenuCapa();\">",
 			   "<div class=\"llistaMenuContext\"  id=\"menuContextualCapa-text\">");
 	cdns.push("</div></div>");

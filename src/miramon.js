@@ -3296,7 +3296,7 @@ function EsEnvDinsAmbitActual(env)
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
 		if (!EsEnvDinsEnvolupant(
-					DonaEnvolupantLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamInternCtrl.vista.EnvActual), 
+					DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), 
 					DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
 			return false;
 	}

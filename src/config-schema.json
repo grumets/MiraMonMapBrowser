@@ -615,27 +615,23 @@
 			"description": "Estil de la barra de botons", 
 			"type": "object",
 			"properties": {		
-				"classic": {
-					"description": "Cal que els botons de la barra siguin clàssics (en base a GIFs multicolor). Si 'false'', null o absent, els botons seran vectorials de colors plans (SVG)", 
-					"type": "boolean"
-				},
 				"ncol": { 
-					"description": "Amplada de cada botó. Opcional. Per defecte val 23",
+					"description": "Amplada de cada botó de la barra de botons. Opcional. Per defecte val 23",
 					"type": "number",
 					"minimum": 0,
 					"multipleOf" : 1
 				},
 				"nfil": { 
-					"description": "Alçada de cada botó. Opcional. Per defecte val 22",
+					"description": "Alçada de cada botó de la barra de botons. Opcional. Per defecte val 22",
 					"type": "number",
 					"minimum": 0,
 					"multipleOf" : 1
 				},
 				"colors": {
-					"description": "Colors a aplicar als botons de la barra. Només aplica per botons vectorials de colors plans (SVG). Properties are names of an SVG element classes",
+					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill".,
 					"type": "object",
 					"additionalProperties": { 
-						"description": "The color of this element class",
+						"description": "The the color of this element class. De moment els botons SVG que distribuim tenen un estil de fons anomenat 'cls-1' i un estil de contorns anomenat 'cls-2' i aquestes serien les 2 propietats a indicar.",
 						"type": "string"
 					}
 				}

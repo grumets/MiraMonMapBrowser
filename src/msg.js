@@ -39,6 +39,7 @@
 "use strict"
 
 var MessageLang={
+	TheLanguageName: {"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"},
 	MissingMessage: {"cat":"Missatge no trobat", "spa":"Mensage no encontrado", "eng":"Missing message", "fre":"Message non trouvé"},
 	ModifyName: {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"},
 	AddLayer: {"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"},
@@ -137,15 +138,19 @@ var MessageLang={
 	Statistics: {"cat":"Estadístics", "spa":"Estadísticos", "eng":"Statistics", "fre":"Statistique"},
 	Statistic: {"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"},
 	ContingencyTable: {"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"},
-  Columns: {"cat": "Columnes", "spa": "Columnas", "eng": "Columns", "fre": "Colonnes"},
+	Columns: {"cat": "Columnes", "spa": "Columnas", "eng": "Columns", "fre": "Colonnes"},
 	columns: {"cat": "columnes", "spa": "columnas", "eng": "columns", "fre": "colonnes"},
-  Rows: {"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"},
+	Rows: {"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"},
 	rows: {"cat": "files", "spa": "filas", "eng": "rows", "fre": "lignes"},
 	Shown: {"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"},
 	Name: {"cat": "Nom", "spa": "Nombre", "eng": "Name", "fre": "Nom"},
 	Band: {"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"},
 	Measure: {"cat": "Mesura", "spa": "Medida", "eng": "Measure", "fre": "Mesure"},
 	copy: {"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"},
+	help: {"cat":"ajuda", "spa":"ayuda", "eng":"help","fre":"aider"},
+	InteractiveHelp: {"cat":"Ajuda interactiva", "spa":"Ayuda interactiva", "eng":"Interactive help", "fre":"Aide intéractive"},
+	popDown: {"cat":"incrustar", "spa":"incrustar", "eng":"pop down","fre":"incruster"},
+	popUp: {"cat":"desincrustar", "spa":"desincrustar", "eng":"pop up","fre":"desincruster"},
 	KappaCoef:{"cat": "Index Kappa", "spa": "Indice Kappa", "eng": "Kappa coefficient", "fre": "Coefficient kappa"},
 	none: {"cat":"cap", "spa":"ninguno", "eng":"none", "fre":"aucun"},
 	and: {"cat": "i", "spa": "y", "eng": "and", "fre": "et"},
@@ -426,7 +431,6 @@ var MessageLang={
 		MonthOfTheYear11: {"cat": "Desembre", "spa": "Diciembre", "eng": "December","fre": "Décembre"}
 	},
 	barra: {
-		InteractiveHelp: {"cat":"Ajuda interactiva", "spa":"Ayuda interactiva", "eng":"Interactive help", "fre":"Aide intéractive"},
 		ZoomIn: {"cat":"Acostar", "spa":"Acercar", "eng":"Zoom in","fre":"Rapprocher"},
 		ZoomOut: {"cat":"Allunyar", "spa":"Alejar", "eng":"Zoom out","fre":"Éloigner"},
 		GoToCoordinate: {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng":"Go to coordinate", "fre":"Aller à la coordonnée"},

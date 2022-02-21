@@ -151,7 +151,9 @@ function MouLayerContextMenuCapa(event, s)
 				y=event.clientY-parseInt(rec.alt);
 			else
 				y=event.clientY+5;
-			changePosAndShowLayer(menu, event.clientX, y);
+
+			moveLayer(menu, event.clientX, y, rec.ample+4, rec.alt+4);
+			showLayer(menu);
 			moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
 		}
 		else
@@ -345,7 +347,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
-			  "<img align=\"right\" src=\"tanca_consulta.gif\" alt=\"",
+			  "<img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
 				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\">",
 			   "<div class=\"llistaMenuContext\"  id=\"menuContextualCapa-text\">");
 	cdns.push("</div></div>");
@@ -403,7 +405,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
-			  "<img align=\"right\" src=\"tanca_consulta.gif\" alt=\"",
+			  "<img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
 				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\">",
 			   "<div class=\"llistaMenuContext\"  id=\"menuContextualCapa-text\">");
 	cdns.push("</div></div>");
@@ -2262,11 +2264,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			  GetMessage("AddGeometricOverlayLayerBetweenTwoCategoricalLayers", "cntxmenu"),
 			  ": </legend>",
 			  "<fieldset><legend>",
-			  GetMessage("Layer", "cntxmenu"),
+			  GetMessage("Layer"),
 			  "_1: </legend>",
 				DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 0, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset><fieldset><legend>",
-			  GetMessage("Layer", "cntxmenu"),
+			  GetMessage("Layer"),
 			  "_2: </legend>",
 			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 			  "</fieldset>",
@@ -2282,11 +2284,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	  GetMessage("AddStatisticalFieldsToCategoricalLayerFromAnotherLayer", "cntxmenu"),
 	  ": </legend>",
 	  "<fieldset><legend>",
-	  GetMessage("Layer", "cntxmenu"),
+	  GetMessage("Layer"),
 	  "_1: </legend>",
 		DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 2, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
 	  "</fieldset><fieldset><legend>",
-	  GetMessage("Layer", "cntxmenu"),
+	  GetMessage("Layer"),
 	  "_2: </legend>",
 	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false}),
 	  "</fieldset>",

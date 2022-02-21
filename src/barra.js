@@ -120,6 +120,10 @@ function ChangeTitleColorsSVG(id, params)
 		}
 		svg.getElementsByTagName("title")[0].textContent=params.title;
 	}
+	if (params.width)
+		svg.setAttribute('width', params.width);
+	if (params.height)
+		svg.setAttribute('height', params.height);
 	for(var c in params.colors)
 	{
 		if (svg.getElementsByClassName(c))
@@ -137,7 +141,7 @@ function AddRemoveMouseOverOutSVG(id, add)
 	var svg=document.getElementById(id);
 	if (svg)
 	{
-		if (add)
+		if (add && ParamCtrl.BarraEstil.colorsGrey)
 		{
 			//https://stackoverflow.com/questions/256754/how-to-pass-arguments-to-addeventlistener-listener-function (tercera resposta)
 			svg.onmouseover=ChangeTitleColorsSVG.bind(null, id, {colors: ParamCtrl.BarraEstil.colorsGrey});
@@ -169,11 +173,11 @@ function CanviaImageBotoPolsable(event, img, nom)
 function CadenaBotoPolsable(nom, fitxer, text_groc, funcio, size)
 {
 var cdns=[];
-	cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC(fitxer + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic ? ".gif" : ".svg") ), "\" ",
+	cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC(fitxer + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif") ), "\" ",
 			"id=\"id_barra_", nom, "\" name=\"", nom, "\" ",
 			"width=\"", (size ? size : (ParamCtrl.BarraEstil.ncol ? ParamCtrl.BarraEstil.ncol : 23)), "\" ",
 			"height=\"", (size ? size : (ParamCtrl.BarraEstil.ncol ? ParamCtrl.BarraEstil.nfil : 22)), "\" ");
-	if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+	if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
 		cdns.push("alt=\"", text_groc, "\" title=\"", text_groc, "\" ",
 			"onClick=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';", funcio, "\" ",
 			"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
@@ -197,7 +201,7 @@ function CanviaPolsatEnBotonsAlternatius()
 {
 	for (var i=0; i<arguments.length; i+=3)
 	{
-		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+		if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
 			window.document[arguments[i]].src=AfegeixAdrecaBaseSRC(arguments[i+1]+arguments[i+2]+".gif");
 		else if (ParamCtrl.BarraEstil.colorsGrey)
 		{
@@ -219,15 +223,15 @@ var cdns=[];
 			cdns.push(" ");
 		cdns.push( "<img align=\"absmiddle\" src=\"" ,
 			AfegeixAdrecaBaseSRC(botons[j].src),
-			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic && boto_p==botons[j].src ? "p" : ""),
-			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic ? ".gif" : ".svg"), 
+			(ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors && boto_p==botons[j].src ? "p" : ""),
+			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"), 
 			"\" ",
 			"id=\"id_barra_", botons[j].src, "\" name=\"", botons[j].src, "\" "+
 			"width=\"", (sizep ? (boto_p==botons[j].src ? sizep : size) : (ParamCtrl.BarraEstil.ncol ? ParamCtrl.BarraEstil.ncol : 23)), "\" ");
 		if (!sizep)
 			cdns.push("height=\"", (ParamCtrl.BarraEstil.ncol ? ParamCtrl.BarraEstil.nfil : 22), "\" ");
 
-		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+		if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
 			cdns.push("alt=\"" , botons[j].alt, "\" title=\"", botons[j].alt, "\" ");
 		cdns.push("onClick=\"CanviaPolsatEnBotonsAlternatius(" );
 		for (l=0; l<botons.length; l++)
@@ -237,16 +241,22 @@ var cdns=[];
 			cdns.push("\'", botons[l].src, "\',\'", botons[l].src, "\',\'", ((j==l) ? "p" : ""), "\'");
 		}
 		cdns.push( ");", botons[j].funcio, "\" ");
-		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.classic)
+		if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
 			cdns.push("onMouseOver=\"if (document." , botons[j].src , ".alt) window.status=document." , botons[j].src , ".alt; return true;\" ",
 				"onMouseOut=\"if (document." , botons[j].src , ".alt) window.status=''; return true;\" ");
 		else
 		{
 			cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", botons[j].alt, "\", colors: ", JSON.stringify((boto_p==botons[j].src && ParamCtrl.BarraEstil.colorsGrey) ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
 				"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
-			if (boto_p!=botons[j].src && ParamCtrl.BarraEstil.colorsGrey)
-				cdns.push("onmouseover='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
-					"onmouseout='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+			if (boto_p!=botons[j].src)
+			{
+				if (size!=sizep)
+					cdns.push("onmouseover='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {width: ", sizep, ", height: ", sizep, "});' ",
+						"onmouseout='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {width: ", size, ", height: ", size, "});' ");
+				else if (ParamCtrl.BarraEstil.colorsGrey)
+					cdns.push("onmouseover='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
+						"onmouseout='ChangeTitleColorsSVG(\"id_barra_", botons[j].src, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+			}
 		}
 		cdns.push(">");
 	}
@@ -266,7 +276,7 @@ var cdns=[];
 		cdns.push("<CENTER>",
 		   (CadenaBotoPolsable("getmmz_text", "getmmz_text", GetMessage("Download"), "ObtenirMMZ();")),
 		   "&nbsp;&nbsp;&nbsp;",
-		   (CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp", "barra"), "ObreFinestraAjuda();")),
+		   (CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"), "ObreFinestraAjuda();")),
 		   "</CENTER>");
 	}
 	else // Barra completa
@@ -439,14 +449,13 @@ var cdns=[];
 			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
 				GetMessage("InstallMiraMonReader", "barra"),
 				"InstalaLectorMapes();")));
-    if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
-    	cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
+		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
+			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)
-			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp", "barra"),
+			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
 				"ObreFinestraAjuda();")));
 		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
-			var nom_idioma_alt={"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"};
 			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
 			var boto_per_defecte;
 			for (boto_per_defecte=0; boto_per_defecte<ParamCtrl.idiomes.length; boto_per_defecte++)
@@ -460,8 +469,8 @@ var cdns=[];
 			{
 				var botons=[];
 				for(i=0; i<ParamCtrl.idiomes.length; i++)
-					botons.push({"src": "idioma_"+ParamCtrl.idiomes[i], "alt": DonaCadenaConcret(nom_idioma_alt, ParamCtrl.idiomes[i]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[i]+"\');"});
-				cdns.push(" ", CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte], botons, true, 17, 21), "\n");
+					botons.push({"src": "idioma_"+ParamCtrl.idiomes[i], "alt": DonaCadenaConcret(GetMessageJSON("TheLanguageName"), ParamCtrl.idiomes[i]), "funcio": "CanviaIdioma(\'"+ParamCtrl.idiomes[i]+"\');"});
+				cdns.push(" ", CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte], botons, true, ParamCtrl.BarraEstil.nfil ? ParamCtrl.BarraEstil.nfil-6 : 17, ParamCtrl.BarraEstil.nfil ? ParamCtrl.BarraEstil.nfil-2 : 21), "\n");
 			}
 		}
 		if (ParamCtrl.AltresLinks)

@@ -2131,7 +2131,7 @@ var chart=[];
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma),
 	 	"</div>",
 		"<div style=\"width: ", ncol, "px; position:absolute; opacity: 0.7;\">",
-			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("tanca_consulta.gif"), "\" ",
+			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("boto_tancar.gif"), "\" ",
 				"alt=\"",GetMessage("close") , "\" ",
 				"title=\"",GetMessage("close"), "\" onClick=\"TancaFinestraSerieTemp('",nom_div,"','",nom_div_click,"');\">",
 			  "<img align=\"right\" src=\"", AfegeixAdrecaBaseSRC("boto_copiar.gif"), "\" ",

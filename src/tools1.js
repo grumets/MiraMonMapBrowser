@@ -1115,6 +1115,26 @@ var z;
 	alert("Finestra \""+nom+ "\"no trobada");
 }
 
+function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_function_name)
+{
+var cdns=[];	
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(nom_boto+ (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
+		 "id=\"id_", nom_fin, "_", nom_boto, "\" name=\"", nom_fin, "_", nom_boto, "\" ",
+		 "width=\"", size, "\" height=\"", size, "\" onClick=\"", onclick_function_name,"\" ");
+	if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
+		 cdns.push("alt=\"", title , "\" title=\"", title,"\" ");
+	else
+	{
+		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", title, "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
+		if (ParamCtrl.BarraEstil.colorsGrey)
+			cdns.push("onmouseover='ChangeTitleColorsSVG(\"id_", nom_fin, "_", nom_boto, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
+				"onmouseout='ChangeTitleColorsSVG(\"id_", nom_fin, "_", nom_boto, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+	}
+	cdns.push(">");
+	return cdns.join("");
+
+}
 var movimentDesactiu=0x01;
 var movimentArrossegant=0x02;
 var movimentRedimensionant=0x04;
@@ -1132,36 +1152,38 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
-	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
-				 AfegeixAdrecaBaseSRC("boto_copiar.gif"), 
-				 "\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" ", 
-				 "title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" onClick=\"",
-				 "CopiaPortapapersFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11, 
+					GetMessage("copy"), 
+					"CopiaPortapapersFinestraLayer('" + layerFinestraList[i_finestra].nom + "');"),
+			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
-	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"", 
-				 AfegeixAdrecaBaseSRC("boto_ajuda.gif"), 
-				 "\" alt=\"",DonaCadenaLang({"cat":"ajuda", "spa":"ayuda", "eng":"help","fre":"aider"}),"\" ", 
-				 "title=\"",DonaCadenaLang({"cat":"ajuda", "spa":"ayuda", "eng":"help","fre":"aider"}),"\ onClick=\"AjudaFinestra_",
-				 layerFinestraList[i_finestra].nom ,"();\"></td>");
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11, 
+					GetMessage("help"), 
+					"AjudaFinestra_" + layerFinestraList[i_finestra].nom + "();"),
+				"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
-	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
-				 AfegeixAdrecaBaseSRC("pop_down.gif"),
-				 "\" alt=\"pop down\" onClick=\"PopDownFinestra_",
-				 layerFinestraList[i_finestra].nom ,"();\"></td>");
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11, 
+					GetMessage("popDown"), 
+					"PopDownFinestra_" + layerFinestraList[i_finestra].nom + "();"),
+			"</td>");
 	if(layerFinestraList[i_finestra].botons&boto_pop_up)
-	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
-				 AfegeixAdrecaBaseSRC("pop_up.gif"), 
-				 "\" alt=\"pop up\" onClick=\"PopUpFinestra_",
-				 layerFinestraList[i_finestra].nom,"();\"></td>");
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11, 
+					GetMessage("popUp"), 
+					"PopUpFinestra_" + layerFinestraList[i_finestra].nom + "();"),
+			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
-	   cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\"><img src=\"",
-				 AfegeixAdrecaBaseSRC("tanca_consulta.gif"), 
-				 "\" alt=\"", DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}) , "\" ",
-				 "title=\"", DonaCadenaLang({"cat":"tancar", "spa":"cerrar", "eng":"close","fre":"quitter"}),"\" onClick=\"", 
-				"TancaFinestraLayer('",layerFinestraList[i_finestra].nom,"');\"></td>");
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11, 
+					GetMessage("close"),
+					"TancaFinestraLayer('" + layerFinestraList[i_finestra].nom + "')"),
+			"</td>");
 	cdns.push("<td width=\"5px\"></td></tr></table>");
 	contentLayer(getLayer(win, nom), cdns.join(""));
 
@@ -1476,7 +1498,7 @@ var layer_finestra=layerFinestraList[i_finestra];
 				dy=38-layer_finestra.pos_ini_finestra.h;
 			moveLayer(getFinestraLayer(window, layer_finestra.nom), -1, -1, layer_finestra.pos_ini_finestra.w+dx, layer_finestra.pos_ini_finestra.h+dy);
 			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), -1, -1, layer_finestra.pos_ini_finestra.w+dx, -1);
-			if (layer_finestra.onresize && typeof layer_finestra.onresize==="function");
+			if (layer_finestra.onresize && typeof layer_finestra.onresize==="function")
 				layer_finestra.onresize();
 		}		
 		div=getLayer(window, layer_finestra.nom+SufixCanto);

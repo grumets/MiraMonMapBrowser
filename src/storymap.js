@@ -61,7 +61,7 @@ var ncol=2, nstory, i_real_story=[];
 
 	for (i_story=0, nstory=0; i_story<ParamCtrl.StoryMap.length; i_story++)
 	{
-		if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[i_story].EnvTotal))
+		if (ParamCtrl.StoryMap[i_story].EnvTotal && !EsEnvDinsAmbitActual(ParamCtrl.StoryMap[i_story].EnvTotal))
 			continue;
 		i_real_story[nstory]=i_story;  //This transforms filtered story index into unfiltered index.
 		nstory++;
