@@ -48,6 +48,8 @@
 var ServerGUF="https://www.nimmbus.cat/cgi-bin/nimmbus.cgi";
 var ClientGUF="https://www.nimmbus.cat/index.htm";
 
+var Opcions_GUFFeedbackWindow='toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=1500,height=1000';
+
 function GUFIncludeScript(url, late)   //https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 {
 	var script = document.createElement("script");  // create a script DOM node
@@ -819,7 +821,7 @@ function GUFOpenNimmbus(lang, access_token_type)
 {
 	if (GUFFeedbackWindow==null || GUFFeedbackWindow.closed)
 	{
-		GUFFeedbackWindow=window.open(ClientGUF+"?ACCESS_TOKEN_TYPE="+access_token_type, "Feedback",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=800,height=700');
+		GUFFeedbackWindow=window.open(ClientGUF+"?ACCESS_TOKEN_TYPE="+access_token_type, Opcions_GUFFeedbackWindow);
 		GUFShaObertPopUp(GUFFeedbackWindow, lang);
 	}
 	else
@@ -940,7 +942,7 @@ var targets;
 	if (GUFFeedbackWindow==null || GUFFeedbackWindow.closed)
 	{
 		var url=GUFDonaNomFitxerAddFeedbackMutipleTargets(targets, lang, access_token_type, reprod_usage);
-		GUFFeedbackWindow=window.open(url,"Feedback",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=800,height=700');
+		GUFFeedbackWindow=window.open(url,"Feedback", Opcions_GUFFeedbackWindow);
 		GUFShaObertPopUp(GUFFeedbackWindow, lang);
 	}
 	else
