@@ -703,33 +703,33 @@ function GetMessage(msg_id, section)
 			{
 				if (!place[sections[i]])
 				{
-					alert("MessageLang Error: I cannot found section "+sections[i]+" in "+section);
+					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
 					return "["+GetMessage("MissingMessage")+"]";
 				}
 				place=place[sections[i]];
 			}
 			if (!place[msg_id])
 			{
-				alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
 				return "["+GetMessage("MissingMessage")+"]";
 			}
 			return DonaCadenaLang(place[msg_id]);
 		}
 		if (!MessageLang[section])
 		{
-			alert("MessageLang Error: I cannot found section "+section);
+			alert("MessageLang Error: I cannot found section \""+section+"\"");
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		if (!MessageLang[section][msg_id])
 		{
-			alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		return DonaCadenaLang(MessageLang[section][msg_id]);
 	}	
 	if (!MessageLang[msg_id])
 	{
-		alert("MessageLang Error: I cannot found message id "+msg_id+" as a root message");
+		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
 		if (msg_id=="MissingMessage")
 			return "[Missing message]"
 		return "["+GetMessage("MissingMessage")+"]";
@@ -748,33 +748,33 @@ function GetMessageJSON(msg_id, section)
 			{
 				if (!place[sections[i]])
 				{
-					alert("MessageLang Error: I cannot found section "+sections[i]+" in "+section);
+					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
 					return "["+GetMessage("MissingMessage")+"]";
 				}
 				place=place[sections[i]];
 			}
 			if (!place[msg_id])
 			{
-				alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
 				return "["+GetMessage("MissingMessage")+"]";
 			}
 			return place[msg_id];
 		}
 		if (!MessageLang[section])
 		{
-			alert("MessageLang Error: I cannot found section "+section);
+			alert("MessageLang Error: I cannot found section \""+section+"\"");
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		if (!MessageLang[section][msg_id])
 		{
-			alert("MessageLang Error: I cannot found message id "+msg_id+" in "+section);
+			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		return MessageLang[section][msg_id];
 	}	
 	if (!MessageLang[msg_id])
 	{
-		alert("MessageLang Error: I cannot found message id "+msg_id+" as a root message");
+		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
 		if (msg_id=="MissingMessage")
 			return "[Missing message]"
 		return "["+GetMessage("MissingMessage")+"]";
@@ -3976,14 +3976,22 @@ var cdns=[], tipus, plantilla, i_estil2;
 
 			if (ParamCtrl.capa[i].estil[i_estil2].nom)
 			{
-				cdns.push(ParamCtrl.capa[i].estil[i_estil2].nom);
-				if (pot_semitrans && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
-					cdns.push(":SEMITRANSPARENT");
+				if (EsCapaBinaria(ParamCtrl.capa[i]))
+				{
+					alert("A binary array layer cannot have a 'estil' with 'nom'. The 'nom' is being disabled. Please use extra dimensions instead of style names");
+					ParamCtrl.capa[i].estil[i_estil2].nom=null;
+				}
+				else
+				{
+					cdns.push(ParamCtrl.capa[i].estil[i_estil2].nom);
+					if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+						cdns.push(":SEMITRANSPARENT");
+				}
 			}
-			else if (pot_semitrans && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+			else if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 				cdns.push("SEMITRANSPARENT");
 		}
-		else if (pot_semitrans && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+		else if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 				cdns.push("SEMITRANSPARENT");
 	}
 	if (ParamCtrl.capa[i].AnimableMultiTime)
@@ -5854,7 +5862,7 @@ var i_estil_nou=capa.estil.length, estil;
 	estil=capa.estil[i_estil_nou];
 	if (estil.diagrama)
 		delete estil.diagrama;
-	estil.nom=nom_nou;
+	estil.id=nom_nou;
 	estil.desc=nom_nou;
 	estil.origen=OriginUsuari;  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
@@ -5922,7 +5930,7 @@ var capa, j, i, i_estil;
 						    }
 						    for (i_estil=0; i_estil<capa.estil.length; i_estil++)
 						    {
-							    if (capa.estil[i_estil].nom==capa_estil[j])
+							    if (capa.estil[i_estil].id==capa_estil[j])
 							    {
 								    capa.i_estil=i_estil;
 								    break;
@@ -5938,19 +5946,19 @@ var capa, j, i, i_estil;
 					}
 					else
 					{
-					    //Si é sun servidor de MiraMon només pot dir semitransparent.
-					    if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
-					    {
-						    if (capa.visible!="no")
-							    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+						//Si és un servidor de MiraMon només pot dir semitransparent.
+						if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
+						{
+							if (capa.visible!="no")
+								CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
 
-					    }
-					    else
-					    {
-						    if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].nom!=capa_estil[j])
-							    alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"}) + " " + capa_estil[j] + " " +
+						}
+						else
+						{
+							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].if!=capa_estil[j])
+								alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"}) + " " + capa_estil[j] + " " +
 								    DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
-					    }
+					    	}
 					}
 				}
 
@@ -6247,6 +6255,18 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 	IniciaVisualitzacio();
 }
 
+//Crea un identificador des de del nom o l'i d'ordre
+function CreaIdSiCal(obj, i)
+{
+	if (!obj.id)
+	{
+		if (obj.nom)
+			obj.id=obj.nom;
+		else
+			obj.id=i.toString;
+	}
+}
+
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
 	var i, j, k;
@@ -6269,13 +6289,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
-		if (!capa.id)
-		{
-			if (capa.nom)
-				capa.id=capa.nom;
-			else
-				capa.id=i.toString;
-		}
+		CreaIdSiCal(capa, i);
 		if (capa.atributs && capa.atributs.length)
 		{
 			for (j=0; j<capa.atributs.length; j++)
@@ -6324,6 +6338,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			for (j=0; j<capa.estil.length; j++)
 			{
 				estil=capa.estil[j];
+				CreaIdSiCal(estil, j);
 				if (estil.atributs && estil.atributs.length)
 				{
 					for (k=0; k<estil.atributs.length; k++)

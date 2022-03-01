@@ -1109,7 +1109,7 @@
 						"type": ["string", "null"]
 					},
 					"id":	{ 
-						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de la capa a l'array. Indiqueu un 'id' si la capa no te nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors",
+						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de la capa a l'array. Indiqueu un 'id' si la capa no te nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors. L'id indicat aquí identifica la capa del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
 						"type": ["string", "null"]
 					},					
 					"nom":	{ 
@@ -1265,14 +1265,14 @@
 						"$ref": "#/definitions/descripcioAtributs"			
 					},
 					"valors": {
-						"description": "Descripció dels valors. És un array perquè en un futur podríem fer servir l'estil WMS per comunicar multibandes i en necessitarem més d'un. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'.",
+						"description": "Descripció dels valors. És un array perquè es fa servir l'estil WMS per comunicar multibandes o els estils WMS i en necessitarem més d'un. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció dels valors",
 							"type": ["object"],
 							"properties": {								
 								"param": { 
-									"description": "Llistat de paràmetres (clau i valor) per obtenir la banda en questió. Pot ser null.",
+									"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Pot ser null.",
 									"type": ["array", "null"],
 									"items": {
 										"description": "Paràmetres (clau i valor)",
@@ -1421,8 +1421,12 @@
 							"type": ["object"],
 							"required": ["TipusObj"],
 							"properties": {
+								"id":	{ 
+									"description": "Identificador únic per a l'estiil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+									"type": ["string", "null"]
+								},								
 								"nom":	{ 
-									"description": "Nom de l'estil. Pot ser null si només n'hi ha un i és el per defecte del servidor",
+									"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a  null",
 									"type": ["string", "null"]
 								},
 								"desc":	{ 
