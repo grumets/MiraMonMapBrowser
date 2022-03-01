@@ -1121,7 +1121,7 @@ var cdns=[];
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(nom_boto+ (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
 		 "id=\"id_", nom_fin, "_", nom_boto, "\" name=\"", nom_fin, "_", nom_boto, "\" ",
 		 "width=\"", size, "\" height=\"", size, "\" onClick=\"", onclick_function_name,"\" ");
-	if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 		 cdns.push("alt=\"", title , "\" title=\"", title,"\" ");
 	else
 	{
@@ -1772,7 +1772,8 @@ function Ajax()
 			req.setRequestHeader('Content-Type', this.requestFormat);
 		if ((this.method == 'POST' || this.method == 'PUT') && this.responseFormat)
 			req.setRequestHeader('Accept', this.responseFormat);
-		req.setRequestHeader('Access-Control-Expose-Headers', '*');
+		if (this.method != 'GET')
+			req.setRequestHeader('Access-Control-Expose-Headers', '*');  //Si això es fa amb mètode GET genera una preflight que pot fallar. En els altres casos es fa el preflight igualment...
 
 		for (var i=0; i<this.requestHeaders.length; i++)
 			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
@@ -1837,7 +1838,7 @@ function Ajax()
 						break;
 				}
 
-				if(self.structResp)
+				if(self.structResp && self.structResp.text)
 					self.structResp.text=self.responseText;
 				if (self.status > 199 && self.status < 300) {
 					if (!self.handleResp) {
@@ -1876,7 +1877,7 @@ function Ajax()
 		// Create new window and display error
 		try {
 			errorWin = window.open('', 'errorWin');
-			errorWin.document.body.innerHTML = this.responseText;
+			errorWin.document.body.innerHTML = "<b>Request: </b>"+ this.url + "<br><br><b>Response:</b><br><pre>"+this.responseText+"</pre>";
 		}
 		// If pop-up gets blocked, inform user
 		catch(e) {

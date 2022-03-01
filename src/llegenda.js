@@ -544,7 +544,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 						"<img width=\"14\" ",
 							"id=\"c_ll_capa", i, "\" name=\"c_ll_capa", i, "\" border=\"0\" ",
 							"src=\"");
-					if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
+					if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 					{
 						cdns.push(((capa.consultable=="si") ? 
 								(AfegeixAdrecaBaseSRC("consultable.gif") +
@@ -559,7 +559,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 						cdns.push(AfegeixAdrecaBaseSRC("consultable.svg"),"\" ");
 					}
 					cdns.push("onClick='CanviaEstatCapa(", i,", \"consultable\");' ");
-					if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
+					if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 						cdns.push("onMouseOver=\"if (", "c_ll_capa", i,".alt) window.status=", "c_ll_capa", i,".alt; return true;\" ",
 							"onMouseOut=\"if (", "c_ll_capa", i,".alt) window.status=\'\'; return true;\" ");
 					else
@@ -1040,7 +1040,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 
 function CanviaEstatConsultableCapa(icon_capa, i)
 {
-	if (ParamCtrl.BarraEstil && !ParamCtrl.BarraEstil.colors)
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 	{
 		if (TreuAdreca(icon_capa.src)=="ara_no_consultable.gif")
 		{

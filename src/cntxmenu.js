@@ -140,7 +140,8 @@ function MouLayerContextMenuCapa(event, s)
 		contentLayer(menu, s);
 		var menu_marc=getLayer(window, "menuContextualCapa-contingut");
 		var menu_text=getLayer(window, "menuContextualCapa-text");
-		if(menu_text && menu_marc)
+		var menu_boto=getLayer(window, "menuContextualCapa-boto");
+		if(menu_text && menu_marc && menu_boto)
 		{
 			var rec=getRectLayer(menu_text);
 
@@ -155,6 +156,7 @@ function MouLayerContextMenuCapa(event, s)
 			moveLayer(menu, event.clientX, y, rec.ample+4, rec.alt+4);
 			showLayer(menu);
 			moveLayer(menu_marc, event.clientX, y, rec.ample, rec.alt);
+			moveLayer(menu_boto, -1, -1, rec.ample, -1);
 		}
 		else
 			changePosAndShowLayer(menu, event.clientX, y);
@@ -164,6 +166,8 @@ function MouLayerContextMenuCapa(event, s)
 			setzIndexLayer(menu_text,(layerList.length-1));
 		if(menu_marc)
 			setzIndexLayer(menu_marc,(layerList.length-1));
+		if(menu_boto)
+			setzIndexLayer(menu_boto,(layerList.length-1));
 	}
 }
 
@@ -347,10 +351,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	if (cdns.length==0)
 		return false;
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
-			  "<img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
-				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\">",
-			   "<div class=\"llistaMenuContext\"  id=\"menuContextualCapa-text\">");
-	cdns.push("</div></div>");
+			   "<div class=\"llistaMenuContext\" style=\"position:absolute\" id=\"menuContextualCapa-text\">");
+	cdns.push("</div><div style=\"position:absolute;text-align:right;vertical-align:top;\" id=\"menuContextualCapa-boto\"><img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
+				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\"></div>",
+				"</div>");
 	MouLayerContextMenuCapa(event, cdns.join(""));
 	return false;
 }
