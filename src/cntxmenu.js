@@ -1095,7 +1095,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
 		"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 		"proces":	null,
-		"ProcesMostrarTitolCapa" : false
+		"ProcesMostrarTitolCapa" : false,
+		"origen": OriginUsuari
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
@@ -1222,12 +1223,12 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 			"desc":	desc_estil,
 			"TipusObj": "P",
 			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil)},
-										{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
-											"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
-										 	"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
-										 		"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
-										 		"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null}
-										}],
+					{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
+						"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
+						"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
+								"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
+								"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null}
+				}],
 			"categories": categ_noves,
 			"atributs": atrib_nous,
 			"metadades": null,
@@ -1253,7 +1254,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"animable":	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
 		"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 		"proces":	null,
-		"ProcesMostrarTitolCapa" : false
+		"ProcesMostrarTitolCapa" : false,
+		"origen": OriginUsuari
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
@@ -3101,7 +3103,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 	{
 		var atribut=ParamCtrl.capa[i_capa].atributs[i_estil];
 		if (typeof atribut.calcul!=="undefined")
-			return atribut.calcul;
+			return (i_capa_ref==i_capa) ? atribut.calcul : AfageixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
 		if (typeof atribut.FormulaConsulta!=="undefined")
 		{
 			var s=atribut.FormulaConsulta;
@@ -3120,7 +3122,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 		var component_sel=ParamCtrl.capa[i_capa].estil[i_estil].component[0], s_patro, i;
 
 		if (typeof component_sel.calcul!=="undefined")
-			return component_sel.calcul;
+			return (i_capa_ref==i_capa) ? component_sel.calcul : AfageixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
 		if (typeof component_sel.FormulaConsulta!=="undefined")
 		{
 			var valors=ParamCtrl.capa[i_capa].valors;
@@ -3323,9 +3325,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 
 	if (estil.categories && estil.atributs) //cas categòric
 	{
-		cdns.push("<input type=\"radio\" id=\"stat_mode\" name=\"stat\" value=\"mode\"><label for=\"mode\">", GetMessage("ModalClass"), "</label><br>",
-	  					"<input type=\"radio\" id=\"stat_percent_mode\" name=\"stat\" value=\"percent_mode\"><label for=\"percent_mode\">", GetMessage("PercentageMode"), "</label><br>",
-	  					"<input type=\"radio\" id=\"stat_mode_and_percent\" name=\"stat\" value=\"mode_and_percent\"><label for=\"mode_and_percent\">", GetMessage("ModalClass"), " (", GetMessage("PercentageMode"), ")</label><br>");
+		cdns.push("<input type=\"radio\" id=\"stat_mode\" name=\"stat\" value=\"mode\"><label for=\"stat_mode\">", GetMessage("ModalClass"), "</label><br>",
+	  					"<input type=\"radio\" id=\"stat_percent_mode\" name=\"stat\" value=\"percent_mode\"><label for=\"stat_percent_mode\">", GetMessage("PercentageMode"), "</label><br>",
+	  					"<input type=\"radio\" id=\"stat_mode_and_percent\" name=\"stat\" value=\"mode_and_percent\"><label for=\"stat_mode_and_percent\">", GetMessage("ModalClass"), " (", GetMessage("PercentageMode"), ")</label><br>");
 
 	  if (estil.component.length==2 && estil.component[1].herenciaOrigen) //capa especial: "estadistics (per categoria)"
 	  {
@@ -3346,19 +3348,19 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    		//if (estil.atributs[i_atrib].nom == "$stat$_i_mode") -> no la miro perquè ja inicialment es declara com a mostrar = "no"
 	    		if (estil.atributs[i_atrib].nom == "$stat$_mode")
 	    		{
-	    			value_text+="<input type=\"radio\" id=\"stat_mode_2\" name=\"stat\" value=\"mode_2\"><label for=\"mode\">"+GetMessage("ModalClass")+"</label><br>";
+	    			value_text+="<input type=\"radio\" id=\"stat_mode_2\" name=\"stat\" value=\"mode_2\"><label for=\"stat_mode_2\">"+GetMessage("ModalClass")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 	    		if (estil.atributs[i_atrib].nom == "$stat$_percent_mode")
 	    		{
-	    			value_text+="<input type=\"radio\" id=\"stat_percent_mode_2\" name=\"stat\" value=\"percent_mode_2\"><label for=\"percent_mode\">"+GetMessage("PercentageMode")+"</label><br>";
+	    			value_text+="<input type=\"radio\" id=\"stat_percent_mode_2\" name=\"stat\" value=\"percent_mode_2\"><label for=\"stat_percent_mode_2\">"+GetMessage("PercentageMode")+"</label><br>";
 	    			recompte++;
 	    			//break; -> no cal
 	    		}
 	    	}
     		if (recompte == 2)
-						value_text+="<input type=\"radio\" id=\"stat_mode_and_percent_2\" name=\"stat\" value=\"mode_and_percent_2\" checked=\"true\"><label for=\"mode_and_percent\">"+
+						value_text+="<input type=\"radio\" id=\"stat_mode_and_percent_2\" name=\"stat\" value=\"mode_and_percent_2\" checked=\"true\"><label for=\"stat_mode_and_percent_2\">"+
 						GetMessage("ModalClass")+" ("+GetMessage("PercentageMode")+")</label><br>";
 	  	}
 			else //la segona és QC
@@ -3371,49 +3373,49 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    		//primer mirar sui_ple, pq si es que no no cal q em proecupi si él nom és un dles que m¡0interessa , oq igualment no es mostrara
 					if (estil.atributs[i_atrib].nom == "$stat$_sum")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"sum_2\">"+GetMessage("Sum")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"stat_sum_2\">"+GetMessage("Sum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_sum_area")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_sum_area_2\" name=\"stat\" value=\"sum_area_2\"><label for=\"sum_area_2\">"+GetMessage("SumArea")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_sum_area_2\" name=\"stat\" value=\"sum_area_2\"><label for=\"stat_sum_area_2\">"+GetMessage("SumArea")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_mean")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_mean_2\" name=\"stat\" value=\"mean_2\" checked=\"true\"><label for=\"mean_2\">"+GetMessage("Mean")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_mean_2\" name=\"stat\" value=\"mean_2\" checked=\"true\"><label for=\"stat_mean_2\">"+GetMessage("Mean")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_variance")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_variance_2\" name=\"stat\" value=\"variance_2\"><label for=\"variance_2\">"+GetMessage("Variance")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_variance_2\" name=\"stat\" value=\"variance_2\"><label for=\"stat_variance_2\">"+GetMessage("Variance")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_stdev")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_stdev_2\" name=\"stat\" value=\"stdev_2\"><label for=\"stdev_2\">"+GetMessage("StandardDeviation")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_stdev_2\" name=\"stat\" value=\"stdev_2\"><label for=\"stat_stdev_2\">"+GetMessage("StandardDeviation")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_min")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_min_2\" name=\"stat\" value=\"min_2\"><label for=\"min_2\">"+GetMessage("Minimum")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_min_2\" name=\"stat\" value=\"min_2\"><label for=\"stat_min_2\">"+GetMessage("Minimum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_max")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_max_2\" name=\"stat\" value=\"max_2\"><label for=\"max_2\">"+GetMessage("Maximum")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_max_2\" name=\"stat\" value=\"max_2\"><label for=\"stat_max_2\">"+GetMessage("Maximum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
 					if (estil.atributs[i_atrib].nom == "$stat$_range")
 					{
-						value_text+="<input type=\"radio\" id=\"stat_range_2\" name=\"stat\" value=\"range_2\"><label for=\"range_2\">"+GetMessage("Range")+"</label><br>";
+						value_text+="<input type=\"radio\" id=\"stat_range_2\" name=\"stat\" value=\"range_2\"><label for=\"stat_range_2\">"+GetMessage("Range")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
@@ -3422,8 +3424,8 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
   		if (recompte > 0)
   		{
 				value_text+="<td><fieldset><legend>"+GetMessage("Presentation")+": </legend>"+
-								"<input type=\"radio\" id=\"stat_graphic\" name=\"presentacio\" value=\"graphic\"><label for=\"graphic\">"+GetMessage("Graphical")+"</label><br>"+
-								"<input type=\"radio\" id=\"stat_text\" name=\"presentacio\" value=\"text\" checked=\"true\"><label for=\"sum_area_2\">"+GetMessage("Textual")+"</label><br>"+
+								"<input type=\"radio\" id=\"stat_graphic\" name=\"presentacio\" value=\"graphic\"><label for=\"stat_graphic\">"+GetMessage("Graphical")+"</label><br>"+
+								"<input type=\"radio\" id=\"stat_text\" name=\"presentacio\" value=\"text\" checked=\"true\"><label for=\"stat_text\">"+GetMessage("Textual")+"</label><br>"+
 	    					"</fieldset></td></tr>";
 	    	value_text+="<tr><td><fieldset><legend>"+GetMessage("SortingOrder")+": </legend>"+
 	    					"<input type=\"radio\" id=\"stat_unsorted\" name=\"order\" value=\"unsorted\" checked=\"true\"><label for=\"stat_unsorted\">"+GetMessage("Unsorted")+"</label><br>"+

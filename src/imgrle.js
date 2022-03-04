@@ -38,6 +38,38 @@
 
 "use strict"
 
+function AfageixIcapaACalcul(calcul, i_capa, estil_o_atribut)
+{
+var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
+var fragment, inici, final, cadena, nou_valor;
+var calcul_amb_icapa="";
+	fragment=calcul;
+	while ((inici=fragment.indexOf("{"))!=-1)
+	{
+		//busco una clau de tancar
+		final=fragment.indexOf("}");
+		if  (final==-1)
+		{
+			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+			break;
+		}
+		cadena=fragment.substring(inici, final+1);
+		//interpreto el fragment metajson
+		nou_valor=JSON.parse(cadena);
+		if (typeof nou_valor.i_capa==="undefined")
+		{
+			nou_valor.i_capa=i_capa;
+			calcul_amb_icapa+=fragment.substring(0, inici)+JSON.stringify(nou_valor);
+		}
+		else
+			calcul_amb_icapa+=fragment.substring(0, inici)+cadena;
+		fragment=fragment.substring(final+1, fragment.length);
+	}
+	return calcul_amb_icapa+fragment;
+}
+
+
+
 /*Aquesta funció transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
 (la segona part només és vàlida per vectors).*/
 function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
@@ -45,7 +77,7 @@ function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
 var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
 //Busco la descripció de cada "valor" en la operació i creo un equivalent FormulaConsulta
 //busco una clau d'obrir
-var i, fragment, inici, final, cadena, c, i_capa_link;
+var i, fragment, inici, final, cadena, nou_valor, c, i_capa_link;
 var FormulaConsulta="";
 
 	fragment=calcul;
@@ -60,7 +92,7 @@ var FormulaConsulta="";
 		}
 		cadena=fragment.substring(inici, final+1);
 		//interpreto el fragment metajson
-		var nou_valor=JSON.parse(cadena);
+		nou_valor=JSON.parse(cadena);
 		if (typeof nou_valor.i_capa!=="undefined")
 		{
 			if (nou_valor.i_capa>=ParamCtrl.capa.length)
