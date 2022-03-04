@@ -2513,7 +2513,7 @@ function ActivaConstantOCapaSeleccioCondicional(prefix_id, i_condicio, es_capa)
 
 /*Retorna un objecte amb "n_capa" que és nombre de capes compatibles amb i_capa i la vista actual (o si i_capa==-1 només amb la vista actual)
 i "i_capa_unica" que és la primera capa compatible (o la única si només n'hi ha una)*/
-function DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, considera_vectors)
+function DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, considera_vectors, nomes_categoric)
 {
 var n_capa=0, i_capa_unica=-1, capa, i;
 
@@ -2538,6 +2538,8 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 				if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 					((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || (capa.model!=model_vector && (!EsCapaBinaria(capa) || !capa.valors)))
 					continue;
+				if (nomes_categoric && !EsCapaAmbAlgunEstilAmbCategories(capa))
+					continue;
 			}
 			n_capa++;
 			if (i_capa_unica==-1)
@@ -2553,6 +2555,8 @@ var n_capa=0, i_capa_unica=-1, capa, i;
 			capa=ParamCtrl.capa[i];
 			if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa) ||
 				((i_capa==-1) ? false : !EsCapaDinsAmbitCapa(capa, ParamCtrl.capa[i_capa])) || !EsCapaBinaria(capa) || !capa.valors)
+				continue;
+			if (nomes_categoric && !EsCapaAmbAlgunEstilAmbCategories(capa))
 				continue;
 			n_capa++;
 			if (i_capa_unica==-1)
@@ -2636,7 +2640,7 @@ var estil_o_atrib;
 	}
 	cdns.push("</select></div>");
 
-	nc=DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, capa.model==model_vector? true :false);
+	nc=DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, capa.model==model_vector? true :false, false);
 	cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-qualsevol\" name=\"cc",i_condicio, "\" value=\"qualsevol\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", null);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("anyValue", "cntxmenu"), "</label>",
 			"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-constant\" name=\"cc",i_condicio, "\" value=\"constant\" checked=\"checked\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", false);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("constant", "cntxmenu"), "</label>");
 	if (nc.n_capa>1)
@@ -2835,7 +2839,7 @@ function DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, par
 {
 var cdns=[], capa, nc, capa_def, origen_vector;
 
-	nc=DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, param.vull_operador==true? true:false);
+	nc=DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, param.vull_operador==true? true:false, param.nomes_categoric);
 	if (i_capa==-1)
 	{
 		capa_def=null;
@@ -3214,7 +3218,8 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 			}
 			else //if (typeof estil.component[i_c].i_valor!=="undefined")
 			{
-				estil.component[i_c].calcul=calcul + "v["+estil.component[i_c].i_valor+"]";
+				//estil.component[i_c].calcul=calcul + "v["+estil.component[i_c].i_valor+"]";
+				estil.component[i_c].calcul=calcul + "{\"i_valor\": "+estil.component[i_c].i_valor+"}";
 				delete estil.component[i_c].i_valor;
 			}
 			estil.component[i_c].calcul+=":null";
