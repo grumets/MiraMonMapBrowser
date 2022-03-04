@@ -2604,8 +2604,15 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 					//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
 					if (valors2[i_valor2].param)
 					{
+						var clau_valor;
 						for (var i_param=0; i_param<valors2[i_valor2].param.length; i_param++)
-							url_dades+="&"+valors2[i_valor2].param[i_param].clau.nom+"="+valors2[i_valor2].param[i_param].valor.nom;
+						{
+							clau_valor=valors2[i_valor2].param[i_param];
+							//Si la clau no comença per "DIM_", llavors ho afageixo jo
+							url_dades+="&"+
+								((clau_valor.clau.nom.toUpperCase()!="TIME" && clau_valor.clau.nom.toUpperCase()!="ELEVATION" && clau_valor.clau.nom.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": "") +
+									clau_valor.clau.nom+"="+clau_valor.valor.nom;
+						}
 					}
 					i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
 					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
