@@ -132,9 +132,13 @@ var i_vista;
 	var excepcions=["atribucio"];
 	if (ParamCtrl.VistaPermanent.lenght>1)
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			excepcions = excepcions.push(ParamCtrl.VistaPermanent[i_vista].nom);
+			excepcions.push(ParamCtrl.VistaPermanent[i_vista].nom);
+	var prefixes=[];
 	for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-		showOrHideLayersOnTopOfLayer(window, ParamCtrl.VistaPermanent[i_vista].nom, !ParamCtrl.hideLayersOverVista, excepcions);
+		prefixes.push(ParamCtrl.VistaPermanent[i_vista].nom+"_");
+	for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		showOrHideLayersOnTopOfLayer(window, ParamCtrl.VistaPermanent[i_vista].nom, !ParamCtrl.hideLayersOverVista, excepcions, prefixes);
+	CreaBarra();
 }
 
 function RecuperaValorsFinestraParametres(formul, tancar)
@@ -189,7 +193,10 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 		}
 
 		if (isFinestraLayer(window, "coord"))
+		{
 			showOrHideFinestraLayer(window, "coord", formul.param_CoordVisible.checked);
+			document.getElementById("llegenda_situacio_coord").innerHTML=DonaCadenaBotonsVistaLlegendaSituacioCoord();
+		}
 		else
 			showOrHideLayer(getLayer(window, "coord"), formul.param_CoordVisible.checked);
 

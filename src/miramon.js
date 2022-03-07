@@ -83,6 +83,7 @@ IncludeScript("cntxmenu.js");
 IncludeScript("novacapa.js");
 IncludeScript("llegenda.js");
 IncludeScript("situacio.js");
+IncludeScript("coord.js");
 IncludeScript("barra.js");
 IncludeScript("download.js");
 IncludeScript("storymap.js");
@@ -120,20 +121,6 @@ var NovaVistaImprimir=-2;
 var NovaVistaRodet=-3;  //El rodet de petites previsualitzacions de la serie temporal
 var NovaVistaVideo=-4;  //El el fotogrames de la serie temporal
 //Els números positius es reserven per les vistes instantàneas (array NovaVistaFinestra)
-
-/* General functionality: */
-function dontPropagateEvent(e)
-{
-	if(!e)
-		e= window.event;
-
-	//IE9 & Other Browsers
-	if(e.stopPropagation)
-		e.stopPropagation();
-	//IE8 and Lower
-	else
-		e.cancelBubble= true;
-}
 
 //allows compatibility between IE8 and modern browsers
 function MMgetEventButton(event)
@@ -1218,6 +1205,7 @@ function RecuperaVistaPrevia()
 							  "eng":"There is no previous view to be shown.", "fre":"Il n'y a pas une vue préalable à récupérer."}));
 	}
 }
+
 function RecuperaVistaPreviaEvent(event) // Afegit Cristian 19/01/2016
 {
 	RecuperaVistaPrevia();
@@ -1812,16 +1800,16 @@ var cursor="auto";
 	}
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
-		var elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_tel_trans");
+		var elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixTelTrans);
 		if(elem)
 			elem.style.cursor=cursor;
-		elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_sliderzoom");
+		elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixSliderZoom);
 		if(elem)
 			elem.style.cursor=cursor;
 	}
 	for (var i_vista=0; i_vista<NovaVistaFinestra.vista.length; i_vista++)
 	{
-		var elem=getLayer(window, prefixNovaVistaFinestra+i_vista+"_finestra" + "_tel_trans");
+		var elem=getLayer(window, prefixNovaVistaFinestra+i_vista+"_finestra" + SufixTelTrans);
 		if(elem)
 			elem.style.cursor=cursor;
 	}
@@ -1978,6 +1966,8 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_triaStoryMap();
 	else if (nom_finestra=="storyMap")
 		TancaFinestra_storyMap();
+	else if (nom_finestra=="llegenda" || nom_finestra=="situacio" || nom_finestra=="coord")
+		TancaFinestra_llegenda_situacio_coord();
 	else if (nom_finestra.length>prefixNovaVistaFinestra.length && nom_finestra.substring(0, prefixNovaVistaFinestra.length) == prefixNovaVistaFinestra)
 		TancaFinestra_novaFinestra(nom_finestra, NovaVistaFinestra);
 	else if (nom_finestra.length>prefixHistogramaFinestra.length && nom_finestra.substring(0, prefixHistogramaFinestra.length) == prefixHistogramaFinestra)
@@ -2484,12 +2474,12 @@ var i_vista;
 
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"),
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
-			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		}
 		ParamCtrl.EstatClickSobreVista="ClickZoomRec2";
 	}
@@ -2500,12 +2490,12 @@ var i_vista;
 		ZRec_1PuntClient.x=event.clientX;
 		ZRec_1PuntClient.y=event.clientY;
 
-		moveLayer2(getLayer(window, event.target.parentElement.id+"_z_rectangle"),
+		moveLayer2(getLayer(window, event.target.parentElement.id+SufixZRectangle),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
-		showLayer(getLayer(window, event.target.parentElement.id+"_z_rectangle"));
+		showLayer(getLayer(window, event.target.parentElement.id+SufixZRectangle));
 		ParamCtrl.EstatClickSobreVista="ClickNovaVista2";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2")
@@ -2527,7 +2517,7 @@ var i_vista;
 			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		}
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		if (ParamCtrl.ConsultaTipica)
 			PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
 		PortamAAmbit(AmbitZoomRectangle);
@@ -2552,7 +2542,7 @@ var i_vista;
 			AmbitZoomRectangle.MinY=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
 		}
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		if (ParamCtrl.ConsultaTipica)
 			PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
 
@@ -2606,7 +2596,7 @@ var i_vista;
 function CanviaEstatClickSobreVista(estat)
 {
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_z_rectangle"));
+		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle));
 	if(ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
 		TancaFinestraLayer("editarVector");
 	ParamCtrl.EstatClickSobreVista=estat;
@@ -2718,12 +2708,12 @@ var i_vista;
     	MapTouchTypeIniciat = 2;
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"),
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientY)+DonaMargeSuperiorVista(i_nova_vista),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientY)+DonaMargeSuperiorVista(i_nova_vista));
-			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		}
 		ZRec_1PuntClient.x=(event.touches[1].clientX+event.touches[0].clientX)/2;
 		ZRec_1PuntClient.y=(event.touches[1].clientY+event.touches[0].clientY)/2;
@@ -2734,7 +2724,7 @@ var i_vista;
 	}
 	MapTouchTypeIniciat==0;
 	for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 	return true;
 }
 
@@ -2749,12 +2739,12 @@ var i_vista;
 			MapTouchTypeIniciat==-1;
 			setTimeout("MapTouchTypeIniciat=0", 900);
 			for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-				hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+				hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 			return false;
 		}*/
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"),
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientX)+DonaMargeEsquerraVista(i_nova_vista),
 				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[0].clientY)+DonaMargeSuperiorVista(i_nova_vista),
 				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.touches[1].clientX)+DonaMargeEsquerraVista(i_nova_vista),
@@ -2778,7 +2768,7 @@ var i_vista, ratio={x:0, y:0};
 		MapTouchTypeIniciat=-1;
 		setTimeout("MapTouchTypeIniciat=0;", 200);
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"));
+			hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		if (event.touches.length==1)  //The user has removed one finger and the 2 fingers event has concluded.
 		{
 			//unfortunatelly the data form the event is not useful now because we cannot get the two fingers possition.
@@ -2935,7 +2925,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2")
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_z_rectangle"),
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle),
 				DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.x)+DonaMargeEsquerraVista(i_nova_vista),
 				DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, ZRec_1PuntClient.y)+DonaMargeSuperiorVista(i_nova_vista),
 				DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event_de_moure.clientX)+DonaMargeEsquerraVista(i_nova_vista),
@@ -2946,32 +2936,6 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	{
 		PanVistes(event_de_moure.clientX, event_de_moure.clientY, ZRec_1PuntClient.x, ZRec_1PuntClient.y);
 		HiHaHagutMoviment=true;
-	}
-}
-
-function CreaCoordenades()
-{
-var cdns=[];
-
-	var elem=getResizableLayer(window, "coord");
-	if (elem)
-	{
-		cdns.push("<form name=\"form_coord\" onSubmit=\"return false;\"><table style=\"width: 100%; height: 100%;\"><tr>");
-		if (!isFinestraLayer(window, "coord"))
-		{
-			cdns.push("<td style=\"width: 1\"><span class=\"text_coord\">", (ParamCtrl.TitolCoord ? DonaCadena(ParamCtrl.TitolCoord) : "Coord: "),
-				   "</span></td>");
-			if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-				cdns.push("</tr><tr>");
-		}
-		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-			cdns.push("<td><fieldset class=\"input_info_coord\" name=\"info_coord\" style=\"width: 93%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></fieldset></td>");
-		else
-			cdns.push("<td><input class=\"input_info_coord\" type=\"text\" name=\"info_coord\" style=\"width: 97%\" readonly=\"readonly\"></td>");
-		cdns.push("</tr></table></form>");
-		contentLayer(elem, cdns.join(""));
-		elem.style.opacity=0.8;
-		elem.style.backgroundColor="#FFFFFF";
 	}
 }
 
@@ -3911,12 +3875,12 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WFS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
 	if (tipus=="TipusSOS")
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
-	// En TipusOAPI_Maps, ... no eixisteix aquesta petició que he de retornar? ·$·
+	// En TipusOAPI_Maps, ... no existeix aquesta petició que he de retornar, la landing page?
 	return "";
 }
 
 
-function CalGirarCoordenades(crs, v)  // ·$· Afegit les uri
+function CalGirarCoordenades(crs, v)
 {
 	if(crs.toUpperCase()=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
 		return true;
@@ -5141,6 +5105,25 @@ var cdns=[], tile_matrix;
 	return cdns.join("");
 }
 
+function DonaCadenaBotonsVistaLlegendaSituacioCoord()
+{
+var cdns=[]
+	if (isFinestraLayer(window, "llegenda") && !isFinestraLayerVisible(window, "llegenda"))
+		cdns.push(CadenaBotoPolsable('boto_mostra_llegenda', 'mostra_llegenda', DonaCadenaLang({"cat":"Mostra llegenda", "spa":"Muestra legenda", "eng":"Show legend","fre":"Afficher la légende"}), 'MostraFinestraLlegenda(event)'), "<br>",
+			"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=\"1\" height=\"3\"><br>");
+	if (isFinestraLayer(window, "situacio") && !isFinestraLayerVisible(window, "situacio"))
+		cdns.push(CadenaBotoPolsable('boto_mostra_situacio', 'mostra_situacio', DonaCadenaLang({"cat":"Mostra mapa de situació", "spa":"Muestra mapa de situación", "eng":"Show situation map", "fre":"Afficher la carte de situation"}), 'MostraFinestraSituacio(event)'),"<br>",
+			"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=\"1\" height=\"3\"><br>");
+	if (isFinestraLayer(window, "coord") && !isFinestraLayerVisible(window, "coord"))
+		cdns.push(CadenaBotoPolsable('boto_mostra_coord', 'mostra_coord', DonaCadenaLang({"cat":"Mostra informació de la posició", "spa":"Muestra información sobre la posición", "eng":"Show information about current position","fre":"Afficher des informations sur la position actuelle"}), 'MostraFinestraCoord(event)'),"<br>");
+	return cdns.join("");
+}
+
+function TancaFinestra_llegenda_situacio_coord()
+{
+	document.getElementById("llegenda_situacio_coord").innerHTML=DonaCadenaBotonsVistaLlegendaSituacioCoord();
+}
+
 var AltTextCoordenada=18;
 var AmpleTextCoordenada=85;
 
@@ -5162,6 +5145,9 @@ function CreaVistesImmediates()
 }
 
 var NCreaVista=0;  //Guarda el nombre de vegades que he cridat CreaVistaImmediata(). D'aquesta manera puc detectar si he entrat a redibuixar quan encara estic redibuixant la vegada anterior i plegar immediatament de la vegada anterior.
+var SufixSliderZoom="sliderzoom";    //No pot tenir subratllat al davant. Aquesta es pot desactivar
+var SufixTelTrans="_tel_trans";    //Cal que porti el subratllat al davant. Aquesta no s'hauria de desactivar mai
+var SufixZRectangle="_z_rectangle";  //Cal que porti el subratllat al davant.
 
 function CreaVistaImmediata(win, nom_vista, vista)
 {
@@ -5433,16 +5419,15 @@ var p, unitats_CRS;
 		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
 		{
 			//Dibuixo el rectangle de zoom sobre la vista (inicialment invisible)
-			cdns.push(textHTMLLayer(nom_vista+"_z_rectangle", DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
+			cdns.push(textHTMLLayer(nom_vista+SufixZRectangle, DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
 
 			//Dibuixo el "tel" transparent amb els events de moure i click. Sembla que si tinc slider aquests esdeveniments no es fan servir i els altres tenen prioritat
-			cdns.push(textHTMLLayer(nom_vista+"_tel_trans", DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
-		}
+			cdns.push(textHTMLLayer(nom_vista+SufixTelTrans, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 
-		var barra_slider=[];
-		if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) && 
+		    var barra_slider=[];
+		    if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) && 
 			vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
-		{
+		    {
 			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 			if (ParamCtrl.VistaBotonsBruixola && (parseInt(document.getElementById("vista").style.height) >= 300))
 			{
@@ -5489,10 +5474,10 @@ var p, unitats_CRS;
 				barra_slider.push("</td></tr>");
 			}
 			barra_slider.push("</table>");
-		}
+		    }
 
-		if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length && !ParamCtrl.hideLayersOverVista)
-		{
+		    if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length && !ParamCtrl.hideLayersOverVista)
+		    {
 			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 					"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
@@ -5505,10 +5490,15 @@ var p, unitats_CRS;
 				barra_slider.push("</datalist>");
 			}
 			barra_slider.push("</span>");
-		}
-		if (barra_slider.length)
-			cdns.push(textHTMLLayer(nom_vista+"_sliderzoom", DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
+		    }
 
+		    barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", 
+				DonaCadenaBotonsVistaLlegendaSituacioCoord(),
+				"</span>");
+		    //if (barra_slider.length) Finalment la creo sempre per poder canviar el seu interior si cal.
+		    cdns.push(textHTMLLayer(nom_vista+SufixSliderZoom, DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
+		}
+		
 		contentLayer(elem, cdns.join(""));
 
 		//Només s'hauria de fer si hi ha peticions SOAP

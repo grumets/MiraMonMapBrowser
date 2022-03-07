@@ -204,6 +204,20 @@ if(!window.addEventListener)
 	};
 }
 
+/* General functionality: */
+function dontPropagateEvent(e)
+{
+	if(!e)
+		e= window.event;
+
+	//IE9 & Other Browsers
+	if(e.stopPropagation)
+		e.stopPropagation();
+	//IE8 and Lower
+	else
+		e.cancelBubble= true;
+}
+
 //IE8 and lower compatibility for Array.indexOf()
 if(!Array.prototype.indexOf)
 {
@@ -882,7 +896,7 @@ var SufixCanto="_canto"
 var AltBarraFinestraLayer=19;
 var MidaCantoFinestraLayer=12;
 
-function showOrHideLayersOnTopOfLayer(win, mainNom, show, excepcioNoms)
+function showOrHideLayersOnTopOfLayer(win, mainNom, show, excepcioNoms, prefixNoms)
 {
 var elem, rect, x, y, nom;
 
@@ -907,6 +921,17 @@ var elem, rect, x, y, nom;
 		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
 		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto) ||
 		   (nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra))
+			continue;
+
+		if (prefixNoms)
+		{
+			for (var j=0; j<prefixNoms.length; j++)
+			{
+				if(nom.length>prefixNoms[j].length && nom.substr(0, prefixNoms[j].length)==prefixNoms[j])
+					break;
+			}
+		}
+		if (j<prefixNoms.length)
 			continue;
 	
 		elem=getLayer(win, nom);

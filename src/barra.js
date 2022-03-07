@@ -386,6 +386,13 @@ var cdns=[];
 			cdns.push(CadenaBotonsAlternatius(boto_p, botons),"\n");
 		}
 
+		if (ParamCtrl.BarraBotoMapaNet)
+		{
+			cdns.push(CadenaBotonsAlternatius(ParamCtrl.hideLayersOverVista ? "mapanet" : null, [{"src": "mapanet",
+				   "alt": GetMessage("ShowCleanMap_View", "params").replace("<u>","").replace("</u>",""),
+				   "funcio": "ParamCtrl.hideLayersOverVista=!ParamCtrl.hideLayersOverVista;showOrHideLayersOnTopOfVista();"}]), "\n");
+		}
+
 		if ((typeof ParamCtrl.BarraEscala==="undefined" || ParamCtrl.BarraEscala) &&
 			(ParamCtrl.LlistatZoomFraccio || ParamCtrl.LlistatZoomMidaPixel || ParamCtrl.LlistatZoomEscalaAprox))
 		{
@@ -405,16 +412,17 @@ var cdns=[];
 			cdns.push("</select>\n");
 		}
 		if (ParamCtrl.BarraBotoCTipica && ParamCtrl.ConsultaTipica)
-			cdns.push((CadenaBotoPolsable("consulta_tipica_i", "ctipica", GetMessage("TypicalOrObjectQuery", "barra"), "MostraOAmagaCtipiques();")));
+			cdns.push(CadenaBotoPolsable("consulta_tipica_i", "ctipica", GetMessage("TypicalOrObjectQuery", "barra"), "MostraOAmagaCtipiques();"));
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
 		 	if (ParamCtrl.capa[i].descarregable!="no")
 			{
 			    //window.document.write("&nbsp;");
-				cdns.push((CadenaBotoPolsable("getmmz", "getmmz", GetMessage("Download"), "ObtenirMMZ();")),"\n");
+				cdns.push(CadenaBotoPolsable("getmmz", "getmmz", GetMessage("Download"), "ObtenirMMZ();"),"\n");
 				break;
 			}
 		}
+
 		for (i=0; i<ParamCtrl.capa.length; i++)
 		{
 		 	if (ParamCtrl.capa[i].animable)

@@ -1245,22 +1245,22 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 			var zindex_temp;
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			{
-				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_z_rectangle"), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
+				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
 				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
 				//Canvio el Z order de les capes del tel i de l'slider del zoom.
 				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
-				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom");
+				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom);
 				if (elem)
 				{
 					//Poso l'slider a dalt de tot
-					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom")));
-					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_sliderzoom"), zindex_temp);
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom)));
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom), zindex_temp);
 					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
 				}
 				//Poso el tel_tran per sobre de la capa de la consulta.
-				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans")));
-				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_tel_trans"), zindex_temp);
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixTelTrans)));
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixTelTrans), zindex_temp);
 			}
 		}
 		else

@@ -697,6 +697,10 @@
 			"description": "Mostrar el botó de la finestra d'anar a coordenada a la barra de botons", 
 			"type": "boolean"
 		},
+		"BarraBotoMapaNet":	{
+			"description": "Mostrar el botó per amagar o mostrar les coses que hi ha sobre la vista i aconseguir un mapa net", 
+			"type": "boolean"
+		},
 		"BarraBotoConsola": {
 			"description": "Mostrar el botó de la consola de comandes als servidors a la barra de botons", 
 			"type": "boolean"

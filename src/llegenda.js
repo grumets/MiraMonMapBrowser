@@ -852,7 +852,12 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
     return cdns.join("");
 }//Fi de DonaCadenaHTMLLlegenda()
 
-
+function MostraFinestraLlegenda(event)
+{
+	showFinestraLayer(window, "llegenda");
+	document.getElementById("llegenda_situacio_coord").innerHTML=DonaCadenaBotonsVistaLlegendaSituacioCoord();
+	dontPropagateEvent(event);
+}
 
 //var scroll_llegenda_previ={"x": 0, "y": 0}; NOTA20200403-1912 Es descubreix que no es fa servir el 
 
@@ -867,7 +872,7 @@ var salt_entre_columnes;
 	if (isLayer(elem))
 	{
 		contentLayer(elem, s);
-		showLayer(elem);
+		//showLayer(elem);
 		//Queda pendent el tema de la recuperaciò d'scrolls. Veure NOTA20200403-1912
 	}
 }
@@ -1217,4 +1222,3 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 	if (redibuixar_llegenda)
 		CreaLlegenda();
 }
-

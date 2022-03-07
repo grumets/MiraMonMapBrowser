@@ -81,6 +81,13 @@ var cdns=[];
 	return cdns.join("");
 }*/
 
+function MostraFinestraSituacio(event)
+{
+	showFinestraLayer(window, "situacio");
+	document.getElementById("llegenda_situacio_coord").innerHTML=DonaCadenaBotonsVistaLlegendaSituacioCoord();
+	dontPropagateEvent(event);
+}
+
 function CreaSituacio()
 {
 var nom_img_src;
