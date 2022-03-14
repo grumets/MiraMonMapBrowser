@@ -852,6 +852,19 @@ function setzIndexLayer(elem, z)
 
 var RectGetRectLayer=new CreaRectangle(0,0,0,0);*/
 
+function getRectLayerName(win, name)
+{
+	if (isFinestraLayer(win, name))
+	{
+		var rect=getRectLayer(getFinestraLayer(win, name));
+		rect.sup-=AltBarraFinestraLayer;
+		rect.ample+=AltBarraFinestraLayer;
+		return rect;
+	}
+	return getRectLayer(getLayer(win, name));
+}
+
+
 //http://stackoverflow.com/questions/288699/get-the-position-of-a-div-span-tag
 function getRectLayer(elem)
 {
@@ -1142,24 +1155,9 @@ var z;
 
 function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_function_name)
 {
-var cdns=[];	
-	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(nom_boto+ (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
-		 "id=\"id_", nom_fin, "_", nom_boto, "\" name=\"", nom_fin, "_", nom_boto, "\" ",
-		 "width=\"", size, "\" height=\"", size, "\" onClick=\"", onclick_function_name,"\" ");
-	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
-		 cdns.push("alt=\"", title , "\" title=\"", title,"\" ");
-	else
-	{
-		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", title, "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
-			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
-		if (ParamCtrl.BarraEstil.colorsGrey)
-			cdns.push("onmouseover='ChangeTitleColorsSVG(\"id_", nom_fin, "_", nom_boto, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
-				"onmouseout='ChangeTitleColorsSVG(\"id_", nom_fin, "_", nom_boto, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
-	}
-	cdns.push(">");
-	return cdns.join("");
-
+	return DonaTextImgGifSvg("id_"+nom_fin+"_"+nom_boto, nom_fin+"_"+nom_boto, nom_boto, size, title, onclick_function_name);
 }
+
 var movimentDesactiu=0x01;
 var movimentArrossegant=0x02;
 var movimentRedimensionant=0x04;
@@ -1180,7 +1178,7 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11, 
 					GetMessage("copy"), 
-					"CopiaPortapapersFinestraLayer('" + layerFinestraList[i_finestra].nom + "');"),
+					"CopiaPortapapersFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\");"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
@@ -1207,7 +1205,7 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11, 
 					GetMessage("close"),
-					"TancaFinestraLayer('" + layerFinestraList[i_finestra].nom + "')"),
+					"TancaFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\")"),
 			"</td>");
 	cdns.push("<td width=\"5px\"></td></tr></table>");
 	contentLayer(getLayer(win, nom), cdns.join(""));

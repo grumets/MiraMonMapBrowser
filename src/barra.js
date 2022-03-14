@@ -38,6 +38,42 @@
 
 "use strict"
 
+function DonaTextImgGifSvg(id, name, filename, size, title, onclick_function_name)
+{
+var cdns=[];	
+
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(filename + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
+		 "id=\"", id, "\" ");
+	if (name)
+		cdns.push("name=\"", name, "\" ");
+	if (size>0)
+	{
+		//cdns.push("width=\"", size, "\" height=\"", size, "\" ");
+		cdns.push("width=\"", size, "\" ");
+	}
+	if (onclick_function_name)
+		cdns.push("onClick='", onclick_function_name,"' ");
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+		cdns.push("border=\"0\" ");
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+	{
+		if (title)
+			cdns.push("alt=\"", title, "\" title=\"", title,"\" align=\"middle\" ",
+				"onMouseOver='if (document.getElementById(\"", id, "\").alt) window.status=document.getElementById(\"", id, "\").alt; return true;' ",
+				"onMouseOut='if (document.getElementById(\"", id, "\").alt) window.status=\"\"; return true;' ");
+	}
+	else
+	{
+		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {", (title ? "title: \""+title.replaceAll("'", "\'")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
+		if (ParamCtrl.BarraEstil.colorsGrey)
+			cdns.push("onmouseover='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
+				"onmouseout='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+	}
+	cdns.push(">");
+	return cdns.join("");
+}
+
 /*
  * Replace an SVG img src with inline XML SVG 
  */

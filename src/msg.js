@@ -449,6 +449,17 @@ var MessageLang={
 		RestartFromServer: {"cat":"Reiniciar des de servidor", "spa":"Reiniciar desde servidor", "eng":"Restart from server", "fre":"Redémarrer depuis le serveur"},
 		InstallMiraMonReader: {"cat":"Instal·lar el Lector Universal de Mapes del MiraMon", "spa":"Instalar el Lector Universal de Mapas de MiraMon", "eng":"Install MiraMon Universal Map Reader","fre":"Installer le Lecteur Universel de Cartes du Miramon"}
 	},
+	llegenda: {
+		queryable: {"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"},
+		nonQueryable: {"cat":"no consultable", "spa":"no consultable", "eng":"non queryable", "fre":"non consultable"},
+		downloadable: {"cat":"descarregable", "spa":"descargable", "eng":"downloadable", "fre":"téléchargeable"},
+		nonDownloadable: {"cat":"no descarregable", "spa":"no descargable", "eng":"no downloadable", "fre":"non téléchargeable"},
+		visible: {"cat":"visible", "spa":"visible", "eng":"visible", "fre":"visible"},
+		nonVisible: {"cat":"no visible", "spa": "no visible", "eng":"non visible", "fre":"non visible"},
+		semitransparent: {"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"},
+		foldLegend: {"cat":"plega llegenda", "spa":"recoge leyenda", "eng":"fold legend up","fre":"plie légende"},
+		unfoldLegend: {"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"}
+	},
 	cntxmenu2:{
 		statistics:
 		{

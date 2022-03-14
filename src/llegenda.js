@@ -256,6 +256,85 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 	}
 }
 
+function DonaCadenaImgCanviaEstatCapa(i, estat)
+{
+var cdns=[], lletra, msg, nom_gif, width=-1, capa=ParamCtrl.capa[i];
+
+	if (estat=="consultable")
+	{
+		lletra="c";
+		msg=(capa[estat]=="si") ? GetMessage("queryable", "llegenda") : GetMessage("nonQueryable", "llegenda");
+		if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+			nom_gif=(capa[estat]=="si" ? estat : "ara_no_"+estat);
+		else
+			nom_gif=estat;
+		width=14;
+	}
+	else if (estat=="descarregable")
+	{
+		lletra="z";
+		msg=(capa[estat]=="si") ? GetMessage("downloadable", "llegenda") : GetMessage("nonDownloadable", "llegenda");
+		if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+			nom_gif=(capa[estat]=="si" ? estat : "ara_no_"+estat);
+		else
+			nom_gif=estat;
+	}
+	else
+	{
+		lletra="v";
+		msg=(capa[estat]=="si") ? GetMessage("visible", "llegenda") : GetMessage("nonVisible", "llegenda");
+		if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
+		{
+			if (capa.visible=="si")
+			{
+				nom_gif="radio"; 
+				msg=GetMessage("visible", "llegenda");
+			}
+			else if (capa.visible=="semitransparent")
+			{	
+				nom_gif="semi_radio"; 
+				msg=GetMessage("semitransparent", "llegenda");
+			}
+			else
+			{	
+				nom_gif="ara_no_radio"; 
+				msg=GetMessage("nonVisible", "llegenda");
+			}
+			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+				width=14;
+		}
+		else
+		{
+			if (capa.visible=="si")
+			{
+				nom_gif="visible"; 
+				msg=GetMessage("visible", "llegenda");
+			}
+			else if (capa.visible=="semitransparent")
+			{	
+				nom_gif="semitransparent"; 
+				msg=GetMessage("semitransparent", "llegenda");
+			}
+			else
+			{	
+				nom_gif="ara_no_visible"; 
+				msg=GetMessage("nonVisible", "llegenda");
+			}
+			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+				width=17;
+		}
+	}
+
+	return DonaTextImgGifSvg(lletra+"_ll_capa"+i, null, nom_gif, width, msg, "CanviaEstatCapa("+i+", \""+estat+"\");");
+}
+
+function DonaCadenaImgCanviaEstilCapa(i_capa, i_estil, repinta_si_mateix_estil)
+{
+var cdns=[], nom_gif, capa=capa=ParamCtrl.capa[i_capa];
+
+	return DonaTextImgGifSvg("e_raster_vector"+i_capa+"_"+i_estil, null, (i_estil==capa.i_estil ? "radio" : "ara_no_radio"), 14, null, "CanviaEstilCapa("+i_capa+", "+i_estil+", "+repinta_si_mateix_estil+");");
+}
+
 var LlegendaAmbControlDeCapes=0x01;
 var LlegendaAmbCapesNoVisibles=0x02;
 
@@ -322,15 +401,15 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 	cdns.push((aspecte.CapcaleraLlegenda?DonaCadena(aspecte.CapcaleraLlegenda):""),
 			"<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>");
 	if (alguna.desplegable)
-		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"7\" height=\"1\"></td>");
+		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 7 : 9), "\" height=\"1\"></td>");
 	if (alguna.visible)
-		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"10\" height=\"1\"></td>");
+		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 10 : 19), "\" height=\"1\"></td>");
 	if (alguna.consultable)
 		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"16\" height=\"1\"></td>");
 	if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && alguna.descarregable)
 		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"18\" height=\"1\"></td>");
 	if (alguna.getcoverage)
-		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"20\" height=\"1\"></td>");
+		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 20 : 16), "\" height=\"1\"></td>");
 	if (alguna.WPS)
 		cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"22\" height=\"1\"></td>");		
 	cdns.push("<td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"27\" height=\"1\"></td><td><img src=\"",
@@ -396,30 +475,14 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 					(!(ParamCtrl.LlegendaGrisSiForaAmbit) || EsCapaDinsAmbitActual(capa)) &&
 					((capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length>1) || (capa.estil[capa.i_estil].nItemLlegAuto && capa.estil[capa.i_estil].nItemLlegAuto>1)))
 				{
-					if (capa.LlegDesplegada)
-						cdns.push("<img src=\"",
-								  AfegeixAdrecaBaseSRC("menys.gif"), 
-								  "\" alt=\"",
-							(DonaCadenaLang({"cat":"plega llegenda", "spa":"recoge leyenda", "eng":"fold legend up","fre":"plie légende"})),
-							"\" title=\"",
-							(DonaCadenaLang({"cat":"plega llegenda", "spa":"recoge leyenda", "eng":"fold legend up","fre":"plie légende"})),
-							"\"");
-					else 
-						cdns.push("<img src=\"",
-								  AfegeixAdrecaBaseSRC("mes.gif"), 
-								  "\" alt=\"",
-							(DonaCadenaLang({"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"})),
-						"\" title=\"",
-						(DonaCadenaLang({"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"})),
-						"\"");
-					cdns.push(" align=middle name=\"", "m_ll_capa", i, "\" border=\"0\" onClick='CanviaEstatCapa(",
-						i,", \"lleg_desplegada\");' onMouseOver=\"if (", "m_ll_capa", i, ".alt) window.status=", "m_ll_capa",
-						i,".alt; return true;\" onMouseOut=\"if (", "m_ll_capa", i, ".alt) window.status=\'\'; return true;\">");
+					cdns.push(DonaTextImgGifSvg("m_ll_capa"+i, null, (capa.LlegDesplegada ? "menys": "mes"), 8, GetMessage(capa.LlegDesplegada ? "foldLegend" : "unfoldLegend", "llegenda"), 
+							"CanviaEstatCapa("+i+", \"lleg_desplegada\");"));
 				}
 				else
-					cdns.push("<img src=\"",
-							  AfegeixAdrecaBaseSRC("menysg.gif"), 
-							  "\" alt=\"\" align=middle>");
+				{
+					//cdns.push(DonaTextImgGifSvg("m_ll_capa"+i, null, "menysg", 8, null, null));
+					cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"8\" height=\"1\">");
+				}
 				cdns.push("</td>");
 				//Icones d'estats:
 				//Icones visible:
@@ -472,44 +535,10 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 				}
 				else
 				{
-					//"<input type=\"checkbox\" name=\"raster"+i+"\""+ ((capa.visible=="si") ? " checked" : "") +" onClick=\"ControlCapes(document.llegenda)\">"+
-					cdns.push("<td valign=\"middle\">");
-					if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
-					{
-						if (capa.visible=="si")
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("radio.gif"), 
-									  "\" alt=\"visible\" title=\"visible\"");  //No cal DonaCadena();
-						else if (capa.visible=="semitransparent")
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("semi_radio.gif"),  
-									  "\" alt=\"",
-								(DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"})),
-							"\" title=\"", (DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"})),"\"");
-						else
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("ara_no_radio.gif"),  
-									  "\" alt=\"no visible\" title=\"no visible\"");  //No cal DonaCadena();
-					}
-					else
-					{
-						if (capa.visible=="si")
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("visible.gif"), 
-									  "\" alt=\"visible\" title=\"visible\"");  //No cal DonaCadena();
-						else if (capa.visible=="semitransparent")
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("semitransparent.gif"), 
-									  "\" alt=\"",(DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"})),
-							"\" title=\"",(DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"})),"\"");
-						else
-							cdns.push("<img src=\"",
-									  AfegeixAdrecaBaseSRC("ara_no_visible.gif"), 
-									  "\" alt=\"no visible\" title=\"no visible\""); //No cal DonaCadena();
-					}
-					cdns.push(" align=middle name=\"", "v_ll_capa", i, "\" border=\"0\" onClick='CanviaEstatCapa(",
-						i,", \"visible\");' onMouseOver=\"if (", "v_ll_capa", i, ".alt) window.status=", "v_ll_capa",
-						i,".alt; return true;\" onMouseOut=\"if (", "v_ll_capa", i,".alt) window.status=\'\'; return true;\"></td>");
+					cdns.push("<td valign=\"middle\">",
+						DonaCadenaImgCanviaEstatCapa(i, "visible"),
+						"</td>");
+					cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"3\" height=\"1\">");
 				}
 				//Icones consultable:
 				if (capa.consultable=="no")
@@ -541,40 +570,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 				else
 				{
 					cdns.push("<td valign=\"middle\">",
-						"<img width=\"14\" ",
-							"id=\"c_ll_capa", i, "\" name=\"c_ll_capa", i, "\" border=\"0\" ",
-							"src=\"");
-					if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
-					{
-						cdns.push(((capa.consultable=="si") ? 
-								(AfegeixAdrecaBaseSRC("consultable.gif") +
-								"\" alt=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+
-								"\" title=\""+DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"})+ "\"") : 
-								(AfegeixAdrecaBaseSRC("ara_no_consultable.gif") +
-								"\" alt=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+
-								"\" title=\""+DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})+ "\" align=middle")), " ");
-					}
-					else
-					{
-						cdns.push(AfegeixAdrecaBaseSRC("consultable.svg"),"\" ");
-					}
-					cdns.push("onClick='CanviaEstatCapa(", i,", \"consultable\");' ");
-					if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
-						cdns.push("onMouseOver=\"if (", "c_ll_capa", i,".alt) window.status=", "c_ll_capa", i,".alt; return true;\" ",
-							"onMouseOut=\"if (", "c_ll_capa", i,".alt) window.status=\'\'; return true;\" ");
-					else
-					{
-						cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"",
-								(capa.consultable=="si" ? 
-									DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"}) :
-									DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"})),
-							"\", colors: ", JSON.stringify((capa.consultable!="si" && ParamCtrl.BarraEstil.colorsGrey) ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
-							"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
-						if (capa.consultable=="si" && ParamCtrl.BarraEstil.colorsGrey)
-							cdns.push("onmouseover='ChangeTitleColorsSVG(\"c_ll_capa", i, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
-								"onmouseout='ChangeTitleColorsSVG(\"c_ll_capa", i, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
-					}
-					cdns.push(">",
+						DonaCadenaImgCanviaEstatCapa(i, "consultable"),
 						"</td>");
 				}
 				//Icones descarregable:
@@ -608,15 +604,9 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\"><img src=\"",
-								((capa.descarregable=="si") ? 
-											(AfegeixAdrecaBaseSRC("descarregable.gif") +
-											"\" alt=\""+DonaCadenaLang({"cat":"descarregable", "spa":"descargable", "eng":"downloadable", "fre":"téléchargeable"})+"\"") : 
-											(AfegeixAdrecaBaseSRC("ara_no_descarregable.gif") +
-											"\" alt=\""+DonaCadenaLang({"cat":"no descarregable", "spa":"no descargable", "eng":"no downloadable", "fre":"non téléchargeable"})+"\" align=middle")),
-									" name=\"","z_ll_capa", i,"\" border=\"0\" onClick='CanviaEstatCapa(",i,
-								", \"descarregable\");' onMouseOver=\"if (","z_ll_capa" ,i,".alt) window.status=","z_ll_capa", i,
-								".alt; return true;\" onMouseOut=\"if (","z_ll_capa", i,".alt) window.status=\'\'; return true;\"></td>");
+						cdns.push("<td valign=\"middle\">",
+							DonaCadenaImgCanviaEstatCapa(i, "descarregable"),
+							"</td>");
 					}
 				}
 			}
@@ -624,7 +614,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			if (EsCapaDecarregableIndividualment(capa))
 			{
 				cdns.push("<td valign=\"middle\">",
-					CadenaBotoPolsable("getcov"+i, "getcov", DonaCadenaLang({"cat":"descarregar", "spa":"descargar", "eng":"download", "fre":"téléchargeable"}), "MostraFinestraDownload("+i+")", 14),
+					CadenaBotoPolsable("getcov"+i, "getcov", GetMessage("Download").toLowerCase, "MostraFinestraDownload("+i+")", 14),
 					"</td>");
 			}
 			else
@@ -780,13 +770,9 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 									cdns.push("<td valign=\"middle\">",
 										"<img src=\"",
 										AfegeixAdrecaBaseSRC("1tran.gif"), 
-										"\" width=\"4\" height=\"1\"><img align=middle name=\"e_raster_vector",
-										i,"_",l,"\"  border=\"0\" onClick='CanviaEstilCapa(",i,", ",l,", false);' src=\"");
-									if (l==capa.i_estil)
-										cdns.push(AfegeixAdrecaBaseSRC("radio.gif"));
-									else
-										cdns.push(AfegeixAdrecaBaseSRC("ara_no_radio.gif"));
-									cdns.push("\"></td>",
+										"\" width=\"4\" height=\"1\">",
+										DonaCadenaImgCanviaEstilCapa(i, l, false),
+										"</td>",
 										"<td valign=\"middle\"><img src=\"",
 										AfegeixAdrecaBaseSRC("1tran.gif"), 
 										"\" width=\"2\" height=\"1\"></td>",
@@ -817,7 +803,8 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			//Llegenda si hi ha més d'un item
 			estil=capa.estil[capa.i_estil];
 			if (estil.ItemLleg && estil.ItemLleg.length>1 && 
-				(!(flag&LlegendaAmbControlDeCapes) || capa.LlegDesplegada))
+				(!(flag&LlegendaAmbControlDeCapes) || capa.LlegDesplegada) &&
+				capa.visible!="ara_no")
 			{
 				var ncol_items=estil.ncol ? estil.ncol : 1;
 				salt_entre_columnes=Math.floor(estil.ItemLleg.length/ncol_items)+((estil.ItemLleg.length%ncol_items!=0) ? 1 : 0);
@@ -890,10 +877,10 @@ function EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa)
 function CanviaEstatVisibleCapaLlegenda(icon_capa, i)
 {
 var i_vista, capa=ParamCtrl.capa[i], capa2, grup_consultable=false;
-var nom_icona=TreuAdreca(icon_capa.src);
+var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 
-	if (nom_icona=="ara_no_visible.gif" ||
-	    nom_icona=="ara_no_radio.gif")
+	if ( (nom_icona && (nom_icona=="ara_no_visible" || nom_icona=="ara_no_radio")) ||
+		(!nom_icona && capa.visible=="ara_no") )
 	{
 		//pas a visible
 		if (capa.grup)
@@ -919,12 +906,17 @@ var nom_icona=TreuAdreca(icon_capa.src);
 					{
 						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
 				       		if (ParamCtrl.LlegendaGrupsComARadials)
-							window.document["v_ll_capa"+i_capa].src=AfegeixAdrecaBaseSRC("semi_radio.gif");
+						{
+							if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+								document.getElementById("v_ll_capa"+i_capa).outerHTML=DonaCadenaImgCanviaEstatCapa(i_capa, "visible");
+							else
+								document.getElementById("v_ll_capa"+i_capa).src=AfegeixAdrecaBaseSRC("semi_radio.gif");
+						}
 					}
-					CanviaEstatVisibleCapaLlegenda(window.document["v_ll_capa"+i_capa],i_capa);
+					CanviaEstatVisibleCapaLlegenda(document.getElementById("v_ll_capa"+i_capa),i_capa);
 					if (capa2.consultable=="si")
 					{
-						CanviaEstatConsultableCapa(window.document["c_ll_capa"+i_capa],i_capa);
+						CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i_capa),i_capa);
 						grup_consultable=true;
 					}
 					break;
@@ -933,7 +925,7 @@ var nom_icona=TreuAdreca(icon_capa.src);
 		}
 		CanviaEstatVisibleISiCalDescarregableCapa(i,"si");
 		if (grup_consultable && capa.consultable=="ara_no")
-			CanviaEstatConsultableCapa(window.document["c_ll_capa"+i],i);
+			CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i),i);
 		if (capa.model==model_vector)
 		{
 			if (EsCapaVisibleAAquestNivellDeZoom(capa) && capa.objectes && capa.objectes.features)
@@ -962,21 +954,27 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				}
 			}
 		}
-		if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
-		    icon_capa.src=AfegeixAdrecaBaseSRC("radio.gif");
+		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+			icon_capa.outerHTML=DonaCadenaImgCanviaEstatCapa(i, "visible");
 		else
-		    icon_capa.src=AfegeixAdrecaBaseSRC("visible.gif");
-		if (icon_capa.alt)
-			icon_capa.alt="visible"; //no cal DonaCadenaLang();
+		{
+			if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
+				icon_capa.src=AfegeixAdrecaBaseSRC("radio.gif");
+			else
+				icon_capa.src=AfegeixAdrecaBaseSRC("visible.gif");
+			if (icon_capa.alt)
+				icon_capa.alt=GetMessage("visible", "llegenda");
+		}
 			
 		//Miro si l'estil actiu té gràfics que estaven "congelats" perquè la capa no era visible
 		//(els altres possibles gràfics d'altres estils de la capa encara han d'estar congelats)
-		DesactivaCheckITextChartsMatriusDinamics(i, capa.i_estil, false);
+		if (capa.estil)
+			DesactivaCheckITextChartsMatriusDinamics(i, capa.i_estil, false);
 	}	
-	else if (nom_icona=="semitransparent.gif" || 
-		 nom_icona=="semi_radio.gif"||
-	         (capa.transparencia && capa.transparencia!="semitransparent") ||
-		capa.model==model_vector)  //Els vectors no tenen semitranparència (de moment)
+	else if ((nom_icona && (nom_icona=="semitransparent" || nom_icona=="semi_radio")) ||
+                  (!nom_icona && capa.visible=="semitransparent") ||
+	          (capa.transparencia && capa.transparencia!="semitransparent") ||
+		  capa.model==model_vector)  //Els vectors no tenen semitranparència (de moment)
 	{	
 		//pas a no visible
 		CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
@@ -1002,16 +1000,23 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + "_l_capa"+i));
 			}
 		}
-		if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
-		    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_radio.gif");
+		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+			icon_capa.outerHTML=DonaCadenaImgCanviaEstatCapa(i, "visible");
 		else
-		    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_visible.gif");
-		if (icon_capa.alt)
-			icon_capa.alt="no visible";  //no cal DonaCadenaLang();
-			
+		{
+			if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
+				icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_radio"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
+			else
+				icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_visible"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
+			if (icon_capa.alt)
+				icon_capa.alt=GetMessage("nonVisible", "llegenda");
+		}
 		//Miro hi havia estils d'aquesta capa tenien gràfics que cal "congelar" perquè ara la capa no serà visible
-		for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
-			DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
+		if (capa.estil)
+		{
+			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
+				DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
+		}
 	}	
 	else
 	{
@@ -1031,13 +1036,17 @@ var nom_icona=TreuAdreca(icon_capa.src);
 				}
 			}
 		}
-		if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
-			icon_capa.src=AfegeixAdrecaBaseSRC("semi_radio.gif");
+		if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+			icon_capa.outerHTML=DonaCadenaImgCanviaEstatCapa(i, "visible");
 		else
-			icon_capa.src=AfegeixAdrecaBaseSRC("semitransparent.gif");
-		if (icon_capa.alt)
-			icon_capa.alt=DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent", "fre":"semi transparent"});
-			
+		{
+			if (capa.grup && ParamCtrl.LlegendaGrupsComARadials)
+				icon_capa.src=AfegeixAdrecaBaseSRC("semi_radio"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
+			else
+				icon_capa.src=AfegeixAdrecaBaseSRC("semitransparent"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
+			if (icon_capa.alt)
+				icon_capa.alt=DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent", "fre":"semi transparent"});
+		}	
 		// El cas "semitransparent" és només un subtipus de "visible" per tant no afecta als gràfics
 	}
 	CreaAtribucioVista();
@@ -1052,18 +1061,18 @@ function CanviaEstatConsultableCapa(icon_capa, i)
 			ParamCtrl.capa[i].consultable="si";
 			icon_capa.src=AfegeixAdrecaBaseSRC("consultable.gif");
 			if (icon_capa.alt)
-				icon_capa.alt=DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"});
+				icon_capa.alt=GetMessage("queryable", "llegenda");
 			if (icon_capa.title)
-				icon_capa.title=DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"});
+				icon_capa.title=GetMessage("queryable", "llegenda");
 		}
 		else 
 		{
 			ParamCtrl.capa[i].consultable="ara_no";
 			icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_consultable.gif");
 			if (icon_capa.alt)
-				icon_capa.alt=DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"});
+				icon_capa.alt=GetMessage("nonQueryable", "llegenda");
 			if (icon_capa.title)
-				icon_capa.title=DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"});
+				icon_capa.title=GetMessage("nonQueryable", "llegenda");
 		}
 	}
 	else
@@ -1072,13 +1081,13 @@ function CanviaEstatConsultableCapa(icon_capa, i)
 		{
 			ParamCtrl.capa[i].consultable="si";
 			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, true);
-			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: DonaCadenaLang({"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"}), colors: ParamCtrl.BarraEstil.colors});
+			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("queryable", "llegenda"), colors: ParamCtrl.BarraEstil.colors});
 		}
 		else 
 		{
 			ParamCtrl.capa[i].consultable="ara_no";
 			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, false);
-			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: DonaCadenaLang({"cat":"no consultable", "spa":"no consultable", "eng":"no queryable", "fre":"non consultable"}), colors: ParamCtrl.BarraEstil.colorsGrey ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors});
+			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("nonQueryable", "llegenda"), colors: ParamCtrl.BarraEstil.colorsGrey ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors});
 		}
 	}
 }
@@ -1086,7 +1095,7 @@ function CanviaEstatConsultableCapa(icon_capa, i)
 function CanviaEstatDescarregableCapa(icon_capa, i)
 {
 var capa=ParamCtrl.capa[i];
-	if (TreuAdreca(icon_capa.src)=="ara_no_descarregable.gif")
+	if (TreuExtensio(TreuAdreca(icon_capa.src))=="ara_no_descarregable")
 	{
 	    if (capa.grup)
 	    {
@@ -1101,20 +1110,20 @@ var capa=ParamCtrl.capa[i];
 												"eng":"It is not possible to download two layers from the same group.\nLayer \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", that also is member to the group \"" + ParamCtrl.capa[i_capa].grup + "\", will be deselected.", 
 												"fre":"Impossible de télécharger deux couches du même groupe.\nLa couche \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
 					   return;
-				   CanviaEstatDescarregableCapa(window.document["z_ll_capa"+i_capa], i_capa);
+				   CanviaEstatDescarregableCapa(document.getElementById("z_ll_capa"+i_capa), i_capa);
 				   break;
 				}
 			}
 	    }
 	    capa.descarregable="si";
-	    icon_capa.src=AfegeixAdrecaBaseSRC("descarregable.gif");
+	    icon_capa.src=AfegeixAdrecaBaseSRC("descarregable"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
 	    if (icon_capa.alt)
 		icon_capa.alt=DonaCadenaLang({"cat":"descarregable", "spa":"descargable", "eng":"downloadable","fre":"téléchargeable"});
 	}
 	else 
 	{
 	    capa.descarregable="ara_no";
-	    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_descarregable.gif");
+	    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_descarregable"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
 	    if (icon_capa.alt)
 			icon_capa.alt=DonaCadenaLang({"cat":"no descarregable", "spa":"no descargable", "eng":"no downloadable", "fre":"non téléchargeable"});
 	}
@@ -1122,7 +1131,8 @@ var capa=ParamCtrl.capa[i];
 
 function CanviaEstatLlegendaDesplegadaCapa(icon_capa, i)
 {
-	if (TreuAdreca(icon_capa.src)=="menys.gif")
+	//if (TreuAdreca(icon_capa.src)=="menys.gif")
+	if (ParamCtrl.capa[i].LlegDesplegada)
 		ParamCtrl.capa[i].LlegDesplegada=false;
 	else 
 		ParamCtrl.capa[i].LlegDesplegada=true;
@@ -1135,28 +1145,28 @@ function CanviaEstatCapa(i, estat)
 	if (estat=="visible")
 	{
 		var capa=ParamCtrl.capa[i];
-		CanviaEstatVisibleCapaLlegenda(window.document["v_ll_capa"+i], i);
+		CanviaEstatVisibleCapaLlegenda(document.getElementById("v_ll_capa"+i), i);
 		if ((capa.estil && capa.estil.length>1) || 
 			(capa.grup && ParamCtrl.LlegendaGrupsComARadials) ||
 			capa.AnimableMultiTime)
 			CreaLlegenda();
 	}
 	else if (estat=="consultable")
-		CanviaEstatConsultableCapa(window.document["c_ll_capa"+i], i);
+		CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i), i);
 	else if (estat=="descarregable")
-		CanviaEstatDescarregableCapa(window.document["z_ll_capa"+i], i);
+		CanviaEstatDescarregableCapa(document.getElementById("z_ll_capa"+i), i);
 	else if (estat=="lleg_desplegada")
-		CanviaEstatLlegendaDesplegadaCapa(window.document["m_ll_capa"+ i],i);
+		CanviaEstatLlegendaDesplegadaCapa(document.getElementById("m_ll_capa"+ i),i);
 	else
 		alert(DonaCadenaLang({"cat":"Estat no reconegut.", "spa":"Estado no reconocido.", "eng":"Unknown state.", "fre":"État non reconnu"}));
 }
 
-function CanviaEstatLlegendaRadioEstil(icon_capa, marcat)
+function CanviaEstatLlegendaRadioEstil(i_capa, i_estil, repinta_si_mateix_estil, marcat)
 {
-	if (marcat)
-		icon_capa.src=AfegeixAdrecaBaseSRC("radio.gif");
+	if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
+		document.getElementById("e_raster_vector"+i_capa+"_"+i_estil).outerHTML=DonaCadenaImgCanviaEstilCapa(i_capa, i_estil, repinta_si_mateix_estil);
 	else
-		icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_radio.gif");	
+		document.getElementById("e_raster_vector"+i_capa+"_"+i_estil).src=AfegeixAdrecaBaseSRC((marcat) ? "radio.gif" : "ara_no_radio.gif");
 }
 
 function CanviaEstilCapa(i_capa, i_estil, repinta_si_mateix_estil)
@@ -1168,24 +1178,24 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 	
 	if (capa.i_estil!=i_estil)
 	{
+		if (!redibuixar_llegenda && capa.LlegDesplegada && capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length>=1)
+			redibuixar_llegenda=true;
+		if (!redibuixar_llegenda && capa.LlegDesplegada && ((capa.estil[i_estil].ItemLleg && capa.estil[i_estil].ItemLleg.length>=1) || capa.estil[i_estil].nItemLlegAuto>=1))
+			redibuixar_llegenda=true;
+		capa.i_estil=i_estil;
 		for (var i=0; i<capa.estil.length; i++)
 		{
 			if (i==i_estil)
 			{
-				//CanviaEstatLlegendaRadioEstil(eval("window.document.e_raster_vector"+i_capa+"_"+i), true);
-				CanviaEstatLlegendaRadioEstil(window.document["e_raster_vector"+i_capa+"_"+i], true);
+				CanviaEstatLlegendaRadioEstil(i_capa, i, repinta_si_mateix_estil, true);
 				DesactivaCheckITextChartsMatriusDinamics(i_capa, i, false);
 			}
 			else
 			{
-				//CanviaEstatLlegendaRadioEstil(eval("window.document.e_raster_vector"+i_capa+"_"+i), false);
-				CanviaEstatLlegendaRadioEstil(window.document["e_raster_vector"+i_capa+"_"+i], false);
+				CanviaEstatLlegendaRadioEstil(i_capa, i, repinta_si_mateix_estil, false);
 				DesactivaCheckITextChartsMatriusDinamics(i_capa, i, true);
 			}
-			if (!redibuixar_llegenda && capa.LlegDesplegada && capa.estil[i].ItemLleg && capa.estil[i].ItemLleg.length>1)
-				redibuixar_llegenda=true;
 		}
-		capa.i_estil=i_estil;
 	}
 	else
 		redibuixar_llegenda=false;

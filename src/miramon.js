@@ -6848,14 +6848,44 @@ function MovementMiraMonMapBrowser(event)
 }
 
 //https://stackoverflow.com/questions/33083484/on-ctrlmousewheel-event
+/*Moving the wheel to chagne tne map zoom and position is only possible if the mouse is over the map view or the situation map*/
 function WheelMiraMonMapBrowser(event)
 {
-var elem;
+var elem, rect;
 	if (IStoryActive!==null)
 		return;
-	elem=getFinestraLayer(window, "video");
-	if(isLayer(elem) && isLayerVisible(elem))
-		return;
+
+	for (var z=0; z<layerFinestraList.length; z++)
+	{
+		if (layerFinestraList[z].nom!="llegenda" && layerFinestraList[z].nom!="coord" && layerFinestraList[z].nom!="situacio")
+		{
+			elem=getFinestraLayer(window, layerFinestraList[z].nom);
+			if (isLayer(elem) && isLayerVisible(elem))
+				return;
+		}
+	}
+
+	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+	{
+		elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom);
+		if (isLayer(elem) && isLayerVisible(elem))
+		{
+			rect=getRectLayer(elem);
+			if (event.clientX>rect.esq && event.clientX<rect.esq+rect.ample &&
+				event.clientY>rect.sup && event.clientY<rect.sup+rect.alt)
+				break;
+		}
+	}
+	if (i_vista==ParamCtrl.VistaPermanent.length)
+	{
+		if (!isLayerVisible(getResizableLayer(window, "situacio")))
+			return;
+		rect=getRectLayerName(window, "situacio");
+		if (event.clientX<rect.esq || event.clientX>rect.esq+rect.ample ||
+			event.clientY<rect.sup || event.clientY>rect.sup+rect.alt)
+			return;
+	}
+
 	if (event.shiftKey)
 		MouLaVistaEventDeSalt(event, Math.sign(event.deltaY)*0.1, (event.altKey) ? -Math.sign(event.deltaY)*0.1 : (event.ctrlKey ? Math.sign(event.deltaY)*0.1 : 0));
 	else if (event.ctrlKey)
