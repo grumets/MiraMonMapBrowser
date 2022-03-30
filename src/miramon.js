@@ -637,6 +637,16 @@ var a={};
 	return a;
 }
 
+function DonaCadenaNomDesc(a)
+{
+	return a.desc ? DonaCadena(a.desc) : a.nom;
+}
+
+function DonaCadenaNomDescItemsLleg(estil)
+{
+	return estil.DescItems ? DonaCadena(estil.DescItems) : DonaCadenaNomDesc(estil);
+}
+
 function DonaCadena(a)
 {
 	if (a==null || ParamCtrl.idioma==null)
@@ -657,6 +667,7 @@ function DonaCadena(a)
 		return a;
 	return null;
 }
+
 
 //S'usa per cadenes definides estàticament definides així: DonaCadenaLang({"cat": "sí", "spa": "sí", "eng": "yes", "fre": "oui"});
 function DonaCadenaLang(cadena_lang)
@@ -1286,7 +1297,7 @@ function ShaObertPopUp(wnd)
 }
 
 
-function NetejaConfigJSON(param_ctrl, is_local_storage)
+function NetejaParamCtrl(param_ctrl, is_local_storage)
 {
 	param_ctrl.NivellZoomCostat=ParamInternCtrl.vista.CostatZoomActual;  //Recupero el costat de zoom actual
 	param_ctrl.ISituacioOri=ParamInternCtrl.ISituacio; //Recupero el mapa de situació, que indica el CRS
@@ -1324,6 +1335,14 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 			{
 				var estil=capa.estil[i_estil];
+				for (var i_c=0; i_c<estil.component.length; i_c++)
+				{
+					if (estil.component[i_c].calcul && estil.component[i_c].FormulaConsulta)
+						delete estil.component[i_c].FormulaConsulta;
+					if (estil.component[i_c].formulaInterna)
+						delete estil.component[i_c].formulaInterna;
+				}
+				
 				if (estil.diagrama && estil.diagrama.length>0)
 				{
 					for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
@@ -1401,14 +1420,14 @@ function NetejaConfigJSON(param_ctrl, is_local_storage)
 	RemoveOtherPropertiesInObjWithRef(param_ctrl);
 }
 
-function CreaDuplicatNetejaiMostraConfigJSON(text_area)
+function CreaDuplicatNetejaiMostraParamCtrl(text_area)
 {
 	var param_ctrl=JSON.parse(JSON.stringify(ParamCtrl));
-	NetejaConfigJSON(param_ctrl, false);
+	NetejaParamCtrl(param_ctrl, false);
 	document.getElementById(text_area).value=JSON.stringify(param_ctrl, null, '\t');
 }
 
-function CarregaiAdoptaConfigJSON(s)
+function CarregaiAdoptaParamCtrl(s)
 {
 	try {
 		var param_ctrl=JSON.parse(s);
@@ -3412,6 +3431,16 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 }
 
+function CanviaValorDimensioExtraDeCapa(i_capa, i_dim, i_valor)
+{
+var dim=ParamCtrl.capa[i_capa].dimensioExtra[i_dim];
+
+	dim.i_valor=i_valor;
+	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+}
+
+
 /*
  * Returns the WMTS TileMatrixSet from a image url of the tile set.
  * The TileMatrixSet produced in this way lacks CRS and TileMatrix list, which
@@ -3630,7 +3659,7 @@ function DonaRequestGetMapTiled(i_capa, i_estil, pot_semitrans, ncol, nfil, i_ti
 	env_tile.MaxX=env_tile.MinX+tile_matrix.costat*tile_matrix.TileWidth;
 	env_tile.MaxY=tile_matrix.TopLeftPoint.y-tile_matrix.costat*tile_matrix.TileHeight*j;
 	env_tile.MinY=env_tile.MaxY-tile_matrix.costat*tile_matrix.TileHeight;
-	var s=DonaRequestGetMap(i_capa, i_estil, pot_semitrans, ncol, nfil, env_tile, i_data);
+	var s=DonaRequestGetMap(i_capa, i_estil, pot_semitrans, ncol, nfil, env_tile, i_data, null);
 	//CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 	return s;
 }
@@ -3887,24 +3916,24 @@ function CalGirarCoordenades(crs, v)
 	return false;
 }
 
-function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data)
+function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
-var cdns=[], tipus, plantilla, i_estil2;
+var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 
-	tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
+	tipus=DonaTipusServidorCapa(capa);
 	if (tipus=="TipusOAPI_Maps")
 	{
-		if(ParamCtrl.capa[i].URLTemplate)
-			plantilla=ParamCtrl.capa[i].URLTemplate+"?";
+		if(capa.URLTemplate)
+			plantilla=capa.URLTemplate+"?";
 		else
 			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
 
-		plantilla=plantilla.replace("{collectionId}", ParamCtrl.capa[i].nom);
-		if (ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length)
+		plantilla=plantilla.replace("{collectionId}", capa.nom);
+		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? ParamCtrl.capa[i].i_estil : i_estil;
-			if (ParamCtrl.capa[i].estil[i_estil2].nom)
-	 			plantilla=plantilla.replace("{styleId}", ParamCtrl.capa[i].estil[i_estil2].nom);
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+			if (capa.estil[i_estil2].nom)
+	 			plantilla=plantilla.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
 				plantilla=plantilla.replace("{styleId}", "default");
 		}
@@ -3913,86 +3942,115 @@ var cdns=[], tipus, plantilla, i_estil2;
 		cdns.push(plantilla);
 	}
 
-	if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers<2))
+	if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
 		cdns.push("SRS=");
 	else
 		cdns.push("CRS=");
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&BBOX=");
 
-	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  (tipus=="TipusOAPI_Maps" ? null : DonaVersioServidorCapa(ParamCtrl.capa[i]))))
+	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  (tipus=="TipusOAPI_Maps" ? null : DonaVersioServidorCapa(capa))))
 		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
 	else
 		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
 
 	cdns.push("&WIDTH=" , ncol , "&HEIGHT=" , nfil);
 	if(tipus=="TipusOAPI_Maps")
-		cdns.push("&f=" , ParamCtrl.capa[i].FormatImatge ) ;
+		cdns.push("&f=" , capa.FormatImatge ) ;
 	else
-		 cdns.push("&LAYERS=" , ParamCtrl.capa[i].nom, "&FORMAT=" , ParamCtrl.capa[i].FormatImatge );
-	cdns.push(((ParamCtrl.capa[i].FormatImatge=="image/jpeg") ? "" : "&TRANSPARENT=" + ((ParamCtrl.capa[i].transparencia && ParamCtrl.capa[i].transparencia!="opac")? "TRUE" : "FALSE")));
+		 cdns.push("&LAYERS=" , capa.nom, "&FORMAT=" , capa.FormatImatge );
+	cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&TRANSPARENT=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
 
 	if(tipus!="TipusOAPI_Maps")
 	{
 		cdns.push("&STYLES=");
-		if (ParamCtrl.capa[i].estil && ParamCtrl.capa[i].estil.length)
+		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? ParamCtrl.capa[i].i_estil : i_estil;
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 
-			if (ParamCtrl.capa[i].estil[i_estil2].nom)
+			if (capa.estil[i_estil2].nom)
 			{
-				if (EsCapaBinaria(ParamCtrl.capa[i]))
+				if (EsCapaBinaria(capa))
 				{
 					alert("A binary array layer cannot have a 'estil' with 'nom'. The 'nom' is being disabled. Please use extra dimensions instead of style names");
-					ParamCtrl.capa[i].estil[i_estil2].nom=null;
+					capa.estil[i_estil2].nom=null;
 				}
 				else
 				{
-					cdns.push(ParamCtrl.capa[i].estil[i_estil2].nom);
-					if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+					cdns.push(capa.estil[i_estil2].nom);
+					if (pot_semitrans && !EsCapaBinaria(capa) && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 						cdns.push(":SEMITRANSPARENT");
 				}
 			}
-			else if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+			else if (pot_semitrans && !EsCapaBinaria(capa) && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 				cdns.push("SEMITRANSPARENT");
 		}
-		else if (pot_semitrans && !EsCapaBinaria(ParamCtrl.capa[i]) && ParamCtrl.capa[i].FormatImatge!="image/jpeg" && ParamCtrl.capa[i].visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+		else if (pot_semitrans && !EsCapaBinaria(capa) && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 				cdns.push("SEMITRANSPARENT");
+
+		//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
+		if (valors_i && valors_i.param)
+		{
+			var clau_valor;
+			for (var i_param=0; i_param<valors_i.param.length; i_param++)
+			{
+				clau_valor=valors_i.param[i_param];
+				//Si la clau no comença per "DIM_", llavors ho afageixo jo
+				cdns.push("&",
+					((clau_valor.clau.nom.toUpperCase()!="TIME" && clau_valor.clau.nom.toUpperCase()!="ELEVATION" && clau_valor.clau.nom.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
+					clau_valor.clau.nom,"=",clau_valor.valor.nom);
+			}
+		}
+		if (capa.dimensioExtra)
+		{
+			for (var i_param=0; i_param<capa.dimensioExtra.length; i_param++)
+			{
+				if (capa.dimensioExtra[i_param].i_valor>-1)
+				{
+					var clau=capa.dimensioExtra[i_param].clau.nom;
+					//Si la clau no comença per "DIM_", llavors ho afageixo jo
+					cdns.push("&",
+						((clau.toUpperCase()!="TIME" && clau.toUpperCase()!="ELEVATION" && clau.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
+						clau,"=",capa.dimensioExtra[i_param].valor[capa.dimensioExtra[i_param].i_valor].nom);
+				}
+			}
+		}
 	}
-	if (ParamCtrl.capa[i].AnimableMultiTime)
+	if (capa.AnimableMultiTime)
 	{
 		if(tipus=="TipusOAPI_Maps")
 			cdns.push("&datetime=",
-				(DonaDataJSONComATextISO8601(ParamCtrl.capa[i].data[DonaIndexDataCapa(ParamCtrl.capa[i], i_data)],ParamCtrl.capa[i].FlagsData)));
+				(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));
 		else
 			cdns.push("&TIME=",
-			(DonaDataJSONComATextISO8601(ParamCtrl.capa[i].data[DonaIndexDataCapa(ParamCtrl.capa[i], i_data)],ParamCtrl.capa[i].FlagsData)));
+			(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));
 	}
 	return cdns.join("");
 }
 
 //i_estil és un index d'estil o -1 si ha de ser l'estil indicat a la capa
 //i_data és un número (positiu o negatiu o null si ha de ser la dada indicada a la capa.
-function DonaRequestGetMap(i, i_estil, pot_semitrans, ncol, nfil, env, i_data)
+function DonaRequestGetMap(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
-var cdns=[], tipus;
+var cdns=[], tipus, capa=ParamCtrl.capa[i];
 
-	tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
+	tipus=DonaTipusServidorCapa(capa);
 	if (tipus!="TipusOAPI_Maps")
 	{
-		if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers==0))
+		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers==0))
 			cdns.push("WMTVER=");
 		else
 			cdns.push("SERVICE=WMS&VERSION=");
-		cdns.push(DonaVersioComAText(DonaVersioServidorCapa(ParamCtrl.capa[i])), "&REQUEST=");
+		cdns.push(DonaVersioComAText(DonaVersioServidorCapa(capa)), "&REQUEST=");
 
-		if (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers<1 || (DonaVersioServidorCapa(ParamCtrl.capa[i]).Vers==1 && DonaVersioServidorCapa(ParamCtrl.capa[i]).SubVers==0))
+		if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers==0))
 			cdns.push("map&");
 		else
 			cdns.push("GetMap&");
 	}
-	cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data));
+	cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i));
 
-	var s=AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i]), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(ParamCtrl.capa[i]));
+	var s=AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
+
 	//CreaIOmpleEventConsola("GetMap", i, s, TipusEventGetMap);
 	return s;
 }
@@ -4054,7 +4112,7 @@ var i_estil, capa=ParamCtrl.capa[i_capa];
 	else
 		i_estil=-1;
 
-	var s=DonaRequestGetMap(i_capa, i_estil, pot_semitrans, vista.ncol, vista.nfil, vista.EnvActual, i_data);
+	var s=DonaRequestGetMap(i_capa, i_estil, pot_semitrans, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
 	CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 	return s;
 }
@@ -4064,15 +4122,12 @@ function DonaDescripcioValorMostrarCapa(i_capa, una_linia)
 var capa=ParamCtrl.capa[i_capa];
 	if (una_linia)
 		return (capa.DescLlegenda ? DonaCadena(capa.DescLlegenda) :
-				((capa.desc) ? DonaCadena(capa.desc) : capa.nom)) +
+				DonaCadenaNomDesc(capa)) +
 			((capa.estil.length>1 && capa.estil[capa.i_estil].desc) ? " - " + DonaCadena(capa.estil[capa.i_estil].desc) : "") +
 			(capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 
 	return (capa.estil[capa.i_estil].desc ?
-			DonaCadena(capa.estil[capa.i_estil].desc) :
-			(
-				(capa.desc) ? DonaCadena(capa.desc) : capa.nom
-			)
+			DonaCadena(capa.estil[capa.i_estil].desc) : DonaCadenaNomDesc(capa)
 		) + (capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 }
 
@@ -4190,7 +4245,7 @@ function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok,
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
 	{
-		var url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data);
+		var url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
 		if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusOAPI_Maps")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
 		else
@@ -5095,7 +5150,7 @@ var cdns=[], tile_matrix;
 			else //wms-c
 				i_event=CreaIOmpleEventConsola("GetMap", i_capa, s, TipusEventGetMap);
 			cdns.push(s);
-			//cdns.push(DonaRequestGetMapTiled(i_capa, -1, true, tile_matrix.TileWidth, tile_matrix.TileHeight, i_tile_matrix_set, i_tile_matrix, j, i, null));
+			//cdns.push(DonaRequestGetMapTiled(i_capa, -1, true, tile_matrix.TileWidth, tile_matrix.TileHeight, i_tile_matrix_set, i_tile_matrix, j, i));
 			cdns.push(" i_event=\""+i_event+"\" onLoad=\"onLoadCanviaImatge\" onError=\"onErrorCanviaImatge\"></td>");
 		}
 		cdns.push("  </tr>");
@@ -6296,7 +6351,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
 										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
 										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
-										+ " capa = " + (capa.desc ? DonaCadena(capa.desc) : capa.nom));											
+										+ " capa = " + DonaCadenaNomDesc(capa));											
 								avis_mostrar_atributs=true;
 							}
 							if (capa.atributs[j].mostrar)
@@ -6312,7 +6367,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
 										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
 										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
-										+ " capa = " + (capa.desc ? DonaCadena(capa.desc) : capa.nom));
+										+ " capa = " + DonaCadenaNomDesc(capa));
 								avis_mostrar_atributs=true;
 							}
 							capa.atributs[j].mostrar = "si";
@@ -6345,7 +6400,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
 												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
 												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
-												+ " estil = " + (estil.desc ? DonaCadena(estil.desc) : estil.nom));
+												+ " estil = " + DonaCadenaNomDesc(estil));
 												avis_mostrar_atributs=true;
 									}
 									if (estil.atributs[k].mostrar)
@@ -6361,7 +6416,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
 												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
 												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
-												+ " estil = " + (estil.desc ? DonaCadena(estil.desc) : estil.nom));
+												+ " estil = " + DonaCadenaNomDesc(estil));
 										avis_mostrar_atributs=true;
 									}
 									estil.atributs[k].mostrar = "si";
@@ -6774,7 +6829,7 @@ function EndMiraMonMapBrowser(event, reset)
 {
 	if (typeof Storage !== "undefined")  //https://arty.name/localstorage.html
 	{
-		NetejaConfigJSON(ParamCtrl, true);
+		NetejaParamCtrl(ParamCtrl, true);
 
 		if (reset)
 			localStorage.removeItem("EditedParamCtrl_"+ParamCtrl.config_json);

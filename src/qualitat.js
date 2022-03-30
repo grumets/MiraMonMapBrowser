@@ -39,7 +39,7 @@
 "use strict"
 
 var QualityML=null;
-var ArrelURLQualityML="http://www.qualityml.org/";
+var ArrelURLQualityML="https://www.qualityml.org/";
 
 
 // Funciona tant per capa com per capa_digi
@@ -56,7 +56,7 @@ function FinestraMostraQualitatCapa(elem, capa, i_estil)
 {
 	if (!QualityML)
 	{
-		loadJSON("http://www.qualityml.org/qualityml.json",
+		loadJSON(ArrelURLQualityML+"qualityml.json",
 				// "qualityml.json",
 			function(quality_ml, extra_param) { 
 				QualityML=quality_ml;
@@ -277,7 +277,7 @@ function DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i_component, descri
 				final=fragment.indexOf("]");
 				if (final==-1)
 				{
-					alert("Character 'v[' without ']' in 'FormulaConsulta' in capa " + capa.desc ? capa.desc : capa.nom + " estil " + i_estil);
+					alert("Character 'v[' without ']' in 'FormulaConsulta' in capa " + DonaCadenaNomDesc(capa) + " estil " + i_estil);
 					error=true;
 					break;
 				}
@@ -313,7 +313,7 @@ var s=capa.nom;
 	if (i_estil==-1)
 		return s;
 
-	//estil antic -> return capa.nom + (i_estil==-1 ? "": "_" + (capa.estil[i_estil].desc ? capa.estil[i_estil].desc : DonaCadena(capa.estil[i_estil].desc)));
+	//estil antic -> return capa.nom + (i_estil==-1 ? "": "_" + DonaCadenaNomDesc(capa.estil[i_estil]) );
 	
 	if (capa.estil[i_estil].component.length==1)
 	{	//pot ser un i_valor o un FormulaConsulta
@@ -464,7 +464,7 @@ var capa=ParamCtrl.capa[i_capa];
 				cdns.join(""), 
 				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
 				s, //identificador unic 
-				DonaAdrecaAbsoluta(DonaServidorCapa(capa)), 
+				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"), 
 				ParamCtrl.idioma);
 }
 
@@ -918,7 +918,7 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 						"spa": "para calcular la calidad de la capa", 
 						"eng": "to compute data quality for the layer", 
 						"fre": "pour calculer la qualité des données pour la couche"}) + " " +
-				(capa_digi.desc ? capa_digi.desc : capa_digi.nom));
+				DonaCadenaNomDesc(capa_digi));
 		unitats=null;
 	}
 	else
@@ -1113,7 +1113,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 						"spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa", 
 						"eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer", 
 						"fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"}) + " \"" +
-				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : capa.nom) + "\".");
+				DonaCadenaNomDesc(capa) + "\".");
 			TancaFinestraLayer('calculaQualitat');
 		}
 		else
@@ -1122,7 +1122,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 						"spa": "No se ha podido calcular la calidad de la capa", 
 						"eng": "The quality cannot be computed for the layer", 
 						"fre": "The quality cannot be computed for the layer"}) + " \"" +
-				(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : capa.nom) + "\".");
+				DonaCadenaNomDesc(capa) + "\".");
 		}
 	}
 }

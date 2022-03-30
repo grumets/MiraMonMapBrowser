@@ -101,7 +101,7 @@
 			"description": "Nom de la divisió que conté el navegador. INTERN; no usar. S'omple a partir del nom indicat a StartMiraMonMapBrowser(div_name)",
 			"type": "string"
 		},
-		"ParamCtrl.config_json": {
+		"config_json": {
 			"description": "El propi config.json com a text. INTERN; no usar. S'omple al iniciar el navegador",
 			"type": "string"
 		},
@@ -481,7 +481,7 @@
 				"required": ["camps"],
 				"properties": {
 					"servidor":	{ 
-						"description": "Adreça i nom del servidor del MiraMon per a les consultes típiques. Si és null s'agafa el ServidorLocal",
+						"description": "Adreça i nom del servidor del MiraMon per a les consultes típiques. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) vol dir que els objectes estan definits directament al 'proj_camp' i no es demanen a cap servidor.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -628,7 +628,7 @@
 					"multipleOf" : 1
 				},
 				"colors": {
-					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill".,
+					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill",
 					"type": "object",
 					"additionalProperties": { 
 						"description": "The the color of this element class. De moment els botons SVG que distribuim tenen un estil de fons anomenat 'cls-1' i un estil de contorns anomenat 'cls-2' i aquestes serien les 2 propietats a indicar.",
@@ -1269,14 +1269,14 @@
 						"$ref": "#/definitions/descripcioAtributs"			
 					},
 					"valors": {
-						"description": "Descripció dels valors. És un array perquè es fa servir l'estil WMS per comunicar multibandes o els estils WMS i en necessitarem més d'un. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'.",
+						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció dels valors",
 							"type": ["object"],
 							"properties": {								
 								"param": { 
-									"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Pot ser null.",
+									"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És optim per una sola dimensió amb poques poques posibiilltats, quan les combinacións de valors de dimensions tenen poques posibilitats vàlides vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. Pot ser null",
 									"type": ["array", "null"],
 									"items": {
 										"description": "Paràmetres (clau i valor)",
@@ -1375,15 +1375,48 @@
 								},
 								"i_capa": { 
 									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre capa en un estil tipus 'calcul'",
-									"type": "string"
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1									
 								},
 								"i_data": { 
 									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre data en un estil tipus 'calcul'",
-									"type": "string"
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1									
 								},
 								"i_valor": { 
 									"description": "INTERN: s'afegeix programaticament si la banda usa una altre banda en un estil tipus 'calcul'",
-									"type": "string"
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1
+								}
+							}
+						}
+					},
+					"dimensioExtra": {
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors valids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Descripció de la clau i els valors d'una dimensió",
+							"type": "object",
+							"properties": {
+								"clau": {
+									"description": "Nom i descripció de la clau. Per exemple 'DIM_band' i 'Band'",
+									"$ref": "#/definitions/nomDescripcio"
+								},
+								"valor": {
+									"type": ["array"],
+									"items": {
+										"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
+										"$ref": "#/definitions/nomDescripcio"
+									}
+								},
+								"i_valor": {
+									"description": "Índex de valor que es mostrarà seleccionat, començant des de 0",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf" : 1
 								}
 							}
 						}
@@ -1457,7 +1490,11 @@
 												"type": "string"
 											},
 											"FormulaConsulta": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Pot usar referencies a selectors fetes amb {'i_sltr': }. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
+												"type": "string"
+											},
+											"formulaInterna": { 
+												"description": "Formula matemàtica igual a la FormulaConsulta però sense referencies a selectors. Interna; No usar.",
 												"type": "string"
 											},
 											"i_valor": { 
@@ -1466,6 +1503,36 @@
 												"minimum": 0,
 												"multipleOf": 1
 											},
+											"selector": {
+												"description": "Array de les selectors. Només es pot fer servir si la capa té FormulaConsulta o un calcul. Opcional",
+												"type": "array",
+												"items": {
+													"description": "Selector per una 'FormulaConsulta' o un 'calcul'. La intenció és saber més sobre els valors de l'estil. Primer es mira si l'estil té categories i es fan servir per crear un selector a la llegenda, i si no es mira si hi ha estiramentPaleta per inidicar un interval del rang de valors recomenats",
+													"type": "object",
+													"properties": {
+														"desc":  {
+															"description": "Descripció del selector",
+															"type": "number"
+														},
+														"valorActual": {
+															"description": "Valor actualment seleccionat",
+															"type": "number"
+														},
+														"categories": {
+															"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array",
+															"$ref": "#/definitions/descripcioCategories"
+														},
+														"atributs": {
+															"description": "Array que descriu les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
+															"$ref": "#/definitions/descripcioAtributs"	
+														},
+														"estiramentPaleta": {
+															"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica",
+															"$ref": "#/definitions/estiramentPaleta"
+														}
+													}
+												}
+											}, 
 											"illum": {
 												"type": "object",
 												"description": "The sun illuminates the DEM and generates an illumination effect. The result are numbers from 1 to -1. Anything below 0 means that it is illumnated 'form the opposite side' and it is considered 0 (so, no negative values). If this object is present a DEM is simplozed as illuminations that can be used to create shadows if a semitransparent layer is added on top.",
@@ -1544,7 +1611,7 @@
 														"multipleOf" : 1
 													},
 													"categories" : { 
-														"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
+														"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
 														"$ref": "#/definitions/descripcioCategories"
 													},
 													"atributs": {
@@ -1860,7 +1927,7 @@
 						}
 					},
 					"i_estil": {
-						"description": "Índex de l'estil que es mostrarà en primer lloc, començant des de 0",
+						"description": "Índex de l'estil que es mostrarà seleccionat, començant des de 0",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1

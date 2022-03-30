@@ -350,11 +350,12 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 
 	if (cdns.length==0)
 		return false;
+
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
 			   "<div class=\"llistaMenuContext\" style=\"position:absolute\" id=\"menuContextualCapa-text\">");
-	cdns.push("</div><div style=\"position:absolute;text-align:right;vertical-align:top;\" id=\"menuContextualCapa-boto\"><img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
-				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\"></div>",
-				"</div>");
+	cdns.push("</div><div style=\"position:absolute;text-align:right;vertical-align:top;\" id=\"menuContextualCapa-boto\">",
+				DonaTextImgGifSvg("id_context_menu_capa_close", "context_menu_capa_close", "boto_tancar", 11, GetMessage("close"), "TancaContextMenuCapa();"),
+				"</div></div>");
 	MouLayerContextMenuCapa(event, cdns.join(""));
 	return false;
 }
@@ -408,11 +409,12 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	if (cdns.length==0)
 		return false;
+
 	cdns.splice(0, 0, "<div class=\"MenuContextualCapa\" id=\"menuContextualCapa-contingut\">",
-			  "<img align=\"right\" src=\"boto_tancar.gif\" alt=\"",
-				GetMessage("close") , "\" onClick=\"TancaContextMenuCapa();\">",
-			   "<div class=\"llistaMenuContext\"  id=\"menuContextualCapa-text\">");
-	cdns.push("</div></div>");
+			   "<div class=\"llistaMenuContext\" style=\"position:absolute\" id=\"menuContextualCapa-text\">");
+	cdns.push("</div><div style=\"position:absolute;text-align:right;vertical-align:top;\" id=\"menuContextualCapa-boto\">",
+				DonaTextImgGifSvg("id_context_menu_capa_close", "context_menu_capa_close", "boto_tancar", 11, GetMessage("close"), "TancaContextMenuCapa();"),
+				"</div></div>");
 	MouLayerContextMenuCapa(event, cdns.join(""));
 	return false;
 }
@@ -2047,7 +2049,7 @@ var condicio, reclassificacio, valor, text_valor;
 	condicio=LlegeixParametresCondicioCapaDataEstil(prefix_id, "-valor", 0);
 	reclassificacio=document.ReclassificadoraCapes.reclassificacio;
 	reclassificacio.focus();
-	valor=eval("document.ReclassificadoraCapes.valor"+0+".value");
+	valor=document.ReclassificadoraCapes["valor"+0].value;
 	if(valor && valor!="")
 		text_valor="\""+DonaTextCategoriaDesDeColor(ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].categories, ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].atributs, valor, true)+"\"";
 	else
@@ -2505,11 +2507,12 @@ function CanviaOperadorValorSeleccioCondicional(prefix_id, i_capa, i_condicio, i
 	document.getElementById(prefix_id + "-operador-valor-"+i_condicio).innerHTML=DonaCadenaOperadorValorSeleccioCondicional(prefix_id, i_capa, i_condicio, i_estil);
 }
 
-function ActivaConstantOCapaSeleccioCondicional(prefix_id, i_condicio, es_capa)
+function ActivaConstantOCapaSeleccioCondicional(prefix_id, i_condicio, quin_radial)
 {
-	document.getElementById("div-" + prefix_id + "-operador-"+i_condicio).style.display=(es_capa==null) ? "none" : "inline";
-	document.getElementById("div-" + prefix_id + "-cc-constant-"+i_condicio).style.display=(es_capa==null || es_capa==true) ? "none" : "inline";
-	document.getElementById("div-" + prefix_id + "-cc-capa-"+i_condicio).style.display=(es_capa==null || es_capa==false) ? "none" : "inline";
+	document.getElementById("div-" + prefix_id + "-operador-" + i_condicio).style.display=(quin_radial=="qualsevol") ? "none" : "inline";
+	document.getElementById("div-" + prefix_id + "-cc-constant-" + i_condicio).style.display=(quin_radial=="constant" || quin_radial=="selector") ? "inline" : "none";
+	document.getElementById("span-text-" + prefix_id + "-cc-constant-" + i_condicio).innerHTML=GetMessage((quin_radial=="selector")? "InitialValue" : "Value");
+	document.getElementById("div-" + prefix_id + "-cc-capa-" + i_condicio).style.display=(quin_radial!="capa") ? "none" : "inline";
 }
 
 
@@ -2643,16 +2646,17 @@ var estil_o_atrib;
 	cdns.push("</select></div>");
 
 	nc=DonaNCapesVisiblesOperacioArraysBinarisOVectors(i_capa, capa.model==model_vector? true :false, false);
-	cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-qualsevol\" name=\"cc",i_condicio, "\" value=\"qualsevol\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", null);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("anyValue", "cntxmenu"), "</label>",
-			"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-constant\" name=\"cc",i_condicio, "\" value=\"constant\" checked=\"checked\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", false);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("constant", "cntxmenu"), "</label>");
+	cdns.push(	"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-qualsevol\" name=\"cc",i_condicio, "\" value=\"qualsevol\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", \"qualsevol\");' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("anyValue", "cntxmenu"), "</label>",
+			"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-constant\" name=\"cc",i_condicio, "\" value=\"constant\" checked=\"checked\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", \"constant\");' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-constant\">", GetMessage("constant", "cntxmenu"), "</label>",
+			"<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-selector\" name=\"cc",i_condicio, "\" value=\"selector\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", \"selector\");' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-selector\">", GetMessage("selector", "cntxmenu"), "</label>");
 	if (nc.n_capa>1)
-		cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-capa\" name=\"cc",i_condicio, "\" value=\"capa\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", true);' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-capa\">", GetMessage("layer"), "</label>");
+		cdns.push("<input type=\"radio\" id=\"", prefix_id, "-cc-",i_condicio, "-capa\" name=\"cc",i_condicio, "\" value=\"capa\" onClick='ActivaConstantOCapaSeleccioCondicional(\"", prefix_id, "\", ", i_condicio, ", \"capa\");' />", "<label for=\"", prefix_id, "-cc-",i_condicio, "-capa\">", GetMessage("layer"), "</label>");
 
 	cdns.push("<br>");
 
-	//Una caixa que permeti triar un valor com a constant
+	//Una caixa que permeti triar un valor
 	cdns.push("<div id=\"div-", prefix_id, "-cc-constant-",i_condicio,"\" style=\"display:inline;\">",
-		"<label for=\"", prefix_id, "-valor-",i_condicio, "\">", GetMessage("Value"), ":</label>");
+		"<label for=\"", prefix_id, "-valor-",i_condicio, "\" id=\"span-text-", prefix_id, "-cc-constant-",i_condicio,"\">", GetMessage("Value"), ":</label>");
 	if(capa.model==model_vector)
 	{
 		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>1)
@@ -2915,6 +2919,7 @@ function CanviaNomNouEstilSeleccioCondicional(prefix_id, i_capa)
 	document.SeleccioCondicional.nom_estil.value=DonaNomNouEstilSeleccioCondicional(prefix_id, i_capa, null);
 }
 
+var MaxCondicionsSeleccioCondicional=10;  //Podria ser configurable en un futur si cal
 
 function DonaCadenaSeleccioCondicional(prefix_id, i_capa)
 {
@@ -2947,13 +2952,13 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 		cdns.push("<br>");
 	}
 	cdns.push(GetMessage("thatConformFollowingConditions", "cntxmenu"), ":");
-	for (var i_condicio=0; i_condicio<10; i_condicio++)
+	for (var i_condicio=0; i_condicio<MaxCondicionsSeleccioCondicional; i_condicio++)
 	{
 		cdns.push("<span id=\"", prefix_id, "-nexe-", i_condicio, "\" class=\"Verdana11px\" style=\"display: "+((i_condicio==0) ? "inline" : "none")+"\"><fieldset><legend>",
 			GetMessage("Condition"), " ", i_condicio+1, ": </legend>",
 			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false}),
 			"</fieldset>");
-		if (i_condicio<(10-1))
+		if (i_condicio<(MaxCondicionsSeleccioCondicional-1))
 		{
 			/*(Eventualment Un nexe... i altre cop el mateix)*/
 			cdns.push(GetMessage("NexusWithNextCondition", "cntxmenu"), ":",
@@ -3038,33 +3043,38 @@ var sel_condicional={}, condicio, radials;
 		sel_condicional.i_estil=parseInt(document.getElementById(prefix_id+"-estil").value);  //No se perquè en IE no funciona la manera clàssica.
 	sel_condicional.nom_estil=document.SeleccioCondicional.nom_estil.value;
 	sel_condicional.condicio=[];
-	for (var i_condicio=0; i_condicio<10; i_condicio++)
+	for (var i_condicio=0; i_condicio<MaxCondicionsSeleccioCondicional; i_condicio++)
 	{
 		sel_condicional.condicio[i_condicio]={};
 		condicio=sel_condicional.condicio[i_condicio];
 
 		condicio.capa_clau=LlegeixParametresCondicioCapaDataEstil(prefix_id, "", i_condicio);
 
-		radials=eval("document.SeleccioCondicional.cc"+i_condicio);
-		if (radials && (radials[1] && radials[1].checked) || (radials[2] && radials[2].checked))
-			condicio.operador=eval("document.SeleccioCondicional.operador"+i_condicio+".value");
-
-		if (radials && radials[2] && radials[2].checked)
-			condicio.capa_valor=LlegeixParametresCondicioCapaDataEstil(prefix_id, "-valor", i_condicio);
-		else if (radials && radials[1] && radials[1].checked)
+		radials=document.SeleccioCondicional["cc"+i_condicio];
+		if (radials)
 		{
-			var valor=eval("document.SeleccioCondicional.valor"+i_condicio+".value");
-			if (valor && valor!="")  //Si la cadena és buida, no ho recullo"
-				condicio.valor=valor;
-			else
-				delete condicio.operador;
+			if ((radials[1] && radials[1].checked) || (radials[2] && radials[2].checked) || (radials[3] && radials[3].checked))
+				condicio.operador=document.SeleccioCondicional["operador"+i_condicio].value;
+
+			if (radials[3] && radials[3].checked)
+				condicio.capa_valor=LlegeixParametresCondicioCapaDataEstil(prefix_id, "-valor", i_condicio);
+			else if ((radials[1] && radials[1].checked) || (radials[2] && radials[2].checked))
+			{
+				var valor=document.SeleccioCondicional["valor"+i_condicio].value;
+				if (valor && valor!="")  //Si la cadena és buida, no ho recullo"
+					condicio.valor=valor;
+				else
+					delete condicio.operador;
+			}
+			if (radials[2] && radials[2].checked)
+				condicio.selector=true;
 		}
 
-		if (i_condicio<(10-1))
+		if (i_condicio<(MaxCondicionsSeleccioCondicional-1))
 		{
-			if (eval("document.SeleccioCondicional.nexe"+i_condicio+"[1].checked"))
+			if (document.SeleccioCondicional["nexe"+i_condicio][1].checked)
 				condicio.nexe="&&";
-			else if (eval("document.SeleccioCondicional.nexe"+i_condicio+"[2].checked"))
+			else if (document.SeleccioCondicional["nexe"+i_condicio][2].checked)
 				condicio.nexe="||";
 			else
 				break;
@@ -3141,7 +3151,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 
 function CreaBandaSeleccioCondicional(prefix_id, i_capa)
 {
-var sel_condicional, i_estil_nou, estil, calcul, capa;
+var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, selectors=null, selector;
 
 	sel_condicional=LlegeixParametresSeleccioCondicional(prefix_id, i_capa);
 	//Crea un nou estil
@@ -3157,25 +3167,52 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 		calcul="";
 	for (var i_condicio=0; i_condicio<sel_condicional.condicio.length; i_condicio++)
 	{
-		// Quan la capa és un vector  sel_condicional.condicio[i_condicio].capa_clau.i_estil és l'índex del atribut i no de l'estil
-		calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, sel_condicional.condicio[i_condicio].capa_clau.i_capa, sel_condicional.condicio[i_condicio].capa_clau.i_data, sel_condicional.condicio[i_condicio].capa_clau.i_estil);
-		if (typeof sel_condicional.condicio[i_condicio].operador==="undefined")
+		condicio=sel_condicional.condicio[i_condicio];
+		// Quan la capa és un vector sel_condicional.condicio[i_condicio].capa_clau.i_estil és l'índex del atribut i no de l'estil
+		calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_clau.i_capa, condicio.capa_clau.i_data, condicio.capa_clau.i_estil);
+		if (typeof condicio.operador==="undefined")
 			calcul+="!=null";
 		else
 		{
-			calcul+=sel_condicional.condicio[i_condicio].operador;
-			if (typeof sel_condicional.condicio[i_condicio].valor!=="undefined")
+			calcul+=condicio.operador;
+			if (typeof condicio.valor!=="undefined")
 			{
-				if(capa.model==model_vector && isNaN(sel_condicional.condicio[i_condicio].valor) )
-					calcul+=("\""+sel_condicional.condicio[i_condicio].valor+"\"");
+				if (condicio.selector)
+				{
+					if (!selectors)
+						selectors=[];
+					selectors.push({});
+					selector=selectors[selectors.length-1];
+					if(capa.model==model_vector)
+						estil_o_atrib=ParamCtrl.capa[condicio.capa_clau.i_capa].atributs[condicio.capa_clau.i_estil];
+					else
+					{
+						estil_o_atrib=ParamCtrl.capa[condicio.capa_clau.i_capa].estil[condicio.capa_clau.i_estil];
+						selector.desc=DonaCadenaNomDescItemsLleg(estil_o_atrib);
+					}
+					if (estil_o_atrib.categories && estil_o_atrib.categories.length && estil_o_atrib.atributs)
+					{
+						selector.categories=JSON.parse(JSON.stringify(estil_o_atrib.categories));
+						selector.atributs=JSON.parse(JSON.stringify(estil_o_atrib.atributs));
+					}
+					if (estil_o_atrib.estiramentPaleta)
+						selector.estiramentPaleta=JSON.parse(JSON.stringify(estil_o_atrib.estiramentPaleta));
+					selector.valorActual=condicio.valor;
+					calcul+="{\"i_sltr\": " + (selectors.length-1) + "}";
+				}
 				else
-					calcul+=sel_condicional.condicio[i_condicio].valor;
+				{
+					if (capa.model==model_vector && isNaN(condicio.valor) )
+						calcul+=("\""+condicio.valor+"\"");
+					else
+						calcul+=condicio.valor;
+				}
 			}
 			else
-				calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, sel_condicional.condicio[i_condicio].capa_valor.i_capa, sel_condicional.condicio[i_condicio].capa_valor.i_data, sel_condicional.condicio[i_condicio].capa_valor.i_estil);
+				calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_valor.i_capa, condicio.capa_valor.i_data, condicio.capa_valor.i_estil);
 		}
-		if (typeof sel_condicional.condicio[i_condicio].nexe!=="undefined")
-			calcul+=sel_condicional.condicio[i_condicio].nexe;
+		if (typeof condicio.nexe!=="undefined")
+			calcul+=condicio.nexe;
 	}
 	if(capa.model!=model_vector)
 		calcul+=")?";
@@ -3225,6 +3262,8 @@ var sel_condicional, i_estil_nou, estil, calcul, capa;
 				delete estil.component[i_c].i_valor;
 			}
 			estil.component[i_c].calcul+=":null";
+			if (selectors && selectors.length)
+				estil.component[i_c].selector=JSON.parse(JSON.stringify(selectors));
 		}
 	}
 	if (capa.visible=="ara_no")
@@ -3473,9 +3512,9 @@ function DonaDescripcioValorsCapa(params)
 var cdns=[];
 	for (var i_param=0; i_param<params.length; i_param++)
 	{
-		cdns.push((params[i_param].clau.desc ? DonaCadena(params[i_param].clau.desc) : params[i_param].clau.nom),
+		cdns.push(DonaCadenaNomDesc(params[i_param].clau),
 			 " ",
-			(params[i_param].valor.desc ? DonaCadena(params[i_param].valor.desc) : params[i_param].valor.nom));
+			DonaCadenaNomDesc(params[i_param].valor));
 		if (i_param+1<params.length)
 			cdns.push(", ");
 	}
@@ -3545,7 +3584,7 @@ function LlegeixParametresCombinacioRGB()
 var combinacio_rgb={"i_valor": []};
 
 	for (var i_c=0; i_c<3; i_c++)
-		combinacio_rgb.i_valor[i_c]=eval("document.CombinacioRGB.component"+i_c+".value");
+		combinacio_rgb.i_valor[i_c]=document.CombinacioRGB["component"+i_c].value;
 	combinacio_rgb.nom_estil=document.CombinacioRGB.nom_estil.value;
 	return combinacio_rgb;
 }
@@ -3703,7 +3742,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			{
 				if (i==i_estil || !capa.estil[i].paleta)
 					continue;
-				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-estil-", i, "\"><label for=\"edita-estil-capa-paleta-estil-", i, "\">", DonaCadenaHTMLPintaPaleta(capa.estil[i].paleta), " (", (capa.estil[i].desc ? DonaCadena(capa.estil[i].desc) : capa.estil[i].nom), ")</label><br>");
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-estil-", i, "\"><label for=\"edita-estil-capa-paleta-estil-", i, "\">", DonaCadenaHTMLPintaPaleta(capa.estil[i].paleta), " (", DonaCadenaNomDesc(capa.estil[i]), ")</label><br>");
 			}
 		}
 		cdns.push("</fieldset>");

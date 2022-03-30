@@ -139,7 +139,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			cdns.push("\n",
 				GetMessage("ClassDescription", "histopie"));
 			for (i_c=0; i_c<n_comp_usar; i_c++)
-				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
+				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)));
 
 			cdns.push("\n",	GetMessage("ModalClass"));
 			for (i_c=0; i_c<n_comp_usar; i_c++)
@@ -220,7 +220,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			cdns.push("\n",
 				GetMessage("ClassDescription", "histopie"));
 			for (i_c=0; i_c<estil.component.length; i_c++)
-				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
+				cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)));
 			cdns.push("\n",	GetMessage("Sum"));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].suma);
@@ -251,7 +251,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				cdns.push("\n",
 					GetMessage("ClassDescription", "histopie"));
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
+					cdns.push("\t", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)));
 
 				for (i_c=1; i_c<estil.component.length; i_c++)
 				{
@@ -335,7 +335,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 		//primer poso les unitats de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les unitats dels atributs estadístics són la descripció de la segona categoria
 		cdns.push(GetMessage("ClassDescription", "histopie"), "\t");
-				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))));
+				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
 		if (estil.component[1].herenciaOrigen.categories && estil.component[1].herenciaOrigen.atributs) //la segona també es categòrica
 			cdns.push(estil.component[1].herenciaOrigen.atributs[0].descripcio ? estil.component[1].herenciaOrigen.atributs[0].descripcio : estil.component[1].herenciaOrigen.atributs[0].nom);
 		else
@@ -871,7 +871,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	if (es_html)
 	{
 		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol_mostrades+2, "\">",
-			(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom),
+			DonaCadenaNomDesc(capa[0]),
 			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, "²)");
 		if (categories_iguals)
 			cdns.push(" (Kappa: ", kappa, ")");
@@ -880,9 +880,9 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	}
 	else
 	{
-		cdns.push(GetMessage("Layer"), " 1 (", GetMessage("columns"), ")\t", (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc): capa[0].nom),
+		cdns.push(GetMessage("Layer"), " 1 (", GetMessage("columns"), ")\t", DonaCadenaNomDesc(capa[0]),
 			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), "\n",
-			GetMessage("Layer"), " 2 (", GetMessage("rows"), ")\t", (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom),
+			GetMessage("Layer"), " 2 (", GetMessage("rows"), ")\t", DonaCadenaNomDesc(capa[1]),
 			(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), "\n");
 		cdns.push(GetMessage("Columns"), "\t", ncol, "\t", GetMessage("Shown"), "\t", ncol_mostrades, "\n");
 		cdns.push(GetMessage("Rows"), "\t", nfil, "\t", GetMessage("Shown"), "\t", nfil_mostrades, "\n");
@@ -931,7 +931,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			cdns.push("<tr>");
 			if (j==0)
 				cdns.push("<td style=\"vertical-align: bottom; text-align: center;\" rowspan=\"", nfil_mostrades+2, "\"><div class=\"text_vertical\" style=\"width: 15px;\">",
-					(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc): capa[1].nom),
+					DonaCadenaNomDesc(capa[1]),
 					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, "²)</div></td>");
 			//Categories de la capa 2
 			cdns.push("<td style=\"white-space: nowrap; text-align: right;\">");
@@ -1119,42 +1119,42 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			if (tipus_estad == "sum")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].suma, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].suma, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			else if (tipus_estad == "sum_area")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].suma*area_cella, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "&sdot;m²<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].suma*area_cella, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "&sdot;m²<br>");
 			}
 			else if (tipus_estad == "mean")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].mitjana, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].mitjana, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			else if (tipus_estad == "variance")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].varianca, 3), " (", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), ")²<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].varianca, 3), " (", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), ")²<br>");
 			}
 			else if (tipus_estad == "stdev")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].desv_tipica, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].desv_tipica, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			else if (tipus_estad == "min")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMinimReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMinimReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			else if (tipus_estad == "max")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			else if (tipus_estad == "range")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : ((estil.DescItems) ? DonaCadena(estil.DescItems) : DonaCadena(estil.desc))), "<br>");
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
 			//decidim no donar mediana i quartils perquè ja tenim agrupat per classes i pot tenir molt poc sentit si ni han poques (o encara que n'hagi moltes, pel fet que ja tinc les classe de l'histograma)
 	}
@@ -1628,12 +1628,12 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 		};
 
 		retorn_prep_histo.data=data;
-		if (retorn_prep_histo.labels.join("").length<800)  //Protencció contra llegendes massa grans.
+		if (retorn_prep_histo.labels.join("").length<600)  //Protencció contra llegendes massa grans.
 		{
 			for (i=0; i<retorn_prep_histo.labels.length; i++)
 			{
-				if (retorn_prep_histo.labels[i]>80/(retorn_prep_histo.labels.length/20+1))
-					break;  //Protencció contra llegendes massa grans.
+				if (retorn_prep_histo.labels[i].length>40)
+					retorn_prep_histo.labels[i]=retorn_prep_histo.labels[i].substring(0, 40);
 			}
 		}
 		else

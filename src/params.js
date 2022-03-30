@@ -145,7 +145,7 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 {
 	if (document.getElementById("textarea_ConfigJSON").style.display!="none")
 	{
-		if (CarregaiAdoptaConfigJSON(formul.textarea_ConfigJSON.value)) //error
+		if (CarregaiAdoptaParamCtrl(formul.textarea_ConfigJSON.value)) //error
 			return;
 	}
 	else
@@ -227,7 +227,7 @@ function MostraConfigJSON(text_area, param_desgranat, button_show)
 	document.getElementById("text_canvis_aplicats").style.display="none";
 	document.getElementById("param_hr_dprs_show").style.display="none";
 	document.getElementById("param_button_apply").style.display="none";
-	setTimeout("CreaDuplicatNetejaiMostraConfigJSON(\""+text_area+"\")", 200);
+	setTimeout("CreaDuplicatNetejaiMostraParamCtrl(\""+text_area+"\")", 200);
 }
 
 function OmpleFinestraParametres()

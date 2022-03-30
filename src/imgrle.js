@@ -93,124 +93,166 @@ var FormulaConsulta="";
 		cadena=fragment.substring(inici, final+1);
 		//interpreto el fragment metajson
 		nou_valor=JSON.parse(cadena);
-		if (typeof nou_valor.i_capa!=="undefined")
+		if (typeof nou_valor.i_sltr!=="undefined")
 		{
-			if (nou_valor.i_capa>=ParamCtrl.capa.length)
-			{
-				alert("capa " + nou_valor.i_capa + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
-				break;
-			}
-			if (nou_valor.i_capa==i_capa)
-			{
-				delete nou_valor.i_capa;
-				i_capa_link=i_capa;
-			}
-			else
-				i_capa_link=nou_valor.i_capa;
+			//Aquest tipus de objecte és un selector no s'ha de tractar ara
+			FormulaConsulta+=fragment.substring(0, inici)+cadena;
 		}
 		else
-			i_capa_link=i_capa
+		{
+			if (typeof nou_valor.i_capa!=="undefined")
+			{
+				if (nou_valor.i_capa>=ParamCtrl.capa.length)
+				{
+					alert("capa " + nou_valor.i_capa + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+					break;
+				}
+				if (nou_valor.i_capa==i_capa)
+				{
+					delete nou_valor.i_capa;
+					i_capa_link=i_capa;
+				}
+				else
+					i_capa_link=nou_valor.i_capa;
+			}
+			else
+				i_capa_link=i_capa
 
-		if (typeof nou_valor.i_data!=="undefined" && !ParamCtrl.capa[i_capa_link].data)
-		{
-			alert("i_data has been indicated for a 'capa' without 'data' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
-			break;
-		}
-		if (typeof nou_valor.i_data!=="undefined" && nou_valor.i_data>=ParamCtrl.capa[i_capa_link].data.length)
-		{
-			alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
-			break;
-		}
-		/*Eliminar aquesta línia em permet diferenciar entre "la data d'ara" encara que m'ho canviïn o "la seleccionada a la capa" i si la canvien l'adopto també.
-		if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
-			delete nou_valor.i_data;*/
+			if (typeof nou_valor.i_data!=="undefined" && !ParamCtrl.capa[i_capa_link].data)
+			{
+				alert("i_data has been indicated for a 'capa' without 'data' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+				break;
+			}
+			if (typeof nou_valor.i_data!=="undefined" && nou_valor.i_data>=ParamCtrl.capa[i_capa_link].data.length)
+			{
+				alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+				break;
+			}
+			/*Eliminar aquesta línia em permet diferenciar entre "la data d'ara" encara que m'ho canviïn o "la seleccionada a la capa" i si la canvien l'adopto també.
+			if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
+				delete nou_valor.i_data;*/
 
 		
-		if(ParamCtrl.capa[i_capa_link].model==model_vector)
-		{
-			if(ParamCtrl.capa[i_capa].model==model_vector && i_capa!=i_capa_link)
+			if(ParamCtrl.capa[i_capa_link].model==model_vector)
 			{
-				alert("prop does not belong to the layer" + i_capa);
-				break;
+				if(ParamCtrl.capa[i_capa].model==model_vector && i_capa!=i_capa_link)
+				{
+					alert("prop does not belong to the layer" + i_capa);
+					break;
+				}
+				if (typeof nou_valor.prop==="undefined")
+				{
+					alert("prop is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+					break;
+				}
+				FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; //contrueixo el fragment de FormulaConsulta
 			}
-			if (typeof nou_valor.prop==="undefined")
-			{
-				alert("prop is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
-				break;
-			}
-			FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; //contrueixo el fragment de FormulaConsulta
-		}
-		else
-		{
-			if (typeof nou_valor.i_valor==="undefined")
-			{
-				alert("i_valor is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
-				break;
-			}
-			if (!ParamCtrl.capa[i_capa_link].valors)
-			{
-				alert("i_valor has been indicated for a 'capa' without 'valors' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
-				break;
-			}
-			if (nou_valor.i_valor<0 || nou_valor.i_valor>=ParamCtrl.capa[i_capa_link].valors.length)
-			{
-				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
-				break;
-			}
-			if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].calcul)
-			{
-				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that is a 'calcul'. This is not supported yet.");
-				break;
-			}
-			if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].FormulaConsulta)
-			{
-				alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
-				break;
-			}
-			if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si és la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
-				i=nou_valor.i_valor;
 			else
 			{
-				//cerco si ja existeix un valor amb aquestes caracteristiques
-				if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
-					ParamCtrl.capa[i_capa].valors=[];
-				var valors=ParamCtrl.capa[i_capa].valors;
-				for (i=0; i<valors.length; i++)
-				{						
-					if ((
-						(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) && 
-						(
-							(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
-							(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
-						) && 
-						nou_valor.i_valor==i
-						) || 
-						(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa && 
-							nou_valor.i_valor==valors[i].i_valor && 
-							(
-								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
-								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
-							)
-						)
-						)
+				if (typeof nou_valor.i_valor==="undefined")
+				{
+					alert("i_valor is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
 						break;
 				}
-				if (i==valors.length)
+				if (!ParamCtrl.capa[i_capa_link].valors)
 				{
-					//afageixo el valor si no existeix copiant tot el necessari.
-					valors[i]=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor]));
-					if (typeof nou_valor.i_capa!=="undefined")
-						valors[i].i_capa=nou_valor.i_capa;
-					valors[i].i_valor=nou_valor.i_valor;
-					if (typeof nou_valor.i_data!=="undefined")
-						valors[i].i_data=nou_valor.i_data;
+					alert("i_valor has been indicated for a 'capa' without 'valors' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+					break;
 				}
+				if (nou_valor.i_valor<0 || nou_valor.i_valor>=ParamCtrl.capa[i_capa_link].valors.length)
+				{
+					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+					break;
+				}
+				if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].calcul)
+				{
+					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that is a 'calcul'. This is not supported yet.");
+					break;
+				}
+				if (ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor].FormulaConsulta)
+				{
+					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
+					break;
+				}
+				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si és la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
+					i=nou_valor.i_valor;
+				else
+				{
+					//cerco si ja existeix un valor amb aquestes caracteristiques
+					if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
+						ParamCtrl.capa[i_capa].valors=[];
+					var valors=ParamCtrl.capa[i_capa].valors;
+					for (i=0; i<valors.length; i++)
+					{						
+						if ((
+							(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) && 
+							(
+								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
+								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
+							) && 
+							nou_valor.i_valor==i
+							) || 
+							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa && 
+								nou_valor.i_valor==valors[i].i_valor && 
+								(
+									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
+									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
+								)
+							)
+							)
+							break;
+					}
+					if (i==valors.length)
+					{
+						//afageixo el valor si no existeix copiant tot el necessari.
+						valors[i]=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor]));
+						if (typeof nou_valor.i_capa!=="undefined")
+							valors[i].i_capa=nou_valor.i_capa;
+						valors[i].i_valor=nou_valor.i_valor;
+						if (typeof nou_valor.i_data!=="undefined")
+							valors[i].i_data=nou_valor.i_data;
+					}
+				}
+				FormulaConsulta+=fragment.substring(0, inici)+"v["+i+"]"; //contrueixo el fragment de FormulaConsulta
 			}
-			FormulaConsulta+=fragment.substring(0, inici)+"v["+i+"]"; //contrueixo el fragment de FormulaConsulta
-		}		
+		}
 		fragment=fragment.substring(final+1, fragment.length);
 	}
 	return FormulaConsulta+fragment;
+}
+
+function ActualitzaSelectorsFormulaConsulta(component)
+{
+var fragment, cadena, inici, final, nou_valor;
+var FormulaConsulta="";
+
+	fragment=component.FormulaConsulta;
+	while ((inici=fragment.indexOf("{"))!=-1)
+	{
+		//busco una clau de tancar
+		final=fragment.indexOf("}");
+		if  (final==-1)
+		{
+			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+			break;
+		}
+		cadena=fragment.substring(inici, final+1);
+		//interpreto el fragment metajson
+		nou_valor=JSON.parse(cadena);
+		if (typeof nou_valor.i_sltr!=="undefined")
+		{
+			if (nou_valor.i_sltr>=component.selector.length)
+			{
+				alert("Selector " + nou_valor.i_sltr + " in 'FormulaConsulta' is out of range");
+				break;
+			}
+			FormulaConsulta+=fragment.substring(0, inici) + component.selector[nou_valor.i_sltr].valorActual;
+		}
+		else
+			FormulaConsulta+=fragment.substring(0, inici)+cadena;
+		fragment=fragment.substring(final+1, fragment.length);
+	}
+	component.formulaInterna=FormulaConsulta+fragment;
 }
 
 function HiHaValorsNecessarisCapaFormulaconsulta(capa, formula_consulta)
@@ -254,6 +296,7 @@ var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
 
 		if (component[i_c].FormulaConsulta)
 		{
+			ActualitzaSelectorsFormulaConsulta(component[i_c]);
 			for (i=0; i<valors.length; i++)
 			{
 				if (component[i_c].FormulaConsulta.indexOf("v["+i+"]")!=-1)
@@ -444,9 +487,9 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 
 	if (component.length==1)
 	{
-		if (component[0].FormulaConsulta)
+		if (component[0].formulaInterna)
 		{
-			valor=eval(component[0].FormulaConsulta);
+			valor=eval(component[0].formulaInterna);
 			if (isNaN(valor) || valor==null)
 				return null;
 			return [valor];
@@ -457,9 +500,9 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	var v_c=[];
 	for (i_c=0; i_c<component.length; i_c++)
 	{
-		if (component[i_c].FormulaConsulta)
+		if (component[i_c].formulaInterna)
 		{
-			valor=eval(component[i_c].FormulaConsulta);
+			valor=eval(component[i_c].formulaInterna);
 			if (isNaN(valor) || valor==null)
 				v_c[i_c]=null;
 			else
@@ -1042,7 +1085,7 @@ var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
 		}
 		else
 		{
-			valor0=eval(component0.FormulaConsulta);
+			valor0=eval(component0.formulaInterna);
 			if (isNaN(valor0) || valor0==null)
 			{
 				if (histograma)	
@@ -1125,8 +1168,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 						}
 						else
 						{
-							if (component0.FormulaConsulta)
-								valor0=eval(component0.FormulaConsulta);
+							if (component0.formulaInterna)
+								valor0=eval(component0.formulaInterna);
 							else
 								valor0=v[i_v];
 							if (isNaN(valor0) || valor0==null)
@@ -1189,8 +1232,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 					}
 					else
 					{
-						if (component0.FormulaConsulta)
-							valor0=eval(component0.FormulaConsulta);
+						if (component0.formulaInterna)
+							valor0=eval(component0.formulaInterna);
 						else
 							valor0=v[i_v];
 						if (isNaN(valor0) || valor0==null)
@@ -1259,8 +1302,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 				}
 				else
 				{
-					if (component0.FormulaConsulta)
-						valor0=eval(component0.FormulaConsulta);
+					if (component0.formulaInterna)
+						valor0=eval(component0.formulaInterna);
 					else
 						valor0=v[i_v];
 					if (isNaN(valor0) || valor0==null)
@@ -1504,7 +1547,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			alert(DonaCadenaLang({"cat":"Una capa amb una sola component ha de tenir definits els colors de la paleta", 
 						"spa":"Una capa con una sola componente debe tener definidos los colores de la paleta", 
 						"eng":"A layer with a single component must define a pallette of colors",
-						"fre":"Une couche d'un composant unique doit avoir défini les couleurs de la palette"}) + ". (" + (capa.desc ? capa.desc: capa.nom) + ")");
+						"fre":"Une couche d'un composant unique doit avoir défini les couleurs de la palette"}) + ". (" + DonaCadenaNomDesc(capa) + ")");
 			return;
 		}*/
 		component0=component[0];
@@ -1665,7 +1708,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					}
 					else
 					{
-						valor0=eval(component0.FormulaConsulta);
+						valor0=eval(component0.formulaInterna);
 						if (isNaN(valor0) || valor0==null)
 						{
 							if (histograma)	
@@ -1728,8 +1771,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					}
 					else
 					{
-						if (component0.FormulaConsulta)
-							valor0=eval(component0.FormulaConsulta);
+						if (component0.formulaInterna)
+							valor0=eval(component0.formulaInterna);
 						else if (component0.i_valor)
 							valor0=v[component0.i_valor];
 						else
@@ -1743,8 +1786,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						}
 						else
 						{
-							if (component1.FormulaConsulta)
-								valor1=eval(component1.FormulaConsulta);
+							if (component1.formulaInterna)
+								valor1=eval(component1.formulaInterna);
 							else if (component1.i_valor)
 								valor1=v[component1.i_valor];
 							else
@@ -1830,9 +1873,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					{
 						for (i_c=0; i_c<3; i_c++)
 						{
-							if (component[i_c].FormulaConsulta)
+							if (component[i_c].formulaInterna)
 							{
-								valor0=eval(component[i_c].FormulaConsulta);
+								valor0=eval(component[i_c].formulaInterna);
 								if (isNaN(valor0) || valor0==null)
 								{
 									if (histograma)
@@ -1976,8 +2019,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								{
 									if (una_component)
 									{
-										if (component0.FormulaConsulta)
-											valor0=eval(component0.FormulaConsulta);
+										if (component0.formulaInterna)
+											valor0=eval(component0.formulaInterna);
 										else
 											valor0=v[i_v];
 										if (isNaN(valor0) || valor0==null)
@@ -2019,9 +2062,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									{
 										for (i_c=0; i_c<3; i_c++)
 										{
-											if (component[i_c].FormulaConsulta)
+											if (component[i_c].formulaInterna)
 											{
-												valor0=eval(component[i_c].FormulaConsulta);
+												valor0=eval(component[i_c].formulaInterna);
 												if (isNaN(valor0) || valor0==null)
 												{
 													if (histograma)
@@ -2093,8 +2136,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							{
 								if (una_component)
 								{
-									if (component0.FormulaConsulta)
-										valor0=eval(component0.FormulaConsulta);
+									if (component0.formulaInterna)
+										valor0=eval(component0.formulaInterna);
 									else
 										valor0=v[i_v];
 									if (isNaN(valor0) || valor0==null)
@@ -2139,9 +2182,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								{
 									for (i_c=0; i_c<3; i_c++)
 									{
-										if (component[i_c].FormulaConsulta)
+										if (component[i_c].formulaInterna)
 										{
-											valor0=eval(component[i_c].FormulaConsulta);
+											valor0=eval(component[i_c].formulaInterna);
 											if (isNaN(valor0) || valor0==null)
 												break;
 										}
@@ -2218,8 +2261,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						{
 							if (una_component)
 							{
-								if (component0.FormulaConsulta)
-									valor0=eval(component0.FormulaConsulta);
+								if (component0.formulaInterna)
+									valor0=eval(component0.formulaInterna);
 								else
 									valor0=v[i_v];
 								if (isNaN(valor0) || valor0==null)
@@ -2259,9 +2302,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							{
 								for (i_c=0; i_c<3; i_c++)
 								{
-									if (component[i_c].FormulaConsulta)
+									if (component[i_c].formulaInterna)
 									{
-										valor0=eval(component[i_c].FormulaConsulta);
+										valor0=eval(component[i_c].formulaInterna);
 										if (isNaN(valor0) || valor0==null)
 										{
 											if (histograma)
@@ -2608,7 +2651,6 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
 				var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
 				var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
-				var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
 
 				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
 				{
@@ -2632,20 +2674,8 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				}
 				else
 				{
-					var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2);
-					//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
-					if (valors2[i_valor2].param)
-					{
-						var clau_valor;
-						for (var i_param=0; i_param<valors2[i_valor2].param.length; i_param++)
-						{
-							clau_valor=valors2[i_valor2].param[i_param];
-							//Si la clau no comença per "DIM_", llavors ho afageixo jo
-							url_dades+="&"+
-								((clau_valor.clau.nom.toUpperCase()!="TIME" && clau_valor.clau.nom.toUpperCase()!="ELEVATION" && clau_valor.clau.nom.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": "") +
-									clau_valor.clau.nom+"="+clau_valor.valor.nom;
-						}
-					}
+					var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
+					var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors2[i_valor2]);
 					i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
 					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
 				}
@@ -2689,6 +2719,8 @@ var valors, estil;
 			{
 				if (estil.component[i_c].calcul && estil.component[i_c].FormulaConsulta)
 					delete estil.component[i_c].FormulaConsulta;
+				if (estil.component[i_c].formulaInterna)
+					delete estil.component[i_c].formulaInterna;
 			}
 		}
 	}

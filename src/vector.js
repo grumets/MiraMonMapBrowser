@@ -491,7 +491,7 @@ var capa_digi=ParamCtrl.capa[consulta.param.i_capa];
 						"spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa", 
 						"eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer", 
 						"fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"}) + " " +
-				(capa_digi.desc ? DonaCadenaLang(capa_digi.desc) : capa_digi.nom));
+				DonaCadenaNomDesc(capa_digi));
 			TancaFinestraLayer('calculaQualitat');
 		}
 		else
@@ -500,7 +500,7 @@ var capa_digi=ParamCtrl.capa[consulta.param.i_capa];
 						"spa": "No se ha podido calcular la calidad de la capa", 
 						"eng": "The quality cannot be computed for the layer", 
 						"fre": "The quality cannot be computed for the layer"}) + " " +
-				(capa_digi.desc ? DonaCadenaLang(capa_digi.desc) : capa_digi.nom));
+				DonaCadenaNomDesc(capa_digi));
 		}
 	}
 }
@@ -1112,7 +1112,7 @@ function AlertaNomAtributIncorrecteSimbolitzar(nom_camp, text_nom_camp, capa_dig
 						"spa": "para simbolizar la capa", 
 						"eng": "to symbolize the layer", 
 						"fre": "por symboliser la couche"}) + " " +
-				(capa_digi.desc ? capa_digi.desc : capa_digi.nom));
+				DonaCadenaNomDesc(capa_digi));
 }
 
 function DeterminaValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)

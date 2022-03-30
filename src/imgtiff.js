@@ -51,7 +51,7 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 				return valor2.capa_video[i_data2].tiff;
 			return null;
 		}
-		if (DonaIndexDataCapa(capa, i_data2)==valor2.i_data_tiff)
+		if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==valor2.i_data_tiff)
 			return valor2.tiff;
 		return null;
 	}
@@ -61,7 +61,7 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 			return capa.capa_video[i_data2].tiff;
 		return null;
 	}
-	if (DonaIndexDataCapa(capa, i_data2)==capa.i_data_tiff)
+	if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==capa.i_data_tiff)
 		return capa.tiff;
 	return null;
 }
@@ -124,7 +124,8 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			valor2.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
+			if (capa.data && capa.data.length)
+				valor2.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
 			valor2.tiff=tiff;
 		}
 	}
@@ -140,7 +141,8 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			capa.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
+			if (capa.data && capa.data.length)
+				capa.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
 			capa.tiff=tiff;
 		}
 	}

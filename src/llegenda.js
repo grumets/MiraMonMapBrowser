@@ -335,6 +335,13 @@ var cdns=[], nom_gif, capa=capa=ParamCtrl.capa[i_capa];
 	return DonaTextImgGifSvg("e_raster_vector"+i_capa+"_"+i_estil, null, (i_estil==capa.i_estil ? "radio" : "ara_no_radio"), 14, null, "CanviaEstilCapa("+i_capa+", "+i_estil+", "+repinta_si_mateix_estil+");");
 }
 
+function CanviaSelectorEstilCapa(input, i_capa, i_estil, i_comp, i_sltr)
+{
+	ParamCtrl.capa[i_capa].estil[i_estil].component[i_comp].selector[i_sltr].valorActual=parseFloat(input.value);
+	delete ParamCtrl.capa[i_capa].estil[i_estil].component[i_comp].formulaInterna;
+	CanviaEstilCapa(i_capa, i_estil, true);
+}
+
 var LlegendaAmbControlDeCapes=0x01;
 var LlegendaAmbCapesNoVisibles=0x02;
 
@@ -614,7 +621,7 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			if (EsCapaDecarregableIndividualment(capa))
 			{
 				cdns.push("<td valign=\"middle\">",
-					CadenaBotoPolsable("getcov"+i, "getcov", GetMessage("Download").toLowerCase, "MostraFinestraDownload("+i+")", 14),
+					CadenaBotoPolsable("getcov"+i, "getcov", GetMessage("Download").toLowerCase(), "MostraFinestraDownload("+i+")", 14),
 					"</td>");
 			}
 			else
@@ -673,25 +680,15 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 			cdns.push("</td></tr>");
 
 			//Control del temps si cal
-			if (capa.AnimableMultiTime && capa.visible!="no" && capa.visible!="ara_no" &&
+			if (capa.visible!="no" && capa.visible!="ara_no" &&
 				(!ParamCtrl.LlegendaGrisSegonsEscala || EsCapaDinsRangDEscalesVisibles(capa)) &&
 					(!ParamCtrl.LlegendaGrisSiForaAmbit || EsCapaDinsAmbitActual(capa)))
 			{
-				if (flag&LlegendaAmbControlDeCapes)
+				if (capa.AnimableMultiTime)
 				{
 					if(capa.data)
 					{
-						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-						{
-							cdns.push("<tr><td valign=\"middle\" colspan=2><img src=\"",
-									  AfegeixAdrecaBaseSRC("1tran.gif"), 
-									  "\"></td>",
-							   "<td valign=\"middle\" colspan=" ,
-							   (alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS) ,
-								   "><select CLASS=text_petit name=\"data_capa_",i,"\" onChange=\"CanviaDataDeCapaMultitime(",
-							   i,", parseInt(document.form_llegenda.data_capa_",i,".value));\">\n");
-						}
-						else
+						if (flag&LlegendaAmbControlDeCapes)
 						{
 							cdns.push("<tr><td valign=\"middle\" colspan=2><img src=\"",
 									  AfegeixAdrecaBaseSRC("1tran.gif"), 
@@ -703,15 +700,20 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 								cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 							cdns.push("><select CLASS=text_petit name=\"data_capa_",i,"\" onChange=\"CanviaDataDeCapaMultitime(",
 							   i,", parseInt(document.form_llegenda.data_capa_",i,".value));\">\n");
+							var i_data_sel=DonaIndexDataCapa(capa, null);
+							for (var i_data=0; i_data<capa.data.length; i_data++)
+							{
+								cdns.push("<OPTION VALUE=\"",i_data,"\"",
+									((i_data==i_data_sel) ? " SELECTED" : "") ,
+								">", DonaDataCapaPerLlegenda(i,i_data) , "</OPTION>\n");
+							}
+							cdns.push("</select></td></tr>");
 						}
-						var i_data_sel=DonaIndexDataCapa(capa, null);
-						for (var i_data=0; i_data<capa.data.length; i_data++)
+						else
 						{
-							cdns.push("<OPTION VALUE=\"",i_data,"\"",
-								((i_data==i_data_sel) ? " SELECTED" : "") ,
-							">" , (DonaDataCapaPerLlegenda(i,i_data)) , "</OPTION>\n");
+							cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, DonaDataCapaPerLlegenda(i, null),
+								aspecte.PostDescEstil , "</td>");
 						}
-						cdns.push("</select></td></tr>");
 					}
 					else
 					{
@@ -719,10 +721,37 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 							DonaCadenaLang({"cat":"indica que és AnimableMultiTime però no té dates definides", "spa":"indica que es AnimableMultiTime pero no tiene fechas definidas", "eng":"indicates that is AnimableMultiTime but it has no dates defined", "fre":"Indique que c\'est AnimableMultiTime, mais il n\'a pas de dates définies"}));
 					}
 				}
-				else
+				if (capa.dimensioExtra)
 				{
-					cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil,(DonaDataCapaPerLlegenda(i, null)),
-						aspecte.PostDescEstil , "</td>");
+					for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+					{
+						var dim=capa.dimensioExtra[i_dim];
+						if (flag&LlegendaAmbControlDeCapes)
+						{
+							cdns.push("<tr><td valign=\"middle\" colspan=2><img src=\"",
+									  AfegeixAdrecaBaseSRC("1tran.gif"), 
+									  "\"></td>",
+							   	"<td valign=\"middle\" colspan=");
+							if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
+								cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
+							else
+								cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
+							cdns.push(">", dim.clau.desc?DonaCadena(dim.clau.desc):dim.clau.nom, ": <select CLASS=text_petit name=\"dim_capa_",i,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
+								   i,", parseInt(document.form_llegenda.dim_capa_",i,"_",i_dim,".value));\">\n");
+							for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
+							{
+								cdns.push("<OPTION VALUE=\"",i_v_dim,"\"",
+									((i_v_dim==dim.i_valor) ? " SELECTED" : "") ,
+								">", dim.valor[i_v_dim].desc?DonaCadena(dim.valor[i_v_dim].desc):dim.valor[i_v_dim].nom, "</OPTION>\n");
+							}
+							cdns.push("</select></td></tr>");
+						}
+						else
+						{
+							cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, dim.clau.desc?DonaCadena(dim.clau.desc):dim.clau.nom, ": ",  dim.valor[dim.i_valor].desc?DonaCadena(dim.valor[dim.i_valor].desc):dim.valor[dim.i_valor].nom,
+								aspecte.PostDescEstil , "</td>");
+						}
+					}
 				}
 			}
 
@@ -800,8 +829,49 @@ var alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverag
 				//}				
 			}
 
-			//Llegenda si hi ha més d'un item
 			estil=capa.estil[capa.i_estil];
+			if (capa.model!=model_vector && estil.component && estil.component.length && estil.component[0].selector && estil.component[0].selector.length)
+			{
+				for (var i_sltr=0; i_sltr<estil.component[0].selector.length; i_sltr++)
+				{
+					var selector=estil.component[0].selector[i_sltr];
+					cdns.push("<tr><td colspan=");
+					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
+						cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
+					else
+						cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
+					cdns.push(">",aspecte.PreviDescItems);
+
+					if (selector.categories && selector.categories.length && selector.atributs)
+					{
+						if (selector.categories.length>1)
+						{
+							cdns.push(DonaCadena(selector.desc), ": ",
+							          "<select id=\"selector-lleg-", i, "-i_estil-", capa.i_estil, "-sltr-", i_sltr, "\" onChange=\"CanviaSelectorEstilCapa(this, "+i+", "+capa.i_estil+", 0, " +i_sltr+ ");\">");
+							for (var i_cat=0; i_cat<selector.categories.length; i_cat++)
+							{
+								if (selector.categories[i_cat])
+								{
+									cdns.push("<option value=\"",i_cat,"\"",
+										((i_cat==selector.valorActual) ? " selected=\"selected\"" : "") ,
+										">", DonaTextCategoriaDesDeColor(selector.categories, selector.atributs, i_cat, true), "</option>");
+								}
+							}
+							cdns.push("</select>");
+						}
+					}
+					else
+					{
+						cdns.push(DonaCadena(selector.desc), ": ", 
+							"<input type=\"text\" id=\"selector-lleg-", i, "-i_estil-", capa.i_estil, "-sltr-",i_sltr,"\" value=\"", selector.valorActual, "\" onChange='CanviaSelectorEstilCapa(this, "+i+", "+capa.i_estil+", 0, " +i_sltr+ ");'/>");
+						if (selector.estiramentPaleta && typeof selector.estiramentPaleta.valorMaxim!=="undefined" && typeof selector.estiramentPaleta.valorMinim!=="undefined")
+							cdns.push(" [", selector.estiramentPaleta.valorMinim, ",", selector.estiramentPaleta.valorMaxim, "]");
+					}
+					cdns.push(aspecte.PostDescItems, "</td></tr>");
+				}
+			}
+
+			//Llegenda si hi ha més d'un item
 			if (estil.ItemLleg && estil.ItemLleg.length>1 && 
 				(!(flag&LlegendaAmbControlDeCapes) || capa.LlegDesplegada) &&
 				capa.visible!="ara_no")

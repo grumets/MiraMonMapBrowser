@@ -64,7 +64,7 @@ var cdns=[];
 	}
 	else
 	{
-		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {", (title ? "title: \""+title.replaceAll("'", "\'")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {", (title ? "title: \""+title.replaceAll("'", "&apos;")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
 			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
 		if (ParamCtrl.BarraEstil.colorsGrey)
 			cdns.push("onmouseover='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
@@ -221,7 +221,7 @@ var cdns=[];
 			"onmouseout=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';if (this.alt) window.status=\'\'; return true;\"");
 	else
 	{
-		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", text_groc, "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", text_groc.replaceAll("'", "&apos;"), "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
 			"onError='DefaultSVGToPNG(event, this, \"gif\");' ",
 			"onClick='", funcio, "' ");
 		if (ParamCtrl.BarraEstil.colorsGrey)

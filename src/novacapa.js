@@ -53,7 +53,7 @@ var minim, maxim;
 		for(j=0; j<servidorGC.layer[i_capa].estil.length; j++)
 		{
 			estil[estil.length]={nom: servidorGC.layer[i_capa].estil[j].nom,
-						desc: (servidorGC.layer[i_capa].estil[j].desc ? servidorGC.layer[i_capa].estil[j].desc: servidorGC.layer[i_capa].estil[j].nom),
+						desc: DonaCadenaNomDesc(servidorGC.layer[i_capa].estil[j]),
 						DescItems: null,
 						TipusObj: "I",
 						metadades: null,
@@ -91,7 +91,7 @@ var minim, maxim;
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
 				separa: DonaTextSeparadorCapaAfegida(k),
-				DescLlegenda: (servidorGC.layer[i_capa].desc ? servidorGC.layer[i_capa].desc : servidorGC.layer[i_capa].nom),
+				DescLlegenda: DonaCadenaNomDesc(servidorGC.layer[i_capa]),
 				estil: estil,
 				i_estil: 0,
 				NColEstil: (estil && estil.length>0) ? 1: 0,

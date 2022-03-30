@@ -304,7 +304,7 @@ var data_a_usar, cdns=[], capa=ParamCtrl.capa[i_capa];
 		capa.FlagsData.DataMostraMes ||
 		capa.FlagsData.DataMostraDia ||
 		capa.FlagsData.DataMostraHora ||
-        capa.FlagsData.DataMostraMinut ||
+		capa.FlagsData.DataMostraMinut ||
 		capa.FlagsData.DataMostraSegon)
 		data_a_usar=capa.data[DonaIndexDataCapa(capa, i_data)];
 	else
