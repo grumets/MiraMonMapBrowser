@@ -3257,8 +3257,8 @@ function EsCapaDinsAmbitCapa(c, c2)
 	else
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
-		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(c.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
-				DonaEnvolupantLongLat(c2.EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)))
+		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(c.EnvTotal.EnvCRS, c.EnvTotal.CRS),
+				DonaEnvolupantLongLat(c2.EnvTotal.EnvCRS, c2.EnvTotal.CRS)))
 			return false;
 	}
 	return true;
