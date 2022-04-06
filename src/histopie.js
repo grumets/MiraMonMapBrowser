@@ -108,7 +108,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 	else if (tipus_chart == "stat" || tipus_chart == "chart") //en els dos casos el portapapers té tots els estadístics
 	{
 		var i_c, i, i_cat, columna_perc=false;
-		if (estil.categories && estil.atributs) //cas categòric
+		if (DonaTractamentComponent(estil, 0)=="categoric")
 		{
 			var n_comp_usar = estil.component.length==2 ? 1 : estil.component.length;
 			var estadistics_categorics=[];
@@ -328,7 +328,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		}
 	}
 	else if ((tipus_chart == "stat_categ" || tipus_chart == "chart_categ") &&			//cas d'estadistics de categories
-					 (estil.categories && estil.atributs && estil.component.length == 2)) //en els dos casos el portapapers té tots els estadístics
+					 (DonaTractamentComponent(estil, 0)=="categoric" && estil.component.length == 2)) //en els dos casos el portapapers té tots els estadístics
 	{
 		var i_cat;
 		var estadistics_categorics=CalculaEstadisticsCategorics(estil.histograma.component[0].classe);
@@ -336,7 +336,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		//primer poso les unitats de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les unitats dels atributs estadístics són la descripció de la segona categoria
 		cdns.push(GetMessage("ClassDescription", "histopie"), "\t");
 				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
-		if (estil.component[1].herenciaOrigen.categories && estil.component[1].herenciaOrigen.atributs) //la segona també es categòrica
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 			cdns.push(estil.component[1].herenciaOrigen.atributs[0].descripcio ? estil.component[1].herenciaOrigen.atributs[0].descripcio : estil.component[1].herenciaOrigen.atributs[0].nom);
 		else
 		{
@@ -361,7 +361,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 		//i després construeixo una taula amb els tots els estadístics típics en les files i amb les N categories en les columnes. Si hi ha moltes categories la taula
 		// quedarà molt ample, però no és un problema. A més prefereixo fer les categ en columnes pq així les files son com en el cas normal
-		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 		{
 			estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
 			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (m²)", "\t", estadistics_categorics.recompte);
@@ -674,7 +674,7 @@ var tipus_chart;
 	else
 	{
 		tipus_chart="chart";
-		titol=((estil.categories && estil.atributs) ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+		titol=(DonaTipusGraficHistograma(estil,0)=="pie" ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
@@ -1072,7 +1072,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	//cdns.push("<span style=\"font-size: 4vw\">");
 	//·$· depen del text a posar caldrà més curt o llarg, fer alguna cosa com posar-ho a una cadena deduir el numero segons la longitud de la cadena?
 
-	if (estil.categories && estil.atributs) //cas categòric
+	if (DonaTractamentComponent(estil, 0)=="categoric")
 	{
 			var n_comp_usar;
 			var estadistics_categorics=[];
@@ -1337,7 +1337,7 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 				continue;
 			estad_categ.ordre_cat.push({valor: estil.categories[i_cat]["$stat$_"+tipus_estad], i_cat: i_cat});
 		}
-		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 		{
 			estad_categ.ordre_cat[estad_categ.ordre_cat.length-1].count=0;
 			for (var i_segona_cat=0; i_segona_cat<estil.categories[i_cat]["$stat$_histo"].classe.length; i_segona_cat++)
@@ -1369,7 +1369,7 @@ var estil=capa.estil[histograma.i_estil];
 var cdns=[];
 var area_cella, i_cat;
 
-	if (!estil.categories || !estil.atributs || estil.component.length != 2) //cas d'estadistics de categories
+	if (DonaTractamentComponent(estil, 0)!="categoric" || estil.component.length != 2)
 		return cdns.join("");
 
 	area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY},
@@ -1378,7 +1378,7 @@ var area_cella, i_cat;
 
 	//capçalera, lletra una mica més gran
 	cdns.push("<p style=\"font-size: 2em; text-align: center;\">", estad_categ.desc);
- 	if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+ 	if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 	{
 		var estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
 		if (tipus_estad == "mode")
@@ -1421,7 +1421,7 @@ var area_cella, i_cat;
 	{
 		cdns.push("<tr><td>", estad_categ.ordre_cat[i_cat].desc, "</td>");
 		cdns.push("<td style=\"text-align:right;\">",	OKStrOfNe(estad_categ.ordre_cat[i_cat].count/estad_categ.count_total*100, estad_categ.n_dec), " %</td>"); //va % perquè és text per finestra
-		if (estil.component[1].herenciaOrigen.categories) //la segona també es categòrica
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 		{
 			if (tipus_estad == "mode_and_percent")
 				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor2," (", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.unitats ? " "+estad_categ.unitats : "", ")</td>");
@@ -1458,7 +1458,14 @@ function DonaTipusGraficHistograma(estil, i_c)
 {
 	if (estil.component[i_c].representacio && (estil.component[i_c].representacio.tipus=='bar' || estil.component[i_c].representacio.tipus=='pie'))
 		return estil.component[i_c].representacio.tipus;
-	return (estil.categories && estil.atributs) ? 'pie' : 'bar';
+	return DonaTractamentComponent(estil, i_c)=="categoric" ? 'pie' : 'bar';
+}
+
+function DonaTractamentComponent(estil, i_c)
+{
+	if (estil.component[i_c].tractament)
+		return estil.component[i_c].tractament;
+	return (estil.categories && estil.atributs) ? "categoric" : "quantitatiu";
 }
 
 function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, disabled)
@@ -1733,7 +1740,7 @@ var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista
 var i_situacio=ParamInternCtrl.ISituacio;
 var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [], colors_estad: []};
 
-	if (estil.component.length!=2 || !estil.categories || !estil.atributs || !estil.paleta  || !estil.paleta.colors)
+	if (estil.component.length!=2 || !estil.categories || !estil.atributs || !estil.paleta || !estil.paleta.colors)
 		return;
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);

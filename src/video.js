@@ -648,7 +648,7 @@ var cdns=[], capa, estil;
 						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(event, document.video_animacions.veure.value, -1);\">");
 					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
 					cdns.push("<option value=\"x/t\">", DonaCadenaLang({"cat":"Gràfic", "spa":"Gráfico", "eng":"Graph", "fre":"Graphique"}), " x/t</option>");
-					if (estil.categories && estil.atributs)
+					if (DonaTractamentComponent(estil, 0)=="categoric")
 					{
 						cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
 						for (var i=0; i<estil.categories.length; i++)

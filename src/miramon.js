@@ -5531,7 +5531,8 @@ var p, unitats_CRS;
 			barra_slider.push("</table>");
 		    }
 
-		    if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length && !ParamCtrl.hideLayersOverVista)
+		    if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length &&
+			vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
 		    {
 			barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 					"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",

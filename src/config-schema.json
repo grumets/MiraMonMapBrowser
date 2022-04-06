@@ -1586,6 +1586,10 @@
 													}
 												}
 											},
+											"tractament": {
+												"description": "Tractament de la component",
+												"$ref": "#/definitions/tractamentVariable" 
+											},
 											"desc":	{ 
 												"description": "Descripció de la component",
 												"$ref": "#/definitions/StringOCadenaLang" 
@@ -1617,6 +1621,10 @@
 													"atributs": {
 														"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 														"$ref": "#/definitions/descripcioAtributs"			
+													},
+													"tractament": {
+														"description": "Tractament de la variable",
+														"$ref": "#/definitions/tractamentVariable" 
 													}
 												}
 											}
@@ -1698,7 +1706,7 @@
 													"properties": {
 														"ValorCamp": {
 															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant",
-															"type": "string"
+															"type": ["string", "number", "boolean"]
 														},
 														"icona": {
 															"description": "icona",
@@ -2941,6 +2949,10 @@
 					}
 				}
 			}
+		},
+		"tractamentVariable": {
+			"description": "Tractament matemàtic de la variable. Té efectes en els histogrames, els estadístics i les operacions de comparació de les seleccions. Opcional, per defecte es consider 'categoric' si hi ha categories i 'quantitatiu' si no n'hi ha",
+			"enum": ["quantitatiu", "ordinal", "categoric"]
 		},
 		"histograma": {
 			"description": "Un histograma, composat per les seves clases.",

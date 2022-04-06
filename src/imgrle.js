@@ -1614,7 +1614,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					if (!categories[i_categ])
 						continue;
 					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ·$· l'estructura de "pisos" és diferent en aquest histograma que en el "normal". És important? potser si si més endavant volem fer servir altres funcions? 
-					if (!component1.herenciaOrigen.categories)
+					if (component1.herenciaOrigen.tractament!="categoric")
 					{
 						categories[i_categ]["$stat$_sum"]=0;
 						categories[i_categ]["$stat$_min"]=1e300;
@@ -1808,7 +1808,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								categories[valor0]["$stat$_histo"].classe[i_color1]++;
 
 								//calculo el min, max i sum de la component1 per la categoria categories[valor0]
-								if (!component1.herenciaOrigen.categories)
+								if (component1.herenciaOrigen.tractament!="categoric")
 								{
 									if (categories[valor0]["$stat$_min"]>valor1)
 										categories[valor0]["$stat$_min"]=valor1;
@@ -1923,7 +1923,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				if (!categories[i_categ])
 					continue;
 				
-				if (component1.herenciaOrigen.categories)
+				if (component1.herenciaOrigen.tractament=="categoric")
 				{
 					var estad_cat=CalculaEstadisticsCategorics(categories[i_categ]["$stat$_histo"].classe);
 					if (estad_cat.recompte)

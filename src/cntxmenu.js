@@ -302,7 +302,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 			;
 		else if (estil.component)
 		{
-			if (estil.component.length==2 && estil.component[1].herenciaOrigen) //capa especial: "estadistics (per categoria)"
+			if (estil.component.length==2 && estil.component[1].herenciaOrigen.tractament=="categoric")
 				cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioEstadistic(", i_capa, ");TancaContextMenuCapa();\">",
 					GetMessage("StatisticByCategory", "cntxmenu"), "</a><br>");
 			else
@@ -1148,7 +1148,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	for (var i_atrib_capa_0=0; i_atrib_capa_0<capa[0].estil[condicio[0].i_estil].atributs.length; i_atrib_capa_0++)
 		atrib_nous.push(JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].atributs[i_atrib_capa_0])));
 	// b/ afegir els estadístics
-	if (capa[1].estil[condicio[1].i_estil].categories && capa[1].estil[condicio[1].i_estil].atributs) //cas categòric
+	if (DonaTractamentComponent(capa[1].estil[condicio[1].i_estil], 0)=="categoric")
 	{
 		atrib_nous.push({nom: "$stat$_i_mode", descripcio: GetMessage("ModalClass"), mostrar: "no"});
 		atrib_nous.push({nom: "$stat$_mode", descripcio: GetMessage("ModalClass"), mostrar: "si_ple"});
@@ -1229,7 +1229,9 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 						"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
 						"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
 								"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
-								"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null}
+								"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null,
+								"tractament": DonaTractamentComponent(capa[1].estil[condicio[1].i_estil], 0)
+						}
 				}],
 			"categories": categ_noves,
 			"atributs": atrib_nous,
@@ -2509,9 +2511,9 @@ function CanviaOperadorValorSeleccioCondicional(prefix_id, i_capa, i_condicio, i
 
 function ActivaConstantOCapaSeleccioCondicional(prefix_id, i_condicio, quin_radial)
 {
-	document.getElementById("div-" + prefix_id + "-operador-" + i_condicio).style.display=(quin_radial=="qualsevol") ? "none" : "inline";
+	document.getElementById("div-" + prefix_id + "-operador-" + i_condicio).style.display=(quin_radial=="qualsevol") ? "none" : "block";
 	document.getElementById("div-" + prefix_id + "-cc-constant-" + i_condicio).style.display=(quin_radial=="constant" || quin_radial=="selector") ? "inline" : "none";
-	document.getElementById("span-text-" + prefix_id + "-cc-constant-" + i_condicio).innerHTML=GetMessage((quin_radial=="selector")? "InitialValue" : "Value");
+	document.getElementById("span-text-" + prefix_id + "-cc-constant-" + i_condicio).innerHTML=GetMessage((quin_radial=="selector")? "InitialValue" : "Value")+":";
 	document.getElementById("div-" + prefix_id + "-cc-capa-" + i_condicio).style.display=(quin_radial!="capa") ? "none" : "inline";
 }
 
@@ -2636,7 +2638,7 @@ var estil_o_atrib;
 			"<select id=\"", prefix_id, "-operador-",i_condicio,"\" name=\"operador", i_condicio, "\" style=\"width:80px;\">",
 			"<option value=\"==\" selected=\"selected\">=</option>",
 			"<option value=\"!=\">=/=</option>");
-	if (capa.model==model_vector || !estil_o_atrib.categories)
+	if (capa.model==model_vector || DonaTractamentComponent(estil_o_atrib, 0)!="categoric")
 	{
 		cdns.push("<option value=\"<\">&lt;</option>",
 			"<option value=\">\">&gt;</option>",
@@ -3362,7 +3364,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 			DonaCadena(capa.DescLlegenda),
 			"\":<br/><br/>");
 
-	if (estil.categories && estil.atributs) //cas categòric
+	if (DonaTractamentComponent(estil, 0)=="categoric")
 	{
 		cdns.push("<input type=\"radio\" id=\"stat_mode\" name=\"stat\" value=\"mode\"><label for=\"stat_mode\">", GetMessage("ModalClass"), "</label><br>",
 	  					"<input type=\"radio\" id=\"stat_percent_mode\" name=\"stat\" value=\"percent_mode\"><label for=\"stat_percent_mode\">", GetMessage("PercentageMode"), "</label><br>",
@@ -3378,7 +3380,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    value_text+="<table style=\"width:100%;text-align:left;font-size:inherit\"><tr><td rowspan=\"2\">";
 
 	    //només poso per triar els que els atributs de la capa categorica inicial indiquen com a mostrables
-	    if (estil.component[1].herenciaOrigen.categories) //la segona és categòrica també
+	    if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona és categòrica també
 	    {
 	    	for (i_atrib=0, recompte=0; i_atrib<estil.atributs.length; i_atrib++)
 	    	{
@@ -3716,7 +3718,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		if (estil.paletaPrevia)
 			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", GetMessage("Previous"), ")</label><br>");
 		//Paletes generals
-		if (estil.categories)
+		if (DonaTractamentComponent(estil, 0)=="categoric")
 		{
 			for (paleta in PaletesGlobals.categoric)
 			{
@@ -3838,7 +3840,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 			if (!paleta_de_estil_capa)
 			{
 				var paleta;
-				if (estil.categories)
+				if (DonaTractamentComponent(estil, 0)=="categoric")
 				{
 					if (!estil.paletaPrevia && estil.paleta)
 						estil.paletaPrevia=JSON.parse(JSON.stringify(estil.paleta));
