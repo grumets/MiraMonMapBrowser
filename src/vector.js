@@ -767,7 +767,7 @@ var key;
 
 function ExtreuTransformaSTAObservations(obs, data_capa)
 {
-var ob, prop={}, nom_param;
+var ob, prop={}, nom_param, ds;
 
 	for (var i=0; i<obs.length; i++)
 	{
@@ -789,19 +789,21 @@ var ob, prop={}, nom_param;
 		{
 			for (var j=0; j<ob.MultiDatastream.unitOfMeasurements.length; j++)
 				AddPropertyAndTime(prop, ob.MultiDatastream.unitOfMeasurements[j], ob.phenomenonTime, ob.result[j]);
-			prop["thing"]=ob.MultiDatastream.Thing.name;
-			prop["party"]=ob.MultiDatastream.Party.nickName;
-			prop["project"]=ob.MultiDatastream.Project.name;
-			prop["license"]=ob.MultiDatastream.License.description;
+			ds=ob.MultiDatastream;
 		}
 		else // if (ob.Datastream)
 		{
 			AddPropertyAndTime(prop, ob.Datastream.unitOfMeasurement, ob.phenomenonTime, ob.result);
-			prop["thing"]=ob.Datastream.Thing.name;
-			prop["party"]=ob.Datastream.Party.nickName;
-			prop["project"]=ob.Datastream.Project.name;
-			prop["license"]=ob.Datastream.License.description;
+			ds=ob.Datastream;
 		}
+		if (ds.Thing && ds.Thing.name)
+			prop["thing"]=ds.Thing.name;
+		if (ds.Party && ds.Party.name)
+			prop["party"]=ds.Party.name;
+		if (ds.Project && ds.Project.name)
+			prop["project"]=ds.Project.name;
+		if (ds.License && ds.License.description)
+			prop["license"]=ds.License.description;
 	}
 	return prop;
 }
@@ -1557,12 +1559,17 @@ var capa=ParamCtrl.capa[i_capa];
 
 	cdns_datastream.push(",name;$expand=Thing($select=name)");
 	if (capa.tipus=="TipusSTAplus")
-		cdns_datastream.push(",Party($select=nickName),Project($select=name),License($select=description)");
+		cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
 	cdns.push("/v",DonaVersioComAText(capa.versio),"/FeaturesOfInterest");
 	if (i_obj==null)
 	        cdns.push("?$top=10000000&");
 	else
-		cdns.push("('", capa.objectes.features[i_obj].id, "')?");
+	{
+		if (capa.objectes.features[i_obj].id==+capa.objectes.features[i_obj].id)  //test if this is a number
+			cdns.push("(", capa.objectes.features[i_obj].id, ")?");
+		else
+			cdns.push("('", capa.objectes.features[i_obj].id, "')?");
+	}
 	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime,parameters;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), "),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), "))");
 	if (env!=null)
 	{
@@ -1704,7 +1711,7 @@ var ha_calgut=false, vaig_a_carregar=false;
 			for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 			{
 				if (ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS.toUpperCase()==tiles.env.CRS.toUpperCase())
-					env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX;
+					env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS;
 				else
 					env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS.toUpperCase())
 				if (tiles.env.EnvCRS.MinX>env_temp.MinX)

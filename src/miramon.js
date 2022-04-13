@@ -4838,11 +4838,12 @@ var env=vista.EnvActual;
 						un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
 					}
 
-					if (!forma_vora || !forma_interior)
+					if (!forma_vora && !forma_interior)
 						continue;
 
 													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
-													PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+													if (forma_vora)
+														PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 													if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 														ctx.lineWidth = 1;
 													else
