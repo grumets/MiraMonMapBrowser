@@ -1023,7 +1023,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 			CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i),i);
 		if (capa.model==model_vector)
 		{
-			if (EsCapaVisibleAAquestNivellDeZoom(capa) && capa.objectes && capa.objectes.features)
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) && ((capa.objectes && capa.objectes.features) || capa.servidor))
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{

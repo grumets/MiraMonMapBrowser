@@ -957,11 +957,9 @@ function OpenOWSContext(url_context)
 +"</feed>",
 		elem;
 	
-	try
-	{
+	if (window.DOMParser)
 		xmlobject=(new DOMParser()).parseFromString(str,"text/xml");
-	}
-	catch(e)
+	else
 	{
 		//IE8 and previous
 		xmlobject=new ActiveXObject("Microsoft.XMLDOM");

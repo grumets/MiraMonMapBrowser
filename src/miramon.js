@@ -4241,11 +4241,37 @@ function EsCapaBinaria(capa)
 
 function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
-	if (EsCapaBinaria(ParamCtrl.capa[i_capa]))
+var capa=ParamCtrl.capa[i_capa];
+
+	if (EsCapaBinaria(capa))
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
 	{
 		var url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		var url_dades_real=url_dades;
+		if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+		{
+			var authResponse=hello(capa.access.tokenType).getAuthResponse();
+			if (IsAuthResponseOnline(authResponse))
+			{
+				if (authResponse.error)
+				{
+					alert(authResponse.error.message)
+					return;
+				}
+				if (authResponse.error_description)
+				{
+					alert(authResponse.error_description)
+					return;
+				}
+				url_dades_real+= "&" + "access_token=" + authResponse.access_token;
+			}
+			else
+			{
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param, null);
+				return;
+			}
+		}
 		if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusOAPI_Maps")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
 		else
@@ -4256,7 +4282,8 @@ function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok,
 			imatge.funcio_ok_param=funcio_ok_param;
 		imatge.onerror=onErrorCanviaImatge;
 		imatge.onload=onLoadCanviaImatge;
-		imatge.src=url_dades;
+
+		imatge.src=url_dades_real;
 	}
 }
 
@@ -6373,10 +6400,21 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 								avis_mostrar_atributs=true;
 							}
 							capa.atributs[j].mostrar = "si";
-						}						
+						}
 					}
 				}
 			}
+		}
+
+		if ((capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img") && (!capa.valors || capa.valors.length==0))
+		{
+			alert(DonaCadenaLang({"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de definir un array de 'valors'. La capa no es podria carregar i es declara no visible ni consultable.",
+						"spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'. La capa no es podría carregar por lo que declara no visible ni consultable.",
+						"eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'. The layer will not load so it is declared as neither visible nor queriable.",
+						"fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'. La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable."})
+						+ " capa = " + DonaCadenaNomDesc(capa));
+			capa.visible="no";
+			capa.consultable="no";
 		}
 			
 		if (capa.estil && capa.estil.length)

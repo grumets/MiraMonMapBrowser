@@ -463,6 +463,8 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 	for (i=0; i<RespostaConsultaObjDigiXML.length; i++)
 		NCapesDigiConsultables++;
 
+	var ajax_consulta_capa_digi=[];
+
 	for (i=0; i<RespostaConsultaObjDigiXML.length; i++)
 	{
 		//ajax_consulta_capa_digi[i]=new Ajax();
@@ -515,8 +517,18 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 		}
 		//ajax_consulta_capa_digi[i].doGet();
 		//loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+			
 		if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
-			loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+		{
+			if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("consultaLink")!=-1)
+			{
+				ajax_consulta_capa_digi[i]=new Ajax();
+				ajax_consulta_capa_digi[i].setHandlerErr(ErrorCapaDigiAmbPropietatsObjecteDigitalitzat);
+				doAutenticatedHTTPRequest(capa.access, "GET", ajax_consulta_capa_digi[i], url, 'application/json', null, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, 'application/json', RespostaConsultaObjDigiXML[i]);
+			}
+			else
+				loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+		}
 		else
 			loadFile(url, capa.FormatConsulta, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 	}
@@ -670,6 +682,12 @@ var cdns=[], ncol=440, nfil=220;
 
 	if(typeof valor !== "undefined" && valor!=null)
 	{
+		if((atribut.FormatVideo || atribut.esImatge || atribut.esLink) &&
+			window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("consultaLink")!=-1)
+		{
+			valor+=(valor.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + hello.getAuthResponse(capa.access.tokenType).access_token;
+		}
+	
 		if(atribut.FormatVideo)
 		{
 			if (valor)

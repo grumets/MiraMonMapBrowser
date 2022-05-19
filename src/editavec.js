@@ -197,7 +197,7 @@ var capa=ParamCtrl.capa[form.i_capa.value], objecte, num, plantilla=[], url, i_e
 	Transaccio[i_transaccio]={i_capa: form.i_capa.value, i_event : i_event, tipus: tipus_insert};
 	ajaxTransaccio[i_transaccio]=new Ajax();
 	ajaxTransaccio[i_transaccio].setHandlerErr(ErrorAvaluaRespostaTransaccio);
-	if (window.doAutenticatedHTTPRequest && capa.access)
+	if (window.doAutenticatedHTTPRequest && capa.access && (!capa.access.request || capa.access.request.indexOf("transaction")!=-1))
 		doAutenticatedHTTPRequest(capa.access, "POST", ajaxTransaccio[i_transaccio], url, 'application/json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
 	else
 		ajaxTransaccio[i_transaccio].doPost(url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
@@ -230,7 +230,7 @@ var i_capa=parseInt(form.i_capa.value), capa=ParamCtrl.capa[i_capa], objecte, nu
 	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_insert, feature: objecte};
 	ajaxTransaccio[i_transaccio]=new Ajax();
 	ajaxTransaccio[i_transaccio].setHandlerErr(ErrorAvaluaRespostaTransaccio);
-	if (window.doAutenticatedHTTPRequest && capa.access)
+	if (window.doAutenticatedHTTPRequest && capa.access && (!capa.access.request || capa.access.request.indexOf("transaction")!=-1))
 		doAutenticatedHTTPRequest(capa.access, "POST", ajaxTransaccio[i_transaccio], url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
 	else
 		ajaxTransaccio[i_transaccio].doPost(url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
@@ -367,7 +367,7 @@ var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plan
 	Transaccio[i_transaccio]={i_capa: i_capa, i_event : i_event, tipus: tipus_delete, feature: objecte};
 	ajaxTransaccio[i_transaccio]=new Ajax();
 	ajaxTransaccio[i_transaccio].setHandlerErr(ErrorAvaluaRespostaTransaccioDelete);
-	//if (window.doAutenticatedHTTPRequest && capa.access)
+	//if (window.doAutenticatedHTTPRequest && capa.access && (!capa.access.request || capa.access.request.indexOf("transaction")!=-1))
 	//	doAutenticatedHTTPRequest(capa.access, "POST", url, 'application/geo+json', JSON.stringify(objecte), AvaluaRespostaTransaccio, 'application/json', {i_transaccio: i_transaccio});
 	//else
 	ajaxTransaccio[i_transaccio].doDelete(url, AvaluaRespostaTransaccioDelete, 'application/json',  {i_transaccio: i_transaccio});

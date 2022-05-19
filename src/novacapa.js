@@ -40,20 +40,18 @@
 
 const OriginUsuari="usuari";
 
-function AfegeixCapaWMSAlNavegador(format_get_map, servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap)
+function AfegeixCapaWMSAlNavegador(format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, i_getmap)
 {
-var j, k;
-var alguna_capa_afegida=false;
-var estil;
-var minim, maxim;
+var j, k, estil, minim, maxim;
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 
-	if(servidorGC.layer[i_capa].estil && servidorGC.layer[i_capa].estil.length>0)
+	if(layer.estil && layer.estil.length>0)
 	{
 		estil=[];
-		for(j=0; j<servidorGC.layer[i_capa].estil.length; j++)
+		for(j=0; j<layer.estil.length; j++)
 		{
-			estil[estil.length]={nom: servidorGC.layer[i_capa].estil[j].nom,
-						desc: DonaCadenaNomDesc(servidorGC.layer[i_capa].estil[j]),
+			estil[estil.length]={nom: layer.estil[j].nom,
+						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: null,
 						TipusObj: "I",
 						metadades: null,
@@ -63,12 +61,12 @@ var minim, maxim;
 	}
 	else
 		estil=null;
-	if(servidorGC.layer[i_capa].CostatMinim && servidorGC.layer[i_capa].CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
-		minim=servidorGC.layer[i_capa].CostatMinim;
+	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
+		minim=layer.CostatMinim;
 	else
 		minim=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
-	if(servidorGC.layer[i_capa].CostatMaxim && servidorGC.layer[i_capa].CostatMaxim<=ParamCtrl.zoom[0].costat)
-		maxim=servidorGC.layer[i_capa].CostatMaxim;
+	if(layer.CostatMaxim && layer.CostatMaxim<=ParamCtrl.zoom[0].costat)
+		maxim=layer.CostatMaxim;
 	else
 		maxim=ParamCtrl.zoom[0].costat;
 
@@ -82,8 +80,8 @@ var minim, maxim;
 	ParamCtrl.capa.splice(k, 0, {servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
 				tipus: servidorGC.tipus,
-				nom: servidorGC.layer[i_capa].nom,
-				desc: servidorGC.layer[i_capa].desc,
+				nom: layer.nom,
+				desc: layer.desc,
 				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
 				FormatImatge: format_get_map,
 				transparencia: (format_get_map=="image/jpeg") ? "opac" : "transparent",
@@ -91,20 +89,21 @@ var minim, maxim;
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
 				separa: DonaTextSeparadorCapaAfegida(k),
-				DescLlegenda: DonaCadenaNomDesc(servidorGC.layer[i_capa]),
+				DescLlegenda: DonaCadenaNomDesc(layer),
 				estil: estil,
 				i_estil: 0,
 				NColEstil: (estil && estil.length>0) ? 1: 0,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
 				visible: "si",
-				consultable: (i_get_featureinfo!=-1 && servidorGC.layer[i_capa].consultable)? "si" : "no",
+				consultable: (i_get_featureinfo!=-1 && layer.consultable)? "si" : "no",
 				descarregable: "no",
-				FlagsData: servidorGC.layer[i_capa].FlagsData,
-				data: servidorGC.layer[i_capa].data,
-				i_data: servidorGC.layer[i_capa].i_data,
-				animable: (servidorGC.layer[i_capa].data)? true: false,
-				AnimableMultiTime: (servidorGC.layer[i_capa].data)? true:false,
+				FlagsData: layer.FlagsData,
+				data: layer.data,
+				i_data: layer.i_data,
+				animable: (layer.data)? true: false,
+				AnimableMultiTime: (layer.data)? true:false,
+				access: (servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null,
 				origen: OriginUsuari});
 
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);

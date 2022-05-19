@@ -1787,7 +1787,7 @@ function Ajax()
 		req = this.req;		
 		req.open(this.method, this.url, this.async);
 
-		if (this.accessTokenType && this.accessTokenType.length)
+		if (this.accessTokenType && this.accessTokenType.length && this.url.indexOf("nimmbus.cat")!=-1)
    			this.setRequestHeader("nb-access-token-type", this.accessTokenType);
   		if (this.accessToken && this.accessToken.length)
 			this.setRequestHeader("Authorization", "Bearer " + this.accessToken);
@@ -1837,7 +1837,20 @@ function Ajax()
 						resp = self.responseText;
 						break;
 					case 'text/xml':
-						resp = self.responseXML;
+						if (self.responseXML)
+							resp = self.responseXML;
+						else
+						{
+							//Si el navegador rep application/vnd.ogc.wms_xml es pensa que no és XML i cal tractar-ho com a text
+							if (window.DOMParser)
+								resp=(new DOMParser()).parseFromString(self.responseText, "text/xml");
+							else
+							{
+								//IE8 and previous
+								resp=new ActiveXObject("Microsoft.XMLDOM");
+								resp.loadXML(self.responseText);
+							}
+						}
 						break;					
 					case 'application/json':
 						if (self.responseText=="")
@@ -2150,9 +2163,9 @@ function ResolveJSONPointerRefs(obj_root, obj)
 		obj=obj_root;
 	if (typeof obj === "object" && null !== obj)
 	{
+		var found=false;
 		for (var k in obj)
 		{
-			var found=false;
 			if (obj.hasOwnProperty(k) && k=="$ref")
 			{
 				found=true;
@@ -2165,15 +2178,23 @@ function ResolveJSONPointerRefs(obj_root, obj)
 			{
 				AddJSONPointerRefToObject(obj_root, obj, obj["$ref"]);
 			}
+			else if (obj["$ref"]==null)
+			{
+				//Protegeixo un cas extrany en que es posa "$ref": null
+				alert("A '$ref' null object found. Please remove");				
+			}
 			else  //assumeixo que és un Array
 			{
 				for (var i=0; i<obj["$ref"].length; i++)
 					AddJSONPointerRefToObject(obj_root, obj, obj["$ref"][i]);
 			}
-			for (var k in obj)
+			if (obj["$ref"])
 			{
-				if (obj.hasOwnProperty(k) && k!="$ref")
-					ResolveJSONPointerRefs(obj_root, obj[k]);
+				for (var k in obj)
+				{
+					if (obj.hasOwnProperty(k) && k!="$ref")
+						ResolveJSONPointerRefs(obj_root, obj[k]);
+				}
 			}
 		}
 		else

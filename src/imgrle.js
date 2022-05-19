@@ -1051,7 +1051,7 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 		}
 		else
 		{
-			alert(dtype + " " + DonaCadenaLang({"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"}));
+			alert(dtype + " " + GetMessage("neitherRecognizedNorImplemented"));
 			return;
 		}
 	}
@@ -1369,7 +1369,7 @@ var histo_component0, classe0;
 		for (i_color0=0; i_color0<ncolors; i_color0++)
 		{
 			if (colors[i_color0].charAt(0)!="#")
-				alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + colors[i_color0] + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
+				alert(GetMessage("UnsupportedColor","imgrle") + ": " + colors[i_color0] + ". " + GetMessage("UseTheFormat") + ": #RRGGBB");
 		}
 	}*/
 	a0=DonaFactorAEstiramentPaleta(estiramentPaleta, ncolors);
@@ -1544,10 +1544,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	{
 		/*if (!estil.paleta || !estil.paleta.colors)
 		{
-			alert(DonaCadenaLang({"cat":"Una capa amb una sola component ha de tenir definits els colors de la paleta", 
-						"spa":"Una capa con una sola componente debe tener definidos los colores de la paleta", 
-						"eng":"A layer with a single component must define a pallette of colors",
-						"fre":"Une couche d'un composant unique doit avoir défini les couleurs de la palette"}) + ". (" + DonaCadenaNomDesc(capa) + ")");
+			alert(GetMessage("LayerSingleComponentNeedPallette", "imgrle") + ". (" + DonaCadenaNomDesc(capa) + ")");
 			return;
 		}*/
 		component0=component[0];
@@ -1567,7 +1564,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 					colors[i_color0]=RGB_JSON(colors[i_color0]);
 				if (typeof colors[i_color0]!=="string" ||colors[i_color0].charAt(0)!="#")
 				{
-					alert(DonaCadenaLang({"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"}) + ": " + colors[i_color0] + ". " + DonaCadenaLang({"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"}) + ": #RRGGBB");
+					alert(GetMessage("UnsupportedColor", "imgrle") + ": " + colors[i_color0] + ". " + GetMessage("UseTheFormat") + ": #RRGGBB");
 					return;
 				}
 			}
@@ -1627,10 +1624,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			}
 			else
 			{
-				alert(DonaCadenaLang({"cat":"Una capa no pot tenir 2 components. Ha de tenir definides 1 o 3 components.", 
-						"spa":"Una capa no puede tener 2 componentes. Debe tener definidas 1 o 3 componentes", 
-						"eng":"A layer can not have 2 component. It must have defined 1 or 3 components",
-						"fre":"Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants"}));
+				alert(GetMessage("LayerMustHave1or3Components", "imgrle"));
 				return;
 			}
 		}
@@ -2540,10 +2534,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 
 		/*if (!estil.component)
 		{
-			alert(DonaCadenaLang({"cat":"La capa ha estat demanada com img però no hi ha components definides al estil actual. No es podrà ni consultar\nCapa: \"",
-						"spa":"La capa ha sido solicitada como img pero no tiene componentes definidas en el estilo actual.\nCapa \"",
-						"eng":"The layer is requested as img but there are no defined components for the current style.\nLayer \"", 
-						"fre":"La couche est requise comme img mais il n'y a pas de composants définis pour le style actuel.\nCouche \""}) + DonaCadena(ParamCtrl.capa[i_capa].desc));
+			alert(GetMessage("LayerIMGNoDefinesComponents", "imgrle") + "\n" + GetMessage("Layer") + " \"" + DonaCadena(ParamCtrl.capa[i_capa].desc));
 			return;
 		}*/
 		//arrayBuffer és "undefined" si la banda no està implicada al dibuixat i null si encara no s'ha carregar però s'espera que ho faci.

@@ -509,7 +509,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[format.selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+				AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -523,7 +523,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[format.selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+			AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 		}
 	}
 	if(alguna_capa_afegida)
@@ -1550,20 +1550,7 @@ var i;
 var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
-function CreaCapaServidor()
-{
-	this.nom = null;
-	this.desc = null;
-	this.CostatMinim = null;
-	this.CostatMaxim = null;
-	this.consultable = false;
-	this.estil = [];
-	this.FlagsData=null;
-	this.i_data=0;
-	this.data=null;
-}
-
-function LlegeixLayer(servidorGC, node, sistema_ref_comu, pare)
+function LlegeixLayerServidorGC(servidorGC, node, sistema_ref_comu, pare)
 {
 var i, j, node2, trobat=false, cadena, cadena2;
 var minim, maxim, factor_k, factorpixel;
@@ -1614,7 +1601,16 @@ var minim, maxim, factor_k, factorpixel;
 			if(node2.nodeName=="Name")
 			{
 				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]=new CreaCapaServidor();
+				servidorGC.layer[servidorGC.layer.length]={nom: null, 
+									desc: null,
+									CostatMinim: null,
+									CostatMaxim: null,
+									consultable: false,
+									estil: [],
+									FlagsData: null,
+									i_data: 0,
+									data: null};
+
 				servidorGC.layer[servidorGC.layer.length-1].nom=node2.childNodes[0].nodeValue;
 				//hereto les coses del pare
 				if(pare)
@@ -1646,7 +1642,7 @@ var minim, maxim, factor_k, factorpixel;
 				}
 				else if(node2.nodeName=="Style")
 				{
-					node3=node2.getElementsByTagName('Name');
+					var node3=node2.getElementsByTagName('Name');
 					if(node3 && node3.length>0)
 					{
 						cadena=node3[0].childNodes[0].nodeValue;
@@ -1732,9 +1728,9 @@ var minim, maxim, factor_k, factorpixel;
 	{
 		var pare2=servidorGC.layer[servidorGC.layer.length-1];
 		for(i=0; i<node2.length; i++)
-			LlegeixLayer(servidorGC, node2[i], trobat, pare2);
+			LlegeixLayerServidorGC(servidorGC, node2[i], trobat, pare2);
 	}
-}//Fi de LlegeixLayer()
+}//Fi de LlegeixLayerServidorGC()
 
 function HiHaAlgunErrorDeParsejat(doc)
 {
@@ -1869,7 +1865,7 @@ var root, cadena, node, node2, i, j, cdns=[];
 		if(node2.nodeName=="Layer")  //És una layer que a dins pot tenir altres layers
 		{
 			//Si té name vol dir que és una capa de veritat, sinó és que és una capa d'agrupació
-			LlegeixLayer(servidorGC, node2, false, null);
+			LlegeixLayerServidorGC(servidorGC, node2, false, null);
 		}
 	}
 	if(servidorGC.layer.length>0)
@@ -1916,15 +1912,13 @@ var root, cadena, node, node2, i, j, cdns=[];
 function FesPeticioCapacitatsIParsejaResposta(form, i_capa)
 {
 var servidor=form.servidor.value;
-var request;
+var request, tipus="TipusWMS";
 
 	if(servidor)
 		servidor=servidor.trim();
 
-	if(!servidor || servidor=="")
+	if(!servidor || servidor=="")  //Es podria mirar més a fons que l'adreça sigui vàlida
 	{
-
-		//·$· Crec que caldria mirar més a fons que l'adreça sigui vàlida
 		alert(GetMessage("ValidURLMustBeProvided", "cntxmenu"));
 		return;
 	}
@@ -1934,14 +1928,28 @@ var request;
 								"i_capa_on_afegir": i_capa,
 								"servidor": servidor,
 								"versio": null,
-								"tipus": "TipusWMS",
+								"tipus": tipus,
 								"titol": null,
 								"formatGetMap": [],
 								"formatGetFeatureInfo": [],
 								"layer": []};
+	if (ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
+		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 
-	request=AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS", true, true  /*Cal posar-ho a la caixa en lloc de definir-ho constant ·$·*/);
-	ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
+	request="REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE="
+	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
+		request+="WMS";
+	else if (tipus=="TipusWMTS_KVP")
+		request+="WMTS";
+	else if (tipus=="TipusWFS")
+		request+="WFS";
+	else if (tipus=="TipusSOS")
+		request+="SOS";
+	request=AfegeixNomServidorARequest(servidor, request, true, true  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/);
+	if (window.doAutenticatedHTTPRequest && ServidorGetCapabilities[ServidorGetCapabilities.length-1].access)
+		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", ajaxGetCapabilities[ajaxGetCapabilities.length-1], request, null, null, ParsejaRespostaGetCapabilities, "text/xml", ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
+	else
+		ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
 				ParsejaRespostaGetCapabilities, "text/xml",
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
 }//Fi de FesPeticioCapacitatsIParsejaResposta
@@ -2381,6 +2389,7 @@ var cdns=[], i;
 			GetMessage("SpecifyServerURL", "cntxmenu"),
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" value=\"",
 			(url ? url: "http://"), "\" />",
+			//"<input type=\"radio\" id=\"RadioVersionAndType_WMS11\" name=\"version_and_type\" value=\"WMS11\" checked=\"checked\"><label for=\"RadioVersionAndType_WMS11\">WMS v1.1</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
 		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor,",i_capa,");\" />");

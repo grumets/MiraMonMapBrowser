@@ -738,25 +738,31 @@ var root, capa, features, valor, tipus, i_obj;
 	return 0;
 }// Fi de OmpleCapaDigiAmbPropietatsObjectes()
 
-function AddPropertyAndTime(prop, uom, time, value)
+function AddPropertyAndTime(prop, time, obsProp, uom, value)
 {
 var key;
-	if ((!uom.name || uom.name=="n/a") && uom.definition)
-	{
-		if (uom.definition.lastIndexOf("/")>0)
-			key=uom.definition.substring(uom.definition.lastIndexOf("/")+1);
-		else
-			key=uom.definition;
-	}
-	else if (!uom.name)
-		key="name";
+
+	if (obsProp && obsProp.name)
+		key=obsProp.name
 	else
 	{
-		key=uom.name;
-		for (var i=0; i<key.length; i++)
+		if ((!uom.name || uom.name=="n/a") && uom.definition)
 		{
-			if (!isalnum(key.charAt(i)))
-				key=key.substring(0, i) + "_" + key.substring(i+1);
+			if (uom.definition.lastIndexOf("/")>0)
+				key=uom.definition.substring(uom.definition.lastIndexOf("/")+1);
+			else
+				key=uom.definition;
+		}
+		else if (!uom.name)
+			key="name";
+		else
+		{
+			key=uom.name;
+			for (var i=0; i<key.length; i++)
+			{
+				if (!isalnum(key.charAt(i)))
+					key=key.substring(0, i) + "_" + key.substring(i+1);
+			}
 		}
 	}
 	/*if (time)  //Mirar bé com s'ha de fer.
@@ -788,12 +794,12 @@ var ob, prop={}, nom_param, ds;
 		if (ob.MultiDatastream)
 		{
 			for (var j=0; j<ob.MultiDatastream.unitOfMeasurements.length; j++)
-				AddPropertyAndTime(prop, ob.MultiDatastream.unitOfMeasurements[j], ob.phenomenonTime, ob.result[j]);
+				AddPropertyAndTime(prop, ob.phenomenonTime, ob.MultiDatastream.ObservedProperties[j], ob.MultiDatastream.unitOfMeasurements[j], ob.result[j]);
 			ds=ob.MultiDatastream;
 		}
 		else // if (ob.Datastream)
 		{
-			AddPropertyAndTime(prop, ob.Datastream.unitOfMeasurement, ob.phenomenonTime, ob.result);
+			AddPropertyAndTime(prop, ob.phenomenonTime, ob.Datastream.ObservedProperty, ob.Datastream.unitOfMeasurement, ob.result);
 			ds=ob.Datastream;
 		}
 		if (ds.Thing && ds.Thing.name)
@@ -1570,7 +1576,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push("('", capa.objectes.features[i_obj].id, "')?");
 	}
-	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime,parameters;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), "),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), "))");
+	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime,parameters;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), ",ObservedProperty($select=name)),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), ",ObservedProperties($select=name)))");
 	if (env!=null)
 	{
 		var env2=null;

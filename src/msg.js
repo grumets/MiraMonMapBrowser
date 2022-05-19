@@ -41,6 +41,8 @@
 var MessageLang={
 	TheLanguageName: {"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"},
 	MissingMessage: {"cat":"Missatge no trobat", "spa":"Mensage no encontrado", "eng":"Missing message", "fre":"Message non trouvé"},
+	neitherRecognizedNorImplemented: {"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"},
+	UseTheFormat: {"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"},
 	ModifyName: {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"},
 	AddLayer: {"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"},
 	Georeference: {"cat":"Georeferència","spa":"Georeferencia", "eng":"Georeference", "fre":"Géoréférence"},
@@ -157,6 +159,7 @@ var MessageLang={
 	and: {"cat": "i", "spa": "y", "eng": "and", "fre": "et"},
 	or: {"cat":"o", "spa":"o", "eng":"or", "fre":"ou"},
 	Working: {"cat":"Processant", "spa":"Procesando", "eng":"Working", "fre":"En traitement"},
+	LoginFailedOrCancelled: {"cat": "Error o cancel·lació de la identificació amb el compte de", "spa": "Error o cancelación de la identificación en la cuenta de", "eng": "Login in your account failed or cancelled in", "fre": "La connexion à votre compte a échoué ou a été annulée dans"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -461,6 +464,12 @@ var MessageLang={
 		semitransparent: {"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"},
 		foldLegend: {"cat":"plega llegenda", "spa":"recoge leyenda", "eng":"fold legend up","fre":"plie légende"},
 		unfoldLegend: {"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"}
+	},
+	imgrle: {
+		UnsupportedColor: {"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"},
+		LayerSingleComponentNeedPallette: {"cat":"Una capa amb una sola component ha de tenir definits els colors de la paleta", "spa":"Una capa con una sola componente debe tener definidos los colores de la paleta", "eng":"A layer with a single component must define a pallette of colors", "fre":"Une couche d'un composant unique doit avoir défini les couleurs de la palette"},
+		LayerMustHave1or3Components: {"cat":"Una capa no pot tenir 2 components. Ha de tenir definides 1 o 3 components.", "spa":"Una capa no puede tener 2 componentes. Debe tener definidas 1 o 3 componentes", "eng":"A layer can not have 2 component. It must have defined 1 or 3 components", "fre":"Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants"},
+		LayerIMGNoDefinesComponents: {"cat":"La capa ha estat demanada com img però no hi ha components definides al estil actual.", "spa":"La capa ha sido solicitada como img pero no tiene componentes definidas en el estilo actual.", "eng":"The layer is requested as img but there are no defined components for the current style.", "fre":"La couche est requise comme img mais il n'y a pas de composants définis pour le style actuel."}
 	},
 	cntxmenu2:{
 		statistics:
