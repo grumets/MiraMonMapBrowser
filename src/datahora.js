@@ -819,8 +819,9 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 			else
 				s=s.substring(0,i) + (query.f=="ISO" ? DonaDataJSONComATextISO8601(capa.data[i_data_sel], capa.FlagsData) : DonaDataJSONComATextCompacte(capa.data[i_data_sel])) + s.substring(i+6+ii+1);
 		}
-		while(true)
-		{
+	}
+	while(true)
+	{
 			i=s.toUpperCase().indexOf("{DIM?");
 			if (i==-1)
 				break;
@@ -897,6 +898,13 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 				alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
 				break;
 			}
+	}
+	if (capa.tipus=="TipusHTTP_GET" && capa.dimensioExtra && capa.dimensioExtra.length)
+	{
+		for (i=0; i<capa.dimensioExtra.length; i++)
+		{
+			var d=capa.dimensioExtra[i];
+			s=s.replaceAll("{"+d.clau.nom+"}", d.valor[d.i_valor].nom);
 		}
 	}
 	return s;

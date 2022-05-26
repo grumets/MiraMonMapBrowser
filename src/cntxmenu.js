@@ -464,7 +464,7 @@ var separa_capa_afegida;
 	return null;
 }
 
-function AfegirCapesAlNavegador(form, i_serv)
+function AfegeixCapesWMSAlNavegador(form, i_serv)
 {
 var i, j, i_capa, i_get_featureinfo, i_getmap;
 var alguna_capa_afegida=false;
@@ -509,7 +509,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -523,7 +523,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegeixCapaWMSAlNavegador(servidorGC.formatGetMap[form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value], servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
 		}
 	}
 	if(alguna_capa_afegida)
@@ -540,7 +540,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
-}//Fi de AfegirCapesAlNavegador
+}//Fi de AfegeixCapesWMSAlNavegador
 
 /*Aquesta funció s'ha de cridar abans o després fer capa.splice() o similars.
 Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
@@ -1547,413 +1547,6 @@ var i;
 }
 
 
-var ajaxGetCapabilities=[];
-var ServidorGetCapabilities=[];
-
-function LlegeixLayerServidorGC(servidorGC, node, sistema_ref_comu, pare)
-{
-var i, j, node2, trobat=false, cadena, cadena2;
-var minim, maxim, factor_k, factorpixel;
-
-	//Llegeixo les capacitats d'aquesta capa
-	//Començo pel sistema de referència
-	//versió 1.0.0, 1.1.0 i 1.1.1 en l'estil antic --> un únic element amb els diversos sistemes de referència separats per espais (SRS)
-	//versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
-	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)
-
-
-	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
-	{
-		factor_k=120000*1000/0.28;  //pas de graus a mm dividit per la mida de píxel
-		factorpixel=120000; // de graus a metres
-	}
-	else //if(unitats=="m")
-	{
-		factor_k=1000/0.28;  // pas de m a mm dividit per la mida de píxel
-		factorpixel=1; //de m a m
-	}
-
-	//Això no ho puc usar perquè em dona els elements SRS de node i dels seus fills node.getElementsByTagName('SRS');
-	for(i=0; i<node.childNodes.length; i++)
-	{
-		node2=node.childNodes[i];
-		if(node2.nodeName=="SRS" || node2.nodeName=="CRS")
-		{
-			cadena=node2.childNodes[0].nodeValue;
-			if(cadena)
-			{
-				cadena=cadena.toUpperCase();
-				cadena2=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase();
-				if(cadena.indexOf(cadena2)!=-1)
-				{
-					//·$·Aqui s'haurà de fer alguna cosa amb els sinònims,...
-					trobat=true;
-					break;
-				}
-			}
-		}
-	}
-	if(trobat || sistema_ref_comu)
-	{
-		for(i=0; i<node.childNodes.length; i++)
-		{
-			node2=node.childNodes[i];
-			if(node2.nodeName=="Name")
-			{
-				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]={nom: null, 
-									desc: null,
-									CostatMinim: null,
-									CostatMaxim: null,
-									consultable: false,
-									estil: [],
-									FlagsData: null,
-									i_data: 0,
-									data: null};
-
-				servidorGC.layer[servidorGC.layer.length-1].nom=node2.childNodes[0].nodeValue;
-				//hereto les coses del pare
-				if(pare)
-				{
-					if(pare.consultable)
-						servidorGC.layer[servidorGC.layer.length-1].consultable=true;
-					if(pare.estil)
-					{
-						for(j=0; j<pare.estil.length; j++)
-							servidorGC.layer[servidorGC.layer.length-1].estil[servidorGC.layer[servidorGC.layer.length-1].estil.length]=pare.estil[j];
-					}
-					servidorGC.layer[servidorGC.layer.length-1].CostatMinim=pare.CostatMinim;
-					servidorGC.layer[servidorGC.layer.length-1].CostatMaxim=pare.CostatMaxim;
-				}
-				break;
-			}
-		}
-
-		if(i<node.childNodes.length)  //vol dir que aquesta capa té name
-		{
-			var temps_defecte=null, valors_temps=null;
-			for(i=0; i<node.childNodes.length; i++)
-			{
-				node2=node.childNodes[i];
-
-				if(node2.nodeName=="Title")
-				{
-					servidorGC.layer[servidorGC.layer.length-1].desc=node2.childNodes[0].nodeValue;
-				}
-				else if(node2.nodeName=="Style")
-				{
-					var node3=node2.getElementsByTagName('Name');
-					if(node3 && node3.length>0)
-					{
-						cadena=node3[0].childNodes[0].nodeValue;
-						node3=node2.getElementsByTagName('Title');
-						if(node3 && node3.length>0)
-							cadena2=node3[0].childNodes[0].nodeValue;
-						servidorGC.layer[servidorGC.layer.length-1].estil[servidorGC.layer[servidorGC.layer.length-1].estil.length]={"nom": cadena, "desc": cadena2};
-					}
-				}
-				else if(node2.nodeName=="ScaleHint")
-				{
-					minim=parseInt(node2.getAttribute('min'));
-					maxim=parseInt(node2.getAttribute('max'));
-					if(minim)
-						servidorGC.layer[servidorGC.layer.length-1].CostatMinim=minim/Math.SQRT2;
-					if(maxim)
-						servidorGC.layer[servidorGC.layer.length-1].CostatMaxim=maxim/Math.SQRT2;
-				}
-				else if(node2.nodeName=="MinScaleDenominator")
-				{
-					minim=parseInt(node2.childNodes[0].nodeValue);
-					if(minim)
-						servidorGC.layer[servidorGC.layer.length-1].CostatMinim=minim*factorpixel/factor_k;
-				}
-				else if(node2.nodeName=="MaxScaleDenominator")
-				{
-					maxim=parseInt(node2.childNodes[0].nodeValue);
-					if(maxim)
-						servidorGC.layer[servidorGC.layer.length-1].CostatMaxim=maxim*factorpixel/factor_k;
-				}
-				else if ((node2.nodeName=="Dimension" || node2.nodeName=="Extent") && node2.getAttribute('name').toLowerCase()=='time')
-				{
-					temps_defecte=node2.getAttribute('default');
-					if(node2.childNodes.length>0)
-						valors_temps=node2.childNodes[0].nodeValue;
-				}
-			}
-			//Miro si és consultable
-			if(node.getAttribute('queryable')=='1')
-			{
-				servidorGC.layer[servidorGC.layer.length-1].consultable=true;
-			}
-			if(valors_temps!=null)
-			{
-				if(valors_temps.indexOf("/")==-1)  //Si és un interval (!=-1) de moment no li dono suport ·$·
-				{
-					var data_defecte=null;
-					var dates;
-					//És una capa multitemporal
-					//valors_temps és una cadena que pot contenir un únic valor, una llista de valors separats per coma o un interval amb període
-					//yyyy-mm-ddThh:mm:ss.sssZ
-					if(temps_defecte)
-					{
-						var data_defecte;
-						OmpleDataJSONAPartirDeDataISO8601(data_defecte, temps_defecte);
-					}
-					servidorGC.layer[servidorGC.layer.length-1].data=[];
-					dates=valors_temps.split(",");
-					for(i=0; i<dates.length; i++)
-					{
-						//servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length]=new Date();
-						if(i==0)
-						{
-							servidorGC.layer[servidorGC.layer.length-1].FlagsData=OmpleDataJSONAPartirDeDataISO8601(
-														servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
-														dates[i]);
-						}
-						else
-							OmpleDataJSONAPartirDeDataISO8601(servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length],
-														dates[i]);
-						if(data_defecte &&
-						   servidorGC.layer[servidorGC.layer.length-1].data[servidorGC.layer[servidorGC.layer.length-1].data.length-1]==data_defecte)
-							servidorGC.layer[servidorGC.layer.length-1].i_data=servidorGC.layer[servidorGC.layer.length-1].data.length-1;
-					}
-				}
-			}
-		}
-	}
-
-	//Si aquesta layer té fills continuo llegint
-	node2=node.getElementsByTagName('Layer');
-	if(node2)
-	{
-		var pare2=servidorGC.layer[servidorGC.layer.length-1];
-		for(i=0; i<node2.length; i++)
-			LlegeixLayerServidorGC(servidorGC, node2[i], trobat, pare2);
-	}
-}//Fi de LlegeixLayerServidorGC()
-
-function HiHaAlgunErrorDeParsejat(doc)
-{
-	if (doc.parseError && doc.parseError.errorCode != 0)
-    {
-	    alert("Error in line " + doc.parseError.line +
-				" position " + doc.parseError.linePos +
-				"\nError Code: " + doc.parseError.errorCode +
-				"\nError Reason: " + doc.parseError.reason +
-				"Error Line: " + doc.parseError.srcText);
-	    return true;
-    }
-	else if (doc.documentElement.nodeName=="parsererror")
-	{
-		var errStr=doc.documentElement.childNodes[0].nodeValue;
-		errStr=errStr.replace(/</g, "&lt;");
-		alert(errStr);
-		return true;
-	}
-	return false;
-}
-
-function ParsejaRespostaGetCapabilities(doc, servidorGC)
-{
-var root, cadena, node, node2, i, j, cdns=[];
-
-	if(!doc)
-	{
-		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
-		return;
-	}
-	if(HiHaAlgunErrorDeParsejat(doc))
-		return;
-	root=doc.documentElement;
-	if(!root)
-	{
-		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
-		return;
-	}
-
-	//Cal comprovar que és un document de capacitats, potser és un error, en aquest cas el llegeix-ho i el mostraré directament
-	if(root.nodeName!="WMT_MS_Capabilities")
-	{
-		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
-		//·$· mirar de possar el que ens ha retornat el servidor
-		return;
-	}
-
-	//Obtinc la versió de les capacitats
-	cadena=root.getAttribute('version');
-	servidorGC.versio={"Vers": parseInt(cadena.substr(0,1)), "SubVers": parseInt(cadena.substr(2,1)), "VariantVers": parseInt(cadena.substr(4))};
-
-	//Obtinc el títol del servidor, és obligatòri però podria ser que algun servidor posses el tag sense valor
-	servidorGC.titol="";
-	node=root.getElementsByTagName('Service')[0];
-	if(node)
-	{
-		node2=node.getElementsByTagName('Title')[0];
-		if(node2 && node2.hasChildNodes())
-			servidorGC.titol=node2.childNodes[0].nodeValue;
-	}
-
-	//Selecciono el node request
-	node=(root.getElementsByTagName('Capability')[0]).getElementsByTagName('Request')[0];
-
-	//Formats de visualització
-	if(servidorGC.versio.Vers==1 && servidorGC.versio.SubVers==0)
-	{
-		node2=(node.getElementsByTagName('Map')[0]).getElementsByTagName('Format');
-		for(i=0; i<node2[0].childNodes.length; i++)
-		{
-			cadena=node2[0].childNodes[i].nodeName;
-			if(cadena.search(/JPEG/i)!=-1)			//no pot ser indexOf perquè és una regular expression
-				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/jpeg";
-			else if(cadena.search(/GIF/i)!=-1) 	//no pot ser indexOf perquè és una regular expression
-				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/gif";
-			else if(cadena.search(/PNG/i)!=-1)	//no pot ser indexOf perquè és una regular expression
-				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/png";
-		}
-	}
-	else
-	{
-		node2=(node.getElementsByTagName('GetMap')[0]).getElementsByTagName('Format');
-		for(i=0; i<node2.length; i++)
-		{
-			cadena=node2[i].childNodes[0].nodeValue;
-			if(cadena)
-				servidorGC.formatGetMap[servidorGC.formatGetMap.length]=cadena;
-		}
-	}
-
-	//Formats de consulta
-	if(servidorGC.versio.Vers==1 && servidorGC.versio.SubVers==0)
-	{
-		node2=node.getElementsByTagName('FeatureInfo')[0];
-		if(node2)
-		{
-			node2=node2.getElementsByTagName('Format');
-			for(i=0; i<node2[0].childNodes.length; i++)
-			{
-				cadena=node2[0].childNodes[i].nodeName;
-				if(cadena)
-				{
-					if(cadena.search(/XML/i)!=-1)					//no pot ser indexOf perquè és una regular expression
-						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/xml";
-					else if(cadena.search(/HTML/i)!=-1)		//no pot ser indexOf perquè és una regular expression
-						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/html";
-				}
-			}
-		}
-	}
-	else
-	{
-		node2=node.getElementsByTagName('GetFeatureInfo')[0];
-		if(node2)
-		{
-			node2=node2.getElementsByTagName('Format');
-			for(i=0; i<node2.length; i++)
-			{
-				cadena=node2[i].childNodes[0].nodeValue;
-				if(cadena)
-					servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]=cadena;
-			}
-		}
-	}
-
-	//Llegeix-ho les capes disponibles en el sistema de referència actual del navegador
-	node=root.getElementsByTagName('Capability')[0];
-	for(i=0; i<node.childNodes.length; i++)
-	{
-		node2=node.childNodes[i];
-		if(node2.nodeName=="Layer")  //És una layer que a dins pot tenir altres layers
-		{
-			//Si té name vol dir que és una capa de veritat, sinó és que és una capa d'agrupació
-			LlegeixLayerServidorGC(servidorGC, node2, false, null);
-		}
-	}
-	if(servidorGC.layer.length>0)
-	{
-		cdns.push("<b>",
-			  	GetMessage("ServerURL", "cntxmenu"),
-			  	"</b><br><input type=\"text\" name=\"servidor\" readOnly style=\"width:400px;\" value=\"",
-			  	servidorGC.servidor, "\" />",
-				  "<br><br><b>",
-				  GetMessage("Title"),
-				  "</b><br><input type=\"text\" name=\"TitolServidor\" style=\"width:400px;\"");
-		if(servidorGC.titol)
-	  		cdns.push(" value=\"",servidorGC.titol, "\"");
-		cdns.push(" /><br><br><hr><br><div class=\"layerselectorcapesafegir\">",
-				  "<b>",GetMessage("Layers"),"</b><br>",
-				  "<input name=\"seltotes_capes\" onclick=\"SeleccionaTotesLesCapesDelServidor(form);\" type=\"checkbox\" />",
-				  GetMessage("SelectAllLayers", "cntxmenu"), "<br><br><table class=\"Verdana11px\">");
-		for(i=0; i<servidorGC.layer.length; i++)
-		{
-			cdns.push("<tr><td><input name=\"sel_capes\" value=\"", i, "\" type=\"checkbox\">",
-					(servidorGC.layer[i].desc? servidorGC.layer[i].desc : servidorGC.layer[i].nom));
-			cdns.push("</td><td><select name=\"format_capa_", i, "\" class=\"Verdana11px\">");
-			for(j=0; j<servidorGC.formatGetMap.length; j++)
-				cdns.push("<option value=\"", j, "\">",  servidorGC.formatGetMap[j]);
-			cdns.push("</select></td></tr>");
-		}
-		cdns.push("</table></div><br>",
-				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
-				  GetMessage("Add"),
-				  "\"",
-				  " onClick='AfegirCapesAlNavegador(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
-				  "<input type=\"button\" class=\"Verdana11px\" value=\"",
-				  GetMessage("Cancel"),
-				  "\"",
-				  " onClick='TancaFinestraLayer(\"afegirCapa\");' />");
-		document.getElementById("LayerAfegeixCapaServidor").innerHTML=cdns.join("");
-	}
-	else
-	{
-		alert(GetMessage("ServerNotHaveLayerInBrowserReferenceSystem", "cntxmenu"));
-	}
-}//Fi de ParsejaRespostaGetCapabilities()
-
-function FesPeticioCapacitatsIParsejaResposta(form, i_capa)
-{
-var servidor=form.servidor.value;
-var request, tipus="TipusWMS";
-
-	if(servidor)
-		servidor=servidor.trim();
-
-	if(!servidor || servidor=="")  //Es podria mirar més a fons que l'adreça sigui vàlida
-	{
-		alert(GetMessage("ValidURLMustBeProvided", "cntxmenu"));
-		return;
-	}
-	ajaxGetCapabilities[ajaxGetCapabilities.length]=new Ajax();
-	ServidorGetCapabilities[ServidorGetCapabilities.length]={"win": window,
-								"index": ServidorGetCapabilities.length,
-								"i_capa_on_afegir": i_capa,
-								"servidor": servidor,
-								"versio": null,
-								"tipus": tipus,
-								"titol": null,
-								"formatGetMap": [],
-								"formatGetFeatureInfo": [],
-								"layer": []};
-	if (ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
-		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
-
-	request="REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE="
-	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
-		request+="WMS";
-	else if (tipus=="TipusWMTS_KVP")
-		request+="WMTS";
-	else if (tipus=="TipusWFS")
-		request+="WFS";
-	else if (tipus=="TipusSOS")
-		request+="SOS";
-	request=AfegeixNomServidorARequest(servidor, request, true, true  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/);
-	if (window.doAutenticatedHTTPRequest && ServidorGetCapabilities[ServidorGetCapabilities.length-1].access)
-		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", ajaxGetCapabilities[ajaxGetCapabilities.length-1], request, null, null, ParsejaRespostaGetCapabilities, "text/xml", ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
-	else
-		ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
-				ParsejaRespostaGetCapabilities, "text/xml",
-				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
-}//Fi de FesPeticioCapacitatsIParsejaResposta
-
 function ActualitzaLlistaServSegonsCategoriaSel(form)
 {
 var nova_opcio;
@@ -2392,7 +1985,7 @@ var cdns=[], i;
 			//"<input type=\"radio\" id=\"RadioVersionAndType_WMS11\" name=\"version_and_type\" value=\"WMS11\" checked=\"checked\"><label for=\"RadioVersionAndType_WMS11\">WMS v1.1</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor,",i_capa,");\" />");
+		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
@@ -2448,6 +2041,69 @@ var cdns=[], i;
 		"</fieldset></form>");
 	cdns.push("</div>");
 	return cdns.join("");
+}
+
+function MostraCapesCapacitatsWMS(servidorGC)
+{
+var cdns=[], j, layer, j_selected;
+	cdns.push("<b>",
+	  	GetMessage("ServerURL", "cntxmenu"),
+	  	":</b><br><input type=\"text\" name=\"servidor\" readOnly style=\"width:400px;\" value=\"",
+	  	servidorGC.servidor, "\" />",
+		"<br><br><b>",
+		GetMessage("Title"),
+		":</b><br>");
+	if(servidorGC.titol)
+		cdns.push(servidorGC.titol);
+	cdns.push("<br><br><hr><br><div class=\"layerselectorcapesafegir\">",
+		  "<b>",GetMessage("Layers"),":</b><br>",
+		  "<input name=\"seltotes_capes\" onclick=\"SeleccionaTotesLesCapesDelServidor(form);\" type=\"checkbox\" />",
+		  GetMessage("SelectAllLayers", "cntxmenu"), "<br><br><table class=\"Verdana11px\">");
+	for(var i=0; i<servidorGC.layer.length; i++)
+	{
+		layer=servidorGC.layer[i];
+		cdns.push("<tr><td><input name=\"sel_capes\" value=\"", i, "\" type=\"checkbox\">",
+					DonaCadenaNomDesc(layer));
+		cdns.push("</td><td><select name=\"format_capa_", i, "\" class=\"Verdana11px\">");
+
+		if (layer.esCOG && layer.uriTemplate)
+			j_selected=servidorGC.formatGetMap.length;
+		else
+		{
+			j_selected=0;
+			for(j=0; j<servidorGC.formatGetMap.length; j++)
+			{
+				if (servidorGC.formatGetMap[j]=="image/jpeg")
+				{
+					j_selected=j;
+					break;
+				}
+			}
+			for(j=0; j<servidorGC.formatGetMap.length; j++)
+			{
+				if (servidorGC.formatGetMap[j]=="image/png")
+				{
+					j_selected=j;
+					break;
+				}
+			}
+		}
+		for(j=0; j<servidorGC.formatGetMap.length; j++)
+			cdns.push("<option value=\"", j, "\"", (j_selected==j ? " selected" : ""), ">",  servidorGC.formatGetMap[j]);
+		if (layer.esCOG && layer.uriTemplate)
+			cdns.push("<option value=\"-1\" selected>",  "Cloud Optimized GeoTIFF direct");
+		cdns.push("</select></td></tr>");
+	}
+	cdns.push("</table></div><br>",
+		  "<input type=\"button\" class=\"Verdana11px\" value=\"",
+		  GetMessage("Add"),
+		  "\"",
+		  " onClick='AfegeixCapesWMSAlNavegador(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
+		  "<input type=\"button\" class=\"Verdana11px\" value=\"",
+		  GetMessage("Cancel"),
+		  "\"",
+		  " onClick='TancaFinestraLayer(\"afegirCapa\");' />");
+	document.getElementById("LayerAfegeixCapaServidor").innerHTML=cdns.join("");
 }
 
 var LlistaServOWS=null;

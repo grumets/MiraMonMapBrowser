@@ -649,7 +649,7 @@ var cdns=[], capa, feature, atribut, atr;
 
 function MostraConsultaAtributComHTML(i_capa, i_obj, i_atr, atribut, separador, valor, i_capa_validar, cal_class)
 {
-var cdns=[], ncol=440, nfil=220;
+var cdns=[], ncol=440, nfil=220, capa=ParamCtrl.capa[i_capa];
 
 	if(separador)
 		cdns.push(DonaCadena(separador));

@@ -80,6 +80,7 @@ IncludeScript("phenology.js");
 IncludeScript("qualitat.js");
 IncludeScript("llinatge.js");
 IncludeScript("cntxmenu.js");
+IncludeScript("wmscapab.js");
 IncludeScript("novacapa.js");
 IncludeScript("llegenda.js");
 IncludeScript("situacio.js");
@@ -4251,7 +4252,7 @@ var capa=ParamCtrl.capa[i_capa];
 		var url_dades_real=url_dades;
 		if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
 		{
-			var authResponse=hello(capa.access.tokenType).getAuthResponse();
+			/*var authResponse=hello(capa.access.tokenType).getAuthResponse();
 			if (IsAuthResponseOnline(authResponse))
 			{
 				if (authResponse.error)
@@ -4266,9 +4267,10 @@ var capa=ParamCtrl.capa[i_capa];
 				}
 				url_dades_real+= "&" + "access_token=" + authResponse.access_token;
 			}
-			else
+			else*/
+			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
 			{
-				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param, null);
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param, null, null, null);
 				return;
 			}
 		}
@@ -6286,6 +6288,7 @@ var ParamCtrl;
 function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 {
 	ParamCtrl=param_ctrl; //Ho necessito aquí perquè funcioni la configuració idiomàtica en cas d'haver de preguntar.
+
 	if (typeof Storage !== "undefined" && param.usa_local_storage)
 	{
 		if (param.config_reset)
@@ -6325,6 +6328,9 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 	ParamCtrl.config_json=param.config_json;
 
 	ResolveJSONPointerRefs(ParamCtrl);
+
+	if (window.InitHello)
+		InitHello();
 
 	IniciaVisualitzacio();
 }
@@ -6909,9 +6915,6 @@ var config_json="config.json", config_reset=false;
 var clau_config="CONFIG=", clau_reset="RESET=";
 
 	FesTestDeNavegador();
-
-	if (window.InitHello)
-		InitHello();
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{

@@ -1269,7 +1269,7 @@
 						"$ref": "#/definitions/descripcioAtributs"			
 					},
 					"valors": {
-						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img. Només aplica quan el 'model' és 'raster'",
+						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció dels valors",
@@ -2188,7 +2188,15 @@
 						"properties": {
 							"tokenType": {
 								"description": "Nom del servei d'autentificació.", 
-								"enum": ["authenix"]
+								"enum": ["authenix", "wqems"]
+							},
+							"request": {
+								"description": "Llista de requests que necessiten autentificació", 
+								"type": ["null", "array"],
+								"items": {
+									"description": "Request que necessita autentificació", 
+									"enum": ["transaction", "capabilities", "consultaLink", "map"]
+								}
 							}
 						}
 					},

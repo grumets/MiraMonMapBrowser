@@ -2,10 +2,12 @@
 
 function InitHello()
 {
-	hello.init({
-		//authenix: 'bbf7d666-9553-36b4-91b4-5c3e1f22652d',
-		wqems: 'wqems-miramon'
-	}, {redirect_uri: ((location.pathname.charAt(location.pathname.length-1)=='/') ? location.pathname.substring(0, location.pathname.length-1) : location.pathname)});
+	if (!ParamCtrl.accessClientId)
+	{
+		alert("authen.js has been included by the homepage but the config.json does not specify accessClientId. Autentication has not been iniciated.")
+		return;
+	}
+	hello.init(ParamCtrl.accessClientId, {redirect_uri: ((location.pathname.charAt(location.pathname.length-1)=='/') ? location.pathname.substring(0, location.pathname.length-1) : location.pathname)});
 }
 
 function parseJwt(token) 
@@ -20,12 +22,38 @@ function IsAuthResponseOnline(session) {
 	return session && session.access_token && session.expires > currentTime;
 };
 
-function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, param5, param6, param7, param8)
+function AddAccessTokenToURLIfOnline(url, access)
+{
+	if (access)
+	{
+		var authResponse=hello(access.tokenType).getAuthResponse();
+		if (IsAuthResponseOnline(authResponse))
+		{
+			if (authResponse.error)
+			{
+				alert(authResponse.error.message)
+				return null;
+			}
+			if (authResponse.error_description)
+			{
+				alert(authResponse.error_description)
+				return null;
+			}
+			return url + (url.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + authResponse.access_token;
+		}
+		else
+			return null;
+	}
+	return url;
+}
+
+
+function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
 {
 	if (hello(access.tokenType ? access.tokenType : "authenix").askingAToken)  //Parametre meu que no forma part de la llibreria
 	{
 		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard. 
-		setTimeOut(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8);
+		setTimeOut(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 		return;
 	}
 
@@ -59,7 +87,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 					alert("Error: " +err.message);
 				}
 				hello(access.tokenType ? access.tokenType : "authenix").askingAToken=false;
-				f_repeat(access, param1, param2, param3, param4, param5, param6, param7, param8);
+				f_repeat(access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 			},
 			// On error
 			function(error) {
@@ -71,14 +99,13 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 
 function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, dataPayload, hand, response_format, struct) 
 {
-var authResponse
 	if (!access || !access.tokenType || access.tokenType.length==0)
 	{
-		//No autehtication requested in the 'access' property
+		//No autentication requested in the 'access' property
 		ajax.doReqIndirect(method, url, request_format, dataPayload, hand, response_format, struct);
 		return;
 	}
-	authResponse=hello(access.tokenType).getAuthResponse();
+	var authResponse=hello(access.tokenType).getAuthResponse();
 	if (IsAuthResponseOnline(authResponse))
 	{
 		if (authResponse.error)
@@ -91,7 +118,7 @@ var authResponse
 			alert(authResponse.error_description)
 			return;
 		}
-		if (access.tokenType=="wqems")
+		if (access.request && access.request.indexOf("map"))  //access.tokenType=="wqems" && 
 			ajax.doReqIndirect(method, url + (url.indexOf('?')==-1 ? "?" : "&") + "access_token=" + authResponse.access_token, request_format, dataPayload, hand, response_format, struct);
 		else
 		{
@@ -101,6 +128,6 @@ var authResponse
 		return;
 	}
 	
-	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct);
+	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct, null, null);
 }
 

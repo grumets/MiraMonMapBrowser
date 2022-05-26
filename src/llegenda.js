@@ -806,7 +806,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 						DonaCadenaLang({"cat":"indica que és AnimableMultiTime però no té dates definides", "spa":"indica que es AnimableMultiTime pero no tiene fechas definidas", "eng":"indicates that is AnimableMultiTime but it has no dates defined", "fre":"Indique que c\'est AnimableMultiTime, mais il n\'a pas de dates définies"}));
 				}
 			}
-			if (capa.dimensioExtra)
+			if (capa.dimensioExtra && capa.dimensioExtra.length)
 			{
 				for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
 				{
@@ -821,19 +821,20 @@ var salt_entre_columnes, cdns=[], capa, estil;
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
 						else
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-						cdns.push(">", dim.clau.desc?DonaCadena(dim.clau.desc):dim.clau.nom, ": <select CLASS=text_petit name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
+						cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
+							": <select CLASS=text_petit name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
 							   i_capa,", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 						for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
 						{
 							cdns.push("<OPTION VALUE=\"",i_v_dim,"\"",
 								((i_v_dim==dim.i_valor) ? " SELECTED" : "") ,
-							">", dim.valor[i_v_dim].desc?DonaCadena(dim.valor[i_v_dim].desc):dim.valor[i_v_dim].nom, "</OPTION>\n");
+							">", DonaCadenaNomDesc(dim.valor[i_v_dim]), "</OPTION>\n");
 						}
-						cdns.push("</select></td></tr>");
+						cdns.push("</select>", aspecte.PostDescItems, "</td></tr>");
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, dim.clau.desc?DonaCadena(dim.clau.desc):dim.clau.nom, ": ",  dim.valor[dim.i_valor].desc?DonaCadena(dim.valor[dim.i_valor].desc):dim.valor[dim.i_valor].nom,
+						cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
 							aspecte.PostDescEstil , "</td>");
 					}
 				}
@@ -852,7 +853,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				var ncol_estil=capa.NColEstil ? capa.NColEstil : 1;
 				/*if (capa.NColEstil==0)
 				{
-					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) +" "+ DonaCadena(capa.desc) + " "+
+					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) +" "+ DonaCadenaNomDesc(capa) + " "+
 							DonaCadenaLang({"cat":", "indica incorrectament 0 columnes dels items de la llegenda però té", "spa":"indica incorrectamente 0 columnas en los items de la leyenda pero tiene", "eng":"has been incorrectly set to 0 columns on the legend items but it has", "fre":"indique 0 colonnes des éléments de la légende mais a"}) +
 							 " "+ estil.ItemLleg.length + " " + 
 							DonaCadenaLang({"cat":"elements descrits. No es dibuixaran.", "spa":"elementos descritos. No es dibujaran.", "eng":"described elements. They will not be shown on the legend.", "fre":"éléments décrits. Ils ne seront pas dessinés."}));
@@ -893,7 +894,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 										"<td valign=\"middle\">");
 									if (isLayer(window, "menuContextualCapa"))
 										cdns.push("<a href=\"javascript:void(0);\" style=\"cursor:context-menu;\" onClick=\"OmpleLayerContextMenuEstil(event,", i_capa, ",", l,");\" onContextMenu=\"return OmpleLayerContextMenuEstil(event,", i_capa, ",", l,");\">");
-									cdns.push(aspecte.PreviDescEstil , DonaCadena(capa.estil[l].desc) , aspecte.PostDescEstil);
+									cdns.push(aspecte.PreviDescEstil , DonaCadenaNomDesc(capa.estil[l]) , aspecte.PostDescEstil);
 									cdns.push("</a>");
 									cdns.push("</td>");
 								}
@@ -907,7 +908,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				    else
 				    {
 						cdns.push("<td valign=\"middle\" colspan=3>" ,
-							aspecte.PreviDescEstil, (DonaCadena(capa.estil[capa.i_estil].desc)),
+							aspecte.PreviDescEstil, (DonaCadenaNomDesc(capa.estil[capa.i_estil])),
 							aspecte.PostDescEstil, "</td>");
 				    }
 				    cdns.push("</tr>");
@@ -991,10 +992,10 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
 					if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
 					{
-						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
-													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
-													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadena(capa2.desc) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.", 
-													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(capa2.desc) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
+						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadenaNomDesc(capa2) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
+													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadenaNomDesc(capa2) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
+													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadenaNomDesc(capa2) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.", 
+													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadenaNomDesc(capa2) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
 							return;
 					}
 					if (capa.model!=model_vector && capa2.transparencia=="semitransparent")
@@ -1200,10 +1201,10 @@ var capa=ParamCtrl.capa[i];
 					continue;
 				if (capa.grup==ParamCtrl.capa[i_capa].grup && ParamCtrl.capa[i_capa].descarregable=="si")
 				{
-				   if (!confirm(DonaCadenaLang({"cat":"No és possible descarregar dues capes del mateix grup.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que també format part del grup \"" + ParamCtrl.capa[i_capa].grup + "\", serà desmarcada.", 
-												"spa":"No es posible descargar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", que también forma parte del grupo \"" + ParamCtrl.capa[i_capa].grup + "\", será desmarcada.", 
-												"eng":"It is not possible to download two layers from the same group.\nLayer \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", that also is member to the group \"" + ParamCtrl.capa[i_capa].grup + "\", will be deselected.", 
-												"fre":"Impossible de télécharger deux couches du même groupe.\nLa couche \"" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
+				   if (!confirm(DonaCadenaLang({"cat":"No és possible descarregar dues capes del mateix grup.\nLa capa \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", que també format part del grup \"" + ParamCtrl.capa[i_capa].grup + "\", serà desmarcada.", 
+												"spa":"No es posible descargar dos capas del mismo grupo.\nLa capa \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", que también forma parte del grupo \"" + ParamCtrl.capa[i_capa].grup + "\", será desmarcada.", 
+												"eng":"It is not possible to download two layers from the same group.\nLayer \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", that also is member to the group \"" + ParamCtrl.capa[i_capa].grup + "\", will be deselected.", 
+												"fre":"Impossible de télécharger deux couches du même groupe.\nLa couche \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
 					   return;
 				   CanviaEstatDescarregableCapa(document.getElementById("z_ll_capa"+i_capa), i_capa);
 				   break;

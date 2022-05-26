@@ -96,10 +96,9 @@ var capa = ParamCtrl.capa[i_capa2], url;
 	else
 		url = capa.valors[i_valor2];
 
-	if (url)
-		return CanviaVariablesDeCadena(url, capa, i_data2);
-	else
+	if (!url)
 		return "";
+	return CanviaVariablesDeCadena(url, capa, i_data2);
 }
 
 async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
@@ -108,9 +107,40 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		await loadGeoTIFF();
 	var capa = ParamCtrl.capa[i_capa2];
 	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2);
+
+	/*if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+	{
+		if (null==(url=AddAccessTokenToURLIfOnline(url, capa.access)))
+		{
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+			return;
+		}
+	}*/
+
 	var valor2 = capa.valors[i_valor2];
 
-	var tiff = await GeoTIFFfromUrl(url);
+	if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+	{
+		var authResponse=hello(capa.access.tokenType).getAuthResponse();
+		if (IsAuthResponseOnline(authResponse))
+		{
+			if (authResponse.error)
+			{
+				alert(authResponse.error.message)
+				return;
+			}
+			if (authResponse.error_description)
+			{
+				alert(authResponse.error_description)
+				return;
+			}
+			var tiff = await GeoTIFFfromUrl(url, {headers: {"Authorization":"Bearer "+authResponse.access_token}});
+		}
+		else
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+	}
+	else
+		var tiff = await GeoTIFFfromUrl(url);
 
 	if (valor2.url)
 	{

@@ -40,7 +40,7 @@
 
 const OriginUsuari="usuari";
 
-function AfegeixCapaWMSAlNavegador(format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, i_getmap)
+function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, i_getmap)
 {
 var j, k, estil, minim, maxim;
 var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
@@ -57,6 +57,8 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
+			if (layer.esCOG && layer.uriTemplate)
+				estil[estil.length-1].component=[{"i_valor": 0}];
 		}
 	}
 	else
@@ -77,14 +79,14 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 		k=i_on_afegir;
 		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
 	}
-	ParamCtrl.capa.splice(k, 0, {servidor: servidorGC.servidor,
-				versio: servidorGC.versio,
-				tipus: servidorGC.tipus,
+	ParamCtrl.capa.splice(k, 0, {servidor: (layer.esCOG && layer.uriTemplate) ? layer.uriTemplate : servidorGC.servidor,
+				versio: (layer.esCOG && layer.uriTemplate) ? null : servidorGC.versio,
+				tipus: (layer.esCOG && layer.uriTemplate) ? "TipusHTTP_GET" : servidorGC.tipus,
 				nom: layer.nom,
 				desc: layer.desc,
 				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
-				FormatImatge: format_get_map,
-				transparencia: (format_get_map=="image/jpeg") ? "opac" : "transparent",
+				FormatImatge: (layer.esCOG && layer.uriTemplate) ? "image/tiff" : servidorGC.formatGetMap[i_format_get_map],
+				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
 				CostatMinim: minim,
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
@@ -106,6 +108,14 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 				access: (servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null,
 				origen: OriginUsuari});
 
+	if (layer.esCOG && layer.uriTemplate)
+	{
+		ParamCtrl.capa[k].valors=[{
+					"datatype": "float32",
+					"nodata": [-9999, 0]
+				}],
+		ParamCtrl.capa[k].dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+	}
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
 	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(ParamCtrl.capa[k]))
