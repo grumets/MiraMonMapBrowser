@@ -2562,10 +2562,13 @@ var cdns=[], capa, nc, capa_def, origen_vector;
 	}
 	else if (nc.n_capa>0)
 		cdns.push("<input type=\"hidden\" value=\"",nc.i_capa_unica,"\" id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"capa-",i_condicio,"\" name=\"",(param.vull_operador? "": "valor_"),"capa", i_condicio, "\" />", DonaCadena(ParamCtrl.capa[nc.i_capa_unica].DescLlegenda));
-	cdns.push("<br>",
-		"<div id=\"", prefix_id, "-",(param.vull_operador? "" : "capa-valor-"), i_condicio, "\">",
-		DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param),
-		"</div>");
+	cdns.push("<br>");
+	if (i_capa>-1)
+	{
+		cdns.push("<div id=\"", prefix_id, "-",(param.vull_operador? "" : "capa-valor-"), i_condicio, "\">",
+			DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param),
+			"</div>");
+	}
 	return cdns.join("");
 }
 

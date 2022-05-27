@@ -176,13 +176,20 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			capa.tiff=tiff;
 		}
 	}
+	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc);
+	CompletaDefinicioCapa(capa, false);
 	return {imatge: imatge, vista: vista, i_capa: i_capa, i_estil: i_estil, i_data: i_data, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
 }
 
 
 async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
 {
-var tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, vista);
-	var data = await tiff.readRasters({samples: [ParamCtrl.capa[i_capa2].valors[i_valor2].iBand ? ParamCtrl.capa[i_capa2].valors[i_valor2].iBand : 0], bbox: [vista.EnvActual.MinX, vista.EnvActual.MinY, vista.EnvActual.MaxX, vista.EnvActual.MaxY], width: vista.ncol, height: vista.nfil /*, resampleMethod: 'bilinear'*/});
+var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, vista);
+
+	var data = await tiff.readRasters({samples: [ParamCtrl.capa[i_capa2].valors[i_valor2].iBand ? ParamCtrl.capa[i_capa2].valors[i_valor2].iBand : 0], 
+					bbox: [vista.EnvActual.MinX, vista.EnvActual.MinY, vista.EnvActual.MaxX, vista.EnvActual.MaxY], 
+					width: vista.ncol, height: vista.nfil, 
+					fillValue: (ParamCtrl.capa[i_capa2].valors[i_valor2].nodata && ParamCtrl.capa[i_capa2].valors[i_valor2].nodata.length) ? ParamCtrl.capa[i_capa2].valors[i_valor2].nodata[0]: null 
+					/*, resampleMethod: 'bilinear'*/});
 	return {dades: data[0].buffer, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
 }

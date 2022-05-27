@@ -2437,11 +2437,6 @@ function OmpleFinestraEnllac()
     }
 }
 
-function EsEnvDinsMapaSituacio(env_actual)
-{
-	return EsEnvDinsEnvolupant(env_actual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
-}//Fi de EsPuntDinsAmbitNavegacio()
-
 function EsPuntDinsAmbitNavegacio(punt)
 {
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);

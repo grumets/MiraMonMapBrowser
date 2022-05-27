@@ -43,7 +43,7 @@ const OriginUsuari="usuari";
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, i_getmap)
 {
 var j, k, estil, minim, maxim;
-var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	if(layer.estil && layer.estil.length>0)
 	{
@@ -63,6 +63,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 	}
 	else
 		estil=null;
+
 	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 		minim=layer.CostatMinim;
 	else
@@ -79,13 +80,18 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 		k=i_on_afegir;
 		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
 	}
-	ParamCtrl.capa.splice(k, 0, {servidor: (layer.esCOG && layer.uriTemplate) ? layer.uriTemplate : servidorGC.servidor,
-				versio: (layer.esCOG && layer.uriTemplate) ? null : servidorGC.versio,
-				tipus: (layer.esCOG && layer.uriTemplate) ? "TipusHTTP_GET" : servidorGC.tipus,
+
+	ParamCtrl.capa.splice(k, 0, 
+		(layer.esCOG && layer.uriTemplate) ? 
+			IniciaDefinicioCapaTIFF(layer.uriTemplate, layer.desc)
+			:
+			{servidor: servidorGC.servidor,
+				versio: servidorGC.versio,
+				tipus: servidorGC.tipus,
 				nom: layer.nom,
 				desc: layer.desc,
 				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
-				FormatImatge: (layer.esCOG && layer.uriTemplate) ? "image/tiff" : servidorGC.formatGetMap[i_format_get_map],
+				FormatImatge: servidorGC.formatGetMap[i_format_get_map],
 				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
 				CostatMinim: minim,
 				CostatMaxim: maxim,
@@ -105,21 +111,29 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer];
 				i_data: layer.i_data,
 				animable: (layer.data)? true: false,
 				AnimableMultiTime: (layer.data)? true:false,
-				access: (servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null,
-				origen: OriginUsuari});
+				origen: OriginUsuari}
+		);
+
+	capa=ParamCtrl.capa[k];
+	capa.access=(servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null;
+	capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
 
 	if (layer.esCOG && layer.uriTemplate)
 	{
-		ParamCtrl.capa[k].valors=[{
+		capa.CostatMinim=minim;
+		capa.CostatMaxim=maxim;
+		capa.valors=[{
 					"datatype": "float32",
 					"nodata": [-9999, 0]
-				}],
-		ParamCtrl.capa[k].dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+				}],  //provisional. CompletaDefinicioCapaTIFF no reescriu amb informació del propi TIFF
+		capa.estil=estil;
+		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
-	CompletaDefinicioCapa(ParamCtrl.capa[k]);
+	else
+		CompletaDefinicioCapa(capa);
 
-	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(ParamCtrl.capa[k]))
-		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+ParamCtrl.capa[k].nom+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
+	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa))
+		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
 /* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
@@ -251,6 +265,9 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 	if (i_capes.length>1) //Si en l'expressió entra en joc més d'una capa -> la capa calculada és una capa nova
 	{
 		//pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil ·$·
+
+
+
 		ParamCtrl.capa.splice(i_capa, 0, {servidor: null,
 			versio: null,
 			tipus: null,
@@ -500,7 +517,7 @@ function IniciaDefinicioCapaTIFF(url, desc)
 {
 	return {servidor: url,
 				versio: null,
-				tipus: null,
+				tipus: "TipusHTTP_GET",
 				nom: null,
 				desc: desc,
 				CRS: null,
@@ -512,11 +529,11 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				FormatConsulta: null,
 				separa: null,
 				DescLlegenda: desc,
-				estil: [],
+				estil: null,
 				i_estil: 0,
 				NColEstil: 1,
-				LlegDesplegada: false,
-				VisibleALaLlegenda: true,
+				LlegDesplegada: true,
+				VisibleALaLlegenda: false,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -528,7 +545,7 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				origen: OriginUsuari};
 }
 
-async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
+async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 {
 	var image = await tiff.getImage();
 
@@ -546,6 +563,13 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
 			return;
 		}
 		capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
+		if (capa.origen==OriginUsuari && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + "./n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
+		var bbox = image.getBoundingBox();
+		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
+		if (capa.origen==OriginUsuari && 
+			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && EsEnvDinsMapaSituacio(capa.EnvTotal))
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
 
 	var datatype;
@@ -573,7 +597,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
 		return;
 	}
 
-	var i_v=capa.valors.length;
+	capa.valors=[];
+	var i_v=0;
 	for (var i=0; i<image.getSamplesPerPixel(); i++)
 	{
 		capa.valors.push({
@@ -588,10 +613,11 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
 		}
 	}
 
+	capa.estil=[];
 	if (image.getSamplesPerPixel()==3)
 	{
 		capa.estil.push({nom: null,
-					desc: desc,
+					desc: descEstil,
 					DescItems: null,
 					TipusObj: "I",
 					metadades: null,
@@ -611,7 +637,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
 		for (var i=0; i<image.getSamplesPerPixel(); i++)
 		{
 			capa.estil.push({nom: null,
-					desc: desc,
+					desc: descEstil,
 					DescItems: null,
 					TipusObj: "P",
 					metadades: null,
@@ -627,6 +653,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, desc)
 				});
 		}
 	}
+	capa.VisibleALaLlegenda=true;
 	//i_v+=image.getSamplesPerPixel();						
 }
 

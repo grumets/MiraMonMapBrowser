@@ -227,3 +227,8 @@ function MovimentSobreSituacio(event_de_moure)
 {
 	MostraValorDeCoordActual(-1, DonaCoordXDeCoordSobreSituacio(event_de_moure.clientX), DonaCoordYDeCoordSobreSituacio(event_de_moure.clientY));
 }
+
+function EsEnvDinsMapaSituacio(env_actual)
+{
+	return EsEnvDinsEnvolupant(env_actual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
+}//Fi de EsPuntDinsAmbitNavegacio()
