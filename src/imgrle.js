@@ -2344,13 +2344,71 @@ function CanviaImatgeBinariaCapaIndirectCallback(param)
 	CanviaImatgeBinariaCapaCallback(param.dades, param.extra_param);
 }
 
+function CalEstiramentAutomaticPaleta(component)
+{
+	for (var i_c=0; i_c<component.length; i_c++)
+	{
+		if (component[i_c].estiramentPaleta && component[i_c].estiramentPaleta.auto)
+			return true;
+	}
+	return false;
+}
+
+function DefineixEstiramentIniPaletaSiCal(component)
+{
+	for (var i_c=0; i_c<component.length; i_c++)
+	{
+		if (component[i_c].estiramentPaleta && component[i_c].estiramentPaleta.auto)
+		{
+			//Genero un ample gran per començar a determinar l'estirament necessari.
+			component[i_c].estiramentPaleta.valorMaxim=1e+10;
+			component[i_c].estiramentPaleta.valorMinim=-1e+10;
+		}
+	}
+}
+
+//return false, vol dir que no es pot fer l'estirament perquè hi ha massa poc valors
+function AjustaEstiramentIniPaletaSiCal(histograma, component, paleta)
+{
+var c, histo, estadistics;
+	for (var i_c=0; i_c<component.length; i_c++)
+	{
+		c=component[i_c];
+		histo=histograma.component[i_c];
+		if (c.estiramentPaleta && c.estiramentPaleta.auto)
+		{
+			if (c.estiramentPaleta.valorMaxim==1e+10 && c.estiramentPaleta.valorMinim==-1e+10)
+			{
+				c.estiramentPaleta.valorMinim=histo.valorMinimReal;
+				c.estiramentPaleta.valorMaxim=histo.valorMaximReal;
+			}
+			else
+			{
+				if (c.estiramentPaleta.valorMinim==1e+300 && c.estiramentPaleta.valorMaxim==-1e+300)
+					return false;
+				estadistics=CalculaEstadisticsHistograma(histo.classe, c.estiramentPaleta.valorMinim, c.estiramentPaleta.valorMaxim, histo.sumaValorsReal);
+				if (estadistics.recompte<histograma.classe_nodata/600)
+					return false;  //Hi ha massa pocs valors per definir l'estirament
+				c.estiramentPaleta.valorMinim=estadistics.mitjana-estadistics.desv_tipica*2;
+				if (c.estiramentPaleta.valorMinim<histo.valorMinimReal)
+					c.estiramentPaleta.valorMinim<histo.valorMinimReal;
+				c.estiramentPaleta.valorMaxim=estadistics.mitjana+estadistics.desv_tipica*2;
+				if (c.estiramentPaleta.valorMaxim>histo.valorMaximReal)
+					c.estiramentPaleta.valorMaxim<histo.valorMaximReal;
+				c.estiramentPaleta.auto=false;
+			}
+		}
+	}
+	return true;	
+}
+
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
 {
 var i_v, dv=[], mes_duna_v;
 var capa=ParamCtrl.capa[extra_param.i_capa], valors=capa.valors, n_v, n_v_plena;
 var estil=capa.estil[extra_param.i_estil];
 var histograma=null, imgData, ctx;
-var data;
+var data
 //cal_histo=false;
 
 	if (typeof extra_param.i_event!=="undefined")
@@ -2430,12 +2488,22 @@ var data;
 		if (n_v_plena==0)
 			return;
 
-		data=[]; //Empty the array;
+		DefineixEstiramentIniPaletaSiCal(estil.component);
+		do {
+			data=[]; //Empty the array;
 
-		if (estil.component && estil.component.length==1 && estil.component[0].illum)
-			ConstrueixImatgeCanvasIllum(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
-		else
-			ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
+			if (estil.component && estil.component.length==1 && estil.component[0].illum)
+				ConstrueixImatgeCanvasIllum(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
+			else
+				ConstrueixImatgeCanvas(data, histograma, imgData.width, imgData.height, dv, n_v_plena-1, estil.component, valors, estil.paleta, estil.categories);
+
+			if (CalEstiramentAutomaticPaleta(estil.component))
+			{
+				if (!AjustaEstiramentIniPaletaSiCal(histograma, estil.component, estil.paleta))
+					break;
+				ForcaRecalculItemLleg(estil);
+			}
+		} while (CalEstiramentAutomaticPaleta(estil.component))
 
 		imgData.data.set(data);
 

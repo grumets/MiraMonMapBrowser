@@ -220,7 +220,7 @@ var estadistics={valor_min: valor_min,   //Valor mínim cosiderat al histograma. 
 	for (i=0, value=estadistics.ample/2+estadistics.valor_min; i<ncolors; i++, value+=estadistics.ample)
 	{
 		estadistics.recompte+=classe[i];
-		if (!suma_real)
+		if (suma_real==null)
 			estadistics.suma+=classe[i]*value;
 	}
 

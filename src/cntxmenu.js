@@ -1980,8 +1980,7 @@ var cdns=[], i;
 			GetMessage("NewLayerFromServer", "cntxmenu"),
 			": </legend>",
 			GetMessage("SpecifyServerURL", "cntxmenu"),
-			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" value=\"",
-			(url ? url: "http://"), "\" />",
+			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />", 
 			//"<input type=\"radio\" id=\"RadioVersionAndType_WMS11\" name=\"version_and_type\" value=\"WMS11\" checked=\"checked\"><label for=\"RadioVersionAndType_WMS11\">WMS v1.1</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
@@ -3425,6 +3424,16 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	return cdns.join("");
 }
 
+function ForcaRecalculItemLleg(estil)
+{
+	//Cal passar a llegenda automàtica per força
+	estil.ItemLleg=null //això força a tornar a genera els colors de la llegenda i aquest eren automàtics.
+	if (!estil.nItemLlegAuto)
+		estil.nItemLlegAuto=20;
+	if (!estil.ncol)
+		estil.ncol=4;
+}
+
 function EditaEstilCapa(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max;
@@ -3445,12 +3454,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 				estil.component[i_c].estiramentPaleta={"valorMinim": valor_min,
 								"valorMaxim": valor_max};
 			}
-			//Cal passar a llegenda automàtica per força
-			estil.ItemLleg=null //això força a tornar a genera els colors de la llegenda i aquest eren automàtics.
-			if (!estil.nItemLlegAuto)
-				estil.nItemLlegAuto=20;
-			if (!estil.ncol)
-				estil.ncol=4;
+			ForcaRecalculItemLleg(estil);
 		}
 	}
 	if (estil.component && estil.component.length==1 && estil.component[0].illum)

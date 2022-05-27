@@ -564,11 +564,11 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 		}
 		capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
 		if (capa.origen==OriginUsuari && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
-			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + "./n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
 		if (capa.origen==OriginUsuari && 
-			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && EsEnvDinsMapaSituacio(capa.EnvTotal))
+			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
 
@@ -644,6 +644,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 					component: [
 						{
 							i_valor: i_v+i,
+							estiramentPaleta: {auto: true}
 						}
 					],
 					nItemLlegAuto: 20,
