@@ -588,10 +588,10 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 						{
 							calcul="";
 							fragment=capa.estil[j].component[k].calcul;
-							while ((inici=fragment.indexOf("{"))!=-1)
+							while ((inici=fragment.indexOf('{'))!=-1)
 							{
 								//busco una clau de tancar
-								final=fragment.indexOf("}");
+								final=fragment.indexOf('}');
 								if (final==-1)
 								{
 									alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -636,10 +636,10 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 				{
 					calcul="";
 					fragment=capa.atributs[j].calcul;
-					while ((inici=fragment.indexOf("{"))!=-1)
+					while ((inici=fragment.indexOf('{'))!=-1)
 					{
 						//busco una clau de tancar
-						final=fragment.indexOf("}");
+						final=fragment.indexOf('}');
 						if (final==-1)
 						{
 							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -696,10 +696,10 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 				if (!capa.atributs[j].calcul)
 					continue;
 				fragment=capa.atributs[j].calcul;
-				while ((inici=fragment.indexOf("{"))!=-1)
+				while ((inici=fragment.indexOf('{'))!=-1)
 				{
 					//busco una clau de tancar
-					final=fragment.indexOf("}");
+					final=fragment.indexOf('}');
 					if (final==-1)
 					{
 						alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -728,10 +728,10 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 						if (!capa.estil[j].component[k].calcul)
 							continue;
 						fragment=capa.estil[j].component[k].calcul;
-						while ((inici=fragment.indexOf("{"))!=-1)
+						while ((inici=fragment.indexOf('{'))!=-1)
 						{
 							//busco una clau de tancar
-							final=fragment.indexOf("}");
+							final=fragment.indexOf('}');
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -782,10 +782,10 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 						{
 							calcul="";
 							fragment=capa.estil[j].component[k].calcul;
-							while ((inici=fragment.indexOf("{"))!=-1)
+							while ((inici=fragment.indexOf('{'))!=-1)
 							{
 								//busco una clau de tancar
-								final=fragment.indexOf("}");
+								final=fragment.indexOf('}');
 								if (final==-1)
 								{
 									alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -834,10 +834,10 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 					{
 						calcul="";
 						fragment=capa.atributs[j].calcul;
-						while ((inici=fragment.indexOf("{"))!=-1)
+						while ((inici=fragment.indexOf('{'))!=-1)
 						{
 							//busco una clau de tancar
-							final=fragment.indexOf("}");
+							final=fragment.indexOf('}');
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -878,10 +878,10 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 				if (!capa.atributs[j].calcul)
 					continue;
 				fragment=capa.atributs[j].calcul;
-				while ((inici=fragment.indexOf("{"))!=-1)
+				while ((inici=fragment.indexOf('{'))!=-1)
 				{
 					//busco una clau de tancar
-					final=fragment.indexOf("}");
+					final=fragment.indexOf('}');
 					if (final==-1)
 					{
 						alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -910,10 +910,10 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 						if (!capa.estil[j].component[k].calcul)
 							continue;
 						fragment=capa.estil[j].component[k].calcul;
-						while ((inici=fragment.indexOf("{"))!=-1)
+						while ((inici=fragment.indexOf('{'))!=-1)
 						{
 							//busco una clau de tancar
-							final=fragment.indexOf("}");
+							final=fragment.indexOf('}');
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -1277,7 +1277,7 @@ function DonaOldNewDeCadenaReclass(linia_reclass, i_linia, categories,atributs)
 {
 var i, old_value, old_up_value, new_value, desc_value, inici, final;
 
-	i=linia_reclass.indexOf(";");
+	i=linia_reclass.indexOf(';');
 
 	if(i==0)  // la línia és un comentari
 		return null;

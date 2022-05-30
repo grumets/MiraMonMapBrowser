@@ -19,17 +19,17 @@
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
-    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ã©s un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
-    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
-    de mapes rÃ sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
-    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -125,9 +125,9 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		capa.valors=[{
 					"datatype": "float32",
 					"nodata": [-9999, 0]
-				}],  //provisional. CompletaDefinicioCapaTIFF no reescriu amb informaciÃ³ del propi TIFF
+				}],  //provisional. CompletaDefinicioCapaTIFF no reescriu amb informació del propi TIFF
 		capa.estil=estil;
-		//CompletaDefinicioCapa() es fa mÃ©s tard dins de PreparaLecturaTiff()
+		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
 		CompletaDefinicioCapa(capa);
@@ -136,22 +136,22 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
-/* i_capa es passa en el context que estic demanat els indexos en relaciÃ³ a una capa concreta,
-per si la definicÃ³ d'algun v[] d'aquell no indica i_capa explÃ­citament, com per exemple passa
+/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
+per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa
 en crear un flistre espacial a partir d'una banda de la mateixa capa
-En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i estÃ  protegit) */
+En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit) */
 function DonaIndexosACapesDeCalcul(calcul, i_capa)
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
 
 	fragment=calcul;
-	while ((inici=fragment.indexOf("{"))!=-1)
+	while ((inici=fragment.indexOf('{'))!=-1)
 	{
 		//busco una clau de tancar
-		final=fragment.indexOf("}");
+		final=fragment.indexOf('}');
 		if (final==-1)
 		{
-			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
+			alert("Character '{' without '}' in 'calcul'" + (typeof i_capa!=="undefined" ? (" in capa" + i_capa) : ""));
 			break;
 		}
 		cadena=fragment.substring(inici, final+1);
@@ -169,6 +169,31 @@ var fragment, cadena, i_capes=[], inici, final, nou_valor;
 
 	return i_capes;
 }
+
+function AlgunaCapaAmbDataNoDefecteACalcul(calcul)
+{
+var fragment, cadena, inici, final, nou_valor;
+
+	fragment=calcul;
+	while ((inici=fragment.indexOf('{'))!=-1)
+	{
+		//busco una clau de tancar
+		final=fragment.indexOf('}');
+		if (final==-1)
+		{
+			alert("Character '{' without '}' in 'calcul'");
+			break;
+		}
+		cadena=fragment.substring(inici, final+1);
+		//interpreto el fragment metajson
+		nou_valor=JSON.parse(cadena);
+		if (typeof nou_valor.i_data !== "undefined")
+			return true;
+		fragment=fragment.substring(final+1, fragment.length);
+	}
+	return false;
+}
+
 
 function DeterminaEnvTotalDeCapes(i_capes)
 {
@@ -262,11 +287,9 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
-	if (i_capes.length>1) //Si en l'expressiÃ³ entra en joc mÃ©s d'una capa -> la capa calculada Ã©s una capa nova
+	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no son les dades per defecte -> la capa calculada és una capa nova
 	{
-		//pensar quÃ¨ fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil Â·$Â·
-
-
+		//AZ: pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
 
 		ParamCtrl.capa.splice(i_capa, 0, {servidor: null,
 			versio: null,
@@ -291,6 +314,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 				TipusObj: "P",
 				component: [{
 					calcul: document.CalculadoraCapes.calcul.value,
+					estiramentPaleta: {auto: true}
 				}],
 				metadades: null,
 				nItemLlegAuto: 20,
@@ -311,24 +335,24 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 			FlagsData: null,
 			data: null,
 			i_data: 0,
-			animable:	false, //Â·Â·Segurament la capa es podria declarar animable si alguna capa tÃ© els temps "current" i Ã©s multitime.
-			AnimableMultiTime: false,  //Â·Â·Segurament la capa es podria declarar AnimableMultiTime si alguna capa tÃ© els temps "current" i Ã©s multitime.
+			animable:	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
+			AnimableMultiTime: false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 			proces:	null,
 			ProcesMostrarTitolCapa: false,
 			origen: OriginUsuari
 			});
 
-		if (i_capa<ParamCtrl.capa.length)  //aixÃ² Ã©s fa desprÃ©s, donat que els Ã­ndex de capa de la capa nova es poden referir a capes que s'han mogut.
+		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
 			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
 
 		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
-		//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
+		//Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
 		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
-	else //si en l'expressiÃ³ nomÃ©s entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
+	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
 	{
 		var capa=ParamCtrl.capa[i_capa];
 		capa.estil.push({
@@ -337,6 +361,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 				TipusObj: "P",
 				component: [{
 					calcul: calcul,
+					estiramentPaleta: {auto: true}
 				}],
 				metadades: null,
 				nItemLlegAuto: 20,
@@ -447,7 +472,7 @@ var k;
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
+	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	CreaLlegenda();
 	RepintaMapesIVistes();
@@ -507,7 +532,7 @@ var k;
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
+	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	CreaLlegenda();
 	RepintaMapesIVistes();
