@@ -1242,6 +1242,12 @@ function PortaVistaAFullScreen()
 
 	//Canviar la posició de la finestra de la vista per ocupar tota la pantalla
 	moveLayer(vista, 0, 0, window.document.body.clientWidth, window.document.body.clientHeight);
+	if (isFinestraLayer(window, "situacio") && isFinestraLayerVisible(window, "llegenda"))
+		hideFinestraLayer(window, "situacio");
+	if (isFinestraLayer(window, "coord") && isFinestraLayerVisible(window, "coord"))
+		hideFinestraLayer(window, "coord");
+	if (isFinestraLayer(window, "llegenda") && isFinestraLayerVisible(window, "llegenda"))
+		hideFinestraLayer(window, "llegenda");
 	RepintaMapesIVistes();
 }
 
