@@ -137,7 +137,10 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			var tiff = await GeoTIFFfromUrl(url, {headers: {"Authorization":"Bearer "+authResponse.access_token}});
 		}
 		else
+		{
 			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+			return null;
+		}
 	}
 	else
 		var tiff = await GeoTIFFfromUrl(url);
@@ -176,8 +179,9 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			capa.tiff=tiff;
 		}
 	}
-	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc);
-	CompletaDefinicioCapa(capa, false);
+	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc, i_valor2);
+	if (capa.origen==OriginUsuari)
+		CompletaDefinicioCapa(capa, false);
 	return {imatge: imatge, vista: vista, i_capa: i_capa, i_estil: i_estil, i_data: i_data, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
 }
 

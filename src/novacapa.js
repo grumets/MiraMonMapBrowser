@@ -570,7 +570,7 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				origen: OriginUsuari};
 }
 
-async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
+async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 {
 	var image = await tiff.getImage();
 
@@ -622,26 +622,45 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 		return;
 	}
 
-	capa.valors=[];
-	var i_v=0;
-	for (var i=0; i<image.getSamplesPerPixel(); i++)
+	if (capa.origen==OriginUsuari)
 	{
-		capa.valors.push({
+		capa.valors=[];
+		var i_v=0;
+		for (var i=0; i<image.getSamplesPerPixel(); i++)
+		{
+			capa.valors.push({
 				url: capa.servidor ? null : url,
 				datatype: datatype,
 				nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
 			});
-		if (!capa.servidor)
+			if (!capa.servidor)
+			{
+				capa.valors[i_v+i].tiff=tiff;
+				capa.valors[i_v+i].i_data_tiff=0;
+			}
+		}
+	}
+	else
+	{
+		var i_v=i_valor;
+		for (var i=0; i<image.getSamplesPerPixel(); i++)
 		{
-			capa.valors[i_v+i].tiff=tiff;
-			capa.valors[i_v+i].i_data_tiff=0;
+			capa.valors[i_v+i].datatype=datatype;
+			capa.valors[i_v+i].nodata=(image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null;
+			if (!capa.servidor)
+			{
+				capa.valors[i_v+i].tiff=tiff;
+				capa.valors[i_v+i].i_data_tiff=0;
+			}
 		}
 	}
 
-	capa.estil=[];
-	if (image.getSamplesPerPixel()==3)
+	if (capa.origen==OriginUsuari)
 	{
-		capa.estil.push({nom: null,
+		capa.estil=[];
+		if (image.getSamplesPerPixel()==3)
+		{
+			capa.estil.push({nom: null,
 					desc: descEstil,
 					DescItems: null,
 					TipusObj: "I",
@@ -656,12 +675,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 						}
 					]
 				});
-	}
-	else
-	{
-		for (var i=0; i<image.getSamplesPerPixel(); i++)
+		}
+		else
 		{
-			capa.estil.push({nom: null,
+			for (var i=0; i<image.getSamplesPerPixel(); i++)
+			{
+				capa.estil.push({nom: null,
 					desc: descEstil,
 					DescItems: null,
 					TipusObj: "P",
@@ -677,10 +696,10 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil)
 					descColorMultiplesDe: 0.01,
 					ColorMinimPrimer: false
 				});
+			}
 		}
+		capa.VisibleALaLlegenda=true;
 	}
-	capa.VisibleALaLlegenda=true;
-	//i_v+=image.getSamplesPerPixel();						
 }
 
 function AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir)
@@ -727,7 +746,7 @@ var i_fitxer, i_event;
 		}
 
 
-		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer]));
+		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer], 0));
 	}
 
 	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);
@@ -745,7 +764,7 @@ var i_fitxer;
 			await loadGeoTIFF();
 		
 		var tiff = await GeoTIFFfromBlob(tiff_blobs[i_fitxer]);
-		await CompletaDefinicioCapaTIFF(capa, tiff, tiff_blobs[i_fitxer].name, tiff_blobs[i_fitxer].name);
+		await CompletaDefinicioCapaTIFF(capa, tiff, tiff_blobs[i_fitxer].name, tiff_blobs[i_fitxer].name, 0);
 	}
 
 	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);

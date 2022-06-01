@@ -122,6 +122,15 @@
 			"description": "Tipus de servei del ServidorLocal",
 			"$ref": "#/definitions/EnumTipusServidor" 
 		},
+		"accessClientId":
+		{
+			"description": "Noms i client IDs dels applicacions d'autentificació",
+			"type": "object",
+			"properties": {
+				"authenix": { "type": "string"},
+				"wqems": { "type": "string"}
+			}
+		},
 		"AdrecaBaseSRC": { 
 			"description": "Adreça base de les imatges del navegador. Pot ser una cadena buida",
 			"type": "string",
@@ -2403,16 +2412,20 @@
 			}
 		},		
 		"estiramentPaleta": {
-			"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
+			"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta. Pot ser que el rang de valros sigui més gran i la paleta 'saturi'",
 			"type": "object",
 			"properties": {
+				"valorMinim": {
+					"description": "Valor mínim",
+					"type": "number"
+				},
 				"valorMaxim": {
 					"description": "Valor màxim",
 					"type": "number"
 				},
-				"valorMinim": {
-					"description": "Valor màxim",
-					"type": "number"
+				"auto": {
+					"description": "Cal deteriminar el mínim i màxim de manera automàtica. Opcional. Valor per defecte és 'false'.",
+					"type": "boolean"
 				}
 			}
 		},
@@ -2998,7 +3011,7 @@
 					}
 				},
 				"classe_nodata": {
-					"description": "Nombre de cel·les on qualsevol de les component de array binari és assignada a nodata",
+					"description": "Nombre de cel·les on una o més de les component de array binari és assignada a nodata",
 					"type": "number"
 				}								
 			}

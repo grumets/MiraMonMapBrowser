@@ -53,7 +53,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 	if (hello(access.tokenType ? access.tokenType : "authenix").askingAToken)  //Parametre meu que no forma part de la llibreria
 	{
 		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard. 
-		setTimeOut(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+		setTimeout(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 		return;
 	}
 

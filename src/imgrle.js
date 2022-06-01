@@ -2718,8 +2718,11 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 						//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2), TipusEventHttpGet),
 								CanviaImatgeTiFFIndirect: function (param){
-									CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
-									return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+									if (param)
+									{
+										CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
+										return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+									}
 								},
 								ErrorImatgeTIFF: function (error){
 									alert(error);
