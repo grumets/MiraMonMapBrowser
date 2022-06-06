@@ -41,6 +41,7 @@
 var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
+//Suporta totes les version de WMS
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
 var i, j, node2, node3, trobat=false, cadena, cadena2, layer;
@@ -97,7 +98,8 @@ var minim, maxim, factor_k, factorpixel;
 									i_data: 0,
 									data: null,
 									esCOG: false,
-									uriTemplate: null,
+									uriDataTemplate: null,
+									uriMDTemplate: null,
 									dimensioExtra: null};
 				layer=servidorGC.layer[servidorGC.layer.length-1];
 				layer.nom=node2.childNodes[0].nodeValue;
@@ -234,6 +236,7 @@ var minim, maxim, factor_k, factorpixel;
 					}
 				}
 			}
+			//Aquests 2 els faig a part perquè necessito els noms de les dimensions.
 			for(i=0; i<node_layer.childNodes.length; i++)
 			{
 				node2=node_layer.childNodes[i];
@@ -259,11 +262,27 @@ var minim, maxim, factor_k, factorpixel;
 						}
 						if (node3.nodeName=="OnlineResource")
 						{
-							layer.uriTemplate=node3.getAttribute("xlink:href");
+							layer.uriDataTemplate=node3.getAttribute("xlink:href");
 							for (var d=0; d<layer.dimensioExtra.length; d++)
 							{
 								//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
-								layer.uriTemplate=layer.uriTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+								layer.uriDataTemplate=layer.uriDataTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+							}
+						}
+					}
+				}
+				if(node2.nodeName=="MetadataURL")
+				{
+					for(j=0; j<node2.childNodes.length; j++)
+					{
+						node3=node2.childNodes[j];
+						if (node3.nodeName=="OnlineResource")
+						{
+							layer.uriMDTemplate=node3.getAttribute("xlink:href");
+							for (var d=0; d<layer.dimensioExtra.length; d++)
+							{
+								//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
+								layer.uriMDTemplate=layer.uriMDTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
 							}
 						}
 					}
@@ -318,17 +337,16 @@ var root, cadena, node, node2, i, j
 	if(HiHaAlgunErrorDeParsejatGetCapabilities(doc))
 		return;
 	root=doc.documentElement;
-	if(!root)
+	if(!root) 
 	{
 		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
 		return;
 	}
 
 	//Cal comprovar que és un document de capacitats, potser és un error, en aquest cas el llegeix-ho i el mostraré directament
-	if(root.nodeName!="WMT_MS_Capabilities")
+	if(root.nodeName!="WMT_MS_Capabilities" && root.nodeName!="WMS_Capabilities")
 	{
-		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
-		//·$· mirar de possar el que ens ha retornat el servidor
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu") + "rootNode: " + root.nodeName);
 		return;
 	}
 
@@ -432,9 +450,9 @@ var root, cadena, node, node2, i, j
 	}
 }//Fi de ParsejaRespostaGetCapabilities()
 
-function FesPeticioCapacitatsIParsejaResposta(servidor, i_capa, func_after)
+function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, i_capa, func_after)
 {
-var request, tipus="TipusWMS";
+var request;
 
 	if(servidor)
 		servidor=servidor.trim();
@@ -459,7 +477,9 @@ var request, tipus="TipusWMS";
 	if (ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
 		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 
-	request="REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE="
+	request="REQUEST=GetCapabilities&VERSION="
+	request+=versio	? versio : "1.1.0";
+	request+="&SERVICE="
 	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
 		request+="WMS";
 	else if (tipus=="TipusWMTS_KVP")

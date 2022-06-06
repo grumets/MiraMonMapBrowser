@@ -1981,10 +1981,14 @@ var cdns=[], i;
 			": </legend>",
 			GetMessage("SpecifyServerURL", "cntxmenu"),
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />", 
-			//"<input type=\"radio\" id=\"RadioVersionAndType_WMS11\" name=\"version_and_type\" value=\"WMS11\" checked=\"checked\"><label for=\"RadioVersionAndType_WMS11\">WMS v1.1</label>",
+			"<br />",
+			"<input type=\"hidden\" name=\"tipus\" value=\"TipusWMS\">",
+			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\"><label for=\"RadioVersion_WMS11\">WMS v1.1</label>",
+			"<input type=\"radio\" id=\"RadioVersion_WMS111\" name=\"versio\" value=\"1.1.1\" checked=\"checked\"><label for=\"RadioVersion_WMS111\">WMS v1.1.1</label>",
+			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\"><label for=\"RadioVersion_WMS13\">WMS v1.3</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
+		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
@@ -2065,7 +2069,7 @@ var cdns=[], j, layer, j_selected;
 					DonaCadenaNomDesc(layer));
 		cdns.push("</td><td><select name=\"format_capa_", i, "\" class=\"Verdana11px\">");
 
-		if (layer.esCOG && layer.uriTemplate)
+		if (layer.esCOG && layer.uriDataTemplate)
 			j_selected=servidorGC.formatGetMap.length;
 		else
 		{
@@ -2089,7 +2093,7 @@ var cdns=[], j, layer, j_selected;
 		}
 		for(j=0; j<servidorGC.formatGetMap.length; j++)
 			cdns.push("<option value=\"", j, "\"", (j_selected==j ? " selected" : ""), ">",  servidorGC.formatGetMap[j]);
-		if (layer.esCOG && layer.uriTemplate)
+		if (layer.esCOG && layer.uriDataTemplate)
 			cdns.push("<option value=\"-1\" selected>",  "Cloud Optimized GeoTIFF direct");
 		cdns.push("</select></td></tr>");
 	}

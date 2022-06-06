@@ -20,7 +20,16 @@ function parseJwt(token)
 function IsAuthResponseOnline(session) {
 	var currentTime = (new Date()).getTime() / 1000;
 	return session && session.access_token && session.expires > currentTime;
-};
+}
+
+//Suporta que access_token sigui null
+function DonaUrlAmbAccessToken(url, access_token)
+{
+	if (access_token)
+		return url + (url.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + access_token;
+	else
+		return url;
+}
 
 function AddAccessTokenToURLIfOnline(url, access)
 {
@@ -39,7 +48,7 @@ function AddAccessTokenToURLIfOnline(url, access)
 				alert(authResponse.error_description)
 				return null;
 			}
-			return url + (url.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + authResponse.access_token;
+			return DonaUrlAmbAccessToken(url, authResponse.access_token);
 		}
 		else
 			return null;

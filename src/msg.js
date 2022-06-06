@@ -201,7 +201,7 @@ var MessageLang={
 		WrongValuesFormatInLine: {"cat": "Format incorrecte dels valors a la línia", "spa": "Formato incorrecto de los valores en la línea", "eng": "Wrong values format in line", "fre": "Wrong values format in line"},
 		WrongOldValueInLine: {"cat": "Valor a canviar incorrecte a la línia", "spa": "Valor a cambiar incorrecto en la línea", "eng": "Wrong old value in line", "fre": "Ancienne valeur erronée dans la ligne"},
 		CannotObtainValidResponseFromServer: {"cat":"No s'ha obtingut cap resposta vàlida del servidor sol·licitat", "spa":"No se ha obtenido ninguna respuesta válida del servidor solicitado", "eng":"Cannot obtain any valid response from server", "fre":"Aucune réponse valide n'a été obtenue du serveur demandé"},
-		ServerURL: {"cat":"URL del servidor:", "spa":"URL del servidor:", "eng":"server URL:", "fre":"URL du serveur:"},
+		ServerURL: {"cat":"URL del servidor", "spa":"URL del servidor", "eng":"server URL", "fre":"URL du serveur"},
 		SelectAllLayers: {"cat":"Seleccionar totes les capes", "spa":"Seleccionar todas las capas", "eng":"Select all layers", "fre":"Sélectionner toutes les couches"},
 		ServerNotHaveLayerInBrowserReferenceSystem: {"cat":"Aquest servidor no té cap capa disponible en el sistema de referència actual del navegador", "spa":"Este servidor no tiene ninguna capa disponible en el sistema de referéncia actual del navegador", "eng":"This server don't have any layer in the browser actual reference system", "fre":"Ce serveur n'a aucune couche disponible dans le système de référence actuel du navigateur"},
 		ValidURLMustBeProvided: {"cat":"Cal indicar una adreça vàlida", "spa":"Se debe indicar una dirección válida","eng":"A valid URL must be provided","fre":"Vous devez indiquer une adresse valide"},

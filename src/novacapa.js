@@ -57,7 +57,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
-			if (layer.esCOG && layer.uriTemplate)
+			if (layer.esCOG && layer.uriDataTemplate)
 				estil[estil.length-1].component=[{"i_valor": 0}];
 		}
 	}
@@ -82,8 +82,8 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 	}
 
 	ParamCtrl.capa.splice(k, 0, 
-		(layer.esCOG && layer.uriTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriTemplate, layer.desc)
+		(layer.esCOG && layer.uriDataTemplate) ? 
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
@@ -118,7 +118,10 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 	capa.access=(servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null;
 	capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
 
-	if (layer.esCOG && layer.uriTemplate)
+	if (layer.uriMDTemplate)
+		capa.metadades={standard: layer.uriMDTemplate};
+
+	if (layer.esCOG && layer.uriDataTemplate)
 	{
 		capa.CostatMinim=minim;
 		capa.CostatMaxim=maxim;

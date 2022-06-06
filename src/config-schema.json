@@ -2204,7 +2204,7 @@
 								"type": ["null", "array"],
 								"items": {
 									"description": "Request que necessita autentificació", 
-									"enum": ["transaction", "capabilities", "consultaLink", "map"]
+									"enum": ["transaction", "capabilities", "consultaLink", "map", "download"]
 								}
 							}
 						}
