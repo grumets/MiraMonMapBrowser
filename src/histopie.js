@@ -41,6 +41,7 @@
 var prefixNovaVistaFinestra="nova_vista_fin_";
 var prefixHistogramaFinestra="histo_fin_";
 var sufixCheckDinamicHistograma="_dinamic";
+var HistogramaFinestra={"n": 0, "vista":[]};
 
 function CopiaPortapapersFinestraLayer(nom_finestra)
 {
@@ -61,8 +62,6 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 	}
 }
 
-var HistogramaFinestra={"n": 0, "vista":[]};
-
 function CanviaIndexosCapesHistogramaFinestra(n_moviment, i_capa_ini, i_capa_fi_per_sota)
 {
 	if (HistogramaFinestra && HistogramaFinestra.n && HistogramaFinestra.vista.length>0)
@@ -72,6 +71,15 @@ function CanviaIndexosCapesHistogramaFinestra(n_moviment, i_capa_ini, i_capa_fi_
 			if (HistogramaFinestra.vista[i].i_capa>=i_capa_ini && HistogramaFinestra.vista[i].i_capa<i_capa_fi_per_sota)
 				HistogramaFinestra.vista[i].i_capa+=n_moviment;
 		}
+	}
+}
+
+function TancaTotsElsHistogramaFinestra()
+{
+	if (HistogramaFinestra && HistogramaFinestra.n && HistogramaFinestra.vista.length>0)
+	{
+		for (var i=0; i<HistogramaFinestra.vista.length; i++)
+			TancaFinestraLayer(DonaNomHistograma(i));
 	}
 }
 
@@ -591,22 +599,21 @@ function DonaNomCheckDinamicTextHistograma(i_histo)
 	return DonaNomCheckDinamicHistograma(i_histo)+"_text";
 }
 
-function ObreFinestraHistograma(i_capa, i_estil, tipus_estad, presentacio, order)
+//Els 3 parametres tipus, stat, order es corresponen amb els descrits com a propietats de al'element "diagrama" del config.
+//si tipus=="stat_categ" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
+function ObreFinestraHistograma(i_capa, i_estil, tipus, stat, order)
 {
 var ncol=460, nfil=260, estil, i_estil_intern, component, titol;
 var nom_histograma=DonaNomHistograma(HistogramaFinestra.n);
 var cdns=[];
-var def_diagrama_existeix=false;
-var i_diag=-1, des_top=-9999, des_left=-9999, des_width=-9999, des_height=-9999;
+var i_diag, des_top=-9999, des_left=-9999, des_width=-9999, des_height=-9999;
 var tipus_chart;
 
 	if (typeof i_estil !== "undefined" && i_estil != -1)
-	{
 		i_estil_intern=i_estil;
-		def_diagrama_existeix=true;
-	}
 	else //si em pasen un estil concret d'aquesta capa, que pot no ser el "actiu", l'uso
 		i_estil_intern=ParamCtrl.capa[i_capa].i_estil;
+
 	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern];
 	component=estil.component;
 
@@ -619,17 +626,18 @@ var tipus_chart;
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
 		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
 
-	if (tipus_estad)
+	if (tipus && stat)
 	{
-		var tip_est_intern;
-		if (tipus_estad.substr(tipus_estad.length-2, 2) == "_2")
+		//var tip_est_intern;
+		if (tipus=="chart_categ" || tipus=="stat_categ")
 		{
-			tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
+			//tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
 			titol=GetMessage("Statistics")+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 			//titol=DonaCadenaLang({"cat":"Estadístics per categoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
-			if (presentacio == "graphic")
-			{
-				tipus_chart="chart_categ";
+			//if (presentacio == "graphic")
+			if (tipus=="chart_categ")
+			{	
+				tipus_chart=tipus;
 				ncol=650;
 				nfil=200;
 				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><table><td><canvas id=\"", nom_histograma, "_canvas_", "area", "\" width=\"", ncol*4/6.5, "\" height=\"", nfil, "\"></canvas></td>");
@@ -638,9 +646,9 @@ var tipus_chart;
 				ncol+=20;
 				nfil+=20;
 			}
-			else //"text"
+			else //"stat_categ"
 			{
-				tipus_chart="stat_categ";
+				tipus_chart=tipus;
 				//·$· pensar mida que cal per aquesta representació textual per categories
 				ncol/=1.3;
 				nfil/=2;
@@ -651,8 +659,8 @@ var tipus_chart;
 		else
 		{
 			tipus_chart="stat";
-			tip_est_intern=tipus_estad;
-			var s=DonaTitolEstadistic(estil.categories, estil.atributs, tip_est_intern);
+			//tip_est_intern=tipus_estad;
+			var s=DonaTitolEstadistic(estil.categories, estil.atributs, stat);
 			titol=GetMessage("Statistic")+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
 			//titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
@@ -689,7 +697,8 @@ var tipus_chart;
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
-	if (def_diagrama_existeix) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+	if (typeof i_estil !== "undefined" && i_estil!=null && i_estil != -1 && 
+		estil.diagrama && estil.diagrama.length) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
 	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadístic en un futur). si tinc més de un del mateix tipus, cada cop faig el primer que trobo
 		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
 		{
@@ -709,6 +718,9 @@ var tipus_chart;
 		if (i_diag == estil.diagrama.length) //no l'he trobat
 			i_diag=-1;
 	}
+	else
+		i_diag=-1;
+
 	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd",
 		textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, (des_left == -9999 ) ? 200+HistogramaFinestra.n*10 : des_left, (des_top == -9999) ? 200+HistogramaFinestra.n*10 : des_top,
 			(des_width == -9999) ? ncol : des_width, (des_height == -9999) ? (component.length == 2 ? nfil+AltBarraFinestraLayer+2+20 : nfil*component.length+AltBarraFinestraLayer+2+20) : des_height+20,
@@ -716,7 +728,7 @@ var tipus_chart;
 	OmpleBarraFinestraLayerNom(window, nom_histograma);
 	HistogramaFinestra.vista[HistogramaFinestra.n]={ //"nfil": nfil,
 				//"ncol": ncol,
-        "i_capa": i_capa,
+			        "i_capa": i_capa,
 				"i_estil": i_estil_intern,
 				//"costat": ParamInternCtrl.vista.CostatZoomActual,
 				//"env": {"MinX": ParamInternCtrl.vista.EnvActual.MinX, "MaxX": ParamInternCtrl.vista.EnvActual.MaxX, "MinY": ParamInternCtrl.vista.EnvActual.MinY, "MaxY": ParamInternCtrl.vista.EnvActual.MaxY},
@@ -727,7 +739,7 @@ var tipus_chart;
 	if (tipus_chart == "stat")
 		CreaEstadistic(HistogramaFinestra.n, i_diag, tipus_estad); //dins ja omple estil.diagrama
 	else if (tipus_chart == "stat_categ")
-		CreaEstadisticPerCategories(HistogramaFinestra.n, i_diag, tip_est_intern, order); //dins ja omple estil.diagrama
+		CreaEstadisticPerCategories(HistogramaFinestra.n, i_diag, stat, order); //dins ja omple estil.diagrama
 	else if (tipus_chart == "matriu")
 		CreaMatriuDeConfusio(HistogramaFinestra.n, i_diag); //dins ja omple estil.diagrama
 	else if (tipus_chart == "chart")
@@ -747,14 +759,14 @@ var tipus_chart;
 	}
 	else	// "chart_categ"
 	{
-		CreaHistogramesPerCategories(HistogramaFinestra.n, tip_est_intern, order); //crea 2
+		CreaHistogramesPerCategories(HistogramaFinestra.n, stat, order); //crea 2
 		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
 			estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 		else
 		{
 			if (typeof estil.diagrama === "undefined") //no està creat (i.e. obertura de nova finestra de gràfic des del menú)
 				estil.diagrama = []; //array de objectes
-			estil.diagrama.push({tipus: "chart_categ", stat: tip_est_intern, order: order, i_histograma: HistogramaFinestra.n});
+			estil.diagrama.push({tipus: "chart_categ", stat: stat, order: order, i_histograma: HistogramaFinestra.n});
 		}
 	}
 	HistogramaFinestra.n++;
@@ -794,7 +806,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
-	if (unitats=="°")
+	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		unitats="m";
 	if (area_cella>10000 && unitats=="m")
 	{
@@ -1480,12 +1492,10 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 	{
 		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "matriu")
 			ObreFinestraHistograma(i_capa, i_estil);
-		else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
-			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat+"_2", "graphic", estil.diagrama[i_diagrama].order);
+		else if (estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "stat_categ")
+			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].tipus, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
 		else if (estil.diagrama[i_diagrama].tipus == "stat")
-			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat);
-		else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
-			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].stat+"_2", "text", estil.diagrama[i_diagrama].order);
+			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].tipus, estil.diagrama[i_diagrama].stat);
 		else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			ObreFinestraSuperficie3D(i_capa, i_estil);
 	}
@@ -1577,7 +1587,7 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 	retorn_prep_histo.unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
-	if (retorn_prep_histo.unitats=="°")
+	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		retorn_prep_histo.unitats="m";
 	if (area_cella>20 && retorn_prep_histo.unitats=="m")
 	{
@@ -1645,7 +1655,7 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 		}
 		else
 			i=-1;
-		if (i==retorn_prep_histo.labels.length)
+		if (i==retorn_prep_histo.labels.length && DonaTipusGraficHistograma(estil,0)=="pie")
 		{
 			retorn_prep_histo.options.legend={
 				position: "right",
@@ -1987,10 +1997,10 @@ function CreaHistograma(n_histograma, i_c)
 		HistogramaFinestra.vista[n_histograma].chart[HistogramaFinestra.vista[n_histograma].chart.length]=myChart;
 }
 
-function CreaHistogramesPerCategories(n_histograma, tip_est_intern, order)
+function CreaHistogramesPerCategories(n_histograma, stat, order)
 {
 	var histograma=HistogramaFinestra.vista[n_histograma];
-	var retorn_prep_histo=PreparaHistogramaPerCategories(n_histograma, tip_est_intern, order);
+	var retorn_prep_histo=PreparaHistogramaPerCategories(n_histograma, stat, order);
 	var estil = ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
 
 	//primer gràfic de barres: àrea

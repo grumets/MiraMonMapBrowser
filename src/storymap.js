@@ -225,7 +225,7 @@ var hihacanvis, node, attribute, i_styles
 							punt=JSON.parse(mmcenter);
 						}
 						catch (e) {
-							alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap") + ": " + e + ". " +
+							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
 										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
 							break;
 						}
@@ -233,7 +233,7 @@ var hihacanvis, node, attribute, i_styles
 							hihacanvis=true;
 					}
 					else
-						alert(GetMessage("WrongFormat_mm_center_Parameter", "storymap"));
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
 				else if (attribute.name=='mm-zoom')
 				{
@@ -267,7 +267,7 @@ var hihacanvis, node, attribute, i_styles
 						}
 						catch (e)
 						{
-							alert(GetMessage("WrongFormat_mm_time_Parameter", "storymap") + ": " + e + ". "+
+							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
 										GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
 							break;
 						}
@@ -285,7 +285,7 @@ var hihacanvis, node, attribute, i_styles
 							sels=JSON.parse(mmsels);
 						}
 						catch (e) {
-							alert(GetMessage("WrongFormat_mm_sels_Parameter", "storymap") + ": " + e + ". " +
+							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
 										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
 							break;
 						}
@@ -293,7 +293,27 @@ var hihacanvis, node, attribute, i_styles
 							hihacanvis=true;
 					}
 					else
-						alert(GetMessage("WrongFormat_mm_sels_Parameter", "storymap"));
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+				}
+				else if (attribute.name=='mm-histos')
+				{
+					var mmhistos = "["+attribute.value.trim()+"]";
+					if (mmhistos.length>3)
+					{
+						var histos;
+						try {
+							histos=JSON.parse(mmhistos);
+						}
+						catch (e) {
+							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
+							break;
+						}
+						if (0==CommandMMNHistograms(histos))
+							hihacanvis=true;
+					}
+					else
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
 			}
 			if (hihacanvis)
@@ -301,6 +321,8 @@ var hihacanvis, node, attribute, i_styles
 				if (darrerNodeStoryMapVisibleExecutat==node)
 					return true;
 				darrerNodeStoryMapVisibleExecutat=node;
+				if (!histos)
+					TancaTotsElsHistogramaFinestra();
 				RepintaMapesIVistes();
 				return true;
 			}

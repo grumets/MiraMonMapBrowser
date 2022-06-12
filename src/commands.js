@@ -153,3 +153,36 @@ var sel, capa, estil, i_estil;
 		capa.i_estil=i_estil;
 	}
 }
+
+function CommandMMNHistograms(histos)
+{
+var histo, capa, estil, i_estil;
+
+	TancaTotsElsHistogramaFinestra();
+	for (var i_histo=0; i_histo<histos.length; i_histo++)
+	{	
+		histo=histos[i_histo];
+
+		if(typeof histo.ly === 'undefined')
+		{
+			alert(GetMessage("HistogramsIncorrectFormat", "commands") + GetMessage("LyRequired", "commands") + ": {ly: 'IdCapa1', style: 'styleNom', type: 'diagramType', stat: 'statEnum', order: 'orderEnum'}");
+				return 1;
+		}
+		if (null==(capa=DonaCapaDesDeIdCapa(histo.ly)))
+			continue;
+
+		estil=DonaEstilDesDeNomEstil(capa, histo.style);
+		if (estil)
+		{
+			i_estil=capa.estil.indexOf(estil);	
+			capa.i_estil=i_estil; //Defineix el nou estil com estil actiu. Si no ho faig l'histograma no es veurà.
+		}
+		else
+			i_estil=-1;  //estil actual
+
+		if (capa.visible=="ara_no")  //si no faig la capa visible no funcionaran les estadistiques igualment.
+			CanviaEstatVisibleCapa(ParamCtrl.capa.indexOf(capa), "si");
+
+		ObreFinestraHistograma(ParamCtrl.capa.indexOf(capa), i_estil, histo.type, histo.stat, histo.order);
+	}
+}

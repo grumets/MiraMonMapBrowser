@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
+ 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
 	"type": "object",
@@ -884,7 +884,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles: mm-center='{'x': `number`, 'y': `number`}' mm-zoom=`number` mm-crs=`crs_name` mm-time='{'year': `number`..., 'second': `number`}' mm-layers='`IdCapa1`,`IdCapa2`,...' mm-styles='`styleNom1`,`styleNom2`...' mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'name': `NomEstil`}' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) mm-center='{'x': `number`, 'y': `number`}'  (2) mm-zoom=`number`   (3)   mm-crs=`crs_name` mm-time='{'year': `number`..., 'second': `number`}'  (4) mm-layers='`IdCapa1`,`IdCapa2`,...'   (5) mm-styles='`styleNom1`,`styleNom2`...',    (6) mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'name': `NomEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (7)  mm-histos={'ly': '`IdCapa1`', 'style': '`styleNom`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre mm-histos, es tanquen tots els histogrames; IdCapa* a deser una capa d'arrays binaris)",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
@@ -2204,7 +2204,7 @@
 								"type": ["null", "array"],
 								"items": {
 									"description": "Request que necessita autentificació", 
-									"enum": ["transaction", "capabilities", "consultaLink", "map", "download"]
+									"enum": ["transaction", "capabilities", "consultaLink", "map"]
 								}
 							}
 						}

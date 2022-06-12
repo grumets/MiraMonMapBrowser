@@ -3175,9 +3175,10 @@ function CridaCreacioEstadistic(i_capa)
 	TancaFinestraLayer("seleccioEstadistic");
 	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")
 	//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
-		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value, document.SeleccioEstadistic.presentacio.value, document.SeleccioEstadistic.order.value);
+		return ObreFinestraHistograma(i_capa, -1, (document.SeleccioEstadistic.presentacio.value == "graphic") ? "chart_categ" : "stat_categ", 
+					document.SeleccioEstadistic.stat.value.substring(0, document.SeleccioEstadistic.stat.value.length-2), document.SeleccioEstadistic.order.value);
 	else //cas normal, només necessito saber el estadístic a mostrar
-		return ObreFinestraHistograma(i_capa, -1, document.SeleccioEstadistic.stat.value);
+		return ObreFinestraHistograma(i_capa, -1, "stat", document.SeleccioEstadistic.stat.value);
 }
 
 function DonaDescripcioValorsCapa(params)

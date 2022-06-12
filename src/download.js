@@ -699,7 +699,7 @@ var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data);
 
 function OfereixOpcionsDescarregaTot(i_capa, i_data)
 {
-var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false, access_token=null;
+var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false/*, access_token=null*/;
 
 	cdns.push("<form name=\"botons_descarrega\"", // onSubmit=\"DescarregaFitxerCapa("+i_capa+");return false;\">"+
 				   "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">");
@@ -710,7 +710,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false, access_token=null;
 
 	cdns.push("<fieldset><legend><b>", GetMessage("Option"), ":</b></legend>");
 
-	if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("download")!=-1)
+	/*if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("download")!=-1)
 	{
 		var authResponse=hello(capa.access.tokenType).getAuthResponse();
 		if (IsAuthResponseOnline(authResponse))
@@ -732,14 +732,14 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], missatge_mmz=false, access_token=null;
 			AuthResponseConnect(OfereixOpcionsDescarregaTot, capa.access, i_capa, i_data);
 			return;
 		}
-	}
+	}*/
 
 	for (var i=0; i<capa.DescarregaTot.length; i++)
 	{
 		//S'ha de demanar la descarrega de la url enviant-la a l'iframe ocult.
 		for (var i_format=0; i_format<capa.DescarregaTot[i].format.length; i_format++)
 		{
-			cdns.push("<a href=\"", (access_token ? DonaUrlAmbAccessToken(DonaNomFitxerDescarregaTot(i_capa, i, i_format, i_data), access_token) : DonaNomFitxerDescarregaTot(i_capa, i, i_format, i_data)), "\" target=\"_blank\">",DonaCadena(capa.DescarregaTot[i].desc),
+			cdns.push("<a href=\"", /*(access_token ? DonaUrlAmbAccessToken(DonaNomFitxerDescarregaTot(i_capa, i, i_format, i_data), access_token) : */DonaNomFitxerDescarregaTot(i_capa, i, i_format, i_data)/*)*/, "\" target=\"_blank\">",DonaCadena(capa.DescarregaTot[i].desc),
 				"</a> (",DonaCadena(ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.desc),
 				")<br>");
 			if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i].format[i_format]].format.nom=="application/x-mmz" ||

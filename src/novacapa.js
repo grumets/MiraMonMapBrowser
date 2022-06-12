@@ -125,6 +125,9 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 	{
 		capa.CostatMinim=minim;
 		capa.CostatMaxim=maxim;
+		if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
+			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
+
 		capa.valors=[{
 					"datatype": "float32",
 					"nodata": [-9999, 0]

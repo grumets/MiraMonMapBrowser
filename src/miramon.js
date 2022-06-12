@@ -6367,10 +6367,32 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	// arreglem els config.json que deien mostrar: true false errònimament
 	var avis_mostrar_atributs=false;
 	var capa, estil;
+
+	var protocol=location.protocol.toLowerCase();
+	var host=location.host.toLowerCase();
+	if(protocol=="https:")
+	{
+		// 22-11-2019 (NJ i JM) : Decidim canviar el protocol dels servidors que tenen el mateix host que el navegador
+		// perquè per seguretat els navegadors bloquegen o donen error quan fas una petició http des d'una url(navegador) en htpps
+		if(ParamCtrl.ServidorLocal &&
+		   host==DonaHost(ParamCtrl.ServidorLocal).toLowerCase() &&
+		   protocol!=DonaProtocol(ParamCtrl.ServidorLocal).toLowerCase())
+		{
+			ParamCtrl.ServidorLocal=protocol+ParamCtrl.ServidorLocal.substring(ParamCtrl.ServidorLocal.indexOf("://")+1, ParamCtrl.ServidorLocal.length);
+		}
+	}
+
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
 		CreaIdSiCal(capa, i);
+
+		if (protocol=="https:" && capa.servidor && host==DonaHost(capa.servidor).toLowerCase() &&
+			   protocol!=DonaProtocol(capa.servidor).toLowerCase())
+		{
+			capa.servidor=protocol+capa.servidor.substring(capa.servidor.indexOf("://")+1, capa.servidor.length);
+		}
+
 		if (capa.atributs && capa.atributs.length)
 		{
 			for (j=0; j<capa.atributs.length; j++)
@@ -6413,15 +6435,21 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			}
 		}
 
-		if ((capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img") && (!capa.valors || capa.valors.length==0))
+		if ((capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img"))
 		{
-			alert(DonaCadenaLang({"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de definir un array de 'valors'. La capa no es podria carregar i es declara no visible ni consultable.",
-						"spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'. La capa no es podría carregar por lo que declara no visible ni consultable.",
-						"eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'. The layer will not load so it is declared as neither visible nor queriable.",
-						"fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'. La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable."})
-						+ " capa = " + DonaCadenaNomDesc(capa));
-			capa.visible="no";
-			capa.consultable="no";
+			if (!capa.valors || capa.valors.length==0)
+			{
+				alert(GetMessage("LayerTIFFIMGMustHaveValues", "miramon") + ". "+ GetMessage("LayerSetToNoVisibleQueriable", "miramon")+ "." + " capa = " + DonaCadenaNomDesc(capa));
+				capa.visible="no";
+				capa.consultable="no";
+			}
+
+			if (protocol=="https:" && DonaServidorCapa(capa) && protocol!=DonaProtocol(DonaServidorCapa(capa)).toLowerCase()/* && DonaCorsServidorCapa(capa)==true*/)
+			{
+				alert(GetMessage("LayerBinaryArrayMustBeHTTPS", "miramon") + ". "+ GetMessage("LayerSetToNoVisibleQueriable", "miramon")+ "." + " capa = " + DonaCadenaNomDesc(capa));
+				capa.visible="no";
+				capa.consultable="no";
+			}
 		}
 			
 		if (capa.estil && capa.estil.length)
@@ -6510,28 +6538,6 @@ var win, i, j, l, capa;
 	if (ParamCtrl.AdrecaBaseSRC)
 		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
 
-	var protocol=location.protocol.toLowerCase();
-	if("https:"==protocol)
-	{
-		// 22-11-2019 (NJ i JM) : Decidim canviar el protocol dels servidors que tenen el mateix host que el navegador
-		// perquè per seguretat els navegadors bloquegen o donen error quan fas una petició http des d'una url(navegador) en htpps
-		var host=location.host.toLowerCase();
-		if(ParamCtrl.ServidorLocal &&
-		   host==DonaHost(ParamCtrl.ServidorLocal).toLowerCase() &&
-		   protocol!=DonaProtocol(ParamCtrl.ServidorLocal).toLowerCase())
-		{
-			ParamCtrl.ServidorLocal=protocol+ParamCtrl.ServidorLocal.substring(ParamCtrl.ServidorLocal.indexOf("://")+1, ParamCtrl.ServidorLocal.length);
-		}
-		for (i=0; i<ParamCtrl.capa.length; i++)
-		{
-			capa=ParamCtrl.capa[i];
-			if(capa.servidor && host==DonaHost(capa.servidor).toLowerCase() &&
-			   protocol!=DonaProtocol(capa.servidor).toLowerCase())
-			{
-				capa.servidor=protocol+capa.servidor.substring(capa.servidor.indexOf("://")+1, capa.servidor.length);
-			}
-		}
-	}
 	for (i=0; i<ParamCtrl.Layer.length; i++)
 	{
 		l=ParamCtrl.Layer[i];

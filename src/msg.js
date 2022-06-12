@@ -43,6 +43,7 @@ var MessageLang={
 	MissingMessage: {"cat":"Missatge no trobat", "spa":"Mensage no encontrado", "eng":"Missing message", "fre":"Message non trouvé"},
 	neitherRecognizedNorImplemented: {"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"},
 	UseTheFormat: {"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"},
+	WrongFormatParameter: {"cat":"Format de paràmetre incorrecte", "spa":"Formato de parametro incorrecto", "eng":"Wrong format in parameter", "fre":"Format incorrect dans le paramètre"},
 	ModifyName: {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"},
 	AddLayer: {"cat":"Afegir capa", "spa":"A&ntilde;adir capa", "eng":"Add layer", "fre":"Ajouter couche"},
 	Georeference: {"cat":"Georeferència","spa":"Georeferencia", "eng":"Georeference", "fre":"Géoréférence"},
@@ -280,10 +281,7 @@ var MessageLang={
 		Storymaps: {"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"},
 		SelectStory: {"cat":"Selecciona un relat", "spa":"Selecciona un relato", "eng":"Select a story", "fre":"Sélectionnez une histoire"},
 		NoStoryInThisArea: {"cat":"No hi ha cap relat associat a aquesta zona", "spa":"No hay ningún relato asociado a esta zona", "eng":"There are no stories associated with this area", "fre":"Il n'y a pas d'histoires associées à cette zone"},
-		WrongFormat_mm_center_Parameter: {"cat":"Format del paràmetre mm-center incorrecte", "spa":"Formato del parametro mm-center icnorrecto", "eng":"Wrong format in mm-center parameter", "fre":"Format incorrect dans le paramètre mm-center"},
-		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és:", "spa":"El valor del parámetro indicado es:", "eng":"The parameter value found is:", "fre":"La valeur de paramètre trouvée est:"},
-		WrongFormat_mm_time_Parameter: {"cat":"Format del paràmetre mm-time incorrecte", "spa":"Formato del parámetro mm-time icnorrecto", "eng":"Wrong format in mm-time parameter", "fre":"Format incorrect dans le paramètre mm-time"},
-		WrongFormat_mm_sels_Parameter: {"cat":"Format del paràmetre mm-sels incorrecte", "spa":"Formato del parametro mm-sels icnorrecto", "eng":"Wrong format in mm-sels parameter", "fre":"Format incorrect dans le paramètre mm-sels"},
+		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és", "spa":"El valor del parámetro indicado es", "eng":"The parameter value found is", "fre":"La valeur de paramètre trouvée est"},
 	},
 	tresD:{
 		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},
@@ -327,7 +325,9 @@ var MessageLang={
 		CoordIncorrectFormat: {"cat":"Format de les coordenades erroni", "spa":"Formato de las coordenadas erróneo", "eng":"Coordinate format is incorrect", "fre":"Format des coordonnées erroné"},
 		TwoNumericalValuesRequiredFormat: {"cat":"S'ha d'indicar dos valors numèrics en el format", "spa":"Se debe indicar dos valores numéricos en el formato", "eng":"Two numerical values are required with the format", "fre":"Deux valeurs numériques sont requises dans le format"},
 		SelectionsIncorrectFormat: {"cat":"Format de les consultes erroni", "spa":"Formato de las consultas erróneo", "eng":"Query format is incorrect", "fre":"Format des requete erroné"},
-		LyQNameRequired: {"cat":"S'han d'indicar l'identificador de la capa, la consulta i el nom del nou estil en el format", "spa":"Se debe indicar el identificador de la capa, la consulta y el nombre del nuevo estilo en el formato", "eng":"The layer identifier, query, and new style name must be specified in the format", "fre":"L'identifiant de la couche, la requête et le nom du nouveau style doivent être spécifiés dans le format"},
+		HistogramsIncorrectFormat: {"cat":"Format dels histogrames erroni", "spa":"Formato de los histogramas erróneo", "eng":"Histogram format is incorrect", "fre":"Format d'histogramme erroné"},
+		LyQNameRequired: {"cat":"S'han d'indicar l'identificador de la capa, la consulta i el nom del nou estil en el format", "spa":"Debe indicar el identificador de la capa, la consulta y el nombre del nuevo estilo en el formato", "eng":"The layer identifier, query, and new style name must be specified in the format", "fre":"L'identifiant de la couche, la requête et le nom du nouveau style doivent être spécifiés dans le format"},
+		LyRequired: {"cat":"S'han d'indicar l'identificador de la capa", "spa":"Debe indicar el identificador de la capa", "eng":"The layer identifier, must be specified in the format", "fre":"L'identifiant de la couche, être spécifiés dans le format"},
 	},
 	consola:{
 		Console: {"cat":"Consola", "spa":"Consola", "eng":"Console","fre":"Console"},
@@ -473,6 +473,11 @@ var MessageLang={
 		LayerSingleComponentNeedPallette: {"cat":"Una capa amb una sola component ha de tenir definits els colors de la paleta", "spa":"Una capa con una sola componente debe tener definidos los colores de la paleta", "eng":"A layer with a single component must define a pallette of colors", "fre":"Une couche d'un composant unique doit avoir défini les couleurs de la palette"},
 		LayerMustHave1or3Components: {"cat":"Una capa no pot tenir 2 components. Ha de tenir definides 1 o 3 components.", "spa":"Una capa no puede tener 2 componentes. Debe tener definidas 1 o 3 componentes", "eng":"A layer can not have 2 component. It must have defined 1 or 3 components", "fre":"Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants"},
 		LayerIMGNoDefinesComponents: {"cat":"La capa ha estat demanada com img però no hi ha components definides al estil actual.", "spa":"La capa ha sido solicitada como img pero no tiene componentes definidas en el estilo actual.", "eng":"The layer is requested as img but there are no defined components for the current style.", "fre":"La couche est requise comme img mais il n'y a pas de composants définis pour le style actuel."}
+	},
+	miramon: {
+		LayerTIFFIMGMustHaveValues: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de definir un array de 'valors'", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'", "eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'"},
+		LayerBinaryArrayMustBeHTTPS: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de ser servida en https:", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe ser servida en https:", "eng": "A layer with FormatImatge image/tiff or application/x-img must be provided in https:", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit être fourni en https"},
+		LayerSetToNoVisibleQueriable: {"cat":"La capa no es podria carregar i es declara no visible ni consultable", "spa": "La capa no es podría carregar por lo que declara no visible ni consultable", "eng": "The layer will not load so it is declared as neither visible nor queriable", "fre": "La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable"}
 	},
 	cntxmenu2:{
 		statistics:
