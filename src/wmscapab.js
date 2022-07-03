@@ -98,6 +98,7 @@ var minim, maxim, factor_k, factorpixel;
 									i_data: 0,
 									data: null,
 									esCOG: false,
+									EnvLL: null,
 									uriDataTemplate: null,
 									uriMDTemplate: null,
 									dimensioExtra: null};
@@ -141,7 +142,7 @@ var minim, maxim, factor_k, factorpixel;
 						layer.estil[layer.estil.length]={"nom": cadena, "desc": cadena2};
 					}
 				}
-				else if(node2.nodeName=="ScaleHint")
+				else if (node2.nodeName=="ScaleHint")
 				{
 					minim=parseInt(node2.getAttribute('min'));
 					maxim=parseInt(node2.getAttribute('max'));
@@ -150,17 +151,41 @@ var minim, maxim, factor_k, factorpixel;
 					if(maxim)
 						layer.CostatMaxim=maxim/Math.SQRT2;
 				}
-				else if(node2.nodeName=="MinScaleDenominator")
+				else if (node2.nodeName=="MinScaleDenominator")
 				{
 					minim=parseInt(node2.childNodes[0].nodeValue);
 					if(minim)
 						layer.CostatMinim=minim*factorpixel/factor_k;
 				}
-				else if(node2.nodeName=="MaxScaleDenominator")
+				else if (node2.nodeName=="MaxScaleDenominator")
 				{
 					maxim=parseInt(node2.childNodes[0].nodeValue);
 					if(maxim)
 						layer.CostatMaxim=maxim*factorpixel/factor_k;
+				}
+				else if (node2.nodeName=="LatLonBoundingBox")
+				{
+					layer.EnvLL={};	
+					layer.EnvLL.MinX=parseFloat(node2.getAttribute('minx'));
+					layer.EnvLL.MaxX=parseFloat(node2.getAttribute('maxx'));
+					layer.EnvLL.MinY=parseFloat(node2.getAttribute('miny'));
+					layer.EnvLL.MaxY=parseFloat(node2.getAttribute('maxy'));
+				}
+				else if (node2.nodeName=="EX_GeographicBoundingBox")
+				{
+					layer.EnvLL={};	
+					node3=node2.getElementsByTagName('westBoundLongitude');
+					if(node3 && node3.length>0)
+						layer.EnvLL.MinX=parseFloat(node3[0].childNodes[0].nodeValue);
+					node3=node2.getElementsByTagName('eastBoundLongitude');
+					if(node3 && node3.length>0)
+						layer.EnvLL.MaxX=parseFloat(node3[0].childNodes[0].nodeValue);
+					node3=node2.getElementsByTagName('southBoundLatitude');
+					if(node3 && node3.length>0)
+						layer.EnvLL.MinY=parseFloat(node3[0].childNodes[0].nodeValue);
+					node3=node2.getElementsByTagName('northBoundLatitude');
+					if(node3 && node3.length>0)
+						layer.EnvLL.MaxY=parseFloat(node3[0].childNodes[0].nodeValue);
 				}
 				else if (node2.nodeName=="Dimension" || node2.nodeName=="Extent")
 				{

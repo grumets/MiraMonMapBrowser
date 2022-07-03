@@ -127,7 +127,7 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 			alert(authResponse.error_description)
 			return;
 		}
-		if (access.request && access.request.indexOf("map"))  //access.tokenType=="wqems" && 
+		if (access.request && access.request.indexOf("map")!=-1 && url.indexOf("REQUEST=GetMap")!=-1)
 			ajax.doReqIndirect(method, url + (url.indexOf('?')==-1 ? "?" : "&") + "access_token=" + authResponse.access_token, request_format, dataPayload, hand, response_format, struct);
 		else
 		{

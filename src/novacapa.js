@@ -73,6 +73,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 	else
 		maxim=ParamCtrl.zoom[0].costat;
 
+
 	if(i_on_afegir==-1)
 		k=ParamCtrl.capa.length;
 	else
@@ -120,6 +121,8 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	if (layer.uriMDTemplate)
 		capa.metadades={standard: layer.uriMDTemplate};
+	if (layer.EnvLL)
+		capa.EnvTotal={EnvCRS: JSON.parse(JSON.stringify(layer.EnvLL)), CRS:"EPSG:4326"};
 
 	if (layer.esCOG && layer.uriDataTemplate)
 	{
@@ -131,7 +134,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		capa.valors=[{
 					"datatype": "float32",
 					"nodata": [-9999, 0]
-				}],  //provisional. CompletaDefinicioCapaTIFF no reescriu amb informació del propi TIFF
+				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estil;
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
@@ -586,14 +589,14 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		capa.i_data_tiff=0;
 	}
 
-	if (image.getGeoKeys() && image.getGeoKeys().ProjectedCSTypeGeoKey)
+	if (image.getGeoKeys() && (image.getGeoKeys().ProjectedCSTypeGeoKey || image.getGeoKeys().GeographicTypeGeoKey))
 	{
-		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey)
+		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
 		{
 			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
 			return;
 		}
-		capa.CRS=["EPSG:"+image.getGeoKeys().ProjectedCSTypeGeoKey];
+		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
 		if (capa.origen==OriginUsuari && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
@@ -663,6 +666,30 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OriginUsuari)
 	{
+		//En la versió qeu em provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
+                //En un COG, cada overview és una imatge més en el compte. La darrera és la de menys detall. Només la primera presenta resolució. Les altres s'ha de "deduir" de la relació entre mides d'imatges en pixels
+		//https://geoexamples.com/other/2019/02/08/cog-tutorial.html/
+		var n_overviews = await tiff.getImageCount();
+		var lastImage = await tiff.getImage(n_overviews-1);
+
+		//var costatMin=image.getResolution()[0];  //No hi ha probrema en un costat petit (mirar la imatge molt de prop)
+		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerància sobre el costat màxim
+		if (capa.CRS && capa.CRS.length)
+		{
+			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && EsProjLongLat(capa.CRS[0]))
+				costatMax*=FactorGrausAMetres; 
+			else if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) && DonaUnitatsCoordenadesProj(capa.CRS[0])=="m")
+				costatMax/=FactorGrausAMetres;
+		}
+		for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
+		{
+			if (ParamCtrl.zoom[nivell].costat<=costatMax)
+			{
+				capa.CostatMaxim=ParamCtrl.zoom[nivell].costat;
+				break;
+			}
+		}
+
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
 		{
@@ -687,21 +714,43 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			for (var i=0; i<image.getSamplesPerPixel(); i++)
 			{
 				capa.estil.push({nom: null,
-					desc: descEstil,
-					DescItems: null,
-					TipusObj: "P",
-					metadades: null,
-					component: [
-						{
-							i_valor: i_v+i,
-							estiramentPaleta: {auto: true}
-						}
-					],
-					nItemLlegAuto: 20,
-					ncol: 4,
-					descColorMultiplesDe: 0.01,
-					ColorMinimPrimer: false
-				});
+						desc: descEstil,
+						DescItems: null,
+						TipusObj: "P",
+						metadades: null,
+						component: [
+							{
+								i_valor: i_v+i,
+							}
+						],
+						ColorMinimPrimer: false
+					});
+				var estil=capa.estil[capa.estil.length-1];
+				if (image.fileDirectory && image.fileDirectory.ColorMap)
+				{
+					estil.paleta={colors: []};
+					estil.ItemLleg=[];
+					var ncolors=image.fileDirectory.ColorMap.length/3;
+					for (var i=0; i<ncolors; i++)
+					{
+						if (i>0 && image.fileDirectory.ColorMap[i-1]==32896 && image.fileDirectory.ColorMap[ncolors+i-1]==32896 && image.fileDirectory.ColorMap[ncolors*2+i-1]==32896 && 
+							image.fileDirectory.ColorMap[i]==32896 && image.fileDirectory.ColorMap[ncolors+i]==32896 && image.fileDirectory.ColorMap[ncolors*2+i]==32896)
+							break; //Aquest color està repetit amb l'anterior i és un gris. Sembla que és el final de la paleta.
+						estil.paleta.colors[i]={
+								r: image.fileDirectory.ColorMap[i]>>>8,
+								g: image.fileDirectory.ColorMap[ncolors+i]>>>8,
+								b: image.fileDirectory.ColorMap[ncolors*2+i]>>>8};
+						estil.ItemLleg[i]={color: RGB(estil.paleta.colors[i].r, estil.paleta.colors[i].g, estil.paleta.colors[i].b), DescColor: i};
+					}
+					estil.ncol=1;
+				}
+				else
+				{
+					estil.component[0].estiramentPaleta.auto=true;
+					estil.nItemLlegAuto=20;
+					estil.ncol=4;
+					estil.descColorMultiplesDe=0.01;
+				}
 			}
 		}
 		capa.VisibleALaLlegenda=true;

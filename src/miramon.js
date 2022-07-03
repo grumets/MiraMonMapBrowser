@@ -1342,12 +1342,15 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 			{
 				var estil=capa.estil[i_estil];
-				for (var i_c=0; i_c<estil.component.length; i_c++)
+				if (estil.component)
 				{
-					if (estil.component[i_c].calcul && estil.component[i_c].FormulaConsulta)
-						delete estil.component[i_c].FormulaConsulta;
-					if (estil.component[i_c].formulaInterna)
-						delete estil.component[i_c].formulaInterna;
+					for (var i_c=0; i_c<estil.component.length; i_c++)
+					{
+						if (estil.component[i_c].calcul && estil.component[i_c].FormulaConsulta)
+							delete estil.component[i_c].FormulaConsulta;
+						if (estil.component[i_c].formulaInterna)
+							delete estil.component[i_c].formulaInterna;
+					}
 				}
 				
 				if (estil.diagrama && estil.diagrama.length>0)
@@ -3055,12 +3058,12 @@ var i;
 	for (i=0; i<ParamCtrl.capa.length; i++)
 		CanviaCRSITransformaCoordenadesCapaDigi(ParamCtrl.capa[i], crs_dest);
 
-	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && DonaUnitatsCoordenadesProj(crs_dest)=="°")
+	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && EsProjLongLat(crs_dest))
 	{
 		factor=1/120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
 		ParamCtrl.NDecimalsCoordXY+=4;
 	}
-	else if (DonaUnitatsCoordenadesProj(crs_ori)=="°" && DonaUnitatsCoordenadesProj(crs_dest)=="m")
+	else if (EsProjLongLat(crs_ori) && DonaUnitatsCoordenadesProj(crs_dest)=="m")
 	{
 		factor=120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
 		ParamCtrl.NDecimalsCoordXY-=4;
