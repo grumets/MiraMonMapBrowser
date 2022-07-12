@@ -823,7 +823,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 						cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
 							": <select CLASS=text_petit name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
-							   i_capa,", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
+							   i_capa, ",", i_dim, ", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 						for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
 						{
 							cdns.push("<OPTION VALUE=\"",i_v_dim,"\"",

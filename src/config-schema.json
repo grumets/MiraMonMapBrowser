@@ -1082,6 +1082,50 @@
 				}
 			}
 		},
+		"capesDeServei": {
+			"description": "Array de serveis que el navegador intentarà convertir en capes en iniciar",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {									
+					"servei": { 
+						"description": "Servei del que extreure capes",
+						"type": "object",
+						"properties": {									
+							"servidor": { 
+								"description": "Adreça i nom del servidor. Si és null s'agafa el ServidorLocal.",
+								"type": ["string", "null"],
+								"format": "uri"
+							},
+							"versio": { 
+								"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
+								"$ref": "#/definitions/versio" 
+							},
+							"cors": { 
+								"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+								"type": "boolean"
+							},
+							"tipus": {
+								"description": "Tipus de servei per aquesta capa. Si és null s'agafa el TipusServidorLocal.",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"$ref": "#/definitions/EnumTipusServidor" 
+								}]
+							},
+							"access": { 
+								"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
+								"$ref": "#/definitions/access"
+							}
+						}
+					},
+					"estilPerCapa": {
+						"description": "Estils a aplicar a les capes, en funció de les paraules clau o el nom de la capa (encara per definir)",
+						"type": "array"
+					} 
+				}
+			}
+		}, 
 		"capa":	{
 			"description": "Array de capes del navegador",
 			"type": "array",
@@ -1108,7 +1152,11 @@
 						},{
 							"$ref": "#/definitions/EnumTipusServidor" 
 						}]
-					},					
+					},
+					"access": { 
+						"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
+						"$ref": "#/definitions/access"
+					},
 					"model": {
 						"description": "Model de dades de la capa. Si no es defineix es determina automàticament.",
 						"oneOf":[{
@@ -2191,24 +2239,6 @@
 						"description": "Estat de la capa per l'edició. Possibilitats: mai (no), no està editable però l'usuari la pot activar (ara_no), si (si). Només aplica quan el 'model' és 'vector'.", 
 						"enum": [null, "no", "ara_no", "si"]
 					},
-					"access": { 
-						"description": "En el cas que editable sigui 'si' o 'ara_no', Indica que l'edició està protegida per autentificació", 
-						"type": "object",
-						"properties": {
-							"tokenType": {
-								"description": "Nom del servei d'autentificació.", 
-								"enum": ["authenix", "wqems"]
-							},
-							"request": {
-								"description": "Llista de requests que necessiten autentificació", 
-								"type": ["null", "array"],
-								"items": {
-									"description": "Request que necessita autentificació", 
-									"enum": ["transaction", "capabilities", "consultaLink", "map"]
-								}
-							}
-						}
-					},
 					"FuncioEdicio": {
 						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el 'model' és 'vector'.",
 						"type": ["null", "string"]
@@ -2251,6 +2281,25 @@
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG i GeoJSON. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
 			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET"]
+		},
+		"access": 
+		{
+			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. En aquest cas cal incloure al index.htm la llibreria 'hello.js', la 'authen.js' i les 'authen*.js que s'indiquin a tokenType.", 
+			"type": "object",
+			"properties": {
+				"tokenType": {
+					"description": "Nom del servei d'autentificació.", 
+					"enum": ["authenix", "wqems"]
+				},
+				"request": {
+					"description": "Llista de requests que necessiten autentificació", 
+					"type": ["null", "array"],
+					"items": {
+						"description": "Request que necessita autentificació", 
+						"enum": ["transaction", "capabilities", "consultaLink", "map"]
+					}
+				}
+			}
 		},
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",

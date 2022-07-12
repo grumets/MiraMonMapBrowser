@@ -475,7 +475,7 @@ var root, cadena, node, node2, i, j
 	}
 }//Fi de ParsejaRespostaGetCapabilities()
 
-function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, i_capa, func_after)
+function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, access, i_capa, func_after)
 {
 var request;
 
@@ -492,6 +492,7 @@ var request;
 								index: ServidorGetCapabilities.length,
 								i_capa_on_afegir: i_capa,
 								servidor: servidor,
+								access: access ? JSON.parse(JSON.stringify(access)) : null,
 								versio: null,
 								tipus: tipus,
 								titol: null,
@@ -499,7 +500,7 @@ var request;
 								formatGetFeatureInfo: [],
 								layer: [],
 								func_after: func_after};
-	if (ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
+	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
 		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 
 	request="REQUEST=GetCapabilities&VERSION="

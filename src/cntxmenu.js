@@ -464,39 +464,59 @@ var separa_capa_afegida;
 	return null;
 }
 
-function AfegeixCapesWMSAlNavegador(form, i_serv)
+function DonaFormatFeatureInfoCapesWMS(servidorGC)
 {
-var i, j, i_capa, i_get_featureinfo, i_getmap;
+var j;
+
+	//Format de consulta comú per totes les capes
+	if(servidorGC.formatGetFeatureInfo)
+	{
+		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
+		{
+			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
+				return j;
+		}
+		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
+		{
+			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
+				return j;
+		}
+	}
+	return -1;
+}
+
+function DonaFormatGetMapCapesWMS(servidorGC, i_layer)
+{
+var j;
+
+	var layer=servidorGC.layer[i_layer];
+	if (layer.esCOG && layer.uriDataTemplate)
+		return servidorGC.formatGetMap.length;
+	for(j=0; j<servidorGC.formatGetMap.length; j++)
+	{
+		if (servidorGC.formatGetMap[j]=="image/jpeg")
+			return j;
+	}
+	for(j=0; j<servidorGC.formatGetMap.length; j++)
+	{
+		if (servidorGC.formatGetMap[j]=="image/png")
+			return j;
+	}
+	return 0;
+}
+
+function AfegeixCapesWMSAlNavegadorForm(form, i_serv)
+{
+var i, j, i_capa, i_get_featureinfo;
 var alguna_capa_afegida=false;
 var servidorGC=ServidorGetCapabilities[i_serv];
 var i_on_afegir=servidorGC.i_capa_on_afegir;
 
 	if(form==null)
 		return;
+
 	//Format de consulta comú per totes les capes
-	i_get_featureinfo=-1;
-	if(servidorGC.formatGetFeatureInfo)
-	{
-		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
-		{
-			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
-			{
-				i_get_featureinfo=j;
-				break;
-			}
-		}
-		if(i_get_featureinfo==-1)
-		{
-			for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
-			{
-				if(servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
-				{
-					i_get_featureinfo=j;
-					break;
-				}
-			}
-		}
-	}
+	i_get_featureinfo=DonaFormatFeatureInfoCapesWMS(servidorGC);
 
 	//Potser només tinc una capa al servidor, en aquest cap form.sel_capes no és un array i no puc fer sel_capes.length
 	if(form.sel_capes.length!=null)
@@ -509,7 +529,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -523,7 +543,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, i_getmap);
+			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
 		}
 	}
 	if(alguna_capa_afegida)
@@ -540,7 +560,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
-}//Fi de AfegeixCapesWMSAlNavegador
+}//Fi de AfegeixCapesWMSAlNavegadorForm
 
 /*Aquesta funció s'ha de cridar abans o després fer capa.splice() o similars.
 Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
@@ -1988,7 +2008,7 @@ var cdns=[], i;
 			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\"><label for=\"RadioVersion_WMS13\">WMS v1.3</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
+		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, null, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
@@ -2069,28 +2089,7 @@ var cdns=[], j, layer, j_selected;
 					DonaCadenaNomDesc(layer));
 		cdns.push("</td><td><select name=\"format_capa_", i, "\" class=\"Verdana11px\">");
 
-		if (layer.esCOG && layer.uriDataTemplate)
-			j_selected=servidorGC.formatGetMap.length;
-		else
-		{
-			j_selected=0;
-			for(j=0; j<servidorGC.formatGetMap.length; j++)
-			{
-				if (servidorGC.formatGetMap[j]=="image/jpeg")
-				{
-					j_selected=j;
-					break;
-				}
-			}
-			for(j=0; j<servidorGC.formatGetMap.length; j++)
-			{
-				if (servidorGC.formatGetMap[j]=="image/png")
-				{
-					j_selected=j;
-					break;
-				}
-			}
-		}
+		j_selected=DonaFormatGetMapCapesWMS(servidorGC, i);
 		for(j=0; j<servidorGC.formatGetMap.length; j++)
 			cdns.push("<option value=\"", j, "\"", (j_selected==j ? " selected" : ""), ">",  servidorGC.formatGetMap[j]);
 		if (layer.esCOG && layer.uriDataTemplate)
@@ -2101,7 +2100,7 @@ var cdns=[], j, layer, j_selected;
 		  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 		  GetMessage("Add"),
 		  "\"",
-		  " onClick='AfegeixCapesWMSAlNavegador(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
+		  " onClick='AfegeixCapesWMSAlNavegadorForm(form, ",servidorGC.index,");TancaFinestraLayer(\"afegirCapa\");' />",
 		  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 		  GetMessage("Cancel"),
 		  "\"",

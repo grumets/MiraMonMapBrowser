@@ -737,7 +737,7 @@ var tipus_chart;
 
 	//if (tipus_chart == "matrestil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 	if (tipus_chart == "stat")
-		CreaEstadistic(HistogramaFinestra.n, i_diag, tipus_estad); //dins ja omple estil.diagrama
+		CreaEstadistic(HistogramaFinestra.n, i_diag, stat); //dins ja omple estil.diagrama
 	else if (tipus_chart == "stat_categ")
 		CreaEstadisticPerCategories(HistogramaFinestra.n, i_diag, stat, order); //dins ja omple estil.diagrama
 	else if (tipus_chart == "matriu")

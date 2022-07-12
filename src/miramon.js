@@ -6529,6 +6529,31 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	return 0;
 }
 
+/*Aquesta funció afegeix automàticament totes les capes d'un servidor a la llegenda. 
+Funció inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
+function AfegeixCapesWMSAlNavegador(servidorGC)
+{
+var i_get_featureinfo;
+
+	i_get_featureinfo=DonaFormatFeatureInfoCapesWMS(servidorGC);
+
+	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
+		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+}
+
+function CarregaCapesDeServei(capesDeServei)
+{
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador);
+}
+
+function CarregaArrayCapesDeServei()
+{
+	if (!ParamCtrl.capesDeServei)
+		return;
+	for (var i_srv=0; i_srv<ParamCtrl.capesDeServei.length; i_srv++)
+		CarregaCapesDeServei(ParamCtrl.capesDeServei[i_srv]);
+}
+
 function IniciaVisualitzacio()
 {
 var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
@@ -6589,6 +6614,8 @@ var win, i, j, l, capa;
 	CreaCapesVolatils();
 
 	CompletaDefinicioCapes();
+
+	CarregaArrayCapesDeServei();
 
 	changeSizeLayers(window);
 	CarregaConsultesTipiques();

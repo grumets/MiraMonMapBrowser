@@ -52,7 +52,18 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 			return null;
 		}
 		if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==valor2.i_data_tiff)
+		{
+			if (capa.dimensioExtra)
+			{
+				for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+				{
+					var dim=capa.dimensioExtra[i_dim];
+					if (typeof dim.i_valor_tiff === "undefined" || dim.i_valor_tiff!=dim.i_valor)
+						return null;
+				}
+			}
 			return valor2.tiff;
+		}
 		return null;
 	}
 	if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
@@ -62,7 +73,18 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 		return null;
 	}
 	if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==capa.i_data_tiff)
+	{
+		if (capa.dimensioExtra)
+		{
+			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+			{
+				var dim=capa.dimensioExtra[i_dim];
+				if (typeof dim.i_valor_tiff === "undefined" || dim.i_valor_tiff!=dim.i_valor)
+					return null;
+			}
+		}
 		return capa.tiff;
+	}
 	return null;
 }
 
@@ -177,6 +199,14 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			if (capa.data && capa.data.length)
 				capa.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
 			capa.tiff=tiff;
+		}
+	}
+	if (capa.dimensioExtra)
+	{
+		for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+		{
+			var dim=capa.dimensioExtra[i_dim];
+			dim.i_valor_tiff=dim.i_valor;
 		}
 	}
 	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc, i_valor2);

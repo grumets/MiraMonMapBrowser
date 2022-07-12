@@ -40,7 +40,7 @@
 
 const OriginUsuari="usuari";
 
-function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, i_getmap)
+function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
 var j, k, estil, minim, maxim;
 var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
@@ -746,7 +746,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				}
 				else
 				{
-					estil.component[0].estiramentPaleta.auto=true;
+					estil.component[0].estiramentPaleta={auto: true};
 					estil.nItemLlegAuto=20;
 					estil.ncol=4;
 					estil.descColorMultiplesDe=0.01;
