@@ -66,6 +66,7 @@ var MessageLang={
 	Close: {"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"},
 	Print: {"cat":"imprimir", "spa":"imprimir", "eng":"print", "fre":"imprimer"},
 	Show: {"cat":"Mostrar", "spa":"Mostrar", "eng":"Show", "fre":"Afficher"},
+	Hide: {"cat":"Amagar", "spa":"Ocultar", "eng":"Hide", "fre":"Cacher"},
 	UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
 	layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
 	Layer: {"cat":"Capa", "spa":"Capa", "eng":"Layer", "fre":"Couche"},
@@ -80,6 +81,7 @@ var MessageLang={
 	InitialValue: {"cat":"Valor inicial", "spa":"Valor inicial", "eng":"Initial value", "fre":"Valeur initiale"},
 	TheValue:{"cat":"El valor", "spa":"El valor", "eng":"The value", "fre":"La valeur"},
 	Operator: {"cat":"Operador", "spa":"Operador", "eng":"Operator", "fre":"Opérateur"},
+	Parameters: {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"},
 	Date: {"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},
 	Field: {"cat":"Camp", "spa":"Camp", "eng":"Field", "fre":"Champ"},
 	ofTheField:{"cat":"del camp", "spa": "del campo", "eng": "of the field", "fre": "du champ"},
@@ -169,7 +171,6 @@ var MessageLang={
 		Up: {"cat":"A sobre","spa":"Encima", "eng":"Up", "fre":"Au-dessus"},
 		Down: {"cat":"A sota", "spa":"Debajo::", "eng":"Down", "fre":"Au-dessous"},
 		ToTheEnd: {"cat":"A sota de tot", "spa":"Debajo de todo", "eng":"To the end", "fre":"En bas"},
-		ComputeQuality: {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"},
 		EditStyle: {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"},
 		ofEditingStyle: {"cat":"de editar l'estil", "spa":"de editar el estilo", "eng":"of editing the style", "fre":"pour modifier le style"},
 		StyleName: {"cat":"Nom de l'estil", "spa":"Nombre del estilo", "eng":"Name of the style", "fre":"Nom du style"},
@@ -185,6 +186,7 @@ var MessageLang={
 		ComputeQuality: {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"},
 		toComputeTheQuality: {"cat":"de calcular la qualitat", "spa":"de calcular la calidad", "eng":"to compute the quality", "fre":"pour calculer la qualité"},
 		NewLayerAdded: {"cat":"La nova capa afegida", "spa":"La nueva capa añadida", "eng":"The new added layer", "fre":"La nouvelle couche ajoutée"},
+		WhyNotVisible: {"cat":"Perquè no visible", "spa":"Porque no visible", "eng":"Why not visible", "fre":"Pourquoi pas visible"},
 		notVisibleInCurrentZoom: {"cat":"no és visible al nivell de zoom actual del navegador", "spa":"no es visible al nivel de zoom actual del navegador", "eng":"is not visible in the current zoom level of the browser", "fre":"n'est pas visible au niveau du zoom actuel du navigateur"},
 		notVisibleInCurrentCRS: {"cat":"no és visible amb el CRS actual", "spa":"no es visible en el CRS actual", "eng":"is not visible in the current CRS", "fre":"n'est pas visible au CRS actuel"},
 		notVisibleInCurrentView: {"cat":"no és visible en àmbit actual de la vista", "spa":"no es visible en el ámbito actual de la vista", "eng":"is not visible in the current view extent", "fre":"n'est pas visible dans l'étendue de la vue actuelle"},
@@ -368,6 +370,7 @@ var MessageLang={
 		MMZ_MMZX_NotInstalledDownload: {"cat":"Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>", "spa":"Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>", "eng":"For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>", "fre":"Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>"},
 		ViewLayers_MMZ_MMZX_InstalledMM: {"cat":"Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.", "spa":"Para poder visualitzar las capas en formato MMZ o MMZX (ISO 19165-1) es necessario tener correctamente instalado el programa MiraMon.", "eng":"In order to be able to view the layers in MMZ or MMZX format (ISO 19165-1), an installed version of the MiraMon software is required.", "fre":"Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19165-1), et la version installée du logiciel MiraMon est nécessaire"},
 		DownloadLayerCompleted: {"cat": "Descàrrega la capa completa", "spa": "Descarga de la capa completa", "eng": "Download the complete layer", "fre": "Téléchargement de la couche complète"},
+		DownloadLayer: {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"},
 		ofDownloading: {"cat":"de descarregar", "spa":"de descargar", "eng":"of downloading", "fre":"de téléchargement"},
   },
 	params:{
@@ -388,8 +391,11 @@ var MessageLang={
 		ShowWindow_underlined_char: {"cat":"m", "spa":"m", "eng":"h", "fre":"f"},
 		JsonConfigurationFile: {"cat":"Fitxer de configuració JSON", "spa":"Fichero de configuración JSON", "eng":"JSON configuration file", "fre":"Fichier de configuration JSON)"},
 		changesAboveWillBeApplied: {"cat":"s'’aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"},
-		ofChangingParameters: {"cat":"de canviar paràmetres", "spa":"de cambiar parámetros", "eng":"of changing parameters", "fre":"pour changement de paramètres"}
-  },
+		ofChangingParameters: {"cat":"de canviar paràmetres", "spa":"de cambiar parámetros", "eng":"of changing parameters", "fre":"pour changement de paramètres"},
+		LayersOutSideTheBBox: {"cat":"Capes fora de l'àmbit actual", "spa":"Capas fuera del ámbito actual", "eng":"Layers outside the current bounding box", "fre": "Calques en dehors de la zone de délimitation actuelle"},
+		LayersOutSideScale: {"cat":"Capes sense suport pel nivell de zoom actual", "spa":"Capas sin soporte para el nivel de zoom actual", "eng":"Layers without suport for the current zoom level", "fre": "Calques sans prise en charge du niveau de zoom actuel"},
+		LayersWithoutSupportCurrentCRS: {"cat":"Capes sense suport pel CRS actual", "spa":"Capas sin soporte para el CRS actual", "eng":"Layers without suport for the current CRS", "fre": "Calques sans prise en charge du CRS actuel"}
+	},
 	editavec:{
 		InsertTransactionObjectIntoLayer: {"cat": "La transacció d'inserció a la capa", "spa": "La transacción de inserción a la capa", "eng":"The insert transaction of the object into the layer", "fre": "L'opération d'insertion de l'objet dans la couche"},
 		hasFailed: {"cat":"ha fallat", "spa": "ha fallado", "eng":"has failed", "fre": "a échoué"},
@@ -458,6 +464,7 @@ var MessageLang={
 		InstallMiraMonReader: {"cat":"Instal·lar el Lector Universal de Mapes del MiraMon", "spa":"Instalar el Lector Universal de Mapas de MiraMon", "eng":"Install MiraMon Universal Map Reader","fre":"Installer le Lecteur Universel de Cartes du Miramon"}
 	},
 	llegenda: {
+		Legend: {"cat":"Llegenda", "spa":"Leyenda", "eng":"Legend", "fre":"Légende"},
 		queryable: {"cat":"consultable", "spa":"consultable", "eng":"queryable", "fre":"consultable"},
 		nonQueryable: {"cat":"no consultable", "spa":"no consultable", "eng":"non queryable", "fre":"non consultable"},
 		downloadable: {"cat":"descarregable", "spa":"descargable", "eng":"downloadable", "fre":"téléchargeable"},
@@ -477,7 +484,20 @@ var MessageLang={
 	miramon: {
 		LayerTIFFIMGMustHaveValues: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de definir un array de 'valors'", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'", "eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'"},
 		LayerBinaryArrayMustBeHTTPS: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de ser servida en https:", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe ser servida en https:", "eng": "A layer with FormatImatge image/tiff or application/x-img must be provided in https:", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit être fourni en https"},
-		LayerSetToNoVisibleQueriable: {"cat":"La capa no es podria carregar i es declara no visible ni consultable", "spa": "La capa no es podría carregar por lo que declara no visible ni consultable", "eng": "The layer will not load so it is declared as neither visible nor queriable", "fre": "La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable"}
+		LayerSetToNoVisibleQueriable: {"cat":"La capa no es podria carregar i es declara no visible ni consultable", "spa": "La capa no es podría carregar por lo que declara no visible ni consultable", "eng": "The layer will not load so it is declared as neither visible nor queriable", "fre": "La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable"},
+		ExecuteProcessWPS: {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"},
+		AddLayerToMap: {"cat":"Afegir capa al mapa", "spa":"Añadir capa al mapa", "eng": "Add layer to map", "fre":"Ajouter une couche à la carte"},
+		SelectionByCondition: {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"},
+		TimeSeriesAnalysisAndAnimations: {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"},
+		RequestConsole: {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"},
+		ReclassifierLayerValues: {"cat":"Reclassificadora de valors de la capa", "spa":"Reclasificadora de valores de la capa", "eng":"Reclassifier of layer values", "fre":"Reclassificateur de valeurs de couches"},
+		FeedbackContainingStyles: {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"},
+		OpenOrSaveContext: {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"},
+		LinksToOGCServicesBrowser: {"cat":"Enllaços als servidors OGC del navegador", "spa":"Enlaces a los servidors OGC del navegador","eng": "Links to OGC services in the browser", "fre":"Liens aux serveurs OGC du navigateur"},
+		StoryMapTitle: {"cat":"titol del relat", "spa":"título del ralato", "eng": "storymap title", "fre":"titre de l'histoire"},
+		InformationHelp: {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"},
+		InsertNewPoint: {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert new point", "fre":"Insérer un nouveaux point"},
+		ResultOfTheTransaction: {"cat":"Resultat de la transacció", "spa":"Resulado de la transacción", "eng": "Result of the transaction", "fre":"Résultats de la transaction"}
 	},
 	cntxmenu2:{
 		statistics:

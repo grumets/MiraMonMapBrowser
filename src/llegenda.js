@@ -373,7 +373,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 				}
 				else
 				{*/
-					if(!EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa))
+					if(!EsCapaVisibleOActivaALaLlegenda(capa))
 						continue;
 					if (capa.visible!="no")
 						alguna.visible=1;
@@ -515,7 +515,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 	    if (capa.separa!=null)
 	    {
 	        if (ParamCtrl.LlegendaAmagaSeparaNoCapa &&
-	        	(!EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa) ||
+	        	(!EsCapaVisibleOActivaALaLlegenda(capa) ||
 			    (capa.visible!="si" && capa.visible!="semitransparent" && !(flag&LlegendaAmbCapesNoVisibles))))
 	        {
 	 		    //Busco si hi ha alguna capa visible fins al pròxim separador
@@ -525,7 +525,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					capa2=ParamCtrl.capa[i2];
 					if (capa2.separa)
 						break;
-					if (!EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa2) ||
+					if (!EsCapaVisibleOActivaALaLlegenda(capa2) ||
 						(capa2.visible!="si" && capa2.visible!="semitransparent" && !(flag&LlegendaAmbCapesNoVisibles)))
 					{
 						continue;
@@ -552,7 +552,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 	    	}
 	    }
 
-	    if (!EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa) ||
+	    if (!EsCapaVisibleOActivaALaLlegenda(capa) ||
 		   (capa.visible!="si" && capa.visible!="semitransparent" && !(flag&LlegendaAmbCapesNoVisibles)) )
 			continue;
 
@@ -563,8 +563,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 			//Icones de + o -:
 			if (capa.estil && capa.estil.length>0 && 
 				(!capa.grup || !(ParamCtrl.LlegendaGrupsComARadials) || (capa.visible!="no" && capa.visible!="ara_no")) &&
-				(!(ParamCtrl.LlegendaGrisSegonsEscala) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-				(!(ParamCtrl.LlegendaGrisSiForaAmbit) || EsCapaDinsAmbitActual(capa)) &&
+				!EsCapaInactivaGrisALaLlegenda(capa) &&
 				((capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length>1) || (capa.estil[capa.i_estil].nItemLlegAuto && capa.estil[capa.i_estil].nItemLlegAuto>1)))
 			{
 				cdns.push(DonaTextImgGifSvg("m_ll_capa"+i_capa, null, (capa.LlegDesplegada ? "menys": "mes"), 8, GetMessage(capa.LlegDesplegada ? "foldLegend" : "unfoldLegend", "llegenda"), 
@@ -585,13 +584,15 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					if (ParamCtrl.LlegendaIconesInactivesGrises)
 					{
 						if (capa.grup!=null && capa.grup!="")
-							cdns.push("<td valign=\"middle\"><img src=\"",
-									  AfegeixAdrecaBaseSRC("ara_no_radiog.gif"), 
-									  "\" align=middle></td>");
+							cdns.push("<td valign=\"middle\">",
+								//"<img src=\"",AfegeixAdrecaBaseSRC("ara_no_radiog.gif"), "\" align=middle>",
+								DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_radiog", 14, null, null),
+								"</td>");
 						else
-							cdns.push("<td valign=\"middle\"><img src=\"",
-									  AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), 
-									  "\" align=middle></td>");
+							cdns.push("<td valign=\"middle\">", 
+								//<img src=\"", AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), "\" align=middle>",
+								DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_visibleg", 17, null, null),
+								"</td>");
 					}
 					else
 						cdns.push("<td valign=\"middle\"><img src=\"",
@@ -599,38 +600,41 @@ var salt_entre_columnes, cdns=[], capa, estil;
 								  "\" width=\"5\" height=\"1\"></td>");
 				}
 			}
-			else if ((ParamCtrl.LlegendaGrisSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
-				 (ParamCtrl.LlegendaGrisSiForaAmbit && !EsCapaDinsAmbitActual(capa)))
+			else if (EsCapaInactivaGrisALaLlegenda(capa))
 			{
 				if (capa.grup!=null && capa.grup!="")
 				{
 					if (capa.visible=="ara_no")
-						cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("ara_no_radiog.gif"),  
-							  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_radiog.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_radiog", 14, null, null),
+							"</td>");
 					else
-						cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("radiog.gif"), 
-							  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("radiog.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "radiog", 14, null, null),
+							"</td>");
 				}
 				else
 				{
 					if (capa.visible=="ara_no")
-						cdns.push("<td valign=\"middle\"><img src=\"",
-								  AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), 
-								  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_visibleg", 17, null, null),
+							"</td>");
 					else
-						cdns.push("<td valign=\"middle\"><img src=\"",
-								  AfegeixAdrecaBaseSRC("visibleg.gif"), 
-								  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("visibleg.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "visibleg", 17, null, null),
+							"</td>");
 				}
 			}
 			else
 			{
 				cdns.push("<td valign=\"middle\">",
 					DonaCadenaImgCanviaEstatCapa(i_capa, "visible"),
-					"</td>");
-				cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"3\" height=\"1\">");
+					"</td>",
+					"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"3\" height=\"1\">");
 			}
 			//Icones consultable:
 			if (capa.consultable=="no")
@@ -638,26 +642,28 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				if (alguna.consultable)
 				{
 					if (ParamCtrl.LlegendaIconesInactivesGrises)
-						cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"),  
-							  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
+							"</td>");
 					else
-						cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("1tran.gif"), 
-							  "\" width=\"1\" height=\"1\"></td>");
+						cdns.push("<td valign=\"middle\">", 
+							"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"1\" height=\"1\">",
+							"</td>");
 				}
 			}
-			else if ((ParamCtrl.LlegendaGrisSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
-				 (ParamCtrl.LlegendaGrisSiForaAmbit && !EsCapaDinsAmbitActual(capa)))
+			else if (EsCapaInactivaGrisALaLlegenda(capa))
 			{
 				if (capa.consultable=="ara_no")
-					cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"),  
-							  "\" align=middle></td>");
+					cdns.push("<td valign=\"middle\">",
+						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
+						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
+						"</td>");
 				else
-					cdns.push("<td valign=\"middle\"><img src=\"",
-							  AfegeixAdrecaBaseSRC("consultableg.gif"), 
-							  "\" align=middle></td>");
+					cdns.push("<td valign=\"middle\">",
+						//"<img src=\"", AfegeixAdrecaBaseSRC("consultableg.gif"), "\" align=middle>",
+						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
+						"</td>");
 			}
 			else
 			{
@@ -673,26 +679,28 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					if (alguna.descarregable)
 					{
 						if (ParamCtrl.LlegendaIconesInactivesGrises)
-							cdns.push("<td valign=\"middle\"><img src=\"",
-								  AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), 
-								  "\" align=middle></td>");
+							cdns.push("<td valign=\"middle\">",
+								//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
+								DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
+								"</td>");
 						else
 							cdns.push("<td valign=\"middle\"><img src=\"",
 								  AfegeixAdrecaBaseSRC("1tran.gif"), 
 								  "\" width=\"1\" height=\"1\"></td>");
 					}
 				}
-				else if ((ParamCtrl.LlegendaGrisSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
-					 (ParamCtrl.LlegendaGrisSiForaAmbit && !EsCapaDinsAmbitActual(capa)))
+				else if (EsCapaInactivaGrisALaLlegenda(capa))
 				{
 					if (capa.descarregable=="ara_no")
-						cdns.push("<td valign=\"middle\"><img src=\"",
-								  AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), 
-								  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
+							"</td>");
 					else
-						cdns.push("<td valign=\"middle\"><img src=\"",
-								  AfegeixAdrecaBaseSRC("descarregableg.gif"), 
-								  "\" align=middle></td>");
+						cdns.push("<td valign=\"middle\">",
+							"<img src=\"", AfegeixAdrecaBaseSRC("descarregableg.gif"), "\" align=middle>",
+							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "descarregableg", 17, null, null),
+							"</td>");
 				}
 				else
 				{
@@ -739,8 +747,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 		//Icona o color general per tota la capa en cas de simbol únic.
 		if (capa.estil && capa.estil.length && capa.estil[capa.i_estil].ItemLleg && 
 			capa.estil[capa.i_estil].ItemLleg.length==1 &&
-			(!(ParamCtrl.LlegendaGrisSegonsEscala) || EsCapaDinsRangDEscalesVisibles(capa)) &&
-				(!(ParamCtrl.LlegendaGrisSiForaAmbit) || EsCapaDinsAmbitActual(capa)))
+			!EsCapaInactivaGrisALaLlegenda(capa))
 			cdns.push(DonaCadenaHTMLSimbolUnicLlegenda(capa.estil[capa.i_estil]));
 		else
 			cdns.push("<td colspan=2 valign=\"middle\" nowrap>");
@@ -754,8 +761,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				cdns.push("<a href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa,",-1);\" title=\"", 
 					DonaCadenaLang({"cat":"metadades", "spa":"metadatos", "eng":"metadata","fre":"métadonnées"}), "\">");
 		}		
-		if ((ParamCtrl.LlegendaGrisSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
-			(ParamCtrl.LlegendaGrisSiForaAmbit && !EsCapaDinsAmbitActual(capa)))
+		if (EsCapaInactivaGrisALaLlegenda(capa))
 			cdns.push(aspecte.PreviDescLlegendaGris, DonaCadena(capa.DescLlegenda), aspecte.PostDescLlegendaGris);
 		else
 			cdns.push(aspecte.PreviDescLlegenda , DonaCadena(capa.DescLlegenda) , aspecte.PostDescLlegenda);
@@ -765,9 +771,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 		cdns.push("</td></tr>");
 
 		//Control del temps si cal
-		if (capa.visible!="no" && capa.visible!="ara_no" &&
-			(!ParamCtrl.LlegendaGrisSegonsEscala || EsCapaDinsRangDEscalesVisibles(capa)) &&
-				(!ParamCtrl.LlegendaGrisSiForaAmbit || EsCapaDinsAmbitActual(capa)))
+		if (capa.visible!="no" && capa.visible!="ara_no" && !EsCapaInactivaGrisALaLlegenda(capa))
 		{
 			if (capa.AnimableMultiTime)
 			{
@@ -843,8 +847,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 
 		if (capa.estil && capa.estil.length && 
 			(!capa.grup || !ParamCtrl.LlegendaGrupsComARadials || (capa.visible!="no" && capa.visible!="ara_no" &&
-			(!ParamCtrl.LlegendaGrisSegonsEscala || EsCapaDinsRangDEscalesVisibles(capa)) &&
-		        (!ParamCtrl.LlegendaGrisSiForaAmbit || EsCapaDinsAmbitActual(capa))
+			!EsCapaInactivaGrisALaLlegenda(capa)
 			)))
 		{
 			//Radials d'estil si cal	
@@ -960,14 +963,23 @@ function CreaLlegenda()
 	}
 }
 
-function EsCapaVisibleAAquestNivellDeZoomOEnLlegenda(capa)
+function EsCapaVisibleOActivaALaLlegenda(capa)
 {
 	if ((ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
 		(ParamCtrl.LlegendaAmagaSiForaAmbit && !EsCapaDinsAmbitActual(capa)) ||
-		!EsCapaDisponibleEnElCRSActual(capa) ||
+		(ParamCtrl.LlegendaAmagaSiForaCRS && !EsCapaDisponibleEnElCRSActual(capa)) ||
 		!capa.VisibleALaLlegenda)
 		return false;
 	return true;
+}
+
+function EsCapaInactivaGrisALaLlegenda(capa)
+{
+	if ((ParamCtrl.LlegendaGrisSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa)) ||
+		(ParamCtrl.LlegendaGrisSiForaAmbit && !EsCapaDinsAmbitActual(capa)) ||
+		(ParamCtrl.LlegendaGrisSiForaCRS && !EsCapaDisponibleEnElCRSActual(capa)))
+		return true;
+	return false;
 }
 
 function CanviaEstatVisibleCapaLlegenda(icon_capa, i)

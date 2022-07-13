@@ -1153,11 +1153,6 @@ var z;
 	alert("Finestra \""+nom+ "\"no trobada");
 }
 
-function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_function_name)
-{
-	return DonaTextImgGifSvg("id_"+nom_fin+"_"+nom_boto, nom_fin+"_"+nom_boto, nom_boto, size, title, onclick_function_name);
-}
-
 var movimentDesactiu=0x01;
 var movimentArrossegant=0x02;
 var movimentRedimensionant=0x04;

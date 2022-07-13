@@ -454,8 +454,28 @@
 			"description": "Posa en l'estil les entrades de les capes a la llegenda quan no siguin visibles per escala a gris.", 
 			"type": "boolean"
 		},
+		"LlegendaAmagaSiForaAmbit": {
+			"description": "Amaga les entrades de les capes a la llegenda si la capa no està disponible en l'àmbit de visualització actual", 
+			"type": "boolean"
+		},
+		"LlegendaGrisSiForaAmbit": {
+			"description": "Posa a gris les entrades de les capes a la llegenda si la capa no està disponible en l'àmbit de visualització actual", 
+			"type": "boolean"
+		},		
+		"LlegendaAmagaSiForaCRS": {
+			"description": "Amaga les entrades de les capes a la llegenda si la capa no està disponible en el CRS actual", 
+			"type": "boolean"
+		},
+		"LlegendaGrisSiForaCRS": {
+			"description": "Posa a gris les entrades de les capes a la llegenda si la capa no està disponible en el CRS actual", 
+			"type": "boolean"
+		},		
+		"LlegendaAmagaSeparaNoCapa": {
+			"description": "Amaga el separador de capes si no hi ha cap capa visible fins al proper separador", 
+			"type": "boolean"
+		},
 		"LlegendaIconesInactivesGrises": {
-			"description": "Les icones que no es poden fer servir es posen a gris", 
+			"description": "Les icones que no es poden fer servir es posen a gris. De no indicar-se les icones inactives no són visibles.", 
 			"type": "boolean"
 		},
 		"LlegendaGrupsComARadials": {
@@ -464,18 +484,6 @@
 		},
 		"LlegendaLligaVisibleAmbCtipica": {
 			"description": "Les capes que són consultades amb l'eina de consulta típica es fan visibles i consultables", 
-			"type": "boolean"
-		},
-		"LlegendaAmagaSeparaNoCapa": {
-			"description": "Amaga el separador de capes si no hi ha cap capa visible fins al proper separador", 
-			"type": "boolean"
-		},
-		"LlegendaAmagaSiForaAmbit": {
-			"description": "Amaga el separador si la capa no està visible perquè la capa no està disponible en l'àmbit de visualització actual", 
-			"type": "boolean"
-		},
-		"LlegendaGrisSiForaAmbit": {
-			"description": "Posa a gris l'entrada de la llegenda de la capa perquè la capa no està disponible en l'àmbit de visualització actual", 
 			"type": "boolean"
 		},
 		"LlegendaLligaVisibleAmbDescarregable": {

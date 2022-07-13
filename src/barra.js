@@ -74,6 +74,11 @@ var cdns=[];
 	return cdns.join("");
 }
 
+function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_function_name)
+{
+	return DonaTextImgGifSvg("id_"+nom_fin+"_"+nom_boto, nom_fin+"_"+nom_boto, nom_boto, size, title, onclick_function_name);
+}
+
 /*
  * Replace an SVG img src with inline XML SVG 
  */

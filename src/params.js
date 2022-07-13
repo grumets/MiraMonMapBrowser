@@ -158,8 +158,11 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 		ParamCtrl.psalt=parseInt(formul.param_psalt.value);
 		ParamCtrl.hideLayersOverVista=(formul.param_SobreVistaVisible.checked) ? true : false;  //Això té efectes en el proper redibuixat de la vista
 		showOrHideLayersOnTopOfVista();
-		ParamCtrl.ColorFonsVista=param_ColorFonsVista;
-		ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
+
+		ParamCtrl.LlegendaAmagaSegonsEscala=(formul.param_LayersOutSideScale[1].checked) ? true : false;
+		ParamCtrl.LlegendaAmagaSiForaAmbit=(formul.param_LayersOutSideTheBBox[1].checked) ? true : false;
+		ParamCtrl.LlegendaAmagaSiForaCRS=(formul.param_LayersWithoutSupportCurrentCRS[1].checked) ? true : false;
+
 		ParamCtrl.NDecimalsCoordXY=parseInt(formul.param_NDecimalsCoordXY.value);
 		if (formul.param_CoordExtremes[1].checked)
 			ParamCtrl.CoordExtremes="proj";
@@ -204,6 +207,9 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 			ParamCtrl.ZoomUnSolClic=true;
 		else
 			ParamCtrl.ZoomUnSolClic=false;
+
+		ParamCtrl.ColorFonsVista=param_ColorFonsVista;
+		ParamCtrl.ColorQuadratSituacio=param_ColorQuadratSituacio;
 	}
 
 	GuardaVistaPrevia();
@@ -212,7 +218,7 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 	if (tancar==true)
 		TancaFinestraLayer("param");
 
-  return false;  //per no efectuar l'acció de submit del formulari
+	return false;  //per no efectuar l'acció de submit del formulari
 }
 
 
@@ -257,6 +263,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 					",",OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),")<br>&nbsp;&nbsp;&nbsp;",
 				GetMessage("CellSize"), ": ", ParamInternCtrl.vista.CostatZoomActual, unitats_CRS,
 		"</small></fieldset>",
+
 		"<fieldset><legend>",
 		GetMessage("View"),
 		": </legend>",
@@ -270,6 +277,15 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicSi\"", (ParamCtrl.ZoomUnSolClic ? " checked=\"checked\"" : ""), "><label for=\"id_ZoomUnSolClicSi\" accesskey=\"1\"> ",
 		GetMessage("ZoomPan_1ClickDrag", "params") ,
 		"</label></fieldset>",
+
+		"<fieldset><legend>",
+		GetMessage("Legend", "llegenda"),
+		": </legend>",
+		GetMessage("LayersOutSideScale", "params") , ": <input type=\"radio\" name=\"param_LayersOutSideScale\" id=\"id_LayersOutSideScaleMostra\"", (ParamCtrl.LlegendaAmagaSegonsEscala ? "" : " checked=\"checked\""), "> <label for=\"id_LayersOutSideScaleMostra\">", GetMessage("Show") ,"</label> <input type=\"radio\" name=\"param_LayersOutSideScale\" id=\"id_LayersOutSideScaleAmaga\"", (ParamCtrl.LlegendaAmagaSegonsEscala ? " checked=\"checked\"" :  ""), "> <label for=\"id_LayersOutSideScaleAmaga\">", GetMessage("Hide") ,"</label><br>",
+		GetMessage("LayersOutSideTheBBox", "params"), ": <input type=\"radio\" name=\"param_LayersOutSideTheBBox\" id=\"id_LayersOutSideTheBBoxMostra\"", (ParamCtrl.LlegendaAmagaSiForaAmbit ? "" : " checked=\"checked\""), "> <label for=\"id_LayersOutSideTheBBoxMostra\">", GetMessage("Show") ,"</label> <input type=\"radio\" name=\"param_LayersOutSideTheBBox\" id=\"id_LayersOutSideTheBBoxAmaga\"", (ParamCtrl.LlegendaAmagaSiForaAmbit ? " checked=\"checked\"" : ""), "> <label for=\"id_LayersOutSideTheBBoxAmaga\">", GetMessage("Hide") ,"</label><br>",
+		GetMessage("LayersWithoutSupportCurrentCRS", "params"), ": <input type=\"radio\" name=\"param_LayersWithoutSupportCurrentCRS\" id=\"id_LayersWithoutSupportCurrentCRSMostra\"", (ParamCtrl.LlegendaAmagaSiForaCRS ? "" : " checked=\"checked\""), "> <label for=\"id_LayersWithoutSupportCurrentCRSMostra\">", GetMessage("Show") ,"</label> <input type=\"radio\" name=\"param_LayersWithoutSupportCurrentCRS\" id=\"id_LayersWithoutSupportCurrentCRSAmaga\"", (ParamCtrl.LlegendaAmagaSiForaCRS ? " checked=\"checked\"" : ""), "> <label for=\"id_LayersWithoutSupportCurrentCRSAmaga\">", GetMessage("Hide") ,"</label>",
+		"</label></fieldset>",
+
 		"<fieldset><legend>",
 		GetMessage("Coordinates"),
 		": </legend>",

@@ -6539,6 +6539,8 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+	RevisaEstatsCapes();
+	CreaLlegenda();
 }
 
 function CarregaCapesDeServei(capesDeServei)
@@ -6576,36 +6578,36 @@ var win, i, j, l, capa;
 	}
 
 
-	createFinestraLayer(window, "executarProces", {"cat":"Executar un proces (WPS)", "spa":"Ejecutar un proceso (WPS)", "eng": "Execute a process (WPS)", "fre":"Exécuter un processus (WPS)"}, boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "afegirCapa", {"cat":"Afegir capa al mapa", "spa":"Añadir capa al mapa", "eng": "Add layer to map", "fre":"Ajouter une couche à la carte"}, boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "calculadoraCapa", {"cat":"Calculadora de capes", "spa":"Calculadora de capas", "eng": "Calculator of layers", "fre":"Calculateur des couches"}, boto_tancar, 420, 150, 450, 500, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "combinacioCapa", {"cat":"Combinació analítica de capes", "spa":"Combinación analítica de capas", "eng": "Analytical combination of layers", "fre":"Combinaison analytique de couches"}, boto_tancar, 420, 150, 520, 400, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "seleccioCondicional", {"cat":"Selecció per condicions", "spa":"Selección por condición", "eng": "Selection by condition", "fre":"Sélection par condition"}, boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "combinacioRGB", {"cat":"Combinació RGB", "spa":"Combinación RGB", "eng":"RGB combination", "fre":"Combinaison RVB"}, boto_tancar, 220, 90, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "seleccioEstadistic", {"cat":"Selecció del valor estadístic", "spa":"Selección del valor estadístico", "eng":"Selection of statistic value", "fre":"Sélection de la valeur statistique"}, boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "editaEstil", {"cat":"Edita estil", "spa":"Editar estilo", "eng":"Edit style", "fre":"Modifier le style"}, boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "anarCoord", {"cat":"Anar a coordenada", "spa":"Ir a coordenada", "eng": "Go to coordinate","fre": "Aller à la coordonnée"}, boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "multi_consulta",{"cat":"Consulta","spa": "Consulta", "eng": "Query", "fre":"Recherche"}, boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"}, boto_tancar, 277, 200, 480, 430, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "download", {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"}, boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "video", {"cat":"Anàlisi de sèries temporals i animacions", "spa":"Analisis de series temporales y animaciones", "eng":"Time series analysis and animations", "fre":"Analyse de séries chronologiques et animations"}, boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "consola", {"cat":"Consola de peticions", "spa":"Consola de peticiones", "eng": "Request console","fre": "Console de demandes"}, boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
-	createFinestraLayer(window, "reclassificaCapa", {"cat":"Reclassificadora de capes", "spa":"Reclasificadora de capas", "eng":"Reclassifier of layers", "fre":"Reclassificateur des couches"}, boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "calculaQualitat", {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "mostraLlinatge", {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"}, boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "mostraQualitat", {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"}, boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "feedback", {"cat":"Valoracions", "spa":"Valoraciones", "eng":"Feedback", "fre":"rétroaction"}, boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "feedbackAmbEstils", {"cat":"Valoracions que contenen estils", "spa":"Valoraciones que contienen estilos", "eng":"Feedback containing styles", "fre":"Rétroaction contenant des styles"}, boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "enllac", {"cat":"Obrir o desar el contexte","spa":"Abrir o guardar el contexto","eng": "Open or save the context"}, boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "enllacWMS", {"cat":"Enllaços als servidors WMS del navegador", "spa":"Enlaces a los servidors WMS del navegador","eng": "Links to WMS", "fre":"Liens aux serveurs WMS du navigateur"}, boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "triaStoryMap", {"cat":"Relats", "spa":"Relatos", "eng": "Stories", "fre":"Histoires"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-	createFinestraLayer(window, "storyMap", {"cat":"titol del relat", "spa":"título del ralato", "eng": "story title", "fre":"titre de l'histoire"}, boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
-	createFinestraLayer(window, "info", {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"}, boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "modificaNom", {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"}, boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "executarProces", GetMessage("ExecuteProcessWPS", "miramon"), boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "afegirCapa", GetMessage("AddLayerToMap", "miramon"), boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "calculadoraCapa", GetMessage("LayerCalculator", "cntxmenu"), boto_tancar, 420, 150, 450, 500, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "combinacioCapa", GetMessage("AnalyticalCombinationLayers", "cntxmenu"), boto_tancar, 420, 150, 520, 400, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "seleccioCondicional", GetMessage("SelectionByCondition", "miramon"), boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "combinacioRGB", GetMessage("RGBCombination", "cntxmenu"), boto_tancar, 220, 90, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "seleccioEstadistic", GetMessage("SelectionStatisticValue", "cntxmenu"), boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 530, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "download", GetMessage("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "video", GetMessage("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "consola", GetMessage("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
+	createFinestraLayer(window, "reclassificaCapa", GetMessage("ReclassifierLayerValues", "miramon"), boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "calculaQualitat", GetMessage("ComputeQuality", "cntxmenu"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "mostraLlinatge", GetMessage("Lineage"), boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "mostraQualitat", GetMessage("Quality"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "feedback", GetMessage("Feedback"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "feedbackAmbEstils", GetMessage("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "enllac", GetMessage("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "enllacWMS", GetMessage("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "triaStoryMap", GetMessage("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	createFinestraLayer(window, "storyMap", GetMessage("StoryMapTitle", "miramon"), boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
+	createFinestraLayer(window, "info", GetMessage("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "modificaNom", GetMessage("ModifyName"), boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 145, 240, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
-	createFinestraLayer(window, "editarVector", {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert a new point", "fre":"Insérer un nouveaux point"}, boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "editarVector", GetMessage("InsertNewPoint", "miramon"), boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
-	createFinestraLayer(window, "misTransaccio", {"cat":"Informació del resultat de la transacció", "spa":"Información del resulado de la transacción", "eng": "Information about the result of the transaction", "fre":"Informations sur les résultats de la transaction"}, boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "misTransaccio", GetMessage("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
@@ -6983,7 +6985,7 @@ function MovementMiraMonMapBrowser(event)
 }
 
 //https://stackoverflow.com/questions/33083484/on-ctrlmousewheel-event
-/*Moving the wheel to chagne tne map zoom and position is only possible if the mouse is over the map view or the situation map*/
+/*Moving the wheel to change the map zoom and position is only possible if the mouse is over the map view or the situation map*/
 function WheelMiraMonMapBrowser(event)
 {
 var elem, rect;
@@ -7019,6 +7021,16 @@ var elem, rect;
 		if (event.clientX<rect.esq || event.clientX>rect.esq+rect.ample ||
 			event.clientY<rect.sup || event.clientY>rect.sup+rect.alt)
 			return;
+	}
+	else
+	{
+		if (isLayerVisible(getResizableLayer(window, "llegenda")))
+		{
+			rect=getRectLayerName(window, "llegenda");
+			if (event.clientX>rect.esq && event.clientX<rect.esq+rect.ample &&
+				event.clientY>rect.sup && event.clientY<rect.sup+rect.alt)
+				return; // La llegenda està sobre una de les vistes i no vull que faci scroll a la vista
+		}
 	}
 
 	if (event.shiftKey)

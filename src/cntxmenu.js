@@ -180,6 +180,12 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 						GetMessage("ModifyName"), "</a><br>");
 	cdns.push("<hr>");
 
+	if (!EsCapaDinsRangDEscalesVisibles(capa) || !EsCapaDinsAmbitActual(capa) || !EsCapaDisponibleEnElCRSActual(capa))
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraRaonsNoVisible(", i_capa, ");TancaContextMenuCapa();\">",
+						GetMessage("WhyNotVisible", "cntxmenu"), "</a><br>");
+	}
+
 	if(ParamCtrl.BarraBotoAfegeixCapa)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"IniciaFinestraAfegeixCapaServidor(", i_capa, ");TancaContextMenuCapa();\">",
@@ -3554,6 +3560,39 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 	CreaLlegenda();
 }
 
+function ObreFinestraRaonsNoVisible(i_capa)
+{
+var elem=ObreFinestra(window, "modificaNom", GetMessage("ofModifingName", "cntxmenu"));
+	if (!elem)
+		return;
+	contentLayer(elem, DonaCadenaRaonsNoVisible(i_capa));
+	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+}
+
+function DonaCadenaRaonsNoVisible(i_capa)
+{
+var cdns=[], capa=ParamCtrl.capa[i_capa];
+
+	if (!EsCapaDinsRangDEscalesVisibles(capa))
+		cdns.push(GetMessage("Layer"), " ", GetMessage("notVisibleInCurrentZoom", "cntxmenu"), "<br>");
+	if (!EsCapaDinsAmbitActual(capa))
+		cdns.push(GetMessage("Layer"), " ", GetMessage("notVisibleInCurrentView", "cntxmenu"), "<br>");
+	if (!EsCapaDisponibleEnElCRSActual(capa))
+	{
+		cdns.push(GetMessage("Layer"), " ", GetMessage("notVisibleInCurrentCRS", "cntxmenu"), ".\n", GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu"), ": ");
+		for (var i; i<capa.CRS.length; i++)
+		{
+			cdns.push(DonaDescripcioCRS(capa.CRS[i]));
+			if (i)
+				cdns.push(", ");
+		}
+		cdns.push("<br>");
+	}
+	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
+			  GetMessage("Cancel"),
+			  "\" onClick='TancaFinestraLayer(\"modificaNom\");' />");
+	return cdns.join("");
+}
 
 function ObreFinestraModificaNomCapa(i_capa)
 {
@@ -3561,6 +3600,7 @@ var elem=ObreFinestra(window, "modificaNom", GetMessage("ofModifingName", "cntxm
 	if (!elem)
 		return;
 	contentLayer(elem, DonaCadenaModificaNomCapa(i_capa));
+	titolFinestraLayer(window, "modificaNom", GetMessage("ModifyName"));
 }
 
 function DonaCadenaModificaNomCapa(i_capa)
@@ -3637,6 +3677,7 @@ var elem=ObreFinestra(window, "modificaNom", GetMessage("ofModifingName", "cntxm
 	if (!elem)
 		return;
 	contentLayer(elem, DonaCadenaModificaNomEstil(i_capa, i_estil));
+	titolFinestraLayer(window, "modificaNom", GetMessage("ModifyName"));
 }
 
 function DonaCadenaModificaNomEstil(i_capa, i_estil)
