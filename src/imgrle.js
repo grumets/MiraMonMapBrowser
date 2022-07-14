@@ -1051,7 +1051,7 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 		}
 		else
 		{
-			alert(dtype + " " + GetMessage("neitherRecognizedNorImplemented"));
+			alert(dtype + " " + GetMessage("neitherRecognizedNorImplemented") + ".");
 			return;
 		}
 	}

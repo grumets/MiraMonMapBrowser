@@ -41,7 +41,7 @@
 var MessageLang={
 	TheLanguageName: {"cat": "Català", "spa": "Español", "eng": "English", "fre":"Français"},
 	MissingMessage: {"cat":"Missatge no trobat", "spa":"Mensage no encontrado", "eng":"Missing message", "fre":"Message non trouvé"},
-	neitherRecognizedNorImplemented: {"cat": "no reconnegut o implementat.", "spa": "no reconocido o implementado.", "eng": "neither recognized nor implemented.", "fre":"Ni reconnu ni mis en œuvre"},
+	neitherRecognizedNorImplemented: {"cat": "no reconnegut o implementat", "spa": "no reconocido o implementado", "eng": "neither recognized nor implemented", "fre":"Ni reconnu ni mis en œuvre"},
 	UseTheFormat: {"cat":"Useu el format", "spa":"Use el formato", "eng":"Use the format","fre":"Utilisez le format"},
 	WrongFormatParameter: {"cat":"Format de paràmetre incorrecte", "spa":"Formato de parametro incorrecto", "eng":"Wrong format in parameter", "fre":"Format incorrect dans le paramètre"},
 	ModifyName: {"cat":"Modifica el nom", "spa":"Modifica el nombre", "eng":"Modify the name", "fre":"Modifier le nom"},
@@ -482,6 +482,9 @@ var MessageLang={
 		LayerIMGNoDefinesComponents: {"cat":"La capa ha estat demanada com img però no hi ha components definides al estil actual.", "spa":"La capa ha sido solicitada como img pero no tiene componentes definidas en el estilo actual.", "eng":"The layer is requested as img but there are no defined components for the current style.", "fre":"La couche est requise comme img mais il n'y a pas de composants définis pour le style actuel."}
 	},
 	miramon: {
+		NotPossibleShowLayersSameGroup: {"cat":"No és possible mostrar dues capes del mateix grup", "spa":"No es posible mostrar dos capas del mismo grupo", "eng":"It is not possible to show two layers from the same group", "fre":"Impossible de montrer deux couches du même groupe"},
+		alsoMemberToTheGroup: {"cat":"que també format part del grup", "spa": "que también forma parte del grupo", "eng": "that also is member to the group", "fre":"appartenant aussi au groupe"},
+		willBeDeselected: {"cat":"serà desmarcada", "spa":"será desmarcada", "eng":"will be deselected", "fre": "va être désélectionnée"},
 		LayerTIFFIMGMustHaveValues: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de definir un array de 'valors'", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'", "eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'"},
 		LayerBinaryArrayMustBeHTTPS: {"cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de ser servida en https:", "spa": "Una capa con FormatImatge image/tiff o application/x-img debe ser servida en https:", "eng": "A layer with FormatImatge image/tiff or application/x-img must be provided in https:", "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit être fourni en https"},
 		LayerSetToNoVisibleQueriable: {"cat":"La capa no es podria carregar i es declara no visible ni consultable", "spa": "La capa no es podría carregar por lo que declara no visible ni consultable", "eng": "The layer will not load so it is declared as neither visible nor queriable", "fre": "La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable"},

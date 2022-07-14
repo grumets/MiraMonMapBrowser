@@ -3580,7 +3580,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	if (!EsCapaDisponibleEnElCRSActual(capa))
 	{
 		cdns.push(GetMessage("Layer"), " ", GetMessage("notVisibleInCurrentCRS", "cntxmenu"), ".\n", GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu"), ": ");
-		for (var i; i<capa.CRS.length; i++)
+		for (var i=0; i<capa.CRS.length; i++)
 		{
 			cdns.push(DonaDescripcioCRS(capa.CRS[i]));
 			if (i)

@@ -1131,10 +1131,11 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
 					if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
 					{
-						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
-													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadena(capa2.desc) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
-													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadena(capa2.desc) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.", 
-													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadena(capa2.desc) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
+						if (!confirm(GetMessage("NotPossibleShowLayersSameGroup", "miramon") + ".\n" + GetMessage("TheLayer") +
+							" \"" + DonaCadena(capa2.desc) + "\", " +
+							GetMessage("alsoMemberToTheGroup", "miramon") + 
+							" \"" + capa2.grup + "\", " +
+							GetMessage("willBeDeselected", "miramon") + ".")) 
 							return;
 					}
 					if (nou_estat=="si" || nou_estat=="semitransparent")
