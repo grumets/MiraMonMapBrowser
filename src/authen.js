@@ -10,7 +10,7 @@ function InitHello()
 	hello.init(ParamCtrl.accessClientId, {redirect_uri: ((location.pathname.charAt(location.pathname.length-1)=='/') ? location.pathname.substring(0, location.pathname.length-1) : location.pathname)});
 }
 
-function parseJwt(token) 
+function parseJwt(token)
 {
 	var base64Url = token.split(".")[1];
 	var base64 = base64Url.replace("-", "+").replace("_", "/");
@@ -61,7 +61,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 {
 	if (hello(access.tokenType ? access.tokenType : "authenix").askingAToken)  //Parametre meu que no forma part de la llibreria
 	{
-		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard. 
+		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard.
 		setTimeout(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 		return;
 	}
@@ -79,9 +79,9 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 					if (!hello(access.tokenType ? access.tokenType : "authenix").userAlreadyWelcomed)
 					{
 						var jwt = parseJwt(authResponse.id_token);
-	
+
 						// https://github.com/kjur/jsrsasign/wiki/Tutorial-for-JWT-verification
-	
+
 						if (access.tokenType=="nextgeoss")
 							alert("Hello " + decode_utf8(jwt.name));  //Sembla que nextgeoss que ho diferent i envia el nom del utf8. En canvi landsense/authenix ho fa "normal".
 						else if (access.tokenType=="wqems")
@@ -101,12 +101,12 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 			// On error
 			function(error) {
 				hello(access.tokenType ? access.tokenType : "authenix").askingAToken=false;
-				alert(DonaCadenaLang({cat: "Error o cancel·lació de la identificació amb el compte de", spa: "Error o cancelación de la identificación en la cuenta de", eng: "Login in your account failed or cancelled in"}) + " " + access.tokenType + ". " + error.error.message);
+				alert(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + error.error.message);
 			}
 		);
 }
 
-function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, dataPayload, hand, response_format, struct) 
+function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, dataPayload, hand, response_format, struct)
 {
 	if (!access || !access.tokenType || access.tokenType.length==0)
 	{
@@ -136,7 +136,6 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 		}
 		return;
 	}
-	
+
 	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct, null, null);
 }
-

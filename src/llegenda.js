@@ -19,17 +19,17 @@
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -179,7 +179,7 @@ var estil=capa.estil[i_estil];
 var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample, n_item_lleg_auto;
 
 	if (estil.ItemLleg && estil.ItemLleg.length>0)
-		return;  //No cal fer-la: ja està feta.
+		return;  //No cal fer-la: ja estÃ  feta.
 
 	if (estil.paleta && estil.paleta.ramp && !estil.paleta.colors)
 		TransformRampToColorsArray(estil.paleta);
@@ -451,10 +451,10 @@ var cdns=[], cal_retorn=false;
 		}
 	}
 
-	//Si la capa té una paleta, defineixo els colors de la llegenda aquí. Necessari si m'han canviar l'estil de visualització i no s'havia calculat abans.
+	//Si la capa tÃ© una paleta, defineixo els colors de la llegenda aquÃ­. Necessari si m'han canviar l'estil de visualitzaciÃ³ i no s'havia calculat abans.
 	CreaItemLlegDePaletaSiCal(i_capa, capa.i_estil);
 
-	//Llegenda si hi ha més d'un item
+	//Llegenda si hi ha mÃ©s d'un item
 	if (estil.ItemLleg && estil.ItemLleg.length>1 &&
 		(!(flag&LlegendaAmbControlDeCapes) || capa.LlegDesplegada) &&
 		capa.visible!="ara_no")
@@ -489,7 +489,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 	if (flag&LlegendaAmbControlDeCapes)
 		cdns.push("<form name=\"form_llegenda\">");
 
-	//Inici de taula i regle d'un píxel
+	//Inici de taula i regle d'un pÃ­xel
 	cdns.push((aspecte.CapcaleraLlegenda?DonaCadena(aspecte.CapcaleraLlegenda):""),
 			"<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>");
 	if (alguna.desplegable)
@@ -518,7 +518,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 	        	(!EsCapaVisibleOActivaALaLlegenda(capa) ||
 			    (capa.visible!="si" && capa.visible!="semitransparent" && !(flag&LlegendaAmbCapesNoVisibles))))
 	        {
-	 		    //Busco si hi ha alguna capa visible fins al pròxim separador
+	 		    //Busco si hi ha alguna capa visible fins al prÃ²xim separador
 				var capa2;
 				for (var i2=i_capa+1; i2<ParamCtrl.capa.length; i2++)
 		 		{
@@ -710,7 +710,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				}
 			}
 		}
-		//Botó de GetCovergage:
+		//BotÃ³ de GetCovergage:
 		if (EsCapaDecarregableIndividualment(capa))
 		{
 			cdns.push("<td valign=\"middle\">",
@@ -725,7 +725,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 						  "\" width=\"1\" height=\"1\"></td>");
 		}
 
-		//Botó de WPS
+		//BotÃ³ de WPS
 		if(capa.proces==null)
 		{
 			if (alguna.WPS)
@@ -736,15 +736,15 @@ var salt_entre_columnes, cdns=[], capa, estil;
 		else
 			cdns.push("<td valign=\"middle\">",
 						(CadenaBotoPolsable("excutewps"+i_capa, "executewps",
-								GetMessage("processingService", "miramon"), 
+								GetMessage("processingService", "llegenda"),
 								"IniciaFinestraExecutaProcesCapa("+i_capa+")")),
 						"</td>");
 
 
-		//Si la capa té una paleta, defineixo els colors de la llegenda aquí.
+		//Si la capa tÃ© una paleta, defineixo els colors de la llegenda aquÃ­.
 		CreaItemLlegDePaletaSiCal(i_capa, capa.i_estil);
 
-		//Icona o color general per tota la capa en cas de simbol únic.
+		//Icona o color general per tota la capa en cas de simbol Ãºnic.
 		if (capa.estil && capa.estil.length && capa.estil[capa.i_estil].ItemLleg &&
 			capa.estil[capa.i_estil].ItemLleg.length==1 &&
 			!EsCapaInactivaGrisALaLlegenda(capa))
@@ -759,7 +759,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				cdns.push("<a href=\"javascript:void(0);\" style=\"cursor:context-menu;\" onClick=\"OmpleLayerContextMenuCapa(event,",i_capa,");\" onContextMenu=\"return OmpleLayerContextMenuCapa(event,",i_capa,");\">");
 			else if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades.standard))
 				cdns.push("<a href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa,",-1);\" title=\"",
-					DonaCadenaLang({"cat":"metadades", "spa":"metadatos", "eng":"metadata","fre":"métadonnées"}), "\">");
+					GetMessage("metadata"), "\">");
 		}
 		if (EsCapaInactivaGrisALaLlegenda(capa))
 			cdns.push(aspecte.PreviDescLlegendaGris, DonaCadena(capa.DescLlegenda), aspecte.PostDescLlegendaGris);
@@ -806,8 +806,8 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				}
 				else
 				{
-					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) +" "+ DonaCadena(capa.desc) + " " +
-						DonaCadenaLang({"cat":"indica que és AnimableMultiTime però no té dates definides", "spa":"indica que es AnimableMultiTime pero no tiene fechas definidas", "eng":"indicates that is AnimableMultiTime but it has no dates defined", "fre":"Indique que c\'est AnimableMultiTime, mais il n\'a pas de dates définies"}));
+					alert(GetMessage("TheLayer") +" "+ DonaCadena(capa.desc) + " " +
+						GetMessage("animableButNoDate"));
 				}
 			}
 			if (capa.dimensioExtra && capa.dimensioExtra.length)
@@ -857,9 +857,9 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				/*if (capa.NColEstil==0)
 				{
 					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) +" "+ DonaCadenaNomDesc(capa) + " "+
-							DonaCadenaLang({"cat":", "indica incorrectament 0 columnes dels items de la llegenda però té", "spa":"indica incorrectamente 0 columnas en los items de la leyenda pero tiene", "eng":"has been incorrectly set to 0 columns on the legend items but it has", "fre":"indique 0 colonnes des éléments de la légende mais a"}) +
+							DonaCadenaLang({"cat":", "indica incorrectament 0 columnes dels items de la llegenda perÃ² tÃ©", "spa":"indica incorrectamente 0 columnas en los items de la leyenda pero tiene", "eng":"has been incorrectly set to 0 columns on the legend items but it has", "fre":"indique 0 colonnes des Ã©lÃ©ments de la lÃ©gende mais a"}) +
 							 " "+ estil.ItemLleg.length + " " +
-							DonaCadenaLang({"cat":"elements descrits. No es dibuixaran.", "spa":"elementos descritos. No es dibujaran.", "eng":"described elements. They will not be shown on the legend.", "fre":"éléments décrits. Ils ne seront pas dessinés."}));
+							DonaCadenaLang({"cat":"elements descrits. No es dibuixaran.", "spa":"elementos descritos. No es dibujaran.", "eng":"described elements. They will not be shown on the legend.", "fre":"Ã©lÃ©ments dÃ©crits. Ils ne seront pas dessinÃ©s."}));
 				}
 				else
 				{*/
@@ -959,7 +959,7 @@ function CreaLlegenda()
 	{
 		contentLayer(elem, s);
 		//showLayer(elem);
-		//Queda pendent el tema de la recuperaciò d'scrolls. Veure NOTA20200403-1912
+		//Queda pendent el tema de la recuperaciÃ² d'scrolls. Veure NOTA20200403-1912
 	}
 }
 
@@ -1004,15 +1004,12 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
 					if (!(ParamCtrl.LlegendaGrupsComARadials && ParamCtrl.LlegendaGrupsComARadials==true))
 					{
-						if (!confirm(DonaCadenaLang({"cat":"No és possible mostrar dues capes del mateix grup.\nLa capa \"" + DonaCadenaNomDesc(capa2) + "\", que també format part del grup \"" + capa2.grup + "\", serà desmarcada.",
-													"spa":"No es posible mostrar dos capas del mismo grupo.\nLa capa \"" + DonaCadenaNomDesc(capa2) + "\", que también forma parte del grupo \"" + capa2.grup + "\", será desmarcada.",
-													"eng":"It is not possible to show two layers from the same group.\nLayer \"" + DonaCadenaNomDesc(capa2) + "\", that also is member to the group \"" + capa2.grup + "\", will be deselected.",
-													"fre":"Impossible de montrer deux couches du même groupe..\nLa couche \"" + DonaCadenaNomDesc(capa2) + "\", appartenant aussi au groupe \"" + capa2.grup + "\", va être désélectionnée."})))
+						if (!confirm(GetMessage("NotPossibleShowLayersSameGroup", "miramon") + ".\n" + GetMessage("TheLayer") + " \"" + DonaCadenaNomDesc(capa2) + "\", " + GetMessage("alsoMemberToTheGroup", "miramon") + " \"" + capa2.grup + "\", " + GetMessage("willBeDeselected", "miramon") + "."))
 							return;
 					}
 					if (capa.model!=model_vector && capa2.transparencia=="semitransparent")
 					{
-						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
+						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//AixÃ­ forÃ§o que passi a no visible
 				       		if (ParamCtrl.LlegendaGrupsComARadials)
 						{
 							if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
@@ -1074,15 +1071,15 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 				icon_capa.alt=GetMessage("visible", "llegenda");
 		}
 
-		//Miro si l'estil actiu té gràfics que estaven "congelats" perquè la capa no era visible
-		//(els altres possibles gràfics d'altres estils de la capa encara han d'estar congelats)
+		//Miro si l'estil actiu tÃ© grÃ fics que estaven "congelats" perquÃ¨ la capa no era visible
+		//(els altres possibles grÃ fics d'altres estils de la capa encara han d'estar congelats)
 		if (capa.estil)
 			DesactivaCheckITextChartsMatriusDinamics(i, capa.i_estil, false);
 	}
 	else if ((nom_icona && (nom_icona=="semitransparent" || nom_icona=="semi_radio")) ||
                   (!nom_icona && capa.visible=="semitransparent") ||
 	          (capa.transparencia && capa.transparencia!="semitransparent") ||
-		  capa.model==model_vector)  //Els vectors no tenen semitranparència (de moment)
+		  capa.model==model_vector)  //Els vectors no tenen semitranparÃ¨ncia (de moment)
 	{
 		//pas a no visible
 		CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
@@ -1119,7 +1116,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 			if (icon_capa.alt)
 				icon_capa.alt=GetMessage("nonVisible", "llegenda");
 		}
-		//Miro hi havia estils d'aquesta capa tenien gràfics que cal "congelar" perquè ara la capa no serà visible
+		//Miro hi havia estils d'aquesta capa tenien grÃ fics que cal "congelar" perquÃ¨ ara la capa no serÃ  visible
 		if (capa.estil)
 		{
 			for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -1153,9 +1150,9 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 			else
 				icon_capa.src=AfegeixAdrecaBaseSRC("semitransparent"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
 			if (icon_capa.alt)
-				icon_capa.alt=DonaCadenaLang({"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent", "fre":"semi transparent"});
+				icon_capa.alt=GetMessage("semitransparent", "llegenda");
 		}
-		// El cas "semitransparent" és només un subtipus de "visible" per tant no afecta als gràfics
+		// El cas "semitransparent" Ã©s nomÃ©s un subtipus de "visible" per tant no afecta als grÃ fics
 	}
 	CreaAtribucioVista();
 }
@@ -1213,10 +1210,7 @@ var capa=ParamCtrl.capa[i];
 					continue;
 				if (capa.grup==ParamCtrl.capa[i_capa].grup && ParamCtrl.capa[i_capa].descarregable=="si")
 				{
-				   if (!confirm(DonaCadenaLang({"cat":"No és possible descarregar dues capes del mateix grup.\nLa capa \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", que també format part del grup \"" + ParamCtrl.capa[i_capa].grup + "\", serà desmarcada.",
-												"spa":"No es posible descargar dos capas del mismo grupo.\nLa capa \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", que también forma parte del grupo \"" + ParamCtrl.capa[i_capa].grup + "\", será desmarcada.",
-												"eng":"It is not possible to download two layers from the same group.\nLayer \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", that also is member to the group \"" + ParamCtrl.capa[i_capa].grup + "\", will be deselected.",
-												"fre":"Impossible de télécharger deux couches du même groupe.\nLa couche \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", appartenant aussi au groupe \"" + ParamCtrl.capa [i_capa].grup + "\", va être désélectionnée."})))
+				   if (!confirm(GetMessage("NotPossibleDownloadLayersSameGroup", "llegenda") + ".\n" + GetMessage("TheLayer") + " \"" + DonaCadenaNomDesc(ParamCtrl.capa[i_capa]) + "\", " + GetMessage("alsoMemberToTheGroup", "miramon") + " \"" + ParamCtrl.capa[i_capa].grup + "\", " + GetMessage("willBeDeselected", "miramon") + "."))
 					   return;
 				   CanviaEstatDescarregableCapa(document.getElementById("z_ll_capa"+i_capa), i_capa);
 				   break;
@@ -1226,14 +1220,14 @@ var capa=ParamCtrl.capa[i];
 	    capa.descarregable="si";
 	    icon_capa.src=AfegeixAdrecaBaseSRC("descarregable"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
 	    if (icon_capa.alt)
-		icon_capa.alt=DonaCadenaLang({"cat":"descarregable", "spa":"descargable", "eng":"downloadable","fre":"téléchargeable"});
+		icon_capa.alt=GetMessage("downloadable", "llegenda");
 	}
 	else
 	{
 	    capa.descarregable="ara_no";
 	    icon_capa.src=AfegeixAdrecaBaseSRC("ara_no_descarregable"+((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? ".gif" : ".svg"));
 	    if (icon_capa.alt)
-			icon_capa.alt=DonaCadenaLang({"cat":"no descarregable", "spa":"no descargable", "eng":"no downloadable", "fre":"non téléchargeable"});
+			icon_capa.alt=GetMessage("nonDownloadable", "llegenda");
 	}
 }
 
@@ -1266,7 +1260,7 @@ function CanviaEstatCapa(i, estat)
 	else if (estat=="lleg_desplegada")
 		CanviaEstatLlegendaDesplegadaCapa(document.getElementById("m_ll_capa"+ i),i);
 	else
-		alert(DonaCadenaLang({"cat":"Estat no reconegut.", "spa":"Estado no reconocido.", "eng":"Unknown state.", "fre":"État non reconnu"}));
+		alert(GetMessage("UnknownState", "llegenda") + ".");
 }
 
 function CanviaEstatLlegendaRadioEstil(i_capa, i_estil, repinta_si_mateix_estil, marcat)
@@ -1315,8 +1309,8 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 			 (capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length<2)))
 			redibuixar_llegenda=true;
 		CarregaSimbolsEstilActualCapaDigi(capa);
-		/* Abans s'assumia que un canvi d'estil era també un canvi de contingut. De moment, això no és pas així
-		  i per això no cal fer això que hi ha aquí:
+		/* Abans s'assumia que un canvi d'estil era tambÃ© un canvi de contingut. De moment, aixÃ² no Ã©s pas aixÃ­
+		  i per aixÃ² no cal fer aixÃ² que hi ha aquÃ­:
 		capa.objectes=null;
 		if (capa.tipus)
 		{

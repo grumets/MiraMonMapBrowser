@@ -1742,7 +1742,7 @@ var cdns=[], i, capa;
 	capa=ParamCtrl.capa[i_capa];
 
 	cdns.push("<br><fieldset><legend>",
-			  GetMessage("AddReclassifiedLayerAsNewStyle", "cntxmenu"), 
+			  GetMessage("AddReclassifiedLayerAsNewStyle", "cntxmenu"),
 			  ": </legend>",
 			  "<fieldset><legend>",
 			  GetMessage("LayerToReclassify", "cntxmenu"),
@@ -1792,7 +1792,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  //DonaCadenaLang({"cat":"Afegeix capa calculada a partir de les capes existents", "spa":"Añada capa calculada a partir de las capas existentes", "eng":"Add layer computed from existing layers", "fre":"Rajouter couche calculé à partir de couches existantes"}),
 			  //"</legend>",
 			  "<fieldset><legend>",
-			  GetMessage("LayerForExpression", "cntxmenu"), 
+			  GetMessage("LayerForExpression", "cntxmenu"),
 			  ": </legend>");
 		//Posar uns desplegables de capes, estils i dates
 		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
@@ -1953,7 +1953,7 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 			fileread[i_fitxer].nom_json=form.nom_fitxer.files[i_fitxer].name;  //Així onload pot saber el nom del fitxer
 			fileread[i_fitxer].onload = function(e) {
 				var objectes;
-				try{    	
+				try{
 					objectes=JSON.parse(e.target.result);
 				}
 				catch (e){
@@ -2006,7 +2006,7 @@ var cdns=[], i;
 			GetMessage("NewLayerFromServer", "cntxmenu"),
 			": </legend>",
 			GetMessage("SpecifyServerURL", "cntxmenu"),
-			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />", 
+			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />",
 			"<br />",
 			"<input type=\"hidden\" name=\"tipus\" value=\"TipusWMS\">",
 			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\"><label for=\"RadioVersion_WMS11\">WMS v1.1</label>",
@@ -3180,7 +3180,7 @@ function CridaCreacioEstadistic(i_capa)
 	TancaFinestraLayer("seleccioEstadistic");
 	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")
 	//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
-		return ObreFinestraHistograma(i_capa, -1, (document.SeleccioEstadistic.presentacio.value == "graphic") ? "chart_categ" : "stat_categ", 
+		return ObreFinestraHistograma(i_capa, -1, (document.SeleccioEstadistic.presentacio.value == "graphic") ? "chart_categ" : "stat_categ",
 					document.SeleccioEstadistic.stat.value.substring(0, document.SeleccioEstadistic.stat.value.length-2), document.SeleccioEstadistic.order.value);
 	else //cas normal, només necessito saber el estadístic a mostrar
 		return ObreFinestraHistograma(i_capa, -1, "stat", document.SeleccioEstadistic.stat.value);

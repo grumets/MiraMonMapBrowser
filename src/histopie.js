@@ -636,7 +636,7 @@ var tipus_chart;
 			//titol=DonaCadenaLang({"cat":"Estadístics per categoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//if (presentacio == "graphic")
 			if (tipus=="chart_categ")
-			{	
+			{
 				tipus_chart=tipus;
 				ncol=650;
 				nfil=200;
@@ -697,7 +697,7 @@ var tipus_chart;
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
-	if (typeof i_estil !== "undefined" && i_estil!=null && i_estil != -1 && 
+	if (typeof i_estil !== "undefined" && i_estil!=null && i_estil != -1 &&
 		estil.diagrama && estil.diagrama.length) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
 	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadístic en un futur). si tinc més de un del mateix tipus, cada cop faig el primer que trobo
 		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
