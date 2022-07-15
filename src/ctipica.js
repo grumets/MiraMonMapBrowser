@@ -1437,7 +1437,7 @@ var s="";
 				//El resultat ha es troba a l'estructura i no cal demanar-lo
 				NCapesCTipicaCarregades++;
 				continue;
-			}	
+			}
 			cdns.push("VERSION=1.2.0&REQUEST=DonaProjeccioConsultaTipica&CRS=",
 				ParamCtrl.CapaConsultaPreguntaServidor[i].CRS,
 				"&INFO_FORMAT=text/xml&QUERY_LAYERS=",
@@ -1734,15 +1734,18 @@ function MostraOAmagaCtipiques()
 function EliminaProjCampIIdCampSiServidor(param_ctrl)
 {
 	//Elimino les consultes típiques si venen d'un servidor
-	for (var i=0; i<param_ctrl.CapaConsultaPreguntaServidor.length; i++)
+	if (param_ctrl.CapaConsultaPreguntaServidor)
 	{
-		var cdns=[], i_event;
-		if (typeof param_ctrl.CapaConsultaPreguntaServidor[i].servidor !== "undefined")
+		for (var i=0; i<param_ctrl.CapaConsultaPreguntaServidor.length; i++)
 		{
-			if (param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp)
-				delete param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp;
-			if (param_ctrl.CapaConsultaPreguntaServidor[i].id_camp)
-				delete param_ctrl.CapaConsultaPreguntaServidor[i].id_camp;
+			var cdns=[], i_event;
+			if (typeof param_ctrl.CapaConsultaPreguntaServidor[i].servidor !== "undefined")
+			{
+				if (param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp)
+					delete param_ctrl.CapaConsultaPreguntaServidor[i].proj_camp;
+				if (param_ctrl.CapaConsultaPreguntaServidor[i].id_camp)
+					delete param_ctrl.CapaConsultaPreguntaServidor[i].id_camp;
+			}
 		}
 	}
 }

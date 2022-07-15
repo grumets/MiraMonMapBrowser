@@ -49,10 +49,11 @@ var MessageLang={
 	Georeference: {"cat":"Georeferència","spa":"Georeferencia", "eng":"Georeference", "fre":"Géoréférence"},
 	Coordinates: {"cat":"Coordenades","spa":"Coordenadas", "eng":"Coordinates", "fre":"Coordonnées"},
 	CentralPoint: {"cat":"Punt central","spa":"Punto central", "eng":"Central point", "fre":"Point central"},
-	CurrentReferenceSystem: {"cat":"Sistema de referència actual", "spa":"Sistema de referencia actual", "eng":"Current reference system", "fre":"Système de référence actuel"}, 
+	CurrentReferenceSystem: {"cat":"Sistema de referència actual", "spa":"Sistema de referencia actual", "eng":"Current reference system", "fre":"Système de référence actuel"},
 	AvailableBoundary: {"cat":"Àmbit disponible", "spa":"Ámbito disponible", "eng":"Available boundary", "fre":"Champ disponible"},
 	CellSize: {"cat": "Costat de cel·la", "spa": "Lado de celda", "eng": "Cell size", "fre": "Taille de la cellule"},
 	CellArea: {"cat": "Àrea de la cel·la", "spa": "Área de celda", "eng": "Cell area", "fre": "Zone de la cellule"},
+	metadata: {"cat":"metadades", "spa":"metadatos", "eng":"metadata","fre":"métadonnées"},
 	Metadata: {"cat":"Metadades", "spa":"Metadatos", "eng":"Metadata", "fre":"Métadonnées"},
 	Quality: {"cat":"Qualitat", "spa":"Calidad", "eng":"Quality", "fre":"Qualité"},
 	Lineage: {"cat":"Llinatge", "spa":"Linaje", "eng":"Lineage", "fre":"Lignage"},
@@ -65,6 +66,7 @@ var MessageLang={
 	close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
 	Close: {"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"},
 	Print: {"cat":"imprimir", "spa":"imprimir", "eng":"print", "fre":"imprimer"},
+	show: {"cat":"mostrar", "spa":"mostrar", "eng":"show", "fre":"afficher"},
 	Show: {"cat":"Mostrar", "spa":"Mostrar", "eng":"Show", "fre":"Afficher"},
 	Hide: {"cat":"Amagar", "spa":"Ocultar", "eng":"Hide", "fre":"Cacher"},
 	UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
@@ -82,6 +84,7 @@ var MessageLang={
 	TheValue:{"cat":"El valor", "spa":"El valor", "eng":"The value", "fre":"La valeur"},
 	Operator: {"cat":"Operador", "spa":"Operador", "eng":"Operator", "fre":"Opérateur"},
 	Parameters: {"cat":"Paràmetres", "spa":"Parámetros", "eng": "Parameters","fre": "Parameters"},
+	date: {"cat":"data", "spa":"fecha","eng":"date","fre":"date"},
 	Date: {"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},
 	Field: {"cat":"Camp", "spa":"Camp", "eng":"Field", "fre":"Champ"},
 	ofTheField:{"cat":"del camp", "spa": "del campo", "eng": "of the field", "fre": "du champ"},
@@ -149,6 +152,7 @@ var MessageLang={
 	Rows: {"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"},
 	rows: {"cat": "files", "spa": "filas", "eng": "rows", "fre": "lignes"},
 	Shown: {"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"},
+	name: {"cat":"nom", "spa":"nombre","eng":"name","fre":"nom"},
 	Name: {"cat": "Nom", "spa": "Nombre", "eng": "Name", "fre": "Nom"},
 	Band: {"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"},
 	Measure: {"cat": "Mesura", "spa": "Medida", "eng": "Measure", "fre": "Mesure"},
@@ -162,7 +166,25 @@ var MessageLang={
 	and: {"cat": "i", "spa": "y", "eng": "and", "fre": "et"},
 	or: {"cat":"o", "spa":"o", "eng":"or", "fre":"ou"},
 	Working: {"cat":"Processant", "spa":"Procesando", "eng":"Working", "fre":"En traitement"},
-	LoginFailedOrCancelled: {"cat": "Error o cancel·lació de la identificació amb el compte de", "spa": "Error o cancelación de la identificación en la cuenta de", "eng": "Login in your account failed or cancelled in", "fre": "La connexion à votre compte a échoué ou a été annulée dans"},
+	Source: {"cat":"Font", "spa":"Fuente", "eng":"Source", "fre":"Source"},
+	Agent: {"cat":"Agent", "spa":"Agente", "eng":"Agent", "fre":"Agent"},
+	Agents: {"cat":"Agents", "spa":"Agentes", "eng":"Agents", "fre":"Agents"},
+	Executable: {"cat": "Executable", "spa": "Ejecutable", "eng": "Executable", "fre": "Exécutable"},
+	compilationDate: {"cat":"data de compilació", "spa":"fecha de compilación","eng":"compilation date","fre":"date de compilation"},
+	CompilationDate: {"cat": "Data de compilació", "spa": "Fecha de compilación", "eng": "Compilation date", "fre": "Date de compilation"},
+	Algorithm: {"cat": "Algorisme", "spa": "Algoritmo", "eng": "Algorithm", "fre": "Algorithme"},
+	Algorithms: {"cat": "Algorismes", "spa": "Algoritmos", "eng": "Algorithms", "fre": "Algorithmes"},
+	Functionality: {"cat": "Funcionalitat", "spa": "Funcionalidad", "eng": "Functionality", "fre": "Fonctionnalité"},
+	Functionalities: {"cat": "Funcionalitats", "spa": "Funcionalidades", "eng": "Functionalities", "fre": "Fonctionnalités"},
+	Step: {"cat": "Pas", "spa": "Paso", "eng": "Step", "fre": "Étape"},
+	role: {"cat":"paper","spa":"papel","eng":"role","fre":"rôle"},
+	reference: {"cat":"referència","spa":"referencia","eng":"reference","fre":"référence"},
+	description: {"cat":"descripció", "spa":"descripción","eng":"description","fre":"description"},
+	purpose: {"cat":"propòsit","spa":"propósito","eng":"purpose","fre":"raison"},
+	Start: {"cat":"Inici: ", "spa":"Inicio:", "eng":"Start:", "fre":"Départ:"},
+	Type: {"cat":"Tipus: ", "spa":"Tipo:", "eng":"Type:", "fre":"Type:"},
+	Attribute: {"cat":"Atribut: ", "spa":"Atributo:", "eng":"Attribute:", "fre":"Attribut:"},
+	End: {"cat":"Fi", "spa":"Fin", "eng":"End", "fre":"But"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -473,7 +495,11 @@ var MessageLang={
 		nonVisible: {"cat":"no visible", "spa": "no visible", "eng":"non visible", "fre":"non visible"},
 		semitransparent: {"cat":"semitransparent", "spa":"semitransparente", "eng":"semitransparent","fre":"semi transparent"},
 		foldLegend: {"cat":"plega llegenda", "spa":"recoge leyenda", "eng":"fold legend up","fre":"plie légende"},
-		unfoldLegend: {"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"}
+		unfoldLegend: {"cat":"desplega llegenda", "spa":"expande leyenda", "eng":"unfold legend", "fre":"déplier légende"},
+		processingService: {"cat":"servei de processos", "spa":"servicio de procesos", "eng":"processing service","fre":"service des processus"},
+		animableButNoDate: {"cat":"indica que és AnimableMultiTime però no té dates definides", "spa":"indica que es AnimableMultiTime pero no tiene fechas definidas", "eng":"indicates that is AnimableMultiTime but it has no dates defined", "fre":"Indique que c\'est AnimableMultiTime, mais il n\'a pas de dates définies"},
+		NotPossibleDownloadLayersSameGroup: {"cat":"No és possible descarregar dues capes del mateix grup", "spa":"No es posible descargar dos capas del mismo grupo", "eng":"It is not possible to download two layers from the same group", "fre":"Impossible de télécharger deux couches du même groupe"},
+		UnknownState: {"cat":"Estat no reconegut", "spa":"Estado no reconocido", "eng":"Unknown state", "fre":"État non reconnu"}
 	},
 	imgrle: {
 		UnsupportedColor: {"cat":"Color no suportat", "spa":"Color no suportado", "eng":"Unsupported color","fre":"Couleur non supportée"},
@@ -502,13 +528,33 @@ var MessageLang={
 		InsertNewPoint: {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert new point", "fre":"Insérer un nouveaux point"},
 		ResultOfTheTransaction: {"cat":"Resultat de la transacció", "spa":"Resulado de la transacción", "eng": "Result of the transaction", "fre":"Résultats de la transaction"}
 	},
-	cntxmenu2:{
-		statistics:
-		{
-			display:
-			{
-				SampleMessage: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
-			}
-		}
+	authens: {
+		LoginAccountFailed: {cat: "Error o cancel·lació de la identificació amb el compte de", spa: "Error o cancelación de la identificación en la cuenta de", eng: "Login in your account failed or cancelled in"}
+	},
+	llinatge: {
+		Process: {"cat":"Procés", "spa":"Proceso", "eng":"Process", "fre":"Processus"},
+		Processes: {"cat": "Processos", "spa": "Procesos", "eng": "Processes", "fre": "Processus"},
+		ProcessGroup: {"cat": "Grup de processos", "spa": "Grupo de procesos", "eng": "Process group", "fre": "Groupe de processus"},
+		ResultingDataset: {"cat": "Capa Resultat", "spa": "Capa Resultado", "eng": "Resulting dataset", "fre": "Jeu de données résultant"},
+		GroupWithFollowing: {"cat":"Agrupar amb el seguënt", "spa":"Agrupar con el seguiente", "eng":"Group with the following", "fre":"Grouper avec le suivant"},
+		GroupWithPrevious: {"cat":"Agrupar amb l'anterior", "spa":"Agrupar con el anterior", "eng":"Group with the previous", "fre":"Grouper avec le précédent"},
+		UngroupRecentLevel: {"cat":"Desagrupa un nivell més recent", "spa":"Desagrupar un nivel más reciente", "eng":"Ungroup a more recent level", "fre":"Dissocier un niveau plus récent"},
+		UngroupOlderLevel: {"cat":"Desagrupa un nivell més antic", "spa":"Desagrupar un nivel más antiguo", "eng":"Ungroup an older level", "fre":"Dissocier un niveau plus ancien"},
+		VisibleElements: {"cat":"Elements visibles", "spa":"Elementos visibles", "eng":"Visible elements", "fre":"Éléments visibles"},
+		InternalSources: {"cat":"Fonts intermitges/temporals", "spa":"Fuentes intermedias/temporales", "eng":"Internal/temporary sources", "fre":"Sources intermédiaires / temporaires"},
+		LeafSources: {"cat":"Fonts fulles", "spa":"Fuentes hoja", "eng":"Leaf sources", "fre":"Sources feuilles"},
+		ProcessSteps: {"cat":"Passos del procés", "spa":"Pasos del proceso", "eng":"Process steps", "fre":"Étapes du processus"},
+		ProcessingTools: {"cat":"Eines de processament", "spa":"Herramientas de procesamiento", "eng":"Processing tools", "fre":"Outils de traitement"},
+		TheUnion: {"cat":"La unió", "spa":"La unión", "eng":"The union", "fre":"L'union"},
+		DatasetsIndependentsGraphs: {"cat":"Cada capa en un gràfic independent", "spa":"Cada capa en un gráfico independiente", "eng":"Datasets as independents graphs", "fre":"Chaque couche sur un graphique séparé"},
+		TheIntersection: {"cat":"La intersecció", "spa":"La intersección", "eng":"The intersection", "fre":"l'intersection"},
+		TheComplementIntersection: {"cat":"El complement de la intersecció", "spa":"El complemento de la intersección", "eng":"The complement of the intersection", "fre":"Le complément de l'intersection"},
+		TheSubstractionFirst: {"cat":"La resta de la primera", "spa":"La resta del primero", "eng":"The substraction of the first", "fre":"La soustraction de la première"},
+		MoreOneDataset: {"cat":"Quan hi ha més d'una capa", "spa":"Cuando hay más de una capa", "eng":"When more than one dataset", "fre":"Quand il y a plus d'une couche"},
+		SimpleQuery: {"cat":"Consulta simple", "spa":"Consulta simple", "eng":"Simple query", "fre":"Requête simple"},
+		StartNode: {"cat":"Node inicial", "spa":"Nodo inicial", "eng":"Start node", "fre":"Noeud initial"},
+		EndNode: {"cat":"Node final", "spa":"Nodo final", "eng":"End node", "fre":"Noeud finale"},
+		ComplexQuery: {"cat":"Consulta complexa", "spa":"Consulta compleja", "eng":"Complex query", "fre":"Requête complexe"},
+		QueryFilterOptions: {"cat":"Opcions de visualització, consulta i filtre", "spa":"Opciones de visualización, consulta y filtro", "eng":"Show, query and filter options", "fre":"Options de visualisation, consultations et filtrage"}
 	}
 }

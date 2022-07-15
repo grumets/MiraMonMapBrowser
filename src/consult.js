@@ -517,7 +517,7 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 		}
 		//ajax_consulta_capa_digi[i].doGet();
 		//loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
-			
+
 		if (capa.FormatImatge=="application/json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		{
 			if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("consultaLink")!=-1)
@@ -687,7 +687,7 @@ var cdns=[], ncol=440, nfil=220, capa=ParamCtrl.capa[i_capa];
 		{
 			valor+=(valor.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + hello.getAuthResponse(capa.access.tokenType).access_token;
 		}
-	
+
 		if(atribut.FormatVideo)
 		{
 			if (valor)
