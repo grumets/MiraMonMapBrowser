@@ -945,6 +945,11 @@ var cdns=[],capa;
 				"\" onclick='VisibleoNoCapaLlinatge(", LListaCapesGraphsMM[i].i_capa, ");' type=\"checkbox\"",
 				LListaCapesGraphsMM[i].visible ? " checked" : "", "/>",
 				"<label for=\"cll_visible_",LListaCapesGraphsMM[i].i_capa,"\">", (DonaCadena(capa.DescLlegenda)? DonaCadena(capa.DescLlegenda): capa.nom), "</label>",
+				//"<input name=\"cll_agrupat_",LListaCapesGraphsMM[i].i_capa,"\" value=\"",LListaCapesGraphsMM[i].i_capa, 				
+				//"\" onclick='AgrupadaoNoCapaLlinatge(", LListaCapesGraphsMM[i].i_capa, ");' type=\"checkbox\"",
+				//(LListaCapesGraphsMM[i].visible && LListaCapesGraphsMM[i].agrupada) ? " checked" : "", 
+				//LListaCapesGraphsMM[i].visible ? "" : "disabled", "/>", 				
+				//"<label for=\"cll_agrupat_",LListaCapesGraphsMM[i].i_capa,"\">", DonaCadenaLang({"cat":"Vista agrupada", "spa":"Vista agrupada", "eng":"Group view", "fre": "Vue groupée"}), "</label>",
 				"<br>");
 	}
 	if(LListaCapesGraphsMM.length>0)
