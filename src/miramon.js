@@ -6649,7 +6649,7 @@ var win, i, j, l, capa;
 
 		if (query["BBOX"])
 		{
-			coord=query["BBOX"].split(",");
+			var coord=query["BBOX"].split(",");
 			if (coord.length!=4)
 			{
 				alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));

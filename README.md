@@ -33,7 +33,7 @@ Masó J., Zabala A., Pons X. (2020) Protected Areas from Space Map Browser with 
 
 ## Demo guide
 Catalan Data Cube: https://www.datacube.cat/cdc/
-* Create rgb combinations as well as band indices from row images directly
+* Create RGB combinations as well as band indices from row images directly
 * Dynamic histograms of NDVI (in sentinel 2 NDVI 22-05-2022 can compare histograms with see and without see and the change in NDVI on 17-01-2022)
 * Create new indices and RGB combinations.
 
@@ -46,14 +46,14 @@ ECOPotential: http://maps.ecopotential-project.eu/
 *	Compare pies with and without the border filter
 *	Geospatial user feedback in canopy height in Swiss National Park
 
-LidarCAT: https://www.ogc3.grumets.cat/mdalidarcat/
+LidarCAT: https://www.ogc3.grumets.cat/mdalidarcat/?BBOX=436625.67982456135,4605133.216867469,439595.67982456135,4606339.216867469
 *	Create a difference of heights,
 *	Change to rainbow palette to
 *	Visually detect some spot with square shape in the metropolitan area see a building appear.
 
 RutesMaresme: https://www.ogc.grumets.cat/rutesmaresme/
-*	Capability to generate profiles from rutes (click by location
-*	Capability of automatic creation of shadows.
+*	Capability to generate profiles from rutes (query by location)
+*	Capability of automatic creation of shadows from DEM data.
 
 BESTMAP: http://www.ogc.grumets.cat/bestmap/
 * Story maps (FSA distribution for Mulde CS story generates an histogram) (work in progress)
