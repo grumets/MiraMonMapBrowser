@@ -1243,7 +1243,7 @@ function DonaCadenaFormComplexQueryLlinatge()
 {
 var cdns=[];
 	cdns.push("<legend>",GetMessage("ComplexQuery", "llinatge"), "</legend>",
-			GetMessage("Start"),
+			GetMessage("Start") + ": ",
       GetMessage("Type"),
 			"<select name=\"cQLl_startTypeNode\" onChange=\"CanviaContigutAtributComplexQueryLlinatge('start', null);\">",
 			"<option value=\"agent\" selected>", GetMessage("Agent"),
