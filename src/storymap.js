@@ -200,6 +200,9 @@ var hihacanvis, node, attribute, i_styles
 
 		if (node.attributes)
 		{
+			if (darrerNodeStoryMapVisibleExecutat==node)
+				return false;
+
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
@@ -318,8 +321,6 @@ var hihacanvis, node, attribute, i_styles
 			}
 			if (hihacanvis)
 			{
-				if (darrerNodeStoryMapVisibleExecutat==node)
-					return true;
 				darrerNodeStoryMapVisibleExecutat=node;
 				if (!histos)
 					TancaTotsElsHistogramaFinestra();

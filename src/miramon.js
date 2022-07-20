@@ -5676,10 +5676,6 @@ function PortamAAmbit(env)
 		else
 		{
 			RevisaEstatsCapes();
-			if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
-				;
-			else
-			CreaLlegenda();
 			RepintaMapesIVistes();
 		}
 	}
@@ -5864,8 +5860,7 @@ function RepintaMapesIVistes()
 	CreaSituacio();
 	CreaVistes();
 	CreaProjeccio();
-	if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
-		CreaLlegenda();
+	CreaLlegenda();
 	if (ParamCtrl.ConsultaTipica)
 	{
 		OmpleXYAmpleAltEnvConsultesTipiquesCompleta(null);
@@ -5928,6 +5923,19 @@ var estil;
 	}
 	return null;
 }
+
+function DonaEstilDesDeIdEstil(capa, id)
+{
+var estil;
+	for (var i=0; i<capa.estil.length; i++)
+	{
+		estil=capa.estil[i];
+		if (id==estil.id)
+			return estil;
+	}
+	return null;
+}
+
 
 function DuplicaEstilCapa(capa, i_estil_patro, nom_nou)
 {
@@ -6016,7 +6024,6 @@ var capa, j, i, i_estil;
 								    capa.i_estil=i_estil;
 								    break;
 							    }
-
 						    }
 						    if (i_estil==capa.estil.length)
 						    {
@@ -6348,7 +6355,7 @@ function CreaIdSiCal(obj, i)
 		if (obj.nom)
 			obj.id=obj.nom;
 		else
-			obj.id=i.toString;
+			obj.id=i.toString();
 	}
 }
 
@@ -6397,6 +6404,13 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			capa.servidor=protocol+capa.servidor.substring(capa.servidor.indexOf("://")+1, capa.servidor.length);
 		}
 
+		if (capa.visible=="semitransparent" && capa.transparencia!="semitransparent")
+		{
+			alert(GetMessage("TheProperty") + " capa.visible " + GetMessage("indica") + " \"semitransparent\" " + GetMessage("butTransparenciaDoesNotAllowIt", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
+					" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
+			capa.transparencia="semitransparent";
+		}
+
 		if (capa.atributs && capa.atributs.length)
 		{
 			for (j=0; j<capa.atributs.length; j++)
@@ -6409,11 +6423,8 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 						{	
 							if (!avis_mostrar_atributs)
 							{
-								alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
-										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
-										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
-										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
-										+ " capa = " + DonaCadenaNomDesc(capa));											
+								alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
+										" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 								avis_mostrar_atributs=true;
 							}
 							if (capa.atributs[j].mostrar)

@@ -761,7 +761,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				cdns.push("<a href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa,",-1);\" title=\"",
 					GetMessage("metadata"), "\">");
 		}
-		if (EsCapaInactivaGrisALaLlegenda(capa))
+		if (EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescLlegendaGris)
 			cdns.push(aspecte.PreviDescLlegendaGris, DonaCadena(capa.DescLlegenda), aspecte.PostDescLlegendaGris);
 		else
 			cdns.push(aspecte.PreviDescLlegenda , DonaCadena(capa.DescLlegenda) , aspecte.PostDescLlegenda);
@@ -800,8 +800,8 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, DonaDataCapaPerLlegenda(i_capa, null),
-							aspecte.PostDescEstil , "</td>");
+						cdns.push("<td valign=\"middle\" colspan=3>", (EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaDataCapaPerLlegenda(i_capa, null),
+							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 					}
 				}
 				else
@@ -838,8 +838,8 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=3>",aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
-							aspecte.PostDescEstil , "</td>");
+						cdns.push("<td valign=\"middle\" colspan=3>",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
+							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 					}
 				}
 			}
@@ -897,12 +897,12 @@ var salt_entre_columnes, cdns=[], capa, estil;
 										"<td valign=\"middle\">");
 									if (isLayer(window, "menuContextualCapa"))
 										cdns.push("<a href=\"javascript:void(0);\" style=\"cursor:context-menu;\" onClick=\"OmpleLayerContextMenuEstil(event,", i_capa, ",", l,");\" onContextMenu=\"return OmpleLayerContextMenuEstil(event,", i_capa, ",", l,");\">");
-									cdns.push(aspecte.PreviDescEstil , DonaCadenaNomDesc(capa.estil[l]) , aspecte.PostDescEstil);
+									cdns.push((EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(capa.estil[l]) , (EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil);
 									cdns.push("</a>");
 									cdns.push("</td>");
 								}
 								else
-									cdns.push("<td colspan=3 valign=\"middle\">",aspecte.PreviDescEstil,"&nbsp;",aspecte.PostDescEstil,"</td>");
+									cdns.push("<td colspan=3 valign=\"middle\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil,"&nbsp;",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil,"</td>");
 							}
 							cdns.push("</tr>");
 						}
@@ -911,8 +911,8 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				    else
 				    {
 						cdns.push("<td valign=\"middle\" colspan=3>" ,
-							aspecte.PreviDescEstil, (DonaCadenaNomDesc(capa.estil[capa.i_estil])),
-							aspecte.PostDescEstil, "</td>");
+							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, (DonaCadenaNomDesc(capa.estil[capa.i_estil])),
+							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 				    }
 				    cdns.push("</tr>");
 				//}				

@@ -1320,7 +1320,6 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 	//The map browser is redrawn in order the layers to appear
 	ReescriuIndexOrdreCapes();
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 
 	//Try to center the view over a new point...

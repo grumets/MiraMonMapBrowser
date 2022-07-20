@@ -66,8 +66,10 @@ var MessageLang={
 	close: {"cat":"tancar", "spa":"cerrar", "eng":"close", "fre":"quitter"},
 	Close: {"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"},
 	Print: {"cat":"imprimir", "spa":"imprimir", "eng":"print", "fre":"imprimer"},
+	indica: {"cat":"indica", "spa":"indica", "eng": "indicates", "fre":"indique"},
 	show: {"cat":"mostrar", "spa":"mostrar", "eng":"show", "fre":"afficher"},
 	Show: {"cat":"Mostrar", "spa":"Mostrar", "eng":"Show", "fre":"Afficher"},
+	Shown: {"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"},
 	Hide: {"cat":"Amagar", "spa":"Ocultar", "eng":"Hide", "fre":"Cacher"},
 	UnderDevelopment: {"cat":"En desenvolupament.", "spa":"En desarrollo.", "eng":"Under development.", "fre":"En développement."},
 	layer: {"cat":"capa", "spa":"capa", "eng":"layer", "fre":"couche"},
@@ -151,7 +153,6 @@ var MessageLang={
 	columns: {"cat": "columnes", "spa": "columnas", "eng": "columns", "fre": "colonnes"},
 	Rows: {"cat": "Files", "spa": "Filas", "eng": "Rows", "fre": "Lignes"},
 	rows: {"cat": "files", "spa": "filas", "eng": "rows", "fre": "lignes"},
-	Shown: {"cat": "Mostrades", "spa": "Mostradas", "eng": "Shown", "fre": "Montré"},
 	name: {"cat":"nom", "spa":"nombre","eng":"name","fre":"nom"},
 	Name: {"cat": "Nom", "spa": "Nombre", "eng": "Name", "fre": "Nom"},
 	Band: {"cat": "Banda", "spa": "Banda", "eng": "Band", "fre": "Bande"},
@@ -184,7 +185,10 @@ var MessageLang={
 	Start: {"cat":"Inici: ", "spa":"Inicio:", "eng":"Start:", "fre":"Départ:"},
 	Type: {"cat":"Tipus: ", "spa":"Tipo:", "eng":"Type:", "fre":"Type:"},
 	Attribute: {"cat":"Atribut: ", "spa":"Atributo:", "eng":"Attribute:", "fre":"Attribut:"},
+	TheProperty: {"cat": "La propietat", "spa": "La propiedad", "eng": "The property", "fre": "La propriété"},
 	End: {"cat":"Fi", "spa":"Fin", "eng":"End", "fre":"But"},
+	mustBe: {"cat": "ha de ser", "spa": "debe ser", "eng": "must be", "fre": "doit être"},
+	YouMayContinue: {"cat": "Es deixa continuar", "spa": "Se deja continuar", "eng": "You may continue", "fre": "Il est permis de continuer"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -526,7 +530,9 @@ var MessageLang={
 		StoryMapTitle: {"cat":"titol del relat", "spa":"título del ralato", "eng": "storymap title", "fre":"titre de l'histoire"},
 		InformationHelp: {"cat":"Informació/Ajuda", "spa":"Información/Ayuda", "eng": "Information/Help", "fre":"Information/Aide"},
 		InsertNewPoint: {"cat":"Inserir un punt nou", "spa":"Insertar un punto nuevo", "eng": "Insert new point", "fre":"Insérer un nouveaux point"},
-		ResultOfTheTransaction: {"cat":"Resultat de la transacció", "spa":"Resulado de la transacción", "eng": "Result of the transaction", "fre":"Résultats de la transaction"}
+		ResultOfTheTransaction: {"cat":"Resultat de la transacció", "spa":"Resulado de la transacción", "eng": "Result of the transaction", "fre":"Résultats de la transaction"},
+		butTransparenciaDoesNotAllowIt: {"cat":"però capa.transparencia no permet semitrasparència", "spa":"pero capa.transparencia no permite semitrasparencia", "eng": "but capa.transparencia does not allow semitransparency", "fre":"mais capa.transparencia n'autorise pas la semi-transparence"},
+		andIsInsteadSetTo: {"cat": "i en canvi està definit com a", "spa": "y en cambio está definido como", "eng": "and is instead set to", "fre": "et est à la place définie sur"},
 	},
 	authens: {
 		LoginAccountFailed: {cat: "Error o cancel·lació de la identificació amb el compte de", spa: "Error o cancelación de la identificación en la cuenta de", eng: "Login in your account failed or cancelled in"}
