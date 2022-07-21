@@ -6388,11 +6388,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 								{
 									if (!avis_mostrar_atributs)
 									{
-										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
-												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
-												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
-												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."})
-												+ " estil = " + DonaCadenaNomDesc(estil));
+										alert(GetMessage("PropertyMustBeIsInstead", "miramon") + ". " + GetMessage("MayContinue", "miramon") + "." + " estil = " + DonaCadenaNomDesc(estil));
 												avis_mostrar_atributs=true;
 									}
 									if (estil.atributs[k].mostrar)
@@ -6404,11 +6400,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 								{
 									if (!avis_mostrar_atributs)
 									{
-										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definida d'una altra manera. El valor serà ignorat i l'atribut marcat com a mostrable. Es deixa continuar.",
-												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
-												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
-												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
-												+ " estil = " + DonaCadenaNomDesc(estil));
+										alert(GetMessage("PropertyMustBeIsOtherwiseDefined", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("MayContinue", "miramon") + "." + " estil = " + DonaCadenaNomDesc(estil));
 										avis_mostrar_atributs=true;
 									}
 									estil.atributs[k].mostrar = "si";
@@ -6423,10 +6415,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
 	{
-		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer",
-				"spa": "Los lados de zoom deben estar ordenados con el más grande primero",
-				"eng": "The zoom sizes must be sorted with the bigger first",
-				"fre": "Les tailles de zoom doivent être triées par ordre croissant"}));
+		alert(GetMessage("ZoomSizesSortedBiggerFirst", "miramon"));
 		return 1;
 	}
 	for (i=0; i<param_ctrl.zoom.length; i++)
@@ -6434,10 +6423,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			break;
 	if (i==param_ctrl.zoom.length)
 	{
-		alert(DonaCadenaLang({"cat": "El NivellZoomCostat no és cap del costats indicats a la llista de zooms",
-				"spa": "El NivellZoomCostat no es ninguno de los 'costat' indicados en la lista de zooms",
-				"eng": "The NivellZoomCostat is not one of the indicated 'costat' in the zoom array",
-				"fre": "Le NivellZoomCostat n'est pas l'un des 'costat' indiqués dans la matrice de zoom"}));
+		alert(GetMessage("NivellZoomCostatNotIndicated", "miramon"));
 		return 1;
 	}
 	return 0;
@@ -6565,7 +6551,7 @@ var win, i, j, l, capa;
 			coord=query["BBOX"].split(",");
 			if (coord.length!=4)
 			{
-				alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
+				alert(GetMessage("NotFindBBox", "miramon") + "=");
 			}
 			else
 			{
@@ -6599,14 +6585,12 @@ var win, i, j, l, capa;
 						if (ParamCtrl.capa[i].consultable=="ara_no")
 							ParamCtrl.capa[i].consultable="si";
 						else
-							alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] +
-								  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS= no pot ser activada.", "spa":" indicada en QUERY_LAYERS= no puede ser activada.", "eng":" indicated at QUERY_LAYERS= cannot be activaded.", "fre":" indiquée à QUERY_LAYERS= ne peut pas être activée."}));
+							alert(GetMessage("Layer") + capa_visible[j] + " " + GetMessage("IndicatedQueryLayers", "miramon") + "= " + GetMessage("cannotBeActivated") + ".");
 						break;
 					}
 				}
 				if (i==ParamCtrl.capa.length)
-					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ", "fre":"Impossible trouver la couche "}) + capa_visible[j] +
-						  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS=", "spa":" indicada en QUERY_LAYERS=", "eng":" indicated at QUERY_LAYERS=", "fre":" indiquée à QUERY_LAYERS="}));
+					alert(GetMessage("CannotFindLayer") + " " + capa_visible[j] + " " + GetMessage("IndicatedQueryLayers", "miramon") + "= ");
 			}
 		}
 		if (query["LANGUAGE"])
@@ -6712,10 +6696,7 @@ var win, i, j, l, capa;
 				else
 				{
 					//Mostro un missatge de que comencin a buscar amb les eines del navegador
-					alert(DonaCadenaLang({"cat":"Usa les eines del navegador per situar-te sobre la vista.\nA continuació fés clic sobre la vista per determinar la coordenada i la informació del punt a validar.\nPer finalitzar, prem [Validar Coordenada] o [Cancel·lar] des de la finestra de validació.",
-										"spa":"Utiliza las herramientas del navegador para situarte sobre la vista.\nA continuación haz clic sobre la vista para determinar la coordenada y la información del punto a validar.\nPara finalizar aprieta [Validar Coordenada] o [Cancelar] desde la ventana de validación.",
-										"eng":"You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.",
-										"fre":"Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\n et l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation."}));
+					alert(GetMessage("UseBrowserToolsPlaceOnView", "ctipica"));
 					Accio.coord={"x": 0, "y": 0};
 				}
 			}
