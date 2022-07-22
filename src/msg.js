@@ -98,6 +98,7 @@ var MessageLang={
   Textual: {"cat":"Textual", "spa":"Textual", "eng":"Textual", "fre":"Textuelle"},
   Unsorted: {"cat":"Cap", "spa":"Ninguno", "eng":"Unsorted", "fre":"Non trié"},
   ColorPalette: {"cat":"Paleta de colors", "spa":"Paleta de colores", "eng":"Color palette", "fre":"Palette de couleurs"},
+	ColorSelector: {"cat":"Selector de colors", "spa":"Selector de colores", "eng":"Color selector", "fre":"Sélecteur de couleur"},
   Colors: {"cat":"Colors","spa":"Colores", "eng":"Colors", "fre":"Couleurs"},
   Current: {"cat": "Actual", "spa": "Actual", "eng": "Current", "fre": "Actuel"},
   Previous: {"cat": "Prèvia", "spa": "Previa", "eng": "Previous", "fre": "Précédente"},

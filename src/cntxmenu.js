@@ -3385,46 +3385,52 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 				"<br>");
 		cdns.push("</fieldset>");
 	}
-	else if (estil.component.length<3)
+	else if (estil.component && estil.component.length<3)
 	{
 		var paleta;
 		cdns.push("<fieldset><legend>",
 			GetMessage("ColorPalette"),
 			": </legend>",
 			"<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-actual\" checked=\"checked\"><label for=\"edita-estil-capa-paleta-actual\">", DonaCadenaHTMLPintaPaleta(estil.paleta), " (", GetMessage("Current"), ")</label><br>");
-		if (estil.paletaPrevia)
-			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", GetMessage("Previous"), ")</label><br>");
-		//Paletes generals
-		if (DonaTractamentComponent(estil, 0)=="categoric")
-		{
-			for (paleta in PaletesGlobals.categoric)
+			if (estil.paletaPrevia)
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-previa\"><label for=\"edita-estil-capa-paleta-previa\">", DonaCadenaHTMLPintaPaleta(estil.paletaPrevia), " (", GetMessage("Previous"), ")</label><br>");
+			//Paletes generals
+			if (DonaTractamentComponent(estil, 0)=="categoric")
 			{
-				if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
-					continue;
-				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.categoric[paleta]), " (", (PaletesGlobals.categoric[paleta].desc ? DonaCadena(PaletesGlobals.categoric[paleta].desc) : paleta), ")</label><br>");
+				for (paleta in PaletesGlobals.categoric)
+				{
+					if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
+						continue;
+					cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.categoric[paleta]), " (", (PaletesGlobals.categoric[paleta].desc ? DonaCadena(PaletesGlobals.categoric[paleta].desc) : paleta), ")</label><br>");
+				}
 			}
-		}
-		else
-		{
-			cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-grisos\"><label for=\"edita-estil-capa-paleta-grisos\">", DonaCadenaHTMLPintaPaleta(null), " (", GetMessage("Greyscale", "cntxmenu"), ")</label><br>");
-			for (paleta in PaletesGlobals.continuous)
+			else
 			{
-				if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
-					continue;
-				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.continuous[paleta]), " (", (PaletesGlobals.continuous[paleta].desc ? DonaCadena(PaletesGlobals.continuous[paleta].desc) : paleta), ")</label><br>");
+				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-grisos\"><label for=\"edita-estil-capa-paleta-grisos\">", DonaCadenaHTMLPintaPaleta(null), " (", GetMessage("Greyscale", "cntxmenu"), ")</label><br>");
+				for (paleta in PaletesGlobals.continuous)
+				{
+					if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
+						continue;
+					cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-", paleta, "\"><label for=\"edita-estil-capa-paleta-", paleta, "\">", DonaCadenaHTMLPintaPaleta(PaletesGlobals.continuous[paleta]), " (", (PaletesGlobals.continuous[paleta].desc ? DonaCadena(PaletesGlobals.continuous[paleta].desc) : paleta), ")</label><br>");
+				}
 			}
-		}
-		//Paletes d'altres estils d'aquesta mateixa capa si existen
-		if (capa.estil.length>1)
-		{
-			for (var i=0; i<capa.estil.length; i++)
+			//Paletes d'altres estils d'aquesta mateixa capa si existen
+			if (capa.estil.length>1)
 			{
-				if (i==i_estil || !capa.estil[i].paleta)
-					continue;
-				cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-estil-", i, "\"><label for=\"edita-estil-capa-paleta-estil-", i, "\">", DonaCadenaHTMLPintaPaleta(capa.estil[i].paleta), " (", DonaCadenaNomDesc(capa.estil[i]), ")</label><br>");
+				for (var i=0; i<capa.estil.length; i++)
+				{
+					if (i==i_estil || !capa.estil[i].paleta)
+						continue;
+					cdns.push("<input type=\"radio\" name=\"PaletaColors\" id=\"edita-estil-capa-paleta-estil-", i, "\"><label for=\"edita-estil-capa-paleta-estil-", i, "\">", DonaCadenaHTMLPintaPaleta(capa.estil[i].paleta), " (", DonaCadenaNomDesc(capa.estil[i]), ")</label><br>");
+				}
 			}
-		}
-		cdns.push("</fieldset>");
+			cdns.push("</fieldset>");
+	}
+
+	if (capa.model == "vector") {
+		cdns.push(GetMessage("ColorSelector"),
+		": </legend><br>",
+		"<label for=\"edita-estil-color-capa-actual\">", GetMessage("Colors") + ": ", "</label><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-capa-actual\"><br></fieldset>");
 	}
 
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
