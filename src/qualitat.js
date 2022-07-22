@@ -471,7 +471,7 @@ var i_estil_nou, estil, capa;
 
 	if (!guf)
 	{
-		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ".");
+		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StyleCannotImported", "qualitat") + ".");
 		TancaFinestraLayer('feedbackAmbEstils');
 		return;
 	}
@@ -497,10 +497,7 @@ var i_estil_nou, estil, capa;
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat": "Aquesta valoració no conté una descripció d'ús reproduible vàlida per a aquest navegador de mapas, versió o esquema. No es pot importar l'estil.",
-		"spa": "Esta valoración no contiene una descripción de uso reproducible válida para este navegador de mapas, versión o esquema. No se puede importar el estilo.",
-		"eng": "This feedback item does not contain a valid reproducible usage description for this web map browser, version or schema. The style cannot be imported.",
-		"fre": "Cet élément de rétroaction ne contient pas de description d'utilisation reproductible valide pour ce navigateur de carte web, cette version ou ce schéma. Le style ne peut pas être importé."}));
+		alert(GetMessage("FeedbackNotValidReproducibleDescription", "qualitat") + ". " + GetMessage("StyleCannotImported", "qualitat") + ".");
 	}
 	TancaFinestraLayer('feedbackAmbEstils');
 	return;
@@ -511,7 +508,7 @@ function FinestraFeedbackAmbEstilsCapa(elem, i_capa)
 var cdns=[], s;
 var capa=ParamCtrl.capa[i_capa];
 
-	cdns.push(DonaCadenaLang({"cat":"la capa", "spa":"la capa", "eng":"the layer", "fre":"la couche"}),
+	cdns.push(GetMessage("theLayer"),
 				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
 	cdns.push("\"");
 
@@ -580,19 +577,13 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 
 	if (n==0)
 	{
-		alert(DonaCadenaLang({"cat": "No hi ha observacions amb valors vàlids per obtenir la vàlidessa temporal en aquesta àrea",
-					"spa": "No hay observaciones con valores válidos para obtener la validez temporal en esta área",
-					"eng": "There is no observations with valid values to obtain temporal validity in this area",
-					"fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la validité temporelle dans ce domaine"}));
+		alert(GetMessage("NoObservationsValidObtainValidity", "qualitat"));
 		return false;
 	}
 	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_TemporalValidity",
-		statement: DonaCadenaLang({"cat": "La validessa temporal resumida està basada en la comparació de la data de cada observació individual indicada a l'atribut",
-					"spa": "La validez temporal está basada en la comparación de la fecha de cada observación individual indicada por el atributo",
-					"eng": "The temporal consistency is based on the comparison of the date of each individual observation as indicated in the field",
-					"fre": "The temporal consistency is based on the comparison of the date of each individual observation as indicated in "}) +
+		statement: GetMessage("ConsistencyBasedOnComparisonObservation","qualitat") +
 			" \'"+param.atribut+"\' "+
 			DonaCadenaLang({"cat": "amb l'interval especificat.",
 					"spa": "con el intervalo especificado.",
