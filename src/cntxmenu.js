@@ -3302,7 +3302,7 @@ function DonaCadenaEditaEstilCapa(i_capa, i_estil)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
-	if (!estil.histograma)
+	if (capa.model != "vector" && !estil.histograma)
 	{
 		alert(GetMessage("CannotEditStyleNeverVisualized", "cntxmenu"));
 		return "";
