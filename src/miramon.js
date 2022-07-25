@@ -19,17 +19,17 @@
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -121,7 +121,7 @@ var NovaVistaPrincipal=-1;
 var NovaVistaImprimir=-2;
 var NovaVistaRodet=-3;  //El rodet de petites previsualitzacions de la serie temporal
 var NovaVistaVideo=-4;  //El el fotogrames de la serie temporal
-//Els números positius es reserven per les vistes instantàneas (array NovaVistaFinestra)
+//Els nÃºmeros positius es reserven per les vistes instantÃ neas (array NovaVistaFinestra)
 
 //allows compatibility between IE8 and modern browsers
 function MMgetEventButton(event)
@@ -254,7 +254,7 @@ var elems= DOMElement.children, length= elems.length;
 
 function DonaServidorCapa(capa)
 {
-	if (capa.servidor==null)   //Els servidors vectorials distigeixen entre null i undefined. Caldria analitzar be això per poder canviar a una condició més simple
+	if (capa.servidor==null)   //Els servidors vectorials distigeixen entre null i undefined. Caldria analitzar be aixÃ² per poder canviar a una condiciÃ³ mÃ©s simple
 		return ParamCtrl.ServidorLocal;
 	return capa.servidor;
 }
@@ -324,7 +324,7 @@ function DonaVersioPerNameSpaceComAText(v)
 
 var plantilla_dimpressio_intern=[];
 
-/* Aquest constructor no s'usa i es deixa només com a documentació del JSON
+/* Aquest constructor no s'usa i es deixa nomÃ©s com a documentaciÃ³ del JSON
 function CreaPlantillaDImpressioLayerPropiaIntern(visible, rect, contingut, i_layer)
 {
 	this.visible = visible;
@@ -348,7 +348,7 @@ function IniciaLayerPropiaPlantillaDImpressio(i_plantilla, i_layer_propia,
 
 function CompletaDefinicioCapa(capa, capa_vola)
 {
-	//Càlcul de la envolupant el·lipsoidal
+	//CÃ lcul de la envolupant elÂ·lipsoidal
 	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 
@@ -372,7 +372,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	if (!capa.editable)
 		capa.editable="no";
 
-	//Evito haver de posar el nom i la descripció del video si la capa és animable sola.
+	//Evito haver de posar el nom i la descripciÃ³ del video si la capa Ã©s animable sola.
 	if (capa.animable && capa.AnimableMultiTime && capa.data && capa.data.length>1)
 	{
 		if (!capa.NomVideo)
@@ -392,7 +392,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	if (tipus=="TipusHTTP_GET" && !capa.DescarregaTot)
 	{
 		var i_format;
-		//Contrueixo la manera de descarregar automàticament.
+		//Contrueixo la manera de descarregar automÃ ticament.
 		if (!ParamCtrl.FormatDescarregaTot)
 			ParamCtrl.FormatDescarregaTot=[];
 		if (capa.model==model_vector)
@@ -400,7 +400,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 			//Hi ha el format que toca la l'array de formats?
 			for (i_format=0; i_format<ParamCtrl.FormatDescarregaTot.length; i_format++)
 			{
-				if ((capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json") && 
+				if ((capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json") &&
 					(ParamCtrl.FormatDescarregaTot.extension=="json" || ParamCtrl.FormatDescarregaTot.extension=="geojson"))
 					break;
 			}
@@ -413,7 +413,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 			//Hi ha el format que toca la l'array de formats?
 			for (i_format=0; i_format<ParamCtrl.FormatDescarregaTot.length; i_format++)
 			{
-				if (capa.FormatImatge=="image/tiff" && 
+				if (capa.FormatImatge=="image/tiff" &&
 					(ParamCtrl.FormatDescarregaTot.extension=="tif" || ParamCtrl.FormatDescarregaTot.extension=="tiff"))
 					break;
 			}
@@ -438,8 +438,8 @@ function CompletaDefinicioCapa(capa, capa_vola)
 					capa.DescarregaTot.push({desc: GetMessage("Band")+" "+(i_v+1)+" (GeoTIFF, COG)", url:url, format:[i_format]});
 				}
 			}
-		}		
-		//Poso una descarrega per tot o una descàrrega per a cada valor segons calgui.
+		}
+		//Poso una descarrega per tot o una descÃ rrega per a cada valor segons calgui.
 	}
 
 	if (!capa_vola)
@@ -463,7 +463,7 @@ function CompletaDefinicioCapes()
 }
 
 
-/* Aquest constructor no s'usa i es deixa només com a documentació del JSON
+/* Aquest constructor no s'usa i es deixa nomÃ©s com a documentaciÃ³ del JSON
 function CreaPlantillaDImpressioIntern(cal_imprimir, rect_titol, rect_vista, rect_situacio, rect_llegenda, rect_escala, layers_propies)
 {
 	this.CalImprimir = cal_imprimir;
@@ -491,19 +491,19 @@ var ActualitzaLlistaMinimitzaVisu=true;  //Minimitza el nombre de vegades que es
 
 function DonaCadenaSenzilla(s)
 {
-//var LletresComplexes="àéèíóòúçÀÉÈÍÓÒÚÇïüÏÜ·ñáÑÁäãâåëêìîöôõùûÄÃÂÅËÊÌÎÖÔÕÙÛÿýÝðÐ";
+//var LletresComplexes="Ã Ã©Ã¨Ã­Ã³Ã²ÃºÃ§Ã€Ã‰ÃˆÃÃ“Ã’ÃšÃ‡Ã¯Ã¼ÃÃœÂ·Ã±Ã¡Ã‘ÃÃ¤Ã£Ã¢Ã¥Ã«ÃªÃ¬Ã®Ã¶Ã´ÃµÃ¹Ã»Ã„ÃƒÃ‚Ã…Ã‹ÃŠÃŒÃŽÃ–Ã”Ã•Ã™Ã›Ã¿Ã½ÃÃ°Ã";
 //var LletresSenzilles="aeeiooucAEEIOOUCiuIU.naNAaaaaeeiiooouuAAAAEEIIOOOUUyyYdD";
-var LletresComplexes="àéèíóòúçïü·áäãâåëêìîöôõùûÿýð";
+var LletresComplexes="Ã Ã©Ã¨Ã­Ã³Ã²ÃºÃ§Ã¯Ã¼Â·Ã¡Ã¤Ã£Ã¢Ã¥Ã«ÃªÃ¬Ã®Ã¶Ã´ÃµÃ¹Ã»Ã¿Ã½Ã°";
 var LletresSenzilles="aeeioouciu.aaaaaeeiiooouuyyd";
 var s_low=s.toLowerCase();
 var caracter;
 var s_sortida="";
 var k;
 
-	/*Elimino el cas difícil de la ñ
+	/*Elimino el cas difÃ­cil de la Ã±
 	while (true)
 	{
-		k=s_low.indexOf("ñ");
+		k=s_low.indexOf("Ã±");
 		if (k==-1)
 			break;
 		else
@@ -520,7 +520,7 @@ var k;
 			s_sortida+=LletresSenzilles.charAt(k);
 	}
 
-	/*Elimino el cas difícil de la l.l
+	/*Elimino el cas difÃ­cil de la l.l
 	while (true)
 	{
 		k=s_sortida.indexOf("l.l");
@@ -536,7 +536,7 @@ var k;
 //////////////////////////////////////////////////////////////////////////
 /*Funcions de Navegador de Mapes del MiraMon.*/
 
-//S'usa per a les variables de l'estructura ParamCtrl. Suporta una cadena normal o una cadena multiidioma tipus {"cat": "sí", "spa": "sí", "eng": "yes", "fre": "oui"}
+//S'usa per a les variables de l'estructura ParamCtrl. Suporta una cadena normal o una cadena multiidioma tipus {"cat": "sÃ­", "spa": "sÃ­", "eng": "yes", "fre": "oui"}
 
 function ConcatenaCadenes(cadena1, cadena2)
 {
@@ -549,7 +549,7 @@ var a={};
 		a=(cadena1?cadena1: "")+(cadena2?cadena2:"");
 		return a;
 	}
-	// O un o l'altre són una cadena multidioma
+	// O un o l'altre sÃ³n una cadena multidioma
 	if(typeof cadena1==="object")
 	{
 		if(typeof cadena1.cat!=="undefined")
@@ -613,7 +613,7 @@ var a={};
 	}
 	else if(cadena1)
 	{
-		// cadena2 ha de ser un objecte sinó hauria sortit per la segona condició, en la que totes dues no són un objecte
+		// cadena2 ha de ser un objecte sinÃ³ hauria sortit per la segona condiciÃ³, en la que totes dues no sÃ³n un objecte
 		if(typeof cadena2.cat!=="undefined")
 			a.cat=cadena1 + (cadena2.cat?cadena2.cat:"");
 		if(typeof cadena2.spa!=="undefined")
@@ -625,7 +625,7 @@ var a={};
 	}
 	else
 	{
-		// cadena2 ha de ser un objecte sinó hauria sortit per la segona condició, en la que totes dues no són un objecte
+		// cadena2 ha de ser un objecte sinÃ³ hauria sortit per la segona condiciÃ³, en la que totes dues no sÃ³n un objecte
 		if(typeof cadena2.cat!=="undefined")
 			a.cat=cadena2.cat;
 		if(typeof cadena2.spa!=="undefined")
@@ -661,7 +661,7 @@ function DonaCadena(a)
 		return a.eng;
 	if (a.fre && ParamCtrl.idioma=="fre")
 		return a.fre;
-	if (a.eng)   //Si no hi ha l'idioma solicitat faig que xerri en anglès
+	if (a.eng)   //Si no hi ha l'idioma solicitat faig que xerri en anglÃ¨s
 		return a.eng;
 
 	if (a.cat==null && a.spa==null && a.eng==null && a.fre==null)  //Cas de cadena no multiidioma
@@ -670,7 +670,7 @@ function DonaCadena(a)
 }
 
 
-//S'usa per cadenes definides estàticament definides així: DonaCadenaLang({"cat": "sí", "spa": "sí", "eng": "yes", "fre": "oui"});
+//S'usa per cadenes definides estÃ ticament definides aixÃ­: DonaCadenaLang({"cat": "sÃ­", "spa": "sÃ­", "eng": "yes", "fre": "oui"});
 function DonaCadenaLang(cadena_lang)
 {
 	if(cadena_lang)
@@ -681,7 +681,7 @@ function DonaCadenaLang(cadena_lang)
 				return cadena_lang.cat;
 			case "spa":
 				return cadena_lang.spa;
-			default:     //Si no hi ha l'idioma solicitat faig que xerri en anglès
+			default:     //Si no hi ha l'idioma solicitat faig que xerri en anglÃ¨s
 			case "eng":
 				return cadena_lang.eng;
 			case "fre":
@@ -725,7 +725,7 @@ function GetMessage(msg_id, section)
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		return DonaCadenaLang(MessageLang[section][msg_id]);
-	}	
+	}
 	if (!MessageLang[msg_id])
 	{
 		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
@@ -770,7 +770,7 @@ function GetMessageJSON(msg_id, section)
 			return "["+GetMessage("MissingMessage")+"]";
 		}
 		return MessageLang[section][msg_id];
-	}	
+	}
 	if (!MessageLang[msg_id])
 	{
 		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
@@ -795,8 +795,8 @@ function DonaCadenaConcret(a, idioma)
 	return a;
 }
 
-/* Es substitueix aquesta funció per DonaCadenaLang al
-	canviar a l'implementació JSON.
+/* Es substitueix aquesta funciÃ³ per DonaCadenaLang al
+	canviar a l'implementaciÃ³ JSON.
 function DonaCadena4(cat,spa,eng,fre)
 {
 	if (ParamCtrl.idioma)
@@ -829,11 +829,11 @@ function getISOLanguageTag(language)
 
 function CombinaURLServidorAmbParamPeticio(servidor, request)
 {
-	if(request.indexOf("=")==-1)	
+	if(request.indexOf("=")==-1)
 		return DonaNomServidorSenseCaracterFinal(servidor) + request;
 	if (request.indexOf("?")==-1)
 		return DonaNomServidorCaracterFinal(servidor) + request;
-	if ((servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
+	if ((servidor.charAt(servidor.length-1)=="?")  // Â·$Â· Potser tambÃ© caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i desprÃ©s cal fer espai per inserir la request al mig i treure el ? del servidor
 		|| (servidor.charAt(servidor.length-1)=="/" &&  request.charAt(0)=="/"))
 		returnservidor.substring(0, servidor.length-1) + request;
 	return servidor + request;
@@ -847,7 +847,7 @@ function AfegeixNomServidorARequest(servidor, request, es_ajax, suporta_cors)
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
 		if (s_host.toLowerCase()!=location.host.toLowerCase())
 		{
-			//Canvio l'arrel del servidor local per l'arrel de la plana del navegador per estar segur que l'ajax funcionarà sense "cross server vulmerability".
+			//Canvio l'arrel del servidor local per l'arrel de la plana del navegador per estar segur que l'ajax funcionarÃ  sense "cross server vulmerability".
 			return CombinaURLServidorAmbParamPeticio(ParamCtrl.ServidorLocal.substring(0,pos_host)+location.host+ParamCtrl.ServidorLocal.substring(pos_host+s_host.length, ParamCtrl.ServidorLocal.length), request) + "&ServerToRequest="+DonaNomServidorSenseCaracterFinal(servidor);
 		}
 		return CombinaURLServidorAmbParamPeticio(ParamCtrl.ServidorLocal,request)  + "&ServerToRequest="+DonaNomServidorSenseCaracterFinal(servidor);
@@ -913,11 +913,11 @@ function CanviaIdioma(s)
 
 	elem=getFinestraLayer(window, "combinacioRGB");
 	if(isLayer(elem) && isLayerVisible(elem))
-		TancaFinestraLayer("combinacioRGB"); //Em falta una paràmetre per iniciar-la
+		TancaFinestraLayer("combinacioRGB"); //Em falta una parÃ metre per iniciar-la
 
 	elem=getFinestraLayer(window, "seleccioEstadistic");
 	if(isLayer(elem) && isLayerVisible(elem))
-		TancaFinestraLayer("seleccioEstadistic"); //Em falta una paràmetre per iniciar-la
+		TancaFinestraLayer("seleccioEstadistic"); //Em falta una parÃ metre per iniciar-la
 
 	elem=getFinestraLayer(window, "anarCoord");
 	if(isLayer(elem) && isLayerVisible(elem))
@@ -952,7 +952,7 @@ function CanviaIdioma(s)
 		TancaFinestraLayer("editarVector");
 
 	elem=getFinestraLayer(window, "mostraLlinatge");
-	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
+	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si tÃ© algun graf es mostraria en l'idioma anterior
 		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});
 
 	if (IStoryActive!==null)
@@ -974,7 +974,7 @@ function DonaIndexNivellZoom(costat)
 	return 0;
 }
 
-/*Dona el costat de píxel igual o immediatament inferior al demanat o -1.
+/*Dona el costat de pÃ­xel igual o immediatament inferior al demanat o -1.
 function DonaIndexNivellZoomFloor(costat)
 {
     for (var i=0; i<ParamCtrl.zoom.length; i++)
@@ -1008,7 +1008,7 @@ function DonaIndexNivellZoomFloor(costat)
     return i_retorn;
 }*/
 
-//Dona el costat de píxel igual o immediatament superior al demanat o -1.
+//Dona el costat de pÃ­xel igual o immediatament superior al demanat o -1.
 function DonaIndexNivellZoomCeil(costat)
 {
 var i;
@@ -1098,7 +1098,7 @@ function EsCapaDinsRangDEscalesVisibles(capa)
 	return false;
 }
 
-//Aquesta funció ara caldrà usar-la cada vegada que es canvii l'estat de visibilitat d'una capa
+//Aquesta funciÃ³ ara caldrÃ  usar-la cada vegada que es canvii l'estat de visibilitat d'una capa
 function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
 {
 	if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
@@ -1111,7 +1111,7 @@ function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
 	ParamCtrl.capa[i_capa].visible=nou_estat;
 }
 
-//A diferència de CanviaEstatVisibleCapaLlegenda, aquesta funció no toca res de la llegenda ni força un redibuixat
+//A diferÃ¨ncia de CanviaEstatVisibleCapaLlegenda, aquesta funciÃ³ no toca res de la llegenda ni forÃ§a un redibuixat
 function CanviaEstatVisibleCapa(i_capa, nou_estat)
 {
 var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
@@ -1125,7 +1125,7 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 				if (i_capa2==i_capa)
 					continue;
 				capa2=ParamCtrl.capa[i_capa2];
-				if (capa.grup==capa2.grup && 
+				if (capa.grup==capa2.grup &&
 				    EsCapaVisibleAAquestNivellDeZoom(capa2))
 				{
 					//In the case of groups We sincronize the querible (consultable) with the visible property.
@@ -1133,13 +1133,13 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 					{
 						if (!confirm(GetMessage("NotPossibleShowLayersSameGroup", "miramon") + ".\n" + GetMessage("TheLayer") +
 							" \"" + DonaCadena(capa2.desc) + "\", " +
-							GetMessage("alsoMemberToTheGroup", "miramon") + 
+							GetMessage("alsoMemberToTheGroup", "miramon") +
 							" \"" + capa2.grup + "\", " +
-							GetMessage("willBeDeselected", "miramon") + ".")) 
+							GetMessage("willBeDeselected", "miramon") + "."))
 							return;
 					}
 					if (nou_estat=="si" || nou_estat=="semitransparent")
-						CanviaEstatVisibleISiCalDescarregableCapa(i_capa2, "ara_no"); 
+						CanviaEstatVisibleISiCalDescarregableCapa(i_capa2, "ara_no");
 
 					if (capa2.consultable=="si")
 					{
@@ -1159,8 +1159,8 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 function RevisaEstatsCapes()
 {
 var capa, capa2;
-	//De moment només revisa que en un grup la capa activa no estigui oculta.
-	//Si està oculta i una altre capa del grup és visible, aquesta queda activada.
+	//De moment nomÃ©s revisa que en un grup la capa activa no estigui oculta.
+	//Si estÃ  oculta i una altre capa del grup Ã©s visible, aquesta queda activada.
 	if (ParamCtrl.LlegendaAmagaSegonsEscala || ParamCtrl.LlegendaGrisSegonsEscala)
 	{
 		for (var i=0; i<ParamCtrl.capa.length; i++)
@@ -1214,8 +1214,7 @@ function RecuperaVistaPrevia()
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat":"No hi ha cap vista prèvia a recuperar.", "spa":"No hay ninguna vista previa a recuperar.",
-							  "eng":"There is no previous view to be shown.", "fre":"Il n'y a pas une vue préalable à récupérer."}));
+		alert(GetMessage("NoPreviousView", "miramon") + ".");
 	}
 }
 
@@ -1229,19 +1228,18 @@ var RectVistaAbansFullScreen=null;
 
 function PortaVistaAFullScreen()
 {
-	//Si hi ha més d'una vista avisar que no te sentit fer-ho i plegar
+	//Si hi ha mÃ©s d'una vista avisar que no te sentit fer-ho i plegar
 	if (ParamCtrl.VistaPermanent[0].length>1)
 	{
-		alert(DonaCadenaLang({"cat":"No es possible saltar a pantalla completa en un navegador multivista.", "spa":"No es posible saltar a pantalla completa en un navegador multivista.",
-						  "eng":"You cannot go full screen in a multiview browser.", "fre":"Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples."}));
+		alert(GetMessage("NoFullScreenMultiBrowser", "miramon"));
 		ParamCtrl.fullScreen=0;
 		return;
 	}
 	var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
-	//Guardar la posició de la finestra de la vista.
+	//Guardar la posiciÃ³ de la finestra de la vista.
 	RectVistaAbansFullScreen=getRectLayer(vista);
 
-	//Canviar la posició de la finestra de la vista per ocupar tota la pantalla
+	//Canviar la posiciÃ³ de la finestra de la vista per ocupar tota la pantalla
 	moveLayer(vista, 0, 0, window.document.body.clientWidth, window.document.body.clientHeight);
 	if (isFinestraLayer(window, "situacio") && isFinestraLayerVisible(window, "llegenda"))
 		hideFinestraLayer(window, "situacio");
@@ -1258,10 +1256,10 @@ function PortaVistaANormalScreen()
 		return;
 	var vista=getLayer(window, ParamCtrl.VistaPermanent[0].nom);
 
-	//Recuperar la posició de la finestra de la vista.
+	//Recuperar la posiciÃ³ de la finestra de la vista.
 	moveLayer(vista, RectVistaAbansFullScreen.esq, RectVistaAbansFullScreen.sup, RectVistaAbansFullScreen.ample, RectVistaAbansFullScreen.alt);
 	RectVistaAbansFullScreen=null;
-	//Recuperar la posició de la caixa de coordenades.
+	//Recuperar la posiciÃ³ de la caixa de coordenades.
 }
 
 function GoFullScreenEvent(event)
@@ -1295,10 +1293,7 @@ function ShaObertPopUp(wnd)
 {
 	if (wnd==null)
 	{
-	    alert(DonaCadenaLang({"cat":"Aquest navegador té les finestres emergents bloquejades. Canvia la configuració del teu navegador.\nEn algunes versions d'Internet Explorer, només cal fer un clic sobre la faixa groga superior.",
-							  "spa":"Este navegador tiene las ventanas emergentes bloqueadas. Modifique la configuración de su navegador.\nEn algunas versiones de Internet Explorer, un clic sobre la banda amarilla superior es suficiente.",
-							  "eng":"Sorry, this browser has pop-up windows locked. Please change browser configuration.\nIn some Internet Explorer versions only a click on top yellow band will fix it.",
-							  "fre":"Ce navigateur a les fenêtres émergentes fermées. Changez la configuration de votre navigateur.\nDans certaines versions d'Internet Explorer, il suffit de cliquer sur la barre jaune supérieure."}));
+	    alert(GetMessage("BrowserPopUpWindowsLocked", "miramon") + ". " + GetMessage("ChangeBrowserConfig", "miramon") + ".\n" + GetMessage("SomeInternetExplorerClickYellowBand", "miramon") + ".");
 	    return false;
 	}
 	return true;
@@ -1308,9 +1303,9 @@ function ShaObertPopUp(wnd)
 function NetejaParamCtrl(param_ctrl, is_local_storage)
 {
 	param_ctrl.NivellZoomCostat=ParamInternCtrl.vista.CostatZoomActual;  //Recupero el costat de zoom actual
-	param_ctrl.ISituacioOri=ParamInternCtrl.ISituacio; //Recupero el mapa de situació, que indica el CRS
+	param_ctrl.ISituacioOri=ParamInternCtrl.ISituacio; //Recupero el mapa de situaciÃ³, que indica el CRS
 
-	//Buido les coses grans que he afegit al param_ctrl abans de guardar la configuració.
+	//Buido les coses grans que he afegit al param_ctrl abans de guardar la configuraciÃ³.
 	//De fet, tots les elements documentats com "INTERN" al config-schema s'haurien d'esborrar.
 	for (var i_capa=0; i_capa<param_ctrl.capa.length; i_capa++)
 	{
@@ -1353,25 +1348,25 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 							delete estil.component[i_c].formulaInterna;
 					}
 				}
-				
+
 				if (estil.diagrama && estil.diagrama.length>0)
 				{
 					for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
-					{	// en tancar el navegador anoto al config les coses que mecessitaré per tornar a obrir la caixa igual, i esborro el i_histograma que és la marca que la fienstra no s'ha obert
-						// posició finestra
+					{	// en tancar el navegador anoto al config les coses que mecessitarÃ© per tornar a obrir la caixa igual, i esborro el i_histograma que Ã©s la marca que la fienstra no s'ha obert
+						// posiciÃ³ finestra
 						var nom_finestra="";
-						
-						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" || 
+
+						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" ||
 								estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
 							nom_finestra=DonaNomHistograma(estil.diagrama[i_diagrama].i_histograma);
 						else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 							nom_finestra=DonaNomGrafic3d(estil.diagrama[i_diagrama].i_histograma);
-						
+
 						if (nom_finestra != "")
 						{
 							for (var i_layer_fin=0; i_layer_fin<layerFinestraList.length; i_layer_fin++)
 							{
-								if (layerFinestraList[i_layer_fin].nom == nom_finestra)							
+								if (layerFinestraList[i_layer_fin].nom == nom_finestra)
 									break;
 							}
 							if (i_layer_fin < layerFinestraList.length) //he identificar quina finestra era
@@ -1386,35 +1381,35 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 									estil.diagrama[i_diagrama].height=parseInt(div.style.height); //encara no s'usa en recarregar la finestra
 								}
 							}
-							//else -> si no l'he identificat, no anoto res i el proper cop s'obrirà a la posició per defecte
+							//else -> si no l'he identificat, no anoto res i el proper cop s'obrirÃ  a la posiciÃ³ per defecte
 						}
-						
-						// mida finestra -> s'haurà de fer més endavant, si fem que aquestes caixes siguin redimensionables (ara no ho són)
-						
-						/* dades del darrer gràfic visualitzat + estat dianmisme (important per si tinc un gràfic estàtic i he de desar 
-						aquestes dades que ja no surten de la vita actual!, i també important per poder obrir totes les finestres 
-						des del principi encara que no estigui veient aquesta capa/estil concret * / 
+
+						// mida finestra -> s'haurÃ  de fer mÃ©s endavant, si fem que aquestes caixes siguin redimensionables (ara no ho sÃ³n)
+
+						/* dades del darrer grÃ fic visualitzat + estat dianmisme (important per si tinc un grÃ fic estÃ tic i he de desar
+						aquestes dades que ja no surten de la vita actual!, i tambÃ© important per poder obrir totes les finestres
+						des del principi encara que no estigui veient aquesta capa/estil concret * /
 						if (estil.diagrama[i_diagrama].tipus == "chart")
 						{
 							estil.diagrama[i_diagrama].chart=[];
 							for (var i_c=0; i_c<estil.component.length; i_c++)
 							{
-								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);												
+								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);
 								/*estil.diagrama[i_diagrama].chart.push({labels: retorn_prep_histo.label, valors: (retorn_prep_histo.valors ? retorn_prep_histo.valors : null),
-									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /	
+									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /
 							}
 						}
 						else if (estil.diagrama[i_diagrama].tipus == "matriu")
 							estil.diagrama[i_diagrama].matriu=CreaTextMatriuDeConfusio(estil.diagrama[i_diagrama].i_histograma, true);
 						//else if (estil.diagrama[i_diagrama].tipus == "stat")
-							//··*/
+							//Â·Â·*/
 						// esborrar i_histograma
-						delete estil.diagrama[i_diagrama].i_histograma; //en reiniciar serà la marca que no s'ha creat a finestra encara
+						delete estil.diagrama[i_diagrama].i_histograma; //en reiniciar serÃ  la marca que no s'ha creat a finestra encara
 					}
-				}	
+				}
 			}
-		}			
-						
+		}
+
 		if (capa.metadades && capa.metadades.provenance && capa.metadades.provenance.peticioServCSW=="true" && capa.metadades.provenance.lineage)
 			delete capa.metadades.provenance.lineage;
 	}
@@ -1448,7 +1443,7 @@ function CarregaiAdoptaParamCtrl(s)
 			return 1;
 	}
 	FinalitzaMiraMonMapBrowser();
-	//La seguent crida tancarà la caixa i reiniciarà el navegador amb els nous parametres
+	//La seguent crida tancarÃ  la caixa i reiniciarÃ  el navegador amb els nous parametres
 	IniciaParamCtrlIVisualitzacio(param_ctrl, {div_name: ParamCtrl.containerName, config_json:ParamCtrl.config_json, config_reset: true/*, usa_local_storage: false*/});
 	return 0;
 }
@@ -1459,7 +1454,7 @@ var VistaImprimir={ "EnvActual": {"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0},
 				 "ncol": 0,
 				 "CostatZoomActual": 0,
 				 "i_vista": -2,
-				 "i_nova_vista": NovaVistaImprimir};  //El significat de "i_nova_vista" es pot trobar a la funció PreparaParamInternCtrl()
+				 "i_nova_vista": NovaVistaImprimir};  //El significat de "i_nova_vista" es pot trobar a la funciÃ³ PreparaParamInternCtrl()
 
 function CalculaNColNFilVistaImprimir(ncol,nfil)
 {
@@ -1486,14 +1481,14 @@ var i, capa;
 				DonaTipusServidorCapa(capa)!="TipusWMS" &&
 				DonaTipusServidorCapa(capa)!="TipusOAPI_Maps")
 			{
-				//Hi ha 1 capa (o més) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
+				//Hi ha 1 capa (o mÃ©s) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
 				costat=(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/VistaImprimir.ncol;
 				//Buscar el costar de pixel que cumplim:
 				var i_zoom=DonaIndexNivellZoomCeil(costat);
 				if (i_zoom==-1)
 					i=ParamCtrl.capa.length;  //No ha ha cap costat que em serveixi.
 				else
-					costat=ParamCtrl.zoom[i_zoom].costat; //Ara amb el nou costat de píxel cal redefinir envolupant per excés donat que no la puc conservar totalment.
+					costat=ParamCtrl.zoom[i_zoom].costat; //Ara amb el nou costat de pÃ­xel cal redefinir envolupant per excÃ©s donat que no la puc conservar totalment.
 				break;
 			}
 	    }
@@ -1546,15 +1541,15 @@ var cdns=[];
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
-		cdns.push(" (", DonaCadenaLang({"cat":"aprox","spa":"aprox","eng":"approx","fre":"approx"}), ". " , (d_escala>10000 ? d_escala/1000+" km" : d_escala+" m"), " " ,
-			DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"}), " " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "°)");
+		cdns.push(" (", GetMessage("approx"), ". " , (d_escala>10000 ? d_escala/1000+" km" : d_escala+" m"), " " ,
+			GetMessage("atLat"), ". " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "Â°)");
 	}
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,41.42")
-		cdns.push(" (" , (DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"})) , " 41° 25\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 41Â° 25\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,40.60")
-		cdns.push(" (" , (DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"})) , " 40° 36\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 40Â° 36\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,0.0" || ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="EPSG:3785")
-		cdns.push(" (" , (DonaCadenaLang({"cat":"a lat.","spa":"a lat.","eng":"at lat.","fre":"à lat"})) , " 0° 0\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 0Â° 0\')");
 	cdns.push("</font>");
 	return cdns.join("");
 }
@@ -1592,14 +1587,14 @@ var cdns=[], i;
 		if (ParamCtrl.CanviProjAuto)
 		{
 			cdns.push("<OPTION VALUE=\"-1\"",(ParamCtrl.araCanviProjAuto ? " SELECTED" : "") ,">",
-				DonaCadenaLang({"cat":"automàtic", "spa":"automático", "eng":"automatic","fre":"automatique"}));
+				GetMessage("automatic"));
 			if (ParamCtrl.araCanviProjAuto)
 				cdns.push(" (", DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), ")");
 			cdns.push("</OPTION>");
 		}
-		//NJ_31_03_2017: Hi ha casos en que hi ha imatges de situació amb igual sistema de referència però diferent àmbit
-		//al desplegable de projeccions no té sentit que surtin repeticions, per tant, construeixo un array de crs,
-		//del qual eliminaré les repeticions.
+		//NJ_31_03_2017: Hi ha casos en que hi ha imatges de situaciÃ³ amb igual sistema de referÃ¨ncia perÃ² diferent Ã mbit
+		//al desplegable de projeccions no tÃ© sentit que surtin repeticions, per tant, construeixo un array de crs,
+		//del qual eliminarÃ© les repeticions.
 		var crs_temp=[];
 		for (i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
@@ -1668,7 +1663,7 @@ function ObreFinestraAjuda()
 {
     if (AjudaWindow==null || AjudaWindow.closed)
     {
-        AjudaWindow=window.open(DonaCadenaLang({"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"}),"FinestraAjuda",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=yes,directories=no,resizable=yes,width=780,height=580');
+        AjudaWindow=window.open(GetMessage("helpHtm", "urls"),"FinestraAjuda",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=yes,directories=no,resizable=yes,width=780,height=580');
 		ShaObertPopUp(AjudaWindow);
     }
     else
@@ -1677,10 +1672,7 @@ function ObreFinestraAjuda()
 
 function InstalaLectorMapes()
 {
-    var instalaWindow=window.open(DonaCadenaLang({"cat":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE",
-												 "spa":"http://www.creaf.uab.cat/miramon/mmr/esp/exe/Inst_MMR.EXE",
-												 "eng":"http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE",
-												 "fre":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE"}));
+    var instalaWindow=window.open(GetMessage("installerMMRExe", "urls"));
     ShaObertPopUp(instalaWindow);
 }
 
@@ -1781,7 +1773,7 @@ var d_max;
 		ParamInternCtrl.PuntOri.y=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY-ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual/2;
 }
 
-//Aquesta funció converteix un nom de vista en un index de l'array ParamCtrl.VistaPermanent. Noteu que no funciona per les "vistes noves" creades per l'usuari.
+//Aquesta funciÃ³ converteix un nom de vista en un index de l'array ParamCtrl.VistaPermanent. Noteu que no funciona per les "vistes noves" creades per l'usuari.
 function DonaIVista(nom)
 {
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
@@ -1796,9 +1788,9 @@ var NRequestedCursor=0;
 
 //https://www.w3schools.com/cssref/pr_class_cursor.asp
 /*cursor pot ser
-	un cursor requerit (que cal cancelar més tard)
+	un cursor requerit (que cal cancelar mÃ©s tard)
 	"auto" per cancelar un cursor requerit
-	null perque la funció determini el cursor a partir del estats del botons (de fet de les variables que reflectexien l'estat dels botons)*/
+	null perque la funciÃ³ determini el cursor a partir del estats del botons (de fet de les variables que reflectexien l'estat dels botons)*/
 function CanviaCursorSobreVista(requested_cursor)
 {
 var cursor="auto";
@@ -1859,7 +1851,7 @@ function MouLaVista(dx,dy)
 /*Mou la vista un finestra sencera en x, y especificant -1, 0 o 1 segons el sentit desitjat:
      sx: -1 per esquerra, 0 per res, 1 per dreta.
      sy: -1 per aball,    0 per res, 1 per adalt.
-  El moviment no salta una finetra sencera exactament sino que té en compte el paràmetre psalt
+  El moviment no salta una finetra sencera exactament sino que tÃ© en compte el parÃ metre psalt
   (percentatge de salt). Crida RepintaMapesIVistes() al final*/
 function MouLaVistaSalt(sx,sy)
 {
@@ -1874,8 +1866,8 @@ function MouLaVistaEventDeSalt(event, sx, sy) //Afegit JM 18/09/2016
 }
 
 
-/*Mou la vista per centrar-la a la posició x,y en coordenades mapa. Crida RepintaMapesIVistes()
-  al final. Aquesta funció NO guarda la vista.*/
+/*Mou la vista per centrar-la a la posiciÃ³ x,y en coordenades mapa. Crida RepintaMapesIVistes()
+  al final. Aquesta funciÃ³ NO guarda la vista.*/
 function CentraLaVista(x,y)
 {
     ParamInternCtrl.PuntOri.x=x;
@@ -1948,7 +1940,7 @@ function DonaCoordJDeCoordSobreVista(elem, i_nova_vista, y)
 	return ((window.document.body.scrollTop) ? window.document.body.scrollTop : 0) + y-DonaOrigenSuperiorVista(elem, i_nova_vista);
 }
 
-//Només útils per la consulta per localització de punts
+//NomÃ©s Ãºtils per la consulta per localitzaciÃ³ de punts
 function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 {
 	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
@@ -1958,7 +1950,7 @@ function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 		return true;
 	}
 
-	//En un futur proper, quan se suportin linies i polígons això s'haurà de canviar de lloc
+	//En un futur proper, quan se suportin linies i polÃ­gons aixÃ² s'haurÃ  de canviar de lloc
 	punt.x=feature.geometryCRSactual.coordinates[0];
 	punt.y=feature.geometryCRSactual.coordinates[1];
 	return false;
@@ -1989,7 +1981,7 @@ function TancaFinestraLayer(nom_finestra)
 	else if (nom_finestra=="anarCoord")
 		TancaFinestra_anarCoord();
 	else if (nom_finestra=="video")
-		TancaFinestra_video();	
+		TancaFinestra_video();
 	else if (nom_finestra=="editarVector")
 		TancaFinestra_editarVector();
 	else if (nom_finestra=="triaStoryMap")
@@ -2006,17 +1998,17 @@ function TancaFinestraLayer(nom_finestra)
 		var str_id = nom_finestra.substr(prefixHistogramaFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[HistogramaFinestra.vista[number_id].i_capa].estil[HistogramaFinestra.vista[number_id].i_estil];
-	 
+
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{	
+		{
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id &&
-						(estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" || 
+						(estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" ||
 						estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ"))
-				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);				
-					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
+				//Ã©s aquest (cal comprovar el tipus perquÃ¨ les numeracions sÃ³n independents i es podrien repetir entre Histogrames i Vistes3D)
+					estil.diagrama.splice(i_diagrama, 1);
+					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquÃ¨ ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
 		if (estil.diagrama.length == 0)
@@ -2028,15 +2020,15 @@ function TancaFinestraLayer(nom_finestra)
 		var str_id = nom_finestra.substr(prefixSuperficie3DFinestra.length);
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[Superficie3DFinestra.vista[number_id].i_capa].estil[Superficie3DFinestra.vista[number_id].i_estil];
-	 
+
 	 	if (estil.diagrama && estil.diagrama.length>0)
-		{	
+		{
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id && estil.diagrama[i_diagrama].tipus == "vista3d" )
-				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
-					estil.diagrama.splice(i_diagrama, 1);				
-					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
+				//Ã©s aquest (cal comprovar el tipus perquÃ¨ les numeracions sÃ³n independents i es podrien repetir entre Histogrames i Vistes3D)
+					estil.diagrama.splice(i_diagrama, 1);
+					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquÃ¨ ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
 		if (estil.diagrama.length == 0)
@@ -2067,10 +2059,7 @@ function TancaFinestra_novaFinestra(nom, finestra)
 
 function ValidacioFinalitzada(doc)
 {
-	alert(DonaCadenaLang({"cat":"Validació finalitzada. Pots tancar el navegador.",
-						  "spa":"Validación finalizada. Puedes cerrar el navegador.",
-						  "eng":"Finished validation. You can close the browser.",
-						  "fre":"Validation terminée. Vous pouvez fermer le navigateur."}));
+	alert(GetMessage("FinishValidation", "miramon") + ". " + GetMessage("MayCloseBrowser", "miramon") + ".");
 	return;
 }
 function FesPeticioAjaxValidacio(s)
@@ -2101,7 +2090,7 @@ var cdns=[];
 		//envio la reposta
 		setTimeout("FesPeticioAjaxValidacio(\""+s+"\");",30);
 
-		//Tanco la finestra de consulta si és una finestra emergent
+		//Tanco la finestra de consulta si Ã©s una finestra emergent
 		if(ParamCtrl.TipusConsulta=="FinestraDeCop" && ConsultaWindow && ConsultaWindow.closed==false)
 			setTimeout("ConsultaWindow.close();",300);
 		else if(ParamCtrl.TipusConsulta=="IncrustadaDeCop")
@@ -2115,7 +2104,7 @@ function EsborraTotIOmpleEventConsola()
 	OmpleFinestraConsola();
 }
 
-//La funció de tanca la caixa general serveix en aquet cas i no en creem una de pròpia.
+//La funciÃ³ de tanca la caixa general serveix en aquet cas i no en creem una de prÃ²pia.
 
 function DonaEnllacAAquestNavegador()
 {
@@ -2133,7 +2122,7 @@ var cdns=[], cal_coma, capa, i;
 	cal_coma=false;
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		//Crec que s'hauria de fer això EsCapaVisibleAAquestNivellDeZoom  //·$·
+		//Crec que s'hauria de fer aixÃ² EsCapaVisibleAAquestNivellDeZoom  //Â·$Â·
 		if (ParamCtrl.capa[i].visible=="si" || ParamCtrl.capa[i].visible=="semitransparent")
 		{
 			if (cal_coma)
@@ -2178,13 +2167,13 @@ var cdns=[], cal_coma, capa, i;
 		}
 	}
 
-	//S'hauria d'afegir el paràmetre time per aquelles capes que el tenen per saber quina és la data que es vol mostrar
-	//·$·
+	//S'hauria d'afegir el parÃ metre time per aquelles capes que el tenen per saber quina Ã©s la data que es vol mostrar
+	//Â·$Â·
 	cdns.push("&QUERY_LAYERS=");
 	cal_coma=false;
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
-		//Crec que s'hauria de fer això ·$·
+		//Crec que s'hauria de fer aixÃ² Â·$Â·
 		//EsCapaDinsRangDEscalesVisibles(c) && EsCapaDinsAmbitActual(c) && EsCapaDisponibleEnElCRSActual(c))
 		if (ParamCtrl.capa[i].consultable=="si")
 		{
@@ -2247,8 +2236,8 @@ function DonaDescripcioTipusServidor(tipus)
 	return "";
 }
 
-//Si mode==0 dona un enllaç amb la URL com a text subratllat
-//Si mode==1 dona un enllaç amb el tipus com a text subratllat
+//Si mode==0 dona un enllaÃ§ amb la URL com a text subratllat
+//Si mode==1 dona un enllaÃ§ amb el tipus com a text subratllat
 function DonaEnllacCapacitatsServidorDeCapa(i_capa, mode)
 {
 var cdns=[];
@@ -2282,7 +2271,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	return cdns.join("");
 }
 
-/*Només enumero el servidor local si s'usa o si el nombre da capes és 0. Tinc en compte
+/*NomÃ©s enumero el servidor local si s'usa o si el nombre da capes Ã©s 0. Tinc en compte
 els servidors WFS.*/
 function OmpleFinestraEnllacWMS()
 {
@@ -2313,10 +2302,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 							{
 								if (array_tipus.length==0)
 								{
-									cdns2.push(DonaCadenaLang({"cat":"Servidor principal d'aquest navegador",
-																"spa":"Servidor principal de este navegador",
-																"eng":"Main Server of this browser",
-																"fre":"Serveur principal du navigateur"}),":<br>");
+									cdns2.push(GetMessage("MainServerBrowser", "miramon"),":<br>");
 									cdns2.push(DonaEnllacCapacitatsServidorDeCapa(i_capa, 0));
 									servidor_local_trobat=true;
 								}
@@ -2343,7 +2329,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 						}
 						if (servidor_local_trobat)
 							cdns2.push(")");
-						cdns2.push("<P>", DonaCadenaLang({"cat":"Altres servidors usats", "spa":"Otros servidores usados", "eng":"Others servers used", "fre":"Autres serveurs utilisés"}), ":<br>");
+						cdns2.push("<P>", GetMessage("OtherServersUsed", "miramon"), ":<br>");
 						break;
 					}
 				}
@@ -2394,19 +2380,13 @@ var elem=getLayer(window, "enllacWMS_finestra");
 			//No hi ha capes
 			if(ParamCtrl.ServidorLocal && ParamCtrl.VersioServidorLocal && ParamCtrl.TipusServidorLocal)
 			{
-				cdns2.push(DonaCadenaLang({"cat":"Servidor principal d'aquest navegador",
-											"spa":"Servidor principal de este navegador",
-											"eng":"Main Sever of this browser",
-											"fre":"Serveur principal du navigateur"}),":<br><a href=\"",
+				cdns2.push(GetMessage("MainServerBrowser", "miramon"),":<br><a href=\"",
 					DonaRequestServiceMetadata(ParamCtrl.ServidorLocal, ParamCtrl.VersioServidorLocal, ParamCtrl.TipusServidorLocal, ParamCtrl.CorsServidorLocal), "\" target=\"_blank\">",
 					ParamCtrl.ServidorLocal, " (", DonaDescripcioTipusServidor(ParamCtrl.TipusServidorLocal), ")","</a><br>");
 			}
 			else
 			{
-				cdns2.push(DonaCadenaLang({"cat":"No s'han pogut determinar les adreçes dels servidors usats en aquest navegador.",
-										   "spa":"No se han podido determinar las direcciones de los servidores usados en este navegador.",
-										   "eng":"It could not determine the servers URL used in this browser.",
-										   "fre":"Impossible de déterminer les adresses des serveurs utilisés avec ce navigateur"}));
+				cdns2.push(GetMessage("ServerUrlNotDetermine", "miramon") + ".");
 			}
 		}
 		cdns2.push("</font></td></tr></table>");
@@ -2423,10 +2403,7 @@ function OmpleFinestraEnllac()
 		link=DonaEnllacAAquestNavegador();
 		cdns.push("<form name=\"OWSContext\" class=\"floatingWindowText\" onsubmit=\"OpenOWSContext(document.OWSContext.url_context.value); return false;\">", //Returning false effectively blocks the submission of the form
 			//OWSC open/save interface
-			DonaCadenaLang({"cat":"Document de context OWS",
-						"spa":"Documento de contexto OWS",
-						"eng":"OWS context document",
-						"fre":"Document de contexte OWS"}),
+			GetMessage("OWSContextDocument", "miramon"),
 			":<br><input type=\"text\" name=\"url_context\" value=\"\"><input type=\"submit\" value=\"",
 			GetMessage("Open"),
 			"\">",
@@ -2436,10 +2413,7 @@ function OmpleFinestraEnllac()
 			//OWSC previewer (here will appear the info about the OWSC when loaded)
 			//Direct link to de view (until the OWSC is loaded, a link to the current view)
 			"</form><div id=\"OWSC_previewer\">",
-			DonaCadenaLang({"cat":"Enllaç a aquesta vista",
-							"spa":"Enlace a esta vista",
-							"eng":"Link to this view",
-							"fre":"Lien à cette vue"}),
+			GetMessage("LinkToView", "miramon"),
 			":<br><a href=\"",link,"\">",
 			link,
 			"</a></div>");
@@ -2639,7 +2613,7 @@ function DonaValorDeCoordActual(x,y,negreta,input)
 var cdns=[], ll, p, unitats_CRS;
 
 	p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-	if (p=="°")
+	if (p=="Â°")
 		unitats_CRS=p;
 	else
 		unitats_CRS=" "+p;
@@ -2690,7 +2664,7 @@ var cdns=[], i, j, vista, capa;
 		for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 		{
 			capa=ParamCtrl.capa[i_capa];
-			if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer aixÃ² perÃ² no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
 				capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
 			{
 				var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j), true);
@@ -3052,21 +3026,21 @@ var i;
 	TransformaCoordenadesPunt(ParamInternCtrl.PuntOri, crs_ori, crs_dest);
 	TransformaCoordenadesPunt(PuntConsultat, crs_ori, crs_dest);
 
-	//He de transformar les coordenades dels objectes digitalitzats a memòria
+	//He de transformar les coordenades dels objectes digitalitzats a memÃ²ria
 	TransformaCoordenadesCapesVolatils(crs_ori, crs_dest);
 
-	//i també de les CapesDigitalitzades
+	//i tambÃ© de les CapesDigitalitzades
 	for (i=0; i<ParamCtrl.capa.length; i++)
 		CanviaCRSITransformaCoordenadesCapaDigi(ParamCtrl.capa[i], crs_dest);
 
 	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && EsProjLongLat(crs_dest))
 	{
-		factor=1/120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
+		factor=1/120000; // AquÃ­ no apliquem FactorGrausAMetres perquÃ¨ volem obtenir un costat de zoom arrodonit.
 		ParamCtrl.NDecimalsCoordXY+=4;
 	}
 	else if (EsProjLongLat(crs_ori) && DonaUnitatsCoordenadesProj(crs_dest)=="m")
 	{
-		factor=120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
+		factor=120000; // AquÃ­ no apliquem FactorGrausAMetres perquÃ¨ volem obtenir un costat de zoom arrodonit.
 		ParamCtrl.NDecimalsCoordXY-=4;
 		if (ParamCtrl.NDecimalsCoordXY<0)
 		    ParamCtrl.NDecimalsCoordXY=0;
@@ -3092,7 +3066,7 @@ var i;
 function CanviaAVistaGeneral()
 {
 var i_max;
-	//busco la vista de més extensió
+	//busco la vista de mÃ©s extensiÃ³
 	i_max=0;
 	for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
 	{
@@ -3167,15 +3141,13 @@ function CanviaNivellDeZoom(nivell, redibuixa)
 {
 	if (nivell<0)
 	{
-		alert(DonaCadenaLang({"cat":"No hi ha zoom inferior a mostrar.", "spa":"No hay zoom inferior a mostrar.",
-						  "eng":"There is no more zoom out to be shown.", "fre":"Il n'y a pas un zoom inférieur à montrer"}));
+		alert(GetMessage("NoMoreZoomOut", "miramon") + ".");
 		nivell=0;
 		CanviaAVistaGeneral();
 	}
 	else if (nivell>=ParamCtrl.zoom.length)
 	{
-		alert(DonaCadenaLang({"cat":"No hi ha zoom superior a mostrar.", "spa":"No hay zoom superior a mostrar.",
-						  "eng":"There is no more zoom in to be shown.","fre":"Il n'y a pas un zoom supérieur à montrer"}));
+		alert(GetMessage("NoMoreZoomIn", "miramon") + ".");
 		nivell=ParamCtrl.zoom.length-1;
 	}
 	if (ParamCtrl.ZoomContinu || nivell!=DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual))  //Evito canviar de nivell al nivell actual.
@@ -3196,10 +3168,7 @@ function CanviaNivellDeZoom(nivell, redibuixa)
 
 function MostraFinestraVideo()
 {
-	if (!ObreFinestra(window, "video", DonaCadenaLang({"cat":"de sèries temporals",
-							  "spa":"de series temporales",
-							  "eng":"of time series",
-							  "fre":"pour séries chronologiques"})))
+	if (!ObreFinestra(window, "video", GetMessage("timeSeries", "miramon")))
 		return;
 	PreparaIOmpleFinestraVideo();
 }
@@ -3285,7 +3254,7 @@ function EsEnvDinsAmbitActual(env)
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
 		if (!EsEnvDinsEnvolupant(
-					DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), 
+					DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
 					DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
 			return false;
 	}
@@ -3313,7 +3282,7 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 	else
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
-		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), 
+		if (!EsEnvDinsEnvolupant(DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
 			ParamInternCtrl.EnvLLSituacio[i]))
 			return false;
 	}
@@ -3328,7 +3297,7 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 		{
 			for (var i=0; i<c.TileMatrixSet.length; i++)
 			{
-				//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
+				//Â·$Â· Que passa amb els sinÃ²nims de sistemes de referÃ¨ncia??? ara mateix no es tenen en compte i no funcionen
 				if (c.TileMatrixSet[i].CRS &&
 					c.TileMatrixSet[i].CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
 				{
@@ -3350,7 +3319,7 @@ function EsCapaDisponibleEnElCRSActual(capa)
 	{
 		for (var i=0; i<capa.CRS.length; i++)
 		{
-			//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
+			//Â·$Â· Que passa amb els sinÃ²nims de sistemes de referÃ¨ncia??? ara mateix no es tenen en compte i no funcionen
 			if (capa.CRS[i].toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
 				return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 		}
@@ -3515,12 +3484,9 @@ var ns;
 		elem=DonamElementsNodeAPartirDelNomDelTag(root, ns, "wmts", "BinaryPayload");
 		if(!elem || elem.length<1)
 		{
-			alert(DonaCadenaLang({"cat":"No trobo BinaryPayload a la resposta GetTile en SOAP",
-							  "spa":"No encuentro BinaryPayload la respuesta GetTile en SOAP",
-							  "eng":"BinaryPayload cannot be found on GetTile SOAP answer",
-							  "fre":"Impossible trouver BinaryPayload à la réponse GetTile à SOAP"})+": \n"+dades_request.text);
+			alert(GetMessage("BinaryPayloadNotFound", "miramon") +": \n"+dades_request.text);
 			return;  //Si no existeix l'element BinaryPayload es podria mirar si hi ha l'element Fault i
-					   //llegir i mostrar l'excepció, però això de moment no es fa mira en cap dels casos, ni en el GetMap
+					   //llegir i mostrar l'excepciÃ³, perÃ² aixÃ² de moment no es fa mira en cap dels casos, ni en el GetMap
 		}
 	}
 	for(var i=0; i<elem[0].childNodes.length; i++)
@@ -3533,23 +3499,17 @@ var ns;
 	}
 	if(format=="")
 	{
-		alert(DonaCadenaLang({"cat":"No trobo Format a la resposta GetTile en SOAP",
-						  "spa":"No encuentro Format en la respuesta GetTile en SOAP",
-						  "eng":"Format cannot be found on GetTile SOAP answer",
-						  "fre":"Impossible trouver Format à la réponse GetTile à SOAP."})+": \n"+dades_request.text);
+		alert(GetMessage("FormatNotFound", "miramon")+": \n"+dades_request.text);
 		return;
 	}
 	else if (binary_content=="")
 	{
-		alert(DonaCadenaLang({"cat":"No trobo BinaryContent ni PayloadContent a la resposta GetTile en SOAP",
-						  "spa":"No encuentro BinaryContent ni PayloadContent en la respuesta GetTile en SOAP",
-						  "eng":"BinaryPayload and PayloadContent cannot be found on GetTile SOAP answer",
-						  "fre":"Impossible trouver BinaryPayload ou PayloadContent à la réponse GetTile à SOAP."})+": \n"+dades_request.text );
+		alert(GetMessage("BinaryPayloadAndPayloadContentNotFound", "miramon")+": \n"+dades_request.text );
 		return;  //Si no existeix l'element BinaryPayload es podria mirar si hi ha l'element Fault i
-					   //llegir i mostrar l'excepció, però això de moment no es fa mira en cap dels casos, ni en el GetMap
+					   //llegir i mostrar l'excepciÃ³, perÃ² aixÃ² de moment no es fa mira en cap dels casos, ni en el GetMap
 	}
 
-	/* No ho faig servir perquè no sé perquè però em diu que el binary_content no té cap fill
+	/* No ho faig servir perquÃ¨ no sÃ© perquÃ¨ perÃ² em diu que el binary_content no tÃ© cap fill
 	//Obtinc el format
 	elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0], ns, "wmts", "Format");
 	if(elem_fill && elem_fill.length>0 && elem_fill[0].hasChildNodes())
@@ -3557,7 +3517,7 @@ var ns;
 	else
 		return;
 
-	//Obtinc el binary_content que és la imatge sol·licitada en codificació amb base 63
+	//Obtinc el binary_content que Ã©s la imatge solÂ·licitada en codificaciÃ³ amb base 63
 	elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0],ns,"wmts","BinaryContent");
 	if(!elem_fill || elem.length<1)
 		elem_fill=DonamElementsNodeAPartirDelNomDelTag(elem[0], ns, "wmts", "PayloadContent");
@@ -3568,9 +3528,9 @@ var ns;
 		alert(DonaCadenaLang({"cat":"No trobo BinaryContent ni PayloadContent a la resposta GetTile en SOAP",
 						  "spa":"No encuentro BinaryContent ni PayloadContent en la respuesta GetTile en SOAP",
 						  "eng":"BinaryPayload and PayloadContent cannot be found on GetTile SOAP answer",
-						  "fre":"Impossible trouver BinaryPayload ou PayloadContent à la réponse GetTile à SOAP"}));
+						  "fre":"Impossible trouver BinaryPayload ou PayloadContent Ã  la rÃ©ponse GetTile Ã  SOAP"}));
 		return;  //Si no existeix l'element BinaryPayload es podria mirar si hi ha l'element Fault i
-					   //llegir i mostrar l'excepció, però això de moment no es fa mira en cap dels casos, ni en el GetMap
+					   //llegir i mostrar l'excepciÃ³, perÃ² aixÃ² de moment no es fa mira en cap dels casos, ni en el GetMap
 	}*/
 
 
@@ -3591,7 +3551,7 @@ function FesPeticioAjaxGetTileWMTS_SOAP(i_capa, estil, i_tile_matrix_set, i_tile
 var cdns=[], cdns_temp=[], s, servidor_temp, capa=ParamCtrl.capa[i_capa];
 
 	RespostaGetTileWMTS_SOAP[RespostaGetTileWMTS_SOAP.length]=new CreaGetTileWMTS_SOAP(i_capa, i_tile_matrix, j, i);
-	//Creo la petició de GetTile en SOAP
+	//Creo la peticiÃ³ de GetTile en SOAP
 	cdns.push("<?xml version=\"1.0\"?>\n",
 			  "<soap:Envelope xmlns:soap=\"http://www.w3.org/2001/12/soap-envelope\" ",
 			  "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ",
@@ -3910,7 +3870,7 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WFS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
 	if (tipus=="TipusSOS")
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
-	// En TipusOAPI_Maps, ... no existeix aquesta petició que he de retornar, la landing page?
+	// En TipusOAPI_Maps, ... no existeix aquesta peticiÃ³ que he de retornar, la landing page?
 	return "";
 }
 
@@ -3993,14 +3953,14 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 		else if (pot_semitrans && !EsCapaBinaria(capa) && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 				cdns.push("SEMITRANSPARENT");
 
-		//Afegeixo els paràmetres addicionals que venen de la definició dels valors.
+		//Afegeixo els parÃ metres addicionals que venen de la definiciÃ³ dels valors.
 		if (valors_i && valors_i.param)
 		{
 			var clau_valor;
 			for (var i_param=0; i_param<valors_i.param.length; i_param++)
 			{
 				clau_valor=valors_i.param[i_param];
-				//Si la clau no comença per "DIM_", llavors ho afageixo jo
+				//Si la clau no comenÃ§a per "DIM_", llavors ho afageixo jo
 				cdns.push("&",
 					((clau_valor.clau.nom.toUpperCase()!="TIME" && clau_valor.clau.nom.toUpperCase()!="ELEVATION" && clau_valor.clau.nom.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
 					clau_valor.clau.nom,"=",clau_valor.valor.nom);
@@ -4013,7 +3973,7 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 				if (capa.dimensioExtra[i_param].i_valor>-1)
 				{
 					var clau=capa.dimensioExtra[i_param].clau.nom;
-					//Si la clau no comença per "DIM_", llavors ho afageixo jo
+					//Si la clau no comenÃ§a per "DIM_", llavors ho afageixo jo
 					cdns.push("&",
 						((clau.toUpperCase()!="TIME" && clau.toUpperCase()!="ELEVATION" && clau.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
 						clau,"=",capa.dimensioExtra[i_param].valor[capa.dimensioExtra[i_param].i_valor].nom);
@@ -4033,8 +3993,8 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 	return cdns.join("");
 }
 
-//i_estil és un index d'estil o -1 si ha de ser l'estil indicat a la capa
-//i_data és un número (positiu o negatiu o null si ha de ser la dada indicada a la capa.
+//i_estil Ã©s un index d'estil o -1 si ha de ser l'estil indicat a la capa
+//i_data Ã©s un nÃºmero (positiu o negatiu o null si ha de ser la dada indicada a la capa.
 function DonaRequestGetMap(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
 var cdns=[], tipus, capa=ParamCtrl.capa[i];
@@ -4090,7 +4050,7 @@ function OmpleVistaCapa(nom_vista, vista, i)
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
 	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET")
 	{
-		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
+		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //AixÃ² no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
 		var image=win.document.getElementById(nom_vista + "_i_raster"+i);
 		CanviaImatgeCapa(image, vista, i, -1, null, null, null);
@@ -4099,8 +4059,8 @@ var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
 		CreaMatriuCapaTiled(nom_vista, vista, i);
 }
 
-//Aquesta funció està en desús i només es fa servir pel video. Useu DonaRequestGetMap() directament. 'estil' és el nom de l'estil o null per fer servir l'estiu predeterminat a l'estructura.
-// ·$· potser ni pel vídeo
+//Aquesta funciÃ³ estÃ  en desÃºs i nomÃ©s es fa servir pel video. Useu DonaRequestGetMap() directament. 'estil' Ã©s el nom de l'estil o null per fer servir l'estiu predeterminat a l'estructura.
+// Â·$Â· potser ni pel vÃ­deo
 function DonaNomImatge(i_capa, vista, estil, pot_semitrans, i_data)
 {
 var i_estil, capa=ParamCtrl.capa[i_capa];
@@ -4137,13 +4097,13 @@ var capa=ParamCtrl.capa[i_capa];
 		) + (capa.estil[capa.i_estil].DescItems ? " (" + DonaCadena(capa.estil[capa.i_estil].DescItems) +")" : "");
 }
 
-//Igual que la funció posterior però retorna sempre un text
+//Igual que la funciÃ³ posterior perÃ² retorna sempre un text
 function DonaTextCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
 {
 	return DonaCadena(DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte));
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
+//Aquesta funciÃ³ assumeix que hi ha estil.categories i estil.atributs. Si alguna descripciÃ³ era undefined, obvia aquesta i continua amb les altres. Si la cadena Ã©s multiidioma es retorna un objecte
 function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
 {
 	if (atributs.length==1)
@@ -4155,34 +4115,34 @@ function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats
 	if (!categories[i_color])
 		return "";
 
-	var value_text;	
+	var value_text;
 	var i_ple=0;
 	var desc_atrib;
-	
+
 	if (compacte)
 		value_text="[";
 	else
 		value_text="<br>";
-	
+
 	for (var i_a=0; i_a<atributs.length; i_a++)
 	{
 		if (!categories[i_color][atributs[i_a].nom])
-			continue; //return ""; -> per algun atribut pot no haver valor però puc mostrar els altres
-						
+			continue; //return ""; -> per algun atribut pot no haver valor perÃ² puc mostrar els altres
+
 		if (filtra_stats && atributs[i_a].nom.substring(0,7) == "$stat$_")
 			continue; //en un context de "nomes_atrib_simples" els stat no els vull mostrar
-		
-		if (atributs[i_a].mostrar == "no" || (atributs[i_a].mostrar == "si_ple" && 
+
+		if (atributs[i_a].mostrar == "no" || (atributs[i_a].mostrar == "si_ple" &&
 				(!categories[i_color][atributs[i_a].nom] || categories[i_color][atributs[i_a].nom].length==0)))
-			continue; //si és no mostrable o és si_ple i buit no el mostro
-			
+			continue; //si Ã©s no mostrable o Ã©s si_ple i buit no el mostro
+
 		if (compacte)
 			desc_atrib=(atributs[i_a].simbol ? atributs[i_a].simbol : (atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : atributs[i_a].nom));
 		else
 			desc_atrib=(atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : (atributs[i_a].simbol ? atributs[i_a].simbol : atributs[i_a].nom));
-		
+
 		if (atributs[i_a].NDecimals)
-			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][atributs[i_a].nom], atributs[i_a].NDecimals);		
+			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][atributs[i_a].nom], atributs[i_a].NDecimals);
 		else
 			value_text+= desc_atrib + ": " + categories[i_color][atributs[i_a].nom];
 		if (atributs[i_a].unitats)
@@ -4193,7 +4153,7 @@ function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats
 			if (compacte)
 				value_text+="; "
 			else
-				value_text+="<br>"				
+				value_text+="<br>"
 		}
 	}
 	if (compacte)
@@ -4204,12 +4164,12 @@ function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats
 	else
 	{
 		if (value_text.length>4 && value_text.substr(value_text.length-4)=="<br>")
-			value_text=value_text.substring(0, value_text.length-4);	
+			value_text=value_text.substring(0, value_text.length-4);
 	}
-	
-	if (i_ple==1) 
+
+	if (i_ple==1)
 	{
-		if (compacte) //si només hi ha un atribut no cal posar-lo entre "[", ni tampoc posar la descripció abans ni els ": "
+		if (compacte) //si nomÃ©s hi ha un atribut no cal posar-lo entre "[", ni tampoc posar la descripciÃ³ abans ni els ": "
 			value_text=value_text.substr(desc_atrib.length+2+2);
 		else
 			value_text=value_text.substr(desc_atrib.length+2+4);
@@ -4240,7 +4200,7 @@ function onErrorCanviaImatge(event)
 
 function EsCapaBinaria(capa)
 {
-	return capa.FormatImatge=="application/x-img" || 
+	return capa.FormatImatge=="application/x-img" ||
 	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 }
 
@@ -4294,10 +4254,10 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 }
 
-/* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
+/* No puc fer servir aquestas funciÃ³ donat que els PNG's progressius no es tornen a mostrar nomÃ©s fent un showLayer. Els torno a demanar sempre.
 function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
-	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
+	//AquÃ­ no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu.gif", aquest no Ã©s canviat pel nou idioma. De fet, aixÃ² es podria fer durant el canvi d'idioma perÃ² Ã©s un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
 		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
@@ -4316,8 +4276,8 @@ var atribut=capa_digi.atributs[i_atribut];
 
 	if (atribut.FormulaConsulta)
 	{
-		// Aquí hem de pensar que passa si hi ha v[] però encara no estan carregats.
-		// En aquest punt es demanes les capes v[] per fer servir més tard una consulta per localització
+		// AquÃ­ hem de pensar que passa si hi ha v[] perÃ² encara no estan carregats.
+		// En aquest punt es demanes les capes v[] per fer servir mÃ©s tard una consulta per localitzaciÃ³
 		if (!param["v_carregat_"+i_atribut] && HiHaValorsNecessarisCapaFormulaconsulta(capa_digi, atribut.FormulaConsulta))
 		{
 			param["v_carregat_"+i_atribut]=true;
@@ -4418,7 +4378,7 @@ var env=vista.EnvActual;
 				var simbols=estil.simbols[i_simb];
 				if (simbols.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
+					//PrecÃ rrega de valors si hi ha referencies rÃ ster.
 					var i=DonaIAtributsDesDeNomAtribut(capa_digi, simbols.NomCamp)
 					if (i==-1)
 					{
@@ -4430,7 +4390,7 @@ var env=vista.EnvActual;
 				}
 				if (simbols.NomCampFEscala)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
+					//PrecÃ rrega de valors si hi ha referencies rÃ ster.
 					var i=DonaIAtributsDesDeNomAtribut(capa_digi, simbols.NomCampFEscala)
 					if (i==-1)
 					{
@@ -4444,7 +4404,7 @@ var env=vista.EnvActual;
 		}
 		if (estil.NomCampSel)
 		{
-			//Precàrrega de valors de la selecció
+			//PrecÃ rrega de valors de la selecciÃ³
 			i_atri_sel=DonaIAtributsDesDeNomAtribut(capa_digi, estil.NomCampSel)
 			if (i_atri_sel==-1)
 			{
@@ -4462,7 +4422,7 @@ var env=vista.EnvActual;
 				if (forma.interior &&
 					forma.interior.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
+					//PrecÃ rrega de valors si hi ha referencies rÃ ster.
 					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.interior.NomCamp)
 					if (i_atri_interior[i_forma]==-1)
 					{
@@ -4475,7 +4435,7 @@ var env=vista.EnvActual;
 				if (forma.vora &&
 					forma.vora.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
+					//PrecÃ rrega de valors si hi ha referencies rÃ ster.
 					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.vora.NomCamp)
 					if (i_atri_vora[i_forma]==-1)
 					{
@@ -4490,7 +4450,7 @@ var env=vista.EnvActual;
 		if (HiHaSimbolitzacioIndexadaPerPropietats(estil))
 		{
 			if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
-				return;  //ja es tornarà a cridar a si mateixa quan la crida assincrona acabi
+				return;  //ja es tornarÃ  a cridar a si mateixa quan la crida assincrona acabi
 		}
 		var previ={}, a_vmin_ncol_interior=[], a_vmin_ncol_interiorSel=[], un_a_vmin_ncol_interior, valor, a_vmin_ncol_vora=[], a_vmin_ncol_voraSel=[], un_a_vmin_ncol_vora, forma, forma_interior, forma_vora;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
@@ -4547,7 +4507,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'ediciÃ³
 					{
 						forma_vora=forma.voraSel;
 						un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
@@ -4616,7 +4576,7 @@ var env=vista.EnvActual;
 							i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
 							i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
 							ctx.lineTo(i_col, i_fil);
-						}						
+						}
 					}
 					PintaCtxColorVoraIInterior(forma_vora, null, ctx, previ);
 				}
@@ -4630,7 +4590,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'ediciÃ³
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -4765,7 +4725,7 @@ var env=vista.EnvActual;
 
 								if (i_simbol!=-1)
 								{
-									if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
+									if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'ediciÃ³
 										icona=simbol[i_simbol].IconaSel;
 									else if (estil.NomCampSel)
 									{
@@ -4792,8 +4752,8 @@ var env=vista.EnvActual;
 											env_icona=DonaEnvIcona({x: coord[0],y: coord[1]}, icona);
 										if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
 										{
-											//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa_digi --> No he de considerar ni els marges de la vista ni els scrolls.
-											//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+											//la layer l_obj_digi tÃ© les coordenades referides a la seva layer pare que Ã©s l_capa_digi --> No he de considerar ni els marges de la vista ni els scrolls.
+											//la manera de fer aixÃ² estÃ  extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
 
 											if (Array.isArray(icona))
 											{
@@ -4808,7 +4768,7 @@ var env=vista.EnvActual;
 												{
 													forma=estil.formes[i_forma];
 
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'ediciÃ³
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -4910,10 +4870,10 @@ var env=vista.EnvActual;
 											}
 											else
 											{
-												//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que està en un altre window. El problema ha estat analitzat aquí:
+												//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que estÃ  en un altre window. El problema ha estat analitzat aquÃ­:
 												//https://stackoverflow.com/questions/34402718/img-from-opener-is-not-img-type-for-canvas-drawimage-in-ie-causing-type-mismatch
 												//In IE there is a problem "img from opener is not img type for canvas drawImage (DispHTMLImg, being HTMLImageElement instead) in IE causing TYPE_MISMATCH_ERR"
-												//Després d'invertir dies, he estat incapaç de trobar una manera de resoldre això en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
+												//DesprÃ©s d'invertir dies, he estat incapaÃ§ de trobar una manera de resoldre aixÃ² en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
 												if (icona.img.sha_carregat==true)
 												{
 													try
@@ -5107,7 +5067,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 			if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusWMTS_SOAP")
 			{
 				//if(j==vista_tiled.JTileMin && i==vista_tiled.ITileMin)
-				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè el estil i el i_data sempre són null en el WMTS??
+				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: PerquÃ¨ el estil i el i_data sempre sÃ³n null en el WMTS??
 			}
 			else
 			{
@@ -5122,7 +5082,7 @@ function DonaTextMatriuCapaTiledImprimir(i_capa, ncol, nfil, env)
 {
 var cdns=[], tile_matrix;
 
-	//Donat que només és possible imprimir conservant la resolució.
+	//Donat que nomÃ©s Ã©s possible imprimir conservant la resoluciÃ³.
 	var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	if (i_tile_matrix_set==-1)
@@ -5164,7 +5124,7 @@ var cdns=[], tile_matrix;
 	clipLayer(layer_vista, dx, dy, ncol, nfil);
 
 	//Genero la taula
-	//NJ a JM: cal fer alguna modificació aquí també perquè funcioni correctament la impressió en SOAP
+	//NJ a JM: cal fer alguna modificaciÃ³ aquÃ­ tambÃ© perquÃ¨ funcioni correctament la impressiÃ³ en SOAP
 	cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
 	for (var j=j_tile_min; j<=j_tile_max; j++)
 	{
@@ -5199,13 +5159,13 @@ function DonaCadenaBotonsVistaLlegendaSituacioCoord()
 {
 var cdns=[]
 	if (isFinestraLayer(window, "llegenda") && !isFinestraLayerVisible(window, "llegenda"))
-		cdns.push(CadenaBotoPolsable('boto_mostra_llegenda', 'mostra_llegenda', DonaCadenaLang({"cat":"Mostra llegenda", "spa":"Muestra legenda", "eng":"Show legend","fre":"Afficher la légende"}), 'MostraFinestraLlegenda(event)'), "<br>",
+		cdns.push(CadenaBotoPolsable('boto_mostra_llegenda', 'mostra_llegenda', GetMessage("ShowLegend", "miramon"), 'MostraFinestraLlegenda(event)'), "<br>",
 			"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=\"1\" height=\"3\"><br>");
 	if (isFinestraLayer(window, "situacio") && !isFinestraLayerVisible(window, "situacio"))
-		cdns.push(CadenaBotoPolsable('boto_mostra_situacio', 'mostra_situacio', DonaCadenaLang({"cat":"Mostra mapa de situació", "spa":"Muestra mapa de situación", "eng":"Show situation map", "fre":"Afficher la carte de situation"}), 'MostraFinestraSituacio(event)'),"<br>",
+		cdns.push(CadenaBotoPolsable('boto_mostra_situacio', 'mostra_situacio', GetMessage("ShowSituationMap", "miramon"), 'MostraFinestraSituacio(event)'),"<br>",
 			"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=\"1\" height=\"3\"><br>");
 	if (isFinestraLayer(window, "coord") && !isFinestraLayerVisible(window, "coord"))
-		cdns.push(CadenaBotoPolsable('boto_mostra_coord', 'mostra_coord', DonaCadenaLang({"cat":"Mostra informació de la posició", "spa":"Muestra información sobre la posición", "eng":"Show information about current position","fre":"Afficher des informations sur la position actuelle"}), 'MostraFinestraCoord(event)'),"<br>");
+		cdns.push(CadenaBotoPolsable('boto_mostra_coord', 'mostra_coord', GetMessage("ShowInfoCurrentPosition", "miramon"), 'MostraFinestraCoord(event)'),"<br>");
 	return cdns.join("");
 }
 
@@ -5250,16 +5210,16 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 var p, unitats_CRS;
 
 	if (ParamCtrl.CoordExtremes=="longlat_g")
-		unitats_CRS="°";
+		unitats_CRS="Â°";
 	else if (ParamCtrl.CoordExtremes=="proj")
 	{
 		p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		if (p=="°")
+		if (p=="Â°")
 			unitats_CRS=p;
 		else
 			unitats_CRS=" "+p;
 	}
-	else //if (ParamCtrl.CoordExtremes=="longlat_gms") -> tant pel cas gms (pq ja les té) com pel cas desconegut no poso unitats
+	else //if (ParamCtrl.CoordExtremes=="longlat_gms") -> tant pel cas gms (pq ja les tÃ©) com pel cas desconegut no poso unitats
 		unitats_CRS="";
 
 	NCreaVista++;
@@ -5473,7 +5433,7 @@ var p, unitats_CRS;
 	if(ParamCtrl.MostraBarraEscala && vista.i_nova_vista==NovaVistaPrincipal)
 	{
 		cdns.push("  <tr>",
-		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLEscala(vista.EnvActual) ,"</td>");  //Servirà per indicar l'escala.
+		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLEscala(vista.EnvActual) ,"</td>");  //ServirÃ  per indicar l'escala.
 		if (cal_coord && !cal_vora)
 			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\"></td>\n");
 		cdns.push("  </tr>");
@@ -5506,7 +5466,7 @@ var p, unitats_CRS;
 		}
 
 
-		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
+		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressiÃ³n tingui events.
 		{
 			//Dibuixo el rectangle de zoom sobre la vista (inicialment invisible)
 			cdns.push(textHTMLLayer(nom_vista+SufixZRectangle, DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
@@ -5515,30 +5475,30 @@ var p, unitats_CRS;
 			cdns.push(textHTMLLayer(nom_vista+SufixTelTrans, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 
 		    var barra_slider=[];
-		    if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) && 
+		    if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) &&
 			vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
 		    {
 			barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 			if (ParamCtrl.VistaBotonsBruixola && (parseInt(document.getElementById("vista").style.height) >= 300))
 			{
 				barra_slider.push("<tr><td align='center'>");
-				barra_slider.push(CadenaBotoPolsable('boto_nw', 'nw', DonaCadenaLang({"cat":"mou al Nord-Oest", "spa":"mover al NorOeste", "eng":"move to North-West","fre":"déplacer vers le Nord-Ouest"}), 'MouLaVistaEventDeSalt(event,-1,1)'));
-				barra_slider.push(CadenaBotoPolsable("boto_n", "n", DonaCadenaLang({"cat":"mou al Nord", "spa":"mover al Norte", "eng":"move to North","fre":"déplacer vers le Nord"}), "MouLaVistaEventDeSalt(event,0,1)"));
-				barra_slider.push(CadenaBotoPolsable("boto_ne", "ne", DonaCadenaLang({"cat":"mou al Nord-Est", "spa":"mover al Noreste", "eng":"move to North-East","fre":"déplacer vers le Nord-Est"}), "MouLaVistaEventDeSalt(event,1,1)"));
+				barra_slider.push(CadenaBotoPolsable('boto_nw', 'nw', GetMessage("moveNorthWest", "miramon"), 'MouLaVistaEventDeSalt(event,-1,1)'));
+				barra_slider.push(CadenaBotoPolsable("boto_n", "n", GetMessage("moveNorth", "miramon"), "MouLaVistaEventDeSalt(event,0,1)"));
+				barra_slider.push(CadenaBotoPolsable("boto_ne", "ne", GetMessage("moveNorthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,1)"));
 				barra_slider.push("<br/>");
-				barra_slider.push(CadenaBotoPolsable("boto_w", "w", DonaCadenaLang({"cat":"mou a l'Oest", "spa":"mover al Oeste", "eng":"move to West","fre":"déplacer vers l'Ouest"}), "MouLaVistaEventDeSalt(event,-1,0)"));
-				barra_slider.push(CadenaBotoPolsable("boto_zoomall", "zoomall", DonaCadenaLang({"cat":"vista general", "spa":"vista general", "eng":"general view","fre":"vue générale"}), "PortamAVistaGeneralEvent(event)"));
-				barra_slider.push(CadenaBotoPolsable("boto_e", "e", DonaCadenaLang({"cat":"mou a l'Est", "spa":"mover al Este", "eng":"move to East","fre":"déplacer vers l'Est"}), "MouLaVistaEventDeSalt(event,1,0)"));
+				barra_slider.push(CadenaBotoPolsable("boto_w", "w", GetMessage("moveWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,0)"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoomall", "zoomall", GetMessage("generalView", "barra"), "PortamAVistaGeneralEvent(event)"));
+				barra_slider.push(CadenaBotoPolsable("boto_e", "e", GetMessage("moveEast", "miramon"), "MouLaVistaEventDeSalt(event,1,0)"));
 				barra_slider.push("<br/>");
-				barra_slider.push(CadenaBotoPolsable("boto_sw", "sw", DonaCadenaLang({"cat":"mou al Sud-Oest", "spa":"mover al Suroeste", "eng":"move to South-West","fre":"déplacer vers le Sud-Ouest"}), "MouLaVistaEventDeSalt(event,-1,-1)"));
-				barra_slider.push(CadenaBotoPolsable("boto_s", "s", DonaCadenaLang({"cat":"mou al Sud", "spa":"mover al Sur", "eng":"move to South","fre":"déplacer vers le Sud"}), "MouLaVistaEventDeSalt(event,0,-1)"));
-				barra_slider.push(CadenaBotoPolsable("boto_se", "se", DonaCadenaLang({"cat":"mou al Sud-Est", "spa":"mover al Sureste", "eng":"move to South-East","fre":"déplacer vers le Sud-Est"}), "MouLaVistaEventDeSalt(event,1,-1)"));
+				barra_slider.push(CadenaBotoPolsable("boto_sw", "sw", GetMessage("moveSouthWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,-1)"));
+				barra_slider.push(CadenaBotoPolsable("boto_s", "s", GetMessage("moveSouth", "miramon"), "MouLaVistaEventDeSalt(event,0,-1)"));
+				barra_slider.push(CadenaBotoPolsable("boto_se", "se", GetMessage("moveSouthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,-1)"));
 				barra_slider.push("</td></tr><tr><td height='15px'></td></tr>");
 			}
 			barra_slider.push("<tr><td align='center'>");
 			if (ParamCtrl.VistaBotonsZoom)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", DonaCadenaLang({"cat":"augmenta 1 nivell de zoom", "spa":"augmenta 1 nivel de zoom", "eng":"increase 1 zoom level","fre":"augmenter 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", GetMessage("IncreaseZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
 				barra_slider.push("<br>");
 			}
 			if (ParamCtrl.VistaSliderZoom && (parseInt(document.getElementById("vista").style.height) >= 500))
@@ -5547,19 +5507,19 @@ var p, unitats_CRS;
 			}
 			if (ParamCtrl.VistaBotonsZoom)
 			{
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", DonaCadenaLang({"cat":"redueix 1 nivell de zoom", "spa":"reduce 1 nivel de zoom", "eng":"reduce 1 zoom level","fre":"réduire 1 niveau de zoom"}), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", GetMessage("ReduceZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
 			}
 			barra_slider.push("</td></tr>");
 			if (ParamCtrl.VistaEscalaNumerica && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 			{
 				barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
 				barra_slider.push("<br>");
-				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", DonaCadenaLang({"cat":"anar a coordenada", "spa":"ir a coordenada", "eng":"go to coordinate", "fre":"aller à la coordonnée"}), "MostraFinestraAnarCoordenadaEvent(event)"));
-				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", DonaCadenaLang({"cat":"vista prèvia", "spa":"vista previa", "eng":"previous view","fre":"vue préalable"}), "RecuperaVistaPreviaEvent(event)"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", GetMessage("goToCoordinate", "barra"), "MostraFinestraAnarCoordenadaEvent(event)"));
+				barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", GetMessage("previousView", "barra"), "RecuperaVistaPreviaEvent(event)"));
 				if (ParamCtrl.fullScreen)
-					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "exitfullscreen", DonaCadenaLang({"cat":"sortir de pantalla completa", "spa":"salir de pantalla completa", "eng":"exit full screen","fre":"Quitter le mode plein écran"}), "ExitFullScreenEvent(event)"));
+					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "exitfullscreen", GetMessage("exitFullScreen", "miramon"), "ExitFullScreenEvent(event)"));
 				else
-					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "fullscreen", DonaCadenaLang({"cat":"pantalla completa", "spa":"pantalla completa", "eng":"full screen","fre":"plein écran"}), "GoFullScreenEvent(event)"));
+					barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "fullscreen", GetMessage("fullScreen", "miramon"), "GoFullScreenEvent(event)"));
 
 				barra_slider.push("</td></tr>");
 			}
@@ -5583,16 +5543,16 @@ var p, unitats_CRS;
 			barra_slider.push("</span>");
 		    }
 
-		    barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", 
+		    barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",
 				DonaCadenaBotonsVistaLlegendaSituacioCoord(),
 				"</span>");
 		    //if (barra_slider.length) Finalment la creo sempre per poder canviar el seu interior si cal.
 		    cdns.push(textHTMLLayer(nom_vista+SufixSliderZoom, DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
 		}
-		
+
 		contentLayer(elem, cdns.join(""));
 
-		//Només s'hauria de fer si hi ha peticions SOAP
+		//NomÃ©s s'hauria de fer si hi ha peticions SOAP
 		RespostaGetTileWMTS_SOAP.splice(0,RespostaGetTileWMTS_SOAP.length);
 		ajaxGetTileWMTS_SOAP.splice(0,ajaxGetTileWMTS_SOAP.length);
 
@@ -5611,7 +5571,7 @@ var p, unitats_CRS;
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
 					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
-				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
+				else if (capa.estil) //si la capa ara Ã©s no visible, i tÃ© estils, he de mirar si hi ha grÃ fics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
@@ -5649,12 +5609,12 @@ function PortamAAmbit(env)
 		{
 			if (costat>ParamCtrl.zoom[0].costat)
 			{
-				alert(DonaCadenaLang({"cat":"No hi ha zoom inferior a mostrar.", "spa":"No hay zoom inferior a mostrar.", "eng":"There is no more zoom out to be shown.", "fre":"Il n'y a pas un zoom inférieur à montrer."}));
+				alert(GetMessage("NoMoreZoomOut", "miramon"));
 				costat=ParamCtrl.zoom[0].costat;
 			}
 			else if (costat<ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 			{
-				alert(DonaCadenaLang({"cat":"No hi ha zoom superior a mostrar.", "spa":"No hay zoom superior a mostrar.", "eng":"There is no more zoom in to be shown.", "fre":"Il n'y a pas un zoom supérieur à montrer."}));
+				alert(GetMessage("NoMoreZoomIn", "miramon"));
 				costat=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
 			}
 		}
@@ -5676,10 +5636,6 @@ function PortamAAmbit(env)
 		else
 		{
 			RevisaEstatsCapes();
-			if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
-				;
-			else
-			CreaLlegenda();
 			RepintaMapesIVistes();
 		}
 	}
@@ -5729,8 +5685,8 @@ var cal_coord=(ParamCtrl.CoordExtremes) ? true : false;
 
 function ActualitzaEnvParametresDeControl()
 {
-/*Generalment demandes un ambit que està desplaçat de la malla de píxels. El resultat és que la CGI et retorna
-  una imatge 1 píxel més gran del compte. Per prevenir això, decremento en 1. Aquest truco està molts llocs!. Compte!*/
+/*Generalment demandes un ambit que estÃ  desplaÃ§at de la malla de pÃ­xels. El resultat Ã©s que la CGI et retorna
+  una imatge 1 pÃ­xel mÃ©s gran del compte. Per prevenir aixÃ², decremento en 1. Aquest truco estÃ  molts llocs!. Compte!*/
 	if (ParamCtrl.NColNFilAuto)
 		CalculaMidesVista(false);
 
@@ -5764,7 +5720,7 @@ var env_ll;
 
 	if (i_min==ParamCtrl.ImatgeSituacio.length)
 	{
-	    //Agafo la més general en aquest cas.
+	    //Agafo la mÃ©s general en aquest cas.
 	    i_max=0;
 	    for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
 	    {
@@ -5791,7 +5747,7 @@ var env_ll;
 
 /*'env' pot ser null
 Retorna: 2 si no troba el 'crs'
-	1 si no necessita canviar ni el crs ni la imatge de situació.
+	1 si no necessita canviar ni el crs ni la imatge de situaciÃ³.
 Compte que si ParamCtrl.araCanviProjAuto==true RepintaMapesIVistes pot canviar les coses altre cop.
 */
 function EstableixNouCRSEnv(crs, env)
@@ -5816,8 +5772,8 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 
 	if (i_min==ParamCtrl.ImatgeSituacio.length)
 	{
-		//Agafo la més general en aquest cas.
-		//Busco el primer per començar
+		//Agafo la mÃ©s general en aquest cas.
+		//Busco el primer per comenÃ§ar
 		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
 			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS)
@@ -5827,8 +5783,8 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 			}
 		}
 		if (i==ParamCtrl.ImatgeSituacio.length)
-			return 2;  //No és possible canviar al CRS que m'han demanat perquè no hi ha mapa de situació en aquest CRS.
-		//Ara miro si n'hi ha un de més general.
+			return 2;  //No Ã©s possible canviar al CRS que m'han demanat perquÃ¨ no hi ha mapa de situaciÃ³ en aquest CRS.
+		//Ara miro si n'hi ha un de mÃ©s general.
 		for (var i=i_max+1; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
 			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
@@ -5864,8 +5820,7 @@ function RepintaMapesIVistes()
 	CreaSituacio();
 	CreaVistes();
 	CreaProjeccio();
-	if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
-		CreaLlegenda();
+	CreaLlegenda();
 	if (ParamCtrl.ConsultaTipica)
 	{
 		OmpleXYAmpleAltEnvConsultesTipiquesCompleta(null);
@@ -5929,14 +5884,27 @@ var estil;
 	return null;
 }
 
+function DonaEstilDesDeIdEstil(capa, id)
+{
+var estil;
+	for (var i=0; i<capa.estil.length; i++)
+	{
+		estil=capa.estil[i];
+		if (id==estil.id)
+			return estil;
+	}
+	return null;
+}
+
+
 function DuplicaEstilCapa(capa, i_estil_patro, nom_nou)
 {
 var i_estil_nou=capa.estil.length, estil;
 
 	if(capa.estil.length==1 && !capa.estil[0].nom && !capa.estil[0].desc)
 	{
-		// Si la capa només té un estil, potser que no tingui ni nom ni descripció perquè és l'estil per defecte
-		// com que ara n'afegeix-ho un de nou li he de possar com a mínim la descripció
+		// Si la capa nomÃ©s tÃ© un estil, potser que no tingui ni nom ni descripciÃ³ perquÃ¨ Ã©s l'estil per defecte
+		// com que ara n'afegeix-ho un de nou li he de possar com a mÃ­nim la descripciÃ³
 		capa.estil[0].desc=GetMessageJSON("byDefault","cntxmenu");
 	}
 	capa.estil[i_estil_nou]=JSON.parse(JSON.stringify(capa.estil[(i_estil_patro) ? i_estil_patro : 0]));
@@ -5945,7 +5913,7 @@ var i_estil_nou=capa.estil.length, estil;
 		delete estil.diagrama;
 	estil.id=nom_nou;
 	estil.desc=nom_nou;
-	estil.origen=OriginUsuari;  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
+	estil.origen=OriginUsuari;  //AixÃ² ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
 
 	return i_estil_nou;
@@ -5958,10 +5926,7 @@ var capa, j, i, i_estil;
 
 	if (capa_estil && capa_visible.length!=capa_estil.length)
 	{
-		alert(DonaCadenaLang({"cat":"El nombre d\'estils no es correspon amb el nombre de capes.",
-					 "spa":"El número de estilos no se corresponde con el número de capas.",
-					 "eng":"Style number is no the same of the number of layers.",
-					 "fre":"Le nombre de styles ne correspond pas au nombre de couches."}));
+		alert(GetMessage("StyleNumberNotNumberLayers", "miramon"));
 		capa_estil=null;
 	}
 
@@ -5986,9 +5951,9 @@ var capa, j, i, i_estil;
 					CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
 				else
 				{
-					alert(DonaCadenaLang({"cat":"La capa", "spa":"La capa", "eng":"Layer", "fre":"La couche"}) + " " + capa_visible[j] + " " +
-						DonaCadenaLang({"cat":"indicada a", "spa":"indicada en", "eng":"indicated at", "fre":"indiquée à"}) + " " + param_name_layers +  " " +
-						DonaCadenaLang({"cat":"no pot ser activada", "spa":"no puede ser activada", "eng":"cannot be activaded", "fre":"ne peut pas être activée"}) + ".");
+					alert(GetMessage("Layer") + " " + capa_visible[j] + " " +
+						GetMessage("indicatedAt") + " " + param_name_layers +  " " +
+						GetMessage("cannotBeActivated") + ".");
 					continue;
 				}
 				if (capa_estil && capa_estil[j])
@@ -6016,18 +5981,17 @@ var capa, j, i, i_estil;
 								    capa.i_estil=i_estil;
 								    break;
 							    }
-
 						    }
 						    if (i_estil==capa.estil.length)
 						    {
 							    if (capa_estil[j]!=null && capa_estil[j]!="")  //si es blanc vol dir l'estil per defecte
-								    alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"})+ " " + capa_estil[j] + " " +DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
+								    alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " + GetMessage("ForLayer") + " " + capa_visible[j]);
 						    }
 					    }
 					}
 					else
 					{
-						//Si és un servidor de MiraMon només pot dir semitransparent.
+						//Si Ã©s un servidor de MiraMon nomÃ©s pot dir semitransparent.
 						if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 						{
 							if (capa.visible!="no")
@@ -6037,8 +6001,8 @@ var capa, j, i, i_estil;
 						else
 						{
 							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].if!=capa_estil[j])
-								alert(DonaCadenaLang({"cat":"No trobo l'estil", "spa":"No encuentro el estilo", "eng":"Cannot find style", "fre":"Impossible trouver le style"}) + " " + capa_estil[j] + " " +
-								    DonaCadenaLang({"cat":"per a la capa", "spa":"para la capa", "eng":"for the layer", "fre":"pour cette couche"}) + " " + capa_visible[j]);
+								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " +
+								    GetMessage("ForLayer") + " " + capa_visible[j]);
 					    	}
 					}
 				}
@@ -6049,8 +6013,8 @@ var capa, j, i, i_estil;
 			}
 		}
 		if (i==ParamCtrl.capa.length)
-			alert(DonaCadenaLang({"cat":"No trobo la capa", "spa":"No encuentro la capa", "eng":"Cannot find layer","fre":"Impossible trouver la couche"}) + " " + capa_visible[j] + " " +
-					DonaCadenaLang({"cat":"indicada a", "spa":"indicada en", "eng":"indicated at", "fre":"indiquée à"}) + " " +  param_name_layers);
+			alert(GetMessage("CannotFindLayer") + " " + capa_visible[j] + " " +
+					GetMessage("indicatedAt") + " " +  param_name_layers);
 	}
 }
 
@@ -6059,60 +6023,45 @@ function ComprovaOpcionsAccio()
 {
 	if(Accio.accio==null)
 	{
-		/*alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'REQUEST'",
-							  "spa":"No se ha encontrado el parámetro 'REQUEST'",
+		/*alert(DonaCadenaLang({"cat":"No s'ha trobat el parÃ metre 'REQUEST'",
+							  "spa":"No se ha encontrado el parÃ¡metro 'REQUEST'",
 							  "eng":"Cannot find the 'REQUEST' parameter",
-							  "fre":"Le paramètre 'REQUEST' n'a pas été trouvé"}));*/
+							  "fre":"Le paramÃ¨tre 'REQUEST' n'a pas Ã©tÃ© trouvÃ©"}));*/
 		return false;
 	}
 	if(Accio.accio&AccioValidacio)
 	{
 		if(Accio.servidor==null)
 		{
-			alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'SERVERTORESPONSE'",
-								  "spa":"No se ha encontrado el parámetro 'SERVERTORESPONSE'",
-								  "eng":"Cannot find the 'SERVERTORESPONSE' parameter",
-								  "fre":"Le paramètre 'SERVERTORESPONSE' n'a pas été trouvé"}));
+			alert(GetMessage("CannotFindServerToResponse", "miramon"));
 			return false;
 		}
 		if(Accio.capes==null)
 		{
-			alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'TEST_LAYERS'",
-								  "spa":"No se ha encontrado el parámetro 'TEST_LAYERS'",
-								  "eng": "Cannot find the 'TEST_LAYERS' parameter",
-								  "fre":"Le paramètre 'TEST_LAYERS' n'a pas été trouvé"}));
+			alert(GetMessage("CannotFindTestLayers", "miramon"));
 			return false;
 		}
 		if(Accio.camps==null)
 		{
-			alert(DonaCadenaLang({"cat":"No s'ha trobat el paràmetre 'TEST_FIELDS'",
-								  "spa":"No se ha encontrado el parámetro 'TEST_FIELDS'",
-								  "eng":"Cannot find the 'TEST_FIELDS'  parameter",
-								  "fre":"Le paramètre 'TEST_FIELDS' n'a pas été trouvé"}));
+			alert(GetMessage("CannotFindTestFields", "miramon"));
 			return false;
 		}
 
 		if(Accio.camps.length!=Accio.capes.length)
 		{
-			alert(DonaCadenaLang({"cat":"El nombre de camps no es correspon amb el nombre de capes.",
-								  "spa":"El número de campos no se corresponde con el número de capas.",
-								  "eng":"Field number is not the same of the number of layers.",
-								  "fre":"Le nombre de champs ne correspond pas au nombre de couches."}));
+			alert(GetMessage("FieldNumberNotNumberLayers", "miramon") + ".");
 			return false;
 		}
 		if(Accio.valors && Accio.valors.length!=Accio.capes.length)
 		{
-			alert(DonaCadenaLang({"cat":"El nombre de valors no es correspon amb el nombre de capes.",
-								  "spa":"El número de valores no se corresponde con el número de capas.",
-								  "eng":"Field values number is not the same of the number of layers.",
-								  "fre":"Le nombre de valeurs ne correspond pas au nombre de couches."}));
+			alert(GetMessage("ValuesNumberNotNumberLayers", "miramon") + ".");
 			return false;
 		}
 
 		if(capa)
 		{
-			//Cal marcar com a consultables les capes sol·licitades en l'acció i la resta com a no consultables
-			//Ho faré mentre les recorro per comprobar que són correctes
+			//Cal marcar com a consultables les capes solÂ·licitades en l'acciÃ³ i la resta com a no consultables
+			//Ho farÃ© mentre les recorro per comprobar que sÃ³n correctes
 			for (var j=0; j<ParamCtrl.capa.length; j++)
 			{
 				if(ParamCtrl.capa[j].consultable=="si")
@@ -6131,26 +6080,20 @@ function ComprovaOpcionsAccio()
 				}
 				if(j==ParamCtrl.capa.length) //Capa no trobada
 				{
-					alert(DonaCadenaLang({"cat":"La capa " + Accio.capes[i] + " indicada al paràmetre TEST_LAYERS no existeix.",
-										  "spa":"La capa " + Accio.capes[i] + " indicada en el parámetro TEST_LAYERS no existe.",
-										  "eng":"Layer " + Accio.capes[i] + " indicated in TEST_LAYERS parameter does not exist.",
-										  "fre":"La couche " + Accio.capes[i] + " indiquée au paramètre TEST_LAYERS n'existe pas."}));
+					alert(GetMessage("Layer") + Accio.capes[i] + GetMessage("indicatedTestLayerNotExist") + ".");
 					return false;
 				}
 			}
 
 		}
-		//Comprovo si puc anar a alguna coordenada perquè m'ho han indicat o a partir de la consulta típica
+		//Comprovo si puc anar a alguna coordenada perquÃ¨ m'ho han indicat o a partir de la consulta tÃ­pica
 		if(Accio.coord)
 		{
 			if(isNaN(Accio.coord.x) || isNaN(Accio.coord.y))
 				Accio.coord=null;
 			else if(!EsPuntDinsAmbitNavegacio(Accio.coord))
 			{
-				alert(DonaCadenaLang({"cat":"El punt sol·licitat (x,y)="+Accio.coord.x+","+Accio.coord.y+" està fora de l'àmbit de navegació.",
-									  "spa":"El punto solicitado (x,y)="+Accio.coord.x+","+Accio.coord.y+" está fuera del ámbito de navegación.",
-									  "eng":"The requested point (x,y)="+Accio.coord.x+","+Accio.coord.y+" is outside browser envelope.",
-									  "fre":"Le point requis (x,y)="+Accio.coord.x+","+Accio.coord.y+" se trouve dehors le milieu de navigation."}));
+				alert(GetMessage("RequestedPoint", "miramon") + " (x,y)=" + Accio.coord.x + "," + Accio.coord.y + " " + GetMessage("isOutsideBrowserEnvelope", "miramon") + ".");
 				Accio.coord=null;
 			}
 			else
@@ -6158,7 +6101,7 @@ function ComprovaOpcionsAccio()
 		}
 		if(Accio.valors)
 		{
-			//Intento buscar un punt on anar mitjançant els valors dels camps
+			//Intento buscar un punt on anar mitjanÃ§ant els valors dels camps
 			// i si el trobo marco
 			if(DadesPendentsAccio==false && BuscaValorAConsultesTipiques())
 				Accio.accio|=AccioConLoc;
@@ -6173,18 +6116,12 @@ function ComprovaOpcionsAccio()
 	{
 		if(Accio.coord==null)
 		{
-			alert(DonaCadenaLang({"cat":"No s'ha trobat els paràmetres 'X' i 'Y'.",
-								  "spa":"No se ha encontrado los parámetro 'X' y 'Y'.",
-								  "eng":"Cannot find 'X' and 'Y' parameters.",
-								  "fre":"Les paramètres 'X' et 'Y' n’ont pas été trouvés."}));
+			alert(GetMessage("CannotFindXYParameters", "miramon"));
 			return false;
 		}
 		else if(!EsPuntDinsAmbitNavegacio(Accio.coord))
 		{
-			alert(DonaCadenaLang({"cat":"El punt sol·licitat (x,y)="+Accio.coord.x+","+Accio.coord.y+" està fora de l'àmbit de navegació.",
-								  "spa":"El punto solicitado (x,y)="+Accio.coord.x+","+Accio.coord.y+" está fuera del ámbito de navegación.",
-								  "eng":"The requested point (x,y)="+Accio.coord.x+","+Accio.coord.y+" is outside browser envelope.",
-								  "fre":"Le point requis (x,y)="+Accio.coord.x+","+Accio.coord.y+" se trouve dehors le milieu de navigation."}));
+			alert(GetMessage("RequestedPoint", "miramon") + " (x,y)=" + Accio.coord.x + "," + Accio.coord.y + " " + GetMessage("isOutsideBrowserEnvelope", "miramon") + ".");
 			return false;
 		}
 	}
@@ -6230,7 +6167,7 @@ function PreparaParamInternCtrl()
 								ncol: ParamCtrl.ncol,
 								CostatZoomActual: ParamCtrl.NivellZoomCostat,
 								i_vista: -1,        //index en l'array ParamCtrl.VistaPermanent[]
-								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si és la vista principal, -2 si és la vista d'impressió, -3 si és el rodet del video i -4 si és el fotograma del video
+								i_nova_vista: NovaVistaPrincipal},  //index en l'array NovaVistaFinestra.vista[] o -1 si Ã©s la vista principal, -2 si Ã©s la vista d'impressiÃ³, -3 si Ã©s el rodet del video i -4 si Ã©s el fotograma del video
 					 EnvLLSituacio: [],
 					 AmpleSituacio: 99,
 					 AltSituacio: 99,
@@ -6253,7 +6190,7 @@ function PreparaParamInternCtrl()
 
 	for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 	{
-		//Càlcul de la envolupant el·lipsoidal
+		//CÃ lcul de la envolupant elÂ·lipsoidal
 		ParamInternCtrl.EnvLLSituacio[i]=DonaEnvolupantLongLat(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS);
 	}
 
@@ -6278,11 +6215,11 @@ function ComprovaVersioConfigMMN(param_ctrl)
 	if (param_ctrl.VersioConfigMMN.Vers!=VersioToolsMMN.Vers ||
 	    param_ctrl.VersioConfigMMN.SubVers>VersioToolsMMN.SubVers)
 	{
-	    alert(DonaCadenaLang({"cat": "La versió de", "spa": "La versión de", "eng": "The version of", "fre": "La version"}) +
-			" config.json (" + param_ctrl.VersioConfigMMN.Vers+"."+param_ctrl.VersioConfigMMN.SubVers + ") " +
-			DonaCadenaLang({"cat": "no es correspon amb la versió de", "spa": "no se corresponde con la versión de", "eng": "it is not according with the version of", "fre": "ne correspond pas à la version de"}) +
-			" tools.htm (" + VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers + "). "+
-			DonaCadenaLang({"cat": "Actualitza't correctament.", "spa": "Actualicese correctamente.", "eng": "Please, upgrade it correctly.", "fre": "S'il vous plaît, actualisez vous correctement."}));
+	    alert(GetMessage("TheVersion", "miramon") +
+			" config.json (" + param_ctrl.VersioConfigMMN.Vers + "." + param_ctrl.VersioConfigMMN.SubVers + ") " +
+			GetMessage("notAccrodingVersion", "miramon") +
+			" tools.htm (" + VersioToolsMMN.Vers + "." + VersioToolsMMN.SubVers + "). " +
+			GetMessage("UpgradeCorrectly", "miramon") + ".");
 			return 1;
 	}
 	return 0;
@@ -6292,7 +6229,7 @@ var ParamCtrl;
 
 function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 {
-	ParamCtrl=param_ctrl; //Ho necessito aquí perquè funcioni la configuració idiomàtica en cas d'haver de preguntar.
+	ParamCtrl=param_ctrl; //Ho necessito aquÃ­ perquÃ¨ funcioni la configuraciÃ³ idiomÃ tica en cas d'haver de preguntar.
 
 	if (typeof Storage !== "undefined" && param.usa_local_storage)
 	{
@@ -6303,10 +6240,7 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 		var original_param_ctrl=JSON.stringify(param_ctrl);
 		if (edited_param_ctrl &&
 			(original_param_ctrl==stored_param_ctrl ||
-			false==confirm(DonaCadenaLang({"cat": "El servidor incorpora una configuració del mapa més nova. Acceptes adoptar-la?",
-							"spa": "El servidor incorpora una configuración del mapa más nueva. ¿Acepta adoptarla?",
-							"eng": "The server has a newer configuration for the map. Do you accept to adopt it?",
-							"fre": "Le serveur intègre une configuration de carte plus récente. Acceptez-vous de l'adopter?"}))))
+			false==confirm(GetMessage("ServerHasNewConfMap", "miramon") + "." + GetMessage("AcceptToAdopt", "miramon"))))
 			ParamCtrl=JSON.parse(edited_param_ctrl);
 		else
 		{
@@ -6318,10 +6252,7 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 			catch (e)
 			{
 			        //localStorage.removeItem(key);
-				alert(DonaCadenaLang({"cat":"No serà possible guardar l'estat del map.",
-						"spa":"No será posible guardar el estado del mapa.",
-						"eng":"Saving the status of the map will not possible.",
-						"fre":"Il ne sera pas possible de sauvegarder le statut de la carte."}));
+				alert(GetMessage("SavingStatusMapNotPossible", "miramon") + ".");
 			}
 		}
 	}
@@ -6348,7 +6279,7 @@ function CreaIdSiCal(obj, i)
 		if (obj.nom)
 			obj.id=obj.nom;
 		else
-			obj.id=i.toString;
+			obj.id=i.toString();
 	}
 }
 
@@ -6357,18 +6288,15 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	var i, j, k;
 
 	if (!param_ctrl.VistaPermanent)
-		param_ctrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
+		param_ctrl.VistaPermanent=[{"nom": "vista"}]; //AixÃ² Ã©s el sistema antic, on nomÃ©s hi podia haver una vista. Si no m'ho especifiquen assumeixo aixÃ².
 
 	if (param_ctrl.CapaDigi)
 	{
-		alert(DonaCadenaLang({"cat": "CapaDigi ja no se suporta. Useu una \"capa\" amb \"model\": \"vector\".",
-				"spa": "CapaDigi ya no se soporta. Use una \"capa\" con \"model\": \"vector\".",
-				"eng": "CapaDigi no longer supported. Use a \"capa\" with \"model\": \"vector\" instead.",
-				"fre": "CapaDigi n'est plus pris en charge. Utilisez un \"capa\" avec le \"model\": \"vector\"."}));
+		alert(GetMessage("CapaDigiNoLongerSupported", "miramon") + ". " + GetMessage("UseLayerModelInstead", "miramon") + ".");
 		return 1;
 	}
-	
-	// arreglem els config.json que deien mostrar: true false errònimament
+
+	// arreglem els config.json que deien mostrar: true false errÃ²nimament
 	var avis_mostrar_atributs=false;
 	var capa, estil;
 
@@ -6377,7 +6305,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	if(protocol=="https:")
 	{
 		// 22-11-2019 (NJ i JM) : Decidim canviar el protocol dels servidors que tenen el mateix host que el navegador
-		// perquè per seguretat els navegadors bloquegen o donen error quan fas una petició http des d'una url(navegador) en htpps
+		// perquÃ¨ per seguretat els navegadors bloquegen o donen error quan fas una peticiÃ³ http des d'una url(navegador) en htpps
 		if(ParamCtrl.ServidorLocal &&
 		   host==DonaHost(ParamCtrl.ServidorLocal).toLowerCase() &&
 		   protocol!=DonaProtocol(ParamCtrl.ServidorLocal).toLowerCase())
@@ -6397,6 +6325,13 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			capa.servidor=protocol+capa.servidor.substring(capa.servidor.indexOf("://")+1, capa.servidor.length);
 		}
 
+		if (capa.visible=="semitransparent" && capa.transparencia!="semitransparent")
+		{
+			alert(GetMessage("TheProperty") + " capa.visible " + GetMessage("indica") + " \"semitransparent\" " + GetMessage("butTransparenciaDoesNotAllowIt", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
+					" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
+			capa.transparencia="semitransparent";
+		}
+
 		if (capa.atributs && capa.atributs.length)
 		{
 			for (j=0; j<capa.atributs.length; j++)
@@ -6406,30 +6341,23 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 					if (capa.atributs[j].mostrar != "si" && capa.atributs[j].mostrar != "si_ple" && capa.atributs[j].mostrar != "no")
 					{
 						if (capa.atributs[j].mostrar == true || capa.atributs[j].mostrar == false)
-						{	
+						{
 							if (!avis_mostrar_atributs)
 							{
-								alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
-										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
-										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
-										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
-										+ " capa = " + DonaCadenaNomDesc(capa));											
+								alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
+										" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 								avis_mostrar_atributs=true;
 							}
 							if (capa.atributs[j].mostrar)
 								capa.atributs[j].mostrar = "si";
-							else						
-								capa.atributs[j].mostrar = "no";						
+							else
+								capa.atributs[j].mostrar = "no";
 						}
-						else 
+						else
 						{
 							if (!avis_mostrar_atributs)
 							{
-								alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definida d'una altra manera. El valor serà ignorat i l'atribut marcat com a mostrable. Es deixa continuar.",
-										"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
-										"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
-										"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
-										+ " capa = " + DonaCadenaNomDesc(capa));
+								alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetOtherwise", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("YouMayContinue") + "." + " capa = " + DonaCadenaNomDesc(capa));
 								avis_mostrar_atributs=true;
 							}
 							capa.atributs[j].mostrar = "si";
@@ -6455,9 +6383,9 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 				capa.consultable="no";
 			}
 		}
-			
+
 		if (capa.estil && capa.estil.length)
-		{ 	
+		{
 			var estil;
 			for (j=0; j<capa.estil.length; j++)
 			{
@@ -6472,48 +6400,39 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 							if (estil.atributs[k].mostrar != "si" && estil.atributs[k].mostrar != "si_ple" && estil.atributs[k].mostrar != "no")
 							{
 								if (estil.atributs[k].mostrar == true || estil.atributs[k].mostrar == false)
-								{	
+								{
 									if (!avis_mostrar_atributs)
 									{
-										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definit com a \"true/false\". Es deixa continuar.",
-												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido como \"true/false\". Se deja continuar.",
-												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is instead set to \"true/false\". You may continue.",
-												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est à la place définie sur \"true/false\". Il est permis de continuer."}) 
-												+ " estil = " + DonaCadenaNomDesc(estil));
+										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
+												" estil = " + DonaCadenaNomDesc(estil));												
 												avis_mostrar_atributs=true;
 									}
 									if (estil.atributs[k].mostrar)
 										estil.atributs[k].mostrar = "si";
 									else
-										estil.atributs[k].mostrar = "no";						
+										estil.atributs[k].mostrar = "no";
 								}
-								else 
+								else
 								{
 									if (!avis_mostrar_atributs)
 									{
-										alert(DonaCadenaLang({"cat": "La propietat atributs.mostrar ha de ser \"si\", \"si_ple\", \"no\" i en canvi està definida d'una altra manera. El valor serà ignorat i l'atribut marcat com a mostrable. Es deixa continuar.",
-												"spa": "La propiedad atributs.mostrar debe ser \"si\", \"si_ple\", \"no\" y en cambio está definido de otra manera. El valor será ignorado y el atributo marcado como mostrable. Se deja continuar.",
-												"eng": "The property atributs.mostrar must be \"si\", \"si_ple\", \"no\" and is otherwise defined. The value will be ignored and the attribute marked as showable. You may continue.",
-												"fre": "La propriété atributs.mostrar doit être \"si\", \"si_ple\", \"no\" et est définie autrement. La valeur sera ignorée et l'attribut marqué comme affichable. Il est permis de continuer."})
+										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetOtherwise", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
 												+ " estil = " + DonaCadenaNomDesc(estil));
 										avis_mostrar_atributs=true;
 									}
 									estil.atributs[k].mostrar = "si";
-								}						
+								}
 							}
 						}
 					}
-				}			
-			}					
+				}
+			}
 		}
 	}
-	
+
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
 	{
-		alert(DonaCadenaLang({"cat": "Els costats de zoom han d'estat ordenats amb el més gran primer",
-				"spa": "Los lados de zoom deben estar ordenados con el más grande primero",
-				"eng": "The zoom sizes must be sorted with the bigger first",
-				"fre": "Les tailles de zoom doivent être triées par ordre croissant"}));
+		alert(GetMessage("ZoomSizesSortedBiggerFirst", "miramon"));
 		return 1;
 	}
 	for (i=0; i<param_ctrl.zoom.length; i++)
@@ -6521,17 +6440,14 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			break;
 	if (i==param_ctrl.zoom.length)
 	{
-		alert(DonaCadenaLang({"cat": "El NivellZoomCostat no és cap del costats indicats a la llista de zooms",
-				"spa": "El NivellZoomCostat no es ninguno de los 'costat' indicados en la lista de zooms",
-				"eng": "The NivellZoomCostat is not one of the indicated 'costat' in the zoom array",
-				"fre": "Le NivellZoomCostat n'est pas l'un des 'costat' indiqués dans la matrice de zoom"}));
+		alert(GetMessage("NivellZoomCostatNotIndicated", "miramon"));
 		return 1;
 	}
 	return 0;
 }
 
-/*Aquesta funció afegeix automàticament totes les capes d'un servidor a la llegenda. 
-Funció inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
+/*Aquesta funciÃ³ afegeix automÃ ticament totes les capes d'un servidor a la llegenda.
+FunciÃ³ inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
 function AfegeixCapesWMSAlNavegador(servidorGC)
 {
 var i_get_featureinfo;
@@ -6567,7 +6483,7 @@ var win, i, j, l, capa;
 	document.getElementById(ParamCtrl.containerName).style.width="100%";
 	document.getElementById(ParamCtrl.containerName).innerHTML="";
 	if (ParamCtrl.AdrecaBaseSRC)
-		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
+		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquÃ­ i aixÃ­ ja no cal versificar-ho cada cop. (JM)
 
 	for (i=0; i<ParamCtrl.Layer.length; i++)
 	{
@@ -6602,12 +6518,12 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "enllac", GetMessage("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", GetMessage("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "triaStoryMap", GetMessage("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-	createFinestraLayer(window, "storyMap", GetMessage("StoryMapTitle", "miramon"), boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
+	createFinestraLayer(window, "storyMap", GetMessage("storyMapTitle", "miramon"), boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
 	createFinestraLayer(window, "info", GetMessage("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", GetMessage("ModifyName"), boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
-	createLayer(window, "menuContextualCapa", 277, 168, 145, 240, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
+	createLayer(window, "menuContextualCapa", 277, 168, 145, 240, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funciÃ³ OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
 	createFinestraLayer(window, "editarVector", GetMessage("InsertNewPoint", "miramon"), boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
+	//La segÃ¼ent finesta es fa servir pels missatges de les transaccions perÃ², s'hauria de resoldre bÃ© i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", GetMessage("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
@@ -6652,11 +6568,11 @@ var win, i, j, l, capa;
 			coord=query["BBOX"].split(",");
 			if (coord.length!=4)
 			{
-				alert(DonaCadenaLang({"cat":"No trobo les 4 coordenades a BBOX=", "spa":"No encuentro las 4 coordenadas en BBOX=", "eng":"Cannot find 4 coordinates at BBOX=", "fre":"Impossible de trouver les 4 coordonnées à BBOX="}));
+				alert(GetMessage("NotFindBBox", "miramon") + "=");
 			}
 			else
 			{
-				//Cal carregar les 4 coordenades i fer el canvi d'àmbit
+				//Cal carregar les 4 coordenades i fer el canvi d'Ã mbit
 				nou_env.MinX=parseFloat(coord[0]);
 				nou_env.MaxX=parseFloat(coord[2]);
 				nou_env.MinY=parseFloat(coord[1]);
@@ -6686,14 +6602,12 @@ var win, i, j, l, capa;
 						if (ParamCtrl.capa[i].consultable=="ara_no")
 							ParamCtrl.capa[i].consultable="si";
 						else
-							alert(DonaCadenaLang({"cat":"La capa ", "spa":"La capa ", "eng":"Layer ", "fre":"La couche "}) + capa_visible[j] +
-								  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS= no pot ser activada.", "spa":" indicada en QUERY_LAYERS= no puede ser activada.", "eng":" indicated at QUERY_LAYERS= cannot be activaded.", "fre":" indiquée à QUERY_LAYERS= ne peut pas être activée."}));
+							alert(GetMessage("Layer") + capa_visible[j] + " " + GetMessage("IndicatedQueryLayers", "miramon") + "= " + GetMessage("cannotBeActivated") + ".");
 						break;
 					}
 				}
 				if (i==ParamCtrl.capa.length)
-					alert(DonaCadenaLang({"cat":"No trobo la capa ", "spa":"No encuentro la capa ", "eng":"Cannot find layer ", "fre":"Impossible trouver la couche "}) + capa_visible[j] +
-						  DonaCadenaLang({"cat":" indicada a QUERY_LAYERS=", "spa":" indicada en QUERY_LAYERS=", "eng":" indicated at QUERY_LAYERS=", "fre":" indiquée à QUERY_LAYERS="}));
+					alert(GetMessage("CannotFindLayer") + " " + capa_visible[j] + " " + GetMessage("IndicatedQueryLayers", "miramon") + "= ");
 			}
 		}
 		if (query["LANGUAGE"])
@@ -6787,7 +6701,7 @@ var win, i, j, l, capa;
 	{
 		if(Accio.accio&AccioValidacio || Accio.accio&AccioConLoc)
 		{
-			//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes
+			//Haig de tornar a fer un CreaLLegenda() perquÃ¨ he tocat l'estat de les capes
 			CreaLlegenda();
 			if(DadesPendentsAccio==false)
 			{
@@ -6799,10 +6713,7 @@ var win, i, j, l, capa;
 				else
 				{
 					//Mostro un missatge de que comencin a buscar amb les eines del navegador
-					alert(DonaCadenaLang({"cat":"Usa les eines del navegador per situar-te sobre la vista.\nA continuació fés clic sobre la vista per determinar la coordenada i la informació del punt a validar.\nPer finalitzar, prem [Validar Coordenada] o [Cancel·lar] des de la finestra de validació.",
-										"spa":"Utiliza las herramientas del navegador para situarte sobre la vista.\nA continuación haz clic sobre la vista para determinar la coordenada y la información del punto a validar.\nPara finalizar aprieta [Validar Coordenada] o [Cancelar] desde la ventana de validación.",
-										"eng":"You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.",
-										"fre":"Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\n et l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation."}));
+					alert(GetMessage("UseBrowserToolsPlaceOnView", "ctipica"));
 					Accio.coord={"x": 0, "y": 0};
 				}
 			}
@@ -6822,7 +6733,7 @@ var win, i, j, l, capa;
 			var formulari=getLayer(window, "anarCoord_finestra").getElementsByTagName("form")[0];
 			if(formulari)
 				AnarACoordenada(formulari);
-		}		
+		}
 	}
 	else
 	{
@@ -6862,7 +6773,7 @@ var win, i, j, l, capa;
 
 function ResizeMiraMonMapBrowser()
 {
-	if ((ParamCtrl.fullScreen==2 && !isFullscreen()) || 
+	if ((ParamCtrl.fullScreen==2 && !isFullscreen()) ||
 		(RectVistaAbansFullScreen && ParamCtrl.fullScreen==0))
 	{
 		ParamCtrl.fullScreen=0;
@@ -6870,9 +6781,9 @@ function ResizeMiraMonMapBrowser()
 	}
 	else if (!ParamCtrl.fullScreen!=2 && isFullscreen())
 	{
-		//Si hi ha més d'una vista avisar que no te sentit fer-ho i plegar
+		//Si hi ha mÃ©s d'una vista avisar que no te sentit fer-ho i plegar
 		ParamCtrl.fullScreen=2;
-		setTimeout(PortaVistaAFullScreen, 1000);  //Hi ha un event de ResizeMiraMonMapBrowser() pendent i causat per openFullscreen que s'executa en 200 mil·lisegons i jo demano això després.
+		setTimeout(PortaVistaAFullScreen, 1000);  //Hi ha un event de ResizeMiraMonMapBrowser() pendent i causat per openFullscreen que s'executa en 200 milÂ·lisegons i jo demano aixÃ² desprÃ©s.
 	}
 	setTimeout(ChangeSizeMiraMonMapBrowser,200);
 }
@@ -6923,11 +6834,11 @@ function EndMiraMonMapBrowser(event, reset)
 		{
 			try
 			{
-				//Només Internet explorer suporta un missatge de confirmació tipus confirm o alert en aquest punt.
+				//NomÃ©s Internet explorer suporta un missatge de confirmaciÃ³ tipus confirm o alert en aquest punt.
 				/*if (confirm(DonaCadenaLang({"cat": "Aceptes guardar l'estat del mapa?. (Per recuperar l'estat original afegiu a la URL:",
-								"spa": "¿Acepta guardar el estado del mapa? (Para recuperar el estado original añada a la URL:",
+								"spa": "Â¿Acepta guardar el estado del mapa? (Para recuperar el estado original aÃ±ada a la URL:",
 								"eng": "Do you accept to save the status of the map? (To recover the original status add to the URL:",
-								"fre": "Acceptez-vous de sauvegarder l’état de la carte? (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")"))*/
+								"fre": "Acceptez-vous de sauvegarder lÂ’Ã©tat de la carte? (Pour restaurer l'Ã©tat d'origine, ajoutez Ã  l'URL:"})+" \"?reset=1\")"))*/
 					localStorage.setItem("EditedParamCtrl_"+ParamCtrl.config_json, JSON.stringify(ParamCtrl));
 			}
 			catch (e)
@@ -6936,7 +6847,7 @@ function EndMiraMonMapBrowser(event, reset)
 				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
 							"spa":"No ha sido posible guardar el estado del mapa.",
 							"eng":"Saving the map status done was not possible.",
-							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
+							"fre":"Il nÂ’a pas Ã©tÃ© possible de sauvegarder le statut de la carte."}));*/
 			}
 		}
 	}
@@ -6944,9 +6855,9 @@ function EndMiraMonMapBrowser(event, reset)
 	FinalitzaMiraMonMapBrowser()
 
 	/*return DonaCadenaLang({"cat": "Estat del mapa guardat.(Per recuperar l'estat original afegiu a la URL:",
-					"spa": "Estado del mapa guardado. (Para recuperar el estado original añada a la URL:",
+					"spa": "Estado del mapa guardado. (Para recuperar el estado original aÃ±ada a la URL:",
 					"eng": "Map status saved (To recover the original status add to the URL:",
-					"fre": "Statut de la carte enregistré (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")";*/
+					"fre": "Statut de la carte enregistrÃ© (Pour restaurer l'Ã©tat d'origine, ajoutez Ã  l'URL:"})+" \"?reset=1\")";*/
 }
 
 function StartMiraMonMapBrowser(div_name)
@@ -7030,7 +6941,7 @@ var elem, rect;
 			rect=getRectLayerName(window, "llegenda");
 			if (event.clientX>rect.esq && event.clientX<rect.esq+rect.ample &&
 				event.clientY>rect.sup && event.clientY<rect.sup+rect.alt)
-				return; // La llegenda està sobre una de les vistes i no vull que faci scroll a la vista
+				return; // La llegenda estÃ  sobre una de les vistes i no vull que faci scroll a la vista
 		}
 	}
 

@@ -156,6 +156,9 @@ var i_story=extra_param, elem;
 
 	ObreFinestra(window, "storyMap")
 	IStoryActive=i_story;
+
+	AfegeixMarkerStoryMapVisible();
+
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
 }
@@ -181,13 +184,56 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	return rect_div.top <= rect_el.top && rect_div.bottom >= rect_el.bottom;
 }
 
+function AfegeixMarkerStoryMapVisible()
+{
+	var div=getFinestraLayer(window, "storyMap");
+	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
+}
+
+//Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
+function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
+{
+var node, attribute;
+
+	for (var i = 0; i < nodes.length; i++)
+	{
+		node=nodes[i];
+		if (node.nodeType!=Node.ELEMENT_NODE)
+			continue;
+		if (node.attributes)
+		{
+			for (var i_at = 0; i_at < node.attributes.length; i_at++)
+			{
+				attribute=node.attributes[i_at];
+				if (attribute.name=='data-mm-crs' || attribute.name=="data-mm-center" || attribute.name=='data-mm-zoom' || attribute.name=="data-mm-layers" ||
+					attribute.name=="data-mm-time" || attribute.name=='data-mm-sels' || attribute.name=='data-mm-histos')
+				{
+					//Afegir el simbol dins
+					// Create a text node:
+					var divNode = document.createElement("span");
+					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, "storymap_mm_action_"+i_mm, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+					i_mm++;
+					node.insertBefore(divNode, node.children[0]);
+					break;
+				}
+			}
+		}
+		if (node.childNodes && node.childNodes.length)
+		{
+			if (AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes, i_mm))
+				return true;
+		}
+	}
+	return false;
+}
+
 var darrerNodeStoryMapVisibleExecutat=null;
 
-function RecorreNodesFillsAttributsStoryMapVisible(nodes)
+function RecorreNodesFillsAttributsStoryMapVisible(div, nodes)
 {
-var hihacanvis, node, attribute, i_styles
+var hihacanvis, node, attribute;
 
-	var div=getFinestraLayer(window, "storyMap");
+	//var div=getFinestraLayer(window, "storyMap");
 
 	for (var i = 0; i < nodes.length; i++)
 	{
@@ -200,10 +246,13 @@ var hihacanvis, node, attribute, i_styles
 
 		if (node.attributes)
 		{
+			if (darrerNodeStoryMapVisibleExecutat==node)
+				return false;
+
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
-				if (attribute.name=='mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
+				if (attribute.name=='data-mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
 				{
 					if (attribute.value.trim().length)
 					{
@@ -215,7 +264,7 @@ var hihacanvis, node, attribute, i_styles
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
-				if (attribute.name=="mm-center")
+				if (attribute.name=="data-mm-center")
 				{
 					var mmcenter = attribute.value.trim();
 					if (mmcenter.length)
@@ -235,7 +284,7 @@ var hihacanvis, node, attribute, i_styles
 					else
 						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
-				else if (attribute.name=='mm-zoom')
+				else if (attribute.name=='data-mm-zoom')
 				{
 					if (attribute.value.trim().length)
 					{
@@ -243,19 +292,19 @@ var hihacanvis, node, attribute, i_styles
 							hihacanvis=true;
 					}
 				}
-				else if (attribute.name=="mm-layers")
+				else if (attribute.name=="data-mm-layers")
 				{
-					for (i_styles = 0; i_styles < node.attributes.length; i_styles++)
+					for (var i_styles = 0; i_styles < node.attributes.length; i_styles++)
 					{
-						if (node.attributes[i_styles].name=="mm-styles")
+						if (node.attributes[i_styles].name=="data-mm-styles")
 							break;
 					}
 					CommandMMNSetLayersAndStyles(attribute.value.trim(), 
 							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(), 
-							"mm-layers");
+							"data-mm-layers");
 					hihacanvis=true;
 				}
-				else if (attribute.name=="mm-time")
+				else if (attribute.name=="data-mm-time")
 				{
 					var datejson;
 					var mmtime = attribute.value.trim();
@@ -275,7 +324,7 @@ var hihacanvis, node, attribute, i_styles
 							hihacanvis=true;
 					}
 				}
-				else if (attribute.name=='mm-sels')
+				else if (attribute.name=='data-mm-sels')
 				{
 					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
 					if (mmsels.length>3)
@@ -295,7 +344,7 @@ var hihacanvis, node, attribute, i_styles
 					else
 						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
-				else if (attribute.name=='mm-histos')
+				else if (attribute.name=='data-mm-histos')
 				{
 					var mmhistos = "["+attribute.value.trim()+"]";
 					if (mmhistos.length>3)
@@ -318,8 +367,6 @@ var hihacanvis, node, attribute, i_styles
 			}
 			if (hihacanvis)
 			{
-				if (darrerNodeStoryMapVisibleExecutat==node)
-					return true;
 				darrerNodeStoryMapVisibleExecutat=node;
 				if (!histos)
 					TancaTotsElsHistogramaFinestra();
@@ -329,7 +376,7 @@ var hihacanvis, node, attribute, i_styles
 		}
 		if (node.childNodes && node.childNodes.length)
 		{
-			if (RecorreNodesFillsAttributsStoryMapVisible(node.childNodes))
+			if (RecorreNodesFillsAttributsStoryMapVisible(div, node.childNodes))
 				return true;
 		}
 	}
@@ -348,6 +395,6 @@ function ExecutaAttributsStoryMapVisibleEvent(event)
 function ExecutaAttributsStoryMapVisible()
 {
 	var div=getFinestraLayer(window, "storyMap")
-	RecorreNodesFillsAttributsStoryMapVisible(div.childNodes);
+	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }

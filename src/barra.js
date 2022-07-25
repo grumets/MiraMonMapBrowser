@@ -66,7 +66,7 @@ var cdns=[];
 	{
 		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {", (title ? "title: \""+title.replaceAll("'", "&apos;")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
 			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
-		if (ParamCtrl.BarraEstil.colorsGrey)
+		if (ParamCtrl.BarraEstil.colorsGrey && onclick_function_name)
 			cdns.push("onmouseover='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
 				"onmouseout='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
 	}
@@ -151,26 +151,32 @@ function DefaultSVGToPNG(event, img, ext)
 
 function ChangeTitleColorsSVG(id, params)
 {
-	var svg=document.getElementById(id);
-	if (params.title)
+	if (params)
 	{
-		if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
+		var svg=document.getElementById(id);
+		if (params.title)
 		{
-			var newNode = document.createElementNS("http://www.w3.org/2000/svg", "title");
-			svg.insertBefore(newNode, svg.firstChild);
+			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
+			{
+				var newNode = document.createElementNS("http://www.w3.org/2000/svg", "title");
+				svg.insertBefore(newNode, svg.firstChild);
+			}
+			svg.getElementsByTagName("title")[0].textContent=params.title;
 		}
-		svg.getElementsByTagName("title")[0].textContent=params.title;
-	}
-	if (params.width)
-		svg.setAttribute('width', params.width);
-	if (params.height)
-		svg.setAttribute('height', params.height);
-	for(var c in params.colors)
-	{
-		if (svg.getElementsByClassName(c))
+		if (params.width)
+			svg.setAttribute('width', params.width);
+		if (params.height)
+			svg.setAttribute('height', params.height);
+		if (params.colors)
 		{
-			for (var i=0; i<svg.getElementsByClassName(c).length; i++)
-				svg.getElementsByClassName(c)[i].style.fill=params.colors[c];
+			for(var c in params.colors)
+			{
+				if (svg.getElementsByClassName(c))
+				{
+					for (var i=0; i<svg.getElementsByClassName(c).length; i++)
+						svg.getElementsByClassName(c)[i].style.fill=params.colors[c];
+				}
+			}
 		}
 	}
 }

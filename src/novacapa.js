@@ -358,7 +358,6 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 		//Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
-		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
 	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
@@ -483,7 +482,6 @@ var k;
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 }
 
@@ -543,7 +541,6 @@ var k;
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 }
 
@@ -769,9 +766,11 @@ var k;
 	}
 	ParamCtrl.capa.splice(k, 0, capa);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-	CreaLlegenda();
 	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	{
+		CreaLlegenda();
 		alert("The added layer has a CRS '"+ DonaDescripcioCRS(capa.CRS[0]) + "' that is no visible in the current CRS '" + DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) + "'");
+	}
 	else
 		RepintaMapesIVistes();
 }
