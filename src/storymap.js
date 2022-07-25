@@ -190,7 +190,7 @@ function AfegeixMarkerStoryMapVisible()
 	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
 }
 
-//Atenció que els tags vendor specific han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
+//Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
 {
 var node, attribute;
@@ -205,8 +205,8 @@ var node, attribute;
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
-				if (attribute.name=='mm-crs' || attribute.name=="mm-center" || attribute.name=='mm-zoom' || attribute.name=="mm-layers" ||
-					attribute.name=="mm-time" || attribute.name=='mm-sels' || attribute.name=='mm-histos')
+				if (attribute.name=='data-mm-crs' || attribute.name=="data-mm-center" || attribute.name=='data-mm-zoom' || attribute.name=="data-mm-layers" ||
+					attribute.name=="data-mm-time" || attribute.name=='data-mm-sels' || attribute.name=='data-mm-histos')
 				{
 					//Afegir el simbol dins
 					// Create a text node:
@@ -252,7 +252,7 @@ var hihacanvis, node, attribute;
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
-				if (attribute.name=='mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
+				if (attribute.name=='data-mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
 				{
 					if (attribute.value.trim().length)
 					{
@@ -264,7 +264,7 @@ var hihacanvis, node, attribute;
 			for (var i_at = 0; i_at < node.attributes.length; i_at++)
 			{
 				attribute=node.attributes[i_at];
-				if (attribute.name=="mm-center")
+				if (attribute.name=="data-mm-center")
 				{
 					var mmcenter = attribute.value.trim();
 					if (mmcenter.length)
@@ -284,7 +284,7 @@ var hihacanvis, node, attribute;
 					else
 						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
-				else if (attribute.name=='mm-zoom')
+				else if (attribute.name=='data-mm-zoom')
 				{
 					if (attribute.value.trim().length)
 					{
@@ -292,19 +292,19 @@ var hihacanvis, node, attribute;
 							hihacanvis=true;
 					}
 				}
-				else if (attribute.name=="mm-layers")
+				else if (attribute.name=="data-mm-layers")
 				{
 					for (var i_styles = 0; i_styles < node.attributes.length; i_styles++)
 					{
-						if (node.attributes[i_styles].name=="mm-styles")
+						if (node.attributes[i_styles].name=="data-mm-styles")
 							break;
 					}
 					CommandMMNSetLayersAndStyles(attribute.value.trim(), 
 							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(), 
-							"mm-layers");
+							"data-mm-layers");
 					hihacanvis=true;
 				}
-				else if (attribute.name=="mm-time")
+				else if (attribute.name=="data-mm-time")
 				{
 					var datejson;
 					var mmtime = attribute.value.trim();
@@ -324,7 +324,7 @@ var hihacanvis, node, attribute;
 							hihacanvis=true;
 					}
 				}
-				else if (attribute.name=='mm-sels')
+				else if (attribute.name=='data-mm-sels')
 				{
 					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
 					if (mmsels.length>3)
@@ -344,7 +344,7 @@ var hihacanvis, node, attribute;
 					else
 						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 				}
-				else if (attribute.name=='mm-histos')
+				else if (attribute.name=='data-mm-histos')
 				{
 					var mmhistos = "["+attribute.value.trim()+"]";
 					if (mmhistos.length>3)
