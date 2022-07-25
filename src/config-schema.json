@@ -892,7 +892,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) mm-center='{'x': `number`, 'y': `number`}'  (2) mm-zoom=`number`   (3)   mm-crs=`crs_name` mm-time='{'year': `number`..., 'second': `number`}'  (4) mm-layers='`IdCapa1`,`IdCapa2`,...'   (5) mm-styles='`styleNom1`,`styleNom2`...',    (6) mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'name': `NomEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (7)  mm-histos={'ly': '`IdCapa1`', 'style': '`styleNom`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre mm-histos, es tanquen tots els histogrames; IdCapa* a deser una capa d'arrays binaris)",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-histos={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre data-mm-histos, es tanquen tots els histogrames; IdCapa* a de ser una capa d'arrays binaris)",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
@@ -1487,7 +1487,7 @@
 						}
 					},
 					"transparencia":	{
-						"description": "Indica si la capa pot ser potencialment transparent o semitransparent en la visualització: no (opac), si (transparent), semitransparent (semitransparent, propi de MiraMon). Opcional",
+						"description": "Indica si la capa pot ser potencialment transparent o semitransparent en la visualització: no (opac), si (transparent) o semitransparent. Opcional",
 						"enum": ["opac", "transparent", "semitransparent"]
 					},															
 					"CostatMinim": {
@@ -1540,7 +1540,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"TipusObj":{ 
-									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
+									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons). No indicar quan no cal desplegar valors a la llegenda",
 									"enum": [null, "L", "P", "S", "I"] 
 								},
 								"component": {
@@ -2381,6 +2381,14 @@
 					"description": "Format HTML que es posa al final del nom del estil de la capa a la llegenda",
 					"type":"string" 
 				},
+				"PreviDescEstilGris": {
+					"description": "Format HTML que es posa l'inici del nom del estil de la capa a la llegenda quan aquesta està gris",
+					"type": "string" 
+				},
+				"PostDescEstilGris":	{
+					"description": "Format HTML que es posa al final del nom del estil de la capa a la llegenda quan aquesta està gris",
+					"type":"string" 
+				},
 				"PreviDescItems": {
 					"description": "Format HTML que es posa a l'inici de la descripció de tots els ítems de la llegenda de la capa a la llegenda. A vegades conté les unitats, etc",
 					"type": "string" 
@@ -2406,7 +2414,7 @@
 				"type": ["object"],
 				"properties": {
 					"color":	{
-						"description": "Nom del color o el nom del fitxer que fa de símbol",
+						"description": "Nom del color o el nom del fitxer que fa de símbol (això darrer si 'TipusObj' és 'S')",
 						"type": "string"												
 					},
 					"DescColor": { 

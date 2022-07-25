@@ -104,20 +104,20 @@ var sel, capa, estil, i_estil;
 	{	
 		sel=selections[i_sel];
 
-		if(typeof sel.ly === 'undefined' || typeof sel.q === 'undefined' || typeof sel.name === 'undefined')
+		if(typeof sel.ly === 'undefined' || typeof sel.q === 'undefined' || typeof sel.id === 'undefined')
 		{
-			alert(GetMessage("SelectionsIncorrectFormat", "commands") + GetMessage("LyQNameRequired", "commands") + ": {ly: NomCapa, q: FormulaConsulta, name: NomEstil}");
+			alert(GetMessage("SelectionsIncorrectFormat", "commands") + GetMessage("LyQNameRequired", "commands") + ": {ly: NomCapa, q: FormulaConsulta, id: IdEstilNou}");
 				return 1;
 		}
 		if (null==(capa=DonaCapaDesDeIdCapa(sel.ly)))
 			continue;
 
-		estil=DonaEstilDesDeNomEstil(capa, sel.name);
+		estil=DonaEstilDesDeIdEstil(capa, sel.id);
 		if (estil)
 			i_estil=capa.estil.indexOf(estil);
 		else
 		{
-			i_estil=DuplicaEstilCapa(capa, 0, sel.name);
+			i_estil=DuplicaEstilCapa(capa, 0, sel.id);
 			estil=capa.estil[i_estil];
 		}
 		
@@ -125,13 +125,13 @@ var sel, capa, estil, i_estil;
 		{
 			for (var i_atr=0; i_atr<capa.atributs.length; i_atr++)
 			{
-				if(sel.name==capa.atributs[i_atr].nom)
+				if(sel.id==capa.atributs[i_atr].nom)
 					continue;
 			}
-			capa.atributs[i_atr]={"nom": sel.name,
+			capa.atributs[i_atr]={"nom": sel.id,
 						"FormulaConsulta": sel.q,
-						"desc": sel.name};
-			estil.NomCampSel=sel.name;
+						"desc": sel.id};
+			estil.NomCampSel=sel.id;
 		}
 		else
 		{
@@ -171,7 +171,7 @@ var histo, capa, estil, i_estil;
 		if (null==(capa=DonaCapaDesDeIdCapa(histo.ly)))
 			continue;
 
-		estil=DonaEstilDesDeNomEstil(capa, histo.style);
+		estil=DonaEstilDesDeIdEstil(capa, histo.stl);
 		if (estil)
 		{
 			i_estil=capa.estil.indexOf(estil);	

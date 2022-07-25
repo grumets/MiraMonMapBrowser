@@ -48,7 +48,6 @@ function MoureASobreDeTot(i_capa)
 	ParamCtrl.capa.splice(n_capes_especials_a_sobre, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 	return;
 }
@@ -63,7 +62,6 @@ function MoureASobre(i_capa)
 
 	//Caldrà fer alguna cosa amb els grups, capes no visibles a la llegenda en aquell moment,...
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 	return;
 }
@@ -77,7 +75,6 @@ function MoureASota(i_capa)
 	ParamCtrl.capa.splice(i_capa+1, 0, ParamCtrl.capa.splice(i_capa, 1)[0]);
 
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 	return;
 }
@@ -91,7 +88,6 @@ function MoureASotaDeTot(i_capa)
 	ParamCtrl.capa.push(ParamCtrl.capa.splice(i_capa, 1)[0]);
 
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 	return;
 }
@@ -103,7 +99,6 @@ function EsborrarCapa(i_capa)
 	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no te sentit; i ja hem avisat que no anirà bé.
 	ParamCtrl.capa.splice(i_capa, 1);
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 }
 
@@ -118,7 +113,6 @@ function EsborrarEstilCapa(i_capa, i_estil)
 		capa.i_estil--;
 	CanviaIndexosCapesSpliceEstil(-1, i_capa, i_estil+1, capa.estil.length);
 	capa.estil.splice(i_estil, 1);
-	CreaLlegenda();
 	RepintaMapesIVistes()
 }
 
@@ -563,7 +557,6 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 		ParamCtrl.RelaxaAmbitVisualitzacio=true;
                 //Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
-		CreaLlegenda();
 		RepintaMapesIVistes();
 	}
 }//Fi de AfegeixCapesWMSAlNavegadorForm
@@ -1134,7 +1127,6 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 }//Fi de AfegeixCapaCombicapaCategoric()
 
@@ -1295,7 +1287,6 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	RevisaEstatsCapes();
-	CreaLlegenda();
 	RepintaMapesIVistes();
 }//Fi de AfegeixTransferenciaEstadistics()
 
