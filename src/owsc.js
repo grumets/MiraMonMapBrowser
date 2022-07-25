@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 "use strict"
@@ -55,7 +55,7 @@ function isOpenableLayer(myResource)
 	{
 		var i= myResource.offerings.length,
 			isSupported= false;
-		
+
 		while(i--)
 		{
 			if(!myResource.offerings[i].nonSupported)
@@ -68,10 +68,7 @@ function isOpenableLayer(myResource)
 			return myResource.offerings[0].nonSupported;
 	}
 	else
-		return DonaCadenaLang({"cat":"Aquesta entrada no té cap contingut geoespacial (cap etiqueta 'offering' definida).",
-								"spa":"Esta entrada carece de contenido geoespacial (ninguna etiqueta 'offering' definida).",
-								"eng":"This entry is empty of geospatial content (no 'offering' tag defined).",
-								"fre":"Cette entrée manque du contenu géospatial (aucune étiquette 'offering' définie)."});
+		return GetMessage("EmptyGeospatialContent", "owsc") + ".";
 
 	//Is the resource CRS compatible with the map CRS?
 	if(myResource.where)
@@ -80,10 +77,7 @@ function isOpenableLayer(myResource)
 		myWhere= OWSCDocument.where;
 
 	if(myWhere && !MMisMapCompatibleCRS(myWhere.CRS.name))
-		return DonaCadenaLang({"cat":"Sistema de referència de coordenades no compatible.",
-								"spa":"Sistema de referencia de coordenadas no compatible.",
-								"eng":"Non-compatible Coordinate Reference System.",
-								"fre":"Système de référence de coordonnées non compatible."});
+		return GetMessage("NonComptibleCRS", "owsc") + ".";
 	return 0;
 }
 
@@ -110,10 +104,7 @@ function parseWhere(geoTag,myHolder,myOWSC)
 		myGml= myGml.toGmlBox();
 	}
 	else if(myGml.type!==3)
-		return DonaCadenaLang({"cat":"El format de 'where' no inclou cap 'Envelope' o 'Polygon' de 2 o més punts.",
-								"spa":"El formato de 'where' no incluye ningún 'Envelope' o 'Polygon' de 2 o más puntos.",
-								"eng":"The format of 'where' do not have any 'Envelope' or 'Polygon' of 2 or more points.",
-								"fre":"Le format de 'where' n'inclut pas de 'Envelope' ou ' Polygon ' de 2 ou plus de points."});
+		return GetMessage("FormatWhereNotHaveEnvelope", "owsc") + ".";
 
 	//Permet guardar el resultat de myGml a un objecte
 	if(myHolder)
@@ -208,7 +199,7 @@ function parseWMSOffering(tag,myOffering)
 			elem= operationTags[i].getAttribute("code");
 			url= operationTags[i].getAttribute("href");
 			//Build some description to show the operation description to the user
-			myOffering.operationsHTML[i]= DonaCadenaLang({"cat":"Petició","spa":"Petición","eng":"Request","fre":"Demande"});
+			myOffering.operationsHTML[i]= GetMessage("Request");
 			if(elem)
 			{
 				if(url)
@@ -217,17 +208,14 @@ function parseWMSOffering(tag,myOffering)
 					myOffering.operationsHTML[i]+= elem+" (error: no 'href')";
 			}
 			else
-				myOffering.operationsHTML[i]+= DonaCadenaLang({"cat":"desconeguda","spa":"desconocida","eng":"Unknown","fre":"inconnu"});
-			myOffering.operationsHTML[i]+= DonaCadenaLang({"cat":" petició","spa":" petición","eng":" request","fre":" demande"});
+				myOffering.operationsHTML[i]+= GetMessage("unknown") + "";
+			myOffering.operationsHTML[i]+= GetMessage("request");
 
 			//If this is something we cannot use to open the layer in the client,
 			//this is as far as we can get.
 			if(elem!=="GetMap")
 			{
-				reason= DonaCadenaLang({"cat":"'Operation' no acceptada '"+elem+"'",
-									"spa":"'Operation' no soportada '"+elem+"'",
-									"eng":"Non supported operation '"+elem+"'",
-									"fre":"'Operation' non supportée'"+elem+"'"});
+				reason= GetMessage("NonSupportedOperation", "owsc") + " '" + elem + "'";
 				continue;
 			}
 
@@ -235,22 +223,16 @@ function parseWMSOffering(tag,myOffering)
 			elem= operationTags[i].getAttribute("method");
 			if(elem!=="GET")
 			{
-				reason= DonaCadenaLang({"cat":"Métode d'operació '"+elem+"' no acceptat (només GET és acceptat actualment)",
-									"spa":"Método de operación '"+elem+"' no aceptado (sólo GET es soportado actualmente)",
-									"eng":"Non supported operation method '"+elem+"' (only GET is currently supported)",
-									"fre":"Méthode d'opération '"+elem+"' non acceptée (seulement 'GET' est actuellement supportée)"});
+				reason= GetMessage("NonSupportedOperationMethod", "owsc") + " '" + elem + "' " + GetMessage("OnlyGetSupported", "owsc");
 				continue;
 			}
-			
+
 			//Get the minimum required data to make the layer work: server, version and type
 			//We obtain the data from the requestURL
 			//elem= operationTags[i].getAttribute("href"); Already got into 'url'
 			if(!url)
 			{
-				reason= DonaCadenaLang({"cat":"L'atribut 'href' no s'ha trobat en l'operació, la 'requestURL' no es pot obtenir.",
-									"spa":"El atributo 'href' no se encontró en la operación, la 'requestURL' no se puede obtener",
-									"eng":"Attribute 'href' was not found in the operation, the 'requestURL' cannot be obtained",
-									"fre":"L'attribut 'href' n'a pas été trouvé dans l'opération, le 'requestURL' ne peut pas être obtenu"});
+				reason= GetMessage("AttributeHrefNotFound", "owsc") + ", " + GetMessage("requestUrlCannotObtained", "owsc") + ".";
 				continue;
 			}
 			//Create an URI object using URI.js This has been removed by JM as it seems not necessary to use this library.
@@ -338,10 +320,7 @@ var elem, reason,isSupported= false, //In order to check if at least one operati
 			elem= operationTags[i].getAttribute("code");
 			if(elem!=="GetTile")
 			{
-				reason= DonaCadenaLang({"cat":"'Operation' no acceptada '"+elem+"'",
-									"spa":"'Operation' no soportada '"+elem+"'",
-									"eng":"Non supported operation '"+elem+"'",
-									"fre":"'Operation' non supportée'"+elem+"'"});
+				reason= GetMessage("NonSupportedOperation", "owsc") + " '" + elem + "'";
 				continue;
 			}
 
@@ -349,25 +328,19 @@ var elem, reason,isSupported= false, //In order to check if at least one operati
 			elem= operationTags[i].getAttribute("method");
 			if(elem!=="GET")
 			{
-				reason= DonaCadenaLang({"cat":"Métode d'operació '"+elem+"' no acceptat (només GET és acceptat actualment)",
-									"spa":"Método de operación '"+elem+"' no aceptado (sólo GET es soportado actualmente)",
-									"eng":"Non supported operation method '"+elem+"' (only GET is currently supported)",
-									"fre":"Méthode d'opération '"+elem+"' non acceptée (seulement 'GET' est actuellement supportée)"});
+				reason= GetMessage("NonSupportedOperationMethod", "owsc") + " '" + elem + "' " + GetMessage("OnlyGetSupported", "owsc");
 				continue;
 			}
-			
+
 			//Get the minimum required data to make the layer work: server, version and type
 			//We obtain the data from the requestURL
 			elem= operationTags[i].getAttribute("href");
 			if(!elem)
 			{
-				reason= DonaCadenaLang({"cat":"L'atribut 'href' no s'ha trobat en l'operació, la 'requestURL' no es pot obtenir.",
-										"spa":"El atributo 'href' no se encontró en la operación, la 'requestURL' no se puede obtener",
-										"eng":"Attribute 'href' was not found in the operation, the 'requestURL' cannot be obtained",
-										"fre":"L'attribut 'href' n'a pas été trouvé dans l'opération, le 'requestURL' ne peut pas être obtenu"});
+				reason= GetMessage("AttributeHrefNotFound", "owsc") + ", " + GetMessage("requestUrlCannotObtained", "owsc") + ".";
 				continue;
 			}
-		
+
 			if(!myTileMatrixSet)
 			{
 				myTileMatrixSet= MMnewTileMatrixSetFromImageURL(elem);
@@ -389,7 +362,7 @@ var elem, reason,isSupported= false, //In order to check if at least one operati
 			}
 			//Add this operation image to the Tile list in order to compose a TileMatrix
 			x= tilesWidth.length;
-			
+
 			tilesWidth[x]= parseFloat(operationTags[i].getAttribute("owcht:width"));
 			tilesHeight[x]= parseFloat(operationTags[i].getAttribute("owcht:height"));
 			tilesTop[x]= parseFloat(operationTags[i].getAttribute("owcht:top"));
@@ -406,7 +379,7 @@ var elem, reason,isSupported= false, //In order to check if at least one operati
 		myOffering.i_symbology= 0;
 		myOffering.layerId= myTileMatrixSet.layer;
 		myOffering.server= myTileMatrixSet.server;
-		
+
 		//Now the TileMatrix array must be filled, at least with one TileMatrix
 		/*myTileMatrixSet.TileMatrix= new Array(new CreaTileMatrix(myTileMatrixSet.tileMatrixName,
 			714285.71428571,
@@ -431,10 +404,7 @@ var myOffering= new Offering(myOWSCLayer), elem;
 
 	elem= tag.getAttribute("code");
 	if(!elem)
-		throw DonaCadenaLang({"cat":"Falta l'atribut obligatori 'code' en l' 'offering' de "+tag,
-							"spa":"Falta el atributo obligatorio 'code' en el 'offering' de "+tag,
-							"eng":"Missing mandatory 'code' attribute on offering "+tag,
-							"fre":"Manque l'attribut obligatoire 'code' sur l' 'offereing' de "+tag});
+		throw GetMessage("MissingMandatoryCodeAttribute", "owsc") + " " + tag;
 
 	myOffering.code= elem;
 	//Process the 'code' attribute to get the type of offering
@@ -445,15 +415,12 @@ var myOffering= new Offering(myOWSCLayer), elem;
 	{
 		case "WMS": parseWMSOffering(tag,myOffering); break;
 		case "WMTS": parseWMTSOffering(tag,myOffering); break;
-		default: myOffering.nonSupported= DonaCadenaLang({"cat":"Tipus d''offering' no acceptat: '"+myOffering.typeName+"'",
-														"spa":"Tipo de 'offering' no soportado: '"+myOffering.typeName+"'",
-														"eng":"Non supported offering type: '"+myOffering.typeName+"'",
-														"fre":"Type d' 'offering' non supporté: '"+myOffering.typeName+"'"});
+		default: myOffering.nonSupported= GetMessage("NonSupportedOfferingType", "owsc") + ": '" + myOffering.typeName + "'";
 	}
 
 	//Add the new offering to the layer offering list
 	myOWSCLayer.offerings[myOWSCLayer.offerings.length]= myOffering;
-	
+
 	if(myOffering.operationsHTML.length)
 		return myOffering.typeName+"<ul><li>"
 			+myOffering.operationsHTML.join("</li><li>")
@@ -541,7 +508,7 @@ var elem,i,j,
 					attValueMatch= null;
 					elem= elem[0].attributes;
 				}
-				
+
 				//In case it has the attribute it is supposed to have, we add the attribute value to the info box
 				if(elem && elem.length)
 				{
@@ -566,10 +533,9 @@ var elem,i,j,
 				{
 					//Is it a mandatory attribute?
 					if(aTags[i+tagField.isMandatory])
-						throw DonaCadenaLang({"cat":"Etiqueta incomplerta","spa":"Etiqueta incompleta","eng":"Incomplete tag", "fre":"Étiquette incomplète"})+": '"
-							+aTags[i+tagField.name]+"'\n"
-							+DonaCadenaLang({"cat":"Manca atribut","spa":"Falta atributo","eng":"Missing attribute", "fre":"Manque attribut"})+": '"
-							+attRetrieved+"'";
+						throw GetMessage("IncompleteTag") + ": '" +
+            aTags[i+tagField.name] + "'\n" +
+            GetMessage("MissingAttribute") + ": '" + attRetrieved + "'";
 					else if(aTags[i+tagField.defaultValue])
 						newHTML+= aTags[i+tagField.defaultValue]; //Add the default text
 				}
@@ -578,7 +544,7 @@ var elem,i,j,
 			{
 				//It's this tag mandatory? Then throw an error...
 				if(aTags[i+tagField.isMandatory])
-					throw DonaCadenaLang({"cat":"Manca etiqueta obligatòria","spa":"Falta etiqueta obligatoria","eng":"Missing mandatory tag", "fre":"Manque étiquette obligatorire"})+": '"+aTags[i+tagField.name]+"'";
+					throw GetMessage("MissingMandatoryTag") + ": '" + aTags[i+tagField.name] + "'";
 				else if(aTags[i+tagField.defaultValue])
 					newHTML+= aTags[i+tagField.defaultValue]; //Add the default text
 			}
@@ -593,7 +559,7 @@ var elem,i,j,
 			{
 				//Check if this is mandatory, and throw if, or add the default value if not
 				if(aTags[i+tagField.isMandatory])
-					throw aTags[i+tagField.name]+", "+DonaCadenaLang({"cat":"manquen etiquetes anidades obligatòries","spa":"falten etiquetas anidadas obligatorias","eng":"missing mandatory nested tags", "fre":"des étiquettes nichées obligatoires manquantes"})+": '"+aTags[i+tagField.nestedTag]+"'";
+					throw aTags[i+tagField.name] + ", " + GetMessage("missingMandatoryNestedTags") + ": '" + aTags[i+tagField.nestedTag] + "'";
 				else if(aTags[i+tagField.defaultValue])
 					newHTML+= aTags[i+tagField.defaultValue]; //Add the default text
 			}
@@ -626,7 +592,7 @@ var elem,i,j,
 		if(shown && aTags[i+tagField.fieldClosing])
 			newHTML+= aTags[i+tagField.fieldClosing];
 	}
-	
+
 	return newHTML;
 }
 //Makes the list items to appear
@@ -688,7 +654,7 @@ function MMcommuteImage(self,imgArray,thisLayerId,controlProperty,toolTipArray,e
 }
 /*
  * Very simple HTML link generator from an url.
- * 
+ *
  * @param {XMLNode} url
  * @param {OWSCLayer} myOWSCLayer
  * @returns {String}
@@ -734,14 +700,14 @@ specificationTags=[
 //"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"Especificació","spa":"Especificación","eng":"Specification","fre":"Spécification"})+fieldNameClose,0,0,0,
 //"*",	"lang",		true,	0,	0,	DonaCadenaLang({"cat":"Idioma","spa":"Idioma","eng":"Language", "fre":"Langue"}),0,0, Seems to be inserted as an attribute of feed...
 //"*",	"id",			true,	0,	0,	fieldNameStart+"Id"+fieldNameClose,0,0,0,
-"*",	"updated",		true,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Data","spa":"Fecha","eng":"Date","fre":"Date"})+fieldNameClose,0,parseOWSCDate,0,
-"*",	"author",		false,	0,"name",fieldNameStart+DonaCadenaLang({"cat":"Autoria","spa":"Autoría","eng":"Authorship","fre":"Paternité"})+fieldNameClose,0,0,0,
-"dc",	"publisher",	false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Editor","spa":"Editor","eng":"Publisher", "fre":"Éditeur"})+fieldNameClose,0,0,0,
-"*",	"generator",	false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Generat amb","spa":"Generado con","eng":"Generated by","fre":"Généré par"})+fieldNameClose,0,0,0,
+"*",	"updated",		true,	0,	0,	fieldNameStart+ GetMessage("Date")+fieldNameClose,0,parseOWSCDate,0,
+"*",	"author",		false,	0,"name",fieldNameStart + GetMessage("Authorship") + fieldNameClose,0,0,0,
+"dc",	"publisher",	false,	0,	0,	fieldNameStart + GetMessage("Publisher") + fieldNameClose,0,0,0,
+"*",	"generator",	false,	0,	0,	fieldNameStart + GetMessage("GeneratedBy") + fieldNameClose,0,0,0,
 //"*", "display", Only metadata, not relevant for early implementation
-"*",	"rights",		false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Drets sobre el document de context","spa":"Derechos sobre el documento de contexto","eng":"Rights over the context document", "fre":"Les droits sur le document de contexte"})+fieldNameClose,0,0,0,
-"georss","where",		false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Àmbit","spa":"Ámbito","eng":"Boundaries","fre":"Champ"})+fieldNameClose,0,function(tag) { return parseWhere(tag,OWSCDocument,null); },0,
-"dc",	"dc:date",		false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"Interval de temps","spa":"Intérvalo de tiempo","eng":"Time resolution","fre":"Résolution temporelle"})+fieldNameClose,0,0,0 //The last comma should be removed for IE length correctness
+"*",	"rights",		false,	0,	0,	fieldNameStart + GetMessage("RightsOverContextDoc", "owsc") + fieldNameClose,0,0,0,
+"georss","where",		false,	0,	0,	fieldNameStart + GetMessage("Boundaries") + fieldNameClose,0,function(tag) { return parseWhere(tag,OWSCDocument,null); },0,
+"dc",	"dc:date",		false,	0,	0,	fieldNameStart + GetMessage("TimeResolution") + fieldNameClose,0,0,0 //The last comma should be removed for IE length correctness
 //"category",	false,	0,	0,	fieldNameStart+DonaCadenaLang({"cat":"","spa":"","eng":"","fre":""})+fieldNameClose,0,0,0, //keyword <- not unambiguous
 //"entry"
 //"link"
@@ -755,25 +721,25 @@ entryTags=[
 "*",	"content",		true,		0,	0,	"<li>","</li>",function(tag,myOWSCLayer) { myOWSCLayer.description= tag.firstChild.nodeValue; return myOWSCLayer.description; },0,
 //"*",	"contentDescription",		true,		0,	0,	"<li>","</li>",function(tag,myOWSCLayer) { myOWSCLayer.description= tag.firstChild.nodeValue; return myOWSCLayer.description; },0, Added on 1.0r2
 //"*",	"id",			true,		0,	0,	"<li>"+fieldNameStart+"Id"+fieldNameClose,"</li>",0,0,
-"*",	"updated",		/*true*/false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Data d'actualització","spa":"Fecha de actualización","eng":"Update date","fre":"Date de mise à jour"})+fieldNameClose,"</li>",parseOWSCDate,0,
-"*",	"author",		false,		0,"name","<li>"+fieldNameStart+DonaCadenaLang({"cat":"Autoria","spa":"Autoría","eng":"Autorship","fre":"Paternité"})+fieldNameClose,"</li>",0,0,
+"*",	"updated",		/*true*/false,		0,	0,	"<li>" + fieldNameStart + GetMessage("UpdateDate") + fieldNameClose,"</li>",parseOWSCDate,0,
+"*",	"author",		false,		0,"name","<li>" + fieldNameStart + GetMessage("Authorship") + fieldNameClose,"</li>",0,0,
 //"*", "author", "email" <-- should be also parsed
-"dc",	"publisher",	false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Editor","spa":"Editor","eng":"Publisher","fre":"Éditeur"})+fieldNameClose,"</li>",0,0,
-"dc",	"creator",		false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Creat amb","spa":"Creado con","eng":"Creator application","fre":"Créé avec"})+fieldNameClose,"</li>",0,0,
-"*",	"rights",		false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Drets","spa":"Derechos","eng":"Rights","fre":"Droits"})+fieldNameClose,"</li>",0,0,
-"georss","where",		false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Extensió geoespacial","spa":"Extensión geoespacial","eng":"Geospatial extent","fre":"Extension géospatiale"})+fieldNameClose,"</li>",function(tag,myOWSCLayer) { return parseWhere(tag,OWSCDocument,OWSCDocument.where); },0,
-"dc",	"date",			false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Extensió temporal","spa":"Extensión temporal","eng":"Temporal extent","fre":"Extension temporelle"})+fieldNameClose,"</li>",0,0,
-"*",	"link",			false,["rel","icon","href"],	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Previsualització","spa":"Previsualización","eng":"Preview","fre":"Aperçu"})+fieldNameClose+" <img src=\"","\"></li>",0,0,
-"*",	"link",			false,["rel","alternate","href"],0,"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Descripció del contingut","spa":"Descripción del contenido","eng":"Content description","fre":"Description du contenu"})+fieldNameClose,"</li>",MMcreateHTMLLink,0,
-"*",	"link",			false,["rel","enclosure","href"],0,"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Referència al contingut","spa":"Referencia al contenido","eng":"Content by reference","fre":"Contenu par référence"})+fieldNameClose,"</li>",MMcreateHTMLLink,0,
+"dc",	"publisher",	false,		0,	0,	"<li>" + fieldNameStart + GetMessage("Publisher") + fieldNameClose,"</li>",0,0,
+"dc",	"creator",		false,		0,	0,	"<li>" + fieldNameStart + GetMessage("CreatorApplication") + fieldNameClose,"</li>",0,0,
+"*",	"rights",		false,		0,	0,	"<li>" + fieldNameStart + GetMessage("Rights") + fieldNameClose,"</li>",0,0,
+"georss","where",		false,		0,	0,	"<li>" + fieldNameStart + GetMessage("GeospatialExtent") + fieldNameClose,"</li>",function(tag,myOWSCLayer) { return parseWhere(tag,OWSCDocument,OWSCDocument.where); },0,
+"dc",	"date",			false,		0,	0,	"<li>" + fieldNameStart + GetMessage("TemporalExtent") + fieldNameClose,"</li>",0,0,
+"*",	"link",			false,["rel","icon","href"],	0,	"<li>" + fieldNameStart + GetMessage("Preview") + fieldNameClose+" <img src=\"","\"></li>",0,0,
+"*",	"link",			false,["rel","alternate","href"],0,"<li>" + fieldNameStart + GetMessage("ContentDescription") + fieldNameClose,"</li>",MMcreateHTMLLink,0,
+"*",	"link",			false,["rel","enclosure","href"],0,"<li>" + fieldNameStart + GetMessage("ContentReference") + fieldNameClose,"</li>",MMcreateHTMLLink,0,
 //"*",	"offering",		Parsed in different order (see below in this list)
 "*",	"category"/*"active"*/,false,"scheme",	0,	"","",parseActive,0, //Only required to set active (visibility) property not to be shown as text
-"*",	"link",			false,["rel","via","href"],	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Metadades de la font","spa":"Metadatos de la fuente","eng":"Source metadata","fre":"Métadónnées de source"})+fieldNameClose,"</li>",MMcreateHTMLLink,0,
+"*",	"link",			false,["rel","via","href"],	0,	"<li>" + fieldNameStart + GetMessage("SourceMetadata") + fieldNameClose,"</li>",MMcreateHTMLLink,0,
 //"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"Especificació","spa":"Especificación","eng":"Specification","fre":"Spécificaction"})+fieldNameClose,0,0,0,
-"owc",	"minScaleDenominator",false,0,0,"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Escala mínima de visualització","spa":"Escala mínima de visualización","eng":"Minimum display scale", "fre":"Échelle d'affichage minimale"})+fieldNameClose,"</li>",0,0,
-"owc",	"maxScaleDenominator",false,0,0,"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Escala màxima de visualització","spa":"Escala máxima de visualización","eng":"Maximum display scale","fre":"Échelle d'affichage maximale"})+fieldNameClose,"</li>",0,0,
+"owc",	"minScaleDenominator",false,0,0,"<li>" + fieldNameStart + GetMessage("MinimumDisplayScale") + fieldNameClose,"</li>",0,0,
+"owc",	"maxScaleDenominator",false,0,0,"<li>" + fieldNameStart + GetMessage("MaximumDisplayScale") + fieldNameClose,"</li>",0,0,
 //"*", "folder", Not implemented (lack of time)
-"owc",	"offering",		false,		0,	0,	"<li>"+fieldNameStart+DonaCadenaLang({"cat":"Oferta de servei ('offering')","spa":"Oferta de servicio ('offering')","eng":"Offering","fre":"Offre de services ('offering')"})+fieldNameClose,"</li>",parseOffering,0 //The last comma should be removed for IE length correctness
+"owc",	"offering",		false,		0,	0,	"<li>" + fieldNameStart + GetMessage("Offering") + fieldNameClose,"</li>",parseOffering,0 //The last comma should be removed for IE length correctness
 ];
 
 	//This will be the text to copy in myBox.innerHTML in the end.
@@ -783,10 +749,10 @@ entryTags=[
 		auxHTML,
 		cState, //Controls the checkbox state "checked"/"disabled"
 		visibilityImageArray= ['is_visible.gif','not_visible.gif'],
-		visibilityToolTipArray= [DonaCadenaLang({"cat":"La capa estarà activa i visible","spa":"La capa estarà activa y visible","eng":"Layer will be active and visible","fre":"La couche sera active et visible"}), //Active title
-			DonaCadenaLang({"cat":"La capa no estarà visible","spa":"La capa no estarà visible","eng":"Layer will be not visible","fre":"La couche ne sera pas visible"})], //Non active title
+		visibilityToolTipArray= [GetMessage("LayerActiveAndVisible"), //Active title
+			GetMessage("LayerNotVisible")], //Non active title
 		myOWSCLayer;
-	
+
 	OWSCDocument.url= doc.baseURI;
 	OWSCDocument.layers= [];
 
@@ -807,10 +773,7 @@ entryTags=[
 			root=DonamElementsNodeAPartirDelNomDelTag(doc, null, "*", "feed");
 		if(!root || root.length<1)
 		{
-			throw DonaCadenaLang({"cat":"El document de context OWS no té \"feed\" com a node arrel.",
-								"spa":"El documento de contexto OWS no tiene \"feed\" como nodo raiz.",
-								"eng":"The OWS context document does not have \"feed\" as a root node.",
-								"fre":"Le document de context OWS n'a pas \"feed\" comme un noeud racine."});
+			throw GetMessage("OwsContextDocumentNotHaveFeed", "owsc");
 		}
 		else
 			root= root[0];
@@ -819,9 +782,8 @@ entryTags=[
 		newHTML+= parseTag(specificationTags,tagField,root,OWSCDocument);
 
 		//Now, check for entry layers and show them to the user
-		newHTML+= "<h3 class=\"floatingWindowText\">"
-			+DonaCadenaLang({"cat":"Capes de la vista","spa":"Capas de la vista","eng":"Layers on this view","fre":"Couches sur ce point de vue"})
-			+":</h3><form action=\"\" onsubmit=\"OpenmyOWSCLayers(this); return false;\">"; //Capture the submit event
+		newHTML+= "<h3 class=\"floatingWindowText\">" + GetMessage("LayersOnView") +
+    ":</h3><form action=\"\" onsubmit=\"OpenmyOWSCLayers(this); return false;\">"; //Capture the submit event
 		entries=DonamElementsNodeAPartirDelNomDelTag(root, null, "*", "entry");
 		for(i=0;i<entries.length;i++)
 		{
@@ -831,7 +793,7 @@ entryTags=[
 			//Should be done now, so myOWSCLayer get the proper values
 			auxHTML= parseTag(entryTags,tagField,entries[i],myOWSCLayer);
 			myOWSCLayer.title=DonamElementsNodeAPartirDelNomDelTag(entries[i], null, "*","title")[0].childNodes[0].nodeValue;
-			
+
 			//Now check if the layer is openable
 			error= isOpenableLayer(myOWSCLayer);
 			if(!error)
@@ -845,15 +807,15 @@ entryTags=[
 				cState= "disabled";
 				hasDisabled= true; //The context document has non openable layers
 			}
-			
-			newHTML+= 
+
+			newHTML+=
 				//Controls before the layer name
 				//The next span is required in order to avoid the unfoldEntry() function when
 				//checking/unchecking the checkbox. A better solution would be to place the
 				//checkbox outside the <ul> but that desaligns the checbox from the entry title.
 				"<span onclick=\"dontPropagateEvent(arguments[0] || window.event)\">"
 				+"<input type=\"checkbox\" name=\"layer\" value=\""+i+"\" "+cState+"></span>";
-			
+
 			//In case the layer is active, add Visibility image
 			if(!hasDisabled)
 			{
@@ -872,38 +834,29 @@ entryTags=[
 			}
 			else
 				newHTML+= " ";
-		
+
 			newHTML+= myOWSCLayer.title
 				+auxHTML
 				//Close this entry list
 				+"</ul>";
 		}
-		
+
 		//Add message explaining the meaning of the 'grey style layers'.
 		if(hasDisabled)
-			newHTML+= "<ul class=\"floatingWindowNote disabled\">"
-				+DonaCadenaLang({"cat":"Les capes inactives no es poden obrir (moure el punter per sobre del nom mostrarà una descripció del motiu).",
-								"spa":"Las capas inactivas no se pueden abrir (mover el puntero por encima del nombre mostrará una descripción del motivo).",
-								"eng":"Disabled layers cannot be opened (move the cursor over the layer name will make appear a description of the reason).",
-								"fre":"Les couches inactives ne peuvent pas être ouvertes (mouvoir le pointeur sur le nom montrera une description du motif)."})
-				+"</ul><br>";
+			newHTML+= "<ul class=\"floatingWindowNote disabled\">" + GetMessage("DisabledLayersCannotOpened", "owsc") + "." + "</ul><br>";
 
 		//Finally, assign the newHTML written to the innerHTML tag to display it
 		//and close the form
 		myBox.innerHTML= newHTML
 			//Add a submit button and close the form
-			+"<input type=\"submit\" value=\""+DonaCadenaLang({"cat":"Afegir a vista","spa":"Añadir a vista","eng":"Add to view", "fre":"Ajoutez à la vue"})+"\" title=\""
-				+DonaCadenaLang({"cat":"Afegeix les capes seleccionades a la visualització actual.",
-								"spa":"Añade las capas seleccionadas a la visualización actual.",
-								"eng":"Add the selected layers to the current visualization.",
-								"fre":"Ajoutez les couches choisies à la visualisation actuelle ."})+"\" onclick=\"MMFloatingWindowEnllac_close()\">"
-			+"<input type=\"button\" value=\""+DonaCadenaLang({"cat":"Tancar vista i obrir","spa":"Cerrar vista y abrir","eng":"Close view and open","fre":"Fermer la vue et ovrir"})+"\" title=\""
-				+DonaCadenaLang({"cat":"Tanca la visualització actual i obra una nova amb les capes seleccionades.",
-					"spa":"Cierra la visualización actual y abre una nueva con las capas seleccionadas.",
-					"eng":"Close the current visualization and open a new one with the selected layers.",
-					"fre":"Fermez la visualisation en cours et ouvrez une nouvelle avec les couches choisies."})+"\" onclick=\"EliminaTotesLesCapes(false); OpenmyOWSCLayers(this.form); MMFloatingWindowEnllac_close()\">"
-			+"<input type=\"button\" value=\""+DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"})+"\" onclick=\"MMFloatingWindowEnllac_close()\">"
-			+"</form>";
+			+ "<input type=\"submit\" value=\"" + GetMessage("AddToView") +
+      "\" title=\"" + GetMessage("AddSelectedLayersCurrentVisu") + "." +
+      "\" onclick=\"MMFloatingWindowEnllac_close()\">" +
+      "<input type=\"button\" value=\"" + GetMessage("CloseViewOpen") +
+      "\" title=\"" + GetMessage("CloseOpenNewSelectedLayers") + "." +
+      "\" onclick=\"EliminaTotesLesCapes(false); OpenmyOWSCLayers(this.form); MMFloatingWindowEnllac_close()\">" +
+      "<input type=\"button\" value=\"" + GetMessage("Cancel") +
+      "\" onclick=\"MMFloatingWindowEnllac_close()\">" +"</form>";
 	}
 	/*catch(err)
 	{
@@ -917,7 +870,7 @@ entryTags=[
 			auxHTML+= err.description;
 		else
 			auxHTML+= err;
-		
+
 		myBox.innerHTML= auxHTML;
   	}*/
 }
@@ -956,7 +909,7 @@ function OpenOWSContext(url_context)
 +"</entry>"
 +"</feed>",
 		elem;
-	
+
 	if (window.DOMParser)
 		xmlobject=(new DOMParser()).parseFromString(str,"text/xml");
 	else
@@ -975,12 +928,9 @@ function OpenOWSContext(url_context)
     //We set a function to handle errors in case the ajax can not download the XML
     ajaxOWSC.setHandlerErr(function(resp)
 			{
-				textTarget.innerHTML= DonaCadenaLang({"cat":"El document de context no s'ha pogut carregar: ",
-												"spa":"El documento de contexto no se ha podido cargar: ",
-												"eng":"It was not possible to load the context document: ",
-												"fre":"Il n'était pas possible de charger le document de contexte: "})
-										+"<a href=\""+url_context+"\">"+url_context+"</a>"
-										+"<br>Error: "+this.responseText; });
+				textTarget.innerHTML= GetMessage("NotPossibleLoadContextDoc", "owsc") + ": " +
+        "<a href=\"" + url_context + "\">" + url_context + "</a>" +
+        "<br>Error: " + this.responseText; });
 	ajaxOWSC.doGet(url_context, LlegeixIAplicaOWSContext, "text/xml",document);
 }
 
@@ -991,12 +941,12 @@ function getServiceRequestURL(thisLayer,thisRequest)
 {
 var thisService;
 var tipusServidorCapa=DonaTipusServidorCapa(thisLayer);
-	
+
 	if (tipusServidorCapa=="TipusWMS" || tipusServidorCapa=="TipusWMS_C")
 		thisService= "WMS";
 	else if (tipusServidorCapa=="TipusWMTS_REST" || tipusServidorCapa=="TipusWMTS_SOAP" || tipusServidorCapa=="TipusWMTS_KVP")
 		thisService= "WMTS";
-	else if (tipusServidorCapa=="TipusWFS") 
+	else if (tipusServidorCapa=="TipusWFS")
 		thisService= "WFS";
 	else
 		throw "Service type "+DonaTipusServidorCapa(thisLayer)+" not supported.";
@@ -1084,10 +1034,7 @@ function createOWSCFile(thisForm)
 	if(thisForm.title.value)
 		MMaddElement(xmlobject,root,"title",thisForm.title.value);
 	else
-		alert(DonaCadenaLang({"cat":"El teu document OWSC no serà compatible amb l'estàndard ja que no has proporcionat un títol vàlid.",
-							"spa":"Su documento OWSC no será compatible con el estándar ya que no ha proporcionado un título válido.",
-							"eng":"Your OWSC document will not be standard compliant as you have not provided a valid title.",
-							"fre":"Votre document OWSC ne sera pas conforme avec le norme car vous n'avez pas fourni un titre valable."}));
+		alert(GetMessage("OwscDocumentNotStandardCompliant", "owsc"));
 	if(thisForm.subtitle.value)
 		MMaddElement(xmlobject,root,"subtitle",thisForm.subtitle.value);
 	MMaddElement(xmlobject,root,"updated",currentDate);
@@ -1151,8 +1098,8 @@ function createOWSCFile(thisForm)
 	if (true)//Can URI
 	{
 		//The replace is required so data inside do not break the '' of the a link
-		downloadRegion.innerHTML= "<a href=\"data:text/xml;charset=UTF-8,"+encodeURIComponent(str)+"\"><img src='download.gif' style='height:24px;'> "
-			+DonaCadenaLang({"cat":"Descarrega document OWSC","spa":"Descarga documento OWSC","eng":"Download OWSC document", "fre":"Téléchargez document OWSC"})+"</a>";
+		downloadRegion.innerHTML= "<a href=\"data:text/xml;charset=UTF-8," + encodeURIComponent(str) + "\"><img src='download.gif' style='height:24px;'> " +
+		  GetMessage("DownloadOwscDocument", "owsc") + "</a>";
 	}
 	else
 	{
@@ -1161,11 +1108,11 @@ function createOWSCFile(thisForm)
 		//so the user can save it with the browser "save as" option.
 		//Maybe is possible to send the file to the server and ask him to download.
 		//(will look better for the user-side).
-		alert("A new window will be opened in your browser with the OWS Context"
-			+"document. You can then save the document in that window using your browser "
-			+"'Save as...' option.\n\n(It might happen that your browser renders the "
-			+"document in a way that you cannot see the tags. Open the source code view "
-			+"or save the document to fully visualize the content.)");
+		alert("A new window will be opened in your browser with the OWS Context" +
+      "document. You can then save the document in that window using your browser " +
+      "'Save as...' option.\n\n(It might happen that your browser renders the " +
+      "document in a way that you cannot see the tags. Open the source code view " +
+      "or save the document to fully visualize the content.)");
 		textTarget= window.open("about:blank","_blank");
 		textTarget.document.open("text/xml");
 
@@ -1190,54 +1137,31 @@ function SaveOWSContext(url_context)
     var textTarget= document.getElementById("enllac_finestra"),
 		//I use this list in order to keep the form code cleaner:
 		f={
-			"lang":[DonaCadenaLang({"cat":"Idioma del document","spa":"Idioma del documento","eng":"Document language","fre":"Langue du document"}),
-				DonaCadenaLang({"cat":"Llengua en què s'està documentant aquest arxiu OWS Context",
-								"spa":"Idioma en el que se está documentando este archivo OWS Context",
-								"eng":"Language at which you are documenting this OWS Context file",
-								"fre":"La langue à lequel vous documentez ce fichier de Contexte OWS"})],
-			"titl":[DonaCadenaLang({"cat":"Títol","spa":"Título","eng":"Title","fre":"Titre"}),
-				DonaCadenaLang({"cat":"Un títol per al document de context",
-								"spa":"Un título para el documento de contexto",
-								"eng":"A title for the Context document",
-								"fre":"Un titre pour le document de context"})],
-			"subt":[DonaCadenaLang({"cat":"Descripció","spa":"Descripción","eng":"Description","fre":"Descriptif"}),
-				DonaCadenaLang({"cat":"Descripció de la finalitat o el contingut del document de context",
-								"spa":"Descripción de la finalidad o el contenido del documento de contexto",
-								"eng":"Description of the Context document purpose or content",
-								"fre":"Description du but ou du contenu du document de context"})],
-			"auth":[DonaCadenaLang({"cat":"Autor","spa":"Autor","eng":"Author","fre":"Auteur"}),
-				DonaCadenaLang({"cat":"Una entitat directament responsable de crear el document de context (en general tu o la teva organització)",
-								"spa":"Una entidad directamente responsable de crear el documento de contexto (por lo general usted o su organización)",
-								"eng":"An entity primarily responsible for making the Context Document (usually you or your organisation)",
-								"fre":"Une entité principalement responsable de faire le document de contexte (d'habitude vous ou votre organisation)"})],
-			"publ":[DonaCadenaLang({"cat":"Editor","spa":"Editor","eng":"Publisher","fre":"Éditeur"}),
-				DonaCadenaLang({"cat":"Identificador de l'editor del document de context",
-								"spa":"Identificador del editor del documento de contexto",
-								"eng":"Identifier for the publisher of the Context document",
-								"fre":"Identifiant de l'éditeur du document de contexte"})],
-			"righ":[DonaCadenaLang({"cat":"Drets sobre el document de context","spa":"Derechos sobre el documento de contexto","eng":"Rights over the context document","fre":"Les droits sur le document de contexte"}),
-				DonaCadenaLang({"cat":"Informació sobre els drets continguts en i sobre el document de context",
-								"spa":"Información sobre los derechos contenidos en y sobre el documento de contexto",
-								"eng":"Information about rights held in and over the Context document",
-								"fre":"Informations sur les droits détenus dans et sur le document de contexte"})],
+			"lang":[GetMessage("DocumentLanguage"),
+				GetMessage("LanguageWhichDocumentingOws", "owsc")],
+			"titl":[GetMessage("Title"),
+				GetMessage("TitleContextDocument", "owsc")],
+			"subt":[GetMessage("Description"),
+				GetMessage("DescriptionContextDocumentContent", "owsc")],
+			"auth":[GetMessage("Author"),
+				GetMessage("EntityResponsibleMakingContextDoc"), "owsc"],
+			"publ":[GetMessage("Publisher"),
+				GetMessage("IdentifiePublisherContextDoc", "owsc")],
+			"righ":[GetMessage("RightsOverContextDoc", "owsc"),
+				GetMessage("InformationRightsContextDoc", "owsc")],
 			"":0 //For easily adding elements above without the , error
 		},
-		mandatoryHelp= DonaCadenaLang({"cat":"Camp obligatori","spa":"Campo obligatorio","eng":"Mandatory field","fre":"Champ obligatoire"}),
+		mandatoryHelp= GetMessage("MandatoryField"),
 		mandatory= "<span style='color:red;' title='"+mandatoryHelp+"'>*</span>",
 		elem;
 
-	textTarget.innerHTML= "<p>"+DonaCadenaLang(
-			{"cat":"L'estat actual del navegador de mapes es desarà mitjançant l'estàndar de documents de context OWS. El podrà restaurar més tard usant el fitxer amb aquest navegador de mapes o qualsevol altre client compatible amb OWS.",
-			"spa":"El estado actual del navegador de mapas se guardará usando el estándar de documentos de contexto OWS. Lo podrà restaurar más tarde usando el archivo con este navegador de mapas o cualquier cliente compatible con OWS.",
-			"eng":"The current state of the map browser will be saved using the OWS Context document standard. You may restore it later using the file in this map browser or any other OWS compliant client.",
-			"fre":"L'état actuel du navigateur des cartes sera sauvé utilisant la norme de document de Contexte OWS. Vous pouvez le reconstituer pour utiliser plus tard le fichier dans ce navigateur des cartes ou un autre client conforme OWS."})
-		+"</p><p>URL actual: "+url_context+"</p>"
-		+"<form onsubmit='createOWSCFile(this); return false;'>"
-		+"<ul class='fieldName'>"
-		+"<li>"+mandatory+f.lang[0]+": <select id='language' title='"+f.lang[1]+"' style='width:160px;'>"
-			//It would be possible to read from an xml, but this way it's not necessaire to use Ajax
-			+"<option value='aa'>Afar [aa]</option><option value='ab'>Abkhazian [ab]</option><option value='ae'>Avestan [ae]</option><option value='af'>Afrikaans [af]</option><option value='ak'>Akan [ak]</option><option value='am'>Amharic [am]</option><option value='an'>Aragonese [an]</option><option value='ar'>Arabic [ar]</option><option value='as'>Assamese [as]</option><option value='av'>Avaric [av]</option><option value='ay'>Aymara [ay]</option><option value='az'>Azerbaijani [az]</option><option value='ba'>Bashkir [ba]</option><option value='be'>Belarusian [be]</option><option value='bg'>Bulgarian [bg]</option><option value='bh'>Bihari languages [bh]</option><option value='bi'>Bislama [bi]</option><option value='bm'>Bambara [bm]</option><option value='bn'>Bengali [bn]</option><option value='bo'>Tibetan [bo]</option><option value='br'>Breton [br]</option><option value='bs'>Bosnian [bs]</option><option value='ca'>Catalan; Valencian [ca]</option><option value='ce'>Chechen [ce]</option><option value='ch'>Chamorro [ch]</option><option value='co'>Corsican [co]</option><option value='cr'>Cree [cr]</option><option value='cs'>Czech [cs]</option><option value='cu'>Church Slavic; Old Slavonic [cu]</option><option value='cv'>Chuvash [cv]</option><option value='cy'>Welsh [cy]</option><option value='da'>Danish [da]</option><option value='de'>German [de]</option><option value='dv'>Divehi; Dhivehi; Maldivian [dv]</option><option value='dz'>Dzongkha [dz]</option><option value='ee'>Ewe [ee]</option><option value='el'>Greek, Modern (1453-) [el]</option><option value='en'>English [en]</option><option value='eo'>Esperanto [eo]</option><option value='es'>Spanish; Castilian [es]</option><option value='et'>Estonian [et]</option><option value='eu'>Basque [eu]</option><option value='fa'>Persian [fa]</option><option value='ff'>Fulah [ff]</option><option value='fi'>Finnish [fi]</option><option value='fj'>Fijian [fj]</option><option value='fo'>Faroese [fo]</option><option value='fr'>French [fr]</option><option value='fy'>Western Frisian [fy]</option><option value='ga'>Irish [ga]</option><option value='gd'>Gaelic; Scottish Gaelic [gd]</option><option value='gl'>Galician [gl]</option><option value='gn'>Guarani [gn]</option><option value='gu'>Gujarati [gu]</option><option value='gv'>Manx [gv]</option><option value='ha'>Hausa [ha]</option><option value='he'>Hebrew [he]</option><option value='hi'>Hindi [hi]</option><option value='ho'>Hiri Motu [ho]</option><option value='hr'>Croatian [hr]</option><option value='ht'>Haitian; Haitian Creole [ht]</option><option value='hu'>Hungarian [hu]</option><option value='hy'>Armenian [hy]</option><option value='hz'>Herero [hz]</option><option value='ia'>Interlingua [ia]</option><option value='id'>Indonesian [id]</option><option value='ie'>Interlingue; Occidental [ie]</option><option value='ig'>Igbo [ig]</option><option value='ii'>Sichuan Yi; Nuosu [ii]</option><option value='ik'>Inupiaq [ik]</option><option value='io'>Ido [io]</option><option value='is'>Icelandic [is]</option><option value='it'>Italian [it]</option><option value='iu'>Inuktitut [iu]</option><option value='ja'>Japanese [ja]</option><option value='jv'>Javanese [jv]</option><option value='ka'>Georgian [ka]</option><option value='kg'>Kongo [kg]</option><option value='ki'>Kikuyu; Gikuyu [ki]</option><option value='kj'>Kuanyama; Kwanyama [kj]</option><option value='kk'>Kazakh [kk]</option><option value='kl'>Kalaallisut; Greenlandic [kl]</option><option value='km'>Central Khmer [km]</option><option value='kn'>Kannada [kn]</option><option value='ko'>Korean [ko]</option><option value='kr'>Kanuri [kr]</option><option value='ks'>Kashmiri [ks]</option><option value='ku'>Kurdish [ku]</option><option value='kv'>Komi [kv]</option><option value='kw'>Cornish [kw]</option><option value='ky'>Kirghiz; Kyrgyz [ky]</option><option value='la'>Latin [la]</option><option value='lb'>Luxembourgish; Letzeburgesch [lb]</option><option value='lg'>Ganda [lg]</option><option value='li'>Limburgan; Limburger; Limburgish [li]</option><option value='ln'>Lingala [ln]</option><option value='lo'>Lao [lo]</option><option value='lt'>Lithuanian [lt]</option><option value='lu'>Luba-Katanga [lu]</option><option value='lv'>Latvian [lv]</option><option value='mg'>Malagasy [mg]</option><option value='mh'>Marshallese [mh]</option><option value='mi'>Maori [mi]</option><option value='mk'>Macedonian [mk]</option><option value='ml'>Malayalam [ml]</option><option value='mn'>Mongolian [mn]</option><option value='mr'>Marathi [mr]</option><option value='ms'>Malay [ms]</option><option value='mt'>Maltese [mt]</option><option value='my'>Burmese [my]</option><option value='na'>Nauru [na]</option><option value='nb'>BokmÃ¥l, Norwegian [nb]</option><option value='nd'>Ndebele, North; North Ndebele [nd]</option><option value='ne'>Nepali [ne]</option><option value='ng'>Ndonga [ng]</option><option value='nl'>Dutch; Flemish [nl]</option><option value='nn'>Nynorsk, Norwegian [nn]</option><option value='no'>Norwegian [no]</option><option value='nr'>Ndebele, South; South Ndebele [nr]</option><option value='nv'>Navajo; Navaho [nv]</option><option value='ny'>Chichewa; Chewa; Nyanja [ny]</option><option value='oc'>Occitan (post 1500) [oc]</option><option value='oj'>Ojibwa [oj]</option><option value='om'>Oromo [om]</option><option value='or'>Oriya [or]</option><option value='os'>Ossetian; Ossetic [os]</option><option value='pa'>Panjabi; Punjabi [pa]</option><option value='pi'>Pali [pi]</option><option value='pl'>Polish [pl]</option><option value='ps'>Pushto; Pashto [ps]</option><option value='pt'>Portuguese [pt]</option><option value='qu'>Quechua [qu]</option><option value='rm'>Romansh [rm]</option><option value='rn'>Rundi [rn]</option><option value='ro'>Romanian; Moldavian; Moldovan [ro]</option><option value='ru'>Russian [ru]</option><option value='rw'>Kinyarwanda [rw]</option><option value='sa'>Sanskrit [sa]</option><option value='sc'>Sardinian [sc]</option><option value='sd'>Sindhi [sd]</option><option value='se'>Northern Sami [se]</option><option value='sg'>Sango [sg]</option><option value='si'>Sinhala; Sinhalese [si]</option><option value='sk'>Slovak [sk]</option><option value='sl'>Slovenian [sl]</option><option value='sm'>Samoan [sm]</option><option value='sn'>Shona [sn]</option><option value='so'>Somali [so]</option><option value='sq'>Albanian [sq]</option><option value='sr'>Serbian [sr]</option><option value='ss'>Swati [ss]</option><option value='st'>Sotho, Southern [st]</option><option value='su'>Sundanese [su]</option><option value='sv'>Swedish [sv]</option><option value='sw'>Swahili [sw]</option><option value='ta'>Tamil [ta]</option><option value='te'>Telugu [te]</option><option value='tg'>Tajik [tg]</option><option value='th'>Thai [th]</option><option value='ti'>Tigrinya [ti]</option><option value='tk'>Turkmen [tk]</option><option value='tl'>Tagalog [tl]</option><option value='tn'>Tswana [tn]</option><option value='to'>Tonga (Tonga Islands) [to]</option><option value='tr'>Turkish [tr]</option><option value='ts'>Tsonga [ts]</option><option value='tt'>Tatar [tt]</option><option value='tw'>Twi [tw]</option><option value='ty'>Tahitian [ty]</option><option value='ug'>Uighur; Uyghur [ug]</option><option value='uk'>Ukrainian [uk]</option><option value='ur'>Urdu [ur]</option><option value='uz'>Uzbek [uz]</option><option value='ve'>Venda [ve]</option><option value='vi'>Vietnamese [vi]</option><option value='vo'>VolapÃ¼k [vo]</option><option value='wa'>Walloon [wa]</option><option value='wo'>Wolof [wo]</option><option value='xh'>Xhosa [xh]</option><option value='yi'>Yiddish [yi]</option><option value='yo'>Yoruba [yo]</option><option value='za'>Zhuang; Chuang [za]</option><option value='zh'>Chinese [zh]</option><option value='zu'>Zulu [zu]</option>"
-			+"</select>"
+	textTarget.innerHTML= "<p>" + GetMessage("StateMapBrowserSavedOwsContextDocumentStandard", "owsc") + ". " +
+    GetMessage("MayRestoreUsingFileOrOwsCompliantClient", "owsc") + "." + "</p><p>URL actual: " + url_context + "</p>" +
+    "<form onsubmit='createOWSCFile(this); return false;'>"	+ "<ul class='fieldName'>"	+
+    "<li>" + mandatory + f.lang[0] + ": <select id='language' title='" + f.lang[1] + "' style='width:160px;'>" +
+    //It would be possible to read from an xml, but this way it's not necessaire to use Ajax
+		"<option value='aa'>Afar [aa]</option><option value='ab'>Abkhazian [ab]</option><option value='ae'>Avestan [ae]</option><option value='af'>Afrikaans [af]</option><option value='ak'>Akan [ak]</option><option value='am'>Amharic [am]</option><option value='an'>Aragonese [an]</option><option value='ar'>Arabic [ar]</option><option value='as'>Assamese [as]</option><option value='av'>Avaric [av]</option><option value='ay'>Aymara [ay]</option><option value='az'>Azerbaijani [az]</option><option value='ba'>Bashkir [ba]</option><option value='be'>Belarusian [be]</option><option value='bg'>Bulgarian [bg]</option><option value='bh'>Bihari languages [bh]</option><option value='bi'>Bislama [bi]</option><option value='bm'>Bambara [bm]</option><option value='bn'>Bengali [bn]</option><option value='bo'>Tibetan [bo]</option><option value='br'>Breton [br]</option><option value='bs'>Bosnian [bs]</option><option value='ca'>Catalan; Valencian [ca]</option><option value='ce'>Chechen [ce]</option><option value='ch'>Chamorro [ch]</option><option value='co'>Corsican [co]</option><option value='cr'>Cree [cr]</option><option value='cs'>Czech [cs]</option><option value='cu'>Church Slavic; Old Slavonic [cu]</option><option value='cv'>Chuvash [cv]</option><option value='cy'>Welsh [cy]</option><option value='da'>Danish [da]</option><option value='de'>German [de]</option><option value='dv'>Divehi; Dhivehi; Maldivian [dv]</option><option value='dz'>Dzongkha [dz]</option><option value='ee'>Ewe [ee]</option><option value='el'>Greek, Modern (1453-) [el]</option><option value='en'>English [en]</option><option value='eo'>Esperanto [eo]</option><option value='es'>Spanish; Castilian [es]</option><option value='et'>Estonian [et]</option><option value='eu'>Basque [eu]</option><option value='fa'>Persian [fa]</option><option value='ff'>Fulah [ff]</option><option value='fi'>Finnish [fi]</option><option value='fj'>Fijian [fj]</option><option value='fo'>Faroese [fo]</option><option value='fr'>French [fr]</option><option value='fy'>Western Frisian [fy]</option><option value='ga'>Irish [ga]</option><option value='gd'>Gaelic; Scottish Gaelic [gd]</option><option value='gl'>Galician [gl]</option><option value='gn'>Guarani [gn]</option><option value='gu'>Gujarati [gu]</option><option value='gv'>Manx [gv]</option><option value='ha'>Hausa [ha]</option><option value='he'>Hebrew [he]</option><option value='hi'>Hindi [hi]</option><option value='ho'>Hiri Motu [ho]</option><option value='hr'>Croatian [hr]</option><option value='ht'>Haitian; Haitian Creole [ht]</option><option value='hu'>Hungarian [hu]</option><option value='hy'>Armenian [hy]</option><option value='hz'>Herero [hz]</option><option value='ia'>Interlingua [ia]</option><option value='id'>Indonesian [id]</option><option value='ie'>Interlingue; Occidental [ie]</option><option value='ig'>Igbo [ig]</option><option value='ii'>Sichuan Yi; Nuosu [ii]</option><option value='ik'>Inupiaq [ik]</option><option value='io'>Ido [io]</option><option value='is'>Icelandic [is]</option><option value='it'>Italian [it]</option><option value='iu'>Inuktitut [iu]</option><option value='ja'>Japanese [ja]</option><option value='jv'>Javanese [jv]</option><option value='ka'>Georgian [ka]</option><option value='kg'>Kongo [kg]</option><option value='ki'>Kikuyu; Gikuyu [ki]</option><option value='kj'>Kuanyama; Kwanyama [kj]</option><option value='kk'>Kazakh [kk]</option><option value='kl'>Kalaallisut; Greenlandic [kl]</option><option value='km'>Central Khmer [km]</option><option value='kn'>Kannada [kn]</option><option value='ko'>Korean [ko]</option><option value='kr'>Kanuri [kr]</option><option value='ks'>Kashmiri [ks]</option><option value='ku'>Kurdish [ku]</option><option value='kv'>Komi [kv]</option><option value='kw'>Cornish [kw]</option><option value='ky'>Kirghiz; Kyrgyz [ky]</option><option value='la'>Latin [la]</option><option value='lb'>Luxembourgish; Letzeburgesch [lb]</option><option value='lg'>Ganda [lg]</option><option value='li'>Limburgan; Limburger; Limburgish [li]</option><option value='ln'>Lingala [ln]</option><option value='lo'>Lao [lo]</option><option value='lt'>Lithuanian [lt]</option><option value='lu'>Luba-Katanga [lu]</option><option value='lv'>Latvian [lv]</option><option value='mg'>Malagasy [mg]</option><option value='mh'>Marshallese [mh]</option><option value='mi'>Maori [mi]</option><option value='mk'>Macedonian [mk]</option><option value='ml'>Malayalam [ml]</option><option value='mn'>Mongolian [mn]</option><option value='mr'>Marathi [mr]</option><option value='ms'>Malay [ms]</option><option value='mt'>Maltese [mt]</option><option value='my'>Burmese [my]</option><option value='na'>Nauru [na]</option><option value='nb'>BokmÃ¥l, Norwegian [nb]</option><option value='nd'>Ndebele, North; North Ndebele [nd]</option><option value='ne'>Nepali [ne]</option><option value='ng'>Ndonga [ng]</option><option value='nl'>Dutch; Flemish [nl]</option><option value='nn'>Nynorsk, Norwegian [nn]</option><option value='no'>Norwegian [no]</option><option value='nr'>Ndebele, South; South Ndebele [nr]</option><option value='nv'>Navajo; Navaho [nv]</option><option value='ny'>Chichewa; Chewa; Nyanja [ny]</option><option value='oc'>Occitan (post 1500) [oc]</option><option value='oj'>Ojibwa [oj]</option><option value='om'>Oromo [om]</option><option value='or'>Oriya [or]</option><option value='os'>Ossetian; Ossetic [os]</option><option value='pa'>Panjabi; Punjabi [pa]</option><option value='pi'>Pali [pi]</option><option value='pl'>Polish [pl]</option><option value='ps'>Pushto; Pashto [ps]</option><option value='pt'>Portuguese [pt]</option><option value='qu'>Quechua [qu]</option><option value='rm'>Romansh [rm]</option><option value='rn'>Rundi [rn]</option><option value='ro'>Romanian; Moldavian; Moldovan [ro]</option><option value='ru'>Russian [ru]</option><option value='rw'>Kinyarwanda [rw]</option><option value='sa'>Sanskrit [sa]</option><option value='sc'>Sardinian [sc]</option><option value='sd'>Sindhi [sd]</option><option value='se'>Northern Sami [se]</option><option value='sg'>Sango [sg]</option><option value='si'>Sinhala; Sinhalese [si]</option><option value='sk'>Slovak [sk]</option><option value='sl'>Slovenian [sl]</option><option value='sm'>Samoan [sm]</option><option value='sn'>Shona [sn]</option><option value='so'>Somali [so]</option><option value='sq'>Albanian [sq]</option><option value='sr'>Serbian [sr]</option><option value='ss'>Swati [ss]</option><option value='st'>Sotho, Southern [st]</option><option value='su'>Sundanese [su]</option><option value='sv'>Swedish [sv]</option><option value='sw'>Swahili [sw]</option><option value='ta'>Tamil [ta]</option><option value='te'>Telugu [te]</option><option value='tg'>Tajik [tg]</option><option value='th'>Thai [th]</option><option value='ti'>Tigrinya [ti]</option><option value='tk'>Turkmen [tk]</option><option value='tl'>Tagalog [tl]</option><option value='tn'>Tswana [tn]</option><option value='to'>Tonga (Tonga Islands) [to]</option><option value='tr'>Turkish [tr]</option><option value='ts'>Tsonga [ts]</option><option value='tt'>Tatar [tt]</option><option value='tw'>Twi [tw]</option><option value='ty'>Tahitian [ty]</option><option value='ug'>Uighur; Uyghur [ug]</option><option value='uk'>Ukrainian [uk]</option><option value='ur'>Urdu [ur]</option><option value='uz'>Uzbek [uz]</option><option value='ve'>Venda [ve]</option><option value='vi'>Vietnamese [vi]</option><option value='vo'>VolapÃ¼k [vo]</option><option value='wa'>Walloon [wa]</option><option value='wo'>Wolof [wo]</option><option value='xh'>Xhosa [xh]</option><option value='yi'>Yiddish [yi]</option><option value='yo'>Yoruba [yo]</option><option value='za'>Zhuang; Chuang [za]</option><option value='zh'>Chinese [zh]</option><option value='zu'>Zulu [zu]</option>" +
+    "</select>"
 		//<input id='language' type='text' title='"+f.lang[1]+"' value='"+expandLanguageName().substr(0,2)+"' style='width:70px'></li>"
 		+"<li>"+mandatory+f.titl[0]+": <input id='title' type='text' title='"+f.titl[1]+"' value='"+document.title+"'></li>"
 		+"<li>"+f.auth[0]+": <input id='author' type='text' title='"+f.auth[1]+"'></li>"
@@ -1247,9 +1171,9 @@ function SaveOWSContext(url_context)
 		+"</ul>"
 		+"<p>"+mandatory+mandatoryHelp+".</p>"
 		//+"<input type='submit' value='"+DonaCadenaLang({"cat":"Desar","spa":"Guardar","eng":"Save","fre":"Sauvegarder"})+"'>"
-		+"<input type='submit' value='"+DonaCadenaLang({"cat":"Generar","spa":"Generar","eng":"Generate","fre":"Générer"})+"'>"
-		+"<input type='button' value='"+DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"})+"' onclick='MMFloatingWindowEnllac_close()'>"
-		+"</form>"; 
+		+"<input type='submit' value='" + GetMessage("Generated") + "'>"
+		+"<input type='button' value='" + GetMessage("Cancel") + "' onclick='MMFloatingWindowEnllac_close()'>"
+		+"</form>";
 
 	//Set as selected language, current user language
 	elem= document.getElementById("language");
@@ -1270,10 +1194,7 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 			myOWSC= OWSCDocument.layers[myForm.elements[i].value];
 
 			if(!myOWSC.offerings || myOWSC.offerings.length<1)
-				throw DonaCadenaLang({"cat":"La capa '"+myOWSC.title+"' no té cap 'offering'",
-									"spa":"La capa '"+myOWSC.title+"' no tiene ningún 'offering'",
-									"eng":"The layer '"+myOWSC.title+"' do not have any offering",
-									"fre":"La couche '"+myOWSC.title+"' n'a pas 'offering'"});
+				throw GetMessage("TheLayer") + " '" + myOWSC.title + "' "+ GetMessage("NotHaveOffering");
 
 			//bBox= getWhere(myOWSC); By now, leave it visible in all CRS
 
@@ -1295,12 +1216,12 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 				"DescLlegenda": myOWSC.title, //Title shown in the legend
 				"i_estil": 0,
 				"NColEstil": 0,
-				"LlegDesplegada": false, 
-				"VisibleALaLlegenda": true, 
+				"LlegDesplegada": false,
+				"VisibleALaLlegenda": true,
 				"visible": myOWSC.active ? "si":"ara_no",
-				"consultable": "ara_no", 
-				"descarregable": "no", 
-				"i_data": 0, 
+				"consultable": "ara_no",
+				"descarregable": "no",
+				"i_data": 0,
 				"animable": false});
 
 			//Add a tool tip to show on mouse over the layer name
@@ -1312,11 +1233,11 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 			CompletaDefinicioCapa(ParamCtrl.capa[n_nova_capa]);
 			n_nova_capa++;
 		}
-	}	
+	}
 	//None layers will be added
 	if(n_nova_capa==0)
 		return;
-	
+
 	//The map browser is redrawn in order the layers to appear
 	ReescriuIndexOrdreCapes();
 	RevisaEstatsCapes();
@@ -1339,7 +1260,7 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 
 		env= DonaEnvDeMinMaxXY(lowerLeft.x,upperRight.x,lowerLeft.y,upperRight.y);
 		TransformaEnvolupant(env, bBox.CRS.name, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		
+
 		//A new envelope is produced from the Gml bounding box
 		//And then go to that new envelope.
 		PortamAAmbit(env);

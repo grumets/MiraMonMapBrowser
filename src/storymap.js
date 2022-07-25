@@ -190,6 +190,7 @@ function AfegeixMarkerStoryMapVisible()
 	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
 }
 
+//Atenció que els tags vendor specific han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
 {
 var node, attribute;

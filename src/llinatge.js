@@ -1248,8 +1248,8 @@ function DonaCadenaFormComplexQueryLlinatge()
 {
 var cdns=[];
 	cdns.push("<legend>",GetMessage("ComplexQuery", "llinatge"), "</legend>",
-			GetMessage("Start"),
-      GetMessage("Type"),
+			GetMessage("Start"), ": ",
+      GetMessage("Type"), ": ",
 			"<select name=\"cQLl_startTypeNode\" onChange=\"CanviaContigutAtributComplexQueryLlinatge('start', null);\">",
 			"<option value=\"agent\" selected>", GetMessage("Agent"),
 			"<option value=\"font\">", GetMessage("Source"),
@@ -1264,8 +1264,8 @@ var cdns=[];
 			"<option value=\"name\">",GetMessage("name"), "</option>",
 			GetMessage("Value") + ":",
 			"<input type=\"text\" name=\"cQLl_startValueNode\" size=\"20\"><br>",
-			GetMessage("End") + ": ",
-			GetMessage("Type"),
+			GetMessage("End"), ": ",
+			GetMessage("Type"), ": ",
 			"<select name=\"cQLl_endTypeNode\" onChange=\"CanviaContigutAtributComplexQueryLlinatge('end', null);\">",
 			"<option value=\"agent\" selected>", GetMessage("Agent"),
 			"<option value=\"font\">", GetMessage("Source"),
