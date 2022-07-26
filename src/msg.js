@@ -244,6 +244,7 @@ var MessageLang={
 	TemporalField: {"cat":"Camp temporal", "spa":"Campo temporal", "eng": "Temporal field", "fre":"Temporal Champ"},
 	byBoundingBox: {"cat":"per envolupant", "spa":"por envolvente", "eng":"by bounding box", "fre": "par enveloppe"},
 	Compute: {"cat":"Calcular", "spa":"Calcular", "eng":"Compute", "fre":"Calculer"},
+	resize: {"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -761,6 +762,15 @@ var MessageLang={
 		TemporalValidityObsDate: {"cat":"Validessa temporal de la data d'observació", "spa":"Validez temporal de la fecha de observación", "eng":"Temporal validity of observation date", "fre": "Validité temporelle de la date de l'observation"},
 		ValidityPositionsObs: {"cat":"Validessa de les posicions de les observacions", "spa":"Validez de las posiciones de las observaciones", "eng":"Validity of the positions of observations", "fre": "Validité des positions des observations"},
 
+	},
+	tools: {
+		LayerTypeWindow: {"cat":"No s'ha definit la layer de tipus finestra", "spa":"No se ha definido la layer de tipo ventana", "eng":"The layer", "fre":"La layer de type fenêtre"},
+		notDefinedNotFunctionality: {"cat":"i per tant no es pot usar la funcionalitat", "spa":"y en consecuencia no se puede usar la funcionalidad", "eng":"has not been defined and its not possible use the functionality", "fre":"n'a été pas définie et il n'est donc pas possible d'utilise l'outil"},
+		TheValueOf: {"cat": "El valor de", "spa": "El valor de", "eng": "The value of", "fre": "La valeur de"},
+		requiresACharacter: {"cat": "ha de contenir un caracter", "spa": "debe contenir un caracter", "eng": "requires a character", "fre": "nécessite un caractère"},
+		ReferencesOtherJSONNotSupported: {"cat": "Encara no se suporten valors de $ref amb referències a altres fitxers JSON", "spa": "Aún no se suporta valores de $ref con referencias a otros ficheros JSON", "eng": "$ref values with references to other JSON files are still not supported", "fre": "Les valeurs $ref avec des références à d'autres fichiers JSON ne sont toujours pas prises en charge"},
+		isNotDefined: {"cat": "no està definit", "spa": "no está definido", "eng": "is not defined", "fre": "n'est pas défini"},
+		isNotObject: {"cat": "no és un objecte", "spa": "no es un objecto", "eng": "is not an object", "fre": "n'est pas un objet"}
 	},
 	urls: {
 		helpHtm: {"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"},
