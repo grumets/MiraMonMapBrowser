@@ -822,6 +822,19 @@ var MessageLang={
 		WillUse: {"cat":"Usaré 5.0", "spa": "Usaré 5.0", "eng": "I'll use 5.0", "fre": "Je vais utiliser 5.0"},
 		SelectTempScaleInterval: {"cat":"Sel·lecciona escala temporal o interval", "spa": "Seleccione escala temporal o intervalo", "eng": "Select temporal scale or interval", "fre": "Sélectionner échelle temporelle où intervalle"}
 	},
+	wps: {
+		Result: {"cat":"Resultat: ", "spa":"Resultado: ", "eng":"Result: ", "fre":"Résultat: "},
+		Accepted: {"cat":"Acceptat", "spa":"Aceptado", "eng":"Accepted", "fre":"Accepté"},
+		Started: {"cat":"Iniciat", "spa":"Iniciado", "eng":"Started", "fre":"Initié"},
+		percentCompleted: {"cat":"percentatge completat","spa":"porcentaje completado","eng":"percent completed", "fre":"pourcentage complété"},
+		Paused: {"cat":"Pausat", "spa":"Pausado", "eng":"Paused", "fre":"En pause"},
+		Succeeded: {"cat":"Finalitzat", "spa":"Finalizado", "eng":"Succeeded", "fre":"Terminé"},
+		Failed: {"cat":"Error: ", "spa":"Error: ", "eng":"Failed: ", "fre":"Erreur: "},
+		AnyValueDefinedParameter: {"cat":"No s'ha definit cap valor pel paràmetre", "spa":"No se ha definido ningún valor para el paràmetro", "eng":"Any value has been defined by parameter", "fre":"Aucun valeur défini pour le paramètre"},
+		NecessarySendFileBeforeExecProcess: {"cat":"Cal enviar el fitxer al servidor abans d'executar el procès", "spa":"Es necesario enviar el fichero al servidor antes de ejecutar el proceso", "eng":"It is necessary to send the file to the server before executing the process", "fre":"Il faut envoyer le fichier au serveur avant d'exécuter le processus"},
+		URLIntroducedInParameter: {"cat":"La URL introduïda en el paràmetre", "spa":"La URL introducida en el parametro", "eng": "The URL introduced in the parameter", "fre":"La URL introduite au paramètre"},
+		isInvalid: {"cat":"és invàlida","spa":" es invalida", "eng":"is invalid", "fre":"n'est pas valide"}
+	},
 	urls: {
 		helpHtm: {"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"},
 		installerMMRExe: {"cat":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE", "spa":"http://www.creaf.uab.cat/miramon/mmr/esp/exe/Inst_MMR.EXE", "eng":"http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE",	"fre":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE"}
