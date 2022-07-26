@@ -245,6 +245,8 @@ var MessageLang={
 	byBoundingBox: {"cat":"per envolupant", "spa":"por envolvente", "eng":"by bounding box", "fre": "par enveloppe"},
 	Compute: {"cat":"Calcular", "spa":"Calcular", "eng":"Compute", "fre":"Calculer"},
 	resize: {"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"},
+	symbolizeLayer: {"cat": "per simbolitzar la capa", "spa": "para simbolizar la capa", "eng": "to symbolize the layer", "fre": "por symboliser la couche"},
+	UnsuppServiceType: {"cat":"Tipus de servei suportat", "spa":"Tipo de servicio no suportado", "eng":"Unsupported service type","fre":"Type de service non supportée"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -736,8 +738,8 @@ var MessageLang={
 		InitialDateNotBlank: {"cat": "La data inicial no pot es pot deixar en blanc",	"spa": "La fecha inicial no puede dejarse en blaco", "eng": "The initial date cannot be left blank", "fre": "La date finitiale ne peut pas être laissée en blanc"},
 		FinalDateNotBlank: {"cat": "La data final no pot es pot deixar en blanc", "spa": "La fecha final no puede dejarse en blaco", "eng": "The final date cannot be left blank",  "fre": "La date finale ne peut pas être laissée en blanc"},
 		FinalDateNotLessInitialDate: {"cat": "La data final no pot ser inferior a la inicial", "spa": "La fecha final no puede ser inferior a la inicial", "eng": "The final date cannot be less than the initial date", "fre": "La date finale ne peut pas être inférieure à la date initiale"},
-		QualityParamAvailableMenu: {"cat": "El paràmetre de qualitat calculat està disponible a la entrada de menú contextual 'qualitat' de la capa", "spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa", "eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer", "fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"},
-		QualityNotComputedLayer: {"cat": "No s'ha pogut calcular la qualitat de la capa", "spa": "No se ha podido calcular la calidad de la capa", "eng": "The quality cannot be computed for the layer", "fre": "The quality cannot be computed for the layer"},
+		QualityParamAvailableMenu: {"cat": "El paràmetre de qualitat calculat està disponible a la entrada de menú contextual 'qualitat' de la capa", "spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa", "eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer", "fre": "Le paramètre de qualité calculé est disponible en tant qu'entrée dans l'entrée du menu contextuel 'qualité' de la couche"},
+		QualityNotComputedLayer: {"cat": "No s'ha pogut calcular la qualitat de la capa", "spa": "No se ha podido calcular la calidad de la capa", "eng": "The quality cannot be computed for the layer", "fre": "La qualité ne peut pas être calculée pour la couche"},
 		FieldPositionalUncertainty: {"cat":"Camp d'incertesa posicional", "spa":"Campo de incertidumbre posicional", "eng": "Field of positional uncertainty", "fre":"Champ d'incertitude de position"},
 		FieldsVerifyLogicalConsistency: {"cat":"Atributs a verificar la consistència lògica", "spa":"Atributos a verificar la consistencia lógica", "eng":"Fields to verify the logical consistency", "fre":"Attributs pour vérifier la cohérence logique"},
 		ListPossibleValues: {"cat":"Llista de valors possibles ", "spa":"Lista de valores posibles ", "eng":"List of possible values ", "fre":"Liste des valeurs possibles"},
@@ -760,8 +762,7 @@ var MessageLang={
 		PositionalLayerObsUncertainties: {"cat":"Exactitud posicional de la capa a partir de la incertessa de l'observació", "spa":"Exactitud posicional de la capa a partir de la incertidumbre de la observación", "eng":"Positional accuracy of the layer from observation uncertainties", "fre": "Précision de positionnement de la couche par rapport à l'incertitude d'observation"},
 		LogicalConsistencyThematicAttr: {"cat":"Consistència lògica dels atributs temàtics", "spa":"Consistencia lógica de los atributos temáticos", "eng":"Logical consistency of the thematic attributes", "fre": "Cohérence logique des attributs thématiques"},
 		TemporalValidityObsDate: {"cat":"Validessa temporal de la data d'observació", "spa":"Validez temporal de la fecha de observación", "eng":"Temporal validity of observation date", "fre": "Validité temporelle de la date de l'observation"},
-		ValidityPositionsObs: {"cat":"Validessa de les posicions de les observacions", "spa":"Validez de las posiciones de las observaciones", "eng":"Validity of the positions of observations", "fre": "Validité des positions des observations"},
-
+		ValidityPositionsObs: {"cat":"Validessa de les posicions de les observacions", "spa":"Validez de las posiciones de las observaciones", "eng":"Validity of the positions of observations", "fre": "Validité des positions des observations"}
 	},
 	tools: {
 		LayerTypeWindow: {"cat":"No s'ha definit la layer de tipus finestra", "spa":"No se ha definido la layer de tipo ventana", "eng":"The layer", "fre":"La layer de type fenêtre"},
@@ -771,6 +772,9 @@ var MessageLang={
 		ReferencesOtherJSONNotSupported: {"cat": "Encara no se suporten valors de $ref amb referències a altres fitxers JSON", "spa": "Aún no se suporta valores de $ref con referencias a otros ficheros JSON", "eng": "$ref values with references to other JSON files are still not supported", "fre": "Les valeurs $ref avec des références à d'autres fichiers JSON ne sont toujours pas prises en charge"},
 		isNotDefined: {"cat": "no està definit", "spa": "no está definido", "eng": "is not defined", "fre": "n'est pas défini"},
 		isNotObject: {"cat": "no és un objecte", "spa": "no es un objecto", "eng": "is not an object", "fre": "n'est pas un objet"}
+	},
+	vector: {
+		CannotSelectObjectLayerNoExist: {"cat":"No es poden seleccionar els objectes sol·licitats perquè la capa no existeix", "spa":"No se pueden seleccionar los objetos solicitados porquè la capa no existe", "eng":"Cannot select request objecte because the layer doesn't exist", "fre":"Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas"}
 	},
 	urls: {
 		helpHtm: {"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"},
