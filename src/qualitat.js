@@ -585,24 +585,12 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 		indicator: "DQ_TemporalValidity",
 		statement: GetMessage("ConsistencyBasedOnComparisonObservation","qualitat") +
 			" \'"+param.atribut+"\' "+
-			DonaCadenaLang({"cat": "amb l'interval especificat.",
-					"spa": "con el intervalo especificado.",
-					"eng": "against the data interval specified.",
-					"fre": "against the data interval specified."}) +
-			DonaCadenaLang({"cat": "Hi ha",
-					"spa": "Hay",
-					"eng": "There are",
-					"fre": "Il y a"}) +
+			GetMessage("dataIntervalSpecified", "qualitat")+ ". " +
+			GetMessage("ThereAre") +
 			" " + (n_dins-n) + " "+
-			DonaCadenaLang({"cat": "de",
-					"spa": "de",
-					"eng": "of",
-					"fre": "de"}) +
+			GetMessage("of") +
 			" " +n_dins+ " " +
-			DonaCadenaLang({"cat": "que no tenen informació sobre la validessa.",
-					"spa": "que no tienen información sobre la validez.",
-					"eng": "that does not have validity information.",
-					"fre": "qui n'ont pas d'informations de la validité."}),
+			GetMessage("notValdityInformation", "qualitat") + ".",
 		result: [{
 			qualityml: {
 				version: "1.0",
@@ -661,20 +649,14 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n_dins=0;
 
 	if (n_dins==0)
 	{
-		alert(DonaCadenaLang({"cat": "No hi ha observacions amb valors vàlids per obtenir la validessa de les posicions de les observacions en aquesta àrea",
-					"spa": "No hay observaciones con valores válidos para obtener la validez de las posiciones de las observaciones en esta área",
-					"eng": "There is no observations with valid values to obtain the validity of the positions of observations in this area",
-					"fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la validité des positions des observations dans ce domaine"}));
+		alert(GetMessage("NoObservationsValidityPositions", "qualitat"));
 		return false;
 	}
 
 	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_DomainConsistency",
-		statement: DonaCadenaLang({"cat": "La consistència del domini resumida està basada en la localització de cada observació individual present en la vista actual comparada amb l'àmbit especificat.",
-					"spa": "La consistencia del dominio resumida está basada en la localización de cada observación individual present en la vista actual comparada con el ámbito especificado.",
-					"eng": "The domain consistency is based on the localization of each individual observation present in the actual view against the envelope specified.",
-					"fre": "The domain consistency is based on the localization of each individual observation present in the actual view against the envelope specified."}) ,
+		statement: GetMessage("DomainConsistencyOnLocationIndividual", "qualitat") ,
 		result: [{
 			qualityml: {
 				version: "1.0",
@@ -782,42 +764,24 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 
 	if (n==0)
 	{
-		alert(DonaCadenaLang({"cat": "No hi ha observacions amb valors vàlids per obtenir la consistència lògica dels atributs en aquesta àrea",
-					"spa": "No hay observaciones con valores válidos para obtener la consistencia lógica de los atributos en esta área",
-					"eng": "There is no observations with valid values to obtain logical consistency of attributes in this area",
-					"fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la cohérence logique des attributs dans ce domaine"}));
+		alert(GetMessage("NoObservationsLogicalConsistency", "qualitat"));
 		return false;
 	}
 	var quality={
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_DomainConsistency",
-		statement: DonaCadenaLang({"cat": "La consistència resumida està basada en la comparació dels valors de cada observació pels atribut/s: ",
-					"spa": "La consistència resumida está basada en la comparación de los valores de cada observación individual para los atributo/s: ",
-					"eng": "The overall consistency is based on the comparison of the values of each individual observation for the field/s: ",
-					"fre": "The overall consistency is based on the comparison of the values of each individual observation for the field(s: "}) +
+		statement: GetMessage("OverallConsistencyComparisonIndividualObservation", "qualitat") + ": " +
 			param.atributlogic1+
 			(param.atributlogic2 ?  ", " : "")+
 			(param.atributlogic2 ? param.atributlogic2 : "")+
 			(param.atributlogic3 ?  ", " : "")+
 			(param.atributlogic3 ? param.atributlogic3 : "")+
-			DonaCadenaLang({"cat": " contra la llista de valors possibles especificada al domini.",
-					"spa": " contra la lista de valores posibles especificada en el dominio.",
-					"eng": " against the list of possible values specified in the domain.",
-					"fre": " against the list of possible values specified in the domain."}) +
-			DonaCadenaLang({"cat": "Hi ha",
-					"spa": "Hay",
-					"eng": "There are",
-					"fre": "Il y a"}) +
+			+ " " + GetMessage("listPossibleValuesDomain", "qualitat") + "." +
+			GetMessage("ThereAre") +
 			" " + (n_dins-n) + " "+
-			DonaCadenaLang({"cat": "de",
-					"spa": "de",
-					"eng": "of",
-					"fre": "de"}) +
-			" " +n_dins+ " " +
-			DonaCadenaLang({"cat": "que no tenen informació sobre la consistència, perquè no tenen els atributs indicats.",
-					"spa": "que no tienen información sobre la consisténcia, porque no tienen los atributos indicados.",
-					"eng": "that does not have consistency information, because it does not have the specified attributes.",
-					"fre": "qui n'ont pas d'informations de coherénce, parce qu'ils n'ont pas les attributs."}),
+			GetMessage("of") +
+			" " + n_dins + " " +
+			GetMessage("notConsistencyInformationSpecifiedAttributes", "qualitat"),
 		result: [{
 			qualityml: {
 				version: "1.0",
@@ -882,10 +846,7 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 	}
 	if (n==0)
 	{
-		alert(DonaCadenaLang({"cat": "No hi ha observacions amb incertesa posicional en aquesta àrea",
-					"spa": "No hay observaciones con incertidumbre posicional en esta área",
-					"eng": "There is no observations with positional uncertainty in this area",
-					"fre": "Il n'y a pas d'observations avec une incertitude de position dans ce domaine"}));
+		alert(GetMessage("NoObservationsPositionalUncertainty", "qualitat"));
 		return false;
 	}
 
@@ -894,15 +855,9 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 	i=DonaIAtributsDesDeNomAtribut(capa_digi, param.atribut);
 	if (i==-1)
 	{
-		alert(DonaCadenaLang({"cat": "Nom d'atribut incorrecte",
-					"spa": "Nombre de atributo incorrecto",
-					"eng": "Wrong attribute name",
-					"fre": "Nom d'attribut incorrect"}) + " " +
+		alert(GetMessage("WrongAttributeName", "qualitat") + " " +
 				param.atribut + "  " +
-				DonaCadenaLang({"cat": "per calcular la qualitat de la capa",
-						"spa": "para calcular la calidad de la capa",
-						"eng": "to compute data quality for the layer",
-						"fre": "pour calculer la qualité des données pour la couche"}) + " " +
+				GetMessage("computeDataQuality", "qualitat") + " " +
 				DonaCadenaNomDesc(capa_digi));
 		unitats=null;
 	}
@@ -912,25 +867,13 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 	AfegeixQualitatACapa(capa_digi, {
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_AbsoluteExternalPositionalAccuracy",
-		statement: DonaCadenaLang({"cat": "La exactitud resumida està basada en la incertesa posicional de cada observació individual indicada a l'atribut",
-					"spa": "La exactitud resumida está basada en la incertidumbre posicional de cada observación individual indicada en el atributo",
-					"eng": "The overall accuracy is based on the positional uncertainty for each indiviadual observation as indicated in the field",
-					"fre": "The overall accuracy is based on the positional uncertainty for each indiviadual observation as indicated in the field"}) +
+		statement: GetMessage("AccuracyPositionalUncertainty", "quality") +
 			" " +param.atribut+". " +
-			DonaCadenaLang({"cat": "Hi ha",
-					"spa": "Hay",
-					"eng": "There are",
-					"fre": "There are"}) +
+			GetMessage("ThereAre") +
 			" " + (n_dins-n) + " "+
-			DonaCadenaLang({"cat": "de",
-					"spa": "de",
-					"eng": "of",
-					"fre": "of"}) +
+			GetMessage("of") +
 			" " +n_dins+ " " +
-			DonaCadenaLang({"cat": "que no tenen informació sobre la incertesa.",
-					"spa": "que no tienen información sobre la incertidumbre.",
-					"eng": "that does not have uncetainty information.",
-					"fre": "that does not have uncetainty information."}),
+			GetMessage("noUncertaintyInformation", "qualitat"),
 		result: [{
 			qualityml: {
 				version: "1.0",
@@ -979,7 +922,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			}
 			else
 			{
-				alert(DonaCadenaLang({"cat": "Cal seleccionar un camp", "spa": "Debe seleccionar un campo", "eng": "You must select a field", "fre": "Vous devez sélectionner un champ"}));
+				alert(GetMessage("MustSelectField"));
 				return;
 			}
 		}
