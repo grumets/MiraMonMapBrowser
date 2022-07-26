@@ -968,7 +968,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			}
 			else
 			{
-				alert(DonaCadenaLang({"cat": "Cal seleccionar un camp", "spa": "Debe seleccionar un campo", "eng": "You must select a field", "fre": "Vous devez sélectionner un champ"}));
+				alert(GetMessage("MustSelectField"));
 				return;
 			}
 		}
@@ -987,36 +987,27 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			var sel_camp=form.camp_temporal;
 			if(sel_camp.selectedIndex>=sel_camp.length)
 			{
-				alert(DonaCadenaLang({"cat": "Cal seleccionar un camp", "spa": "Debe seleccionar un campo", "eng": "You must select a field", "fre": "Vous devez sélectionner un champ"}));
+				alert(GetMessage("MustSelectField"));
 				return;
 			}
 
 			if (!form.data_ini.value)
 			{
-				alert(DonaCadenaLang({"cat": "La data inicial no pot es pot deixar en blanc",
-									 "spa": "La fecha inicial no puede dejarse en blaco",
-									 "eng": "The initial date cannot be left blank",
-									 "fre": "La date finitiale ne peut pas être laissée en blanc"}));
+				alert(GetMessage("InitialDateNotBlank","qualitat"));
 				return;
 			}
 			var date_ini=new Date(form.data_ini.value);
 
 			if (!form.data_final.value)
 			{
-				alert(DonaCadenaLang({"cat": "La data final no pot es pot deixar en blanc",
-									 "spa": "La fecha final no puede dejarse en blaco",
-									 "eng": "The final date cannot be left blank",
-									 "fre": "La date finale ne peut pas être laissée en blanc"}));
+				alert(GetMessage("FinalDateNotBlank", "qualitat"));
 				return;
 			}
 			var date_fi=new Date(form.data_final.value+"T23:59:59.999Z");  // form.data_final.value està com a hora UTC en format cadena. Necessito que estigui al final del dia per a fer comparacions.
 
 			if(date_fi<=date_ini)
 			{
-				alert(DonaCadenaLang({"cat": "La data final no pot ser inferior a la inicial",
-									 "spa": "La fecha final no puede ser inferior a la inicial",
-									 "eng": "The final date cannot be less than the initial date",
-									 "fre": "La date finale ne peut pas être inférieure à la date initiale"}));
+				alert(GetMessage("FinalDateNotLessInitialDate", "qualitat"));
 				return;
 			}
 
@@ -1037,19 +1028,13 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 		}
 		if(retorn)
 		{
-			alert(DonaCadenaLang({"cat": "El paràmetre de qualitat calculat està disponible a la entrada de menú contextual 'qualitat' de la capa",
-						"spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa",
-						"eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer",
-						"fre": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer"}) + " \"" +
+			alert(GetMessage("QualityParamAvailableMenu", "qualitat") + " \"" +
 				DonaCadenaNomDesc(capa) + "\".");
 			TancaFinestraLayer('calculaQualitat');
 		}
 		else
 		{
-			alert(DonaCadenaLang({"cat": "No s'ha pogut calcular la qualitat de la capa",
-						"spa": "No se ha podido calcular la calidad de la capa",
-						"eng": "The quality cannot be computed for the layer",
-						"fre": "The quality cannot be computed for the layer"}) + " \"" +
+			alert(GetMessage("QualityNotComputedLayer", "qualitat") + " \"" +
 				DonaCadenaNomDesc(capa) + "\".");
 		}
 	}
@@ -1061,7 +1046,7 @@ function DonaCadenaCampsPositionalAccuracyFromUncertainty(capa)
 var cdns=[];
 
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Camp d'incertesa posicional", "spa":"Campo de incertidumbre posicional", "eng": "Field of positional uncertainty", "fre":"Champ d'incertitude de position"}),
+				GetMessage("FieldPositionalUncertainty", "qualitat"),
 			  "</legend>");
 	cdns.push("<select name=\"camp_incertesa\" class=\"Verdana11px\" >");
 	if(capa.atributs)
@@ -1079,10 +1064,7 @@ function DonaCadenaCampsLogicalConsistencyFromThematicAttributes(capa)
 var cdns=[];
 
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Atributs a verificar la consistència lògica",
-							   "spa":"Atributos a verificar la consistencia lógica",
-							   "eng":"Fields to verify the logical consistency",
-							   "fre":"Attributs pour vérifier la cohérence logique"}),
+				GetMessage("FieldsVerifyLogicalConsistency", "qualitat"),
 			  "</legend>");
 
 	cdns.push("<select name=\"camp_logic1\" class=\"Verdana11px\" >");
@@ -1096,7 +1078,7 @@ var cdns=[];
 	cdns.push("<select name=\"camp_logic2\" class=\"Verdana11px\">");
 	if(capa.atributs)
 	{
-		cdns.push("<option value=\"camp_logic_empty\" selected \>", DonaCadenaLang({"cat":"--buit--","spa":"--vacio--", "eng":"--empty--", "fre":"--vide--"}));
+		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
 		for(var i=0; i<capa.atributs.length; i++)
 			cdns.push("<option value=\"",capa.atributs[i].nom,"\" \>",
 					(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
@@ -1106,18 +1088,15 @@ var cdns=[];
 
 	if(capa.atributs)
 	{
-		cdns.push("<option value=\"camp_logic_empty\" selected \>", DonaCadenaLang({"cat":"--buit--","spa":"--vacio--", "eng":"--empty--", "fre":"--vide--"}));
+		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
 		for(var i=0; i<capa.atributs.length; i++)
 			cdns.push("<option value=\"",capa.atributs[i].nom,"\" \>",
 				   (DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
 	}
 	cdns.push("</select><br>");
-	cdns.push( DonaCadenaLang({"cat":"Llista de valors possibles (separats per ;)",
-				   "spa":"Lista de valores posibles (separados por ;)",
-				   "eng":"List of possible values (separated by ;)",
-				   "fre":"Liste des valeurs possibles (séparées par ;)"}),
+	cdns.push(GetMessage("ListPossibleValues", "qualitat"), " (", GetMessage("separatedBy"), " ;)",
 			  "<br><textarea name=\"llista_valors_logic\" rows=\"8\" cols=\"60\" >",
-			  DonaCadenaLang({"cat":"valor1camp1;valor1camp2;valor1camp3","spa":"valor1campo1;valor1campo2;valor1campo3", "eng":"value1field1;value1field2;value1field3", "fre":"valeur1champ1;valeur1champ2;valeur1champ3"}),
+			  GetMessage("valueField", "qualitat"),
 			  "</textarea>");
 	cdns.push("</fieldset>");
 	return cdns.join("");
@@ -1126,7 +1105,7 @@ var cdns=[];
 function DonaCadenaCampsThematicAccuracyGroundTruth(capa)
 {
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Capa veritat terreny", "spa":"Capa verdad terreno", "eng": "Ground truth layer", "fre":"Couche de vérité terrain"}),
+				GetMessage("GroundTruthLayer", "qualitat"),
 			  "</legend>");
 	//·$·
 	cdns.push("</fieldset>");
@@ -1139,7 +1118,7 @@ function DonaCadenaCampsTemporalValidityOfObservationData(capa)
 var cdns=[];
 
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Camp temporal", "spa":"Campo temporal", "eng": "Temporal field", "fre":"Temporal Champ"}),
+				GetMessage("TemporalField"),
 			  "</legend>");
 	cdns.push("<select name=\"camp_temporal\" class=\"Verdana11px\" >");
 	if(capa.atributs)
@@ -1151,14 +1130,14 @@ var cdns=[];
 	cdns.push("</select></fieldset>");
 
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Interval de les dates d'observació", "spa":"Intervalo de las fechas de observación", "eng": "Range of observation dates", "fre":"Plage de dates d'observation"}),
+				GetMessage("RangeObservationDates", "qualitat"),
 			  "</legend>");
 
-	cdns.push(DonaCadenaLang({"cat":"Data inicial", "spa":"Fecha inicial", "eng": "Initial date", "fre":"Date initiale"}),
+	cdns.push(GetMessage("InitialDate", "qualitat"),
 			": ",
 			"<input type=\"date\" name=\"data_ini\" class=\"Verdana11px\" >",
 			" ",
-			DonaCadenaLang({"cat":"Data final", "spa":"Fecha final", "eng": "Final date", "fre":"Date finale"}),
+			GetMessage("FinalDate", "qualitat"),
 			": ",
 			"<input type=\"date\" name=\"data_final\" class=\"Verdana11px\" ><br>");
 	cdns.push("</fieldset>");
@@ -1170,25 +1149,25 @@ function DonaCadenaCampsBBOXPositionalValidity(capa)
 var cdns=[], es_long_lat;
 
 	cdns.push("<fieldset><legend>",
-				DonaCadenaLang({"cat":"Àmbit geogràfic", "spa":"Ámbito geográfico", "eng": "Geographic extent", "fre":"Etendue géographique"}),
+				GetMessage("GeographicExtent", "qualitat"),
 			  "</legend>");
 
 	es_long_lat=EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	cdns.push("<table class=\"Verdana11px\"><tr><td align=\"right\"><label id=\"label_xmin\" for=\"coordXmin\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Longitud mínima","spa":"Longitud mínima","eng":"Minimum longitude","fre":"Longitude minimale"}) : DonaCadenaLang({"cat":"X mínima","spa":"X mínima","eng":"Minimum X","fre":"X minimale"})),
+			  (es_long_lat ? GetMessage("MinimumLongitude", "qualitat") : GetMessage("MinimumX", "qualitat")),
 			  ": </label><input class=\"Verdana11px\" id=\"coordXmin\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX, ParamCtrl.NDecimalsCoordXY),"\"></td>",
 			  "<td align=\"right\"><label id=\"label_xmax\" for=\"coordXmax\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Longitud màxima","spa":"Longitud máxima","eng":"Maximum longitude","fre":"Longitude maximale"}) : DonaCadenaLang({"cat":"X màxima","spa":"X máxima","eng":"Maxima X","fre":"X maximale"})),
+			  (es_long_lat ? GetMessage("MaximumLongitude", "qualitat") : GetMessage("MaximumX", "qualitat")),
 			  ": </label><input class=\"Verdana11px\" id=\"coordXmax\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX, ParamCtrl.NDecimalsCoordXY),"\"></td></tr>",
 			  "<tr><td align=\"right\"><label id=\"label_ymin\" for=\"coordYmin\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Latitud mínima","spa":"Latitud mínima","eng":"Minimum latitude","fre":"Latitude minimale"}) : DonaCadenaLang({"cat":"Y mínima","spa":"Y mínima","eng":"Minimum Y","fre":"Y minimale"})),
+			  (es_long_lat ? GetMessage("MinimumLatitude", "qualitat") : GetMessage("MinimumY", "qualitat")),
 			  ": </label><input class=\"Verdana11px\" id=\"coordYmin\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY, ParamCtrl.NDecimalsCoordXY),"\"></td>",
 			  "<td align=\"right\"><label id=\"label_ymax\" for=\"coordYmax\">",
-			  (es_long_lat ? DonaCadenaLang({"cat":"Latitud máxima","spa":"Latitud máxima","eng":"Maximum latitude","fre":"Latitude maximale"}) : DonaCadenaLang({"cat":"Y màxima","spa":"Y máxima","eng":"Maximum Y","fre":"Y maximale"})),
+			  (es_long_lat ? GetMessage("MaximumLatitude", "qualitat") : GetMessage("MaximumY", "qualitat")),
 			  ": </label><input class=\"Verdana11px\" id=\"coordYmax\" name=\"coordX\" type=\"text\" size=\"10\" value=\"",
 			  OKStrOfNe(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY, ParamCtrl.NDecimalsCoordXY),"\"></td></tr></table>");
 
@@ -1227,49 +1206,37 @@ var capa;
 
 	cdns.push("<form name=\"CalculaQualitatCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerCalculaQualitatCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\"><b>",
-			DonaCadenaLang({"cat":"Calcular la qualitat de la capa", "spa":"Calcular la Calidad de la capa", "eng":"Compute the quality of the layer", "fre":"Calculer la qualité de la couche"}), " \"",
+			GetMessage("ComputeQualityLayer", "qualitat"), " \"",
 			(DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
 	if (i_estil!=-1)
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"<b><br/><br/>");
 
 	cdns.push("<fieldset><legend>",
-			  DonaCadenaLang({"cat":"Mètode d'avaluació de la qualitat", "spa":"Método de evaluación de la calidad", "eng": "Quality assesment", "fre":"Méthode d'évaluation de la qualité"}),
+			  GetMessage("QualityAssesment", qualitat),
 			  "</legend>");
 
 	cdns.push("<select name=\"metode_eval_qual\" class=\"Verdana11px\" onChange=\"ActualitzaCampsEnFuncioMetodeAvaluacioQualitat(form,",i_capa,",",i_estil,");\" >");
 	cdns.push("<option value=\"PositionalAccuracyFromUncertainty\" selected \>",
-			DonaCadenaLang({"cat":"Exactitud posicional de la capa a partir de la incertessa de l'observació",
-				   "spa":"Exactitud posicional de la capa a partir de la incertidumbre de la observación",
-				   "eng":"Positional accuracy of the layer from observation uncertainties",
-				   "fre": "Précision de positionnement de la couche par rapport à l'incertitude d'observation"}));
+			GetMessage("PositionalLayerObsUncertainties", "qualitat"));
 	cdns.push("<option value=\"LogicalConsistencyFromThematicAttributes\" \>",
-			DonaCadenaLang({"cat":"Consistència lògica dels atributs temàtics",
-				   "spa":"Consistencia lógica de los atributos temáticos",
-				   "eng":"Logical consistency of the thematic attributes",
-				   "fre": "Cohérence logique des attributs thématiques"}));
+			GetMessage("LogicalConsistencyThematicAttr", "qualitat"));
 	/*cdns.push("<option value=\"ThematicAccuracyGroundTruth\" \>",
 			DonaCadenaLang({"cat":"Exactitud temàtica comparant amb la veritat terreny",
 				   "spa":"Exactitud temática comparando con la verdad terreno",
 				   "eng":"Thematic accuracy comparing with the ground truth",
 				   "fre": "Exactitude thématique par rapport à la vérité du terrain"}));*/
 	cdns.push("<option value=\"TemporalValidityOfObservationData\" \>",
-			DonaCadenaLang({"cat":"Validessa temporal de la data d'observació",
-				   "spa":"Validez temporal de la fecha de observación",
-				   "eng":"Temporal validity of observation date",
-				   "fre": "Validité temporelle de la date de l'observation"}));
+			GetMessage("TemporalValidityObsDate", "qualitat"));
 	cdns.push("<option value=\"BBoxPositionalValidity\" \>",
-			DonaCadenaLang({"cat":"Validessa de les posicions de les observacions (per envolupant)",
-				   "spa":"Validez de las posiciones de las observaciones (por envolvente)",
-				   "eng":"Validity of the positions of observations (by bounding box)",
-				   "fre": "Validité des positions des observations (par enveloppe)"}));
+			GetMessage("ValidityPositionsObs", "qualitat"), " (", GetMessage("byBoundingBox"), ")");
 	cdns.push("</select></fieldset>");
 	cdns.push("<br/><div id=\"LayerParamEvalQual\" class=\"Verdana11px\">",DonaCadenaCampsPositionalAccuracyFromUncertainty(capa),"</div>");
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
-			  DonaCadenaLang({"cat":"Calcular", "spa":"Calcular", "eng":"Compute", "fre":"Calculer"}),
+			  GetMessage("Compute"),
 			  "\" onClick='CalculaIAfegeixQualitatACapa(form,",i_capa,",",i_estil,");' />",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
-			  DonaCadenaLang({"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),
+			  GetMessage("Cancel"),
 			  "\" onClick='TancaFinestraLayer(\"calculaQualitat\");' />");
 
 	cdns.push("</div></form>");
