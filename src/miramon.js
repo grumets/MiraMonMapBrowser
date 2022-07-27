@@ -6327,7 +6327,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 
 		if (capa.visible=="semitransparent" && capa.transparencia!="semitransparent")
 		{
-			alert(GetMessage("TheProperty") + " capa.visible " + GetMessage("indica") + " \"semitransparent\" " + GetMessage("butTransparenciaDoesNotAllowIt", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
+			alert(GetMessage("TheProperty") + " capa.visible " + GetMessage("indicates") + " \"semitransparent\" " + GetMessage("butTransparenciaDoesNotAllowIt", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
 					" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 			capa.transparencia="semitransparent";
 		}
