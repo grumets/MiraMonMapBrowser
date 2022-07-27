@@ -52,13 +52,25 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		{
 			estil[estil.length]={nom: layer.estil[j].nom,
 						desc: DonaCadenaNomDesc(layer.estil[j]),
-						DescItems: null,
+						DescItems: layer.uom,
 						TipusObj: "I",
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
 			if (layer.esCOG && layer.uriDataTemplate)
 				estil[estil.length-1].component=[{"i_valor": 0}];
+			if (layer.categories)
+			{
+				estil.categories=[];
+				for (k=0; k<strlen(layer.categories); k++)
+				{
+					if (layer.categories[k])
+						estil.categories[k][layer.estil[j].nom]=layer.categories[k];
+					else
+						estil.categories[k]=null;
+				}
+				estil.atributs=[{nom: layer.estil[j].nom, unitats: layer.uom, mostrar: "si"}];
+			}
 		}
 	}
 	else

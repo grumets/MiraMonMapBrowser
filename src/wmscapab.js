@@ -46,6 +46,8 @@ function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
 var i, j, node2, node3, trobat=false, cadena, cadena2, layer;
 var minim, maxim, factor_k, factorpixel;
+var str_uom="UnitOfMeasurement:"
+var str_valueMeaning="ValueMeaning:"
 
 	//Llegeixo les capacitats d'aquesta capa
 	//Començo pel sistema de referència
@@ -94,6 +96,8 @@ var minim, maxim, factor_k, factorpixel;
 									CostatMaxim: null,
 									consultable: false,
 									estil: [],
+									uom: null,
+									categories: [],
 									FlagsData: null,
 									i_data: 0,
 									data: null,
@@ -186,6 +190,18 @@ var minim, maxim, factor_k, factorpixel;
 					node3=node2.getElementsByTagName('northBoundLatitude');
 					if(node3 && node3.length>0)
 						layer.EnvLL.MaxY=parseFloat(node3[0].childNodes[0].nodeValue);
+				}
+				else if (node2.nodeName=="Keyword")
+				{				
+					//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
+					cadena=node2.childNodes[0].nodeValue;
+					if (cadena.substr(0, str_uom.length)==str_uom)
+						layer.uom=cadena.substr(str_uom.length);
+					else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
+					{
+						if (-1!=(j=cadena.substr(str_valueMeaning.length).indexOf(':')))
+							layer.categories[parseInt(cadena.substr(str_valueMeaning.length,j))]=cadena.substr(str_valueMeaning.length+j+1);
+					}
 				}
 				else if (node2.nodeName=="Dimension" || node2.nodeName=="Extent")
 				{
