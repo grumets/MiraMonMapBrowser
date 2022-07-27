@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -109,9 +109,9 @@ var index=ajaxExecuteWPS.length;
 
 	//WARNING: In order this to work, the server has to be configured to expire the content immmendiatelly in this folder
 	ajaxExecuteWPS[index]=new Ajax();
-		
+
 	var s=AfegeixNomServidorARequest(url, "", true, false);
-	ajaxExecuteWPS[index].doGet(s, AvaluaRespostaExecuteWPS, "text/xml", 
+	ajaxExecuteWPS[index].doGet(s, AvaluaRespostaExecuteWPS, "text/xml",
 					document);
 }
 
@@ -120,41 +120,41 @@ function AvaluaRespostaExecuteWPS(doc, document_html)
 var root;
 var i,j;
 
-	if(!doc) 
-		return;	
+	if(!doc)
+		return;
 	root=doc.documentElement;
-	if(!root) 
+	if(!root)
 		return;
 	resposta=document.getElementById("responseWPS");
 	if (root.xml && resposta)
-	{		
+	{
 		resposta.value=root.xml;
 	}
 	else if (XMLSerializer && resposta)
 	{
-		var serializer = new XMLSerializer();   
-		resposta.value=serializer.serializeToString(root);		
+		var serializer = new XMLSerializer();
+		resposta.value=serializer.serializeToString(root);
 	}
 	else if(resposta)
-		resposta.value="Sorry, the server responded but I do not know how to show the result on this browser.";	
-		
+		resposta.value="Sorry, the server responded but I do not know how to show the result on this browser.";
+
 	if(root.nodeName!="wps:ExecuteResponse")  //Això passa quan ho he fet amb soap
 	{
 		root=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "ExecuteResponse")[0];
 	}
-	
+
 	var reference=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "Reference");
 	if (reference && reference.length>0)
-	{		
+	{
 		reference=reference[0];
 		if(reference)
-		{			
-			document.getElementById("ResponseWPSReference").innerHTML="<b>"+DonaCadenaLang({"cat":"Resultat: ", "spa":"Resultado: ", "eng":"Result: ", "fre":"Résultat: "})+
-					"</b><br>"+"<a href=\"" + reference.getAttribute('href') + "\" target=\"_blank\">" + reference.getAttribute('href') + "</a>";			
+		{
+			document.getElementById("ResponseWPSReference").innerHTML="<b>" + GetMessage("Result", "wps") +
+					"</b><br>"+"<a href=\"" + reference.getAttribute('href') + "\" target=\"_blank\">" + reference.getAttribute('href') + "</a>";
 		}
 	}
 	var localitzacio_estat=root.getAttribute('statusLocation');
-	
+
 	var status=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "Status");
 	if (status.length>0)
 	{
@@ -163,68 +163,68 @@ var i,j;
 		var process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessAccepted");
 		if (process_status && process_status.length>0)
 		{
-			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
-			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Acceptat", "spa":"Aceptado", "eng":"Accepted", "fre":"Accepté"});
+			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);
+      document.getElementById("StatusResponseWPS").innerHTML = GetMessage("Accepted", "wps");
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessStarted");
+		process_status = DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessStarted");
 		if (process_status && process_status.length>0)
 		{
-			var process_started=process_status[0];
+			var process_started = process_status[0];
 			percent=parseInt(process_started.getAttribute('percentCompleted'));
-			
-			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
-			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Iniciat", "spa":"Iniciado", "eng":"Started", "fre":"Initié"})+ 
-			DonaCadenaLang({"cat":" percentatge completat: ","spa":" porcentaje completado: ","eng":" percent completed: ", "fre":" pourcentage complété: "})+percent+"%";
+
+			AJAX_ID = setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);
+			document.getElementById("StatusResponseWPS").innerHTML = GetMessage("Started", "wps") +
+			" " + GetMessage("percentCompleted", "wps") + ": " + percent + "%";
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessPaused");
+		process_status = DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessPaused");
 		if (process_status && process_status.length>0)
 		{
-			var process_paused=process_status[0];
+			var process_paused = process_status[0];
 			percent=parseInt(process_paused.getAttribute('percentCompleted'));
-			
-			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);					
+
+			AJAX_ID=setTimeout("UpdateAjaxExecuteWPS(\"" + localitzacio_estat + "\");", 2*1000);
 			if(percent!=-1)
-				document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Pausat", "spa":"Pausado", "eng":"Paused", "fre":"En pause"})+ 
-				DonaCadenaLang({"cat":" percentatge completat: ","spa":" porcentaje completado: ","eng":" percent completed: ", "fre":" pourcentage complété: "})+percent+"%";
+				document.getElementById("StatusResponseWPS").innerHTML = GetMessage("Paused", "wps") +
+				" " + GetMessage("percentCompleted", "wps") + ": "+percent+"%";
 			else
-				document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Pausat", "spa":"Pausado", "eng":"Paused", "fre":"En pause"});
+				document.getElementById("StatusResponseWPS").innerHTML = GetMessage("Paused", "wps");
 			return;
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessSucceeded");
+		process_status = DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessSucceeded");
 		if (process_status && process_status.length>0)
 		{
-			document.getElementById("StatusResponseWPS").innerHTML=DonaCadenaLang({"cat":"Finalitzat", "spa":"Finalizado", "eng":"Succeeded", "fre":"Terminé"});
+			document.getElementById("StatusResponseWPS").innerHTML = GetMessage("Succeeded", "wps");
 			document.getElementById("ResponseWPSReference").style.display="inline";
 		}
-		process_status=DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessFailed");
+		process_status = DonamElementsNodeAPartirDelNomDelTag(status, "http://www.opengeospatial.net/wps", "wps", "ProcessFailed");
 		if (process_status && process_status.length>0)
 		{
-			var codi_error=null, text_error=null;
-			var excepcio=DonamElementsNodeAPartirDelNomDelTag(process_status[0], "http://www.opengeospatial.net/ows", "ows", "ExceptionReport");
+			var codi_error = null, text_error = null;
+			var excepcio = DonamElementsNodeAPartirDelNomDelTag(process_status[0], "http://www.opengeospatial.net/ows", "ows", "ExceptionReport");
 			if(excepcio && excepcio.length>0)
 			{
-				excepcio=DonamElementsNodeAPartirDelNomDelTag(excepcio[0], "http://www.opengeospatial.net/ows", "ows", "Exception");
+				excepcio = DonamElementsNodeAPartirDelNomDelTag(excepcio[0], "http://www.opengeospatial.net/ows", "ows", "Exception");
 				if(excepcio)
 				{
-					excepcio=excepcio[0];
-					codi_error=excepcio.getAttribute('exceptionCode');
-					text_error=DonamElementsNodeAPartirDelNomDelTag(excepcio, "http://www.opengeospatial.net/ows", "ows", "ExceptionText");
+					excepcio = excepcio[0];
+					codi_error = excepcio.getAttribute('exceptionCode');
+					text_error = DonamElementsNodeAPartirDelNomDelTag(excepcio, "http://www.opengeospatial.net/ows", "ows", "ExceptionText");
 					if(text_error && text_error.length>0)
-						text_error=text_error[0].childNodes[0].nodeValue;
+						text_error = text_error[0].childNodes[0].nodeValue;
 				}
 			}
-			var cadena=DonaCadenaLang({"cat":"Error: ", "spa":"Error: ", "eng":"Failed: ", "fre":"Erreur: "});
+			var cadena = GetMessage("Failed", "wps");
 			if(codi_error)
 				cadena+=codi_error;
 			if(text_error)
 				cadena+="<blockquote><br>\""+text_error+ "\"";
-						
+
 			document.getElementById("StatusResponseWPS").innerHTML=cadena;
-		}			
+		}
 		document.getElementById("StatusResponseWPS").style.display="inline";
-	}				
+	}
 	ChronoStop();
 	return;
 }
@@ -262,7 +262,7 @@ var s1;
 		{
 			if(operacio.par_input[i].InputOutputValorCapaWPS && operacio.par_input[i].InputOutputValorCapaWPS)
 			{
-				s1=ParamCtrl.capa[i_capa].proces[i_proces].capa_wps;			
+				s1=ParamCtrl.capa[i_capa].proces[i_proces].capa_wps;
 			}
 			else if(operacio.par_input[i].InputOutputValorBoolea && operacio.par_input[i].InputOutputValorBoolea)
 			{
@@ -271,7 +271,7 @@ var s1;
 				if(opcio.checked)
 				{
 					for(i_valor=0; i_valor<operacio.par_input[i].valors.length; i_valor++)
-					{				
+					{
 						if(operacio.par_input[i].valors[i_valor].nom=="true" ||
 						   operacio.par_input[i].valors[i_valor].nom=="si"  ||
 						   operacio.par_input[i].valors[i_valor].nom=="yes"  ||
@@ -280,12 +280,12 @@ var s1;
 							s1=operacio.par_input[i].valors[i_valor].nom;
 							break;
 						}
-					}				
+					}
 				}
 				else
 				{
 					for(i_valor=0; i_valor<operacio.par_input[i].valors.length; i_valor++)
-					{				
+					{
 						if(operacio.par_input[i].valors[i_valor].nom=="false" ||
 						   operacio.par_input[i].valors[i_valor].nom=="no"  ||
 						   operacio.par_input[i].valors[i_valor].nom=="0")
@@ -293,14 +293,11 @@ var s1;
 							s1=operacio.par_input[i].valors[i_valor].nom;
 							break;
 						}
-					}	
+					}
 				}
 				if(i_valor==operacio.par_input[i].valors.length)
 				{
-					alert(DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre \"",
-									  "spa":"No se ha definido ningún valor para el paràmetro \"",
-									  "eng":"Any value has been defined by parameter \"",
-									  "fre":"Aucun valeur défini pour le paramètre \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
+					alert(GetMessage("AnyValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
 					return -1;
 				}
 			}
@@ -331,20 +328,14 @@ var s1;
 						s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 					else
 					{
-						var cadena_error=DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre \"",
-										  "spa":"No se ha definido ningún valor para el paràmetro \"",
-										  "eng":"Any value has been defined by parameter \"",
-										  "fre":"Aucun valeur défini pour le paramètre \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
-						
+						var cadena_error = GetMessage("AnyValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
+
 						var file=document.getElementById("e_file_"+i);
 						if(file && file.value)
 						{
-							cadena_error+=DonaCadenaLang({"cat":"\nCal enviar el fitxer al servidor abans d'executar el procès.",
-													  "spa":"\nEs necesario enviar el fichero al servidor antes de ejecutar el proceso.",
-													  "eng":"\nIt is necessary to send the file to the server before executing the process.",
-													  "fre":"\nIl faut envoyer le fichier au serveur avant d'exécuter le processus."});
+							cadena_error+= "\n" + GetMessage("NecessarySendFileBeforeExecProcess", "wps") + ".";
 						}
-						alert(cadena_error);					
+						alert(cadena_error);
 						return -1;
 					}
 				}
@@ -357,15 +348,12 @@ var s1;
 							return -1;
 						if(false==EsUnaURLValida(text.value))
 						{
-							alert(DonaCadenaLang({"cat":"La URL introduïda en el paràmetre \"", 
-											  "spa":"La URL introducida en el parametro \"", 
-											 "eng": "The URL introduced in the parameter \"",
-											  "fre":"La URL introduite au paramètre \""}) +
-									  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc)+ 
-									  DonaCadenaLang({"cat":"\" és invàlida.","spa":"\" es invalida.", "eng":"\" is invalid.", "fre":"n'est pas valide."}));
+							alert(GetMessage("URLIntroducedInParameter", "wps") + " \"" +
+									  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc)+
+									  "\"" + GetMessage("isInvalid", "wps") + ".");
 							return -1;
-						}					
-						s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);					
+						}
+						s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 					}
 					else
 					{
@@ -373,7 +361,7 @@ var s1;
 										  "spa":"No se ha definido ningún valor para el paràmetro \"",
 										  "eng":"Any value has been defined by parameter \"",
 										  "fre":"Aucun valeur défini pour le paramètre \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
-						return -1;					
+						return -1;
 					}
 				}
 			}
@@ -398,7 +386,7 @@ var s1;
 											  "spa":"No se ha definido ningún valor para el paràmetro: \"",
 											  "eng":"Any value has been defined by parameter: \"",
 											  "fre":"Aucun valeur défini pour le paramètre: \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
-							
+
 							var file=document.getElementById("e_file_"+i);
 							if(file && file.value)
 							{
@@ -407,7 +395,7 @@ var s1;
 													  "eng":"\nIt is necessary to send the file to the server before executing the process.",
 													  "fre":"\nIl faut envoyer le fichier au serveur avant d'exécuter le processus"});
 							}
-							alert(cadena_error);					
+							alert(cadena_error);
 							return -1;
 						}
 					}
@@ -420,11 +408,11 @@ var s1;
 								return;
 							if(false==EsUnaURLValida(text.value))
 							{
-								alert(DonaCadenaLang({"cat":"La URL introduïda en el paràmetre \"", 
-											  "spa":"La URL introducida en el parametro \"", 
+								alert(DonaCadenaLang({"cat":"La URL introduïda en el paràmetre \"",
+											  "spa":"La URL introducida en el parametro \"",
 											  "eng":"The URL introduced in the parameter \"",
 											  "fre":"La URL introduite au paramètre \""}) +
-								  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc)+ 
+								  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc)+
 									  DonaCadenaLang({"cat":"\" és invàlida.","spa":"\" es invalida.", "eng":"\" is invalid.", "fre":"n'est pas valide."}));
 								return -1;
 							}
@@ -436,7 +424,7 @@ var s1;
 											  "spa":"No se ha definido ningún valor para el paràmetro \"",
 											  "eng":"Any value has been defined by parameter \"",
 											  "fre":"Aucun valeur défini pour le paramètre \""})+  DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
-							return -1;					
+							return -1;
 						}
 					}
 				}
@@ -452,9 +440,9 @@ var s1;
 											  "eng":"Any value has been defined by parameter: \"",
 											  "fre":"Aucun valeur défini pour le paramètre: \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
 
-						alert(cadena_error);					
+						alert(cadena_error);
 						return -1;
-					}					
+					}
 				}
 			}
 			input[input.length]={"identificador": operacio.par_input[i].nom.nom,
@@ -462,7 +450,7 @@ var s1;
 					"InputOutputTipusReferencia": operacio.par_input[i].InputOutputTipusReferencia,
 					"InputOutputTipusRefFitxer": operacio.par_input[i].InputOutputTipusRefFitxer,
 					"InputOutputTipusDada": operacio.par_input[i].InputOutputTipusDada};
-//					"flags": operacio.par_input[i].flags_tipus};	
+//					"flags": operacio.par_input[i].flags_tipus};
 		}
 	}
 	//Falten els outputs ·$·
@@ -486,9 +474,9 @@ var cdns=[];
 		var peticio_en_cascada=false;
 		if ((typeof ProcessosAExecutar[i_proces].cors==="undefined" || ProcessosAExecutar[i_proces].cors==false) && location.host && DonaHost(ProcessosAExecutar[i_proces].servidor).toLowerCase()!=location.host.toLowerCase() && ParamCtrl.ServidorLocal)
 			peticio_en_cascada=true;
-	
+
 		cdns.push("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
-		
+
 		if(peticio_en_cascada)
 			cdns.push("<soap:Envelope xmlns:soap=\"http://www.w3.org/2001/12/soap-envelope\" ",
 				  "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ",
@@ -502,15 +490,15 @@ var cdns=[];
 				  "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 \n",
 				  ParamCtrl.WPSschemaURL+"/wps/1.0.0/wpsExecute_request.xsd\">\n",
 				  "	<ows:Identifier>",ProcessosAExecutar[i_proces].operacio,"</ows:Identifier>\n");
-		
+
 		if(ProcessosAExecutar[i_proces].input)
 		{
-			cdns.push("	<DataInputs>\n");		
+			cdns.push("	<DataInputs>\n");
 			for(var i=0; i<ProcessosAExecutar[i_proces].input.length; i++)
 			{
 				cdns.push("		<Input>\n",
 						"			<ows:Identifier>",ProcessosAExecutar[i_proces].input[i].identificador,"</ows:Identifier>\n");
-				
+
 				if(ProcessosAExecutar[i_proces].input[i].InputOutputTipusReferencia || ProcessosAExecutar[i_proces].input[i].InputOutputTipusRefFitxer)
 				{
 					cdns.push("			<Reference xlink:href=\"" , ProcessosAExecutar[i_proces].input[i].valor , "\" schema=\"\"/>\n");
@@ -526,28 +514,28 @@ var cdns=[];
 			}
 			cdns.push("	</DataInputs>\n");
 		}
-		
+
 		//Falten els outputs ·$·
 		//Falten els outputs ·$·
 		//·$· Cal programar la definició dels outputs ara he fet la porqueria d'escriure el que necessito NJ
 		cdns.push("	<ResponseForm>\n",
 				"		<ResponseDocument storeExecuteResponse=\"true\" status=\"true\">\n",
-				"			<Output asReference=\"true\" mimeType=\"application/gml+xml\" encoding=\"ISO-8859-1\" schema=\"http://schemas.opengis.net/schemas/gml/3.1.1/base/gml.xsd\">\n",			
+				"			<Output asReference=\"true\" mimeType=\"application/gml+xml\" encoding=\"ISO-8859-1\" schema=\"http://schemas.opengis.net/schemas/gml/3.1.1/base/gml.xsd\">\n",
 				"				<ows:Identifier>OutputFile</ows:Identifier>\n",
 				"			</Output>\n",
-				"		</ResponseDocument>\n",				
+				"		</ResponseDocument>\n",
 				"	</ResponseForm>\n",
 				"</Execute>\n");
-		
+
 		/*cdns.push("	<ResponseForm>\n",
 				"		<ResponseDocument storeExecuteResponse=\"true\" status=\"true\">\n",
-				"			<Output asReference=\"true\">\n",			
+				"			<Output asReference=\"true\">\n",
 				"				<ows:Identifier>result</ows:Identifier>\n",
 				"			</Output>\n",
-				"		</ResponseDocument>\n",				
+				"		</ResponseDocument>\n",
 				"	</ResponseForm>\n",
 				"</Execute>\n");*/
-		
+
 		if(peticio_en_cascada)
 		{
 			var s_host=DonaHost(ParamCtrl.ServidorLocal);
@@ -563,8 +551,8 @@ var cdns=[];
 			ProcessosAExecutar[i_proces].servidor_on_fer_peticio=DonaNomServidorSenseCaracterFinal(ProcessosAExecutar[i_proces].servidor);
 		if(peticio_en_cascada)
 			cdns.push("</soap:Body>\n",
-					"</soap:Envelope>\n");	
-	
+					"</soap:Envelope>\n");
+
 		return cdns.join("");
 	}
 	return "";
@@ -577,10 +565,10 @@ function ExecutaRequestProces(servidor, request)
 
 	ajaxExecuteWPS=new Ajax();
 	//alert(request);
-	ajaxExecuteWPS.doPost(servidor, 
-			"text/xml", request, 
-			AvaluaRespostaExecuteWPS, "text/xml", 
-			document);				
+	ajaxExecuteWPS.doPost(servidor,
+			"text/xml", request,
+			AvaluaRespostaExecuteWPS, "text/xml",
+			document);
 }
 
 var MostraAvancadesWPS=true;
@@ -599,7 +587,7 @@ function MostraOAmagaAvancades()
 		{
 			resposta.style.display="none";
 			MostraAvancadesWPS=true;
-		}		
+		}
 	}
 }
 
@@ -612,19 +600,19 @@ var i_proces_a_executar;
 	if (!document.ExecutaProcesCapa)
 		return false;
 
-	//Agafo la info del formulari més la de la estructura i construeixo la petició		
+	//Agafo la info del formulari més la de la estructura i construeixo la petició
 	i_proces_a_executar=OmpleCreaProcesAExecutarDeFormulari(i_capa);
 	if(i_proces_a_executar==-1)
 		return false;
 
-	request=DonaRequestExecuteProces(i_proces_a_executar);		
-	
+	request=DonaRequestExecuteProces(i_proces_a_executar);
+
 	if(request!="")
 	{
 		var cdns=[];
 		var elem=getLayer(this, "executarProces_finestra");
 		var i_proces=document.SeleccionaProcesCapa.sel_proces.value;
-		
+
 		contentLayer(elem, null);
 		MostraAvancadesWPS=true;
 		cdns.push("<div class=\"finestraproces\" name=\"estat_execucio\" id=\"estat_execucio\">",
@@ -635,20 +623,20 @@ var i_proces_a_executar;
 				  "<b>",DonaCadenaLang({"cat":"Estat: ", "spa":"Estado: ", "eng":"Status: ", "fre":"État: "}),"</b>", "<span id=\"StatusResponseWPS\"></span>",
 				  "<br><br><span id=\"ResponseWPSReference\"></span>",
 				  "<br><br><a  href=\"javascript:void(0);\" onClick=\"MostraOAmagaAvancades()\"; id=\"AvancadesResponseWPS\">",
-				  DonaCadenaLang({"cat":"Opcions avançades","spa":"Opciones avanzadas","eng":"Advanced options","fre":"Options avancées"}),"</a>", 
+				  DonaCadenaLang({"cat":"Opcions avançades","spa":"Opciones avanzadas","eng":"Advanced options","fre":"Options avancées"}),"</a>",
 				  "<textarea class=\"Verdana11px\" name=\"responseWPS\" id=\"responseWPS\" wrap=off cols=80 rows=15 style=\"display:none\"></textarea>",
 				  "<br><br><center><input type=\"button\" value=\"",DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
 				  "\" onClick='TancaFinestraLayer(\"executarProces\");'/></center></div>");
 		s=cdns.join("");
-		contentLayer(elem, s);			
+		contentLayer(elem, s);
 		ExecutaRequestProces(ProcessosAExecutar[i_proces_a_executar].servidor_on_fer_peticio, request);
 		return true;
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat":"Error al construir la petició d'execució", 
-							 "spa":"Error al construir la petición de ejecución", 
-							 "eng":"Error while building execution request", 
+		alert(DonaCadenaLang({"cat":"Error al construir la petició d'execució",
+							 "spa":"Error al construir la petición de ejecución",
+							 "eng":"Error while building execution request",
 							 "fre":"Erreur en construisant la demande d'exécution"}));
 		return false;
 	}
@@ -674,7 +662,7 @@ var exp_file=document.getElementById("e_file_"+i_input);
 var path_file=document.getElementById("e_filepath_user_"+i_input);
 var form=document.getElementById("e_form_input_"+i_input);
 var opcio=document.getElementById("e_opcio_"+i_input);
-	
+
 	if(activar)
 	{
 		exp_file.style.display="none";
@@ -689,23 +677,23 @@ var opcio=document.getElementById("e_opcio_"+i_input);
 	{
 		form.reset();
 		opcio.checked=true;
-		exp_file.style.display="inline";		
+		exp_file.style.display="inline";
 		path_file.style.display="none";
 		boto_submit.style.display="none";
-		boto_cancel.style.display="none";	
+		boto_cancel.style.display="none";
 	}
 }
 
 function EsUnaURLValida(text)
 {
 	//var re=/^(file|http):\/\/S+.(com|net|org|info|biz|ws|us|es|cat|tv|cc)$/i;
-	//La cadena ha de començar per file o http, 
+	//La cadena ha de començar per file o http,
 	//S vol dir que busqui un caracter no blanc
-	//S+ vol dir que n'hi hagi com a mínim un 
+	//S+ vol dir que n'hi hagi com a mínim un
 	//.
 	//i alguna  de les seguënts extensions
 
-	var re=/^(file|http):\/\/\w+(\.\w+)*\.\w{2,3}$/i; 	
+	var re=/^(file|http):\/\/\w+(\.\w+)*\.\w{2,3}$/i;
 	//http o file ://(n caracteres).(n caracteres)(0 ó más veces).(2 ó 3 caracteres)
 	if (re.test(text))
 		return true;
@@ -719,8 +707,8 @@ function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces
 		var ext_fitxer=DonaExtensioFitxerSensePunt(sz_fitxer);
 		if(ext_fitxer=="")
 		{
-			alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ", 
-						  "spa":"Formato incorrecto. Formatos permitidos by parameter ", 
+			alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ",
+						  "spa":"Formato incorrecto. Formatos permitidos by parameter ",
 						  "eng":"Wrong format. Allowed formats by parameter ",
 						  "fre":"Format incorrect. Formats permis by parameter "}) +
 				  "\"" + DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
@@ -733,8 +721,8 @@ function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces
 			if(ext_fitxer==ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].formats[i].toLowerCase())
 				return true;
 		}
-		alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ", 
-					      	  "spa":"Formato incorrecto. Formatos permitidos by parameter ", 
+		alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ",
+					      	  "spa":"Formato incorrecto. Formatos permitidos by parameter ",
 						      "eng":"Wrong format. Allowed formats by parameter ",
 						      "fre":"Format incorrect. Formats permis by parameter "}) +
 			  "\""+ DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
@@ -747,7 +735,7 @@ function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces
 function ComprovaActivaIMostraButtonEnviar(activar, i_capa, i_proces_sel, i_input)
 {
 var exp_file=document.getElementById("e_file_"+i_input);
-	
+
 	if(exp_file && exp_file.value)
 	{
 		if(true==ComprovaSiFormatFitxerParamProcesEsCorrecte(exp_file.value, i_capa, i_proces_sel, i_input))
@@ -760,7 +748,7 @@ function TornaASeleccionarFitxer(i_capa, i_proces_sel, i_input)
 //Mostro el selector de fitxers i esborro la selecció que hi havia
 var span_estat_file=document.getElementById("estat_file_"+i_input);
 var nom_fitxer_servidor=document.getElementById("e_text_"+i_input);
-var nom_fitxer_usuari=document.getElementById("e_file_user_"+i_input);		
+var nom_fitxer_usuari=document.getElementById("e_file_user_"+i_input);
 var exp_file=document.getElementById("e_file_"+i_input);
 var path_file=document.getElementById("e_filepath_user_"+i_input);
 var boto_submit=document.getElementById("e_submit_"+i_input);
@@ -775,7 +763,7 @@ var sel_opcio=0;
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable &&
 	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 	{
-		
+
 		if(opcio_e && opcio_e.checked)
 			sel_opcio=opcio_editable;
 		else
@@ -794,18 +782,18 @@ var sel_opcio=0;
 	path_file.style.display="none";
 	path_file.innerHTML="";
 	span_estat_file.style.display="none";
-	nom_fitxer_servidor.value="";		
+	nom_fitxer_servidor.value="";
 	nom_fitxer_usuari.style.display="none";
 	nom_fitxer_usuari.value="";
 	boto_sel_altre_fitxer.style.display="none";
-	
+
 	//Genero un nou identificador de proces
 	NIdProces++;
 	var id_proces=IdProces+"_"+NIdProces;
 	var id_file=document.getElementById("id_file_"+i_input);
 	id_file.value=id_proces;
-		
-	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable && 
+
+	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable &&
 	   ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 	{
 		if(sel_opcio==opcio_predefinit)
@@ -818,7 +806,7 @@ var sel_opcio=0;
 			opcio_e.checked=true;
 			ActivaTextEditable(i_input);
 		}
-		else 
+		else
 		{
 			opcio_u.checked=true;
 			ActivaTextURL(i_input);
@@ -835,7 +823,7 @@ var node, node2;
 	//en cas d'error crec que hauria de modificar el formulari perquè no estigui esperant indefinidament el fitxer
 	if(doc)
 	{
-		var root=doc.documentElement;	
+		var root=doc.documentElement;
 		if(root)
 		{
 			node=root.getElementsByTagName('status');
@@ -867,7 +855,7 @@ var node, node2;
 		}
 	}
 	//S'ha de modificar alguna cosa del formulari
-	
+
 	if(percentatge==-1)
 	{
 		alert(DonaCadenaLang({"cat":"S'ha produït algun error durant l'enviament del fitxer. Torna-ho a intentar",
@@ -880,7 +868,7 @@ var node, node2;
 	}
 	var span_estat_file=document.getElementById("estat_file_"+estat_proces.i_input);
 	var nom_fitxer_servidor=document.getElementById("e_text_"+estat_proces.i_input);
-	var nom_fitxer_usuari=document.getElementById("e_file_user_"+estat_proces.i_input);		
+	var nom_fitxer_usuari=document.getElementById("e_file_user_"+estat_proces.i_input);
 	var exp_file=document.getElementById("e_file_"+estat_proces.i_input);
 	var path_file=document.getElementById("e_filepath_user_"+estat_proces.i_input);
 	var boto_submit=document.getElementById("e_submit_"+estat_proces.i_input);
@@ -889,23 +877,23 @@ var node, node2;
 	if(percentatge<100)
 	{
 		//Mostro l'estat d'enviament i desactivo la resta de coses
-		var cdns=[]; 
+		var cdns=[];
 		cdns.push(DonaCadenaLang({"cat":"Enviant fitxer", "spa":"Enviando fichero", "eng":"Sending file", "fre":"Fichier en cours d’envoi"}), " ", percentatge, "%");
 		span_estat_file.innerHTML=cdns.join("");
-		span_estat_file.style.display="inline";						
+		span_estat_file.style.display="inline";
 	}
 	else
 	{
-		span_estat_file.style.display="none";				
-		nom_fitxer_servidor.value=nom_fitxer;	
+		span_estat_file.style.display="none";
+		nom_fitxer_servidor.value=nom_fitxer;
 		nom_fitxer_usuari.style.display="inline";
-		nom_fitxer_usuari.value=descp_fitxer;		
+		nom_fitxer_usuari.value=descp_fitxer;
 		boto_sel_altre_fitxer.style.display="inline";
 	}
 	path_file.style.display="none";
 	exp_file.style.display="none";
 	boto_submit.style.display="none";
-	boto_cancel.style.display="none";		
+	boto_cancel.style.display="none";
 	if(percentatge>=0 && percentatge<100)
 		setTimeout("ActualitzaValorParametre("+estat_proces.i_capa+","+estat_proces.i_proces_sel+","+estat_proces.i_input+", \'"+estat_proces.id_proces+"\')", 500);
 	return;
@@ -914,7 +902,7 @@ var node, node2;
 function ActualitzaValorParametre(i_capa, i_proces_sel, i_input, id_proces)
 {
 var i_ajax=ajaxEstatEnviaFitxer.length;
-		
+
 	//Només s'usa per enviar un fitxer, i aquesta petició sempre és al ServidorLocal
 	if (location.host && DonaHost(ParamCtrl.ServidorLocal).toLowerCase()!=location.host.toLowerCase())
 	{
@@ -930,16 +918,16 @@ var i_ajax=ajaxEstatEnviaFitxer.length;
 	}
 	else
 		servidor=DonaNomServidorCaracterFinal(ParamCtrl.ServidorLocal);
-	
+
 	var request=servidor+"VERSION=1.2.0&REQUEST=GetProcessStatus&IDPROCES="+id_proces+"&FORMAT=text/xml&I_AJAX="+i_ajax;
 
 	ajaxEstatEnviaFitxer[i_ajax]=new Ajax();
 	EstatProcesEnviaFitxer[i_ajax]=new CreaEstatProcesEnviaFitxer(i_capa, i_proces_sel, i_input, id_proces);
 
-	ajaxEstatEnviaFitxer[i_ajax].doGet(request, AvaluaRespostaEstatProcesEnviaFitxer, 
+	ajaxEstatEnviaFitxer[i_ajax].doGet(request, AvaluaRespostaEstatProcesEnviaFitxer,
 									   "text/xml", EstatProcesEnviaFitxer[i_ajax]);
 }
-	
+
 function EnviarFitxerAlServidor(i_capa, i_proces_sel, i_input)
 {
 	var id_file=document.getElementById("id_file_"+i_input);
@@ -954,25 +942,25 @@ function ActivaTextURL(i_input)
 var elem;
 	elem=document.getElementById("p_opcio_"+i_input);
 	if(elem)
-		elem.checked=false;		
+		elem.checked=false;
 	elem=document.getElementById("e_opcio_"+i_input);
 	if(elem)
-		elem.checked=false;		
+		elem.checked=false;
 	elem=document.getElementById("p_sel_input_"+i_input);
 	if(elem)
 		elem.disabled=true;
 	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
-		elem.disabled=true;			
-	elem=document.getElementById("e_sel_file_"+i_input);						
+		elem.disabled=true;
+	elem=document.getElementById("e_sel_file_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
@@ -995,16 +983,16 @@ var elem;
 		elem.disabled=false;
 	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
-		elem.disabled=true;			
-	elem=document.getElementById("e_sel_file_"+i_input);						
+		elem.disabled=true;
+	elem=document.getElementById("e_sel_file_"+i_input);
 	if(elem)
-		elem.disabled=true;		
+		elem.disabled=true;
 	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=true;
@@ -1028,16 +1016,16 @@ var elem;
 		elem.disabled=true;
 	elem=document.getElementById("e_file_"+i_input);
 	if(elem)
-		elem.disabled=false;		
+		elem.disabled=false;
 	elem=document.getElementById("e_submit_"+i_input);
 	if(elem)
 		elem.disabled=false;
 	elem=document.getElementById("e_cancel_"+i_input);
 	if(elem)
-		elem.disabled=false;						
-	elem=document.getElementById("e_sel_file_"+i_input);						
+		elem.disabled=false;
+	elem=document.getElementById("e_sel_file_"+i_input);
 	if(elem)
-		elem.disabled=false;					
+		elem.disabled=false;
 	elem=document.getElementById("e_text_"+i_input);
 	if(elem)
 		elem.disabled=false;
@@ -1078,7 +1066,7 @@ var elem=document.getElementById("p_check_"+i_input), i;
 					AfegeixProcessosAActivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);
 				}
 				else
-					AfegeixProcessosADesactivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);		
+					AfegeixProcessosADesactivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);
 			}
 		}
 		else
@@ -1092,7 +1080,7 @@ var elem=document.getElementById("p_check_"+i_input), i;
 					AfegeixProcessosAActivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);
 				}
 				else
-					AfegeixProcessosADesactivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);		
+					AfegeixProcessosADesactivar(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa[i].id_proces_a);
 			}
 		}
 		ActivaIDesactivaLlistaProcessos(i_capa, i_proces_sel);
@@ -1148,27 +1136,27 @@ var i,j;
 function ActualitzaParametresProces(i_capa, i_proces_sel)
 {
 var i_valor, i;
-var cdns=[]; 
+var cdns=[];
 
 
 	ProcessosAActivar=[];
 	ProcessosADesactivar=[];
 
-	contentLayer(getLayer(this, "parametres_operacio_wps"), null);	
+	contentLayer(getLayer(this, "parametres_operacio_wps"), null);
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input)
-	{				
+	{
 		cdns.push("<b>",
-				  DonaCadenaLang({"cat":"Paràmetres d'entrada: ","spa":"Parámetros de entrada: ", "eng":"Input parameters: ", "fre":"Paramètres d'entrée: "}), 
+				  DonaCadenaLang({"cat":"Paràmetres d'entrada: ","spa":"Parámetros de entrada: ", "eng":"Input parameters: ", "fre":"Paramètres d'entrée: "}),
 				  "</b>",
 				  "<br><br>");
 		for(var i_input=0; i_input<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input.length; i_input++)
 		{
-			
+
 			if( ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorCapaWPS)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
-						  "<input class=\"Verdana11px\" readonly type=\"text\" size=\"50px\" name=\"p_text_", 
+						  "<input class=\"Verdana11px\" readonly type=\"text\" size=\"50px\" name=\"p_text_",
 						  i_input, "\" id=\"p_text_", i_input, "\" value=\"", DonaCadena(ParamCtrl.capa[i_capa].desc),"\" />",
 						  "</form>");
 			}
@@ -1178,7 +1166,7 @@ var cdns=[];
 				var i;
 				//Formulari de tipus check
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
-						  "<input class=\"Verdana11px\" type=\"checkbox\" id=\"p_check_", i_input, "\" name=\"p_check_", i_input, 
+						  "<input class=\"Verdana11px\" type=\"checkbox\" id=\"p_check_", i_input, "\" name=\"p_check_", i_input,
 						  "\" value=\"boleana\"");
 				//només hauria de tenir 2 valors (si/no) (yes/no) (1/0) (true/false)
 				for(i_valor=0; i_valor<2; i_valor++)
@@ -1195,9 +1183,9 @@ var cdns=[];
 								cdns.push(" checked");
 								i_seleccionat=i_valor;
 							}
-								
+
 							break;
-						}						
+						}
 					}
 				}
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].activa)
@@ -1223,11 +1211,11 @@ var cdns=[];
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				//Formulari de la part de l'input predefinida
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
-						  "<input class=\"Verdana11px\" type=\"radio\" id=\"p_opcio_", i_input, "\" name=\"p_opcio_", i_input, 
+						  "<input class=\"Verdana11px\" type=\"radio\" id=\"p_opcio_", i_input, "\" name=\"p_opcio_", i_input,
 						  "\" value=\"predefinit\" onClick=\"ActivaTextPredefinit(",i_input, ");\" checked />");
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 					cdns.push("<label for=\"p_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Predefinit","spa":"Predefinido","eng":"Predefined","fre":"Prédéfinie"}),": </label>");
-				
+
 				cdns.push("<select class=\"Verdana11px\" name=\"p_sel_input_", i_input, "\" id=\"p_sel_input_", i_input,"\">");
 				for(i_valor=0; i_valor<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors.length; i_valor++)
 				{
@@ -1236,20 +1224,20 @@ var cdns=[];
 							DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors[i_valor].desc), "</option>");
 				}
 				cdns.push("</select></form>");
-				
-				//Formulari de la part de l'input editable				
+
+				//Formulari de la part de l'input editable
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
-				{					
+				{
 	  				NIdProces++;
 					var id_proces=IdProces+"_"+NIdProces;
-												
+
 					//El selector de fitxers locals
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,
 							  "\" name=\"e_form_input_",i_input, "\" action=\"",ParamCtrl.ServidorLocal,"\"",
 							  "enctype=\"multipart/form-data\" method=\"post\" target=\"retorn_fitxers_operacio_wps_",i_input,
-							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",							  
-							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input, 
-						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" />",							  
+							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
+							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
+						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" />",
 							  "<label for=\"e_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Local","spa":"Local","eng":"Local","fre":"Local"}),": </label>",
 							  "<span class=\"Verdana11px\" id=\"estat_file_",i_input,"\" style=\"display:none\"></span>",
 							  "<input type=\"hidden\" id=\"id_file_",i_input, "\" name=\"idfile\" value=\"",id_proces,"\" />",
@@ -1261,28 +1249,28 @@ var cdns=[];
 							  DonaCadenaLang({"cat":"Canviar el fitxer", "spa":"Cambiar el fichero", "eng":"Change a file", "fre":"Changer le fichier"}),"\" onclick=\"",
 							  "TornaASeleccionarFitxer(", i_capa, ",", i_proces_sel, ",", i_input, ");\" />",
 							  "<input type=\"hidden\" id=\"e_text_", i_input, "\" name=\"e_text_", i_input, "\" />",
-							  "  <input class=\"Verdana11px\" disabled type=\"submit\" id=\"e_submit_", i_input, "\" value=\"", 
+							  "  <input class=\"Verdana11px\" disabled type=\"submit\" id=\"e_submit_", i_input, "\" value=\"",
 							  DonaCadenaLang({"cat":"Enviar","spa":"Enviar","eng":"Send","fre":"Envoyer"}),
 							  "\" style=\"display:none\" />",
-							  "  <input class=\"Verdana11px\" disabled type=\"button\" id=\"e_cancel_", i_input, "\" value=\"", 
+							  "  <input class=\"Verdana11px\" disabled type=\"button\" id=\"e_cancel_", i_input, "\" value=\"",
 							  DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"}),
 							  "\" style=\"display:none\" onclick=\"ActivaIMostraButtonEnviar(false,",i_input,");\" />",
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
 					//L'edit per escriure url's
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
-						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input, 
-						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",							  
+						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
+						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
 							  "<label for=\"u_opcio_",i_input,"\">",DonaCadenaLang({"cat":"URL","spa":"URL","eng":"URL","fre":"URL"}),": </label>",
 							  "<input type=\"text\" id=\"u_text_",i_input,"\" disabled size=\"60px\" />",
-							  "</form>");					
+							  "</form>");
 				}
 				else
 				{
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,"\" name=\"e_form_input_",i_input, "\">",
-							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input, 
+							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
 							  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" />",
-							  "<input class=\"Verdana11px\" type=\"text\" size=\"50px\" name=\"e_text_", i_input, 
+							  "<input class=\"Verdana11px\" type=\"text\" size=\"50px\" name=\"e_text_", i_input,
 							  "\" id=\"e_text_",i_input, "\" disabled />",
 							  "</form>");
 				}
@@ -1292,31 +1280,31 @@ var cdns=[];
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<select class=\"Verdana11px\" id=\"p_sel_input_", i_input, "\" name=\"p_sel_input_", i_input, "\">");
-				
+
 				for(i_valor=0; i_valor<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors.length; i_valor++)
 				{
 					cdns.push("<option value=\"", i_valor,"\" ",
 							((ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors[i_valor].sel) ? "selected" : ""), ">",
 							DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors[i_valor].desc), "</option>");
 				}
-				cdns.push("</select></form>");				
+				cdns.push("</select></form>");
 			}
 			else //if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorEditable)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
-				//Formulari de la part de l'input editable				
+				//Formulari de la part de l'input editable
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
 				{
 					NIdProces++;
 					var id_proces=IdProces+"_"+NIdProces;
-																
+
 					//El selector de fitxers locals
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,
 							  "\" name=\"e_form_input_",i_input, "\" action=\"",ParamCtrl.ServidorLocal,"\"",
 							  "enctype=\"multipart/form-data\" method=\"post\" target=\"retorn_fitxers_operacio_wps_",i_input,
-							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",							  
-							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input, 
-						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" checked/>",							  
+							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
+							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
+						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" checked/>",
 							  "<label for=\"e_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Local","spa":"Local","eng":"Local","fre":"Local"}),": </label>",
 							  "<span class=\"Verdana11px\" id=\"estat_file_",i_input,"\" style=\"display:none\"></span>",
 							  "<input type=\"hidden\" id=\"id_file_",i_input, "\" name=\"idfile\" value=\"",id_proces,"\" />",
@@ -1328,26 +1316,26 @@ var cdns=[];
 							  DonaCadenaLang({"cat":"Canviar el fitxer", "spa":"Cambiar el fichero", "eng":"Change a file", "fre":"Changer le fichier"}),"\" onclick=\"",
 							  "TornaASeleccionarFitxer(", i_capa, ",", i_proces_sel, ",", i_input, ");\" />",
 							  "<input type=\"hidden\" id=\"e_text_", i_input, "\" name=\"e_text_", i_input, "\" />",
-							  "  <input class=\"Verdana11px\" type=\"submit\" id=\"e_submit_", i_input, "\" value=\"", 
+							  "  <input class=\"Verdana11px\" type=\"submit\" id=\"e_submit_", i_input, "\" value=\"",
 							  DonaCadenaLang({"cat":"Enviar","spa":"Enviar","eng":"Send","fre":"Envoyer"}),
 							  "\" style=\"display:none\" />",
-							  "  <input class=\"Verdana11px\" type=\"button\" id=\"e_cancel_", i_input, "\" value=\"", 
+							  "  <input class=\"Verdana11px\" type=\"button\" id=\"e_cancel_", i_input, "\" value=\"",
 							  DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"}),
 							  "\" style=\"display:none\" onclick=\"ActivaIMostraButtonEnviar(false,",i_input,");\" />",
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
 					//L'edit per escriure url's
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
-						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input, 
-						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",							  
+						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
+						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
 							  "<label for=\"u_opcio_",i_input,"\">",DonaCadenaLang({"cat":"URL","spa":"URL","eng":"URL","fre":"URL"}),": </label>",
 							  "<input type=\"text\" id=\"u_text_",i_input,"\" disabled size=\"60px\" />",
-							  "</form>");					
+							  "</form>");
 				}
 				else
 				{
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
-							  "<input class=\"Verdana11px\" type=\"text\" size=\"60px\" name=\"e_text_", i_input, 
+							  "<input class=\"Verdana11px\" type=\"text\" size=\"60px\" name=\"e_text_", i_input,
 							  "\" id=\"e_text_",i_input, "\">",
   							  "</form>");
 				}
@@ -1360,10 +1348,10 @@ var cdns=[];
 	{
 		cdns.push("<b>",DonaCadenaLang({"cat":"Paràmetres de sortida: ","spa":"Parámetros de salida: ", "eng":"Output parameters: ", "fre":"Paramètres de sortie: "}), "</b>","<br><br>");
 		//·$· Falta fer aquesta part
-		cdns.push("<br><br>");				
-	}	
+		cdns.push("<br><br>");
+	}
 	var s=cdns.join("");
-	contentLayer(getLayer(this, "parametres_operacio_wps"), s);	
+	contentLayer(getLayer(this, "parametres_operacio_wps"), s);
 	ActivaIDesactivaLlistaProcessos(i_capa, i_proces_sel);
 }
 //Fi de ActualitzaParametresProces()
@@ -1372,23 +1360,23 @@ function FinestraExecutaProcesCapa(elem, i_capa)
 {
 var cdns=[];
 var s;
-var i_proces, i; 
+var i_proces, i;
 
 	//Esborro el contingut de la finestra
 	contentLayer(elem, null);
 	if (ParamCtrl.capa[i_capa].proces && ParamCtrl.capa[i_capa].proces.length>0)
-	{	
+	{
 		cdns.push("<div class=\"finestraproces\" id=\"finestraproces\">",
 				"<form name=\"SeleccionaProcesCapa\" id=\"SeleccionaProcesCapa\">");
 		if(!(ParamCtrl.capa[i_capa].ProcesMostrarTitolCapa && ParamCtrl.capa[i_capa].ProcesMostrarTitolCapa==false))
 		{
-			cdns.push("<b>", 
+			cdns.push("<b>",
 				DonaCadenaLang({"cat":"Capa a processar: ","spa":"Capa a procesar: ","eng":"Layer to process: ","fre":"Couche à traiter: "}),
 			  	"</b>",DonaCadena(ParamCtrl.capa[i_capa].desc),"<br><br><hr>");
 		}
 		cdns.push("<b>",DonaCadenaLang({"cat":"Operació a executar: ", "spa":"Operación a ejecutar: ", "eng":"Operation to execute: ", "fre":"Opération à exécuter: "}),
 			  	"</b><br><br><select name=\"sel_proces\" id=\"sel_proces\" class=\"Verdana11px\"",
-				"onChange=\"ActualitzaParametresProces(",i_capa,", document.SeleccionaProcesCapa.sel_proces.value);\">");	  
+				"onChange=\"ActualitzaParametresProces(",i_capa,", document.SeleccionaProcesCapa.sel_proces.value);\">");
 
 		for (i_proces=0; i_proces<ParamCtrl.capa[i_capa].proces.length; i_proces++)
 		{
@@ -1407,7 +1395,7 @@ var i_proces, i;
 		}
 		cdns.push("</select></form><div name=\"parametres_operacio_wps\" id=\"parametres_operacio_wps\"></div>",
 				  "<form name=\"ExecutaProcesCapa\" id=\"ExecutaProcesCapa\" onSubmit=\"return OmpleEstructGlobalIExecutaProces(",i_capa,");\"\>",
-				  "<center><input TYPE=\"submit\" VALUE=\"",DonaCadenaLang({"cat":"Executar", "spa":"Ejecutar", "eng":"Execute", "fre":"Exécuter"}),"\" /></center></form></div>");				
+				  "<center><input TYPE=\"submit\" VALUE=\"",DonaCadenaLang({"cat":"Executar", "spa":"Ejecutar", "eng":"Execute", "fre":"Exécuter"}),"\" /></center></form></div>");
 	}
 	else
 	{
@@ -1418,7 +1406,7 @@ var i_proces, i;
 	}
 	s=cdns.join("");
 	contentLayer(elem, s);
-	ActualitzaParametresProces(i_capa, document.SeleccionaProcesCapa.sel_proces.value);		
+	ActualitzaParametresProces(i_capa, document.SeleccionaProcesCapa.sel_proces.value);
 }
 
 function IniciaFinestraExecutaProcesCapa(i_capa)
@@ -1429,5 +1417,5 @@ var elem=ObreFinestra(this, "executarProces", DonaCadenaLang({"cat":"d'afegir ca
 							 "fre":"pour ajouter des couches au navigateur"}));
 	if (!elem)
 		return;
-	FinestraExecutaProcesCapa(elem, i_capa);			
+	FinestraExecutaProcesCapa(elem, i_capa);
 }//Fi de IniciaFinestraExecutaProcesCapa()

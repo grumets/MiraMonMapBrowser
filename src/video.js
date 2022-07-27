@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2021 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -41,7 +41,7 @@
 var RodetVertical=false;  // Constant. el mode vertical no s'ha provat mai.
 var DatesVideo=[];  //Un array de propietats de cada "fotograma" de conforma el video: {"i_capa":, "i_data":, "i_estil:, "millisegons":, "animable":("si", "ara_no", "no"), "carregada":, "carregadaRodet":, "timeoutRodet":, "timeoutFotograma":}
 var IDataVideoMostrada;
-var IDataVideoInicial, IDataVideoFinal;  //Només útils al principi de la càrrega. Després DatesVideo és manipulat per eliminar les dates fora de l'interval que desapareixen del array.
+var IDataVideoInicial, IDataVideoFinal;  //NomÃ©s Ãºtils al principi de la cÃ rrega. DesprÃ©s DatesVideo Ã©s manipulat per eliminar les dates fora de l'interval que desapareixen del array.
 var NomVideoActiu;
 var PuntsSerieTemporal=[], IconaVideoClick={}, ImgVideoStat, ImgVideoStatHistograma;
 //var EstadisticCarregatVideo=null;
@@ -50,17 +50,17 @@ var IDataFilEixXEixT=[];    //Array amb d'index de fotograma que representa cada
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
 
-var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"};
+var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaÃ®t, attendez"};
 
-function OrdenacioCapesVideoData(x,y) 
+function OrdenacioCapesVideoData(x,y)
 {
-	//Ascendent per data 
+	//Ascendent per data
 	return (x.millisegons - y.millisegons);
 }
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps també són aptes per a vídeos
+	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps tambÃ© sÃ³n aptes per a vÃ­deos
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;
@@ -121,7 +121,7 @@ var n_c=0;
 function DonaDadesValorsSerieTemporalLocalitzacio(i_col,i_fil, filtra_null)
 {
 var data=[], v, i_c;
-	
+
 	var n_c=DeterminaNombreComponentsSerieTemporal();
 	if (n_c==0)
 		return null;
@@ -139,7 +139,7 @@ var data=[], v, i_c;
 					for (i_c=0; i_c<n_c; i_c++)
 						data[i_c].push({t:DatesVideo[i_data_video].millisegons, y:""});
 				continue;
-			}			
+			}
 			for (i_c=0; i_c<v.length; i_c++)
 				data[i_c].push({t:DatesVideo[i_data_video].millisegons, y:v[i_c]});
 		}
@@ -161,17 +161,17 @@ var data=[], i_v, i_c;
 	{
 		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			continue;
-		
+
 		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];
-		
+
 		if (estil.component)
 		{
 			for (i_c=0; i_c<estil.component.length; i_c++)
 			{
-				estadistics=CalculaEstadisticsHistograma(estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe, 
+				estadistics=CalculaEstadisticsHistograma(estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe,
 						DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
-						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, 
-								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
+						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta,
+								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o Ã©s el nombre de colors de la paleta, o Ã©s 256 per totes les bandes
 									));
 				data[i_c][0][i_v]={t:DatesVideo[i_data_video].millisegons, y:estadistics.mitjana+estadistics.desv_tipica};
 				data[i_c][1][i_v]={t:DatesVideo[i_data_video].millisegons, y:estadistics.mitjana};
@@ -184,7 +184,7 @@ var data=[], i_v, i_c;
 }
 
 
-//Aquesta funció dona les etiquetes de temps en mode "moment" tal com ho vol la llibreria chart.js.
+//Aquesta funciÃ³ dona les etiquetes de temps en mode "moment" tal com ho vol la llibreria chart.js.
 function DonaEtiquetesValorsSerieTemporalLocalitzacio()
 {
 var labels=[];
@@ -199,7 +199,7 @@ var labels=[];
 	return labels;
 }
 
-//Aquesta funció dona les etiquetes de temps en mode text.
+//Aquesta funciÃ³ dona les etiquetes de temps en mode text.
 function DonaTempsValorsSerieTemporalLocalitzacio()
 {
 var temps=[];
@@ -222,13 +222,13 @@ var titol=[], estil;
 	{
 		if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			continue;
-		
-		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];	
+
+		estil=ParamCtrl.capa[DatesVideo[i_data_video].i_capa].estil[DatesVideo[i_data_video].i_estil];
 		if (estil.component)
 		{
 			for (var i_c=0; i_c<estil.component.length; i_c++)
 				titol[i_c]=(estil.component[i_c].desc) ? DonaCadena(estil.component[i_c].desc) : DonaCadena(estil.desc);
-			return titol;  //agafem el primer títol sense més.
+			return titol;  //agafem el primer tÃ­tol sense mÃ©s.
 		}
 	}
 }
@@ -239,18 +239,18 @@ var titol=[], estil;
 	{
 		document.getElementById("video_click").style.visibility="hidden";
 		//if (typeof document.video_animacions.veure!=="undefined" && document.video_animacions.veure!=null)
-		//{			 			
+		//{
 			document.video_animacions.veure.selectedIndex=0;
 			PosaEstadisticSerieOAnimacio(null, estadistic, -1);
 		}
-	}	
+	}
 	else
 	{
 		TancaFinestraSerieTemp("video_grafic", "video_click");
 		document.getElementById("video_click").style.visibility="visible";
 		IFilEixXEixTVideo=-1;
 		return;
-	}	
+	}
 	if (event)
 		dontPropagateEvent(event);
 }*/
@@ -290,11 +290,11 @@ function ConsultaSobreVideo(event_de_click)
 
 	if (PuntsSerieTemporal.length==0)
 	{
-		//Ara cal presentar la gràfica.
-		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_click", "video_grafic", 
-						DonaDadesEstadistiquesFotogramaDeSerieTemporal(), 								
-						DonaEtiquetesValorsSerieTemporalLocalitzacio(), 								
-						DonaTempsValorsSerieTemporalLocalitzacio(), 
+		//Ara cal presentar la grÃ fica.
+		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_click", "video_grafic",
+						DonaDadesEstadistiquesFotogramaDeSerieTemporal(),
+						DonaEtiquetesValorsSerieTemporalLocalitzacio(),
+						DonaTempsValorsSerieTemporalLocalitzacio(),
 						DonaTitolEixYSerieTemporalLocalitzacio(),
 						ParamCtrl.capa[DatesVideo[IDataVideoMostrada].i_capa].FlagsData);
 	}
@@ -334,7 +334,7 @@ var ctx, canvas, shadowPrevi;
 	DesactivaSombraFonts(ctx, shadowPrevi)
 }
 
-function PintaPosicionsConsutaSobreVideo()	
+function PintaPosicionsConsutaSobreVideo()
 {
 var ctx, canvas, shadowPrevi;
 
@@ -346,10 +346,10 @@ var ctx, canvas, shadowPrevi;
 		return;
 
 	for (var i_punt=0; i_punt<PuntsSerieTemporal.length; i_punt++)
-	{				
-		try 
+	{
+		try
 		{
-			ctx.drawImage(IconaVideoClick.img, PuntsSerieTemporal[i_punt].i-IconaVideoClick.i+1, 
+			ctx.drawImage(IconaVideoClick.img, PuntsSerieTemporal[i_punt].i-IconaVideoClick.i+1,
 						PuntsSerieTemporal[i_punt].j-IconaVideoClick.j+1, IconaVideoClick.img.ncol, IconaVideoClick.img.nfil);
 
 			shadowPrevi=ActivaSombraFonts(ctx)
@@ -367,7 +367,7 @@ var ctx, canvas, shadowPrevi;
 			ctx.fillStyle="#000000";
 			ctx.textAlign="left";
 			ctx.fillText(i_punt+1, PuntsSerieTemporal[i_punt].i+22, PuntsSerieTemporal[i_punt].j);
-			
+
 			DesactivaSombraFonts(ctx, shadowPrevi)
 
 		}
@@ -384,7 +384,7 @@ var cdns=[], capa, i_capa_primer_video;
 
 	//Canviar la mida de la finestra.
 	moveFinestraLayer(win, name, -1, -1, ParamInternCtrl.vista.ncol+142, ParamInternCtrl.vista.nfil+140);
-						
+
 	//Determinar el primer video actiu.
 	for (i_capa_primer_video=0; i_capa_primer_video<ParamCtrl.capa.length; i_capa_primer_video++)
 	{
@@ -393,18 +393,15 @@ var cdns=[], capa, i_capa_primer_video;
 	}
 	if (i_capa_primer_video==ParamCtrl.capa.length)
 	{
-		alert(DonaCadenaLang({"cat":"No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.", 
-					"spa":"No hi ha ninguna capa disponible para la animación en este área o zoom.", 
-					"eng":"There is no layer available for the animation in this area or zoom.",
-					"fre":"Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom"}));
+		alert(GetMessage("NoLayerAvailableForAnimation", "video"));
 		return;
 	}
 
-	//Començo pel selector de capes.
+	//ComenÃ§o pel selector de capes.
 	cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
 		" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
 			  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-			  DonaCadenaLang({"cat":"Sèries temporals", "spa":"Series temporales", "eng":"Time series", "fre":"Séries chronologiques"}),
+			  GetMessage("TimeSeries", "video"),
 			  ": <select name=\"capa\" onChange=\"CanviaAnimacio(document.video_animacions.capa.value);\">");
 
 	var i_capa_video_actiu_actual=-1;
@@ -416,7 +413,7 @@ var cdns=[], capa, i_capa_primer_video;
 			cdns.push("<option value=\"",capa.NomVideo,"\"",((i_capa_video_actiu_actual==-1) ? " selected" : ""),">" ,
 					DonaCadena(capa.DescVideo),"</option>");
 			if (i_capa_video_actiu_actual==-1)
-				i_capa_video_actiu_actual=i_capa_video_actiu; 
+				i_capa_video_actiu_actual=i_capa_video_actiu;
 			//Salto la resta.
 			for (var i_capa_video_actiu2=i_capa_video_actiu+1; true; i_capa_video_actiu2++)
 			{
@@ -431,7 +428,7 @@ var cdns=[], capa, i_capa_primer_video;
 	}
 	cdns.push("</select>",
 		"<span id=\"video_estil\"></span></font></td></tr></table>");
-	
+
 	//Creo la pantalla on es projecte el video.
 	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
 		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
@@ -439,26 +436,26 @@ var cdns=[], capa, i_capa_primer_video;
 		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
 		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
-	// Desplegable d' animació o d'estadistic.
+	// Desplegable d' animaciÃ³ o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
 
-	//Dibuixar els botons de progrés del video.
-	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic(event);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\" title=\"",DonaCadenaLang({"cat":"copiar", "spa":"copiar", "eng":"copy","fre":"copier"}),"\"></button></span>");
-	cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\" title=\"",DonaCadenaLang({"cat":"al inici", "spa":"al inicio", "eng":"to the start", "fre":"au début"}),"\"></button>",
-		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\" title=\"",DonaCadenaLang({"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"}),"\"></button>",
-		"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\" title=\"",DonaCadenaLang({"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"}),"\"></button>",
-		"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"}),"\"></button>",
-		"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\" title=\"",DonaCadenaLang({"cat":"reproduir repetitivament", "spa":"reproducir repetitivamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}),"\"></button>",
-		"<button onClick=\"return VideoMostraEvent(event, 1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_forward.gif"),"\" alt=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\" title=\"",DonaCadenaLang({"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"}),"\"></button>",
-		"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\" title=\"",DonaCadenaLang({"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"}),"\"></button>",
+	//Dibuixar els botons de progrÃ©s del video.
+	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic(event);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",GetMessage("copy"),"\" title=\"",GetMessage("copy"),"\"></button></span>");
+	cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",GetMessage("toTheStart"),"\" title=\"",GetMessage("toTheStart"),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",GetMessage("stepBack"),"\" title=\"",GetMessage("stepBack"),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",GetMessage("pause"),"\" title=\"",GetMessage("pause"),"\"></button>",
+		"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",GetMessage("play"),"\" title=\"",GetMessage("play"),"\"></button>",
+		"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",GetMessage("repeatedlyPlay", "video"),"\" title=\"",GetMessage("repeatedlyPlay", "video"),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_forward.gif"),"\" alt=\"",GetMessage("stepForward"),"\" title=\"",GetMessage("stepForward"),"\"></button>",
+		"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",GetMessage("toTheEnd"),"\" title=\"",GetMessage("toTheEnd"),"\"></button>",
 		"<br />",
 		"<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
-		DonaCadenaLang({"cat":"Rapidesa per","spa":"Rapidez por","eng":"Speed by", "fre":"Vitesse pour"}),
+		GetMessage("SpeedyBy"),
 		": <input type=\"radio\" name=\"TipusTemps\">",
-		DonaCadenaLang({"cat":"Escala temporal","spa":"Escala temporal","eng":"Temporal scale", "fre":"Échelle temporelle"}),
+		GetMessage("TemporalScale", "video"),
 		" 1:<input type=\"text\" name=\"EscalaTemporal\" value=\"1000000\" size=8 onChange=\"document.video_animacions.TipusTemps[0].checked=true\">",
 		"<input type=\"radio\" name=\"TipusTemps\" checked>",
-		DonaCadenaLang({"cat":"Interval", "spa":"Intervalo", "eng":"Interval", "fre":"Intervalle"}),
+		GetMessage("Interval", "video"),
 		"<input name=\"interval\" type=\"text\" value=\"0.9\" size=\"3\" onChange=\"document.video_animacions.TipusTemps[1].checked=true\">s</span>",
 		//"&nbsp;&nbsp;&nbsp;&nbsp;",
 		//DonaCadenaLang({"cat":"Al fer clic", "spa":"Al hacer clic", "eng":"On click", "fre":"Sur clic"}),
@@ -471,13 +468,13 @@ var cdns=[], capa, i_capa_primer_video;
 		"</font>",
 		"</center>");
 
-	//Dibuixar la data i la barra de progrés del video.
+	//Dibuixar la data i la barra de progrÃ©s del video.
 	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
-			  DonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date","fre":"Date"}),": <span id=\"video_data\"></span></center><span>",
+			  GetMessage("Date"),": <span id=\"video_data\"></span></center><span>",
 			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 	var n=DonaNPecesBarraVideo();
 	for (var i=0; i<n; i++)
-		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");		
+		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
 
 	if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
@@ -494,10 +491,10 @@ var cdns=[], capa, i_capa_primer_video;
 		"<div id=\"video_grafic\" style=\"position: absolute; visibility: hidden; top: 25px; width:"+ 460 +"; height:"+ ParamInternCtrl.vista.nfil +";\"></div>",
 		"</form>",
 		DonaTextDivCopiaPortapapersFinestra("VideoDiv"));
-	
-	contentFinestraLayer(win, name, cdns.join("")); 
 
-		//Si hi ha un video actiu, activar la seva preparació.
+	contentFinestraLayer(win, name, cdns.join(""));
+
+		//Si hi ha un video actiu, activar la seva preparaciÃ³.
 	CanviaAnimacio(document.video_animacions.capa.value);
 }
 
@@ -576,7 +573,7 @@ function CanviaValorDataVideoInicialFinal(event, millisegons, final)
 function DonaCadenaHTMLSliderDataVideoInicialFinal()
 {
 var cdns=[];
-	cdns.push(DonaCadenaLang({"cat":"Data inicial", "spa":"Fecha inicial", "eng":"Start date", "fre":"Date de début"}), ": ",
+	cdns.push(GetMessage("StartDate"), ": ",
 		DonaDataMillisegonsComATextBreu(ParamCtrl.capa[DatesVideo[IDataVideoInicial].i_capa].FlagsData, DatesVideo[IDataVideoInicial].millisegons), " ",
 		"<input type='button' value='<' onClick='CanviaValorDataVideoInicialFinal(event, ", DatesVideo[(IDataVideoInicial ? IDataVideoInicial-1 : 0)].millisegons, ", false);'", (IDataVideoInicial==0 ? " disabled='disabled'" : ""), ">",
 		"<input type='range' style='width: 300px;' step='1' min='", DatesVideo[0].millisegons, "' max='", DatesVideo[DatesVideo.length-1].millisegons, "' value='", DatesVideo[IDataVideoInicial].millisegons, "' onchange='CanviaValorDataVideoInicialFinal(event, this.value, false);' onclick='dontPropagateEvent(event);' list='DataVideoInicialTicks'>",
@@ -588,10 +585,10 @@ var cdns=[];
 			cdns.push("<option value='", DatesVideo[i].millisegons, "'></option>");
 		cdns.push("</datalist>");
 	}
-	/*Atenció que aquest slider està dibuixat al revés ("direction: rtl"; de dreta a esquerra) i tots els calculs s'han d'invertir. 
-	Això és important perquè Chrome i Edge posen un color a la dreta de l'slider (que, en aquest cas, ha de quedar a l'esquerra)*/
-	cdns.push("<br>", 
-		DonaCadenaLang({"cat":"Data final", "spa":"Fecha final", "eng":"End date", "fre":"Date de fin"}), ": ",
+	/*AtenciÃ³ que aquest slider estÃ  dibuixat al revÃ©s ("direction: rtl"; de dreta a esquerra) i tots els calculs s'han d'invertir.
+	AixÃ² Ã©s important perquÃ¨ Chrome i Edge posen un color a la dreta de l'slider (que, en aquest cas, ha de quedar a l'esquerra)*/
+	cdns.push("<br>",
+		GetMessage("EndDate"), ": ",
 		DonaDataMillisegonsComATextBreu(ParamCtrl.capa[DatesVideo[IDataVideoFinal].i_capa].FlagsData, DatesVideo[IDataVideoFinal].millisegons), " ",
 		"<input type='button' value='<' onClick='CanviaValorDataVideoInicialFinal(event, ", DatesVideo[(IDataVideoFinal ? IDataVideoFinal-1 : 0)].millisegons, ", true);'", (IDataVideoInicial==IDataVideoFinal ? " disabled='disabled'" : ""), ">",
 		"<input type='range' style='width: 300px;direction: rtl;' step='1' min='", 0, "' max='", DatesVideo[DatesVideo.length-1].millisegons-DatesVideo[0].millisegons, "' value='", DatesVideo[DatesVideo.length-1].millisegons-DatesVideo[IDataVideoFinal].millisegons, "' onchange='CanviaValorDataVideoInicialFinal(event, ", DatesVideo[DatesVideo.length-1].millisegons, " - this.value, true);' onclick='dontPropagateEvent(event);' list='DataVideoFinalTicks'>",
@@ -602,7 +599,7 @@ var cdns=[];
 		for (var i=0; i<DatesVideo.length; i++)
 			cdns.push("<option value='", DatesVideo[DatesVideo.length-1].millisegons-DatesVideo[i].millisegons, "'></option>");
 		cdns.push("</datalist>");
-	}	
+	}
 	return cdns.join("");
 }
 
@@ -630,7 +627,7 @@ var cdns=[], capa, estil;
 
 	cdns=[];
 
-	//Llista per veure animació o veure estadistics
+	//Llista per veure animaciÃ³ o veure estadistics
 	if (estil!=null)
 	{
 		for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
@@ -638,44 +635,44 @@ var cdns=[], capa, estil;
 			capa=ParamCtrl.capa[i_capa_video_actiu];
 			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo && capa.estil)
 			{
-				//Em quedo amb el primer i no em complico: Si n'hi ha més d'un haurien de ser iguals.
+				//Em quedo amb el primer i no em complico: Si n'hi ha mÃ©s d'un haurien de ser iguals.
 				//De fet, cal limitar-ho a animacions d'una sola capa de moment.
 
 				estil=capa.estil[DonaIEstilFotograma(i_capa_video_actiu, estil)];
-				if (EsCapaBinaria(capa) && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot és massa complicat.
+				if (EsCapaBinaria(capa) && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot Ã©s massa complicat.
 				{
-					cdns.push(DonaCadenaLang({"cat":"Veure","spa":"Ver","eng":"View", "fre":"Vue"}),
+					cdns.push(GetMessage("View"),
 						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(event, document.video_animacions.veure.value, -1);\">");
-					cdns.push("<option value=\"animacio\" selected >", DonaCadenaLang({"cat":"Animacions", "spa":"Animaciones", "eng":"Animations", "fre":"Animations"}), "</option>");
-					cdns.push("<option value=\"x/t\">", DonaCadenaLang({"cat":"Gràfic", "spa":"Gráfico", "eng":"Graph", "fre":"Graphique"}), " x/t</option>");
+					cdns.push("<option value=\"animacio\" selected >", GetMessage("Animations", "video"), "</option>");
+					cdns.push("<option value=\"x/t\">", GetMessage("Graph", "video"), " x/t</option>");
 					if (DonaTractamentComponent(estil, 0)=="categoric")
 					{
-						cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
+						cdns.push("<option value=\"Moda\">", GetMessage("Mode"), "</option>");
 						for (var i=0; i<estil.categories.length; i++)
 						{
 							if (!estil.categories[i])
 								continue;
-							cdns.push("<option value=\"NDeValor_"+i+"\">", DonaCadenaLang({"cat":"N. fotog. amb valor", "spa":"N. fotog. con valor", "eng":"N. photos with value", "fre":"N. fotog. avec valeur"}), " ", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true), "</option>");
+							cdns.push("<option value=\"NDeValor_"+i+"\">", GetMessage("NumPhotosValue", "video"), " ", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true), "</option>");
 						}
 					}
 					else
 					{
-						//Fer estadistics clàsics: mitjana, desviació etc.
-						//Considerar determinar transformades de fourier o wavelet.	
-						cdns.push("<option value=\"Mitjana\">", DonaCadenaLang({"cat":"Mitjana", "spa":"Media", "eng":"Mean", "fre":"Moyenne"}), "</option>");
-						cdns.push("<option value=\"StanDev\">", DonaCadenaLang({"cat":"Desviació típica", "spa":"Desviación típica", "eng":"Standard deviation", "fre":"Déviation standard"}), "</option>");
-						cdns.push("<option value=\"Moda\">", DonaCadenaLang({"cat":"Moda", "spa":"Moda", "eng":"Mode", "fre":"Mode"}), "</option>");
-						cdns.push("<option value=\"Pheno_idxsos\">", DonaCadenaLang({"cat":"Dia d'inici de la temporada", "spa":"Día de inicio de la temporada", "eng":"Start of the Season day", "fre":"Jour de début de saison"}), " (SoS)</option>");
-						cdns.push("<option value=\"Pheno_idxpos\">", DonaCadenaLang({"cat":"Dia el màxim de la temporada", "spa":"Día del máximo de la temporada", "eng":"Peak of the Season day", "fre":"Journée de pointe de la saison"}), " (PoS)</option>");
-						cdns.push("<option value=\"Pheno_idxeos\">", DonaCadenaLang({"cat":"Dia de fi de la temporada", "spa":"Día de final de la temporada", "eng":"End of the Season day", "fre":"Jour de fin de saison"}), " (EoS)</option>");
-						cdns.push("<option value=\"Pheno_idxlos\">", DonaCadenaLang({"cat":"Dies D'allargada de la temporada", "spa":"Días de longitud de la temporada", "eng":"Length of the season (days)", "fre":"Durée de la saison (jours)"}), " (LoS)</option>");
-						cdns.push("<option value=\"Pheno_sos\">", DonaCadenaLang({"cat":"Valor d'inici de la temporada", "spa":"Valor de inicio de la temporada", "eng":"Start of the Season value", "fre":"Valeur de début de saison"}), " (SoS)</option>");
-						cdns.push("<option value=\"Pheno_pos\">", DonaCadenaLang({"cat":"Valor màxim de la temporada", "spa":"Valor máximo de la temporada", "eng":"Peak of the Season value", "fre":"Valeur maximale de la saison"}), " (PoS)</option>");
-						cdns.push("<option value=\"Pheno_eos\">", DonaCadenaLang({"cat":"Valor de fi de la temporada", "spa":"Valor de final de la temporada", "eng":"End of the Season value", "fre":"Valeur de fin de saison"}), " (EoS)</option>");
-						cdns.push("<option value=\"Pheno_base\">", DonaCadenaLang({"cat":"Valor base la temporada", "spa":"Valor base de la temporada", "eng":"Season base value", "fre":"Valeur de base de la saison"}), "</option>");
-						cdns.push("<option value=\"Pheno_aos\">", DonaCadenaLang({"cat":"Amplitud de la temporada", "spa":"Amplitud de la temporada", "eng":"Amplitude of the season", "fre":"Amplitude de la saison"}), " (AoS)</option>");
-						cdns.push("<option value=\"Pheno_rog\">", DonaCadenaLang({"cat":"Taxa de verdor", "spa":"Tasa de verdor", "eng":"Rate of Greening", "fre":"Taux de verdissement"}), " (RoG)</option>");
-						cdns.push("<option value=\"Pheno_ros\">", DonaCadenaLang({"cat":"Taxa de senecència", "spa":"Tasa de sensecencia", "eng":"Rate of Senescing", "fre":"Taux de sénescente"}), " (RoS)</option>");
+						//Fer estadistics clÃ sics: mitjana, desviaciÃ³ etc.
+						//Considerar determinar transformades de fourier o wavelet.
+						cdns.push("<option value=\"Mitjana\">", GetMessage("Mean"), "</option>");
+						cdns.push("<option value=\"StanDev\">", GetMessage("StandardDeviation"), "</option>");
+						cdns.push("<option value=\"Moda\">", GetMessage("Mode"), "</option>");
+						cdns.push("<option value=\"Pheno_idxsos\">", GetMessage("StartSeasonDay", "video"), " (SoS)</option>");
+						cdns.push("<option value=\"Pheno_idxpos\">", GetMessage("PeakSeasonDay", "video"), " (PoS)</option>");
+						cdns.push("<option value=\"Pheno_idxeos\">", GetMessage("EndSeasonDay", "video"), " (EoS)</option>");
+						cdns.push("<option value=\"Pheno_idxlos\">", GetMessage("LengthSeasonDays", "video"), " (LoS)</option>");
+						cdns.push("<option value=\"Pheno_sos\">", GetMessage("StartSeasonValue", "video"), " (SoS)</option>");
+						cdns.push("<option value=\"Pheno_pos\">", GetMessage("PeakSeasonValue", "video"), " (PoS)</option>");
+						cdns.push("<option value=\"Pheno_eos\">", GetMessage("EndSeasonValue", "video"), " (EoS)</option>");
+						cdns.push("<option value=\"Pheno_base\">", GetMessage("SeasonBaseValue", "video"), "</option>");
+						cdns.push("<option value=\"Pheno_aos\">", GetMessage("AmplitudeSeason", "video"), " (AoS)</option>");
+						cdns.push("<option value=\"Pheno_rog\">", GetMessage("RateGreening", "video"), " (RoG)</option>");
+						cdns.push("<option value=\"Pheno_ros\">", GetMessage("RateSenescing", "video"), " (RoS)</option>");
 					}
 					cdns.push("</select>");
 				}
@@ -687,14 +684,14 @@ var cdns=[], capa, estil;
 
 	cdns=[];
 	cdns.push("<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">",
-		"<div id='SliderDataVideoInicialFinal'>", 
+		"<div id='SliderDataVideoInicialFinal'>",
 		DonaCadenaHTMLSliderDataVideoInicialFinal(),
 		"</div>",
 		//DonaCadenaLang({"cat":"Prem", "spa":"Presione", "eng":"Press", "fre":"Presse"}), ": "
-		"<input type=\"button\" class=\"Verdana11px\" value=\"--", 
-		DonaCadenaLang({"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"}),
+		"<input type=\"button\" class=\"Verdana11px\" value=\"--",
+		GetMessage("Load"),
 	        "--\" onClick='CarregaVideoRodetEvent(event, \"", nom_video+"\", \"", estil, "\");'>",
-		" (<span id='NumeroFotogramesVideo'>" , DonaNumeroFotogramesVideo() , "</span> " , DonaCadenaLang({"cat":"fotogrames", "spa":"fotogramas", "eng":"frames", "fre":"cadres"}), ")",
+		" (<span id='NumeroFotogramesVideo'>" , DonaNumeroFotogramesVideo() , "</span> " , GetMessage("frames", "video"), ")",
 		"</font></center>")
 	document.getElementById("video_info").innerHTML=cdns.join("");
 }
@@ -715,20 +712,20 @@ var capa, i_estil;
 
 	//Determino quins fotogrames he de fer servir.
 	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
-	{	
+	{
 		capa=ParamCtrl.capa[i_capa];
 		if (EsCapaAptePerVideo(capa) && capa.NomVideo==nom_video)
-		{			
+		{
 			i_estil=DonaIEstilFotograma(i_capa, estil);
 			if (i_estil==null)
 				break;
 			for (var i_data=0; i_data<capa.data.length; i_data++)
 			{
 				var d=DonaDateDesDeDataJSON(capa.data[i_data]);
-				DatesVideo.push({"i_capa": i_capa, 
-						"i_data": i_data, 
-						"i_estil": i_estil, 
-						"millisegons": d.getTime(), 
+				DatesVideo.push({"i_capa": i_capa,
+						"i_data": i_data,
+						"i_estil": i_estil,
+						"millisegons": d.getTime(),
 						"animable": ((capa.animable && capa.animable==true) ? "si" : "ara_no"),
 						"carregada": false,
 						"carregadaRodet": false});
@@ -768,8 +765,8 @@ function CarregaVideoRodet(nom_video, estil)
 {
 var i_data_video, capa, cdns=[];
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
-	
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFilm", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	//Dibuixo el rodet de fotogrames buit
 	vista.i_nova_vista=NovaVistaRodet;
@@ -783,7 +780,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
 			cdns.push("<tr><td rowspan=\"4\" width=\"13\">&nbsp;</td>",
-				"<td colspan=3>", 
+				"<td colspan=3>",
 				DonaCadenaHTMLTitolFotogramaRodet(i_data_video),
 				"</td></tr>",
 				"<tr><td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td></tr>",
@@ -808,10 +805,10 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		}
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img src=1tran.gif height=\"13\"></td>");			
+			cdns.push("<td colspan=3><img src=1tran.gif height=\"13\"></td>");
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td>");			
+			cdns.push("<td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td>");
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
@@ -843,7 +840,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		DatesVideo[i_data_video].timeOutRodet=setTimeout("CanviaImatgeCapaRodet("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 75*i_data_video+75);
 	}
 
-	//Dibuixo tots els fotogrames de l'animació buits i apagats
+	//Dibuixo tots els fotogrames de l'animaciÃ³ buits i apagats
 	cdns.length=0;
 	vista.ncol=ParamInternCtrl.vista.ncol;
 	vista.nfil=ParamInternCtrl.vista.nfil;
@@ -867,13 +864,13 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	{
 	    clearTimeout(timeoutVideoInfo);
 	    timeoutVideoInfo=null;
-	}	
+	}
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
 }
 
 function DonaRatioNodataRodet(i_data_video)
 {
-var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];	
+var capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
 	if (EsCapaBinaria(capa))
 		return capa.estil[DatesVideo[i_data_video].i_estil].capa_rodet[DatesVideo[i_data_video].i_data].histograma.classe_nodata/(DonaNColVideoRodet()*DonaNFilVideoRodet());
 	return 0.0;
@@ -889,23 +886,23 @@ function CanviaRatioNodataNoTolera(event, valor)
 	var n_foto=0;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		//Determino si la imatge és enterament nodata.
+		//Determino si la imatge Ã©s enterament nodata.
 		if (ratio_nodata_no_tolerat>DonaRatioNodataRodet(i_data_video))
 			n_foto++;
 	}
-	document.getElementById("video_nodata_max_tx").innerHTML=valor + "% (" + n_foto + "/" + DatesVideo.length + " " + DonaCadenaLang({"cat":"fotogrames", "spa":"fotogramas", "eng":"frames", "fre":"cadres"}) +")";
+	document.getElementById("video_nodata_max_tx").innerHTML=valor + "% (" + n_foto + "/" + DatesVideo.length + " " + GetMessage("frames", "video") +")";
 }
 
 function FiltraNodataICarregaVideo()
 {
 var ratio_nodata, inserir_slider=false;
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	//Demano totes les imatges grans per omplir el video de fotogrames
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		//Determino si la imatge és enterament nodata.
+		//Determino si la imatge Ã©s enterament nodata.
 		ratio_nodata=DonaRatioNodataRodet(i_data_video);
 		if (0.99<ratio_nodata)
 		{
@@ -922,16 +919,16 @@ var ratio_nodata, inserir_slider=false;
 		//codi que insereix un slider
 		var initial_value=(RatioNodataNoTolerat>=0.99 ? 99.9 : RatioNodataNoTolerat*100);
 		document.getElementById("video_info").innerHTML="<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
-			DonaCadenaLang({"cat":"Percentatge tolerat de superfície buida", "spa":"Porcentage tolerado de superficie vacia", "eng":"Allowed percentage of void space", "fre":"Pourcentage de surface vide toléré"})+
+			GetMessage("AllowedPercentageVoidSpace", "video") +
 			": <input id=\"video_nodata_max_rg\" type=\"range\" step=\"0.1\" min=\"0\" max=\"99.9\" value=\""+ initial_value +"\" onchange=\"CanviaRatioNodataNoTolera(event, this.value);\" oninput=\"CanviaRatioNodataNoTolera(event, this.value);\" style=\"width: 300px\">"+
 			" <span id=\"video_nodata_max_tx\"></span>"+
-			" <input type=\"button\" class=\"Verdana11px\" value=\"--"+ 
-			DonaCadenaLang({"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"})+
+			" <input type=\"button\" class=\"Verdana11px\" value=\"--"+
+			GetMessage("Load")+
 		        "--\" onClick='CarregaVideoEvent(event);'></font>";
 		CanviaRatioNodataNoTolera(null, initial_value);
 		return;
 	}
-	//Mostrar immediatament el vídeo
+	//Mostrar immediatament el vÃ­deo
 	CarregaVideo();
 }
 
@@ -950,7 +947,7 @@ function CarregaVideo()
 {
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"}) + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 
 	vista.i_nova_vista=NovaVistaVideo; //Les imatges grans del video
 
@@ -971,7 +968,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	{
 		clearTimeout(timeoutVideoInfo);
 		timeoutVideoInfo=null;
-	}	
+	}
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
 }//Fi de CanviaVideo()
 
@@ -1003,7 +1000,7 @@ var capa, estil, estils=[], cdns=[], i_estil, i_estil_sel=-1;
 			else
 			{
 				for (var i_estil_video_actiu=0; i_estil_video_actiu<capa.estil.length; i_estil_video_actiu++)
-				{				
+				{
 					for (i_estil=0; i_estil<estils.length; i_estil++)
 					{
 						if (!capa.estil[0].nom)
@@ -1097,8 +1094,8 @@ var i, j, i_data_video;
 		{
 			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			{
-				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files següents.
-					fila_calc[i][i_data_video]=null;  
+				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files segÃ¼ents.
+					fila_calc[i][i_data_video]=null;
 				continue;
 			}
 			capa=ParamCtrl.capa[DatesVideo[i_data_video].i_capa];
@@ -1106,7 +1103,7 @@ var i, j, i_data_video;
 			valors=capa.valors;
 			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
 			if (n_v_plena==0)
-				return;  //Això no hauria d'haver passat mai
+				return;  //AixÃ² no hauria d'haver passat mai
 
 			if (n_v_plena>1)
 			{
@@ -1125,7 +1122,7 @@ var i, j, i_data_video;
 
 	if (n_j<nfil)
 		document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
-				DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
+				GetMessage("ComputingStatisticSeries", "video")+
 				". " + Math.floor(j*100/nfil) + "% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 	else
 		document.getElementById("video_info").innerHTML="";
@@ -1133,7 +1130,7 @@ var i, j, i_data_video;
 	//document.getElementById("video_nodata_max_tx").innerHTML=100;
 	var imatge=document.getElementById(nom_canvas);
 	imatge.width=ncol;
-	imatge.height=nfil;	
+	imatge.height=nfil;
 
 	ctx=imatge.getContext("2d");
 	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -1141,10 +1138,10 @@ var i, j, i_data_video;
 	imgData=ctx.createImageData(imatge.width,imatge.height);
 
 	data=[]; //Empty the array;
-	
+
 	//Aplico la paleta i obtinc l'array de dades dins de 'data'
 	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, ImgVideoStat, ncol, nfil, estiramentPaleta, paleta);
-	
+
 	imgData.data.set(data);
 
 	ctx.putImageData(imgData,0,0);
@@ -1183,7 +1180,7 @@ var estiramentPaleta, paleta;
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat":"Funció estadística no suportada", "spa":"Función estadística no soportada", "eng":"Unsupported statistical function","fre":"Statistical function non supportée"}) + ": " + estadistic);
+		alert(GetMessage("UnsupportedStatisticalFunction", "video") + ": " + estadistic);
 		return;
 	}
 
@@ -1267,7 +1264,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 			valors=capa.valors;
 			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
 			if (n_v_plena==0)
-				return;  //Això no hauria d'haver passat mai
+				return;  //AixÃ² no hauria d'haver passat mai
 
 			if (n_v_plena>1)
 			{
@@ -1277,7 +1274,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 			}
 			else
 			{
-				//Es podria obtimitzar evitant que calculi el que no cal donat que només vull la darrera fila
+				//Es podria obtimitzar evitant que calculi el que no cal donat que nomÃ©s vull la darrera fila
 				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
 			}
 		}
@@ -1292,7 +1289,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 
 	var imatge=document.getElementById(nom_canvas);
 	imatge.width=ncol;
-	imatge.height=nfil;	
+	imatge.height=nfil;
 
 	ctx=imatge.getContext("2d");
 	ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -1300,10 +1297,10 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 	imgData=ctx.createImageData(imatge.width,imatge.height);
 
 	data=[]; //Empty the array;
-	
+
 	//Aplico la paleta i obtinc l'array de dades dins de 'data'
 	DonaDataCanvasDesDeArrayNumericIPaleta(data, null, ImgVideoStat, ncol, nfil, primer_estil.component[0].estiramentPaleta, primer_estil.paleta);
-	
+
 	imgData.data.set(data);
 
 	ctx.putImageData(imgData,0,0);
@@ -1330,14 +1327,14 @@ var i_data_fil=[], t, j, i_data_video;
 	{
 		if (ParticipaFotogramaDeLaSerieTemporal(i_data_fil[j]))
 			break;
-	}	
+	}
 	if (j<nfil)
 	{
-		//substituexo els primers temps que no són animables pel primer que ho és
+		//substituexo els primers temps que no sÃ³n animables pel primer que ho Ã©s
 		for (var j2=0; j2<j; j2++)
 			i_data_fil[j2]=i_data_fil[j];
-	
-		//substituexo els temps que no són animables pels immediatement anteriors que ho són
+
+		//substituexo els temps que no sÃ³n animables pels immediatement anteriors que ho sÃ³n
 		for (j++; j<nfil; j++)
 		{
 			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_fil[j]))
@@ -1382,7 +1379,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 	if (event)
 		dontPropagateEvent(event);
 	if (estadistic=="x/t" && i_fil==-1 && IFilEixXEixTVideo==-1)
-	{	
+	{
 		//document.video_animacions.TipusClick[0].checked=false;
 		//document.video_animacions.TipusClick[1].checked=true;
 		TancaFinestraSerieTemp("video_grafic", "video_click");
@@ -1419,7 +1416,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 		document.getElementById("video_botons_estadistics").style.visibility="visible";
 		document.getElementById("video_time_slider").style.visibility="hidden";
 		ApagaFotogramaVideo(IDataVideoMostrada, n);
-		//Activo el fotograma de les estadístiques
+		//Activo el fotograma de les estadÃ­stiques
 		EncenEstadisticsVideo(n);
 		if (estadistic=="x/t")
 		{
@@ -1427,10 +1424,10 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			//if (EstadisticCarregatVideo!=estadistic || (IFilEixXEixTVideo!=i_fil && i_fil!=-1))
 			if (i_fil!=-1)
 			{
-				//Demano l'execució del perfil x/t
+				//Demano l'execuciÃ³ del perfil x/t
 				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
-					DonaCadenaLang({"cat":"Calculant grafic x/t de la sèrie", "spa":"Calculando gráfico x/t de la serie", "eng":"Computing graphic x/t of the series", "fre":"Informatique graphique x / t de la série"})+
+					GetMessage("ComputingGraphicSeries", "video")+
 					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 			}
 		}
@@ -1440,10 +1437,10 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			IFilEixXEixTVideo=-1;
 			//if (EstadisticCarregatVideo!=estadistic)
 			//{
-				//Demano l'execució del càlcul estadístic
+				//Demano l'execuciÃ³ del cÃ lcul estadÃ­stic
 				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
-					DonaCadenaLang({"cat":"Calculant estadístic de la sèrie", "spa":"Calculando estadístico de la serie", "eng":"Computing statistic of the series", "fre":"Statistique de calcul de la série"})+
+					GetMessage("ComputingStatisticSeries", "video")+
 					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
 			//}
 		}
@@ -1482,16 +1479,16 @@ var cdns=[], nodata=255, i, j, valor0;
 		}
 		cdns.push("\n");
 	}
-	return cdns.join("");	
+	return cdns.join("");
 }
 
 function VideoCopiaEstadistic(event)
 {
 	IniciaCopiaPortapapersFinestra(window, "VideoDiv");
 
-	FinalitzaCopiaPortapapersFinestra(window, "VideoDiv", 
-			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual), 
-			DonaCadenaLang({"cat": "Els valors de la imatge han estat copiats al portaretalls en format ràster ASCII", "spa": "Los valores de la imagen han sido copiados al portapapeles en formato ráster ASCII", "eng": "The values of the image have been copied to clipboard in ASCII raster format", "fre": "Les valeurs de l'image ont été copiées dans le presse-papier dans le format raster ASCII"}));
+	FinalitzaCopiaPortapapersFinestra(window, "VideoDiv",
+			ConverteixImatgeArrayNumericAAESRIASCIIRaster(ImgVideoStat, ImgVideoStatHistograma.component[0], ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil, ParamInternCtrl.vista.EnvActual, ParamInternCtrl.vista.CostatZoomActual),
+			GetMessage("ValuesImageCopiedClipboard", "video"));
 
 	dontPropagateEvent(event);
 	return false;
@@ -1522,7 +1519,7 @@ var n_carregat=0;
 
 	ActualitzaNCarregatRodetEsCurs=true;
 	for (var i_data=0; i_data<DatesVideo.length; i_data++)
-	{	
+	{
 		if (DatesVideo[i_data].carregadaRodet)
 			n_carregat++
 	}
@@ -1533,7 +1530,7 @@ var n_carregat=0;
 		FiltraNodataICarregaVideo();
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant miniatures", "spa":"Cargando miniaturas", "eng":"Loading thumbnails", "fre":"Chargement des vignettes"}) + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingThumbnails", "video") + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
 	ActualitzaNCarregatRodetEsCurs=false;
 }
@@ -1581,7 +1578,7 @@ var n_carregat, n_carregable;
 		return;
 	}
 	ActualitzaNCarregatVideoEsCurs=true;
-	
+
 	n_carregat=DonaNFotogramesCarregatsVideo();
 	n_carregable=DonaNFotogramesCarregablesVideo();
 	if (n_carregat>=n_carregable)
@@ -1591,7 +1588,7 @@ var n_carregat, n_carregable;
 		VideoPlay(8);  //Com que se que ja ho tinc tot, faig "Play" repetitiu.
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ DonaCadenaLang({"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"}) + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("Loading") + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
 	ActualitzaNCarregatVideoEsCurs=false;
 }
@@ -1655,7 +1652,7 @@ function ApagaFotogramaVideo(i_data_video, n)
 function ApagaEstadisticsVideo(n)
 {
 	var elem=document.getElementById("video_l_raster_stat");
-	if (elem) // potser que no existeix-hi perquè no hi ha cap capa animable tipus IMG
+	if (elem) // potser que no existeix-hi perquÃ¨ no hi ha cap capa animable tipus IMG
 	{
 		elem.style.opacity=0;
 		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
@@ -1686,7 +1683,7 @@ function EncenFotogramaVideo(i_data_video, n)
 function EncenEstadisticsVideo(n)
 {
 	var elem=document.getElementById("video_l_raster_stat");
-	if (elem) // potser que no existeix-hi perquè no hi ha cap capa animable tipus IMG
+	if (elem) // potser que no existeix-hi perquÃ¨ no hi ha cap capa animable tipus IMG
 	{
 		elem.style.opacity=1;
 		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
@@ -1703,7 +1700,7 @@ var j, img, nom_icona;
 	//Actualitzo la data.
 	document.getElementById("video_data").innerHTML=DonaDataComAText(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data);
 
-	//Apago la barra de progrés de videos.
+	//Apago la barra de progrÃ©s de videos.
 	var n=DonaNPecesBarraVideo();
 
 	//Encenc l'element de la barra que toca.
@@ -1746,7 +1743,7 @@ var j, img, nom_icona;
 		}
 	}
 
-	//Actualitzo la posició del rodet i el fotograma actiu
+	//Actualitzo la posiciÃ³ del rodet i el fotograma actiu
 	var n=parseFloat(document.video_animacions.interval.value);
 	if (isNaN(n) || n<0.09)
 		n=0;
@@ -1806,10 +1803,10 @@ var i_data_video_actiu;
 		else
 		{
 			for (i_data_video_actiu=0; i_data_video_actiu<DatesVideo.length; i_data_video_actiu++)
-			{	
-				if (i_data_video_actiu!=i_data_mostrada && 
+			{
+				if (i_data_video_actiu!=i_data_mostrada &&
 					DatesVideo[i_data_video_actiu].animable=="si")
-				{			 	    				
+				{
 					if (opcio==1)
 					{
 						if (DatesVideo[i_data_mostrada].millisegons < DatesVideo[i_data_video_actiu].millisegons)
@@ -1817,7 +1814,7 @@ var i_data_video_actiu;
 							if (i_data_a_mostrar==i_data_mostrada)
 								i_data_a_mostrar=i_data_video_actiu;
 							else if (DatesVideo[i_data_a_mostrar].millisegons > DatesVideo[i_data_video_actiu].millisegons)
-								i_data_a_mostrar=i_data_video_actiu; 
+								i_data_a_mostrar=i_data_video_actiu;
 						}
 					}
 					else
@@ -1827,7 +1824,7 @@ var i_data_video_actiu;
 							if (i_data_a_mostrar==i_data_mostrada)
 								i_data_a_mostrar=i_data_video_actiu;
 							else if (DatesVideo[i_data_a_mostrar].millisegons < DatesVideo[i_data_video_actiu].millisegons)
-								i_data_a_mostrar=i_data_video_actiu; 
+								i_data_a_mostrar=i_data_video_actiu;
 						}
 					}
 				}
@@ -1864,22 +1861,19 @@ var n;
 	{
 		n=parseFloat(document.video_animacions.EscalaTemporal.value);
 		if (n<=0)
-			alert(DonaCadenaLang({"cat":"Valor incorrecte de l'escala temporal.", 
-		   			"spa":"Valor incorrecto de la escala temporal.", 
-					"eng":"Wrong value in temporal scale.", 
-					"fre":"Valeur incorrect de l'échelle temporelle"}));
+			alert(GetMessage("WrongValueTemporalScale", "video"));
 		else
 		{
 			if (0==VideoMostra(opcio)) 	   //mostrar la imatge que toca.
 			{
-				//buscar la imatge següent.
+				//buscar la imatge segÃ¼ent.
 				i_data_a_mostrar=DeterminaIDataVideoSeguent(IDataVideoMostrada, 1)
 				if (IDataVideoMostrada==i_data_a_mostrar)
 				{
 					if (opcio==9)
-						return; //Estic al final d'una sequencia automàtica.
+						return; //Estic al final d'una sequencia automÃ tica.
 
-					//animació circular
+					//animaciÃ³ circular
 					i_data_a_mostrar=0;
 					while (DatesVideo[i_data_a_mostrar].animable!="si")
 					{
@@ -1890,7 +1884,7 @@ var n;
 					}
 				}
 				timeoutVideoID=setTimeout('VideoPlayRecursiva('+opcio+')', (DatesVideo[i_data_a_mostrar].millisegons-DatesVideo[IDataVideoMostrada].millisegons)/n);
-			}		   		   		   
+			}
 		}
 	}
 	else if (document.video_animacions.TipusTemps[1].checked)
@@ -1898,20 +1892,14 @@ var n;
 		n=parseFloat(document.video_animacions.interval.value);
 		if (n<=0 || isNaN(n))
 		{
-			alert(DonaCadenaLang({"cat":"Valor incorrecte de l'interval de segons. Usaré 5.0",
-					"spa": "Valor incorrecto del intervaluo de segundos. Usaré 5.0",
-					"eng": "Incorrect value of the interval of seconds. I'll use 5.0",
-					"fre": "Valeur incorrecte de l'intervalle de secondes. Je vais utiliser 5.0"}));
+			alert(GetMessage("IncorrectValueIntervalSeconds", "video") + ". " + GetMessage("WillUse", "video"));
 			n=5.0;
 		}
 		if (0==VideoMostra(opcio))
 			timeoutVideoID=setTimeout("VideoPlayRecursiva("+opcio+")", n*1000);
 	}
 	else
-		alert(DonaCadenaLang({"cat":"Sel·lecciona escala temporal o interval",
-					"spa": "Seleccione escala temporal o intervalo",
-					"eng": "Select temporal scale or interval",
-					"fre": "Sélectionner échelle temporelle où intervalle"}));
+		alert(GetMessage("SelectTempScaleInterval", "video"));
 }//Fi de VideoPlayRecursiva()
 
 function VideoMostraEvent(event, opcio)
@@ -1926,7 +1914,7 @@ function VideoMostra(opcio)
 var i_data_a_mostrar=(IDataVideoMostrada==-1) ? 0 : IDataVideoMostrada;
 var i_capa_previa;
 
-  
+
 	if (opcio!=8 && opcio!=9)
 	{
    		if (timeoutVideoID)
@@ -1940,11 +1928,11 @@ var i_capa_previa;
 		i_data_a_mostrar=DeterminaIDataVideoSeguent(IDataVideoMostrada, 1);
 		if ((opcio==8 || opcio==9) && IDataVideoMostrada==i_data_a_mostrar)
 		{
-		    //Estic al final d'una sequencia automàtica.
+		    //Estic al final d'una sequencia automÃ tica.
 			if (opcio==9)
 				return 1;
 
-			//animació circular
+			//animaciÃ³ circular
 		 	i_data_a_mostrar=0;
 			while (DatesVideo[i_data_a_mostrar].animable!="si")
 			{
@@ -1952,7 +1940,7 @@ var i_capa_previa;
 				i_data_a_mostrar=DeterminaIDataVideoSeguent(i_capa_previa, 1);
 				if (i_capa_previa==i_data_a_mostrar)
 				return;  //alguna cosa no va
-			}			
+			}
  		}
 	}
 	else if (opcio==-1)
@@ -1961,7 +1949,7 @@ var i_capa_previa;
 	}
 	else if (opcio==2)
 	{
-		i_data_a_mostrar=DatesVideo.length-1;    
+		i_data_a_mostrar=DatesVideo.length-1;
 		while (DatesVideo[i_data_a_mostrar].animable!="si")
 		{
 			i_capa_previa=i_data_a_mostrar;
@@ -1981,7 +1969,7 @@ var i_capa_previa;
 			return;  //alguna cosa no va
 		}
 	}
-	
+
 	/*else  //(opcio==0)*/
 	MostraFotograma(i_data_a_mostrar, true, true);
 	return 0;
@@ -1992,7 +1980,7 @@ function IniciaImgVideoStat()
 	ImgVideoStat=[];
 	ImgVideoStatHistograma={"classe_nodata": 0,
 		"component": [{
-			//"classe": [], 
+			//"classe": [],
 			"valorMinimReal": +1e300,
 			"valorMaximReal": -1e300}]};
 }
@@ -2003,7 +1991,7 @@ function DescarregaVideo()
 	{
 	    clearTimeout(timeoutVideoID);
 	    timeoutVideoID=null;
-	}	
+	}
 	if (timeoutVideoInfo)
 	{
 	    clearTimeout(timeoutVideoInfo);
