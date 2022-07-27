@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
+    dins del grup del MiraMon. MiraMon és un projecte del
     CREAF que elabora programari de Sistema d'Informació Geogràfica 
     i de Teledetecció per a la visualització, consulta, edició i anàlisi 
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -63,7 +63,7 @@ function compatGetElementsByTag(thisElement,namespace,name)
 			}
 			catch(e)
 			{
-				//else try without namespace...	
+				//else try without namespace...
 			}
 		}
 		return thisElement.getElementsByTagName(name);
@@ -99,14 +99,14 @@ function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 			if(fills && fills.length>0)
 				return fills;
 		}
-		var fills2=pare.getElementsByTagNameNS(nom_ns, nom_tag); //La resta			
+		var fills2=pare.getElementsByTagNameNS(nom_ns, nom_tag); //La resta
 		if(fills2 && fills2.length>0)
 			return fills2;
 	}
 	var fills3=pare.getElementsByTagName(nom_ns+":"+nom_tag); //IE, Mozilla segons versions
 	if(fills3 && fills3.length>0)
 		return fills3;
-		
+
 	var fills4=pare.getElementsByTagName(nom_tag); //sense namespace
 	if(fills4 && fills4.length>0)
 		return fills4;
@@ -132,7 +132,7 @@ function MMgetElementTextByTag(thisElement,namespace,name)
 {
 	//var tags= compatGetElementsByTag(thisElement,namespace,name);
 	var tags=DonamElementsNodeAPartirDelNomDelTag(thisElement, null, namespace,name);
-	
+
 	if(tags && tags.length && tags[0].firstChild)
 		return tags[0].firstChild.nodeValue;
 	return null;
@@ -157,12 +157,12 @@ function MMgetCheckedRadioButton(form,buttonName)
 	return null;
 }
 
-function EsborraTotesOptionDeSelect(selector)	
+function EsborraTotesOptionDeSelect(selector)
 {
 	if(selector && selector.length>0)
 	{
-		for(var i=selector.length-1; i>=0; i--)		
-			selector.remove(i); 
+		for(var i=selector.length-1; i>=0; i--)
+			selector.remove(i);
 	}
 }
 
@@ -175,7 +175,7 @@ function AfegeixOptionASelect(selector, param, index)
 	if(index)
 		selector.add(option, index);
 	else
-		selector.add(option); 	
+		selector.add(option);
 }
 
 
@@ -185,7 +185,7 @@ function AfegeixOptionASelect(selector, param, index)
  * @param {Object} thisVariable
  * @returns {boolean}
 No usada.
-function MMisString(thisVariable) 
+function MMisString(thisVariable)
 {
 	return typeof thisVariable==="string" || thisVariable instanceof String;
 }
@@ -224,7 +224,7 @@ if(!Array.prototype.indexOf)
 	Array.prototype.indexOf = function (obj, fromIndex) {
 		if (fromIndex == null) {
 			fromIndex = 0;
-		} 
+		}
 		else if (fromIndex < 0) {
 	        	fromIndex = Math.max(0, this.length + fromIndex);
 		}
@@ -241,13 +241,13 @@ if(!Array.prototype.find)
 {
 	Array.prototype.find = function (myFunction) {
 		try
-		{						
+		{
 			var x=this.filter(myFunction);
 			if (x.length>0)
 				return x[0];
 		}
 		catch(ex)
-		{								
+		{
 			// En funció de la versió potser que no existeixi la funció find()
 			for (var i=0; i<this.length; i++)
 			{
@@ -266,7 +266,7 @@ Això és diferent de com funcionen les meves funcions sense funció de comparació.
 
 /*
  * Binary search (bsearch) in a sorted array (from https://oli.me.uk/2013/06/08/searching-javascript-arrays-with-a-binary-search   http://jsfiddle.net/aryzhov/pkfst550/
- * Returns 
+ * Returns
       * the index of the element in a sorted array that is iqual to 'elem' (see the note if there are more than one)
       * (-n-1) where n is the insertion point for the new element.  E.g. -5 means "insert in i=4" to keep the array sorted, a.k.a "insert between 3 and 4".
  * Parameters:
@@ -276,7 +276,7 @@ Això és diferent de com funcionen les meves funcions sense funció de comparació.
  *        0 if a is equal to b;
  *        a positive number of a is greater than b.
  *        compare_fn can be null for simple comparisons.
- * Note: The array may contain duplicate elements. 
+ * Note: The array may contain duplicate elements.
  * If there are more than one equal elements in the array, the returned value can be the index of any one of the equal elements.
 
  * Consider using indexOf() if the list is not sorted.
@@ -304,14 +304,14 @@ if(!Array.prototype.binarySearch)
 
 function sortAscendingStringSensible(a, b)
 {
-	return ((a < b) ? -1 : ((a > b) ? 1 : 0));		
+	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 }
 
 function sortAscendingStringInsensible(a, b)
 {
 	a = a.toLowerCase();
     b = b.toLowerCase();
-   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));		
+   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 }
 
 function sortAscendingNumber(a, b)
@@ -354,7 +354,7 @@ if(!Array.prototype.removeDuplicates)
 			{
 				var n=0;
 				while (i+n+1<this.length && 0==compare_fn(this[i], this[i+n+1]))
-					n++;	
+					n++;
 				if (n)
 					this.splice(i+1, n);
 			}
@@ -365,7 +365,7 @@ if(!Array.prototype.removeDuplicates)
 			{
 				var n=0;
 				while (i+n+1<this.length && (this[i]==this[i+n+1]))
-					n++;	
+					n++;
 				if (n)
 					this.splice(i+1, n);
 			}
@@ -396,17 +396,17 @@ if(!String.prototype.replaceAll)
 	};
 }
 
-function isalpha(c) 
+function isalpha(c)
 {
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
 
-function isdigit(c) 
+function isdigit(c)
 {
 	return (c >= '0' && c <= '9');
 }
 
-function isalnum(c) 
+function isalnum(c)
 {
 	return (isalpha(c) || isdigit(c));
 }
@@ -432,7 +432,7 @@ function openFullscreen(elem)
 	if (elem.requestFullscreen)
 		elem.requestFullscreen();
 	else if (elem.mozRequestFullScreen)
-		elem.mozRequestFullScreen();		
+		elem.mozRequestFullScreen();
 	else if (elem.webkitRequestFullscreen) // Safari
 		elem.webkitRequestFullscreen();
 	else if (elem.msRequestFullscreen) // IE11
@@ -445,16 +445,16 @@ function closeFullscreen(elem)
 		document.exitFullscreen();
 	else if (document.mozExitFullScreen)
 		document.mozExitFullScreen();
-	else if (document.webkitExitFullscreen)  // Safari 
+	else if (document.webkitExitFullscreen)  // Safari
 		document.webkitExitFullscreen();
-	else if (document.msExitFullscreen)  // IE11 
+	else if (document.msExitFullscreen)  // IE11
 		document.msExitFullscreen();
 }
 
 /*inspired in https://stackoverflow.com/questions/25126106/capture-esc-event-when-exiting-full-screen-mode
 function addEventFullscreen(exitHandler)
 {
-	if (document.exitFullscreen) 
+	if (document.exitFullscreen)
 		document.addEventListener('fullscreenchange', exitHandler);
 	else if (document.document.mozExitFullScreen)
 		document.addEventListener('webkitfullscreenchange', exitHandler);
@@ -624,7 +624,7 @@ function showOrHideLayer(elem, show)
 		hideLayer(elem);
 }
 
-function removeLayer(elem) 
+function removeLayer(elem)
 {
 	var elem_pare=elem.parentNode;
 	if (!elem_pare)
@@ -633,28 +633,28 @@ function removeLayer(elem)
 	if (NecessariLayerIFrame)
 	{
 		 var elem_iframe=elem_pare.getElementById("iframe_"+elem.id);
-		 if (elem_iframe)  
+		 if (elem_iframe)
 			 elem_pare.removeChild(elem_iframe);
 	}
 }
 
-function hideLayer(elem) 
+function hideLayer(elem)
 {
-	elem.style.visibility = "hidden";	
+	elem.style.visibility = "hidden";
 	if (NecessariLayerIFrame)
-	{		 
+	{
 		 var elem_iframe=elem.ownerDocument.getElementById("iframe_"+elem.id);
 		 if (elem_iframe)  //Problema IE6
 		     elem_iframe.style.visibility = "hidden";
 	}
 }
 
-function showLayer(elem) 
+function showLayer(elem)
 {
   	elem.style.visibility = "visible";
-	
+
 	if (NecessariLayerIFrame)
-	{		 
+	{
 		 var elem_iframe=elem.ownerDocument.getElementById("iframe_"+elem.id);
 		 if (elem_iframe)  //Problema IE6
 		     elem_iframe.style.visibility = "visible";
@@ -705,9 +705,9 @@ HTMLElement.prototype.insertAdjacentElement){
 			this.appendChild(parsedNode);
 			break;
 		case 'afterEnd':
-			if (this.nextSibling) 
+			if (this.nextSibling)
 				this.parentNode.insertBefore(parsedNode,this.nextSibling);
-			else 
+			else
 				this.parentNode.appendChild(parsedNode);
 			break;
 		}
@@ -735,7 +735,7 @@ function insertContentLayer(elem_pare, where, content)
 	elem_pare.insertAdjacentHTML(where, content);
 }
 
-function contentLayer(elem, content) 
+function contentLayer(elem, content)
 {
 	elem.innerHTML = content;
 }
@@ -767,7 +767,7 @@ function changePosAndShowLayer(elem, x, y)
 	estil.top = y;
      	estil.visibility = "visible";
 	if (NecessariLayerIFrame)
-	{		 
+	{
 		 var elem_iframe=elem.ownerDocument.getElementById("iframe_"+elem.id);
 		 if (elem_iframe)  //Problema IE6
 		     elem_iframe.style.visibility = "visible";
@@ -831,12 +831,12 @@ function classLayer(elem, s)
 	elem.className = s;
 }
 
-function getzIndexLayer(elem) 
+function getzIndexLayer(elem)
 {
 	return elem.style.zIndex;
 }
 
-function setzIndexLayer(elem, z) 
+function setzIndexLayer(elem, z)
 {
 	elem.zIndex=z;
    	elem.style.zIndex=z;
@@ -875,9 +875,9 @@ function getRectLayer(elem)
 	RectGetRectLayer.ample=estil.pixelWidth ? estil.pixelWidth : ((estil.width=="") ? 0 : parseInt(estil.width));
 	RectGetRectLayer.alt=estil.pixelHeight ? estil.pixelHeight : ((estil.height=="") ? 0 : parseInt(estil.height));*/
 	var offsets = elem.getBoundingClientRect();
-	return {"esq": offsets.left + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft, 
-		"sup": offsets.top + window.pageYOffset - elem.ownerDocument.documentElement.clientTop, 
-		"ample": Math.round(offsets.right-offsets.left), 
+	return {"esq": offsets.left + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft,
+		"sup": offsets.top + window.pageYOffset - elem.ownerDocument.documentElement.clientTop,
+		"ample": Math.round(offsets.right-offsets.left),
 		"alt": Math.round(offsets.bottom-offsets.top)};
 }
 
@@ -946,9 +946,9 @@ var elem, rect, x, y, nom;
 		}
 		if (j<prefixNoms.length)
 			continue;
-	
+
 		elem=getLayer(win, nom);
-		
+
 		if (!elem || elem==mainElem) //Avoid comparing with the elem layer
 			continue;
 
@@ -958,10 +958,10 @@ var elem, rect, x, y, nom;
 		y=rect.sup+rect.alt/2;
 
 		//Is the Layer on top of the layer?
-		if (mainRect.esq<x && mainRect.esq+mainRect.ample>x && 
+		if (mainRect.esq<x && mainRect.esq+mainRect.ample>x &&
 			mainRect.sup<y && mainRect.sup+mainRect.alt>y)
 			showOrHideLayer(elem, show);
-	}	
+	}
 }
 
 function changeSizeLayers(win)
@@ -1115,7 +1115,7 @@ var elem, rect, ancora, nom;
 
 				if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
 					moveFinestraLayer(win, nom.substring(0, nom.length-SufixFinestra.length), rect.esq, rect.sup, rect.ample, rect.alt);
-				else					
+				else
 					moveLayer(elem, rect.esq, rect.sup, rect.ample, rect.alt);
 			}
 		}
@@ -1135,7 +1135,7 @@ function vScrollLayer(elem, i, n)
 	}
 }
 
-//Aquests 
+//Aquests
 var boto_tancar=0x01;
 var boto_pop_up=0x02;
 var boto_pop_down=0x04;
@@ -1166,39 +1166,39 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "<td class=\"titolfinestra\" onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentArrossegant);\" ",
 			  "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
   			  "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
-			  "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >", 
+			  "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >",
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
-			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11, 
-					GetMessage("copy"), 
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11,
+					GetMessage("copy"),
 					"CopiaPortapapersFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\");"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
-			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11, 
-					GetMessage("help"), 
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11,
+					GetMessage("help"),
 					"AjudaFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 				"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
-			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11, 
-					GetMessage("popDown"), 
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11,
+					GetMessage("popDown"),
 					"PopDownFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 	if(layerFinestraList[i_finestra].botons&boto_pop_up)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
-			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11, 
-					GetMessage("popUp"), 
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11,
+					GetMessage("popUp"),
 					"PopUpFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
-			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11, 
+			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11,
 					GetMessage("close"),
 					"TancaFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\")"),
 			"</td>");
@@ -1215,7 +1215,7 @@ var nom=name+SufixBarra;
 	{
 	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
 	    {
-			layerFinestraList[i].botons|=botons;		
+			layerFinestraList[i].botons|=botons;
 			//Omplo la layer barra amb els botons i el títol
 			OmpleBarraFinestraLayer(win,i);
 			return;
@@ -1231,7 +1231,7 @@ var nom=name+SufixBarra;
 	{
 	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
 	    {
-			layerFinestraList[i].titol=titol;		
+			layerFinestraList[i].titol=titol;
 			//Omplo la layer barra amb els botons i el títol
 			OmpleBarraFinestraLayer(win,i);
 			return;
@@ -1283,10 +1283,7 @@ function ObreFinestra(win, name, desc_funcionalitat_de)
 {
 	if (!isFinestraLayer(win, name))
 	{
-		alert(DonaCadenaLang({"cat":"No s'ha definit la layer de tipus finestra '"+name+"' i per tant no es pot usar la funcionalitat ",
-						  "spa":"No se ha definido la layer de tipo ventana '"+name+"' y en consecuencia no se puede usar la funcionalidad ",
-						  "eng":"The layer '"+name+"' has not been defined and its not possible use the funcionality ",
-						  "fre":"La layer de type fenêtre '"+name+"' n'a été pas définie et il n'est donc pas possible d'utilise l'outil "})+desc_funcionalitat_de);
+		alert(GetMessage("LayerTypeWindow", "tools") + " '" + name + "' " + GetMessage("notDefinedNotFunctionality", "tools") + " " + desc_funcionalitat_de);
 		return null;
 	}
 	showFinestraLayer(win, name);
@@ -1312,7 +1309,7 @@ function setTopFloatingWindow(i_finestra)
 {
 var div, div_canto;
 	if(focusedFloatingWindow!=-1)
-	{		
+	{
 		div=getLayer(window, layerFinestraList[focusedFloatingWindow].nom+SufixBarra);
 		 //Restore the zIndex
 		setzIndexLayer(div,div.old_zIndex);
@@ -1338,7 +1335,7 @@ var div, div_canto;
 	focusedFloatingWindow=i_finestra;
 }
 
-function showFinestraLayer(win, name) 
+function showFinestraLayer(win, name)
 {
 	showLayer(getFinestraLayer(win, name));
 	showLayer(getLayer(win,name+SufixBarra));
@@ -1349,7 +1346,7 @@ function showFinestraLayer(win, name)
 	setTopFloatingWindow(getFloatingWindowId(name));
 }
 
-function hideFinestraLayer(win, name) 
+function hideFinestraLayer(win, name)
 {
 	hideLayer(getFinestraLayer(win, name));
 	hideLayer(getLayer(win,name+SufixBarra));
@@ -1363,11 +1360,11 @@ function showOrHideFinestraLayer(win, name, show)
 	if (show)
 		showFinestraLayer(win, name);
 	else
-		hideFinestraLayer(win, name) 
+		hideFinestraLayer(win, name)
 }
 
 
-function removeFinestraLayer(win, name) 
+function removeFinestraLayer(win, name)
 {
 	removeLayer(getFinestraLayer(win, name));
 	removeLayer(getLayer(win,name+SufixBarra));
@@ -1399,7 +1396,7 @@ function isFinestraLayerVisible(win, name)
 	var elem=getFinestraLayer(win,name);
 	if(elem && isLayerVisible(elem))
 		return true;
-	return false;	
+	return false;
 }
 
 function getcontentFinestraLayer(win, name)
@@ -1407,41 +1404,41 @@ function getcontentFinestraLayer(win, name)
 	return getContentLayer(getFinestraLayer(win, name));
 }
 
-function contentFinestraLayer(win, name, content) 
+function contentFinestraLayer(win, name, content)
 {
 	contentLayer(getFinestraLayer(win, name), content);
 }
 
-function winMousePos(e) 
+function winMousePos(e)
 {
 	//get the position of the mouse
-	if( !e ) 
-		e = window.event; 
-	if( !e || ( typeof( e.pageX ) != 'number' && typeof( e.clientX ) != 'number' ) ) 
+	if( !e )
+		e = window.event;
+	if( !e || ( typeof( e.pageX ) != 'number' && typeof( e.clientX ) != 'number' ) )
 		return {"x": 0, "y": 0};
-	
-	if( typeof( e.pageX ) == 'number' ) 
-	{ 
-		var xcoord = e.pageX; 
-		var ycoord = e.pageY; 
-	} 
-	else 
+
+	if( typeof( e.pageX ) == 'number' )
 	{
-		var xcoord = e.clientX; 
+		var xcoord = e.pageX;
+		var ycoord = e.pageY;
+	}
+	else
+	{
+		var xcoord = e.clientX;
 		var ycoord = e.clientY;
-		if( !(( window.navigator.userAgent.indexOf( 'Opera' ) + 1) || 
-			  (window.ScriptEngine && ScriptEngine().indexOf( 'InScript' ) + 1 ) || 
-			  window.navigator.vendor == 'KDE' ) ) 
+		if( !(( window.navigator.userAgent.indexOf( 'Opera' ) + 1) ||
+			  (window.ScriptEngine && ScriptEngine().indexOf( 'InScript' ) + 1 ) ||
+			  window.navigator.vendor == 'KDE' ) )
 		{
-			if( document.documentElement && ( document.documentElement.scrollTop || document.documentElement.scrollLeft ) ) 
+			if( document.documentElement && ( document.documentElement.scrollTop || document.documentElement.scrollLeft ) )
 			{
 				xcoord += document.documentElement.scrollLeft; ycoord += document.documentElement.scrollTop;
-			} 
-			else if( document.body && ( document.body.scrollTop || document.body.scrollLeft ) ) 
+			}
+			else if( document.body && ( document.body.scrollTop || document.body.scrollLeft ) )
 			{
-				xcoord += document.body.scrollLeft; ycoord += document.body.scrollTop; 
-			} 
-		} 
+				xcoord += document.body.scrollLeft; ycoord += document.body.scrollTop;
+			}
+		}
 	}
 	return {"x": xcoord, "y": ycoord};
 }
@@ -1451,10 +1448,10 @@ var iFinestraLayerFora=-1;
 function ActivaMovimentFinestraLayer(event, i_finestra, tipus)
 {
 var layer_finestra=layerFinestraList[i_finestra];
-	if(layer_finestra.estat_click!=tipus)  
+	if(layer_finestra.estat_click!=tipus)
 	{
 		var div;
-		layer_finestra.coord_click=winMousePos(event);		
+		layer_finestra.coord_click=winMousePos(event);
 		layer_finestra.estat_click=tipus;
 
 		div=getFinestraLayer(window, layer_finestra.nom);
@@ -1472,7 +1469,7 @@ var layer_finestra=layerFinestraList[i_finestra];
 		if (div)
 		{
 			layer_finestra.pos_ini_canto.x=parseInt(div.style.left);
-			layer_finestra.pos_ini_canto.y=parseInt(div.style.top);	
+			layer_finestra.pos_ini_canto.y=parseInt(div.style.top);
 		}
 	}
 	iFinestraLayerFora=-1;
@@ -1485,9 +1482,9 @@ var layer_finestra=layerFinestraList[i_finestra];
 	if(layer_finestra.estat_click!=movimentDesactiu)
 	{
 		var dx, dy, coordActual, div;
-				
+
 		coordActual=winMousePos(event);
-		
+
 		//Make sure the mouse is not outside the client area (avoid the window
 		//to be placed in a non reacheable area).
 		if(coordActual.y<=0)
@@ -1498,10 +1495,10 @@ var layer_finestra=layerFinestraList[i_finestra];
 			coordActual.x=1;
 		else if(coordActual.x>=window.innerWidth)
 			coordActual.x= window.innerWidth;
-		
+
 		dx=coordActual.x-layer_finestra.coord_click.x;
 		dy=coordActual.y-layer_finestra.coord_click.y;
-			
+
 		if(layer_finestra.estat_click==movimentArrossegant)
 		{
 			moveLayer(getFinestraLayer(window, layer_finestra.nom), layer_finestra.pos_ini_finestra.x+dx, layer_finestra.pos_ini_finestra.y+dy, -1, -1);
@@ -1518,7 +1515,7 @@ var layer_finestra=layerFinestraList[i_finestra];
 			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), -1, -1, layer_finestra.pos_ini_finestra.w+dx, -1);
 			if (layer_finestra.onresize && typeof layer_finestra.onresize==="function")
 				layer_finestra.onresize();
-		}		
+		}
 		div=getLayer(window, layer_finestra.nom+SufixCanto);
 		if (div)
 			moveLayer(div, layer_finestra.pos_ini_canto.x+dx, layer_finestra.pos_ini_canto.y+dy, -1, -1);
@@ -1555,8 +1552,8 @@ function textHTMLImgCantoFinestra(i_finestra)
 var cdns=[];
 
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("canto.png"),
-					 "\" alt=\"", DonaCadenaLang({"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"}), "\" ", 
-					 "title=\"", DonaCadenaLang({"cat":"redimensionar", "spa":"redimensionar", "eng":"resize","fre":"redimensionner"}), "\" ", 
+					 "\" alt=\"", GetMessage("resize"), "\" ",
+					 "title=\"", GetMessage("resize"), "\" ",
 					 "onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentRedimensionant);\" ",
 					 "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
   			  		 "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
@@ -1585,10 +1582,10 @@ var nom, i_finestra=layerFinestraList.length;
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
-	classLayer(getLayer(win, nom), "finestra"); 
+	classLayer(getLayer(win, nom), "finestra");
 
 	if (param.resizable)
-	{ 
+	{
 		nom=name+SufixCanto;
 		createLayer(win, nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, textHTMLImgCantoFinestra(i_finestra));
 		classLayer(getLayer(win, nom), "cantofinestra");
@@ -1600,7 +1597,7 @@ function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, an
 {
 var nom, s, i_finestra=layerFinestraList.length;
 
-	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, 
+	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
 	//el text de les dos layers que formaran la layer tipus finestra amb títol i botons
@@ -1614,9 +1611,9 @@ var nom, s, i_finestra=layerFinestraList.length;
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, param, "finestra", content);
-	
+
 	if (param.resizable)
-	{ 
+	{
 		nom=name+SufixCanto;
 		s+=textHTMLLayer(nom, left+width-MidaCantoFinestraLayer, top+height-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "cantofinestra", textHTMLImgCantoFinestra(i_finestra));
 		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
@@ -1625,7 +1622,7 @@ var nom, s, i_finestra=layerFinestraList.length;
 }//Fi de textHTMLFinestraLayer()
 
 
-function createLayer(win, name, left, top, width, height, ancora, param, content)  // param --> scroll, visible, ev 
+function createLayer(win, name, left, top, width, height, ancora, param, content)  // param --> scroll, visible, ev
 {
 	var container = document.getElementById(ParamCtrl.containerName);
 	param.save_content=true;
@@ -1638,7 +1635,7 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 	var z=layerList.length;
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
-	
+
 	return '<div id="' + name + '" style="position:absolute; overflow:'+((param.scroll=="si") ? 'scroll' : (param.scroll=="ara_no"? 'auto':'hidden'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (param.visible ? 'visible;' : 'hidden;') + (param.bg_trans ? ' background-image:url(1tran.gif);' : '') + (param.border ? (' border:' +param.border + ';') : '') + ' z-index:' + z +';" ' + (param.ev ? param.ev+ ' ' : '') + (div_class ? 'class='+div_class : '')+'>'+
 			 ((content) ? ((typeof content == 'object')? '' : content) : '') +
     			'</div>';
@@ -1673,7 +1670,7 @@ function isLayer(elem)
 }
 
 // Funció inspirada en una de SitePoint Pty. Ltd, www.sitepoint.com
-function Ajax() 
+function Ajax()
 {
 	this.req = null;
 	this.url = null;
@@ -1689,7 +1686,7 @@ function Ajax()
 	this.responseFormat = 'text/plain', // 'text/plain', 'text/xml', 'object'
 	this.requestFormat = 'application/x-www-form-urlencoded'  //només per POST
 	this.structResp=null;
-	this.mimeType = null;  
+	this.mimeType = null;
 	//this.headers = [];
 	this.requestHeaders=[];
 	this.accessToken = null;
@@ -1697,20 +1694,20 @@ function Ajax()
 
 	this.init = function() {
 		var i = 0;
-		var reqTry = [ 
+		var reqTry = [
 			function() { return new XMLHttpRequest(); },
 			function() { return new ActiveXObject('Msxml2.XMLHTTP') },
 			function() { return new ActiveXObject('Microsoft.XMLHTTP' )} ];
-      
+
 		while (!this.req && (i < reqTry.length)) {
-			try { 
+			try {
 				this.req = reqTry[i++]();
-			} 
+			}
 			catch(e) {}
 		}
 		return true;
 	};
-	this.doGet = function(url, hand, response_format, struct) 
+	this.doGet = function(url, hand, response_format, struct)
 	{
 		//alert(url);  //·$·Per a depurar
 		this.url = url;
@@ -1721,10 +1718,10 @@ function Ajax()
 		this.doReq();
 	};
 
-	this.doPost = function(url, request_format, dataPayload, hand, response_format, struct) 
+	this.doPost = function(url, request_format, dataPayload, hand, response_format, struct)
 	{
 		this.url = url;
-		this.requestFormat = request_format || 'application/x-www-form-urlencoded';    
+		this.requestFormat = request_format || 'application/x-www-form-urlencoded';
 		this.dataPayload = dataPayload;
 		this.handleResp = hand;
 		this.responseFormat = response_format || 'text/plain';
@@ -1732,11 +1729,11 @@ function Ajax()
 		this.method = 'POST';
 		this.doReq();
 	};
-	
-	this.doPut = function(url, request_format, dataPayload, hand, response_format, struct) 
+
+	this.doPut = function(url, request_format, dataPayload, hand, response_format, struct)
 	{
 		this.url = url;
-		this.requestFormat = request_format || 'application/x-www-form-urlencoded';    
+		this.requestFormat = request_format || 'application/x-www-form-urlencoded';
 		this.dataPayload = dataPayload;
 		this.handleResp = hand;
 		this.responseFormat = response_format || 'text/plain';
@@ -1744,8 +1741,8 @@ function Ajax()
 		this.method = 'PUT';
 		this.doReq();
 	};
-	
-	this.doDelete = function(url, hand, response_format, struct) 
+
+	this.doDelete = function(url, hand, response_format, struct)
 	{
 		//alert(url);
 		this.url = url;
@@ -1755,7 +1752,7 @@ function Ajax()
 		this.method = 'DELETE';
 		this.doReq();
 	};
-	
+
 	this.doReqIndirect = function(method, url, request_format, dataPayload, hand, response_format, struct)
 	{
 		if (method=="POST")
@@ -1766,27 +1763,27 @@ function Ajax()
 			this.doDelete(url, hand, response_format, struct);
 		else
 			this.doGet(url, hand, response_format, struct);
-	};	
+	};
 
-	this.doReq = function() 
+	this.doReq = function()
 	{
 		var self = null;
 		var req = null;
 		var headArr = [];
-    
+
 		if (!this.init()) {
 			alert('Could not create XMLHttpRequest object.');
 			return;
 		}
-			   
-		req = this.req;		
+
+		req = this.req;
 		req.open(this.method, this.url, this.async);
 
 		if (this.accessTokenType && this.accessTokenType.length && this.url.indexOf("nimmbus.cat")!=-1)
    			this.setRequestHeader("nb-access-token-type", this.accessTokenType);
   		if (this.accessToken && this.accessToken.length)
 			this.setRequestHeader("Authorization", "Bearer " + this.accessToken);
-		if ((this.method == 'POST' || this.method == 'PUT') && this.requestFormat) 
+		if ((this.method == 'POST' || this.method == 'PUT') && this.requestFormat)
 			req.setRequestHeader('Content-Type', this.requestFormat);
 		if ((this.method == 'POST' || this.method == 'PUT') && this.responseFormat)
 			req.setRequestHeader('Accept', this.responseFormat);
@@ -1797,7 +1794,7 @@ function Ajax()
 			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
 
 		self = this;
-	
+
 		req.onreadystatechange = function() {
 			var resp = null;
 			self.readyState = req.readyState;
@@ -1805,7 +1802,7 @@ function Ajax()
 			{
 			    // Get the raw header string
 			    var headers = req.getAllResponseHeaders();
-			
+
 				// Convert the header string into an array
 				// of individual headers
 				var arr = headers.trim().split(/[\r\n]+/);
@@ -1820,7 +1817,7 @@ function Ajax()
 				});
 		    }
 
-			else if (req.readyState == 4) 
+			else if (req.readyState == 4)
 			{
 				self.status = req.status;
 				self.statusText = req.statusText;
@@ -1846,7 +1843,7 @@ function Ajax()
 								resp.loadXML(self.responseText);
 							}
 						}
-						break;					
+						break;
 					case 'application/json':
 						if (self.responseText=="")
 						{
@@ -1857,13 +1854,13 @@ function Ajax()
 						{
 							try {
 								resp = JSON.parse(self.responseText);
-							} 
+							}
 							catch (e) {
 								self.handleErr("JSON file error: " + self.responseText, self.structResp);
 								return;
 							}
-						}						
-						break;					
+						}
+						break;
 					case 'object':
 						resp = req;
 						break;
@@ -1876,7 +1873,7 @@ function Ajax()
 						alert('No response handler defined for this XMLHttpRequest object.');
             					return;
 					}
-					if(self.structResp) 
+					if(self.structResp)
 					{
 						try
 						{
@@ -1918,12 +1915,12 @@ function Ajax()
 	};
 	this.setMimeType = function(mimeType) {
 		this.mimeType = mimeType;
-	};  
+	};
 	this.setHandlerResp = function(funcRef) {
 		this.handleResp = funcRef;
 	};
 	this.setHandlerErr = function(funcRef) {
-		this.handleErr = funcRef; 
+		this.handleErr = funcRef;
 	};
 	this.setHandlerBoth = function(funcRef) {
 		this.handleResp = funcRef;
@@ -1954,24 +1951,24 @@ function loadJSON(path, success, error, extra_param)
 var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function()
 	{
-        if (xhr.readyState === XMLHttpRequest.DONE) 
+        if (xhr.readyState === XMLHttpRequest.DONE)
 		{
-	       	if (xhr.status === 200) 
+	       	if (xhr.status === 200)
 			{
             	if (success)
 				{
 					var data;
 					try {
 						data = JSON.parse(xhr.responseText);
-					} 
+					}
 					catch (e) {
 		                		if (error)
 							return error("JSON file: \""+ path + "\". " + e);
 					}
 					success(data, extra_param);
 				}
-			} 
-			else 
+			}
+			else
 			{
                 if (error)
 				{
@@ -1999,9 +1996,9 @@ function loadTextFile(path, mimetype, success, error, extra_param)
 var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function()
 	{
-        if (xhr.readyState === XMLHttpRequest.DONE) 
+        if (xhr.readyState === XMLHttpRequest.DONE)
 		{
-	        if (xhr.status === 200) 
+	        if (xhr.status === 200)
 			{
 				//if (mimetype && mimetype!="" && mimetype!=xhr.getResponseHeader('content-type'))
 				if (!ResponseHeaderContentTypeConteMimeType(mimetype, xhr))
@@ -2025,8 +2022,8 @@ var xhr = new XMLHttpRequest();
 						success(xhr.responseText, extra_param);
 					}
 				}
-			} 
-			else 
+			}
+			else
 			{
              	if (error)
 				{
@@ -2053,9 +2050,9 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function()
 	{
-		if (xhr.readyState === XMLHttpRequest.DONE) 
+		if (xhr.readyState === XMLHttpRequest.DONE)
 		{
-			if (xhr.status === 200) 
+			if (xhr.status === 200)
 			{
 				//if (mimetype!=xhr.getResponseHeader('content-type'))
 				if (!ResponseHeaderContentTypeConteMimeType(mimetype, xhr))
@@ -2077,8 +2074,8 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 					if (success)
 						success(xhr.response, extra_param);
 				}
-			} 
-			else 
+			}
+			else
 			{
 				if (retry && retry<200)
 				{
@@ -2118,23 +2115,23 @@ function AddJSONPointerRefToObject(obj_root, obj, ref)
 var i;
 	if (-1==(i=ref.indexOf('#')))
 	{
-		alert(DonaCadenaLang({"cat": "El valor de $ref ha de contenir un caracter '#'", "spa": "El valor de $ref debe contenir un caracter '#'", "eng": "The value of $ref requires a caracter '#'", "fre": "La valeur de $ref nécessite un caractère '#'"}));
+		alert(GetMessage("TheValueOf", "tools") + " $ref " + GetMessage("requiresACharacter", "tools") + " '#'");
 		return;
 	}
 	if (i!=0)
 	{
-		alert(DonaCadenaLang({"cat": "Encara no se suporten valors de $ref amb referències a altres fitxers JSON", "spa": "Aún no se suporta valores de $ref con referencias a otros ficheros JSON", "eng": "$ref values with references to other JSON files are still not supported", "fre": "Les valeurs $ref avec des références à d'autres fichiers JSON ne sont toujours pas prises en charge"}));
+		alert(GetMessage("ReferencesOtherJSONNotSupported", "tools"));
 		return;
 	}
 	var r=jsonpointer.get(obj_root, ref);
 	if (typeof r === "undefined" || r===null)
 	{
-		alert(DonaCadenaLang({"cat": "El valor de $ref", "spa": "El valor de $ref", "eng": "The value of $ref", "fre": "La valeur de $ref"})+": \""+ref+"\" "+ DonaCadenaLang({"cat": "no està definit", "spa": "no está definido", "eng": "is not defined", "fre": "n'est pas défini"}));
+		alert(GetMessage("TheValueOf", "tools") + " $ref: \""+ref+"\" " + GetMessage("isNotDefined", "tools"));
 		return;
 	}
 	if (typeof r !== "object")
 	{
-		alert(DonaCadenaLang({"cat": "El valor de $ref", "spa": "El valor de $ref", "eng": "The value of $ref", "fre": "La valeur de $ref"})+": \""+ref+"\" "+ DonaCadenaLang({"cat": "no és un objecte", "spa": "no es un objecto", "eng": "is not an object", "fre": "n'est pas un objet"}));
+		alert(GetMessage("TheValueOf", "tools") + " $ref: \""+ref+"\" "+ GetMessage("isNotObject", "tools"));
 		return;
 	}
 	//Replico les propietats de l'objecte aquí
@@ -2147,7 +2144,7 @@ var i;
 
 /*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter. 
 It supports that "$ref" is a string of a single JSON Pointer or an array of JSON Pointers.
-The original object can have other properties but they should not the properties of the pointed object ($ref) 
+The original object can have other properties but they should not the properties of the pointed object ($ref)
 should not have the same names.
 The only JSON Pointers supported are the ones starting by "#/" (root JSON Pointers to this document).
 Pointing to a different JSON document is not implemented yet.
@@ -2176,7 +2173,7 @@ function ResolveJSONPointerRefs(obj_root, obj)
 			else if (obj["$ref"]==null)
 			{
 				//Protegeixo un cas extrany en que es posa "$ref": null
-				alert("A '$ref' null object found. Please remove");				
+				alert("A '$ref' null object found. Please remove");
 			}
 			else  //assumeixo que és un Array
 			{
@@ -2229,7 +2226,7 @@ function RemoveOtherPropertiesInObjWithRef(obj_root, obj)
 					{
 						if (r.hasOwnProperty(k))
 							delete obj[k];
-						else			
+						else
 							RemoveOtherPropertiesInObjWithRef(obj_root, obj[k]);
 					}
 				}
@@ -2240,7 +2237,7 @@ function RemoveOtherPropertiesInObjWithRef(obj_root, obj)
 				for (var i=0; i<obj["$ref"].length; i++)
 				{
 					r[i]=jsonpointer.get(obj_root, obj["$ref"][i]);
-				}	
+				}
 				for (var k in obj)
 				{
 					if (obj.hasOwnProperty(k) && k!="$ref")
@@ -2281,8 +2278,8 @@ var a=Math.floor(x);
 //Extret de http://www.merlyn.demon.co.uk/js-round.htm
 //Modificada perque si es demanen 0 decimals no es vegi el punt.
 //Sempre retorna el número com a text
-function OKStrOfNe(X, N) 
-{ 
+function OKStrOfNe(X, N)
+{
 var es_negatiu;
 	if (isNaN(X))
 		return "";
@@ -2295,11 +2292,11 @@ var es_negatiu;
 	}
 	else
 		es_negatiu=false;
-	
+
 	var Q = ''+Math.round(X*Number("1e"+N))
-	while (Q.length<=N) 
+	while (Q.length<=N)
 		Q='0'+Q
-	if (Q.search(/e/)!=-1) 
+	if (Q.search(/e/)!=-1)
 		return X.toString();
 	return ((es_negatiu) ? "-" : "") + Q.substring(0,Q.length-N)+'.'+Q.substring(Q.length-N,Q.length);
 }
@@ -2313,7 +2310,7 @@ var r;
 		return OKStrOfNe(v, Math.round(-Math.log(m)/Math.LN10));
 
 	r = v%m;
-	if (r <= (m/2)) { 
+	if (r <= (m/2)) {
         	return v-r;
 	} else {
         	return v+m-r;
@@ -2328,7 +2325,7 @@ function sinh(z)
 }
 
 function ArrodoneixSiSoroll(n)
-{ 
+{
 var e, d;
 
 	e=Math.floor(Math.log(n)/Math.LN10);    //dona l'exponent en base 10
@@ -2412,7 +2409,7 @@ function checkIt(s, find)
 }
 
 //Extret de https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
-function MobileCheck() 
+function MobileCheck()
 {
 	var check = false;
 	(function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
@@ -2422,7 +2419,7 @@ function MobileCheck()
 function MobileAndTabletCheck()
 {
 	var check = false;
-	(function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);	
+	(function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
 	return check;
 }
 
@@ -2456,12 +2453,12 @@ function FesTestDeNavegador()
 		browser = "Safari";
 		NomNavegador='safari';
 	}
-	else if (checkIt(detect, 'omniweb')) 
+	else if (checkIt(detect, 'omniweb'))
 	{
 		browser = "OmniWeb";
 		NomNavegador='omniweb';
 	}
-	else if (checkIt(detect, 'opera')) 
+	else if (checkIt(detect, 'opera'))
 	{
 		browser = "Opera";
 		NomNavegador='opera';
@@ -2488,7 +2485,7 @@ function FesTestDeNavegador()
 		NomNavegador='compatible';
 	}
 	else
-	{ 
+	{
 		browser = "An unknown browser";
 	}
 
@@ -2526,13 +2523,13 @@ function FesTestDeNavegador()
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 8 o greater to work properly.\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 8 oû postérieure pour bien fonctionner.");
 		}
-		var appVer = navigator.appVersion.toLowerCase(); 
-		var iePos = appVer.indexOf('msie'); 
-		if (iePos !=-1) 
+		var appVer = navigator.appVersion.toLowerCase();
+		var iePos = appVer.indexOf('msie');
+		if (iePos !=-1)
 		{
-			var is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos))); 
-			var is_major = parseInt(is_minor); 
-		} 
+			var is_minor = parseFloat(appVer.substring(iePos+5,appVer.indexOf(';',iePos)));
+			var is_major = parseInt(is_minor);
+		}
 		if (navigator.appName.substring(0,9) == "Microsoft" && is_major <= 6)
 			NecessariLayerIFrame=true;
     }
@@ -2570,7 +2567,7 @@ function FesTestDeNavegador()
 			"Version " + version + " of the browser " + browser + " has been detected. This browser has not been tested and the indicated version is lower than 5. It is allowed to continue but we cannot guaranty a correct performance of this map browser.\n"+
 			"Une version " + version + " de " + browser + " a été détectée. Ce navigateur n'a pas été testé et la version indiquée est antérieure au la version 5. On laisse poursuivre mais on ne garantit pas le fonctionnement correct de ce navigateur de couches.");
     }
-	MobileAndTabletWebBrowser=MobileAndTabletCheck();		
+	MobileAndTabletWebBrowser=MobileAndTabletCheck();
 	MobileWebBrowser=MobileCheck();
 }
 
@@ -2596,7 +2593,7 @@ function CreaParametresVistaCapaTiled(tile_matrix, i_tileMin, i_tileMax, j_tileM
 	this.ITileMax=i_tileMax;
 	this.JTileMin=j_tileMin;
 	this.JTileMax=j_tileMax;
-	this.dx=dx; 
+	this.dx=dx;
 	this.dy=dy;
 }
 */
@@ -2656,7 +2653,7 @@ function CreaCampConsultaTipica(previ, nom, desc, post)
 }
 
 function CreaCapaPreguntaServidorConsultaTipica(servidor, nom, camps, crs)
-{   
+{
 	this.servidor=servidor;
 	this.nom=nom;
 	this.camps=camps;  //Array de CreaCampConsultaTipica: noms,descripcions de camps i textos anteriors i posterios, ordenats en funció de com estan continguts  1er Municipis - 2on Provincies
@@ -2707,5 +2704,5 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 	this.url=url;
 	this.nom=nom;
 	this.tipus=tipus;
-	this.categoria=categoria; 
+	this.categoria=categoria;
 }*/
