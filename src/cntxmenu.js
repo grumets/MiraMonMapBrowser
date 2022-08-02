@@ -3419,14 +3419,18 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	}
 
 	if (capa.model == "vector") {
-		cdns.push(GetMessage("ColorSelector"),
-		": </legend><br>",
-		"<label for=\"edita-estil-color-capa-actual\">", GetMessage("Colors") + ": ", "</label><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-capa-actual\"><br></fieldset>");
+		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
+			cdns.push("<fieldset><legend>", GetMessage("ColorSelector"), ": </legend><br><table>");
+			for (var i_ItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; i_ItemLleg < itemsLlegLength; i_ItemLleg++) {
+				cdns.push("<tr><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\">", estil.ItemLleg[i_ItemLleg].DescColor + ": ", "</label></td><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\" value=\"" + estil.ItemLleg[i_ItemLleg].color + "\"></td></tr>");
+			}
+			cdns.push("</fieldset>");
+		}
 	}
 
-	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
+	cdns.push("<td><input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("OK"),
-	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
+		"\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' /></td><td></td></tr>",
 		"</div></form>");
 	return cdns.join("");
 }
@@ -3443,7 +3447,7 @@ function ForcaRecalculItemLleg(estil)
 
 function EditaEstilCapa(i_capa, i_estil)
 {
-var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max;
+	var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max;
 
 	if (estil.component && !estil.categories)
 	{
@@ -3489,7 +3493,7 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 		else
 			estil.component[0].illum.f=valor;
 	}
-	else if (estil.component.length<3)
+	else if (estil.component && estil.component.length<3)
 	{
 		var paleta_de_estil_capa=false;
 		if (document.getElementById("edita-estil-capa-paleta-actual").checked)
@@ -3548,6 +3552,40 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 							if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
 								estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.continuous[paleta]));
 						}
+					}
+				}
+			}
+		}
+	}
+	if (capa.model == "vector") {
+ 		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
+			// Guardo els nous colors seleccionats per als elements de la llegenda
+			for (var i_ItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; i_ItemLleg < itemsLlegLength; i_ItemLleg++) {
+				var colorInput = document.getElementById("edita-estil-color-itemLleg-" + i_ItemLleg);
+				if (colorInput && colorInput.value)
+				{
+					estil.ItemLleg[i_ItemLleg].color = colorInput.value;
+				}
+			}
+			// Guardo els nous colors en la paleta de l'objecte "forma" que defineix com es pinta la lÃ­nia.
+			if (estil.formes) {
+				for (var indexForma = 0, forma_length = estil.formes.length; indexForma < forma_length; indexForma++) {
+					var currentForma = estil.formes[indexForma];
+					if (currentForma.vora && currentForma.vora.NomCamp &&
+							currentForma.vora.paleta && currentForma.vora.paleta.colors &&
+							estil.ItemLleg.length <= currentForma.vora.paleta.colors.length) {
+								/* Degut a que els elements de la llegenda i els colors de a
+								 	paleta no concorden en número, recorrem l'array menys nombrós
+								  i modificarem l'índex per accedir al més llarg.
+									---- S'hauria de igualar els colors de paleta amb llegenda i
+									eliminar l'element buit ""*/
+							for (var indexColorLlegenda = 0, llegendaLength = estil.ItemLleg.length; indexColorLlegenda < llegendaLength; indexColorLlegenda++) {
+								if (estil.ItemLleg.length == currentForma.vora.paleta.colors.length) {
+									currentForma.vora.paleta.colors[indexColorLlegenda] = estil.ItemLleg[indexColorLlegenda].color;
+								} else {
+									currentForma.vora.paleta.colors[(indexColorLlegenda + 1)] = estil.ItemLleg[indexColorLlegenda].color;
+								}
+							}
 					}
 				}
 			}
