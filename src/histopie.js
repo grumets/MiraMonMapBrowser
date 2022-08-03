@@ -499,15 +499,15 @@ function CanviDinamismeHistograma(event)
 {
 	var n_histo, i_str, i_str_2, estil, retorn_prep_histo;
 
-	if (event.srcElement)
+	if (event.target)
 	{
-		i_str=event.srcElement.id.indexOf(prefixHistogramaFinestra);
-		i_str_2=event.srcElement.id.indexOf(sufixCheckDinamicHistograma);
-		n_histo=parseInt(event.srcElement.id.substr(i_str+prefixHistogramaFinestra.length, i_str_2-i_str+prefixHistogramaFinestra.length));
+		i_str=event.target.id.indexOf(prefixHistogramaFinestra);
+		i_str_2=event.target.id.indexOf(sufixCheckDinamicHistograma);
+		n_histo=parseInt(event.target.id.substr(i_str+prefixHistogramaFinestra.length, i_str_2-i_str+prefixHistogramaFinestra.length));
 		if (isNaN(n_histo))
 			return;
 
-		if (window.document.getElementById(event.srcElement.id).checked)
+		if (window.document.getElementById(event.target.id).checked)
 		{
 			estil=ParamCtrl.capa[HistogramaFinestra.vista[n_histo].i_capa].estil[HistogramaFinestra.vista[n_histo].i_estil]
 			if (estil.diagrama)
