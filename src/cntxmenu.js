@@ -3420,17 +3420,17 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 	if (capa.model == "vector") {
 		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
-			cdns.push("<fieldset><legend>", GetMessage("ColorSelector"), ": </legend><br><table>");
+			cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
 			for (var i_ItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; i_ItemLleg < itemsLlegLength; i_ItemLleg++) {
-				cdns.push("<tr><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\">", estil.ItemLleg[i_ItemLleg].DescColor + ": ", "</label></td><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\" value=\"" + estil.ItemLleg[i_ItemLleg].color + "\"></td></tr>");
+				cdns.push("<tr><th></th></tr><tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\" value=\"" + estil.ItemLleg[i_ItemLleg].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\">", estil.ItemLleg[i_ItemLleg].DescColor, "</label></td></tr>");
 			}
-			cdns.push("</fieldset>");
+			cdns.push("</table></fieldset>");
 		}
 	}
 
-	cdns.push("<td><input type=\"button\" class=\"Verdana11px\" value=\"",
+	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("OK"),
-		"\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' /></td><td></td></tr>",
+		"\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
 		"</div></form>");
 	return cdns.join("");
 }
