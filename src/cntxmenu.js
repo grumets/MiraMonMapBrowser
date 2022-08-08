@@ -3420,9 +3420,29 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 	if (capa.model == "vector") {
 		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
+			/*Construeixo estructura amb colors i descripcions a mostrar. A partir dels
+			colors de "forma" i els índex dels objectes > features "TipusNom" i les
+			descripcions de "ItemLleg". Com relacionar els 2 arrays:
+			índex ItemLleg = TipusNom - 1
+			*/
+			const arrayColorsSelectors = [];
+			for (var indexForma = 0, formaLength = estil.formes.length; indexForma < formaLength; indexForma++) {
+				const currentForma = estil.formes[indexForma];
+				if (currentForma.vora && currentForma.vora.NomCamp && currentForma.vora.NomCamp == "TipusNum" && currentForma.vora.paleta && currentForma.vora.paleta.colors) {
+					for (var indexColors = 0, colorsLength = currentForma.vora.paleta.colors.length; indexColors < colorsLength; indexColors++) {
+						const currentColor = currentForma.vora.paleta.colors[indexColors];
+						if (currentColor != "" && estil.ItemLleg && estil.ItemLleg.length >= indexColors && indexColors > 0) {
+							const indexItemLleg = indexColors-1;
+							if (currentColor == estil.ItemLleg[indexItemLleg].color) {
+									arrayColorsSelectors.push({color:currentColor, descr:estil.ItemLleg[indexItemLleg].DescColor});
+							}
+						}
+					}
+				}
+			}
 			cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
-			for (var i_ItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; i_ItemLleg < itemsLlegLength; i_ItemLleg++) {
-				cdns.push("<tr><th></th></tr><tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\" value=\"" + estil.ItemLleg[i_ItemLleg].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + i_ItemLleg + "\">", estil.ItemLleg[i_ItemLleg].DescColor, "</label></td></tr>");
+			for (var indexColorSel = 0, itemsColorSelLength = arrayColorsSelectors.length; indexColorSel < itemsColorSelLength; indexColorSel++) {
+				cdns.push("<tr><th></th></tr><tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + indexColorSel + "\" value=\"" + arrayColorsSelectors[indexColorSel].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + indexColorSel + "\">", arrayColorsSelectors[indexColorSel].descr, "</label></td></tr>");
 			}
 			cdns.push("</table></fieldset>");
 		}
