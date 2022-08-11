@@ -3632,6 +3632,19 @@ function EditaEstilCapa(i_capa, i_estil)
 					}
 				}
 			}
+			if (estil.formes && estil.formes.length > 0) {
+				const lastForma = estil.formes[estil.formes.length - 1];
+				if (lastForma.vora && lastForma.vora.gruix && lastForma.vora.gruix.amples) {
+					for (var iAmples = 0, amplesLength = lastForma.vora.gruix.amples.length; iAmples < amplesLength; iAmples++) {
+						var textThicknessInput = document.getElementById("edita-estil-gruix-" + iAmples);
+						if (textThicknessInput && textThicknessInput.value)
+						{
+							lastForma.vora.gruix.amples[textThicknessInput] = textThicknessInput.value > 10 ? 10 : (textThicknessInput.value < 1 ? 1 : textThicknessInput.value);
+						}
+					}
+					//estil.formes[estil.formes.length - 1].vora.gruix.amples = lastForma.vora.gruix.amples;
+				}
+			}
 		}
 	}
 	CanviaEstilCapa(i_capa, i_estil, true);
