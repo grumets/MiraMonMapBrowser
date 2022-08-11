@@ -260,6 +260,7 @@ var MessageLang={
 	EndDate: {"cat":"Data final", "spa":"Fecha final", "eng":"End date", "fre":"Date de fin"},
 	Load: {"cat":"Carregar", "spa":"Cargar", "eng":"Load", "fre":"Charge"},
 	Loading: {"cat":"Carregant", "spa":"Cargando", "eng":"Loading", "fre":"Chargement"},
+	Thickness: {"cat":"Griux", "spa":"Grosor", "eng":"Thickness", "fre":"Épaisseur"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -374,7 +375,8 @@ var MessageLang={
 		forShowingQualityInformation: {"cat":"de mostrar la informació de qualitat", "spa":"de mostrar la información de calidad", "eng":"for showing the quality information", "fre":"pour afficher l'information de qualité"},
 		ofUserFeedback: {"cat":"de valoracions dels usuaris", "spa":"de valoraciones de los usuarios", "eng":"of user feedback", "fre":"pour la rétroaction de l'utilisateur"},
 		_withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
-		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
+		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"},
+		ThicknessRange: {"cat":"Gruix limitat a un rang de 1 a 10px", "spa":"Grosor limitado a un rango de 1 a 10px", "eng":"Thickness limited to a range of 1 to 10px", "fre":"Épaisseur limitée à une gamme de 1 à 10px"}
 	},
 	storymap:{
 		Storymaps: {"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"},

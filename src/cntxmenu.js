@@ -3418,33 +3418,62 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			cdns.push("</fieldset>");
 	}
 
-	if (capa.model == "vector") {
-		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
-			/*Construeixo estructura amb colors i descripcions a mostrar. A partir dels
-			colors de "forma" i els índex dels objectes > features "TipusNom" i les
+	if (capa.model == "vector")
+	{
+		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0)
+		{
+			/* Es construeix estructura amb colors i descripcions a mostrar. A partir dels
+			colors de "forma" amb attribut "TipusNom" i les
 			descripcions de "ItemLleg". Com relacionar els 2 arrays:
-			índex ItemLleg = TipusNom - 1
+			índex ItemLleg = TipusNom - 1, si la simbolització és indexada
 			*/
 			const arrayColorsSelectors = [];
-			for (var indexForma = 0, formaLength = estil.formes.length; indexForma < formaLength; indexForma++) {
-				const currentForma = estil.formes[indexForma];
-				if (currentForma.vora && currentForma.vora.NomCamp && currentForma.vora.NomCamp == "TipusNum" && currentForma.vora.paleta && currentForma.vora.paleta.colors) {
-					for (var indexColors = 0, colorsLength = currentForma.vora.paleta.colors.length; indexColors < colorsLength; indexColors++) {
-						const currentColor = currentForma.vora.paleta.colors[indexColors];
-						if (currentColor != "" && estil.ItemLleg && estil.ItemLleg.length >= indexColors && indexColors > 0) {
-							const indexItemLleg = indexColors-1;
-							if (currentColor == estil.ItemLleg[indexItemLleg].color) {
-									arrayColorsSelectors.push({color:currentColor, descr:estil.ItemLleg[indexItemLleg].DescColor});
-							}
-						}
+			// Thicknesses to modify
+			var arrayThicknessSelectors = [];
+			if (estil.formes && estil.formes.length)
+			{
+				const lastFormaIndex = estil.formes.length - 1;
+				const lastForma = estil.formes[lastFormaIndex];
+				if (lastForma.vora && lastForma.vora.paleta && lastForma.vora.paleta.colors)
+				{
+					const isMultipleColored = lastForma.vora.NomCamp ? true : false;
+					for (var indexColors = isMultipleColored ? 1 : 0, colorsLength = lastForma.vora.paleta.colors.length; indexColors < colorsLength; indexColors++)
+					{
+							const currentColor = lastForma.vora.paleta.colors[indexColors];
+							// Index refering to ItemLleg where to find description of the color
+							const indexItemLleg = estil.ItemLleg && estil.ItemLleg.length >= indexColors && isMultipleColored ? indexColors-1 : indexColors;
+							arrayColorsSelectors.push({color:currentColor, descr:estil.ItemLleg[indexItemLleg].DescColor});
 					}
 				}
+				// Check if thickness (gruix) is available
+				if (lastForma.vora && lastForma.vora.gruix && lastForma.vora.gruix.amples)
+				{
+					arrayThicknessSelectors = lastForma.vora.gruix.amples;
+				}
 			}
-			cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
-			for (var indexColorSel = 0, itemsColorSelLength = arrayColorsSelectors.length; indexColorSel < itemsColorSelLength; indexColorSel++) {
-				cdns.push("<tr><th></th></tr><tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + indexColorSel + "\" value=\"" + arrayColorsSelectors[indexColorSel].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + indexColorSel + "\">", arrayColorsSelectors[indexColorSel].descr, "</label></td></tr>");
+
+			if(arrayColorsSelectors && arrayColorsSelectors.length)
+			{
+			// Color HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
+				for (var indexColorSel = 0, itemsColorSelLength = arrayColorsSelectors.length; indexColorSel < itemsColorSelLength; indexColorSel++)
+				{
+					cdns.push("<tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-itemLleg-" + indexColorSel + "\" value=\"" + arrayColorsSelectors[indexColorSel].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-itemLleg-" + indexColorSel + "\">", arrayColorsSelectors[indexColorSel].descr, "</label></td></tr>");
+				}
+				cdns.push("</table></fieldset>");
 			}
-			cdns.push("</table></fieldset>");
+
+			if(arrayThicknessSelectors && arrayThicknessSelectors.length)
+			{
+				// Thickness HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Thickness"), ": </legend><table>");
+				cdns.push("<tr><td>", "<p class=\"Verdana11px\">", GetMessage("ThicknessRange", "cntxmenu"),"</p>","</td></tr>");
+				for (var indexThickSel = 0, itemsThickSelLength = arrayThicknessSelectors.length; indexThickSel < itemsThickSelLength; indexThickSel++)
+				{
+					cdns.push("<tr><td><input type=\"text\" name=\"Gruixos\" size=\"2\" id=\"edita-estil-gruix-" + indexThickSel + "\" value=\"" + arrayThicknessSelectors[indexThickSel] + "\"></td></tr>");
+				}
+				cdns.push("</table></fieldset>");
+			}
 		}
 	}
 
@@ -3578,34 +3607,28 @@ function EditaEstilCapa(i_capa, i_estil)
 		}
 	}
 	if (capa.model == "vector") {
- 		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0) {
-			// Guardo els nous colors seleccionats per als elements de la llegenda
-			for (var i_ItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; i_ItemLleg < itemsLlegLength; i_ItemLleg++) {
-				var colorInput = document.getElementById("edita-estil-color-itemLleg-" + i_ItemLleg);
+ 		if (estil.TipusObj == "L" && estil.ItemLleg) {
+			/* Save new colors selected for legend representation and to"forma.paleta"
+			 object. It defines how the line should be painted on map */
+			for (var iItemLleg = 0, itemsLlegLength = estil.ItemLleg.length; iItemLleg < itemsLlegLength; iItemLleg++)
+			{
+				var colorInput = document.getElementById("edita-estil-color-itemLleg-" + iItemLleg);
 				if (colorInput && colorInput.value)
 				{
-					estil.ItemLleg[i_ItemLleg].color = colorInput.value;
-				}
-			}
-			// Guardo els nous colors en la paleta de l'objecte "forma" que defineix com es pinta la lÃ­nia.
-			if (estil.formes) {
-				for (var indexForma = 0, forma_length = estil.formes.length; indexForma < forma_length; indexForma++) {
-					var currentForma = estil.formes[indexForma];
-					if (currentForma.vora && currentForma.vora.NomCamp &&
-							currentForma.vora.paleta && currentForma.vora.paleta.colors &&
-							estil.ItemLleg.length <= currentForma.vora.paleta.colors.length) {
-								/* Degut a que els elements de la llegenda i els colors de a
-								 	paleta no concorden en número, recorrem l'array menys nombrós
-								  i modificarem l'índex per accedir al més llarg.
-									---- S'hauria de igualar els colors de paleta amb llegenda i
-									eliminar l'element buit ""*/
-							for (var indexColorLlegenda = 0, llegendaLength = estil.ItemLleg.length; indexColorLlegenda < llegendaLength; indexColorLlegenda++) {
-								if (estil.ItemLleg.length == currentForma.vora.paleta.colors.length) {
-									currentForma.vora.paleta.colors[indexColorLlegenda] = estil.ItemLleg[indexColorLlegenda].color;
-								} else {
-									currentForma.vora.paleta.colors[(indexColorLlegenda + 1)] = estil.ItemLleg[indexColorLlegenda].color;
-								}
+					// Legend
+					estil.ItemLleg[iItemLleg].color = colorInput.value;
+					// Palette
+					if (estil.formes && estil.formes.length > 0)
+					{
+						const lastForma = estil.formes[estil.formes.length - 1];
+						if (lastForma.vora && lastForma.vora.paleta && lastForma.vora.paleta.colors)
+						{
+							// If NomCamp exists means we have multiple colors then we need to worry about the first emtpy color in "paleta"
+							const indexPalette = lastForma.vora.NomCamp ? iItemLleg + 1 : iItemLleg;
+							if (lastForma.vora.paleta.colors.length > indexPalette) {
+								lastForma.vora.paleta.colors[indexPalette] = colorInput.value;
 							}
+						}
 					}
 				}
 			}
