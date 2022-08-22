@@ -3623,7 +3623,7 @@ function EditaEstilCapa(i_capa, i_estil)
 						const lastForma = estil.formes[estil.formes.length - 1];
 						if (lastForma.vora && lastForma.vora.paleta && lastForma.vora.paleta.colors)
 						{
-							// If NomCamp exists means we have multiple colors then we need to worry about the first emtpy color in "paleta"
+							// If NomCamp exists means we have multiple colors and then we need to worry about the first emtpy color in "paleta"
 							const indexPalette = lastForma.vora.NomCamp ? iItemLleg + 1 : iItemLleg;
 							if (lastForma.vora.paleta.colors.length > indexPalette) {
 								lastForma.vora.paleta.colors[indexPalette] = colorInput.value;
@@ -3639,7 +3639,7 @@ function EditaEstilCapa(i_capa, i_estil)
 						var textThicknessInput = document.getElementById("edita-estil-gruix-" + iAmples);
 						if (textThicknessInput && textThicknessInput.value)
 						{
-							lastForma.vora.gruix.amples[textThicknessInput] = textThicknessInput.value > 10 ? 10 : (textThicknessInput.value < 1 ? 1 : textThicknessInput.value);
+							lastForma.vora.gruix.amples[iAmples] = textThicknessInput.value > 10 ? 10 : (textThicknessInput.value < 1 ? 1 : textThicknessInput.value);
 						}
 					}
 					//estil.formes[estil.formes.length - 1].vora.gruix.amples = lastForma.vora.gruix.amples;
