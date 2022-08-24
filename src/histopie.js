@@ -1691,14 +1691,14 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 				retorn_prep_histo.valors[i]=OKStrOfNe(retorn_prep_histo.valors[i], estil.component[i_c].NDecimals);
 			/* Tall de cues histograma:
 			*	Si som a la 1era columna de l'histo i tenim un valor mínim de estirament
-			* paleta diferent de 0, data[] valdrà 0 i n'eliminem la cua inical.
+			* paleta superior al valor mínim de la capa, data[] valdrà 0 i n'eliminem la cua inicial.
 			*	Si som a la última columna de l'histo i tenim un valor màxim de
-			* estirament paleta diferent de XXX, data[] valdrà 0 i n'eliminem
+			* estirament paleta inferior al màxim de la capa, data[] valdrà 0 i n'eliminem
 			*	la cua final.
 			*/
-			if (i == 0 && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMinim && estil.component[i_c].estiramentPaleta.valorMinim != 0)
+			if (i == 0 && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMinim && estil.histograma.component[i_c].valorMinimReal && estil.component[i_c].estiramentPaleta.valorMinim > estil.histograma.component[i_c].valorMinimReal)
 				data[i]=0;
-			else if ((i==n_colors-1) && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMaxim && estil.component[i_c].estiramentPaleta.valorMaxim != 0)
+			else if ((i==n_colors-1) && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMaxim && estil.histograma.component[i_c].valorMaximReal && estil.component[i_c].estiramentPaleta.valorMaxim < estil.histograma.component[i_c].valorMaximReal)
 				data[i]=0;
 			else
 				data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
