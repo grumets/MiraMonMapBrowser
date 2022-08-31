@@ -1696,9 +1696,9 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 			* estirament paleta inferior al màxim de la capa, data[] valdrà 0 i n'eliminem
 			*	la cua final.
 			*/
-			if (i == 0 && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMinim && estil.histograma.component[i_c].valorMinimReal && estil.component[i_c].estiramentPaleta.valorMinim > estil.histograma.component[i_c].valorMinimReal)
+			if (i == 0 && estil.component[i_c].estiramentPaleta && !isNaN(estil.component[i_c].estiramentPaleta.valorMinim) && !isNaN(estil.histograma.component[i_c].valorMinimReal) && estil.component[i_c].estiramentPaleta.valorMinim > estil.histograma.component[i_c].valorMinimReal)
 				data[i]=0;
-			else if ((i==n_colors-1) && estil.component[i_c].estiramentPaleta && estil.component[i_c].estiramentPaleta.valorMaxim && estil.histograma.component[i_c].valorMaximReal && estil.component[i_c].estiramentPaleta.valorMaxim < estil.histograma.component[i_c].valorMaximReal)
+			else if ((i==n_colors-1) && estil.component[i_c].estiramentPaleta && !isNaN(estil.component[i_c].estiramentPaleta.valorMaxim) && !isNaN(estil.histograma.component[i_c].valorMaximReal) && estil.component[i_c].estiramentPaleta.valorMaxim < estil.histograma.component[i_c].valorMaximReal)
 				data[i]=0;
 			else
 				data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
