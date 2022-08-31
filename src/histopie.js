@@ -41,6 +41,7 @@
 var prefixNovaVistaFinestra="nova_vista_fin_";
 var prefixHistogramaFinestra="histo_fin_";
 var sufixCheckDinamicHistograma="_dinamic";
+var sufixCheckTrimTailsHistograma="_trimTails";
 var HistogramaFinestra={"n": 0, "vista":[]};
 
 function CopiaPortapapersFinestraLayer(nom_finestra)
@@ -495,19 +496,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 	textarea.value=cdns.join("");
 }
 
-function CanviDinamismeHistograma(event)
+function CanviOpcionsHistograma(event)
 {
-	var n_histo, i_str, i_str_2, estil, retorn_prep_histo;
+	var n_histo, indexPrefixHistoId, indexSufixHistoId, estil, retorn_prep_histo;
 
 	if (event.target)
 	{
-		i_str=event.target.id.indexOf(prefixHistogramaFinestra);
-		i_str_2=event.target.id.indexOf(sufixCheckDinamicHistograma);
-		n_histo=parseInt(event.target.id.substr(i_str+prefixHistogramaFinestra.length, i_str_2-i_str+prefixHistogramaFinestra.length));
-		if (isNaN(n_histo))
-			return;
+		indexPrefixHistoId =event.target.id.indexOf(prefixHistogramaFinestra);
 
-		if (window.document.getElementById(event.target.id).checked)
+		indexSufixHistoId=event.target.id.indexOf(sufixCheckDinamicHistograma);
+
+		n_histo=parseInt(event.target.id.substr(indexPrefixHistoId+prefixHistogramaFinestra.length, indexSufixHistoId-indexPrefixHistoId+prefixHistogramaFinestra.length));
+
+		if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckDinamicHistograma(n_histo) && window.document.getElementById(event.target.id).checked)
 		{
 			estil=ParamCtrl.capa[HistogramaFinestra.vista[n_histo].i_capa].estil[HistogramaFinestra.vista[n_histo].i_estil]
 			if (estil.diagrama)
@@ -561,6 +562,14 @@ function CanviDinamismeHistograma(event)
 				}
 			}
 		}
+		else if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckTrimTailsHistograma(n_histo) && window.document.getElementById(event.target.id).checked)
+		{
+
+		}
+		else
+		{
+			return
+		}
 	}
 }
 
@@ -599,6 +608,21 @@ function DonaNomCheckDinamicTextHistograma(i_histo)
 	return DonaNomCheckDinamicHistograma(i_histo)+"_text";
 }
 
+function DonaNomCheckTrimTailsHistograma(i_histo)
+{
+	return DonaNomHistograma(i_histo)+sufixCheckTrimTailsHistograma;
+}
+
+function DonaNomCheckTrimTailsLabelHistograma(i_histo)
+{
+	return DonaNomCheckTrimTailsHistograma(i_histo)+"_label";
+}
+
+function DonaNomCheckTrimTailsTextHistograma(i_histo)
+{
+	return DonaNomCheckTrimTailsHistograma(i_histo)+"_text";
+}
+
 //Els 3 parametres tipus, stat, order es corresponen amb els descrits com a propietats de al'element "diagrama" del config.
 //si tipus=="stat_categ" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
 function ObreFinestraHistograma(i_capa, i_estil, tipus, stat, order)
@@ -621,10 +645,15 @@ var tipus_chart;
 		return;
 
 	//Check per a Histograma dinàmic i text per a indicar que actualització aturada per capa no visible
-	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeHistograma(event);\">")
+	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
 	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
 		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
+	cdns.push("<label for=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("CutTails", "histopie") , "</label>");
+	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckTrimTailsTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
+		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+
 
 	if (tipus && stat)
 	{
