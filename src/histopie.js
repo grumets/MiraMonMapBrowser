@@ -503,22 +503,21 @@ function CanviOpcionsHistograma(event)
 	if (event.target)
 	{
 		indexPrefixHistoId =event.target.id.indexOf(prefixHistogramaFinestra);
-
 		indexSufixHistoId=event.target.id.indexOf(sufixCheckDinamicHistograma);
-
 		n_histo=parseInt(event.target.id.substr(indexPrefixHistoId+prefixHistogramaFinestra.length, indexSufixHistoId-indexPrefixHistoId+prefixHistogramaFinestra.length));
+		estil=ParamCtrl.capa[HistogramaFinestra.vista[n_histo].i_capa].estil[HistogramaFinestra.vista[n_histo].i_estil];
 
-		if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckDinamicHistograma(n_histo) && window.document.getElementById(event.target.id).checked)
+		if (estil.diagrama)
 		{
-			estil=ParamCtrl.capa[HistogramaFinestra.vista[n_histo].i_capa].estil[HistogramaFinestra.vista[n_histo].i_estil]
-			if (estil.diagrama)
+			if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckDinamicHistograma(n_histo) && window.document.getElementById(event.target.id).checked)
 			{
 				for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 				{	//actualitzo els diagrames
-					if (estil.diagrama[i_diagrama].i_histograma!=n_histo) //si no és el que ha provocat l'event, no faig res
+					const estilDiagrama = estil.diagrama[i_diagrama];
+					if (estilDiagrama.i_histograma!=n_histo) //si no és el que ha provocat l'event, no faig res
 						continue;
 
-					if (estil.diagrama[i_diagrama].tipus == "chart")
+					if (estilDiagrama.tipus == "chart")
 					{
 						for (var i_c=0; i_c<estil.component.length; i_c++)
 						{
@@ -532,10 +531,10 @@ function CanviOpcionsHistograma(event)
 							HistogramaFinestra.vista[n_histo].chart[i_c].update();
 						}
 					}
-					else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
+					else if (estilDiagrama.tipus == "chart_categ")
 					{
 						//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
-						retorn_prep_histo=PreparaHistogramaPerCategories(n_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
+						retorn_prep_histo=PreparaHistogramaPerCategories(n_histo, estilDiagrama.stat, estilDiagrama.order);
 						//Gràfic de l'àrea
 						HistogramaFinestra.vista[n_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
@@ -553,22 +552,66 @@ function CanviOpcionsHistograma(event)
 						HistogramaFinestra.vista[n_histo].chart[1].options=retorn_prep_histo.options_estad;
 						HistogramaFinestra.vista[n_histo].chart[1].update();
 					}
-					else if (estil.diagrama[i_diagrama].tipus == "matriu")
+					else if (estilDiagrama.tipus == "matriu")
 						document.getElementById(DonaNomMatriuConfusio(n_histo)).innerHTML=CreaTextMatriuDeConfusio(n_histo, true);
-					else if (estil.diagrama[i_diagrama].tipus == "stat")
-						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadistic(n_histo, estil.diagrama[i_diagrama].stat);
-					else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
-						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadisticPerCategories(n_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
+					else if (estilDiagrama.tipus == "stat")
+						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadistic(n_histo, estilDiagrama.stat);
+					else if (estilDiagrama.tipus == "stat_categ")
+						document.getElementById(DonaNomEstadistic(n_histo)).innerHTML=CreaTextEstadisticPerCategories(n_histo, estilDiagrama.stat, estilDiagrama.order);
 				}
 			}
-		}
-		else if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckTrimTailsHistograma(n_histo) && window.document.getElementById(event.target.id).checked)
-		{
+			else if (!isNaN(n_histo) && window.document.getElementById(event.target.id).id == DonaNomCheckTrimTailsHistograma(n_histo))
+			{
+				var n_colors;
 
-		}
-		else
-		{
-			return
+				if (estil.paleta && estil.paleta.colors)
+					n_colors=estil.paleta.colors.length;
+				else
+					n_colors=256;
+
+				for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
+				{	//actualitzo els diagrames
+					const estilDiagrama = estil.diagrama[i_diagrama];
+					if (estilDiagrama.i_histograma!=n_histo) //si no és el que ha provocat l'event, no faig res
+						continue;
+
+					if (estilDiagrama.tipus == "chart")
+					{
+						for (var i_c=0; i_c<estil.component.length; i_c++)
+						{
+							retorn_prep_histo=PreparaHistograma(n_histo, i_c);
+
+							if (retorn_prep_histo.data && estil.component[i_c].estiramentPaleta)
+							{
+								/* Tall de cues histograma:
+								*	Si som a la 1era columna de l'histo i tenim un valor mínim de estirament
+								* paleta superior al valor mínim de la capa, data[i] valdrà 0 i n'eliminem la cua inicial.
+								*	Si som a la última columna de l'histo i tenim un valor màxim de
+								* estirament paleta inferior al màxim de la capa, data[i] valdrà 0 i n'eliminem
+								*	la cua final.
+								*/
+								if (window.document.getElementById(event.target.id).checked)
+								{
+									if (!isNaN(estil.component[i_c].estiramentPaleta.valorMinim) && !isNaN(estil.histograma.component[i_c].valorMinimReal) && estil.component[i_c].estiramentPaleta.valorMinim > estil.histograma.component[i_c].valorMinimReal)
+										retorn_prep_histo.data[0]=0;
+									if (!isNaN(estil.component[i_c].estiramentPaleta.valorMaxim) && !isNaN(estil.histograma.component[i_c].valorMaximReal) && estil.component[i_c].estiramentPaleta.valorMaxim < estil.histograma.component[i_c].valorMaximReal)
+										retorn_prep_histo.data[n_colors]=0;
+								}
+
+								HistogramaFinestra.vista[n_histo].chart[i_c].config.data.datasets=[{data: retorn_prep_histo.data,
+																backgroundColor: retorn_prep_histo.colors,
+																unitats: retorn_prep_histo.unitats}];
+								HistogramaFinestra.vista[n_histo].chart[i_c].options=retorn_prep_histo.options;
+								HistogramaFinestra.vista[n_histo].chart[i_c].update();
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				return
+			}
 		}
 	}
 }
@@ -644,17 +687,6 @@ var tipus_chart;
 	if (typeof estil.histograma === "undefined") // ara no estic preparat perquè no ha arribat la imatge
 		return;
 
-	//Check per a Histograma dinàmic i text per a indicar que actualització aturada per capa no visible
-	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
-	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
-	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
-		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
-	cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
-	cdns.push("<label for=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("CutTails", "histopie") , "</label>");
-	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckTrimTailsTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
-		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
-
-
 	if (tipus && stat)
 	{
 		//var tip_est_intern;
@@ -711,7 +743,25 @@ var tipus_chart;
 	else
 	{
 		tipus_chart="chart";
-		titol=(DonaTipusGraficHistograma(estil,0)=="pie" ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+		const subTipusChar = DonaTipusGraficHistograma(estil,0);
+		titol=(subTipusChar=="pie" ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
+
+		if (subTipusChar=="bar")
+		{
+			/*
+			*	Checks per a Histograma dinàmic i per a Retall de cues.
+			*	Per check Histo. dinànim també té text per a indicar que actualització aturada per capa no visible.
+			*/
+			cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
+			cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
+			cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
+				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+			cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" onclick=\"CanviOpcionsHistograma(event);\">")
+			cdns.push("<label for=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("CutTails", "histopie") , "</label>");
+			cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckTrimTailsTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
+				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+		}
+
 		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
@@ -1516,26 +1566,27 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 
 	if (typeof estil.diagrama === "undefined" || i_diagrama>estil.diagrama.length)
 		return;
-
-	if (typeof estil.diagrama[i_diagrama].i_histograma === "undefined") //encara no s'havia carregat mai
+	const estilDiagrama = estil.diagrama[i_diagrama];
+	if (typeof estilDiagrama.i_histograma === "undefined") //encara no s'havia carregat mai
 	{
-		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "matriu")
+
+		if (estilDiagrama.tipus == "chart" || estilDiagrama.tipus == "matriu")
 			ObreFinestraHistograma(i_capa, i_estil);
-		else if (estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "stat_categ")
-			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].tipus, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
-		else if (estil.diagrama[i_diagrama].tipus == "stat")
-			ObreFinestraHistograma(i_capa, i_estil, estil.diagrama[i_diagrama].tipus, estil.diagrama[i_diagrama].stat);
-		else if (estil.diagrama[i_diagrama].tipus == "vista3d")
+		else if (estilDiagrama.tipus == "chart_categ" || estilDiagrama.tipus == "stat_categ")
+			ObreFinestraHistograma(i_capa, i_estil, estilDiagrama.tipus, estilDiagrama.stat, estilDiagrama.order);
+		else if (estilDiagrama.tipus == "stat")
+			ObreFinestraHistograma(i_capa, i_estil, estilDiagrama.tipus, estilDiagrama.stat);
+		else if (estilDiagrama.tipus == "vista3d")
 			ObreFinestraSuperficie3D(i_capa, i_estil);
 	}
 
 	if (typeof estil.histograma !== "undefined" ) //potser encara no ho puc fer perquè no tinc les dades i ObreFinestraHistograma no ha acabat creant el chart encara
 	{
-		if (estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" ||
-					estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
-			part_id=DonaNomCheckDinamicHistograma(estil.diagrama[i_diagrama].i_histograma);
-		else if (estil.diagrama[i_diagrama].tipus == "vista3d")
-			part_id=DonaNomCheckDinamicGrafic3d(estil.diagrama[i_diagrama].i_histograma);
+		if (estilDiagrama.tipus == "chart" || estilDiagrama.tipus == "chart_categ" || estilDiagrama.tipus == "matriu" ||
+					estilDiagrama.tipus == "stat" || estilDiagrama.tipus == "stat_categ")
+			part_id=DonaNomCheckDinamicHistograma(estilDiagrama.i_histograma);
+		else if (estilDiagrama.tipus == "vista3d")
+			part_id=DonaNomCheckDinamicGrafic3d(estilDiagrama.i_histograma);
 		else
 			return;
 
@@ -1567,14 +1618,14 @@ function DesactivaCheckITextChartsMatriusDinamics(i_capa, i_estil, disabled)
 
 function PreparaHistograma(n_histograma, i_c)
 {
-var histograma=HistogramaFinestra.vista[n_histograma];
-var i, n_colors, i_color, area_cella;
-var capa=ParamCtrl.capa[histograma.i_capa];
-var estil=capa.estil[histograma.i_estil];
-var costat=ParamInternCtrl.vista.CostatZoomActual;
-var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
-var i_situacio=ParamInternCtrl.ISituacio;
-var retorn_prep_histo={labels: [], valors: [], colors: []};
+	var histograma=HistogramaFinestra.vista[n_histograma];
+	var i, n_colors, i_color, area_cella;
+	var capa=ParamCtrl.capa[histograma.i_capa];
+	var estil=capa.estil[histograma.i_estil];
+	var costat=ParamInternCtrl.vista.CostatZoomActual;
+	var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
+	var i_situacio=ParamInternCtrl.ISituacio;
+	var retorn_prep_histo={labels: [], valors: [], colors: []};
 
 	if (estil.paleta && estil.paleta.colors)
 	{
@@ -1718,19 +1769,8 @@ var retorn_prep_histo={labels: [], valors: [], colors: []};
 			retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
 			if (typeof estil.component[i_c].NDecimals!=="undefined" && estil.component[i_c].NDecimals!=null)
 				retorn_prep_histo.valors[i]=OKStrOfNe(retorn_prep_histo.valors[i], estil.component[i_c].NDecimals);
-			/* Tall de cues histograma:
-			*	Si som a la 1era columna de l'histo i tenim un valor mínim de estirament
-			* paleta superior al valor mínim de la capa, data[] valdrà 0 i n'eliminem la cua inicial.
-			*	Si som a la última columna de l'histo i tenim un valor màxim de
-			* estirament paleta inferior al màxim de la capa, data[] valdrà 0 i n'eliminem
-			*	la cua final.
-			*/
-			if (i == 0 && estil.component[i_c].estiramentPaleta && !isNaN(estil.component[i_c].estiramentPaleta.valorMinim) && !isNaN(estil.histograma.component[i_c].valorMinimReal) && estil.component[i_c].estiramentPaleta.valorMinim > estil.histograma.component[i_c].valorMinimReal)
-				data[i]=0;
-			else if ((i==n_colors-1) && estil.component[i_c].estiramentPaleta && !isNaN(estil.component[i_c].estiramentPaleta.valorMaxim) && !isNaN(estil.histograma.component[i_c].valorMaximReal) && estil.component[i_c].estiramentPaleta.valorMaxim < estil.histograma.component[i_c].valorMaximReal)
-				data[i]=0;
-			else
-				data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
+
+			data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
 		}
 		//En poso un de més deliveradament per tancar l'interval de útil cas.
 		retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
