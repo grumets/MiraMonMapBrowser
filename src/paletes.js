@@ -69,12 +69,12 @@ var cdns=[], w;
 		}
 		w=paleta.colors.length<24 ? 12 : 1;
 		for (var i=0; i<paleta.colors.length; i++)
-			cdns.push("<span style=\"height:15px;width:", w, "px;background-color:", paleta.colors[i], ";\"><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=", w, "></span>");
+			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" style=\"height: 15px;width: ", w, "px;background-color:", paleta.colors[i], ";\">");
 	}
 	else
 	{
 		for (var i=0; i<256; i++)
-			cdns.push("<span style=\"height:15px;width:1px;background-color:", RGB(i,i,i), ";\"><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\"></span>");
+			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" style=\"height: 15px;width: 1px;background-color: ", RGB(i,i,i), ";\">");
 	}
 	return cdns.join("");
 }
