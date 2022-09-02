@@ -50,8 +50,6 @@ var IDataFilEixXEixT=[];    //Array amb d'index de fotograma que representa cada
 
 var timeoutVideoID=null, timeoutVideoInfo=null;
 
-var CadenaLangPleaseWait={"cat":"Espereu si us plau", "spa":"Por favor, espere", "eng":"Please wait", "fre":"S'il vous plaît, attendez"};
-
 function OrdenacioCapesVideoData(x,y)
 {
 	//Ascendent per data
@@ -766,7 +764,7 @@ function CarregaVideoRodet(nom_video, estil)
 var i_data_video, capa, cdns=[];
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFilm", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFilm", "video") + ". " + GetMessage("PleaseWait") +"...</font></center>";
 
 	//Dibuixo el rodet de fotogrames buit
 	vista.i_nova_vista=NovaVistaRodet;
@@ -897,7 +895,7 @@ function FiltraNodataICarregaVideo()
 {
 var ratio_nodata, inserir_slider=false;
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + GetMessage("PleaseWait")+"...</font></center>";
 
 	//Demano totes les imatges grans per omplir el video de fotogrames
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
@@ -947,7 +945,7 @@ function CarregaVideo()
 {
 var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingFrames", "video") + ". " + GetMessage("PleaseWait")+"...</font></center>";
 
 	vista.i_nova_vista=NovaVistaVideo; //Les imatges grans del video
 
@@ -1123,7 +1121,7 @@ var i, j, i_data_video;
 	if (n_j<nfil)
 		document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 				GetMessage("ComputingStatisticSeries", "video")+
-				". " + Math.floor(j*100/nfil) + "% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+				". " + Math.floor(j*100/nfil) + "% " + GetMessage("PleaseWait") + "</font></center>";
 	else
 		document.getElementById("video_info").innerHTML="";
 
@@ -1428,7 +1426,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					GetMessage("ComputingGraphicSeries", "video")+
-					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+					". 0% " + GetMessage("PleaseWait") + "</font></center>";
 			}
 		}
 		else
@@ -1441,7 +1439,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					GetMessage("ComputingStatisticSeries", "video")+
-					". 0% " + DonaCadenaLang(CadenaLangPleaseWait) + "</font></center>";
+					". 0% " + GetMessage("PleaseWait") + "</font></center>";
 			//}
 		}
 	return;
@@ -1530,7 +1528,7 @@ var n_carregat=0;
 		FiltraNodataICarregaVideo();
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingThumbnails", "video") + " " + n_carregat +"/"+ DatesVideo.length +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("LoadingThumbnails", "video") + " " + n_carregat +"/"+ DatesVideo.length +" "+GetMessage("PleaseWait")+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
 	ActualitzaNCarregatRodetEsCurs=false;
 }
@@ -1588,7 +1586,7 @@ var n_carregat, n_carregable;
 		VideoPlay(8);  //Com que se que ja ho tinc tot, faig "Play" repetitiu.
 		return;
 	}
-	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("Loading") + " " + n_carregat +"/"+ n_carregable +" "+DonaCadenaLang(CadenaLangPleaseWait)+"...</font></center>";
+	document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"4\">"+ GetMessage("Loading") + " " + n_carregat +"/"+ n_carregable +" "+GetMessage("PleaseWait")+"...</font></center>";
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
 	ActualitzaNCarregatVideoEsCurs=false;
 }
