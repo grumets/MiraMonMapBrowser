@@ -524,6 +524,7 @@ var MessageLang={
 		MeanPlusDev: {"cat": "Mitjana+desv", "spa": "Media+desv", "eng": "Mean+dev", "fre": "Moyenne+écart"},
 		MeanMinusDev: {"cat": "Mitjana-desv", "spa": "Media-desv", "eng": "Mean-dev", "fre": "Moyenne-écart"},
 		ChartValuesCopiedClipboard: {"cat": "Els valors del gràfic han estat copiats al portaretalls", "spa": "Los valores del gráfico han sido copiados al portapapeles", "eng": "The values of the chart have been copied to clipboard", "fre": "Les valeurs du graphique ont été copiées dans le presse-papier"},
+		CutTails: {"cat": "Retall de cues", "spa": "Recorte de colas", "eng": "Tail trimming", "fre":"Coupe de la queue"}
   },
 	datahora:{
 	    ofData: {"cat":"de","spa":"de", "eng":"","fre":""},
