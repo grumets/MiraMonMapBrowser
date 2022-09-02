@@ -357,10 +357,7 @@ var s1;
 					}
 					else
 					{
-						alert(DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre \"",
-										  "spa":"No se ha definido ningún valor para el paràmetro \"",
-										  "eng":"Any value has been defined by parameter \"",
-										  "fre":"Aucun valeur défini pour le paramètre \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
+						alert(GetMessage("NoValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc) + "\"");
 						return -1;
 					}
 				}
@@ -382,18 +379,12 @@ var s1;
 							s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 						else
 						{
-							var cadena_error=DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre: \"",
-											  "spa":"No se ha definido ningún valor para el paràmetro: \"",
-											  "eng":"Any value has been defined by parameter: \"",
-											  "fre":"Aucun valeur défini pour le paramètre: \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
+							var cadena_error= GetMessage("NoValueDefinedParameter", "wps") + ": \"" + DonaCadena(operacio.par_input[i].nom.desc) + "\"";
 
-							var file=document.getElementById("e_file_"+i);
+							var file=document.getElementById("e_file_" + i);
 							if(file && file.value)
 							{
-								cadena_error+=DonaCadenaLang({"cat":"\nCal enviar el fitxer al servidor abans d'executar el procès.",
-													  "spa":"\nEs necesario enviar el fichero al servidor antes de ejecutar el proceso.",
-													  "eng":"\nIt is necessary to send the file to the server before executing the process.",
-													  "fre":"\nIl faut envoyer le fichier au serveur avant d'exécuter le processus"});
+								cadena_error+= "\n" + GetMessage("NecessarySendFileBeforeExecProcess", "wps") + ".";
 							}
 							alert(cadena_error);
 							return -1;
@@ -408,22 +399,16 @@ var s1;
 								return;
 							if(false==EsUnaURLValida(text.value))
 							{
-								alert(DonaCadenaLang({"cat":"La URL introduïda en el paràmetre \"",
-											  "spa":"La URL introducida en el parametro \"",
-											  "eng":"The URL introduced in the parameter \"",
-											  "fre":"La URL introduite au paramètre \""}) +
-								  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc)+
-									  DonaCadenaLang({"cat":"\" és invàlida.","spa":"\" es invalida.", "eng":"\" is invalid.", "fre":"n'est pas valide."}));
+								alert(GetMessage("URLIntroducedInParameter", "wps") + " \"" +
+								  DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.par_input[i].nom.desc) + "\" " +
+									GetMessage("isInvalid", "wps") + ".");
 								return -1;
 							}
 							s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 						}
 						else
 						{
-							alert(DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre \"",
-											  "spa":"No se ha definido ningún valor para el paràmetro \"",
-											  "eng":"Any value has been defined by parameter \"",
-											  "fre":"Aucun valeur défini pour le paramètre \""})+  DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
+							alert(GetMessage("URLIntroducedInParameter", "wps")+  DonaCadena(operacio.par_input[i].nom.desc) + "\"");
 							return -1;
 						}
 					}
@@ -435,11 +420,7 @@ var s1;
 						s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 					else
 					{
-						var cadena_error=DonaCadenaLang({"cat":"No s'ha definit cap valor pel paràmetre: \"",
-											  "spa":"No se ha definido ningún valor para el paràmetro: \"",
-											  "eng":"Any value has been defined by parameter: \"",
-											  "fre":"Aucun valeur défini pour le paramètre: \""})+ DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
-
+						var cadena_error=GetMessage("NoValueDefinedParameter", "wps") + ": \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
 						alert(cadena_error);
 						return -1;
 					}
@@ -616,16 +597,16 @@ var i_proces_a_executar;
 		contentLayer(elem, null);
 		MostraAvancadesWPS=true;
 		cdns.push("<div class=\"finestraproces\" name=\"estat_execucio\" id=\"estat_execucio\">",
-				  "<b>",DonaCadenaLang({"cat":"Estat de l'execució", "spa":"Estado de la ejecución", "eng":"State of execution", "fre":"État de l'exécution"}),"</b><hr><br>",
-				  "<b>",DonaCadenaLang({"cat":"Capa: ","spa":"Capa: ","eng":"Layer: ", "fre":"Couche: "}),"</b>",DonaCadena(ParamCtrl.capa[i_capa].desc),"<br><br>",
-				  "<b>",DonaCadenaLang({"cat":"Procés: ", "spa":"Proceso: ", "eng":"Process: ", "fre":"Processus: "}),"</b>", DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.id_operacio.desc),"<br><br>",
-				  "<b>",DonaCadenaLang({"cat":"Temps d'execució: ","spa":"Tiempo de ejecución:	","eng":"Execution time: ", "fre":"Durée d’exécution: "}),"</b>","<span id=\"ChronoTimeWPS\">0:00:00:00</span><br><br>",
-				  "<b>",DonaCadenaLang({"cat":"Estat: ", "spa":"Estado: ", "eng":"Status: ", "fre":"État: "}),"</b>", "<span id=\"StatusResponseWPS\"></span>",
+				  "<b>",GetMessage("StateExecution", "wps"),"</b><hr><br>",
+				  "<b>",GetMessage("Layer"), ": ","</b>",DonaCadena(ParamCtrl.capa[i_capa].desc),"<br><br>",
+				  "<b>",GetMessage("Process", "llinatge"), ": ","</b>", DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces].operacio.id_operacio.desc),"<br><br>",
+				  "<b>",GetMessage("ExecutionTime", "wps"), ": ","</b>","<span id=\"ChronoTimeWPS\">0:00:00:00</span><br><br>",
+				  "<b>",GetMessage("Status"), ": ","</b>", "<span id=\"StatusResponseWPS\"></span>",
 				  "<br><br><span id=\"ResponseWPSReference\"></span>",
 				  "<br><br><a  href=\"javascript:void(0);\" onClick=\"MostraOAmagaAvancades()\"; id=\"AvancadesResponseWPS\">",
-				  DonaCadenaLang({"cat":"Opcions avançades","spa":"Opciones avanzadas","eng":"Advanced options","fre":"Options avancées"}),"</a>",
+				  GetMessage("AdvancedOptions", "wps"),"</a>",
 				  "<textarea class=\"Verdana11px\" name=\"responseWPS\" id=\"responseWPS\" wrap=off cols=80 rows=15 style=\"display:none\"></textarea>",
-				  "<br><br><center><input type=\"button\" value=\"",DonaCadenaLang({"cat":"Tancar", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"}),
+				  "<br><br><center><input type=\"button\" value=\"",GetMessage("Close"),
 				  "\" onClick='TancaFinestraLayer(\"executarProces\");'/></center></div>");
 		s=cdns.join("");
 		contentLayer(elem, s);
@@ -634,10 +615,7 @@ var i_proces_a_executar;
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat":"Error al construir la petició d'execució",
-							 "spa":"Error al construir la petición de ejecución",
-							 "eng":"Error while building execution request",
-							 "fre":"Erreur en construisant la demande d'exécution"}));
+		alert(GetMessage("ErrorBuildingExecReq", "wps"));
 		return false;
 	}
 }//Fi de OmpleEstructGlobalIExecutaProces()
@@ -707,11 +685,8 @@ function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces
 		var ext_fitxer=DonaExtensioFitxerSensePunt(sz_fitxer);
 		if(ext_fitxer=="")
 		{
-			alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ",
-						  "spa":"Formato incorrecto. Formatos permitidos by parameter ",
-						  "eng":"Wrong format. Allowed formats by parameter ",
-						  "fre":"Format incorrect. Formats permis by parameter "}) +
-				  "\"" + DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
+			alert(GetMessage("WrongFormat") + ". " + GetMessage("AllowedFormatsParameter", "wps") +
+				  " \"" + DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
 				  ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].formats.join(",") + ".");
 			return false;
 		}
@@ -721,11 +696,8 @@ function ComprovaSiFormatFitxerParamProcesEsCorrecte(sz_fitxer, i_capa, i_proces
 			if(ext_fitxer==ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].formats[i].toLowerCase())
 				return true;
 		}
-		alert(DonaCadenaLang({"cat":"Format incorrecte. Formats permesos by parameter ",
-					      	  "spa":"Formato incorrecto. Formatos permitidos by parameter ",
-						      "eng":"Wrong format. Allowed formats by parameter ",
-						      "fre":"Format incorrect. Formats permis by parameter "}) +
-			  "\""+ DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
+		alert(GetMessage("WrongFormat") + ". " + GetMessage("AllowedFormatsParameter", "wps") +
+			  " \""+ DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc)+ "\" :"+
 		      ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].formats.join(",") + ".");
 		return false;
 	}
@@ -858,10 +830,7 @@ var node, node2;
 
 	if(percentatge==-1)
 	{
-		alert(DonaCadenaLang({"cat":"S'ha produït algun error durant l'enviament del fitxer. Torna-ho a intentar",
-						  "spa":"Se ha producido algun error durante el envío del fichero. Vuélvalo a intentar",
-						  "eng":"Has been occurred an error while sending the file. Try again",
-						  "fre":"Une erreur vient de se produire pendant l'envoi du fichier. Réessayez"}));
+		alert(GetMessage("OccurredErrorSendingFile", "wps") + ". " + GetMessage("TryAgain"));
 		//S'ha produit algun error torno a deixar les coses preparades per enviar un altre fitxer
 		TornaASeleccionarFitxer(estat_proces.i_capa, estat_proces.i_proces_sel, estat_proces.i_input);
 		return;
@@ -878,7 +847,7 @@ var node, node2;
 	{
 		//Mostro l'estat d'enviament i desactivo la resta de coses
 		var cdns=[];
-		cdns.push(DonaCadenaLang({"cat":"Enviant fitxer", "spa":"Enviando fichero", "eng":"Sending file", "fre":"Fichier en cours d’envoi"}), " ", percentatge, "%");
+		cdns.push(GetMessage("SendingFile"), " ", percentatge, "%");
 		span_estat_file.innerHTML=cdns.join("");
 		span_estat_file.style.display="inline";
 	}
@@ -1146,7 +1115,7 @@ var cdns=[];
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input)
 	{
 		cdns.push("<b>",
-				  DonaCadenaLang({"cat":"Paràmetres d'entrada: ","spa":"Parámetros de entrada: ", "eng":"Input parameters: ", "fre":"Paramètres d'entrée: "}),
+				  GetMessage("InputParameters", "wps"), ": ",
 				  "</b>",
 				  "<br><br>");
 		for(var i_input=0; i_input<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input.length; i_input++)
@@ -1214,7 +1183,7 @@ var cdns=[];
 						  "<input class=\"Verdana11px\" type=\"radio\" id=\"p_opcio_", i_input, "\" name=\"p_opcio_", i_input,
 						  "\" value=\"predefinit\" onClick=\"ActivaTextPredefinit(",i_input, ");\" checked />");
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
-					cdns.push("<label for=\"p_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Predefinit","spa":"Predefinido","eng":"Predefined","fre":"Prédéfinie"}),": </label>");
+					cdns.push("<label for=\"p_opcio_",i_input,"\">",GetMessage("Predefined"),": </label>");
 
 				cdns.push("<select class=\"Verdana11px\" name=\"p_sel_input_", i_input, "\" id=\"p_sel_input_", i_input,"\">");
 				for(i_valor=0; i_valor<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors.length; i_valor++)
@@ -1238,7 +1207,7 @@ var cdns=[];
 							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
 							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
 						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" />",
-							  "<label for=\"e_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Local","spa":"Local","eng":"Local","fre":"Local"}),": </label>",
+							  "<label for=\"e_opcio_",i_input,"\">",GetMessage("Local"),": </label>",
 							  "<span class=\"Verdana11px\" id=\"estat_file_",i_input,"\" style=\"display:none\"></span>",
 							  "<input type=\"hidden\" id=\"id_file_",i_input, "\" name=\"idfile\" value=\"",id_proces,"\" />",
 							  "<input class=\"Verdana11px\" disabled size=\"60px\" type=\"file\" id=\"e_file_", i_input, "\" name=\"datafile\" ",
@@ -1246,14 +1215,14 @@ var cdns=[];
 							  "<input class=\"Verdana11px\" readonly size=\"60px\" type=\"text\" id=\"e_file_user_", i_input, "\" style=\"display:none\" />",
 							  "<span class=\"Verdana11px\" id=\"e_filepath_user_", i_input, "\" style=\"display:none\"></span>",
  							  "<input class=\"Verdana11px\" disabled type=\"button\" id=\"e_sel_file_", i_input, "\" style=\"display:none\" value=\"",
-							  DonaCadenaLang({"cat":"Canviar el fitxer", "spa":"Cambiar el fichero", "eng":"Change a file", "fre":"Changer le fichier"}),"\" onclick=\"",
+							  GetMessage("ChangeFile"),"\" onclick=\"",
 							  "TornaASeleccionarFitxer(", i_capa, ",", i_proces_sel, ",", i_input, ");\" />",
 							  "<input type=\"hidden\" id=\"e_text_", i_input, "\" name=\"e_text_", i_input, "\" />",
 							  "  <input class=\"Verdana11px\" disabled type=\"submit\" id=\"e_submit_", i_input, "\" value=\"",
-							  DonaCadenaLang({"cat":"Enviar","spa":"Enviar","eng":"Send","fre":"Envoyer"}),
+							  GetMessage("Send"),
 							  "\" style=\"display:none\" />",
 							  "  <input class=\"Verdana11px\" disabled type=\"button\" id=\"e_cancel_", i_input, "\" value=\"",
-							  DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"}),
+							  GetMessage("Cancel"),
 							  "\" style=\"display:none\" onclick=\"ActivaIMostraButtonEnviar(false,",i_input,");\" />",
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
@@ -1261,7 +1230,7 @@ var cdns=[];
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
 						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
 						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
-							  "<label for=\"u_opcio_",i_input,"\">",DonaCadenaLang({"cat":"URL","spa":"URL","eng":"URL","fre":"URL"}),": </label>",
+							  "<label for=\"u_opcio_",i_input,"\">",GetMessage("Url"),": </label>",
 							  "<input type=\"text\" id=\"u_text_",i_input,"\" disabled size=\"60px\" />",
 							  "</form>");
 				}
@@ -1305,7 +1274,7 @@ var cdns=[];
 							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
 							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
 						  	  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" checked/>",
-							  "<label for=\"e_opcio_",i_input,"\">",DonaCadenaLang({"cat":"Local","spa":"Local","eng":"Local","fre":"Local"}),": </label>",
+							  "<label for=\"e_opcio_",i_input,"\">",GetMessage("Local"),": </label>",
 							  "<span class=\"Verdana11px\" id=\"estat_file_",i_input,"\" style=\"display:none\"></span>",
 							  "<input type=\"hidden\" id=\"id_file_",i_input, "\" name=\"idfile\" value=\"",id_proces,"\" />",
 							  "<input class=\"Verdana11px\" size=\"60px\" type=\"file\" id=\"e_file_", i_input, "\" name=\"datafile\" ",
@@ -1313,14 +1282,14 @@ var cdns=[];
 							  "<input class=\"Verdana11px\" readonly size=\"60px\" type=\"text\" id=\"e_file_user_", i_input, "\" style=\"display:none\" />",
 							  "<span class=\"Verdana11px\" id=\"e_filepath_user_", i_input, "\" style=\"display:none\"></span>",
  							  "<input class=\"Verdana11px\" type=\"button\" id=\"e_sel_file_", i_input, "\" style=\"display:none\" value=\"",
-							  DonaCadenaLang({"cat":"Canviar el fitxer", "spa":"Cambiar el fichero", "eng":"Change a file", "fre":"Changer le fichier"}),"\" onclick=\"",
+							  GetMessage("ChangeFile"),"\" onclick=\"",
 							  "TornaASeleccionarFitxer(", i_capa, ",", i_proces_sel, ",", i_input, ");\" />",
 							  "<input type=\"hidden\" id=\"e_text_", i_input, "\" name=\"e_text_", i_input, "\" />",
 							  "  <input class=\"Verdana11px\" type=\"submit\" id=\"e_submit_", i_input, "\" value=\"",
-							  DonaCadenaLang({"cat":"Enviar","spa":"Enviar","eng":"Send","fre":"Envoyer"}),
+							  GetMessage("Send"),
 							  "\" style=\"display:none\" />",
 							  "  <input class=\"Verdana11px\" type=\"button\" id=\"e_cancel_", i_input, "\" value=\"",
-							  DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"}),
+							  GetMessage("Cancel"),
 							  "\" style=\"display:none\" onclick=\"ActivaIMostraButtonEnviar(false,",i_input,");\" />",
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
@@ -1328,7 +1297,7 @@ var cdns=[];
 					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
 						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
 						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
-							  "<label for=\"u_opcio_",i_input,"\">",DonaCadenaLang({"cat":"URL","spa":"URL","eng":"URL","fre":"URL"}),": </label>",
+							  "<label for=\"u_opcio_",i_input,"\">",GetMessage("Url"),": </label>",
 							  "<input type=\"text\" id=\"u_text_",i_input,"\" disabled size=\"60px\" />",
 							  "</form>");
 				}
@@ -1346,7 +1315,7 @@ var cdns=[];
 	}
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_output)
 	{
-		cdns.push("<b>",DonaCadenaLang({"cat":"Paràmetres de sortida: ","spa":"Parámetros de salida: ", "eng":"Output parameters: ", "fre":"Paramètres de sortie: "}), "</b>","<br><br>");
+		cdns.push("<b>",GetMessage("OutputParameter"), ": ", "</b>","<br><br>");
 		//·$· Falta fer aquesta part
 		cdns.push("<br><br>");
 	}
@@ -1371,10 +1340,10 @@ var i_proces, i;
 		if(!(ParamCtrl.capa[i_capa].ProcesMostrarTitolCapa && ParamCtrl.capa[i_capa].ProcesMostrarTitolCapa==false))
 		{
 			cdns.push("<b>",
-				DonaCadenaLang({"cat":"Capa a processar: ","spa":"Capa a procesar: ","eng":"Layer to process: ","fre":"Couche à traiter: "}),
+				GetMessage("LayerProcess", "wps"), ": ",
 			  	"</b>",DonaCadena(ParamCtrl.capa[i_capa].desc),"<br><br><hr>");
 		}
-		cdns.push("<b>",DonaCadenaLang({"cat":"Operació a executar: ", "spa":"Operación a ejecutar: ", "eng":"Operation to execute: ", "fre":"Opération à exécuter: "}),
+		cdns.push("<b>",GetMessage("OperationExecute", "wps"), ": ",
 			  	"</b><br><br><select name=\"sel_proces\" id=\"sel_proces\" class=\"Verdana11px\"",
 				"onChange=\"ActualitzaParametresProces(",i_capa,", document.SeleccionaProcesCapa.sel_proces.value);\">");
 
@@ -1387,22 +1356,16 @@ var i_proces, i;
 			}
 			else
 			{
-				alert(DonaCadenaLang({"cat":"La capa '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' té processos sense cap operació definida",
-									  "spa":"La capa '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' tiene procesos sin ninguna operación definida",
-									  "eng":"The layer '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' have some process without any operation defined",
-									  "fre":"La couche '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' a des processus sans aucune opération définie"}));
+				alert(GetMessage("TheLayer") + " '" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "' " + GetMessage("someProcessWithoutOperation", "wps"));
 			}
 		}
 		cdns.push("</select></form><div name=\"parametres_operacio_wps\" id=\"parametres_operacio_wps\"></div>",
 				  "<form name=\"ExecutaProcesCapa\" id=\"ExecutaProcesCapa\" onSubmit=\"return OmpleEstructGlobalIExecutaProces(",i_capa,");\"\>",
-				  "<center><input TYPE=\"submit\" VALUE=\"",DonaCadenaLang({"cat":"Executar", "spa":"Ejecutar", "eng":"Execute", "fre":"Exécuter"}),"\" /></center></form></div>");
+				  "<center><input TYPE=\"submit\" VALUE=\"",GetMessage("Execute"),"\" /></center></form></div>");
 	}
 	else
 	{
-		alert(DonaCadenaLang({"cat":"La capa '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' no té capa procés executable definit",
-						  "spa":"La capa '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' no tiene ningún proceso ejecutable definido",
-						  "eng":"The layer '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' do not have any executable proces defined",
-						  "fre":"La couche '"+DonaCadena(ParamCtrl.capa[i_capa].desc)+"' n'a aucun processus exécutable définit"}));
+		alert(GetMessage("TheLayer") + " '" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "' " + GetMessage("notAnyExecProcesDefined", "wps"));
 	}
 	s=cdns.join("");
 	contentLayer(elem, s);
@@ -1411,10 +1374,7 @@ var i_proces, i;
 
 function IniciaFinestraExecutaProcesCapa(i_capa)
 {
-var elem=ObreFinestra(this, "executarProces", DonaCadenaLang({"cat":"d'afegir capes al navegador",
-							 "spa":"de añadir capas al navegador",
-							 "eng":"of adding a layer to the browser",
-							 "fre":"pour ajouter des couches au navigateur"}));
+var elem=ObreFinestra(this, "executarProces", GetMessage("addingLayersToBrowser", "wps"));
 	if (!elem)
 		return;
 	FinestraExecutaProcesCapa(elem, i_capa);
