@@ -3548,11 +3548,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			{
 				// Transparency HTML Section
 				cdns.push("<fieldset><legend>", GetMessage("Transparency"), ": </legend><table>");
-				cdns.push("<tr><td>", "<p class=\"Verdana11px\">", GetMessage("TransparencyRange", "cntxmenu"),"</p>","</td></tr>");
 				for (var indexTranspSel = 0, itemsTransSelLength = arrayAlphaSelectors.length; indexTranspSel < itemsTransSelLength; indexTranspSel++)
 				{
 					const labelString = arrayAlphaSelectors[indexTranspSel].descr.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
-					cdns.push("<tr><td><input type=\"text\" name=\"Transparencia\" size=\"2\" id=\"edita-estil-transparencia-" + indexTranspSel + "\" value=\"" + arrayAlphaSelectors[indexTranspSel].alpha + "\"></td><label class=\"Verdana11px\" for=\"edita-estil-transparencia-" + indexTranspSel + "\">", labelString, "</label></td></tr></tr>");
+					cdns.push("<tr><td><input type=\"text\" name=\"Transparencia\" size=\"2\" id=\"edita-estil-transparencia-" + indexTranspSel + "\" value=\"" + (100 - parseInt(arrayAlphaSelectors[indexTranspSel].alpha * 100)) + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-transparencia-" + indexTranspSel + "\">", GetMessage("PercentageTransparencyRange", "cntxmenu"), "</label></td></tr></tr>");
 				}
 				cdns.push("</table></fieldset>");
 			}
@@ -3782,8 +3781,9 @@ function EditaEstilCapa(i_capa, i_estil)
 							if (transpInput && transpInput.value)
 							{
 								const rgbComponents = hexToRgb(colorInput.value);
-								const evalTanspValue = transpInput.value > 1.0 ? 1.0 : (transpInput.value < 0.0 ? 0.0 : transpInput.value);
-								const rgbaValue = "rgba(" + rgbComponents.r + "," + rgbComponents.g + "," + rgbComponents.b + "," + evalTanspValue.toString() + ")";
+								const evalTanspValue = parseInt(transpInput.value) > 100 ? 100 : (parseInt(transpInput.value) < 0 ? 0 : parseInt(transpInput.value));
+								const transValueTantPer1 = 1 - evalTanspValue/100;
+								const rgbaValue = "rgba(" + rgbComponents.r + "," + rgbComponents.g + "," + rgbComponents.b + "," + transValueTantPer1.toString() + ")";
 								forma.paleta.colors[0] = rgbaValue;
 							}
 							alphaIndex++;

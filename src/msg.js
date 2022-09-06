@@ -388,7 +388,7 @@ var MessageLang={
 		_withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
 		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"},
 		ThicknessRange: {"cat":"Gruix limitat a un rang de 1 a 10px", "spa":"Grosor limitado a un rango de 1 a 10px", "eng":"Thickness limited to a range of 1 to 10px", "fre":"Épaisseur limitée à une gamme de 1 à 10px"},
-		TransparencyRange: {"cat":"Transparència limitada a valors entre 0 i 1", "spa":"Transparencia limitada a valores entre 0 y 1", "eng":"Transparency limited to values between 0 and 1", "fre":"Transparence limitée à des valeurs comprises entre 0 et 1"}
+		PercentageTransparencyRange: {"cat":"Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)", "spa":"Porcentage de transparencia limitada a valores 0% (opaco) y 100% (transparente)", "eng":"Percentage of transparency limited to values 0% (opaque) to 100% (transparent)", "fre":"Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)"}
 	},
 	storymap:{
 		Storymaps: {"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"},
