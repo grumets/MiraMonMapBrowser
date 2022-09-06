@@ -141,6 +141,7 @@ function RGB(r,g,b)
 			+ (b.toString(16).length==1 ? "0"+b.toString(16) : b.toString(16));
 }
 
+//Aquesta funció necessita que color estigui en JSON i si no dona un error.
 function RGB_JSON(color)
 {
 	if (typeof color!=="object" || typeof color.r!=="number" || typeof color.b!=="number" || typeof color.r!=="number")
@@ -152,3 +153,14 @@ function RGB_JSON(color)
 	}
 	return RGB(color.r, color.g, color.b);
 }
+
+
+//Aquesta funció assumeix que si el color no és un RGB_JSON potser serà una cadena #RRGGBB i deixa continuar sense dir res
+function RGB_color(color)
+{
+	if (typeof color!=="object" || typeof color.r!=="number" || typeof color.b!=="number" || typeof color.r!=="number")
+		return color;
+	return RGB(color.r, color.g, color.b);
+}
+
+

@@ -287,6 +287,9 @@ var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
 		return v;
 	}
 
+	if (!ParamCtrl.capa[i_capa].estil || ParamCtrl.capa[i_capa].estil.length<=i_estil_o_atrib)
+		return v;
+
 	var component=ParamCtrl.capa[i_capa].estil[i_estil_o_atrib].component, i_c;
 
 	for (i_c=0; i_c<component.length; i_c++)
@@ -2599,6 +2602,9 @@ function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_fun
 {
 var i, i_event;
 var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
+
+		if (!ParamCtrl.capa[i_capa].estil || ParamCtrl.capa[i_capa].estil.length<=i_estil2)
+			return;
 
 		/*if (!estil.component)
 		{

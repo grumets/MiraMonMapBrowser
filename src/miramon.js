@@ -3105,8 +3105,10 @@ function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 }
 
 //sz=1 will "zoom in" and sz=-1 will "zoom out"
-function MouNivellDeZoomEvent(event, sz)
+function MouNivellDeZoomEvent(event, sz, targetParentElement, i_nova_vista, clientX, clientY)
 {
+	if (i_nova_vista!=null && targetParentElement)
+		PortamAPunt(DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, clientX), DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, clientY));
 	PortamANivellDeZoomEvent(event, DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+sz);
 }
 
@@ -6456,6 +6458,7 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+
 	RevisaEstatsCapes();
 	CreaLlegenda();
 }
@@ -6948,7 +6951,7 @@ var elem, rect;
 	if (event.shiftKey)
 		MouLaVistaEventDeSalt(event, Math.sign(event.deltaY)*0.1, (event.altKey) ? -Math.sign(event.deltaY)*0.1 : (event.ctrlKey ? Math.sign(event.deltaY)*0.1 : 0));
 	else if (event.ctrlKey)
-		MouNivellDeZoomEvent(event, -Math.sign(event.deltaY));
+		MouNivellDeZoomEvent(event, -Math.sign(event.deltaY), event.target.parentElement, (i_vista<ParamCtrl.VistaPermanent.length) ? NovaVistaPrincipal : null, event.clientX, event.clientY);
 	else if (event.altKey)
 		MouDataEvent(event, -Math.sign(event.deltaY));
 	else
