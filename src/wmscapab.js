@@ -44,9 +44,9 @@ var ServidorGetCapabilities=[];
 //Suporta totes les version de WMS
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
-var i, j, node2, node3, trobat=false, cadena, cadena2, layer;
+var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer;
 var minim, maxim, factor_k, factorpixel;
-var str_uom="UnitOfMeasurement:"
+var str_uom="UnitOfMeasure:"
 var str_valueMeaning="ValueMeaning:"
 
 	//Llegeixo les capacitats d'aquesta capa
@@ -128,6 +128,9 @@ var str_valueMeaning="ValueMeaning:"
 
 		if(i<node_layer.childNodes.length)  //vol dir que aquesta capa té name
 		{
+			//if (layer.nom=="landwatertransitionzone-twodates:lwtztd-polyphytos")
+			//	alert(1);
+
 			for(i=0; i<node_layer.childNodes.length; i++)
 			{
 				node2=node_layer.childNodes[i];
@@ -191,16 +194,26 @@ var str_valueMeaning="ValueMeaning:"
 					if(node3 && node3.length>0)
 						layer.EnvLL.MaxY=parseFloat(node3[0].childNodes[0].nodeValue);
 				}
-				else if (node2.nodeName=="Keyword")
-				{				
-					//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
-					cadena=node2.childNodes[0].nodeValue;
-					if (cadena.substr(0, str_uom.length)==str_uom)
-						layer.uom=cadena.substr(str_uom.length);
-					else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
+				else if (node2.nodeName=="KeywordList")
+				{
+					if (node2.childNodes)
 					{
-						if (-1!=(j=cadena.substr(str_valueMeaning.length).indexOf(':')))
-							layer.categories[parseInt(cadena.substr(str_valueMeaning.length,j))]=cadena.substr(str_valueMeaning.length+j+1);
+						for(j=0; j<node2.childNodes.length; j++)
+						{
+							node3=node2.childNodes[j];
+							if (node3.nodeName=="Keyword")
+							{
+								cadena=node3.childNodes[0].nodeValue;
+								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
+								if (cadena.substr(0, str_uom.length)==str_uom)
+									layer.uom=cadena.substr(str_uom.length).trim();
+								else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
+								{
+									if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
+										layer.categories[parseInt(cadena.substr(str_valueMeaning.length,k))]=cadena.substr(str_valueMeaning.length+k+1).trim();
+								}
+							}
+						}
 					}
 				}
 				else if (node2.nodeName=="Dimension" || node2.nodeName=="Extent")
@@ -304,10 +317,13 @@ var str_valueMeaning="ValueMeaning:"
 						if (node3.nodeName=="OnlineResource")
 						{
 							layer.uriDataTemplate=node3.getAttribute("xlink:href");
-							for (var d=0; d<layer.dimensioExtra.length; d++)
+							if (layer.dimensioExtra)
 							{
-								//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
-								layer.uriDataTemplate=layer.uriDataTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+								for (var d=0; d<layer.dimensioExtra.length; d++)
+								{
+									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
+									layer.uriDataTemplate=layer.uriDataTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+								}
 							}
 						}
 					}
@@ -320,10 +336,13 @@ var str_valueMeaning="ValueMeaning:"
 						if (node3.nodeName=="OnlineResource")
 						{
 							layer.uriMDTemplate=node3.getAttribute("xlink:href");
-							for (var d=0; d<layer.dimensioExtra.length; d++)
+							if (layer.dimensioExtra)
 							{
-								//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
-								layer.uriMDTemplate=layer.uriMDTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+								for (var d=0; d<layer.dimensioExtra.length; d++)
+								{
+									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
+									layer.uriMDTemplate=layer.uriMDTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
+								}
 							}
 						}
 					}
