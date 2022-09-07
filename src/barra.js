@@ -97,7 +97,7 @@ function ChangeSVGToInlineSVG(img, f_next, params)
 
 	        var parser = new DOMParser();
 	        var xmlDoc = parser.parseFromString(text, "text/xml");
-
+		
 	        // Get the SVG tag, ignore the rest
         	var svg = xmlDoc.getElementsByTagName('svg')[0];
 
@@ -154,6 +154,10 @@ function ChangeTitleColorsSVG(id, params)
 	if (params)
 	{
 		var svg=document.getElementById(id);
+		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
+		if (!svg)
+			return;
+			
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)

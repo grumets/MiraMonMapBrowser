@@ -399,7 +399,6 @@ var timeoutActualitzaLLista=null;
 //Aquesta funció necessita WindowsDelEvent ple
 function ActualitzaLlista(llavor, i_llista, keycode)
 {
-var s="";
 var elem;
 
 	if (timeoutActualitzaLLista)
@@ -408,10 +407,9 @@ var elem;
 		timeoutActualitzaLLista=null;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
-	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>" +
+	contentLayer(elem, "<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>" +
 	   GetMessage("UpdatingList", "ctipica") + ", " + GetMessage("PleaseWait") +
-	   "...</td></tr></table>";
-	contentLayer(elem, s);
+	   "...</td></tr></table>");
 	showLayer(elem);
 	//ActualitzaLlistaTimeOut(i_llista, keycode);
 	timeoutActualitzaLLista=setTimeout("ActualitzaLlistaTimeOut("+i_llista+", "+keycode+")", 50);
@@ -1042,12 +1040,11 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 						}
 						if (i==ParamCtrl.CapaConsultaPreguntaServidor.length)
 						{
-							s=GetMessage("TheLayer") + " " +
-							ctipica.NomCapa[i_nom_capa] + " "
-							GetMessage("toBeShownInFrame", "ctipica") + " "
-							ctipica.nom + " "
-							GetMessage("notInTypicalQueryLayerList", "ctipica");
-							alert(s);
+							alert(GetMessage("TheLayer") + " " +
+								ctipica.NomCapa[i_nom_capa] + " " +
+								GetMessage("toBeShownInFrame", "ctipica") + " " +
+								ctipica.nom + " " +
+								GetMessage("notInTypicalQueryLayerList", "ctipica"));
 						}
 						else
 						{
@@ -1126,7 +1123,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 								   "ActualitzaComboConsultaTipicaSeguents(",i_ctipica,", ",CTipicaCapa[i_ctipica],", ",j,
 								   ", ",valor_opcio,");\">" ,
 								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
-								   ("--" + GetMessage("Select") + "--") , "</option>" ,
+								   "(--", GetMessage("Select"), "--)" , "</option>" ,
 								   "  <option VALUE=\"-1\">" , "---------------", "</option>");
 							for (var i=0; i<capa_pregunta_svr.proj_camp[j].length; i++)
 								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
@@ -1144,7 +1141,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 					cdns.push("  <select name=\"valor0\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
 					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
-					   ("--" + GetMessage("Select") + "--") , "</option>" ,
+					   "(--", GetMessage("Select"), "--)" , "</option>" ,
 					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
 					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
 						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
@@ -1501,7 +1498,10 @@ var trobat=false;
 								}
 								if(i_valor==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
 								{
-									alert(GetMessage("TheValue") + " " + Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + " " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + " " + Accio.capes[i_capa_accio]+ " " + GetMessage("isIncorrect", "ctipica"));
+									alert(GetMessage("TheValue") + " " + 
+										Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + 
+										" " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + 
+										" " + Accio.capes[i_capa_accio] + " " + GetMessage("isIncorrect", "ctipica") + ".");
 								}
 							}
 							break;
@@ -1646,7 +1646,7 @@ var valor;
 								ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " " +
 								GetMessage("toBeShownInFrame", "ctipica") + " " +
 								ParamCtrl.ConsultaTipica[i_ctipica].nom + " " +
-								GetMessage("notInTypicalQueryLayerList", "ctipica") + " ");
+								GetMessage("notInTypicalQueryLayerList", "ctipica") + ".");
 						}
 						else
 						{
