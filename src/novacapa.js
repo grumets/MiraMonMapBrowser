@@ -42,39 +42,46 @@ const OriginUsuari="usuari";
 
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
-var j, k, estil, minim, maxim;
+var j, k, estils, estil, minim, maxim;
 var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
+
+	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
 	if(layer.estil && layer.estil.length>0)
 	{
-		estil=[];
+		estils=[];
 		for(j=0; j<layer.estil.length; j++)
 		{
-			estil[estil.length]={nom: layer.estil[j].nom,
+			estils[estils.length]={nom: layer.estil[j].nom,
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
 						TipusObj: "I",
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
+			estil=estils[estils.length-1];
 			if (layer.esCOG && layer.uriDataTemplate)
-				estil[estil.length-1].component=[{"i_valor": 0}];
-			if (layer.categories)
+				estil.component=[{"i_valor": 0}];
+			if (layer.categories && layer.categories.length)
 			{
 				estil.categories=[];
-				for (k=0; k<strlen(layer.categories); k++)
+				var s=layer.uom ? layer.uom : GetMessage("Class");
+				for (k=0; k<layer.categories.length; k++)
 				{
 					if (layer.categories[k])
-						estil.categories[k][layer.estil[j].nom]=layer.categories[k];
+					{
+						estil.categories[k]={};
+						estil.categories[k][s]=layer.categories[k];
+					}
 					else
 						estil.categories[k]=null;
 				}
-				estil.atributs=[{nom: layer.estil[j].nom, unitats: layer.uom, mostrar: "si"}];
+				estil.atributs=[{nom: s, unitats: layer.uom, mostrar: "si"}];
 			}
 		}
 	}
 	else
-		estil=null;
+		estils=null;
 
 	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 		minim=layer.CostatMinim;
@@ -111,9 +118,9 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
 				separa: DonaTextSeparadorCapaAfegida(k),
 				DescLlegenda: DonaCadenaNomDesc(layer),
-				estil: estil,
+				estil: estils,
 				i_estil: 0,
-				NColEstil: (estil && estil.length>0) ? 1: 0,
+				NColEstil: (estils && estils.length>0) ? 1: 0,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
 				visible: "si",
@@ -147,7 +154,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 					"datatype": "float32",
 					"nodata": [-9999, 0]
 				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
-		capa.estil=estil;
+		capa.estil=estils;
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
@@ -606,11 +613,11 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			return;
 		}
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
-		if (capa.origen==OriginUsuari && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
+		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
-		if (capa.origen==OriginUsuari && 
+		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
 			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
@@ -675,7 +682,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OriginUsuari)
 	{
-		//En la versió qeu em provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
+		//En la versió qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
                 //En un COG, cada overview és una imatge més en el compte. La darrera és la de menys detall. Només la primera presenta resolució. Les altres s'ha de "deduir" de la relació entre mides d'imatges en pixels
 		//https://geoexamples.com/other/2019/02/08/cog-tutorial.html/
 		var n_overviews = await tiff.getImageCount();
@@ -699,14 +706,30 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			}
 		}
 
+		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
+		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
+
+		var descItems=null, metadades=null, categories=null, atributs=null;
+		if (capa.estil && capa.estil.length)
+		{
+			var estil=capa.estil[0];
+			if (estil.DescItems)
+				descItems=estil.DescItems;
+			if (estil.metadades)
+				metadades=JSON.parse(JSON.stringify(estil.metadades));
+			if (estil.categories) 
+				categories=JSON.parse(JSON.stringify(estil.categories));
+			if (estil.atributs)
+				atributs=JSON.parse(JSON.stringify(estil.atributs));
+		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
 		{
 			capa.estil.push({nom: null,
 					desc: descEstil,
-					DescItems: null,
+					DescItems: descItems,
 					TipusObj: "I",
-					metadades: null,
+					metadades: metadades,
 					component: [
 						{
 							i_valor: i_v,
@@ -724,14 +747,16 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			{
 				capa.estil.push({nom: null,
 						desc: descEstil,
-						DescItems: null,
+						DescItems: descItems,
 						TipusObj: "P",
-						metadades: null,
+						metadades: metadades,
 						component: [
 							{
 								i_valor: i_v+i,
 							}
 						],
+						categories: categories,
+						atributs: atributs,
 						ColorMinimPrimer: false
 					});
 				var estil=capa.estil[capa.estil.length-1];
@@ -749,7 +774,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 								r: image.fileDirectory.ColorMap[i]>>>8,
 								g: image.fileDirectory.ColorMap[ncolors+i]>>>8,
 								b: image.fileDirectory.ColorMap[ncolors*2+i]>>>8};
-						estil.ItemLleg[i]={color: RGB(estil.paleta.colors[i].r, estil.paleta.colors[i].g, estil.paleta.colors[i].b), DescColor: i};
+						//estil.ItemLleg[i]={color: RGB(estil.paleta.colors[i].r, estil.paleta.colors[i].g, estil.paleta.colors[i].b), DescColor: i};
 					}
 					estil.ncol=1;
 				}
@@ -781,7 +806,8 @@ var k;
 	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
 	{
 		CreaLlegenda();
-		alert("The added layer has a CRS '"+ DonaDescripcioCRS(capa.CRS[0]) + "' that is no visible in the current CRS '" + DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) + "'");
+		if (ParamCtrl.LlegendaAmagaSiForaCRS)
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 	}
 	else
 		RepintaMapesIVistes();

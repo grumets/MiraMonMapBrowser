@@ -186,7 +186,9 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 	colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors : null;
 	ncolors=colors ? colors.length : 256;
 
-	/*if (estil.categories && estil.atributs)
+	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
+
+	if (estil.categories && estil.atributs)
 	{
 		var desc
 		//La llegenda es pot generar a partir de la llista de categories i la paleta.
@@ -201,11 +203,11 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
 			if (desc=="")
 				continue;
-			estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": desc};
+			estil.ItemLleg[i]={"color": (colors) ? RGB_color(colors[i_color]) : RGB(i_color,i_color,i_color), "DescColor": desc};
 			i++;
 		}
 		return;
-	}*/
+	}
 
 	if (!estil.component || estil.component.length==0 || estil.component.length>2)
 		return;
@@ -457,7 +459,8 @@ var cdns=[], cal_retorn=false;
 	//Llegenda si hi ha més d'un item
 	if (estil.ItemLleg && estil.ItemLleg.length>1 &&
 		(!(flag&LlegendaAmbControlDeCapes) || capa.LlegDesplegada) &&
-		capa.visible!="ara_no")
+		capa.visible!="ara_no" &&
+		!EsCapaInactivaGrisALaLlegenda(capa))
 	{
 		if (estil.DescItems)
 		{
@@ -633,8 +636,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 			{
 				cdns.push("<td valign=\"middle\">",
 					DonaCadenaImgCanviaEstatCapa(i_capa, "visible"),
-					"</td>",
-					"<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=\"3\" height=\"1\">");
+					"</td>");
 			}
 			//Icones consultable:
 			if (capa.consultable=="no")
