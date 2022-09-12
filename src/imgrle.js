@@ -2525,6 +2525,7 @@ var data
 				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 				{
 					var retorn_prep_histo;
+          // Desselecciona el checkbox per al tall de cues.
           window.document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo)).checked=false;
 					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
 					for (var i_c=0; i_c<estil.component.length; i_c++)
