@@ -6406,7 +6406,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 									if (!avis_mostrar_atributs)
 									{
 										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
-												" estil = " + DonaCadenaNomDesc(estil));												
+												" estil = " + DonaCadenaNomDesc(estil));
 												avis_mostrar_atributs=true;
 									}
 									if (estil.atributs[k].mostrar)
@@ -6846,11 +6846,12 @@ function EndMiraMonMapBrowser(event, reset)
 			}
 			catch (e)
 			{
-			        ;//localStorage.removeItem(key);
+				//localStorage.removeItem(key);
 				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
-							"spa":"No ha sido posible guardar el estado del mapa.",
-							"eng":"Saving the map status done was not possible.",
-							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
+					"spa":"No ha sido posible guardar el estado del mapa.",
+					"eng":"Saving the map status done was not possible.",
+					"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));
+				*/
 			}
 		}
 	}
