@@ -271,7 +271,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		GetMessage("Height") , ": " , ParamInternCtrl.vista.nfil, "px, ",
 		GetMessage("WidthOfTheView", "params") , ": <input type=\"text\" size=\"6\" name=\"param_MidaAmplePantalla\" value=\"", OKStrOfNe(MidaDePixelPantalla*ParamInternCtrl.vista.ncol,1), "\" maxlength=\"8\"> mm<br>",
 		GetMessage("LateralJumpPerc", "params") , ": <input type=\"text\" size=\"3\" name=\"param_psalt\" value=\"", ParamCtrl.psalt, "\" maxlength=\"3\"> %, ",
-		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>", 
+		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>",
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicNo\"", (ParamCtrl.ZoomUnSolClic ? "" : " checked=\"checked\""),"><label for=\"id_ZoomUnSolClicNo\" accesskey=\"2\"> ",
 		GetMessage("ZoomPan_2Clicks", "params") , "</label><br>" ,
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicSi\"", (ParamCtrl.ZoomUnSolClic ? " checked=\"checked\"" : ""), "><label for=\"id_ZoomUnSolClicSi\" accesskey=\"1\"> ",
@@ -311,11 +311,19 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		"<div id=\"param_colors\">",
 		DonaTextParamColors(),
 		"</div></fieldset>",
+		"<fieldset><legend>",
+		GetMessage("UserConfiguration"),
+		": </legend>",
+		"<div id=\"param_config_storage\" align=\"center\">",
+		"<button class=\"Verdana11px\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Open"), "</button>",
+		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.value)'>",
+		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari()'> ",
+		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
 		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", GetMessage("Show"),
 		"\" onClick='MostraConfigJSON(\"textarea_ConfigJSON\",\"param_desgranat\", \"button_show_ConfigJSON\");'>&nbsp;<small id=\"text_canvis_aplicats\"><i>(",
 		GetMessage("changesAboveWillBeApplied", "params"),
-		")</i></small></div>",		
+		")</i></small></div>",
 		"<textarea id=\"textarea_ConfigJSON\" name=\"textarea_ConfigJSON\" rows=\"26\" cols=\"70\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" style=\"display:none\"></textarea></div>",
 		"<div id=\"param_hr_dprs_show\"></div>",
 		"<div align=\"center\">",
@@ -331,4 +339,63 @@ function MostraFinestraParametres()
 	if (!ObreFinestra(window, "param", GetMessage("ofChangingParameters", "params")))
 		return;
 	OmpleFinestraParametres();
+}
+
+/*
+*	Funció per a guardar el fitxer de configuració de JSON en memòria
+*/
+function GuardaConfiguracioUsuari()
+{
+
+}
+
+/*
+*	Funció per a obrir el fitxer de configuració de JSON en memòria
+*/
+function RecuperaConfiguracioUsuari(path)
+{
+		if (path.length < 1)
+			return false;
+		const fileName = extractFilename(path);
+		if (path.type=="application/json" || path.type=="application/geo+json")
+		{
+			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
+			const fileReader = new FileReader();
+			fileReader.nom_json = fileName; //Així onload pot saber el nom del fitxer
+			fileReader.onload = function(e) {
+				try {
+							loadJSON(path,
+							IniciaParamCtrlIVisualitzacio,
+							function(xhr) { alert(xhr); },
+							//{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
+							{config_json:this.nom_json, config_reset: false, usa_local_storage: true});
+				}
+				catch (e){
+					alert("JSON file error. " + e);
+				}
+			};
+			fileReader.readAsText(path);
+		}
+		else
+		{
+			alert("Unrecognized file type '"+path.type+ "' for the file '"+ path.name + "'");
+		}
+
+		return false;
+}
+/*
+* Per seguretat els paths dels fitxers seleccionats s'inclou "C:\\fakepath\\" llavors
+* per extreure el nom real es fa la següent funció: (https://html.spec.whatwg.org/multipage/input.html#fakepath-srsly)
+*/
+function extractFilename(path) {
+  if (path.substr(0, 12) == "C:\\fakepath\\")
+    return path.substr(12); // modern browser
+  var x;
+  x = path.lastIndexOf('/');
+  if (x >= 0) // Unix-based path
+    return path.substr(x+1);
+  x = path.lastIndexOf('\\');
+  if (x >= 0) // Windows-based path
+    return path.substr(x+1);
+  return path; // just the filename
 }
