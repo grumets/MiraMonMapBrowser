@@ -315,9 +315,10 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		GetMessage("UserConfiguration"),
 		": </legend>",
 		"<div id=\"param_config_storage\" align=\"center\">",
-		"<button class=\"Verdana11px\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Open"), "</button>",
-		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.value)'>",
-		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari()'> ",
+		"<button class=\"Verdana11px\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Open"), "</button>&nbsp;",
+		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.files)'>",
+		GetMessage("FileNameToSave") , ": <input TYPE=\"text\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
+		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari(ParamCtrl, form.textFileInput.value)'> ",
 		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
 		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", GetMessage("Show"),
@@ -341,34 +342,75 @@ function MostraFinestraParametres()
 	OmpleFinestraParametres();
 }
 
+
+/*
+*	Funció per a transformar els paràmetres de configuració de l'usuari en quelcom
+*	capaç de ser inclòs en un anchor <a>, per exemple un Blob.
+*/
+var jsonConfigFile = null;
+
+function makeHrefData(userConfig)
+{
+	var data = new Blob([JSON.stringify(userConfig)], {type: 'text/json'});
+
+	// If we are replacing a previously generated file we need to
+	// manually revoke the object URL to avoid memory leaks.
+	if (jsonConfigFile !== null)
+		window.URL.revokeObjectURL(jsonConfigFile);
+
+	jsonConfigFile = window.URL.createObjectURL(data);
+	return jsonConfigFile;
+};
+
 /*
 *	Funció per a guardar el fitxer de configuració de JSON en memòria
 */
-function GuardaConfiguracioUsuari()
+function GuardaConfiguracioUsuari(userConfig, fileName)
 {
+	if (fileName.length < 1)
+		return false
+	const jsonExtention = ".json";
+	var link = document.createElement('a');
+	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
+		fileName+=jsonExtention;
+	link.setAttribute('download', fileName);
+	link.setAttribute('href', makeHrefData(userConfig));
+	document.body.appendChild(link);
 
+	// wait for the link to be added to the document
+	window.requestAnimationFrame(function () {
+      		var event = new MouseEvent('click');
+		link.dispatchEvent(event);
+		document.body.removeChild(link);
+		});
+
+  return false;
 }
 
 /*
 *	Funció per a obrir el fitxer de configuració de JSON en memòria
 */
-function RecuperaConfiguracioUsuari(path)
+function RecuperaConfiguracioUsuari(files)
 {
+		if (files.length < 1)
+			return false;
+		const path = files[0];
 		if (path.length < 1)
 			return false;
-		const fileName = extractFilename(path);
 		if (path.type=="application/json" || path.type=="application/geo+json")
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			const fileReader = new FileReader();
-			fileReader.nom_json = fileName; //Així onload pot saber el nom del fitxer
+			fileReader.nom_json = "./"+path.name; //Així onload pot saber el nom del fitxer
 			fileReader.onload = function(e) {
 				try {
-							loadJSON(path,
+
+
+							loadJSON(this.nom_json,
 							IniciaParamCtrlIVisualitzacio,
 							function(xhr) { alert(xhr); },
 							//{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
-							{config_json:this.nom_json, config_reset: false, usa_local_storage: true});
+							{/*last_config_json: , */config_json:this.nom_json, config_reset: true, usa_local_storage: true});
 				}
 				catch (e){
 					alert("JSON file error. " + e);

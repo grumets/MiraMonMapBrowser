@@ -271,6 +271,8 @@ var MessageLang={
 	OutputParameter: {"cat":"Paràmetres de sortida","spa":"Parámetros de salida", "eng":"Output parameters", "fre":"Paramètres de sortie"},
 	Execute: {"cat":"Executar", "spa":"Ejecutar", "eng":"Execute", "fre":"Exécuter"},
 	UserConfiguration: {"cat":"Configuració d'usuari", "spa":"Configuración de usuario", "eng":"User configuration", "fre":"Configuration de l'utilisateur"},
+	FileName: {"cat":"Nom del fitxer", "spa":"Nombre del fichero", "eng":"File name", "fre":"Nom du fichier"},
+	FileNameToSave: {"cat":"Nom del fitxer a guardar", "spa":"Nombre del fichero a guardar", "eng":"File name to save", "fre":"Nom du fichier à sauvegarder"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
