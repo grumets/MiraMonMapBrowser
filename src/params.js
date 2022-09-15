@@ -314,10 +314,12 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		"<fieldset><legend>",
 		GetMessage("UserConfiguration"),
 		": </legend>",
-		"<div id=\"param_config_storage\" align=\"center\">",
-		"<button class=\"Verdana11px\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Open"), "</button>&nbsp;",
+		"<div id=\"param_config_storage\">",
+		"<label for=\"configLoadBtn\">", GetMessage("SelectConfigLoad"), "</label>&nbsp;",
+		"<button class=\"Verdana11px\" id=\"configLoadBtn\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Load"), "</button><br>",
 		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.files)'>",
-		GetMessage("FileNameToSave") , ": <input TYPE=\"text\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
+		"<label for=\"configLoadBtn\">", GetMessage("FileNameToSave"), "</label>: &nbsp;",
+		"<input TYPE=\"text\" id=\"\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
 		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari(ParamCtrl, form.textFileInput.value)'> ",
 		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
@@ -410,7 +412,7 @@ function RecuperaConfiguracioUsuari(files)
 							IniciaParamCtrlIVisualitzacio,
 							function(xhr) { alert(xhr); },
 							//{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
-							{/*last_config_json: , */config_json:this.nom_json, config_reset: true, usa_local_storage: true});
+							{div_name:ParamCtrl.containerName, config_json:this.nom_json, config_reset: true, usa_local_storage: false});
 				}
 				catch (e){
 					alert("JSON file error. " + e);
@@ -424,20 +426,4 @@ function RecuperaConfiguracioUsuari(files)
 		}
 
 		return false;
-}
-/*
-* Per seguretat els paths dels fitxers seleccionats s'inclou "C:\\fakepath\\" llavors
-* per extreure el nom real es fa la següent funció: (https://html.spec.whatwg.org/multipage/input.html#fakepath-srsly)
-*/
-function extractFilename(path) {
-  if (path.substr(0, 12) == "C:\\fakepath\\")
-    return path.substr(12); // modern browser
-  var x;
-  x = path.lastIndexOf('/');
-  if (x >= 0) // Unix-based path
-    return path.substr(x+1);
-  x = path.lastIndexOf('\\');
-  if (x >= 0) // Windows-based path
-    return path.substr(x+1);
-  return path; // just the filename
 }
