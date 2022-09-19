@@ -1311,16 +1311,6 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 			 (capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length<2)))
 			redibuixar_llegenda=true;
 		CarregaSimbolsEstilActualCapaDigi(capa);
-		/* Abans s'assumia que un canvi d'estil era també un canvi de contingut. De moment, això no és pas així
-		  i per això no cal fer això que hi ha aquí:
-		capa.objectes=null;
-		if (capa.tipus)
-		{
-			InicialitzaTilesSolicitatsCapaDigi(capa);
-			DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, ParamInternCtrl.vista.EnvActual);
-		}
-		else
-			capa.TileMatrixGeometry.tiles_solicitats=null;*/
 	}
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{

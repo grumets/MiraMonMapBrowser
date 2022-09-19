@@ -582,8 +582,8 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				estil: null,
 				i_estil: 0,
 				NColEstil: 1,
-				LlegDesplegada: true,
-				VisibleALaLlegenda: false,
+				LlegDesplegada: false,
+				VisibleALaLlegenda: true,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -787,7 +787,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				}
 			}
 		}
-		capa.VisibleALaLlegenda=true;
+		capa.LlegDesplegada=true;
 	}
 }
 

@@ -1679,12 +1679,15 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 
 
 
-function DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, env, funcio, param)
+function DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
-var env_total, env_temp, incr_x=0, incr_y=0, i_tile=0, capa=ParamCtrl.capa[i_capa];
+var env_total, env_temp, incr_x=0, incr_y=0, i_tile=0;
 
 var tiles=capa.TileMatrixGeometry;
 var ha_calgut=false, vaig_a_carregar=false;
+
+	if (!tiles)
+		return;
 
 	// Si la capa té un EnvTotal faig la tessel·lació respecte aquest env i sino respecte la/les imatges de situació que tenen el mateix sistema de referència (CRSgeometry)
 	if(!tiles.env)
@@ -1719,7 +1722,7 @@ var ha_calgut=false, vaig_a_carregar=false;
 			}
 		}
 	}
-	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamCtrl.capa[i_capa].i_situacio
+	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamInternCtrl.ISituacio
 	if(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==tiles.env.CRS)
 		env_total={"MinX": env.MinX, "MaxX": env.MaxX, "MinY": env.MinY, "MaxY": env.MaxY};
 	else
@@ -1770,10 +1773,10 @@ var ha_calgut=false, vaig_a_carregar=false;
 							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && (capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus"))
 							{
 								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
-								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, null, false, funcio, param);
+								FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, null, false, funcio, param);
 							}
 							else*/
-							FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
+							FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, env_sol, false, funcio, param);
 						}
 						else
 							return true;

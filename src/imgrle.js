@@ -2481,6 +2481,8 @@ var data
 		extra_param.imatge.width  = extra_param.vista.ncol;
 		extra_param.imatge.height = extra_param.vista.nfil;	
 
+		if (!extra_param.imatge.getContext)
+			return;
 		ctx=extra_param.imatge.getContext("2d");
 		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
 

@@ -1979,7 +1979,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-		    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+			    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -2025,7 +2028,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-             	if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -2034,7 +2037,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+ xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -2079,7 +2085,7 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 			{
 				if (retry && retry<200)
 				{
-					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry*2 + " seconds");
+					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry + " seconds");
 					setTimeout(loadBinaryFile, retry*1000, path, mimetype, success, retry*2, error, extra_param);
 				}
 				if (error)
@@ -2091,11 +2097,13 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText +  ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
-
 	};
 	xhr.open("GET", path, true);
 	xhr.responseType = "arraybuffer";
