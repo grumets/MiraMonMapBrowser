@@ -778,6 +778,24 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					}
 					estil.ncol=1;
 				}
+				else if (categories)
+				{
+					//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+					if (!PaletesGlobals)
+						PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+					estil.paleta={colors: []};
+					estil.ItemLleg=[];
+					var ncolors=categories.length;
+					for (var i=0, j=0; i<ncolors; i++, j++)
+					{
+						if (j==20)
+							j==0;
+						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+					}
+					estil.ncol=1;					
+				}
 				else
 				{
 					estil.component[0].estiramentPaleta={auto: true};

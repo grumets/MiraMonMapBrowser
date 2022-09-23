@@ -1955,7 +1955,7 @@ var xhr = new XMLHttpRequest();
 		{
 	       	if (xhr.status === 200)
 			{
-            	if (success)
+				if (success)
 				{
 					var data;
 					try {
@@ -1970,7 +1970,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-                if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -1992,6 +1992,58 @@ var xhr = new XMLHttpRequest();
 	xhr.setRequestHeader('Accept', 'application/json');
 	//xhr.setRequestHeader('Accept-Charset', 'utf-8');	Això no li agrada als navegadors, donen error
 	xhr.send();
+}
+
+//The same as the previous function but expressed as a promise.
+//Good thing about this one is that you can use it syncronously in an async function by calling it as data=await promiseLoadJSON(path);
+//https://stackoverflow.com/questions/30008114/how-do-i-promisify-native-xhr
+function promiseLoadJSON(path)
+{
+	return new Promise(function(success, error)
+	{
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function()
+		{
+        		if (xhr.readyState === XMLHttpRequest.DONE)
+			{
+		       		if (xhr.status === 200)
+				{
+					if (success)
+					{
+						var data;
+						try {
+							data = JSON.parse(xhr.responseText);
+						}
+						catch (e) {
+		                			if (error)
+								return error("JSON file: \""+ path + "\". " + e);
+						}	
+						success(data);
+					}
+				}
+				else
+				{
+        				if (error)
+					{
+						var s=null;
+						if (xhr.response)
+						{
+							var s=arrayBufferToString(xhr.response);
+							if (-1!=s.indexOf("<body>"))
+								s=s.substring(s.indexOf("<body>"));
+						}
+						if (xhr.status)
+				    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+						else
+							error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+					}
+				}
+			}
+		};
+		xhr.open("GET", path, true);
+		xhr.setRequestHeader('Accept', 'application/json');
+		xhr.send();
+	});
 }
 
 function loadTextFile(path, mimetype, success, error, extra_param)

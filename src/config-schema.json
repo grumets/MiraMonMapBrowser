@@ -2555,12 +2555,12 @@
 							"multipleOf" : 1
 						},
 						"i": {
-							"description": "Posició del píxel que fa de punt calent en l'eix de columnes",
+							"description": "Posició del píxel que fa de punt calent en l'eix de columnes. 0 vol dir l'extrem esquerra de la icona. El punt calent és el punt on s'apliquen les coordenades terreny. Per exemple, en una 'gota' el punt calent se situa sota la gota",
 							"type": "number",
 							"multipleOf" : 1
 						},
 						"j": {
-							"description": "Posició del píxel que fa de punt calent en l'eix de files",
+							"description": "Posició del píxel que fa de punt calent en l'eix de files. 0 vol dir l'exterm superior de la icona",
 							"type": "number",
 							"multipleOf" : 1
 						}
