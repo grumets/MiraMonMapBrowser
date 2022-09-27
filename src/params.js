@@ -411,7 +411,6 @@ function RecuperaConfiguracioUsuari(files)
 							loadJSON(this.nom_json,
 							IniciaParamCtrlIVisualitzacio,
 							function(xhr) { alert(xhr); },
-							//{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
 							{div_name:ParamCtrl.containerName, config_json:this.nom_json, config_reset: true, usa_local_storage: false});
 				}
 				catch (e){
