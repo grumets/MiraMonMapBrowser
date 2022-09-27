@@ -4259,7 +4259,7 @@ var capa=ParamCtrl.capa[i_capa];
 /* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
 function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
-	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
+	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
 		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
@@ -5204,6 +5204,23 @@ var SufixSliderZoom="sliderzoom";    //No pot tenir subratllat al davant. Aquest
 var SufixTelTrans="_tel_trans";    //Cal que porti el subratllat al davant. Aquesta no s'hauria de desactivar mai
 var SufixZRectangle="_z_rectangle";  //Cal que porti el subratllat al davant.
 
+var timeOutCapaVista={};
+
+function CancellaTimeOutCapaVista(nom_vista, i_crea_vista)
+{
+	if (!timeOutCapaVista[nom_vista+"_"+i_crea_vista])
+		return;
+	for (var i=0; i<timeOutCapaVista[nom_vista+"_"+i_crea_vista].length; i++)
+	{
+		if (timeOutCapaVista[nom_vista+"_"+i_crea_vista][i])
+		{
+			clearTimeout(timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]);
+			timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=null;
+		}
+	}
+	timeOutCapaVista[nom_vista+"_"+i_crea_vista]=null;
+}
+
 function CreaVistaImmediata(win, nom_vista, vista)
 {
 var cdns=[], ll;
@@ -5229,6 +5246,7 @@ var p, unitats_CRS;
 
 	NCreaVista++;
 	i_crea_vista=NCreaVista;
+	timeOutCapaVista[nom_vista+"_"+i_crea_vista]=[];
 
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 	if (vista.i_nova_vista==NovaVistaPrincipal)
@@ -5453,7 +5471,10 @@ var p, unitats_CRS;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
+			{
+				CancellaTimeOutCapaVista(nom_vista, i_crea_vista);
 				return;
+			}
 			var capa=ParamCtrl.capa[i];
 			if (capa.model==model_vector)
 			{
@@ -5564,18 +5585,21 @@ var p, unitats_CRS;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
+			{
+				CancellaTimeOutCapaVista(nom_vista, i_crea_vista);
 				return;
+			}
 			var capa=ParamCtrl.capa[i];
 			if (capa.model==model_vector)
 			{
 				//if (EsObjDigiVisibleAAquestNivellDeZoom(capa))
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapaDigi(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
+					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapaDigi(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 			}
 			else
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
+					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -5583,7 +5607,7 @@ var p, unitats_CRS;
 				}
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)
-				setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
+				timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
 		}
 	}
 	if (vista.i_nova_vista==NovaVistaPrincipal || vista.i_nova_vista==NovaVistaImprimir)
