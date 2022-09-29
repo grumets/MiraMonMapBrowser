@@ -1018,10 +1018,9 @@ var crs_up=crs.toUpperCase();
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
         	return "m";
-	else if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
+	if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
 		return "°";
-	else
-		return "m?";
+	return "m?";
 }
 
 function DonaDescripcioCRS(crs)
@@ -1030,97 +1029,135 @@ var crs_up=crs.toUpperCase();
 
 	if (crs_up=="EPSG:32616")
 		return "UTM16N - WGS84";
-	else if (crs_up=="EPSG:32628")
+	if (crs_up=="EPSG:32628")
 		return "UTM28N - WGS84";
-	else if (crs_up=="EPSG:32629")
+	if (crs_up=="EPSG:32629")
 		return "UTM29N - WGS84";
-	else if (crs_up=="EPSG:32630")
+	if (crs_up=="EPSG:32630")
 		return "UTM30N - WGS84";
-	else if (crs_up=="EPSG:32631")
+	if (crs_up=="EPSG:32631")
 		return "UTM31N - WGS84";
-    	else if (crs_up=="EPSG:32632")
+    	if (crs_up=="EPSG:32632")
 		return "UTM32N - WGS84";
-    	else if (crs_up=="EPSG:32633")
+    	if (crs_up=="EPSG:32633")
 		return "UTM33N - WGS84";
-	else if (crs_up=="EPSG:32634")
+	if (crs_up=="EPSG:32634")
 		return "UTM34N - WGS84";
-	else if (crs_up=="EPSG:32635")
+	if (crs_up=="EPSG:32635")
 		return "UTM35N - WGS84";
-	else if (crs_up=="EPSG:32636")
+	if (crs_up=="EPSG:32636")
 		return "UTM36N - WGS84";
-	else if (crs_up=="EPSG:25829")
+	if (crs_up=="EPSG:25829")
 		return "UTM29N - ETRS89";
-	else if (crs_up=="EPSG:25830")
+	if (crs_up=="EPSG:25830")
 		return "UTM30N - ETRS89";
-	else if (crs_up=="EPSG:25831")
+	if (crs_up=="EPSG:25831")
 		return "UTM31N - ETRS89";
-	else if (crs_up=="EPSG:25832")
+	if (crs_up=="EPSG:25832")
 		return "UTM32N - ETRS89";
-	else if (crs_up=="EPSG:25833")
+	if (crs_up=="EPSG:25833")
 		return "UTM33N - ETRS89";
-	else if (crs_up=="EPSG:25834")
+	if (crs_up=="EPSG:25834")
 		return "UTM34N - ETRS89";
-	else if (crs_up=="EPSG:25835")
+	if (crs_up=="EPSG:25835")
 		return "UTM35N - ETRS89";
-	else if (crs_up=="EPSG:25836")
+	if (crs_up=="EPSG:25836")
 		return "UTM36N - ETRS89";
-	else if (crs_up=="EPSG:23029")
+	if (crs_up=="EPSG:23029")
 		return "UTM29N - ED50";
-	else if (crs_up=="EPSG:23030")
+	if (crs_up=="EPSG:23030")
 		return "UTM30N - ED50";
-	else if (crs_up=="EPSG:23031")
+	if (crs_up=="EPSG:23031")
 		return "UTM31N - ED50";
-	else if (crs_up=="EPSG:23032")
+	if (crs_up=="EPSG:23032")
 		return "UTM32N - ED50";
-	else if (crs_up=="EPSG:23033")
+	if (crs_up=="EPSG:23033")
 		return "UTM33N - ED50";
-	else if (crs_up=="EPSG:23034")
+	if (crs_up=="EPSG:23034")
 		return "UTM34N - ED50";
-	else if (crs_up=="EPSG:23035")
+	if (crs_up=="EPSG:23035")
 		return "UTM35N - ED50";
-	else if (crs_up=="EPSG:23036")
+	if (crs_up=="EPSG:23036")
 		return "UTM36N - ED50";
-	else if (crs_up=="EPSG:32736")
+	if (crs_up=="EPSG:32736")
 		return "UTM36S - WGS84";
-	else if (crs_up=="EPSG:27563")
+	if (crs_up=="EPSG:27563")
 		return GetMessage("LambertConformalConicZoneIII_NTF", "canviprj");
-	else if (crs_up=="EPSG:27572")
+	if (crs_up=="EPSG:27572")
 		return GetMessage("LambertConformalConicZoneIIext_NTF", "canviprj");
-	else if (crs_up=="EPSG:27573")
+	if (crs_up=="EPSG:27573")
 		return GetMessage("LambertConformalConicZoneIIIext_NTF", "canviprj");
-	else if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
+	if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
 		return GetMessage("LambertConformalConicICCMediterranianRegion", "canviprj");
-	else if (crs_up=="EPSG:3035")
+	if (crs_up=="EPSG:3035")
 		return "ETRS89-LAEA";
-	else if (crs_up=="AUTO2:MERCATOR,1,0,41.42")
+	if (crs_up=="AUTO2:MERCATOR,1,0,41.42")
 		return GetMessage("MercatorParallel_41d25m_ED50", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42")
+	if (crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42")
 		return GetMessage("MercatorParallel_41d25m_WGS84", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR,1,0,40.60")
+	if (crs_up=="AUTO2:MERCATOR,1,0,40.60")
 		return GetMessage("MercatorParallel_40d36m_ED50", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR,1,0,0.0")
+	if (crs_up=="AUTO2:MERCATOR,1,0,0.0")
 		return GetMessage("MercatorParallelEquator_ED50", "canviprj");
-	else if (crs_up=="EPSG:3395")
+	if (crs_up=="EPSG:3395")
 		return GetMessage("MercatorParallelEquator_WGS84", "canviprj");
-	else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
+	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return GetMessage("WebMercator", "canviprj");
-	else if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
+	if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
 		return "long/lat - WGS84";
-	else if (crs_up=="EPSG:4258")
+	if (crs_up=="EPSG:4258")
 		return "long/lat - ETRS89";
-	else
-		return crs;  // si no hi ha descripció poso el codi.
+	return crs;  // si no hi ha descripció poso el codi.
 }
 
-//Es pot posar v=null si el servei no és un WMS
+//Retorn null si no son quasi iguals o el crs que represent els 2 iguals o quasi iguals in upperCase.
+//Això permet ordenar per crs considerant els que són quasi iguals
+function DonaCRSRepresentaQuasiIguals(crs1, crs2)
+{
+var crs1_up=crs1.toUpperCase(), crs2_up=crs2.toUpperCase();
+
+	if (    (crs1_up=="EPSG:25829" || crs1_up=="EPSG:32629") && 
+		(crs2_up=="EPSG:25829" || crs2_up=="EPSG:32629")  )
+		return "EPSG:25829";
+	if (    (crs1_up=="EPSG:25830" || crs1_up=="EPSG:32630") && 
+		(crs2_up=="EPSG:25830" || crs2_up=="EPSG:32630")  )
+		return "EPSG:25830";
+	if (    (crs1_up=="EPSG:25831" || crs1_up=="EPSG:32631") && 
+		(crs2_up=="EPSG:25831" || crs2_up=="EPSG:32631")  )
+		return "EPSG:25831";
+	if (    (crs1_up=="EPSG:25832" || crs1_up=="EPSG:32632") && 
+		(crs2_up=="EPSG:25832" || crs2_up=="EPSG:32632")  )
+		return "EPSG:25832";
+	if (    (crs1_up=="EPSG:25833" || crs1_up=="EPSG:32633") && 
+		(crs2_up=="EPSG:25833" || crs2_up=="EPSG:32633")  )
+		return "EPSG:25833";
+	if (    (crs1_up=="EPSG:25834" || crs1_up=="EPSG:32634") && 
+		(crs2_up=="EPSG:25834" || crs2_up=="EPSG:32634")  )
+		return "EPSG:25834";
+	if (    (crs1_up=="EPSG:25835" || crs1_up=="EPSG:32635") && 
+		(crs2_up=="EPSG:25835" || crs2_up=="EPSG:32635")  )
+		return "EPSG:25835";
+	if (    (crs1_up=="EPSG:25836" || crs1_up=="EPSG:32636") && 
+		(crs2_up=="EPSG:25836" || crs2_up=="EPSG:32636")  )
+		return "EPSG:25836";
+	if (    (crs1_up=="EPSG:3785" || crs1_up=="EPSG:3857") && 
+		(crs2_up=="EPSG:3785" || crs2_up=="EPSG:3857")  )
+		return "EPSG:3785";
+	if (    (crs1_up=="EPSG:4326" || crs1_up=="CRS:84" || crs1_up=="EPSG:4258") && 
+		(crs2_up=="EPSG:4326" || crs2_up=="CRS:84" || crs2_up=="EPSG:4258")  )
+		return "CRS:84";
+	if (crs1_up==crs2_up)
+		return crs1_up;
+	return null;
+}
+
+//v representa la versió. es pot passar com a null si el servei no és un WMS
 function CalGirarCoordenades(crs, v)
 {
 	if((crs.toUpperCase()=="EPSG:4326" || crs.toUpperCase()=="EPSG:3035") && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
 		return true;
 	return false;
 }
-
-
 
 /*
  * Returns a CRS code in the EPSG style. In case an equivalence is not found,
@@ -1139,7 +1176,7 @@ function MMgetCRSEquivalentEPSG(codeCRS)
 	var parts= codeCRS.split(":");
 	if(parts[parts.length-3]==="EPSG" && parts[parts.length-2]==="")
 		return parts[parts.length-3]+":"+parts[parts.length-1];
-	else if(parts[parts.length-2]==="EPSG")
+	if(parts[parts.length-2]==="EPSG")
 		return parts[parts.length-2]+":"+parts[parts.length-1];
 	//Else look in our dictionary for translation
 	return {

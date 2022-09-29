@@ -1193,8 +1193,7 @@ function RecuperaVistaPrevia()
 	if (ParamInternCtrl.NZoomPreviUsat)
 	{
 		ParamInternCtrl.NZoomPreviUsat--;
-		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toLowerCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS.toLowerCase())
-			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS);
+		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
@@ -1537,7 +1536,7 @@ var cdns=[];
 			  "\" width=1 height=3 border=0><br><img src=\"",
 			  AfegeixAdrecaBaseSRC("1negre.gif"),
 			  "\" width=", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
-		  " height=2 border=0><br>", escala ,DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+		  " height=2 border=0><br>", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
@@ -1692,7 +1691,6 @@ var j;
 function EscriuEscalaAproximada(i, crs)
 {
 var e=ParamCtrl.zoom[i].costat*1000/MidaDePixelPantalla;
-//var crs_up=crs.toUpperCase();
 
 	if (EsProjLongLat(crs))
 		e*=FactorGrausAMetres;
@@ -1708,8 +1706,6 @@ function DonaAreaCella(env, costat, crs)
 
 function EscriuCostatIUnitatsZoom(i, crs)
 {
-//var crs_up=crs.toUpperCase();
-
 	if (EsProjLongLat(crs))
 		return g_gms(ParamCtrl.zoom[i].costat, false);
 	return ParamCtrl.zoom[i].costat+DonaUnitatsCoordenadesProj(crs);
@@ -1757,7 +1753,7 @@ function VerificaICorregeixPuntOri()
 {
 var d_max;
 
-    if (ParamCtrl.RelaxaAmbitVisualitzacio)
+	if (ParamCtrl.RelaxaAmbitVisualitzacio)
 		return;
 
 	if (ParamInternCtrl.PuntOri.x<ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX+ParamInternCtrl.vista.CostatZoomActual+ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual/2)
@@ -1943,7 +1939,7 @@ function DonaCoordJDeCoordSobreVista(elem, i_nova_vista, y)
 //Només útils per la consulta per localització de punts
 function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 {
-	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if(!crs_capa || DonaCRSRepresentaQuasiIguals(crs_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		punt.x=feature.geometry.coordinates[0];
 		punt.y=feature.geometry.coordinates[1];
@@ -1958,7 +1954,7 @@ function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 
 function DonaGeometryCRSActual(feature, crs_capa)
 {
-	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if(!crs_capa || DonaCRSRepresentaQuasiIguals(crs_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		return feature.geometry;
 
 	return feature.geometryCRSactual;
@@ -2988,16 +2984,21 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 	dontPropagateEvent(event);
 }
 
+//Aquesta funció no sobreescriu env sino que retorna un duplicat.
 function TransformaEnvolupant(env, crs_ori, crs_dest)
 {
 var env_ll;
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
+
 	env_ll=DonaEnvolupantLongLat(env, crs_ori);
 	return DonaEnvolupantCRS(env_ll, crs_dest);
 }
 
+//Aquesta funció sobreescriu el punt.
 function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 {
-	if (crs_ori!=crs_dest)
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
 	{
 		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
 		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
@@ -3006,9 +3007,10 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }
 
+//Aquesta funció sobreescriu el coord array
 function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
 {
-	if (crs_ori!=crs_dest)
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
 	{
 		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
 		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
@@ -3022,6 +3024,9 @@ function CanviaCRS(crs_ori, crs_dest)
 {
 var factor=1;
 var i;
+
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return;   //no cal torcar res
 
 	TransformaCoordenadesPunt(ParamInternCtrl.PuntOri, crs_ori, crs_dest);
 	TransformaCoordenadesPunt(PuntConsultat, crs_ori, crs_dest);
@@ -3195,7 +3200,7 @@ function EsCapaDinsAmbitActual(capa)
 {
 	if (!capa.EnvTotal || !capa.EnvTotal.EnvCRS)
 		return true;
-	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==capa.EnvTotal.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.EnvTotal.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, capa.EnvTotal.EnvCRS))
 			return false;
@@ -3220,7 +3225,7 @@ function EsCapaDinsAmbitCapa(c, c2)
 {
 	if (!c.EnvTotal || !c.EnvTotal.EnvCRS || !c2.EnvTotal || !c2.EnvTotal.EnvCRS)
 		return true;
-	if (c.EnvTotal.CRS.toUpperCase()==c2.EnvTotal.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(c.EnvTotal.CRS, c2.EnvTotal.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(c.EnvTotal.EnvCRS, c2.EnvTotal.EnvCRS))
 			return false;
@@ -3247,7 +3252,7 @@ function EsEnvDinsAmbitActual(env)
 
 	if (!env || !env.CRS)
 		return true;
-	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==env.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, env.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env.EnvCRS))
 			return false;
@@ -3256,8 +3261,8 @@ function EsEnvDinsAmbitActual(env)
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
 		if (!EsEnvDinsEnvolupant(
-					DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
-					DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
+				DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
+				DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
 			return false;
 	}
 	return true;
@@ -3271,7 +3276,7 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 
 	if (ParamInternCtrl.ISituacio==i)
 		return true;
-	if (env_situa_actual.CRS.toUpperCase()==env_situa.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(env_situa_actual.CRS, env_situa.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env_situa.EnvCRS))
 			return false;
@@ -3301,7 +3306,7 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 			{
 				//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
 				if (c.TileMatrixSet[i].CRS &&
-					c.TileMatrixSet[i].CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+					DonaCRSRepresentaQuasiIguals(c.TileMatrixSet[i].CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
 					return true;
 				}
@@ -3321,8 +3326,7 @@ function EsCapaDisponibleEnElCRSActual(capa)
 	{
 		for (var i=0; i<capa.CRS.length; i++)
 		{
-			//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
-			if (capa.CRS[i].toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+			if (DonaCRSRepresentaQuasiIguals(capa.CRS[i], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 		}
 		return false;
@@ -3874,14 +3878,6 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
 	// En TipusOAPI_Maps, ... no existeix aquesta petició que he de retornar, la landing page?
 	return "";
-}
-
-
-function CalGirarCoordenades(crs, v)
-{
-	if(crs.toUpperCase()=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
-		return true;
-	return false;
 }
 
 function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
@@ -5056,7 +5052,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
 			cdns.push("<td width=", vista_tiled.TileMatrix.TileWidth, "><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\"></td>");
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\" class=\"ImgHVCenter\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -5486,7 +5482,7 @@ var p, unitats_CRS;
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
 											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
-											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">")));
+											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\"  class=\"ImgHVCenter\">")));
 				}
 			}
 		}
@@ -5764,12 +5760,12 @@ var env_ll;
 
 	if (ParamInternCtrl.ISituacio!=i_min)
 	{
-	    if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
+		//Aquesta funció no fa canvis de CRS si no cal
 		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
-	    ParamInternCtrl.ISituacio=i_min;
+		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
-	    return 1;
+		return 1;
 	}
 	return 0;
 }
@@ -5787,7 +5783,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 	{
 		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS) &&
 			    ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15<env.MinX &&
 				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15>env.MaxX &&
 				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15<env.MinY &&
@@ -5805,7 +5801,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 		//Busco el primer per començar
 		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS)
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS))
 			{
 				i_max=i;
 				break;
@@ -5816,7 +5812,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 		//Ara miro si n'hi ha un de més general.
 		for (var i=i_max+1; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS) &&
 		    	((ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinX)+
 				 (ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinY)<
 				 (ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)+
@@ -5828,8 +5824,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 
 	if (ParamInternCtrl.ISituacio!=i_min)  //En cas contrari ja estem en el CRS que toca i no hi ha canvis.
 	{
-		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
-			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
+		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
