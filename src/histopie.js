@@ -773,16 +773,17 @@ var tipus_chart;
 		const subTipusChar = DonaTipusGraficHistograma(estil,0);
 		titol=(subTipusChar=="pie" ? GetMessage("PieChart") : GetMessage("Histogram"))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
 
-		if (subTipusChar=="bar")
-		{
+
 			/*
 			*	Checks per a Histograma dinàmic i per a Retall de cues.
-			*	Per check Histo. dinànim també té text per a indicar que actualització aturada per capa no visible.
+			*	Per check Histo. dinàmic també té text per a indicar que actualització aturada per capa no visible.
 			*/
 			cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
 			cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 			cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
 				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+		if (subTipusChar=="bar")
+		{
 			cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" onclick=\"CanviOpcionsHistograma(event);\">")
 			cdns.push("<label for=\"", DonaNomCheckTrimTailsHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckTrimTailsLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("CutTails", "histopie") , "</label>");
 			cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckTrimTailsTextHistograma(HistogramaFinestra.n), "\" style=\"display: none\">",
