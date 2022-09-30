@@ -2460,9 +2460,9 @@ var data
 		}
 	}
 
-	//Ara ha se que tinc el que necessito.
-	
-	if (extra_param.imatge)
+	//Ara ha se que tinc el que necessito.	
+	//Depen del ordre en que passen les coses s'arriba aquí quan ja s'ha demanat un altre redibuixat i aquest ja no està en sincronia amb l'actual contigut de la vista (que te les capes definides diferentment). 
+	if (extra_param.imatge && extra_param.imatge.getContext)
 	{
 		//Decidim on en guarda l'histograma
 		if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)

@@ -87,7 +87,7 @@ var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], obj
 		if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			d/=FactorGrausAMetres;
 		var punt={x: trans.feature.geometry.coordinates[0], y: trans.feature.geometry.coordinates[1]};
-		if(capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+		if (!DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			punt=TransformaCoordenadesPunt(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS);
 		FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(trans.i_capa, DonaEnvDeXYAmpleAlt(punt.x, punt.y, d, d), false);
 	}

@@ -2005,7 +2005,7 @@ var cdns=[], i;
 			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\"><label for=\"RadioVersion_WMS13\">WMS v1.3</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, null, ", i_capa, ", MostraCapesCapacitatsWMS);\" />");
+		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
