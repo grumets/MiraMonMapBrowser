@@ -1528,7 +1528,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if (env!=null)
 	{
 		var env2=null;
-		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+		if (!DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
 		else
 			env2=env;
@@ -1568,8 +1568,8 @@ var capa=ParamCtrl.capa[i_capa];
 	if (env!=null)
 	{
 		var env2=null;
-		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
+		if (!DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
 		else
 			env2=env;
 		cdns.push("&$filter=st_within(feature,geography'POLYGON((", env2.MinX, " ", env2.MinY, ",", env2.MaxX, " ", env2.MinY, ",", env2.MaxX, " ", env2.MaxY, ",", env2.MinX, " ", env2.MaxY, ",", env2.MinX, " ", env2.MinY, "))')");
@@ -1589,7 +1589,7 @@ var capa=ParamCtrl.capa[i_capa];
 	if (env!=null)
 	{
 		var env2=null;
-		if (capa.CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+		if (!DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			env2=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry)
 		else
 			env2=env;
@@ -1679,12 +1679,15 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 
 
 
-function DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, env, funcio, param)
+function DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
-var env_total, env_temp, incr_x=0, incr_y=0, i_tile=0, capa=ParamCtrl.capa[i_capa];
+var env_total, env_temp, incr_x=0, incr_y=0, i_tile=0;
 
 var tiles=capa.TileMatrixGeometry;
 var ha_calgut=false, vaig_a_carregar=false;
+
+	if (!tiles)
+		return;
 
 	// Si la capa té un EnvTotal faig la tessel·lació respecte aquest env i sino respecte la/les imatges de situació que tenen el mateix sistema de referència (CRSgeometry)
 	if(!tiles.env)
@@ -1697,14 +1700,14 @@ var ha_calgut=false, vaig_a_carregar=false;
 			tiles.env.EnvCRS.MaxX=capa.EnvTotal.EnvCRS.MaxX;
 			tiles.env.EnvCRS.MaxY=capa.EnvTotal.EnvCRS.MaxY;
 
-			if(capa.EnvTotal.CRS && capa.EnvTotal.CRS.toUpperCase()!=tiles.env.CRS.toUpperCase())
+			if(capa.EnvTotal.CRS && !DonaCRSRepresentaQuasiIguals(capa.EnvTotal.CRS, tiles.env.CRS))
 				TransformaEnvolupant(tiles.env.EnvCRS, crs_ori, tiles.env.CRS);
 		}
 		else
 		{
 			for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 			{
-				if (ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS.toUpperCase()==tiles.env.CRS.toUpperCase())
+				if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS,tiles.env.CRS))
 					env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS;
 				else
 					env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS.toUpperCase())
@@ -1719,8 +1722,8 @@ var ha_calgut=false, vaig_a_carregar=false;
 			}
 		}
 	}
-	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamCtrl.capa[i_capa].i_situacio
-	if(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==tiles.env.CRS)
+	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamInternCtrl.ISituacio
+	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS))
 		env_total={"MinX": env.MinX, "MaxX": env.MaxX, "MinY": env.MinY, "MaxY": env.MaxY};
 	else
 		env_total=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS);
@@ -1770,10 +1773,10 @@ var ha_calgut=false, vaig_a_carregar=false;
 							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && (capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus"))
 							{
 								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
-								FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, null, false, funcio, param);
+								FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, null, false, funcio, param);
 							}
 							else*/
-							FesPeticioAjaxObjectesDigitalitzats(i_capa, i_tile, env_sol, false, funcio, param);
+							FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, env_sol, false, funcio, param);
 						}
 						else
 							return true;
@@ -1814,7 +1817,7 @@ var env={"MinX": minx, "MaxX": maxx, "MinY": miny, "MaxY": maxy};
 		alert(GetMessage("CannotSelectObjectLayerNoExist", "vector") + ".");
 		return;
 	}
-	if(ParamCtrl.capa[i_capa].CRSgeometry.toUpperCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if (!DonaCRSRepresentaQuasiIguals(ParamCtrl.capa[i_capa].CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		env=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.capa[i_capa].CRS);
 	FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(i_capa, env, true);
 }//Fi de SeleccionaObjsCapaDigiPerEnvolupant()
@@ -1998,7 +2001,7 @@ function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
 	if (capa.model==model_vector)
 	{
 		if(capa.CRSgeometry &&
-		   capa.CRSgeometry.toUpperCase()!=crs_dest.toUpperCase() && capa.objectes && capa.objectes.features)
+		   !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, crs_dest) && capa.objectes && capa.objectes.features)
 		{
 			for(var j=0; j<capa.objectes.features.length; j++)
 			{

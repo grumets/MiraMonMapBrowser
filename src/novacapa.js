@@ -61,7 +61,11 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 						ncol: 0};
 			estil=estils[estils.length-1];
 			if (layer.esCOG && layer.uriDataTemplate)
+			{
 				estil.component=[{"i_valor": 0}];
+				if (layer.vom=="Land Water Transition Zone - Hydroperiod")
+					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
+			}
 			if (layer.categories && layer.categories.length)
 			{
 				estil.categories=[];
@@ -235,7 +239,7 @@ var env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, i;
 	{
 		if (!ParamCtrl.capa[i_capes[i]].EnvTotal)
 			return null;
-		if (i<0 && ParamCtrl.capa[i_capes[i]].EnvTotal.CRS!=ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS)
+		if (i<0 && !DonaCRSRepresentaQuasiIguals(ParamCtrl.capa[i_capes[i]].EnvTotal.CRS, ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS))
 			break;
 	}
 	if (i<i_capes.length)  //Hi ha ambits en CRSs diferents. Ho faig amb LongLat
@@ -582,8 +586,8 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				estil: null,
 				i_estil: 0,
 				NColEstil: 1,
-				LlegDesplegada: true,
-				VisibleALaLlegenda: false,
+				LlegDesplegada: false,
+				VisibleALaLlegenda: true,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -613,12 +617,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			return;
 		}
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
-		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
+		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
 		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
-			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
+			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
 
@@ -709,7 +713,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
 		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
-		var descItems=null, metadades=null, categories=null, atributs=null;
+		var descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null;
 		if (capa.estil && capa.estil.length)
 		{
 			var estil=capa.estil[0];
@@ -721,6 +725,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				categories=JSON.parse(JSON.stringify(estil.categories));
 			if (estil.atributs)
 				atributs=JSON.parse(JSON.stringify(estil.atributs));
+			if (estil.component && estil.component.length && estil.component[0].estiramentPaleta)
+				estiramentPaleta=JSON.parse(JSON.stringify(estil.component[0].estiramentPaleta));
 		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
@@ -753,6 +759,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 						component: [
 							{
 								i_valor: i_v+i,
+								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0
 							}
 						],
 						categories: categories,
@@ -778,16 +785,34 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					}
 					estil.ncol=1;
 				}
+				else if (categories)
+				{
+					//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+					if (!PaletesGlobals)
+						PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+					estil.paleta={colors: []};
+					estil.ItemLleg=[];
+					var ncolors=categories.length;
+					for (var i=0, j=0; i<ncolors; i++, j++)
+					{
+						if (j==20)
+							j==0;
+						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+					}
+					estil.ncol=1;					
+				}
 				else
 				{
-					estil.component[0].estiramentPaleta={auto: true};
+					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};
 					estil.nItemLlegAuto=20;
 					estil.ncol=4;
 					estil.descColorMultiplesDe=0.01;
 				}
 			}
 		}
-		capa.VisibleALaLlegenda=true;
+		capa.LlegDesplegada=true;
 	}
 }
 
@@ -803,7 +828,7 @@ var k;
 	}
 	ParamCtrl.capa.splice(k, 0, capa);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if (capa.CRS && !DonaCRSRepresentaQuasiIguals(capa.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		CreaLlegenda();
 		if (ParamCtrl.LlegendaAmagaSiForaCRS)

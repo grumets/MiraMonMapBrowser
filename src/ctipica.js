@@ -47,7 +47,7 @@ var NCellaLlista=[];
 var ICellaLlistaBlau=[];
 var NomEditLlavorLlista=[];
 var NomLayerLlista=[];
-var CTipicaCapa=[];
+var CTipicaCapa=[];  //Index de la capa a "CapaConsultaPreguntaServidor" per a cada possible "ConsultaTipica" (generalment només n'hi ha una)
 var NCapesCTipicaCarregades=0;
 
 //var WindowDelEvent=parent.ctipica;
@@ -900,24 +900,24 @@ var CTipicaValor=-CTipicaOffset;
 
 function CanviaLlistaCapaConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica && form_ctipica.capa)
 		{
-			CTipicaCapa[i_ctipica]=form_ctipica.capa.selectedIndex;
+			CTipicaCapa[i_ctipica]=parseInt(form_ctipica.capa.options[form_ctipica.capa.selectedIndex].value);
 			CTipicaValor=-CTipicaOffset;
 			CreaConsultaTipica(i_ctipica);
-		}
-    }
+		}	
+	}
 }
 
 
 function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica)
@@ -942,7 +942,7 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 				}
 			}
 		}
-    }
+	}
 }
 
 function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
@@ -1025,7 +1025,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 				{
 					for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 					{
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i, "\"" , ((i==CTipicaCapa[i_ctipica]) ? " selected" : "") , ">" ,
 						   DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 					}
 				}
@@ -1048,12 +1048,12 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 						}
 						else
 						{
-							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") ,
+							cdns.push("  <option value=\"" , i, "\"" , (i==CTipicaCapa[i_ctipica] ? " SELECTED" : "") ,
 							   ">" , DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 						}
 					}
 				}
-				cdns.push("  </SELECT><span class=\"text_general_consulta\">");
+				cdns.push("  </select><span class=\"text_general_consulta\">");
 				if(capa_pregunta_svr.camps.length>1 && ctipica.TipusConsultaTipica=="CTipicaDesplegables")
 					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",
 						 DonaCadena(capa_pregunta_svr.camps[capa_pregunta_svr.camps.length-1].previ));
@@ -1140,13 +1140,13 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 					valor_opcio="document.ctipica"+i_ctipica+".valor"+0+".options[document.ctipica"+i_ctipica+".valor"+0+".selectedIndex].value";
 					cdns.push("  <select name=\"valor0\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
-					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
+					   "  <option value=\"-2\"" , ((-1==CTipicaValor) ? " selected" : "") , ">" ,
 					   "(--", GetMessage("Select"), "--)" , "</option>" ,
-					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
+					   "  <option value=\"-1\">" , "---------------" , "</option>");
 					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i , "\"" , ((i==CTipicaValor) ? " selected" : "") , ">" ,
 							capa_pregunta_svr.proj_camp[0][i].valor , "</option>");
-					cdns.push("  </SELECT>");
+					cdns.push("  </select>");
 				}
 			}
 			cdns.push("</FORM>");

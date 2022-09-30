@@ -168,6 +168,21 @@ textarea
 
 
 /* *******************************************************
+ Estils de espereu si us plau de la vista
+  
+********************************************************** */
+
+.ImgHVCenter{
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+
+/* *******************************************************
  Estils de visualització dels diferents elements de la
  
  C O N S U L T A   T Í P I C A   de tipus  C E R C A D O R

@@ -1255,8 +1255,7 @@ function RecuperaVistaPrevia()
 	if (ParamInternCtrl.NZoomPreviUsat)
 	{
 		ParamInternCtrl.NZoomPreviUsat--;
-		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toLowerCase()!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS.toLowerCase())
-			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS);
+		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
@@ -1599,7 +1598,7 @@ var cdns=[];
 			  "\" width=1 height=3 border=0><br><img src=\"",
 			  AfegeixAdrecaBaseSRC("1negre.gif"),
 			  "\" width=", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
-		  " height=2 border=0><br>", escala ,DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+		  " height=2 border=0><br>", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
@@ -1754,7 +1753,6 @@ var j;
 function EscriuEscalaAproximada(i, crs)
 {
 var e=ParamCtrl.zoom[i].costat*1000/MidaDePixelPantalla;
-//var crs_up=crs.toUpperCase();
 
 	if (EsProjLongLat(crs))
 		e*=FactorGrausAMetres;
@@ -1770,8 +1768,6 @@ function DonaAreaCella(env, costat, crs)
 
 function EscriuCostatIUnitatsZoom(i, crs)
 {
-//var crs_up=crs.toUpperCase();
-
 	if (EsProjLongLat(crs))
 		return g_gms(ParamCtrl.zoom[i].costat, false);
 	return ParamCtrl.zoom[i].costat+DonaUnitatsCoordenadesProj(crs);
@@ -1819,7 +1815,7 @@ function VerificaICorregeixPuntOri()
 {
 var d_max;
 
-    if (ParamCtrl.RelaxaAmbitVisualitzacio)
+	if (ParamCtrl.RelaxaAmbitVisualitzacio)
 		return;
 
 	if (ParamInternCtrl.PuntOri.x<ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX+ParamInternCtrl.vista.CostatZoomActual+ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual/2)
@@ -2005,7 +2001,7 @@ function DonaCoordJDeCoordSobreVista(elem, i_nova_vista, y)
 //Només útils per la consulta per localització de punts
 function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 {
-	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if(!crs_capa || DonaCRSRepresentaQuasiIguals(crs_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		punt.x=feature.geometry.coordinates[0];
 		punt.y=feature.geometry.coordinates[1];
@@ -2020,7 +2016,7 @@ function DonaCoordenadaPuntCRSActual(punt, feature, crs_capa)
 
 function DonaGeometryCRSActual(feature, crs_capa)
 {
-	if(!crs_capa  || crs_capa.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if(!crs_capa || DonaCRSRepresentaQuasiIguals(crs_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		return feature.geometry;
 
 	return feature.geometryCRSactual;
@@ -3050,16 +3046,21 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 	dontPropagateEvent(event);
 }
 
+//Aquesta funci� no sobreescriu env sino que retorna un duplicat.
 function TransformaEnvolupant(env, crs_ori, crs_dest)
 {
 var env_ll;
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
+
 	env_ll=DonaEnvolupantLongLat(env, crs_ori);
 	return DonaEnvolupantCRS(env_ll, crs_dest);
 }
 
+//Aquesta funci� sobreescriu el punt.
 function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 {
-	if (crs_ori!=crs_dest)
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
 	{
 		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
 		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
@@ -3068,9 +3069,10 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }
 
+//Aquesta funci� sobreescriu el coord array
 function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
 {
-	if (crs_ori!=crs_dest)
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
 	{
 		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
 		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
@@ -3084,6 +3086,9 @@ function CanviaCRS(crs_ori, crs_dest)
 {
 var factor=1;
 var i;
+
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return;   //no cal torcar res
 
 	TransformaCoordenadesPunt(ParamInternCtrl.PuntOri, crs_ori, crs_dest);
 	TransformaCoordenadesPunt(PuntConsultat, crs_ori, crs_dest);
@@ -3257,7 +3262,7 @@ function EsCapaDinsAmbitActual(capa)
 {
 	if (!capa.EnvTotal || !capa.EnvTotal.EnvCRS)
 		return true;
-	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==capa.EnvTotal.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.EnvTotal.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, capa.EnvTotal.EnvCRS))
 			return false;
@@ -3282,7 +3287,7 @@ function EsCapaDinsAmbitCapa(c, c2)
 {
 	if (!c.EnvTotal || !c.EnvTotal.EnvCRS || !c2.EnvTotal || !c2.EnvTotal.EnvCRS)
 		return true;
-	if (c.EnvTotal.CRS.toUpperCase()==c2.EnvTotal.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(c.EnvTotal.CRS, c2.EnvTotal.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(c.EnvTotal.EnvCRS, c2.EnvTotal.EnvCRS))
 			return false;
@@ -3309,7 +3314,7 @@ function EsEnvDinsAmbitActual(env)
 
 	if (!env || !env.CRS)
 		return true;
-	if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()==env.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, env.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env.EnvCRS))
 			return false;
@@ -3318,8 +3323,8 @@ function EsEnvDinsAmbitActual(env)
 	{
 		//Paso l'envolupant actual a lat/long i comparo.
 		if (!EsEnvDinsEnvolupant(
-					DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
-					DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
+				DonaEnvolupantLongLat(ParamInternCtrl.vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),
+				DonaEnvolupantLongLat(env.EnvCRS, env.CRS)))
 			return false;
 	}
 	return true;
@@ -3333,7 +3338,7 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 
 	if (ParamInternCtrl.ISituacio==i)
 		return true;
-	if (env_situa_actual.CRS.toUpperCase()==env_situa.CRS.toUpperCase())
+	if (DonaCRSRepresentaQuasiIguals(env_situa_actual.CRS, env_situa.CRS))
 	{
 		if (!EsEnvDinsEnvolupant(ParamInternCtrl.vista.EnvActual, env_situa.EnvCRS))
 			return false;
@@ -3363,7 +3368,7 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 			{
 				//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
 				if (c.TileMatrixSet[i].CRS &&
-					c.TileMatrixSet[i].CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+					DonaCRSRepresentaQuasiIguals(c.TileMatrixSet[i].CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
 					return true;
 				}
@@ -3383,9 +3388,8 @@ function EsCapaDisponibleEnElCRSActual(capa)
 	{
 		for (var i=0; i<capa.CRS.length; i++)
 		{
-			//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
-			if (capa.CRS[i].toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
-				return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
+			if (DonaCRSRepresentaQuasiIguals(capa.CRS[i], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+        return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 		}
 		return false;
 	}
@@ -3938,14 +3942,6 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 	return "";
 }
 
-
-function CalGirarCoordenades(crs, v)
-{
-	if(crs.toUpperCase()=="EPSG:4326" && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
-		return true;
-	return false;
-}
-
 function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
 var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
@@ -4321,7 +4317,7 @@ var capa=ParamCtrl.capa[i_capa];
 /* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
 function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
-	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
+	//Aqu� no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no �s canviat pel nou idioma. De fet, aix� es podria fer durant el canvi d'idioma per� �s un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
 		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
@@ -4422,18 +4418,21 @@ function PintaCtxColorVoraIInterior(estil_vora, estil_interior, ctx, previ)
 function OmpleVistaCapaDigiIndirect(param)
 {
 var nom_vista=param.nom_vista, vista=param.vista;
-var capa_digi=ParamCtrl.capa[param.i_capa];
+var capa=ParamCtrl.capa[param.i_capa];
 var env=vista.EnvActual;
 
-	if(capa_digi.tipus)
+	if (capa.model!=model_vector)
+		return;
+
+	if(DonaTipusServidorCapa(capa))
 	{
-		if(DemanaTilesDeCapaDigitalitzadaSiCal(param.i_capa, env, OmpleVistaCapaDigiIndirect, param))
+		if(DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;
 	}
 
-	if (capa_digi.objectes && capa_digi.objectes.features)
+	if (capa.objectes && capa.objectes.features)
 	{
-		var estil=capa_digi.estil[capa_digi.i_estil];
+		var estil=capa.estil[capa.i_estil];
 		var i_atri_sel, i_atri_interior=[], i_atri_vora=[];
 		if (estil.simbols && estil.simbols.length)
 		{
@@ -4442,11 +4441,11 @@ var env=vista.EnvActual;
 				var simbols=estil.simbols[i_simb];
 				if (simbols.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
-					var i=DonaIAtributsDesDeNomAtribut(capa_digi, simbols.NomCamp)
+					//Prec�rrega de valors si hi ha referencies r�ster.
+					var i=DonaIAtributsDesDeNomAtribut(capa, simbols.NomCamp)
 					if (i==-1)
 					{
-						AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa_digi);
+						AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa);
 						return ;
 					}
 					if (PrecarregaValorsArrayBinaryAtributSiCal(i, OmpleVistaCapaDigiIndirect, param))
@@ -4454,11 +4453,11 @@ var env=vista.EnvActual;
 				}
 				if (simbols.NomCampFEscala)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
-					var i=DonaIAtributsDesDeNomAtribut(capa_digi, simbols.NomCampFEscala)
+					//Prec�rrega de valors si hi ha referencies r�ster.
+					var i=DonaIAtributsDesDeNomAtribut(capa, simbols.NomCampFEscala)
 					if (i==-1)
 					{
-						AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCampFEscala, "simbols.NomCampFEscala", capa_digi);
+						AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCampFEscala, "simbols.NomCampFEscala", capa);
 						return ;
 					}
 					if (PrecarregaValorsArrayBinaryAtributSiCal(i, OmpleVistaCapaDigiIndirect, param))
@@ -4468,11 +4467,11 @@ var env=vista.EnvActual;
 		}
 		if (estil.NomCampSel)
 		{
-			//Precàrrega de valors de la selecció
-			i_atri_sel=DonaIAtributsDesDeNomAtribut(capa_digi, estil.NomCampSel)
+			//Prec�rrega de valors de la selecci�
+			i_atri_sel=DonaIAtributsDesDeNomAtribut(capa, estil.NomCampSel)
 			if (i_atri_sel==-1)
 			{
-				AlertaNomAtributIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa_digi);
+				AlertaNomAtributIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa);
 				return ;
 			}
 			if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_sel, OmpleVistaCapaDigiIndirect, param))
@@ -4486,11 +4485,11 @@ var env=vista.EnvActual;
 				if (forma.interior &&
 					forma.interior.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
-					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.interior.NomCamp)
+					//Prec�rrega de valors si hi ha referencies r�ster.
+					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.interior.NomCamp)
 					if (i_atri_interior[i_forma]==-1)
 					{
-						AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa_digi);
+						AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa);
 						return ;
 					}
 					if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_interior[i_forma], OmpleVistaCapaDigiIndirect, param))
@@ -4499,11 +4498,11 @@ var env=vista.EnvActual;
 				if (forma.vora &&
 					forma.vora.NomCamp)
 				{
-					//Precàrrega de valors si hi ha referencies ràster.
-					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa_digi, forma.vora.NomCamp)
+					//Prec�rrega de valors si hi ha referencies r�ster.
+					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.vora.NomCamp)
 					if (i_atri_vora[i_forma]==-1)
 					{
-						AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa_digi);
+						AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa);
 						return ;
 					}
 					if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_vora[i_forma], OmpleVistaCapaDigiIndirect, param))
@@ -4560,9 +4559,9 @@ var env=vista.EnvActual;
 			}
 		}
 
-		for (var j=capa_digi.objectes.features.length-1; j>=0; j--)
+		for (var j=capa.objectes.features.length-1; j>=0; j--)
 		{
-			geometry=DonaGeometryCRSActual(capa_digi.objectes.features[j], capa_digi.CRSgeometry);
+			geometry=DonaGeometryCRSActual(capa.objectes.features[j], capa.CRSgeometry);
 			if (geometry.type=="LineString" || geometry.type=="MultiLineString")
 			{
 				if (!estil.formes)
@@ -4571,14 +4570,15 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edició
+
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel;
 						un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -4614,7 +4614,7 @@ var env=vista.EnvActual;
 
 					if (!forma_vora)
 						continue;
-					PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+					PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 				 	if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 						ctx.lineWidth = 1;
 					else
@@ -4654,7 +4654,8 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+          
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -4663,7 +4664,7 @@ var env=vista.EnvActual;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -4721,10 +4722,10 @@ var env=vista.EnvActual;
 					if (!forma_vora && !forma_interior)
 						continue;
 					if (forma_interior)
-						PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+						PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 					if (forma_vora)
 					{
-						PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+						PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 
 						if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 							ctx.lineWidth = 1;
@@ -4785,15 +4786,15 @@ var env=vista.EnvActual;
 								else if (simbol.length==1 && !simbols.NomCamp)
 									i_simbol=0;
 								else
-									i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil);
+									i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa, j, i_simb, i_col, i_fil);
 
 								if (i_simbol!=-1)
 								{
-									if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
+									if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edici�
 										icona=simbol[i_simbol].IconaSel;
 									else if (estil.NomCampSel)
 									{
-										if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+										if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
 											icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].IconaSel: simbol[i_simbol].icona);
 										else
 											icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].icona: null);
@@ -4805,7 +4806,7 @@ var env=vista.EnvActual;
 									{
 										if (simbols.NomCampFEscala)
 										{
-											icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, simbols.NomCampFEscala);
+											icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa, j, i_simb, i_col, i_fil, simbols.NomCampFEscala);
 											if (typeof icona.fescala==="undefined" || isNaN(icona.fescala) || icona.fescala<=0)
 												icona.fescala=-1;
 										}
@@ -4816,8 +4817,8 @@ var env=vista.EnvActual;
 											env_icona=DonaEnvIcona({x: coord[0],y: coord[1]}, icona);
 										if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
 										{
-											//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa_digi --> No he de considerar ni els marges de la vista ni els scrolls.
-											//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+											//la layer l_obj_digi t� les coordenades referides a la seva layer pare que �s l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
+											//la manera de fer aix� est� extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
 
 											if (Array.isArray(icona))
 											{
@@ -4832,7 +4833,7 @@ var env=vista.EnvActual;
 												{
 													forma=estil.formes[i_forma];
 
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa_digi.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -4841,7 +4842,7 @@ var env=vista.EnvActual;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -4899,9 +4900,9 @@ var env=vista.EnvActual;
 					if (!forma_vora && !forma_interior)
 						continue;
 					if (forma_interior)
-						PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+						PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 													if (forma_vora)
-														PreparaCtxColorVoraOInterior(vista, capa_digi, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+														PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 													if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 														ctx.lineWidth = 1;
 													else
@@ -4977,14 +4978,14 @@ var env=vista.EnvActual;
 							env.MinY < coord[1] &&
 							env.MaxY > coord[1])
 						{
-							valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa_digi, j, i_simb, i_col, i_fil, estil.fonts.NomCampText);
+							valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa, j, i_simb, i_col, i_fil, estil.fonts.NomCampText);
 							if (typeof valor!=="undefined" && (typeof valor!=="string" || valor!="") && (typeof valor!=="number" || !isNaN(valor)))
 							{
 								previ.shadow=ActivaSombraFonts(ctx);
 								if(estil.fonts.aspecte.length==1)
 									font=estil.fonts.aspecte[0].font;
 								else
-									font=estil.fonts.aspecte[capa_digi.objectes.features[j].i_aspecte].font;  //No acabat implementar encara. Caldria generar index d'estils a cada objecte.
+									font=estil.fonts.aspecte[capa.objectes.features[j].i_aspecte].font;  //No acabat implementar encara. Caldria generar index d'estils a cada objecte.
 								ctx.font=font.font;
 								if (font.color)
 								{
@@ -5115,7 +5116,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
 			cdns.push("<td width=", vista_tiled.TileMatrix.TileWidth, "><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\"></td>");
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\" class=\"ImgHVCenter\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -5263,6 +5264,23 @@ var SufixSliderZoom="sliderzoom";    //No pot tenir subratllat al davant. Aquest
 var SufixTelTrans="_tel_trans";    //Cal que porti el subratllat al davant. Aquesta no s'hauria de desactivar mai
 var SufixZRectangle="_z_rectangle";  //Cal que porti el subratllat al davant.
 
+var timeOutCapaVista={};
+
+function CancellaTimeOutCapaVista(nom_vista, i_crea_vista)
+{
+	if (!timeOutCapaVista[nom_vista+"_"+i_crea_vista])
+		return;
+	for (var i=0; i<timeOutCapaVista[nom_vista+"_"+i_crea_vista].length; i++)
+	{
+		if (timeOutCapaVista[nom_vista+"_"+i_crea_vista][i])
+		{
+			clearTimeout(timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]);
+			timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=null;
+		}
+	}
+	timeOutCapaVista[nom_vista+"_"+i_crea_vista]=null;
+}
+
 function CreaVistaImmediata(win, nom_vista, vista)
 {
 var cdns=[], ll;
@@ -5288,6 +5306,7 @@ var p, unitats_CRS;
 
 	NCreaVista++;
 	i_crea_vista=NCreaVista;
+	timeOutCapaVista[nom_vista+"_"+i_crea_vista]=[];
 
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 	if (vista.i_nova_vista==NovaVistaPrincipal)
@@ -5512,7 +5531,10 @@ var p, unitats_CRS;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
+			{
+				CancellaTimeOutCapaVista(nom_vista, i_crea_vista);
 				return;
+			}
 			var capa=ParamCtrl.capa[i];
 			if (capa.model==model_vector)
 			{
@@ -5524,7 +5546,7 @@ var p, unitats_CRS;
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
 											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
-											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">")));
+											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\"  class=\"ImgHVCenter\">")));
 				}
 			}
 		}
@@ -5623,26 +5645,29 @@ var p, unitats_CRS;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
+			{
+				CancellaTimeOutCapaVista(nom_vista, i_crea_vista);
 				return;
+			}
 			var capa=ParamCtrl.capa[i];
 			if (capa.model==model_vector)
 			{
 				//if (EsObjDigiVisibleAAquestNivellDeZoom(capa))
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapaDigi(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
+					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapaDigi(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
 			}
 			else
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
-					setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
-				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
+					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
+				else if (capa.estil) //si la capa ara �s no visible, i t� estils, he de mirar si hi ha gr�fics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
 				}
 			}
 			if (capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor!=true)
-				setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
+				timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("semitransparentThisNomLayer(\""+nom_vista+"_l_capa"+i+"\")", 25*i);
 		}
 	}
 	if (vista.i_nova_vista==NovaVistaPrincipal || vista.i_nova_vista==NovaVistaImprimir)
@@ -5799,12 +5824,12 @@ var env_ll;
 
 	if (ParamInternCtrl.ISituacio!=i_min)
 	{
-	    if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
+		//Aquesta funci� no fa canvis de CRS si no cal
 		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
-	    ParamInternCtrl.ISituacio=i_min;
+		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
-	    return 1;
+		return 1;
 	}
 	return 0;
 }
@@ -5822,7 +5847,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 	{
 		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS) &&
 			    ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15<env.MinX &&
 				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX+(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)*0.15>env.MaxX &&
 				ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY-(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinY)*0.15<env.MinY &&
@@ -5840,7 +5865,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 		//Busco el primer per començar
 		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS)
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS))
 			{
 				i_max=i;
 				break;
@@ -5851,7 +5876,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 		//Ara miro si n'hi ha un de més general.
 		for (var i=i_max+1; i<ParamCtrl.ImatgeSituacio.length; i++)
 		{
-			if (crs==ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS &&
+			if (DonaCRSRepresentaQuasiIguals(crs, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS) &&
 		    	((ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinX)+
 				 (ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MaxY-ParamCtrl.ImatgeSituacio[i_max].EnvTotal.EnvCRS.MinY)<
 				 (ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MaxX-ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS.MinX)+
@@ -5863,8 +5888,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 
 	if (ParamInternCtrl.ISituacio!=i_min)  //En cas contrari ja estem en el CRS que toca i no hi ha canvis.
 	{
-		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS)
-			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
+		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
 			eval(ParamCtrl.FuncioCanviProjeccio);
@@ -6064,7 +6088,7 @@ var capa, j, i, i_estil;
 						}
 						else
 						{
-							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].if!=capa_estil[j])
+							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].id!=capa_estil[j])
 								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " +
 								    GetMessage("ForLayer") + " " + capa_visible[j]);
 					    	}
@@ -6510,8 +6534,54 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	return 0;
 }
 
-/*Aquesta funció afegeix automàticament totes les capes d'un servidor a la llegenda.
-Funció inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
+function AfegeixPuntsCapabilitiesACapaDePunts(layers, capaDePunts)
+{
+var capa, layer, punt;
+
+	//cerco la capa de punts
+	//si te objectes li afageixo els que toca
+	if (null==(capa=DonaCapaDesDeIdCapa(capaDePunts.id)))
+	{
+		alert(GetMessage("CannotFindLayer") + " (id: " + i_capa + ")");
+		return;
+	}
+	if (!capa.objectes || !capa.objectes.features)
+	{
+		alert("The 'capa' has no 'objectes' or there is no array on 'features' in 'objectes'" + " (id: " + i_capa + ")");
+		return;
+	}
+
+	for(var i_layer=0; i_layer<layers.length; i_layer++)
+	{
+		layer=layers[i_layer];
+		if (!layer.EnvLL)
+			continue;
+
+		punt={x: (layer.EnvLL.MaxX+layer.EnvLL.MinX)/2, y: (layer.EnvLL.MaxY+layer.EnvLL.MinY)/2};
+
+		capa.objectes.features.push({
+			"type": "Feature",
+			"bbox": [punt.x, punt.y, punt.x, punt.y],
+			"geometry": {
+				"type": "Point",
+				"coordinates": [punt.x, punt.y]
+			},
+			"properties": {
+			}
+		});
+		if (capaDePunts.properties && capaDePunts.properties.length)
+		{
+			for (var i_prop=0; i_prop<capaDePunts.properties.length; i_prop++)
+			{
+				if (layer[capaDePunts.properties[i_prop]])
+					capa.objectes.features[capa.objectes.features.length-1].properties[capaDePunts.properties[i_prop]]=layer[capaDePunts.properties[i_prop]];
+			}
+		}
+	}
+}
+
+/*Aquesta funci� afegeix autom�ticament totes les capes d'un servidor a la llegenda.
+Funci� inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
 function AfegeixCapesWMSAlNavegador(servidorGC)
 {
 var i_get_featureinfo;
@@ -6520,14 +6590,16 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
-
+	
+	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
+		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
 	RevisaEstatsCapes();
 	CreaLlegenda();
 }
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador);
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
 }
 
 function CarregaArrayCapesDeServei()
