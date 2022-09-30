@@ -173,7 +173,7 @@ var i_indicator, cdns=[];
 			else
 				decimals=ParamCtrl.NDecimalsCoordXY;
 			cdns.push("<b>Scope:</b> Dataset fragment of this area: x=[", OKStrOfNe(env.MinX, decimals), ",", OKStrOfNe(env.MaxX, decimals), "], y=[", OKStrOfNe(env.MinY, decimals), ",", OKStrOfNe(env.MaxY, decimals), "] ");
-			if (quality[i_q].scope.env.CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+			if (DonaCRSRepresentaQuasiIguals(quality[i_q].scope.env.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 				  	GetMessage("GoTo", "capavola"),
 					"\" onClick='PortamAAmbit(",JSON.stringify(env),")' />");
