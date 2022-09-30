@@ -271,7 +271,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		GetMessage("Height") , ": " , ParamInternCtrl.vista.nfil, "px, ",
 		GetMessage("WidthOfTheView", "params") , ": <input type=\"text\" size=\"6\" name=\"param_MidaAmplePantalla\" value=\"", OKStrOfNe(MidaDePixelPantalla*ParamInternCtrl.vista.ncol,1), "\" maxlength=\"8\"> mm<br>",
 		GetMessage("LateralJumpPerc", "params") , ": <input type=\"text\" size=\"3\" name=\"param_psalt\" value=\"", ParamCtrl.psalt, "\" maxlength=\"3\"> %, ",
-		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>",
+		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>", 
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicNo\"", (ParamCtrl.ZoomUnSolClic ? "" : " checked=\"checked\""),"><label for=\"id_ZoomUnSolClicNo\" accesskey=\"2\"> ",
 		GetMessage("ZoomPan_2Clicks", "params") , "</label><br>" ,
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicSi\"", (ParamCtrl.ZoomUnSolClic ? " checked=\"checked\"" : ""), "><label for=\"id_ZoomUnSolClicSi\" accesskey=\"1\"> ",
@@ -311,22 +311,11 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		"<div id=\"param_colors\">",
 		DonaTextParamColors(),
 		"</div></fieldset>",
-		"<fieldset><legend>",
-		GetMessage("UserConfiguration"),
-		": </legend>",
-		"<div id=\"param_config_storage\">",
-		"<label for=\"configLoadBtn\">", GetMessage("SelectConfigLoad"), "</label>&nbsp;",
-		"<button class=\"Verdana11px\" id=\"configLoadBtn\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Load"), "</button><br>",
-		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.files)'>",
-		"<label for=\"configLoadBtn\">", GetMessage("FileNameToSave"), "</label>: &nbsp;",
-		"<input TYPE=\"text\" id=\"\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
-		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari(ParamCtrl, form.textFileInput.value)'> ",
-		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
 		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", GetMessage("Show"),
 		"\" onClick='MostraConfigJSON(\"textarea_ConfigJSON\",\"param_desgranat\", \"button_show_ConfigJSON\");'>&nbsp;<small id=\"text_canvis_aplicats\"><i>(",
 		GetMessage("changesAboveWillBeApplied", "params"),
-		")</i></small></div>",
+		")</i></small></div>",		
 		"<textarea id=\"textarea_ConfigJSON\" name=\"textarea_ConfigJSON\" rows=\"26\" cols=\"70\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" style=\"display:none\"></textarea></div>",
 		"<div id=\"param_hr_dprs_show\"></div>",
 		"<div align=\"center\">",
@@ -342,87 +331,4 @@ function MostraFinestraParametres()
 	if (!ObreFinestra(window, "param", GetMessage("ofChangingParameters", "params")))
 		return;
 	OmpleFinestraParametres();
-}
-
-
-/*
-*	Funció per a transformar els paràmetres de configuració de l'usuari en quelcom
-*	capaç de ser inclòs en un anchor <a>, per exemple un Blob.
-*/
-var jsonConfigFile = null;
-
-function makeHrefData(userConfig)
-{
-	var data = new Blob([JSON.stringify(userConfig)], {type: 'text/json'});
-
-	// If we are replacing a previously generated file we need to
-	// manually revoke the object URL to avoid memory leaks.
-	if (jsonConfigFile !== null)
-		window.URL.revokeObjectURL(jsonConfigFile);
-
-	jsonConfigFile = window.URL.createObjectURL(data);
-	return jsonConfigFile;
-};
-
-/*
-*	Funció per a guardar el fitxer de configuració de JSON en memòria
-*/
-function GuardaConfiguracioUsuari(userConfig, fileName)
-{
-	if (fileName.length < 1)
-		return false
-	const jsonExtention = ".json";
-	var link = document.createElement('a');
-	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
-		fileName+=jsonExtention;
-	link.setAttribute('download', fileName);
-	link.setAttribute('href', makeHrefData(userConfig));
-	document.body.appendChild(link);
-
-	// wait for the link to be added to the document
-	window.requestAnimationFrame(function () {
-      		var event = new MouseEvent('click');
-		link.dispatchEvent(event);
-		document.body.removeChild(link);
-		});
-
-  return false;
-}
-
-/*
-*	Funció per a obrir el fitxer de configuració de JSON en memòria
-*/
-function RecuperaConfiguracioUsuari(files)
-{
-		if (files.length < 1)
-			return false;
-		const path = files[0];
-		if (path.length < 1)
-			return false;
-		if (path.type=="application/json" || path.type=="application/geo+json")
-		{
-			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
-			const fileReader = new FileReader();
-			fileReader.nom_json = "./"+path.name; //Així onload pot saber el nom del fitxer
-			fileReader.onload = function(e) {
-				try {
-
-
-							loadJSON(this.nom_json,
-							IniciaParamCtrlIVisualitzacio,
-							function(xhr) { alert(xhr); },
-							{div_name:ParamCtrl.containerName, config_json:this.nom_json, config_reset: true, usa_local_storage: false});
-				}
-				catch (e){
-					alert("JSON file error. " + e);
-				}
-			};
-			fileReader.readAsText(path);
-		}
-		else
-		{
-			alert("Unrecognized file type '"+path.type+ "' for the file '"+ path.name + "'");
-		}
-
-		return false;
 }
