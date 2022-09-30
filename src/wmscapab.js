@@ -46,8 +46,7 @@ function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
 var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer;
 var minim, maxim, factor_k, factorpixel;
-var str_uom="UnitOfMeasure:"
-var str_valueMeaning="ValueMeaning:"
+var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
 
 	//Llegeixo les capacitats d'aquesta capa
 	//Començo pel sistema de referència
@@ -72,7 +71,7 @@ var str_valueMeaning="ValueMeaning:"
 			cadena=node2.childNodes[0].nodeValue;
 			if(cadena)
 			{
-				if(cadena.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+				if (DonaCRSRepresentaQuasiIguals(cadena.toUpperCase(), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
 					//·$·Aqui s'haurà de fer alguna cosa amb els sinònims,...
 					trobat=true;
@@ -97,6 +96,7 @@ var str_valueMeaning="ValueMeaning:"
 									consultable: false,
 									estil: [],
 									uom: null,
+									vom: null,  //Variable of measure
 									categories: [],
 									FlagsData: null,
 									i_data: 0,
@@ -206,7 +206,15 @@ var str_valueMeaning="ValueMeaning:"
 								cadena=node3.childNodes[0].nodeValue;
 								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
 								if (cadena.substr(0, str_uom.length)==str_uom)
+								{
 									layer.uom=cadena.substr(str_uom.length).trim();
+									if (layer.uom=="mg/m^3")
+										layer.uom="mg/m<sup>3</sup>";
+									else if (layer.uom=="NTU")
+										layer.uom="Nephelometric Turbidity (NTU)";
+								}
+								else if (cadena.substr(0, str_vom.length)==str_vom)
+									layer.vom=cadena.substr(str_vom.length).trim();
 								else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
 								{
 									if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
@@ -510,7 +518,7 @@ var root, cadena, node, node2, i, j
 	}
 }//Fi de ParsejaRespostaGetCapabilities()
 
-function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, access, i_capa, func_after)
+function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, access, i_capa, func_after, param_func_after)
 {
 var request;
 
@@ -534,7 +542,8 @@ var request;
 								formatGetMap: [],
 								formatGetFeatureInfo: [],
 								layer: [],
-								func_after: func_after};
+								func_after: func_after,
+								param_func_after: param_func_after};
 	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
 		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 

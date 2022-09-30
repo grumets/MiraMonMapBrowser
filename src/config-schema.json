@@ -1130,7 +1130,24 @@
 					"estilPerCapa": {
 						"description": "Estils a aplicar a les capes, en funció de les paraules clau o el nom de la capa (encara per definir)",
 						"type": "array"
-					} 
+					},
+					"capaDePunts": {
+						"description": "Id de la capa de punts que s'alimenta automaticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"type": "object",
+						"properties": {									
+							"id": { 
+								"description": "Capa vectorial embeguda on inserir les posicions. La capa ha d'estar completament definida incluent l'array d'atributs. Ha de tenir també creat 'objectes' amb un array de 'features' que provablement tindrà 0 elements abans d'importar el servei.",
+								"type": "string"
+							},
+							"properties": {
+								"description": "Per a cada 'feature' la 'geometry' es calcula sola però les 'properties' a heretar de cada capa importada s'indiquen aquí. Recordeu que si no s'indica aquest nom al array d'atributs de la definició de la capa de punts, aquest no apareixerà. De moment pot ser 'nom', 'desc', 'CostatMinim', 'CostatMaxim', 'uriDataTemplate' i 'uriMDTemplate'",
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							}
+						}
+					}  
 				}
 			}
 		}, 
@@ -1540,7 +1557,7 @@
 									"$ref": "#/definitions/StringOCadenaLang" 
 								},
 								"TipusObj":{ 
-									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons). No indicar quan no cal desplegar valors a la llegenda",
+									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
 									"enum": [null, "L", "P", "S", "I"] 
 								},
 								"component": {
@@ -2538,12 +2555,12 @@
 							"multipleOf" : 1
 						},
 						"i": {
-							"description": "Posició del píxel que fa de punt calent en l'eix de columnes",
+							"description": "Posició del píxel que fa de punt calent en l'eix de columnes. 0 vol dir l'extrem esquerra de la icona. El punt calent és el punt on s'apliquen les coordenades terreny. Per exemple, en una 'gota' el punt calent se situa sota la gota",
 							"type": "number",
 							"multipleOf" : 1
 						},
 						"j": {
-							"description": "Posició del píxel que fa de punt calent en l'eix de files",
+							"description": "Posició del píxel que fa de punt calent en l'eix de files. 0 vol dir l'exterm superior de la icona",
 							"type": "number",
 							"multipleOf" : 1
 						}

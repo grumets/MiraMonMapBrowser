@@ -160,7 +160,7 @@ var cdns=[], cdns_req=[], capa=ParamCtrl.capa[i_capa_wcs];
 	var res_cov=ParamCtrl.ResGetCoverage[capa.ResCoverage];
 	var crs;
 
-	if (res_cov.CRS && res_cov.CRS!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
+	if (res_cov.CRS && DonaCRSRepresentaQuasiIguals(res_cov.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		crs=res_cov.CRS;
 		env=DonaEnvolupantCRS(env, crs);

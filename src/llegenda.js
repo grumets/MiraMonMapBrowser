@@ -168,6 +168,7 @@ var cdns=[];
 	return cdns.join("");
 }
 
+
 function CreaItemLlegDePaletaSiCal(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
@@ -190,11 +191,14 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 	if (estil.categories && estil.atributs)
 	{
-		var desc
-		//La llegenda es pot generar a partir de la llista de categories i la paleta.
+		var desc, nodata=null, i_nodata;
 
+		//La llegenda es pot generar a partir de la llista de categories i la paleta.
 		estil.ItemLleg=[];
 		ncolors=(estil.categories.length>ncolors) ? ncolors : estil.categories.length;
+
+		if (estil.component && estil.component.length==1 && typeof estil.component[0].i_valor !=="undefined" && estil.component[0].i_valor!=null)
+			nodata=capa.valors[estil.component[0].i_valor].nodata;
 		
 		for (var i=0, i_color=0; i_color<ncolors; i_color++)
 		{
@@ -203,6 +207,12 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
 			if (desc=="")
 				continue;
+			if (nodata)
+			{
+				i_nodata=nodata.indexOf(i_color);
+				if (i_nodata>=0)
+					continue;
+			}
 			estil.ItemLleg[i]={"color": (colors) ? RGB_color(colors[i_color]) : RGB(i_color,i_color,i_color), "DescColor": desc};
 			i++;
 		}	
@@ -1311,16 +1321,6 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 			 (capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length<2)))
 			redibuixar_llegenda=true;
 		CarregaSimbolsEstilActualCapaDigi(capa);
-		/* Abans s'assumia que un canvi d'estil era també un canvi de contingut. De moment, això no és pas així
-		  i per això no cal fer això que hi ha aquí:
-		capa.objectes=null;
-		if (capa.tipus)
-		{
-			InicialitzaTilesSolicitatsCapaDigi(capa);
-			DemanaTilesDeCapaDigitalitzadaSiCal(i_capa, ParamInternCtrl.vista.EnvActual);
-		}
-		else
-			capa.TileMatrixGeometry.tiles_solicitats=null;*/
 	}
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
