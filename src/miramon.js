@@ -902,7 +902,8 @@ function CreaTitolNavegador()
 
 function CanviaIdioma(s)
 {
-	ParamCtrl.idioma = ComprovaDisponibilitatIdiomaPreferit(s);
+	if (!s)
+		ParamCtrl.idioma = ComprovaDisponibilitatIdiomaPreferit();
 	parent.document.title=DonaCadena(ParamCtrl.titol);
 	CreaTitolNavegador();
 	CreaLlegenda();
@@ -1001,9 +1002,11 @@ function CanviaIdioma(s)
 *	a un dels idiomes que gestiona el MMN. En cas afirmatiu es defineix
 * aquest idioma com a inical per carregar el MMN.
 */
-function ComprovaDisponibilitatIdiomaPreferit(idioma)
+function ComprovaDisponibilitatIdiomaPreferit()
 {
-	if (window.navigator.languages)
+	const defaultLanguange = "eng";
+
+ 	if (window.navigator.languages) // Mai serà buit, en principi, perquè com a mínim contindrà l'idioma amb que es mostra les opcions del navegador.
 	{
 		const preferenciesIdiomesNavegador = window.navigator.languages;
 		var currentISOIdiom, mmnIdiom;
@@ -1020,10 +1023,12 @@ function ComprovaDisponibilitatIdiomaPreferit(idioma)
 
 			indexIdioma++
 		}
-		return idiomaTrobat ? mmnIdiom : idioma
+		return idiomaTrobat ? mmnIdiom : defaultLanguange
 	}
 	else
-		return idioma;
+	{
+		return defaultLanguange;
+	}
 } // Fi function ComprovaDisponibilitatIdiomaPreferit()
 
 function DonaIndexNivellZoom(costat)
@@ -4654,7 +4659,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-          
+
 					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
@@ -6590,7 +6595,7 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
-	
+
 	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
 		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
 	RevisaEstatsCapes();
@@ -6820,17 +6825,16 @@ var win, i, j, l, capa;
 	if(ParamCtrl.CapaConsultaPreguntaServidor && NCapesCTipicaCarregades < ParamCtrl.CapaConsultaPreguntaServidor.length)
 		DadesPendentsAccio=true;
 
+	CanviaIdioma(ParamCtrl.idioma);
 	if (nou_env.MinX<1e300 && nou_env.MaxX>-1e300 && nou_env.MinY<1e300 && nou_env.MaxY>-1e300)
 	{
 		if (nou_CRS!="")
 			EstableixNouCRSEnv(nou_CRS, nou_env);
-		CanviaIdioma(ParamCtrl.idioma);
 		PortamAAmbit(nou_env);
 	}
 	else
 	{
 		RevisaEstatsCapes();
-		CanviaIdioma(ParamCtrl.idioma);
 		RepintaMapesIVistes();
 	}
 	document.body.bgColor=ParamCtrl.ColorFonsPlana;
