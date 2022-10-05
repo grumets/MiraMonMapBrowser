@@ -1004,7 +1004,7 @@ function CanviaIdioma(s)
 */
 function ComprovaDisponibilitatIdiomaPreferit()
 {
-	const defaultLanguange = "eng";
+	const defaultLanguage = "eng";
 
  	if (window.navigator.languages) // Mai serà buit, en principi, perquè com a mínim contindrà l'idioma amb que es mostra les opcions del navegador.
 	{
@@ -1023,11 +1023,11 @@ function ComprovaDisponibilitatIdiomaPreferit()
 
 			indexIdioma++
 		}
-		return idiomaTrobat ? mmnIdiom : defaultLanguange
+		return idiomaTrobat ? mmnIdiom : defaultLanguage
 	}
 	else
 	{
-		return defaultLanguange;
+		return defaultLanguage;
 	}
 } // Fi function ComprovaDisponibilitatIdiomaPreferit()
 
