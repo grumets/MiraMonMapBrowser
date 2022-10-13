@@ -374,7 +374,7 @@ function GuardaConfiguracioUsuari(userConfig, fileName)
 	const jsonExtention = ".json";
 	// Fem que els canvis de ParamInternCtrl passin a ParamCtrl.
 	RecuperaValorsFinestraParametres(document.form_param, true);
-	// Guardem el nivell de zoom i mida finestra
+	// Guardem el nivell de zoom
 	userConfig.NivellZoomCostat = ParamInternCtrl.vista.CostatZoomActual;
 
 	var link = document.createElement('a');
