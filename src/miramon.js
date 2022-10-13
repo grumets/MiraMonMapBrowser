@@ -813,6 +813,10 @@ function DonaCadena4(cat,spa,eng,fre)
 	return eng;
 }*/
 
+/**
+*	Converteix un idioma conegut al MMN a l'equivalència a un idioma ISO.
+* Per una entrada buida del paràmetre s'utilitza l'idioma de ParamCtrl.idioma.
+*/
 function getISOLanguageTag(language)
 {
 	if(!language)
@@ -825,6 +829,32 @@ function getISOLanguageTag(language)
 		case "fre": return "fr";
 	}
 	return "";
+}
+
+/**
+*	Converteix un idioma ISO d'entrada a l'equivalència a un idioma
+*	que gestiona el MMN. Per defecte es pren l'ànglès.
+*/
+function getMMNLanguagefromISO(isoLanguage)
+{
+	if(!isoLanguage)
+		isoLanguage= "en"; // Idioma per defecte l'anglès.
+	switch(isoLanguage)
+	{
+		case "en": return "eng";
+		case "ca": return "cat";
+		case "es": return "spa";
+		case "fr": return "fre";
+	}
+	return "";
+}
+
+/**
+*	Obtindre la sub-etiqueta de un idioma ISO. en-US ---> en
+*/
+function getSubtagIdiom(isoIdiom)
+{
+	return isoIdiom.split("-", 1)[0];
 }
 
 function CombinaURLServidorAmbParamPeticio(servidor, request)
@@ -872,7 +902,7 @@ function CreaTitolNavegador()
 
 function CanviaIdioma(s)
 {
-	ParamCtrl.idioma=s;
+	ParamCtrl.idioma = ComprovaDisponibilitatIdiomaPreferit(s);
 	parent.document.title=DonaCadena(ParamCtrl.titol);
 	CreaTitolNavegador();
 	CreaLlegenda();
@@ -962,7 +992,39 @@ function CanviaIdioma(s)
 		else
 			IniciaStoryMap(IStoryActive);
 	}
-}
+} // Fi function CanviaIdioma()
+
+
+/**
+*	Comprova del llistat de idiomes preferits per l'usuari, establert
+*	a la configuració del navegador, si n'hi ha cap que correspongui
+*	a un dels idiomes que gestiona el MMN. En cas afirmatiu es defineix
+* aquest idioma com a inical per carregar el MMN.
+*/
+function ComprovaDisponibilitatIdiomaPreferit(idioma)
+{
+	if (window.navigator.languages)
+	{
+		const preferenciesIdiomesNavegador = window.navigator.languages;
+		var currentISOIdiom, mmnIdiom;
+		var idiomaTrobat = false;
+		var indexIdioma = 0, preferencesLength = preferenciesIdiomesNavegador.length;
+		/* Es recorre les preferencies idiomàtiques de l'usuari definides
+		 al navegador.*/
+		while (!idiomaTrobat && indexIdioma < preferencesLength)
+		{
+			currentISOIdiom = getSubtagIdiom(preferenciesIdiomesNavegador[indexIdioma]);
+			mmnIdiom = getMMNLanguagefromISO(currentISOIdiom);
+			if (mmnIdiom != "")
+				idiomaTrobat = true;
+
+			indexIdioma++
+		}
+		return idiomaTrobat ? mmnIdiom : idioma
+	}
+	else
+		return idioma;
+} // Fi function ComprovaDisponibilitatIdiomaPreferit()
 
 function DonaIndexNivellZoom(costat)
 {
@@ -3327,7 +3389,7 @@ function EsCapaDisponibleEnElCRSActual(capa)
 		for (var i=0; i<capa.CRS.length; i++)
 		{
 			if (DonaCRSRepresentaQuasiIguals(capa.CRS[i], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-				return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
+        return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 		}
 		return false;
 	}
@@ -4511,6 +4573,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
+
 					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel;
@@ -4594,7 +4657,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					
+
 					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
