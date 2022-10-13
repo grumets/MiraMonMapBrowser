@@ -4594,6 +4594,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
+					
 					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
@@ -4771,74 +4772,74 @@ var env=vista.EnvActual;
 												{
 													forma=estil.formes[i_forma];
 
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
-					{
-						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
-						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
-						forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
-						un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
-					}
-					else if (estil.NomCampSel)
-					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
-						{
-							if (forma.voraSel)
-							{
-								forma_vora=forma.voraSel;
-								un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
-							}
-							else
-							{
-								forma_vora=forma.vora;
-								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-							}
-							if (forma.interiorSel)
-							{
-								forma_interior=forma.interiorSel;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
-							}
-							else
-							{
-								forma_interior=forma.interior;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-							}
-						}
-						else
-						{
-							if (forma.voraSel)
-							{
-								forma_vora=forma.vora;
-								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-							}
-							else
-							{
-								forma_vora=null;
-								un_a_vmin_ncol_vora=null;
-							}
-							if (forma.interiorSel)
-							{
-								forma_interior=forma.interior;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-							}
-							else
-							{
-								forma_interior=null;
-								un_a_vmin_ncol_interior=null;
-							}
-						}
-					}
-					else
-					{
-						forma_vora=forma.vora;
-						un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-						forma_interior=forma.interior;
-						un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-					}
+													if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
+													{
+														forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
+														un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
+														forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
+														un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
+													}
+													else if (estil.NomCampSel)
+													{
+														if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+														{
+															if (forma.voraSel)
+															{
+																forma_vora=forma.voraSel;
+																un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+															}
+															else
+															{
+																forma_vora=forma.vora;
+																un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+															}
+															if (forma.interiorSel)
+															{
+																forma_interior=forma.interiorSel;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
+															}
+															else
+															{
+																forma_interior=forma.interior;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+															}
+														}
+														else
+														{
+															if (forma.voraSel)
+															{
+																forma_vora=forma.vora;
+																un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+															}
+															else
+															{
+																forma_vora=null;
+																un_a_vmin_ncol_vora=null;
+															}
+															if (forma.interiorSel)
+															{
+																forma_interior=forma.interior;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+															}
+															else
+															{
+																forma_interior=null;
+																un_a_vmin_ncol_interior=null;
+															}
+														}
+													}
+													else
+													{
+														forma_vora=forma.vora;
+														un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+														forma_interior=forma.interior;
+														un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+													}
 
-					if (!forma_vora && !forma_interior)
-						continue;
-					if (forma_interior)
-						PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+													if (!forma_vora && !forma_interior)
+														continue;
+													if (forma_interior)
+														PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 													if (forma_vora)
 														PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 													if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
@@ -6528,7 +6529,7 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
-	
+
 	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
 		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
 	RevisaEstatsCapes();
