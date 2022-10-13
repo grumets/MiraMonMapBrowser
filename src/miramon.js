@@ -4469,6 +4469,7 @@ var env=vista.EnvActual;
 		{
 			//Prec�rrega de valors de la selecci�
 			i_atri_sel=DonaIAtributsDesDeNomAtribut(capa, estil.NomCampSel)
+
 			if (i_atri_sel==-1)
 			{
 				AlertaNomAtributIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa);
@@ -4487,6 +4488,7 @@ var env=vista.EnvActual;
 				{
 					//Prec�rrega de valors si hi ha referencies r�ster.
 					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.interior.NomCamp)
+
 					if (i_atri_interior[i_forma]==-1)
 					{
 						AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa);
@@ -4500,6 +4502,7 @@ var env=vista.EnvActual;
 				{
 					//Prec�rrega de valors si hi ha referencies r�ster.
 					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.vora.NomCamp)
+
 					if (i_atri_vora[i_forma]==-1)
 					{
 						AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa);
@@ -4654,7 +4657,7 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-          
+
 					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
@@ -4819,7 +4822,6 @@ var env=vista.EnvActual;
 										{
 											//la layer l_obj_digi t� les coordenades referides a la seva layer pare que �s l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
 											//la manera de fer aix� est� extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-
 											if (Array.isArray(icona))
 											{
 												alert("OmpleVistaCapaDigiIndirect() does not implement arrays of shapes yet");
@@ -4833,74 +4835,74 @@ var env=vista.EnvActual;
 												{
 													forma=estil.formes[i_forma];
 
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
-					{
-						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
-						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
-						forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
-						un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
-					}
-					else if (estil.NomCampSel)
-					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
-						{
-							if (forma.voraSel)
-							{
-								forma_vora=forma.voraSel;
-								un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
-							}
-							else
-							{
-								forma_vora=forma.vora;
-								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-							}
-							if (forma.interiorSel)
-							{
-								forma_interior=forma.interiorSel;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
-							}
-							else
-							{
-								forma_interior=forma.interior;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-							}
-						}
-						else
-						{
-							if (forma.voraSel)
-							{
-								forma_vora=forma.vora;
-								un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-							}
-							else
-							{
-								forma_vora=null;
-								un_a_vmin_ncol_vora=null;
-							}
-							if (forma.interiorSel)
-							{
-								forma_interior=forma.interior;
-								un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-							}
-							else
-							{
-								forma_interior=null;
-								un_a_vmin_ncol_interior=null;
-							}
-						}
-					}
-					else
-					{
-						forma_vora=forma.vora;
-						un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
-						forma_interior=forma.interior;
-						un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
-					}
+													if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
+													{
+														forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
+														un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
+														forma_interior=forma.interiorSel ? forma.interiorSel : forma.interior;
+														un_a_vmin_ncol_interior=forma.interiorSel ? a_vmin_ncol_interiorSel[i_forma] : a_vmin_ncol_interior[i_forma];
+													}
+													else if (estil.NomCampSel)
+													{
+														if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, j, i_atri_sel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+														{
+															if (forma.voraSel)
+															{
+																forma_vora=forma.voraSel;
+																un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
+															}
+															else
+															{
+																forma_vora=forma.vora;
+																un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+															}
+															if (forma.interiorSel)
+															{
+																forma_interior=forma.interiorSel;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interiorSel[i_forma];
+															}
+															else
+															{
+																forma_interior=forma.interior;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+															}
+														}
+														else
+														{
+															if (forma.voraSel)
+															{
+																forma_vora=forma.vora;
+																un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+															}
+															else
+															{
+																forma_vora=null;
+																un_a_vmin_ncol_vora=null;
+															}
+															if (forma.interiorSel)
+															{
+																forma_interior=forma.interior;
+																un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+															}
+															else
+															{
+																forma_interior=null;
+																un_a_vmin_ncol_interior=null;
+															}
+														}
+													}
+													else
+													{
+														forma_vora=forma.vora;
+														un_a_vmin_ncol_vora=a_vmin_ncol_vora[i_forma];
+														forma_interior=forma.interior;
+														un_a_vmin_ncol_interior=a_vmin_ncol_interior[i_forma];
+													}
 
-					if (!forma_vora && !forma_interior)
-						continue;
-					if (forma_interior)
-						PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+													if (!forma_vora && !forma_interior)
+														continue;
+													if (forma_interior)
+														PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "fillStyle", forma_interior, i_atri_interior[i_forma], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 													if (forma_vora)
 														PreparaCtxColorVoraOInterior(vista, capa, j, previ, ctx, "strokeStyle", forma_vora, i_atri_vora[i_forma], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 													if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
@@ -6590,7 +6592,7 @@ var i_get_featureinfo;
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
 		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
-	
+
 	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
 		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
 	RevisaEstatsCapes();
@@ -6612,9 +6614,9 @@ function CarregaArrayCapesDeServei()
 
 function IniciaVisualitzacio()
 {
-var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
-var nou_CRS="";
-var win, i, j, l, capa;
+	var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
+	var nou_CRS="";
+	var win, i, j, l, capa;
 
 	document.getElementById(ParamCtrl.containerName).style.overflow="hidden";
 	document.getElementById(ParamCtrl.containerName).style.width="100%";
@@ -6642,7 +6644,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 530, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 586, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessage("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", GetMessage("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessage("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
@@ -6980,11 +6982,12 @@ function EndMiraMonMapBrowser(event, reset)
 			}
 			catch (e)
 			{
-			        ;//localStorage.removeItem(key);
+				//localStorage.removeItem(key);
 				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
-							"spa":"No ha sido posible guardar el estado del mapa.",
-							"eng":"Saving the map status done was not possible.",
-							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
+					"spa":"No ha sido posible guardar el estado del mapa.",
+					"eng":"Saving the map status done was not possible.",
+					"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));
+				*/
 			}
 		}
 	}
@@ -7018,7 +7021,7 @@ var clau_config="CONFIG=", clau_reset="RESET=";
 	loadJSON(config_json,
 			IniciaParamCtrlIVisualitzacio,
 			function(xhr) { alert(xhr); },
-			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
+			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: false});
 }
 
 function RestartMiraMonMapBrowser()
