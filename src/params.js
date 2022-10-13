@@ -19,17 +19,17 @@
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -55,8 +55,8 @@ function RedibuixaParamColors()
 	contentLayer(getLayer(window, "param_colors"), DonaTextParamColors());
 }
 
-var param_ColorFonsVista;  //Copia de la variable local a la caixa de par‡metres
-var param_ColorQuadratSituacio; //Copia de la variable local a la caixa de par‡metres
+var param_ColorFonsVista;  //Copia de la variable local a la caixa de par√†metres
+var param_ColorQuadratSituacio; //Copia de la variable local a la caixa de par√†metres
 
 //https://stackoverflow.com/questions/13789163/how-to-know-if-html5-input-type-color-is-available-as-a-color-picker
 function hasColorInputSupport()
@@ -156,7 +156,7 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 			CreaBarra(null);
 		}
 		ParamCtrl.psalt=parseInt(formul.param_psalt.value);
-		ParamCtrl.hideLayersOverVista=(formul.param_SobreVistaVisible.checked) ? true : false;  //AixÚ tÈ efectes en el proper redibuixat de la vista
+		ParamCtrl.hideLayersOverVista=(formul.param_SobreVistaVisible.checked) ? true : false;  //Aix√≤ t√© efectes en el proper redibuixat de la vista
 		showOrHideLayersOnTopOfVista();
 
 		ParamCtrl.LlegendaAmagaSegonsEscala=(formul.param_LayersOutSideScale[1].checked) ? true : false;
@@ -218,7 +218,7 @@ function RecuperaValorsFinestraParametres(formul, tancar)
 	if (tancar==true)
 		TancaFinestraLayer("param");
 
-	return false;  //per no efectuar l'acciÛ de submit del formulari
+	return false;  //per no efectuar l'acci√≥ de submit del formulari
 }
 
 
@@ -244,7 +244,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 	param_ColorQuadratSituacio=ParamCtrl.ColorQuadratSituacio;
 
 	p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-	if (p=="∞")
+	if (p=="¬∞")
 		unitats_CRS=p;
 	else
 		unitats_CRS=" "+p;
@@ -271,7 +271,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		GetMessage("Height") , ": " , ParamInternCtrl.vista.nfil, "px, ",
 		GetMessage("WidthOfTheView", "params") , ": <input type=\"text\" size=\"6\" name=\"param_MidaAmplePantalla\" value=\"", OKStrOfNe(MidaDePixelPantalla*ParamInternCtrl.vista.ncol,1), "\" maxlength=\"8\"> mm<br>",
 		GetMessage("LateralJumpPerc", "params") , ": <input type=\"text\" size=\"3\" name=\"param_psalt\" value=\"", ParamCtrl.psalt, "\" maxlength=\"3\"> %, ",
-		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>",
+		"<input type=\"checkbox\" name=\"param_SobreVistaVisible\" id=\"id_SobreVistaVisible\"", (ParamCtrl.hideLayersOverVista ? " checked=\"checked\"" : ""), "> <label for=\"id_SobreVistaVisible\" accesskey=\"v\">", GetMessage("ShowCleanMap_View", "params"), "</label><br>", 
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicNo\"", (ParamCtrl.ZoomUnSolClic ? "" : " checked=\"checked\""),"><label for=\"id_ZoomUnSolClicNo\" accesskey=\"2\"> ",
 		GetMessage("ZoomPan_2Clicks", "params") , "</label><br>" ,
 		"<input type=\"radio\" name=\"param_ZoomUnSolClic\" id=\"id_ZoomUnSolClicSi\"", (ParamCtrl.ZoomUnSolClic ? " checked=\"checked\"" : ""), "><label for=\"id_ZoomUnSolClicSi\" accesskey=\"1\"> ",
@@ -294,11 +294,11 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesCap\"", (ParamCtrl.CoordExtremes ? "": " checked=\"checked\""), "> <label for=\"id_CoordExtremesCap\" accesskey=\"", GetMessage("None_underlined_char", "params"), "\">", GetMessage("None_underlined", "params") ,"</label> ",
 		   "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesProj\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="proj") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesProj\" accesskey=\"p\">", GetMessage("Proj_underlined_p", "params") ,".</label> ",
                    "<input type=\"radio\" name=\"param_CoordExtremes\" id=\"id_CoordExtremesLongLat\"", ((ParamCtrl.CoordExtremes && (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")) ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesLongLat\" accesskey=\"l\"><u>L</u>ong/Lat</label> ",
-                   "<input type=\"checkbox\" name=\"param_CoordExtremesGMS\" id=\"id_CoordExtremesGMS\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="longlat_gms") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesGMS\">(∞ \' \")</label><br>",
+                   "<input type=\"checkbox\" name=\"param_CoordExtremesGMS\" id=\"id_CoordExtremesGMS\"", ((ParamCtrl.CoordExtremes && ParamCtrl.CoordExtremes=="longlat_gms") ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordExtremesGMS\">(¬∞ \' \")</label><br>",
 		"&nbsp;&nbsp;&nbsp;" , GetMessage("Current") , ": ",
                    "<input type=\"checkbox\" name=\"param_CoordActualProj\" id=\"id_CoordActualProj\"", (ParamCtrl.CoordActualProj ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualProj\" accesskey=\"r\">", GetMessage("Proj_underlined_r", "params") ,".</label> ",
 		   "<input type=\"checkbox\" name=\"param_CoordActualLongLat\" id=\"id_CoordActualLongLat\"", ((ParamCtrl.CoordActualLongLatG || ParamCtrl.CoordActualLongLatGMS) ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualLongLat\" accesskey=\"o\">L<u>o</u>ng/Lat</label> ",
-		   "(<input type=\"checkbox\" name=\"param_CoordActualGMS\" id=\"id_CoordActualGMS\"", (ParamCtrl.CoordActualLongLatGMS ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualGMS\">(∞ \' \")</label>) ");
+		   "(<input type=\"checkbox\" name=\"param_CoordActualGMS\" id=\"id_CoordActualGMS\"", (ParamCtrl.CoordActualLongLatGMS ? " checked=\"checked\"" : ""), "> <label for=\"id_CoordActualGMS\">(¬∞ \' \")</label>) ");
 	if (isFinestraLayer(window, "coord"))
 		coord_visible=isFinestraLayerVisible(window, "coord");
 	else
@@ -310,17 +310,6 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		": </legend>",
 		"<div id=\"param_colors\">",
 		DonaTextParamColors(),
-		"</div></fieldset>",
-		"<fieldset><legend>",
-		GetMessage("UserConfiguration"),
-		": </legend>",
-		"<div id=\"param_config_storage\">",
-		"<label for=\"configLoadBtn\">", GetMessage("SelectConfigLoad"), "</label>&nbsp;",
-		"<button class=\"Verdana11px\" id=\"configLoadBtn\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Load"), "</button><br>",
-		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.files)'>",
-		"<label for=\"configLoadBtn\">", GetMessage("FileNameToSave"), "</label>: &nbsp;",
-		"<input TYPE=\"text\" id=\"\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
-		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari(ParamCtrl, form.textFileInput.value)'> ",
 		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
 		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", GetMessage("Show"),
@@ -344,10 +333,9 @@ function MostraFinestraParametres()
 	OmpleFinestraParametres();
 }
 
-
 /*
-*	FunciÛ per a transformar els par‡metres de configuraciÛ de l'usuari en quelcom
-*	capaÁ de ser inclÚs en un anchor <a>, per exemple un Blob.
+*	Funci√≥ per a transformar els par√†metres de configuraci√≥ de l'usuari en quelcom
+*	capa√ß de ser incl√≤s en un anchor <a>, per exemple un Blob.
 */
 var jsonConfigFile = null;
 
@@ -365,7 +353,7 @@ function makeHrefData(userConfig)
 };
 
 /*
-*	FunciÛ per a guardar el fitxer de configuraciÛ de JSON en memÚria
+*	Funci√≥ per a guardar el fitxer de configuraci√≥ de JSON en mem√≤ria
 */
 function GuardaConfiguracioUsuari(userConfig, fileName)
 {
@@ -395,7 +383,7 @@ function GuardaConfiguracioUsuari(userConfig, fileName)
 }
 
 /*
-*	FunciÛ per a obrir el fitxer de configuraciÛ de JSON en memÚria
+*	Funci√≥ per a obrir el fitxer de configuraci√≥ de JSON en mem√≤ria
 */
 function RecuperaConfiguracioUsuari(files)
 {
@@ -408,7 +396,7 @@ function RecuperaConfiguracioUsuari(files)
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			const fileReader = new FileReader();
-			fileReader.nom_json = "./"+path.name; //AixÌ onload pot saber el nom del fitxer
+			fileReader.nom_json = "./"+path.name; //Aix√≠ onload pot saber el nom del fitxer
 			fileReader.onload = function(e) {
 				try {
 							loadJSON(this.nom_json,

@@ -814,8 +814,8 @@ function DonaCadena4(cat,spa,eng,fre)
 }*/
 
 /**
-*	Converteix un idioma conegut al MMN a l'equivalència a un idioma ISO.
-* Per una entrada buida del paràmetre s'utilitza l'idioma de ParamCtrl.idioma.
+*	Converteix un idioma conegut al MMN a l'equivalÃ¨ncia a un idioma ISO.
+* Per una entrada buida del parÃ metre s'utilitza l'idioma de ParamCtrl.idioma.
 */
 function getISOLanguageTag(language)
 {
@@ -832,13 +832,13 @@ function getISOLanguageTag(language)
 }
 
 /**
-*	Converteix un idioma ISO d'entrada a l'equivalència a un idioma
-*	que gestiona el MMN. Per defecte es pren l'ànglès.
+*	Converteix un idioma ISO d'entrada a l'equivalÃ¨ncia a un idioma
+*	que gestiona el MMN. Per defecte es pren l'Ã nglÃ¨s.
 */
 function getMMNLanguagefromISO(isoLanguage)
 {
 	if(!isoLanguage)
-		isoLanguage= "en"; // Idioma per defecte l'anglès.
+		isoLanguage= "en"; // Idioma per defecte l'anglÃ¨s.
 	switch(isoLanguage)
 	{
 		case "en": return "eng";
@@ -997,7 +997,7 @@ function CanviaIdioma(s)
 
 /**
 *	Comprova del llistat de idiomes preferits per l'usuari, establert
-*	a la configuració del navegador, si n'hi ha cap que correspongui
+*	a la configuraciÃ³ del navegador, si n'hi ha cap que correspongui
 *	a un dels idiomes que gestiona el MMN. En cas afirmatiu es defineix
 * aquest idioma com a inical per carregar el MMN.
 */
@@ -1009,7 +1009,7 @@ function ComprovaDisponibilitatIdiomaPreferit(idioma)
 		var currentISOIdiom, mmnIdiom;
 		var idiomaTrobat = false;
 		var indexIdioma = 0, preferencesLength = preferenciesIdiomesNavegador.length;
-		/* Es recorre les preferencies idiomàtiques de l'usuari definides
+		/* Es recorre les preferencies idiomÃ tiques de l'usuari definides
 		 al navegador.*/
 		while (!idiomaTrobat && indexIdioma < preferencesLength)
 		{
@@ -3046,7 +3046,7 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 	dontPropagateEvent(event);
 }
 
-//Aquesta funci� no sobreescriu env sino que retorna un duplicat.
+//Aquesta funció no sobreescriu env sino que retorna un duplicat.
 function TransformaEnvolupant(env, crs_ori, crs_dest)
 {
 var env_ll;
@@ -3057,7 +3057,7 @@ var env_ll;
 	return DonaEnvolupantCRS(env_ll, crs_dest);
 }
 
-//Aquesta funci� sobreescriu el punt.
+//Aquesta funció sobreescriu el punt.
 function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 {
 	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
@@ -3069,7 +3069,7 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }
 
-//Aquesta funci� sobreescriu el coord array
+//Aquesta funció sobreescriu el coord array
 function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
 {
 	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
@@ -4317,7 +4317,7 @@ var capa=ParamCtrl.capa[i_capa];
 /* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
 function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
-	//Aqu� no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no �s canviat pel nou idioma. De fet, aix� es podria fer durant el canvi d'idioma per� �s un detall massa insignificant.
+	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
 		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
@@ -4441,7 +4441,7 @@ var env=vista.EnvActual;
 				var simbols=estil.simbols[i_simb];
 				if (simbols.NomCamp)
 				{
-					//Prec�rrega de valors si hi ha referencies r�ster.
+					//Precàrrega de valors si hi ha referencies ràster.
 					var i=DonaIAtributsDesDeNomAtribut(capa, simbols.NomCamp)
 					if (i==-1)
 					{
@@ -4453,7 +4453,7 @@ var env=vista.EnvActual;
 				}
 				if (simbols.NomCampFEscala)
 				{
-					//Prec�rrega de valors si hi ha referencies r�ster.
+					//Precàrrega de valors si hi ha referencies ràster.
 					var i=DonaIAtributsDesDeNomAtribut(capa, simbols.NomCampFEscala)
 					if (i==-1)
 					{
@@ -4467,9 +4467,8 @@ var env=vista.EnvActual;
 		}
 		if (estil.NomCampSel)
 		{
-			//Prec�rrega de valors de la selecci�
+			//Precàrrega de valors de la selecció
 			i_atri_sel=DonaIAtributsDesDeNomAtribut(capa, estil.NomCampSel)
-
 			if (i_atri_sel==-1)
 			{
 				AlertaNomAtributIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa);
@@ -4486,9 +4485,8 @@ var env=vista.EnvActual;
 				if (forma.interior &&
 					forma.interior.NomCamp)
 				{
-					//Prec�rrega de valors si hi ha referencies r�ster.
+					//Precàrrega de valors si hi ha referencies ràster.
 					i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.interior.NomCamp)
-
 					if (i_atri_interior[i_forma]==-1)
 					{
 						AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa);
@@ -4500,9 +4498,8 @@ var env=vista.EnvActual;
 				if (forma.vora &&
 					forma.vora.NomCamp)
 				{
-					//Prec�rrega de valors si hi ha referencies r�ster.
+					//Precàrrega de valors si hi ha referencies ràster.
 					i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa, forma.vora.NomCamp)
-
 					if (i_atri_vora[i_forma]==-1)
 					{
 						AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa);
@@ -4574,7 +4571,7 @@ var env=vista.EnvActual;
 				{
 					forma=estil.formes[i_forma];
 
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edici�
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edició
 					{
 						forma_vora=forma.voraSel;
 						un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
@@ -4657,8 +4654,8 @@ var env=vista.EnvActual;
 				for (var i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-
-					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
+          
+					if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -4793,7 +4790,7 @@ var env=vista.EnvActual;
 
 								if (i_simbol!=-1)
 								{
-									if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edici�
+									if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
 										icona=simbol[i_simbol].IconaSel;
 									else if (estil.NomCampSel)
 									{
@@ -4820,8 +4817,9 @@ var env=vista.EnvActual;
 											env_icona=DonaEnvIcona({x: coord[0],y: coord[1]}, icona);
 										if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
 										{
-											//la layer l_obj_digi t� les coordenades referides a la seva layer pare que �s l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
-											//la manera de fer aix� est� extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+											//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
+											//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+
 											if (Array.isArray(icona))
 											{
 												alert("OmpleVistaCapaDigiIndirect() does not implement arrays of shapes yet");
@@ -4835,7 +4833,7 @@ var env=vista.EnvActual;
 												{
 													forma=estil.formes[i_forma];
 
-													if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edici�
+													if (vista.i_nova_vista!=NovaVistaImprimir && capa.objectes.features[j].seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'ediciï¿½
 													{
 														forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 														un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -5662,7 +5660,7 @@ var p, unitats_CRS;
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
 					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
-				else if (capa.estil) //si la capa ara �s no visible, i t� estils, he de mirar si hi ha gr�fics vinculats a ella per a "congelar-los"
+				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
@@ -5826,7 +5824,7 @@ var env_ll;
 
 	if (ParamInternCtrl.ISituacio!=i_min)
 	{
-		//Aquesta funci� no fa canvis de CRS si no cal
+		//Aquesta funció no fa canvis de CRS si no cal
 		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
 		ParamInternCtrl.ISituacio=i_min;
 		if(ParamCtrl.FuncioCanviProjeccio)
@@ -6494,7 +6492,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 									if (!avis_mostrar_atributs)
 									{
 										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
-												" estil = " + DonaCadenaNomDesc(estil));
+												" estil = " + DonaCadenaNomDesc(estil));												
 												avis_mostrar_atributs=true;
 									}
 									if (estil.atributs[k].mostrar)
@@ -6582,8 +6580,8 @@ var capa, layer, punt;
 	}
 }
 
-/*Aquesta funci� afegeix autom�ticament totes les capes d'un servidor a la llegenda.
-Funci� inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
+/*Aquesta funció afegeix automàticament totes les capes d'un servidor a la llegenda.
+Funció inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNavegadorForm() que permet al usuari triar quines capes vol afegir.*/
 function AfegeixCapesWMSAlNavegador(servidorGC)
 {
 var i_get_featureinfo;
@@ -6614,9 +6612,9 @@ function CarregaArrayCapesDeServei()
 
 function IniciaVisualitzacio()
 {
-	var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
-	var nou_CRS="";
-	var win, i, j, l, capa;
+var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
+var nou_CRS="";
+var win, i, j, l, capa;
 
 	document.getElementById(ParamCtrl.containerName).style.overflow="hidden";
 	document.getElementById(ParamCtrl.containerName).style.width="100%";
@@ -6644,7 +6642,7 @@ function IniciaVisualitzacio()
 	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 586, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 530, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessage("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", GetMessage("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessage("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
@@ -6977,17 +6975,16 @@ function EndMiraMonMapBrowser(event, reset)
 				/*if (confirm(DonaCadenaLang({"cat": "Aceptes guardar l'estat del mapa?. (Per recuperar l'estat original afegiu a la URL:",
 								"spa": "¿Acepta guardar el estado del mapa? (Para recuperar el estado original añada a la URL:",
 								"eng": "Do you accept to save the status of the map? (To recover the original status add to the URL:",
-								"fre": "Acceptez-vous de sauvegarder l’état de la carte? (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")"))*/
+								"fre": "Acceptez-vous de sauvegarder létat de la carte? (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")"))*/
 					localStorage.setItem("EditedParamCtrl_"+ParamCtrl.config_json, JSON.stringify(ParamCtrl));
 			}
 			catch (e)
 			{
-				//localStorage.removeItem(key);
+			        ;//localStorage.removeItem(key);
 				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
-					"spa":"No ha sido posible guardar el estado del mapa.",
-					"eng":"Saving the map status done was not possible.",
-					"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));
-				*/
+							"spa":"No ha sido posible guardar el estado del mapa.",
+							"eng":"Saving the map status done was not possible.",
+							"fre":"Il na pas été possible de sauvegarder le statut de la carte."}));*/
 			}
 		}
 	}
@@ -7021,7 +7018,7 @@ var clau_config="CONFIG=", clau_reset="RESET=";
 	loadJSON(config_json,
 			IniciaParamCtrlIVisualitzacio,
 			function(xhr) { alert(xhr); },
-			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: false});
+			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
 }
 
 function RestartMiraMonMapBrowser()
