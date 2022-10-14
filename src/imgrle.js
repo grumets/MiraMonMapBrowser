@@ -1,4 +1,4 @@
-/* 
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -7,32 +7,32 @@
 
     MiraMon Map Browser is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General 
+    You should have received a copy of the GNU Affero General
     Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
-    
+
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
     Copyright 2001, 2022 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del 
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert. 
-    
-    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicència GNU Affero General Public 
+    No tots aquests productes són gratuïts o de codi obert.
+
+    En particular, el Navegador de Mapes del MiraMon (client per Internet)
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
-    
-    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+
+    El Navegador de Mapes del MiraMon es pot actualitzar des de
     https://github.com/grumets/MiraMonMapBrowser.
 */
 
@@ -132,7 +132,7 @@ var FormulaConsulta="";
 			if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
 				delete nou_valor.i_data;*/
 
-		
+
 			if(ParamCtrl.capa[i_capa_link].model==model_vector)
 			{
 				if(ParamCtrl.capa[i_capa].model==model_vector && i_capa!=i_capa_link)
@@ -183,20 +183,20 @@ var FormulaConsulta="";
 						ParamCtrl.capa[i_capa].valors=[];
 					var valors=ParamCtrl.capa[i_capa].valors;
 					for (i=0; i<valors.length; i++)
-					{						
+					{
 						if ((
-							(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) && 
+							(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) &&
 							(
-								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
+								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
-							) && 
+							) &&
 							nou_valor.i_valor==i
-							) || 
-							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa && 
-								nou_valor.i_valor==valors[i].i_valor && 
+							) ||
+							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa &&
+								nou_valor.i_valor==valors[i].i_valor &&
 								(
-									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") || 
-									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
+									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
+									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
 								)
 							)
 							)
@@ -326,7 +326,7 @@ function DonaEstilDadesBinariesCapa(i_nova_vista, i_capa)
 var valors=ParamCtrl.capa[i_capa].valors, i_v;
 
 	if (i_nova_vista==NovaVistaPrincipal || i_nova_vista==NovaVistaImprimir || i_nova_vista==NovaVistaRodet)  //L'estil d'impressió i de visualització són els mateixos
-		return ParamCtrl.capa[i_capa].i_estil;  
+		return ParamCtrl.capa[i_capa].i_estil;
 	else
 	{
 		for (i_v=0; i_v<valors.length; i_v++)
@@ -372,7 +372,7 @@ var valors=ParamCtrl.capa[i_capa].valors, i_v, v, i_estil;
 		for (i_v=0; i_v<valors.length; i_v++)
 		{
 			if (v[i_v] && (!valors[i_v].nova_capa || !valors[i_v].nova_capa[i_nova_vista] || !valors[i_v].nova_capa[i_nova_vista].arrayBuffer))
-				return false;  
+				return false;
 		}
 	}
 	return true;
@@ -431,7 +431,7 @@ var valors=capa.valors;
 			{
 				i_nodata=nodata.indexOf(v[i_v]);
 				if (i_nodata>=0)
-					v[i_v]=null;				
+					v[i_v]=null;
 			}
 		}
 		//else v[i_v] queda a undefined deliveradament.
@@ -533,7 +533,7 @@ var j, i, comptador, acumulat, i_byte=0;
 		{
 			acumulat=0;
 			while (acumulat < ncol)
-			{	
+			{
 				comptador=dv.getUint8(i_byte, littleEndian);
 				i_byte++;
 				if (comptador==0) /* Tros sense comprimir */
@@ -621,7 +621,7 @@ var j, i, comptador, acumulat, i_byte=0;
 							i_byte++;
 					}
                			}
-			}			
+			}
 		}
 		return 0; //No s'hauria de sortir mai per aquí
 	}
@@ -708,12 +708,12 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getUint8(i_byte[i_v], littleEndian);
 						i_byte[i_v]++;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -742,19 +742,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getInt8(i_byte[i_v], littleEndian);
 							i_byte[i_v]++;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getInt8(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getInt8(i_byte[i_v], littleEndian);
 						i_byte[i_v]++;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -783,19 +783,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getUint8(i_byte[i_v], littleEndian);
 							i_byte[i_v]++;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getUint8(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getUint8(i_byte[i_v], littleEndian);
 						i_byte[i_v]++;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -824,19 +824,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getInt16(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=2;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getInt16(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getInt16(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=2;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -865,19 +865,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getUint16(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=2;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getUint16(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getUint16(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=2;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 					}
-				}				
+				}
 			}
 			else
 			{
@@ -906,19 +906,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getInt32(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=4;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getInt32(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getInt32(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=4;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -947,19 +947,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getUint32(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=4;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getUint32(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getUint32(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=4;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -988,19 +988,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=4;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getFloat32(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getFloat32(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=4;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -1029,19 +1029,19 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 
 						for ( ; i<acumulat; i++)
 									{
-							fila[i][i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); 
+							fila[i][i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=8;
 								}
 					}
 					else
 					{
 						acumulat += comptador;
-						v_i=dv_i.getFloat64(i_byte[i_v], littleEndian); 
+						v_i=dv_i.getFloat64(i_byte[i_v], littleEndian);
 						i_byte[i_v]+=8;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
 							}
-				}				
+				}
 			}
 			else
 			{
@@ -1091,7 +1091,7 @@ var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
 			valor0=eval(component0.formulaInterna);
 			if (isNaN(valor0) || valor0==null)
 			{
-				if (histograma)	
+				if (histograma)
 					histograma.classe_nodata++;
 				fila_calc[i][i_data_video]=null;
 			}
@@ -1159,7 +1159,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 							{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
 						else if (dtype=="float64")
 							{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-					
+
 						i_nodata=-1;
 						if (nodata)
 							i_nodata=nodata.indexOf(v[i_v]);
@@ -1268,7 +1268,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 						}
 					}
 				}
-			}			
+			}
 		}
 		else
 		{
@@ -1381,7 +1381,7 @@ var histo_component0, classe0;
 	{
 		histograma.classe_nodata=0;
 		histograma.component=[{
-					"classe": [], 
+					"classe": [],
 					"valorMinimReal": +1e300,
 					"valorMaximReal": -1e300,
 					"sumaValorsReal": 0 //·$· quan passo per aquesta funció segur que és QC i té sentit fer això, oi?
@@ -1399,7 +1399,7 @@ var histo_component0, classe0;
 			valor0=img_stat[j*ncol+i];
 			if (valor0==null || isNaN(valor0))
 			{
-				if (histograma)	
+				if (histograma)
 					histograma.classe_nodata++;
 				data.push(255,255,255,0);
 			}
@@ -1429,7 +1429,7 @@ var histo_component0, classe0;
 					data.push(i_color0, i_color0, i_color0, 255);
 			}
 		}
-	}	
+	}
 }
 
 function PrepararCalculIlluminacio(costat, f, elev_graus, az_graus)
@@ -1439,7 +1439,7 @@ function PrepararCalculIlluminacio(costat, f, elev_graus, az_graus)
 	var az=((typeof az_graus==="undefined" || az_graus===null)?225:az_graus)*Math.PI/180;
 
 	return {dist2: dist*dist,
-		k1: Math.cos(elev)*Math.cos(Math.PI-az), 
+		k1: Math.cos(elev)*Math.cos(Math.PI-az),
 		k2: Math.cos(elev)*Math.sin(Math.PI-az),
 		k3: Math.cos(elev)*Math.tan(elev)*dist}
 }
@@ -1516,12 +1516,12 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
 }
 
 
-/*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255. 
-This is especially handy for Canvas image processing algorithms since now you don’t have to manually clamp your 
+/*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255.
+This is especially handy for Canvas image processing algorithms since now you don?t have to manually clamp your
 image processing math to avoid overflowing the 8-bit range.
 'data' es un array de dades que servirà per enviar al canvas
 'histograma' pot contenir una variable on escriure histograma. Pot ser null si es vol obtenir un histograma.
-'dv' són les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades però moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...); 
+'dv' són les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades però moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...);
 'mes_duna_v' Indica si hi ha més d'una dv[] carregada. Es pot fer servir CarregaDataViewsCapa()-1
 'component' és capa.estil[i_estil].component
 'valors' és capa.valors. No es mira la part on hi ha els arrays binaris perquè això està a dv.
@@ -1578,22 +1578,22 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 		{
 			//cal_histo=true;
 			//component0.histograma=[];
-			//component0.valorMinimReal=+1e300;			
+			//component0.valorMinimReal=+1e300;
 			if (categories) //si la component0 té categories, no cal calcular sumaValorsReal
 			{
 				histograma.component=[{
-						"classe": [], 
+						"classe": [],
 						"valorMinimReal": +1e300,
 						"valorMaximReal": -1e300
-					}];		
+					}];
 			}
 			else
 			{
 				histograma.component=[{
-						"classe": [], 
+						"classe": [],
 						"valorMinimReal": +1e300,
 						"valorMaximReal": -1e300,
-						"sumaValorsReal": 0	
+						"sumaValorsReal": 0
 					}];
 			}
 			histo_component0=histograma.component[0];
@@ -1604,22 +1604,22 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 		if (component.length==2)
 		{
 			if (categories) //és una capa de transferència de camps estadístics a unes categories
-			{	
+			{
 				component1=component[1];
 				a1=DonaFactorAEstiramentPaleta(component1.estiramentPaleta, component1.herenciaOrigen.nColors);
 				valor_min1=DonaFactorValorMinEstiramentPaleta(component1.estiramentPaleta);
-	
+
 				for (var i_categ=0; i_categ<categories.length; i_categ++)
 				{
 					if (!categories[i_categ])
 						continue;
-					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ·$· l'estructura de "pisos" és diferent en aquest histograma que en el "normal". És important? potser si si més endavant volem fer servir altres funcions? 
+					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ·$· l'estructura de "pisos" és diferent en aquest histograma que en el "normal". És important? potser si si més endavant volem fer servir altres funcions?
 					if (component1.herenciaOrigen.tractament!="categoric")
 					{
 						categories[i_categ]["$stat$_sum"]=0;
 						categories[i_categ]["$stat$_min"]=1e300;
 						categories[i_categ]["$stat$_max"]=-1e300;
-					}				
+					}
 					var classe1=categories[i_categ]["$stat$_histo"].classe;
 					for (i_color1=0; i_color1<component1.herenciaOrigen.nColors; i_color1++)
 						classe1[i_color1]=0;
@@ -1653,7 +1653,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			if (histograma)
 			{
 				histograma.component[i_c]={
-							"classe": [], 
+							"classe": [],
 							"valorMinimReal": +1e300,
 							"valorMaximReal": -1e300,
 							"sumaValorsReal": 0		//si tinc tres components és que la variables és QC segur
@@ -1672,7 +1672,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 
 	una_component=(component.length==1)?true:false;
 
-	if (mes_duna_v)  
+	if (mes_duna_v)
 	{
 		for (j=0;j<nfil;j++)
 		{
@@ -1708,7 +1708,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						valor0=eval(component0.formulaInterna);
 						if (isNaN(valor0) || valor0==null)
 						{
-							if (histograma)	
+							if (histograma)
 								histograma.classe_nodata++;
 							data.push(255,255,255,0);
 						}
@@ -1774,10 +1774,10 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							valor0=v[component0.i_valor];
 						else
 							valor0=v[0];
-								
+
 						if (isNaN(valor0) || valor0==null)
 						{
-							if (histograma)	
+							if (histograma)
 								histograma.classe_nodata++;
 							data.push(255,255,255,0);
 						}
@@ -1789,19 +1789,19 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								valor1=v[component1.i_valor];
 							else
 								valor1=v[1];
-						
+
 							if (isNaN(valor1) || valor1==null)
 								categories[valor0]["$stat$_histo"].classe_nodata++
 							else //if (!isNaN(valor1) && valor1!=null)
 							{
-								// ara valor0 conté el valor de l'array de categories i valor1 conté la variable de la qual s'han de fer estadístiques					 
-								
+								// ara valor0 conté el valor de l'array de categories i valor1 conté la variable de la qual s'han de fer estadístiques
+
 								// creo histograma de la component1 per la categoria categories[valor0]
 								i_color1=Math.floor(a1*(valor1-valor_min1));
 								if (i_color1>=component1.herenciaOrigen.nColors)
 									i_color1=component1.herenciaOrigen.nColors-1;
 								else if (i_color1<0)
-									i_color1=0;								
+									i_color1=0;
 								categories[valor0]["$stat$_histo"].classe[i_color1]++;
 
 								//calculo el min, max i sum de la component1 per la categoria categories[valor0]
@@ -1811,7 +1811,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 										categories[valor0]["$stat$_min"]=valor1;
 									if (categories[valor0]["$stat$_max"]<valor1)
 										categories[valor0]["$stat$_max"]=valor1;
-									categories[valor0]["$stat$_sum"]+=valor1;									
+									categories[valor0]["$stat$_sum"]+=valor1;
 								}
 							}
 
@@ -1893,7 +1893,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									histograma.component[i_c].valorMinimReal=valor0;
 								if (histograma.component[i_c].valorMaximReal<valor0)
 									histograma.component[i_c].valorMaximReal=valor0;
-								histograma.component[i_c].sumaValorsReal+=valor0;													
+								histograma.component[i_c].sumaValorsReal+=valor0;
 							}
 							i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 							if (i_color0>=256)
@@ -1912,14 +1912,14 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	  } //End of for
 
  		if (component.length==2) //és una capa de transferència de camps estadístics a unes categories
-		{			
-			var area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY}, 
+		{
+			var area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY},
 					ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
 			for (var i_categ=0; i_categ<categories.length; i_categ++)
 			{
 				if (!categories[i_categ])
 					continue;
-				
+
 				if (component1.herenciaOrigen.tractament=="categoric")
 				{
 					var estad_cat=CalculaEstadisticsCategorics(categories[i_categ]["$stat$_histo"].classe);
@@ -1929,9 +1929,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						categories[i_categ]["$stat$_mode"]=DonaTextCategoriaDesDeColor(component1.herenciaOrigen.categories, component1.herenciaOrigen.atributs, estad_cat.i_moda, true);
 						categories[i_categ]["$stat$_percent_mode"]=categories[i_categ]["$stat$_histo"].classe[estad_cat.i_moda]/estad_cat.recompte*100;
 					}
-				}	
+				}
 				else
-				{		
+				{
 					var stat=CalculaEstadisticsHistograma(categories[i_categ]["$stat$_histo"].classe, categories[i_categ]["$stat$_min"], categories[i_categ]["$stat$_max"], categories[i_categ]["$stat$_sum"]);
 					if (stat.recompte!=0)
 					{
@@ -1981,7 +1981,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 							i_byte[i_v]++;
 							acumulat += comptador;
-		
+
 							for ( ; i<acumulat; i++)
                 		    			{
 								if (!dtype)
@@ -2002,7 +2002,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
 								else if (dtype=="float64")
 									{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-							
+
 								i_nodata=-1;
 								if (nodata)
 									i_nodata=nodata.indexOf(v[i_v]);
@@ -2035,7 +2035,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												if (histo_component0.valorMaximReal<valor0)
 													histo_component0.valorMaximReal=valor0;
 												if (!categories)
-													histo_component0.sumaValorsReal+=valor0;													
+													histo_component0.sumaValorsReal+=valor0;
 											}
 											i_color0=Math.floor(a0*(valor0-valor_min0));
 											if (i_color0>=ncolors)
@@ -2044,9 +2044,9 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												i_color0=0;
 											if (histograma)
 												classe0[i_color0]++;
-											
+
 											if (colors)
-											{	
+											{
 												//From http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 												bigint = parseInt(colors[i_color0].substring(1), 16);
 												data.push((bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255, 255);
@@ -2118,7 +2118,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
 							else if (dtype=="float64")
 								{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-	
+
 							i_nodata=-1;
 							if (nodata)
 								i_nodata=nodata.indexOf(v[i_v]);
@@ -2193,8 +2193,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 												histograma.component[i_c].valorMinimReal=valor0;
 											if (histograma.component[i_c].valorMaximReal<valor0)
 												histograma.component[i_c].valorMaximReal=valor0;
-											histograma.component[i_c].sumaValorsReal+=valor0*comptador;													
-										}										
+											histograma.component[i_c].sumaValorsReal+=valor0*comptador;
+										}
 										i_color0=Math.floor(a[i_c]*(valor0-valor_min[i_c]));
 										if (i_color0>=256)
 											i_color0=255;
@@ -2219,7 +2219,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								}
 							}
 						}
-					}			
+					}
 				}
 				else
 				{
@@ -2244,7 +2244,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						else if (dtype=="float64")
 							v[i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
 						i_cell[i_v]++;
-	
+
 						i_nodata=-1;
 						if (nodata)
 							i_nodata=nodata.indexOf(v[i_v]);
@@ -2402,7 +2402,7 @@ var c, histo, estadistics;
 			}
 		}
 	}
-	return true;	
+	return true;
 }
 
 function CanviaImatgeBinariaCapaCallback(dades, extra_param)
@@ -2459,7 +2459,7 @@ var data
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 	}
-
+  
 	//Ara ha se que tinc el que necessito.	
 	//Depen del ordre en que passen les coses s'arriba aquí quan ja s'ha demanat un altre redibuixat i aquest ja no està en sincronia amb l'actual contigut de la vista (que te les capes definides diferentment). 
 	if (extra_param.imatge && extra_param.imatge.getContext)
@@ -2479,7 +2479,7 @@ var data
 		}
 
 		extra_param.imatge.width  = extra_param.vista.ncol;
-		extra_param.imatge.height = extra_param.vista.nfil;	
+		extra_param.imatge.height = extra_param.vista.nfil;
 
 		ctx=extra_param.imatge.getContext("2d");
 		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -2512,19 +2512,21 @@ var data
 
 		ctx.putImageData(imgData,0,0);
 	}
-		
+
 	if (estil.diagrama && estil.diagrama.length>0)
 	{
 		var i_diagrama, i_histo;
 		for (i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 		{
 			DesactivaCheckITextUnChartMatriuDinamic(extra_param.i_capa, extra_param.i_estil, i_diagrama, false); //depèn de com he "tornat" a la visualització de la capa, potser encara estava "disabled"
-			i_histo=estil.diagrama[i_diagrama].i_histograma;				
+			i_histo=estil.diagrama[i_diagrama].i_histograma;
 			if (estil.diagrama[i_diagrama].tipus == "chart")
 			{
 				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 				{
 					var retorn_prep_histo;
+          // Desselecciona el checkbox per al tall de cues.
+          window.document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo)).checked=false;
 					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
 					for (var i_c=0; i_c<estil.component.length; i_c++)
 					{
@@ -2581,12 +2583,12 @@ var data
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicGrafic3d(i_histo)).checked)				
+				if (window.document.getElementById(DonaNomCheckDinamicGrafic3d(i_histo)).checked)
 					CreaSuperficie3D(i_histo, true);
 			}
 		}
-	}	
-	
+	}
+
 	CanviaCursorSobreVista("auto");
 	if (extra_param.nom_funcio_ok)
 	{
@@ -2734,7 +2736,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 									alert(error);
 									CanviaEstatEventConsola(null, this.i_event, EstarEventError);
 								}
-							};								
+							};
 						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
 						return;
 					}
@@ -2771,7 +2773,7 @@ var valors, estil;
 			if (valors.nova_capa)
 				delete valors.nova_capa;
 		}
-	}	
+	}
 	if (capa.estil)
 	{
 		for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
