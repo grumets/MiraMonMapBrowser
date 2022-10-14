@@ -149,7 +149,7 @@
 			}
 		},
 		"idioma": {
-			"description": "Idioma per defecte, idioma inicial en iniciar el navegador",
+			"description": "DEPRECATED i passat a intern: Es recomana no indicar i deixar que la configuració del navegador de web prevalgui. Idioma per defecte, idioma actual i en iniciar el navegador.",
 			"enum": ["cat", "spa", "eng", "fre"]
 		},
 		"PlanaPrincipal": { 
@@ -1895,7 +1895,7 @@
 																"type": "string"
 															},
 															"align": {
-																"description": "Font (aspecte, mida,... ). Exemple '10px Verdana'.",
+																"description": "Tipus d'alineació horitzontal.",
 																"enum": ["left", "right", "center"]
 															},
 															"i": {
