@@ -57,47 +57,49 @@ function TancaFinestra_triaStoryMap()
 function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], storyMap, i_story, i, j;
-var ncol=2, nstory, i_real_story=[];
+var ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap", "src": "propies/StoryMaps/afegir.svg", "url": ""};
 
-	for (i_story=0, nstory=0; i_story<ParamCtrl.StoryMap.length; i_story++)
+	if (ParamCtrl.StoryMap === null)
 	{
-		if (ParamCtrl.StoryMap[i_story].EnvTotal && !EsEnvDinsAmbitActual(ParamCtrl.StoryMap[i_story].EnvTotal))
+		const aStories = [];
+		aStories.push(newStory);
+		ParamCtrl.StoryMap=aStories;
+	}
+	else if (ParamCtrl.StoryMap[ParamCtrl.StoryMap.length-1].url != "")
+	{
+		ParamCtrl.StoryMap.push(newStory);
+	}
+
+	while (nstory < ParamCtrl.StoryMap.length)
+	{
+		if (ParamCtrl.StoryMap[nstory].EnvTotal && !EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
 			continue;
-		i_real_story[nstory]=i_story;  //This transforms filtered story index into unfiltered index.
+		i_real_story[nstory]=nstory;  //This transforms filtered story index into unfiltered index.
 		nstory++;
 	}
-	
-	if (nstory==0)
-	{
-		contentFinestraLayer(win, name, GetMessage("NoStoryInThisArea", "storymap"));
-		IStoryActive=-1;
-		return 0;
-	}
-
 	cdns.push("<br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
-	for (i_story=0, j=0; j<parseInt(nstory/ncol); j++)
+
+	// Omplim totes les histories
+	i_story=0;
+	while (i_story<nstory)
 	{
-		cdns.push("<tr>");
-		for (i=0; i<ncol; i++, i_story++)
-			cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_real_story[i_story], ");\">",
-				"<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
-				"<br>",
-				DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
-				"</a><br></td>");
-		cdns.push("</tr>");
-	}
-	if (nstory%ncol)
-	{
-		cdns.push("<tr>");
-		for (;i_story<nstory; i_story++)
-			cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"TancaIIniciaStoryMap(", i_real_story[i_story], ");\">",
-				"<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
-				"<br>",
-				DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
-				"</a></td>");
-		cdns.push("</tr>");
+		if ((i_story%ncol)==0)
+			cdns.push("<tr>");
+		cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"");
+		(i_story==nstory-1) ? cdns.push("TancaICreaStoryMap();\">") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");\">");
+		cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
+			"<br>",
+			DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
+			"</a><br></td>");
+		/* Incrementem valor en aquest precís instant per aconseguir que
+		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
+		<tr> el </tr> no s'inclou fins la següent interació que compleixi
+		la condició.*/
+		i_story++;
+		if ((i_story%ncol)==0 || i_story==nstory)
+			cdns.push("</tr>");
 	}
 	cdns.push("</table>");
 	contentFinestraLayer(win, name, cdns.join(""));
@@ -109,6 +111,15 @@ function TancaIIniciaStoryMap(i_story)
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
 	IniciaStoryMap(i_story);
+}
+
+function TancaICreaStoryMap()
+{
+	//Tancar la caixa de les histories
+	TancaFinestraLayer("triaStoryMap");
+	if (!isFinestraLayer(window, "creaStoryMap"))
+		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	ObreFinestra(window, "creaStoryMap");
 }
 
 //Inicia una Storymap
@@ -146,9 +157,9 @@ var i_story=extra_param, elem;
 	    ParamCtrl.StoryMap[i_story].Ample || ParamCtrl.StoryMap[i_story].Alt)
 	{
 		var rect=getRectFinestraLayer(window, "storyMap");
-		moveFinestraLayer(window, "storyMap", (typeof ParamCtrl.StoryMap[i_story].MargeEsq!=="undefined" && ParamCtrl.StoryMap[i_story].MargeEsq>=0) ? ParamCtrl.StoryMap[i_story].MargeEsq : rect.esq, 
-				(typeof ParamCtrl.StoryMap[i_story].MargeSup!=="undefined" && ParamCtrl.StoryMap[i_story].MargeSup>=0) ? ParamCtrl.StoryMap[i_story].MargeSup : rect.sup, 
-				(ParamCtrl.StoryMap[i_story].Ample) ? ParamCtrl.StoryMap[i_story].Ample : rect.ample, 
+		moveFinestraLayer(window, "storyMap", (typeof ParamCtrl.StoryMap[i_story].MargeEsq!=="undefined" && ParamCtrl.StoryMap[i_story].MargeEsq>=0) ? ParamCtrl.StoryMap[i_story].MargeEsq : rect.esq,
+				(typeof ParamCtrl.StoryMap[i_story].MargeSup!=="undefined" && ParamCtrl.StoryMap[i_story].MargeSup>=0) ? ParamCtrl.StoryMap[i_story].MargeSup : rect.sup,
+				(ParamCtrl.StoryMap[i_story].Ample) ? ParamCtrl.StoryMap[i_story].Ample : rect.ample,
 				(ParamCtrl.StoryMap[i_story].Alt) ? ParamCtrl.StoryMap[i_story].Alt : rect.alt);
 	}
 
@@ -168,7 +179,7 @@ function TancaFinestra_storyMap()
 	IStoryActive=null;
 }
 
-function isElemScrolledIntoViewDiv(el, div, partial) 
+function isElemScrolledIntoViewDiv(el, div, partial)
 {
 	var rect_el = el.getBoundingClientRect();
 	var rect_div=div.getBoundingClientRect();
@@ -299,8 +310,8 @@ var hihacanvis, node, attribute;
 						if (node.attributes[i_styles].name=="data-mm-styles")
 							break;
 					}
-					CommandMMNSetLayersAndStyles(attribute.value.trim(), 
-							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(), 
+					CommandMMNSetLayersAndStyles(attribute.value.trim(),
+							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(),
 							"data-mm-layers");
 					hihacanvis=true;
 				}

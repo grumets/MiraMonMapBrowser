@@ -40,7 +40,7 @@
 
 function DonaTextImgGifSvg(id, name, filename, size, title, onclick_function_name)
 {
-var cdns=[];	
+var cdns=[];
 
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(filename + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
 		 "id=\"", id, "\" ");
@@ -80,7 +80,7 @@ function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_
 }
 
 /*
- * Replace an SVG img src with inline XML SVG 
+ * Replace an SVG img src with inline XML SVG
  */
 //https://stackoverflow.com/questions/24933430/img-src-svg-changing-the-styles-with-css/24933495#24933495
 //This code will be to replace them all: document.querySelectorAll('img.svg').forEach(ChangeSVGToInlineSVG())
@@ -97,7 +97,7 @@ function ChangeSVGToInlineSVG(img, f_next, params)
 
 	        var parser = new DOMParser();
 	        var xmlDoc = parser.parseFromString(text, "text/xml");
-		
+
 	        // Get the SVG tag, ignore the rest
         	var svg = xmlDoc.getElementsByTagName('svg')[0];
 
@@ -157,7 +157,7 @@ function ChangeTitleColorsSVG(id, params)
 		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
 		if (!svg)
 			return;
-			
+
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
@@ -275,7 +275,7 @@ var cdns=[];
 		cdns.push( "<img align=\"absmiddle\" src=\"" ,
 			AfegeixAdrecaBaseSRC(botons[j].src),
 			((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) && boto_p==botons[j].src ? "p" : ""),
-			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"), 
+			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"),
 			"\" ",
 			"id=\"id_barra_", botons[j].src, "\" name=\"", botons[j].src, "\" "+
 			"width=\"", (sizep ? (boto_p==botons[j].src ? sizep : size) : ((ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23)), "\" ");
@@ -508,7 +508,7 @@ var cdns=[];
 			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
 				GetMessage("InstallMiraMonReader", "barra"),
 				"InstalaLectorMapes();")));
-		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
+		if ((ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) || ParamCtrl.StoryMap === null)
 			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
@@ -544,4 +544,3 @@ var cdns=[];
 			window.document.zoom.nivell.focus();
 	}
 }//Fi de CreaBarra()
-
