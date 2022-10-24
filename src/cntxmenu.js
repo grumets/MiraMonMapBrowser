@@ -3794,6 +3794,6 @@ function CanviaValorEstiramentDePaleta(event, indexCapa, operValue, estiramentPa
 
 		}
 	}
-
+	document.getElementById("LayerEstilCapa").innerHTML= DonaCadenaHTMLFieldSetValueStrechingColor(estil),
 
 }
