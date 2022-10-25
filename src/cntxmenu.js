@@ -3311,8 +3311,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		cdns.push("<fieldset><legend>",
 			GetMessage("ValueForStretchingColor", "cntxmenu"),
 			": </legend>",
-		DonaCadenaHTMLFieldSetValueStrechingColor(estil),
-		"</fieldset>");
+			"<div id=\"edita-estil-capa-estirament-paleta-conjunt-camps\" class=\"Verdana11px\">",
+			DonaCadenaHTMLFieldSetValueStrechingColor(i_capa, i_estil),
+			"</div>", "</fieldset>");
 	}
 
 	if (estil.component && estil.component.length==1 && estil.component[0].illum)
@@ -3386,15 +3387,17 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	return cdns.join("");
 }
 
-function DonaCadenaHTMLFieldSetValueStrechingColor(estil)
+function DonaCadenaHTMLFieldSetValueStrechingColor(i_capa, i_estil)
 {
-	for (var i_c=0; i_c<estil.component.length; i_c++)
+var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
+
+	for (var i_comp=0, compLength=estil.component.length; i_comp<compLength; i_comp++)
 	{
 		if (estil.component.length>2)
 		{
 			cdns.push("<fieldset><legend>",
 				GetMessage("Component", "cntxmenu"), " ");
-			switch (i_c)
+			switch (i_comp)
 			{
 				case 0:
 					cdns.push("R");
@@ -3406,38 +3409,42 @@ function DonaCadenaHTMLFieldSetValueStrechingColor(estil)
 					cdns.push("B");
 					break;
 				default:
-					cdns.push(i_c);
+					cdns.push(i_comp);
 			}
 			cdns.push(": </legend>");
 		}
 		// Valor mínim i valor màxim
 		// Valor unitari prement botons incrmenet/decrement. Serà 1% del rang possible.
 		var valUnitari = 1; // Per defecte.
-		const estPaleta = estil.component[i_c].estiramentPaleta;
+		const estPaleta = estil.component[i_comp].estiramentPaleta;
 		if (estPaleta && estPaleta.valorMinim && estPaleta.valorMaxim)
 		{
 			valUnitari = parseFloat((estPaleta.valorMaxim - estPaleta.valorMinim) / 100.00);
 		}
 
-		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_c, "\">", GetMessage("Minimum"), ": </label>",
-			"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_c, "\" name=\"minim", i_c,"\" value=\"",
-			DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta), "\" style=\"width:50px;\" />",
-			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_c].valorMinimReal, " ",
+		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_comp, "\">", GetMessage("Minimum"), ": </label>",
+			"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_comp, "\" name=\"minim", i_comp,"\" value=\"",
+			DonaFactorValorMinEstiramentPaleta(estil.component[i_comp].estiramentPaleta), "\" style=\"width:50px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", this.value, ", ", i_estil, ", true);\">",
+			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal, " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
-				"\" onClick='document.getElementById(\"edita-estil-capa-valor-minim-", i_c, "\").value=", estil.histograma.component[i_c].valorMinimReal,";' />",")", "<br>",
-			"<input type=\"button\" id=\"edita-estil-capa-minim-button-esq-",i_c, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", valUnitari, ", ", estPaleta, ", true);\"", (valUnitari==0 ? " disabled=\"disabled\"" : ""), ">",
-			"<input type=\"range\" style=\"width: 300px;\" step=\"", valUnitari * 10.0, "\" min=\"", estPaleta.valorMinim, "\" max=\"", estPaleta.valorMaxim, "\" value=\"", parseFloat(document.getElementById("edita-estil-capa-valor-minim-" + i_c).value), "\" onchange='CanviaValorDataVideoInicialFinal(event, this.value, false);' onclick='dontPropagateEvent(event);' list='DataVideoInicialTicks'>",
-			"<input type=\"button\" id=\"edita-estil-capa-minim-button-dret-",i_c, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", valUnitari, ", ", estPaleta, ", false);\"", (valUnitari==0 ? " disabled=\"disabled\"" : ""), ">");
+				"\" onClick=\"document.getElementById(\"edita-estil-capa-valor-minim-", i_comp, "\").value=", estil.histograma.component[i_comp].valorMinimReal,";\">",")", "<br>",
+			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", parseFloat(document.getElementById("edita-estil-capa-valor-minim-" + i_comp).value) + valUnitari*(-1), ", ", iestil, ", true);\">",
+			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 300px;\" step=\"", valUnitari * 10.0, "\" min=\"", estPaleta.valorMinim, "\" max=\"", estPaleta.valorMaxim, "\" value=\"", parseFloat(document.getElementById("edita-estil-capa-valor-minim-" + i_comp).value), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", this.value, ", ", i_estil, ", false);\" onclick=\"dontPropagateEvent(event);\">",
+			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", parseFloat(document.getElementById("edita-estil-capa-valor-minim-" + i_comp).value) + valUnitari, ", ", i_estil, ", false);\">");
 
-		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_c, "\">", GetMessage("Maximum"), ": </label>",
-			"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_c, "\" name=\"maxim", i_c,"\" value=\"",
-			DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, estil.histograma.component[i_c].classe.length), "\" style=\"width:50px;\" />",
-			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_c].valorMaximReal, " ",
+		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
+			"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_comp, "\" name=\"maxim", i_comp,"\" value=\"",
+			DonaFactorValorMaxEstiramentPaleta(estil.component[i_comp].estiramentPaleta, estil.histograma.component[i_comp].classe.length), "\" style=\"width:50px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", this.value, ", ", i_estil, ", false);\">",
+			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal, " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
-				"\" onClick='document.getElementById(\"edita-estil-capa-valor-maxim-", i_c, "\").value=", estil.histograma.component[i_c].valorMaximReal,";' />",")");
+				"\" onClick=\"document.getElementById(\"edita-estil-capa-valor-maxim-", i_comp, "\").value=", estil.histograma.component[i_comp].valorMaximReal,";\">",")", "<br>",
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", parseFloat(document.getElementById("edita-estil-capa-valor-maxim-" + i_comp).value) + valUnitari*(-1), ", ", iestil, ", true);\">",
+				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 300px;\" step=\"", valUnitari * 10.0, "\" min=\"", estPaleta.valorMinim, "\" max=\"", estPaleta.valorMaxim, "\" value=\"", parseFloat(document.getElementById("edita-estil-capa-valor-maxim-" + i_comp).value), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", this.value, ", ", i_estil, ", false);\" onclick=\"dontPropagateEvent(event);\">",
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", parseFloat(document.getElementById("edita-estil-capa-valor-maxim-" + i_comp).value) + valUnitari, ", ", i_estil, ", false);\">");
 		if (estil.component.length>1)
 			cdns.push("</fieldset>");
 	}
+	return cdns.join("");
 }
 
 function ForcaRecalculItemLleg(estil)
@@ -3771,29 +3778,47 @@ var elem=ObreFinestra(window, "feedbackAmbEstils", GetMessage("ofUserFeedback", 
 	FinestraFeedbackAmbEstilsCapa(elem, i_capa);
 }
 
-function CanviaValorEstiramentDePaleta(event, indexCapa, operValue, estiramentPaleta, esMinim) {
+function CanviaValorEstiramentDePaleta(event, i_capa, i_component, value, i_estil, esMinim)
+{
+var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
-
-	if (esMinim )
+	if (estil && estil.components && estil.components.length > 0)
 	{
-		const textValMinim = document.getElementById("edita-estil-capa-valor-minim-" + indexCapa);
-		const textValMinim = document.getElementById("edita-estil-capa-valor-minim-" + indexCapa);
-		if (estiramentPaleta.valorMinim - operValue > estiramentPaleta.valorMinim)
+		const estPaleta = estil.component[i_c].estiramentPaleta;
+		if (estPaleta.valorMinim && estPaleta.valorMaxim)
 		{
-
-		}
-		else
-		{
-
+			if (esMinim)
+			{
+				const textMinim = document.getElementById("edita-estil-capa-valor-minim-" + indexComponent);
+				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + indexComponent);
+				if (estiramentPaleta.valorMinim - value > estiramentPaleta.valorMinim)
+				{
+					textMinim.value = value;
+					sliderMinim.value = value;
+				}
+				else
+				{
+					textMinim.value = estiramentPaleta.valorMinim;
+					sliderMinim.value = estiramentPaleta.valorMinim;
+				}
+			}
+			else
+			{
+				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + indexComponent);
+				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + indexComponent);
+				if (estiramentPaleta.valorMaxim + value < estiramentPaleta.valorMaxim)
+				{
+					textMaxim.value = value;
+					sliderMaxim.value = value;
+				}
+				else
+				{
+					textMaxim.value = estiramentPaleta.valorMaxim;
+					sliderMaxim.value = estiramentPaleta.valorMaxim;
+				}
+			}
+			document.getElementById("edita-estil-capa-estirament-paleta-conjunt-camps").innerHTML= DonaCadenaHTMLFieldSetValueStrechingColor(i_capa, i_estil);
+			//contentLayer(getFinestraLayer(window, "editaEstil"), DonaCadenaEditaEstilCapa(i_capa, i_estil));
 		}
 	}
-	else
-	{
-		if (estiramentPaleta.valorMaxim + operValue < estiramentPaleta.valorMaxim)
-		{
-
-		}
-	}
-	document.getElementById("LayerEstilCapa").innerHTML= DonaCadenaHTMLFieldSetValueStrechingColor(estil),
-
 }
