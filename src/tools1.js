@@ -22,8 +22,8 @@
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
     No tots aquests productes són gratuïts o de codi obert.
@@ -86,7 +86,7 @@ function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 {
 	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
 	//de getElementsByTagNameNS és diferent
-	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres és el nom del ns i el nom del tag 
+	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres és el nom del ns i el nom del tag
 	//Per getElementsByTagName() en Opera i Chrome no funciona si indiquem el id del ns, és a dir, ns:name no va
 	//En IE depen de la versió. En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
 	//Recomano usar aquesta funció que provarà les diferents possibilitats i així és menys probable tenir problemes
@@ -980,7 +980,7 @@ var elem, rect, ancora, nom;
 
 	delta_w=ParamInternCtrl.realSpaceForLayers.width-w_previ
 	delta_h=ParamInternCtrl.realSpaceForLayers.height-h_previ;
-
+  const layerNamesCheckList = new Map();
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
 	{
@@ -988,6 +988,17 @@ var elem, rect, ancora, nom;
 		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
 		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto))
 			continue;
+    /**
+    * Es comprova que la capa no s'hagi redimensionat abans. Del contrari
+    * evitem que ho fagi més cops.Només es guarda el nom de la capa ambdós clau
+    * i valor perquè en realitat només utilitzem el map() per tenir una llista 
+    * de les capes tractades però no com una estructura de dades amb Informació
+    * sensible per a càlculs.
+    */
+    if (!layerNamesCheckList.has(nom))
+      layerNamesCheckList.set(nom, nom);
+    else
+      continue;
 
 		elem=getLayer(win, nom);
 		if (!elem)
@@ -1578,7 +1589,7 @@ var nom, i_finestra=layerFinestraList.length;
 	classLayer(getLayer(win, nom), "barrafinestra");
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
-	
+
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
@@ -1607,7 +1618,7 @@ var nom, s, i_finestra=layerFinestraList.length;
 	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "barrafinestra", null);
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
-	
+
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, param, "finestra", content);
@@ -2017,7 +2028,7 @@ function promiseLoadJSON(path)
 						catch (e) {
 		                			if (error)
 								return error("JSON file: \""+ path + "\". " + e);
-						}	
+						}
 						success(data);
 					}
 				}
@@ -2202,7 +2213,7 @@ var i;
 	}
 }
 
-/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter. 
+/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter.
 It supports that "$ref" is a string of a single JSON Pointer or an array of JSON Pointers.
 The original object can have other properties but they should not the properties of the pointed object ($ref)
 should not have the same names.
@@ -2362,7 +2373,7 @@ var es_negatiu;
 }
 
 //Pot ser que retorni el número com a text
-function multipleOf(v, m) 
+function multipleOf(v, m)
 {
 var r;
 
@@ -2404,7 +2415,7 @@ function DonaNumeroArrodonit125(a)
 		return a;
 	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
 	var n=Math.abs(a/Math.pow(10,e));
-	
+
 	//Ara cal arrodinir a l'enter més proper:
 	if (n<2)
 		n=1;
@@ -2489,7 +2500,7 @@ function FesTestDeNavegador()
     if (!document.getElementById)
     {
 		alert("Aquest navegador és massa antic i no suporta la funció javascript document.getElementById() pel que no funcionarà correctament. Actualitzeu-vos.\n" +
-			"Este navegador es demassiado antiguo y no suporta la función javascript document.getElementById() por lo que no funcionará correctamente. Actualicese.\n" + 
+			"Este navegador es demassiado antiguo y no suporta la función javascript document.getElementById() por lo que no funcionará correctamente. Actualicese.\n" +
 			"This browser is too old and do not supports the javascript function document.getElementById(). It will not work properly. Please upgrade it.\n" +
 			"Vous utilisez une version ancienne du navigateur qui ne supporte pas la fonction javascript document.getElementById(), par conséquent, il ne fonctionnera pas correctement. Actualisez la version.");
     }
@@ -2579,7 +2590,7 @@ function FesTestDeNavegador()
 		if (version<8)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 8 o posterior per a funcionar correctament.\n" +
-				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 8 o posterior para funcionar correctamente.\n" + 
+				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 8 o posterior para funcionar correctamente.\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 8 o greater to work properly.\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 8 oû postérieure pour bien fonctionner.");
 		}
@@ -2598,7 +2609,7 @@ function FesTestDeNavegador()
 		if (version<5)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 5 o posterior per a funcionar correctament (es recomana la versió 7).\n" +
-				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 5 o posterior para funcionar correctamente (se recomienda la versión 7).\n" + 
+				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 5 o posterior para funcionar correctamente (se recomienda la versión 7).\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 5 o greater to work properly (version 7 is recomended).\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 5 oû postérieure pour bien fonctionner (nous recommandons la version 7).");
 		}
