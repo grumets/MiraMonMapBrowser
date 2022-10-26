@@ -6983,11 +6983,10 @@ function EndMiraMonMapBrowser(event, reset)
 			catch (e)
 			{
 			        ;//localStorage.removeItem(key);
-				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del mapa.",
-					"spa":"No ha sido posible guardar el estado del mapa.",
-					"eng":"Saving the map status done was not possible.",
-					"fre":"Il nâ€™a pas Ã©tÃ© possible de sauvegarder le statut de la carte."}));
-				*/
+				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
+							"spa":"No ha sido posible guardar el estado del mapa.",
+							"eng":"Saving the map status done was not possible.",
+							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
 			}
 		}
 	}
@@ -7021,7 +7020,7 @@ var clau_config="CONFIG=", clau_reset="RESET=";
 	loadJSON(config_json,
 			IniciaParamCtrlIVisualitzacio,
 			function(xhr) { alert(xhr); },
-			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: false});
+			{div_name:div_name, config_json:config_json, config_reset: config_reset, usa_local_storage: true});
 }
 
 function RestartMiraMonMapBrowser()
