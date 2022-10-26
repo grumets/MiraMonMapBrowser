@@ -682,7 +682,8 @@ var MessageLang={
 		andIsInsteadSetOtherwise: {"cat": "i en canvi està definida d'una altra manera", "spa": "y en cambio está definido de otra manera", "eng": "and is set otherwise", "fre": "et est définie autrement"}
 	},
 	authens: {
-		LoginAccountFailed: {cat: "Error o cancel·lació de la identificació amb el compte de", spa: "Error o cancelación de la identificación en la cuenta de", eng: "Login in your account failed or cancelled in"}
+		LoginAccountFailed: {cat: "Error o cancel·lació de la identificació amb el compte de", spa: "Error o cancelación de la identificación en la cuenta de", eng: "Login in your account failed or cancelled in"},
+		ContinueWithoutAuthentication: {"cat": "Vols continuar sense autentificació", "spa": "Desea continuar sin autentificación", "eng": "Do you what to continue without authentication", "fre": "Faites-vous quoi continuer sans authentification"}
 	},
 	llinatge: {
 		Process: {"cat":"Procés", "spa":"Proceso", "eng":"Process", "fre":"Processus"},

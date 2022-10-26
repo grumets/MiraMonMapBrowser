@@ -101,6 +101,12 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 			// On error
 			function(error) {
 				hello(access.tokenType ? access.tokenType : "authenix").askingAToken=false;
+				if (error.error.code=="cancelled")
+				{
+					if (confirm(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + GetMessage("ContinueWithoutAuthentication","authens") + "?"))
+						f_repeat(null, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+					return;
+				}	
 				alert(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + error.error.message);
 			}
 		);
@@ -111,7 +117,11 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 	if (!access || !access.tokenType || access.tokenType.length==0)
 	{
 		//No autentication requested in the 'access' property
-		ajax.doReqIndirect(method, url, request_format, dataPayload, hand, response_format, struct);
+		//Aquí no puc fer una copia "deep" (hi ha funcions dins que no es poden "stringifar" i només puc fer una copia "shallow" (https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/)
+		var struct2=Object.assign({}, struct);
+		if (struct.access)
+			struct2.access=null;  //No propago l'access per no intentar-ho més tard.
+		ajax.doReqIndirect(method, url, request_format, dataPayload, hand, response_format, struct2);
 		return;
 	}
 	var authResponse=hello(access.tokenType).getAuthResponse();
