@@ -436,17 +436,9 @@ var cdns=[], cal_retorn=false;
 					else
 						cal_retorn=true;
 					cdns.push(DonaCadena(selector.desc), ": ",
-					          "<select id=\"selector-lleg-", i_capa, "-i_estil-", capa.i_estil, "-sltr-", i_sltr, "\" onChange=\"CanviaSelectorEstilCapa(this, "+i_capa+", "+capa.i_estil+", 0, " +i_sltr+ ");\">");
-					for (var i_cat=0; i_cat<selector.categories.length; i_cat++)
-					{
-						if (selector.categories[i_cat])
-						{
-							cdns.push("<option value=\"",i_cat,"\"",
-								((i_cat==selector.valorActual) ? " selected=\"selected\"" : "") ,
-								">", DonaTextCategoriaDesDeColor(selector.categories, selector.atributs, i_cat, true), "</option>");
-						}
-					}
-					cdns.push("</select>");
+					        "<select id=\"selector-lleg-", i_capa, "-i_estil-", capa.i_estil, "-sltr-", i_sltr, "\" onChange=\"CanviaSelectorEstilCapa(this, "+i_capa+", "+capa.i_estil+", 0, " +i_sltr+ ");\">",
+						DonaCadenaOpcionsCategories(selector.categories, selector.atributs, selector.valorActual, sortCategoriesValueAscendent),
+						"</select>");
 				}
 			}
 			else

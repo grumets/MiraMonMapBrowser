@@ -8,6 +8,12 @@ function InitHello()
 		return;
 	}
 	hello.init(ParamCtrl.accessClientId, {redirect_uri: ((location.pathname.charAt(location.pathname.length-1)=='/') ? location.pathname.substring(0, location.pathname.length-1) : location.pathname)});
+	ParamInternCtrl.tokenType={};
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+			ParamInternCtrl.tokenType[tokenType]={};
+	}
 }
 
 function parseJwt(token)
@@ -59,14 +65,16 @@ function AddAccessTokenToURLIfOnline(url, access)
 
 function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
 {
-	if (hello(access.tokenType ? access.tokenType : "authenix").askingAToken)  //Parametre meu que no forma part de la llibreria
+	if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
+		return;
+	if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken)  //Parametre meu que no forma part de la llibreria
 	{
 		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard.
 		setTimeout(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 		return;
 	}
 
-	hello(access.tokenType ? access.tokenType : "authenix").askingAToken=true;  //Parametre meu que no forma part de la llibreria
+	ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=true;  //Parametre meu que no forma part de la llibreria
 	hello(access.tokenType ? access.tokenType : "authenix").login({redirect_uri: location.pathname, scope: "openid profile", display: "popup"}).then(
 			function(success) {
 				//alert("success");
@@ -76,7 +84,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 					var authResponse=hello(access.tokenType).getAuthResponse();
 					if (!authResponse || !authResponse.access_token)
 						return 0;
-					if (!hello(access.tokenType ? access.tokenType : "authenix").userAlreadyWelcomed)
+					if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].userAlreadyWelcomed)
 					{
 						var jwt = parseJwt(authResponse.id_token);
 
@@ -88,19 +96,20 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 							alert("Hello " + jwt.preferred_username);
 						else
 							alert("Hello " + jwt.name);
-						hello(access.tokenType ? access.tokenType : "authenix").userAlreadyWelcomed=true;
+						ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].userAlreadyWelcomed=true;
 					}
 				}
 				catch (err)
 				{
 					alert("Error: " +err.message);
 				}
-				hello(access.tokenType ? access.tokenType : "authenix").askingAToken=false;
+				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=false;
 				f_repeat(access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
 			},
 			// On error
-			function(error) {
-				hello(access.tokenType ? access.tokenType : "authenix").askingAToken=false;
+			function(error) 
+			{
+				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken="logout";
 				if (error.error.code=="cancelled")
 				{
 					if (confirm(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + GetMessage("ContinueWithoutAuthentication","authens") + "?"))
@@ -149,3 +158,34 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 
 	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct, null, null);
 }
+
+function CalFerLogin()
+{
+	if (!ParamCtrl.accessClientId)
+		return false;
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			if (ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=="logout")
+				return true;
+		}
+	}
+	return false;
+}
+
+function PreparaReintentarLogin()
+{
+	if (!ParamCtrl.accessClientId)
+		return false;
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			if (ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=="logout")
+				ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=false;
+		}
+	}
+	return false;
+}
+
