@@ -3782,7 +3782,7 @@ function CanviaValorEstiramentDePaleta(event, i_capa, i_component, value, i_esti
 {
 var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
-	if (estil && estil.components && estil.components.length > 0)
+	if (estil && estil.component && estil.component.length > 0)
 	{
 		const estPaleta = estil.component[i_c].estiramentPaleta;
 		if (estPaleta.valorMinim && estPaleta.valorMaxim)
