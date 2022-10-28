@@ -6644,7 +6644,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 530, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 586, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessage("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", GetMessage("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessage("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
@@ -6983,11 +6983,10 @@ function EndMiraMonMapBrowser(event, reset)
 			catch (e)
 			{
 			        ;//localStorage.removeItem(key);
-				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del mapa.",
-					"spa":"No ha sido posible guardar el estado del mapa.",
-					"eng":"Saving the map status done was not possible.",
-					"fre":"Il nâ€™a pas Ã©tÃ© possible de sauvegarder le statut de la carte."}));
-				*/
+				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
+							"spa":"No ha sido posible guardar el estado del mapa.",
+							"eng":"Saving the map status done was not possible.",
+							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
 			}
 		}
 	}

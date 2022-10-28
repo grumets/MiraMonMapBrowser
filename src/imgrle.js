@@ -1802,16 +1802,19 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									i_color1=component1.herenciaOrigen.nColors-1;
 								else if (i_color1<0)
 									i_color1=0;
-								categories[valor0]["$stat$_histo"].classe[i_color1]++;
-
-								//calculo el min, max i sum de la component1 per la categoria categories[valor0]
-								if (component1.herenciaOrigen.tractament!="categoric")
+								if (valor0<categories.length)
 								{
-									if (categories[valor0]["$stat$_min"]>valor1)
-										categories[valor0]["$stat$_min"]=valor1;
-									if (categories[valor0]["$stat$_max"]<valor1)
-										categories[valor0]["$stat$_max"]=valor1;
-									categories[valor0]["$stat$_sum"]+=valor1;
+									categories[valor0]["$stat$_histo"].classe[i_color1]++;
+
+									//calculo el min, max i sum de la component1 per la categoria categories[valor0]
+									if (component1.herenciaOrigen.tractament!="categoric")
+									{
+										if (categories[valor0]["$stat$_min"]>valor1)
+											categories[valor0]["$stat$_min"]=valor1;
+										if (categories[valor0]["$stat$_max"]<valor1)
+											categories[valor0]["$stat$_max"]=valor1;
+										categories[valor0]["$stat$_sum"]+=valor1;
+									}
 								}
 							}
 
