@@ -252,7 +252,6 @@ var MessageLang={
 	stepBack: {"cat":"retrocedir un", "spa":"retroceder una", "eng":"step back", "fre":"revenir un"},
 	pause: {"cat":"pausa", "spa":"pausa", "eng":"pause", "fre":"pause"},
 	play: {"cat":"reproduir", "spa":"reproducir", "eng":"play", "fre":"reproduire"},
-	repeatedlyPlay: {"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"},
 	stepForward: {"cat":"avançar un", "spa":"avanzar una", "eng":"step forward", "fre":"avancer un"},
 	toTheEnd: {"cat":"al final", "spa":"al final", "eng":"to the end", "fre":"à la fin"},
 	SpeedyBy: {"cat":"Rapidesa per","spa":"Rapidez por","eng":"Speed by", "fre":"Vitesse pour"},
@@ -836,7 +835,8 @@ var MessageLang={
 		WrongValueTemporalScale: {"cat":"Valor incorrecte de l'escala temporal", "spa":"Valor incorrecto de la escala temporal", "eng":"Wrong value in temporal scale", "fre":"Valeur incorrect de l'échelle temporelle"},
 		IncorrectValueIntervalSeconds: {"cat":"Valor incorrecte de l'interval de segons", "spa": "Valor incorrecto del intervaluo de segundos", "eng": "Incorrect value of the interval of seconds", "fre": "Valeur incorrecte de l'intervalle de secondes"},
 		WillUse: {"cat":"Usaré 5.0", "spa": "Usaré 5.0", "eng": "I'll use 5.0", "fre": "Je vais utiliser 5.0"},
-		SelectTempScaleInterval: {"cat":"Sel·lecciona escala temporal o interval", "spa": "Seleccione escala temporal o intervalo", "eng": "Select temporal scale or interval", "fre": "Sélectionner échelle temporelle où intervalle"}
+		SelectTempScaleInterval: {"cat":"Sel·lecciona escala temporal o interval", "spa": "Seleccione escala temporal o intervalo", "eng": "Select temporal scale or interval", "fre": "Sélectionner échelle temporelle où intervalle"},
+		repeatedlyPlay: {"cat":"reproduir repetitivament", "spa":"reproducir repetitívamente", "eng":"repeatedly play", "fre":"reproduire à plusieurs reprises"}
 	},
 	wps: {
 		Result: {"cat":"Resultat: ", "spa":"Resultado: ", "eng":"Result: ", "fre":"Résultat: "},
