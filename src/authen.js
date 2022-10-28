@@ -167,7 +167,7 @@ function CalFerLogin()
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
-			if (ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=="logout")
+			if (ParamInternCtrl.tokenType[tokenType].askingAToken=="logout")
 				return true;
 		}
 	}
@@ -182,8 +182,8 @@ function PreparaReintentarLogin()
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
-			if (ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=="logout")
-				ParamInternCtrl.tokenType[tokenType ? tokenType : "authenix"].askingAToken=false;
+			if (ParamInternCtrl.tokenType[tokenType].askingAToken=="logout")
+				ParamInternCtrl.tokenType[tokenType].askingAToken=false;
 		}
 	}
 	return false;
