@@ -432,6 +432,34 @@ var s=capa.nom;
 	return null; //si no sé donar identificador a l'estil, no deixo posar feedback sobre ell
 }
 
+//Si la capa te un tokenType associat es fa servir aquest, i si no el primer que estigui actiu, i si no n'hi ha cap, el primer que tingui possibilitat de fer-se servir
+function DonaAccessTokenTypeFeedback(capa)
+{
+	if (!ParamCtrl.accessClientId)
+		return null;
+
+	if (capa.access)
+		return capa.access.tokenType;
+
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			if (ParamInternCtrl.tokenType[tokenType].userAlreadyWelcomed)
+				return tokenType;
+		}
+	}
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			return tokenType;
+		}
+	}
+	return null;
+}
+
+
 function FinestraFeedbackCapa(elem, i_capa, i_estil)
 {
 var cdns=[], s;
@@ -462,7 +490,8 @@ var capa=ParamCtrl.capa[i_capa];
 				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
-				ParamCtrl.idioma);
+				ParamCtrl.idioma,
+				DonaAccessTokenTypeFeedback(capa));
 }
 
 function AdoptaEstil(params_function, guf)
@@ -521,7 +550,7 @@ var capa=ParamCtrl.capa[i_capa];
 	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa),
 		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 			ru_schema: encodeURIComponent(config_schema_estil) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-		ParamCtrl.idioma, "" /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
+		ParamCtrl.idioma, DonaAccessTokenTypeFeedback(capa) /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
 
 function CalculaValidessaTemporal(param)

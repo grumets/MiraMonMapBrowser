@@ -309,9 +309,9 @@ function sortAscendingStringSensible(a, b)
 
 function sortAscendingStringInsensible(a, b)
 {
-	a = a.toLowerCase();
-    b = b.toLowerCase();
-   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	var ai = a.toLowerCase();
+	var bi = b.toLowerCase();
+   	return ((ai < bi) ? -1 : ((ai > bi) ? 1 : 0));
 }
 
 function sortAscendingNumber(a, b)
