@@ -6355,9 +6355,6 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 	ResolveJSONPointerRefs(ParamCtrl);
 
-	if (window.InitHello)
-		InitHello();
-
 	IniciaVisualitzacio();
 }
 
@@ -6466,7 +6463,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 				capa.consultable="no";
 			}
 
-			if (protocol=="https:" && DonaServidorCapa(capa) && protocol!=DonaProtocol(DonaServidorCapa(capa)).toLowerCase()/* && DonaCorsServidorCapa(capa)==true*/)
+			if (protocol=="https:" && DonaServidorCapa(capa) && DonaProtocol(DonaServidorCapa(capa)) && protocol!=DonaProtocol(DonaServidorCapa(capa)).toLowerCase() /* && DonaCorsServidorCapa(capa)==true*/)
 			{
 				alert(GetMessage("LayerBinaryArrayMustBeHTTPS", "miramon") + ". "+ GetMessage("LayerSetToNoVisibleQueriable", "miramon")+ "." + " capa = " + DonaCadenaNomDesc(capa));
 				capa.visible="no";
@@ -6604,12 +6601,38 @@ function CarregaCapesDeServei(capesDeServei)
 	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
 }
 
-function CarregaArrayCapesDeServei()
+function CarregaArrayCapesDeServei(nomesOffline)
 {
-	if (!ParamCtrl.capesDeServei)
+	if (!ParamCtrl.capesDeServei || (nomesOffline && !ParamCtrl.accessClientId))
 		return;
-	for (var i_srv=0; i_srv<ParamCtrl.capesDeServei.length; i_srv++)
-		CarregaCapesDeServei(ParamCtrl.capesDeServei[i_srv]);
+
+	if (nomesOffline)
+	{
+		var calfer=[], calferAlgun=false;
+		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+		{
+			calfer[i]=false;
+			if (ParamCtrl.capesDeServei[i].servei.access)
+			{
+				var access=ParamCtrl.capesDeServei[i].servei.access;
+				if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
+					calferAlgun=calfer[i]=true;
+			}
+		}
+		if (!calferAlgun)
+			return;
+		PreparaReintentarLogin();
+		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+		{
+			if (calfer[i])
+				CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
+		}
+	}
+	else
+	{
+		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+			CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
+	}
 }
 
 function IniciaVisualitzacio()
@@ -6669,11 +6692,15 @@ var win, i, j, l, capa;
 		return;
 
 	PreparaParamInternCtrl();
+
+	if (window.InitHello)
+		InitHello();
+
 	CreaCapesVolatils();
 
 	CompletaDefinicioCapes();
 
-	CarregaArrayCapesDeServei();
+	CarregaArrayCapesDeServei(false);
 
 	changeSizeLayers(window);
 	CarregaConsultesTipiques();

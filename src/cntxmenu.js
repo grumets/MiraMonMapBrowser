@@ -2250,17 +2250,9 @@ var estil=capa.estil[i_estil];
 		cdns.push("<label for=\"", prefix_id, "-valor-",i_condicio, "\">", GetMessage("Value"), ":</label>");
 		if (estil.categories.length>1)
 		{
-			cdns.push("<select  id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">");
-			for (var i_cat=0; i_cat<estil.categories.length; i_cat++)
-			{
-				if (estil.categories[i_cat])
-				{
-					cdns.push("<option value=\"",i_cat,"\"",
-					    	((i_cat==0) ? " selected=\"selected\"" : "") ,
-						">", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true), "</option>");
-				}
-			}
-			cdns.push("</select>");
+			cdns.push("<select  id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">",
+				DonaCadenaOpcionsCategories(estil.categories, estil.atributs, 0, sortCategoriesValueAscendent),
+				"</select>");
 		}
 		else
 			cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, 0, true));
@@ -2284,6 +2276,43 @@ function CanviaValorSeleccionatSeleccioCondicional(prefix_id, i_condicio)
 {
 var i_option=document.getElementById(prefix_id+"-valor-select-"+i_condicio).selectedIndex;
 	document.getElementById(prefix_id+"-valor-"+ i_condicio).value=document.getElementById(prefix_id+"-valor-select-"+i_condicio).options[i_option].text;
+}
+
+function sortCategoriesValueAscendent(a,b)
+{
+	return ((a.value<b.value) ? -1 : ((a.value>b.value) ? 1 : 0));
+}
+
+function DonaCadenaOpcionsCategories(categories, atributs, i_cat_sel, f_ordena)
+{
+var cdns=[];
+	if (f_ordena)
+	{
+		var cat=[];
+		for (var i_cat=0; i_cat<categories.length; i_cat++)
+		{
+			if (categories[i_cat])
+				cat.push({i_cat: i_cat, value: DonaTextCategoriaDesDeColor(categories, atributs, i_cat, true)});
+		}
+		cat.sort(f_ordena);
+		for (var i=0; i<cat.length; i++)
+		{
+			cdns.push("<option value=\"",cat[i].i_cat,"\"",
+					((cat[i].i_cat==i_cat_sel) ? " selected=\"selected\"" : "") ,
+					">", cat[i].value, "</option>");
+		}
+		return cdns.join("");
+	}
+	for (var i_cat=0; i_cat<categories.length; i_cat++)
+	{
+		if (categories[i_cat])
+		{
+			cdns.push("<option value=\"",i_cat,"\"",
+					((i_cat==i_cat_sel) ? " selected=\"selected\"" : "") ,
+				">", DonaTextCategoriaDesDeColor(categories, atributs, i_cat, true), "</option>");
+		}
+	}
+	return cdns.join("");
 }
 
 function DonaCadenaOperadorValorSeleccioCondicional(prefix_id, i_capa, i_condicio, i_estil_o_atrib)
@@ -2337,7 +2366,8 @@ var estil_o_atrib;
 		    		feature.properties[atribut]=="" ||
 					feature.properties[atribut]==null)
 					continue;
-				valors_atrib.push(DonaCadena(feature.properties[atribut]));
+				if (valors_atrib.length==0 || valors_atrib[valors_atrib.length-1]!=DonaCadena(feature.properties[atribut]))  //Això evita que si n'hi ha de repetits seguits es posin a la llista
+					valors_atrib.push(DonaCadena(feature.properties[atribut]));
 			}
 			// pensar de fer una funció específica per nombres si acabo posant tipus als atributs
 			valors_atrib.sort(sortAscendingStringSensible);
@@ -2346,7 +2376,7 @@ var estil_o_atrib;
 			if(valors_atrib.length>0)
 			{
 				cdns.push("<select id=\"", prefix_id, "-valor-select-",i_condicio,"\" name=\"valor-select", i_condicio,
-						  "\" style=\"width:400px;\" onChange='CanviaValorSeleccionatSeleccioCondicional(\"",prefix_id,"\", ", i_condicio,");'>");
+						  "\" style=\"width:360px;\" onChange='CanviaValorSeleccionatSeleccioCondicional(\"",prefix_id,"\", ", i_condicio,");'>");
 				for (i_valor = 0; i_valor < valors_atrib.length; i_valor++)
 				{
 					cdns.push("<option value=\"",i_valor,"\"",((i_valor==0) ? " selected=\"selected\"" : ""),">", valors_atrib[i_valor], "</option>");
@@ -2362,17 +2392,9 @@ var estil_o_atrib;
 		{
 			if (estil_o_atrib.categories.length>1)
 			{
-				cdns.push("<select id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">");
-				for (var i_cat=0; i_cat<estil_o_atrib.categories.length; i_cat++)
-				{
-					if (estil_o_atrib.categories[i_cat])
-					{
-						cdns.push("<option value=\"",i_cat,"\"",
-								((i_cat==0) ? " selected=\"selected\"" : "") ,
-							">", DonaTextCategoriaDesDeColor(estil_o_atrib.categories, estil_o_atrib.atributs, i_cat, true), "</option>");
-					}
-				}
-				cdns.push("</select>");
+				cdns.push("<select id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">",
+					DonaCadenaOpcionsCategories(estil_o_atrib.categories, estil_o_atrib.atributs, 0, sortCategoriesValueAscendent),
+					"</select>");
 			}
 			else
 				cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil_o_atrib.categories, estil_o_atrib.atributs, 0, true));
