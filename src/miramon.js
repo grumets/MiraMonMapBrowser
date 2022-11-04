@@ -1259,10 +1259,7 @@ function RecuperaVistaPrevia()
 	if (ParamInternCtrl.NZoomPreviUsat)
 	{
 		ParamInternCtrl.NZoomPreviUsat--;
-		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio].EnvTotal.CRS);
-		ParamInternCtrl.ISituacio=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio;
-		if(ParamCtrl.FuncioCanviProjeccio)
-			eval(ParamCtrl.FuncioCanviProjeccio);
+		CanviaCRSISituacio(null, ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].ISituacio);
 		ParamInternCtrl.PuntOri.x=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].PuntOri.x;
 		ParamInternCtrl.PuntOri.y=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].PuntOri.y;
 		if (ParamInternCtrl.vista.CostatZoomActual!=ParamInternCtrl.ZoomPrevi[ParamInternCtrl.NZoomPreviUsat].costat)
@@ -1619,6 +1616,88 @@ var cdns=[];
 	return cdns.join("");
 }
 
+/*Aquesta funció canvia el CRS i el mapa de situació. 
+Si i_situació és -1, busca un mapa de situació que es correspongui al CRS demanat.
+Si CRS és null i i_situacio no és -1, pren el CRS del mapa de situacio indicat*/
+function CanviaCRSISituacio(crs_dest, i_situacio)
+{
+	if (crs_dest==null && i_situacio==-1)
+	{
+		alert("Wrong parameter combination in CanviaCRSISituacio()");
+		return;
+	}
+	if (crs_dest==null)
+		crs_dest=ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS;
+	CanviaCRS(crs_dest);
+	if (i_situacio==-1)
+	{
+		for (i_situacio=0; i_situacio<ParamCtrl.ImatgeSituacio.length; i_situacio++)
+		{
+			if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS, crs_dest))
+				break;
+		}
+		if (i_situacio==ParamCtrl.ImatgeSituacio.length)
+		{
+			alert("CRS not available in the situation map array.");
+			return;
+		}			
+	}
+	ParamInternCtrl.ISituacio=i_situacio;
+	if(ParamCtrl.FuncioCanviProjeccio)
+		eval(ParamCtrl.FuncioCanviProjeccio);
+}
+
+//El segon paràmetre no cal especificar-lo si és el CRS actual. Aquesta funció no canvia el mapa de situació.
+function CanviaCRS(crs_dest, crs_ori)
+{
+var factor=1;
+var i;
+
+	if (!crs_ori)
+		crs_ori=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return;   //no cal torcar res
+
+	TransformaCoordenadesPunt(ParamInternCtrl.PuntOri, crs_ori, crs_dest);
+	TransformaCoordenadesPunt(PuntConsultat, crs_ori, crs_dest);
+
+	//He de transformar les coordenades dels objectes digitalitzats a memòria
+	TransformaCoordenadesCapesVolatils(crs_ori, crs_dest);
+
+	//i també de les CapesDigitalitzades
+	for (i=0; i<ParamCtrl.capa.length; i++)
+		CanviaCRSITransformaCoordenadesCapaDigi(ParamCtrl.capa[i], crs_dest);
+
+	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && EsProjLongLat(crs_dest))
+	{
+		factor=1/120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
+		ParamCtrl.NDecimalsCoordXY+=4;
+	}
+	else if (EsProjLongLat(crs_ori) && DonaUnitatsCoordenadesProj(crs_dest)=="m")
+	{
+		factor=120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
+		ParamCtrl.NDecimalsCoordXY-=4;
+		if (ParamCtrl.NDecimalsCoordXY<0)
+		    ParamCtrl.NDecimalsCoordXY=0;
+	}
+	if (factor!=1)
+	{
+		for (i=0; i<ParamCtrl.zoom.length; i++)
+		{
+			ParamCtrl.zoom[i].costat=ArrodoneixSiSoroll(ParamCtrl.zoom[i].costat*=factor);
+		}
+		for (i=0; i<ParamCtrl.capa.length; i++)
+		{
+			ParamCtrl.capa[i].CostatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMinim*=factor);
+			ParamCtrl.capa[i].CostatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMaxim*=factor);
+		}
+		ParamInternCtrl.vista.CostatZoomActual=ArrodoneixSiSoroll(ParamInternCtrl.vista.CostatZoomActual*=factor);
+		CreaBarra(crs_dest);
+	}
+	ActualitzaEnvParametresDeControl();
+}
+
 function CanviaCRSDeImatgeSituacio(i)
 {
 	if (i==-1)
@@ -1626,10 +1705,7 @@ function CanviaCRSDeImatgeSituacio(i)
 	else
 	{
 		ParamCtrl.araCanviProjAuto=false;
-		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS);
-		ParamInternCtrl.ISituacio=i;
-		if(ParamCtrl.FuncioCanviProjeccio)
-			eval(ParamCtrl.FuncioCanviProjeccio);
+		CanviaCRSISituacio(null, i);
 	}
 	RevisaEstatsCapes();
 	RepintaMapesIVistes();
@@ -3050,88 +3126,6 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 	dontPropagateEvent(event);
 }
 
-//Aquesta funció no sobreescriu env sino que retorna un duplicat.
-function TransformaEnvolupant(env, crs_ori, crs_dest)
-{
-var env_ll;
-	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
-		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
-
-	env_ll=DonaEnvolupantLongLat(env, crs_ori);
-	return DonaEnvolupantCRS(env_ll, crs_dest);
-}
-
-//Aquesta funció sobreescriu el punt.
-function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
-{
-	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
-	{
-		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
-		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
-		punt.x=crs_xy.x;
-		punt.y=crs_xy.y;
-	}
-}
-
-//Aquesta funció sobreescriu el coord array
-function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
-{
-	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
-	{
-		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
-		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
-		coord[0]=crs_xy.x;
-		coord[1]=crs_xy.y;
-	}
-}
-
-
-function CanviaCRS(crs_ori, crs_dest)
-{
-var factor=1;
-var i;
-
-	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
-		return;   //no cal torcar res
-
-	TransformaCoordenadesPunt(ParamInternCtrl.PuntOri, crs_ori, crs_dest);
-	TransformaCoordenadesPunt(PuntConsultat, crs_ori, crs_dest);
-
-	//He de transformar les coordenades dels objectes digitalitzats a memòria
-	TransformaCoordenadesCapesVolatils(crs_ori, crs_dest);
-
-	//i també de les CapesDigitalitzades
-	for (i=0; i<ParamCtrl.capa.length; i++)
-		CanviaCRSITransformaCoordenadesCapaDigi(ParamCtrl.capa[i], crs_dest);
-
-	if (DonaUnitatsCoordenadesProj(crs_ori)=="m" && EsProjLongLat(crs_dest))
-	{
-		factor=1/120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
-		ParamCtrl.NDecimalsCoordXY+=4;
-	}
-	else if (EsProjLongLat(crs_ori) && DonaUnitatsCoordenadesProj(crs_dest)=="m")
-	{
-		factor=120000; // Aquí no apliquem FactorGrausAMetres perquè volem obtenir un costat de zoom arrodonit.
-		ParamCtrl.NDecimalsCoordXY-=4;
-		if (ParamCtrl.NDecimalsCoordXY<0)
-		    ParamCtrl.NDecimalsCoordXY=0;
-	}
-	if (factor!=1)
-	{
-		for (i=0; i<ParamCtrl.zoom.length; i++)
-		{
-			ParamCtrl.zoom[i].costat=ArrodoneixSiSoroll(ParamCtrl.zoom[i].costat*=factor);
-		}
-		for (i=0; i<ParamCtrl.capa.length; i++)
-		{
-			ParamCtrl.capa[i].CostatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMinim*=factor);
-			ParamCtrl.capa[i].CostatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMaxim*=factor);
-		}
-		ParamInternCtrl.vista.CostatZoomActual=ArrodoneixSiSoroll(ParamInternCtrl.vista.CostatZoomActual*=factor);
-		CreaBarra(crs_dest);
-	}
-	ActualitzaEnvParametresDeControl();
-}
 
 //No crida GuardaVistaPrevia()
 function CanviaAVistaGeneral()
@@ -3150,8 +3144,7 @@ var i_max;
 	/*if (i_max!=ParamInternCtrl.ISituacio)
 	{
 		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_max].EnvTotal.CRS)
-			CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_max].EnvTotal.CRS);
-		ParamInternCtrl.ISituacio=i_max;
+			CanviaCRSISituacio(null, i_max);
 	}*/
 	CentraLaVista((ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxX+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinX)/2,
 	    	(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MaxY+ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS.MinY)/2);
@@ -3460,33 +3453,6 @@ function EsCapaVisibleEnAquestaVista(i_vista, i_capa)
 {
 	return EsVisibleEnAquestaVista(i_vista, ParamCtrl.capa[i_capa]);
 }
-
-function CanviaDataDeCapaMultitime(i_capa, i_data)
-{
-var capa=ParamCtrl.capa[i_capa];
-
-	capa.i_data=i_data;
-	if (capa.model==model_vector)
-	{
-		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
-	}
-	else
-	{
-		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
-	}
-}
-
-function CanviaValorDimensioExtraDeCapa(i_capa, i_dim, i_valor)
-{
-var dim=ParamCtrl.capa[i_capa].dimensioExtra[i_dim];
-
-	dim.i_valor=i_valor;
-	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-		OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
-}
-
 
 /*
  * Returns the WMTS TileMatrixSet from a image url of the tile set.
@@ -4419,6 +4385,54 @@ function PintaCtxColorVoraIInterior(estil_vora, estil_interior, ctx, previ)
 		ctx.strokeStyle=previ.strokeStyle;
 }
 
+function TracaCoordenadesCanvasGeometriaLinia(ctx, geometry, env, ncol, nfil)
+{
+var i_col, i_fil, lineString;
+
+	for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+	{
+		if (geometry.type=="MultiLineString")
+			lineString=geometry.coordinates[c2];
+		else
+			lineString=geometry.coordinates;
+		i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+		i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil);
+		ctx.moveTo(i_col, i_fil);
+		for (var c1=1; c1<lineString.length; c1++)
+		{
+			i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+			i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil);
+			ctx.lineTo(i_col, i_fil);
+		}
+	}
+}
+
+function TracaCoordenadesCanvasGeometriaPoligon(ctx, geometry, env, ncol, nfil)
+{
+var i_col, i_fil, polygon, lineString;
+
+	for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+	{
+		if (geometry.type=="MultiPolygon")
+			polygon=geometry.coordinates[c3];
+		else
+			polygon=geometry.coordinates;
+		for (var c2=0; c2<polygon.length; c2++)
+		{
+			lineString=polygon[c2];
+			i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+			i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil);
+			ctx.moveTo(i_col, i_fil);
+			for (var c1=1; c1<lineString.length; c1++)
+			{
+				i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
+				i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil);
+				ctx.lineTo(i_col, i_fil);
+			}
+		}
+	}
+}
+
 function OmpleVistaCapaDigiIndirect(param)
 {
 var nom_vista=param.nom_vista, vista=param.vista;
@@ -4521,7 +4535,7 @@ var env=vista.EnvActual;
 		}
 		var previ={}, a_vmin_ncol_interior=[], a_vmin_ncol_interiorSel=[], un_a_vmin_ncol_interior, valor, a_vmin_ncol_vora=[], a_vmin_ncol_voraSel=[], un_a_vmin_ncol_vora, forma, forma_interior, forma_vora;
 		var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
-		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry, lineString, polygon;
+		var env_icona, i_col, i_fil, icona, font, i_simbol, mida, text, coord, geometry;
 		var win = DonaWindowDesDeINovaVista(vista);
 		var canvas = win.document.getElementById(nom_canvas);
 		var ctx = canvas.getContext('2d');
@@ -4561,6 +4575,15 @@ var env=vista.EnvActual;
 					a_vmin_ncol_voraSel[i_forma].valor_min=DonaFactorValorMinEstiramentPaleta(forma.voraSel.estiramentPaleta);
 				}
 			}
+		}
+
+		if (capa.estil[capa.i_estil].TipusObj=='P')  //Cal pintar també en la layer oculta.
+		{
+			var nom_canvas_ocult=DonaNomCanvasCapaDigi(nom_vista, -1);
+			var canvas_ocult = win.document.getElementById(nom_canvas_ocult);
+			var ctx_ocult = canvas_ocult.getContext('2d');
+			var j_r, j_g, j_b, ja_avisat_16m=false;
+			ctx_ocult.clearRect(0, 0, canvas_ocult.width, canvas_ocult.height);  //els 4 bytes a 0 incloent opacitat que serà la meva marca de nodata.
 		}
 
 		for (var j=capa.objectes.features.length-1; j>=0; j--)
@@ -4629,22 +4652,7 @@ var env=vista.EnvActual;
 					else
 						ctx.setLineDash(forma_vora.patro.separacions[0]);
 
-					for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
-					{
-						if (geometry.type=="MultiLineString")
-							lineString=geometry.coordinates[c2];
-						else
-							lineString=geometry.coordinates;
-						i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-						i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
-						ctx.moveTo(i_col, i_fil);
-						for (var c1=1; c1<lineString.length; c1++)
-						{
-							i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-							i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
-							ctx.lineTo(i_col, i_fil);
-						}
-					}
+					TracaCoordenadesCanvasGeometriaLinia(ctx, geometry, env, vista.ncol, vista.nfil);
 					PintaCtxColorVoraIInterior(forma_vora, null, ctx, previ);
 				}
 			}
@@ -4742,27 +4750,33 @@ var env=vista.EnvActual;
 						else
 							ctx.setLineDash(forma_vora.patro.separacions[0]);
 					}
-					for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+					TracaCoordenadesCanvasGeometriaPoligon(ctx, geometry, env, vista.ncol, vista.nfil);
+					PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
+				}
+				if (capa.estil[capa.i_estil].TipusObj=='P')  //Cal pintar també en la layer oculta.
+				{
+					if (j<16777215)
 					{
-						if (geometry.type=="MultiPolygon")
-							polygon=geometry.coordinates[c3];
-						else
-							polygon=geometry.coordinates;
-						for (var c2=0; c2<polygon.length; c2++)
+						ctx_ocult.beginPath();
+						j_b=Math.floor(j/65536);
+						j_g=j%65536;
+						j_r=j_g%256;
+						j_g=Math.floor(j_g/256);
+						ctx_ocult.fillStyle="rgba("+j_r+","+j_b+","+j_b+",256)";
+						TracaCoordenadesCanvasGeometriaPoligon(ctx_ocult, geometry, env, vista.ncol, vista.nfil);
+						//https://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
+						ctx_ocult.mozFillRule = 'evenodd'; //for old firefox 1~30
+						ctx_ocult.fill('evenodd'); //for firefox 31+, IE 11+, chrome
+					}
+					else
+					{
+						if (!ja_avisat_16m)
 						{
-							lineString=polygon[c2];
-							i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-							i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*vista.nfil);
-							ctx.moveTo(i_col, i_fil);
-							for (var c1=1; c1<lineString.length; c1++)
-							{
-								i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol);
-								i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*vista.nfil);
-								ctx.lineTo(i_col, i_fil);
-							}
+							ja_avisat_16m=true;
+							alert("Too much features. 16 777 215 is the maximum supported for layer combination and filtering.");
+							//Aquest limit es podria ampliar usant el canal alpha (amb el benentès que alpha=0 és la marca de nodata)
 						}
 					}
-					PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
 				}
 			}
 			else if (geometry.type=="Point" || geometry.type=="MultiPoint")
@@ -5010,25 +5024,59 @@ var env=vista.EnvActual;
 				alert("Type of feature geometry: " + geometry.type + " not supported yet");
 			}
 		}
+		if (capa.estil[capa.i_estil].TipusObj=='P')  //Cal recuperar el contingut de la layer oculta com a array d'identificadors
+		{
+			var view, mida=canvas_ocult.width*canvas_ocult.height;
+			var imgData = ctx_ocult.getImageData(0, 0, canvas_ocult.width, canvas_ocult.height);
+			if (capa.objectes.features.length<256)
+			{
+				capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height);
+				var uint8s = new Uint8Array(capa.objectesArrayBuffer);
+				for (var i=0; i<mida; i++)
+					uint8s[i]=imgData.data[i*4+3]==0 ? 255 : imgData.data[i*4];
+			}
+			else if (capa.objectes.features.length<65536)
+			{
+				capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*2);
+				var uint16s = new Uint16Array(capa.objectesArrayBuffer);
+				for (var i=0; i<mida; i++)
+					uint16s[i]=imgData.data[i*4+3]==0 ? 65535 : imgData.data[i*4]+imgData.data[i*4+1]*256;
+			}
+			else //if (capa.objectes.features.length<16777216)
+			{
+				capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*4);
+				var uint32s = new Uint32Array(capa.objectesArrayBuffer);
+				for (var i=0; i<mida; i++)
+					uint32s[i]=imgData.data[i*4+3]==0 ? 16777215 : imgData.data[i*4]+imgData.data[i*4+1]*256+imgData.data[i*4+2]*65536;
+			}
+		}
 	}
 }
 
-function DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i)
+function DonaNomCanvasCapaDigi(nom_vista, i)
 {
+	if (i==-1)
+		return nom_vista + "_l_capa_oculta_canvas";
 	return nom_vista + "_l_capa_digi" + i + "_canvas";
 }
 
 function CreaCapaDigiLayer(nom_vista, i_nova_vista, i)
 {
+	if (i==-1)
+	{
+		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
+		return textHTMLLayer(nom_vista+"_l_capa_oculta", DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
+						vista.ncol, vista.nfil,
+						null, {scroll: "no", visible: false, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+	}
 	if (ParamCtrl.capa[i].visible!="no"/* && EsObjDigiVisibleAAquestNivellDeZoom(ParamCtrl.capa[i])*/)
 	{
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
 		return textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>");  // DonaCadenaHTMLCapaDigi(nom_vista, i_nova_vista, i)
+						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
 	}
-	else
-		return "";
+	return "";
 }
 
 function OmpleMatriuVistaCapaTiled(i_capa, vista, i_tile_matrix_set)
@@ -5530,6 +5578,7 @@ var p, unitats_CRS;
 	if (isLayer(elem))
 	{
 		//Les capes
+		var cal_capa_oculta=false;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
@@ -5541,6 +5590,8 @@ var p, unitats_CRS;
 			if (capa.model==model_vector)
 			{
 				cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, i));
+				if (capa.estil[capa.i_estil].TipusObj=='P')
+					cal_capa_oculta=true;
 			}
 			else
 			{
@@ -5552,7 +5603,8 @@ var p, unitats_CRS;
 				}
 			}
 		}
-
+		if (cal_capa_oculta)
+			cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -1));  //La capa oculta per rasteritzar identificadors gràfics de poligons
 
 		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
 		{
@@ -5827,10 +5879,7 @@ var env_ll;
 	if (ParamInternCtrl.ISituacio!=i_min)
 	{
 		//Aquesta funció no fa canvis de CRS si no cal
-		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
-		ParamInternCtrl.ISituacio=i_min;
-		if(ParamCtrl.FuncioCanviProjeccio)
-			eval(ParamCtrl.FuncioCanviProjeccio);
+		CanviaCRSISituacio(null, i_min);
 		return 1;
 	}
 	return 0;
@@ -5890,10 +5939,7 @@ var i_min=ParamCtrl.ImatgeSituacio.length, i_max;
 
 	if (ParamInternCtrl.ISituacio!=i_min)  //En cas contrari ja estem en el CRS que toca i no hi ha canvis.
 	{
-		CanviaCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, ParamCtrl.ImatgeSituacio[i_min].EnvTotal.CRS);
-		ParamInternCtrl.ISituacio=i_min;
-		if(ParamCtrl.FuncioCanviProjeccio)
-			eval(ParamCtrl.FuncioCanviProjeccio);
+		CanviaCRSISituacio(null, i_min);
 		return 0;
 	}
 	return 1;
@@ -6716,7 +6762,7 @@ var win, i, j, l, capa;
 
 	if (location.search && location.search.substring(0,1)=="?")
 	{
-		var acoord, capa_visible, tinc_estils, capa_estil, query={};
+		var coord, capa_visible, tinc_estils, capa_estil, query={};
 		var kvp=location.search.substring(1, location.search.length).split("&");
 		for(var i_clau=0; i_clau<kvp.length; i_clau++)
 		{

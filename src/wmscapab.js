@@ -45,7 +45,7 @@ var ServidorGetCapabilities=[];
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
 var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer;
-var minim, maxim, factor_k, factorpixel;
+var minim, maxim, factor_k, factorpixel, CRSs=[];
 var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
 
 	//Llegeixo les capacitats d'aquesta capa
@@ -73,9 +73,8 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 			{
 				if (DonaCRSRepresentaQuasiIguals(cadena.toUpperCase(), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
-					//·$·Aqui s'haurà de fer alguna cosa amb els sinònims,...
+					CRSs.push(cadena.toUpperCase());
 					trobat=true;
-					break;
 				}
 			}
 		}
@@ -93,6 +92,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 									desc: null,
 									CostatMinim: null,
 									CostatMaxim: null,
+									CRSs: CRSs.length ? CRSs : null,
 									consultable: false,
 									estil: [],
 									uom: null,
