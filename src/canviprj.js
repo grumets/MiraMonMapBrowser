@@ -998,6 +998,41 @@ var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     return env_crs_xy;
 }
 
+//Aquesta funció no sobreescriu env sino que retorna un duplicat.
+function TransformaEnvolupant(env, crs_ori, crs_dest)
+{
+var env_ll;
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
+
+	env_ll=DonaEnvolupantLongLat(env, crs_ori);
+	return DonaEnvolupantCRS(env_ll, crs_dest);
+}
+
+//Aquesta funció sobreescriu el punt.
+function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		punt.x=crs_xy.x;
+		punt.y=crs_xy.y;
+	}
+}
+
+//Aquesta funció sobreescriu el coord array
+function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		coord[0]=crs_xy.x;
+		coord[1]=crs_xy.y;
+	}
+}
+
 function EsProjLongLat(crs)
 {
 	if (DonaUnitatsCoordenadesProj(crs)=="°")

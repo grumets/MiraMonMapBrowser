@@ -490,6 +490,10 @@
 			"description": "Si una capa no està visible tampoc no serà descarregable", 
 			"type": "boolean"
 		},
+		"LlegendaMostraCapaSencera": {
+			"description": "Posar l'opció 'Mostra sencera' al botó dret de les capes a la llegenda. Això resulta útil si el navegador té capes petites en diversos llocs allunyats que costen de trobar.", 
+			"type": "boolean"
+		},
 		"CapaConsultaPreguntaServidor": {
 			"description": "Array de capes per a fer la consulta típica. Array de definicions de consultes típiques (quina capa s'usa, quins camps, etc)",
 			"type": ["array", "null"],
@@ -1346,10 +1350,15 @@
 						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
 						"$ref": "#/definitions/featureCollection"
 					},
+					"objectesArrayBuffer": {
+						"description": "INTERN: s'afegeix programaticament en pintar els objectes de tipus polígon en la vista principal; només si l'estil és TipusObj=='P'. Conté l'index de objetes.features representat (l'identificador gràfic). El tipus de dades i el nodata depenen de objetes.features.length. Si és <256, es un Uint8 i el 255 és el nodata; si és <65536 es un Uint16 i el nodata és el 65535; is és <16777216 és un Uint32 i el 16777215 és el valor nodata.",
+						"type": "string",
+						"contentEncoding": "binary"
+					},					
 					"atributs": {
 						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model raster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
-					},
+					},			
 					"valors": {
 						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
 						"type": ["array", "null"],
@@ -1805,24 +1814,24 @@
 									}
 								},
 								"formes": {
-									"description": "Com pintar les icones que són formes o objectes de línies i polígons",
+									"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
 									"type": ["array", "null"],
 									"items": {
 										"type": "object",
 										"properties": {
 											"interior": {
-												"description": "Com omplir l'interior de les icones que són formes o els polígons",
+												"description": "Com omplir l'interior de les geometries 2D",
 												"$ref": "#/definitions/colorIndexat"
 											},
 											"vora": { 
-												"description": "Com pintar les vores de les icones que són formes o de les línies",
+												"description": "Com pintar les línies: vores de les geometries 2D o les geometries 1D",
 												"allOf": [
 													{ "$ref": "#/definitions/colorIndexat"},
 													{
 														"properties": {
 															"gruix": 
 															{
-																"description": "L'ample de la línia. És una array en preparació per possible indexat per camp",
+																"description": "L'ample de la línia. És un array en preparació per possible indexat per camp",
 																"type": "object",
 																"properties": {
 																	"amples": {
@@ -1835,7 +1844,7 @@
 																} 
 															},
 															"patro": {
-																"description": "Patró de la línia. És una array en preparació per possible indexat per camp",
+																"description": "Patró de la línia. És un array en preparació per possible indexat per camp",
 																"type": "object",
 																"properties": {
 																	"separacions": {

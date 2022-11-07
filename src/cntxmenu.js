@@ -165,6 +165,18 @@ function MouLayerContextMenuCapa(event, s)
 	}
 }
 
+function ZoomACapa(capa)
+{
+	if (!EsCapaDisponibleEnElCRSActual(capa) && capa.CRS && capa.CRS.length)
+		CanviaCRSISituacio(capa.CRS[0], -1);  //Canviar de CRS al primer que la capa indiqui.
+
+	//Si l'envolupant de la capa no cap dins del CostatMaxim s'usa. Si no, es centra a la capa i el porta al costat màxim
+	if (capa.EnvTotal)
+		PortamAAmbit(TransformaEnvolupant(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));  //Aquesta funció refresca la vista i mes
+	if (!EsCapaDinsRangDEscalesVisibles(capa))
+		CanviaNivellDeZoom(DonaIndexNivellZoom(capa.CostatMaxim), true); //Canviar al CostatMaxim
+}
+
 function OmpleLayerContextMenuCapa(event, i_capa)
 {
 var cdns=[]
@@ -179,6 +191,9 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraRaonsNoVisible(", i_capa, ");TancaContextMenuCapa();\">",
 						GetMessage("WhyNotVisible", "cntxmenu"), "</a><br>");
 	}
+	if (ParamCtrl.LlegendaMostraCapaSencera)
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ZoomACapa(ParamCtrl.capa["+i_capa+"]);TancaContextMenuCapa();\">",
+						GetMessage("ZoomToLayer", "cntxmenu"), "</a><br>");
 
 	if(ParamCtrl.BarraBotoAfegeixCapa)
 	{
@@ -1311,10 +1326,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 	/* var elem_reclass = (linia_reclass.trim()).split(" ");
 	if(elem_reclass.length<2 || elem_reclass.length>3)
 	{
-		alert(DonaCadenaLang({"cat": "Nombre d'elements incorrecte a la línia",
-							 "spa": "Número de elementos incorrecto en la línea",
-							 "eng": "Wrong number of elements in line",
-							 "fre": "Wrong number of elements in line"})+" "+i_linia+": "+linia_reclass);
+		alert(GetMessage("WrongNumberElementsLine")+" "+i_linia+": "+linia_reclass);
 		return null;
 	}
 	old_value=elem_reclass[0];
@@ -1330,10 +1342,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 	}
 	if(NaN==parseFloat(old_value) || (old_up_value && NaN==parseFloat(old_up_value)) || NaN==parseFloat(new_value))
 	{
-		alert(DonaCadenaLang({"cat": "Format incorrecte dels valors a la línia",
-							 "spa": "Formato incorrecto de los valores en la línea",
-							 "eng": "Wrong values format in line",
-							 "fre": "Wrong values format in line"})+" "+i_linia+": "+linia_reclass);
+		alert(DonaCadenaLang("WrongFormatInLine")+" "+i_linia+": "+linia_reclass);
 		return null;
 	}*/
 	var elem_reclass =linia_reclass.trim();

@@ -107,14 +107,14 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
 				tipus: servidorGC.tipus,
 				nom: layer.nom,
 				desc: layer.desc,
-				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
+				CRS: layer.CRSs ? layer.CRSs : [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
 				FormatImatge: servidorGC.formatGetMap[i_format_get_map],
 				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
 				CostatMinim: minim,
@@ -567,14 +567,14 @@ var k;
 	RepintaMapesIVistes();
 }
 
-function IniciaDefinicioCapaTIFF(url, desc)
+function IniciaDefinicioCapaTIFF(url, desc, CRSs)
 {
 	return {servidor: url,
 				versio: null,
 				tipus: "TipusHTTP_GET",
 				nom: null,
 				desc: desc,
-				CRS: null,
+				CRS: CRSs,
 				FormatImatge: "image/tiff",
 				valors: [],
 				transparencia: "semitrasparent",
@@ -845,7 +845,7 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
-	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]));
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null);
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
 	{
@@ -873,7 +873,7 @@ async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
 {
 var i_fitxer;
 
-	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc); 	
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null); 	
 
 	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
 	{

@@ -274,6 +274,8 @@ var MessageLang={
 	SelectConfigLoad: {"cat":"Selecciona un fitxer de configuració a carregar", "spa":"Selecciona un fichero de configuración para cargar", "eng":"Select a config file to load", "fre":"Sélectionnez un fichier de configuration à charger"},
 	FileName: {"cat":"Nom del fitxer", "spa":"Nombre del fichero", "eng":"File name", "fre":"Nom du fichier"},
 	FileNameToSave: {"cat":"Nom del fitxer a guardar", "spa":"Nombre del fichero a guardar", "eng":"File name to save", "fre":"Nom du fichier à sauvegarder"},
+	WrongNumberElementsLine: {"cat": "Nombre d'elements incorrecte a la línia", "spa": "Número de elementos incorrecto en la línea", "eng": "Wrong number of elements in line", "fre": "Wrong number of elements in line"},
+	WrongFormatInLine: {"cat": "Format incorrecte a la línia", "spa": "Formato incorrecto en la línea", "eng": "Wrong values format in line", "fre": "Mauvais format en ligne"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
 		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
@@ -297,6 +299,7 @@ var MessageLang={
 		ComputeQuality: {"cat":"Calcula la qualitat", "spa":"Calcula la calidad", "eng":"Compute the quality", "fre":"Calculer la qualité"},
 		toComputeTheQuality: {"cat":"de calcular la qualitat", "spa":"de calcular la calidad", "eng":"to compute the quality", "fre":"pour calculer la qualité"},
 		NewLayerAdded: {"cat":"La nova capa afegida", "spa":"La nueva capa añadida", "eng":"The new added layer", "fre":"La nouvelle couche ajoutée"},
+		ZoomToLayer: {"cat":"Zoom a capa", "spa": "Zoom a capa", "eng":"Zoom to layer", "fre":"Afficher en entier"},
 		WhyNotVisible: {"cat":"Perquè no visible", "spa":"Porque no visible", "eng":"Why not visible", "fre":"Pourquoi pas visible"},
 		notVisibleInCurrentZoom: {"cat":"no és visible al nivell de zoom actual del navegador", "spa":"no es visible al nivel de zoom actual del navegador", "eng":"is not visible in the current zoom level of the browser", "fre":"n'est pas visible au niveau du zoom actuel du navigateur"},
 		notVisibleInCurrentCRS: {"cat":"no és visible amb el CRS actual", "spa":"no es visible en el CRS actual", "eng":"is not visible in the current CRS", "fre":"n'est pas visible au CRS actuel"},
