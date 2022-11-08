@@ -99,7 +99,7 @@
 			"cat": "Mapa de cobertes del sòl de Catalunya",
 			"spa": "Mapa de cubiertas del suelo de Cataluña",
 			"eng": "Land cover map of Catalunya",
-			"fre": "carte d'occupation du sol de la Catalogne"
+			"fre": "Carte d'occupation du sol de la Catalogne"
 		},
 		"tipus": "TipusWMS"
 		"categoria": {
@@ -117,6 +117,90 @@
 		"tipus": "TipusWMS"
 	},
 	{
+		"url": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms",
+		"nom": {
+			"cat": "Ortofotos de Catalunya",
+			"spa": "Ortofotos de Cataluña",
+			"eng": "Orthophotos of Catalonia",
+			"fre": "Orthophotos de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
+		"url": "https://geoserveis.icgc.cat/servei/catalunya/topografia-territorial/wms",
+		"nom": {
+			"cat": "Base topogràfica de Catalunya",
+			"spa": "Base topográfica de Cataluña",
+			"eng": "Topographical base of Catalonia",
+			"fre": "Base topographique de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
+		"url": "https://geoserveis.icgc.cat/servei/catalunya/divisions-administratives/wms",
+		"nom": {
+			"cat": "Divisions administratives de Catalunya",
+			"spa": "Divisiones administrativas de Cataluña",
+			"eng": "Administrative divisions of Catalonia",
+			"fre": "Divisions administratives de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
+		"url": "https://geoserveis.icgc.cat/icgc_mdt2m/wms/service",
+		"nom": {
+			"cat": "Mapes d’elevacions, orientació i ombres de Catalunya",
+			"spa": "Mapas de elevaciones, orientación y sombras de Cataluña",
+			"eng": "Maps of elevations, orientation and shadows of Catalonia",
+			"fre": "Cartes des élévations, de l'orientation et des ombres de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
+		"url": "https://geoserveis.icgc.cat/servei/catalunya/cobertes-sol/wms",
+		"nom": {
+			"cat": "Cobertes del sòl de Catalunya",
+			"spa": "Cubiertas del suelo de Cataluña",
+			"eng": "Land Cover of Catalonia",
+			"fre": "Occupation du sol de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
+		"url": "https://geoserveis.icgc.cat/servei/catalunya/variables-biofisiques-arbrat/wms",
+		"nom": {
+			"cat": "Variables biofísiques de l'arbrat de Catalunya",
+			"spa": "Variables biofísicas del arbolado de Cataluña",
+			"eng": "Biophysical variables of the trees of Catalonia",
+			"fre": "Variables biophysiques des arbres de la Catalogne"
+		},
+		"tipus": "TipusWMS",
+		"categoria": {
+			"nom": "ICGC", 
+			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+		}
+	},
+	{
 		"url": "https://www.opengis.grumets.cat/cgi-bin/iberia/MiraMon5_0.cgi ",
 		"nom": {
 			"cat": "Atles Climàtic Digital de la Península Ibèrica",
@@ -125,21 +209,7 @@
 			"fre": "Atlas climatique digital de la Péninsule Ibérique"
 		},
 		"tipus": "TipusWMS"
-	},
-	{
-		"url": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms",
-		"nom": {
-			"cat": "Ortofotos de Catalunya de l'ICGC",
-			"spa": "Ortofotos de Cataluña del ICGC",
-			"eng": "Orthophotos of Catalonia from the ICGC",
-			"fre": "Orthophotos de la Catalogne de l'ICGC"
-		},
-		"tipus": "TipusWMS",
-		"categoria": {
-			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
-		}
-	},
+	},	
 	{
 		"url": "https://servicios.idee.es/wms-inspire/ocupacion-suelo",
 		"nom": {
