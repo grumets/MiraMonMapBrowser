@@ -8,6 +8,7 @@
 			"fre": "Carte topographique d'Andorre 1:5000 année 2020"
 		},
 		"tipus": "TipusWMS", 	
+		"cors": true,
 		"categoria": {
 			"nom": "IDEA",
 			"desc": "Infrastructura de Dades Espacials D'Andorra"
@@ -22,6 +23,7 @@
 			"fre": "Photographies aériennes couleur (IRC) 1:5000ème de 2012 de la Principauté d'Andorre"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
 			"desc": "Infrastructura de Dades Espacials D'Andorra"
@@ -36,6 +38,7 @@
 			"fre": "Photographies aériennes infra-rouge couleur (IRC) 1:5000ème de 2012 de la Principauté d'Andorre"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
 			"desc": "Infrastructura de Dades Espacials D'Andorra"
@@ -50,6 +53,7 @@
 			"fre": "Guide des rues d'Andorre"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEA",
 			"desc": "Infrastructura de Dades Espacials D'Andorra"
@@ -61,9 +65,10 @@
 			"cat": "Espais protegits, espais d'interès per la fauna i zones regulades d'Andorra",
 			"spa": "Espacios protegidos, espacios de interés para la fauna y zonas reguladas de Andorra",
 			"eng": "Protected spaces, spaces of fauna interaction and regulatory zones of Andorra",				
-"fre": "Espaces protégés, espaces d'intérêts faunique et zones surveillées d'Andorre"
+			"fre": "Espaces protégés, espaces d'intérêts faunique et zones surveillées d'Andorre"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
 			"desc": "Infrastructura de Dades Espacials D'Andorra"
@@ -77,7 +82,8 @@
 			"eng": "Forest Fire Risk Map of Andorra (CENMA)",
 			"fre": "Carte du Risque d'Incendies de Forêt en Andorre (CENMA)"
 		},
-		"tipus": "TipusWMS"
+		"tipus": "TipusWMS",
+		"cors": true
 	},
 	{
 		"url": "http://oslo.geodata.es/wms4a/pallarssobira/servidor/info_general",
@@ -88,6 +94,7 @@
 			"fre": "Serveur de cartes avec information du Conseil Régional du Pallars Sobirà"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEC", 
 			"desc": "Infrastructura de Dades Espacials de Catalunya"
@@ -101,10 +108,12 @@
 			"eng": "Land cover map of Catalunya",
 			"fre": "Carte d'occupation du sol de la Catalogne"
 		},
-		"tipus": "TipusWMS"
+		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "CREAF", 
 			"desc": "Centre de Recerca Ecològica i d'Aplicacions Forestals"
+		}
 	},
 	{
 		"url": "https://www.opengis.grumets.cat/cgi-bin/acdc/MiraMon5_0.cgi",
@@ -114,7 +123,8 @@
 			"eng": "Climatic Digital Atlas of Catalunya",
 			"fre": "Atlas climatique digital de la Catalogne"
 		},
-		"tipus": "TipusWMS"
+		"tipus": "TipusWMS",
+		"cors": true
 	},
 	{
 		"url": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms",
@@ -125,6 +135,7 @@
 			"fre": "Orthophotos de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -139,6 +150,7 @@
 			"fre": "Base topographique de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -153,6 +165,7 @@
 			"fre": "Divisions administratives de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -167,6 +180,7 @@
 			"fre": "Cartes des élévations, de l'orientation et des ombres de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -181,6 +195,7 @@
 			"fre": "Occupation du sol de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -195,6 +210,7 @@
 			"fre": "Variables biophysiques des arbres de la Catalogne"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
 			"desc": "Institut Cartogràfic y Geològic de Catalunya"
@@ -208,7 +224,8 @@
 			"eng": "Climatic Digital Atlas of the Iberian Peninsula",
 			"fre": "Atlas climatique digital de la Péninsule Ibérique"
 		},
-		"tipus": "TipusWMS"
+		"tipus": "TipusWMS",
+		"cors": true
 	},	
 	{
 		"url": "https://servicios.idee.es/wms-inspire/ocupacion-suelo",
@@ -219,6 +236,7 @@
 			"fre": "IGN-Occupation du Sol (SIOSE et Corine)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEE", 
 			"desc": "Infrastructura de Datos Espaciales de España"
@@ -233,6 +251,7 @@
 			"fre": "IGN-Occupation historique du Sol (SIOSE et Corine)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEE", 
 			"desc": "Infrastructura de Datos Espaciales de España"
@@ -247,6 +266,7 @@
 			"fre": "Copernicus Land Monitoring Service Copernicus Land Monitoring Service (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEE", 
 			"desc": "Infrastructura de Datos Espaciales de España"
@@ -261,6 +281,7 @@
 			"fre": "Hydrographie (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEE", 
 			"desc": "Infrastructura de Datos Espaciales de España"
@@ -275,6 +296,7 @@
 			"fre": "Modèles numériques de terrain (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IDEE", 
 			"desc": "Infrastructura de Datos Espaciales de España"
@@ -289,6 +311,7 @@
 			"fre": "Unités administratives de l'IGN (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IGN", 
 			"desc": "Instituto Geográfico Nacional"
@@ -303,6 +326,7 @@
 			"fre": "Cartographie de base de l'IGN (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IGN", 
 			"desc": "Instituto Geográfico Nacional"
@@ -317,6 +341,7 @@
 			"fre": "Cartographie raster de l'IGN (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IGN", 
 			"desc": "Instituto Geográfico Nacional"
@@ -331,6 +356,7 @@
 			"fre": "Orthophotographies d'actualité maximale du PNOA (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IGN", 
 			"desc": "Instituto Geográfico Nacional"			
@@ -345,6 +371,7 @@
 			"fre": "Orthophotographies historiques et annuelles du PNOA (Espagne)"
 		},
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "IGN", 
 			"desc": "Instituto Geográfico Nacional"			
@@ -360,6 +387,7 @@
 			"fre": "Cartographie cadastrale de l'Espagne"
 		},
 		"tipus": "TipusWMS",
+		"cors": false,
 		"categoria": {
 			"nom": "DGC", 
 			"desc": "DG catastro"
@@ -369,6 +397,7 @@
 		"url": "https://neo.gsfc.nasa.gov/wms/wms",
 		"nom": "NASA",
 		"tipus": "TipusWMS",
+		"cors": true,
 		"categoria": {
 			"nom": "NASA", 
 			"desc": "NASA"
