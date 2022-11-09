@@ -1810,7 +1810,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
 			cdns.push("<td width=", vista_tiled.TileMatrix.TileWidth, "><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\" class=\"ImgHVCenter\"></td>");
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif") +"\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
