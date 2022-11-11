@@ -3457,9 +3457,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		var valUnitari = 1; // Per defecte.
 		const estPaletaIni = estil.component[i_comp].estiramentPaletaInicial;
 		const estPaleta = estil.component[i_comp].estiramentPaleta;
-		if (estPaleta && estPaletaIni && estPaletaIni.valorMinim && estPaletaIni.valorMaxim)
+		if (estPaletaIni)
 		{
-			valUnitari = parseFloat((estPaletaIni.valorMaxim - estPaletaIni.valorMinim) / 100.00);
+			valUnitari = (estPaletaIni.valorMaxim - estPaletaIni.valorMinim) / 100.00;
 		}
 
 		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_comp, "\">", GetMessage("Minimum"), ": </label>",
@@ -3470,13 +3470,13 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"document.getElementById(\"edita-estil-capa-valor-minim-", i_comp, "\").value=", estil.histograma.component[i_comp].valorMinimReal,";\">",")", "<br>",
-			//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onclick=\"sliderStepDown(\"edita-estil-capa-slider-valor-minim-", i_comp,"\");\">",
-			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById(\"edita-estil-capa-valor-minim-", i_comp, "\").value)", + valUnitari*(-1), ", true);\">",
+			//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onclick=\"sliderStepDown('edita-estil-capa-slider-valor-minim-", i_comp,"');\">",
+			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value)", - valUnitari, ", true);\">",
 
 			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 300px;\" step=\"", valUnitari * 10.0, "\" min=\"", estPaletaIni.valorMinim, "\" max=\"", estPaletaIni.valorMaxim, "\" value=\"", estPaleta.valorMinim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, true);\" onclick=\"dontPropagateEvent(event);\">",
 
-			//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onclick=\"sliderStepUp(\"edita-estil-capa-slider-valor-minim-", i_comp,"\");\">",
-			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById(\"edita-estil-capa-valor-minim-", i_comp,"\").value)", + valUnitari, ", true);\">",
+			//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onclick=\"sliderStepUp('edita-estil-capa-slider-valor-minim-", i_comp,"');\">",
+			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp,"').value)", + valUnitari, ", true);\">",
 			"<br>");
 
 		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
@@ -3487,11 +3487,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"document.getElementById(\"edita-estil-capa-valor-maxim-", i_comp, "\").value=", estil.histograma.component[i_comp].valorMaximReal,";\">",")", "<br>",
-				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", document.getElementById(edita-estil-capa-valor-maxim-", i_comp, ").value", + valUnitari*(-1), ", false);\">",
+				//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onclick=\"sliderStepDown('edita-estil-capa-slider-valor-maxim-", i_comp,"');\">",
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value", - valUnitari, ", false);\">",
 
 				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 300px;direction: rtl;\" step=\"", valUnitari * 10.0, "\" min=\"", 0, "\" max=\"", estPaletaIni.valorMaxim - estPaletaIni.valorMinim, "\" value=\"", estPaletaIni.valorMaxim - estPaleta.valorMaxim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, false);\" onclick=\"dontPropagateEvent(event);\">",
-
-				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById(\"edita-estil-capa-valor-maxim-", i_comp, "\").value)", + valUnitari, ", false);\">");
+				//"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onclick=\"sliderStepUp('edita-estil-capa-slider-valor-maxim-", i_comp,"');\">");
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value)", + valUnitari, ", false);\">");
 		if (estil.component.length>1)
 			cdns.push("</fieldset>");
 	}
@@ -3832,13 +3833,13 @@ var elem=ObreFinestra(window, "feedbackAmbEstils", GetMessage("ofUserFeedback", 
 Funció per a disminuir el valor del slider amb més precisió.
 */
 function sliderStepDown(idSlider) {
-  	document.getElementById(idSlider).stepDown(0.1);
+  	document.getElementById(idSlider).stepDown();
 }
 /**
 Funció per a augmentar el valor del slider amb més precisió.
 */
 function sliderStepUp(idSlider) {
-	document.getElementById(idSlider).stepUp(0.1);
+	document.getElementById(idSlider).stepUp();
 }
 function CanviaValorEstiramentDePaleta(event, i_capa, i_component, i_estil, value, esMinim)
 {
@@ -3880,13 +3881,14 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 				var valueDinsRang = 0;
 				//	Distingim entre el tipus de element "input" que preten modifica el
 				//	valor de la paleta. Diferenciem entre input.type= range/number/button
-				if (event.target.attributes["type"].value.localCompare("range") == 0)
+				if (event.target.attributes["type"].value.localeCompare("range") == 0)
 				{
 					valueDinsRang = estPaletaIni.valorMaxim - value;
 				}
 				else //	Tant per input.type= number com button
 				{
-					valueDinsRang = estPaletaIni.valorMaxim - value;
+					valueDinsRang = value;
+					value =  estPaletaIni.valorMaxim - estPaletaIni.valorMinim -(value - estPaletaIni.valorMinim);
 				}
 
 				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
