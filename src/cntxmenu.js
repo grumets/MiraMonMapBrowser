@@ -3877,10 +3877,22 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			}
 			else
 			{
+				var valueDinsRang = 0;
+				//	Distingim entre el tipus de element "input" que preten modifica el
+				//	valor de la paleta. Diferenciem entre input.type= range/number/button
+				if (event.target.attributes["type"].value.localCompare("range") == 0)
+				{
+					valueDinsRang = estPaletaIni.valorMaxim - value;
+				}
+				else //	Tant per input.type= number com button
+				{
+					valueDinsRang = estPaletaIni.valorMaxim - value;
+				}
+
 				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
 				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + i_component);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
-				var valueDinsRang = estPaletaIni.valorMaxim - value;
+
 				if (valueDinsRang > sliderMinim.value && valueDinsRang < estPaletaIni.valorMaxim)
 				{
 					textMaxim.value = valueDinsRang;
