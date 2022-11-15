@@ -1616,7 +1616,7 @@ var cdns=[];
 	return cdns.join("");
 }
 
-/*Aquesta funció canvia el CRS i el mapa de situació. 
+/*Aquesta funció canvia el CRS i el mapa de situació.
 Si i_situació és -1, busca un mapa de situació que es correspongui al CRS demanat.
 Si CRS és null i i_situacio no és -1, pren el CRS del mapa de situacio indicat*/
 function CanviaCRSISituacio(crs_dest, i_situacio)
@@ -1640,7 +1640,7 @@ function CanviaCRSISituacio(crs_dest, i_situacio)
 		{
 			alert("CRS not available in the situation map array.");
 			return;
-		}			
+		}
 	}
 	ParamInternCtrl.ISituacio=i_situacio;
 	if(ParamCtrl.FuncioCanviProjeccio)
@@ -2126,6 +2126,8 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_triaStoryMap();
 	else if (nom_finestra=="storyMap")
 		TancaFinestra_storyMap();
+	else if (nom_finestra=="editaEstil")
+		TancarFinestra_editEstil(nom_finestra);
 	else if (nom_finestra=="llegenda" || nom_finestra=="situacio" || nom_finestra=="coord")
 		TancaFinestra_llegenda_situacio_coord();
 	else if (nom_finestra.length>prefixNovaVistaFinestra.length && nom_finestra.substring(0, prefixNovaVistaFinestra.length) == prefixNovaVistaFinestra)
@@ -5067,14 +5069,14 @@ function CreaCapaDigiLayer(nom_vista, i_nova_vista, i)
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
 		return textHTMLLayer(nom_vista+"_l_capa_oculta", DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: false, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+						null, {scroll: "no", visible: false, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>");
 	}
 	if (ParamCtrl.capa[i].visible!="no"/* && EsObjDigiVisibleAAquestNivellDeZoom(ParamCtrl.capa[i])*/)
 	{
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
 		return textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>");
 	}
 	return "";
 }
