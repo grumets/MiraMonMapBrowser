@@ -518,7 +518,7 @@ var root, cadena, node, node2, i, j
 	}
 }//Fi de ParsejaRespostaGetCapabilities()
 
-function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, access, i_capa, func_after, param_func_after)
+function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, suporta_cors, access, i_capa, func_after, param_func_after)
 {
 var request;
 
@@ -535,6 +535,7 @@ var request;
 								index: ServidorGetCapabilities.length,
 								i_capa_on_afegir: i_capa,
 								servidor: servidor,
+								cors: suporta_cors,
 								access: access ? JSON.parse(JSON.stringify(access)) : null,
 								versio: null,
 								tipus: tipus,
@@ -558,11 +559,12 @@ var request;
 		request+="WFS";
 	else if (tipus=="TipusSOS")
 		request+="SOS";
-	request=AfegeixNomServidorARequest(servidor, request, true, true  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/);
+	
+	request=AfegeixNomServidorARequest(servidor, request, true, suporta_cors);  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/
 	if (window.doAutenticatedHTTPRequest && ServidorGetCapabilities[ServidorGetCapabilities.length-1].access)
 		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", ajaxGetCapabilities[ajaxGetCapabilities.length-1], request, null, null, ParsejaRespostaGetCapabilities, "text/xml", ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
 	else
 		ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
 				ParsejaRespostaGetCapabilities, "text/xml",
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
-}//Fi de FesPeticioCapacitatsIParsejaResposta
+}//Fi de FesPeticioCapacitatsIParsejaResposta()
