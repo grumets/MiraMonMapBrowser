@@ -1589,7 +1589,8 @@ var i, j;
 	j++;
 	while(i<LlistaServOWS.length && categoria_sel==DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 	{
-		form.llista_serveis_OWS.options[j]=new Option(DonaCadena(LlistaServOWS[i].nom), LlistaServOWS[i].url);
+		//form.llista_serveis_OWS.options[j]=new Option(DonaCadena(LlistaServOWS[i].nom), LlistaServOWS[i].url);
+		form.llista_serveis_OWS.options[j]=new Option(DonaCadena(LlistaServOWS[i].nom), i);
 		j++;
 		i++;
 	}
@@ -1598,10 +1599,18 @@ var i, j;
 function MostraServidorSeleccionatDeLlistaOWSAEdit(form)
 {
 var url_a_mostrar;
-	if(form.llista_serveis_OWS.selectedIndex>0)
+	/*if(form.llista_serveis_OWS.selectedIndex>0)
+	
 		url_a_mostrar=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;
-	if(url_a_mostrar)
+	if(url_a_mostrar)	
 		form.servidor.value=url_a_mostrar;
+	*/
+	if(form.llista_serveis_OWS.selectedIndex>0)
+	{	
+		var i_sel=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;		
+		form.servidor.value=LlistaServOWS[i_sel].url;
+		form.cors.value=LlistaServOWS[i_sel].cors;
+	}
 }
 
 function OrdenacioServOWSPerCategoriaINom(a,b) {
@@ -2008,13 +2017,14 @@ var cdns=[], i;
 			GetMessage("SpecifyServerURL", "cntxmenu"),
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />",
 			"<br />",
+			"<input type=\"hidden\" name=\"cors\" value=\"",ParamCtrl.CorsServidorLocal,"\">",
 			"<input type=\"hidden\" name=\"tipus\" value=\"TipusWMS\">",
 			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\"><label for=\"RadioVersion_WMS11\">WMS v1.1</label>",
 			"<input type=\"radio\" id=\"RadioVersion_WMS111\" name=\"versio\" value=\"1.1.1\" checked=\"checked\"><label for=\"RadioVersion_WMS111\">WMS v1.1.1</label>",
 			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\"><label for=\"RadioVersion_WMS13\">WMS v1.3</label>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
+		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, JSON.parse(document.AfegeixCapaServidor.cors.value), null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
@@ -2042,7 +2052,8 @@ var cdns=[], i;
 		cdns.push("<option value=\"\">--",  GetMessage("ChooseOneFromList", "cntxmenu"), "--");
 		while(categoria_sel==DonaCadena(LlistaServOWS[i].categoria.desc).toLowerCase())
 		{
-			cdns.push("<option value=\"", LlistaServOWS[i].url, "\">",  DonaCadena(LlistaServOWS[i].nom));
+			//cdns.push("<option value=\"", LlistaServOWS[i].url, "\">",  DonaCadena(LlistaServOWS[i].nom));
+			cdns.push("<option value=\"", i, "\">",  DonaCadena(LlistaServOWS[i].nom));
 			i++;
 		}
 		cdns.push("</select>");
