@@ -1758,10 +1758,10 @@ var vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 
 function AssignaDonaNomImatgeTiledASrc(nom_vista, i_capa, i_tile_matrix_set, i_tile_matrix, j, i)
 {
-	var capa=ParamCtrl.capa[i_capa];
-	var img=window.document[nom_vista + "_i_raster"+ i_capa +"_"+ j +"_"+ i];
-	var s=DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, -1, true, null);
-	var tipus=DonaTipusServidorCapa(capa);
+var capa=ParamCtrl.capa[i_capa];
+var img=window.document[nom_vista + "_i_raster"+ i_capa +"_"+ j +"_"+ i];
+var s=DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, -1, true, null);
+var tipus=DonaTipusServidorCapa(capa);
 
 	img.src=s;
 	if (tipus=="TipusWMTS_REST")
@@ -1841,8 +1841,8 @@ function DonaTextMatriuCapaTiledImprimir(i_capa, ncol, nfil, env)
 {
 var cdns=[], tile_matrix;
 
-	//Donat que només és possible imprimir conservant la resolució.
-	var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+//Donat que només és possible imprimir conservant la resolució.
+var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	if (i_tile_matrix_set==-1)
 	{
