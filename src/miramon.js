@@ -1520,7 +1520,7 @@ function DonaWindowDesDeINovaVista(vista)
 	return window;
 }
 
-/*Aquesta funció canvia el CRS i el mapa de situació. 
+/*Aquesta funció canvia el CRS i el mapa de situació.
 Si i_situació és -1, busca un mapa de situació que es correspongui al CRS demanat.
 Si CRS és null i i_situacio no és -1, pren el CRS del mapa de situacio indicat*/
 function CanviaCRSISituacio(crs_dest, i_situacio)
@@ -1544,7 +1544,7 @@ function CanviaCRSISituacio(crs_dest, i_situacio)
 		{
 			alert("CRS not available in the situation map array.");
 			return;
-		}			
+		}
 	}
 	ParamInternCtrl.ISituacio=i_situacio;
 	if(ParamCtrl.FuncioCanviProjeccio)
@@ -1818,6 +1818,8 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_triaStoryMap();
 	else if (nom_finestra=="storyMap")
 		TancaFinestra_storyMap();
+	else if (nom_finestra=="editaEstil")
+		TancarFinestra_editEstil(nom_finestra);
 	else if (nom_finestra=="llegenda" || nom_finestra=="situacio" || nom_finestra=="coord")
 		TancaFinestra_llegenda_situacio_coord();
 	else if (nom_finestra.length>prefixNovaVistaFinestra.length && nom_finestra.substring(0, prefixNovaVistaFinestra.length) == prefixNovaVistaFinestra)
@@ -4376,7 +4378,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "seleccioCondicional", GetMessage("SelectionByCondition", "miramon"), boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "combinacioRGB", GetMessage("RGBCombination", "cntxmenu"), boto_tancar, 220, 90, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioEstadistic", GetMessage("SelectionStatisticValue", "cntxmenu"), boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 275, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 435, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 586, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
