@@ -1040,7 +1040,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 					if (capa.model!=model_vector && capa2.transparencia=="semitransparent")
 					{
 						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
-				       		if (ParamCtrl.LlegendaGrupsComARadials)
+				       	if (ParamCtrl.LlegendaGrupsComARadials)
 						{
 							if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
 								document.getElementById("v_ll_capa"+i_capa).outerHTML=DonaCadenaImgCanviaEstatCapa(i_capa, "visible");
@@ -1063,7 +1063,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 			CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i),i);
 		if (capa.model==model_vector)
 		{
-			if (EsCapaVisibleAAquestNivellDeZoom(capa) && ((capa.objectes && capa.objectes.features) || capa.servidor))
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) && ((capa.objectes && capa.objectes.features) || capa.servidor || HiHaObjectesNumericsAAquestNivellDeZoom(capa)))
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
@@ -1115,7 +1115,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 		CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
 		if (capa.model==model_vector)
 		{
-			if(capa.objectes && capa.objectes.features)
+			if((capa.objectes && capa.objectes.features) || HiHaObjectesNumericsAAquestNivellDeZoom(capa))
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{

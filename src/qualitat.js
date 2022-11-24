@@ -881,7 +881,7 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 
 	desv_tip=Math.sqrt(desv_tip/n);
 
-	i=DonaIAtributsDesDeNomAtribut(capa_digi, param.atribut);
+	i=DonaIAtributsDesDeNomAtribut(capa_digi, capa_digi.atributs, param.atribut);
 	if (i==-1)
 	{
 		alert(GetMessage("WrongAttributeName", "qualitat") + " " +

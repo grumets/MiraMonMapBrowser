@@ -387,7 +387,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
 
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features) )
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features))
 		capa.model=model_vector;
 
 	if (tipus=="TipusHTTP_GET" && !capa.DescarregaTot)
@@ -449,7 +449,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		{
 			if (!capa.CRSgeometry)
 				capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
-			InicialitzaTilesSolicitatsCapaDigi(capa);
+			InicialitzaIComprovaTileMatrixGeometryCapaDigi(capa);
 			CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		}
 	}
@@ -1385,12 +1385,18 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
 			delete capa.objectes;
 		DescarregaSimbolsCapaDigi(capa);
-		if (capa.TileMatrixGeometry)
+		if (capa.tileMatrixSetGeometry)
 		{
-			if(capa.TileMatrixGeometry.tiles_solicitats)
-				delete capa.TileMatrixGeometry.tiles_solicitats;
-			if(capa.TileMatrixGeometry.env)
-				delete capa.TileMatrixGeometry.env;
+			if(capa.tileMatrixSetGeometry.tileMatrix)
+			{
+				for(var i_tm=0; i_tm<capa.tileMatrixSetGeometry.tileMatrix.length; i_tm++)
+				{
+					if(capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics)
+						delete capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics;
+				}
+			}
+			if(capa.tileMatrixSetGeometry.tilesSol)
+				delete capa.tileMatrixSetGeometry.tilesSol;
 		}
 
 		if (capa.EnvTotalLL)
