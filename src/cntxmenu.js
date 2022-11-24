@@ -1600,14 +1600,14 @@ function MostraServidorSeleccionatDeLlistaOWSAEdit(form)
 {
 var url_a_mostrar;
 	/*if(form.llista_serveis_OWS.selectedIndex>0)
-	
+
 		url_a_mostrar=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;
-	if(url_a_mostrar)	
+	if(url_a_mostrar)
 		form.servidor.value=url_a_mostrar;
 	*/
 	if(form.llista_serveis_OWS.selectedIndex>0)
-	{	
-		var i_sel=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;		
+	{
+		var i_sel=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;
 		form.servidor.value=LlistaServOWS[i_sel].url;
 		form.cors.value=LlistaServOWS[i_sel].cors;
 	}
@@ -3211,10 +3211,10 @@ function CridaCreacioEstadistic(i_capa)
 		return;
 	}
 	TancaFinestraLayer("seleccioEstadistic");
-	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")	
+	if (document.SeleccioEstadistic.stat.value.substr(document.SeleccioEstadistic.stat.value.length-2, 2) == "_2")
+	//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
 		return ObreFinestraHistograma(i_capa, -1, (document.SeleccioEstadistic.presentacio.value == "graphic") ? "chart_categ" : "stat_categ",
 					document.SeleccioEstadistic.stat.value.substring(0, document.SeleccioEstadistic.stat.value.length-2), document.SeleccioEstadistic.order.value);
-					//si acaba en "_2" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
 	else //cas normal, només necessito saber el estadístic a mostrar
 		return ObreFinestraHistograma(i_capa, -1, "stat", document.SeleccioEstadistic.stat.value);
 }
@@ -3434,7 +3434,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 	for (var i_comp=0, compLength=estil.component.length; i_comp<compLength; i_comp++)
 	{
-		// Es fa una copia de l'estirament de la paleta per preservar-lo després d'esser modificat.
+		// Es fa una còpia de l'estirament de la paleta per preservar-lo després d'esser modificat.
 		if (!estil.component[i_comp].estiramentPaletaInicial)
 		{
 			estil.component[i_comp].estiramentPaletaInicial = {
@@ -3464,7 +3464,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			cdns.push(": </legend>");
 		}
 		// Valor mínim i valor màxim
-		// Valor unitari prement botons incrmenet/decrement. Serà  1% del rang possible.
+		// Valor unitari prement botons incrmenet/decrement. Serà 1% del rang possible.
 		var valUnitari = 1; // Per defecte.
 		const estPaletaIni = estil.component[i_comp].estiramentPaletaInicial;
 		const estPaleta = estil.component[i_comp].estiramentPaleta;
