@@ -865,7 +865,7 @@ function CombinaURLServidorAmbParamPeticio(servidor, request)
 		return DonaNomServidorCaracterFinal(servidor) + request;
 	if ((servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
 		|| (servidor.charAt(servidor.length-1)=="/" &&  request.charAt(0)=="/"))
-		returnservidor.substring(0, servidor.length-1) + request;
+		return servidor.substring(0, servidor.length-1) + request;
 	return servidor + request;
 }
 
@@ -908,7 +908,7 @@ function CanviaIdioma(s)
 	CreaTitolNavegador();
 	CreaLlegenda();
 
-	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		IniciaConsultesTipiques();
 		CreaConsultesTipiques();

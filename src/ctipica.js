@@ -47,7 +47,7 @@ var NCellaLlista=[];
 var ICellaLlistaBlau=[];
 var NomEditLlavorLlista=[];
 var NomLayerLlista=[];
-var CTipicaCapa=[];  //Index de la capa a "CapaConsultaPreguntaServidor" per a cada possible "ConsultaTipica" (generalment només n'hi ha una)
+var CTipicaCapa=[];  //índex de la capa a "CapaConsultaPreguntaServidor" per a cada possible "ConsultaTipica" (generalment només n'hi ha una)
 var NCapesCTipicaCarregades=0;
 
 //var WindowDelEvent=parent.ctipica;
@@ -488,6 +488,9 @@ function PosaVisibleIConsultableCapaConsultaTipica(i_ctipica)
 var retorn=1;  //No he tocat res
 var i_capa, i_capa_a_activar;
 
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return retorn;
+	
 	for(i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{
 		if (ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].nom==ParamCtrl.capa[i_capa].nom)
@@ -578,6 +581,9 @@ var i_capa, i_capa_a_activar;
 function PortamAAmbitConsultaTipicaCercador(i_ctipica, i_llista_buscar)
 {
 var i_ctipica_capa, i_valor;
+
+	if(!ParamCtrl.ConsultaTipica || !ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
 
 	if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
 	{
@@ -678,6 +684,8 @@ function InsertaOpcioEnSelect(selector, opcio, posicio)
 
 function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
 	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>0)
 	{
 		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo
@@ -751,8 +759,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 
 function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
-
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
 	{
 		CTipicaCapa[i_ctipica]=i_ctipica_capa;
 		CTipicaValor=valor;
@@ -773,7 +780,7 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 
 function PortamAAmbitConsultaTipicaCompleta(i_ctipica, capa, valor)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -837,7 +844,7 @@ function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 
 function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -852,8 +859,11 @@ function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 
 function SeleccionaRadialPuntCentralConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		SeleccionaRadialPuntCentralConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			SeleccionaRadialPuntCentralConsultaTipica(i);
+	}
 }
 
 function ModificaAmpleIAltFactor(ctipica, factor)
@@ -864,7 +874,7 @@ function ModificaAmpleIAltFactor(ctipica, factor)
 
 function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -890,8 +900,11 @@ function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 
 function PosaAGrisRetallPerObjecteConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		PosaAGrisRetallPerObjecteConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			PosaAGrisRetallPerObjecteConsultaTipica(i);
+	}
 }
 
 //var ctipica_capa=0; ara és CTipicaCapa[i_ctipica]
@@ -900,7 +913,7 @@ var CTipicaValor=-CTipicaOffset;
 
 function CanviaLlistaCapaConsultaTipica(i_ctipica)
 {
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -916,7 +929,7 @@ function CanviaLlistaCapaConsultaTipica(i_ctipica)
 
 function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 {
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -947,7 +960,7 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 
 function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 {
-    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor.length)
+    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -967,23 +980,26 @@ function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 
 function PosaLlistaValorsConsultesTipiquesAlPrincipi(excepte_i_ctipica)
 {
-	for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+	if(ParamCtrl.ConsultaTipica)
 	{
-		if (i_ctipica==excepte_i_ctipica)
-			continue;
-		if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
-			PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
-			PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
-			CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+		{
+			if (i_ctipica==excepte_i_ctipica)
+				continue;
+			if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
+				PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
+				PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
+				CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		}
 	}
 }
 
 var InicialConsultaTipica="A";
 function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 {
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		InicialConsultaTipica=s;
 		CreaConsultaTipica(i_ctipica);
@@ -1235,8 +1251,11 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 
 function CreaConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		CreaConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			CreaConsultaTipica(i);
+	}
 }
 
 function OmpleICarregaConsultaTipica(doc, i_event)
@@ -1464,7 +1483,7 @@ function BuscaValorAConsultesTipiques()
 {
 var trobat=false;
 
-	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
+	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
 	{
 		//Per cada una de les capes a validar
 		for(var i_capa_accio=0; i_capa_accio<Accio.valors.length; i_capa_accio++)
@@ -1522,7 +1541,7 @@ function IniciaConsultesTipiques()
 {
 var valor;
 
-	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0)
+	if(ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0)
 	{
 		//Per cada finestra de consulta típica
 		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)

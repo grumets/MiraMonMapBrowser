@@ -164,7 +164,7 @@ var TMG, tiles, env_capa;
 			if(typeof TMG.tileMatrix[0].TopLeftPoint === "undefined")
 				TMG.tileMatrix[0].TopLeftPoint={ "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY};						
 				
-			if(typeof TMG.tileMatrix[i_tile_matrix].costat === "undefined")
+			if(typeof TMG.tileMatrix[0].costat === "undefined")
 				TMG.tileMatrix[0].costat=capa.CostatMaxim;	
 			if(typeof TMG.tileMatrix[0].MatrixWidth === "undefined")
 			{		
