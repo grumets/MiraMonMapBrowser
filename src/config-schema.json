@@ -1558,7 +1558,7 @@
 										"type": "object",
 										"properties": {
 											"calcul": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc. Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
 												"type": "string"
 											},
 											"FormulaConsulta": { 
@@ -2066,7 +2066,7 @@
 						}
 					},
 					"i_data": { 
-						"description": "Índex de data seleccionada per començar la visualització. Si s'indica -1 s'usarà el darrer element del array de dates. Només aplica quan el 'model' és 'raster'.",
+						"description": "Índex de data seleccionada per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc. Només aplica quan el 'model' és 'raster'.",
 						"type": ["number", "null"],
 						"minimum": -1,
 						"multipleOf" : 1
