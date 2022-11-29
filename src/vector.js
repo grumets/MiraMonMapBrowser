@@ -1537,11 +1537,20 @@ var simbol;
 		{
 			if (simbol[i_simbol].icona)
 			{
+				if(!simbol[i_simbol].icona.i)
+					simbol[i_simbol].icona.i=0;
+				if(!simbol[i_simbol].icona.j)
+					simbol[i_simbol].icona.j=0;			
 				if(recarrega || !simbol[i_simbol].icona.img)
 					CarregaImatgeIcona(simbol[i_simbol].icona);
+				
 			}
 			if (simbol[i_simbol].IconaSel)
 			{
+				if(!simbol[i_simbol].IconaSel.i)
+					simbol[i_simbol].IconaSel.i=0;
+				if(!simbol[i_simbol].IconaSel.j)
+					simbol[i_simbol].IconaSel.j=0;		
 				if(recarrega || !simbol[i_simbol].IconaSel.img)
 					CarregaImatgeIcona(simbol[i_simbol].IconaSel);
 			}
@@ -2288,14 +2297,18 @@ var env={}, mida;
 	else if (icona.type=="circle")
 	{
 		mida=DonaMidaIconaForma(icona);
-		env.MinI=env.MinJ=-mida;
-		env.MaxI=env.MaxJ=mida;
+		env.MinI=-mida-icona.i;
+		env.MinJ=-mida-icona.j;
+		env.MaxI=mida-icona.i;
+		env.MaxJ=mida-icona.j;
 	}
 	else if (icona.type=="square")
 	{
 		mida=DonaMidaIconaForma(icona);
-		env.MinI=env.MinJ=-mida/2;
-		env.MaxI=env.MaxJ=mida/2;
+		env.MinI=-mida/2-icona.i;
+		env.MinJ=-mida/2-icona.j;
+		env.MaxI=mida/2-icona.i;
+		env.MaxJ=mida/2-icona.j;
 	}
 	else if (icona.icona) //Una icona com a url a una png o similar
 	{

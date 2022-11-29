@@ -2360,7 +2360,7 @@
 		{
 			"oneOf": [
 				{
-					"description": "Color de la paleta en format #RRGGBB. Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
+					"description": "Color de la paleta en format #RRGGBB o en format RGB(r,g,b) o RGBA(r,g,b,a) on r, g i b van de 0 a 255 i a va de 0 a 1 (on 0 es totalment transparent i 1 opac). Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
 					"type": "string"
 				},
 				{
@@ -2457,7 +2457,7 @@
 						"type": ["string", "null"]
 					},
 					"NomCampFEscala": {
-						"description": "Nom del camp per triar un factor d'escalat del simbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+						"description": "Nom del camp per triar un factor d'escalat del símbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
 						"type": ["string", "null"]
 					},
 					"simbol": {
@@ -2640,20 +2640,30 @@
 					"properties": {
 						"type": {
 							"description": "És fàcil d'ampliar",
-							"enum": ["circle", "square" ]
+							"enum": ["circle", "square"]
 						},						
 						"r": {
-							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a,",
+							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a",
 							"type": "number"
 						},
 						"a": {
-							"description": "Àrea del cercle o del quadrat. No compatible amb l'ús de r,",
+							"description": "Àrea del cercle o del quadrat. No compatible amb l'ús de r",
 							"type": "number"
 						},
 						"unitats": 
 						{
 							"description": "Unitats base del ràdi o de l'àrea. El valors per defecte és 'px' (pixels)",
 							"enum": ["px", "m"]
+						},
+						"i": {
+							"description": "Offset de la posició del punt calent en l'eix de columnes. El punt calent és el punt on s'apliquen les coordenades terreny. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les columnes. ",
+							"type": "number",
+							"multipleOf" : 1
+						},
+						"j": {
+							"description": "Offset de la posició del punt calent en l'eix de files. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les files.",
+							"type": "number",
+							"multipleOf" : 1
 						}
 					}
 				},

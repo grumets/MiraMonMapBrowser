@@ -1584,10 +1584,10 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 													mida=1;
 												if (icona.type=="square")
 												{
-													ctx.rect(i_col-mida/2, i_fil-mida/2, mida, mida);
+													ctx.rect(i_col-icona.i-mida/2, i_fil-icona.j-mida/2, mida, mida);
 												}
 												else
-													ctx.arc(i_col, i_fil, mida, 0, 2*Math.PI);
+													ctx.arc(i_col-icona.i, i_fil-icona.j, mida, 0, 2*Math.PI);
 
 												PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
 											}
@@ -1602,8 +1602,8 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 											{
 												try
 												{
-													ctx.drawImage(icona.img, i_col-icona.i*icona.fescala,
-																i_fil-icona.j*icona.fescala, icona.img.ncol*icona.fescala, icona.img.nfil*icona.fescala);
+													ctx.drawImage(icona.img, (i_col-icona.i)*icona.fescala,
+																(i_fil-icona.j)*icona.fescala, icona.img.ncol*icona.fescala, icona.img.nfil*icona.fescala);
 												}
 												catch (e)
 												{
