@@ -201,7 +201,6 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 						GetMessage("AddLayer"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
-
 	}
 	if (capa.origen && capa.origen==OriginUsuari)
 	{
@@ -290,7 +289,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.estil && capa.estil.length==1)
+	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa) /* || capa.model==model_vector*/)) // Cal programar això per vector ·$·
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
@@ -341,7 +340,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (EsCapaBinaria(capa) || capa.model==model_vector)
+	if (EsCapaBinaria(capa) || capa.model==model_vector) 
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSeleccioCondicional(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("Selection"), "</a><br>");
@@ -355,13 +354,16 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if(alguna_opcio)
+	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)/* || capa.model==model_vector*/)) // Cal programar això per vector ·$·
 	{
-		cdns.push("<hr>");
-		alguna_opcio=false;
-	}
-	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
+		if(alguna_opcio)
+		{
+			cdns.push("<hr>");
+			alguna_opcio=false;
+		}
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("RetrieveStyles", "cntxmenu"), "</a><br>");
+	}
 
 	if (cdns.length==0)
 		return false;
@@ -416,7 +418,7 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
 
-	if (capa.model!=model_vector)
+	if (EsCapaBinaria(capa) /*|| capa.model==model_vector*/) // Cal programar això per vector ·$·
 	{
 		cdns.push("<hr>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
@@ -2015,16 +2017,17 @@ var cdns=[], i;
 			GetMessage("NewLayerFromServer", "cntxmenu"),
 			": </legend>",
 			GetMessage("SpecifyServerURL", "cntxmenu"),
-			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"http://\""), " />",
-			"<br />",
+			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"https://\""), " />",
+			"<br/>",
 			"<input type=\"hidden\" name=\"cors\" value=\"",ParamCtrl.CorsServidorLocal,"\">",
-			"<input type=\"hidden\" name=\"tipus\" value=\"TipusWMS\">",
-			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\"><label for=\"RadioVersion_WMS11\">WMS v1.1</label>",
-			"<input type=\"radio\" id=\"RadioVersion_WMS111\" name=\"versio\" value=\"1.1.1\" checked=\"checked\"><label for=\"RadioVersion_WMS111\">WMS v1.1.1</label>",
-			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\"><label for=\"RadioVersion_WMS13\">WMS v1.3</label>",
+			"<input type=\"hidden\" id=\"RadioTipus_Serv\" name=\"tipus\" value=\"TipusWMS\">",
+			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS11\">OGC WMS v 1.1</label>",
+			"<input type=\"radio\" id=\"RadioVersion_WMS111\" name=\"versio\" value=\"1.1.1\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS111\">OGC WMS v 1.1.1</label>",
+			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\" checked=\"checked\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS13\">OGC WMS v 1.3</label>",
+			"<input type=\"radio\" id=\"RadioOAPI_Maps\" name=\"tipus\" value=\"TipusOAPI_Maps\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusOAPI_Maps';\"><label for=\"RadioTipusOAPI_Maps\">OGC API Maps</label><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
-		     	GetMessage("Add"),
-		        "\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, JSON.parse(document.AfegeixCapaServidor.cors.value), null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
+			GetMessage("Explore"),
+			"\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, JSON.parse(document.AfegeixCapaServidor.cors.value), null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
 	if(LlistaServOWS && LlistaServOWS.length)
 	{
 		cdns.push("<br><br>",
@@ -2074,9 +2077,9 @@ var cdns=[], i;
 			": </legend>",
 			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoJSON\" name=\"url_type\" value=\"geojson\" checked=\"checked\"><label for=\"RadioAddUrlTypeGeoJSON\">GeoJSON</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
 			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoTIFF\" name=\"url_type\" value=\"geotiff\"><label for=\"RadioAddUrlTypeGeoTIFF\">GeoTIFF ",GetMessage("or")," COG</label><br>",
-			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" />",
+			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"https://\""), " />",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
-		     		GetMessage("Add"),
+		     GetMessage("Add"),
 			"\" onClick=\"CarregaFitxerURLSeleccionat(form)\" />",
 		"</fieldset></form>");
 	cdns.push("</div>");

@@ -1239,3 +1239,16 @@ var i= ParamCtrl.ImatgeSituacio.length;
 	}
 	return false;
 }
+
+function DonaEPSGDeURLOpengis(url)
+{
+	if(url.match("www.opengis.net/def/crs/OGC/1.3/CRS84"))
+	{
+		return "CRS:84";
+	}
+	if(url.match("www.opengis.net/def/crs/EPSG/"))
+	{
+		return "EPSG:"+url.slice(url.lastIndexOf("/")+1);
+	}
+	return null;
+}
