@@ -2015,9 +2015,9 @@ function promiseLoadJSON(path)
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function()
 		{
-        		if (xhr.readyState === XMLHttpRequest.DONE)
+        	if (xhr.readyState === XMLHttpRequest.DONE)
 			{
-		       		if (xhr.status === 200)
+		       	if (xhr.status === 200)
 				{
 					if (success)
 					{
@@ -2034,7 +2034,7 @@ function promiseLoadJSON(path)
 				}
 				else
 				{
-        				if (error)
+        			if (error)
 					{
 						var s=null;
 						if (xhr.response)
@@ -2454,15 +2454,13 @@ var s2;
 		s2=s.substring(s.indexOf("://")+3,s.length);
 		if (-1!=s2.indexOf("/"))
 			return s2.substring(0,s2.indexOf("/"));
-		else
-			return s2;
+		return s2;
 	}
 	else
 	{
 		if (-1!=s.indexOf("/"))
 			return s.substring(0,s.indexOf("/"));
-		else
-			return s;
+		return s;
 	}
 }
 
