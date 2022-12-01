@@ -130,7 +130,7 @@ function showOrHideLayersOnTopOfVista()
 {
 var i_vista;
 	var excepcions=["atribucio"];
-	if (ParamCtrl.VistaPermanent.lenght>1)
+	if (ParamCtrl.VistaPermanent.length>1)
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			excepcions.push(ParamCtrl.VistaPermanent[i_vista].nom);
 	var prefixes=[];

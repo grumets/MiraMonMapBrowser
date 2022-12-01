@@ -503,7 +503,7 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoEnllacWMS)
 			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();")));
 		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor("+ NumeroDeCapesVolatils(-1) +");")));
+			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));")));
 		if (ParamCtrl.BarraBotoCalculadora)
 			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();")));
 		if (ParamCtrl.BarraBotoCombiCapa)

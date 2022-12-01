@@ -116,7 +116,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 				desc: layer.desc,
 				CRS: layer.CRSs ? layer.CRSs : [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
 				FormatImatge: servidorGC.formatGetMap[i_format_get_map],
-				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
+				transparencia: "semitransparent",
 				CostatMinim: minim,
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
@@ -165,7 +165,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		CompletaDefinicioCapa(capa);
 
 	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa))
-		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
+		alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
 /* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
@@ -861,8 +861,6 @@ var i_fitxer, i_event;
 			CanviaEstatEventConsola(null, i_event, EstarEventError);
 			return;
 		}
-
-
 		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer], 0));
 	}
 

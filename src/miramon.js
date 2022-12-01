@@ -387,7 +387,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
 
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features) )
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features))
 		capa.model=model_vector;
 
 	if (tipus=="TipusHTTP_GET" && !capa.DescarregaTot)
@@ -449,7 +449,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		{
 			if (!capa.CRSgeometry)
 				capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
-			InicialitzaTilesSolicitatsCapaDigi(capa);
+			InicialitzaIComprovaTileMatrixGeometryCapaDigi(capa);
 			CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		}
 	}
@@ -860,12 +860,24 @@ function getSubtagIdiom(isoIdiom)
 function CombinaURLServidorAmbParamPeticio(servidor, request)
 {
 	if(request.indexOf("=")==-1)
+	{
+		if(servidor.toLowerCase()==request.toLowerCase())
+			return servidor;
 		return DonaNomServidorSenseCaracterFinal(servidor) + request;
-	if (request.indexOf("?")==-1)
+	}
+	if(request.indexOf("?")==-1)
+	{
+		if(servidor.toLowerCase()==request.toLowerCase())
+			return servidor;
 		return DonaNomServidorCaracterFinal(servidor) + request;
+	}
 	if ((servidor.charAt(servidor.length-1)=="?")  // ·$· Potser també caldria mirar que l'interrogant sigui a dins del servidor i dins de la request i després cal fer espai per inserir la request al mig i treure el ? del servidor
 		|| (servidor.charAt(servidor.length-1)=="/" &&  request.charAt(0)=="/"))
-		returnservidor.substring(0, servidor.length-1) + request;
+	{
+		return servidor.substring(0, servidor.length-1) + request;
+	}
+	if(servidor.toLowerCase()==request.toLowerCase())
+		return servidor;	
 	return servidor + request;
 }
 
@@ -908,7 +920,7 @@ function CanviaIdioma(s)
 	CreaTitolNavegador();
 	CreaLlegenda();
 
-	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		IniciaConsultesTipiques();
 		CreaConsultesTipiques();
@@ -1117,7 +1129,7 @@ function DonaIndexTileMatrixSetCRS(i_capa, crs)
 	{
 		for (var i=0; i<ParamCtrl.capa[i_capa].TileMatrixSet.length; i++)
 		{
-			if (ParamCtrl.capa[i_capa].TileMatrixSet[i].CRS && ParamCtrl.capa[i_capa].TileMatrixSet[i].CRS.toUpperCase()==crs.toUpperCase())
+			if(DonaCRSRepresentaQuasiIguals(ParamCtrl.capa[i_capa].TileMatrixSet[i].CRS, crs))
 				return i;
 		}
 	}
@@ -1385,12 +1397,18 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
 			delete capa.objectes;
 		DescarregaSimbolsCapaDigi(capa);
-		if (capa.TileMatrixGeometry)
+		if (capa.tileMatrixSetGeometry)
 		{
-			if(capa.TileMatrixGeometry.tiles_solicitats)
-				delete capa.TileMatrixGeometry.tiles_solicitats;
-			if(capa.TileMatrixGeometry.env)
-				delete capa.TileMatrixGeometry.env;
+			if(capa.tileMatrixSetGeometry.tileMatrix)
+			{
+				for(var i_tm=0; i_tm<capa.tileMatrixSetGeometry.tileMatrix.length; i_tm++)
+				{
+					if(capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics)
+						delete capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics;
+				}
+			}
+			if(capa.tileMatrixSetGeometry.tilesSol)
+				delete capa.tileMatrixSetGeometry.tilesSol;
 		}
 
 		if (capa.EnvTotalLL)
@@ -2057,6 +2075,10 @@ function DonaDescripcioTipusServidor(tipus)
 		return "WFS";
 	if (tipus=="TipusSOS")
 		return "SOS";
+	if(tipus=="TipusSTAplus")
+		return "STA Plus";
+	if(tipus=="TipusSTA")
+		return "STA";
 	if(tipus=="TipusOAPI_Maps")
 		return "OAPI Maps";
 	if(tipus=="TipusOAPI_MapTiles")
@@ -2065,6 +2087,7 @@ function DonaDescripcioTipusServidor(tipus)
 		return "OAPI Features";
 	if(tipus=="TipusHTTP_GET")
 		return "HTTP GET";
+	
 	return "";
 }
 
@@ -2621,7 +2644,7 @@ function EsCapaDisponibleEnElCRSActual(capa)
 		for (var i=0; i<capa.CRS.length; i++)
 		{
 			if (DonaCRSRepresentaQuasiIguals(capa.CRS[i], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-        return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
+				return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 		}
 		return false;
 	}
@@ -2975,7 +2998,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"?";
 		else
-			s="collections/{collectionId}/styles/{styleId}/map/tiles/{tileMatrixSetId}/{tileMatrix}/{tileRow}/{tileCol}?";
+			s="/collections/{collectionId}/styles/{styleId}/map/tiles/{tileMatrixSetId}/{tileMatrix}/{tileRow}/{tileCol}?";
 
 		s=s.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
@@ -3000,7 +3023,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		cdns.push(s);
 
 		cdns.push("&f=" , capa.FormatImatge ) ;
-		cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
+		cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
 		if (capa.AnimableMultiTime)
 			cdns.push("&datetime=",DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
 		return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
@@ -3143,8 +3166,7 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=WFS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
 	if (tipus=="TipusSOS")
 		return AfegeixNomServidorARequest(servidor, "REQUEST=GetCapabilities&VERSION="+versio+ "&SERVICE=SOS", ParamCtrl.UsaSempreMeuServidor ? true : false, suporta_cors);
-	// En TipusOAPI_Maps, ... no existeix aquesta petició que he de retornar, la landing page?
-	return "";
+	return servidor ? servidor : "";
 }
 
 function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
@@ -3173,27 +3195,35 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 		cdns.push(plantilla);
 	}
 
-	if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
+	if (tipus=="TipusOAPI_Maps")
+		cdns.push("bbox-crs=");
+	else if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
 		cdns.push("SRS=");
 	else
 		cdns.push("CRS=");
-	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&BBOX=");
+	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	if (tipus=="TipusOAPI_Maps")
+		 cdns.push("&bbox=");
+	else
+		cdns.push("&BBOX=");
 
 	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  (tipus=="TipusOAPI_Maps" ? null : DonaVersioServidorCapa(capa))))
 		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
 	else
 		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
-
-	cdns.push("&WIDTH=" , ncol , "&HEIGHT=" , nfil);
 	if(tipus=="TipusOAPI_Maps")
-		cdns.push("&f=" , capa.FormatImatge ) ;
-	else
-		 cdns.push("&LAYERS=" , capa.nom, "&FORMAT=" , capa.FormatImatge );
-	cdns.push(((capa.FormatImatge=="image/jpeg") ? "" : "&TRANSPARENT=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")));
-
-	if(tipus!="TipusOAPI_Maps")
 	{
-		cdns.push("&STYLES=");
+		cdns.push("&width=" , ncol , "&height=" , nfil,
+				"&f=" , capa.FormatImatge,
+				((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
+
+	}
+	else
+	{
+		cdns.push("&WIDTH=" , ncol , "&HEIGHT=" , nfil,
+				"&LAYERS=" , capa.nom, "&FORMAT=" , capa.FormatImatge,
+				((capa.FormatImatge=="image/jpeg") ? "" : "&TRANSPARENT=" + ((capa.transparencia && capa.transparencia!="opac")? "TRUE" : "FALSE")),
+				"&STYLES=");
 		if (capa.estil && capa.estil.length)
 		{
 			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
@@ -4107,13 +4137,15 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	{
 		// 22-11-2019 (NJ i JM) : Decidim canviar el protocol dels servidors que tenen el mateix host que el navegador
 		// perquè per seguretat els navegadors bloquegen o donen error quan fas una petició http des d'una url(navegador) en htpps
-		if(ParamCtrl.ServidorLocal &&
-		   host==DonaHost(ParamCtrl.ServidorLocal).toLowerCase() &&
-		   protocol!=DonaProtocol(ParamCtrl.ServidorLocal).toLowerCase())
+		if(param_ctrl.ServidorLocal &&
+		   host==DonaHost(param_ctrl.ServidorLocal).toLowerCase() &&
+		   protocol!=DonaProtocol(param_ctrl.ServidorLocal).toLowerCase())
 		{
-			ParamCtrl.ServidorLocal=protocol+ParamCtrl.ServidorLocal.substring(ParamCtrl.ServidorLocal.indexOf("://")+1, ParamCtrl.ServidorLocal.length);
+			param_ctrl.ServidorLocal=protocol+param_ctrl.ServidorLocal.substring(param_ctrl.ServidorLocal.indexOf("://")+1, param_ctrl.ServidorLocal.length);
 		}
 	}
+	if (typeof param_ctrl.CorsServidorLocal==="undefined")
+		param_ctrl.CorsServidorLocal=false;
 
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
@@ -4312,7 +4344,7 @@ var i_get_featureinfo;
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServeu.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
 }
 
 function CarregaArrayCapesDeServei(nomesOffline)
@@ -4392,7 +4424,7 @@ var win, i, j, l, capa;
 	createFinestraLayer(window, "feedback", GetMessage("Feedback"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", GetMessage("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", GetMessage("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "enllacWMS", GetMessage("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "enllacWMS", GetMessage("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, resizable: true, ev: null}, null);
 	createFinestraLayer(window, "triaStoryMap", GetMessage("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
 	createFinestraLayer(window, "storyMap", GetMessage("storyMapTitle", "miramon"), boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
 	createFinestraLayer(window, "info", GetMessage("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
