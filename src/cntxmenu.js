@@ -3862,76 +3862,78 @@ var floatValor=parseFloat(valor);
 		{
 			if (esMinim)
 			{
-				var valueDinsRang = 0;
+				var valorActual = 0;
 				//	Distingim entre el tipus de element "input" que preten modifica el
 				//	valor de la paleta. Diferenciem entre input.type= range/text/button
 				if (event.target.attributes["type"].value.localeCompare("range") == 0)
 				{
-					valueDinsRang = estPaletaExtr.valorMinim + floatValor;
+					valorActual = estPaletaExtr.valorMinim + floatValor;
 				}
 				else //	Tant per input.type= text o button
 				{
-					valueDinsRang = floatValor;
+					valorActual = floatValor;
 					floatValor =  floatValor - estPaletaExtr.valorMinim;
 				}
 
 				const textMinim = document.getElementById("edita-estil-capa-valor-minim-" + i_component);
+				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
 				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + i_component);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
-				const valueRangSuperior = estPaletaExtr.valorMaxim - parseFloat(sliderMaxim.value);
-				if (parseFloat(valueDinsRang) > parseFloat(estPaletaExtr.valorMinim) && parseFloat(valueDinsRang) < parseFloat(valueRangSuperior))
+				//(const valorRangSuperior = estPaletaExtr.valorMaxim - parseFloat(textMaxim.value);
+				if (parseFloat(valorActual) > parseFloat(estPaletaExtr.valorMinim) && parseFloat(valorActual) < parseFloat(textMaxim.value))
 				{
-					textMinim.value = valueDinsRang;
+					textMinim.value = valorActual;
 					sliderMinim.value = floatValor;
 				}
 				else
 				{
-					if (parseFloat(valueDinsRang) <= parseFloat(estPaletaExtr.valorMinim))
+					if (parseFloat(valorActual) <= parseFloat(estPaletaExtr.valorMinim))
 					{
-						textMinim.value = estPaletaExtr.valorMinim;
+						textMinim.value = valorActual;
 						sliderMinim.value = sliderMinim.min;
 					}
 					else
 					{
-						textMinim.value = parseFloat(valueRangSuperior) - valorUnitari;
+						textMinim.value = parseFloat(textMaxim.value) - valorUnitari;
 						sliderMinim.value = parseFloat(sliderMaxim.max) - parseFloat(sliderMaxim.value) - valorUnitari;
 					}
 				}
 			}
 			else
 			{
-				var valueDinsRang = 0;
+				var valorActual = 0;
 				//	Distingim entre el tipus de element "input" que preten modifica el
 				//	valor de la paleta. Diferenciem entre input.type= range/text/button
 				if (event.target.attributes["type"].value.localeCompare("range") == 0)
 				{
-					valueDinsRang = estPaletaExtr.valorMaxim - floatValor;
+					valorActual = estPaletaExtr.valorMaxim - floatValor;
 				}
 				else //	Tant per input.type= text o button
 				{
-					valueDinsRang = floatValor;
+					valorActual = floatValor;
 					floatValor =  estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim -(floatValor - estPaletaExtr.valorMinim);
 				}
 
+				const textMinim = document.getElementById("edita-estil-capa-valor-minim-" + i_component);
 				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
 				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + i_component);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
-				const valueRangInferior = estPaletaExtr.valorMinim + parseFloat(sliderMinim.value);
-				if (parseFloat(valueDinsRang) > parseFloat(valueRangInferior) && parseFloat(valueDinsRang) < parseFloat(estPaletaExtr.valorMaxim))
+				//const valorRangInferior = estPaletaExtr.valorMinim + parseFloat(textMinim.value);
+				if (parseFloat(valorActual) > parseFloat(textMinim.value) && parseFloat(valorActual) < parseFloat(estPaletaExtr.valorMaxim))
 				{
-					textMaxim.value = valueDinsRang;
+					textMaxim.value = valorActual;
 					sliderMaxim.value = floatValor;
 				}
 				else
 				{
-					if (parseFloat(valueDinsRang) >= parseFloat(estPaletaExtr.valorMaxim))
+					if (parseFloat(valorActual) >= parseFloat(estPaletaExtr.valorMaxim))
 					{
-						textMaxim.value = estPaletaExtr.valorMaxim;
+						textMaxim.value = valorActual;
 						sliderMaxim.value = 0;
 					}
 					else
 					{
-						textMaxim.value =  parseFloat(valueRangInferior) + valorUnitari;
+						textMaxim.value =  parseFloat(textMinim.value) + valorUnitari;
 						sliderMaxim.value = parseFloat(sliderMinim.max) - parseFloat(sliderMinim.value) - valorUnitari;
 					}
 				}
