@@ -1136,7 +1136,7 @@
 						"type": "array"
 					},
 					"capaDePunts": {
-						"description": "Id de la capa de punts que s'alimenta automaticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
 						"type": "object",
 						"properties": {									
 							"id": { 
