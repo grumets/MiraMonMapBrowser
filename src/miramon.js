@@ -4347,24 +4347,41 @@ function CarregaCapesDeServei(capesDeServei)
 	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
 }
 
-function CarregaArrayCapesDeServei(nomesOffline)
+function DonaCadenaPreguntarCarregaArrayCapesDeServei()
+{
+var cdns=[];
+
+	cdns.push(GetMessage("BrowserContainsLayersRequireLogin", "authens"), ".<br>",
+		GetMessage("DoYouWantToLogInNow", "authens"),
+		"<br><center><input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("OK"),"\" onClick='CarregaArrayCapesDeServei(false, true);TancaFinestraLayer(\"info\");'/> ",
+		"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Cancel"),"\" onClick='TancaFinestraLayer(\"info\");'/></center>");
+	return cdns.join("");
+}
+
+function PreguntarCarregaArrayCapesDeServei()
+{
+	IniciaFinestraInformacio(DonaCadenaPreguntarCarregaArrayCapesDeServei());
+}
+
+function CarregaArrayCapesDeServei(nomesOffline, preguntat)
 {
 	if (!ParamCtrl.capesDeServei || (nomesOffline && !ParamCtrl.accessClientId))
 		return;
 
+	var calfer=[], calferAlgun=false;
+	for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+	{
+		calfer[i]=false;
+		if (ParamCtrl.capesDeServei[i].servei.access)
+		{
+			var access=ParamCtrl.capesDeServei[i].servei.access;
+			if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
+				calferAlgun=calfer[i]=true;
+		}
+	}
+
 	if (nomesOffline)
 	{
-		var calfer=[], calferAlgun=false;
-		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
-		{
-			calfer[i]=false;
-			if (ParamCtrl.capesDeServei[i].servei.access)
-			{
-				var access=ParamCtrl.capesDeServei[i].servei.access;
-				if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
-					calferAlgun=calfer[i]=true;
-			}
-		}
 		if (!calferAlgun)
 			return;
 		PreparaReintentarLogin();
@@ -4376,9 +4393,17 @@ function CarregaArrayCapesDeServei(nomesOffline)
 	}
 	else
 	{
-		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
-			CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
-	}
+		if (calferAlgun && !preguntat)
+		{
+			//Si hi ha alguna capa que requereix autentificació, el sistema de bloqueix de "pop ups" evita que surti la caixa a no ser que una acció de l'usuari ho invoqui. Per això cal una pregunta a l'usuari
+			PreguntarCarregaArrayCapesDeServei();
+		}
+		else
+		{
+			for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+				CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
+		}
+	}	
 }
 
 function IniciaVisualitzacio()
@@ -4446,7 +4471,7 @@ var win, i, j, l, capa;
 
 	CompletaDefinicioCapes();
 
-	CarregaArrayCapesDeServei(false);
+	CarregaArrayCapesDeServei(false, false);
 
 	changeSizeLayers(window);
 	CarregaConsultesTipiques();

@@ -691,6 +691,8 @@ var MessageLang={
 		LoginAccountFailed: {"cat": "Error o cancel·lació de la identificació amb el compte de", "spa": "Error o cancelación de la identificación en la cuenta de", "eng": "Login in your account failed or cancelled in", "fre": "La connexion à votre compte a échoué ou a été annulée dans"},
 		ContinueWithoutAuthentication: {"cat": "Vols continuar sense autentificació", "spa": "Desea continuar sin autentificación", "eng": "Do you what to continue without authentication", "fre": "Faites-vous quoi continuer sans authentification"},
 		SessionsAlreadyStarted: {"cat": "Les sessions han estat ja iniciades", "spa": "Las sesiones han sido ya iniciadas", "eng": "The sessions were already started", "fre": "Les séances étaient déjà commencées"},
+		BrowserContainsLayersRequireLogin: {"cat": "Aquest navegador conté capes que requereixen inici de sessió", "spa": "Este navegador contiene capas que requieren inicio de sesión", "eng": "This browser contains layers that require login", "fre": "Ce navigateur contient des couches qui nécessitent une connexion"},
+		DoYouWantToLogInNow: {"cat": "Vols iniciar sessió ara?", "spa": "¿Quieres iniciar sesión ahora?", "eng": "Do you want to log in now?", "fre": "Voulez-vous vous connecter maintenant?"}
 	},
 	llinatge: {
 		Process: {"cat":"Procés", "spa":"Proceso", "eng":"Process", "fre":"Processus"},

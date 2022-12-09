@@ -1742,7 +1742,9 @@ var elem=ObreFinestra(window, "info", GetMessage("toShowInformationOrHelp", "cnt
 	if (!elem)
 		return;
 
+	ajustaAllargadaAContingutFinestraLayer(window, "info", 0);  //fa la finestra petita per forçar l'scroll
 	contentLayer(elem, nom_funcio);
+	ajustaAllargadaAContingutFinestraLayer(window, "info", -1); //fa que es vegi tot el text
 }
 
 function DonaCadenaReclassificadoraCapes(prefix_id, i_capa)
