@@ -314,16 +314,6 @@ var cdns=[];
 	return cdns.join("");
 }
 
-function FerLoginICarregaCapes()
-{
-	if (!CalFerLogin())
-	{
-		alert(GetMessage("SessionsAlreadyStarted", "authens"));
-		return;
-	}
-	CarregaArrayCapesDeServei(true);
-}
-
 
 function CreaBarra(crs)
 {

@@ -109,7 +109,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 			// On error
 			function(error) 
 			{
-				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken="logout";
+				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken="failed";
 				if (error.error.code=="cancelled")
 				{
 					if (confirm(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + GetMessage("ContinueWithoutAuthentication","authens") + "?"))
@@ -146,6 +146,7 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 			alert(authResponse.error_description)
 			return;
 		}
+		ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=false;
 		if (access.request && access.request.indexOf("map")!=-1 && url.indexOf("REQUEST=GetMap")!=-1)
 			ajax.doReqIndirect(method, url + (url.indexOf('?')==-1 ? "?" : "&") + "access_token=" + authResponse.access_token, request_format, dataPayload, hand, response_format, struct);
 		else
@@ -167,7 +168,8 @@ function CalFerLogin()
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
-			if (ParamInternCtrl.tokenType[tokenType].askingAToken=="logout")
+			if (typeof ParamInternCtrl.tokenType[tokenType].askingAToken==="undefined" ||
+				ParamInternCtrl.tokenType[tokenType].askingAToken=="failed")
 				return true;
 		}
 	}
@@ -182,10 +184,25 @@ function PreparaReintentarLogin()
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
-			if (ParamInternCtrl.tokenType[tokenType].askingAToken=="logout")
-				ParamInternCtrl.tokenType[tokenType].askingAToken=false;
+			if (ParamInternCtrl.tokenType[tokenType].askingAToken=="failed")
+				delete ParamInternCtrl.tokenType[tokenType].askingAToken;
 		}
 	}
 	return false;
 }
 
+function RevokeLogin(access)
+{
+	var authResponse=hello(access.tokenType).getAuthResponse();		
+	if (IsAuthResponseOnline(authResponse) || 
+		ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken==false)
+	{
+		ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken="revoking";
+		hello(access.tokenType ? access.tokenType : "authenix").logout({force:true}).then(function() {
+				delete ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken;
+				alert("Signed out from"+ " " + access.tokenType + ". ");
+			}, function(e) {
+				alert("Signed out error:" + " " + access.tokenType + ". " + e.error.message);
+			});
+	}
+}	
