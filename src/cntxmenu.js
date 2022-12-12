@@ -3945,7 +3945,6 @@ var floatValor=parseFloat(valor);
 						labelRangeDrtMax.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
 						sliderMaxim.value = 0;
 						sliderMaxim.max = valorActual - estPaletaExtr.valorMinim;
-						//sliderMaxim.max = valorActual;
 						sliderMinim.max = sliderMaxim.max;
 						estPaletaExtr.valorMaxim = valorActual;
 					}
