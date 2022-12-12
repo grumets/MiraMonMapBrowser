@@ -1402,6 +1402,20 @@ function moveFinestraLayer(win, name, x, y, w, h)
 		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
 }
 
+//Si mida==-1 i la finestra és massa petita, ajusta a la mida del text. (Crideu-la abans amb mida=0 si voleu que una finestra gran es faci petita a la mida del text)
+function ajustaAllargadaAContingutFinestraLayer(win, name, mida)
+{
+var elem=getFinestraLayer(win, name);
+var rec=getRectLayer(elem);
+
+	if (mida==-1)
+		mida=elem.scrollHeight+AltBarraFinestraLayer;
+	else if (mida<AltBarraFinestraLayer)
+		mida=AltBarraFinestraLayer;
+
+	moveFinestraLayer(win, name, rec.esq, rec.sup-AltBarraFinestraLayer, rec.ample, mida);
+}
+
 function isFinestraLayerVisible(win, name)
 {
 	var elem=getFinestraLayer(win,name);

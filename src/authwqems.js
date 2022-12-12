@@ -26,7 +26,7 @@
 
 				if (o.options.force) {
 					var token = (o.authResponse || {}).access_token;
-					var revokeUrl = "https://www.authenix.eu/oauth/tokenrevoke";
+					var revokeUrl = "https://idm-wqems.opsi.lecce.it/auth/realms/wqems/protocol/openid-connect/tokenrevoke";
 
 					var xhr = new XMLHttpRequest();
 					xhr.open("POST", revokeUrl, true);
