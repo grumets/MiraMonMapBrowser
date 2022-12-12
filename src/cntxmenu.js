@@ -3483,28 +3483,28 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_comp, "\">", GetMessage("Minimum"), ": </label>",
 			"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_comp, "\" name=\"minim", i_comp,"\" value=\"",
-			DonaFactorValorMinEstiramentPaleta(estPaletaExtr), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
+			DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMinimReal, ", ", valUnitari,", true);\">",")", "<br>",
-				"<div style='display: flex; align-items: stretch;'><label id=\"minEsqBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-esq-valor-minim-", i_comp, "\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr), "</label>", 
+				"<div style='display: flex; align-items: stretch;'><label id=\"minEsqBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-esq-valor-minim-", i_comp, "\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>", 
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", true);\">",
 			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 285px;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaleta.valorMinim - estPaletaExtr.valorMinim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\" onclick=\"dontPropagateEvent(event);\">",
 			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) + ", valUnitari,", ", valUnitari, ", true);\">", 
-			"<label id=\"minDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-minim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr), "</label>",
+			"<label id=\"minDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-minim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
 			"</div><br>");
 
 		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
 			"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_comp, "\" name=\"maxim", i_comp,"\" value=\"",
-			DonaFactorValorMaxEstiramentPaleta(estPaletaExtr), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
+			DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMaximReal, ", ", valUnitari, ", false);\">",")", "<br>",
-				"<div style='display: flex; align-items: stretch;'><label id=\"maxEsqBtn-", i_comp,"\" for=\"edita-estil-capa-button-fletxa-esq-valor-maxim-", i_comp, "\"  style=\"text-align: center;\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr), "</label>", 
+				"<div style='display: flex; align-items: stretch;'><label id=\"maxEsqBtn-", i_comp,"\" for=\"edita-estil-capa-button-fletxa-esq-valor-maxim-", i_comp, "\"  style=\"text-align: center;\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>", 
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", false);\">",
 				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 285px;direction: rtl;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim -(estPaleta.valorMaxim - estPaletaExtr.valorMinim), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\" onclick=\"dontPropagateEvent(event);\">",
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) + ", valUnitari, ", ", valUnitari, ", false);\">",
-				"<label id=\"maxDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr), "</label>",
+				"<label id=\"maxDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
 			"</div><br>");
 		if (estil.component.length>1)
 			cdns.push("</fieldset>");
@@ -3886,7 +3886,7 @@ var floatValor=parseFloat(valor);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
 				if (parseFloat(valorActual) > parseFloat(estPaletaExtr.valorMinim) && parseFloat(valorActual) < parseFloat(textMaxim.value))
 				{
-					textMinim.value = valorActual;
+					textMinim.value = valorActual.toFixed(3);
 					sliderMinim.value = floatValor;
 				}
 				else
@@ -3895,7 +3895,7 @@ var floatValor=parseFloat(valor);
 					{
 						const labelRangeEsqMin= document.getElementById("minEsqBtn-" + i_component);
 						const labelRangeEsqMax= document.getElementById("maxEsqBtn-" + i_component);
-						textMinim.value = valorActual;
+						textMinim.value = valorActual.toFixed(3);
 						labelRangeEsqMin.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
 						labelRangeEsqMax.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
 						sliderMinim.value = 0;
@@ -3905,7 +3905,7 @@ var floatValor=parseFloat(valor);
 					}
 					else
 					{
-						textMinim.value = parseFloat(textMaxim.value) - valorUnitari;
+						textMinim.value = (parseFloat(textMaxim.value) - valorUnitari).toFixed(3);
 						sliderMinim.value = parseFloat(sliderMaxim.max) - parseFloat(sliderMaxim.value) - valorUnitari;
 					}
 				}
@@ -3931,7 +3931,7 @@ var floatValor=parseFloat(valor);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
 				if (parseFloat(valorActual) > parseFloat(textMinim.value) && parseFloat(valorActual) < parseFloat(estPaletaExtr.valorMaxim))
 				{
-					textMaxim.value = valorActual;
+					textMaxim.value = valorActual.toFixed(3);
 					sliderMaxim.value = floatValor;
 				}
 				else
@@ -3940,7 +3940,7 @@ var floatValor=parseFloat(valor);
 					{
 						const labelRangeDrtMin= document.getElementById("minDrtBtn-" + i_component);
 						const labelRangeDrtMax= document.getElementById("maxDrtBtn-" + i_component);
-						textMaxim.value = valorActual;
+						textMaxim.value = valorActual.toFixed(3);
 						labelRangeDrtMin.textContent = ContingutLimitsSliders(parseFloat(textMaxim.value), false);
 						labelRangeDrtMax.textContent = ContingutLimitsSliders(parseFloat(textMaxim.value), false);
 						sliderMaxim.value = 0;
@@ -3950,7 +3950,7 @@ var floatValor=parseFloat(valor);
 					}
 					else
 					{
-						textMaxim.value =  parseFloat(textMinim.value) + valorUnitari;
+						textMaxim.value =  (parseFloat(textMinim.value) + valorUnitari).toFixed(3);
 						sliderMaxim.value = parseFloat(sliderMinim.max) - parseFloat(sliderMinim.value) - valorUnitari;
 					}
 				}
