@@ -3483,7 +3483,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_comp, "\">", GetMessage("Minimum"), ": </label>",
 			"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_comp, "\" name=\"minim", i_comp,"\" value=\"",
-			DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
+			DonaFactorValorMinEstiramentPaleta(estPaleta).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMinimReal, ", ", valUnitari,", true);\">",")", "<br>",
@@ -3496,7 +3496,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
 			"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_comp, "\" name=\"maxim", i_comp,"\" value=\"",
-			DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
+			DonaFactorValorMaxEstiramentPaleta(estPaleta).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMaximReal, ", ", valUnitari, ", false);\">",")", "<br>",
@@ -3896,8 +3896,8 @@ var floatValor=parseFloat(valor);
 						const labelRangeEsqMin= document.getElementById("minEsqBtn-" + i_component);
 						const labelRangeEsqMax= document.getElementById("maxEsqBtn-" + i_component);
 						textMinim.value = valorActual.toFixed(3);
-						labelRangeEsqMin.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
-						labelRangeEsqMax.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
+						labelRangeEsqMin.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
+						labelRangeEsqMax.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
 						sliderMinim.max = parseFloat(sliderMinim.max) + (parseFloat(estPaletaExtr.valorMinim) - valorActual);
 						sliderMaxim.max = sliderMinim.max;
 						sliderMinim.value = 0;
@@ -3941,10 +3941,11 @@ var floatValor=parseFloat(valor);
 						const labelRangeDrtMin= document.getElementById("minDrtBtn-" + i_component);
 						const labelRangeDrtMax= document.getElementById("maxDrtBtn-" + i_component);
 						textMaxim.value = valorActual.toFixed(3);
-						labelRangeDrtMin.textContent = ContingutLimitsSliders(parseFloat(textMaxim.value), false);
-						labelRangeDrtMax.textContent = ContingutLimitsSliders(parseFloat(textMaxim.value), false);
+						labelRangeDrtMin.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
+						labelRangeDrtMax.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
 						sliderMaxim.value = 0;
-						sliderMaxim.max = valorActual;
+						sliderMaxim.max = valorActual - estPaletaExtr.valorMinim;
+						//sliderMaxim.max = valorActual;
 						sliderMinim.max = sliderMaxim.max;
 						estPaletaExtr.valorMaxim = valorActual;
 					}
@@ -3959,7 +3960,7 @@ var floatValor=parseFloat(valor);
 	}
 }
 
-function ContingutLimitsSliders(limitValue, esMinim) 
+function TextLimitsSliders(limitValue, esMinim) 
 {
 	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();	
 }
