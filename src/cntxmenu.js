@@ -3898,9 +3898,9 @@ var floatValor=parseFloat(valor);
 						textMinim.value = valorActual.toFixed(3);
 						labelRangeEsqMin.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
 						labelRangeEsqMax.textContent = ContingutLimitsSliders(parseFloat(textMinim.value), true);
-						sliderMinim.value = 0;
 						sliderMinim.max = parseFloat(sliderMinim.max) + (parseFloat(estPaletaExtr.valorMinim) - valorActual);
 						sliderMaxim.max = sliderMinim.max;
+						sliderMinim.value = 0;
 						estPaletaExtr.valorMinim = parseFloat(estPaletaExtr.valorMinim) - (parseFloat(estPaletaExtr.valorMinim) - valorActual);
 					}
 					else
