@@ -914,8 +914,7 @@ function CreaTitolNavegador()
 
 function CanviaIdioma(s)
 {
-	if (!s)
-		ParamCtrl.idioma = ComprovaDisponibilitatIdiomaPreferit();
+	ParamCtrl.idioma = s ? s : ComprovaDisponibilitatIdiomaPreferit();
 	parent.document.title=DonaCadena(ParamCtrl.titol);
 	CreaTitolNavegador();
 	CreaLlegenda();
@@ -3756,7 +3755,7 @@ var i_estil_nou=capa.estil.length, estil;
 		delete estil.diagrama;
 	estil.id=nom_nou;
 	estil.desc=nom_nou;
-	estil.origen=OriginUsuari;  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
+	estil.origen=OrigenUsuari;  //Això ho va crear AZ ni no crec que hagi de ser 'usuari' sempre. De moment ho deixo.
 	CarregaSimbolsEstilCapaDigi(capa, i_estil_nou, true);
 
 	return i_estil_nou;
@@ -4342,6 +4341,43 @@ var i_get_featureinfo;
 	CreaLlegenda();
 }
 
+//Aquesta funció fa login o logout segons convingui.
+function FerLoginICarregaCapes()
+{
+var capa, n_capa_ini;
+	if (!CalFerLogin())
+	{
+		//alert(GetMessage("SessionsAlreadyStarted", "authens"));
+		if (confirm(GetMessage("CloseTheStartedSessions", "authens")))
+		{
+			n_capa_ini=ParamCtrl.capa.length;
+			for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+			{
+				if (ParamCtrl.capesDeServei[i].servei.access)
+					RevokeLogin(ParamCtrl.capesDeServei[i].servei.access);
+				//Ara cal treure totes les capes que requreixen aquesta identificació
+				for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+				{
+					capa=ParamCtrl.capa[i_capa]
+					if (capa.access && capa.access.tokenType==ParamCtrl.capesDeServei[i].servei.access.tokenType && capa.origen==OrigenUsuari)
+					{
+						CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no te sentit; i ja hem avisat que no anirà bé.
+						ParamCtrl.capa.splice(i_capa, 1);
+						i_capa--;
+					}
+				}
+			}
+			if (n_capa_ini>ParamCtrl.capa.length);
+			{
+				RevisaEstatsCapes();
+				RepintaMapesIVistes();
+			}
+			return;  
+		}
+	}
+	CarregaArrayCapesDeServei(true, false);
+}
+
 function CarregaCapesDeServei(capesDeServei)
 {
 	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
@@ -4375,12 +4411,13 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat)
 		if (ParamCtrl.capesDeServei[i].servei.access)
 		{
 			var access=ParamCtrl.capesDeServei[i].servei.access;
-			if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
+			if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || 
+				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="failed")
 				calferAlgun=calfer[i]=true;
 		}
 	}
 
-	if (nomesOffline)
+	/*if (nomesOffline)
 	{
 		if (!calferAlgun)
 			return;
@@ -4392,7 +4429,7 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat)
 		}
 	}
 	else
-	{
+	{*/
 		if (calferAlgun && !preguntat)
 		{
 			//Si hi ha alguna capa que requereix autentificació, el sistema de bloqueix de "pop ups" evita que surti la caixa a no ser que una acció de l'usuari ho invoqui. Per això cal una pregunta a l'usuari
@@ -4401,9 +4438,10 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat)
 		else
 		{
 			for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
-				CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
+				if (calfer[i])
+					CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
 		}
-	}	
+	//}	
 }
 
 function IniciaVisualitzacio()

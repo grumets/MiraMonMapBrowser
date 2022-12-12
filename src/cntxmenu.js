@@ -202,7 +202,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.origen && capa.origen==OriginUsuari)
+	if (capa.origen && capa.origen==OrigenUsuari)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirCapa(", i_capa,");TancaContextMenuCapa();\">",
 							GetMessage("ShareLayer", "cntxmenu"), "</a>");
@@ -391,7 +391,7 @@ var capa=ParamCtrl.capa[i_capa];
 						GetMessage("ModifyName"), "</a><br>");
 	cdns.push("<hr>");
 
-	if (capa.estil[i_estil].origen && capa.estil[i_estil].origen==OriginUsuari)
+	if (capa.estil[i_estil].origen && capa.estil[i_estil].origen==OrigenUsuari)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"CompartirEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 							GetMessage("ShareStyle", "cntxmenu"), "</a>");
@@ -1134,7 +1134,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 		"proces":	null,
 		"ProcesMostrarTitolCapa" : false,
-		"origen": OriginUsuari
+		"origen": OrigenUsuari
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
@@ -1294,7 +1294,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"AnimableMultiTime": false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 		"proces":	null,
 		"ProcesMostrarTitolCapa" : false,
-		"origen": OriginUsuari
+		"origen": OrigenUsuari
 		});
 
 	if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han pogut.
@@ -3275,7 +3275,7 @@ var combinacio_rgb, i_estil_nou, estil, capa;
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
 	i_estil_nou=capa.estil.length;
-	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil, "TipusObj": "P", "component": [], "origen": OriginUsuari};
+	capa.estil[capa.estil.length]={"nom": null, "desc": combinacio_rgb.nom_estil, "TipusObj": "P", "component": [], "origen": OrigenUsuari};
 	estil=capa.estil[i_estil_nou];
 
 	for (var i_c=0; i_c<3; i_c++)

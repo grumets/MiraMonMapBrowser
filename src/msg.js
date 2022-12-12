@@ -20,7 +20,7 @@
     Copyright 2001, 2022 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
+    amb l'ajut de Alba Brobia (a brobia at creaf uab cat) i Didac Pardell (d.pardell at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del
     CREAF que elabora programari de Sistema d'Informació Geogràfica
     i de Teledetecció per a la visualització, consulta, edició i anàlisi
@@ -279,7 +279,7 @@ var MessageLang={
 	WrongFormatInLine: {"cat": "Format incorrecte a la línia", "spa": "Formato incorrecto en la línea", "eng": "Wrong values format in line", "fre": "Mauvais format en ligne"},
 	cntxmenu: {
 		ShareLayer: {"cat":"Compartir capa", "spa":"Compartir capa", "eng":"Share layer", "fre":"Partager couche"},
-		RemoveLayer: {"cat":"Esborrar capa", "spa":"Borrar capa", "eng":"Delete layer", "fre":"Effacer couche"},
+		RemoveLayer: {"cat":"Eliminar capa", "spa":"Eliminar capa", "eng":"Remove layer", "fre":"Effacer couche"},
 		MoveLayer: {"cat":"Moure la capa", "spa":"Mover la capa", "eng":"Move layer", "fre":"Déplacer la couche"},
 		ToTheTop: {"cat":"A sobre de tot","spa":"Encima de todo", "eng":"To the top", "fre":"En haut de"},
 		Up: {"cat":"A sobre","spa":"Encima", "eng":"Up", "fre":"Au-dessus"},
@@ -668,7 +668,7 @@ var MessageLang={
 		indicatedTestLayerNotExist: {"cat":" indicada al paràmetre TEST_LAYERS no existeix", "spa":" indicada en el parámetro TEST_LAYERS no existe",	"eng": "indicated in TEST_LAYERS parameter does not exist",	"fre": "indiquée au paramètre TEST_LAYERS n'existe pas"},
 		RequestedPoint: {"cat":"El punt sol·licitat", "spa":"El punto solicitado", "eng":"The requested point",	"fre":"Le point requis"},
 		isOutsideBrowserEnvelope: {"cat":"està fora de l'àmbit de navegació", "spa":"está fuera del ámbito de navegación", "eng":"is outside browser envelope", "fre":"se trouve dehors le milieu de navigation"},
-		CannotFindXYParameters: {"cat":"No s'ha trobat els paràmetres 'X' i 'Y'.", 	"spa":"No se ha encontrado los parámetro 'X' y 'Y'.", "eng":"Cannot find 'X' and 'Y' parameters.",	"fre":"Les paramètres 'X' et 'Y' n’ont pas été trouvés."},
+		CannotFindXYParameters: {"cat":"No s'ha trobat els paràmetres 'X' i 'Y'.", "spa":"No se ha encontrado los parámetro 'X' y 'Y'.", "eng":"Cannot find 'X' and 'Y' parameters.",	"fre":"Les paramètres 'X' et 'Y' n’ont pas été trouvés."},
 		TheVersion: {"cat": "La versió de", "spa": "La versión de", "eng": "The version of", "fre": "La version"},
 		notAccrodingVersion: {"cat": "no es correspon amb la versió de", "spa": "no se corresponde con la versión de", "eng": "it is not according with the version of", "fre": "ne correspond pas à la version de"},
 		UpgradeCorrectly: {"cat": "Actualitza't correctament", "spa": "Actualicese correctamente", "eng": "Please, upgrade it correctly", "fre": "S'il vous plaît, actualisez vous correctement"},
@@ -691,8 +691,9 @@ var MessageLang={
 		LoginAccountFailed: {"cat": "Error o cancel·lació de la identificació amb el compte de", "spa": "Error o cancelación de la identificación en la cuenta de", "eng": "Login in your account failed or cancelled in", "fre": "La connexion à votre compte a échoué ou a été annulée dans"},
 		ContinueWithoutAuthentication: {"cat": "Vols continuar sense autentificació", "spa": "Desea continuar sin autentificación", "eng": "Do you what to continue without authentication", "fre": "Faites-vous quoi continuer sans authentification"},
 		SessionsAlreadyStarted: {"cat": "Les sessions han estat ja iniciades", "spa": "Las sesiones han sido ya iniciadas", "eng": "The sessions were already started", "fre": "Les séances étaient déjà commencées"},
+		CloseTheStartedSessions: {"cat": "Vols tancar les sessions iniciades?", "spa": "¿Desea cerrar las sesiones iniciadas?", "eng": "Do you want to close the started sessions?", "fre": "Voulez-vous fermer les sessions ouvertes?"},
 		BrowserContainsLayersRequireLogin: {"cat": "Aquest navegador conté capes que requereixen inici de sessió", "spa": "Este navegador contiene capas que requieren inicio de sesión", "eng": "This browser contains layers that require login", "fre": "Ce navigateur contient des couches qui nécessitent une connexion"},
-		DoYouWantToLogInNow: {"cat": "Vols iniciar sessió ara?", "spa": "¿Quieres iniciar sesión ahora?", "eng": "Do you want to log in now?", "fre": "Voulez-vous vous connecter maintenant?"}
+		DoYouWantToLogInNow: {"cat": "Vols iniciar sessió ara?", "spa": "¿Desea iniciar sesión ahora?", "eng": "Do you want to log in now?", "fre": "Voulez-vous vous connecter maintenant?"}
 	},
 	llinatge: {
 		Process: {"cat":"Procés", "spa":"Proceso", "eng":"Process", "fre":"Processus"},

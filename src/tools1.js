@@ -1409,7 +1409,7 @@ var elem=getFinestraLayer(win, name);
 var rec=getRectLayer(elem);
 
 	if (mida==-1)
-		mida=elem.scrollHeight;
+		mida=elem.scrollHeight+AltBarraFinestraLayer;
 	else if (mida<AltBarraFinestraLayer)
 		mida=AltBarraFinestraLayer;
 
