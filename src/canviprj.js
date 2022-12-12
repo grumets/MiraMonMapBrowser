@@ -116,8 +116,7 @@ function sign(x)
 {
 	if (x < 0.0)
 		return -1;
-	else
-		return 1;
+	return 1;
 }
 
 var CanviCRS={darrerCRS: "",
@@ -210,10 +209,10 @@ function LambertAzimuthal_Funcio_3_12_Snyder(fi)
 		return 0.0;
 	dvar2=(1.0-CanviCRS.e*sin_fi)/dvar2;
 	if (dvar2==0)
-	    	return 0.0;
+		return 0.0;
 	var dvar1=1.0-CanviCRS.e2*sin_fi*sin_fi;
 	if (dvar1==0.0)
-	    	return 0.0;
+	    return 0.0;
 	return (1.0-CanviCRS.e2)*(sin_fi/dvar1-Math.log(dvar2)/(2.0*CanviCRS.e));
 }
 
@@ -998,6 +997,42 @@ var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     return env_crs_xy;
 }
 
+//Aquesta funció no sobreescriu env sino que retorna un duplicat.
+function TransformaEnvolupant(env, crs_ori, crs_dest)
+{
+var env_ll;
+
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
+
+	env_ll=DonaEnvolupantLongLat(env, crs_ori);
+	return DonaEnvolupantCRS(env_ll, crs_dest);
+}
+
+//Aquesta funció sobreescriu el punt.
+function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		punt.x=crs_xy.x;
+		punt.y=crs_xy.y;
+	}
+}
+
+//Aquesta funció sobreescriu el coord array
+function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		coord[0]=crs_xy.x;
+		coord[1]=crs_xy.y;
+	}
+}
+
 function EsProjLongLat(crs)
 {
 	if (DonaUnitatsCoordenadesProj(crs)=="°")
@@ -1203,4 +1238,17 @@ var i= ParamCtrl.ImatgeSituacio.length;
 			return true;
 	}
 	return false;
+}
+
+function DonaEPSGDeURLOpengis(url)
+{
+	if(url.match("www.opengis.net/def/crs/OGC/1.3/CRS84"))
+	{
+		return "CRS:84";
+	}
+	if(url.match("www.opengis.net/def/crs/EPSG/"))
+	{
+		return "EPSG:"+url.slice(url.lastIndexOf("/")+1);
+	}
+	return null;
 }

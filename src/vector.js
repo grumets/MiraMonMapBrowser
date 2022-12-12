@@ -39,35 +39,207 @@
 "use strict"
 
 var model_vector="vector";
+var nom_camp_nObjs_tessella="__nObjsTessella";
+var mida_tessela_vec_defecte=256;
 
-function InicialitzaTilesSolicitatsCapaDigi(capa)
+function HiHaObjectesNumericsAAquestNivellDeZoom(capa)
 {
-var tiles;
+	if( typeof capa.model==="undefined" || capa.model!=model_vector ||
+		typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null ||
+		typeof capa.tileMatrixSetGeometry.tileMatrix==="undefined" || capa.tileMatrixSetGeometry.tileMatrix==null)
+		return false;
+	
+	var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
+	if (DonaUnitatsCoordenadesProj(capa.CRSgeometry)=="m" && EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS))
+		costat_actual=(costat_actual/FactorGrausAMetres);
+	else if (EsProjLongLat(capa.CRSgeometry) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
+		costat_actual=costat_actual*FactorGrausAMetres;
+	
+	var i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeCostat(capa.tileMatrixSetGeometry.tileMatrix, costat_actual);
+	if(typeof capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics!=="undefined" && 
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics &&
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics.features &&
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics.features.length>0)
+		return true;
+	return false;
+}
 
-	if (capa.tipus && capa.model==model_vector)
-	{
-		if (!capa.TileMatrixGeometry)
-		{
-			capa.TileMatrixGeometry={"MatrixWidth": 1, "MatrixHeight": 1, "tiles_solicitats": []};
-			tiles=capa.TileMatrixGeometry;
-		}
-		else
-		{
-			tiles=capa.TileMatrixGeometry;
-			if (!tiles.MatrixWidth)
-				tiles.MatrixWidth=1;
-			if (!tiles.MatrixHeight)
-				tiles.MatrixHeight=1;
-			//Creo un array de tiles
-			tiles.tiles_solicitats=[];
-		}
-		for(var i_tiles=0; i_tiles<tiles.MatrixWidth*tiles.MatrixHeight; i_tiles++)
-			tiles.tiles_solicitats[i_tiles]="TileNoSolicitat";
+function HiHaObjectesNumerics(capa)
+{
+	if(typeof capa.model==="undefined" || capa.model!=model_vector ||
+		typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null ||
+		typeof capa.tileMatrixSetGeometry.tileMatrix==="undefined" || capa.tileMatrixSetGeometry.tileMatrix==null)
+		return false;
+	
+	for(var i=0; i<capa.tileMatrixSetGeometry.tileMatrix.length; i++)
+	{		
+		if(typeof capa.tileMatrixSetGeometry.tileMatrix[i].objNumerics!=="undefined" && 
+			capa.tileMatrixSetGeometry.tileMatrix[i].objNumerics &&			
+			capa.tileMatrixSetGeometry.tileMatrix[i].objNumerics.features &&
+			capa.tileMatrixSetGeometry.tileMatrix[i].objNumerics.features.length>0)
+		return true;
 	}
+	return false;
 }
 
 
-//Fer sol·licitar la informació dels atributs d'un punt determinat
+function InicialitzaIComprovaTileMatrixGeometryCapaDigi(capa)
+{
+var TMG, tiles, env_capa;
+
+	if(typeof capa.tipus==="undefined" || capa.tipus==null ||
+		typeof capa.model==="undefined" || capa.model!=model_vector)
+		return;
+	
+		
+	// En principi si no tinc límits no té sentit que hagi més d'un nivell de tessel·lació perquè al ser un model vectorial amb el que treballem amb els objectes directament
+	// de moment sempre tenim els mateixos objectes, tot i que això podria no ser veritat en un futur, perquè en el OGC s'està treballant per fer tessel·les de vectors i es podrien 
+	// servir objectes diferents en funció del nivell de zoom
+	
+	if (typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null)
+		capa.tileMatrixSetGeometry={};
+	
+	TMG=capa.tileMatrixSetGeometry;
+	
+	if(typeof capa.objLimit!=="undefined" && capa.objLimit!=-1)
+	{		
+		if(typeof TMG.atriObjNumerics==="undefined" || TMG.atriObjNumerics==null)
+			TMG.atriObjNumerics=[{"nom": nom_camp_nObjs_tessella}];	
+	}
+	
+	// Determino l'envolupant per poder determinar l'espai de tessel·lació
+	env_capa={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": capa.CRSgeometry};
+	if(capa.EnvTotal)
+	{
+		env_capa.EnvCRS.MinX=capa.EnvTotal.EnvCRS.MinX;
+		env_capa.EnvCRS.MinY=capa.EnvTotal.EnvCRS.MinY;
+		env_capa.EnvCRS.MaxX=capa.EnvTotal.EnvCRS.MaxX;
+		env_capa.EnvCRS.MaxY=capa.EnvTotal.EnvCRS.MaxY;
+
+		if(capa.EnvTotal.CRS && !DonaCRSRepresentaQuasiIguals(capa.EnvTotal.CRS, env_capa.CRS))
+			TransformaEnvolupant(env_capa.EnvCRS, crs_ori, env_capa.CRS);
+	}
+	else
+	{
+		var env_temp;
+		for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
+		{
+			if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS, env_capa.CRS))
+				env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS;
+			else
+				env_temp=TransformaEnvolupant(ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, env_capa.CRS.toUpperCase())
+			
+			if (env_capa.EnvCRS.MinX>env_temp.MinX)
+				env_capa.EnvCRS.MinX=env_temp.MinX;
+			if (env_capa.EnvCRS.MaxX<env_temp.MaxX)
+				env_capa.EnvCRS.MaxX=env_temp.MaxX;
+			if (env_capa.EnvCRS.MinY>env_temp.MinY)
+				env_capa.EnvCRS.MinY=env_temp.MinY;
+			if (env_capa.EnvCRS.MaxY<env_temp.MaxY)
+				env_capa.EnvCRS.MaxY=env_temp.MaxY;
+		}
+	}
+	var factor=1;
+	if (DonaUnitatsCoordenadesProj(env_capa.CRS)=="m" && EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS))
+		factor=1/FactorGrausAMetres;
+	else if (EsProjLongLat(env_capa.CRS) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
+		factor=FactorGrausAMetres;
+
+	// Calculo la tessel·lació si cal, usant el nivell 0 de l'array com a model		
+	if(typeof capa.objLimit==="undefined" || capa.objLimit==-1)
+	{
+		if (typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null)		
+		{		
+			// Si no tinc límit d'objectes faig la tessel·lació amb el costat de píxel més gran i amb una única tessel·la 
+			TMG.tileMatrix=[{"TopLeftPoint": { "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY}, 
+						"TileWidth":Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(1*capa.CostatMaxim)), 
+						"TileHeight":Math.ceil((env_capa.EnvCRS.MaxY-env_capa.EnvCRS.MinY)/(1*capa.CostatMaxim)),
+						"costat": capa.CostatMaxim, 
+						"MatrixWidth":1, 
+						"MatrixHeight":1}];			
+		}
+		else if(TMG.tileMatrix.length==1)
+		{
+			// Si no tinc límit d'objectes faig la tessel·lació amb el costat de píxel més gran perquè sinó he de fer moltíssimes peticions i això és inviable.
+			if(typeof TMG.tileMatrix[0].TopLeftPoint === "undefined")
+				TMG.tileMatrix[0].TopLeftPoint={ "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY};						
+				
+			if(typeof TMG.tileMatrix[0].costat === "undefined")
+				TMG.tileMatrix[0].costat=capa.CostatMaxim;	
+			if(typeof TMG.tileMatrix[0].MatrixWidth === "undefined")
+			{		
+				if(typeof TMG.tileMatrix[0].TileWidth === "undefined")
+				{				
+					TMG.tileMatrix[0].MatrixWidth=1;
+					TMG.tileMatrix[0].TileWidth=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].MatrixWidth*capa.CostatMaxim));		
+				}
+				else
+					TMG.tileMatrix[0].MatrixWidth=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].TileWidth*capa.CostatMaxim));		
+			}
+			if(typeof TMG.tileMatrix[0].MatrixHeight === "undefined")
+			{		
+				if(typeof TMG.tileMatrix[0].TileHeight === "undefined")
+				{				
+					TMG.tileMatrix[0].MatrixHeight=1;
+					TMG.tileMatrix[0].TileHeight=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].MatrixHeight*capa.CostatMaxim));		
+				}
+				else
+					TMG.tileMatrix[0].MatrixHeight=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].TileHeight*capa.CostatMaxim));		
+			}			
+			if(typeof TMG.tileMatrix[0].TileWidth === "undefined")
+				TMG.tileMatrix[0].TileWidth=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].MatrixWidth*capa.CostatMaxim));		
+			if(typeof TMG.tileMatrix[0].TileHeight === "undefined")
+				TMG.tileMatrix[0].TileHeight=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].MatrixHeight*capa.CostatMaxim));		
+		}
+		return;
+	}
+
+	if((typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null) || TMG.tileMatrix.length==1)  // si l'usuari no m'ha indicat la tessel·lacó la calculo sinó faig cas del que em diu
+	{
+		if (typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null)		
+			TMG.tileMatrix=[];		
+		
+		var topLeftPoint={ "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY}, 
+			tileWidth=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileWidth === "number")? TMG.tileMatrix[0].TileWidth:mida_tessela_vec_defecte),
+			tileHeight=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileHeight === "number")? TMG.tileMatrix[0].TileHeight:mida_tessela_vec_defecte);		
+			
+		// Creo o comprovo l'espai de tessel·lació		
+		for(var i_zoom=ParamCtrl.zoom.length-1, i_tile_matrix=0; i_zoom>=0; i_zoom--,i_tile_matrix++)
+		{
+			if(ParamCtrl.zoom[i_zoom].costat>=capa.CostatMinim && ParamCtrl.zoom[i_zoom].costat<=capa.CostatMaxim)				
+			{
+				if(typeof TMG.tileMatrix[i_tile_matrix]=== "undefined")
+					TMG.tileMatrix[i_tile_matrix]={};									
+				if(typeof TMG.tileMatrix[i_tile_matrix].costat !== "number")
+					TMG.tileMatrix[i_tile_matrix].costat=ParamCtrl.zoom[i_zoom].costat*factor;						
+				if(typeof TMG.tileMatrix[i_tile_matrix].TileHeight !== "number")
+					TMG.tileMatrix[i_tile_matrix].TileHeight=tileHeight;
+				if(typeof TMG.tileMatrix[i_tile_matrix].TileWidth !== "number")
+					TMG.tileMatrix[i_tile_matrix].TileWidth=tileWidth;
+				if(typeof TMG.tileMatrix[i_tile_matrix].TileHeight !== "number")
+					TMG.tileMatrix[i_tile_matrix].TileHeight=tileHeight;
+				if(typeof TMG.tileMatrix[i_tile_matrix].TopLeftPoint === "undefined")
+					TMG.tileMatrix[i_tile_matrix].TopLeftPoint=topLeftPoint;					
+				if(typeof TMG.tileMatrix[i_tile_matrix].MatrixWidth !== "number")
+					TMG.tileMatrix[i_tile_matrix].MatrixWidth=Math.ceil((env_capa.EnvCRS.MaxX-TMG.tileMatrix[i_tile_matrix].TopLeftPoint.x)/(tileWidth*TMG.tileMatrix[i_tile_matrix].costat));
+				if(typeof TMG.tileMatrix[i_tile_matrix].MatrixHeight !== "number")
+					TMG.tileMatrix[i_tile_matrix].MatrixHeight=Math.ceil((TMG.tileMatrix[i_tile_matrix].TopLeftPoint.y-env_capa.EnvCRS.MinY)/(tileHeight*TMG.tileMatrix[i_tile_matrix].costat));
+				
+				if(TMG.tileMatrix[i_tile_matrix].MatrixWidth==1 && TMG.tileMatrix[i_tile_matrix].MatrixHeight==1)
+				{
+					//Ajusto l'envolupant de la tessel·la de manera que l'envolupant de la capa quedi centrada a la tessel·la				
+					TMG.tileMatrix[i_tile_matrix].TopLeftPoint={"x":(env_capa.EnvCRS.MinX+(env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/2)-(TMG.tileMatrix[i_tile_matrix].costat*TMG.tileMatrix[i_tile_matrix].TileWidth/2),
+													"y":(env_capa.EnvCRS.MaxY-(env_capa.EnvCRS.MaxY-env_capa.EnvCRS.MinY)/2)+(TMG.tileMatrix[i_tile_matrix].costat*TMG.tileMatrix[i_tile_matrix].TileHeight/2)};
+					// Recalculo la tessel·lació perquè ara pot haver canviat i que necessiti més tessel·les
+					TMG.tileMatrix[i_tile_matrix].MatrixWidth=Math.ceil((env_capa.EnvCRS.MaxX-TMG.tileMatrix[i_tile_matrix].TopLeftPoint.x)/(tileWidth*TMG.tileMatrix[i_tile_matrix].costat));
+					TMG.tileMatrix[i_tile_matrix].MatrixHeight=Math.ceil((TMG.tileMatrix[i_tile_matrix].TopLeftPoint.y-env_capa.EnvCRS.MinY)/(tileHeight*TMG.tileMatrix[i_tile_matrix].costat));
+				}				
+			}
+		}
+	}
+}
+
+// Fer sol·licitar la informació dels atributs d'un punt determinat
 function ComparaObjCapaDigiIdData(x,y) {
 	//Ascendent per identificador i descendent per data
 	if (x.id < y.id) return -1;
@@ -148,7 +320,6 @@ function OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objecte_json, atributs, featur
 
 function OmpleAtributsObjecteCapaDigiDesDeGeoJSONDeSOS(objecte_json, capa, feature)
 {
-
 	if (!objecte_json.result)
 		return;
 
@@ -544,12 +715,12 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		return false; //no hi ha cap objecte que li faltin les properties.
 	if (tipus=="TipusWFS")
 	{
-		url=DonaRequestGetFeature(param.i_capa, ParamInternCtrl.vista.EnvActual, null, true);
+		url=DonaRequestGetFeature(param.i_capa, null, ParamInternCtrl.vista.EnvActual, null, true);
 		i_event=CreaIOmpleEventConsola("GetFeature", param.i_capa, url, TipusEventGetFeature);
 	}
 	else if (tipus=="TipusOAPI_Features")
 	{
-		url=DonaRequestGetFeature(param.i_capa, ParamInternCtrl.vista.EnvActual, null, true);
+		url=DonaRequestGetFeature(param.i_capa, null, ParamInternCtrl.vista.EnvActual, null, true);
 		i_event=CreaIOmpleEventConsola("OAPI_Features", param.i_capa, url, TipusEventGetFeature);
 	}
 	else if (tipus=="TipusSOS")
@@ -559,7 +730,7 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 	}
 	else //if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 	{
-		url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
+		url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("STA Observations", param.i_capa, url, TipusEventGetObservation);
 	}
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
@@ -832,12 +1003,22 @@ var features=[], foi;
 	}
 	return features;
 }
+function DonaPuntCentreEnvolupantTessella(capa, tile)
+{
+var TM=capa.tileMatrixSetGeometry.tileMatrix;
+	
+	var i=DonaIndexTileMatrixVectorAPartirDeCostat(TM, tile.costat);
+	if(i==-1)
+		return {"x":0, "y":0};	
+	return {"x": TM[i].TopLeftPoint.x +(tile.iTile*TM[i].TileWidth*TM[i].costat) +(TM[i].TileWidth*TM[i].costat/2),
+			"y": TM[i].TopLeftPoint.y -(tile.jTile*TM[i].TileHeight*TM[i].costat)-(TM[i].TileHeight*TM[i].costat/2)};
+}
 
-
-//Els objectes es mantene en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
+//Els objectes es mantenen en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
-var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus;
+var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus, tile, i_tile_matrix=-1;
+var nObj=false, tm=null, hi_havia_objectes_tm=false;
 
 	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serà un punt
 	if(!doc)
@@ -848,46 +1029,95 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 
 	capa=ParamCtrl.capa[consulta.i_capa_digi];
 	tipus=DonaTipusServidorCapa(capa);
+	if(consulta.i_tile!=-1)
+	{
+		tile=capa.tileMatrixSetGeometry.tilesSol[consulta.i_tile];
+		i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeCostat(capa.tileMatrixSetGeometry.tileMatrix, tile.costat);
+		tm=capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix];
+	}
+	else	
+		tile=null;
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 	{
 		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
-		{
-			if (capa.objectes && capa.objectes.features)
-			{
-				hi_havia_objectes=true;
-				//si hi ha una bbox es podria actualitzar però com que no la uso...
-				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
-					var features=doc.features;
-				else if (tipus=="TipusSOS")
-					var features=doc.featureOfInterest;
+		{				
+			if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 && tile!=null)
+			{					
+				// Potser que hagi rebuts els objectes o el nombre d'objectes o les dues coses
+				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+				{	
+					if(doc.numberOfFeatures)
+						tile.nombreObjectes=doc.numberOfFeatures;  // si WFS versió < 2.0
+					else if (doc.numberMatched)
+						tile.nombreObjectes=doc.numberMatched; // si WFS versió >= 2.0										
+				}
 				else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-					var features=ExtreuITransformaSTAfeatures(doc);
-				if(features.length>0)
 				{
+					if((typeof doc["@iot.count"]!=="undefined") && doc["@iot.count"]!=null)
+						tile.nombreObjectes=doc["@iot.count"]; // si STA					
+				}
+				if(tile.nombreObjectes==0 || (tile.nombreObjectes>0 && tile.nombreObjectes<capa.objLimit))
+				{
+					CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
+					// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
+					FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, false, consulta.funcio, consulta.param);					
+					return;
+				}
+				// Afegeixo un objecte númeric amb el nombre d'Objectes de la tessel·la
+				nObj=true;
+				if((typeof tm.objNumerics==="undefined") || tm.objNumerics==null)
+					tm.objNumerics={"type":"FeatureCollection", "features":[]};
+				else if((typeof tm.objNumerics.features==="undefined") || tm.objNumerics.features==null)
+					tm.objNumerics.features=[];
+				else
+					hi_havia_objectes_tm=true;
+				var puntCentre=DonaPuntCentreEnvolupantTessella(capa, tile);
+				var objecteNum={"type": "Feature",
+							"id" : (tile.iTile +"_"+tile.jTile),										
+							"geometry": {"type": "Point","coordinates": [puntCentre.x, puntCentre.y]}, 
+							"properties": {}};								
+				objecteNum.properties[capa.tileMatrixSetGeometry.atriObjNumerics[0].nom]=tile.nombreObjectes;
+				tm.objNumerics.features.push(objecteNum);														
+			}
+			if(!nObj)
+			{
+				if (capa.objectes && capa.objectes.features)
+				{
+					hi_havia_objectes=true;
+					//si hi ha una bbox es podria actualitzar però com que no la uso...
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
+						var features=doc.features;
+					else if (tipus=="TipusSOS")
+						var features=doc.featureOfInterest;
+					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+						var features=ExtreuITransformaSTAfeatures(doc);
+					if(features.length>0)
+					{
+						/*NJ no sé perquè serveix això
+						for (i=0; i<features.length; i++)
+							features[i].id=features[i].id.substring(capa.nom.length+1); */
+						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
+					}
+				}
+				else
+				{
+					hi_havia_objectes=false;
+					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
+						capa.objectes=doc;
+					if (tipus=="TipusSOS")
+						capa.objectes={"type": "FeatureCollection", "features": doc.featureOfInterest};
+					else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+					{
+						var features=ExtreuITransformaSTAfeatures(doc);
+						capa.objectes={"type": "FeatureCollection", "features": features};
+					}
 					/*NJ no sé perquè serveix això
+					var features=capa.objectes.features;
 					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1); */
-					capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
+						features[i].id=features[i].id.substring(capa.nom.length+1);*/
 				}
 			}
-			else
-			{
-				hi_havia_objectes=false;
-				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
-					capa.objectes=doc;
-				if (tipus=="TipusSOS")
-					capa.objectes={"type": "FeatureCollection", "features": doc.featureOfInterest};
-				else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-				{
-					var features=ExtreuITransformaSTAfeatures(doc);
-					capa.objectes={"type": "FeatureCollection", "features": features};
-				}
-				/*NJ no sé perquè serveix això
-				var features=capa.objectes.features;
-				for (i=0; i<features.length; i++)
-					features[i].id=features[i].id.substring(capa.nom.length+1);*/
-			}
-		}
+		}	
 		else
 		{
 			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -902,138 +1132,204 @@ var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus
 			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 			return;
 		}
-
-		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
-		{
-			if(!capa.namespace || capa.namespace==null)
+		if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 && tile)
+		{					
+			// Potser que hagi rebuts els objectes o el nombre d'objectes o les dues coses
+			if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 			{
-				var ns;
-				var atributs=root.attributes;
+				var atributs=root.attributes, atribNObjs=null;				
 				if(atributs)
-					ns=atributs.getNamedItem("xmlns");
-				if(ns)
-					capa.namespace=ns.value;
+				{
+					atribNObjs=atributs.getNamedItem("numberOfFeatures");// si WFS versió < 2.0
+					if(!atribNObjs)
+						atribNObjs=atributs.getNamedItem("numberMatched");// si WFS versió >= 2.0	
+				}
+				if(atribNObjs)
+					tile.nombreObjectes=atribNObjs.value;
+			}			
+			if(tile.nombreObjectes==0 || (tile.nombreObjectes>0 && tile.nombreObjectes<capa.objLimit))
+			{
+				CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
+				// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
+				FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, false, consulta.funcio, consulta.param);					
+				return;
 			}
-			objectes=root.getElementsByTagName(capa.nom);
+			nObj=true;			
+			if((typeof tm.objNumerics==="undefined") || tm.objNumerics==null)
+				tm.objNumerics={"type":"FeatureCollection", "features":[]};
+			else if((typeof tm.objNumerics.features==="undefined") || tm.objNumerics.features==null)
+				tm.objNumerics.features=[];
+			else
+				hi_havia_objectes_tm=true;
+			var puntCentre=DonaPuntCentreEnvolupantTessella(capa, tile);
+			var objecteNum={"type": "Feature",
+							"id" : (tile.iTile +"_"+tile.jTile),										
+							"geometry": {"type": "Point","coordinates": [puntCentre.x, puntCentre.y]}, 
+							"properties": {}};
+			objecteNum.properties[capa.tileMatrixSetGeometry.atriObjNumerics[0].nom]=tile.nombreObjectes;
+			tm.objNumerics.features.push(objecteNum);																	
 		}
-		else if (tipus=="TipusSOS")
-			objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/samplingSpatial/2.0", "sams", "SF_SpatialSamplingFeature");
-		else
+		if(!nObj)
 		{
-			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
-			return;
-		}
-
-		if(objectes && objectes.length>0)
-		{
-			if (capa.objectes && capa.objectes.features)
-				hi_havia_objectes=true;
+			if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+			{
+				if(!capa.namespace || capa.namespace==null)
+				{
+					var ns;
+					var atributs=root.attributes;
+					if(atributs)
+						ns=atributs.getNamedItem("xmlns");
+					if(ns)
+						capa.namespace=ns.value;
+				}
+				objectes=root.getElementsByTagName(capa.nom);
+			}
+			else if (tipus=="TipusSOS")
+				objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/samplingSpatial/2.0", "sams", "SF_SpatialSamplingFeature");
 			else
 			{
-				capa.objectes={"type": "FeatureCollection", "features": []};
-				hi_havia_objectes=false;
+				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+				return;
 			}
-			for(var i_obj=0; i_obj<objectes.length; i_obj++)
+			if(objectes && objectes.length>0)
 			{
-				//Agafo l'identificador del punt i creo l'objecte dins de la Capa
-				valor=objectes[i_obj].getAttribute('gml:id');
-				valor=valor.substring(capa.nom.length+1); //elimino el nom de la capa de l'id.
-				feature=capa.objectes.features[capa.objectes.features.push({
-									"id": valor,
-									"geometry": {
-										"type": "Point",
-										"coordinates": [0.0, 0.0]
-									},
-									"properties": {},
-									"seleccionat": (consulta.seleccionar? true : false)
-								})-1];
-
-				if(objectes[i_obj].hasChildNodes)
-				{
-					//Agafo la posició dels objectes
-					tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/gml", "gml", "pos");
-					if(tag.length>0)
-					{
-						//cal_crear_vista=true;
-						valor=tag[0].childNodes[0].nodeValue;
-						var coord=valor.split(" ");
-						if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // ·$· NJ-> JM Crec que això no està bé, perquè les coordenades en el cas del SOS són de moment sempre en EPGS:4326 i  no en el sistema de sistuació acutal
-						{
-							feature.geometry.coordinates[0]=parseFloat(coord[1]);
-							feature.geometry.coordinates[1]=parseFloat(coord[0]);
-						}
-						else
-						{
-							feature.geometry.coordinates[0]=parseFloat(coord[0]);
-							feature.geometry.coordinates[1]=parseFloat(coord[1]);
-						}
-						CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-						if(consulta.seleccionar==true)
-						{
-							//Actualitzar EnvSelec, que sempre està en el sistema de coordenades actual
-							DonaCoordenadaPuntCRSActual(punt, feature, capa.CRSgeometry);
-							if(EnvSelec==null)
-								EnvSelec={"MinX": punt.x, "MaxX": punt.x, "MinY": punt.y, "MaxY": punt.y};
-							else
-							{
-								if(punt.x<EnvSelec.MinX)
-									EnvSelec.MinX=punt.x;
-								if(punt.x>EnvSelec.MaxX)
-									EnvSelec.MaxX=punt.x;
-								if(punt.y<EnvSelec.MinY)
-									EnvSelec.MinY=punt.y;
-								if(punt.y>EnvSelec.MaxY)
-									EnvSelec.MaxY=punt.y;
-							}
-						}
-					}
-
-					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
-					{
-						//ara els atributs
-						OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, feature);
-					}
-					//ara el i_simbol
-					//DeterminaISimbolObjecteCapaDigi(capa, i_obj);
-				}
-			}
-			CarregaSimbolsEstilActualCapaDigi(capa);
-		}
-	}
-	if (capa.objectes && capa.objectes.features && capa.objectes.features.length==0)
-		capa.objectes=null;
-
-	if (capa.objectes && capa.objectes.features)
-	{
-		//Elimino els objectes que han estat carregats més d'un cop. Això pot passar en usar tiles.
-		var features=capa.objectes.features;
-		features.sort(ComparaObjCapaDigiIdData);
-		if (hi_havia_objectes)
-		{
-			var anterior=features[0].id;
-			var i=1;
-			while(i<features.length)
-			{
-				if(anterior==features[i].id)
-					features.splice(i,1);
+				if (capa.objectes && capa.objectes.features)
+					hi_havia_objectes=true;
 				else
 				{
-					anterior=features[i].id;
-					i++;
+					capa.objectes={"type": "FeatureCollection", "features": []};
+					hi_havia_objectes=false;
 				}
+				for(var i_obj=0; i_obj<objectes.length; i_obj++)
+				{
+					//Agafo l'identificador del punt i creo l'objecte dins de la Capa
+					valor=objectes[i_obj].getAttribute('gml:id');
+					valor=valor.substring(capa.nom.length+1); //elimino el nom de la capa de l'id.
+					feature=capa.objectes.features[capa.objectes.features.push({
+										"id": valor,
+										"geometry": {
+											"type": "Point",
+											"coordinates": [0.0, 0.0]
+										},
+										"properties": {},
+										"seleccionat": (consulta.seleccionar? true : false)
+									})-1];
+
+					if(objectes[i_obj].hasChildNodes)
+					{
+						//Agafo la posició dels objectes
+						tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/gml", "gml", "pos");
+						if(tag.length>0)
+						{
+							//cal_crear_vista=true;
+							valor=tag[0].childNodes[0].nodeValue;
+							var coord=valor.split(" ");
+							if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // ·$· NJ-> JM Crec que això no està bé, perquè les coordenades en el cas del SOS són de moment sempre en EPGS:4326 i  no en el sistema de sistuació acutal
+							{
+								feature.geometry.coordinates[0]=parseFloat(coord[1]);
+								feature.geometry.coordinates[1]=parseFloat(coord[0]);
+							}
+							else
+							{
+								feature.geometry.coordinates[0]=parseFloat(coord[0]);
+								feature.geometry.coordinates[1]=parseFloat(coord[1]);
+							}
+							CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+							if(consulta.seleccionar==true)
+							{
+								//Actualitzar EnvSelec, que sempre està en el sistema de coordenades actual
+								DonaCoordenadaPuntCRSActual(punt, feature, capa.CRSgeometry);
+								if(EnvSelec==null)
+									EnvSelec={"MinX": punt.x, "MaxX": punt.x, "MinY": punt.y, "MaxY": punt.y};
+								else
+								{
+									if(punt.x<EnvSelec.MinX)
+										EnvSelec.MinX=punt.x;
+									if(punt.x>EnvSelec.MaxX)
+										EnvSelec.MaxX=punt.x;
+									if(punt.y<EnvSelec.MinY)
+										EnvSelec.MinY=punt.y;
+									if(punt.y>EnvSelec.MaxY)
+										EnvSelec.MaxY=punt.y;
+								}
+							}
+						}
+
+						if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+						{
+							//ara els atributs
+							OmpleAtributsObjecteCapaDigiDesDeWFS(objectes[i_obj], capa.atributs, feature);
+						}
+						//ara el i_simbol
+						//DeterminaISimbolObjecteCapaDigi(capa, i_obj);
+					}
+				}
+				CarregaSimbolsEstilActualCapaDigi(capa);
 			}
 		}
 	}
+	if(!nObj)
+	{
+		if (capa.objectes && capa.objectes.features && capa.objectes.features.length==0)
+			capa.objectes=null;
 
-	if (!hi_havia_objectes)
-		DefineixAtributsCapaVectorSiCal(capa);
+		if (capa.objectes && capa.objectes.features)
+		{
+			//Elimino els objectes que han estat carregats més d'un cop. Això pot passar en usar tiles.
+			var features=capa.objectes.features;
+			features.sort(ComparaObjCapaDigiIdData);
+			if (hi_havia_objectes)
+			{
+				var anterior=features[0].id;
+				var i=1;
+				while(i<features.length)
+				{
+					if(anterior==features[i].id)
+						features.splice(i,1);
+					else
+					{
+						anterior=features[i].id;
+						i++;
+					}
+				}
+			}
+		}
 
-	CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+		if (!hi_havia_objectes)
+			DefineixAtributsCapaVectorSiCal(capa);
 
-	if(consulta.i_tile!=-1)
-		capa.TileMatrixGeometry.tiles_solicitats[consulta.i_tile]="TileRebut";
-	/*if(consulta.seleccionar==false && cal_crear_vista)
-		CreaVistes(); Ara el redibuixat es fa en el canvas quan totes les tiles han finalitzat i no cal forçar-lo a cada tile mai.*/
+		CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+		/*if(consulta.seleccionar==false && cal_crear_vista)
+			CreaVistes(); Ara el redibuixat es fa en el canvas quan totes les tiles han finalitzat i no cal forçar-lo a cada tile mai.*/
+	}
+	else if(tm)
+	{
+		if (tm.objNumerics && tm.objNumerics.features && tm.objNumerics.features.length==0)
+			tm.objNumerics=null;
+		
+		if (tm.objNumerics && tm.objNumerics.features)
+		{
+			//Elimino els objectes que han estat carregats més d'un cop. 
+			var features=tm.objNumerics.features;
+			features.sort(ComparaObjCapaDigiIdData);
+			if (hi_havia_objectes_tm)
+			{
+				var anterior=features[0].id;
+				var i=1;
+				while(i<features.length)
+				{
+					if(anterior==features[i].id)
+						features.splice(i,1);
+					else
+					{
+						anterior=features[i].id;
+						i++;
+					}
+				}
+			}
+		}
+		
+	}
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 	if(consulta.funcio)
 		consulta.funcio(consulta.param);
@@ -1045,60 +1341,62 @@ function ErrorCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 }//Fi de ErrorCapaDigiAmbObjectesDigitalitzats()
 
-//Dona l'index dins de l'array d'atributs d'un nom d'attribut
-function DonaIAtributsDesDeNomAtribut(capa_digi, nom_atribut)
+//Dona l'índex dins de l'array d'atributs d'un nom d'attribut
+function DonaIAtributsDesDeNomAtribut(capa_digi, atributs, nom_atribut)
 {
-	for(var i=0; i<capa_digi.atributs.length; i++)
+	if(atributs==null)
+		return -1;
+	for(var i=0; i<atributs.length; i++)
 	{
-		if(!capa_digi.atributs[i].nom)
+		if(!atributs[i].nom)
 		{
 			alert("The "+i+" attribute of the layer "+capa_digi.nom+" has no name.");
 			return -1;
 		}
-		if(capa_digi.atributs[i].nom.toUpperCase()==nom_atribut.toUpperCase())
+		if(atributs[i].nom.toUpperCase()==nom_atribut.toUpperCase())
 			return i;
 	}
 	return -1;
 }
 
-//Determina el valor per una data concreta. Pensada per muntar series temporals
-function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, i_data, i_col, i_fil)
+//Determina el valor per una data concreta. Pensada per muntar sèries temporals
+function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, feature, atribut, i_data, i_col, i_fil)
 {
-	if (capa.atributs[i_atrib].calcul && !capa.atributs[i_atrib].FormulaConsulta)
+	if (atribut.calcul && !atribut.FormulaConsulta)
 	{
 		alert("Irregular situation in the code. This needs to be solved in the feature collection level.");
 		return 0;
 	}
 
-	if (capa.atributs[i_atrib].FormulaConsulta)
+	if (atribut.FormulaConsulta)
 	{
-		var p=capa.objectes.features[i_obj_capa].properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
-		var nonPropId=capa.objectes.features[i_obj_capa].id;
-		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, capa.atributs[i_atrib].FormulaConsulta))
+		var p=feature.properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
+		var nonPropId=feature.id;
+		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, atribut.FormulaConsulta))
 			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i_col, i_fil); //idem
-		return eval(CanviaVariablesDeCadena(capa.atributs[i_atrib].FormulaConsulta, capa, i_data));
+		return eval(CanviaVariablesDeCadena(atribut.FormulaConsulta, capa, i_data));
 	}
-	if (capa.atributs[i_atrib].nom=="nonPropId")
-		return capa.objectes.features[i_obj_capa].id;
-	return capa.objectes.features[i_obj_capa].properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data)];
+	if (atribut.nom=="nonPropId")
+		return feature.id;
+	return feature.properties[CanviaVariablesDeCadena(atribut.nom, capa, i_data)];
 }
 
 //Determina el valor per la data actual
-function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, i_col, i_fil)
+function DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa, feature, atribut, i_col, i_fil)
 {
-	return DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, i_obj_capa, i_atrib, null, i_col, i_fil)
+	return DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, feature, atribut, null, i_col, i_fil)
 }
 
-function DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil)
+function DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, feature, atribut, i_col, i_fil)
 {
-	return DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, null, i_col, i_fil);
+	return DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, feature, atribut, null, i_col, i_fil);
 }
 
-function DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_data, i_col, i_fil)
+function DeterminaTextValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, feature, atribut, i_data, i_col, i_fil)
 {
-	var valor=DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_data, i_col, i_fil);
-	if (capa_digi.atributs[i_atrib].NDecimals || capa_digi.atributs[i_atrib].NDecimals===0)
-		return OKStrOfNe(valor, capa_digi.atributs[i_atrib].NDecimals);
+	var valor=DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa_digi, feature, atribut, i_data, i_col, i_fil);
+	if (atribut.NDecimals || atribut.NDecimals===0)
+		return OKStrOfNe(valor, atribut.NDecimals);
 	return valor;
 }
 
@@ -1111,62 +1409,50 @@ function AlertaNomAtributIncorrecteSimbolitzar(nom_camp, text_nom_camp, capa_dig
 				DonaCadenaNomDesc(capa_digi));
 }
 
-function DeterminaValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)
+function DeterminaValorObjecteCapaDigi(i_nova_vista, capa_digi, atributs, estil, feature, i_simbs, i_col, i_fil, nom_camp)
 {
-var estil, i_atrib;
-	if(capa_digi.estil && capa_digi.estil.length && nom_camp &&
-		capa_digi.objectes.features[i_obj_capa].properties &&
-		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	if(estil && nom_camp && feature.properties && CountPropertiesOfObject(feature.properties)>0)
 	{
-		estil=capa_digi.estil[capa_digi.i_estil];
-		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, nom_camp);
+		var i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, atributs, nom_camp);
 		if (i_atrib==-1)
 		{
 			AlertaNomAtributIncorrecteSimbolitzar(nom_camp, "NomCamp*", capa_digi);
 			return 0;
 		}
-		return DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+		return DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, feature, atributs[i_atrib], i_col, i_fil);
 	}
 	return 0;
 }
 
-function DeterminaTextValorObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil, nom_camp)
+function DeterminaTextValorObjecteCapaDigi(i_nova_vista, capa_digi, atributs, estil, feature, i_simbs, i_col, i_fil, nom_camp)
 {
-var estil, i_atrib;
-	if(capa_digi.estil && capa_digi.estil.length && nom_camp &&
-		capa_digi.objectes.features[i_obj_capa].properties &&
-		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	if(estil && nom_camp && feature.properties && CountPropertiesOfObject(feature.properties)>0)
 	{
-		estil=capa_digi.estil[capa_digi.i_estil];
-		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, nom_camp);
+		var i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, atributs, nom_camp);
 		if (i_atrib==-1)
 		{
 			AlertaNomAtributIncorrecteSimbolitzar(nom_camp, "NomCamp*", capa_digi);
 			return 0;
 		}
-		return DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
+		return DeterminaTextValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, feature, atributs[i_atrib], i_col, i_fil);
 	}
 	return 0;
 }
 
-function DeterminaISimbolObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_simbs, i_col, i_fil)
+function DeterminaISimbolObjecteCapaDigi(i_nova_vista, capa_digi, atributs, estil, feature, i_simbs, i_col, i_fil)
 {
-var i_simbol, estil, valor, i_atrib;
-	if(capa_digi.estil && capa_digi.estil.length &&
-		capa_digi.estil[capa_digi.i_estil].simbols && capa_digi.estil[capa_digi.i_estil].simbols.length &&
-		capa_digi.estil[capa_digi.i_estil].simbols[i_simbs].NomCamp &&
-		capa_digi.objectes.features[i_obj_capa].properties &&
-		CountPropertiesOfObject(capa_digi.objectes.features[i_obj_capa].properties)>0)
+	if(estil && estil.simbols && estil.simbols.length &&
+		estil.simbols[i_simbs].NomCamp && feature.properties &&
+		CountPropertiesOfObject(feature.properties)>0)
 	{
-		estil=capa_digi.estil[capa_digi.i_estil];
-		i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, estil.simbols[i_simbs].NomCamp)
+		var i_atrib=DonaIAtributsDesDeNomAtribut(capa_digi, atributs, estil.simbols[i_simbs].NomCamp)
 		if (i_atrib==-1)
 		{
 			AlertaNomAtributIncorrecteSimbolitzar(estil.simbols[i_simbs].NomCamp, "estil.simbols[i_simbs].NomCamp", capa_digi);
 			return -1;
 		}
-		valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, i_obj_capa, i_atrib, i_col, i_fil);
-		for(i_simbol=0; i_simbol<estil.simbols[i_simbs].simbol.length; i_simbol++)
+		var valor=DeterminaValorAtributObjecteCapaDigi(i_nova_vista, capa_digi, feature, atributs[i_atrib], i_col, i_fil);
+		for(var i_simbol=0; i_simbol<estil.simbols[i_simbs].simbol.length; i_simbol++)
 		{
 			if(valor==estil.simbols[i_simbs].simbol[i_simbol].ValorCamp)
 				return i_simbol;
@@ -1203,28 +1489,70 @@ function CarregaImatgeIcona(icona)
 	}
 }
 
-function DescarregaSimbolsCapaDigi(capa)
+function DescarregaSimbolsEstil(estil)
 {
 var simbol;
+	if (!estil.simbols || !estil.simbols.length)
+		return;
+	for (var i_simb=0; i_simb<estil.simbols.length; i_simb++)
+	{
+		if (!estil.simbols[i_simb].simbol)
+			continue;
+		simbol=estil.simbols[i_simb].simbol;
+
+		for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
+		{
+			if (simbol[i_simbol].icona && simbol[i_simbol].icona.img)
+				delete simbol[i_simbol].icona.img;
+			if (simbol[i_simbol].IconaSel && simbol[i_simbol].IconaSel.img)
+				delete simbol[i_simbol].IconaSel.img;
+		}
+	}
+}
+
+function DescarregaSimbolsCapaDigi(capa)
+{
 	if (!capa.estil)
 		return;
 	for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 	{
-		if (!capa.estil[i_estil].simbols ||
-			!capa.estil[i_estil].simbols.length)
-			continue;
-		for (var i_simb=0; i_simb<capa.estil[i_estil].simbols.length; i_simb++)
-		{
-			if (!capa.estil[i_estil].simbols[i_simb].simbol)
-				continue;
-			simbol=capa.estil[i_estil].simbols[i_simb].simbol;
+		DescarregaSimbolsEstil(capa.estil[i_estil]);
+		if(capa.estil[i_estil].estilTilesObjNum)
+			DescarregaSimbolsEstil(capa.estil[i_estil].estilTilesObjNum);		
+	}
+}
 
-			for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
+function CarregaSimbolsEstil(estil, recarrega)
+{
+var simbol;	
+	if(!estil.simbols)
+		return;
+	for (var i_simb=0; i_simb<estil.simbols.length; i_simb++)
+	{
+		if (!estil.simbols[i_simb].simbol)
+			continue;
+		
+		simbol=estil.simbols[i_simb].simbol;
+		for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
+		{
+			if (simbol[i_simbol].icona)
 			{
-				if (simbol[i_simbol].icona && simbol[i_simbol].icona.img)
-					delete simbol[i_simbol].icona.img;
-				if (simbol[i_simbol].IconaSel && simbol[i_simbol].IconaSel.img)
-					delete simbol[i_simbol].IconaSel.img;
+				if(!simbol[i_simbol].icona.i)
+					simbol[i_simbol].icona.i=0;
+				if(!simbol[i_simbol].icona.j)
+					simbol[i_simbol].icona.j=0;			
+				if(recarrega || !simbol[i_simbol].icona.img)
+					CarregaImatgeIcona(simbol[i_simbol].icona);
+				
+			}
+			if (simbol[i_simbol].IconaSel)
+			{
+				if(!simbol[i_simbol].IconaSel.i)
+					simbol[i_simbol].IconaSel.i=0;
+				if(!simbol[i_simbol].IconaSel.j)
+					simbol[i_simbol].IconaSel.j=0;		
+				if(recarrega || !simbol[i_simbol].IconaSel.img)
+					CarregaImatgeIcona(simbol[i_simbol].IconaSel);
 			}
 		}
 	}
@@ -1232,8 +1560,6 @@ var simbol;
 
 function CarregaSimbolsEstilCapaDigi(capa, i_estil, recarrega)
 {
-var simbol;
-
 	if (!capa.estil || capa.estil.length==0 ||
 		!capa.estil[i_estil].simbols)
 		return;
@@ -1241,27 +1567,9 @@ var simbol;
 	if (!Array.isArray(capa.estil[i_estil].simbols))
 		alert("New in 2020-03-10. In all 'capa's, \"simbols\" should be an array.");
 
-	for (var i_simb=0; i_simb<capa.estil[i_estil].simbols.length; i_simb++)
-	{
-		if (!capa.estil[i_estil].simbols[i_simb].simbol)
-			continue;
-
-		simbol=capa.estil[i_estil].simbols[i_simb].simbol;
-
-		for(var i_simbol=0; i_simbol<simbol.length; i_simbol++)
-		{
-			if (simbol[i_simbol].icona)
-			{
-				if(recarrega || !simbol[i_simbol].icona.img)
-					CarregaImatgeIcona(simbol[i_simbol].icona);
-			}
-			if (simbol[i_simbol].IconaSel)
-			{
-				if(recarrega || !simbol[i_simbol].IconaSel.img)
-					CarregaImatgeIcona(simbol[i_simbol].IconaSel);
-			}
-		}
-	}
+	CarregaSimbolsEstil(capa.estil[i_estil], recarrega);
+	if(capa.estil[i_estil].estilTilesObjNum)
+		CarregaSimbolsEstil(capa.estil[i_estil].estilTilesObjNum, recarrega);
 }
 
 function CarregaSimbolsEstilActualCapaDigi(capa)
@@ -1281,16 +1589,16 @@ var c_afegir="";
 	return AfegeixNomServidorARequest(DonaServidorCapa(ParamCtrl.capa[i]), cdns.join(""), true, DonaCorsServidorCapa(ParamCtrl.capa[i]));
 }//Fi de DonaRequestDescribeFeatureTypeInterna()
 
-function DonaRequestOWSObjectesDigi(i_capa, env, cadena_objectes, completa)
+function DonaRequestOWSObjectesDigi(i_capa, limit, env, cadena_objectes, completa)
 {
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
 
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
-		return DonaRequestGetFeature(i_capa, env, cadena_objectes, completa);
+		return DonaRequestGetFeature(i_capa, limit, env, cadena_objectes, completa);
 	if (tipus=="TipusSOS")
 		return DonaRequestSOSGetFeatureOfInterest(i_capa, env);
 	if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-		return DonaRequestSTAFeaturesOfInterest(i_capa, env);
+		return DonaRequestSTAFeaturesOfInterest(i_capa, limit, env);
 	if (tipus=="TipusHTTP_GET")
 		return ParamCtrl.capa[i_capa].servidor;
 
@@ -1442,7 +1750,7 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 	return llista;
 }
 
-function DonaRequestGetFeature(i_capa, env, cadena_objectes, completa)
+function DonaRequestGetFeature(i_capa, limit, env, cadena_objectes, completa)
 {
 var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus;
 
@@ -1462,12 +1770,16 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 		var cp=plantilla.join("");
 		cp=cp.replace("{collectionId}", capa.nom);
 		cdns.push(cp);
-		cdns.push("crs=", capa.CRSgeometry, "&limit=1000&f=");  //·$· hauria json i no application/json
+		cdns.push("crs=", capa.CRSgeometrym,"&limit=", (limit && limit!=-1)? limit:"10000000","&f=");  //·$· hauria json i no application/json
+		// ·$· en aquest cas el limit si se supera i no s'ha establert cap límit caldria continuar sol·licitant la petició amb next,...		
 	}
 	else
-	{
+	{		
 		cdns.push("VERSION=",DonaVersioComAText(capa.versio),"&SERVICE=WFS&REQUEST=GetFeature&ATRIBUTFORMAT=complex&SRSNAME=" ,
-	          capa.CRSgeometry ,"&TYPENAME=" ,capa.nom, "&OUTPUTFORMAT=");
+	          capa.CRSgeometry ,"&TYPENAME=" ,capa.nom);		
+		if(limit && limit!=-1)
+			cdns.push("&resultType=Hits");
+		cdns.push("&OUTPUTFORMAT=");
 	}
 	if (capa.FormatImatge)
 		cdns.push(capa.FormatImatge);
@@ -1541,12 +1853,12 @@ var capa=ParamCtrl.capa[i_capa];
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
-function DonaRequestSTAFeaturesOfInterest(i_capa, env)
+function DonaRequestSTAFeaturesOfInterest(i_capa, limit, env)
 {
-	return DonaRequestSTAObservationsFeatureOfInterest(i_capa, null, env);
+	return DonaRequestSTAObservationsFeatureOfInterest(i_capa, limit, null, env);
 }
 
-function DonaRequestSTAObservationsFeatureOfInterest(i_capa, i_obj, env)
+function DonaRequestSTAObservationsFeatureOfInterest(i_capa, limit, i_obj, env)
 {
 var cdns=[], cdns_datastream=[];
 var capa=ParamCtrl.capa[i_capa];
@@ -1556,7 +1868,12 @@ var capa=ParamCtrl.capa[i_capa];
 		cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
 	cdns.push("/v",DonaVersioComAText(capa.versio),"/FeaturesOfInterest");
 	if (i_obj==null)
-	        cdns.push("?$top=10000000&");
+	{
+		if(limit && limit!=-1)
+			cdns.push("?$count=true&$top=",limit, "&");
+		else
+			cdns.push("?$top=10000000&"); // ·$· en aquest cas el limit si se supera i no s'ha establert cap límit caldria continuar sol·licitant la petició amb next,...		
+	}
 	else
 	{
 		if (capa.objectes.features[i_obj].id==+capa.objectes.features[i_obj].id)  //test if this is a number
@@ -1608,7 +1925,7 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
 	//env està en el CRS de la capa
 
-	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env, null, false);
+	var url=DonaRequestOWSObjectesDigi(i_capa_digi, null, env, null, false);
 	var tipus=DonaTipusServidorCapa(capa);
 
 	if (tipus=="TipusWFS")
@@ -1623,9 +1940,9 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
 
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
-		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "env_sol": env, "seleccionar": seleccionar, "i_event": i_event});
 	else
-		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
+		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "env_sol": env, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant()
 
 function FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(i_capa_digi, cadena_objectes, seleccionar)
@@ -1647,15 +1964,20 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }//Fi de FesPeticioAjaxObjectesDigitalitzatsPerIdentificador()
 
-function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, env_sol, seleccionar, funcio, param)
+function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, costat, i_col, j_fil, demana_objs, env_sol, seleccionar, funcio, param)
 {
-	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, i_tile, seleccionar);
 var i_event, capa=ParamCtrl.capa[i_capa_digi];
 
-	capa.TileMatrixGeometry.tiles_solicitats[i_tile]="TileSolicitat";
-	var tipus=DonaTipusServidorCapa(capa);
+	if(i_tile!=null && i_tile!=-1)
+	{		
+		if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
+			capa.tileMatrixSetGeometry.tilesSol=[];
+		if(i_tile>=capa.tileMatrixSetGeometry.tilesSol.length)
+			capa.tileMatrixSetGeometry.tilesSol[i_tile]={"costat": costat, "iTile": i_col , "jTile": j_fil, "nombreObjectes": -1};
 
-	var url=DonaRequestOWSObjectesDigi(i_capa_digi, env_sol, null, false);
+	}
+	var tipus=DonaTipusServidorCapa(capa);	
+	var url=DonaRequestOWSObjectesDigi(i_capa_digi, ((typeof capa.objLimit === "undefined" || i_tile==null  || i_tile==-1 || demana_objs) ? null: capa.objLimit), env_sol, null, false);
 	if (tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
 	else if (tipus=="TipusOAPI_Features")
@@ -1670,127 +1992,145 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	//env_sol està ja en el CRS de la capa
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
-			 {i_capa_digi: i_capa_digi, i_tile: i_tile, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
+			 {i_capa_digi: i_capa_digi, i_tile: i_tile, env_sol: env_sol, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
 	else
 		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
-			 {i_capa_digi: i_capa_digi, i_tile: i_tile, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
+			 {i_capa_digi: i_capa_digi, i_tile: i_tile, env_sol: env_sol, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
 
 }//Fi de FesPeticioAjaxObjectesDigitalitzats()
 
 
+function DonaTileMatrixMesProperAZoomActual(capa)
+{
+var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
+var i_selec=0;
+
+	if (DonaUnitatsCoordenadesProj(capa.CRSgeometry)=="m" && EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+		costat_actual=ParamInternCtrl.vista.CostatZoomActual*FactorGrausAMetres;
+	else if (EsProjLongLat(capa.CRSgeometry) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
+		costat_actual=ParamInternCtrl.vista.CostatZoomActual/FactorGrausAMetres;
+	else
+		costat_actual=ParamInternCtrl.vista.CostatZoomActual;
+	
+	for(var i=0; i<capa.tileMatrixSetGeometry.tileMatrix.length;i++)
+	{
+		if (capa.tileMatrixSetGeometry.tileMatrix[i].costat<=costat_actual)		// Agafo el més proper per sota	
+			i_selec=i;
+	}
+	return i_selec;
+}
+
+function DonaIndexTileDeCapaTileMatrixSetGeometry(capa, costat, i_col, j_fil)
+{
+	if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
+		return -1;
+	
+	for(var i=0; i<capa.tileMatrixSetGeometry.tilesSol.length; i++)
+		if(capa.tileMatrixSetGeometry.tilesSol[i].costat>costat*0.9999 && 
+			capa.tileMatrixSetGeometry.tilesSol[i].costat<costat*1.0001 &&
+			capa.tileMatrixSetGeometry.tilesSol[i].iTile==i_col && 
+			capa.tileMatrixSetGeometry.tilesSol[i].jTile==j_fil)
+			return i;
+	return -1;	
+}
+function DonaIndexTileMatrixVectorAPartirDeCostat(tileMatrix, costat)
+{
+	for(var i=0; i<tileMatrix.length;i++)
+	{
+		if(tileMatrix[i].costat>costat*0.9999 && tileMatrix[i].costat<costat*1.0001)
+			return i;
+	}
+	return -1;	
+}
 
 function DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
-var env_total, env_temp, incr_x=0, incr_y=0, i_tile=0;
+var env_total, env_temp, env_sol;
+var i_tessella_min, i_tessella_max, j_tessella_min, j_tessella_max, i_col, j_fil, i_tile=0;
+var i_tileMatrix, tileMatrix, TMS;
+var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 
-var tiles=capa.TileMatrixGeometry;
-var ha_calgut=false, vaig_a_carregar=false;
-
-	if (!tiles)
-		return;
-
-	// Si la capa té un EnvTotal faig la tessel·lació respecte aquest env i sino respecte la/les imatges de situació que tenen el mateix sistema de referència (CRSgeometry)
-	if(!tiles.env)
+	if(typeof capa.tileMatrixSetGeometry=== "undefined" || capa.tileMatrixSetGeometry==null ||
+	   typeof capa.tileMatrixSetGeometry.tileMatrix=== "undefined"|| capa.tileMatrixSetGeometry.tileMatrix==null || capa.tileMatrixSetGeometry.tileMatrix.length<1)
+		return ha_calgut;
+	
+	// He de mirar quin tiles i en quin nivell de zoom cal sol·licitar
+	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1)
 	{
-		tiles.env={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": capa.CRSgeometry};
-		if(capa.EnvTotal)
-		{
-			tiles.env.EnvCRS.MinX=capa.EnvTotal.EnvCRS.MinX;
-			tiles.env.EnvCRS.MinY=capa.EnvTotal.EnvCRS.MinY;
-			tiles.env.EnvCRS.MaxX=capa.EnvTotal.EnvCRS.MaxX;
-			tiles.env.EnvCRS.MaxY=capa.EnvTotal.EnvCRS.MaxY;
-
-			if(capa.EnvTotal.CRS && !DonaCRSRepresentaQuasiIguals(capa.EnvTotal.CRS, tiles.env.CRS))
-				TransformaEnvolupant(tiles.env.EnvCRS, crs_ori, tiles.env.CRS);
-		}
+		i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa)		
+		if(i_tileMatrix==0)		
+			demana_objs=true;
 		else
-		{
-			for (var i=0; i<ParamCtrl.ImatgeSituacio.length; i++)
-			{
-				if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[i].EnvTotal.CRS,tiles.env.CRS))
-					env_temp=ParamCtrl.ImatgeSituacio[i].EnvTotal.EnvCRS;
-				else
-					env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS.toUpperCase())
-				if (tiles.env.EnvCRS.MinX>env_temp.MinX)
-					tiles.env.EnvCRS.MinX=env_temp.MinX;
-				if (tiles.env.EnvCRS.MaxX<env_temp.MaxX)
-					tiles.env.EnvCRS.MaxX=env_temp.MaxX;
-				if (tiles.env.EnvCRS.MinY>env_temp.MinY)
-					tiles.env.EnvCRS.MinY=env_temp.MinY;
-				if (tiles.env.EnvCRS.MaxY<env_temp.MaxY)
-					tiles.env.EnvCRS.MaxY=env_temp.MaxY;
-			}
-		}
+			demana_objs=false;
 	}
-	//env en el sistema de referència actual --> La divisió en tiles és en funció del CRS indicat a ParamInternCtrl.ISituacio
-	if (DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS))
-		env_total={"MinX": env.MinX, "MaxX": env.MaxX, "MinY": env.MinY, "MaxY": env.MaxY};
 	else
-		env_total=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, tiles.env.CRS);
-
-	if(env_total.MinX<tiles.env.EnvCRS.MinX)
-		env_total.MinX=tiles.env.EnvCRS.MinX;
-	if(env_total.MaxX>tiles.env.EnvCRS.MaxX)
-		env_total.MaxX=tiles.env.EnvCRS.MaxX;
-	if(env_total.MinY<tiles.env.EnvCRS.MinY)
-		env_total.MinY=tiles.env.EnvCRS.MinY;
-	if(env_total.MaxY>tiles.env.EnvCRS.MaxY)
-		env_total.MaxY=tiles.env.EnvCRS.MaxY;
-
-	//Ara haig de fer els talls en funció de l'ambit del CRS indicat en capa i en la mida indicada i mirar si tinc els talls o no i sol·licitar-los
-	incr_x=(tiles.env.EnvCRS.MaxX-tiles.env.EnvCRS.MinX)/tiles.MatrixWidth;
-	incr_y=(tiles.env.EnvCRS.MaxY-tiles.env.EnvCRS.MinY)/tiles.MatrixHeight;
-
-	env_temp={"MinX": env_total.MinX, "MaxX": env_total.MaxX, "MinY": env_total.MinY, "MaxY": env_total.MaxY};
+	{
+		// Només hi ha un nivell de zoom.
+		i_tileMatrix=0;
+		demana_objs=true;
+	}
+	TMS=capa.tileMatrixSetGeometry;
+	tileMatrix=TMS.tileMatrix[i_tileMatrix];
+	
+	// Transformo l'envolupant de la vista a coordenades vector
+	env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
+	
 	if(!param.carregant_geo)
 	{
 		param.carregant_geo=true;
-		vaig_a_carregar=true;
+		vaig_a_carregar=true;		
 	}
-	for(var i_col=0; i_col<tiles.MatrixWidth; i_col++)
-	{
-		if(((tiles.env.EnvCRS.MinX+(i_col*incr_x))<=env_temp.MinX )&&
-		   ((tiles.env.EnvCRS.MinX+((i_col+1)*incr_x))>=env_temp.MinX))
-		{
-			for(var j_fil=0; j_fil<tiles.MatrixHeight; j_fil++)
-			{
-				i_tile=((j_fil)*tiles.MatrixWidth)+i_col;
-				if((tiles.env.EnvCRS.MinY+(j_fil*incr_y))<=env_temp.MinY &&
-				   (tiles.env.EnvCRS.MinY+((j_fil+1)*incr_y))>=env_temp.MinY)
-				{
-					if(tiles.tiles_solicitats[i_tile]=="TileNoSolicitat")
-					{
-						var env_sol={"MinX": tiles.env.EnvCRS.MinX+(i_col*incr_x),
-							     	"MaxX": tiles.env.EnvCRS.MinX+((i_col+1)*incr_x),
-							     	"MinY": tiles.env.EnvCRS.MinY+(j_fil*incr_y),
-							     	"MaxY": tiles.env.EnvCRS.MinY+((j_fil+1)*incr_y)};
+	
+	// Calculo els índexs de les tessel·les a demanar
+	var incr_x=tileMatrix.TileWidth*tileMatrix.costat;
+	var incr_y=tileMatrix.TileHeight*tileMatrix.costat;
+	i_tessella_min=floor_DJ((env_temp.MinX-tileMatrix.TopLeftPoint.x)/incr_x);
+	if(i_tessella_min<0)
+    	i_tessella_min=0;
+    else if(i_tessella_min>=tileMatrix.MatrixWidth)
+    	i_tessella_min=tileMatrix.MatrixWidth-1;
 
-						env_sol=TransformaEnvolupant(env_sol, tiles.env.CRS, capa.CRSgeometry);
-						if(vaig_a_carregar)
-						{
-							ha_calgut=true;
-							/*Se suporten env a tot arreu ara (JM)
-							if (tiles.MatrixWidth==1 && tiles.MatrixHeight==1 && (capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus"))
-							{
-								//Les peticions GetFeatureOfInterest no suporten BBOX de manera standard, o sigui que en aquest cas, donat que es demana tot d'un sol bloc, decideixo no posar bbox per si no fos un servidor nostre.
-								FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, null, false, funcio, param);
-							}
-							else*/
-							FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, env_sol, false, funcio, param);
-						}
-						else
-							return true;
-					}
+	i_tessella_max=floor_DJ((env_temp.MaxX-tileMatrix.TopLeftPoint.x)/incr_x);
+	if(i_tessella_max<0)
+    	i_tessella_max=0;
+    else if(i_tessella_max>=tileMatrix.MatrixWidth)
+    	i_tessella_max=tileMatrix.MatrixWidth-1;
+
+	j_tessella_min=floor_DJ((tileMatrix.TopLeftPoint.y-env_temp.MaxY)/incr_y);
+	if(j_tessella_min<0)
+    	j_tessella_min=0;
+    else if(j_tessella_min>=tileMatrix.MatrixHeight)
+    	j_tessella_min=tileMatrix.MatrixHeight-1;
+
+	j_tessella_max=floor_DJ((tileMatrix.TopLeftPoint.y-env_temp.MinY)/incr_y);
+	if(j_tessella_max<0)
+    	j_tessella_max=0;
+    else if(j_tessella_max>=tileMatrix.MatrixHeight)
+    	j_tessella_max=tileMatrix.MatrixHeight-1;
+
+	
+	for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
+	{
+		for(j_fil=j_tessella_min; j_fil<=j_tessella_max; j_fil++)
+		{				
+			i_tile=DonaIndexTileDeCapaTileMatrixSetGeometry(capa, tileMatrix.costat, i_col, j_fil);
+					
+			if(i_tile==-1)
+			{
+				i_tile=(TMS.tilesSol) ? TMS.tilesSol.length : 0;
+				env_sol={"MinX": tileMatrix.TopLeftPoint.x+(i_col*incr_x),
+						"MaxX": tileMatrix.TopLeftPoint.x+((i_col+1)*incr_x),
+						"MinY": tileMatrix.TopLeftPoint.y-((j_fil+1)*incr_y),
+						"MaxY": tileMatrix.TopLeftPoint.y-(j_fil*incr_y)};
+				if(vaig_a_carregar)
+				{
+					ha_calgut=true;
+					FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, tileMatrix.costat, i_col, j_fil, demana_objs, env_sol, false, funcio, param);					
 				}
-				env_temp.MinY=(tiles.env.EnvCRS.MinY+((j_fil+1)*incr_y));
-				if(env_temp.MaxY<=env_temp.MinY)
-					break;
+				else
+					return true;
 			}
 		}
-		env_temp.MinX=(tiles.env.EnvCRS.MinX+((i_col+1)*incr_x));
-		if(env_temp.MaxX<=env_temp.MinX)
-			break;
-		env_temp.MinY=env_total.MinY;
 	}
 	return ha_calgut;
 }
@@ -1957,14 +2297,18 @@ var env={}, mida;
 	else if (icona.type=="circle")
 	{
 		mida=DonaMidaIconaForma(icona);
-		env.MinI=env.MinJ=-mida;
-		env.MaxI=env.MaxJ=mida;
+		env.MinI=-mida-icona.i;
+		env.MinJ=-mida-icona.j;
+		env.MaxI=mida-icona.i;
+		env.MaxJ=mida-icona.j;
 	}
 	else if (icona.type=="square")
 	{
 		mida=DonaMidaIconaForma(icona);
-		env.MinI=env.MinJ=-mida/2;
-		env.MaxI=env.MaxJ=mida/2;
+		env.MinI=-mida/2-icona.i;
+		env.MinJ=-mida/2-icona.j;
+		env.MaxI=mida/2-icona.i;
+		env.MaxJ=mida/2-icona.j;
 	}
 	else if (icona.icona) //Una icona com a url a una png o similar
 	{
@@ -1996,50 +2340,65 @@ var env={}, mida;
 		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual};
 }
 
-function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
+function TransformaCoordenadesFeatures(features, crs_ori, crs_dest)
 {
+	for(var j=0; j<features.length; j++)
+	{
+		var feature=features[j], coordinates2, coordinates3;
+		feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
+		if (feature.geometryCRSactual.type=="MultiPolygon")
+		{
+			for(var c3=0; c3<feature.geometryCRSactual.coordinates.length; c3++)
+			{
+				coordinates3=feature.geometryCRSactual.coordinates[c3];
+				for(var c2=0; c2<coordinates3.length; c2++)
+				{
+					coordinates2=coordinates3[c2];
+					for(var c1=0; c1<coordinates2.length; c1++)
+						TransformaCoordenadesArray(coordinates2[c1], crs_ori, crs_dest);
+				}
+			}
+		}
+		else if (feature.geometryCRSactual.type=="MultiLineString" || feature.geometryCRSactual.type=="Polygon")
+		{
+			for(var c2=0; c2<feature.geometryCRSactual.coordinates.length; c2++)
+			{
+				coordinates2=feature.geometryCRSactual.coordinates[c2];
+				for(var c1=0; c1<coordinates2.length; c1++)
+					TransformaCoordenadesArray(coordinates2[c1],crs_ori, crs_dest);
+			}
+		}
+		else if (feature.geometryCRSactual.type=="LineString" || feature.geometryCRSactual.type=="Multipoint")
+		{
+			for(var c1=0; c1<feature.geometryCRSactual.coordinates.length; c1++)
+			{
+				TransformaCoordenadesArray(feature.geometryCRSactual.coordinates[c1], crs_ori, crs_dest);
+			}
+		}
+		else if (feature.geometryCRSactual.type=="Point")
+			TransformaCoordenadesArray(feature.geometryCRSactual.coordinates, crs_ori, crs_dest);
+		else
+			feature.geometryCRSactual.coordinates=null;
+	}
+}
+
+function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
+{	
 	if (capa.model==model_vector)
 	{
+		var hi_ha_objnums=false;
 		if(capa.CRSgeometry &&
-		   !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, crs_dest) && capa.objectes && capa.objectes.features)
+		   !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, crs_dest) && ((capa.objectes && capa.objectes.features) || true==(hi_ha_objnums=HiHaObjectesNumerics(capa))))
 		{
-			for(var j=0; j<capa.objectes.features.length; j++)
+			if(capa.objectes && capa.objectes.features)
+				TransformaCoordenadesFeatures(capa.objectes.features, capa.CRSgeometry, crs_dest);
+			if(hi_ha_objnums)
 			{
-				var feature=capa.objectes.features[j], coordinates2, coordinates3;
-				feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
-				if (feature.geometryCRSactual.type=="MultiPolygon")
+				for(var j=0; j<capa.tileMatrixSetGeometry.tileMatrix.length; j++)
 				{
-					for(var c3=0; c3<feature.geometryCRSactual.coordinates.length; c3++)
-					{
-						coordinates3=feature.geometryCRSactual.coordinates[c3];
-						for(var c2=0; c2<coordinates3.length; c2++)
-						{
-							coordinates2=coordinates3[c2];
-							for(var c1=0; c1<coordinates2.length; c1++)
-								TransformaCoordenadesArray(coordinates2[c1], capa.CRSgeometry, crs_dest);
-						}
-					}
+					if(capa.tileMatrixSetGeometry.tileMatrix.objNumerics &&  capa.tileMatrixSetGeometry.tileMatrix.objNumerics.features)
+						TransformaCoordenadesFeatures(capa.tileMatrixSetGeometry.tileMatrix.objNumerics.features, capa.CRSgeometry, crs_dest);
 				}
-				else if (feature.geometryCRSactual.type=="MultiLineString" || feature.geometryCRSactual.type=="Polygon")
-				{
-					for(var c2=0; c2<feature.geometryCRSactual.coordinates.length; c2++)
-					{
-						coordinates2=feature.geometryCRSactual.coordinates[c2];
-						for(var c1=0; c1<coordinates2.length; c1++)
-							TransformaCoordenadesArray(coordinates2[c1], capa.CRSgeometry, crs_dest);
-					}
-				}
-				else if (feature.geometryCRSactual.type=="LineString" || feature.geometryCRSactual.type=="Multipoint")
-				{
-					for(var c1=0; c1<feature.geometryCRSactual.coordinates.length; c1++)
-					{
-						TransformaCoordenadesArray(feature.geometryCRSactual.coordinates[c1], capa.CRSgeometry, crs_dest);
-					}
-				}
-				else if (feature.geometryCRSactual.type=="Point")
-					TransformaCoordenadesArray(feature.geometryCRSactual.coordinates, capa.CRSgeometry, crs_dest);
-				else
-					feature.geometryCRSactual.coordinates=null;
 			}
 		}
 	}

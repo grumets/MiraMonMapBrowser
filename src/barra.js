@@ -493,7 +493,7 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoEnllacWMS)
 			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();")));
 		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor("+ NumeroDeCapesVolatils(-1) +");")));
+			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));")));
 		if (ParamCtrl.BarraBotoCalculadora)
 			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();")));
 		if (ParamCtrl.BarraBotoCombiCapa)
@@ -513,6 +513,14 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
 				"ObreFinestraAjuda();")));
+
+		if (ParamCtrl.accessClientId || ParamCtrl.AltresLinks)
+			cdns.push("\n");
+		if (ParamCtrl.accessClientId)
+			cdns.push((CadenaBotoPolsable("login", "login", GetMessage("Login", "authens"), "FerLoginICarregaCapes();")));
+		if (ParamCtrl.AltresLinks)
+			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
+
 		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
 			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
@@ -532,8 +540,6 @@ var cdns=[];
 				cdns.push(" ", CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte], botons, true, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-6 : 17, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-2 : 21), "\n");
 			}
 		}
-		if (ParamCtrl.AltresLinks)
-			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
 	}
 	cdns.push("</FORM>\n");
 	var elem=getLayer(window, "barra");

@@ -490,6 +490,10 @@
 			"description": "Si una capa no està visible tampoc no serà descarregable", 
 			"type": "boolean"
 		},
+		"LlegendaMostraCapaSencera": {
+			"description": "Posar l'opció 'Mostra sencera' al botó dret de les capes a la llegenda. Això resulta útil si el navegador té capes petites en diversos llocs allunyats que costen de trobar.", 
+			"type": "boolean"
+		},
 		"CapaConsultaPreguntaServidor": {
 			"description": "Array de capes per a fer la consulta típica. Array de definicions de consultes típiques (quina capa s'usa, quins camps, etc)",
 			"type": ["array", "null"],
@@ -1132,7 +1136,7 @@
 						"type": "array"
 					},
 					"capaDePunts": {
-						"description": "Id de la capa de punts que s'alimenta automaticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
 						"type": "object",
 						"properties": {									
 							"id": { 
@@ -1219,42 +1223,66 @@
 							"format": "uri"
 						}
 					},
+					"objLimit": {
+						"description": "Nombre màxim d'objectes a representar en una tessel·la vectorial, quan el nombre d'objectes en una tessel·la superi aquest nombre es mostrarà una icona amb el nombre d'objectes contingut a la tessel·la. Si no hi és o val -1 vol dir que no es vol aplicar cap límit. Només aplica quan el 'model' és 'vector'.",
+						"type": "number"
+					},
 					"CRSgeometry": { 
 						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector. Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
-					"TileMatrixGeometry": {
-						"description": "Definició de la tesselació vectorial per a les peticions vectorials al servidor. Opcional. Només aplica quan el 'model' és 'vector'.",
-						"type": "object",
-						"properties": {								
-							"MatrixWidth": {
-								"description": "Nombre de tessel·les en la direcció x per aquest TileMatrix",
-								"type": "number",
-								"minimum": 1,
-								"multipleOf" : 1
-							},
-							"MatrixHeight": {
-								"description": "Nombre de tessel·les en la direcció y per aquest TileMatrix",
-								"type": "number",
-								"minimum": 1,
-								"multipleOf" : 1
-							},							
-							"tiles_solicitats": {
-								"description": "Interna; no usar. Array de tessel·les  sol·licitades. N'hi haurà tants com n_colsxn_files.",
+					"tileMatrixSetGeometry": {
+						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Nnomés n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
+						"type": ["object", "null"],
+						"properties": {	
+							"atriObjNumerics": {
+								"description": "Array que descriu les propietats dels objectes de tipus numèric (definits a tileMatrix com a 'objNumerics' i obtinguts dinàmicament). Hi haurà el nom del camp que serà usat per crear els 'objNumerics' i per simbolitzar la font d'aquests objectes. Si no s'indica res, es crearà automàticament amb el nom '__nObjsTessella'",
+								"$ref": "#/definitions/descripcioAtributs"			
+							},			
+							"tileMatrix":  {
+								"description": "Array de tileMatrix amb els paràmetres de tessel·lació.",
+								"allOf": [
+									{ 	"$ref": "#/definitions/tileMatrix"},
+									{
+										"properties": {
+											"objNumerics" : 
+											{ 	
+												"description": "Interna No usar. Array d'objectes amb el nombre d'objectes de cada una de les tessel·les del tileMatrix que ha estat sol·licitada i que conté un nombre d'objectes superior al límit per tessel·la.",								
+												"$ref": "#/definitions/featureCollection"
+											}
+										}
+									}		
+								]									
+							},	
+							"tilesSol": {
+								"description": "Interna; no usar. Array de tiles sol·licitats. Si la capa no té 'ObjLimit' només n'hi haurà un, sinó se'n crearan de manera paral·lela als nivells de zoom de la capa fins que totes les tessel·les continguin objectes i no només el nombre d'objectes inclosos.",								
 								"type": ["array", "null"],
-								"items": {
-									"description": "Ha estat sol·licitada la tessel·la?",
-									"enum": ["TileNoSolicitat", "TileSolicitat", "TileRebut"]
-								}
-							},
-							"env":{
-								"description": "Interna, no usar. Envolupant de l'espai de tessel·lació. Equival a EnvTotal si és diferent de NULL o a la suma de tots els envolupants de les imatges de situació amb un CRS igual a CRSgeometry.",
-								"$ref": "#/definitions/envolupantCRS_2D" 
+								"items": {																		
+									"type": "object",
+									"properties": {										
+										"iTile": {											
+											"description": "Índex de tessel·la en l'eix de les x.",								
+											"type": "number"
+										},
+										"jTile": {											
+											"description": "Índex de tessel·la en l'eix de les y.",								
+											"type": "number"
+										},
+										"costat": {
+											"description": "Costat de píxel (nivell de zoom) del TileMatrix.",
+											"type": "number"
+										},
+										"nombreObjectes": {
+											"description": "Nombre d'objectes de la tessel·la. -1 indica desconegut.",								
+											"type": "number"
+										}													
+									}
+								}										
 							}
 						}
 					},
-					"TileMatrixSet":	{
+					"TileMatrixSet":{
 						"description": "Descripció de les TileMatrixSet suportades per la capa o null si la capa no és WMTS. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
@@ -1274,52 +1302,9 @@
 									"description": "Plantilla URL de la capa WMTS REST. Deixeu-ho a null en els altres casos",
 									"type": ["string", "null"]
 								},
-								"TileMatrix": {
-									"description": "Descripció i paràmetres dels TileMatrixs",
-									"type": ["array"],
-									"items": {
-										"description": "Descripció i paràmetres d'un TileMatrix",
-										"type": "object",
-										"properties": {																	
-											"Identifier":	{ 
-												"description": "Identificador del TileMatrix",
-												"type": "string"
-											},
-											"costat": {
-												"description": "Costat de píxel (nivell de zoom) del TileMatrix",
-												"type": "number",
-												"minimum": 0
-											},
-											"TopLeftPoint":	{
-												"description": "Posició de la coordenada del origen superior esquerra del tallat del TileMatrix",
-												"$ref": "#/definitions/punt2D" 
-											},
-											"TileWidth":	{
-												"description": "Ample de cada tessel·la en píxels per aquest TileMatrix",
-												"type": "number",
-												"minimum": 1,
-												"multipleOf" : 1
-											},
-											"TileHeight": {
-												"description": "Alt de cada tessel·la en píxels per aquest TileMatrix",
-												"type": "number",
-												"minimum": 1,
-												"multipleOf" : 1
-											},
-											"MatrixWidth": {
-												"description": "Nombre de tessel·les en la direcció x per aquest TileMatrix",
-												"type": "number",
-												"minimum": 1,
-												"multipleOf" : 1
-											},
-											"MatrixHeight": {
-												"description": "Nombre de tessel·les en la direcció y per aquest TileMatrix",
-												"type": "number",
-												"minimum": 1,
-												"multipleOf" : 1
-											}
-										}
-									}
+								"TileMatrix":  {
+									"description": "Array de tileMatrix amb la seva descripció i paràmetres de tessel·lació",
+									"$ref": "#/definitions/tileMatrix"
 								}
 							}
 						}
@@ -1346,10 +1331,15 @@
 						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
 						"$ref": "#/definitions/featureCollection"
 					},
+					"objectesArrayBuffer": {
+						"description": "INTERN: s'afegeix programaticament en pintar els objectes de tipus polígon en la vista principal; només si l'estil és TipusObj=='P'. Conté l'index de objetes.features representat (l'identificador gràfic). El tipus de dades i el nodata depenen de objetes.features.length. Si és <256, es un Uint8 i el 255 és el nodata; si és <65536 es un Uint16 i el nodata és el 65535; is és <16777216 és un Uint32 i el 16777215 és el valor nodata.",
+						"type": "string",
+						"contentEncoding": "binary"
+					},					
 					"atributs": {
 						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model raster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
-					},
+					},			
 					"valors": {
 						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
 						"type": ["array", "null"],
@@ -1532,7 +1522,7 @@
 					"DescLlegenda": { 
 						"description": "Descripció de la capa per la llegenda. Opcional.",
 						"$ref": "#/definitions/StringOCadenaLang" 
-					},					
+					},	
 					"estil": {
 						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
 						"type": ["array", "null"],
@@ -1568,7 +1558,7 @@
 										"type": "object",
 										"properties": {
 											"calcul": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc. Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
 												"type": "string"
 											},
 											"FormulaConsulta": { 
@@ -1751,7 +1741,7 @@
 									"type": "boolean"
 								},
 								"paleta": {
-									"description": "Te dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
+									"description": "Té dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
 									"$ref": "#/definitions/paleta"
 								},
 								"paletaPrevia": {
@@ -1762,158 +1752,36 @@
 									"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit 'IconaSel' els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten 'icona'. Si no hi ha 'IconaSel' els objectes seleccionats (true) presenten 'icona' i els no seleccionats (false) no mostren icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
 									"type": ["string", "null"]								
 								},
+								"estilTilesObjNum": {
+									"description" : "Estil de simbolització dels objectes que es generen per mostrar el nombre d'objectes que conté una tessel·la vectorial",
+									"type": "object",
+									"multipleOf": 1,
+									"properties": {									
+										"simbols": {
+											"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+											"$ref": "#/definitions/simbols"									
+										},										
+										"formes":{
+											"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+											"$ref": "#/definitions/formes"									
+										},			
+										"fonts":	{
+											"description": "Fonts per representat textos dels objectes digitalitzats",
+											"$ref": "#/definitions/fonts"									
+										}
+									}
+								},
 								"simbols": {
 									"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
-									"type": ["array", "null"],
-									"items": {
-										"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, tots comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
-										"type": "object",
-										"required": ["simbol"],
-										"properties": {
-											"NomCamp": {
-												"description": "Nom del camp per triar el simbol o la forma a presentat a la vista",
-												"type": ["string", "null"]
-											},
-											"NomCampFEscala": {
-												"description": "Nom del camp per triar un factor d'escalat del simbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
-												"type": ["string", "null"]
-											},
-											"simbol": {
-												"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
-												"type": ["array", "null"],
-												"items": {
-													"description": "Símbol o forma i camp",
-													"type": "object",
-													"required": ["icona"],
-													"properties": {
-														"ValorCamp": {
-															"description": "Valor del camp NomCamp per triar el simbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant",
-															"type": ["string", "number", "boolean"]
-														},
-														"icona": {
-															"description": "icona",
-															"$ref": "#/definitions/icona" 
-														},
-														"IconaSel": {
-															"description": "icona quan està seleccionada a partir de 'NomCampSel'",
-															"$ref": "#/definitions/icona" 
-														}
-													}
-												}
-											}
-										}
-									}
+									"$ref": "#/definitions/simbols"									
 								},
 								"formes": {
-									"description": "Com pintar les icones que són formes o objectes de línies i polígons",
-									"type": ["array", "null"],
-									"items": {
-										"type": "object",
-										"properties": {
-											"interior": {
-												"description": "Com omplir l'interior de les icones que són formes o els polígons",
-												"$ref": "#/definitions/colorIndexat"
-											},
-											"vora": { 
-												"description": "Com pintar les vores de les icones que són formes o de les línies",
-												"allOf": [
-													{ "$ref": "#/definitions/colorIndexat"},
-													{
-														"properties": {
-															"gruix": 
-															{
-																"description": "L'ample de la línia. És una array en preparació per possible indexat per camp",
-																"type": "object",
-																"properties": {
-																	"amples": {
-																		"type": ["array"],
-																		"items": {
-																			"type": "integer", 
-																			"minimum": 0
-																		}
-																	}
-																} 
-															},
-															"patro": {
-																"description": "Patró de la línia. És una array en preparació per possible indexat per camp",
-																"type": "object",
-																"properties": {
-																	"separacions": {
-																		"type": ["array"],
-																		"items": {
-																			"description": "The same content as in canvas setLineDash. An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units)  (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash).",
-																			"type": "array",
-																			"items": {
-																				"type": "integer", 
-																				"minimum": 0
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												]
-											}
-										}
-									}
-								},
+									"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+									"$ref": "#/definitions/formes"									
+								},	
 								"fonts": {
 									"description": "Fonts per representat textos dels objectes digitalitzats",
-									"type": ["object", "null"],
-									"properties": {
-										"NomCamp": {
-											"description": "Nom del camp per triar l'estil per presentat a la vista",
-											"type": ["string", "null"]
-										},
-										"NomCampText": {
-											"description": "Nom del camp del text que es presentarà a la vista",
-											"type": ["string", "null"]
-										},
-										"aspecte": {
-											"description": "Estils pels textos dels objectes digitalitzats",
-											"type": ["array", "null"],
-											"items": {
-												"description": "Estil i camp",
-												"type": "object",
-												"properties": {
-													"ValorCamp": {
-														"description": "Valor del camp NomCamp per triar l'estil del text per presentat a la vista",
-														"type": "string"
-													},
-													"font": {
-														"description": "Font del text per presentat a la vista",
-														"type": "object",
-														"required": ["font", "i", "j"],
-														"properties": {
-															"font": {
-																"description": "Font (aspecte, mida,... ). Exemple '10px Verdana'.",
-																"type": "string"
-															},
-															"color": {
-																"description": "Color de text. Exemple '#B50000'.",
-																"type": "string"
-															},
-															"align": {
-																"description": "Tipus d'alineació horitzontal.",
-																"enum": ["left", "right", "center"]
-															},
-															"i": {
-																"description": "Offset de la posició de punt calent en l'eix de columnes, per exemple per no sobre posar el text amb una icona.",
-																"type": "number",
-																"multipleOf" : 1
-															},
-															"j": {
-																"description": "Offset de la posició del punt calent en l'eix de files",
-																"type": "number",
-																"multipleOf" : 1
-															}
-														}
-													}
-												}
-											}
-										}
-									}
+									"$ref": "#/definitions/fonts"									
 								},
 								"histograma": {
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
@@ -2198,7 +2066,7 @@
 						}
 					},
 					"i_data": { 
-						"description": "Índex de data seleccionada per començar la visualització. Si s'indica -1 s'usarà el darrer element del array de dates. Només aplica quan el 'model' és 'raster'.",
+						"description": "Índex de data seleccionada per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc. Només aplica quan el 'model' és 'raster'.",
 						"type": ["number", "null"],
 						"minimum": -1,
 						"multipleOf" : 1
@@ -2354,6 +2222,53 @@
 				"y": { "type": "number" }
 			}		
 		},
+		"tileMatrix": {
+			"description": "Descripció i paràmetres dels TileMatrixs",
+			"type": ["array"],
+			"items": {
+				"description": "Descripció i paràmetres d'un TileMatrix",
+				"type": "object",
+				"properties": {																	
+					"Identifier":	{ 
+						"description": "Identificador del TileMatrix",
+						"type": "string"
+					},
+					"costat": {
+						"description": "Costat de píxel (nivell de zoom) del TileMatrix",
+						"type": "number",
+						"minimum": 0
+					},
+					"TopLeftPoint":	{
+						"description": "Posició de la coordenada del origen superior esquerra del tallat del TileMatrix",
+						"$ref": "#/definitions/punt2D" 
+					},
+					"TileWidth":	{
+						"description": "Ample de cada tessel·la en píxels per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"TileHeight": {
+						"description": "Alt de cada tessel·la en píxels per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MatrixWidth": {
+						"description": "Nombre de tessel·les en la direcció x per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MatrixHeight": {
+						"description": "Nombre de tessel·les en la direcció y per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
 		"aspecteLlegenda":	{
 			"description": "Elements per condicionar l'aspecte de la llegenda",
 			"type": "object",
@@ -2445,7 +2360,7 @@
 		{
 			"oneOf": [
 				{
-					"description": "Color de la paleta en format #RRGGBB. Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
+					"description": "Color de la paleta en format #RRGGBB o en format RGB(r,g,b) o RGBA(r,g,b,a) on r, g i b van de 0 a 255 i a va de 0 a 1 (on 0 es totalment transparent i 1 opac). Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
 					"type": "string"
 				},
 				{
@@ -2529,6 +2444,158 @@
 				}
 			}
 		},
+		"simbols": {
+			"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+			"type": ["array", "null"],
+			"items": {
+				"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, totes comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
+				"type": "object",
+				"required": ["simbol"],
+				"properties": {
+					"NomCamp": {
+						"description": "Nom del camp per triar el símbol o la forma a presentat a la vista",
+						"type": ["string", "null"]
+					},
+					"NomCampFEscala": {
+						"description": "Nom del camp per triar un factor d'escalat del símbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+						"type": ["string", "null"]
+					},
+					"simbol": {
+						"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Símbol o forma i camp",
+							"type": "object",
+							"required": ["icona"],
+							"properties": {
+								"ValorCamp": {
+									"description": "Valor del camp NomCamp per triar el símbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant",
+									"type": ["string", "number", "boolean"]
+								},
+								"icona": {
+									"description": "icona",
+									"$ref": "#/definitions/icona" 
+								},
+								"IconaSel": {
+									"description": "icona quan està seleccionada a partir de 'NomCampSel'",
+									"$ref": "#/definitions/icona" 
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"formes": {
+			"type": ["array", "null"],
+			"items": {
+				"type": "object",
+				"properties": {
+					"interior": {
+						"description": "Com omplir l'interior de les geometries 2D",
+						"$ref": "#/definitions/colorIndexat"
+					},
+					"vora": { 
+						"description": "Com pintar les línies: vores de les geometries 2D o les geometries 1D",
+						"allOf": [
+							{ "$ref": "#/definitions/colorIndexat"},
+							{
+								"properties": {
+									"gruix": 
+									{
+										"description": "L'ample de la línia. És un array en preparació per possible indexat per camp",
+										"type": "object",
+										"properties": {
+											"amples": {
+												"type": ["array"],
+												"items": {
+													"type": "integer", 
+													"minimum": 0
+												}
+											}
+										} 
+									},
+									"patro": {
+										"description": "Patró de la línia. És un array en preparació per possible indexat per camp",
+										"type": "object",
+										"properties": {
+											"separacions": {
+												"type": ["array"],
+												"items": {
+													"description": "The same content as in canvas setLineDash. An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units)  (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash).",
+													"type": "array",
+													"items": {
+														"type": "integer", 
+														"minimum": 0
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						]
+					}
+				}
+			}
+		},
+		"fonts": {
+			"description": "Fonts per representat textos dels objectes digitalitzats",
+			"type": ["object", "null"],
+			"properties": {
+				"NomCamp": {
+					"description": "Nom del camp per triar l'estil per presentat a la vista",
+					"type": ["string", "null"]
+				},
+				"NomCampText": {
+					"description": "Nom del camp del text que es presentarà a la vista",
+					"type": ["string", "null"]
+				},
+				"aspecte": {
+					"description": "Estils pels textos dels objectes digitalitzats",
+					"type": ["array", "null"],
+					"items": {
+						"description": "Estil i camp",
+						"type": "object",
+						"properties": {
+							"ValorCamp": {
+								"description": "Valor del camp NomCamp per triar l'estil del text per presentat a la vista",
+								"type": "string"
+							},
+							"font": {
+								"description": "Font del text per presentat a la vista",
+								"type": "object",
+								"required": ["font", "i", "j"],
+								"properties": {
+									"font": {
+										"description": "Font (aspecte, mida,... ). Exemple '10px Verdana'.",
+										"type": "string"
+									},
+									"color": {
+										"description": "Color de text. Exemple '#B50000'.",
+										"type": "string"
+									},
+									"align": {
+										"description": "Tipus d'alineació horitzontal.",
+										"enum": ["left", "right", "center"]
+									},
+									"i": {
+										"description": "Offset de la posició de punt calent en l'eix de columnes, per exemple per no sobre posar el text amb una icona.",
+										"type": "number",
+										"multipleOf" : 1
+									},
+									"j": {
+										"description": "Offset de la posició del punt calent en l'eix de files",
+										"type": "number",
+										"multipleOf" : 1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"icona": {
 			"oneOf": 
 			[
@@ -2573,20 +2640,30 @@
 					"properties": {
 						"type": {
 							"description": "És fàcil d'ampliar",
-							"enum": ["circle", "square" ]
+							"enum": ["circle", "square"]
 						},						
 						"r": {
-							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a,",
+							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a",
 							"type": "number"
 						},
 						"a": {
-							"description": "Area del cercle o del quadrat. No compatible amb l'ús de r,",
+							"description": "Àrea del cercle o del quadrat. No compatible amb l'ús de r",
 							"type": "number"
 						},
 						"unitats": 
 						{
 							"description": "Unitats base del ràdi o de l'àrea. El valors per defecte és 'px' (pixels)",
 							"enum": ["px", "m"]
+						},
+						"i": {
+							"description": "Offset de la posició del punt calent en l'eix de columnes. El punt calent és el punt on s'apliquen les coordenades terreny. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les columnes. ",
+							"type": "number",
+							"multipleOf" : 1
+						},
+						"j": {
+							"description": "Offset de la posició del punt calent en l'eix de files. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les files.",
+							"type": "number",
+							"multipleOf" : 1
 						}
 					}
 				},
@@ -2603,7 +2680,7 @@
 									"enum": ["circle", "arc"]
 								},						
 								"r": {
-									"description": "Radi (en pixels) del arc de cercle",
+									"description": "Radi (en píxels) del arc de cercle",
 									"type": "number",
 									"multipleOf" : 1
 								},
@@ -2850,7 +2927,7 @@
 			}
 		},
 		"propertiesGeoJSON": {
-			"description": "Caraterístiques no geomètriques de l'objecte GeoJSON.",
+			"description": "Característiques no geomètriques de l'objecte GeoJSON.",
 			"type": "object"
 		},
 		"coordinate" :{

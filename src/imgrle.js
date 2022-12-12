@@ -1517,7 +1517,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
 
 
 /*img_data és un Uint8ClampedArray que no suporta .push() però a canvi "it clamps input values between 0 and 255.
-This is especially handy for Canvas image processing algorithms since now you don?t have to manually clamp your
+This is especially handy for Canvas image processing algorithms since now you don't have to manually clamp your
 image processing math to avoid overflowing the 8-bit range.
 'data' es un array de dades que servirà per enviar al canvas
 'histograma' pot contenir una variable on escriure histograma. Pot ser null si es vol obtenir un histograma.
@@ -1802,16 +1802,19 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 									i_color1=component1.herenciaOrigen.nColors-1;
 								else if (i_color1<0)
 									i_color1=0;
-								categories[valor0]["$stat$_histo"].classe[i_color1]++;
-
-								//calculo el min, max i sum de la component1 per la categoria categories[valor0]
-								if (component1.herenciaOrigen.tractament!="categoric")
+								if (valor0<categories.length)
 								{
-									if (categories[valor0]["$stat$_min"]>valor1)
-										categories[valor0]["$stat$_min"]=valor1;
-									if (categories[valor0]["$stat$_max"]<valor1)
-										categories[valor0]["$stat$_max"]=valor1;
-									categories[valor0]["$stat$_sum"]+=valor1;
+									categories[valor0]["$stat$_histo"].classe[i_color1]++;
+
+									//calculo el min, max i sum de la component1 per la categoria categories[valor0]
+									if (component1.herenciaOrigen.tractament!="categoric")
+									{
+										if (categories[valor0]["$stat$_min"]>valor1)
+											categories[valor0]["$stat$_min"]=valor1;
+										if (categories[valor0]["$stat$_max"]<valor1)
+											categories[valor0]["$stat$_max"]=valor1;
+										categories[valor0]["$stat$_sum"]+=valor1;
+									}
 								}
 							}
 
@@ -2522,11 +2525,14 @@ var data
 			i_histo=estil.diagrama[i_diagrama].i_histograma;
 			if (estil.diagrama[i_diagrama].tipus == "chart")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 				{
 					var retorn_prep_histo;
-          // Desselecciona el checkbox per al tall de cues.
-          window.document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo)).checked=false;
+					// Desselecciona el checkbox per al tall de cues.
+
+					if (DonaTipusGraficHistograma(estil,0)=="bar")
+						document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo)).checked=false;
+
 					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
 					for (var i_c=0; i_c<estil.component.length; i_c++)
 					{
@@ -2543,7 +2549,7 @@ var data
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "chart_categ")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 				{
 					var retorn_prep_histo;
 					//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
@@ -2568,22 +2574,22 @@ var data
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "matriu")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 					document.getElementById(DonaNomMatriuConfusio(i_histo)).innerHTML=CreaTextMatriuDeConfusio(i_histo, true);
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "stat")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 					document.getElementById(DonaNomEstadistic(i_histo)).innerHTML=CreaTextEstadistic(i_histo, estil.diagrama[i_diagrama].stat);
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "stat_categ")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 					document.getElementById(DonaNomEstadistic(i_histo)).innerHTML=CreaTextEstadisticPerCategories(i_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 			{
-				if (window.document.getElementById(DonaNomCheckDinamicGrafic3d(i_histo)).checked)
+				if (document.getElementById(DonaNomCheckDinamicGrafic3d(i_histo)).checked)
 					CreaSuperficie3D(i_histo, true);
 			}
 		}

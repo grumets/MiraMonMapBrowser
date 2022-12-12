@@ -41,10 +41,10 @@
 var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
-//Suporta totes les version de WMS
+//Suporta totes les versions de WMS
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
-var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer;
+var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer={};
 var minim, maxim, factor_k, factorpixel;
 var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
 
@@ -54,7 +54,6 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 	//versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
 	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)
 
-
 	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
 		factorpixel=FactorGrausAMetres; // de graus a metres
 	else //if(unitats=="m")
@@ -63,6 +62,25 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de píxel
 
 	//Això no ho puc usar perquè em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
+	layer={nom: null, 
+		desc: null,
+		CostatMinim: null,
+		CostatMaxim: null,
+		CRSs: [],
+		consultable: false,
+		estil: [],
+		uom: null,
+		vom: null,  //Variable of measure
+		categories: [],
+		FlagsData: null,
+		i_data: 0,
+		data: null,
+		esCOG: false,
+		EnvLL: null,
+		uriDataTemplate: null,
+		uriMDTemplate: null,
+		dimensioExtra: null};
+		
 	for(i=0; i<node_layer.childNodes.length; i++)
 	{
 		node2=node_layer.childNodes[i];
@@ -73,9 +91,8 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 			{
 				if (DonaCRSRepresentaQuasiIguals(cadena.toUpperCase(), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
-					//·$·Aqui s'haurà de fer alguna cosa amb els sinònims,...
+					layer.CRSs.push(cadena.toUpperCase());
 					trobat=true;
-					break;
 				}
 			}
 		}
@@ -89,28 +106,17 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 			if(node2.nodeName=="Name")
 			{
 				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]={nom: null, 
-									desc: null,
-									CostatMinim: null,
-									CostatMaxim: null,
-									consultable: false,
-									estil: [],
-									uom: null,
-									vom: null,  //Variable of measure
-									categories: [],
-									FlagsData: null,
-									i_data: 0,
-									data: null,
-									esCOG: false,
-									EnvLL: null,
-									uriDataTemplate: null,
-									uriMDTemplate: null,
-									dimensioExtra: null};
-				layer=servidorGC.layer[servidorGC.layer.length-1];
+				servidorGC.layer[servidorGC.layer.length]=layer;
 				layer.nom=node2.childNodes[0].nodeValue;
 				
 				if(pare) //hereto les coses del pare si s'ha de fer
 				{
+					if(pare.CRSs && pare.CRSs.length>0)
+					{
+						layer.CRSs.push.apply(layer.CRSs, pare.CRSs);
+						layer.CRSs.sort(sortAscendingStringInsensible);
+						layer.CRSs.removeDuplicates(sortAscendingStringInsensible);
+					}
 					if(pare.consultable)
 						layer.consultable=true;
 					if(pare.estil)
@@ -120,7 +126,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					}
 					layer.CostatMinim=pare.CostatMinim;
 					layer.CostatMaxim=pare.CostatMaxim;
-					layer.dimensioExtra=JSON.parser(JSON.stringify(pare.dimensioExtra));
+					layer.dimensioExtra=JSON.parse(JSON.stringify(pare.dimensioExtra));
 				}
 				break;
 			}
@@ -356,7 +362,6 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					}
 				}
 			}
-
 			//Miro si és consultable
 			if(node_layer.getAttribute("queryable")=='1')
 				layer.consultable=true;
@@ -382,7 +387,7 @@ function HiHaAlgunErrorDeParsejatGetCapabilities(doc)
 				"\nError Reason: " + doc.parseError.reason +
 				"Error Line: " + doc.parseError.srcText);
 		return true;
-    	}
+    }
 	else if (doc.documentElement.nodeName=="parsererror")
 	{
 		var errStr=doc.documentElement.childNodes[0].nodeValue;
@@ -432,10 +437,10 @@ var root, cadena, node, node2, i, j
 			servidorGC.titol=node2.childNodes[0].nodeValue;
 	}
 
-	//Selecciono el node request
+	// Selecciono el node request
 	node=(root.getElementsByTagName('Capability')[0]).getElementsByTagName('Request')[0];
 
-	//Formats de visualització
+	// Formats de visualització
 	if(servidorGC.versio.Vers==1 && servidorGC.versio.SubVers==0)
 	{
 		node2=(node.getElementsByTagName('Map')[0]).getElementsByTagName('Format');
@@ -518,7 +523,251 @@ var root, cadena, node, node2, i, j
 	}
 }//Fi de ParsejaRespostaGetCapabilities()
 
-function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, access, i_capa, func_after, param_func_after)
+
+function ParsejaRespostaOAPI_MapCollection(servidorGC, collection)
+{
+var i, j, cadena, layer={};
+var factor_k, factorpixel;
+
+	if(!collection.links)
+		return;
+
+	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
+		factorpixel=FactorGrausAMetres; // de graus a metres
+	else //if(unitats=="m")
+		factorpixel=1; //de m a m
+
+	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de píxel
+
+	//Això no ho puc usar perquè em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
+	layer={nom: null, 
+		desc: null,
+		CostatMinim: null,
+		CostatMaxim: null,
+		CRSs: [],
+		consultable: false,
+		estil: [],
+		uom: null,
+		vom: null,  //Variable of measure
+		categories: [],
+		FlagsData: null,
+		i_data: 0,
+		data: null,
+		esCOG: false,
+		EnvLL: null,
+		uriDataTemplate: null,
+		uriMDTemplate: null,
+		dimensioExtra: null};
+		
+	// Miro si és un mapa
+	var rel=(servidorGC.tipus=="TipusOAPI_Maps")?"http://www.opengis.net/def/rel/ogc/1.0/map":"http://www.opengis.net/def/rel/ogc/1.0/tilesets-map";
+	
+	if(collection.links)
+	{
+		for(i=0; i<collection.links.length;i++)
+		{
+			if(collection.links[i].rel==rel)
+			{
+				layer.nom=collection.id;
+				layer.desc=collection.title;
+				break;
+			}
+		}
+	}
+	// Comprovo els estils, potser no té un mapa en un estil per defecte però si té mapes per cada estil
+	if(collection.styles)
+	{
+		for(i=0; i<collection.styles.length;i++)
+		{
+			for(j=0; j<collection.styles[i].links.length;j++)
+			{
+				if(collection.styles[i].links[j].rel==rel)
+				{
+					layer.estil[layer.estil.length]={"nom": collection.styles[i].id, "desc": collection.styles[i].title};
+					if(!layer.nom)
+					{
+						layer.nom=collection.id;
+						layer.desc=collection.title;
+					}
+					break;
+				}
+			}
+		}
+	}
+	if(!layer.nom)
+		return;
+	
+	// Si no s'indica cap CRS vol dir que tot està en CRS:84
+	if(collection.crs && collection.crs.length)
+	{
+		for(i=0; i<collection.crs.length;i++)
+		{
+			if((cadena=DonaEPSGDeURLOpengis(collection.crs[i]))!=null &&
+				DonaCRSRepresentaQuasiIguals(cadena.toUpperCase(), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+			{
+				layer.CRSs.push(cadena);
+			}
+		}
+	}
+	else
+	{
+		if(DonaCRSRepresentaQuasiIguals("CRS:84", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+			layer.CRSs.push("CRS:84");
+		else
+			return;
+	}
+	if(layer.CRSs.length<1)
+		return;
+	
+	if(collection.extent && collection.extent.spatial && collection.extent.spatial.bbox && collection.extent.spatial.bbox.length>0)
+	{
+		var env={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": collection.extent.spatial.crs ? collection.extent.spatial.crs : "CRS:84"};
+		for(i=0; i<collection.extent.spatial.bbox.length;i++)
+		{
+			if(env.EnvCRS.MinX>collection.extent.spatial.bbox[i][0])
+				env.EnvCRS.MinX=collection.extent.spatial.bbox[i][0];
+			if(env.EnvCRS.MinY>collection.extent.spatial.bbox[i][1])
+				env.EnvCRS.MinY=collection.extent.spatial.bbox[i][1];
+			if(collection.extent.spatial.bbox[i].length==4)
+			{
+				if(env.EnvCRS.MaxX<collection.extent.spatial.bbox[i][2])
+					env.EnvCRS.MaxX=collection.extent.spatial.bbox[i][2];
+				if(env.EnvCRS.MaxY<collection.extent.spatial.bbox[i][3])
+					env.EnvCRS.MaxY=collection.extent.spatial.bbox[i][3];
+			}
+			else if(collection.extent.spatial.bbox[i].length==6)
+			{
+				if(env.EnvCRS.MaxX<collection.extent.spatial.bbox[i][3])
+					env.EnvCRS.MaxX=collection.extent.spatial.bbox[i][3];
+				if(env.EnvCRS.MaxY<collection.extent.spatial.bbox[i][4])
+					env.EnvCRS.MaxY=collection.extent.spatial.bbox[i][4];
+			}
+		}
+		layer.EnvLL=DonaEnvolupantLongLat(env.EnvCRS, env.CRS);
+	}
+
+	//minScaleDenominator
+	if(typeof collection.minScaleDenominator==="number")
+		layer.CostatMinim=collection.minScaleDenominator*factorpixel/factor_k;
+	
+	//maxScaleDenominator
+	if(typeof collection.maxScaleDenominator==="number")
+		layer.CostatMaxim=collection.maxScaleDenominator*factorpixel/factor_k;
+
+	//MetadataURL
+	//·$·
+	//atribution
+	//·$·
+	
+	//Miro si és consultable
+	if(collection.queryable=='1' || collection.queryable=='true')
+		layer.consultable=true;
+	servidorGC.layer[servidorGC.layer.length]=layer;
+	
+}
+
+function ParsejaRespostaOAPI_LandingPage(doc, servidorGC)
+{
+	if(!doc)
+	{
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
+		// tot i no tenir aquesta informació intento tirar endavant
+		
+		return;
+	}
+	servidorGC.titol=doc.title;
+	if(servidorGC.func_after)
+	{
+		servidorGC.i_function++;
+		if (servidorGC.i_function<servidorGC.func_after.length)
+			servidorGC.func_after[servidorGC.i_function](servidorGC);
+	}
+}
+
+function ParsejaRespostaOAPI_CollectionsOfMaps(doc, servidorGC)
+{
+var i;
+
+	if(!doc)
+	{
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
+		return;
+	}
+	if(!doc.collections || doc.collections.length<1)
+		alert(GetMessage("ServerNotHaveLayer", "cntxmenu"));
+	
+	//Llegeix-ho les capes disponibles en el sistema de referència actual del navegador
+	for(i=0; i<doc.collections.length; i++)
+		ParsejaRespostaOAPI_MapCollection(servidorGC, doc.collections[i]);
+	
+	//Formats de visualització
+	//·$·
+	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/png";
+	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/jpeg";
+	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/gif";
+
+	//Formats de consulta
+	//·$·
+	servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="application/json";
+
+	if(servidorGC.layer.length>0)
+	{
+		if(servidorGC.func_after)
+		{
+			servidorGC.i_function++;
+			if (servidorGC.i_function<servidorGC.func_after.length)
+				servidorGC.func_after[servidorGC.i_function](servidorGC);
+		}
+	}
+	else
+	{
+		alert(GetMessage("ServerNotHaveLayerInBrowserReferenceSystem", "cntxmenu"));
+	}
+
+}
+
+function FesPeticioOAPI_LandingPage(servidorGC)
+{
+	// Faig una petició de landing page per saber el nom i descripció del servidor
+	var request=servidorGC.servidor;
+	request=AfegeixNomServidorARequest(servidorGC.servidor, request, true, servidorGC.cors); 
+	var ajax=new Ajax();
+	if (window.doAutenticatedHTTPRequest && servidorGC.access)
+		doAutenticatedHTTPRequest(servidorGC.access, "GET", 
+				ajax, request, null, null, 
+				ParsejaRespostaOAPI_LandingPage, "application/json", servidorGC);
+	else
+		ajax.doGet(request,
+				ParsejaRespostaOAPI_LandingPage, "application/json",servidorGC);
+}
+
+function FesPeticioOAPI_CollectionsOfMaps(servidorGC)
+{
+	var request="/collections?f=json";
+	request=AfegeixNomServidorARequest(servidorGC.servidor, request, true, servidorGC.cors);  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/
+	
+	var ajax=new Ajax();
+	if (window.doAutenticatedHTTPRequest && servidorGC.access)
+		doAutenticatedHTTPRequest(servidorGC.access, "GET", 
+				ajax, request, null, null, 
+				ParsejaRespostaOAPI_CollectionsOfMaps, 
+				"application/json", 
+				servidorGC);
+	else
+		ajax.doGet(request,
+				ParsejaRespostaOAPI_CollectionsOfMaps, 
+				"application/json",
+				servidorGC);
+}
+
+function OmpleCapacitatsOAPI(servidorGC)
+{
+	servidorGC.i_function=0;
+	if (servidorGC.i_function<servidorGC.func_after.length)
+		servidorGC.func_after[servidorGC.i_function](servidorGC);
+}
+
+function FesPeticioCapacitatsIParsejaResposta(servidor, tipus, versio, suporta_cors, access, i_capa, func_after, param_func_after)
 {
 var request;
 
@@ -530,20 +779,60 @@ var request;
 		alert(GetMessage("ValidURLMustBeProvided", "cntxmenu"));
 		return;
 	}
-	ajaxGetCapabilities[ajaxGetCapabilities.length]=new Ajax();
-	ServidorGetCapabilities[ServidorGetCapabilities.length]={win: window,
+	
+	if(tipus=="TipusOAPI_Maps" || tipus=="TipusOAPI_MapTiles")
+	{
+		var functions;
+		if(tipus=="TipusOAPI_Maps")
+		{
+			functions=[FesPeticioOAPI_CollectionsOfMaps,
+						FesPeticioOAPI_LandingPage];
+		}
+		else
+		{
+			functions=[FesPeticioOAPI_CollectionsOfMaps,
+						FesPeticioOAPI_LandingPage,
+						FesPeticioOAPI_tileMatrixSet];
+		}
+		if(func_after)
+			functions.push(func_after);
+		
+		ServidorGetCapabilities[ServidorGetCapabilities.length]={win: window,
 								index: ServidorGetCapabilities.length,
 								i_capa_on_afegir: i_capa,
 								servidor: servidor,
+								cors: suporta_cors,
 								access: access ? JSON.parse(JSON.stringify(access)) : null,
 								versio: null,
 								tipus: tipus,
 								titol: null,
 								formatGetMap: [],
 								formatGetFeatureInfo: [],
+								tileMatrixSets:[],
+								layer: [],
+								func_after: functions,
+								param_func_after: param_func_after};
+		OmpleCapacitatsOAPI(ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
+		return;
+	}
+	
+	ServidorGetCapabilities[ServidorGetCapabilities.length]={win: window,
+								index: ServidorGetCapabilities.length,
+								i_capa_on_afegir: i_capa,
+								servidor: servidor,
+								cors: suporta_cors,
+								access: access ? JSON.parse(JSON.stringify(access)) : null,
+								versio: null,
+								tipus: tipus,
+								titol: null,
+								formatGetMap: [],
+								formatGetFeatureInfo: [],
+								tileMatrixSets:[],
 								layer: [],
 								func_after: func_after,
 								param_func_after: param_func_after};
+								
+	ajaxGetCapabilities[ajaxGetCapabilities.length]=new Ajax();
 	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
 		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 
@@ -558,11 +847,18 @@ var request;
 		request+="WFS";
 	else if (tipus=="TipusSOS")
 		request+="SOS";
-	request=AfegeixNomServidorARequest(servidor, request, true, true  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/);
+
+	request=AfegeixNomServidorARequest(servidor, request, true, suporta_cors);  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/
+	
 	if (window.doAutenticatedHTTPRequest && ServidorGetCapabilities[ServidorGetCapabilities.length-1].access)
-		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", ajaxGetCapabilities[ajaxGetCapabilities.length-1], request, null, null, ParsejaRespostaGetCapabilities, "text/xml", ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
+		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", 
+				ajaxGetCapabilities[ajaxGetCapabilities.length-1], request, null, null, 
+				ParsejaRespostaGetCapabilities, 
+				"text/xml", 
+				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
 	else
 		ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
-				ParsejaRespostaGetCapabilities, "text/xml",
+				ParsejaRespostaGetCapabilitiess, 
+				"text/xml",
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
-}//Fi de FesPeticioCapacitatsIParsejaResposta
+}//Fi de FesPeticioCapacitatsIParsejaResposta()

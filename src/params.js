@@ -130,7 +130,7 @@ function showOrHideLayersOnTopOfVista()
 {
 var i_vista;
 	var excepcions=["atribucio"];
-	if (ParamCtrl.VistaPermanent.lenght>1)
+	if (ParamCtrl.VistaPermanent.length>1)
 		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			excepcions.push(ParamCtrl.VistaPermanent[i_vista].nom);
 	var prefixes=[];
@@ -310,6 +310,17 @@ var cdns=[], coord_visible, p, unitats_CRS;
 		": </legend>",
 		"<div id=\"param_colors\">",
 		DonaTextParamColors(),
+		"</div></fieldset>",
+		"<fieldset><legend>",
+		GetMessage("UserConfiguration"),
+		": </legend>",
+		"<div id=\"param_config_storage\">",
+		"<label for=\"configLoadBtn\">", GetMessage("SelectConfigLoad"), "</label>&nbsp;",
+		"<button class=\"Verdana11px\" id=\"configLoadBtn\" onclick=\"document.getElementById('selectConfigFileInput').click();return false;\">", GetMessage("Load"), "</button><br>",
+		"<input TYPE=\"file\" id=\"selectConfigFileInput\" accept=\".json,.geojson\" multiple=\"false\" style=\"display:none\" onChange='RecuperaConfiguracioUsuari(this.files)'>",
+		"<label for=\"configLoadBtn\">", GetMessage("FileNameToSave"), "</label>: &nbsp;",
+		"<input TYPE=\"text\" id=\"\" name=\"textFileInput\" placeholder=\"", GetMessage("FileName"),"\" maxlength=\"15\">&nbsp;",
+		"<input TYPE=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Save"), "\" onClick='GuardaConfiguracioUsuari(ParamCtrl, form.textFileInput.value)'> ",
 		"</div></fieldset>",
 		GetMessage("JsonConfigurationFile", "params"),
 		":&nbsp;&nbsp;<input TYPE=\"button\" id=\"button_show_ConfigJSON\" class=\"Verdana11px\" value=\"", GetMessage("Show"),
