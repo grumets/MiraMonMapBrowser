@@ -92,7 +92,7 @@ var MessageLang={
 	Date: {"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},
 	Field: {"cat":"Camp", "spa":"Camp", "eng":"Field", "fre":"Champ"},
 	ofTheField:{"cat":"del camp", "spa": "del campo", "eng": "of the field", "fre": "du champ"},
-	Title: {"cat":"T&iacute;tol", "spa":"T&iacute;tulo", "eng":"Title", "fre":"Titre"},
+	Title: {"cat":"Títol", "spa":"Título", "eng":"Title", "fre":"Titre"},
 	Condition: {"cat":"Condició", "spa":"Condición", "eng":"Condition", "fre":"Condition"},
 	OK: {"cat":"Acceptar", "spa":"Aceptar", "eng":" OK ", "fre":"Accepter"},
 	Cancel: {"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"},

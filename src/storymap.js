@@ -118,7 +118,12 @@ function TancaICreaStoryMap()
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
 	if (!isFinestraLayer(window, "creaStoryMap"))
-		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	{
+		const creaStoryMapContent = ["<label for='name'>", GetMessage('Title') + ":", "</label><input type='text' id='name' name'name' required minlength='4' maxlength='8' size='10'><br><br><input type='file' align='center'>"];
+		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, creaStoryMapContent.join(""));
+		//Acabem de crear la finestra creaStoryMap per això sabem que és en ultima posició del layerFinestraList
+		OmpleBarraFinestraLayer(window, layerFinestraList.length-1)
+	}
 	ObreFinestra(window, "creaStoryMap");
 }
 
