@@ -402,6 +402,7 @@ var MessageLang={
 		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és", "spa":"El valor del parámetro indicado es", "eng":"The parameter value found is", "fre":"La valeur de paramètre trouvée est"},
 		ActionOnMap: {"cat":"Acció sobre el mapa", "spa":"Acción sobre el mapa", "eng":"Action on the map", "fre":"Agir sur la carte"},
 		NewStorymap: {"cat":"Nou relat amb mapes", "spa":"Nuevo relato con mapas", "eng":"New storymaps", "fre":"Nouvelle carte de l'histoire"},
+		StorymapImage: {"cat":"Imatge de storymaps", "spa":"Imagen de storymap", "eng":"Stroymaps Image", "fre":"Image de storymaps"},
 	},
 	tresD:{
 		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},

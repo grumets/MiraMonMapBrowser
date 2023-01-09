@@ -119,13 +119,26 @@ function TancaICreaStoryMap()
 	TancaFinestraLayer("triaStoryMap");
 	if (!isFinestraLayer(window, "creaStoryMap"))
 	{
-		const creaStoryMapContent = ["<label for='name'>", GetMessage('Title') + ":", "</label><input type='text' id='name' name'name' required minlength='4' maxlength='8' size='10'><br><br><input type='file' align='center'>"];
+		const creaStoryMapContent = ["<label for='name'>", GetMessage('Title') + ":", "</label><input type='text' id='name' name'name' required minlength='4' maxlength='8' size='10'><br><br><input type='file' align='center' onChange='readURL(this)'><img id='#storyImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' />"];
 		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, creaStoryMapContent.join(""));
 		//Acabem de crear la finestra creaStoryMap per això sabem que és en ultima posició del layerFinestraList
 		OmpleBarraFinestraLayer(window, layerFinestraList.length-1)
 	}
 	ObreFinestra(window, "creaStoryMap");
 }
+
+function readURL(input) {
+	if (input.files && input.files[0]) {
+	  var reader = new FileReader();
+	  reader.onload = function (e) {
+		$('#storyImage')
+		  .attr('src', e.target.result)
+		  .width(150)
+		  .height(200);
+	  };
+	  reader.readAsDataURL(input.files[0]);
+	}
+  }
 
 //Inicia una Storymap
 function IniciaStoryMap(i_story)
