@@ -3371,7 +3371,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		cdns.push("<label for=\"edita-estil-capa-illum-az\">", GetMessage("Azimuth", "cntxmenu"), ": </label>",
 				"<input type=\"text\" id=\"edita-estil-capa-illum-az\" name=\"az\" value=\"",
 				(estil.component[0].illum.az ? estil.component[0].illum.az : 225), "\" style=\"width:50px;\" />",
-				" (", GetMessage("originNorthNorthClockwiseDegress", "cntxmenu"), ")",
+				" (", GetMessage("originNorthClockwiseDegress", "cntxmenu"), ")",
 				"<br>");
 		cdns.push("<label for=\"edita-estil-capa-illum-elev\">", GetMessage("Elevation", "cntxmenu"), ": </label>",
 				"<input type=\"text\" id=\"edita-estil-capa-illum-elev\" name=\"elev\" value=\"",

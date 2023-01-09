@@ -670,7 +670,7 @@ var cdns=[], capa, estil;
 						cdns.push("<option value=\"Pheno_base\">", GetMessage("SeasonBaseValue", "video"), "</option>");
 						cdns.push("<option value=\"Pheno_aos\">", GetMessage("AmplitudeSeason", "video"), " (AoS)</option>");
 						cdns.push("<option value=\"Pheno_rog\">", GetMessage("RateGreening", "video"), " (RoG)</option>");
-						cdns.push("<option value=\"Pheno_ros\">", GetMessage("RateSenescing", "video"), " (RoS)</option>");
+						cdns.push("<option value=\"Pheno_ros\">", GetMessage("RateSenescene", "video"), " (RoS)</option>");
 					}
 					cdns.push("</select>");
 				}

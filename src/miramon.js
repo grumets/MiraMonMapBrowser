@@ -4050,7 +4050,7 @@ function ComprovaVersioConfigMMN(param_ctrl)
 	{
 	    alert(GetMessage("TheVersion", "miramon") +
 			" config.json (" + param_ctrl.VersioConfigMMN.Vers + "." + param_ctrl.VersioConfigMMN.SubVers + ") " +
-			GetMessage("notAccrodingVersion", "miramon") +
+			GetMessage("notMatchVersion", "miramon") +
 			" tools.htm (" + VersioToolsMMN.Vers + "." + VersioToolsMMN.SubVers + "). " +
 			GetMessage("UpgradeCorrectly", "miramon") + ".");
 			return 1;

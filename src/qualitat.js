@@ -1242,7 +1242,7 @@ var capa;
 	cdns.push("\"<b><br/><br/>");
 
 	cdns.push("<fieldset><legend>",
-			  GetMessage("QualityAssesment", qualitat),
+			  GetMessage("QualityAssessment", qualitat),
 			  "</legend>");
 
 	cdns.push("<select name=\"metode_eval_qual\" class=\"Verdana11px\" onChange=\"ActualitzaCampsEnFuncioMetodeAvaluacioQualitat(form,",i_capa,",",i_estil,");\" >");

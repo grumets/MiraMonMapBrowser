@@ -1547,7 +1547,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	{
 		/*if (!estil.paleta || !estil.paleta.colors)
 		{
-			alert(GetMessage("LayerSingleComponentNeedPallette", "imgrle") + ". (" + DonaCadenaNomDesc(capa) + ")");
+			alert(GetMessage("LayerSingleComponentNeedPalette", "imgrle") + ". (" + DonaCadenaNomDesc(capa) + ")");
 			return;
 		}*/
 		component0=component[0];

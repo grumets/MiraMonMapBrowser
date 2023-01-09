@@ -1365,7 +1365,7 @@ var i_proces, i;
 	}
 	else
 	{
-		alert(GetMessage("TheLayer") + " '" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "' " + GetMessage("notAnyExecProcesDefined", "wps"));
+		alert(GetMessage("TheLayer") + " '" + DonaCadena(ParamCtrl.capa[i_capa].desc) + "' " + GetMessage("notAnyExecProcessDefined", "wps"));
 	}
 	s=cdns.join("");
 	contentLayer(elem, s);
