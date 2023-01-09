@@ -510,8 +510,8 @@ var MessageLang={
 		changesAboveWillBeApplied: {"cat":"s'’aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"},
 		ofChangingParameters: {"cat":"de canviar paràmetres", "spa":"de cambiar parámetros", "eng":"of changing parameters", "fre":"pour changement de paramètres"},
 		LayersOutSideTheBBox: {"cat":"Capes fora de l'àmbit actual", "spa":"Capas fuera del ámbito actual", "eng":"Layers outside the current bounding box", "fre": "Calques en dehors de la zone de délimitation actuelle"},
-		LayersOutSideScale: {"cat":"Capes sense suport pel nivell de zoom actual", "spa":"Capas sin soporte para el nivel de zoom actual", "eng":"Layers without suport for the current zoom level", "fre": "Calques sans prise en charge du niveau de zoom actuel"},
-		LayersWithoutSupportCurrentCRS: {"cat":"Capes sense suport pel CRS actual", "spa":"Capas sin soporte para el CRS actual", "eng":"Layers without suport for the current CRS", "fre": "Calques sans prise en charge du CRS actuel"}
+		LayersOutSideScale: {"cat":"Capes sense suport pel nivell de zoom actual", "spa":"Capas sin soporte para el nivel de zoom actual", "eng":"Layers without support for the current zoom level", "fre": "Calques sans prise en charge du niveau de zoom actuel"},
+		LayersWithoutSupportCurrentCRS: {"cat":"Capes sense suport pel CRS actual", "spa":"Capas sin soporte para el CRS actual", "eng":"Layers without support for the current CRS", "fre": "Calques sans prise en charge du CRS actuel"}
 	},
 	editavec:{
 		InsertTransactionObjectIntoLayer: {"cat": "La transacció d'inserció a la capa", "spa": "La transacción de inserción a la capa", "eng":"The insert transaction of the object into the layer", "fre": "L'opération d'insertion de l'objet dans la couche"},
@@ -526,7 +526,7 @@ var MessageLang={
 		ClassDescription: {"cat": "Descripció de classe", "spa": "Descripción de clase", "eng": "Class description", "fre": "Description de la classe"},
 		ClassValue: {"cat": "Valor de classe", "spa": "Valor de classe", "eng": "Class value", "fre": "Valeur de classe"},
 		AreaPercentage: {"cat": "Percentatge de l'àrea", "spa": "Porcentaje del área", "eng": "Percentage of area", "fre": "Pourcentage de zone"},
-		ClassCentalValue: {"cat": "Valor central de la classe", "spa": "Valor central de la classe", "eng": "Class cental value", "fre": "Classe valeur centrale"},
+		ClassCentralValue: {"cat": "Valor central de la classe", "spa": "Valor central de la clase", "eng": "Class central value", "fre": "Classe valeur centrale"},
 		CountByCategory: {"cat": "Recompte per categoria", "spa": "Cuenta por categoría", "eng": "Count by category", "fre": "Compter par catégorie"},
 		AreaByCategory: {"cat": "Àrea per categoria", "spa": "Área por categoría", "eng": "Area by category", "fre": "Zone par catégorie"},
 		Similarity: {"cat": "Semblança", "spa": "Similitud", "eng": "Similarity", "fra": "Similitude"},
