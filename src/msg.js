@@ -833,7 +833,7 @@ var MessageLang={
 		SeasonBaseValue: {"cat":"Valor base la temporada", "spa":"Valor base de la temporada", "eng":"Season base value", "fre":"Valeur de base de la saison"},
 		AmplitudeSeason: {"cat":"Amplitud de la temporada", "spa":"Amplitud de la temporada", "eng":"Amplitude of the season", "fre":"Amplitude de la saison"},
 		RateGreening: {"cat":"Taxa de verdor", "spa":"Tasa de verdor", "eng":"Rate of Greening", "fre":"Taux de verdissement"},
-		RateSenescene : {"cat":"Taxa de senescència", "spa":"Tasa de senescencia", "eng":"Rate of senescene", "fre":"Taux de sénescence"},
+		RateSenescene : {"cat":"Taxa de Senescència", "spa":"Tasa de Senescencia", "eng":"Rate of Senescene", "fre":"Taux de Sénescence"},
 		frames: {"cat":"fotogrames", "spa":"fotogramas", "eng":"frames", "fre":"cadres"},
 		LoadingFilm: {"cat":"Carregant rodet", "spa":"Cargando carrete", "eng":"Loading film", "fre":"Chargement film"},
 		LoadingFrames: {"cat":"Carregant fotogrames", "spa":"Cargando fotogramas", "eng":"Loading frames", "fre":"Chargement des cadres"},
