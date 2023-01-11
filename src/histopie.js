@@ -271,7 +271,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				{
 					//el valor màxim i mínim (i l'ample) són iguals per totes les components
 					cdns.push("\n",
-						GetMessage("ClassCentalValue", "histopie"));
+						GetMessage("ClassCentralValue", "histopie"));
 					for (i_c=0; i_c<estil.component.length; i_c++)
 						cdns.push("\t", GetMessage("Area"), " (m²)");
 					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
@@ -300,7 +300,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				else
 				{
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", GetMessage("ClassCentalValue", "histopie"),
+						cdns.push("\t", GetMessage("ClassCentralValue", "histopie"),
 							"\t", GetMessage("Area"), " (m²)");
 					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
 					{
