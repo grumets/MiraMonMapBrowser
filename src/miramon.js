@@ -3254,7 +3254,7 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 			for (var i_param=0; i_param<valors_i.param.length; i_param++)
 			{
 				clau_valor=valors_i.param[i_param];
-				//Si la clau no comença per "DIM_", llavors ho afageixo jo
+				//Si la clau no comença per "DIM_", llavors ho afegeixo jo
 				cdns.push("&",
 					((clau_valor.clau.nom.toUpperCase()!="TIME" && clau_valor.clau.nom.toUpperCase()!="ELEVATION" && clau_valor.clau.nom.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
 					clau_valor.clau.nom,"=",clau_valor.valor.nom);
@@ -3267,7 +3267,7 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 				if (capa.dimensioExtra[i_param].i_valor>-1)
 				{
 					var clau=capa.dimensioExtra[i_param].clau.nom;
-					//Si la clau no comença per "DIM_", llavors ho afageixo jo
+					//Si la clau no comença per "DIM_", llavors ho afegeixo jo
 					cdns.push("&",
 						((clau.toUpperCase()!="TIME" && clau.toUpperCase()!="ELEVATION" && clau.substr(0,4).toUpperCase()!="DIM_") ? "DIM_": ""),
 						clau,"=",capa.dimensioExtra[i_param].valor[capa.dimensioExtra[i_param].i_valor].nom);
@@ -4283,7 +4283,7 @@ function AfegeixPuntsCapabilitiesACapaDePunts(layers, capaDePunts)
 var capa, layer, punt;
 
 	//cerco la capa de punts
-	//si te objectes li afageixo els que toca
+	//si te objectes li afegeixo els que toca
 	if (null==(capa=DonaCapaDesDeIdCapa(capaDePunts.id)))
 	{
 		alert(GetMessage("CannotFindLayer") + " (id: " + i_capa + ")");

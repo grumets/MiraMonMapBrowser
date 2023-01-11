@@ -875,6 +875,6 @@ var MessageLang={
 	},
 	urls: {
 		helpHtm: {"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"},
-		installerMMRExe: {"cat":"https://www.miramon.cat/mmr/cat/exe/Inst_MMR.EXE", "spa":"https://www.miramon.cat/mmr/esp/exe/Inst_MMR.EXE", "eng":"https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE", "fre":"https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE"}
+		installerMMRExe: {"cat":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE", "spa":"http://www.creaf.uab.cat/miramon/mmr/esp/exe/Inst_MMR.EXE", "eng":"http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE",	"fre":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE"}
 	}
 }

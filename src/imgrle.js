@@ -38,7 +38,7 @@
 
 "use strict"
 
-function AfageixIcapaACalcul(calcul, i_capa, estil_o_atribut)
+function AfegeixIcapaACalcul(calcul, i_capa, estil_o_atribut)
 {
 var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
 var fragment, inici, final, cadena, nou_valor;
@@ -135,17 +135,59 @@ var FormulaConsulta="";
 
 			if(ParamCtrl.capa[i_capa_link].model==model_vector)
 			{
-				if(ParamCtrl.capa[i_capa].model==model_vector && i_capa!=i_capa_link)
-				{
-					alert("prop does not belong to the layer" + i_capa);
-					break;
-				}
 				if (typeof nou_valor.prop==="undefined")
 				{
 					alert("prop is missing in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
 					break;
 				}
-				FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; //contrueixo el fragment de FormulaConsulta
+				//Contrueixo el fragment de FormulaConsulta
+				if(ParamCtrl.capa[i_capa].model==model_vector)
+				{
+					if (i_capa!=i_capa_link)
+					{
+						alert("prop does not belong to the layer" + i_capa);
+						break;
+					}
+					FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; 
+				}
+				else //La capa origen és raster però la condició és vectorial
+				{
+					//cerco si ja existeix un valor amb aquestes caracteristiques
+					if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
+						ParamCtrl.capa[i_capa].valors=[];
+					var valors=ParamCtrl.capa[i_capa].valors;
+					for (i=0; i<valors.length; i++)
+					{
+						if ((
+							(typeof nou_valor.i_capa==="undefined" || nou_valor.i_capa==i_capa) &&
+							(
+								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
+								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
+							) &&
+							nou_valor.objectes
+							) ||
+							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa &&
+								nou_valor.objectes &&
+								(
+									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
+									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
+								)
+							)
+							)
+							break;
+					}
+					if (i==valors.length)
+					{
+						//afegeixo el valor si no existeix copiant tot el necessari.
+						valors[i]={};
+						if (typeof nou_valor.i_capa!=="undefined")
+							valors[i].i_capa=nou_valor.i_capa;
+						valors[i].objectes=ParamCtrl.capa[i_capa_link].objectes;
+						if (typeof nou_valor.i_data!=="undefined")
+							valors[i].i_data=nou_valor.i_data;
+					}
+					FormulaConsulta+=fragment.substring(0, inici)+"valors["+i+"].objectes.features[v["+i+"]].properties[\""+nou_valor.prop+"\"]";
+				}
 			}
 			else
 			{
@@ -204,7 +246,7 @@ var FormulaConsulta="";
 					}
 					if (i==valors.length)
 					{
-						//afageixo el valor si no existeix copiant tot el necessari.
+						//afegeixo el valor si no existeix copiant tot el necessari.
 						valors[i]=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa_link].valors[nou_valor.i_valor]));
 						if (typeof nou_valor.i_capa!=="undefined")
 							valors[i].i_capa=nou_valor.i_capa;
@@ -1547,7 +1589,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 	{
 		/*if (!estil.paleta || !estil.paleta.colors)
 		{
-			alert(GetMessage("LayerSingleComponentNeedPalette", "imgrle") + ". (" + DonaCadenaNomDesc(capa) + ")");
+			alert(GetMessage("LayerSingleComponentNeedPallette", "imgrle") + ". (" + DonaCadenaNomDesc(capa) + ")");
 			return;
 		}*/
 		component0=component[0];
@@ -2747,6 +2789,11 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 						return;
 					}
 					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+				}
+				else if (ParamCtrl.capa[i_capa2].model==model_vector)
+				{
+					//Si entro aquí, això hauria de ser una capa de polígons
+					loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 				}
 				else
 				{
