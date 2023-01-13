@@ -814,7 +814,8 @@ var MessageLang={
 		isNotObject: {"cat": "no és un objecte", "spa": "no es un objecto", "eng": "is not an object", "fre": "n'est pas un objet"}
 	},
 	vector: {
-		CannotSelectObjectLayerNoExist: {"cat":"No es poden seleccionar els objectes sol·licitats perquè la capa no existeix", "spa":"No se pueden seleccionar los objetos solicitados porquè la capa no existe", "eng":"Cannot select request object because the layer doesn't exist", "fre":"Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas"}
+		CannotSelectObjectLayerNoExist: {"cat":"No es poden seleccionar els objectes sol·licitats perquè la capa no existeix", "spa":"No se pueden seleccionar los objetos solicitados porquè la capa no existe", "eng":"Cannot select request object because the layer doesn't exist", "fre":"Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas"},
+		ElementsVectorialTable: {"cat":"Taula d'elements vectorials", "spa":"Tabla de elementos vectoriales", "eng":"Vectorial elements table", "fre":"Tableau des éléments vectoriels"}
 	},
 	video: {
 		NoLayerAvailableForAnimation: {"cat":"No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.",  "spa":"No hi ha ninguna capa disponible para la animación en este área o zoom.",  "eng":"There is no layer available for the animation in this area or zoom.", "fre":"Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom"},

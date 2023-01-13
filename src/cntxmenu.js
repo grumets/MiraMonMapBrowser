@@ -366,7 +366,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	}
 	if (capa.model==model_vector)
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"MostraTaulaDeCapaVectorial();TancaContextMenuCapa();\">",
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial();TancaContextMenuCapa();\">",
 				GetMessage("ShowLikeTable", "cntxmenu"), "</a><br>");
 	}
 
@@ -3951,7 +3951,17 @@ var floatValor=parseFloat(valor);
 	Mostra la capa vecotrial en format taula.
  */
 
-function MostraTaulaDeCapaVectorial()
+function ObreFinestraTaulaDeCapaVectorial()
 {
+	var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
+	if (!elem)
+		return;
+	contentLayer(elem, DonaCadenaTaulaDeCapaVecrtorial(i_capa));
+	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+}
 
+function DonaCadenaTaulaDeCapaVecrtorial(i_capa)
+{
+	const cdns=[], capa=ParamCtrl.capa[i_capa];
+	
 }
