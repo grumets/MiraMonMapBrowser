@@ -829,8 +829,7 @@ var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
 	{
 		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
-		var image=win.document.getElementById(nom_vista + "_i_raster"+i);
-		CanviaImatgeCapa(image, vista, i, -1, null, null, null);
+		CanviaImatgeCapa(win.document.getElementById(nom_vista + "_i_raster"+i), vista, i, -1, null, null, null);
 	}
 	else
 		CreaMatriuCapaTiled(nom_vista, vista, i);
@@ -1031,7 +1030,7 @@ function PintaCtxColorVoraIInterior(estil_vora, estil_interior, ctx, previ)
 
 function TracaCoordenadesCanvasGeometriaLinia(ctx, geometry, env, ncol, nfil)
 {
-var i_col, i_fil, lineString;
+var lineString;
 
 	for (var c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
 	{
@@ -1039,21 +1038,20 @@ var i_col, i_fil, lineString;
 			lineString=geometry.coordinates[c2];
 		else
 			lineString=geometry.coordinates;
-		i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
-		i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil);
-		ctx.moveTo(i_col, i_fil);
+		//cal sumar sempre 0.5 perquè la linia es traça a la cantonada d'un pixel i no pel mig segons he llegit.
+		ctx.moveTo(Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol)+0.5,
+			Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil)+0.5);
 		for (var c1=1; c1<lineString.length; c1++)
 		{
-			i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
-			i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil);
-			ctx.lineTo(i_col, i_fil);
+			ctx.lineTo(Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol)+0.5,
+				Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil)+0.5);
 		}
 	}
 }
 
 function TracaCoordenadesCanvasGeometriaPoligon(ctx, geometry, env, ncol, nfil)
 {
-var i_col, i_fil, polygon, lineString;
+var polygon, lineString;
 
 	for (var c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
 	{
@@ -1064,19 +1062,94 @@ var i_col, i_fil, polygon, lineString;
 		for (var c2=0; c2<polygon.length; c2++)
 		{
 			lineString=polygon[c2];
-			i_col=Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
-			i_fil=Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil);
-			ctx.moveTo(i_col, i_fil);
+			ctx.moveTo(Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol)+0.5,
+				Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil)+0.5);
 			for (var c1=1; c1<lineString.length; c1++)
 			{
-				i_col=Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol);
-				i_fil=Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil);
-				ctx.lineTo(i_col, i_fil);
+				ctx.lineTo(Math.round((lineString[c1][0]-env.MinX)/(env.MaxX-env.MinX)*ncol)+0.5,
+					Math.round((env.MaxY-lineString[c1][1])/(env.MaxY-env.MinY)*nfil)+0.5);
 			}
 		}
 	}
 }
 
+async function loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
+{
+	//De moment aiò només està ben implementat per capes vectorials que ja estan carregades.
+	//Cal pensar que passa si els objectes encara no s'han carregat. Cal cridar la carrega dels vectors de manera assincrona 
+	//aquí abans de cridar el dibuixat de la capa oculta amb un await.
+	var objOculta = DonaObjCapaComABinaryArray(vista, i_capa2, ParamCtrl.capa[i_capa2].objectes);
+	ParamCtrl.capa[i_capa].valors[i_valor].datatype=objOculta.datatype;
+	ParamCtrl.capa[i_capa].valors[i_valor].nodata=[objOculta.nodata];
+	return {dades: objOculta.arrayBuffer, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
+}
+
+/*Només dibuixa objectes de tipus polígon.
+Conté l'index de objectes.features representat (l'identificador gràfic). 
+El tipus de dades i el nodata depenen de objetes.features.length. 
+* Si és <256, es un Uint8 i el 255 és el nodata; 
+* si és <65536 es un Uint16 i el nodata és el 65535; 
+* i si és <16777216 és un Uint32 i el nodata és el 16777215.*/
+function DonaObjCapaComABinaryArray(vista, i_capa, objectes)
+{
+var env=vista.EnvActual;
+var capa=ParamCtrl.capa[i_capa];
+var feature, geometry;
+var nom_canvas_ocult=DonaNomCanvasCapaDigi(ParamCtrl.VistaPermanent[0].nom, -i_capa-1);
+var canvas_ocult = window.document.getElementById(nom_canvas_ocult);
+var ctx_ocult = canvas_ocult.getContext('2d');
+var arrayBuffer, array_uint, datatype, nodata, mida=canvas_ocult.width*canvas_ocult.height;
+
+	//if (estil.TipusObj=='P')
+
+	if (objectes.features.length<256)
+	{
+		//Cal canviar això per el arraybuffer que hi ha a valors[i]
+		arrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height);
+		datatype = "uint8";
+		nodata = 255;
+		array_uint = new Uint8Array(arrayBuffer);
+	}
+	else if (objectes.features.length<65536)
+	{
+		arrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*2);
+		datatype = "uint16";
+		nodata = 65535;
+		array_uint = new Uint16Array(arrayBuffer);
+	}
+	else //if (objectes.features.length<16777216)
+	{
+		arrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*4);
+		datatype = "uint32";
+		nodata = 16777215;
+		array_uint = new Uint32Array(arrayBuffer);
+	}
+	array_uint.fill(nodata);
+	
+	//for (var j=0; j<objectes.features.length-1; j++)
+	for (var j=objectes.features.length-1; j>=0; j--)
+	{
+		ctx_ocult.clearRect(0, 0, canvas_ocult.width, canvas_ocult.height);  //els 4 bytes a 0 incloent opacitat que serà la meva marca de nodata.
+		feature=objectes.features[j];
+		geometry=DonaGeometryCRSActual(feature, capa.CRSgeometry);
+		if (geometry.type=="Polygon" || geometry.type=="MultiPolygon")
+		{
+			ctx_ocult.beginPath();
+			ctx_ocult.fillStyle="rgba(255,255,255,1)";
+			//https://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
+			TracaCoordenadesCanvasGeometriaPoligon(ctx_ocult, geometry, env, vista.ncol, vista.nfil);
+			ctx_ocult.mozFillRule = 'evenodd'; //for old firefox 1~30
+			ctx_ocult.fill('evenodd'); //for firefox 31+, IE 11+, chrome
+			var imgData = ctx_ocult.getImageData(0, 0, canvas_ocult.width, canvas_ocult.height);	
+			for (var i=0; i<mida; i++)
+			{
+				if (imgData.data[i*4+3]!=0)
+					array_uint[i]=j;
+			}
+		}
+	}
+	return {arrayBuffer: arrayBuffer, datatype: datatype, nodata: nodata};
+}
 
 function DibuixaObjCapaDigiAVista(param, neteja_canvas, atributs, objectes, estil)
 {	
@@ -1216,14 +1289,6 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 		}
 	}
 
-	if (estil.TipusObj=='P')  //Cal pintar també en la layer oculta.
-	{
-		var nom_canvas_ocult=DonaNomCanvasCapaDigi(nom_vista, -1);
-		var canvas_ocult = win.document.getElementById(nom_canvas_ocult);
-		var ctx_ocult = canvas_ocult.getContext('2d');
-		var j_r, j_g, j_b, ja_avisat_16m=false;
-		ctx_ocult.clearRect(0, 0, canvas_ocult.width, canvas_ocult.height);  //els 4 bytes a 0 incloent opacitat que serà la meva marca de nodata.
-	}
 	var feature;	
 	for (var j=objectes.features.length-1; j>=0; j--)
 	{
@@ -1394,31 +1459,6 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					}
 					TracaCoordenadesCanvasGeometriaPoligon(ctx, geometry, env, vista.ncol, vista.nfil);
 					PintaCtxColorVoraIInterior(forma_vora, forma_interior, ctx, previ);
-				}
-			}
-			if (estil.TipusObj=='P')  //Cal pintar també en la layer oculta.
-			{
-				if (j<16777215)
-				{
-					ctx_ocult.beginPath();
-					j_b=Math.floor(j/65536);
-					j_g=j%65536;
-					j_r=j_g%256;
-					j_g=Math.floor(j_g/256);
-					ctx_ocult.fillStyle="rgba("+j_r+","+j_b+","+j_b+",256)";
-					TracaCoordenadesCanvasGeometriaPoligon(ctx_ocult, geometry, env, vista.ncol, vista.nfil);
-					//https://stackoverflow.com/questions/13618844/polygon-with-a-hole-in-the-middle-with-html5s-canvas
-					ctx_ocult.mozFillRule = 'evenodd'; //for old firefox 1~30
-					ctx_ocult.fill('evenodd'); //for firefox 31+, IE 11+, chrome
-				}
-				else
-				{
-					if (!ja_avisat_16m)
-					{
-						ja_avisat_16m=true;
-						alert("Too much features. 16 777 215 is the maximum supported for layer combination and filtering.");
-						//Aquest limit es podria ampliar usant el canal alpha (amb el benentès que alpha=0 és la marca de nodata)
-					}
 				}
 			}
 		}
@@ -1667,32 +1707,6 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			alert("Type of feature geometry: " + geometry.type + " not supported yet");
 		}
 	}
-	if (estil.TipusObj=='P')  //Cal recuperar el contingut de la layer oculta com a array d'identificadors
-	{
-		var view, mida=canvas_ocult.width*canvas_ocult.height;
-		var imgData = ctx_ocult.getImageData(0, 0, canvas_ocult.width, canvas_ocult.height);
-		if (objectes.features.length<256)
-		{
-			capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height);
-			var uint8s = new Uint8Array(capa.objectesArrayBuffer);
-			for (var i=0; i<mida; i++)
-				uint8s[i]=imgData.data[i*4+3]==0 ? 255 : imgData.data[i*4];
-		}
-		else if (objectes.features.length<65536)
-		{
-			capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*2);
-			var uint16s = new Uint16Array(capa.objectesArrayBuffer);
-			for (var i=0; i<mida; i++)
-				uint16s[i]=imgData.data[i*4+3]==0 ? 65535 : imgData.data[i*4]+imgData.data[i*4+1]*256;
-		}
-		else //if (objectes.features.length<16777216)
-		{
-			capa.objectesArrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height*4);
-			var uint32s = new Uint32Array(capa.objectesArrayBuffer);
-			for (var i=0; i<mida; i++)
-				uint32s[i]=imgData.data[i*4+3]==0 ? 16777215 : imgData.data[i*4]+imgData.data[i*4+1]*256+imgData.data[i*4+2]*65536;
-		}
-	}
 	return;
 }
 
@@ -1742,28 +1756,29 @@ var neteja_canvas=true;
 		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.atributs, capa.objectes, capa.estil[capa.i_estil]);
 }
 
+//Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)
 function DonaNomCanvasCapaDigi(nom_vista, i)
 {
-	if (i==-1)
-		return nom_vista + "_l_capa_oculta_canvas";
+	if (i<0)
+		return nom_vista + "_l_capa_" + (-i-1) + "_oculta_canvas";
 	return nom_vista + "_l_capa_digi" + i + "_canvas";
 }
 
 function CreaCapaDigiLayer(nom_vista, i_nova_vista, i)
 {
-	if (i==-1)
+	if (i<0)
 	{
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
-		return textHTMLLayer(nom_vista+"_l_capa_oculta", DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
+		return textHTMLLayer(nom_vista+ "_l_capa_"+ (-i-1) + "_oculta", DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: false, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+						null, {scroll: "no", visible: false, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, i	) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
 	}
 	if (ParamCtrl.capa[i].visible!="no"/* && EsObjDigiVisibleAAquestNivellDeZoom(ParamCtrl.capa[i])*/)
 	{
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
 		return textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, /*i_nova_vista,*/ i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
 	}
 	return "";
 }
@@ -2248,7 +2263,6 @@ var p, unitats_CRS;
 	if (isLayer(elem))
 	{
 		//Les capes
-		var cal_capa_oculta=false;
 		for (var i=ParamCtrl.capa.length-1; i>=0; i--)
 		{
 			if(i_crea_vista!=NCreaVista)
@@ -2261,7 +2275,7 @@ var p, unitats_CRS;
 			{
 				cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, i));
 				if (capa.estil[capa.i_estil].TipusObj=='P')
-					cal_capa_oculta=true;
+					cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -i-1)); //La capa oculta per rasteritzar identificadors gràfics de poligons
 			}
 			else
 			{
@@ -2273,8 +2287,6 @@ var p, unitats_CRS;
 				}
 			}
 		}
-		if (cal_capa_oculta)
-			cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -1));  //La capa oculta per rasteritzar identificadors gràfics de poligons
 
 		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
 		{

@@ -748,7 +748,7 @@ function CercaCombinacioCamps(llista_comb, combinacio)
                 	   ((!objecte[2] && !combinacio[2]) || (objecte[2] && combinacio[2] && combinacio[2].toLowerCase()==objecte[2].toLowerCase())))
 				return true;
 			return false;
-		});  //tools1.js afegeix suport a find() si no hi és.
+		});  //tools1.js afageix suport a find() si no hi és.
 	/*}
 	catch(ex)
 	{

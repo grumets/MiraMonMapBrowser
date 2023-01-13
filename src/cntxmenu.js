@@ -2022,11 +2022,11 @@ var cdns=[], i;
 			":<br><input type=\"text\" name=\"servidor\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"https://\""), " />",
 			"<br/>",
 			"<input type=\"hidden\" name=\"cors\" value=\"",ParamCtrl.CorsServidorLocal,"\">",
-			"<input type=\"hidden\" id=\"RadioTipus_Serv\" name=\"tipus\" value=\"TipusWMS\">",
+			"<input type=\"hidden\" name=\"tipus\" value=\"TipusWMS\">",
 			"<input type=\"radio\" id=\"RadioVersion_WMS11\" name=\"versio\" value=\"1.1.0\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS11\">OGC WMS v 1.1</label>",
 			"<input type=\"radio\" id=\"RadioVersion_WMS111\" name=\"versio\" value=\"1.1.1\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS111\">OGC WMS v 1.1.1</label>",
 			"<input type=\"radio\" id=\"RadioVersion_WMS13\" name=\"versio\" value=\"1.3.0\" checked=\"checked\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusWMS';\"><label for=\"RadioVersion_WMS13\">OGC WMS v 1.3</label>",
-			"<input type=\"radio\" id=\"RadioOAPI_Maps\" name=\"tipus\" value=\"TipusOAPI_Maps\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusOAPI_Maps';\"><label for=\"RadioTipusOAPI_Maps\">OGC API Maps</label><br/>",
+			"<input type=\"radio\" id=\"RadioOAPI_Maps\" name=\"versio\" value=\"\" onclick=\"document.AfegeixCapaServidor.tipus.value='TipusOAPI_Maps';\"><label for=\"RadioTipusOAPI_Maps\">OGC API Maps</label><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 			GetMessage("Explore"),
 			"\" onClick=\"FesPeticioCapacitatsIParsejaResposta(document.AfegeixCapaServidor.servidor.value, document.AfegeixCapaServidor.tipus.value, document.AfegeixCapaServidor.versio.value, JSON.parse(document.AfegeixCapaServidor.cors.value), null, ", i_capa, ", MostraCapesCapacitatsWMS, null);\" />");
@@ -2918,7 +2918,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 				}
 				else
 				{
-					if (capa.model==model_vector && isNaN(condicio.valor) )
+					if (/*capa.model==model_vector &&*/ isNaN(condicio.valor) )
 						calcul+=("\""+condicio.valor+"\"");
 					else
 						calcul+=condicio.valor;
