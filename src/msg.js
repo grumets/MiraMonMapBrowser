@@ -393,7 +393,8 @@ var MessageLang={
 		forShowingQualityInformation: {"cat":"de mostrar la informació de qualitat", "spa":"de mostrar la información de calidad", "eng":"for showing the quality information", "fre":"pour afficher l'information de qualité"},
 		ofUserFeedback: {"cat":"de valoracions dels usuaris", "spa":"de valoraciones de los usuarios", "eng":"of user feedback", "fre":"pour la rétroaction de l'utilisateur"},
 		_withStatisticOf_: {"cat":" amb estadistics de ","spa":" con estadísticos de ","eng":" with statistic of ", "fre":" avec statistiques des "},
-		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"}
+		StatisticalDescriptorDisplayNeedSelected: {"cat":"Cal sel·leccionar el descriptor estadístic a mostrar per la capa", "spa":"Debe seleccionar el descriptor estadístico para mostrar para la capa", "eng":"The statistical descriptor to display for the layer needs to be selected", "fre":"Le descripteur statistique à afficher pour la couche doit être sélectionné"},
+		ShowLikeTable: {"cat":"Mostra com taula", "spa":"Mostrar como talba", "eng":"Show like table", "fre":"Tableau de présentation"}
 	},
 	storymap:{
 		Storymaps: {"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"},
