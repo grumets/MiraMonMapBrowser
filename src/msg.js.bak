@@ -92,7 +92,7 @@ var MessageLang={
 	Date: {"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},
 	Field: {"cat":"Camp", "spa":"Camp", "eng":"Field", "fre":"Champ"},
 	ofTheField:{"cat":"del camp", "spa": "del campo", "eng": "of the field", "fre": "du champ"},
-	Title: {"cat":"Títol", "spa":"Título", "eng":"Title", "fre":"Titre"},
+	Title: {"cat":"T&iacute;tol", "spa":"T&iacute;tulo", "eng":"Title", "fre":"Titre"},
 	Condition: {"cat":"Condició", "spa":"Condición", "eng":"Condition", "fre":"Condition"},
 	OK: {"cat":"Acceptar", "spa":"Aceptar", "eng":" OK ", "fre":"Accepter"},
 	Cancel: {"cat":"Cancel·lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"},
@@ -401,8 +401,6 @@ var MessageLang={
 		NoStoryInThisArea: {"cat":"No hi ha cap relat associat a aquesta zona", "spa":"No hay ningún relato asociado a esta zona", "eng":"There are no stories associated with this area", "fre":"Il n'y a pas d'histoires associées à cette zone"},
 		ParameterValueFoundIs: {"cat":"El valor del paràmetre indicat és", "spa":"El valor del parámetro indicado es", "eng":"The parameter value found is", "fre":"La valeur de paramètre trouvée est"},
 		ActionOnMap: {"cat":"Acció sobre el mapa", "spa":"Acción sobre el mapa", "eng":"Action on the map", "fre":"Agir sur la carte"},
-		NewStorymap: {"cat":"Nou relat amb mapes", "spa":"Nuevo relato con mapas", "eng":"New storymaps", "fre":"Nouvelle carte de l'histoire"},
-		StorymapImage: {"cat":"Imatge de storymaps", "spa":"Imagen de storymap", "eng":"Stroymaps Image", "fre":"Image de storymaps"},
 	},
 	tresD:{
 		Graphic_3D: {"cat":"Gràfic 3D", "spa":"Gráfico 3D", "eng":"3D Graphic", "fre":"Diagramme 3D"},
@@ -877,6 +875,6 @@ var MessageLang={
 	},
 	urls: {
 		helpHtm: {"cat":"ajuda/cat/ajuda.htm", "spa":"ajuda/spa/ajuda.htm", "eng":"ajuda/eng/ajuda.htm", "fre":"ajuda/fre/ajuda.htm"},
-		installerMMRExe: {"cat":"https://www.miramon.cat/mmr/cat/exe/Inst_MMR.EXE", "spa":"https://www.miramon.cat/mmr/esp/exe/Inst_MMR.EXE", "eng":"https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE", "fre":"https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE"}
+		installerMMRExe: {"cat":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE", "spa":"http://www.creaf.uab.cat/miramon/mmr/esp/exe/Inst_MMR.EXE", "eng":"http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE",	"fre":"http://www.creaf.uab.cat/miramon/mmr/cat/exe/Inst_MMR.EXE"}
 	}
 }

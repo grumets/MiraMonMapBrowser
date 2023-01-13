@@ -250,20 +250,20 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 								//valors_temps és una cadena que pot contenir un únic valor, una llista de valors separats per coma (o un interval amb període que no suportem)
 								//yyyy-mm-ddThh:mm:ss.sssZ
 								if (temps_defecte)
+								{
+									data_defecte={};
 									OmpleDataJSONAPartirDeDataISO8601(data_defecte, temps_defecte);
+								}
 								layer.data=[];
 								dates=valors_temps.split(",");
 								for(j=0; j<dates.length; j++)
 								{
-									if(j==0)
-									{
-										layer.FlagsData=OmpleDataJSONAPartirDeDataISO8601(layer.data[layer.data.length],
-														dates[j]);
-									}
+									layer.data.push({});
+									if (j==0)
+										layer.FlagsData=OmpleDataJSONAPartirDeDataISO8601(layer.data[layer.data.length-1], dates[j]);
 									else
-										OmpleDataJSONAPartirDeDataISO8601(layer.data[layer.data.length],
-														dates[j]);
-									if(data_defecte && layer.data[layer.data.length-1]==data_defecte)
+										OmpleDataJSONAPartirDeDataISO8601(layer.data[layer.data.length-1], dates[j]);
+									if(data_defecte && /*layer.data[layer.data.length-1]==data_defecte*/ dates[j]==temps_defecte)
 										layer.i_data=layer.data.length-1;
 								}
 							}
@@ -858,7 +858,7 @@ var request;
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
 	else
 		ajaxGetCapabilities[ajaxGetCapabilities.length-1].doGet(request,
-				ParsejaRespostaGetCapabilitiess, 
+				ParsejaRespostaGetCapabilities, 
 				"text/xml",
 				ServidorGetCapabilities[ServidorGetCapabilities.length-1]);
 }//Fi de FesPeticioCapacitatsIParsejaResposta()
