@@ -366,7 +366,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	}
 	if (capa.model==model_vector)
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial();TancaContextMenuCapa();\">",
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("ShowLikeTable", "cntxmenu"), "</a><br>");
 	}
 
@@ -3951,17 +3951,47 @@ var floatValor=parseFloat(valor);
 	Mostra la capa vecotrial en format taula.
  */
 
-function ObreFinestraTaulaDeCapaVectorial()
+function ObreFinestraTaulaDeCapaVectorial(i_capa)
 {
-	var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
+var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
+
 	if (!elem)
 		return;
-	contentLayer(elem, DonaCadenaTaulaDeCapaVecrtorial(i_capa));
+	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
 
-function DonaCadenaTaulaDeCapaVecrtorial(i_capa)
+function DonaCadenaTaulaDeCapaVectorial(i_capa)
 {
-	const cdns=[], capa=ParamCtrl.capa[i_capa];
-	
+const cdns=[], capa=ParamCtrl.capa[i_capa], objectes = capa.objectes.features;
+const atributsVisibles = [];
+
+	for (var i = 0; i < capa.atributs.length; i++)
+	{
+		const attribute = capa.atributs[i];
+		if (attribute.mostrar == "si")
+		{
+			atributsVisibles.push(capa.atributs[i]);
+		}
+	}
+	if (atributsVisibles.length > 0) 
+	{
+		cdns.push("<table><tr>");
+		for (var i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		{
+			cdns.push("<th>", atributsVisibles[i].descripcio, "</th>");
+		}
+		cdns.push("</tr>");
+		for (var i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			cdns.push("<tr>");
+			for (var j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			{
+				cdns.push("<td>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+			}
+			cdns.push("<button value='", GetMessage("GoTo", "capavola"), "' onclick='AnarACorrdenada()'></button>", "</tr>");
+		}
+		cdns.push("</table>");
+	}
+	return cdns;
 }
