@@ -3981,6 +3981,7 @@ const atributsVisibles = [];
 		{
 			cdns.push("<th>", atributsVisibles[i].descripcio, "</th>");
 		}
+		cdns.push("<th>Anar a</th>");
 		cdns.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
 		{
@@ -3989,9 +3990,9 @@ const atributsVisibles = [];
 			{
 				cdns.push("<td>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
 			}
-			cdns.push("<button value='", GetMessage("GoTo", "capavola"), "' onclick='AnarACorrdenada()'></button>", "</tr>");
+			cdns.push("<td><button width='100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 		}
 		cdns.push("</table>");
 	}
-	return cdns;
+	return cdns.join("");
 }
