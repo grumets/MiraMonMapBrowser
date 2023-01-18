@@ -133,15 +133,15 @@ var d, punt_coord;
 	}
 
 	//Dibuixo la icona per mostrar el punt consultat
-	/*if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 	{
 		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord];
 		capa.objectes.features[0].geometry.coordinates[0]=punt_coord.x;
 		capa.objectes.features[0].geometry.coordinates[1]=punt_coord.y;
-		capa.objectes.features[0].properties.radius=d;
+		//capa.objectes.features[0].properties.radius=d;
 		capa.visible="si";
 		CreaVistes();
-	}*/
+	}
 	// Constant a 1000m per a una bona visualització del punt i dels voltants.
 	d=1000;
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))

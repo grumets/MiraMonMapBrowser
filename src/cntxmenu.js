@@ -3996,3 +3996,8 @@ const atributsVisibles = [];
 	}
 	return cdns.join("");
 }
+// Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+function TancaFinestra_taulaCapaVectorial() 
+{
+	TancaFinestra_anarCoord();
+}
