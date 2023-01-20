@@ -1378,7 +1378,7 @@
 								},
 								"url": {
 									"description": "Si cada valor està contingut en un fitxer diferent, part final del nom del fitxer llegit amb TipusHTTP_GET que es concatena amb 'servidor'. Només aplica per TIFF. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre llegir una capa multitime. Opcional. Si no s'indica es fa servir 'servidor' sense afegir res",
-									"type": ["string", "null"],
+									"type": "string",
 									"format": "uri"
 								},
 								"iBand": {
@@ -2956,19 +2956,6 @@
 				},
 				{
 					"properties": {
-						"type": {"enum": ["MultiPoint"]},
-						"coordinates": {
-							"description": "Un multipoint",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"$ref": "#/definitions/coordinate"
-							}
-						}
-					}
-				},
-				{
-					"properties": {
 						"type": {"enum": ["LineString"]},
 						"coordinates": {
 							"description": "Una linia",
@@ -2976,65 +2963,6 @@
 							"minItems": 2,
 							"items": {
 								"$ref": "#/definitions/coordinate"
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["MultiLineString"]},
-						"coordinates": {
-							"description": "Un multilinestring",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Una linia",
-								"type": ["array"],
-								"minItems": 2,
-								"items": {
-									"$ref": "#/definitions/coordinate"
-								}
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["Polygon"]},
-						"coordinates": {
-							"description": "Un polígon",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Un anell",
-								"type": ["array"],
-								"minItems": 2,
-								"items": {
-									"$ref": "#/definitions/coordinate"
-								}
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["MultiPolygon"]},
-						"coordinates": {
-							"description": "Un polipolígon",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Un polígon",
-								"type": ["array"],
-								"minItems": 1,
-								"items": {
-									"description": "Un anell",
-									"type": ["array"],
-									"minItems": 2,
-									"items": {
-										"$ref": "#/definitions/coordinate"
-									}
-								}
 							}
 						}
 					}

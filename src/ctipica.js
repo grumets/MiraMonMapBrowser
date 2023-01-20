@@ -1180,9 +1180,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 	    {
 			cdns.push("<table border=0 cellspacing=0 cellpadding=0>" ,
 			   "<tr><td rowspan=",(ParamCtrl.CapaConsultaPreguntaServidor.length+4),
-			   "><img src=\"",
-			   AfegeixAdrecaBaseSRC("1tran.gif"),
-			   "\" height=1 width=5></td>",
+			   " height=\"1\" width=\"5\"></td>",
 			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>Selecció de l'àmbit:</b></td></tr>");
 			//(*) Per ··· [    ][v]
 			var i;
