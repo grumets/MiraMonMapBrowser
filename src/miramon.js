@@ -2284,6 +2284,10 @@ function EsPuntDinsAmbitNavegacio(punt)
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
 }//Fi de EsPuntDinsAmbitNavegacio()
 
+function EsAmbitDinsAmbitNavegacio(ambit)
+{
+	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
+}//Fi de EsAmbitDinsAmbitNavegacio()
 
 function DonaValorDeCoordActual(x,y,negreta,input)
 {

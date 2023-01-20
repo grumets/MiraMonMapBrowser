@@ -3961,10 +3961,11 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
 
-function DonaCadenaTaulaDeCapaVectorial(i_capa)
+function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false)
 {
-const cdns=[], capa=ParamCtrl.capa[i_capa], objectes = capa.objectes.features;
-const atributsVisibles = [];
+const cdns=[], capa=ParamCtrl.capa[i_capa];
+const atributsVisibles = [], objectesDinsAmbit = [];
+var objectes = capa.objectes.features;
 
 	for (var i = 0; i < capa.atributs.length; i++)
 	{
@@ -3974,8 +3975,37 @@ const atributsVisibles = [];
 			atributsVisibles.push(capa.atributs[i]);
 		}
 	}
+	// Si només desitgem veure els objectes de l'àmbit
+	if (isNomesAmbit) 
+	{
+		for (var i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			const objActual = objectes[i];
+			// Si tractem punts
+			if (objActual.geometry.type == "Point")
+			{
+				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			{
+				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+		}
+		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		objectes = objectesDinsAmbit;
+	} 
+	
 	if (atributsVisibles.length > 0) 
 	{
+		cdns.push("<div><input type='checkbox' id='nomesAmbit' name='nomesAmbit' ", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this)'><label for='nomesAmbit'>Només Àmbit</label></div>");
 		cdns.push("<table><tr>");
 		for (var i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
 		{
@@ -3996,8 +4026,14 @@ const atributsVisibles = [];
 	}
 	return cdns.join("");
 }
+
 // Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
 function TancaFinestra_taulaCapaVectorial() 
 {
 	TancaFinestra_anarCoord();
+}
+
+function RecarregaTaula(i_capa, checkbox)
+{
+	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), checkbox.checked ? DonaCadenaTaulaDeCapaVectorial(i_capa, true) : DonaCadenaTaulaDeCapaVectorial(i_capa, false));
 }
