@@ -67,17 +67,11 @@ function CalculaMidesSituacio()
 /*function DonaCadenaHTMLMarcSituacio(ample, alt)
 {
 var cdns=[];
-	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,
-		"></td></tr><tr><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
-		" width=1></td><td><img src=\"",
-		AfegeixAdrecaBaseSRC("1tran.gif"),
-		"\" height=1 width=",(ample-2),
-		"></td><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" , 
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=",(alt-2),
-		" width=1></td></tr><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\"><img src=\"" ,
-		AfegeixAdrecaBaseSRC("1tran.gif") , "\" height=1 width=",ample,"></td></table>");
+	cdns.push( "<table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\" height=\"1\" width=\"",ample,
+		"\"></td></tr><tr><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\" height=\"",(alt-2),
+		"\" width=\"1\"></td><td height=\"1\" width=\"",(ample-2),
+		"\"></td><td style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\" height=\"",(alt-2),
+		"\" width=\"1\"></td></tr><tr><td colspan=3 style=\"background-color:", ParamCtrl.ColorQuadratSituacio ,";\" height=\"1\" width=\"",ample,"\"></td></table>");
 	return cdns.join("");
 }*/
 

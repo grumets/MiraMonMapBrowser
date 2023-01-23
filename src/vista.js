@@ -108,17 +108,17 @@ function CreaVistaFullImprimir(win)
 }
 
 
-function DonaCadenaHTMLDibuixEscala(env)
+function DonaCadenaHTMLDibuixEscala(env, cal_desc_crs)
 {
 var cdns=[];
 
 	var escala=DonaNumeroArrodonit125((env.MaxX-env.MinX)*0.4);
-	cdns.push("<font face=arial size=1><img src=\"",
-			  AfegeixAdrecaBaseSRC("1tran.gif"),
-			  "\" width=1 height=3 border=0><br><img src=\"",
-			  AfegeixAdrecaBaseSRC("1negre.gif"),
-			  "\" width=", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
-		  " height=2 border=0><br>", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" width=\"1\" height=\"3\" border=\"0\"></td></tr>",
+			"<tr><td align=\"middle\" style=\"font-size: 1px;\"><img src=\"",
+			AfegeixAdrecaBaseSRC("1negre.gif"),
+			"\" width=\"", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
+		  	"\" height=\"2\"></td></tr>",
+			"<tr><td align=\"middle\"><font face=\"arial\" size=\"1\">", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
@@ -131,23 +131,11 @@ var cdns=[];
 		cdns.push(" (" , (GetMessage("atLat")) , " 40° 36\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,0.0" || ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="EPSG:3785")
 		cdns.push(" (" , (GetMessage("atLat")) , " 0° 0\')");
-	cdns.push("</font>");
-	return cdns.join("");
-}
-
-function DonaCadenaHTMLEscala(env)
-{
-var cdns=[];
-
-	cdns.push("<table border=0 cellspacing=0 cellpadding=0><tr><td align=middle>", DonaCadenaHTMLDibuixEscala(env) , "</td></tr></table>");
-	return cdns.join("");
-}
-
-function DonaCadenaHTMLEscalaImprimir(env)
-{
-var cdns=[];
-	cdns.push("<table border=0 cellspacing=0 cellpadding=0><tr><td align=middle>" , DonaCadenaHTMLDibuixEscala(env) , "</td><td><font face=arial size=2> &nbsp;",
-		DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font></td></tr></table>");
+	cdns.push("</font></td>");
+	if (cal_desc_crs)
+		cdns.push("<td><font face=arial size=2> &nbsp;",
+				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font></td>");
+	cdns.push("</tr></table>");
 	return cdns.join("");
 }
 
@@ -155,7 +143,7 @@ function CreaEscalaFullImprimir(win)
 {
     var elem=getLayer(win, "escala");
     if (isLayer(elem))
-		contentLayer(elem, DonaCadenaHTMLEscalaImprimir(VistaImprimir.EnvActual));
+		contentLayer(elem, DonaCadenaHTMLDibuixEscala(VistaImprimir.EnvActual, true));
 }
 
 var TriaFullWindow=null;
@@ -1846,14 +1834,12 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	if (i_tile_matrix_set==-1)
 	{
-		//eval("window.document." + nom_vista + "_i_raster"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\"");
 		window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
 		return;
 	}
 	var i_tile_matrix=OmpleMatriuVistaCapaTiled(i_capa, vista, i_tile_matrix_set);
 	if(i_tile_matrix==-1)
 	{
-		//eval("window.document." + nom_vista + "_i_raster"+i_capa+".src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\"");
 		window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
 		return;
 	}
@@ -2047,10 +2033,8 @@ var p, unitats_CRS;
 	if (vista.i_nova_vista==NovaVistaPrincipal)
 	{
 	    cdns.push("  <tr>",
-				"    <td rowspan=", (cal_vora ? (cal_coord ? 8 : 7) : (cal_coord ? 5 : 3)), "><img src=\"",
-				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=1 width=", ((ParamCtrl.MargeEsqVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeEsqVista:0) , "></td>",
-				"    <td colspan=", (cal_vora ? (cal_coord ? 6 : 5) : (cal_coord ? 3 : 1)), "><img src=\"",
-				AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=" , ((ParamCtrl.MargeSupVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeSupVista:0) , " width=1></td>",
+				"    <td rowspan=", (cal_vora ? (cal_coord ? 8 : 7) : (cal_coord ? 5 : 3)), " height=\"1\" width=\"", ((ParamCtrl.MargeEsqVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeEsqVista:0) , "\"></td>",
+				"    <td colspan=", (cal_vora ? (cal_coord ? 6 : 5) : (cal_coord ? 3 : 1)), " height=\"" , ((ParamCtrl.MargeSupVista && !ParamCtrl.fullScreen)?ParamCtrl.MargeSupVista:0) , "\" width=\"1\"></td>",
 				"  </tr>");
 	}
 
@@ -2060,7 +2044,7 @@ var p, unitats_CRS;
 		if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MinX,vista.EnvActual.MaxY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (cal_vora)
-			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
+			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
 		cdns.push("    <td align=left><font face=arial size=1>\n");
 		if (estil_parella_coord)
 		{
@@ -2109,9 +2093,8 @@ var p, unitats_CRS;
 		}
 		cdns.push("    </td>\n");
 		if (cal_vora)
-			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
-		cdns.push("    <td",(cal_vora ? " rowspan=\"2\"": "" ),"><img src=\"",AfegeixAdrecaBaseSRC("1tran.gif"),
-		   "\" height=" , AltTextCoordenada , "></td>\n",
+			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
+		cdns.push("    <td",(cal_vora ? " rowspan=\"2\"": "" )," height=\"" , AltTextCoordenada , "\"></td>\n",
 		   "  </tr>\n");
 	}
 
@@ -2138,8 +2121,7 @@ var p, unitats_CRS;
 		cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
 	   		"\" width=",MidaFletxaInclinada," height=",Math.floor((vista.nfil-MidaFletxaPlana)/2),"></td>");
 	cdns.push(
-	   "    <td colspan=", ((cal_vora) ? 3 : (cal_coord? 2: 1)), " rowspan=", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), " style=\"background-color:", ParamCtrl.ColorFonsVista ,";\"><img src=\"",
-	   AfegeixAdrecaBaseSRC("1tran.gif"),"\" width=",vista.ncol," height=",vista.nfil,"></td>");
+	   "    <td colspan=", ((cal_vora) ? 3 : (cal_coord? 2: 1)), " rowspan=", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), " style=\"background-color:", ParamCtrl.ColorFonsVista ,";\" width=\"",vista.ncol,"\" height=\"",vista.nfil,"\"></td>");
 
 	if (cal_vora)
 	  cdns.push(
@@ -2148,7 +2130,7 @@ var p, unitats_CRS;
 	if (cal_coord)
 	{
 		if (estil_parella_coord)
-			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""),  " nowrap><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\"></td>\n");
+			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""),  " nowrap></td>\n");
 		else
 		{
 			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""), " valign=top nowrap><font face=arial size=1>&nbsp;&nbsp;\n");
@@ -2208,7 +2190,7 @@ var p, unitats_CRS;
 		   "    <td><a href=\"javascript:MouLaVistaSalt(1,-1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_inc22.gif"),
 		   "\" width=",MidaFletxaInclinada," height=",MidaFletxaInclinada," border=0></a></td>");
 		if (cal_coord)
-		   cdns.push("    <td rowspan=\"2\"><img src=\"1tran.gif\"></td>");
+		   cdns.push("    <td rowspan=\"2\"></td>");
 		cdns.push("  </tr>");
 	}
 	if (cal_coord && estil_parella_coord)
@@ -2217,7 +2199,7 @@ var p, unitats_CRS;
 		if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MinX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (cal_vora)
-			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
+			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
 		cdns.push("    <td align=left><font face=arial size=1>\n");
 		if (ParamCtrl.CoordExtremes=="proj")
 			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
@@ -2242,18 +2224,17 @@ var p, unitats_CRS;
 			cdns.push("(" , (g_gms(ll.x, true)), "," , (g_gms(ll.y, true)), unitats_CRS, ")");
 		cdns.push("    </td>\n");
 		if (cal_vora)
-			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" height=0 width=10></td>\n");
-		cdns.push("    <td",(cal_vora ? " rowspan=\"2\"": "" ),"><img src=\"",AfegeixAdrecaBaseSRC("1tran.gif"),
-		   "\" height=" , AltTextCoordenada , "></td>\n",
+			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
+		cdns.push("    <td",(cal_vora ? " rowspan=\"2\"": "" )," height=\"" , AltTextCoordenada , "\"></td>\n",
 		   "  </tr>\n");
 	}
 
 	if(ParamCtrl.MostraBarraEscala && vista.i_nova_vista==NovaVistaPrincipal)
 	{
 		cdns.push("  <tr>",
-		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLEscala(vista.EnvActual) ,"</td>");  //Servirà per indicar l'escala.
+		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLDibuixEscala(vista.EnvActual, false) ,"</td>");  //Servirà per indicar l'escala.
 		if (cal_coord && !cal_vora)
-			cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\"></td>\n");
+			cdns.push("    <td></td>\n");
 		cdns.push("  </tr>");
 	}
 	cdns.push("</table>");
@@ -2351,7 +2332,7 @@ var p, unitats_CRS;
 		    if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length &&
 				vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
 		    {
-				barra_slider.push("<span style='position: absolute; bottom: 20; right: 100; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>", DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
+				barra_slider.push("<span style='position: absolute; bottom: 20px; right: 100px; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",  DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
 						"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
 						"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
 						"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
