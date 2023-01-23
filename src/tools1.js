@@ -751,20 +751,20 @@ function moveLayer(elem, x, y, w, h)
 	//Ara ho manipulo i ho canvio.
 	var estil=elem.style;
 	if (x!=-1)
-		estil.left = x;
+		estil.left = x+"px";
 	if (y!=-1)
-		estil.top = y;
+		estil.top = y+"px";
 	if (w!=-1)
-		estil.width = w;
+		estil.width = w+"px";
 	if (h!=-1)
-		estil.height = h;
+		estil.height = h+"px";
 }
 
 function changePosAndShowLayer(elem, x, y)
 {
 	var estil=elem.style;
-	estil.left = x;
-	estil.top = y;
+	estil.left = x+"px";
+	estil.top = y+"px";
      	estil.visibility = "visible";
 	if (NecessariLayerIFrame)
 	{
@@ -897,10 +897,17 @@ function getRectSupLayer(elem)
 
 function spaceForLayers(win)
 {
-	if (win.document.body.clientWidth)
+/*	if (win.document.body.clientWidth)
 		ParamInternCtrl.realSpaceForLayers.width=win.document.body.clientWidth;
 	if (win.document.body.clientHeight)
-		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla
+		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla*/
+
+var div=win.document.getElementById(ParamCtrl.containerName);
+
+	if (div.clientWidth)
+		ParamInternCtrl.realSpaceForLayers.width=div.clientWidth;
+	if (div.clientHeight)
+		ParamInternCtrl.realSpaceForLayers.height=div.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla*/
 }
 
 var SufixBarra="_barra"
@@ -980,7 +987,7 @@ var elem, rect, ancora, nom;
 
 	delta_w=ParamInternCtrl.realSpaceForLayers.width-w_previ
 	delta_h=ParamInternCtrl.realSpaceForLayers.height-h_previ;
-  const layerNamesCheckList = new Map();
+//  const layerNamesCheckList = new Map();
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
 	{
@@ -994,12 +1001,12 @@ var elem, rect, ancora, nom;
     * i valor perquè en realitat només utilitzem el map() per tenir una llista 
     * de les capes tractades però no com una estructura de dades amb Informació
     * sensible per a càlculs.
-    */
+
     if (!layerNamesCheckList.has(nom))
       layerNamesCheckList.set(nom, nom);
     else
       continue;
-
+    */
 		elem=getLayer(win, nom);
 		if (!elem)
 			continue;
@@ -1181,34 +1188,34 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11,
 					GetMessage("copy"),
 					"CopiaPortapapersFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\");"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11,
 					GetMessage("help"),
 					"AjudaFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 				"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11,
 					GetMessage("popDown"),
 					"PopDownFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 	if(layerFinestraList[i_finestra].botons&boto_pop_up)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11,
 					GetMessage("popUp"),
 					"PopUpFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11,
 					GetMessage("close"),
 					"TancaFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\")"),
@@ -1588,7 +1595,16 @@ var cdns=[];
 
 function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
-var nom, i_finestra=layerFinestraList.length;
+var nom, i_finestra;
+
+	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+	{
+		if (layerFinestraList[i_finestra].nom==name)
+		{
+			console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+			break;
+		}
+	}
 
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
@@ -1658,6 +1674,18 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 {
 
 	var z=layerList.length;
+
+	//evito que una layer es crei 2 cops
+	for (var i=0; i<z; i++)
+	{
+		if (layerList[i].nom==name)
+		{
+			console.log("textHTMLLayer is creating a layer/div with the same layer/div name twice. Old one is overwritten.");
+			z=i;
+			break;
+		}
+	}	
+
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
 
