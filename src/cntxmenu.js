@@ -3961,7 +3961,7 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
 
-function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false)
+function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdns=[], capa=ParamCtrl.capa[i_capa];
 const atributsVisibles = [], objectesDinsAmbit = [];
@@ -3981,7 +3981,6 @@ var objectes = capa.objectes.features;
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			const objActual = objectes[i];
-			// Si tractem punts
 			if (objActual.geometry.type == "Point")
 			{
 				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
@@ -4005,12 +4004,18 @@ var objectes = capa.objectes.features;
 	
 	if (atributsVisibles.length > 0) 
 	{
-		cdns.push("<div><input type='checkbox' id='nomesAmbit' name='nomesAmbit' ", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this)'><label for='nomesAmbit'>Només Àmbit</label></div>");
-		cdns.push("<table><tr>");
+		cdns.push("<div><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, ", document.getElementById("ambGeometria"),")'>", 
+		"<label for='nomesAmbit'>Només Àmbit</label>",
+		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", ",document.getElementById("nomesAmbit"),", this)'>",
+		"<label for='ambGeometria'>Mostra geometria</label>",  
+		"</div>");
+		cdns.push("<table style='width:100%'><tr>");
 		for (var i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
 		{
 			cdns.push("<th>", atributsVisibles[i].descripcio, "</th>");
 		}
+		if (ambGeometria)
+			cdns.push("<th>Geometria</th>");
 		cdns.push("<th>Anar a</th>");
 		cdns.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
@@ -4018,9 +4023,11 @@ var objectes = capa.objectes.features;
 			cdns.push("<tr>");
 			for (var j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
-				cdns.push("<td>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+				cdns.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
 			}
-			cdns.push("<td><button width='100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			if (ambGeometria)
+				cdns.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].geometry.coordinates.toString(), "</td>");
+			cdns.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 		}
 		cdns.push("</table>");
 	}
@@ -4033,7 +4040,8 @@ function TancaFinestra_taulaCapaVectorial()
 	TancaFinestra_anarCoord();
 }
 
-function RecarregaTaula(i_capa, checkbox)
+function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
-	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), checkbox.checked ? DonaCadenaTaulaDeCapaVectorial(i_capa, true) : DonaCadenaTaulaDeCapaVectorial(i_capa, false));
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
+	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
