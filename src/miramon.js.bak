@@ -2135,7 +2135,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
     {
 		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false;
 
-		for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
+		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
 		cdns2.push("<center><table border=0 width=95%><tr><td><font size=1>");
@@ -2144,13 +2144,13 @@ var elem=getLayer(window, "enllacWMS_finestra");
 			cdns.sort();
 			if (ParamCtrl.ServidorLocal)
 			{
-				for (i=0, cdnsLength=cdns.length; i<cdnsLength; i++)
+				for (i=0; i<cdns.length; i++)
 				{
 					if (ParamCtrl.ServidorLocal==cdns[i])
 					{
 						array_tipus.length=0;
 						//Necessito saber el tipus.
-						for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
+						for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 						{
 							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 							{
@@ -4448,12 +4448,11 @@ function IniciaVisualitzacio()
 {
 var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
 var nou_CRS="";
-var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
+var win, i, j, l, capa;
 
-	//div.style.overflow="hidden";
-	div.style.overflow="clip";
-	div.innerHTML="";
-
+	document.getElementById(ParamCtrl.containerName).style.overflow="hidden";
+	document.getElementById(ParamCtrl.containerName).style.width="100%";
+	document.getElementById(ParamCtrl.containerName).innerHTML="";
 	if (ParamCtrl.AdrecaBaseSRC)
 		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
 
@@ -4477,7 +4476,7 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 	createFinestraLayer(window, "editaEstil", GetMessage("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 435, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessage("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessage("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "param", GetMessage("Parameters"), boto_tancar, 277, 200, 480, 586, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessage("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", GetMessage("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessage("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
@@ -4672,9 +4671,7 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 		CanviaIdioma(ParamCtrl.idioma);
 		RepintaMapesIVistes();
 	}
-
-	div.bgColor=ParamCtrl.ColorFonsPlana;
-
+	document.body.bgColor=ParamCtrl.ColorFonsPlana;
 	if(ComprovaOpcionsAccio())
 	{
 		if(Accio.accio&AccioValidacio || Accio.accio&AccioConLoc)

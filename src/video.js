@@ -67,7 +67,7 @@ function EsCapaAptePerVideo(capa)
 
 function DonaNPecesBarraVideo()
 {
-	return Math.round((ParamInternCtrl.vista.ncol-2)/8);
+	return Math.round((ParamInternCtrl.vista.ncol-6)/8);
 }
 
 function DonaIPecaBarraVideo(i_data_video, n)
@@ -428,11 +428,11 @@ var cdns=[], capa, i_capa_primer_video;
 		"<span id=\"video_estil\"></span></font></td></tr></table>");
 
 	//Creo la pantalla on es projecte el video.
-	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\">",
-		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></div>",
-		"<div id=\"video_click\" style=\"position: absolute; bottom: 0; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "\" height=\"", ParamInternCtrl.vista.nfil, "\"></canvas></div>",
-		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "; height:", ParamInternCtrl.vista.nfil, ";\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
-		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
+	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\">",
+		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0px; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></div>",
+		"<div id=\"video_click\" style=\"position: absolute; bottom: 0px; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></canvas></div>",
+		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0px; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
+		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0px; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
 	// Desplegable d' animació o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
@@ -443,7 +443,7 @@ var cdns=[], capa, i_capa_primer_video;
 		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",GetMessage("stepBack"),"\" title=\"",GetMessage("stepBack"),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, 0);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_pause.gif"),"\" alt=\"",GetMessage("pause"),"\" title=\"",GetMessage("pause"),"\"></button>",
 		"<button onClick=\"return VideoPlayEvent(event, 9);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_play.gif"),"\" alt=\"",GetMessage("play"),"\" title=\"",GetMessage("play"),"\"></button>",
-		"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",GetMessage("repeatedlyPlay", "video"),"\" title=\"",GetMessage("repeatedlyPlay", "video"),"\"></button>",
+		"<button onClick=\"return VideoPlayEvent(event, 8);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_repeat.gif"),"\" alt=\"",GetMessage("repeatedlyPlay"),"\" title=\"",GetMessage("repeatedlyPlay"),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, 1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_forward.gif"),"\" alt=\"",GetMessage("stepForward"),"\" title=\"",GetMessage("stepForward"),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, 2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_end.gif"),"\" alt=\"",GetMessage("toTheEnd"),"\" title=\"",GetMessage("toTheEnd"),"\"></button>",
 		"<br />",
@@ -467,7 +467,7 @@ var cdns=[], capa, i_capa_primer_video;
 		"</center>");
 
 	//Dibuixar la data i la barra de progrés del video.
-	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">",
 			  GetMessage("Date"),": <span id=\"video_data\"></span></center><span>",
 			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 	var n=DonaNPecesBarraVideo();
@@ -486,7 +486,7 @@ var cdns=[], capa, i_capa_primer_video;
 
 	//if (RodetVertical==false)
 	cdns.push("<div id=\"video_rodet\" style=\"overflow:auto;\"></div>",
-		"<div id=\"video_grafic\" style=\"position: absolute; visibility: hidden; top: 25px; width:"+ 460 +"; height:"+ ParamInternCtrl.vista.nfil +";\"></div>",
+		"<div id=\"video_grafic\" style=\"position: absolute; visibility: hidden; top: 25px; width:"+ 460 +"px; height:"+ ParamInternCtrl.vista.nfil +"px;\"></div>",
 		"</form>",
 		DonaTextDivCopiaPortapapersFinestra("VideoDiv"));
 
@@ -769,7 +769,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	//Dibuixo el rodet de fotogrames buit
 	vista.i_nova_vista=NovaVistaRodet;
 
-	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\'background-image: url(\"",AfegeixAdrecaBaseSRC("1film_v.png"),"\");background-repeat: repeat-x;\'>");
+	cdns.push("<table cellspacing=\"0\" cellpadding=\"0\" style=\'background-image: url(\"",AfegeixAdrecaBaseSRC("1film_v.png"),"\");background-repeat: repeat-x;\'>");
 	vista.ncol=DonaNColVideoRodet();
 	vista.nfil=DonaNFilVideoRodet();
 	if (RodetVertical)
@@ -777,17 +777,17 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		//Estil antic del rodet vertical a la esquerra.
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
-			cdns.push("<tr><td rowspan=\"4\" width=\"13\">&nbsp;</td>",
+			cdns.push("<tr><td rowspan=\"4\" width=\"13px\"></td>",
 				"<td colspan=3>",
 				DonaCadenaHTMLTitolFotogramaRodet(i_data_video),
 				"</td></tr>",
-				"<tr><td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td></tr>",
-				"<tr><td><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>",
+				"<tr><td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"px\" height=\"2px\"></td></tr>",
+				"<tr><td style=\"font-size: 1px\"><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",vista.nfil,"px\"></td>",
 				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px; background-color:white; \" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
-				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\">"),
+				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"px\" height=\""+vista.nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\">"),
 				"</div></td>",
-				"<td><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"", vista.nfil,"\"></td></tr>",
-				"<tr><td colspan=3><img name=\"video_marc_inf",i_data_video, "\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td></tr>");
+				"<td style=\"font-size: 1px\"><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"", vista.nfil,"px\"></td></tr>",
+				"<tr><td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_inf",i_data_video, "\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"px\" height=\"2px\"></td></tr>");
 		}
 	}
 	else
@@ -796,32 +796,32 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		cdns.push("<tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
-			cdns.push("<td colspan=3>",
+			cdns.push("<td colspan=\"3\">",
 				DonaCadenaHTMLTitolFotogramaRodet(i_data_video),
 				"</td>",
-				"<td rowspan=\"6\"><img src=1tran.gif width=\"8\"></td>");
+				"<td rowspan=\"6\" width=\"8px\"></td>");
 		}
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img src=1tran.gif height=\"13\"></td>");
+			cdns.push("<td colspan=\"3\" height=\"13px\"></td>");
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td>");
+			cdns.push("<td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"px\" height=\"2px\"></td>");
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		{
-			cdns.push("<td><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>",
-				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", vista.ncol, "px; height:", vista.nfil, "px; background-color:white;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
-				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
+			cdns.push("<td style=\"font-size: 1px\"><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",vista.nfil,"px\"></td>",
+				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:clip; width:", vista.ncol, "px; height:", vista.nfil, "px; background-color:white;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
+				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+vista.ncol+"px\" height=\""+vista.nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
 				"</div></td>",
-				"<td><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2\" height=\"",vista.nfil,"\"></td>");
+				"<td style=\"font-size: 1px\"><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",vista.nfil,"px\"></td>");
 		}
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img name=\"video_marc_inf",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"\" height=\"2\"></td>");
+			cdns.push("<td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_inf",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",vista.ncol+4,"px\" height=\"2px\"></td>");
 		cdns.push("</tr><tr>");
 		for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-			cdns.push("<td colspan=3><img src=1tran.gif height=\"16\"></td>");
+			cdns.push("<td colspan=\"3\" height=\"16px\"></td>");
 		cdns.push("<tr>");
 	}
 	cdns.push("</table>");
@@ -847,12 +847,12 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 	{
 		//http://www.greywyvern.com/?post=337
 		cdns.push("<div id=\"video_l_raster",i_data_video,"\" style=\"position: absolute; width:", vista.ncol, "px; height:", vista.nfil, "px; opacity:0;\" >",
-			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
+			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+vista.ncol+"px\" height=\""+vista.nfil+"px\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
 			"</div>");
 	}
 	if (EsCapaBinaria(ParamCtrl.capa[DatesVideo[0].i_capa]))
 		cdns.push("<div id=\"video_l_raster_stat\" style=\"position: absolute; width:", vista.ncol, "px; height:", vista.nfil, "px; opacity:0;\" >",
-			"<canvas id=\"video_i_raster_stat\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>",
+			"<canvas id=\"video_i_raster_stat\" width=\""+vista.ncol+"px\" height=\""+vista.nfil+"px\"></canvas>",
 			"</div>");
 
 	document.getElementById("video_pantalla").innerHTML=cdns.join("");

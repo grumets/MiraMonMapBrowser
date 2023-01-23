@@ -92,15 +92,15 @@ var cdns=[];
 			"<table class=\"Verdana11px\" border=0 cellspacing=0 cellpadding=0>",
 	               "<tr>",
 		           "<td>", GetMessage("ViewAreaBackgroundColor", "params") ,": </td>",
-	        	   "<td bgcolor=",param_ColorFonsVista,"><img src=1tran.gif height=6 width=20></td>",
+	        	   "<td bgcolor=",param_ColorFonsVista," height=\"6\" width=\"20\"></td>",
 	                   "<td>&nbsp;<button onClick=\"return ObreFinestraColors('param_ColorFonsVista', '", GetMessage("ViewAreaBackgroundColor", "params") ,"');\"><img align=middle src=colors.gif></button></td>",
 			"</tr>",
 	               "<tr>",
-		           "<td colspan=3><img src=1tran.gif height=1 width=2></td>",
+		           "<td colspan=3 height=\"1\" width=\"2\"></td>",
 				   "</tr>",
 				   "<tr>",
 		           "<td>", GetMessage("SituationRectangleColor", "params"), ":&nbsp;&nbsp; </td>",
-		           "<td bgcolor=",param_ColorQuadratSituacio,"><img src=1tran.gif height=6 width=20></td>",
+		           "<td bgcolor=",param_ColorQuadratSituacio," height=\"6\" width=\"20\"></td>",
                 	   "<td>&nbsp;<button onClick=\"return ObreFinestraColors('param_ColorQuadratSituacio', '", GetMessage("SituationRectangleColor", "params") ,"');\"><img align=middle src=colors.gif></button></td>",
 	               "</tr></table>");
 	return cdns.join("");

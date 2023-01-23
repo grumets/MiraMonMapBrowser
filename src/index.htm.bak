@@ -1,0 +1,16 @@
+<!-- DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd" -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="tools.css" rel="stylesheet" type="text/css" />
+<link href="propies/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<script language="JavaScript" src="miramon.js"></script>
+<!--script language="JavaScript" src="authen.js"></script>
+<script language="JavaScript" src="hello.all.min.js"></script>
+<script language="JavaScript" src="authenix.js"></script>
+<script language="JavaScript" src="authwqems.js"></script-->
+</head>
+<body bgcolor="#FFFFFF" topmargin="0" leftmargin="0" marginwidth="0" marginheigth="0" text="#000000" onLoad="setTimeout(StartMiraMonMapBrowser('mmn'),30);">
+<div id="mmn"><center><img src="loading.gif"><br>Loading MiraMon Map Browser. Please wait...</center></div>
+</body>
+</html>
