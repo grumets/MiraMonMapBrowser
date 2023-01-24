@@ -4004,10 +4004,10 @@ var objectes = capa.objectes.features;
 	
 	if (atributsVisibles.length > 0) 
 	{
-		cdns.push("<div><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, ", document.getElementById("ambGeometria"),")'>", 
-		"<label for='nomesAmbit'>Només Àmbit</label>",
-		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", ",document.getElementById("nomesAmbit"),", this)'>",
-		"<label for='ambGeometria'>Mostra geometria</label>",  
+		cdns.push("<div><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>", 
+		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
+		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",  
 		"</div>");
 		cdns.push("<table style='width:100%'><tr>");
 		for (var i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
@@ -4015,8 +4015,8 @@ var objectes = capa.objectes.features;
 			cdns.push("<th>", atributsVisibles[i].descripcio, "</th>");
 		}
 		if (ambGeometria)
-			cdns.push("<th>Geometria</th>");
-		cdns.push("<th>Anar a</th>");
+			cdns.push("<th style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
+		cdns.push("<th>", GetMessage("GoTo", "capavola"),"</th>");
 		cdns.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
 		{
@@ -4026,7 +4026,7 @@ var objectes = capa.objectes.features;
 				cdns.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
 			}
 			if (ambGeometria)
-				cdns.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].geometry.coordinates.toString(), "</td>");
+				cdns.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objectes[i].geometry.coordinates.toString(), "</td>");
 			cdns.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 		}
 		cdns.push("</table>");
