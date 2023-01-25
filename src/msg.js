@@ -398,6 +398,7 @@ var MessageLang={
 		ViewItemsInScope: {"cat":"Veure sols elements dins de l'àmbit", "spa":"Ver solo elementos dentro del ámbito", "eng":"View only items within the scope", "fre":"Afficher uniquement les éléments du périmètre"},
 		ShowGeometry: {"cat":"Mostrar geometria", "spa":"Mostrar geometría", "eng":"Show geometry", "fre":"Montrer la géométrie"},
 		Geometry: {"cat":"Geometria", "spa":"Geometría", "eng":"Geometry", "fre":"Géométrie"},
+		VectorLayerValuesCopiedClipboardFormat: {"cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format", "spa": "Los valores de la capa vectorial han sido copiados al portapapeles en formato", "eng": "The values of the vector layer have been copied to clipboard in the format", "fre": "Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format"},
 	},
 	storymap:{
 		Storymaps: {"cat":"Relats amb mapes", "spa":"Relatos con mapas", "eng":"Storymaps", "fre":"Carte de l'histoire"},

@@ -38,10 +38,11 @@
 
 "use strict"
 
-var prefixNovaVistaFinestra="nova_vista_fin_";
-var prefixHistogramaFinestra="histo_fin_";
-var sufixCheckDinamicHistograma="_dinamic";
-var sufixCheckTrimTailsHistograma="_trimTails";
+const prefixNovaVistaFinestra="nova_vista_fin_";
+const prefixHistogramaFinestra="histo_fin_";
+const sufixCheckDinamicHistograma="_dinamic";
+const sufixCheckTrimTailsHistograma="_trimTails";
+const taulaCapaVectorial = "taulaCapaVectorial";
 var HistogramaFinestra={"n": 0, "vista":[]};
 
 function CopiaPortapapersFinestraLayer(nom_finestra)
@@ -60,6 +61,16 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 		window.document.execCommand("Copy");
 		div.style.display="none";
 		window.alert(GetMessage("ImageValuesCopiedClipboardFormat", "histopie") + " " + GetMessage("tabSeparatedText")+".");
+	}
+	else if (nom_finestra == taulaCapaVectorial)
+	{
+		const div = window.document.getElementById(taulaCapaVectorial+"_copy_div");
+		div.style.display="inline";
+		const textarea = window.document.getElementById(taulaCapaVectorial+"_copy_text");
+		textarea.select();
+		window.document.execCommand("Copy");
+		div.style.display="none";
+		window.alert(GetMessage("VectorLayerValuesCopiedClipboardFormat", "cntxmenu") + " " + GetMessage("tabSeparatedText")+".");
 	}
 }
 

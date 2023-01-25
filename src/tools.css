@@ -3,10 +3,10 @@
 
 /* Document d'estils del navegador de Mapes de MiraMon*/
 /* *******************************************************
- Estils de visualització d'alguns elements generals del
+ Estils de visualitzaciï¿½ d'alguns elements generals del
            N A V E G A D O R
 *******************************************************/
-/* Estils de visualització usats en diversos elements i més generals */
+/* Estils de visualitzaciï¿½ usats en diversos elements i mï¿½s generals */
 .text_petit { font-size: xx-small;}
 
 a:link { text-decoration: none}
@@ -95,7 +95,7 @@ input[type="text"]
 {
 	border-style:solid;
 	border-width:1px;
-//	width:97%;
+	/*width:97%;*/
 }
 
 textarea
@@ -104,7 +104,7 @@ textarea
 	font-size:11px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	border: 1px solid #99CCFF;
-	//resize: none;
+	/*resize: none;*/
 }
 /* Coordenades */
 .text_coord{
@@ -131,7 +131,7 @@ textarea
 	color: #000099;
 }
 
-/* Consulta típica */
+/* Consulta tï¿½pica */
 .text_general_consulta{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -183,9 +183,9 @@ textarea
 
 
 /* *******************************************************
- Estils de visualització dels diferents elements de la
+ Estils de visualitzaciï¿½ dels diferents elements de la
  
- C O N S U L T A   T Í P I C A   de tipus  C E R C A D O R
+ C O N S U L T A   T ï¿½ P I C A   de tipus  C E R C A D O R
   
 ********************************************************** */
 .TaulaAmbVora{
@@ -215,7 +215,7 @@ textarea
 }
 
 /* *******************************************************
- Estils de visualització dels diferents elements de la 
+ Estils de visualitzaciï¿½ dels diferents elements de la 
  
   FINESTRA per Afegir Capes
   
@@ -290,13 +290,13 @@ a.unmenu:hover {
 
 
 /* *******************************************************
- Estils de visualització dels diferents elements de la 
+ Estils de visualitzaciï¿½ dels diferents elements de la 
  
-  E D I C I Ó    D E    P U N T S
+  E D I C I ï¿½    D E    P U N T S
   
 ********************************************************** */
 
-/* 'layerpunteditar' configura l'aspecte de la layer en la que apareix la coordenada del punt que s'està editant */
+/* 'layerpunteditar' configura l'aspecte de la layer en la que apareix la coordenada del punt que s'estï¿½ editant */
 .layerpunteditar{
 	background-color: #FFFFFF;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -331,7 +331,7 @@ a.unmenu:hover {
 	width: 120px;
 }
 
-/* 'layereditar' és l'estil de la layer que engloba l'edició d'un punt d'una capa digi.*/
+/* 'layereditar' ï¿½s l'estil de la layer que engloba l'ediciï¿½ d'un punt d'una capa digi.*/
 .layereditar {
 	background-color: #FFFFFF;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -350,9 +350,9 @@ a.unmenu:hover {
 }
 
 /* *******************************************************
- Estils de visualització dels diferents elements de la 
+ Estils de visualitzaciï¿½ dels diferents elements de la 
  
-  C O N S U L T A    P E R    L O C A L I T Z A C I Ó 
+  C O N S U L T A    P E R    L O C A L I T Z A C I ï¿½ 
   
 ********************************************************** */
 
@@ -361,9 +361,9 @@ a.unmenu:hover {
 	visibility: hidden;
   }
 }
-/* 'layerprincipal' és l'estil de la layer que engloba totes les altres layers amb 
-les respostes de la consulta per localització de les diverses capes consultades.
-Només s'usa en les consultes per localització de finestra no incrustada */
+/* 'layerprincipal' ï¿½s l'estil de la layer que engloba totes les altres layers amb 
+les respostes de la consulta per localitzaciï¿½ de les diverses capes consultades.
+Nomï¿½s s'usa en les consultes per localitzaciï¿½ de finestra no incrustada */
 
 @media not print {
 .layerprincipal{
@@ -387,7 +387,7 @@ Només s'usa en les consultes per localització de finestra no incrustada */
 	font-weight: normal;
 }
 
-/* 'layerresposta' és l'estil de la layer que engloba la resposta d'una consulta d'una capa.*/
+/* 'layerresposta' ï¿½s l'estil de la layer que engloba la resposta d'una consulta d'una capa.*/
 .layerresposta {
 	background-color: #FFFFFF;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -405,7 +405,7 @@ Només s'usa en les consultes per localització de finestra no incrustada */
 	margin: 3%;
 	border: 2px solid #C0C0C0;
 }
-/* 'TitolRepostaConsulta' configura l'aspecte del nom de la capa o títol de la resposta consulta de cada capa */
+/* 'TitolRepostaConsulta' configura l'aspecte del nom de la capa o tï¿½tol de la resposta consulta de cada capa */
 .TitolRepostaConsulta{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -445,7 +445,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	font-weight: normal;
 	color: #FF0000;
 }
-/* 'TextValidacio' configura l'aspecte del text adicional que es mostra en la consulta quan s'està validant.*/
+/* 'TextValidacio' configura l'aspecte del text adicional que es mostra en la consulta quan s'estï¿½ validant.*/
 .TextValidacio{
 		font-family: Verdana, Arial, Helvetica, sans-serif;
 		font-size: 11px;
@@ -455,7 +455,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 }
 
 /* *******************************************************
- Estils de visualització dels diferents elements de les 
+ Estils de visualitzaciï¿½ dels diferents elements de les 
  
   L A Y E R S     F I N E S T R A 
   
@@ -469,7 +469,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #99CCFF;
-	//resize:both;
+	/*resize:both;*/
 }
 .cantofinestra {
 	text-align: left;
@@ -591,7 +591,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 }
 
 /* *******************************************************
- Estils de visualització dels diferents elements de la 
+ Estils de visualitzaciï¿½ dels diferents elements de la 
  
 		F I N E S T R A   D E   W P S 
   
@@ -746,3 +746,26 @@ ul.floatingWindowText
 {
 	color: green;
 }*/
+
+/* *******************************************************
+ Estils de visualitzaciï¿½ dels diferents elements de la 
+ 
+		T A U L A   C A P E S   V E C T O R I A L S  
+  
+********************************************************** */
+/* Estil de les celÂ·les capÃ§alera */
+th.vectorial {
+	background-color: #696969;
+    color: #fff;
+	border: 1px solid rgb(190, 190, 190);
+    padding: 0px 10px;
+}
+/* Estil files de color diferents segons paritat */
+tr.vectorial:nth-child(even) {
+    background-color: #eee;
+}
+/* Taula vectorial */
+table.vectorial {
+    border-collapse: collapse;
+    border: 2px solid rgb(200, 200, 200);
+}
