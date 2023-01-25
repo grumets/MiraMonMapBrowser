@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -4476,7 +4476,7 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 
 
 	createFinestraLayer(window, "executarProces", GetMessage("ExecuteProcessWPS", "miramon"), boto_tancar, 400, 250, 550, 550, "nWSeCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "afegirCapa", GetMessage("AddLayerToMap", "miramon"), boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "afegirCapa", GetMessage("AddLayerToMap", "miramon"), boto_tancar, 420, 150, 520, 600, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "calculadoraCapa", GetMessage("LayerCalculator", "cntxmenu"), boto_tancar, 420, 150, 450, 500, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "combinacioCapa", GetMessage("AnalyticalCombinationLayers", "cntxmenu"), boto_tancar, 420, 150, 520, 400, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "seleccioCondicional", GetMessage("SelectionByCondition", "miramon"), boto_tancar, 320, 100, 490, 555, "NWCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);

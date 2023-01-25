@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1242,7 +1242,7 @@ var capa;
 	cdns.push("\"<b><br/><br/>");
 
 	cdns.push("<fieldset><legend>",
-			  GetMessage("QualityAssessment", qualitat),
+			  GetMessage("QualityAssessment", "qualitat"),
 			  "</legend>");
 
 	cdns.push("<select name=\"metode_eval_qual\" class=\"Verdana11px\" onChange=\"ActualitzaCampsEnFuncioMetodeAvaluacioQualitat(form,",i_capa,",",i_estil,");\" >");
