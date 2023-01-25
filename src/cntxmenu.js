@@ -4037,7 +4037,7 @@ var objectes = capa.objectes.features;
 		cdnsHtml.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
 		{
-			cdnsHtml.push("<tr>");
+			cdnsHtml.push("<tr class='vectorial'>");
 			for (var j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
 				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");

@@ -761,8 +761,14 @@ th.vectorial {
     padding: 0px 10px;
 }
 /* Estil files de color diferents segons paritat */
+tr.vectorial {
+	border-bottom: 1px solid rgb(133, 121, 121);
+}
 tr.vectorial:nth-child(even) {
     background-color: #eee;
+}
+tr.vectorial:hover {
+	background-color: #D6EEEE;
 }
 /* Taula vectorial */
 table.vectorial {
