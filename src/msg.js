@@ -494,6 +494,7 @@ var MessageLang={
 		DownloadLayerCompleted: {"cat": "Descàrrega la capa completa", "spa": "Descarga de la capa completa", "eng": "Download the complete layer", "fre": "Téléchargement de la couche complète"},
 		DownloadLayer: {"cat":"Descàrrega de capes", "spa":"Descarga de capas", "eng":"Layer download", "fre":"Télécharger des couches"},
 		ofDownloading: {"cat":"de descarregar", "spa":"de descargar", "eng":"of downloading", "fre":"de téléchargement"},
+		vectorial: {"cat":"vectorial", "spa":"vectorial", "eng":"vector", "fre":"vecteur"},
   },
 	params:{
 		ViewAreaBackgroundColor: {"cat":"Color de fons de la vista", "spa":"Color de fondo de la vista", "eng":"Background color of the view area", "fre":"Couleur du fond"},
@@ -512,7 +513,7 @@ var MessageLang={
 		ShowWindow_underlined: {"cat":"<u>M</u>ostra finestra", "spa":"<u>M</u>uestra ventana", "eng":"S<u>h</u>ow window", "fre":"A<u>f</u>ficher la fenêtre"},
 		ShowWindow_underlined_char: {"cat":"m", "spa":"m", "eng":"h", "fre":"f"},
 		JsonConfigurationFile: {"cat":"Fitxer de configuració JSON", "spa":"Fichero de configuración JSON", "eng":"JSON configuration file", "fre":"Fichier de configuration JSON)"},
-		changesAboveWillBeApplied: {"cat":"s'’aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"},
+		changesAboveWillBeApplied: {"cat":"s'aplicaran els canvis anteriors", "spa":"los cambios anteriores se aplicarán", "eng":"changes above will be applied", "fre":"les modifications ci-dessus s'appliqueront"},
 		ofChangingParameters: {"cat":"de canviar paràmetres", "spa":"de cambiar parámetros", "eng":"of changing parameters", "fre":"pour changement de paramètres"},
 		LayersOutSideTheBBox: {"cat":"Capes fora de l'àmbit actual", "spa":"Capas fuera del ámbito actual", "eng":"Layers outside the current bounding box", "fre": "Calques en dehors de la zone de délimitation actuelle"},
 		LayersOutSideScale: {"cat":"Capes sense suport pel nivell de zoom actual", "spa":"Capas sin soporte para el nivel de zoom actual", "eng":"Layers without support for the current zoom level", "fre": "Calques sans prise en charge du niveau de zoom actuel"},
