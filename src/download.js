@@ -779,8 +779,9 @@ var cdns=[];
 function DibuixaDescarregaVector(i_capa)
 {
 var nomFitxer=GetMessage("layer")+"_"+GetMessage("vectorial", "download")+"_"+Date.now();
+const capa = ParamCtrl.capa[i_capa];
 const cdns=[];
-	cdns.push("<form name='botons_descarrega_vectorial' onSubmit='GuardaDadesJSONFitxerExtern("+ i_capa +", ", nomFitxer,");return false;'><center><input type='submit' name='descarregaCapa' id='descarregaCapa' value='" + GetMessage("Download") + "'></center></form>");
+	cdns.push("<form name=\"botons_descarrega_vectorial\" onSubmit=\"GuardaDadesJSONFitxerExtern(", capa,", ", nomFitxer,");return false;\"><center><input type=\"submit\" name=\"descarregaCapa\" id=\"descarregaCapa\" value=\"" + GetMessage("Download") + "\"></center></form>");
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 }
 

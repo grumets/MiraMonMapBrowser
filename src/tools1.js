@@ -2825,39 +2825,38 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 */
 var jsonFile = null;
 
-function makeHrefData(dades)
+function makeHrefData(data)
 {
-	var data = new Blob([JSON.stringify(dades)], {type: 'text/json'});
+	var blobData = new Blob([JSON.stringify(data)], {type: 'text/json'});
 
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
 	if (jsonFile !== null)
 		window.URL.revokeObjectURL(jsonConfigFile);
 
-	jsonFile = window.URL.createObjectURL(data);
+	jsonFile = window.URL.createObjectURL(blobData);
 	return jsonFile;
-};
+}
 
 /*
 *	Funció per a guardar dades en format JSON en memòria
 */
-function GuardaDadesJSONFitxerExtern(i_capa, fileName)
+function GuardaDadesJSONFitxerExtern(data, fileName)
 {
 const jsonExtention = ".json";
-const capa = ParamCtrl.capa[i_capa];
 const link = document.createElement('a');
 	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
 		fileName+=jsonExtention;
 	link.setAttribute('download', fileName);
-	link.setAttribute('href', makeHrefData(capa));
+	link.setAttribute('href', makeHrefData(data));
 	document.body.appendChild(link);
 
 	// wait for the link to be added to the document
 	window.requestAnimationFrame(function () {
-      		var event = new MouseEvent('click');
+      	var event = new MouseEvent('click');
 		link.dispatchEvent(event);
 		document.body.removeChild(link);
-		});
+	});
 
   	return false;
 }
