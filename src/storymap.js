@@ -164,12 +164,23 @@ function SeguentPasStoryMap()
 	const novaStroyMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStroyMapFinestra.replaceChildren();
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<textarea id='storyMap'></textarea><br><br>", 
-	"<input type='file' align='center' onChange='CarregaImatgeStoryMap(this, ", document.getElementById("storyMainImage"), ")'>", 
+	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, ", document.getElementById("storyMainImage"), ")'>", 
 	"<img id='stepImg", comptadorPassos, "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br>", 
 	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='SeguentPasStoryMap()'>"];
 	novaStroyMapFinestra.innerHTML = htmlNextStep.join("");
-	comptadorPassos+=1;
+
+	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituïr
+	const tinytextarea = document.createElement("textarea");
+	tinytextarea.setAttribute("id", "storyTextAr"+comptadorPassos)
+	const imgStep = document.getElementById("stepImg" + comptadorPassos);
+	imgStep.parentNode.insertBefore(tinytextarea, imgStep);
+	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
+	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
+	comptadorPassos++;
+
+	tinymce.init({
+        target: tinytextarea
+    });
 }
 
 function FinalitzarStoryMap()
