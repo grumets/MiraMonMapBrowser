@@ -56,7 +56,7 @@ function TancaFinestra_triaStoryMap()
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], storyMap, i_story, i, j;
+var cdns=[], i_story;
 var ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap", "src": "propies/StoryMaps/afegir.svg", "url": ""};
 
 	if (ParamCtrl.StoryMap === null)
@@ -89,7 +89,7 @@ var ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap"
 			cdns.push("<tr>");
 		cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"");
 		(i_story==nstory-1) ? cdns.push("TancaICreaStoryMap();\">") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");\">");
-		cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src)?ParamCtrl.StoryMap[i_real_story[i_story]].src:AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
+		cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src) ? ParamCtrl.StoryMap[i_real_story[i_story]].src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 			"<br>",
 			DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
 			"</a><br></td>");
@@ -166,12 +166,12 @@ function SeguentPasStoryMap()
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
 	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, ", document.getElementById("storyMainImage"), ")'>", 
 	"<img id='stepImg", comptadorPassos, "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br>", 
-	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='SeguentPasStoryMap()'>"];
+	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStroyMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituïr
 	const tinytextarea = document.createElement("textarea");
-	tinytextarea.setAttribute("id", "storyTextAr"+comptadorPassos)
+	tinytextarea.setAttribute("id", "storyTextArea"+comptadorPassos)
 	const imgStep = document.getElementById("stepImg" + comptadorPassos);
 	imgStep.parentNode.insertBefore(tinytextarea, imgStep);
 	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
@@ -196,7 +196,9 @@ function GuardarInformacioInicialStoryMap()
 
 function GuardarInformacioPasStoryMap()
 {
-
+	if (novaStoryMap.passos === null)
+		novaStoryMap.passos = [];
+	newStory.passos.push = {"imatge": document.getElementById("stepImg").src, "descripcio": tinymce.get("storyTextArea"+comptadorPassos).getContent(), "x": }
 }
 
 //Inicia una Storymap
