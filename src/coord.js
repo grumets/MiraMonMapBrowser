@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -52,7 +52,8 @@ var cdns=[];
 	var elem=getResizableLayer(window, "coord");
 	if (elem)
 	{
-		cdns.push("<form name=\"form_coord\" onSubmit=\"return false;\"><table style=\"width: 100%; height: 100%;\"><tr>");
+		cdns.push("<form name=\"form_coord\" onSubmit=\"return false;\" style=\"height: 100%;\">",
+			"<table style=\"width: 100%; height: 100%;\"><tr>");
 		if (!isFinestraLayer(window, "coord"))
 		{
 			cdns.push("<td style=\"width: 1\"><span class=\"text_coord\">", (ParamCtrl.TitolCoord ? DonaCadena(ParamCtrl.TitolCoord) : "Coord: "),
@@ -60,10 +61,10 @@ var cdns=[];
 			if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
 				cdns.push("</tr><tr>");
 		}
-		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
-			cdns.push("<td><fieldset class=\"input_info_coord\" name=\"info_coord\" style=\"width: 93%; height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></fieldset></td>");
+		if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area") 
+			cdns.push("<td><fieldset class=\"input_info_coord\" name=\"info_coord\" style=\"width: 90%; margin-right:3%; min-height: ", ((isFinestraLayer(window, "coord")? "90%" : (elem.clientHeight-25)+"px")), ";resize: none;\" readonly=\"readonly\"></fieldset></td>");
 		else
-			cdns.push("<td><input class=\"input_info_coord\" type=\"text\" name=\"info_coord\" style=\"width: 97%\" readonly=\"readonly\"></td>");
+			cdns.push("<td><input class=\"input_info_coord\" type=\"text\" name=\"info_coord\" style=\"width: 97%;\" readonly=\"readonly\"></td>");
 		cdns.push("</tr></table></form>");
 		contentLayer(elem, cdns.join(""));
 		elem.style.opacity=0.8;

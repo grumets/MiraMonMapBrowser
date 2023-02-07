@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -97,7 +97,7 @@ function ChangeSVGToInlineSVG(img, f_next, params)
 
 	        var parser = new DOMParser();
 	        var xmlDoc = parser.parseFromString(text, "text/xml");
-
+		
 	        // Get the SVG tag, ignore the rest
         	var svg = xmlDoc.getElementsByTagName('svg')[0];
 
@@ -154,6 +154,10 @@ function ChangeTitleColorsSVG(id, params)
 	if (params)
 	{
 		var svg=document.getElementById(id);
+		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
+		if (!svg)
+			return;
+			
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
@@ -489,7 +493,7 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoEnllacWMS)
 			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();")));
 		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor("+ NumeroDeCapesVolatils(-1) +");")));
+			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));")));
 		if (ParamCtrl.BarraBotoCalculadora)
 			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();")));
 		if (ParamCtrl.BarraBotoCombiCapa)
@@ -509,6 +513,14 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
 				"ObreFinestraAjuda();")));
+
+		if (ParamCtrl.accessClientId || ParamCtrl.AltresLinks)
+			cdns.push("\n");
+		if (ParamCtrl.accessClientId)
+			cdns.push((CadenaBotoPolsable("login", "login", GetMessage("Login", "authens"), "FerLoginICarregaCapes();")));
+		if (ParamCtrl.AltresLinks)
+			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
+
 		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
 			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
@@ -528,8 +540,6 @@ var cdns=[];
 				cdns.push(" ", CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte], botons, true, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-6 : 17, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-2 : 21), "\n");
 			}
 		}
-		if (ParamCtrl.AltresLinks)
-			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
 	}
 	cdns.push("</FORM>\n");
 	var elem=getLayer(window, "barra");

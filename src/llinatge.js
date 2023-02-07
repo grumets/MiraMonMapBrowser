@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -38,7 +38,7 @@
 
 "use strict"
 var LListaCapesGraphsMM=[];
-var GraphsMM={hihaElements:false, elemVisibles: {agents:true, fontsFulles: true, fontsIntermitges: true, passos: true, eines: true, algorismes: true, funcions: true, conjunts: {union:true, nonUnion:false, intersection:false, complement: false, substraction: false}}};
+var GraphsMM={hihaElements:false, elemVisibles: {agents:true, fontsFulles: true, fontsIntermitges: true, passos: true, eines: true, algorismes: true, funcions: true, conjunts: {union:true, nonUnion:false, intersection:false, complement: false, subtraction: false}}};
 var IdNodeGraphsMM=0;
 
 
@@ -965,7 +965,7 @@ function ActualitzaValorConjuntsVisiblesALlinatge()
 		GraphsMM.elemVisibles.conjunts.nonUnion=true;
 		GraphsMM.elemVisibles.conjunts.intersection=false;
 		GraphsMM.elemVisibles.conjunts.complement=false;
-		GraphsMM.elemVisibles.conjunts.substraction=false;
+		GraphsMM.elemVisibles.conjunts.subtraction=false;
 	}
 	else if(document.LlinatgeCapes.cLl_conjunts.value=="intersection")
 	{
@@ -973,7 +973,7 @@ function ActualitzaValorConjuntsVisiblesALlinatge()
 		GraphsMM.elemVisibles.conjunts.nonUnion=false;
 		GraphsMM.elemVisibles.conjunts.intersection=true;
 		GraphsMM.elemVisibles.conjunts.complement=false;
-		GraphsMM.elemVisibles.conjunts.substraction=false;
+		GraphsMM.elemVisibles.conjunts.subtraction=false;
 	}
 	else if(document.LlinatgeCapes.cLl_conjunts.value=="complement")
 	{
@@ -981,15 +981,15 @@ function ActualitzaValorConjuntsVisiblesALlinatge()
 		GraphsMM.elemVisibles.conjunts.nonUnion=false;
 		GraphsMM.elemVisibles.conjunts.intersection=false;
 		GraphsMM.elemVisibles.conjunts.complement=true;
-		GraphsMM.elemVisibles.conjunts.substraction=false;
+		GraphsMM.elemVisibles.conjunts.subtraction=false;
 	}
-	else if(document.LlinatgeCapes.cLl_conjunts.value=="substraction")
+	else if(document.LlinatgeCapes.cLl_conjunts.value=="subtraction")
 	{
 		GraphsMM.elemVisibles.conjunts.union=false;
 		GraphsMM.elemVisibles.conjunts.nonUnion=false;
 		GraphsMM.elemVisibles.conjunts.intersection=false;
 		GraphsMM.elemVisibles.conjunts.complement=false;
-		GraphsMM.elemVisibles.conjunts.substraction=true;
+		GraphsMM.elemVisibles.conjunts.subtraction=true;
 	}
 	else//if(document.LlinatgeCapes.cLl_conjunts.value=="union")
 	{
@@ -997,7 +997,7 @@ function ActualitzaValorConjuntsVisiblesALlinatge()
 		GraphsMM.elemVisibles.conjunts.nonUnion=false;
 		GraphsMM.elemVisibles.conjunts.intersection=false;
 		GraphsMM.elemVisibles.conjunts.complement=false;
-		GraphsMM.elemVisibles.conjunts.substraction=false;
+		GraphsMM.elemVisibles.conjunts.subtraction=false;
 	}
 }
 
@@ -1032,8 +1032,8 @@ var cdns=[];
 			" <label for=\"intersection\">", GetMessage("TheIntersection", "llinatge"), "</label>",
 			" <input name=\"cLl_conjunts\" value=\"complement\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.complement ? " checked" : "", "/>",
 			" <label for=\"complement\">", GetMessage("TheComplementIntersection", "llinatge"), "</label>",
-			" <input name=\"cLl_conjunts\" value=\"substraction\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.substraction ? " checked" : "", "/>",
-			" <label for=\"substraction\">", GetMessage("TheSubstractionFirst", "llinatge"), "</label>",
+			" <input name=\"cLl_conjunts\" value=\"subtraction\" onclick='ActualitzaValorConjuntsVisiblesALlinatge()' type=\"radio\"", GraphsMM.elemVisibles.conjunts.subtraction ? " checked" : "", "/>",
+			" <label for=\"subtraction\">", GetMessage("TheSubtractionFirst", "llinatge"), "</label>",
 			"</fieldset>");
 	}
 	return cdns.join("");

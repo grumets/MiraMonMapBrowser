@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -173,7 +173,7 @@ var i_indicator, cdns=[];
 			else
 				decimals=ParamCtrl.NDecimalsCoordXY;
 			cdns.push("<b>Scope:</b> Dataset fragment of this area: x=[", OKStrOfNe(env.MinX, decimals), ",", OKStrOfNe(env.MaxX, decimals), "], y=[", OKStrOfNe(env.MinY, decimals), ",", OKStrOfNe(env.MaxY, decimals), "] ");
-			if (quality[i_q].scope.env.CRS.toUpperCase()==ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+			if (DonaCRSRepresentaQuasiIguals(quality[i_q].scope.env.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 				  	GetMessage("GoTo", "capavola"),
 					"\" onClick='PortamAAmbit(",JSON.stringify(env),")' />");
@@ -432,6 +432,34 @@ var s=capa.nom;
 	return null; //si no sé donar identificador a l'estil, no deixo posar feedback sobre ell
 }
 
+//Si la capa te un tokenType associat es fa servir aquest, i si no el primer que estigui actiu, i si no n'hi ha cap, el primer que tingui possibilitat de fer-se servir
+function DonaAccessTokenTypeFeedback(capa)
+{
+	if (!ParamCtrl.accessClientId)
+		return null;
+
+	if (capa.access)
+		return capa.access.tokenType;
+
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			if (ParamInternCtrl.tokenType[tokenType].userAlreadyWelcomed)
+				return tokenType;
+		}
+	}
+	for (var tokenType in ParamCtrl.accessClientId)
+	{
+		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
+		{
+			return tokenType;
+		}
+	}
+	return null;
+}
+
+
 function FinestraFeedbackCapa(elem, i_capa, i_estil)
 {
 var cdns=[], s;
@@ -462,7 +490,8 @@ var capa=ParamCtrl.capa[i_capa];
 				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
-				ParamCtrl.idioma);
+				ParamCtrl.idioma,
+				DonaAccessTokenTypeFeedback(capa));
 }
 
 function AdoptaEstil(params_function, guf)
@@ -521,7 +550,7 @@ var capa=ParamCtrl.capa[i_capa];
 	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa),
 		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 			ru_schema: encodeURIComponent(config_schema_estil) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-		ParamCtrl.idioma, "" /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
+		ParamCtrl.idioma, DonaAccessTokenTypeFeedback(capa) /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
 
 function CalculaValidessaTemporal(param)
@@ -719,7 +748,7 @@ function CercaCombinacioCamps(llista_comb, combinacio)
                 	   ((!objecte[2] && !combinacio[2]) || (objecte[2] && combinacio[2] && combinacio[2].toLowerCase()==objecte[2].toLowerCase())))
 				return true;
 			return false;
-		});  //tools1.js afageix suport a find() si no hi és.
+		});  //tools1.js afegeix suport a find() si no hi és.
 	/*}
 	catch(ex)
 	{
@@ -852,7 +881,7 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 
 	desv_tip=Math.sqrt(desv_tip/n);
 
-	i=DonaIAtributsDesDeNomAtribut(capa_digi, param.atribut);
+	i=DonaIAtributsDesDeNomAtribut(capa_digi, capa_digi.atributs, param.atribut);
 	if (i==-1)
 	{
 		alert(GetMessage("WrongAttributeName", "qualitat") + " " +
@@ -1213,7 +1242,7 @@ var capa;
 	cdns.push("\"<b><br/><br/>");
 
 	cdns.push("<fieldset><legend>",
-			  GetMessage("QualityAssesment", qualitat),
+			  GetMessage("QualityAssessment", "qualitat"),
 			  "</legend>");
 
 	cdns.push("<select name=\"metode_eval_qual\" class=\"Verdana11px\" onChange=\"ActualitzaCampsEnFuncioMetodeAvaluacioQualitat(form,",i_capa,",",i_estil,");\" >");

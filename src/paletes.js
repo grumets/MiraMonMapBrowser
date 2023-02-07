@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -69,12 +69,12 @@ var cdns=[], w;
 		}
 		w=paleta.colors.length<24 ? 12 : 1;
 		for (var i=0; i<paleta.colors.length; i++)
-			cdns.push("<span style=\"height:15px;width:", w, "px;background-color:", paleta.colors[i], ";\"><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" width=", w, "></span>");
+			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" style=\"height: 15px;width: ", w, "px;background-color:", paleta.colors[i], ";\">");
 	}
 	else
 	{
 		for (var i=0; i<256; i++)
-			cdns.push("<span style=\"height:15px;width:1px;background-color:", RGB(i,i,i), ";\"><img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\"></span>");
+			cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("1tran.gif"), "\" style=\"height: 15px;width: 1px;background-color: ", RGB(i,i,i), ";\">");
 	}
 	return cdns.join("");
 }
@@ -141,6 +141,7 @@ function RGB(r,g,b)
 			+ (b.toString(16).length==1 ? "0"+b.toString(16) : b.toString(16));
 }
 
+//Aquesta funció necessita que color estigui en JSON i si no dona un error.
 function RGB_JSON(color)
 {
 	if (typeof color!=="object" || typeof color.r!=="number" || typeof color.b!=="number" || typeof color.r!=="number")
@@ -152,3 +153,14 @@ function RGB_JSON(color)
 	}
 	return RGB(color.r, color.g, color.b);
 }
+
+
+//Aquesta funció assumeix que si el color no és un RGB_JSON potser serà una cadena #RRGGBB i deixa continuar sense dir res
+function RGB_color(color)
+{
+	if (typeof color!=="object" || typeof color.r!=="number" || typeof color.b!=="number" || typeof color.r!=="number")
+		return color;
+	return RGB(color.r, color.g, color.b);
+}
+
+

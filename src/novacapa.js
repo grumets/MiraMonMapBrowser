@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -38,43 +38,54 @@
 
 "use strict"
 
-const OriginUsuari="usuari";
+const OrigenUsuari="usuari";
 
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
-var j, k, estil, minim, maxim;
+var j, k, estils, estil, minim, maxim;
 var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
+
+	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
 	if(layer.estil && layer.estil.length>0)
 	{
-		estil=[];
+		estils=[];
 		for(j=0; j<layer.estil.length; j++)
 		{
-			estil[estil.length]={nom: layer.estil[j].nom,
+			estils[estils.length]={nom: layer.estil[j].nom,
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
 						TipusObj: "I",
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
+			estil=estils[estils.length-1];
 			if (layer.esCOG && layer.uriDataTemplate)
-				estil[estil.length-1].component=[{"i_valor": 0}];
-			if (layer.categories)
+			{
+				estil.component=[{"i_valor": 0}];
+				if (layer.vom=="Land Water Transition Zone - Hydroperiod")
+					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
+			}
+			if (layer.categories && layer.categories.length)
 			{
 				estil.categories=[];
-				for (k=0; k<strlen(layer.categories); k++)
+				var s=layer.uom ? layer.uom : GetMessage("Class");
+				for (k=0; k<layer.categories.length; k++)
 				{
 					if (layer.categories[k])
-						estil.categories[k][layer.estil[j].nom]=layer.categories[k];
+					{
+						estil.categories[k]={};
+						estil.categories[k][s]=layer.categories[k];
+					}
 					else
 						estil.categories[k]=null;
 				}
-				estil.atributs=[{nom: layer.estil[j].nom, unitats: layer.uom, mostrar: "si"}];
+				estil.atributs=[{nom: s, unitats: layer.uom, mostrar: "si"}];
 			}
 		}
 	}
 	else
-		estil=null;
+		estils=null;
 
 	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 		minim=layer.CostatMinim;
@@ -96,24 +107,24 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
 				tipus: servidorGC.tipus,
 				nom: layer.nom,
 				desc: layer.desc,
-				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
+				CRS: layer.CRSs ? layer.CRSs : [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
 				FormatImatge: servidorGC.formatGetMap[i_format_get_map],
-				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
+				transparencia: "semitransparent",
 				CostatMinim: minim,
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
 				separa: DonaTextSeparadorCapaAfegida(k),
 				DescLlegenda: DonaCadenaNomDesc(layer),
-				estil: estil,
+				estil: estils,
 				i_estil: 0,
-				NColEstil: (estil && estil.length>0) ? 1: 0,
+				NColEstil: (estils && estils.length>0) ? 1: 0,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
 				visible: "si",
@@ -124,7 +135,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 				i_data: layer.i_data,
 				animable: (layer.data)? true: false,
 				AnimableMultiTime: (layer.data)? true:false,
-				origen: OriginUsuari}
+				origen: OrigenUsuari}
 		);
 
 	capa=ParamCtrl.capa[k];
@@ -147,14 +158,14 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 					"datatype": "float32",
 					"nodata": [-9999, 0]
 				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
-		capa.estil=estil;
+		capa.estil=estils;
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
 		CompletaDefinicioCapa(capa);
 
 	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa))
-		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
+		alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
 /* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
@@ -228,7 +239,7 @@ var env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, i;
 	{
 		if (!ParamCtrl.capa[i_capes[i]].EnvTotal)
 			return null;
-		if (i<0 && ParamCtrl.capa[i_capes[i]].EnvTotal.CRS!=ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS)
+		if (i<0 && !DonaCRSRepresentaQuasiIguals(ParamCtrl.capa[i_capes[i]].EnvTotal.CRS, ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS))
 			break;
 	}
 	if (i<i_capes.length)  //Hi ha ambits en CRSs diferents. Ho faig amb LongLat
@@ -360,7 +371,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 			AnimableMultiTime: false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 			proces:	null,
 			ProcesMostrarTitolCapa: false,
-			origen: OriginUsuari
+			origen: OrigenUsuari
 			});
 
 		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
@@ -387,7 +398,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 				nItemLlegAuto: 20,
 				ncol: 4,
 				descColorMultiplesDe: 0.01,
-				origen: OriginUsuari
+				origen: OrigenUsuari
 			});
 
 			if (capa.visible=="ara_no")
@@ -487,7 +498,7 @@ var k;
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari});
+				origen: OrigenUsuari});
 
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
@@ -545,7 +556,7 @@ var k;
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari});
+				origen: OrigenUsuari});
 	
 	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
@@ -556,14 +567,14 @@ var k;
 	RepintaMapesIVistes();
 }
 
-function IniciaDefinicioCapaTIFF(url, desc)
+function IniciaDefinicioCapaTIFF(url, desc, CRSs)
 {
 	return {servidor: url,
 				versio: null,
 				tipus: "TipusHTTP_GET",
 				nom: null,
 				desc: desc,
-				CRS: null,
+				CRS: CRSs,
 				FormatImatge: "image/tiff",
 				valors: [],
 				transparencia: "semitrasparent",
@@ -575,8 +586,8 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				estil: null,
 				i_estil: 0,
 				NColEstil: 1,
-				LlegDesplegada: true,
-				VisibleALaLlegenda: false,
+				LlegDesplegada: false,
+				VisibleALaLlegenda: true,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -585,7 +596,7 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari};
+				origen: OrigenUsuari};
 }
 
 async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
@@ -606,12 +617,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			return;
 		}
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
-		if (capa.origen==OriginUsuari && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
+		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
-		if (capa.origen==OriginUsuari && 
-			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
+		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
+			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
 
@@ -640,7 +651,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		return;
 	}
 
-	if (capa.origen==OriginUsuari)
+	if (capa.origen==OrigenUsuari)
 	{
 		capa.valors=[];
 		var i_v=0;
@@ -673,9 +684,9 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		}
 	}
 
-	if (capa.origen==OriginUsuari)
+	if (capa.origen==OrigenUsuari)
 	{
-		//En la versió qeu em provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
+		//En la versió qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
                 //En un COG, cada overview és una imatge més en el compte. La darrera és la de menys detall. Només la primera presenta resolució. Les altres s'ha de "deduir" de la relació entre mides d'imatges en pixels
 		//https://geoexamples.com/other/2019/02/08/cog-tutorial.html/
 		var n_overviews = await tiff.getImageCount();
@@ -699,14 +710,32 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			}
 		}
 
+		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
+		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
+
+		var descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null;
+		if (capa.estil && capa.estil.length)
+		{
+			var estil=capa.estil[0];
+			if (estil.DescItems)
+				descItems=estil.DescItems;
+			if (estil.metadades)
+				metadades=JSON.parse(JSON.stringify(estil.metadades));
+			if (estil.categories) 
+				categories=JSON.parse(JSON.stringify(estil.categories));
+			if (estil.atributs)
+				atributs=JSON.parse(JSON.stringify(estil.atributs));
+			if (estil.component && estil.component.length && estil.component[0].estiramentPaleta)
+				estiramentPaleta=JSON.parse(JSON.stringify(estil.component[0].estiramentPaleta));
+		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
 		{
 			capa.estil.push({nom: null,
 					desc: descEstil,
-					DescItems: null,
+					DescItems: descItems,
 					TipusObj: "I",
-					metadades: null,
+					metadades: metadades,
 					component: [
 						{
 							i_valor: i_v,
@@ -724,14 +753,17 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			{
 				capa.estil.push({nom: null,
 						desc: descEstil,
-						DescItems: null,
+						DescItems: descItems,
 						TipusObj: "P",
-						metadades: null,
+						metadades: metadades,
 						component: [
 							{
 								i_valor: i_v+i,
+								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0
 							}
 						],
+						categories: categories,
+						atributs: atributs,
 						ColorMinimPrimer: false
 					});
 				var estil=capa.estil[capa.estil.length-1];
@@ -749,20 +781,38 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 								r: image.fileDirectory.ColorMap[i]>>>8,
 								g: image.fileDirectory.ColorMap[ncolors+i]>>>8,
 								b: image.fileDirectory.ColorMap[ncolors*2+i]>>>8};
-						estil.ItemLleg[i]={color: RGB(estil.paleta.colors[i].r, estil.paleta.colors[i].g, estil.paleta.colors[i].b), DescColor: i};
+						//estil.ItemLleg[i]={color: RGB(estil.paleta.colors[i].r, estil.paleta.colors[i].g, estil.paleta.colors[i].b), DescColor: i};
 					}
 					estil.ncol=1;
 				}
+				else if (categories)
+				{
+					//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+					if (!PaletesGlobals)
+						PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+					estil.paleta={colors: []};
+					estil.ItemLleg=[];
+					var ncolors=categories.length;
+					for (var i=0, j=0; i<ncolors; i++, j++)
+					{
+						if (j==20)
+							j==0;
+						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+					}
+					estil.ncol=1;					
+				}
 				else
 				{
-					estil.component[0].estiramentPaleta={auto: true};
+					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};
 					estil.nItemLlegAuto=20;
 					estil.ncol=4;
 					estil.descColorMultiplesDe=0.01;
 				}
 			}
 		}
-		capa.VisibleALaLlegenda=true;
+		capa.LlegDesplegada=true;
 	}
 }
 
@@ -778,10 +828,11 @@ var k;
 	}
 	ParamCtrl.capa.splice(k, 0, capa);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if (capa.CRS && !DonaCRSRepresentaQuasiIguals(capa.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		CreaLlegenda();
-		alert("The added layer has a CRS '"+ DonaDescripcioCRS(capa.CRS[0]) + "' that is no visible in the current CRS '" + DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) + "'");
+		if (ParamCtrl.LlegendaAmagaSiForaCRS)
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 	}
 	else
 		RepintaMapesIVistes();
@@ -794,7 +845,7 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
-	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]));
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null);
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
 	{
@@ -810,8 +861,6 @@ var i_fitxer, i_event;
 			CanviaEstatEventConsola(null, i_event, EstarEventError);
 			return;
 		}
-
-
 		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer], 0));
 	}
 
@@ -822,7 +871,7 @@ async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
 {
 var i_fitxer;
 
-	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc); 	
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null); 	
 
 	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
 	{

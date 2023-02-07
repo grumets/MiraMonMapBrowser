@@ -17,13 +17,13 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
     dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica 
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
     de mapes ràsters i vectorials. Aquest programari inclou
     aplicacions d'escriptori i també servidors i clients per Internet.
     No tots aquests productes són gratuïts o de codi obert.
@@ -86,7 +86,7 @@ function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 {
 	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
 	//de getElementsByTagNameNS és diferent
-	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres és el nom del ns i el nom del tag 
+	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres és el nom del ns i el nom del tag
 	//Per getElementsByTagName() en Opera i Chrome no funciona si indiquem el id del ns, és a dir, ns:name no va
 	//En IE depen de la versió. En Motzilla en principi funciona amb ns:name, però crec que també depen de la versió
 	//Recomano usar aquesta funció que provarà les diferents possibilitats i així és menys probable tenir problemes
@@ -309,9 +309,9 @@ function sortAscendingStringSensible(a, b)
 
 function sortAscendingStringInsensible(a, b)
 {
-	a = a.toLowerCase();
-    b = b.toLowerCase();
-   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	var ai = a.toLowerCase();
+	var bi = b.toLowerCase();
+   	return ((ai < bi) ? -1 : ((ai > bi) ? 1 : 0));
 }
 
 function sortAscendingNumber(a, b)
@@ -751,20 +751,20 @@ function moveLayer(elem, x, y, w, h)
 	//Ara ho manipulo i ho canvio.
 	var estil=elem.style;
 	if (x!=-1)
-		estil.left = x;
+		estil.left = x+"px";
 	if (y!=-1)
-		estil.top = y;
+		estil.top = y+"px";
 	if (w!=-1)
-		estil.width = w;
+		estil.width = w+"px";
 	if (h!=-1)
-		estil.height = h;
+		estil.height = h+"px";
 }
 
 function changePosAndShowLayer(elem, x, y)
 {
 	var estil=elem.style;
-	estil.left = x;
-	estil.top = y;
+	estil.left = x+"px";
+	estil.top = y+"px";
      	estil.visibility = "visible";
 	if (NecessariLayerIFrame)
 	{
@@ -897,10 +897,17 @@ function getRectSupLayer(elem)
 
 function spaceForLayers(win)
 {
-	if (win.document.body.clientWidth)
+/*	if (win.document.body.clientWidth)
 		ParamInternCtrl.realSpaceForLayers.width=win.document.body.clientWidth;
 	if (win.document.body.clientHeight)
-		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla
+		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla*/
+
+var div=win.document.getElementById(ParamCtrl.containerName);
+
+	if (div.clientWidth)
+		ParamInternCtrl.realSpaceForLayers.width=div.clientWidth;
+	if (div.clientHeight)
+		ParamInternCtrl.realSpaceForLayers.height=div.clientHeight-4;  //Això assegura que no surti un scroll a la dreta de la pantalla*/
 }
 
 var SufixBarra="_barra"
@@ -980,7 +987,7 @@ var elem, rect, ancora, nom;
 
 	delta_w=ParamInternCtrl.realSpaceForLayers.width-w_previ
 	delta_h=ParamInternCtrl.realSpaceForLayers.height-h_previ;
-
+//  const layerNamesCheckList = new Map();
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
 	{
@@ -988,7 +995,18 @@ var elem, rect, ancora, nom;
 		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
 		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto))
 			continue;
+    /**
+    * Es comprova que la capa no s'hagi redimensionat abans. Del contrari
+    * evitem que ho fagi més cops.Només es guarda el nom de la capa ambdós clau
+    * i valor perquè en realitat només utilitzem el map() per tenir una llista 
+    * de les capes tractades però no com una estructura de dades amb Informació
+    * sensible per a càlculs.
 
+    if (!layerNamesCheckList.has(nom))
+      layerNamesCheckList.set(nom, nom);
+    else
+      continue;
+    */
 		elem=getLayer(win, nom);
 		if (!elem)
 			continue;
@@ -1170,34 +1188,34 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11,
 					GetMessage("copy"),
 					"CopiaPortapapersFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\");"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11,
 					GetMessage("help"),
 					"AjudaFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 				"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11,
 					GetMessage("popDown"),
 					"PopDownFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 	if(layerFinestraList[i_finestra].botons&boto_pop_up)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11,
 					GetMessage("popUp"),
 					"PopUpFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11,
 					GetMessage("close"),
 					"TancaFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\")"),
@@ -1391,6 +1409,20 @@ function moveFinestraLayer(win, name, x, y, w, h)
 		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
 }
 
+//Si mida==-1 i la finestra és massa petita, ajusta a la mida del text. (Crideu-la abans amb mida=0 si voleu que una finestra gran es faci petita a la mida del text)
+function ajustaAllargadaAContingutFinestraLayer(win, name, mida)
+{
+var elem=getFinestraLayer(win, name);
+var rec=getRectLayer(elem);
+
+	if (mida==-1)
+		mida=elem.scrollHeight+AltBarraFinestraLayer;
+	else if (mida<AltBarraFinestraLayer)
+		mida=AltBarraFinestraLayer;
+
+	moveFinestraLayer(win, name, rec.esq, rec.sup-AltBarraFinestraLayer, rec.ample, mida);
+}
+
 function isFinestraLayerVisible(win, name)
 {
 	var elem=getFinestraLayer(win,name);
@@ -1563,7 +1595,16 @@ var cdns=[];
 
 function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
-var nom, i_finestra=layerFinestraList.length;
+var nom, i_finestra;
+
+	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+	{
+		if (layerFinestraList[i_finestra].nom==name)
+		{
+			console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+			break;
+		}
+	}
 
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
@@ -1578,7 +1619,7 @@ var nom, i_finestra=layerFinestraList.length;
 	classLayer(getLayer(win, nom), "barrafinestra");
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
-	
+
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
@@ -1607,7 +1648,7 @@ var nom, s, i_finestra=layerFinestraList.length;
 	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "barrafinestra", null);
 
 	//No omplo la layer barra amb els botons i el títol ho faré quan conegui l'idioma del navegador
-	
+
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, param, "finestra", content);
@@ -1633,6 +1674,18 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 {
 
 	var z=layerList.length;
+
+	//evito que una layer es crei 2 cops
+	for (var i=0; i<z; i++)
+	{
+		if (layerList[i].nom==name)
+		{
+			console.log("textHTMLLayer is creating a layer/div with the same layer/div name twice. Old one is overwritten.");
+			z=i;
+			break;
+		}
+	}	
+
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
 
@@ -1955,7 +2008,7 @@ var xhr = new XMLHttpRequest();
 		{
 	       	if (xhr.status === 200)
 			{
-            	if (success)
+				if (success)
 				{
 					var data;
 					try {
@@ -1970,7 +2023,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-                if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -1979,7 +2032,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-		    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+			    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -1989,6 +2045,58 @@ var xhr = new XMLHttpRequest();
 	xhr.setRequestHeader('Accept', 'application/json');
 	//xhr.setRequestHeader('Accept-Charset', 'utf-8');	Això no li agrada als navegadors, donen error
 	xhr.send();
+}
+
+//The same as the previous function but expressed as a promise.
+//Good thing about this one is that you can use it syncronously in an async function by calling it as data=await promiseLoadJSON(path);
+//https://stackoverflow.com/questions/30008114/how-do-i-promisify-native-xhr
+function promiseLoadJSON(path)
+{
+	return new Promise(function(success, error)
+	{
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function()
+		{
+        	if (xhr.readyState === XMLHttpRequest.DONE)
+			{
+		       	if (xhr.status === 200)
+				{
+					if (success)
+					{
+						var data;
+						try {
+							data = JSON.parse(xhr.responseText);
+						}
+						catch (e) {
+		                			if (error)
+								return error("JSON file: \""+ path + "\". " + e);
+						}
+						success(data);
+					}
+				}
+				else
+				{
+        			if (error)
+					{
+						var s=null;
+						if (xhr.response)
+						{
+							var s=arrayBufferToString(xhr.response);
+							if (-1!=s.indexOf("<body>"))
+								s=s.substring(s.indexOf("<body>"));
+						}
+						if (xhr.status)
+				    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+						else
+							error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+					}
+				}
+			}
+		};
+		xhr.open("GET", path, true);
+		xhr.setRequestHeader('Accept', 'application/json');
+		xhr.send();
+	});
 }
 
 function loadTextFile(path, mimetype, success, error, extra_param)
@@ -2025,7 +2133,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-             	if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -2034,7 +2142,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+ xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -2079,7 +2190,7 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 			{
 				if (retry && retry<200)
 				{
-					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry*2 + " seconds");
+					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry + " seconds");
 					setTimeout(loadBinaryFile, retry*1000, path, mimetype, success, retry*2, error, extra_param);
 				}
 				if (error)
@@ -2091,11 +2202,13 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText +  ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
-
 	};
 	xhr.open("GET", path, true);
 	xhr.responseType = "arraybuffer";
@@ -2142,7 +2255,7 @@ var i;
 	}
 }
 
-/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter. 
+/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter.
 It supports that "$ref" is a string of a single JSON Pointer or an array of JSON Pointers.
 The original object can have other properties but they should not the properties of the pointed object ($ref)
 should not have the same names.
@@ -2302,7 +2415,7 @@ var es_negatiu;
 }
 
 //Pot ser que retorni el número com a text
-function multipleOf(v, m) 
+function multipleOf(v, m)
 {
 var r;
 
@@ -2344,7 +2457,7 @@ function DonaNumeroArrodonit125(a)
 		return a;
 	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
 	var n=Math.abs(a/Math.pow(10,e));
-	
+
 	//Ara cal arrodinir a l'enter més proper:
 	if (n<2)
 		n=1;
@@ -2383,15 +2496,13 @@ var s2;
 		s2=s.substring(s.indexOf("://")+3,s.length);
 		if (-1!=s2.indexOf("/"))
 			return s2.substring(0,s2.indexOf("/"));
-		else
-			return s2;
+		return s2;
 	}
 	else
 	{
 		if (-1!=s.indexOf("/"))
 			return s.substring(0,s.indexOf("/"));
-		else
-			return s;
+		return s;
 	}
 }
 
@@ -2429,7 +2540,7 @@ function FesTestDeNavegador()
     if (!document.getElementById)
     {
 		alert("Aquest navegador és massa antic i no suporta la funció javascript document.getElementById() pel que no funcionarà correctament. Actualitzeu-vos.\n" +
-			"Este navegador es demassiado antiguo y no suporta la función javascript document.getElementById() por lo que no funcionará correctamente. Actualicese.\n" + 
+			"Este navegador es demassiado antiguo y no suporta la función javascript document.getElementById() por lo que no funcionará correctamente. Actualicese.\n" +
 			"This browser is too old and do not supports the javascript function document.getElementById(). It will not work properly. Please upgrade it.\n" +
 			"Vous utilisez une version ancienne du navigateur qui ne supporte pas la fonction javascript document.getElementById(), par conséquent, il ne fonctionnera pas correctement. Actualisez la version.");
     }
@@ -2519,7 +2630,7 @@ function FesTestDeNavegador()
 		if (version<8)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 8 o posterior per a funcionar correctament.\n" +
-				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 8 o posterior para funcionar correctamente.\n" + 
+				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 8 o posterior para funcionar correctamente.\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 8 o greater to work properly.\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 8 oû postérieure pour bien fonctionner.");
 		}
@@ -2538,7 +2649,7 @@ function FesTestDeNavegador()
 		if (version<5)
 		{
 			alert("S'ha detectat una versió " + version + " de " + browser + ". Aquest navegador de mapes necessita una versió 5 o posterior per a funcionar correctament (es recomana la versió 7).\n" +
-				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 5 o posterior para funcionar correctamente (se recomienda la versión 7).\n" + 
+				"Se ha detectado una versión " + version + " de " + browser + ". Este navegador de mapas necesita una versión 5 o posterior para funcionar correctamente (se recomienda la versión 7).\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 5 o greater to work properly (version 7 is recomended).\n"+
 				"Une version " + version + " de " + browser + " a été détectée. Ce navigateur de couches a besoin d'une version 5 oû postérieure pour bien fonctionner (nous recommandons la version 7).");
 		}

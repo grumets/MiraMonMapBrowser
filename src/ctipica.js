@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -47,7 +47,7 @@ var NCellaLlista=[];
 var ICellaLlistaBlau=[];
 var NomEditLlavorLlista=[];
 var NomLayerLlista=[];
-var CTipicaCapa=[];
+var CTipicaCapa=[];  //índex de la capa a "CapaConsultaPreguntaServidor" per a cada possible "ConsultaTipica" (generalment només n'hi ha una)
 var NCapesCTipicaCarregades=0;
 
 //var WindowDelEvent=parent.ctipica;
@@ -399,7 +399,6 @@ var timeoutActualitzaLLista=null;
 //Aquesta funció necessita WindowsDelEvent ple
 function ActualitzaLlista(llavor, i_llista, keycode)
 {
-var s="";
 var elem;
 
 	if (timeoutActualitzaLLista)
@@ -408,10 +407,9 @@ var elem;
 		timeoutActualitzaLLista=null;
 	}
 	elem=getLayer(window, NomLayerLlista[i_llista]);
-	s+="<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>" +
+	contentLayer(elem, "<table class=\"TaulaAmbVora\" CELLSPACING=0 CELLPADDING=0><tr><td>" +
 	   GetMessage("UpdatingList", "ctipica") + ", " + GetMessage("PleaseWait") +
-	   "...</td></tr></table>";
-	contentLayer(elem, s);
+	   "...</td></tr></table>");
 	showLayer(elem);
 	//ActualitzaLlistaTimeOut(i_llista, keycode);
 	timeoutActualitzaLLista=setTimeout("ActualitzaLlistaTimeOut("+i_llista+", "+keycode+")", 50);
@@ -490,6 +488,9 @@ function PosaVisibleIConsultableCapaConsultaTipica(i_ctipica)
 var retorn=1;  //No he tocat res
 var i_capa, i_capa_a_activar;
 
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return retorn;
+	
 	for(i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{
 		if (ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].nom==ParamCtrl.capa[i_capa].nom)
@@ -580,6 +581,9 @@ var i_capa, i_capa_a_activar;
 function PortamAAmbitConsultaTipicaCercador(i_ctipica, i_llista_buscar)
 {
 var i_ctipica_capa, i_valor;
+
+	if(!ParamCtrl.ConsultaTipica || !ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
 
 	if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
 	{
@@ -680,6 +684,8 @@ function InsertaOpcioEnSelect(selector, opcio, posicio)
 
 function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
 	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>0)
 	{
 		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo
@@ -753,8 +759,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 
 function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
-
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
 	{
 		CTipicaCapa[i_ctipica]=i_ctipica_capa;
 		CTipicaValor=valor;
@@ -775,7 +780,7 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 
 function PortamAAmbitConsultaTipicaCompleta(i_ctipica, capa, valor)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -839,7 +844,7 @@ function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 
 function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -854,8 +859,11 @@ function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 
 function SeleccionaRadialPuntCentralConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		SeleccionaRadialPuntCentralConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			SeleccionaRadialPuntCentralConsultaTipica(i);
+	}
 }
 
 function ModificaAmpleIAltFactor(ctipica, factor)
@@ -866,7 +874,7 @@ function ModificaAmpleIAltFactor(ctipica, factor)
 
 function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -892,8 +900,11 @@ function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 
 function PosaAGrisRetallPerObjecteConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		PosaAGrisRetallPerObjecteConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			PosaAGrisRetallPerObjecteConsultaTipica(i);
+	}
 }
 
 //var ctipica_capa=0; ara és CTipicaCapa[i_ctipica]
@@ -902,24 +913,24 @@ var CTipicaValor=-CTipicaOffset;
 
 function CanviaLlistaCapaConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica && form_ctipica.capa)
 		{
-			CTipicaCapa[i_ctipica]=form_ctipica.capa.selectedIndex;
+			CTipicaCapa[i_ctipica]=parseInt(form_ctipica.capa.options[form_ctipica.capa.selectedIndex].value);
 			CTipicaValor=-CTipicaOffset;
 			CreaConsultaTipica(i_ctipica);
-		}
-    }
+		}	
+	}
 }
 
 
 function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica)
@@ -944,12 +955,12 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 				}
 			}
 		}
-    }
+	}
 }
 
 function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 {
-    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor.length)
+    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -969,23 +980,26 @@ function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 
 function PosaLlistaValorsConsultesTipiquesAlPrincipi(excepte_i_ctipica)
 {
-	for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+	if(ParamCtrl.ConsultaTipica)
 	{
-		if (i_ctipica==excepte_i_ctipica)
-			continue;
-		if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
-			PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
-			PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
-			CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+		{
+			if (i_ctipica==excepte_i_ctipica)
+				continue;
+			if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
+				PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
+				PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
+				CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		}
 	}
 }
 
 var InicialConsultaTipica="A";
 function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 {
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		InicialConsultaTipica=s;
 		CreaConsultaTipica(i_ctipica);
@@ -1027,7 +1041,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 				{
 					for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 					{
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i, "\"" , ((i==CTipicaCapa[i_ctipica]) ? " selected" : "") , ">" ,
 						   DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 					}
 				}
@@ -1042,21 +1056,20 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 						}
 						if (i==ParamCtrl.CapaConsultaPreguntaServidor.length)
 						{
-							s=GetMessage("TheLayer") + " " +
-							ctipica.NomCapa[i_nom_capa] + " "
-							GetMessage("toBeShownInFrame", "ctipica") + " "
-							ctipica.nom + " "
-							GetMessage("notInTypicalQueryLayerList", "ctipica");
-							alert(s);
+							alert(GetMessage("TheLayer") + " " +
+								ctipica.NomCapa[i_nom_capa] + " " +
+								GetMessage("toBeShownInFrame", "ctipica") + " " +
+								ctipica.nom + " " +
+								GetMessage("notInTypicalQueryLayerList", "ctipica"));
 						}
 						else
 						{
-							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") ,
+							cdns.push("  <option value=\"" , i, "\"" , (i==CTipicaCapa[i_ctipica] ? " SELECTED" : "") ,
 							   ">" , DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 						}
 					}
 				}
-				cdns.push("  </SELECT><span class=\"text_general_consulta\">");
+				cdns.push("  </select><span class=\"text_general_consulta\">");
 				if(capa_pregunta_svr.camps.length>1 && ctipica.TipusConsultaTipica=="CTipicaDesplegables")
 					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",
 						 DonaCadena(capa_pregunta_svr.camps[capa_pregunta_svr.camps.length-1].previ));
@@ -1126,7 +1139,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 								   "ActualitzaComboConsultaTipicaSeguents(",i_ctipica,", ",CTipicaCapa[i_ctipica],", ",j,
 								   ", ",valor_opcio,");\">" ,
 								   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
-								   ("--" + GetMessage("Select") + "--") , "</option>" ,
+								   "(--", GetMessage("Select"), "--)" , "</option>" ,
 								   "  <option VALUE=\"-1\">" , "---------------", "</option>");
 							for (var i=0; i<capa_pregunta_svr.proj_camp[j].length; i++)
 								cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
@@ -1143,13 +1156,13 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 					valor_opcio="document.ctipica"+i_ctipica+".valor"+0+".options[document.ctipica"+i_ctipica+".valor"+0+".selectedIndex].value";
 					cdns.push("  <select name=\"valor0\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
-					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
-					   ("--" + GetMessage("Select") + "--") , "</option>" ,
-					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
+					   "  <option value=\"-2\"" , ((-1==CTipicaValor) ? " selected" : "") , ">" ,
+					   "(--", GetMessage("Select"), "--)" , "</option>" ,
+					   "  <option value=\"-1\">" , "---------------" , "</option>");
 					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i , "\"" , ((i==CTipicaValor) ? " selected" : "") , ">" ,
 							capa_pregunta_svr.proj_camp[0][i].valor , "</option>");
-					cdns.push("  </SELECT>");
+					cdns.push("  </select>");
 				}
 			}
 			cdns.push("</FORM>");
@@ -1167,9 +1180,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 	    {
 			cdns.push("<table border=0 cellspacing=0 cellpadding=0>" ,
 			   "<tr><td rowspan=",(ParamCtrl.CapaConsultaPreguntaServidor.length+4),
-			   "><img src=\"",
-			   AfegeixAdrecaBaseSRC("1tran.gif"),
-			   "\" height=1 width=5></td>",
+			   " height=\"1\" width=\"5\"></td>",
 			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>Selecció de l'àmbit:</b></td></tr>");
 			//(*) Per ··· [    ][v]
 			var i;
@@ -1238,8 +1249,11 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 
 function CreaConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		CreaConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			CreaConsultaTipica(i);
+	}
 }
 
 function OmpleICarregaConsultaTipica(doc, i_event)
@@ -1467,7 +1481,7 @@ function BuscaValorAConsultesTipiques()
 {
 var trobat=false;
 
-	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
+	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
 	{
 		//Per cada una de les capes a validar
 		for(var i_capa_accio=0; i_capa_accio<Accio.valors.length; i_capa_accio++)
@@ -1501,7 +1515,10 @@ var trobat=false;
 								}
 								if(i_valor==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].proj_camp[i_camp].length && Accio.valors[i_capa_accio]!=null && Accio.valors[i_capa_accio]!="")
 								{
-									alert(GetMessage("TheValue") + " " + Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + " " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + " " + Accio.capes[i_capa_accio]+ " " + GetMessage("isIncorrect", "ctipica"));
+									alert(GetMessage("TheValue") + " " + 
+										Accio.valors[i_capa_accio]+ " " + GetMessage("ofTheField") + 
+										" " + Accio.camps[i_capa_accio]+ " " + GetMessage("ofTheLayer") + 
+										" " + Accio.capes[i_capa_accio] + " " + GetMessage("isIncorrect", "ctipica") + ".");
 								}
 							}
 							break;
@@ -1522,7 +1539,7 @@ function IniciaConsultesTipiques()
 {
 var valor;
 
-	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0)
+	if(ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0)
 	{
 		//Per cada finestra de consulta típica
 		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
@@ -1646,7 +1663,7 @@ var valor;
 								ParamCtrl.ConsultaTipica[i_ctipica].NomCapa[i_nom_capa] + " " +
 								GetMessage("toBeShownInFrame", "ctipica") + " " +
 								ParamCtrl.ConsultaTipica[i_ctipica].nom + " " +
-								GetMessage("notInTypicalQueryLayerList", "ctipica") + " ");
+								GetMessage("notInTypicalQueryLayerList", "ctipica") + ".");
 						}
 						else
 						{
