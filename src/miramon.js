@@ -687,6 +687,8 @@ function DonaCadenaLang(cadena_lang)
 				return cadena_lang.eng;
 			case "fre":
 				return cadena_lang.fre;
+			case "cze":
+				return cadena_lang.cze;
 		}
 	}
 	return "";
