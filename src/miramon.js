@@ -4845,7 +4845,7 @@ function EndMiraMonMapBrowser(event, reset)
 				/*if (confirm(DonaCadenaLang({"cat": "Aceptes guardar l'estat del mapa?. (Per recuperar l'estat original afegiu a la URL:",
 								"spa": "¿Acepta guardar el estado del mapa? (Para recuperar el estado original añada a la URL:",
 								"eng": "Do you accept to save the status of the map? (To recover the original status add to the URL:",
-								"fre": "Acceptez-vous de sauvegarder l’état de la carte? (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")"))*/
+								"fre": "Acceptez-vous de sauvegarder l'état de la carte? (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")"))*/
 					localStorage.setItem("EditedParamCtrl_"+ParamCtrl.config_json, JSON.stringify(ParamCtrl));
 			}
 			catch (e)
@@ -4854,7 +4854,7 @@ function EndMiraMonMapBrowser(event, reset)
 				/*alert(DonaCadenaLang({"cat":"No ha estat possible guardar estat del map.",
 							"spa":"No ha sido posible guardar el estado del mapa.",
 							"eng":"Saving the map status done was not possible.",
-							"fre":"Il n’a pas été possible de sauvegarder le statut de la carte."}));*/
+							"fre":"Il n'a pas été possible de sauvegarder le statut de la carte."}));*/
 			}
 		}
 	}

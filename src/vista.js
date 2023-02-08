@@ -133,7 +133,7 @@ var cdns=[];
 		cdns.push(" (" , (GetMessage("atLat")) , " 0° 0\')");
 	cdns.push("</font></td>");
 	if (cal_desc_crs)
-		cdns.push("<td><font face=arial size=2> &nbsp;",
+		cdns.push("<td><font face=\"arial\" size=\"2\"> &nbsp;",
 				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font></td>");
 	cdns.push("</tr></table>");
 	return cdns.join("");
