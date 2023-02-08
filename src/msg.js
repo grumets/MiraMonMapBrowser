@@ -1735,7 +1735,7 @@ var MessageLang={
     },
     "Down": {
       "cat": "A sota",
-      "spa": "Debajo::",
+      "spa": "Debajo",
       "eng": "Down",
       "fre": "Au-dessous",
       "cze": "Dolů"
@@ -2458,8 +2458,8 @@ var MessageLang={
       "cat": "Factor d'exageració del relleu incorrecte. Hauria de ser un número major de 0.0001. Aplicant el valor per defecte",
       "spa": "Factor de exageración del relieve incorrecta. Debería ser un número mayor que 0.0001. Aplicando el valor por defecto",
       "eng": "Incorrect relief exaggeration factor. It should be a number bigger than 0.0001. Applying the default value",
-      "fre": "Facteur d'exagération du relief incorrect. Il doit s'agir d'un nombre supérieur à 0,0001. Application de la valeur par défaut",
-      "cze": "Nesprávný faktor převýšení reliéfu. Mělo by to být číslo větší než 0,0001. Použití výchozí hodnoty"
+      "fre": "Facteur d'exagération du relief incorrect. Il doit s'agir d'un nombre supérieur à 0.0001. Application de la valeur par défaut",
+      "cze": "Nesprávný faktor převýšení reliéfu. Mělo by to být číslo větší než 0.0001. Použití výchozí hodnoty"
     },
     "ofModifingName": {
       "cat": "de modificar el nom",
@@ -2570,34 +2570,34 @@ var MessageLang={
       "spa": "Paso a longitud/latitud no implementado para este sistema de referencia",
       "eng": "Longitude/latitude conversion has not been implemented for this reference system",
       "fre": "Conversion à longitude/latitude pas implémenté pour ce système de référence",
-      "cze": "Převod zeměpisné délky a šířky nebyl pro tento referenční systém implementován."
+      "cze": "Převod zeměpisné délky a šířky nebyl pro tento referenční systém implementován"
     },
     "MapCoordConversionNotImplementedInRefSys": {
       "cat": "Pas a coordenades mapa no implementat per aquest sistema de referència",
       "spa": "Paso a coordenades mapa no implementado para este sistema de referencia",
       "eng": "Map coordinates conversion has not been implemented for this reference system",
-      "fre": "Conversion à coordonnées de la carte pas implémenté pour ce système de référence.",
-      "cze": "Převod mapových souřadnic nebyl pro tento referenční systém implementován."
+      "fre": "Conversion à coordonnées de la carte pas implémenté pour ce système de référence",
+      "cze": "Převod mapových souřadnic nebyl pro tento referenční systém implementován"
     },
     "LambertConformalConicZoneIII_NTF": {
       "cat": "Lambert Cònica Conforme Zona III - NTF",
       "spa": "Lambert Cónica Conforme Zona III - NTF",
       "eng": "Lambert Conformal Conic Zone III - NTF",
-      "fre": "Lambert Conique Conforme Zone III –NTF",
+      "fre": "Lambert Conique Conforme Zone III – NTF",
       "cze": "Lambert Conformal Conic Zone III - NTF"
     },
     "LambertConformalConicZoneIIext_NTF": {
       "cat": "Lambert Cònica Conforme Zona IIext - NTF",
       "spa": "Lambert Cónica Conforme Zona IIext - NTF",
       "eng": "Lambert Conformal Conic Zone IIext - NTF",
-      "fre": "Lambert Conique Conforme Zone IIext–NTF",
+      "fre": "Lambert Conique Conforme Zone IIext – NTF",
       "cze": "Lambert Conformal Conic Zone IIext - NTF"
     },
     "LambertConformalConicZoneIIIext_NTF": {
       "cat": "Lambert Cònica Conforme Zona IIIext - NTF",
       "spa": "Lambert Cónica Conforme Zona IIIext - NTF",
       "eng": "Lambert Conformal Conic Zone IIIext - NTF",
-      "fre": "Lambert Conique Conforme Zone IIIext –NTF",
+      "fre": "Lambert Conique Conforme Zone IIIext – NTF",
       "cze": "Lambert Conformal Conic Zone IIIext - NTF"
     },
     "LambertConformalConicICCMediterranianRegion": {
@@ -2612,21 +2612,21 @@ var MessageLang={
       "spa": "Mercator paralelo 41° 25' - ED50",
       "eng": "Mercator parallel 41° 25' - ED50",
       "fre": "Mercator parallèle 41° 25' - ED50",
-      "cze": "Mercator parallel 41ï¿½25' - ED50"
+      "cze": "Mercator parallel 41° 25' - ED50"
     },
     "MercatorParallel_41d25m_WGS84": {
       "cat": "Mercator paral·lel 41° 25' - WGS84",
       "spa": "Mercator paralelo 41° 25' - WGS84",
       "eng": "Mercator parallel 41° 25' - WGS84",
       "fre": "Mercator parallèle 41° 25' - WGS84",
-      "cze": "Mercator parallel 41ï¿½25' - WGS84"
+      "cze": "Mercator parallel 41° 25' - WGS84"
     },
     "MercatorParallel_40d36m_ED50": {
       "cat": "Mercator paral·lel 40° 36' - ED50",
       "spa": "Mercator paralelo 40° 36' - ED50",
       "eng": "Mercator parallel 40° 36' - ED50",
       "fre": "Mercator parallèle 40° 36' – ED50",
-      "cze": "Mercator parallel 40ï¿½36' - ED50"
+      "cze": "Mercator parallel 40° 36' - ED50"
     },
     "MercatorParallelEquator_ED50": {
       "cat": "Mercator paral·lel Equador - ED50",
@@ -2639,7 +2639,7 @@ var MessageLang={
       "cat": "Mercator paral·lel Equador - WGS84",
       "spa": "Mercator paralelo Ecuador - WGS84",
       "eng": "Mercator parallel Equator - WGS84",
-      "fre": "Mercator parallèle Equateur- WGS84",
+      "fre": "Mercator parallèle Equateur - WGS84",
       "cze": "Mercator parallel Equator - WGS84"
     },
     "WebMercator": {
@@ -3000,7 +3000,7 @@ var MessageLang={
       "spa": "Utiliza las herramientas del navegador para situarte sobre la vista.\nA continuación haz clic sobre la vista para determinar la coordenada y la información del punto a validar.\nPara finalizar aprieta [Validar Coordenada] o [Cancelar] desde la ventana de validación.",
       "eng": "You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.",
       "fre": "Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\net l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation.",
-      "cze": "K umístění na zobrazení musíte použít nástroje prohlížeče. Později musíte kliknout na zobrazení, abyste určili souřadnice a informace o bodu validace. Pro dokončení musíte v okně validace kliknout na tlačítko [Validovat souřadnici] nebo [Zrušit]."
+      "cze": "K umístění na zobrazení musíte použít nástroje prohlížeče.\n Později musíte kliknout na zobrazení, abyste určili souřadnice\n a informace o bodu validace.\n Pro dokončení musíte v okně validace kliknout na tlačítko [Validovat souřadnici] nebo [Zrušit]."
     }
   },
   "download": {
@@ -3016,7 +3016,7 @@ var MessageLang={
       "spa": "La generación de la descarga de la capa podría demorarse algunos minutos",
       "eng": "Generation of layer to be downloaded can take some minutes",
       "fre": "La création du téléchargement de la couche pourrai prendre quelques minutes",
-      "cze": "Generování vrstvy ke stažení může trvat několik minut."
+      "cze": "Generování vrstvy ke stažení může trvat několik minut"
     },
     "PreparingRequestedLayer": {
       "cat": "Preparant la capa sol·licitada",
@@ -3037,13 +3037,13 @@ var MessageLang={
       "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
       "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
       "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, stáhněte si ji pro formát MMZ nebo MMZX (ISO 19165-1)."
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">stáhněte si ji</a> pro formát MMZ nebo MMZX (ISO 19165-1)."
     },
     "ViewLayers_MMZ_MMZX_InstalledMM": {
       "cat": "Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.",
       "spa": "Para poder visualitzar las capas en formato MMZ o MMZX (ISO 19165-1) es necessario tener correctamente instalado el programa MiraMon.",
       "eng": "In order to be able to view the layers in MMZ or MMZX format (ISO 19165-1), an installed version of the MiraMon software is required.",
-      "fre": "Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19165-1), et la version installée du logiciel MiraMon est nécessaire",
+      "fre": "Pour pouvoir visualiser les couches en MMZ du format MMZX (ISO 19165-1), et la version installée du logiciel MiraMon est nécessaire.",
       "cze": "Pro zobrazení vrstev ve formátu MMZ nebo MMZX (ISO 19165-1) je nutná nainstalovaná verze softwaru MiraMon."
     },
     "DownloadLayerCompleted": {
@@ -3109,14 +3109,14 @@ var MessageLang={
       "spa": "Zoom y pan basado en <u>2</u> simples clics (ergonómico)",
       "eng": "Zoom and pan based in <u>2</u> simples clicks (ergonomic)",
       "fre": "Zoom et pan basé en <u>2</u> simples clics (ergonomique)",
-      "cze": "Přiblížení a posun na základě 2 jednoduchých kliknutí (ergonomické)"
+      "cze": "Přiblížení a posun na základě <u>2</u> jednoduchých kliknutí (ergonomické)"
     },
     "ZoomPan_1ClickDrag": {
       "cat": "Zoom i pan en <u>1</u> clic i arrossegant",
       "spa": "Zoom y pan en <u>1</u> clic y arrastrando",
       "eng": "Zoom and pan with <u>1</u> click and dragging",
       "fre": "Zoom et pan en <u>1</u> cliques et glisser",
-      "cze": "Přiblížení a posun pomocí 1 kliknutí a tažení"
+      "cze": "Přiblížení a posun pomocí <u>1</u> kliknutí a tažení"
     },
     "NOfFigures": {
       "cat": "N. decimals",
@@ -3151,14 +3151,14 @@ var MessageLang={
       "spa": "<u>P</u>roy",
       "eng": "<u>P</u>roj",
       "fre": "<u>P</u>roj",
-      "cze": "Proj"
+      "cze": "<u>P</u>roj"
     },
     "Proj_underlined_r": {
       "cat": "P<u>r</u>oj",
       "spa": "P<u>r</u>oy",
       "eng": "P<u>r</u>oj",
       "fre": "P<u>r</u>oj",
-      "cze": "Proj"
+      "cze": "P<u>r</u>oj"
     },
     "ShowWindow_underlined": {
       "cat": "<u>M</u>ostra finestra",
@@ -3178,7 +3178,7 @@ var MessageLang={
       "cat": "Fitxer de configuració JSON",
       "spa": "Fichero de configuración JSON",
       "eng": "JSON configuration file",
-      "fre": "Fichier de configuration JSON)",
+      "fre": "Fichier de configuration JSON",
       "cze": "Konfigurační soubor JSON"
     },
     "changesAboveWillBeApplied": {
@@ -3822,7 +3822,7 @@ var MessageLang={
       "spa": "Una capa con FormatImatge image/tiff o application/x-img debe definir un array de 'valors'",
       "eng": "A layer with FormatImatge image/tiff or application/x-img must define an array of 'valors'",
       "fre": "Une couche avec FormatImatge image/tiff ou application/x-img doit définir un tableau de 'valeurs'",
-      "cze": "Vrstva s FormatImatge image/tiff nebo application/x-img musí definovat pole 'valors'."
+      "cze": "Vrstva s FormatImatge image/tiff nebo application/x-img musí definovat pole 'valors'"
     },
     "LayerBinaryArrayMustBeHTTPS": {
       "cat": "Una capa amb FormatImatge image/tiff o application/x-img ha de ser servida en https:",
@@ -3836,7 +3836,7 @@ var MessageLang={
       "spa": "La capa no es podría carregar por lo que declara no visible ni consultable",
       "eng": "The layer will not load so it is declared as neither visible nor queriable",
       "fre": "La couche ne se chargera pas, elle est donc déclarée comme ni visible ni interrogeable",
-      "cze": "Vrstva se nenačte, takže není deklarována jako viditelná ani dotazovatelná."
+      "cze": "Vrstva se nenačte, takže není deklarována jako viditelná ani dotazovatelná"
     },
     "ExecuteProcessWPS": {
       "cat": "Executar un proces (WPS)",
@@ -3939,7 +3939,7 @@ var MessageLang={
       "cat": "No es possible saltar a pantalla completa en un navegador multivista",
       "spa": "No es posible saltar a pantalla completa en un navegador multivista",
       "eng": "You cannot go full screen in a multiview browser",
-      "fre": "Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples.",
+      "fre": "Vous ne pouvez pas accéder au plein écran dans un navigateur à vues multiples",
       "cze": "V prohlížeči s více zobrazeními nelze přejít na celou obrazovku"
     },
     "BrowserPopUpWindowsLocked": {
@@ -3996,7 +3996,7 @@ var MessageLang={
       "spa": "No se han podido determinar las direcciones de los servidores usados en este navegador",
       "eng": "It could not determine the servers URL used in this browser",
       "fre": "Impossible de déterminer les adresses des serveurs utilisés avec ce navigateur",
-      "cze": "Nepodařilo se určit adresu URL serverů použitou v tomto prohlížeči."
+      "cze": "Nepodařilo se určit adresu URL serverů použitou v tomto prohlížeči"
     },
     "OWSContextDocument": {
       "cat": "Document de context OWS",
@@ -4178,14 +4178,14 @@ var MessageLang={
       "spa": "No se ha encontrado el parámetro 'TEST_LAYERS'",
       "eng": "Cannot find the 'TEST_LAYERS' parameter",
       "fre": "Le paramètre 'TEST_LAYERS' n'a pas été trouvé",
-      "cze": "Nelze najít parametr \"TEST_LAYERS\"."
+      "cze": "Nelze najít parametr 'TEST_LAYERS'"
     },
     "CannotFindTestFields": {
       "cat": "No s'ha trobat el paràmetre 'TEST_FIELDS'",
       "spa": "No se ha encontrado el parámetro 'TEST_FIELDS'",
       "eng": "Cannot find the 'TEST_FIELDS'  parameter",
       "fre": "Le paramètre 'TEST_FIELDS' n'a pas été trouvé",
-      "cze": "Nelze najít parametr \"TEST_FIELDS\"."
+      "cze": "Nelze najít parametr 'TEST_FIELDS'"
     },
     "FieldNumberNotNumberLayers": {
       "cat": "El nombre de camps no es correspon amb el nombre de capes",
@@ -4261,7 +4261,7 @@ var MessageLang={
       "cat": "Acceptes adoptar-la?",
       "spa": "¿Acepta adoptarla?",
       "eng": "Do you accept to adopt it?",
-      "fre": "Acceptez-vous de l'adopter",
+      "fre": "Acceptez-vous de l'adopter?",
       "cze": "Souhlasíte s jejím přijetím?"
     },
     "SavingStatusMapNotPossible": {
@@ -4304,7 +4304,7 @@ var MessageLang={
       "spa": "El NivellZoomCostat no es ninguno de los 'costat' indicados en la lista de zooms",
       "eng": "The NivellZoomCostat is not one of the indicated 'costat' in the zoom array",
       "fre": "Le NivellZoomCostat n'est pas l'un des 'costat' indiqués dans la matrice de zoom",
-      "cze": "NivellZoomCostat není jednou z uvedených \"costat\" v poli zvětšení"
+      "cze": "NivellZoomCostat není jednou z uvedených 'costat' v poli zvětšení"
     },
     "NotFindBBox": {
       "cat": "No trobo les 4 coordenades a BBOX",
@@ -4461,7 +4461,7 @@ var MessageLang={
       "cat": "Fonts intermitges/temporals",
       "spa": "Fuentes intermedias/temporales",
       "eng": "Internal/temporary sources",
-      "fre": "Sources intermédiaires / temporaires",
+      "fre": "Sources intermédiaires/temporaires",
       "cze": "Interní/dočasné zdroje"
     },
     "LeafSources": {
@@ -4569,7 +4569,7 @@ var MessageLang={
       "spa": "Esta entrada carece de contenido geoespacial (ninguna etiqueta 'offering' definida)",
       "eng": "This entry is empty of geospatial content (no 'offering' tag defined)",
       "fre": "Cette entrée manque du contenu géospatial (aucune étiquette 'offering' définie)",
-      "cze": "Tento záznam neobsahuje geoprostorový obsah (není definován tag \"offering\")."
+      "cze": "Tento záznam neobsahuje geoprostorový obsah (není definován tag 'offering')"
     },
     "NonComptibleCRS": {
       "cat": "Sistema de referència de coordenades no compatible.",
@@ -4583,14 +4583,14 @@ var MessageLang={
       "spa": "El formato de 'where' no incluye ningún 'Envelope' o 'Polygon' de 2 o más puntos",
       "eng": "The format of 'where' do not have any 'Envelope' or 'Polygon' of 2 or more points",
       "fre": "Le format de 'where' n'inclut pas de 'Envelope' ou ' Polygon ' de 2 ou plus de points",
-      "cze": "Formát \"kde\" nemá žádný \"Envelope\" nebo \"Polygon\" 2 nebo více bodů."
+      "cze": "Formát 'where' nemá žádný 'Envelope' nebo 'Polygon' 2 nebo více bod."
     },
     "NonSupportedOperation": {
       "cat": "'Operation' no acceptada",
       "spa": "'Operation' no soportada",
       "eng": "Non supported operation",
       "fre": "'Operation' non supportée",
-      "cze": "Nepodporovaná operace"
+      "cze": "Nepodporovaná 'Operation'"
     },
     "NonSupportedOperationMethod": {
       "cat": "Métode d'operació",
@@ -4600,11 +4600,11 @@ var MessageLang={
       "cze": "Nepodporovaná operační metoda"
     },
     "OnlyGetSupported": {
-      "cat": "no acceptat (només GET és acceptat actualment)",
-      "spa": "no aceptado (sólo GET es soportado actualmente)",
-      "eng": "(only GET is currently supported)",
+      "cat": "no acceptat (només 'GET' és acceptat actualment)",
+      "spa": "no aceptado (sólo 'GET' es soportado actualmente)",
+      "eng": "(only 'GET' is currently supported)",
       "fre": "non acceptée (seulement 'GET' est actuellement supportée)",
-      "cze": "(v současné době je podporována pouze operace GET)"
+      "cze": "(v současné době je podporována pouze operace 'GET')"
     },
     "AttributeHrefNotFound": {
       "cat": "L'atribut 'href' no s'ha trobat en l'operació",
@@ -4625,14 +4625,14 @@ var MessageLang={
       "spa": "Falta el atributo obligatorio 'code' en el 'offering' de",
       "eng": "Missing mandatory 'code' attribute on offering",
       "fre": "Manque l'attribut obligatoire 'code' sur l' 'offereing' de",
-      "cze": "Chybí povinný atribut \"code\" při nabízení"
+      "cze": "Chybí povinný atribut 'code' při nabízení"
     },
     "NonSupportedOfferingType": {
       "cat": "Tipus d''offering' no acceptat",
       "spa": "Tipo de 'offering' no soportado",
       "eng": "Non supported offering type",
       "fre": "Type d' 'offering' non supporté",
-      "cze": "Nepodporovaný typ nabídky"
+      "cze": "Nepodporovaný typ 'offering'"
     },
     "OwsContextDocumentNotHaveFeed": {
       "cat": "El document de context OWS no té \"feed\" com a node arrel.",
@@ -4895,7 +4895,7 @@ var MessageLang={
       "spa": "La exactitud resumida está basada en la incertidumbre posicional de cada observación individual indicada en el atributo",
       "eng": "The overall accuracy is based on the positional uncertainty for each individual observation as indicated in the field",
       "fre": "La précision globale est basée sur l'incertitude positionnelle de chaque observation individuelle, comme indiqué dans le champ",
-      "cze": "Celková přesnost je založena na polohové nejistotě pro každé jednotlivé pozorování, jak je uvedeno v terénu."
+      "cze": "Celková přesnost je založena na polohové nejistotě pro každé jednotlivé pozorování, jak je uvedeno v terénu"
     },
     "noUncertaintyInformation": {
       "cat": "que no tenen informació sobre la incertesa",
@@ -4930,7 +4930,7 @@ var MessageLang={
       "spa": "El parámetro de calidad calculado está disponible en la entrada de menú contextual 'calidad' de la capa",
       "eng": "The calculated quality parameter is available as an entry in the context menu entry 'quality' of the layer",
       "fre": "Le paramètre de qualité calculé est disponible en tant qu'entrée dans l'entrée du menu contextuel 'qualité' de la couche",
-      "cze": "Vypočtený parametr kvality je k dispozici jako položka v kontextovém menu vrstvy \"kvalita\""
+      "cze": "Vypočtený parametr kvality je k dispozici jako položka v kontextovém menu vrstvy 'kvalita'"
     },
     "QualityNotComputedLayer": {
       "cat": "No s'ha pogut calcular la qualitat de la capa",
@@ -4965,7 +4965,7 @@ var MessageLang={
       "spa": "valor1campo1;valor1campo2;valor1campo3",
       "eng": "value1field1;value1field2;value1field3",
       "fre": "valeur1champ1;valeur1champ2;valeur1champ3",
-      "cze": "hodnota1pole1hodnota1pole2hodnota1pole3"
+      "cze": "hodnota1pole1;hodnota1pole2;hodnota1pole3"
     },
     "GroundTruthLayer": {
       "cat": "Capa veritat terreny",
@@ -5135,7 +5135,7 @@ var MessageLang={
       "spa": "Aún no se suporta valores de $ref con referencias a otros ficheros JSON",
       "eng": "$ref values with references to other JSON files are still not supported",
       "fre": "Les valeurs $ref avec des références à d'autres fichiers JSON ne sont toujours pas prises en charge",
-      "cze": "Hodnoty $ref s odkazy na jiné soubory JSON stále nejsou podporovány."
+      "cze": "Hodnoty $ref s odkazy na jiné soubory JSON stále nejsou podporovány"
     },
     "isNotDefined": {
       "cat": "no està definit",
@@ -5166,7 +5166,7 @@ var MessageLang={
       "cat": "No hi ha cap capa disponible per l'ànimació en aquesta àrea o zoom.",
       "spa": "No hi ha ninguna capa disponible para la animación en este área o zoom.",
       "eng": "There is no layer available for the animation in this area or zoom.",
-      "fre": "Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom",
+      "fre": "Il n'y a pas de couche disponible pour la animation dans cette zone ou le zoom.",
       "cze": "Pro animaci v této oblasti nebo zvětšení není k dispozici žádná vrstva."
     },
     "TimeSeries": {
@@ -5442,7 +5442,7 @@ var MessageLang={
       "spa": "Es necesario enviar el fichero al servidor antes de ejecutar el proceso",
       "eng": "It is necessary to send the file to the server before executing the process",
       "fre": "Il faut envoyer le fichier au serveur avant d'exécuter le processus",
-      "cze": "Před spuštěním procesu je nutné odeslat soubor na server."
+      "cze": "Před spuštěním procesu je nutné odeslat soubor na server"
     },
     "URLIntroducedInParameter": {
       "cat": "La URL introduïda en el paràmetre",
@@ -5556,7 +5556,7 @@ var MessageLang={
       "spa": "https://www.miramon.cat/mmr/esp/exe/Inst_MMR.EXE",
       "eng": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
       "fre": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
-      "cze": "http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE"
+      "cze": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE"
     }
   }
 }
