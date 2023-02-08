@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -138,7 +138,7 @@ var i,j;
 	else if(resposta)
 		resposta.value="Sorry, the server responded but I do not know how to show the result on this browser.";
 
-	if(root.nodeName!="wps:ExecuteResponse")  //Això passa quan ho he fet amb soap
+	if(root.nodeName!="wps:ExecuteResponse")  //AixÃ² passa quan ho he fet amb soap
 	{
 		root=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengeospatial.net/wps", "wps", "ExecuteResponse")[0];
 	}
@@ -241,7 +241,7 @@ var i,j;
 {
 	this.servidor=servidor;  //URL del servidor
 	this.servidor_on_fer_peticio=null;
-	this.operacio=operacio; //identificador de l'operació
+	this.operacio=operacio; //identificador de l'operaciÃ³
 	this.input=inputs; //new Array de CreaInputDeProcesAExecutar
 }*/
 
@@ -434,7 +434,7 @@ var s1;
 //					"flags": operacio.par_input[i].flags_tipus};
 		}
 	}
-	//Falten els outputs ·$·
+	//Falten els outputs Â·$Â·
 	ProcessosAExecutar[ProcessosAExecutar.length]={
 				"servidor": operacio.servidor,
 				"servidor_on_fer_peticio": null,
@@ -447,7 +447,7 @@ function DonaRequestExecuteProces(i_proces)
 {
 var cdns=[];
 
-	//si el servidor no és el local cal afegir el paràmetre servertoreuqes,
+	//si el servidor no Ã©s el local cal afegir el parÃ metre servertoreuqes,
 	//mirar com fer-ho en aquest cas
 
 	if(ProcessosAExecutar && i_proces<ProcessosAExecutar.length)
@@ -489,16 +489,16 @@ var cdns=[];
 					cdns.push("			<Data>\n",
 							"				<LiteralData>", ProcessosAExecutar[i_proces].input[i].valor +"</LiteralData>\n" ,
 							"			</Data>\n");
-					//De tipus Data n'hi ha 3: LiteralData, ComplexData permet incrustar el gml directament aquí o BoundingBoxData
+					//De tipus Data n'hi ha 3: LiteralData, ComplexData permet incrustar el gml directament aquÃ­ o BoundingBoxData
 				}
 				cdns.push("		</Input>\n");
 			}
 			cdns.push("	</DataInputs>\n");
 		}
 
-		//Falten els outputs ·$·
-		//Falten els outputs ·$·
-		//·$· Cal programar la definició dels outputs ara he fet la porqueria d'escriure el que necessito NJ
+		//Falten els outputs Â·$Â·
+		//Falten els outputs Â·$Â·
+		//Â·$Â· Cal programar la definiciÃ³ dels outputs ara he fet la porqueria d'escriure el que necessito NJ
 		cdns.push("	<ResponseForm>\n",
 				"		<ResponseDocument storeExecuteResponse=\"true\" status=\"true\">\n",
 				"			<Output asReference=\"true\" mimeType=\"application/gml+xml\" encoding=\"ISO-8859-1\" schema=\"http://schemas.opengis.net/schemas/gml/3.1.1/base/gml.xsd\">\n",
@@ -581,7 +581,7 @@ var i_proces_a_executar;
 	if (!document.ExecutaProcesCapa)
 		return false;
 
-	//Agafo la info del formulari més la de la estructura i construeixo la petició
+	//Agafo la info del formulari mÃ©s la de la estructura i construeixo la peticiÃ³
 	i_proces_a_executar=OmpleCreaProcesAExecutarDeFormulari(i_capa);
 	if(i_proces_a_executar==-1)
 		return false;
@@ -665,14 +665,14 @@ var opcio=document.getElementById("e_opcio_"+i_input);
 function EsUnaURLValida(text)
 {
 	//var re=/^(file|http):\/\/S+.(com|net|org|info|biz|ws|us|es|cat|tv|cc)$/i;
-	//La cadena ha de començar per file o http,
+	//La cadena ha de comenÃ§ar per file o http,
 	//S vol dir que busqui un caracter no blanc
-	//S+ vol dir que n'hi hagi com a mínim un
+	//S+ vol dir que n'hi hagi com a mÃ­nim un
 	//.
-	//i alguna  de les seguënts extensions
+	//i alguna  de les seguÃ«nts extensions
 
 	var re=/^(file|http):\/\/\w+(\.\w+)*\.\w{2,3}$/i;
-	//http o file ://(n caracteres).(n caracteres)(0 ó más veces).(2 ó 3 caracteres)
+	//http o file ://(n caracteres).(n caracteres)(0 Ã³ mÃ¡s veces).(2 Ã³ 3 caracteres)
 	if (re.test(text))
 		return true;
 	return false;
@@ -717,7 +717,7 @@ var exp_file=document.getElementById("e_file_"+i_input);
 
 function TornaASeleccionarFitxer(i_capa, i_proces_sel, i_input)
 {
-//Mostro el selector de fitxers i esborro la selecció que hi havia
+//Mostro el selector de fitxers i esborro la selecciÃ³ que hi havia
 var span_estat_file=document.getElementById("estat_file_"+i_input);
 var nom_fitxer_servidor=document.getElementById("e_text_"+i_input);
 var nom_fitxer_usuari=document.getElementById("e_file_user_"+i_input);
@@ -792,7 +792,7 @@ var percentatge=-1;
 var nom_fitxer, descp_fitxer;
 var node, node2;
 
-	//en cas d'error crec que hauria de modificar el formulari perquè no estigui esperant indefinidament el fitxer
+	//en cas d'error crec que hauria de modificar el formulari perquÃ¨ no estigui esperant indefinidament el fitxer
 	if(doc)
 	{
 		var root=doc.documentElement;
@@ -872,14 +872,14 @@ function ActualitzaValorParametre(i_capa, i_proces_sel, i_input, id_proces)
 {
 var i_ajax=ajaxEstatEnviaFitxer.length;
 
-	//Només s'usa per enviar un fitxer, i aquesta petició sempre és al ServidorLocal
+	//NomÃ©s s'usa per enviar un fitxer, i aquesta peticiÃ³ sempre Ã©s al ServidorLocal
 	if (location.host && DonaHost(ParamCtrl.ServidorLocal).toLowerCase()!=location.host.toLowerCase())
 	{
 		var s_host=DonaHost(ParamCtrl.ServidorLocal);
 		var pos_host=(-1!=ParamCtrl.ServidorLocal.indexOf("//")) ? ParamCtrl.ServidorLocal.indexOf("//")+2 : 0;
 		if (s_host.toLowerCase()!=location.host.toLowerCase())
 		{
-			//Canvio l'arrel del servidor local per l'arrel de la plana del navegador per estar segur que l'ajax funcionarà sense "cross server vulmerability".
+			//Canvio l'arrel del servidor local per l'arrel de la plana del navegador per estar segur que l'ajax funcionarÃ  sense "cross server vulmerability".
 			servidor=DonaNomServidorCaracterFinal(ParamCtrl.ServidorLocal.substring(0,pos_host)+location.host+ParamCtrl.ServidorLocal.substring(pos_host+s_host.length, ParamCtrl.ServidorLocal.length));
 		}
 		else
@@ -1137,7 +1137,7 @@ var cdns=[];
 				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<input class=\"Verdana11px\" type=\"checkbox\" id=\"p_check_", i_input, "\" name=\"p_check_", i_input,
 						  "\" value=\"boleana\"");
-				//només hauria de tenir 2 valors (si/no) (yes/no) (1/0) (true/false)
+				//nomÃ©s hauria de tenir 2 valors (si/no) (yes/no) (1/0) (true/false)
 				for(i_valor=0; i_valor<2; i_valor++)
 				{
 					if(i_valor<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors.length)
@@ -1316,7 +1316,7 @@ var cdns=[];
 	if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_output)
 	{
 		cdns.push("<b>",GetMessage("OutputParameter"), ": ", "</b>","<br><br>");
-		//·$· Falta fer aquesta part
+		//Â·$Â· Falta fer aquesta part
 		cdns.push("<br><br>");
 	}
 	var s=cdns.join("");

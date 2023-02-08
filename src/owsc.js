@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -37,7 +37,7 @@
 */
 "use strict"
 
-/* Daniel DÌaz Benito (d.diaz@creaf.uab.cat) 18-XII-2012
+/* Daniel D√≠az Benito (d.diaz@creaf.uab.cat) 18-XII-2012
  * Script to allow OWSC (OGC Web Services Context) files to be opened and generated.
  * This Open Geospatial Consortium standard allows to save the maps application
  * status and retrieve it with the same maps and processes, even in different
@@ -111,7 +111,7 @@ function parseWhere(geoTag,myHolder,myOWSC)
 	{
 		if(myGml)
 			myHolder.where= myGml;
-		//Si no hem aconseguit un Gml v‡lid, perÚ en tenim un de global definit,
+		//Si no hem aconseguit un Gml v√†lid, per√≤ en tenim un de global definit,
 		//li assignem a aquesta capa.
 		else if(myOWSC && myOWSC.where)
 			myHolder.where= myOWSC.where;
@@ -236,7 +236,7 @@ function parseWMSOffering(tag,myOffering)
 				continue;
 			}
 			//Create an URI object using URI.js This has been removed by JM as it seems not necessary to use this library.
-			//myURI= new URI(elem);  Comento aquesta linia que igualment estava malament donat que elem no contenia cap URL (JM). Jo crec que calia passar "url" en lloc de "elem". Deixo tambÈ la resta del codi antic comentat.
+			//myURI= new URI(elem);  Comento aquesta linia que igualment estava malament donat que elem no contenia cap URL (JM). Jo crec que calia passar "url" en lloc de "elem". Deixo tamb√© la resta del codi antic comentat.
 			//Set the server URL
 			lloc_interrogant=url.indexOf("?");
 			myOffering.server= (lloc_interrogant==-1) ? url : url.substring(0, lloc_interrogant);
@@ -549,7 +549,7 @@ var elem,i,j,
 					newHTML+= aTags[i+tagField.defaultValue]; //Add the default text
 			}
 		}
-		//Check if we require nested tags inside this tag (like: <author><name>Daniel DÌaz</name><name>Joan MassÛ</name></author>)
+		//Check if we require nested tags inside this tag (like: <author><name>Daniel D√≠az</name><name>Joan Mass√≥</name></author>)
 		else if(aTags[i+tagField.nestedTag])
 		{
 			//Get all the nestedTag elements of 'elem'
@@ -696,8 +696,8 @@ tagField= {namespace:0,name:1,isMandatory:2,useAttribute:3,nestedTag:4,shownFiel
 specificationTags=[
 //0,		1,				2,	3,	4,	5,	6,7
 "*",	"title",		true,	0,	0,	"<h3 class=\"floatingWindowText\">","</h3>",function(tag) { OWSCDocument.title= tag.firstChild.nodeValue; return OWSCDocument.title; },0,
-"*",	"subtitle",		false,	0,	0,	"",0,0,0,//DonaCadenaLang({"cat":"DescripciÛ","spa":"DescripciÛn","eng":"Description","fre":"Descriptif"})0,0,
-//"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"EspecificaciÛ","spa":"EspecificaciÛn","eng":"Specification","fre":"SpÈcification"})+fieldNameClose,0,0,0,
+"*",	"subtitle",		false,	0,	0,	"",0,0,0,//DonaCadenaLang({"cat":"Descripci√≥","spa":"Descripci√≥n","eng":"Description","fre":"Descriptif"})0,0,
+//"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"Especificaci√≥","spa":"Especificaci√≥n","eng":"Specification","fre":"Sp√©cification"})+fieldNameClose,0,0,0,
 //"*",	"lang",		true,	0,	0,	DonaCadenaLang({"cat":"Idioma","spa":"Idioma","eng":"Language", "fre":"Langue"}),0,0, Seems to be inserted as an attribute of feed...
 //"*",	"id",			true,	0,	0,	fieldNameStart+"Id"+fieldNameClose,0,0,0,
 "*",	"updated",		true,	0,	0,	fieldNameStart+ GetMessage("Date")+fieldNameClose,0,parseOWSCDate,0,
@@ -735,7 +735,7 @@ entryTags=[
 //"*",	"offering",		Parsed in different order (see below in this list)
 "*",	"category"/*"active"*/,false,"scheme",	0,	"","",parseActive,0, //Only required to set active (visibility) property not to be shown as text
 "*",	"link",			false,["rel","via","href"],	0,	"<li>" + fieldNameStart + GetMessage("SourceMetadata") + fieldNameClose,"</li>",MMcreateHTMLLink,0,
-//"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"EspecificaciÛ","spa":"EspecificaciÛn","eng":"Specification","fre":"SpÈcificaction"})+fieldNameClose,0,0,0,
+//"*",	"category",		true,"term",0,	fieldNameStart+DonaCadenaLang({"cat":"Especificaci√≥","spa":"Especificaci√≥n","eng":"Specification","fre":"Sp√©cificaction"})+fieldNameClose,0,0,0,
 "owc",	"minScaleDenominator",false,0,0,"<li>" + fieldNameStart + GetMessage("MinimumDisplayScale") + fieldNameClose,"</li>",0,0,
 "owc",	"maxScaleDenominator",false,0,0,"<li>" + fieldNameStart + GetMessage("MaximumDisplayScale") + fieldNameClose,"</li>",0,0,
 //"*", "folder", Not implemented (lack of time)
@@ -898,9 +898,9 @@ function OpenOWSContext(url_context)
 +"<updated>2013-01-12T17:22:21.851Z</updated>"
 +"<generator>MiraMap Navigator v.5.4</generator>"
 +"<entry>"
-	+"<id>file:///C:/Documents%20and%20Settings/-/Mis%20documentos/MiramonMapNavigator/index.htm::LÌmites administrativos</id>"
-	+"<title>LÌmites administrativos</title>"
-	+"<content type=\"html\">LÌmites administrativos</content>"
+	+"<id>file:///C:/Documents%20and%20Settings/-/Mis%20documentos/MiramonMapNavigator/index.htm::L√≠mites administrativos</id>"
+	+"<title>L√≠mites administrativos</title>"
+	+"<content type=\"html\">L√≠mites administrativos</content>"
 	+"<updated>2013-01-12T17:22:21.851Z</updated>"
 	+"<offering code=\"http://www.opengis.net/spec/owc/1.0/req/atom/wms\">"
 		+"<operation code=\"GetCapabilities\" href=\"http://localhost/cgi-bin/MiraMon.cgi?REQUEST=GetCapabilities&amp;VERSION=1.1.1&amp;SERVICE=WMS\" method=\"GET\"/>"
@@ -964,7 +964,7 @@ var tipusServidorCapa=DonaTipusServidorCapa(thisLayer);
  				+"&TRANSPARENT="+(thisLayer.transparencia && thisLayer.transparencia!="opac" ? "TRUE":"FALSE")
  				+"&CRS="+(thisLayer.CRS ? thisLayer.CRS:{defaultCRS: "EPSG:4326"})
  				+"&LAYERS="+thisLayer.nom
-				//El codi anterior no Ès correcte si la versiÛ Ès la 1.3 i el sistema Ès lat/long i cal revisar-lo 05/12/2015 (JM)  ∑$∑
+				//El codi anterior no √©s correcte si la versi√≥ √©s la 1.3 i el sistema √©s lat/long i cal revisar-lo 05/12/2015 (JM)  ¬∑$¬∑
  				+"&BBOX="+ParamInternCtrl.vista.EnvActual.MinX+","+ParamInternCtrl.vista.EnvActual.MinY+","+ParamInternCtrl.vista.EnvActual.MaxX+","+ParamInternCtrl.vista.EnvActual.MaxY
 				+"&WIDTH="+ParamInternCtrl.vista.ncol
 				+"&HEIGHT="+ParamInternCtrl.vista.nfil
@@ -1160,7 +1160,7 @@ function SaveOWSContext(url_context)
     "<form onsubmit='createOWSCFile(this); return false;'>"	+ "<ul class='fieldName'>"	+
     "<li>" + mandatory + f.lang[0] + ": <select id='language' title='" + f.lang[1] + "' style='width:160px;'>" +
     //It would be possible to read from an xml, but this way it's not necessaire to use Ajax
-		"<option value='aa'>Afar [aa]</option><option value='ab'>Abkhazian [ab]</option><option value='ae'>Avestan [ae]</option><option value='af'>Afrikaans [af]</option><option value='ak'>Akan [ak]</option><option value='am'>Amharic [am]</option><option value='an'>Aragonese [an]</option><option value='ar'>Arabic [ar]</option><option value='as'>Assamese [as]</option><option value='av'>Avaric [av]</option><option value='ay'>Aymara [ay]</option><option value='az'>Azerbaijani [az]</option><option value='ba'>Bashkir [ba]</option><option value='be'>Belarusian [be]</option><option value='bg'>Bulgarian [bg]</option><option value='bh'>Bihari languages [bh]</option><option value='bi'>Bislama [bi]</option><option value='bm'>Bambara [bm]</option><option value='bn'>Bengali [bn]</option><option value='bo'>Tibetan [bo]</option><option value='br'>Breton [br]</option><option value='bs'>Bosnian [bs]</option><option value='ca'>Catalan; Valencian [ca]</option><option value='ce'>Chechen [ce]</option><option value='ch'>Chamorro [ch]</option><option value='co'>Corsican [co]</option><option value='cr'>Cree [cr]</option><option value='cs'>Czech [cs]</option><option value='cu'>Church Slavic; Old Slavonic [cu]</option><option value='cv'>Chuvash [cv]</option><option value='cy'>Welsh [cy]</option><option value='da'>Danish [da]</option><option value='de'>German [de]</option><option value='dv'>Divehi; Dhivehi; Maldivian [dv]</option><option value='dz'>Dzongkha [dz]</option><option value='ee'>Ewe [ee]</option><option value='el'>Greek, Modern (1453-) [el]</option><option value='en'>English [en]</option><option value='eo'>Esperanto [eo]</option><option value='es'>Spanish; Castilian [es]</option><option value='et'>Estonian [et]</option><option value='eu'>Basque [eu]</option><option value='fa'>Persian [fa]</option><option value='ff'>Fulah [ff]</option><option value='fi'>Finnish [fi]</option><option value='fj'>Fijian [fj]</option><option value='fo'>Faroese [fo]</option><option value='fr'>French [fr]</option><option value='fy'>Western Frisian [fy]</option><option value='ga'>Irish [ga]</option><option value='gd'>Gaelic; Scottish Gaelic [gd]</option><option value='gl'>Galician [gl]</option><option value='gn'>Guarani [gn]</option><option value='gu'>Gujarati [gu]</option><option value='gv'>Manx [gv]</option><option value='ha'>Hausa [ha]</option><option value='he'>Hebrew [he]</option><option value='hi'>Hindi [hi]</option><option value='ho'>Hiri Motu [ho]</option><option value='hr'>Croatian [hr]</option><option value='ht'>Haitian; Haitian Creole [ht]</option><option value='hu'>Hungarian [hu]</option><option value='hy'>Armenian [hy]</option><option value='hz'>Herero [hz]</option><option value='ia'>Interlingua [ia]</option><option value='id'>Indonesian [id]</option><option value='ie'>Interlingue; Occidental [ie]</option><option value='ig'>Igbo [ig]</option><option value='ii'>Sichuan Yi; Nuosu [ii]</option><option value='ik'>Inupiaq [ik]</option><option value='io'>Ido [io]</option><option value='is'>Icelandic [is]</option><option value='it'>Italian [it]</option><option value='iu'>Inuktitut [iu]</option><option value='ja'>Japanese [ja]</option><option value='jv'>Javanese [jv]</option><option value='ka'>Georgian [ka]</option><option value='kg'>Kongo [kg]</option><option value='ki'>Kikuyu; Gikuyu [ki]</option><option value='kj'>Kuanyama; Kwanyama [kj]</option><option value='kk'>Kazakh [kk]</option><option value='kl'>Kalaallisut; Greenlandic [kl]</option><option value='km'>Central Khmer [km]</option><option value='kn'>Kannada [kn]</option><option value='ko'>Korean [ko]</option><option value='kr'>Kanuri [kr]</option><option value='ks'>Kashmiri [ks]</option><option value='ku'>Kurdish [ku]</option><option value='kv'>Komi [kv]</option><option value='kw'>Cornish [kw]</option><option value='ky'>Kirghiz; Kyrgyz [ky]</option><option value='la'>Latin [la]</option><option value='lb'>Luxembourgish; Letzeburgesch [lb]</option><option value='lg'>Ganda [lg]</option><option value='li'>Limburgan; Limburger; Limburgish [li]</option><option value='ln'>Lingala [ln]</option><option value='lo'>Lao [lo]</option><option value='lt'>Lithuanian [lt]</option><option value='lu'>Luba-Katanga [lu]</option><option value='lv'>Latvian [lv]</option><option value='mg'>Malagasy [mg]</option><option value='mh'>Marshallese [mh]</option><option value='mi'>Maori [mi]</option><option value='mk'>Macedonian [mk]</option><option value='ml'>Malayalam [ml]</option><option value='mn'>Mongolian [mn]</option><option value='mr'>Marathi [mr]</option><option value='ms'>Malay [ms]</option><option value='mt'>Maltese [mt]</option><option value='my'>Burmese [my]</option><option value='na'>Nauru [na]</option><option value='nb'>Bokm√•l, Norwegian [nb]</option><option value='nd'>Ndebele, North; North Ndebele [nd]</option><option value='ne'>Nepali [ne]</option><option value='ng'>Ndonga [ng]</option><option value='nl'>Dutch; Flemish [nl]</option><option value='nn'>Nynorsk, Norwegian [nn]</option><option value='no'>Norwegian [no]</option><option value='nr'>Ndebele, South; South Ndebele [nr]</option><option value='nv'>Navajo; Navaho [nv]</option><option value='ny'>Chichewa; Chewa; Nyanja [ny]</option><option value='oc'>Occitan (post 1500) [oc]</option><option value='oj'>Ojibwa [oj]</option><option value='om'>Oromo [om]</option><option value='or'>Oriya [or]</option><option value='os'>Ossetian; Ossetic [os]</option><option value='pa'>Panjabi; Punjabi [pa]</option><option value='pi'>Pali [pi]</option><option value='pl'>Polish [pl]</option><option value='ps'>Pushto; Pashto [ps]</option><option value='pt'>Portuguese [pt]</option><option value='qu'>Quechua [qu]</option><option value='rm'>Romansh [rm]</option><option value='rn'>Rundi [rn]</option><option value='ro'>Romanian; Moldavian; Moldovan [ro]</option><option value='ru'>Russian [ru]</option><option value='rw'>Kinyarwanda [rw]</option><option value='sa'>Sanskrit [sa]</option><option value='sc'>Sardinian [sc]</option><option value='sd'>Sindhi [sd]</option><option value='se'>Northern Sami [se]</option><option value='sg'>Sango [sg]</option><option value='si'>Sinhala; Sinhalese [si]</option><option value='sk'>Slovak [sk]</option><option value='sl'>Slovenian [sl]</option><option value='sm'>Samoan [sm]</option><option value='sn'>Shona [sn]</option><option value='so'>Somali [so]</option><option value='sq'>Albanian [sq]</option><option value='sr'>Serbian [sr]</option><option value='ss'>Swati [ss]</option><option value='st'>Sotho, Southern [st]</option><option value='su'>Sundanese [su]</option><option value='sv'>Swedish [sv]</option><option value='sw'>Swahili [sw]</option><option value='ta'>Tamil [ta]</option><option value='te'>Telugu [te]</option><option value='tg'>Tajik [tg]</option><option value='th'>Thai [th]</option><option value='ti'>Tigrinya [ti]</option><option value='tk'>Turkmen [tk]</option><option value='tl'>Tagalog [tl]</option><option value='tn'>Tswana [tn]</option><option value='to'>Tonga (Tonga Islands) [to]</option><option value='tr'>Turkish [tr]</option><option value='ts'>Tsonga [ts]</option><option value='tt'>Tatar [tt]</option><option value='tw'>Twi [tw]</option><option value='ty'>Tahitian [ty]</option><option value='ug'>Uighur; Uyghur [ug]</option><option value='uk'>Ukrainian [uk]</option><option value='ur'>Urdu [ur]</option><option value='uz'>Uzbek [uz]</option><option value='ve'>Venda [ve]</option><option value='vi'>Vietnamese [vi]</option><option value='vo'>Volap√ºk [vo]</option><option value='wa'>Walloon [wa]</option><option value='wo'>Wolof [wo]</option><option value='xh'>Xhosa [xh]</option><option value='yi'>Yiddish [yi]</option><option value='yo'>Yoruba [yo]</option><option value='za'>Zhuang; Chuang [za]</option><option value='zh'>Chinese [zh]</option><option value='zu'>Zulu [zu]</option>" +
+		"<option value='aa'>Afar [aa]</option><option value='ab'>Abkhazian [ab]</option><option value='ae'>Avestan [ae]</option><option value='af'>Afrikaans [af]</option><option value='ak'>Akan [ak]</option><option value='am'>Amharic [am]</option><option value='an'>Aragonese [an]</option><option value='ar'>Arabic [ar]</option><option value='as'>Assamese [as]</option><option value='av'>Avaric [av]</option><option value='ay'>Aymara [ay]</option><option value='az'>Azerbaijani [az]</option><option value='ba'>Bashkir [ba]</option><option value='be'>Belarusian [be]</option><option value='bg'>Bulgarian [bg]</option><option value='bh'>Bihari languages [bh]</option><option value='bi'>Bislama [bi]</option><option value='bm'>Bambara [bm]</option><option value='bn'>Bengali [bn]</option><option value='bo'>Tibetan [bo]</option><option value='br'>Breton [br]</option><option value='bs'>Bosnian [bs]</option><option value='ca'>Catalan; Valencian [ca]</option><option value='ce'>Chechen [ce]</option><option value='ch'>Chamorro [ch]</option><option value='co'>Corsican [co]</option><option value='cr'>Cree [cr]</option><option value='cs'>Czech [cs]</option><option value='cu'>Church Slavic; Old Slavonic [cu]</option><option value='cv'>Chuvash [cv]</option><option value='cy'>Welsh [cy]</option><option value='da'>Danish [da]</option><option value='de'>German [de]</option><option value='dv'>Divehi; Dhivehi; Maldivian [dv]</option><option value='dz'>Dzongkha [dz]</option><option value='ee'>Ewe [ee]</option><option value='el'>Greek, Modern (1453-) [el]</option><option value='en'>English [en]</option><option value='eo'>Esperanto [eo]</option><option value='es'>Spanish; Castilian [es]</option><option value='et'>Estonian [et]</option><option value='eu'>Basque [eu]</option><option value='fa'>Persian [fa]</option><option value='ff'>Fulah [ff]</option><option value='fi'>Finnish [fi]</option><option value='fj'>Fijian [fj]</option><option value='fo'>Faroese [fo]</option><option value='fr'>French [fr]</option><option value='fy'>Western Frisian [fy]</option><option value='ga'>Irish [ga]</option><option value='gd'>Gaelic; Scottish Gaelic [gd]</option><option value='gl'>Galician [gl]</option><option value='gn'>Guarani [gn]</option><option value='gu'>Gujarati [gu]</option><option value='gv'>Manx [gv]</option><option value='ha'>Hausa [ha]</option><option value='he'>Hebrew [he]</option><option value='hi'>Hindi [hi]</option><option value='ho'>Hiri Motu [ho]</option><option value='hr'>Croatian [hr]</option><option value='ht'>Haitian; Haitian Creole [ht]</option><option value='hu'>Hungarian [hu]</option><option value='hy'>Armenian [hy]</option><option value='hz'>Herero [hz]</option><option value='ia'>Interlingua [ia]</option><option value='id'>Indonesian [id]</option><option value='ie'>Interlingue; Occidental [ie]</option><option value='ig'>Igbo [ig]</option><option value='ii'>Sichuan Yi; Nuosu [ii]</option><option value='ik'>Inupiaq [ik]</option><option value='io'>Ido [io]</option><option value='is'>Icelandic [is]</option><option value='it'>Italian [it]</option><option value='iu'>Inuktitut [iu]</option><option value='ja'>Japanese [ja]</option><option value='jv'>Javanese [jv]</option><option value='ka'>Georgian [ka]</option><option value='kg'>Kongo [kg]</option><option value='ki'>Kikuyu; Gikuyu [ki]</option><option value='kj'>Kuanyama; Kwanyama [kj]</option><option value='kk'>Kazakh [kk]</option><option value='kl'>Kalaallisut; Greenlandic [kl]</option><option value='km'>Central Khmer [km]</option><option value='kn'>Kannada [kn]</option><option value='ko'>Korean [ko]</option><option value='kr'>Kanuri [kr]</option><option value='ks'>Kashmiri [ks]</option><option value='ku'>Kurdish [ku]</option><option value='kv'>Komi [kv]</option><option value='kw'>Cornish [kw]</option><option value='ky'>Kirghiz; Kyrgyz [ky]</option><option value='la'>Latin [la]</option><option value='lb'>Luxembourgish; Letzeburgesch [lb]</option><option value='lg'>Ganda [lg]</option><option value='li'>Limburgan; Limburger; Limburgish [li]</option><option value='ln'>Lingala [ln]</option><option value='lo'>Lao [lo]</option><option value='lt'>Lithuanian [lt]</option><option value='lu'>Luba-Katanga [lu]</option><option value='lv'>Latvian [lv]</option><option value='mg'>Malagasy [mg]</option><option value='mh'>Marshallese [mh]</option><option value='mi'>Maori [mi]</option><option value='mk'>Macedonian [mk]</option><option value='ml'>Malayalam [ml]</option><option value='mn'>Mongolian [mn]</option><option value='mr'>Marathi [mr]</option><option value='ms'>Malay [ms]</option><option value='mt'>Maltese [mt]</option><option value='my'>Burmese [my]</option><option value='na'>Nauru [na]</option><option value='nb'>Bokm√É¬•l, Norwegian [nb]</option><option value='nd'>Ndebele, North; North Ndebele [nd]</option><option value='ne'>Nepali [ne]</option><option value='ng'>Ndonga [ng]</option><option value='nl'>Dutch; Flemish [nl]</option><option value='nn'>Nynorsk, Norwegian [nn]</option><option value='no'>Norwegian [no]</option><option value='nr'>Ndebele, South; South Ndebele [nr]</option><option value='nv'>Navajo; Navaho [nv]</option><option value='ny'>Chichewa; Chewa; Nyanja [ny]</option><option value='oc'>Occitan (post 1500) [oc]</option><option value='oj'>Ojibwa [oj]</option><option value='om'>Oromo [om]</option><option value='or'>Oriya [or]</option><option value='os'>Ossetian; Ossetic [os]</option><option value='pa'>Panjabi; Punjabi [pa]</option><option value='pi'>Pali [pi]</option><option value='pl'>Polish [pl]</option><option value='ps'>Pushto; Pashto [ps]</option><option value='pt'>Portuguese [pt]</option><option value='qu'>Quechua [qu]</option><option value='rm'>Romansh [rm]</option><option value='rn'>Rundi [rn]</option><option value='ro'>Romanian; Moldavian; Moldovan [ro]</option><option value='ru'>Russian [ru]</option><option value='rw'>Kinyarwanda [rw]</option><option value='sa'>Sanskrit [sa]</option><option value='sc'>Sardinian [sc]</option><option value='sd'>Sindhi [sd]</option><option value='se'>Northern Sami [se]</option><option value='sg'>Sango [sg]</option><option value='si'>Sinhala; Sinhalese [si]</option><option value='sk'>Slovak [sk]</option><option value='sl'>Slovenian [sl]</option><option value='sm'>Samoan [sm]</option><option value='sn'>Shona [sn]</option><option value='so'>Somali [so]</option><option value='sq'>Albanian [sq]</option><option value='sr'>Serbian [sr]</option><option value='ss'>Swati [ss]</option><option value='st'>Sotho, Southern [st]</option><option value='su'>Sundanese [su]</option><option value='sv'>Swedish [sv]</option><option value='sw'>Swahili [sw]</option><option value='ta'>Tamil [ta]</option><option value='te'>Telugu [te]</option><option value='tg'>Tajik [tg]</option><option value='th'>Thai [th]</option><option value='ti'>Tigrinya [ti]</option><option value='tk'>Turkmen [tk]</option><option value='tl'>Tagalog [tl]</option><option value='tn'>Tswana [tn]</option><option value='to'>Tonga (Tonga Islands) [to]</option><option value='tr'>Turkish [tr]</option><option value='ts'>Tsonga [ts]</option><option value='tt'>Tatar [tt]</option><option value='tw'>Twi [tw]</option><option value='ty'>Tahitian [ty]</option><option value='ug'>Uighur; Uyghur [ug]</option><option value='uk'>Ukrainian [uk]</option><option value='ur'>Urdu [ur]</option><option value='uz'>Uzbek [uz]</option><option value='ve'>Venda [ve]</option><option value='vi'>Vietnamese [vi]</option><option value='vo'>Volap√É¬ºk [vo]</option><option value='wa'>Walloon [wa]</option><option value='wo'>Wolof [wo]</option><option value='xh'>Xhosa [xh]</option><option value='yi'>Yiddish [yi]</option><option value='yo'>Yoruba [yo]</option><option value='za'>Zhuang; Chuang [za]</option><option value='zh'>Chinese [zh]</option><option value='zu'>Zulu [zu]</option>" +
     "</select>"
 		//<input id='language' type='text' title='"+f.lang[1]+"' value='"+expandLanguageName().substr(0,2)+"' style='width:70px'></li>"
 		+"<li>"+mandatory+f.titl[0]+": <input id='title' type='text' title='"+f.titl[1]+"' value='"+document.title+"'></li>"
@@ -1206,12 +1206,12 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 				"nom": myOWSC.offerings[0].layerId,	//Layer id
 				"desc": "Desc missing of OWSClayer "+myForm.elements[i].value, //Layer description
 				"CRS": /*bBox ? new Array(bBox.CRS.name):*/null, //CRS array (Coordinate Reference System) where the layer is visible
-				"FormatImatge": myOWSC.offerings[0].mime,  //Format visualitzaciÛ (image/gif, image/png, etc...)
+				"FormatImatge": myOWSC.offerings[0].mime,  //Format visualitzaci√≥ (image/gif, image/png, etc...)
 				"transparencia": "transparent",
 				"CostatMinim": ParamCtrl.zoom[zoom.length-1].costat, //Minimum acceptable pixel size in meters (defines minimum zoom level at which the layer is visible)
 				"CostatMaxim": ParamCtrl.zoom[0].costat,  //Maximum acceptable pixel size in meters (defines maximum zoom level at which the layer is visible)
 				"TileMatrixSet": myOWSC.offerings[0].tileMatrixSet ? new Array(myOWSC.offerings[0].tileMatrixSet):null,  //--TileMatrixSet
-				"FormatConsulta": "text/xml",  //--format de les consultes per localitzaciÛ
+				"FormatConsulta": "text/xml",  //--format de les consultes per localitzaci√≥
 				"separa": separator_set ? null:OWSCDocument.title, //Layer legend separator (like an overtitle for the layers)
 				"DescLlegenda": myOWSC.title, //Title shown in the legend
 				"i_estil": 0,
@@ -1225,7 +1225,7 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 				"animable": false});
 
 			//Add a tool tip to show on mouse over the layer name
-			ParamCtrl.capa[n_nova_capa].toolTip= myOWSC.description;  //Ni ideal del que Ès aixÚ. Cal revisar.
+			ParamCtrl.capa[n_nova_capa].toolTip= myOWSC.description;  //Ni ideal del que √©s aix√≤. Cal revisar.
 
 			//Control if the separator has been already set (so it is not redrawn)
 			if(!separator_set)
