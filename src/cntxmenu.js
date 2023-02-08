@@ -3949,7 +3949,9 @@ var floatValor=parseFloat(valor);
 /*
 	Mostra la capa vecotrial en format taula.
  */
+const objctsToExport = {};
 
+/* Mostra la finestra flotant de la taula per representar la capa vectorial */
 function ObreFinestraTaulaDeCapaVectorial(i_capa)
 {
 var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
@@ -3959,7 +3961,7 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
-
+/* Crea l'HTML per a construir la taula d'elements vectorials */
 function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
@@ -4006,7 +4008,8 @@ var objectes = capa.objectes.features;
 		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), " ", capa.desc, "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>", 
 		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
 		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
-		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",  
+		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
+		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(capa)'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
 		"</div><hr>");
 
 		// Porta papers capa info
@@ -4032,6 +4035,7 @@ var objectes = capa.objectes.features;
 			// Porta papers
 			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
 		}
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
 		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
 		cdnsHtml.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
@@ -4049,6 +4053,7 @@ var objectes = capa.objectes.features;
 				// Porta papers
 				cdnsPortapapers.push(objectes[i].geometry.coordinates.toString(), "\t");
 			}
+			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this, ", objectes[i], ")'></td>");
 			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 			// Porta papers
 			cdnsPortapapers.push("\n");
@@ -4059,6 +4064,22 @@ var objectes = capa.objectes.features;
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
 	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
 	return cdnsHtml.join("");
+}
+/* Determina quins elements vectorials s'inclouran en l'exportació */
+function ActualitzaIndexObjectesExportar(checkbox, objecteVect)
+{
+	const indexATreballar = checkbox.value.toString();
+	console.log(indexATreballar);
+	if (checkbox.checked) 
+	{
+		objctsToExport[indexATreballar]=objecteVect;
+	}
+	else 
+	{
+		delete objctsToExport[indexATreballar];
+	}
+	//checkbox.checked ? (objctsToExport[indexATreballar]=objecteVect) : (delete objctsToExport[indexATreballar]);
+	//checkbox.checked ? console.log("Afegit objecte: " + checkbox.value) : console.log("Eliminat objecte: " + checkbox.value);
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4077,4 +4098,9 @@ function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
 	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
 	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
+}
+
+function ExportarObjectesGeoJSON(capa)
+{
+	const capaExportar = {"nom": capa.desc, "CRSgeometry": capa.CRSgeometry, "objects": objctsToExport};
 }
