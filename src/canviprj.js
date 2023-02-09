@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -57,11 +57,11 @@ var graus_no_signe=Math.abs(graus_totals);
 	if (segons<0.00001)
 		segons=0;
 	if (zeros)
-		cdns.push(floor_DJ(graus_no_signe),"∞ ",floor_DJ(minuts),"\' ",OKStrOfNe(segons,ParamCtrl.NDecimalsCoordXY),"\"");
+		cdns.push(floor_DJ(graus_no_signe),"¬∞ ",floor_DJ(minuts),"\' ",OKStrOfNe(segons,ParamCtrl.NDecimalsCoordXY),"\"");
 	else
 	{
 		if (floor_DJ(graus_no_signe)!=0)
-			cdns.push(floor_DJ(graus_no_signe),"∞ ");
+			cdns.push(floor_DJ(graus_no_signe),"¬∞ ");
 		if (floor_DJ(minuts)!=0)
 			cdns.push(floor_DJ(minuts),"\' ");
 		if (segons!=0);
@@ -80,7 +80,7 @@ function DonaDenominadorDeLEscalaArrodonit(a)
 	e-=2;
 	var n=Math.abs(a/Math.pow(10,e));
 
-	//Ara cal arrodinir a l'enter mÈs proper:
+	//Ara cal arrodinir a l'enter m√©s proper:
 	if (n<112)
 		n=100;
 	else if (n<137)
@@ -194,8 +194,8 @@ function LambertConformal_Funcio_15_9a_Snyder(e, fi)
 
 function LambertAzimuthal_Funcio_3_14_Snyder(fi)
 {
-    /*Per al c‡lcul de la authalic latitude (on l'esfera tÈ la mateixa ‡rea que l'el∑lipsoide)
-    es pot usar aquest desenvolupament en sËrie  (Adams, 1921, p.85) */
+    /*Per al c√†lcul de la authalic latitude (on l'esfera t√© la mateixa √†rea que l'el¬∑lipsoide)
+    es pot usar aquest desenvolupament en s√®rie  (Adams, 1921, p.85) */
     return fi-(CanviCRS.e2/3.0+31.0*CanviCRS.e4/180.0+59.0*CanviCRS.e6/560.0)*Math.sin(2.0*fi)
     		 +(17.0*CanviCRS.e4/360.0+61.0*CanviCRS.e6/1260.0)*Math.sin(4.0*fi)
              -(383.0*CanviCRS.e6/45360.0)*Math.sin(6.0*fi);
@@ -216,7 +216,7 @@ function LambertAzimuthal_Funcio_3_12_Snyder(fi)
 	return (1.0-CanviCRS.e2)*(sin_fi/dvar1-Math.log(dvar2)/(2.0*CanviCRS.e));
 }
 
-//Aquesta funciÛ no cal cridar-la. La criden les de canvi de projecciÛ directament si cal
+//Aquesta funci√≥ no cal cridar-la. La criden les de canvi de projecci√≥ directament si cal
 function InicialitzaCRS(crs)
 {
 var crs_up=crs.toUpperCase();
@@ -484,8 +484,8 @@ var crs_up=crs.toUpperCase();
 	CanviCRS.darrerCRS=crs_up;
 }
 
-//var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecciÛ.
-//var crs_x, crs_y;  //coordenades XY de sortida de les funcions de canvi de projecciÛ.
+//var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecci√≥.
+//var crs_x, crs_y;  //coordenades XY de sortida de les funcions de canvi de projecci√≥.
 
 function UTM_Geo(x,y)
 {
@@ -494,7 +494,7 @@ var ll_x, ll_y;
 	y-=CanviCRS.offset_mapa_Y;
 
 	var mu=(CanviCRS.m0+y/CanviCRS.c_tissot)/(CanviCRS.radi_a*(1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0));
-	//fi1 Ès 'footpoint latitude o latitud del meridi‡ central que tÈ la mateixa y que el punt (lont, lat)
+	//fi1 √©s 'footpoint latitude o latitud del meridi√† central que t√© la mateixa y que el punt (lont, lat)
 	var fi1=mu+(3.0*CanviCRS.e1/2.0-27.0*CanviCRS.e1_sobre3/32.0)*Math.sin(2.0*mu)+(21.0*CanviCRS.e1_sobre2/16.0-55.0*CanviCRS.e1_sobre4/32.0)*Math.sin(4.0*mu)+(151.0*CanviCRS.e1_sobre3/96.0)*Math.sin(6.0*mu)+(1097.0*CanviCRS.e1_sobre4/512.0)*Math.sin(8.0*mu);
 	if (fi1<Math.PI/2-0.00001 && fi1>-Math.PI/2+0.00001)
 	{
@@ -523,7 +523,7 @@ var ll_x, ll_y;
 	}
 	else
 	{
-		ll_x=CanviCRS.lambda_0;   //indeterminat perÚ podem donar CanviCRS.lambda_0
+		ll_x=CanviCRS.lambda_0;   //indeterminat per√≤ podem donar CanviCRS.lambda_0
 		if (x>0.0)
 			ll_y=Math.PI/2;
 	        else
@@ -603,7 +603,7 @@ var llr_y=ll_y*FactorGrausARadiants;
 	return {"x": crs_x, "y": crs_y};
 }
 
-//Hi ha fÚrmules especials per si fi1==90graus perÚ de moment nomÈs suporto ETRS89-LAEA que no Ès aquest cas raro.
+//Hi ha f√≤rmules especials per si fi1==90graus per√≤ de moment nom√©s suporto ETRS89-LAEA que no √©s aquest cas raro.
 function LambertAzimutalEqualArea_Geo(x,y)
 {
 	x-=CanviCRS.offset_mapa_X;
@@ -627,7 +627,7 @@ function LambertAzimutalEqualArea_Geo(x,y)
 	return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
 }
 
-//Hi ha fÚrmules especials per si fi1==90graus perÚ de moment nomÈs suporto ETRS89-LAEA que no Ès aquest cas raro.
+//Hi ha f√≤rmules especials per si fi1==90graus per√≤ de moment nom√©s suporto ETRS89-LAEA que no √©s aquest cas raro.
 function Geo_LambertAzimutalEqualArea(ll_x,ll_y)
 {
 var crs_x, crs_y;
@@ -997,7 +997,7 @@ var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     return env_crs_xy;
 }
 
-//Aquesta funciÛ no sobreescriu env sino que retorna un duplicat.
+//Aquesta funci√≥ no sobreescriu env sino que retorna un duplicat.
 function TransformaEnvolupant(env, crs_ori, crs_dest)
 {
 var env_ll;
@@ -1009,7 +1009,7 @@ var env_ll;
 	return DonaEnvolupantCRS(env_ll, crs_dest);
 }
 
-//Aquesta funciÛ sobreescriu el punt.
+//Aquesta funci√≥ sobreescriu el punt.
 function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 {
 	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
@@ -1021,7 +1021,7 @@ function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
 	}
 }
 
-//Aquesta funciÛ sobreescriu el coord array
+//Aquesta funci√≥ sobreescriu el coord array
 function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
 {
 	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
@@ -1035,7 +1035,7 @@ function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
 
 function EsProjLongLat(crs)
 {
-	if (DonaUnitatsCoordenadesProj(crs)=="∞")
+	if (DonaUnitatsCoordenadesProj(crs)=="¬∞")
 		return true;
 	return false;
 }
@@ -1054,7 +1054,7 @@ var crs_up=crs.toUpperCase();
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
         	return "m";
 	if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
-		return "∞";
+		return "¬∞";
 	return "m?";
 }
 
@@ -1142,11 +1142,11 @@ var crs_up=crs.toUpperCase();
 		return "long/lat - WGS84";
 	if (crs_up=="EPSG:4258")
 		return "long/lat - ETRS89";
-	return crs;  // si no hi ha descripciÛ poso el codi.
+	return crs;  // si no hi ha descripci√≥ poso el codi.
 }
 
 //Retorn null si no son quasi iguals o el crs que represent els 2 iguals o quasi iguals in upperCase.
-//AixÚ permet ordenar per crs considerant els que sÛn quasi iguals
+//Aix√≤ permet ordenar per crs considerant els que s√≥n quasi iguals
 function DonaCRSRepresentaQuasiIguals(crs1, crs2)
 {
 var crs1_up=crs1.toUpperCase(), crs2_up=crs2.toUpperCase();
@@ -1186,7 +1186,7 @@ var crs1_up=crs1.toUpperCase(), crs2_up=crs2.toUpperCase();
 	return null;
 }
 
-//v representa la versiÛ. es pot passar com a null si el servei no Ès un WMS
+//v representa la versi√≥. es pot passar com a null si el servei no √©s un WMS
 function CalGirarCoordenades(crs, v)
 {
 	if((crs.toUpperCase()=="EPSG:4326" || crs.toUpperCase()=="EPSG:3035") && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))

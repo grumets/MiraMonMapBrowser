@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -70,12 +70,12 @@ var calcul_amb_icapa="";
 
 
 
-/*Aquesta funciÛ transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
-(la segona part nomÈs Ès v‡lida per vectors).*/
+/*Aquesta funci√≥ transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
+(la segona part nom√©s √©s v√†lida per vectors).*/
 function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
 {
 var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
-//Busco la descripciÛ de cada "valor" en la operaciÛ i creo un equivalent FormulaConsulta
+//Busco la descripci√≥ de cada "valor" en la operaci√≥ i creo un equivalent FormulaConsulta
 //busco una clau d'obrir
 var i, fragment, inici, final, cadena, nou_valor, c, i_capa_link;
 var FormulaConsulta="";
@@ -95,7 +95,7 @@ var FormulaConsulta="";
 		nou_valor=JSON.parse(cadena);
 		if (typeof nou_valor.i_sltr!=="undefined")
 		{
-			//Aquest tipus de objecte Ès un selector no s'ha de tractar ara
+			//Aquest tipus de objecte √©s un selector no s'ha de tractar ara
 			FormulaConsulta+=fragment.substring(0, inici)+cadena;
 		}
 		else
@@ -128,7 +128,7 @@ var FormulaConsulta="";
 				alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
 				break;
 			}
-			/*Eliminar aquesta lÌnia em permet diferenciar entre "la data d'ara" encara que m'ho canviÔn o "la seleccionada a la capa" i si la canvien l'adopto tambÈ.
+			/*Eliminar aquesta l√≠nia em permet diferenciar entre "la data d'ara" encara que m'ho canvi√Øn o "la seleccionada a la capa" i si la canvien l'adopto tamb√©.
 			if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
 				delete nou_valor.i_data;*/
 
@@ -150,7 +150,7 @@ var FormulaConsulta="";
 					}
 					FormulaConsulta+=fragment.substring(0, inici)+"p[\""+nou_valor.prop+"\"]"; 
 				}
-				else //La capa origen Ès raster perÚ la condiciÛ Ès vectorial
+				else //La capa origen √©s raster per√≤ la condici√≥ √©s vectorial
 				{
 					//cerco si ja existeix un valor amb aquestes caracteristiques
 					if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
@@ -216,7 +216,7 @@ var FormulaConsulta="";
 					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
 					break;
 				}
-				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si Ès la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
+				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si √©s la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
 					i=nou_valor.i_valor;
 				else
 				{
@@ -311,7 +311,7 @@ var valors=capa.valors;
 	return false;
 }
 
-//v[] Ès false si la banda no est‡ implicada en el redibuixat.
+//v[] √©s false si la banda no est√† implicada en el redibuixat.
 function DeterminaArrayValorsNecessarisCapa(i_capa, i_estil_o_atrib)
 {
 var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
@@ -367,7 +367,7 @@ function DonaEstilDadesBinariesCapa(i_nova_vista, i_capa)
 {
 var valors=ParamCtrl.capa[i_capa].valors, i_v;
 
-	if (i_nova_vista==NovaVistaPrincipal || i_nova_vista==NovaVistaImprimir || i_nova_vista==NovaVistaRodet)  //L'estil d'impressiÛ i de visualitzaciÛ sÛn els mateixos
+	if (i_nova_vista==NovaVistaPrincipal || i_nova_vista==NovaVistaImprimir || i_nova_vista==NovaVistaRodet)  //L'estil d'impressi√≥ i de visualitzaci√≥ s√≥n els mateixos
 		return ParamCtrl.capa[i_capa].i_estil;
 	else
 	{
@@ -377,10 +377,10 @@ var valors=ParamCtrl.capa[i_capa].valors, i_v;
 				return valors[i_v].nova_capa[i_nova_vista].i_estil;
 		}
 	}
-	return ParamCtrl.capa[i_capa].i_estil;  //Per aquÌ no s'hauria de sortir mai.
+	return ParamCtrl.capa[i_capa].i_estil;  //Per aqu√≠ no s'hauria de sortir mai.
 }
 
-//Aquesta funciÛ, de moment nomÈs s'usa en les consultes.
+//Aquesta funci√≥, de moment nom√©s s'usa en les consultes.
 function HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa)
 {
 var valors=ParamCtrl.capa[i_capa].valors, i_v, v, i_estil;
@@ -420,7 +420,7 @@ var valors=ParamCtrl.capa[i_capa].valors, i_v, v, i_estil;
 	return true;
 }
 
-//dv[] Ès null si la banda no est‡ implicada en el dibuixat
+//dv[] √©s null si la banda no est√† implicada en el dibuixat
 function CarregaDataViewsCapa(dv, i_nova_vista, i_data, valors)
 {
 var n_v=0, i_v, array_buffer;
@@ -448,9 +448,9 @@ var n_v=0, i_v, array_buffer;
 	return n_v;
 }
 
-/*v[] Ès undefined si la banda no est‡ implicada en el dibuixat i null si el valor Ès nodata.
-i_data Ès ˙til per a construir series temporals perÚ pot ser null per a triar la data actual.
-Aquesta funciÛ no es fa servir en el dibuixat sino nomÈs en les consultes*/
+/*v[] √©s undefined si la banda no est√† implicada en el dibuixat i null si el valor √©s nodata.
+i_data √©s √∫til per a construir series temporals per√≤ pot ser null per a triar la data actual.
+Aquesta funci√≥ no es fa servir en el dibuixat sino nom√©s en les consultes*/
 function DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, i_data, i_col, i_fil)
 {
 var i_v, comptador, vista, dv=[], n_v_plena, v=[], i_nodata;
@@ -568,7 +568,7 @@ function DonaValorBandaDeDadesBinariesCapa(dv, compression, datatype, ncol, i_co
 {
 var j, i, comptador, acumulat, i_byte=0;
 
-	//Aquesta funciÛ es podria millorar verificant i el que retorna el servidor Ès un RLE indexat. De moment no ho faig.
+	//Aquesta funci√≥ es podria millorar verificant i el que retorna el servidor √©s un RLE indexat. De moment no ho faig.
 	if (compression && compression=="RLE")
 	{
 		for (j=0;j<i_fil+1;j++)
@@ -579,7 +579,7 @@ var j, i, comptador, acumulat, i_byte=0;
 				comptador=dv.getUint8(i_byte, littleEndian);
 				i_byte++;
 				if (comptador==0) /* Tros sense comprimir */
-				{ /* La seg¸ent lectura de comptador no diu "quants de repetits vÈnen a continuaciÛ" sinÛ "quants de descomprimits en format r‡ster tÌpic" */
+				{ /* La seg√ºent lectura de comptador no diu "quants de repetits v√©nen a continuaci√≥" sin√≥ "quants de descomprimits en format r√†ster t√≠pic" */
 					comptador=dv.getUint8(i_byte, littleEndian);
 					i_byte++;
 					acumulat += comptador;
@@ -665,7 +665,7 @@ var j, i, comptador, acumulat, i_byte=0;
                			}
 			}
 		}
-		return 0; //No s'hauria de sortir mai per aquÌ
+		return 0; //No s'hauria de sortir mai per aqu√≠
 	}
 	if (!datatype)
 		return dv.getUint8(i_fil*vista.ncol+i_col, littleEndian);
@@ -698,7 +698,7 @@ function ErrorImatgeBinariaCapaCallback(text, extra_param)
 	var valors=ParamCtrl.capa[extra_param.i_capa].valors
 	CanviaEstatEventConsola(null, extra_param.i_event, EstarEventError);
 
-	//arrayBuffer Ès "undefined" si la banda no est‡ implicada al dibuixat. No em queda mÈs remei que fer aixÚ.
+	//arrayBuffer √©s "undefined" si la banda no est√† implicada al dibuixat. No em queda m√©s remei que fer aix√≤.
 	//Carrego la banda que m'ha passat
 	if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		delete valors[extra_param.i_valor].arrayBuffer;
@@ -1145,7 +1145,7 @@ var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
 						histo_component0.valorMinimReal=valor0;
 					if (histo_component0.valorMaximReal<valor0)
 						histo_component0.valorMaximReal=valor0;
-					if (histo_component0.sumaValorsReal) //si s'ha inicialitzat Ès que estic en un context que tÈ sentit
+					if (histo_component0.sumaValorsReal) //si s'ha inicialitzat √©s que estic en un context que t√© sentit
 						histo_component0.sumaValorsReal+=valor0;
 				}
 				fila_calc[i][i_data_video]=valor0;
@@ -1176,7 +1176,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 				comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 				i_byte[i_v]++;
 				if (comptador==0) /* Tros sense comprimir */
-				{ /* La seg¸ent lectura de comptador no diu "quants de repetits vÈnen a continuaciÛ" sinÛ "quants de descomprimits en format r‡ster tÌpic" */
+				{ /* La seg√ºent lectura de comptador no diu "quants de repetits v√©nen a continuaci√≥" sin√≥ "quants de descomprimits en format r√†ster t√≠pic" */
 					comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 					i_byte[i_v]++;
 					acumulat += comptador;
@@ -1231,7 +1231,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 										histo_component0.valorMinimReal=valor0;
 									if (histo_component0.valorMaximReal<valor0)
 										histo_component0.valorMaximReal=valor0;
-									if (histo_component0.sumaValorsReal) //si s'ha inicialitzat Ès que estic en un context que tÈ sentit
+									if (histo_component0.sumaValorsReal) //si s'ha inicialitzat √©s que estic en un context que t√© sentit
 										histo_component0.sumaValorsReal+=valor0;
 								}
 								fila_calc[i_col][i_data_video]=valor0;
@@ -1299,7 +1299,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 									histo_component0.valorMinimReal=valor0;
 								if (histo_component0.valorMaximReal<valor0)
 									histo_component0.valorMaximReal=valor0;
-								if (histo_component0.sumaValorsReal) //si s'ha inicialitzat Ès que estic en un context que tÈ sentit
+								if (histo_component0.sumaValorsReal) //si s'ha inicialitzat √©s que estic en un context que t√© sentit
 									histo_component0.sumaValorsReal+=valor0*comptador;
 							}
 							for ( ; i<acumulat; i++)
@@ -1365,7 +1365,7 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 								histo_component0.valorMinimReal=valor0;
 							if (histo_component0.valorMaximReal<valor0)
 								histo_component0.valorMaximReal=valor0;
-							if (histo_component0.sumaValorsReal) //si s'ha inicialitzat Ès que estic en un context que tÈ sentit
+							if (histo_component0.sumaValorsReal) //si s'ha inicialitzat √©s que estic en un context que t√© sentit
 								histo_component0.sumaValorsReal+=valor0;
 						}
 						fila_calc[i][i_data_video]=valor0;
@@ -1393,7 +1393,7 @@ var i_cell_ini=i_fil*ncol, i, valor0, histo_component0=histograma ? histograma.c
 					histo_component0.valorMinimReal=valor0;
 				if (histo_component0.valorMaximReal<valor0)
 					histo_component0.valorMaximReal=valor0;
-				if (histo_component0.sumaValorsReal) //si s'ha inicialitzat Ès que estic en un context que tÈ sentit
+				if (histo_component0.sumaValorsReal) //si s'ha inicialitzat √©s que estic en un context que t√© sentit
 					histo_component0.sumaValorsReal+=valor0;
 			}
 		}
@@ -1426,7 +1426,7 @@ var histo_component0, classe0;
 					"classe": [],
 					"valorMinimReal": +1e300,
 					"valorMaximReal": -1e300,
-					"sumaValorsReal": 0 //∑$∑ quan passo per aquesta funciÛ segur que Ès QC i tÈ sentit fer aixÚ, oi?
+					"sumaValorsReal": 0 //¬∑$¬∑ quan passo per aquesta funci√≥ segur que √©s QC i t√© sentit fer aix√≤, oi?
 				}];
 		histo_component0=histograma.component[0];
 		classe0=histo_component0.classe;
@@ -1453,7 +1453,7 @@ var histo_component0, classe0;
 						histo_component0.valorMinimReal=valor0;
 					if (histo_component0.valorMaximReal<valor0)
 						histo_component0.valorMaximReal=valor0;
-					histo_component0.sumaValorsReal+=valor0;	//∑$∑ quan passo per aquesta funciÛ segur que Ès QC i tÈ sentit fer aixÚ, oi?
+					histo_component0.sumaValorsReal+=valor0;	//¬∑$¬∑ quan passo per aquesta funci√≥ segur que √©s QC i t√© sentit fer aix√≤, oi?
 				}
 				i_color0=Math.floor(a0*(valor0-valor_min0));
 				if (i_color0>=ncolors)
@@ -1508,14 +1508,14 @@ var img_illum=[];
 		for (var i=1; i<ncol_1; i++)
 			img_illum[i_cell_ini+i]=CalculaIlluminacioPunt(imatge[i_cell_ini_n+i], imatge[i_cell_ini_s+i], imatge[i_cell_ini+i+1], imatge[i_cell_ini+i-1], param);
 		img_illum[i_cell_ini]=img_illum[i_cell_ini+1]; //El primer punt repeteix del segon
-		img_illum[i_cell_ini+i]=img_illum[i_cell_ini+i-1]; //El darrer punt repeteix del pen˙ltim
+		img_illum[i_cell_ini+i]=img_illum[i_cell_ini+i-1]; //El darrer punt repeteix del pen√∫ltim
 	}
-	//La primera final es repeteix de la segona. La darrera es repeteix de la pen˙ltima
+	//La primera final es repeteix de la segona. La darrera es repeteix de la pen√∫ltima
 	var i_cell_ini=(nfil-1)*ncol; i_cell_ini_n=(nfil-2)*ncol;
 	for (var i=0; i<ncol; i++)
 	{
 		img_illum[i]=img_illum[ncol+i]; //El primer punt repeteix del segon
-		img_illum[i_cell_ini+i]=img_illum[i_cell_ini_n+i]; //El darrer punt repeteix del pen˙ltim
+		img_illum[i_cell_ini+i]=img_illum[i_cell_ini_n+i]; //El darrer punt repeteix del pen√∫ltim
 	}
 	return img_illum;
 }
@@ -1558,16 +1558,16 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[], imatge=[], img_illum=[];
 }
 
 
-/*img_data Ès un Uint8ClampedArray que no suporta .push() perÚ a canvi "it clamps input values between 0 and 255.
+/*img_data √©s un Uint8ClampedArray que no suporta .push() per√≤ a canvi "it clamps input values between 0 and 255.
 This is especially handy for Canvas image processing algorithms since now you don't have to manually clamp your
 image processing math to avoid overflowing the 8-bit range.
-'data' es un array de dades que servir‡ per enviar al canvas
+'data' es un array de dades que servir√† per enviar al canvas
 'histograma' pot contenir una variable on escriure histograma. Pot ser null si es vol obtenir un histograma.
-'dv' sÛn les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades perÚ moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...);
-'mes_duna_v' Indica si hi ha mÈs d'una dv[] carregada. Es pot fer servir CarregaDataViewsCapa()-1
-'component' Ès capa.estil[i_estil].component
-'valors' Ès capa.valors. No es mira la part on hi ha els arrays binaris perquË aixÚ est‡ a dv.
-'paleta' Ès capa.estil[i_estil].paleta*/
+'dv' s√≥n les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades per√≤ moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...);
+'mes_duna_v' Indica si hi ha m√©s d'una dv[] carregada. Es pot fer servir CarregaDataViewsCapa()-1
+'component' √©s capa.estil[i_estil].component
+'valors' √©s capa.valors. No es mira la part on hi ha els arrays binaris perqu√® aix√≤ est√† a dv.
+'paleta' √©s capa.estil[i_estil].paleta*/
 function ConstrueixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, component, valors, paleta, categories)
 {
 var i_cell=[], i_byte=[], j, i, CalculaFilaDesDeBinaryArraydv_i, i_c, valor0, valor1, i_color=[], i_color0, i_color1, a=[], a0, a1, valor_min=[], valor_min0, valor_min1, comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0, classe1;
@@ -1621,7 +1621,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			//cal_histo=true;
 			//component0.histograma=[];
 			//component0.valorMinimReal=+1e300;
-			if (categories) //si la component0 tÈ categories, no cal calcular sumaValorsReal
+			if (categories) //si la component0 t√© categories, no cal calcular sumaValorsReal
 			{
 				histograma.component=[{
 						"classe": [],
@@ -1645,7 +1645,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 		}
 		if (component.length==2)
 		{
-			if (categories) //Ès una capa de transferËncia de camps estadÌstics a unes categories
+			if (categories) //√©s una capa de transfer√®ncia de camps estad√≠stics a unes categories
 			{
 				component1=component[1];
 				a1=DonaFactorAEstiramentPaleta(component1.estiramentPaleta, component1.herenciaOrigen.nColors);
@@ -1655,7 +1655,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				{
 					if (!categories[i_categ])
 						continue;
-					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ∑$∑ l'estructura de "pisos" Ès diferent en aquest histograma que en el "normal". …s important? potser si si mÈs endavant volem fer servir altres funcions?
+					categories[i_categ]["$stat$_histo"]={"classe": [], classe_nodata: 0}; // ¬∑$¬∑ l'estructura de "pisos" √©s diferent en aquest histograma que en el "normal". √âs important? potser si si m√©s endavant volem fer servir altres funcions?
 					if (component1.herenciaOrigen.tractament!="categoric")
 					{
 						categories[i_categ]["$stat$_sum"]=0;
@@ -1698,7 +1698,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 							"classe": [],
 							"valorMinimReal": +1e300,
 							"valorMaximReal": -1e300,
-							"sumaValorsReal": 0		//si tinc tres components Ès que la variables Ès QC segur
+							"sumaValorsReal": 0		//si tinc tres components √©s que la variables √©s QC segur
 						};
 				classe0=histograma.component[i_c].classe;
 				for (i_color0=0; i_color0<256; i_color0++)
@@ -1722,7 +1722,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			//Segon passem la fila a colors RGB
 			if (una_component)
 			{
-				//Aquest codi Ès igual que FilaFormulaConsultaDesDeMultiFila() perÚ sense passar a colors sino a una fila_calc
+				//Aquest codi √©s igual que FilaFormulaConsultaDesDeMultiFila() per√≤ sense passar a colors sino a una fila_calc
 				for (i=0;i<ncol;i++)
 				{
 					v=fila[i];
@@ -1785,7 +1785,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			}
 			else if (component.length==2)
 			{
-				//Aquest codi Ès igual que FilaFormulaConsultaDesDeMultiFila() perÚ sense passar a colors sino a una fila_calc
+				//Aquest codi √©s igual que FilaFormulaConsultaDesDeMultiFila() per√≤ sense passar a colors sino a una fila_calc
 				for (i=0;i<ncol;i++)
 				{
 					v=fila[i];
@@ -1836,7 +1836,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 								categories[valor0]["$stat$_histo"].classe_nodata++
 							else //if (!isNaN(valor1) && valor1!=null)
 							{
-								// ara valor0 contÈ el valor de l'array de categories i valor1 contÈ la variable de la qual s'han de fer estadÌstiques
+								// ara valor0 cont√© el valor de l'array de categories i valor1 cont√© la variable de la qual s'han de fer estad√≠stiques
 
 								// creo histograma de la component1 per la categoria categories[valor0]
 								i_color1=Math.floor(a1*(valor1-valor_min1));
@@ -1956,7 +1956,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 			}
 	  } //End of for
 
- 		if (component.length==2) //Ès una capa de transferËncia de camps estadÌstics a unes categories
+ 		if (component.length==2) //√©s una capa de transfer√®ncia de camps estad√≠stics a unes categories
 		{
 			var area_cella=DonaAreaCella({MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY},
 					ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
@@ -2022,7 +2022,7 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 						i_byte[i_v]++;
 						if (comptador==0) /* Tros sense comprimir */
-						{ /* La seg¸ent lectura de comptador no diu "quants de repetits vÈnen a continuaciÛ" sinÛ "quants de descomprimits en format r‡ster tÌpic" */
+						{ /* La seg√ºent lectura de comptador no diu "quants de repetits v√©nen a continuaci√≥" sin√≥ "quants de descomprimits en format r√†ster t√≠pic" */
 							comptador=dv_i.getUint8(i_byte[i_v], littleEndian);
 							i_byte[i_v]++;
 							acumulat += comptador;
@@ -2408,14 +2408,14 @@ function DefineixEstiramentIniPaletaSiCal(component)
 	{
 		if (component[i_c].estiramentPaleta && component[i_c].estiramentPaleta.auto)
 		{
-			//Genero un ample gran per comenÁar a determinar l'estirament necessari.
+			//Genero un ample gran per comen√ßar a determinar l'estirament necessari.
 			component[i_c].estiramentPaleta.valorMaxim=1e+10;
 			component[i_c].estiramentPaleta.valorMinim=-1e+10;
 		}
 	}
 }
 
-//return false, vol dir que no es pot fer l'estirament perquË hi ha massa poc valors
+//return false, vol dir que no es pot fer l'estirament perqu√® hi ha massa poc valors
 function AjustaEstiramentIniPaletaSiCal(histograma, component, paleta)
 {
 var c, histo, estadistics;
@@ -2474,39 +2474,39 @@ var data
 	else
 		valors[extra_param.i_valor].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer=dades;
 
-	//Comprovo que tinc les bandes que necessito. Si no hi son, espero mÈs.
+	//Comprovo que tinc les bandes que necessito. Si no hi son, espero m√©s.
 	n_v=valors.length;
 	for (i_v=0; i_v<n_v; i_v++)
 	{
 		if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		{
 			if (typeof valors[i_v].arrayBuffer!=="undefined" && valors[i_v].arrayBuffer==null)
-				return;  //Cal esperar a la c‡rrega de les altres capes.
+				return;  //Cal esperar a la c√†rrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaImprimir)
 		{
 			if (typeof valors[i_v].arrayBufferPrint!=="undefined" && valors[i_v].arrayBufferPrint==null)
-				return;  //Cal esperar a la c‡rrega de les altres capes.
+				return;  //Cal esperar a la c√†rrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		{
 			if (typeof valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer==null)
-				return;  //Cal esperar a la c‡rrega de les altres capes.
+				return;  //Cal esperar a la c√†rrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		{
 			if (typeof valors[i_v].capa_video[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_video[extra_param.i_data].arrayBuffer==null)
-				return;  //Cal esperar a la c‡rrega de les altres capes.
+				return;  //Cal esperar a la c√†rrega de les altres capes.
 		}
 		else
 		{
 			if (typeof valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer!=="undefined" && valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer==null)
-				return;  //Cal esperar a la c‡rrega de les altres capes.
+				return;  //Cal esperar a la c√†rrega de les altres capes.
 		}
 	}
   
 	//Ara ha se que tinc el que necessito.	
-	//Depen del ordre en que passen les coses s'arriba aquÌ quan ja s'ha demanat un altre redibuixat i aquest ja no est‡ en sincronia amb l'actual contigut de la vista (que te les capes definides diferentment). 
+	//Depen del ordre en que passen les coses s'arriba aqu√≠ quan ja s'ha demanat un altre redibuixat i aquest ja no est√† en sincronia amb l'actual contigut de la vista (que te les capes definides diferentment). 
 	if (extra_param.imatge && extra_param.imatge.getContext)
 	{
 		//Decidim on en guarda l'histograma
@@ -2563,7 +2563,7 @@ var data
 		var i_diagrama, i_histo;
 		for (i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 		{
-			DesactivaCheckITextUnChartMatriuDinamic(extra_param.i_capa, extra_param.i_estil, i_diagrama, false); //depËn de com he "tornat" a la visualitzaciÛ de la capa, potser encara estava "disabled"
+			DesactivaCheckITextUnChartMatriuDinamic(extra_param.i_capa, extra_param.i_estil, i_diagrama, false); //dep√®n de com he "tornat" a la visualitzaci√≥ de la capa, potser encara estava "disabled"
 			i_histo=estil.diagrama[i_diagrama].i_histograma;
 			if (estil.diagrama[i_diagrama].tipus == "chart")
 			{
@@ -2575,7 +2575,7 @@ var data
 					if (DonaTipusGraficHistograma(estil,0)=="bar")
 						document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo)).checked=false;
 
-					//actualitzo el/s gr‡fic/s i aixÚ tambÈ actualitza el text ocult de la finestra que es copia al portapapers
+					//actualitzo el/s gr√†fic/s i aix√≤ tamb√© actualitza el text ocult de la finestra que es copia al portapapers
 					for (var i_c=0; i_c<estil.component.length; i_c++)
 					{
 						retorn_prep_histo=PreparaHistograma(i_histo, i_c);
@@ -2594,9 +2594,9 @@ var data
 				if (document.getElementById(DonaNomCheckDinamicHistograma(i_histo)).checked)
 				{
 					var retorn_prep_histo;
-					//actualitzo el/s gr‡fic/s i aixÚ tambÈ actualitza el text ocult de la finestra que es copia al portapapers
+					//actualitzo el/s gr√†fic/s i aix√≤ tamb√© actualitza el text ocult de la finestra que es copia al portapapers
 					retorn_prep_histo=PreparaHistogramaPerCategories(i_histo, estil.diagrama[i_diagrama].stat, estil.diagrama[i_diagrama].order);
-					//Gr‡fic de l'‡rea
+					//Gr√†fic de l'√†rea
 					HistogramaFinestra.vista[i_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
 					//HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].data=retorn_prep_histo.data_area;
@@ -2604,7 +2604,7 @@ var data
 					HistogramaFinestra.vista[i_histo].chart[0].config.data.datasets[0].unitats=retorn_prep_histo.unitats_area;
 					HistogramaFinestra.vista[i_histo].chart[0].options=retorn_prep_histo.options_area;
 					HistogramaFinestra.vista[i_histo].chart[0].update();
-					//Gr‡fic de l'estadÌstic
+					//Gr√†fic de l'estad√≠stic
 					HistogramaFinestra.vista[i_histo].chart[1].config.data.labels=retorn_prep_histo.labels;
 					//HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].data=retorn_prep_histo.data_estad;
@@ -2647,7 +2647,7 @@ var data
 	}
 }
 
-//Si imatge==null aquest funciÛ no dibuixar‡ perÚ servir‡ per carregar totes les bandes necessaries. AixÚ Ès ˙til per atributs calculats de capes vectorials a partir de capes raster.
+//Si imatge==null aquest funci√≥ no dibuixar√† per√≤ servir√† per carregar totes les bandes necessaries. Aix√≤ √©s √∫til per atributs calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
 var i, i_event;
@@ -2661,9 +2661,9 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			alert(GetMessage("LayerIMGNoDefinesComponents", "imgrle") + "\n" + GetMessage("Layer") + " \"" + DonaCadena(ParamCtrl.capa[i_capa].desc));
 			return;
 		}*/
-		//arrayBuffer Ès "undefined" si la banda no est‡ implicada al dibuixat i null si encara no s'ha carregar perÚ s'espera que ho faci.
+		//arrayBuffer √©s "undefined" si la banda no est√† implicada al dibuixat i null si encara no s'ha carregar per√≤ s'espera que ho faci.
 		var valors=ParamCtrl.capa[i_capa].valors;
-		//Determina les v[i] presents a l'expressiÛ.
+		//Determina les v[i] presents a l'expressi√≥.
 		var v=DeterminaArrayValorsNecessarisCapa(i_capa, i_estil2);
 
 		if (vista.i_nova_vista==NovaVistaPrincipal)
@@ -2675,7 +2675,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				else
 				{
 					if (valors[i].arrayBuffer)
-						delete valors[i].arrayBuffer; //Marco que no es far‡
+						delete valors[i].arrayBuffer; //Marco que no es far√†
 				}
 			}
 		}
@@ -2688,7 +2688,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				else
 				{
 					if (valors[i].arrayBufferPrint)
-						delete valors[i].arrayBufferPrint; //Marco que no es far‡
+						delete valors[i].arrayBufferPrint; //Marco que no es far√†
 				}
 			}
 		}
@@ -2696,7 +2696,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 		{
 			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			if (!estil.capa_rodet)
-				estil.capa_rodet=[];       //Preparo guardat els histogrames petits aquÌ dins.
+				estil.capa_rodet=[];       //Preparo guardat els histogrames petits aqu√≠ dins.
 			for (i=0; i<valors.length; i++)
 			{
 				if (!valors[i].capa_rodet)
@@ -2719,7 +2719,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 		{
 			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
 			if (!estil.capa_video)
-				estil.capa_video=[];       //Preparo guardat els histogrames aquÌ dins.
+				estil.capa_video=[];       //Preparo guardat els histogrames aqu√≠ dins.
 			for (i=0; i<valors.length; i++)
 			{
 				if (!valors[i].capa_video)
@@ -2771,7 +2771,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				{
 					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, vista))
 					{
-						//Sistema per passar un altre argument a la funciÛ d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+						//Sistema per passar un altre argument a la funci√≥ d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2), TipusEventHttpGet),
 								CanviaImatgeTiFFIndirect: function (param){
 									if (param)
@@ -2792,7 +2792,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				}
 				else if (ParamCtrl.capa[i_capa2].model==model_vector)
 				{
-					//Si entro aquÌ, aixÚ hauria de ser una capa de polÌgons
+					//Si entro aqu√≠, aix√≤ hauria de ser una capa de pol√≠gons
 					loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 				}
 				else

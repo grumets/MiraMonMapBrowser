@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -49,7 +49,7 @@ function EsPuntDinsEnvolupant(punt, env)
 	return true;
 }//Fi de EsPuntDinsEnvolupant()
 
-//Contesta que sÌ fins i tots si Ès parcialment dins.
+//Contesta que s√≠ fins i tots si √©s parcialment dins.
 function EsEnvDinsEnvolupant(currentEnv, bigEnv)
 {
 	if (currentEnv.MinX>bigEnv.MaxX ||
@@ -62,7 +62,7 @@ function EsEnvDinsEnvolupant(currentEnv, bigEnv)
 }//Fi de EsEnvDinsEnvolupant()
 
 //Codi adaptat de https://stackoverflow.com/questions/907390/how-can-i-tell-if-a-point-belongs-to-a-certain-line
-//p1 i p2 defineixen un segment que te un ample "unilateral" w (cal dividir per 2 l'ample de dibuixat) i p Ès el punt que vole saber si "toca" el segment.
+//p1 i p2 defineixen un segment que te un ample "unilateral" w (cal dividir per 2 l'ample de dibuixat) i p √©s el punt que vole saber si "toca" el segment.
 function EsPuntSobreSegment(p1, p2, p, w)
 {
 var leftPoint, rightPoint;
@@ -121,8 +121,8 @@ var leftPoint, rightPoint;
 }
 
 //Codi adaptat de https://github.com/rowanwins/point-in-polygon-hao/blob/master/src/index.js
-//Diu que est‡ basat en aquest article: https://www.researchgate.net/publication/328261365_Optimal_Reliable_Point-in-Polygon_Test_and_Differential_Coding_Boolean_Operations_on_Polygons
-/*p es el punt com un array de 2 valors i polygon Ès un polÌgon amb forats amb el format GeoJSON directament (un array d'arrays d'arrays de 2 valors)
+//Diu que est√† basat en aquest article: https://www.researchgate.net/publication/328261365_Optimal_Reliable_Point-in-Polygon_Test_and_Differential_Coding_Boolean_Operations_on_Polygons
+/*p es el punt com un array de 2 valors i polygon √©s un pol√≠gon amb forats amb el format GeoJSON directament (un array d'arrays d'arrays de 2 valors)
 retorna:
 1 if point is contained inside the polygon
 0 if point is on the boundary of the polygon
@@ -207,8 +207,8 @@ function PuntEnElPoligon(p, polygon)
 	return 1;
 }
 
-//'geom' Ès un array de coordenades de tipus "LineString".
-//Retorna un objecte amb array de coord que sÛn objectes amb una x i una y
+//'geom' √©s un array de coordenades de tipus "LineString".
+//Retorna un objecte amb array de coord que s√≥n objectes amb una x i una y
 function DonaArrayCoordsPerfilDeLineString(geom, costat)
 {
 var coord=[], step=costat*Math.SQRT2, sx, sy, lx, ly, l;

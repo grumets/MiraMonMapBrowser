@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -115,7 +115,7 @@ function ComparaNodesLlinatge(a, b)
 		}
 		return 1;
 	}
-	// Si sÛn el mateix grup
+	// Si s√≥n el mateix grup
 	if(a.group=="resultat")
 	{
 		if (a.label < b.label) return -1;
@@ -276,7 +276,7 @@ function DonaInformacioAssociadaANodeLlinatge(params)
 {
 var cdns=[], node, i_nod;
      // a params rebo un array dels id dels nodes seleccionats
-	 // i a partir de la llista ordenada i d'equivalents entre id i i trobo el node/s dels quals vull la informaciÛ0
+	 // i a partir de la llista ordenada i d'equivalents entre id i i trobo el node/s dels quals vull la informaci√≥0
 	for (i_nod=0; i_nod<params.nodes.length; i_nod++)
 	{
 		node=GraphsMM.nodes[INodFromNetworkId(GraphsMM, params.nodes[i_nod])];
@@ -373,7 +373,7 @@ function CreaGrafOrganismeLlinatge(org, id_pare)
 	{
 		id_usar=GraphsMM.nodes[i_node].id;
 	}
-	else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+	else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 	{
 		//id_usar=GraphsMM.nodes.length+1;
 		id_usar=IdNodeGraphsMM;
@@ -384,7 +384,7 @@ function CreaGrafOrganismeLlinatge(org, id_pare)
 						group: "agent",
 						responsibleParty: org});
 	}
-		// els segments tambÈ he de fer una cerca i inserciÛ ordenada perquË tambÈ hi podria haver repeticions
+		// els segments tamb√© he de fer una cerca i inserci√≥ ordenada perqu√® tamb√© hi podria haver repeticions
 	var i_edge=GraphsMM.edges.binarySearch({from: id_pare, to: id_usar, label: 'wasAssociatedWith'}, ComparaEdgesLlinatge);
 	if(i_edge<0) // no trobat
 		GraphsMM.edges.splice(-i_edge-1, 0, {from: id_pare, to: id_usar, arrows:'to', label: 'wasAssociatedWith', font: {align: 'top', size: 10}});
@@ -425,7 +425,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 				i_node=(-GraphsMM.nodes.length-1);
 				id_proces=IdNodeGraphsMM;
 				IdNodeGraphsMM++;
-				LListaCapesGraphsMM[i_capa_llista].nSteps++;  // Potser mÈs endavant em pot servir per anar desplegant el llinatge
+				LListaCapesGraphsMM[i_capa_llista].nSteps++;  // Potser m√©s endavant em pot servir per anar desplegant el llinatge
 				var name=[];
 				name.push(GetMessage("ProcessGroup", "llinatge"), ": ",
 										 (DonaCadena (p.grup.desc)?DonaCadena(p.grup.desc):p.grup.id));
@@ -456,7 +456,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 			{
 				id_proces=GraphsMM.nodes[i_node].id;
 			}
-			else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+			else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 			{
 				//id_proces=GraphsMM.nodes.length+1;
 				id_proces=IdNodeGraphsMM;
@@ -484,7 +484,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 	if(p.grup)
 	{
 		// He de dibuixar les fonts fulles
-		if(in_node.llinatge) // no miro p, perquË vull saber si vinc de llinatge o de proces
+		if(in_node.llinatge) // no miro p, perqu√® vull saber si vinc de llinatge o de proces
 		{
 			if(p.processes && p.processes.length>0)
 			{
@@ -531,7 +531,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 				{
 					id_usar=GraphsMM.nodes[i_node].id;
 				}
-				else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+				else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 				{
 					//id_usar=GraphsMM.nodes.length+1;
 					id_usar=IdNodeGraphsMM;
@@ -564,7 +564,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 					{
 						id_usar2=GraphsMM.nodes[i_node].id;
 					}
-					else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+					else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 					{
 						//id_usar=GraphsMM.nodes.length+1;
 						id_usar2=IdNodeGraphsMM;
@@ -594,7 +594,7 @@ var j, i_node, i_edge, id_proces, id_usar, exe, p, node_afegit=false, id_grup_no
 					{
 						id_usar3=GraphsMM.nodes[i_node].id;
 					}
-					else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+					else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 					{
 						//id_usar=GraphsMM.nodes.length+1;
 						id_usar3=IdNodeGraphsMM;
@@ -638,7 +638,7 @@ var id_font, i_node, i_edge, i, j;
 	}
 	if(CountPropertiesOfObject(in_node.font) == 0)
 	{
-		// Si la font no tÈ cap element, aixÚ Ès un error de definiciÛ del llinatge
+		// Si la font no t√© cap element, aix√≤ √©s un error de definici√≥ del llinatge
 		alert("There is a source without properties");
 		return;
 	}
@@ -650,7 +650,7 @@ var id_font, i_node, i_edge, i, j;
 		{
 			id_font=GraphsMM.nodes[i_node].id;
 		}
-		else // no trobat, retorna (-n-1) on n Ès la posiciÛ on he d'insertar l'element
+		else // no trobat, retorna (-n-1) on n √©s la posici√≥ on he d'insertar l'element
 		{
 			//id_font=GraphsMM.nodes.length+1;
 			id_font=IdNodeGraphsMM;
@@ -693,7 +693,7 @@ function AfegeixCapaAGrafLlinatge(i_capa_llista)
 {
 var i, capa=ParamCtrl.capa[LListaCapesGraphsMM[i_capa_llista].i_capa], lli=capa.metadades.provenance.lineage;
 
-	// El primer que he de posar Ès la capa generada, que Ès la que estic documentant el llinatge i tot penja d'aquesta capa.
+	// El primer que he de posar √©s la capa generada, que √©s la que estic documentant el llinatge i tot penja d'aquesta capa.
 	if(GraphsMM.nodes==null)
 		GraphsMM.nodes=[];
 	if(GraphsMM.edges==null)
@@ -708,11 +708,11 @@ var i, capa=ParamCtrl.capa[LListaCapesGraphsMM[i_capa_llista].i_capa], lli=capa.
 	else
 	{
 		// Ara miro els processos i les fonts que pengen d'aquesta capa
-		// AnirÈ afegint els nodes de manera ordenada per nom i group
+		// Anir√© afegint els nodes de manera ordenada per nom i group
 		if(lli.processes && lli.processes.length>0)
 		{
-			// Faig l'ordre invers perquË quedi una numeraciÛ mÈs intuÔtiva de l'ordre en que s'ha fet cada procÈs,
-			// ja que en el llinatge est‡ ordenat a l'inversa
+			// Faig l'ordre invers perqu√® quedi una numeraci√≥ m√©s intu√Øtiva de l'ordre en que s'ha fet cada proc√©s,
+			// ja que en el llinatge est√† ordenat a l'inversa
 			//for(i=0; i<lli.processes.length; i++)
 			for(i=lli.processes.length-1; i>=0; i--)
 				CreaGrafProcesLlinatge({proces: lli.processes[i], nomesSiFulla: false}, id_node_pare, null, i_capa_llista);
@@ -750,9 +750,9 @@ function MostraContextMenuNodeAgrupat(event, node)
 {
 var cdns=[];
 
-	// He d'afegir les opcions del men˙
+	// He d'afegir les opcions del men√∫
 	cdns.push(GetMessage("Processes", "llinatge"),"<br><hr>");
-	if(!node.lineage)	// Si Ès el llinatge, vol dir que ho tinc tot agrupat
+	if(!node.lineage)	// Si √©s el llinatge, vol dir que ho tinc tot agrupat
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"AgrupaAmbSeguentNodeLlinatge(", node, ");TancaContextMenuCapa();\">",
 				GetMessage("GroupWithFollowing", "llinatge"), "</a><br>");
@@ -781,7 +781,7 @@ var cdns=[];
 
 function MostraMenuSiCalIDonaInformacioAssociadaANodeLlinatge(params)
 {
-	// Segons el tipus d'element caldria mostrar algun men˙ contextual
+	// Segons el tipus d'element caldria mostrar algun men√∫ contextual
 	if (isLayer(window, "menuContextualCapa"))
 	{
 		for (var i_nod=0; i_nod<params.nodes.length; i_nod++)
@@ -876,8 +876,8 @@ function DonaRequestCSWGetRecordByIdPerLlinatge(i_capa)
 var cdns=[];
 var capa=ParamCtrl.capa[i_capa];
 
-	// ∑$∑ Cal resoldre el tema del EPSG al servidor, ara per ara no es fa res en el servidor i es busca directament la secciÛ que contÈ
-	// el valor indicat per ID [capa.nom, ":", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS] i si no existeix falla	// caldria fer alguna heurÌstica com en el cas del WMS
+	// ¬∑$¬∑ Cal resoldre el tema del EPSG al servidor, ara per ara no es fa res en el servidor i es busca directament la secci√≥ que cont√©
+	// el valor indicat per ID [capa.nom, ":", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS] i si no existeix falla	// caldria fer alguna heur√≠stica com en el cas del WMS
 	cdns.push("SERVICE=CSW&REQUEST=GetRecordByID&OUTPUTSCHEMA=http://www.isotc211.org/2005/gmd&ELEMENTSETNAME=lineage&ID=",
 			  capa.nom, ":",
 			  ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, "&OUTPUTFORMAT=application/json");
@@ -899,7 +899,7 @@ function VisibleoNoCapaLlinatge(i_capa)
 		return;
 	var i_capa_llista=LListaCapesGraphsMM.binarySearch(i_capa,findLListaCapesGraphsMMIdCapa);
 	if(i_capa_llista<0)
-		return; // capa no trobada a la llista, aixÚ no hauria de passar
+		return; // capa no trobada a la llista, aix√≤ no hauria de passar
 	LListaCapesGraphsMM[i_capa_llista].visible=(visible.checked)?true :false;
 	/*
 	var agrupat=eval("document.LlinatgeCapes.cll_agrupat_"+i_capa);
@@ -922,7 +922,7 @@ function AgrupadaoNoCapaLlinatge(i_capa)
 		return;
 	var i_capa_llista=LListaCapesGraphsMM.binarySearch(i_capa,findLListaCapesGraphsMMIdCapa);
 	if(i_capa_llista<0)
-		return; // capa no trobada a la llista, aixÚ no hauria de passar
+		return; // capa no trobada a la llista, aix√≤ no hauria de passar
 	LListaCapesGraphsMM[i_capa_llista].agrupada=(agrupat.checked)?true :false;
 }*/
 
@@ -949,7 +949,7 @@ var cdns=[],capa;
 				//"\" onclick='AgrupadaoNoCapaLlinatge(", LListaCapesGraphsMM[i].i_capa, ");' type=\"checkbox\"",
 				//(LListaCapesGraphsMM[i].visible && LListaCapesGraphsMM[i].agrupada) ? " checked" : "", 
 				//LListaCapesGraphsMM[i].visible ? "" : "disabled", "/>", 				
-				//"<label for=\"cll_agrupat_",LListaCapesGraphsMM[i].i_capa,"\">", DonaCadenaLang({"cat":"Vista agrupada", "spa":"Vista agrupada", "eng":"Group view", "fre": "Vue groupÈe"}), "</label>",
+				//"<label for=\"cll_agrupat_",LListaCapesGraphsMM[i].i_capa,"\">", DonaCadenaLang({"cat":"Vista agrupada", "spa":"Vista agrupada", "eng":"Group view", "fre": "Vue group√©e"}), "</label>",
 				"<br>");
 	}
 	if(LListaCapesGraphsMM.length>0)
@@ -1058,7 +1058,7 @@ var valor=[], i, p;
 			for(i=0; i<p.length; i++)
 				AfegeixNodeALlistaNodesPerQuery({source: p[i]}, llista_nodes);
 		}
-		// ∑$∑ Falta afegir l'agent de l'atribuciÛ
+		// ¬∑$¬∑ Falta afegir l'agent de l'atribuci√≥
 		return llista_nodes;
 	}
 	if(node.process)
@@ -1284,7 +1284,7 @@ var cdns=[];
 	return cdns.join("");
 }
 
-// Funcions que permeten que hi hagi mÈs d'una capa a la mateixa finestra on es mostren els grafs del llinatge
+// Funcions que permeten que hi hagi m√©s d'una capa a la mateixa finestra on es mostren els grafs del llinatge
 function OmpleFinestraLlinatge(param)
 {
 	if(param.redibuixat)
@@ -1392,7 +1392,7 @@ var capa=ParamCtrl.capa[i_capa];
 	var prov=capa.metadades.provenance;
 	if(prov.peticioServCSW && !prov.lineage)
 	{
-		// Demano el llinatge al servidor i el carrego a memÚria
+		// Demano el llinatge al servidor i el carrego a mem√≤ria
 		DescarregaLlinatgeCapa(i_capa, OmpleFinestraLlinatge, {elem: elem, i_capa: i_capa});
 		return;
 	}

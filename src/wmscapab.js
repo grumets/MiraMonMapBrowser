@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -49,19 +49,19 @@ var minim, maxim, factor_k, factorpixel;
 var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
 
 	//Llegeixo les capacitats d'aquesta capa
-	//Començo pel sistema de referència
-	//versió 1.0.0, 1.1.0 i 1.1.1 en l'estil antic --> un únic element amb els diversos sistemes de referència separats per espais (SRS)
-	//versió 1.1.1 en l'estil nou--> un element per cada sistema de referència (SRS)
-	//versió major a 1.1.1 --> un element per cada sistema de referència (CRS)
+	//ComenÃ§o pel sistema de referÃ¨ncia
+	//versiÃ³ 1.0.0, 1.1.0 i 1.1.1 en l'estil antic --> un Ãºnic element amb els diversos sistemes de referÃ¨ncia separats per espais (SRS)
+	//versiÃ³ 1.1.1 en l'estil nou--> un element per cada sistema de referÃ¨ncia (SRS)
+	//versiÃ³ major a 1.1.1 --> un element per cada sistema de referÃ¨ncia (CRS)
 
-	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
+	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="Â°")
 		factorpixel=FactorGrausAMetres; // de graus a metres
 	else //if(unitats=="m")
 		factorpixel=1; //de m a m
 
-	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de píxel
+	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de pÃ­xel
 
-	//Això no ho puc usar perquè em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
+	//AixÃ² no ho puc usar perquÃ¨ em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
 	layer={nom: null, 
 		desc: null,
 		CostatMinim: null,
@@ -105,7 +105,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 			node2=node_layer.childNodes[i];
 			if(node2.nodeName=="Name")
 			{
-				//Llegeix-ho la capa si té name
+				//Llegeix-ho la capa si tÃ© name
 				servidorGC.layer[servidorGC.layer.length]=layer;
 				layer.nom=node2.childNodes[0].nodeValue;
 				
@@ -132,7 +132,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 			}
 		}
 
-		if(i<node_layer.childNodes.length)  //vol dir que aquesta capa té name
+		if(i<node_layer.childNodes.length)  //vol dir que aquesta capa tÃ© name
 		{
 			//if (layer.nom=="landwatertransitionzone-twodates:lwtztd-polyphytos")
 			//	alert(1);
@@ -210,7 +210,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 							if (node3.nodeName=="Keyword")
 							{
 								cadena=node3.childNodes[0].nodeValue;
-								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
+								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripciÃ³ dels valors.
 								if (cadena.substr(0, str_uom.length)==str_uom)
 								{
 									layer.uom=cadena.substr(str_uom.length).trim();
@@ -242,12 +242,12 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 						if (node2.childNodes.length>0)
 						{
 							valors_temps=node2.childNodes[0].nodeValue;
-							if(valors_temps.indexOf("/")==-1)  //Si és un interval (!=-1) de moment no li dono suport
+							if(valors_temps.indexOf("/")==-1)  //Si Ã©s un interval (!=-1) de moment no li dono suport
 							{
 								var data_defecte=null;
 								var dates;
-								//És una capa multitemporal
-								//valors_temps és una cadena que pot contenir un únic valor, una llista de valors separats per coma (o un interval amb període que no suportem)
+								//Ã‰s una capa multitemporal
+								//valors_temps Ã©s una cadena que pot contenir un Ãºnic valor, una llista de valors separats per coma (o un interval amb perÃ­ode que no suportem)
 								//yyyy-mm-ddThh:mm:ss.sssZ
 								if (temps_defecte)
 								{
@@ -304,7 +304,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					}
 				}
 			}
-			//Aquests 2 els faig a part perquè necessito els noms de les dimensions.
+			//Aquests 2 els faig a part perquÃ¨ necessito els noms de les dimensions.
 			for(i=0; i<node_layer.childNodes.length; i++)
 			{
 				node2=node_layer.childNodes[i];
@@ -335,7 +335,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 							{
 								for (var d=0; d<layer.dimensioExtra.length; d++)
 								{
-									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
+									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notaciÃ³ "$(key)" que aquÃ­ canvio per la normal de les URI templates.
 									layer.uriDataTemplate=layer.uriDataTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
 								}
 							}
@@ -354,7 +354,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 							{
 								for (var d=0; d<layer.dimensioExtra.length; d++)
 								{
-									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notació "$(key)" que aquí canvio per la normal de les URI templates.
+									//DataURL xlink.href no pot portar una "{" o sigui que en el wqems varem acordar la notaciÃ³ "$(key)" que aquÃ­ canvio per la normal de les URI templates.
 									layer.uriMDTemplate=layer.uriMDTemplate.replaceAll("$("+layer.dimensioExtra[d].clau.nom+")", "{"+layer.dimensioExtra[d].clau.nom+"}");
 								}
 							}
@@ -362,13 +362,13 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					}
 				}
 			}
-			//Miro si és consultable
+			//Miro si Ã©s consultable
 			if(node_layer.getAttribute("queryable")=='1')
 				layer.consultable=true;
 		}
 	}
 
-	//Si aquesta layer té fills continuo llegint
+	//Si aquesta layer tÃ© fills continuo llegint
 	node2=node_layer.getElementsByTagName('Layer');
 	if (node2 && node2.length)
 	{
@@ -416,18 +416,18 @@ var root, cadena, node, node2, i, j
 		return;
 	}
 
-	//Cal comprovar que és un document de capacitats, potser és un error, en aquest cas el llegeix-ho i el mostraré directament
+	//Cal comprovar que Ã©s un document de capacitats, potser Ã©s un error, en aquest cas el llegeix-ho i el mostrarÃ© directament
 	if(root.nodeName!="WMT_MS_Capabilities" && root.nodeName!="WMS_Capabilities")
 	{
 		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu") + "rootNode: " + root.nodeName);
 		return;
 	}
 
-	//Obtinc la versió de les capacitats
+	//Obtinc la versiÃ³ de les capacitats
 	cadena=root.getAttribute('version');
 	servidorGC.versio={"Vers": parseInt(cadena.substr(0,1)), "SubVers": parseInt(cadena.substr(2,1)), "VariantVers": parseInt(cadena.substr(4))};
 
-	//Obtinc el títol del servidor, és obligatòri però podria ser que algun servidor posses el tag sense valor
+	//Obtinc el tÃ­tol del servidor, Ã©s obligatÃ²ri perÃ² podria ser que algun servidor posses el tag sense valor
 	servidorGC.titol="";
 	node=root.getElementsByTagName('Service')[0];
 	if(node)
@@ -440,18 +440,18 @@ var root, cadena, node, node2, i, j
 	// Selecciono el node request
 	node=(root.getElementsByTagName('Capability')[0]).getElementsByTagName('Request')[0];
 
-	// Formats de visualització
+	// Formats de visualitzaciÃ³
 	if(servidorGC.versio.Vers==1 && servidorGC.versio.SubVers==0)
 	{
 		node2=(node.getElementsByTagName('Map')[0]).getElementsByTagName('Format');
 		for(i=0; i<node2[0].childNodes.length; i++)
 		{
 			cadena=node2[0].childNodes[i].nodeName;
-			if(cadena.search(/JPEG/i)!=-1)			//no pot ser indexOf perquè és una regular expression
+			if(cadena.search(/JPEG/i)!=-1)			//no pot ser indexOf perquÃ¨ Ã©s una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/jpeg";
-			else if(cadena.search(/GIF/i)!=-1) 	//no pot ser indexOf perquè és una regular expression
+			else if(cadena.search(/GIF/i)!=-1) 	//no pot ser indexOf perquÃ¨ Ã©s una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/gif";
-			else if(cadena.search(/PNG/i)!=-1)	//no pot ser indexOf perquè és una regular expression
+			else if(cadena.search(/PNG/i)!=-1)	//no pot ser indexOf perquÃ¨ Ã©s una regular expression
 				servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/png";
 		}
 	}
@@ -478,9 +478,9 @@ var root, cadena, node, node2, i, j
 				cadena=node2[0].childNodes[i].nodeName;
 				if(cadena)
 				{
-					if(cadena.search(/XML/i)!=-1)					//no pot ser indexOf perquè és una regular expression
+					if(cadena.search(/XML/i)!=-1)					//no pot ser indexOf perquÃ¨ Ã©s una regular expression
 						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/xml";
-					else if(cadena.search(/HTML/i)!=-1)		//no pot ser indexOf perquè és una regular expression
+					else if(cadena.search(/HTML/i)!=-1)		//no pot ser indexOf perquÃ¨ Ã©s una regular expression
 						servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="text/html";
 				}
 			}
@@ -501,14 +501,14 @@ var root, cadena, node, node2, i, j
 		}
 	}
 
-	//Llegeix-ho les capes disponibles en el sistema de referència actual del navegador
+	//Llegeix-ho les capes disponibles en el sistema de referÃ¨ncia actual del navegador
 	node=root.getElementsByTagName('Capability')[0];
 	for(i=0; i<node.childNodes.length; i++)
 	{
 		node2=node.childNodes[i];
-		if(node2.nodeName=="Layer")  //És una layer que a dins pot tenir altres layers
+		if(node2.nodeName=="Layer")  //Ã‰s una layer que a dins pot tenir altres layers
 		{
-			//Si té name vol dir que és una capa de veritat, sinó és que és una capa d'agrupació
+			//Si tÃ© name vol dir que Ã©s una capa de veritat, sinÃ³ Ã©s que Ã©s una capa d'agrupaciÃ³
 			LlegeixLayerServidorGC(servidorGC, node2, false, null);
 		}
 	}
@@ -532,14 +532,14 @@ var factor_k, factorpixel;
 	if(!collection.links)
 		return;
 
-	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="°")
+	if(DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="Â°")
 		factorpixel=FactorGrausAMetres; // de graus a metres
 	else //if(unitats=="m")
 		factorpixel=1; //de m a m
 
-	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de píxel
+	factor_k=factorpixel*1000/0.28;  //pas de unitats mapa a mm dividit per la mida de pÃ­xel
 
-	//Això no ho puc usar perquè em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
+	//AixÃ² no ho puc usar perquÃ¨ em dona els elements SRS de node_layer i dels seus fills node_layer.getElementsByTagName('SRS');
 	layer={nom: null, 
 		desc: null,
 		CostatMinim: null,
@@ -559,7 +559,7 @@ var factor_k, factorpixel;
 		uriMDTemplate: null,
 		dimensioExtra: null};
 		
-	// Miro si és un mapa
+	// Miro si Ã©s un mapa
 	var rel=(servidorGC.tipus=="TipusOAPI_Maps")?"http://www.opengis.net/def/rel/ogc/1.0/map":"http://www.opengis.net/def/rel/ogc/1.0/tilesets-map";
 	
 	if(collection.links)
@@ -574,7 +574,7 @@ var factor_k, factorpixel;
 			}
 		}
 	}
-	// Comprovo els estils, potser no té un mapa en un estil per defecte però si té mapes per cada estil
+	// Comprovo els estils, potser no tÃ© un mapa en un estil per defecte perÃ² si tÃ© mapes per cada estil
 	if(collection.styles)
 	{
 		for(i=0; i<collection.styles.length;i++)
@@ -597,7 +597,7 @@ var factor_k, factorpixel;
 	if(!layer.nom)
 		return;
 	
-	// Si no s'indica cap CRS vol dir que tot està en CRS:84
+	// Si no s'indica cap CRS vol dir que tot estÃ  en CRS:84
 	if(collection.crs && collection.crs.length)
 	{
 		for(i=0; i<collection.crs.length;i++)
@@ -655,11 +655,11 @@ var factor_k, factorpixel;
 		layer.CostatMaxim=collection.maxScaleDenominator*factorpixel/factor_k;
 
 	//MetadataURL
-	//·$·
+	//Â·$Â·
 	//atribution
-	//·$·
+	//Â·$Â·
 	
-	//Miro si és consultable
+	//Miro si Ã©s consultable
 	if(collection.queryable=='1' || collection.queryable=='true')
 		layer.consultable=true;
 	servidorGC.layer[servidorGC.layer.length]=layer;
@@ -671,7 +671,7 @@ function ParsejaRespostaOAPI_LandingPage(doc, servidorGC)
 	if(!doc)
 	{
 		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
-		// tot i no tenir aquesta informació intento tirar endavant
+		// tot i no tenir aquesta informaciÃ³ intento tirar endavant
 		
 		return;
 	}
@@ -696,18 +696,18 @@ var i;
 	if(!doc.collections || doc.collections.length<1)
 		alert(GetMessage("ServerNotHaveLayer", "cntxmenu"));
 	
-	//Llegeix-ho les capes disponibles en el sistema de referència actual del navegador
+	//Llegeix-ho les capes disponibles en el sistema de referÃ¨ncia actual del navegador
 	for(i=0; i<doc.collections.length; i++)
 		ParsejaRespostaOAPI_MapCollection(servidorGC, doc.collections[i]);
 	
-	//Formats de visualització
-	//·$·
+	//Formats de visualitzaciÃ³
+	//Â·$Â·
 	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/png";
 	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/jpeg";
 	servidorGC.formatGetMap[servidorGC.formatGetMap.length]="image/gif";
 
 	//Formats de consulta
-	//·$·
+	//Â·$Â·
 	servidorGC.formatGetFeatureInfo[servidorGC.formatGetFeatureInfo.length]="application/json";
 
 	if(servidorGC.layer.length>0)
@@ -728,7 +728,7 @@ var i;
 
 function FesPeticioOAPI_LandingPage(servidorGC)
 {
-	// Faig una petició de landing page per saber el nom i descripció del servidor
+	// Faig una peticiÃ³ de landing page per saber el nom i descripciÃ³ del servidor
 	var request=servidorGC.servidor;
 	request=AfegeixNomServidorARequest(servidorGC.servidor, request, true, servidorGC.cors); 
 	var ajax=new Ajax();
@@ -744,7 +744,7 @@ function FesPeticioOAPI_LandingPage(servidorGC)
 function FesPeticioOAPI_CollectionsOfMaps(servidorGC)
 {
 	var request="/collections?f=json";
-	request=AfegeixNomServidorARequest(servidorGC.servidor, request, true, servidorGC.cors);  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/
+	request=AfegeixNomServidorARequest(servidorGC.servidor, request, true, servidorGC.cors);  /*Cal posar la versiÃ³ i el tipus de servei a la caixa en lloc de definir-ho a foc*/
 	
 	var ajax=new Ajax();
 	if (window.doAutenticatedHTTPRequest && servidorGC.access)
@@ -774,7 +774,7 @@ var request;
 	if(servidor)
 		servidor=servidor.trim();
 
-	if(!servidor || servidor=="")  //Es podria mirar més a fons que l'adreça sigui vàlida
+	if(!servidor || servidor=="")  //Es podria mirar mÃ©s a fons que l'adreÃ§a sigui vÃ lida
 	{
 		alert(GetMessage("ValidURLMustBeProvided", "cntxmenu"));
 		return;
@@ -848,7 +848,7 @@ var request;
 	else if (tipus=="TipusSOS")
 		request+="SOS";
 
-	request=AfegeixNomServidorARequest(servidor, request, true, suporta_cors);  /*Cal posar la versió i el tipus de servei a la caixa en lloc de definir-ho a foc*/
+	request=AfegeixNomServidorARequest(servidor, request, true, suporta_cors);  /*Cal posar la versiÃ³ i el tipus de servei a la caixa en lloc de definir-ho a foc*/
 	
 	if (window.doAutenticatedHTTPRequest && ServidorGetCapabilities[ServidorGetCapabilities.length-1].access)
 		doAutenticatedHTTPRequest(ServidorGetCapabilities[ServidorGetCapabilities.length-1].access, "GET", 

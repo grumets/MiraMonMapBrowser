@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest progamari programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -40,7 +40,7 @@
 
 var IStoryActive=null;
 
-//Mostra la finestra que conté el llistat d'històries
+//Mostra la finestra que contÃ© el llistat d'histÃ²ries
 function MostraFinestraTriaStoryMap()
 {
 	if (!ObreFinestra(window, "triaStoryMap"))
@@ -53,7 +53,7 @@ function TancaFinestra_triaStoryMap()
 	IStoryActive=null;
 }
 
-//Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
+//Omple la finestra amb el llistat d'histÃ²ries (i mostra la imatge(s) de pre-visualitzaciÃ³ de la histÃ²ria).
 function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], i_story;
@@ -205,9 +205,9 @@ function GuardarInformacioPasStoryMap()
 function IniciaStoryMap(i_story)
 {
 	loadFile(DonaCadena(ParamCtrl.StoryMap[i_story].url), "text/html", CreaStoryMap, null /*error*/, i_story);
-	//Mode Pantalla Completa en iniciar la història:
+	//Mode Pantalla Completa en iniciar la histÃ²ria:
 	//openFullscreen(document.documentElement);
-	//Desplaçar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
+	//DesplaÃ§ar finestra a l'esquerra de la pantalla quan Mode Pantalla Completa: PENDENT
 }
 
 
@@ -280,7 +280,7 @@ function AfegeixMarkerStoryMapVisible()
 	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
 }
 
-//Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
+//Els tags "vendor specific" han de comenÃ§ar per "data-" https://www.w3schools.com/tags/att_data-.asp
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
 {
 var node, attribute;
@@ -416,7 +416,7 @@ var hihacanvis, node, attribute;
 				}
 				else if (attribute.name=='data-mm-sels')
 				{
-					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
+					var mmsels = "["+attribute.value.trim().replaceAll('Â¨', '\'')+"]";
 					if (mmsels.length>3)
 					{
 						var sels;

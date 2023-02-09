@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -96,7 +96,7 @@ var nom_img_src;
 		CalculaMidesSituacio();
 		var rec=OmpleMidesRectangleSituacio(ParamInternCtrl.AmpleSituacio, ParamInternCtrl.AltSituacio, ParamInternCtrl.vista.EnvActual);
 
-		//Determino el nom de la imatge de sitauciÛ.
+		//Determino el nom de la imatge de sitauci√≥.
 		if (typeof situacio.servidor==="undefined")
 			nom_img_src=AfegeixAdrecaBaseSRC(situacio.nom);
 		else if (DonaTipusServidorCapa(situacio)!="TipusWMS")
@@ -128,7 +128,7 @@ var nom_img_src;
 			nom_img_src=CombinaURLServidorAmbParamPeticio(DonaServidorCapa(situacio), nom_img_src);
 		}
 
-		//Contrueixo les 3 divisions (el mapa, el rectangle i el tel sensible). La divisiÛ del mapa contÈ les altres.
+		//Contrueixo les 3 divisions (el mapa, el rectangle i el tel sensible). La divisi√≥ del mapa cont√© les altres.
 		var s='<div style="overflow:hidden; left:' + ParamInternCtrl.MargeEsqSituacio + 'px; top:' + ParamInternCtrl.MargeSupSituacio + 'px; width:' + ParamInternCtrl.AmpleSituacio+ 'px; height:' + ParamInternCtrl.AltSituacio  + 'px;">'+
 			 '<img src="' + nom_img_src + '" width="' + ParamInternCtrl.AmpleSituacio + '" height="' + ParamInternCtrl.AltSituacio+'" border="0">';
 		if (EsEnvDinsMapaSituacio(ParamInternCtrl.vista.EnvActual))
@@ -182,7 +182,7 @@ function OmpleMidesRectangleSituacio(ncol,nfil, env)
 
 function ClickSobreSituacio(event)
 {
-	//Aquesta lÌnia no es pot fer aixÌ perquË activa l'antivirus defender DragDrop.B. 10 anys mÈs tard encara passa!! (https://joanma747.blogspot.com/2012/02/false-dragdropb-trojan-detected-by.html)
+	//Aquesta l√≠nia no es pot fer aix√≠ perqu√® activa l'antivirus defender DragDrop.B. 10 anys m√©s tard encara passa!! (https://joanma747.blogspot.com/2012/02/false-dragdropb-trojan-detected-by.html)
 	//Portam A Punt(  DonaC oordXDeC oordSobreSituacio(event.c lientX),   DonaC oordYDeC oordSobreSituacio(event.c lientY));
 	var x = DonaCoordXDeCoordSobreSituacio(event.clientX);
     	var y = DonaCoordYDeCoordSobreSituacio(event.clientY);

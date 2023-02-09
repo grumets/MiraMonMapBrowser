@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -38,13 +38,13 @@
 
 "use strict"
 
-//Definits aquÌ i usats a histpie.js i a cntxmenu.js
+//Definits aqu√≠ i usats a histpie.js i a cntxmenu.js
 
 function DonaTitolEstadistic(categories, atributs, tipus_estad)
 {
 var titol="";
 
-	if (categories && atributs) //cas categÚric
+	if (categories && atributs) //cas categ√≤ric
 	{
 		if (tipus_estad == "mode")
 			titol=GetMessage("ModalClass");
@@ -127,8 +127,8 @@ var n_valids=0, delta, i, suma=0, v_i, n=v.length;
 	return Math.sqrt(suma/n_valids);
 }
 
-/* Si param == false (o undefined) retorna la primera moda en cas d'empat (aixÚ genera un biaix estadistic perÚ Ès el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
-   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (aixÚ no genera un biaix estadÌstic i Ès necessari per a finestres de convoluciÛ) */
+/* Si param == false (o undefined) retorna la primera moda en cas d'empat (aix√≤ genera un biaix estadistic per√≤ √©s el cal fer si es calcula una imatge d'una serie temporal; de no fer-ho en cas d'empat entre dues taques de dues classes diferents genera salt i pebre)
+   si param == true retorna una moda escollida aleatoriament en cas d'empat de modes (aix√≤ no genera un biaix estad√≠stic i √©s necessari per a finestres de convoluci√≥) */
 function CalculaModeNValues(v, param)
 {
 var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=0;
@@ -181,12 +181,12 @@ var v_i, i, n=v.length, m_previa=[], n_m_previa=0, count_m_previa=0, m, count_m=
 	return m_previa[Math.floor(Math.random()*n_m_previa)];
 }
 
-//Calcula estadistics categÚrics a partir de les classes
+//Calcula estadistics categ√≤rics a partir de les classes
 function CalculaEstadisticsCategorics(classe)
 {
 var i, max_recompte=0;
 var estadistics_categorics={
-			recompte: 0,   //Nombre de pixels considerats en histograma que no sÛn nodata. User estil.histograma.classe_nodata per saber el nombre de pÌxels a nodata
+			recompte: 0,   //Nombre de pixels considerats en histograma que no s√≥n nodata. User estil.histograma.classe_nodata per saber el nombre de p√≠xels a nodata
 			i_moda: 0};    //categoria modal
 
 	for (i=0; i<classe.length; i++)
@@ -194,7 +194,7 @@ var estadistics_categorics={
 		if (!classe[i])
 			continue;
 		estadistics_categorics.recompte+=classe[i];
-		if (max_recompte < classe[i]) //el nou recompte Ès mÈs gran
+		if (max_recompte < classe[i]) //el nou recompte √©s m√©s gran
 		{
 			max_recompte = classe[i];
 			estadistics_categorics.i_moda = i;
@@ -208,14 +208,14 @@ function CalculaEstadisticsHistograma(classe, valor_min, valor_max, suma_real)
 {
 var ncolors=classe.length, value, i, suma_v_menys_mitj_quad_per_n=0;
 
-var estadistics={valor_min: valor_min,   //Valor mÌnim cosiderat al histograma. Useu estil.histograma.component[].valorMinimReal per saber el valor mÌnim real
-			valor_max: valor_max,  //Valor m‡xim cosiderat al histograma. Useu estil.histograma.component[].valorMaximReal per saber el valor m‡xim real
+var estadistics={valor_min: valor_min,   //Valor m√≠nim cosiderat al histograma. Useu estil.histograma.component[].valorMinimReal per saber el valor m√≠nim real
+			valor_max: valor_max,  //Valor m√†xim cosiderat al histograma. Useu estil.histograma.component[].valorMaximReal per saber el valor m√†xim real
 			ample: (valor_max-valor_min)/ncolors,           //Ample de cada clase
-			recompte: 0,   //Nombre de pixels considerats en histograma que no sÛn nodata. User estil.histograma.classe_nodata per saber el nombre de pÌxels a nodata
+			recompte: 0,   //Nombre de pixels considerats en histograma que no s√≥n nodata. User estil.histograma.classe_nodata per saber el nombre de p√≠xels a nodata
 			suma: suma_real ? suma_real : 0,       //Suma de TOTS els valors de la imatge
 			mitjana: 0,    //Mitjana de tots els valors de la imatge
-			varianca: 0,   //VarianÁa de tots els valors de la imatge
-			desv_tipica: 0};  //DesviaciÛ est‡ndard de tots els valors de la imatge
+			varianca: 0,   //Varian√ßa de tots els valors de la imatge
+			desv_tipica: 0};  //Desviaci√≥ est√†ndard de tots els valors de la imatge
 
 	for (i=0, value=estadistics.ample/2+estadistics.valor_min; i<ncolors; i++, value+=estadistics.ample)
 	{
