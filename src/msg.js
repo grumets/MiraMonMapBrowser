@@ -2538,6 +2538,20 @@ var MessageLang={
       "fre": "Géoméxtrie",
       "cze": "Geometrie"
     },
+    "ExportObject": {
+      "cat": "Exporta l'objecte",
+      "spa": "Exportar el objecto",
+      "eng": "Export object",
+      "fre": "Exporter l'objet",
+      "cze": "Objekt exportu"
+    },
+		"ExportObjects": {
+      "cat": "Exportar objectes",
+      "spa": "Exportar objectos",
+      "eng": "Export objects",
+      "fre": "Exporter les objets",
+      "cze": "Export objektů"
+    },
 		"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
       "spa": "Los valores de la capa vectorial han sido copiados al portapapeles en formato",
