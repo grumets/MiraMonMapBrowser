@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -166,9 +166,9 @@ var i_indicator, cdns=[];
 		if (quality[i_q].scope && quality[i_q].scope.env && quality[i_q].scope.env.EnvCRS)
 		{
 			var env=quality[i_q].scope.env.EnvCRS, decimals;
-			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && DonaUnitatsCoordenadesProj(quality[i_q].scope.env.CRS)=="∞")
+			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && DonaUnitatsCoordenadesProj(quality[i_q].scope.env.CRS)=="¬∞")
 				decimals=ParamCtrl.NDecimalsCoordXY+4;
-			else if (DonaUnitatsCoordenadesProj(quality[i_q].scope.env.CRS)=="m" && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="∞")
+			else if (DonaUnitatsCoordenadesProj(quality[i_q].scope.env.CRS)=="m" && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="¬∞")
 				decimals=ParamCtrl.NDecimalsCoordXY-4;
 			else
 				decimals=ParamCtrl.NDecimalsCoordXY;
@@ -282,8 +282,8 @@ function DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, i_component, descri
 					break;
 				}
 				nou_valor+=fragment.substring(0, inici);
-				cadena=fragment.substring(inici+2, final); //-> inici+2 perquË no vull ni "v[" ni "]"
-				//aquÌ "cadena" contÈ el i_valor que vull
+				cadena=fragment.substring(inici+2, final); //-> inici+2 perqu√® no vull ni "v[" ni "]"
+				//aqu√≠ "cadena" cont√© el i_valor que vull
 				var index = cadena.match(/\d+/g).map(Number);
 				nou_valor+=DonaCodeComponentBasatEnValorParam(capa.valors[index]);
 
@@ -332,19 +332,19 @@ var s=capa.nom;
 		else if (capa.estil[i_estil].component[0].FormulaConsulta)
 		{
 			var s2=null, i_capes;
-			if (!capa.estil[i_estil].component[0].calcul)	//per indexos predefinits el "calcul" no existeix, perÚ puc entrar perquË segur que la FormulaConsulta nomÈs tÈ v[] d'aquesta capa.
+			if (!capa.estil[i_estil].component[0].calcul)	//per indexos predefinits el "calcul" no existeix, per√≤ puc entrar perqu√® segur que la FormulaConsulta nom√©s t√© v[] d'aquesta capa.
 				//s2=capa.estil[i_estil].component[0].FormulaConsulta;
 				s2=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, true);
 			else
 			{
 				i_capes=DonaIndexosACapesDeCalcul(capa.estil[i_estil].component[0].calcul, i_capa);
-				if (i_capes.length==1) //per indexos calculats per l'usuari, el "calcul" sÌ que existeix, i amb el darrer if he comprovat que en aquest c‡lcul nomÈs entren bandes d'aquesta capa (Ès a dir que i_capes==1)
+				if (i_capes.length==1) //per indexos calculats per l'usuari, el "calcul" s√≠ que existeix, i amb el darrer if he comprovat que en aquest c√†lcul nom√©s entren bandes d'aquesta capa (√©s a dir que i_capes==1)
 					//s2=capa.estil[i_estil].component[0].FormulaConsulta;
 					s2=DonaCodeUnComponentCapaEstilFeedback(capa, i_estil, 0, true);
 			}
 
 			if (s2)
-			{	//ho fem aixÌ per unificar la descripciÛ a un sol, lloc, encara que vinguem de dos casos diferents a dalt
+			{	//ho fem aix√≠ per unificar la descripci√≥ a un sol, lloc, encara que vinguem de dos casos diferents a dalt
 					s+="_CALC(" + s2 + ")";
 					if (s.length < MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL)
 						return s;
@@ -353,38 +353,38 @@ var s=capa.nom;
 					return s;
 			}
 
-			//aquÌ arribo nomÈs si tinc calcul i quan l'analitzo em diu que hi ha capes "externes a la prÚpia" implicades
+			//aqu√≠ arribo nom√©s si tinc calcul i quan l'analitzo em diu que hi ha capes "externes a la pr√≤pia" implicades
 			alert(GetMessage("ComplexDefinitionOfStyle", "qualitat") + ".");
-			return null; //si no sÈ donar identificador a l'estil, no deixo posar feedback sobre ell
+			return null; //si no s√© donar identificador a l'estil, no deixo posar feedback sobre ell
 
-		//nomÈs arribo aquÌ (i.e. no surto) si tinc 1 sol component perÚ aquest no tÈ ni i_valor ni FormulaConsulta
+		//nom√©s arribo aqu√≠ (i.e. no surto) si tinc 1 sol component per√≤ aquest no t√© ni i_valor ni FormulaConsulta
 
-			/*notes sobre com fer aixÚ:
+			/*notes sobre com fer aix√≤:
 
-			1/ La idea Ès que si ara filtro espacialment amb una banda de la mateixa capa (p.ex per scl), a formula Ès
+			1/ La idea √©s que si ara filtro espacialment amb una banda de la mateixa capa (p.ex per scl), a formula √©s
 				"(v[12]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
 			i a d'alt ja m'ha tornat i_capes=1 i ho he fet
 
-			2/ si filtro amb una altra capa(pex), la idea Ès que la formula diu
+			2/ si filtro amb una altra capa(pex), la idea √©s que la formula diu
 					"(v[        13                    ]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
-			pero aquest v[13] s'ha creat pel programa i ha de ser substituit en primera inst‡ncia per
+			pero aquest v[13] s'ha creat pel programa i ha de ser substituit en primera inst√†ncia per
 					"(v[{\"i_capa\":228,\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
-			perÚ com els Ìndexs de capa son super vol‡lits, realment haurÈ d'anar a alguna cosa tipus
+			per√≤ com els √≠ndexs de capa son super vol√†lits, realment haur√© d'anar a alguna cosa tipus
 				"(v[{\"servidor\":"http://maps-***.cgi",\"nom_capa\":"SwissNationalParkLULC",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
-			(el servidor al meu config.json pot ser "null" que vol dir el servidor_local que Ès una variable global. si Òes null puc no posar-lo pq s'entenc que la nom_capa :"SwissNationalParkLULC" Ès al amteix servidor que la capa de la qual faig el FB/estil (Ès a dir la que tÈ els v[10], etc). Si relament ve d0un lloc diferent, aleshores si ho poso
-			o bÈ, en un exemple diferent usar el mapa usos nostres 2019 per a filtra espacial el SwissNationalParkSen2 de \"servidor\":"http://maps-***.cgi"
+			(el servidor al meu config.json pot ser "null" que vol dir el servidor_local que √©s una variable global. si √±es null puc no posar-lo pq s'entenc que la nom_capa :"SwissNationalParkLULC" √©s al amteix servidor que la capa de la qual faig el FB/estil (√©s a dir la que t√© els v[10], etc). Si relament ve d0un lloc diferent, aleshores si ho poso
+			o b√©, en un exemple diferent usar el mapa usos nostres 2019 per a filtra espacial el SwissNationalParkSen2 de \"servidor\":"http://maps-***.cgi"
 				"(v[{\"servidor\":"http://MCSC....***.cgi",\"nom_capa\":"MUSC_2019",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null"
 
 			"calcul": "({\"i_valor\":12}!=11)?(({\"i_capa\":232,\"i_valor\":10}-{\"i_capa\":232,\"i_valor\":11})/({\"i_capa\":232,\"i_valor\":10}+{\"i_capa\":232,\"i_valor\":11})):null",
 
 			capa nova
-			FormulaConsulta -> i_capes diferents -> similar a aaixÚ -> unic cas amb i_valor
-			"(v[{\"nom_capa\":\"SwissNationalParkLULC\",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null" perÚ amb NOMS CAPES DFE
+			FormulaConsulta -> i_capes diferents -> similar a aaix√≤ -> unic cas amb i_valor
+			"(v[{\"nom_capa\":\"SwissNationalParkLULC\",\"i_valor\":0}]!=11)?((v[10]-v[11])/(v[10]+v[11])):null" per√≤ amb NOMS CAPES DFE
 
-			calcul sobre calcul no tinc nom de capa, perÚ no passa res pq les formules s'expandeixen*/
+			calcul sobre calcul no tinc nom de capa, per√≤ no passa res pq les formules s'expandeixen*/
 		}
 	}
-	else //if (capa.estil[i_estil].component.length==3) //si tinc tres Ès que Ès RGB i per tant tres i_valor -> si per alguna no tinc i_valor, cosa teÚricament no possible ara, aquell no l'afegeixo i el Identificador quedar‡ "amb menys components"
+	else //if (capa.estil[i_estil].component.length==3) //si tinc tres √©s que √©s RGB i per tant tres i_valor -> si per alguna no tinc i_valor, cosa te√≤ricament no possible ara, aquell no l'afegeixo i el Identificador quedar√† "amb menys components"
 	{
 		var i, s2;
 
@@ -415,11 +415,11 @@ var s=capa.nom;
 			s+="_RGB(" + "v[" + capa.estil[i_estil].component[0].i_valor + "],"+ "v[" + capa.estil[i_estil].component[1].i_valor + "],"+ "v[" + capa.estil[i_estil].component[2].i_valor + "])";
 			return s;
 		}	*/
-		//∑$∑ poter salvar aquest cas per si un dia volen fer RGB de formules?
+		//¬∑$¬∑ poter salvar aquest cas per si un dia volen fer RGB de formules?
 	}
 
-	/*AquÌ arribo si tinc 1 sol component perÚ aquest no tÈ ni i_valor ni FormulaConsulta; si tinc 3 components perÚ alguna no tÈ i_valor,
-	o bÈ si tinc un nombre de components diferent de 1 o de 3 no tÈ sentit
+	/*Aqu√≠ arribo si tinc 1 sol component per√≤ aquest no t√© ni i_valor ni FormulaConsulta; si tinc 3 components per√≤ alguna no t√© i_valor,
+	o b√© si tinc un nombre de components diferent de 1 o de 3 no t√© sentit
 
 	-> codi per si un dia volem desar un ID com a llista dels N valors, un darrera l'altre
 	var i;
@@ -429,7 +429,7 @@ var s=capa.nom;
 			s+="_" + "v[" + capa.estil[i_estil].component[i].i_valor + "]";
 	}*/
 	alert(GetMessage("UnexpectedDefinitionOfStyle", "qualitat") + ".");
-	return null; //si no sÈ donar identificador a l'estil, no deixo posar feedback sobre ell
+	return null; //si no s√© donar identificador a l'estil, no deixo posar feedback sobre ell
 }
 
 //Si la capa te un tokenType associat es fa servir aquest, i si no el primer que estigui actiu, i si no n'hi ha cap, el primer que tingui possibilitat de fer-se servir
@@ -477,7 +477,7 @@ var capa=ParamCtrl.capa[i_capa];
 		return;
 	}
 
-	/*if (s.indexOf("Sentinel2Level2a")!=-1) //Ès una Sentinel2
+	/*if (s.indexOf("Sentinel2Level2a")!=-1) //√©s una Sentinel2
 	{
 		var targets=[{title: DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)), code: s, codespace: DonaServidorCapa(capa), role: "primary"},
 				{title: "Sentinel 2 L2A Collection", code: "Sentinel2Level2aCollection", codespace: "http://datacube.uab.cat/cgi-bin/ecopotential/miramon.cgi", role: "secondary"}];
@@ -487,7 +487,7 @@ var capa=ParamCtrl.capa[i_capa];
 		GUFShowFeedbackInHTMLDiv(elem,
 				"LayerFeedbackCapa",
 				cdns.join(""),
-				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, perÚ no Ès crÌtic
+				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, per√≤ no √©s cr√≠tic
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
 				ParamCtrl.idioma,
@@ -549,7 +549,7 @@ var capa=ParamCtrl.capa[i_capa];
 
 	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa),
 		{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
-			ru_schema: encodeURIComponent(config_schema_estil) /*, ru_sugg_app: location.href -> no cal passar-ho perquË s'omple per defecte*/},
+			ru_schema: encodeURIComponent(config_schema_estil) /*, ru_sugg_app: location.href -> no cal passar-ho perqu√® s'omple per defecte*/},
 		ParamCtrl.idioma, DonaAccessTokenTypeFeedback(capa) /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});
 }
 
@@ -596,7 +596,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 			var dateParts = feature.properties[param.atribut].split("/");
 			if (!dateParts || dateParts.length!=3)
 				continue;
-			data_obj=new Date(dateParts[2]+"-"+dateParts[1]+"-"+dateParts[0]);  //fet aixÌ pensa que el text Ès hora UTC que Ès el mateix que passa amb la lectura dels formularis
+			data_obj=new Date(dateParts[2]+"-"+dateParts[1]+"-"+dateParts[0]);  //fet aix√≠ pensa que el text √©s hora UTC que √©s el mateix que passa amb la lectura dels formularis
 		}
 		else
 			data_obj=new Date(feature.properties[param.atribut]);
@@ -723,7 +723,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n_dins=0;
 
 /*function CercaCombinacioCL(objecte)
 {
-	if((!objecte[0] && !this[0]) || (objecte[0].toLowerCase()==this[0].toLowerCase()))   // no hauria de passar que una combinaciÛ fÛs tot null, perÚ ho protegeixo per si de cas
+	if((!objecte[0] && !this[0]) || (objecte[0].toLowerCase()==this[0].toLowerCase()))   // no hauria de passar que una combinaci√≥ f√≥s tot null, per√≤ ho protegeixo per si de cas
 	{
 		if((!objecte[1] && !this[1]) || (objecte[1] && this[1] && this[1].toLowerCase()==objecte[1].toLowerCase()))
 		{
@@ -743,16 +743,16 @@ function CercaCombinacioCamps(llista_comb, combinacio)
 	/*try
 	{*/
 		return llista_comb.find(function (objecte) {
-			if(((!objecte[0] && !combinacio[0]) || objecte[0].toLowerCase()==combinacio[0].toLowerCase()) &&   // no hauria de passar que una combinaciÛ fÛs tot null, perÚ ho protegeixo per si de cas
+			if(((!objecte[0] && !combinacio[0]) || objecte[0].toLowerCase()==combinacio[0].toLowerCase()) &&   // no hauria de passar que una combinaci√≥ f√≥s tot null, per√≤ ho protegeixo per si de cas
 			   ((!objecte[1] && !combinacio[1]) || (objecte[1] && combinacio[1] && combinacio[1].toLowerCase()==objecte[1].toLowerCase())) &&
                 	   ((!objecte[2] && !combinacio[2]) || (objecte[2] && combinacio[2] && combinacio[2].toLowerCase()==objecte[2].toLowerCase())))
 				return true;
 			return false;
-		});  //tools1.js afegeix suport a find() si no hi Ès.
+		});  //tools1.js afegeix suport a find() si no hi √©s.
 	/*}
 	catch(ex)
 	{
-		// En funciÛ de la versiÛ potser que no existeixi la funciÛ find()
+		// En funci√≥ de la versi√≥ potser que no existeixi la funci√≥ find()
 		for(var i=0; i<llista_comb.length; i++)
 		{
 			if (CercaCombinacioCL(llista_comb[i]))
@@ -777,8 +777,8 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 			continue;
 		n_dins++;
 
-		// El primer atribut a avaluar la consistËncia lÚgica Ès obligatÚri, per tant, si l'objecte que vaig a mirar no tÈ aquest
-		// atribut no el considero dins de l'avaluciÛ
+		// El primer atribut a avaluar la consist√®ncia l√≤gica √©s obligat√≤ri, per tant, si l'objecte que vaig a mirar no t√© aquest
+		// atribut no el considero dins de l'avaluci√≥
 		if (typeof feature.properties[param.atributlogic1]==="undefined" ||
 		    feature.properties[param.atributlogic1]=="" ||
 			feature.properties[param.atributlogic1]==null)
@@ -1003,15 +1003,15 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 		}
 		/*else if (sel.options[sel.selectedIndex].value=="ThematicAccuracyGroundTruth")
 		{
-			//∑$∑
+			//¬∑$¬∑
 			;
 		}*/
 		else if (sel.options[sel.selectedIndex].value=="TemporalValidityOfObservationData")
 		{
-			// SORPRESA: Les dates s'enmagatzemen com a data UTC, perÚ sorpresa que si escric 2018-12-01 acaba sent 2018-12-01 01:00 i en canvi si escric 2018/12/01 acaba sent 2018-12-01 00:00.
-			// Hi ha una hora de diferËncia!!! AixÚ fa que quan comparo les dates aquestes poden estar escrites de diferent manera i per tant tenir una hora de diferËncia.
-			// Com que la data s'enmagatzema com a hora UTC aixÚ fa que si comparo 2018-12-01 < 2018/12/01 en realitat estigui comparant 2018-12-01 1:00 < 2017-01-31 23:00.
-			// Buscant mÈs he trobat que si li passes una cadena amb '-' estas indicant el format UTC i si ho fas amb '/' fas el format local
+			// SORPRESA: Les dates s'enmagatzemen com a data UTC, per√≤ sorpresa que si escric 2018-12-01 acaba sent 2018-12-01 01:00 i en canvi si escric 2018/12/01 acaba sent 2018-12-01 00:00.
+			// Hi ha una hora de difer√®ncia!!! Aix√≤ fa que quan comparo les dates aquestes poden estar escrites de diferent manera i per tant tenir una hora de difer√®ncia.
+			// Com que la data s'enmagatzema com a hora UTC aix√≤ fa que si comparo 2018-12-01 < 2018/12/01 en realitat estigui comparant 2018-12-01 1:00 < 2017-01-31 23:00.
+			// Buscant m√©s he trobat que si li passes una cadena amb '-' estas indicant el format UTC i si ho fas amb '/' fas el format local
 
 			var sel_camp=form.camp_temporal;
 			if(sel_camp.selectedIndex>=sel_camp.length)
@@ -1032,7 +1032,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 				alert(GetMessage("FinalDateNotBlank", "qualitat"));
 				return;
 			}
-			var date_fi=new Date(form.data_final.value+"T23:59:59.999Z");  // form.data_final.value est‡ com a hora UTC en format cadena. Necessito que estigui al final del dia per a fer comparacions.
+			var date_fi=new Date(form.data_final.value+"T23:59:59.999Z");  // form.data_final.value est√† com a hora UTC en format cadena. Necessito que estigui al final del dia per a fer comparacions.
 
 			if(date_fi<=date_ini)
 			{
@@ -1136,7 +1136,7 @@ function DonaCadenaCampsThematicAccuracyGroundTruth(capa)
 	cdns.push("<fieldset><legend>",
 				GetMessage("GroundTruthLayer", "qualitat"),
 			  "</legend>");
-	//∑$∑
+	//¬∑$¬∑
 	cdns.push("</fieldset>");
 	return cdns.join("");
 }
@@ -1251,10 +1251,10 @@ var capa;
 	cdns.push("<option value=\"LogicalConsistencyFromThematicAttributes\" \>",
 			GetMessage("LogicalConsistencyThematicAttr", "qualitat"));
 	/*cdns.push("<option value=\"ThematicAccuracyGroundTruth\" \>",
-			DonaCadenaLang({"cat":"Exactitud tem‡tica comparant amb la veritat terreny",
-				   "spa":"Exactitud tem·tica comparando con la verdad terreno",
+			DonaCadenaLang({"cat":"Exactitud tem√†tica comparant amb la veritat terreny",
+				   "spa":"Exactitud tem√°tica comparando con la verdad terreno",
 				   "eng":"Thematic accuracy comparing with the ground truth",
-				   "fre": "Exactitude thÈmatique par rapport ‡ la vÈritÈ du terrain"}));*/
+				   "fre": "Exactitude th√©matique par rapport √† la v√©rit√© du terrain"}));*/
 	cdns.push("<option value=\"TemporalValidityOfObservationData\" \>",
 			GetMessage("TemporalValidityObsDate", "qualitat"));
 	cdns.push("<option value=\"BBoxPositionalValidity\" \>",

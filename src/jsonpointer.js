@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @author Alexey Kuzmin <alex.s.kuzmin@gmail.com>
  * @fileoverview JavaScript implementation of JSON Pointer.
  * @see http://tools.ietf.org/html/rfc6901
