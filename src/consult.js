@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -140,9 +140,9 @@ var esNODATA, esLink, esImatge;
 						In the W3C DOM Core, the Attr (attribute) object inherits all properties and methods from the Node object.
 						In DOM 4, the Attr object no longer inherits from Node.
 						For future code quality, you should avoid using node object properties and methods on attribute objects:
-						On algunes d'aquestes propietats Ès el nodeValue que passa a ser value.
+						On algunes d'aquestes propietats √©s el nodeValue que passa a ser value.
 						nodeName passa a ser name.
-						Compte que aixÚ nomÈs Ès per attributtes elements */
+						Compte que aix√≤ nom√©s √©s per attributtes elements */
 
 					}
 					consulta.Atribut[consulta.Atribut.length]={"nom": tag.attributes[j].name,
@@ -222,7 +222,7 @@ var esNODATA, esLink, esImatge;
 				}
 
 			}
-			//Haig de calcular si tots els atributs sÛn NODATA i si Ès aixÏ
+			//Haig de calcular si tots els atributs s√≥n NODATA i si √©s aix√¨
 			//consulta.estat=EstatXMLTrobatsZero;
 			n_fills_NODATA=0;
 			for(i=0; i<consulta.Atribut.length; i++)
@@ -320,7 +320,7 @@ function MostraConsultaComHTML(consulta)
 					cdns.push(MostraConsultaAtributComHTML(consulta.i_capa, 0, i, consulta.Atribut[i], consulta.Atribut[i].separador, consulta.Atribut[i].valor, i_capa_validar, true));
 				}
 				contentLayer(elem, cdns.join(""));
-				//Com posar la serieTemporal aquÌ? Tot depen de com vinguin els valors. Tal com est‡ ara hi ha un valor per cada atribut o sigui no anem bÈ.
+				//Com posar la serieTemporal aqu√≠? Tot depen de com vinguin els valors. Tal com est√† ara hi ha un valor per cada atribut o sigui no anem b√©.
 			}
 			else
 				removeLayer(elem);
@@ -496,7 +496,7 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			}
 			if(cal_transformar)
 			{
-				//Transformo l'envolupant al sistema de referËncia de la capa
+				//Transformo l'envolupant al sistema de refer√®ncia de la capa
 				env_icones=TransformaEnvolupant(env_icones, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
 			}
 			url=DonaRequestGetFeature(RespostaConsultaObjDigiXML[i].i_capa, null, env_icones, null, true);
@@ -564,7 +564,7 @@ function PopUpFinestra_multi_consulta()
 }//Fi de PopUpFinestra_multi_consulta()
 
 
-/*Aquesta funiÛ sembla que no la crida ning˙  (JM) 15-02-2016
+/*Aquesta funi√≥ sembla que no la crida ning√∫  (JM) 15-02-2016
 (NJ 06-02-2017 Si que s'usa, es crida des de consulta_de_cop.htm)*/
 function TancaFinestraEmergent_multi_consulta()
 {
@@ -784,9 +784,9 @@ function IniciaFinestraConsulta(win)
 {
 var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false, ncol=440, nfil=220, nfilCat=110;
 
-	/*L'us del seg¸ent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
-	  es necessari en Netscape per evitar 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status] (i potser tambÈ en els
-	  altres navegadors). AixÚ est‡ explicat a: http://www.captain.at/howto-ajax-parent-opener-window-close-error.php*/
+	/*L'us del seg√ºent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
+	  es necessari en Netscape per evitar 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status] (i potser tamb√© en els
+	  altres navegadors). Aix√≤ est√† explicat a: http://www.captain.at/howto-ajax-parent-opener-window-close-error.php*/
 	if(ParamCtrl.TipusConsulta=="FinestraDeCop" && isFinestraLayer(window, "multi_consulta"))
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("pop_down.gif"),
 				  "\" alt=\"pop down\" onClick=\"opener.PopDownFinestra_multi_consulta();setTimeout('window.close()', 300);\" align=\"right\" class=\"invisiblewhenprint\">");
@@ -921,7 +921,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 				if (capa.atributs[a].serieTemporal)
 					break;
 			}
-			if (a<capa.atributs.length)  //hi ha com a mÌnim un atribut amb series temporals
+			if (a<capa.atributs.length)  //hi ha com a m√≠nim un atribut amb series temporals
 			{
 				for(var j=0; j<capa.objectes.features.length; j++)
 				{
@@ -953,7 +953,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 						EsObjDigiConsultable(i,j))
 					{
 						k++;
-						//Determino la bateria de punts per l'objecte en questiÛ.
+						//Determino la bateria de punts per l'objecte en questi√≥.
 						var v_c;
 						var vista=DonaVistaDesDeINovaVista(PuntConsultat.i_nova_vista);
 						var perfil=DonaArrayCoordsPerfilDeLineString(DonaGeometryCRSActual(capa.objectes.features[j], capa.CRSgeometry).coordinates, ParamInternCtrl.vista.CostatZoomActual);
@@ -1099,7 +1099,7 @@ var cdns=[];
 	win.document.close();
 }
 
-function CreaTitolConsulta(win, i_capa)  //Escriu el tÌtol de la capa consultada
+function CreaTitolConsulta(win, i_capa)  //Escriu el t√≠tol de la capa consultada
 {
 	if (!win)
 		return;
@@ -1151,7 +1151,7 @@ var i;
 
 	for (i_elem2+=increment; i_elem2<n_elem && i_elem2>=0; i_elem2+=increment)
 	{
-		if (ParamCtrl.capa && i_elem2<ParamCtrl.capa.length && ParamCtrl.capa[i_elem2].model==model_vector && ParamCtrl.capa[i_elem2].objectes && ParamCtrl.capa[i_elem2].objectes.features)  // Ès un objecte digitalitzat
+		if (ParamCtrl.capa && i_elem2<ParamCtrl.capa.length && ParamCtrl.capa[i_elem2].model==model_vector && ParamCtrl.capa[i_elem2].objectes && ParamCtrl.capa[i_elem2].objectes.features)  // √©s un objecte digitalitzat
 		{
 			for(var i_obj=0; i_obj<ParamCtrl.capa[i_elem2].objectes.features.length; i_obj++)
 			{
@@ -1162,7 +1162,7 @@ var i;
 				}
 			}
 		}
-		else  // Ès una capa
+		else  // √©s una capa
 		{
 			if (EsCapaConsultable(i_elem2))
 				break;
@@ -1176,7 +1176,7 @@ function CreaConsulta(win, increment)
 var n_elem=ParamCtrl.capa.length;
 
 	if (ParamCtrl.TipusConsulta=="FinestraDeCop" ||ParamCtrl.TipusConsulta=="IncrustadaDeCop")
-	/*AixÚ no cal que ho torni a comprovar ja ho he fet a ConsultaSobreVista
+	/*Aix√≤ no cal que ho torni a comprovar ja ho he fet a ConsultaSobreVista
 	  (win==this || ParamCtrl.PlantillaConsulta))
 	  i he modificat el TipusConsulta si calia */
 	{
@@ -1215,7 +1215,7 @@ var n_elem=ParamCtrl.capa.length;
 		anterior=false;
 	if (n_elem<=IElemActual || n_elem<=DonaElementConsultaSeguent(1))
 		posterior=false;
-	/*AixÚ no es pot fer a un plana que no has creat tu. 07/07/2005
+	/*Aix√≤ no es pot fer a un plana que no has creat tu. 07/07/2005
 	if (parent.tools)
 		win.consulta_info.document.body.bgColor=ParamCtrl.ColorFonsPlana;
 	*/
@@ -1241,7 +1241,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult];
 		capa.objectes.features[0].geometry.coordinates[0]=PuntConsultat.x;
 		capa.objectes.features[0].geometry.coordinates[1]=PuntConsultat.y;
-		if (capa.visible=="no")  //Vol dir que CreaVistaImmediata no haur‡ creat la layer per contenir aquesta creuta de la consulta i s'ha de fer.
+		if (capa.visible=="no")  //Vol dir que CreaVistaImmediata no haur√† creat la layer per contenir aquesta creuta de la consulta i s'ha de fer.
 			cal_crear=true;
 		else
 			cal_crear=false;
@@ -1344,7 +1344,7 @@ var cdns=[], cdns_temp=[], s, servidor_temp, i_capa=resposta_consulta_xml.i_capa
 	tile_col+=ParamCtrl.capa[i_capa].VistaCapaTiled.ITileMin;
 	tile_row+=ParamCtrl.capa[i_capa].VistaCapaTiled.JTileMin;
 
-	//Creo la peticiÛ de GetTile en SOAP
+	//Creo la petici√≥ de GetTile en SOAP
 	cdns.push("<?xml version=\"1.0\"?>\n",
 			  "<soap:Envelope xmlns:soap=\"http://www.w3.org/2001/12/soap-envelope\" ",
 			  "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ",
@@ -1420,7 +1420,7 @@ var s;
 	}
 	/*if (DonaTipusServidorCapa(capa)=="TipusGoogle_KVP")
 	{
-		alert(DonaCadenaLang({"cat":"No Ès possible en Google KVP",
+		alert(DonaCadenaLang({"cat":"No √©s possible en Google KVP",
 							 "spa":"No es posible en Google KVP",
 							 "eng":"It is not possible on Google KVP",
 							 "fre":"Il n'est pas possible sur Google KVP"}));
@@ -1530,7 +1530,7 @@ function EsObjDigiConsultable(i_capa, i_obj)
 {
 var capa=ParamCtrl.capa[i_capa];
 
-	//Quan no tÈ atributs nomÈs retorno fals si Ès una capa est‡tica, perquË sinÛ pot voler dir que haig de sol∑licitar els atributs
+	//Quan no t√© atributs nom√©s retorno fals si √©s una capa est√†tica, perqu√® sin√≥ pot voler dir que haig de sol¬∑licitar els atributs
 	if(capa.consultable!="si" || !capa.objectes ||
 		(!capa.tipus && (!capa.objectes.features || CountPropertiesOfObject(capa.objectes.features[i_obj].properties)==0)) ||
 		capa.estil==null || !capa.estil.length)
@@ -1581,7 +1581,7 @@ var capa=ParamCtrl.capa[i_capa];
 		}
 		if (env_icones.MinX==+1e300)
 			return false;
-		//Si el simbol Ès massa petit, i la simbolitzaciÛ no Ès en unitats mapa, faig que sel simbol tingui una area mÈs gran.
+		//Si el simbol √©s massa petit, i la simbolitzaci√≥ no √©s en unitats mapa, faig que sel simbol tingui una area m√©s gran.
 		if (!unitatsMetre)
 		{
 			var costat4=ParamInternCtrl.vista.CostatZoomActual*4;

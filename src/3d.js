@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -112,10 +112,10 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 		i_estil_intern=ParamCtrl.capa[i_capa].i_estil;
 	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern];
 
-	if (typeof estil.histograma === "undefined") // ara no estic preparat perquË no ha arribat la imatge
+	if (typeof estil.histograma === "undefined") // ara no estic preparat perqu√® no ha arribat la imatge
 		return;
 
-	//Check per a Gr‡fic 3d din‡mic i text per a indicar que actualitzaciÛ aturada per capa no visible
+	//Check per a Gr√†fic 3d din√†mic i text per a indicar que actualitzaci√≥ aturada per capa no visible
 	cdns.push("<input type=\"checkbox\" name=\"", 	(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicGrafic3d(Superficie3DFinestra.n), "\" checked=\"checked\" onclick=\"CanviDinamismeGrafic3d(event);\">")
 	cdns.push("<label for=\"", DonaNomGrafic3d(Superficie3DFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelGrafic3d(Superficie3DFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
 	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextGrafic3d(Superficie3DFinestra.n), "\" style=\"display: none\">",
@@ -126,12 +126,12 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 		"<div style=\"position: absolute; top: 20; margin-left: auto; margin-right: auto; width:", ncol, "\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
 			GetMessage("VerticalScale", "tresD"),
 			": <input id=\"", nom_grafic3d, "_3d_fh\" type=\"range\" step=\"0.01\" min=\"0.1\" max=\"1.0\" value=\"", vscale ,"\" onchange=\"CanviaEscalaVSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaEscalaVSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\"> &nbsp;&nbsp;",
-			"Zoom", //DonaCadenaLang({"cat":"Dist‡ncia", "spa":"Distancia", "eng":"Distance", "fre":"Distance"}),
+			"Zoom", //DonaCadenaLang({"cat":"Dist√†ncia", "spa":"Distancia", "eng":"Distance", "fre":"Distance"}),
 			": <input id=\"", nom_grafic3d, "_3d_fd\" type=\"range\" step=\"0.01\" min=\"0\" max=\"4.29\" value=\"", 5-1.7,"\" onchange=\"CanviaDistanciaSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaDistanciaSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\">",
 		  "</center></form></div>");
 
-	if (def_diagrama_existeix) //no s'havia creat encara i per aixÚ i_histograma estava indefinit, perÚ estil.diagrama ja existia
-	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadÌstic en un futur). si tinc mÈs de un del mateix tipus, cada cop faig el primer que trobo
+	if (def_diagrama_existeix) //no s'havia creat encara i per aix√≤ i_histograma estava indefinit, per√≤ estil.diagrama ja existia
+	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estad√≠stic en un futur). si tinc m√©s de un del mateix tipus, cada cop faig el primer que trobo
 		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
 		{
 			if (estil.diagrama[i_diag].tipus == "vista3d" && (typeof estil.diagrama[i_diag].i_histograma === "undefined"))
@@ -156,18 +156,18 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 				i_estil: i_estil_intern,
 				i_grafic3d: Superficie3DFinestra.n};
 
-	/* Quan s'est‡ creant la finestra per primera vegada, que per exemple estava definida al JSON, pot ser
+	/* Quan s'est√† creant la finestra per primera vegada, que per exemple estava definida al JSON, pot ser
 	que la imatge encara no s'hagi carregat mai i per tant no puc visualitzar hitograma encara -> la finestra
-	s'obrir‡ perÚ he de posar "no visible" i mÈs endavant quan arribi el nou array binari ja s'omplir‡ sol*/
+	s'obrir√† per√≤ he de posar "no visible" i m√©s endavant quan arribi el nou array binari ja s'omplir√† sol*/
 	if (typeof estil.histograma !== "undefined")
 	{
 		CreaSuperficie3D(Superficie3DFinestra.n);
 
-		if (i_diag != -1) //no s'havia creat encara i per aixÚ i_histograma estava indefinit, perÚ estil.diagrama ja existia
+		if (i_diag != -1) //no s'havia creat encara i per aix√≤ i_histograma estava indefinit, per√≤ estil.diagrama ja existia
 			estil.diagrama[i_diag].i_histograma=Superficie3DFinestra.n;
 		else
 		{
-			if (typeof estil.diagrama === "undefined") //no est‡ creat
+			if (typeof estil.diagrama === "undefined") //no est√† creat
 				estil.diagrama=[];
 			estil.diagrama.push({tipus: "vista3d", i_histograma: Superficie3DFinestra.n});
 		}
@@ -175,11 +175,11 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 	Superficie3DFinestra.n++;
 }
 
-// DocumentaciÛ a: http://visjs.org/docs/graph3d/
-//No Ès posible canviar de color en aquest moment.
-//He aprËs a la internet que per canviar la paleta de colors cal canviar/hack la funciÛ _hsv2rgb quan es cridada des del la llibreria de surfaces.
+// Documentaci√≥ a: http://visjs.org/docs/graph3d/
+//No √©s posible canviar de color en aquest moment.
+//He apr√®s a la internet que per canviar la paleta de colors cal canviar/hack la funci√≥ _hsv2rgb quan es cridada des del la llibreria de surfaces.
 //https://www.rapidtables.com/convert/color/hsv-to-rgb.html
-/*La primera component que rep _hsv2rgb() Ès l'index de color i el darrer l'ombra:
+/*La primera component que rep _hsv2rgb() √©s l'index de color i el darrer l'ombra:
 Caldria traduir la primera component a RGB aplicant la paleta (o el color que vingui d'una altre capa),
 passar-ho a HSV, aplicar l'ombra i tornar finalment a RGB.*/
 function CreaSuperficie3D(n_histograma)
@@ -212,8 +212,8 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 
 	// specify options
 	var options = {
-		width:  vista_grafic3d.width.toString(), //la llibreria espera un string, no un n˙mero, i donava un error en executar
-		height: vista_grafic3d.height.toString(), //la llibreria espera un string, no un n˙mero, i donava un error en executar
+		width:  vista_grafic3d.width.toString(), //la llibreria espera un string, no un n√∫mero, i donava un error en executar
+		height: vista_grafic3d.height.toString(), //la llibreria espera un string, no un n√∫mero, i donava un error en executar
 		style: 'surface',
 		showPerspective: true,
 		showGrid: true,
@@ -245,13 +245,13 @@ var ncol=ParamInternCtrl.vista.ncol, nfil=ParamInternCtrl.vista.nfil;
 		}
 	};
 
-	//aquesta llibreria no tÈ un update, com la de charts, i per aixÚ cada vegada que canvien les dades, creo la vista3d de nou substituint l'anterior
+	//aquesta llibreria no t√© un update, com la de charts, i per aix√≤ cada vegada que canvien les dades, creo la vista3d de nou substituint l'anterior
 	vista_grafic3d.graph3d = new vis.Graph3d(document.getElementById(nom_div), vista_grafic3d.data, options);
-	vista_grafic3d.graph3d.estil=estil;  //NOTA: JM20190425: Amb aquest truc faig visible estil dincs de "graph3d", que es converteix en "this" dins de la funciÛ del tooltip.
+	vista_grafic3d.graph3d.estil=estil;  //NOTA: JM20190425: Amb aquest truc faig visible estil dincs de "graph3d", que es converteix en "this" dins de la funci√≥ del tooltip.
 
 }
 
-//El slider tÈ mÈs sentit com a zoom perÚ llavors el valor s'ha de invertir per convertir-lo en un valor entre 0.71 (	aprop) i 5.0 (lluny) tal com ha de ser.
+//El slider t√© m√©s sentit com a zoom per√≤ llavors el valor s'ha de invertir per convertir-lo en un valor entre 0.71 (	aprop) i 5.0 (lluny) tal com ha de ser.
 function CanviaDistanciaSuperficie3D(event, z, i)
 {
 	Superficie3DFinestra.vista[i].graph3d.setCameraPosition({distance: 4.29-z+0.71});

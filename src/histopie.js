@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -103,7 +103,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		//DonaCadenaLang({"cat": "Estil", "spa": "Estilo", "eng": "Style", "fre": "Style"}), "\t", DonaCadena(estil.desc), "\t", ((estil.DescItems) ? DonaCadena(estil.DescItems) : ""), "\n",
 		GetMessage("Style"), "\t", DonaCadena(estil.desc), "\n",
 		GetMessage("CellSize"), " (", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS), ")\t", costat, "\n",
-		GetMessage("CellArea"), " (m²)\t", area_cella, "\n",
+		GetMessage("CellArea"), " (mÂ²)\t", area_cella, "\n",
 		"MinX", "\t", env.MinX, "\n",
 		"MaxX", "\t", env.MaxX, "\n",
 		"MinY", "\t", env.MinY, "\n",
@@ -111,10 +111,10 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 	if (tipus_chart == "matriu") //else if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
 	{
-		cdns.push(CreaTextMatriuDeConfusio(i_histo, false)); /*no es pot posar el segon paràmetre a true, o es crearà un bucle infinit. Si en algun moment es vol copiar al portatapers en format hml, cal repensar
-		com CreaTextMatriuDeConfusio crida a OmpleTextPortapapersFinestraHistogramaADivisio per evitar-ho (matenint que CreaTextMatriuDeConfusió actualitizi el OmpleTextPortapapers...*/
+		cdns.push(CreaTextMatriuDeConfusio(i_histo, false)); /*no es pot posar el segon parÃ metre a true, o es crearÃ  un bucle infinit. Si en algun moment es vol copiar al portatapers en format hml, cal repensar
+		com CreaTextMatriuDeConfusio crida a OmpleTextPortapapersFinestraHistogramaADivisio per evitar-ho (matenint que CreaTextMatriuDeConfusiÃ³ actualitizi el OmpleTextPortapapers...*/
 	}
-	else if (tipus_chart == "stat" || tipus_chart == "chart") //en els dos casos el portapapers té tots els estadístics
+	else if (tipus_chart == "stat" || tipus_chart == "chart") //en els dos casos el portapapers tÃ© tots els estadÃ­stics
 	{
 		var i_c, i, i_cat, columna_perc=false;
 		if (DonaTractamentComponent(estil, 0)=="categoric")
@@ -131,17 +131,17 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				if (un_recompte!=estadistics_categorics[i_c].recompte)
 					break;
 			}
-			if (i_c==n_comp_usar) //tots són iguals
+			if (i_c==n_comp_usar) //tots sÃ³n iguals
 			{
 					cdns.push("\t", un_recompte);
-					cdns.push("\n", GetMessage("Area"), " (m²)");
+					cdns.push("\n", GetMessage("Area"), " (mÂ²)");
 					cdns.push("\t", un_recompte*area_cella);
 			}
 			else
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte);
-				cdns.push("\n", GetMessage("Area"), " (m²)");
+				cdns.push("\n", GetMessage("Area"), " (mÂ²)");
 				for (i_c=0; i_c<n_comp_usar; i_c++)
 					cdns.push("\t", estadistics_categorics[i_c].recompte*area_cella);
 			}
@@ -161,9 +161,9 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			if (tipus_chart == "chart") //per chart poso histograma, per stat no
 			{
 				cdns.push("\n",	GetMessage("ClassValue", "histopie"),
-						"\t", GetMessage("Area"), " (m²)");
+						"\t", GetMessage("Area"), " (mÂ²)");
 
-				if (n_comp_usar == 1) //si només tinc una component, habitual en classes, a la segona columna poso el % de l'àrea d'aquella categoria
+				if (n_comp_usar == 1) //si nomÃ©s tinc una component, habitual en classes, a la segona columna poso el % de l'Ã rea d'aquella categoria
 					columna_perc=true;
 				if (columna_perc)
 					cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
@@ -198,7 +198,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			var estadistics=[];
 			for (i_c=0; i_c<estil.component.length; i_c++)
 			{
-				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
+				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o Ã©s el nombre de colors de la paleta, o Ã©s 256 per totes les bandes
 				estadistics[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe,
 							DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
 							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
@@ -212,17 +212,17 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				if (un_recompte!=estadistics[i_c].recompte)
 					break;
 			}
-			if (i_c==estil.component.length) //tots són iguals
+			if (i_c==estil.component.length) //tots sÃ³n iguals
 			{
 					cdns.push("\t", un_recompte);
-					cdns.push("\n", GetMessage("Area"), " (m²)");
+					cdns.push("\n", GetMessage("Area"), " (mÂ²)");
 					cdns.push("\t", un_recompte*area_cella);
 			}
 			else
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push("\t", estadistics[i_c].recompte);
-				cdns.push("\n", GetMessage("Area"), " (m²)");
+				cdns.push("\n", GetMessage("Area"), " (mÂ²)");
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push("\t", estadistics[i_c].recompte*area_cella);
 			}
@@ -233,7 +233,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			cdns.push("\n",	GetMessage("Sum"));
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].suma);
-			cdns.push("\n",	GetMessage("SumArea"), " (*m²)");
+			cdns.push("\n",	GetMessage("SumArea"), " (*mÂ²)");
 			for (i_c=0; i_c<estil.component.length; i_c++)
 				cdns.push("\t", estadistics[i_c].suma*area_cella);
 			cdns.push("\n",	GetMessage("Mean"));
@@ -269,19 +269,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				}
 				if (i_c==estil.component.length)
 				{
-					//el valor màxim i mínim (i l'ample) són iguals per totes les components
+					//el valor mÃ xim i mÃ­nim (i l'ample) sÃ³n iguals per totes les components
 					cdns.push("\n",
-						GetMessage("ClassCentalValue", "histopie"));
+						GetMessage("ClassCentralValue", "histopie"));
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", GetMessage("Area"), " (m²)");
-					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
+						cdns.push("\t", GetMessage("Area"), " (mÂ²)");
+					if (estil.component.length==1 /*&& ncolors<51 havÃ­em pensat que si tinc 255 colors els % serien molt petits, i Ã©s aixÃ­ per molts, pero alguns tenn valors alts, i Ã©s interessant de veure igualment*/)
 					{
 						columna_perc=true;
 						cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
 					}
 					cdns.push("\n");
 
-					//Tots els estiraments són iguals
+					//Tots els estiraments sÃ³n iguals
 					for (i=0, value=estadistics[0].ample/2+estadistics[0].valor_min; i<ncolors; i++, value+=estadistics[0].ample)
 					{
 						/*if (estil.descColorMultiplesDe)
@@ -291,7 +291,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 						for (i_c=0; i_c<estil.component.length; i_c++)
 							cdns.push("\t", estil.histograma.component[i_c].classe[i]*area_cella);
 
-						if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
+						if (columna_perc) //si aixÃ² Ã©s true Ã©s que nomÃ©s tinc 1 component, i per tant aquest % quedarÃ  a la segona columna
 							cdns.push("\t", estil.histograma.component[0].classe[i]/un_recompte*100);
 
 						cdns.push("\n");
@@ -300,9 +300,9 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				else
 				{
 					for (i_c=0; i_c<estil.component.length; i_c++)
-						cdns.push("\t", GetMessage("ClassCentalValue", "histopie"),
-							"\t", GetMessage("Area"), " (m²)");
-					if (estil.component.length==1 /*&& ncolors<51 havíem pensat que si tinc 255 colors els % serien molt petits, i és així per molts, pero alguns tenn valors alts, i és interessant de veure igualment*/)
+						cdns.push("\t", GetMessage("ClassCentralValue", "histopie"),
+							"\t", GetMessage("Area"), " (mÂ²)");
+					if (estil.component.length==1 /*&& ncolors<51 havÃ­em pensat que si tinc 255 colors els % serien molt petits, i Ã©s aixÃ­ per molts, pero alguns tenn valors alts, i Ã©s interessant de veure igualment*/)
 					{
 						columna_perc=true;
 						cdns.push("\t",	GetMessage("AreaPercentage", "histopie"));
@@ -318,7 +318,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 							cdns.push("\t", value, "\t", estil.histograma.component[i_c].classe[i]*area_cella);
 						}
 
-						if (columna_perc) //si això és true és que només tinc 1 component, i per tant aquest % quedarà a la segona columna
+						if (columna_perc) //si aixÃ² Ã©s true Ã©s que nomÃ©s tinc 1 component, i per tant aquest % quedarÃ  a la segona columna
 								cdns.push("\t", estil.histograma.component[0].classe[i]/un_recompte*100);
 
 						cdns.push("\n");
@@ -337,15 +337,15 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		}
 	}
 	else if ((tipus_chart == "stat_categ" || tipus_chart == "chart_categ") &&			//cas d'estadistics de categories
-					 (DonaTractamentComponent(estil, 0)=="categoric" && estil.component.length == 2)) //en els dos casos el portapapers té tots els estadístics
+					 (DonaTractamentComponent(estil, 0)=="categoric" && estil.component.length == 2)) //en els dos casos el portapapers tÃ© tots els estadÃ­stics
 	{
 		var i_cat;
 		var estadistics_categorics=CalculaEstadisticsCategorics(estil.histograma.component[0].classe);
 
-		//primer poso les unitats de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les unitats dels atributs estadístics són la descripció de la segona categoria
+		//primer poso les unitats de la segona capa de la combinaciÃ³: -> quan s'ha creat la capa combinada, les unitats dels atributs estadÃ­stics sÃ³n la descripciÃ³ de la segona categoria
 		cdns.push(GetMessage("ClassDescription", "histopie"), "\t");
-				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
-		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
+				// aixÃ² acaba donant el nom de la capa combinada, que no Ã©s el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona tambÃ© es categÃ²rica
 			cdns.push(estil.component[1].herenciaOrigen.atributs[0].descripcio ? estil.component[1].herenciaOrigen.atributs[0].descripcio : estil.component[1].herenciaOrigen.atributs[0].nom);
 		else
 		{
@@ -359,7 +359,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 			}
 		}
 
-		//després poso la capçalera de la separació per classes
+		//desprÃ©s poso la capÃ§alera de la separaciÃ³ per classes
 		cdns.push("\n", GetMessage("Class"), "\t", GetMessage("All"));
 		for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 		{
@@ -368,19 +368,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		}
 
 
-		//i després construeixo una taula amb els tots els estadístics típics en les files i amb les N categories en les columnes. Si hi ha moltes categories la taula
-		// quedarà molt ample, però no és un problema. A més prefereixo fer les categ en columnes pq així les files son com en el cas normal
-		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
+		//i desprÃ©s construeixo una taula amb els tots els estadÃ­stics tÃ­pics en les files i amb les N categories en les columnes. Si hi ha moltes categories la taula
+		// quedarÃ  molt ample, perÃ² no Ã©s un problema. A mÃ©s prefereixo fer les categ en columnes pq aixÃ­ les files son com en el cas normal
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona tambÃ© es categÃ²rica
 		{
 			estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
-			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (m²)", "\t", estadistics_categorics.recompte);
+			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (mÂ²)", "\t", estadistics_categorics.recompte);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]);
 			}
 
-			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (m²)", "\t", estadistics_categorics.recompte*area_cella);
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (mÂ²)", "\t", estadistics_categorics.recompte*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
@@ -408,19 +408,19 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					cdns.push("\t", estil.categories[i_cat]["$stat$_percent_mode"] ? estil.categories[i_cat]["$stat$_percent_mode"] : 0);
 			}
 		}
-		else //la segona és QC
+		else //la segona Ã©s QC
 		{
 			estadistics=CalculaEstadisticsHistograma_AgrupatsDesDeCategories(estil.categories, DonaFactorValorMinEstiramentPaleta(estil.component[1].estiramentPaleta),
 					DonaFactorValorMaxEstiramentPaleta(estil.component[1].estiramentPaleta, estil.component[1].herenciaOrigen.ncolors));
 
-			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (m²)", "\t", estadistics.recompte);
+			cdns.push("\n", GetMessage("CountByCategory", "histopie"), " (mÂ²)", "\t", estadistics.recompte);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]);
 			}
 
-			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (m²)", "\t", estadistics.recompte*area_cella);
+			cdns.push("\n",	GetMessage("AreaByCategory", "histopie"), " (mÂ²)", "\t", estadistics.recompte*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
@@ -441,7 +441,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					cdns.push("\t", estil.categories[i_cat]["$stat$_sum"] ?  estil.categories[i_cat]["$stat$_sum"] : 0);
 			}
 
-			cdns.push("\n",	GetMessage("SumArea"), " (*m²)\t", estadistics.suma*area_cella);
+			cdns.push("\n",	GetMessage("SumArea"), " (*mÂ²)\t", estadistics.suma*area_cella);
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
@@ -514,7 +514,7 @@ function CanviOpcionsHistograma(event)
 				for (var i_diagrama=0, diagramaLength=estil.diagrama.length; i_diagrama<diagramaLength; i_diagrama++)
 				{	//actualitzo els diagrames
 					const estilDiagrama = estil.diagrama[i_diagrama];
-					if (estilDiagrama.i_histograma!=n_histo) //si no és el que ha provocat l'event, no faig res
+					if (estilDiagrama.i_histograma!=n_histo) //si no Ã©s el que ha provocat l'event, no faig res
 						continue;
 
 					if (estilDiagrama.tipus == "chart")
@@ -533,9 +533,9 @@ function CanviOpcionsHistograma(event)
 					}
 					else if (estilDiagrama.tipus == "chart_categ")
 					{
-						//actualitzo el/s gràfic/s i això també actualitza el text ocult de la finestra que es copia al portapapers
+						//actualitzo el/s grÃ fic/s i aixÃ² tambÃ© actualitza el text ocult de la finestra que es copia al portapapers
 						retorn_prep_histo=PreparaHistogramaPerCategories(n_histo, estilDiagrama.stat, estilDiagrama.order);
-						//Gràfic de l'àrea
+						//GrÃ fic de l'Ã rea
 						HistogramaFinestra.vista[n_histo].chart[0].config.data.labels=retorn_prep_histo.labels;
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 						HistogramaFinestra.vista[n_histo].chart[0].config.data.datasets=[{data: retorn_prep_histo.data_area,
@@ -543,7 +543,7 @@ function CanviOpcionsHistograma(event)
 														unitats: retorn_prep_histo.unitats_area}];
 						HistogramaFinestra.vista[n_histo].chart[0].options=retorn_prep_histo.options_area;
 						HistogramaFinestra.vista[n_histo].chart[0].update();
-						//Gràfic de l'estadístic
+						//GrÃ fic de l'estadÃ­stic
 						HistogramaFinestra.vista[n_histo].chart[1].config.data.labels=retorn_prep_histo.labels;
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets=[{data: retorn_prep_histo.data_estad,
@@ -572,7 +572,7 @@ function CanviOpcionsHistograma(event)
 				for (var i_diagrama=0, diagramaLength=estil.diagrama.length; i_diagrama<diagramaLength; i_diagrama++)
 				{	//actualitzo els diagrames
 					const estilDiagrama = estil.diagrama[i_diagrama];
-					if (estilDiagrama.i_histograma!=n_histo) //si no és el que ha provocat l'event, no faig res
+					if (estilDiagrama.i_histograma!=n_histo) //si no Ã©s el que ha provocat l'event, no faig res
 						continue;
 
 					if (estilDiagrama.tipus == "chart")
@@ -584,10 +584,10 @@ function CanviOpcionsHistograma(event)
 							if (retorn_prep_histo.data && estil.component[i_c].estiramentPaleta)
 							{
 								/* Tall de cues histograma:
-								*	Si som a la 1era columna de l'histo i tenim un valor mínim de estirament
-								* paleta superior al valor mínim de la capa, vol dir que tenim cua inferior.
-								*	Si som a la última columna de l'histo i tenim un valor màxim de
-								* estirament paleta inferior al màxim de la capa, vold dir que tenim cua superior.
+								*	Si som a la 1era columna de l'histo i tenim un valor mÃ­nim de estirament
+								* paleta superior al valor mÃ­nim de la capa, vol dir que tenim cua inferior.
+								*	Si som a la Ãºltima columna de l'histo i tenim un valor mÃ xim de
+								* estirament paleta inferior al mÃ xim de la capa, vold dir que tenim cua superior.
 								*/
 								if (window.document.getElementById(event.target.id).checked)
 								{
@@ -609,12 +609,12 @@ function CanviOpcionsHistograma(event)
 									{
 										// Ordenem data sanse cues de forma descendent, ja sense les cues incial i/o final.
 										const sortData = dataWithoutQueues.sort(function(a,b){return b-a});
-										// Lí­mit superior de l'escala de l'eix Y.
+										// LÃ­Â­mit superior de l'escala de l'eix Y.
 										var max = 0;
 										if (sortData && sortData.length > 0)
-											// Definim el màxim de l'eix de les y, i l'augmento un 10% per sobre per evitar representacions incorrectes.
+											// Definim el mÃ xim de l'eix de les y, i l'augmento un 10% per sobre per evitar representacions incorrectes.
 											max = sortData[0]+sortData[0]*0.1;
-										// Definim el límit max per l'escala Y del histograma.
+										// Definim el lÃ­mit max per l'escala Y del histograma.
 										if (retorn_prep_histo.options.scales && retorn_prep_histo.options.scales.yAxes && retorn_prep_histo.options.scales.yAxes.length > 0 && retorn_prep_histo.options.scales.yAxes[0].ticks)
 											retorn_prep_histo.options.scales.yAxes[0].ticks.max=max;
 									}
@@ -694,7 +694,7 @@ function DonaNomCheckTrimTailsTextHistograma(i_histo)
 }
 
 //Els 3 parametres tipus, stat, order es corresponen amb els descrits com a propietats de al'element "diagrama" del config.
-//si tipus=="stat_categ" és la part de transferència de camps estadístics, necessito saber tipus de representació i ordenació
+//si tipus=="stat_categ" Ã©s la part de transferÃ¨ncia de camps estadÃ­stics, necessito saber tipus de representaciÃ³ i ordenaciÃ³
 function ObreFinestraHistograma(i_capa, i_estil, tipus, stat, order)
 {
 var ncol=460, nfil=260, estil, i_estil_intern, component, titol;
@@ -711,7 +711,7 @@ var tipus_chart;
 	estil=ParamCtrl.capa[i_capa].estil[i_estil_intern];
 	component=estil.component;
 
-	if (typeof estil.histograma === "undefined") // ara no estic preparat perquè no ha arribat la imatge
+	if (typeof estil.histograma === "undefined") // ara no estic preparat perquÃ¨ no ha arribat la imatge
 		return;
 
 	if (tipus && stat)
@@ -721,7 +721,7 @@ var tipus_chart;
 		{
 			//tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
 			titol=GetMessage("Statistics")+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
-			//titol=DonaCadenaLang({"cat":"Estadístics per categoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+			//titol=DonaCadenaLang({"cat":"EstadÃ­stics per categoria", "spa":"EstadÃ­sticos por categorÃ­a", "eng":"Statistics by category", "fre":"Statistique par catÃ©gorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//if (presentacio == "graphic")
 			if (tipus=="chart_categ")
 			{
@@ -730,14 +730,14 @@ var tipus_chart;
 				nfil=200;
 				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><table><td><canvas id=\"", nom_histograma, "_canvas_", "area", "\" width=\"", ncol*4/6.5, "\" height=\"", nfil, "\"></canvas></td>");
 				cdns.push("<td><canvas id=\"", nom_histograma, "_canvas_", "estad", "\" width=\"", ncol*2.5/6.5, "\" height=\"", nfil, "\"></canvas></td></table></div>");
-				//després de indicar mida de canvas perquè tingui marge per dreta i per sota
+				//desprÃ©s de indicar mida de canvas perquÃ¨ tingui marge per dreta i per sota
 				ncol+=20;
 				nfil+=20;
 			}
 			else //"stat_categ"
 			{
 				tipus_chart=tipus;
-				//·$· pensar mida que cal per aquesta representació textual per categories
+				//Â·$Â· pensar mida que cal per aquesta representaciÃ³ textual per categories
 				ncol/=1.3;
 				nfil/=2;
 				cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\"></p>");
@@ -750,8 +750,8 @@ var tipus_chart;
 			//tip_est_intern=tipus_estad;
 			var s=DonaTitolEstadistic(estil.categories, estil.atributs, stat);
 			titol=GetMessage("Statistic")+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
-			//titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
-			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
+			//titol=DonaCadenaLang({"cat": "EstadÃ­stic", "spa": "EstadÃ­stico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+			//Â·$Â· ncol i nfil podria ser mÃ©s ample o mÃ©s estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
 			ncol/=1.3;
 			nfil/=2;
 			cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"font-size: 4vw\"></p>");
@@ -762,7 +762,7 @@ var tipus_chart;
 	{
 		tipus_chart="matriu";
 		titol=GetMessage("ContingencyTable") + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
-		//titol=DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+		//titol=DonaCadenaLang({"cat":"Taula de contingÃ¨ncia", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		ncol*=2;
 		nfil*=2;
 		cdns.push("<div id=\"", DonaNomMatriuConfusio(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
@@ -775,8 +775,8 @@ var tipus_chart;
 
 
 			/*
-			*	Checks per a Histograma dinàmic i per a Retall de cues.
-			*	Per check Histo. dinàmic també té text per a indicar que actualització aturada per capa no visible.
+			*	Checks per a Histograma dinÃ mic i per a Retall de cues.
+			*	Per check Histo. dinÃ mic tambÃ© tÃ© text per a indicar que actualitzaciÃ³ aturada per capa no visible.
 			*/
 			cdns.push("<input type=\"checkbox\" name=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" checked=\"checked\" onclick=\"CanviOpcionsHistograma(event);\">")
 			cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(HistogramaFinestra.n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(HistogramaFinestra.n), "\">", GetMessage("Dynamic") , "</label>");
@@ -790,7 +790,7 @@ var tipus_chart;
 				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
 		}
 
-		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"GrÃ fic circular", "spa":"GrÃ¡fico circular", "eng":"Pie chart", "fre":"Diagramme Ã  secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
 		else
@@ -801,24 +801,24 @@ var tipus_chart;
 				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 		}
 	}
-	//Això només és pel portapapers, donat que aquesta àrea és invisible.
+	//AixÃ² nomÃ©s Ã©s pel portapapers, donat que aquesta Ã rea Ã©s invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
 
 	if (typeof i_estil !== "undefined" && i_estil!=null && i_estil != -1 &&
-		estil.diagrama && estil.diagrama.length) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
-	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadístic en un futur). si tinc més de un del mateix tipus, cada cop faig el primer que trobo
+		estil.diagrama && estil.diagrama.length) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
+	{	//hi pot haver diversos diagrames d'aquest estil, p.ex. un histo i un 3d (i un estadÃ­stic en un futur). si tinc mÃ©s de un del mateix tipus, cada cop faig el primer que trobo
 		for (i_diag=0; i_diag<estil.diagrama.length; i_diag++)
 		{
 			if (estil.diagrama[i_diag].tipus == tipus_chart && (typeof estil.diagrama[i_diag].i_histograma === "undefined"))
 			{
 				if (typeof estil.diagrama[i_diag].left !== "undefined")
-					des_left=estil.diagrama[i_diag].left; //ho deixo encara que no ho usaré més
+					des_left=estil.diagrama[i_diag].left; //ho deixo encara que no ho usarÃ© mÃ©s
 				if (typeof estil.diagrama[i_diag].top !== "undefined")
-					des_top=estil.diagrama[i_diag].top; //ho deixo encara que no ho usaré més
+					des_top=estil.diagrama[i_diag].top; //ho deixo encara que no ho usarÃ© mÃ©s
 				if (typeof estil.diagrama[i_diag].width !== "undefined")
-					des_width=estil.diagrama[i_diag].width; //ho deixo encara que no ho usaré més
+					des_width=estil.diagrama[i_diag].width; //ho deixo encara que no ho usarÃ© mÃ©s
 				if (typeof estil.diagrama[i_diag].height !== "undefined")
-					des_height=estil.diagrama[i_diag].height; //ho deixo encara que no ho usaré més
+					des_height=estil.diagrama[i_diag].height; //ho deixo encara que no ho usarÃ© mÃ©s
 				break;
 			}
 		}
@@ -855,11 +855,11 @@ var tipus_chart;
 		for (var i_c=0; i_c<n_comp_usar; i_c++)
 			CreaHistograma(HistogramaFinestra.n, i_c);
 
-		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+		if (i_diag != -1) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
 			estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 		else
 		{
-			if (typeof estil.diagrama === "undefined") //no està creat (i.e. obertura de nova finestra de gràfic des del menú)
+			if (typeof estil.diagrama === "undefined") //no estÃ  creat (i.e. obertura de nova finestra de grÃ fic des del menÃº)
 				estil.diagrama = []; //array de objectes
 			estil.diagrama.push({tipus: "chart", i_histograma: HistogramaFinestra.n});
 		}
@@ -867,11 +867,11 @@ var tipus_chart;
 	else	// "chart_categ"
 	{
 		CreaHistogramesPerCategories(HistogramaFinestra.n, stat, order); //crea 2
-		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+		if (i_diag != -1) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
 			estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 		else
 		{
-			if (typeof estil.diagrama === "undefined") //no està creat (i.e. obertura de nova finestra de gràfic des del menú)
+			if (typeof estil.diagrama === "undefined") //no estÃ  creat (i.e. obertura de nova finestra de grÃ fic des del menÃº)
 				estil.diagrama = []; //array de objectes
 			estil.diagrama.push({tipus: "chart_categ", stat: stat, order: order, i_histograma: HistogramaFinestra.n});
 		}
@@ -904,7 +904,7 @@ var costat=ParamInternCtrl.vista.CostatZoomActual;
 var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
 var i_situacio=ParamInternCtrl.ISituacio;
 
-	//La primera capa està a les columnes i la segona a les files
+	//La primera capa estÃ  a les columnes i la segona a les files
 	estil_nou=ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
 	capa[0]=ParamCtrl.capa[estil_nou.component[0].representacio.dimMatriu[0].i_capa];
 	estil[0]=capa[0].estil[estil_nou.component[0].representacio.dimMatriu[0].i_estil];
@@ -928,7 +928,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 
 	categories_iguals=SonCategoriesIguals(estil[0], estil[1]);
 
-	//Calculo el nombre de columnes real de la matriu (els categories sense descripció s'ignoren)
+	//Calculo el nombre de columnes real de la matriu (els categories sense descripciÃ³ s'ignoren)
 	suma_total=0;
 	creuament=0;
 	encert=0;
@@ -991,7 +991,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	{
 		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol_mostrades+2, "\">",
 			DonaCadenaNomDesc(capa[0]),
-			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, "²)");
+			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, "Â²)");
 		if (categories_iguals)
 			cdns.push(" (Kappa: ", kappa, ")");
 		cdns.push("</th></tr>",
@@ -1007,8 +1007,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 		cdns.push(GetMessage("Rows"), "\t", nfil, "\t", GetMessage("Shown"), "\t", nfil_mostrades, "\n");
 		if (categories_iguals)
 			cdns.push(GetMessage("KappaCoef"), "\t", kappa, "\n");
-		//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats, "²\n");
-		cdns.push(GetMessage("ContingencyTable"), "\t", "Units", "\t", unitats, "²\n");
+		//cdns.push(DonaCadenaLang({"cat":"Matriu de confusiÃ³", "spa":"Matriz de confusiÃ³n", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats, "Â²\n");
+		cdns.push(GetMessage("ContingencyTable"), "\t", "Units", "\t", unitats, "Â²\n");
 		cdns.push("\t");
 	}
 
@@ -1051,7 +1051,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			if (j==0)
 				cdns.push("<td style=\"vertical-align: bottom; text-align: center;\" rowspan=\"", nfil_mostrades+2, "\"><div class=\"text_vertical\" style=\"width: 15px;\">",
 					DonaCadenaNomDesc(capa[1]),
-					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, "²)</div></td>");
+					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, "Â²)</div></td>");
 			//Categories de la capa 2
 			cdns.push("<td style=\"white-space: nowrap; text-align: right;\">");
 		}
@@ -1153,8 +1153,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	if (es_html)
 	{
 		cdns.push("</table>");
-		//vol dir que estic a omplint el HTML de la finestra, i per tant també m'he de preocupar de omplir el text ocult que es copiarà al portapapers
-		//la funció OmpleTextPortapapersFinestraHistogramaADivisio() crida a aquesta funció a la que estic però amb es_html=false, per tant no entraré en bucle infinit
+		//vol dir que estic a omplint el HTML de la finestra, i per tant tambÃ© m'he de preocupar de omplir el text ocult que es copiarÃ  al portapapers
+		//la funciÃ³ OmpleTextPortapapersFinestraHistogramaADivisio() crida a aquesta funciÃ³ a la que estic perÃ² amb es_html=false, per tant no entrarÃ© en bucle infinit
 		OmpleTextPortapapersFinestraHistogramaADivisio(i_histograma, "matriu");
 	}
 	return cdns.join("");
@@ -1165,11 +1165,11 @@ function CreaMatriuDeConfusio(n_histograma, i_diag)
 	var estil = ParamCtrl.capa[HistogramaFinestra.vista[n_histograma].i_capa].estil[HistogramaFinestra.vista[n_histograma].i_estil];
 	document.getElementById(DonaNomMatriuConfusio(n_histograma)).innerHTML=CreaTextMatriuDeConfusio(n_histograma, true);
 
-	if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+	if (i_diag != -1) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
 		estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 	else
 	{
-		if (typeof estil.diagrama === "undefined") //no està creat
+		if (typeof estil.diagrama === "undefined") //no estÃ  creat
 			estil.diagrama =[]; //array de objectes
 		estil.diagrama.push({tipus: "matriu", i_histograma: n_histograma});
 	}
@@ -1189,7 +1189,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 
 	//cdns.push("<span style=\"font-size: 4vw\">");
-	//·$· depen del text a posar caldrà més curt o llarg, fer alguna cosa com posar-ho a una cadena deduir el numero segons la longitud de la cadena?
+	//Â·$Â· depen del text a posar caldrÃ  mÃ©s curt o llarg, fer alguna cosa com posar-ho a una cadena deduir el numero segons la longitud de la cadena?
 
 	if (DonaTractamentComponent(estil, 0)=="categoric")
 	{
@@ -1211,12 +1211,12 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			else if (tipus_estad == "percent_mode")
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
-					cdns.push(OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %<br>"); //va % perquè és text per finestra
+					cdns.push(OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %<br>"); //va % perquÃ¨ Ã©s text per finestra
 			}
 			else if (tipus_estad == "mode_and_percent")
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
-					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), " ("+ OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %)<br>"); //va % perquè és text per finestra
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), " ("+ OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %)<br>"); //va % perquÃ¨ Ã©s text per finestra
 			}
 			// if (estil.component.length==2) cas especial --> cal pensar com ho fem
 	}
@@ -1228,7 +1228,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 
 			for (i_c=0; i_c<estil.component.length; i_c++)
 			{
-				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o és el nombre de colors de la paleta, o és 256 per totes les bandes
+				ncolors=estil.histograma.component[i_c].classe.length;  //El nombre de colors, o Ã©s el nombre de colors de la paleta, o Ã©s 256 per totes les bandes
 				estadistics[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe,
 							DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
 							DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
@@ -1243,7 +1243,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			else if (tipus_estad == "sum_area")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].suma*area_cella, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "&sdot;m²<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].suma*area_cella, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "&sdot;mÂ²<br>");
 			}
 			else if (tipus_estad == "mean")
 			{
@@ -1253,7 +1253,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			else if (tipus_estad == "variance")
 			{
 				for (i_c=0; i_c<estil.component.length; i_c++)
-					cdns.push(OKStrOfNe(estadistics[i_c].varianca, 3), " (", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), ")²<br>");
+					cdns.push(OKStrOfNe(estadistics[i_c].varianca, 3), " (", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), ")Â²<br>");
 			}
 			else if (tipus_estad == "stdev")
 			{
@@ -1275,7 +1275,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 				for (i_c=0; i_c<estil.component.length; i_c++)
 					cdns.push(OKStrOfNe(estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1, 3), " ", (estil.component[i_c].desc ? estil.component[i_c].desc : DonaCadenaNomDescItemsLleg(estil)), "<br>");
 			}
-			//decidim no donar mediana i quartils perquè ja tenim agrupat per classes i pot tenir molt poc sentit si ni han poques (o encara que n'hagi moltes, pel fet que ja tinc les classe de l'histograma)
+			//decidim no donar mediana i quartils perquÃ¨ ja tenim agrupat per classes i pot tenir molt poc sentit si ni han poques (o encara que n'hagi moltes, pel fet que ja tinc les classe de l'histograma)
 	}
 
 	//cdns.push("</span>");
@@ -1288,11 +1288,11 @@ function CreaEstadistic(n_histograma, i_diag, tipus_estad)
 	var estil = ParamCtrl.capa[HistogramaFinestra.vista[n_histograma].i_capa].estil[HistogramaFinestra.vista[n_histograma].i_estil];
 	document.getElementById(DonaNomEstadistic(n_histograma)).innerHTML=CreaTextEstadistic(n_histograma, tipus_estad /*, true*/);
 
-	if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+	if (i_diag != -1) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
 		estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 	else
 	{
-		if (typeof estil.diagrama === "undefined") //no està creat
+		if (typeof estil.diagrama === "undefined") //no estÃ  creat
 			estil.diagrama =[]; //array de objectes
 		estil.diagrama.push({tipus: "stat", stat: tipus_estad, i_histograma: n_histograma});
 	}
@@ -1316,7 +1316,7 @@ function CalculaEstadisticsCategorics_AgrupatsDesDeCategories(categories)
 {
 var i_cat, i, classes_global=[], max_recompte=0;
 var estadistics_categorics={
-			recompte: 0,   //Nombre de pixels considerats en histograma que no són nodata. User estil.histograma.classe_nodata per saber el nombre de píxels a nodata
+			recompte: 0,   //Nombre de pixels considerats en histograma que no sÃ³n nodata. User estil.histograma.classe_nodata per saber el nombre de pÃ­xels a nodata
 			i_moda: 0,
 			recompte_moda: 0};    //categoria modal
 
@@ -1342,7 +1342,7 @@ var estadistics_categorics={
 		if (!classes_global[i])
 			continue;
 		estadistics_categorics.recompte += classes_global[i];
-		if (max_recompte < classes_global[i]) //el nou recompte és més gran
+		if (max_recompte < classes_global[i]) //el nou recompte Ã©s mÃ©s gran
 		{
 			max_recompte = classes_global[i];
 			estadistics_categorics.i_moda = i;
@@ -1456,7 +1456,7 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 				continue;
 			estad_categ.ordre_cat.push({valor: estil.categories[i_cat]["$stat$_"+tipus_estad], i_cat: i_cat});
 		}
-		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona tambÃ© es categÃ²rica
 		{
 			estad_categ.ordre_cat[estad_categ.ordre_cat.length-1].count=0;
 			for (var i_segona_cat=0; i_segona_cat<estil.categories[i_cat]["$stat$_histo"].classe.length; i_segona_cat++)
@@ -1495,9 +1495,9 @@ var area_cella, i_cat;
 		ParamInternCtrl.vista.CostatZoomActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	var estad_categ = CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc), tipus_estad, order);
 
-	//capçalera, lletra una mica més gran
+	//capÃ§alera, lletra una mica mÃ©s gran
 	cdns.push("<p style=\"font-size: 2em; text-align: center;\">", estad_categ.desc);
- 	if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
+ 	if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona tambÃ© es categÃ²rica
 	{
 		var estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
 		if (tipus_estad == "mode")
@@ -1539,14 +1539,14 @@ var area_cella, i_cat;
 	for (i_cat=0; i_cat<estad_categ.ordre_cat.length; i_cat++)
 	{
 		cdns.push("<tr><td>", estad_categ.ordre_cat[i_cat].desc, "</td>");
-		cdns.push("<td style=\"text-align:right;\">",	OKStrOfNe(estad_categ.ordre_cat[i_cat].count/estad_categ.count_total*100, estad_categ.n_dec), " %</td>"); //va % perquè és text per finestra
-		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
+		cdns.push("<td style=\"text-align:right;\">",	OKStrOfNe(estad_categ.ordre_cat[i_cat].count/estad_categ.count_total*100, estad_categ.n_dec), " %</td>"); //va % perquÃ¨ Ã©s text per finestra
+		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona tambÃ© es categÃ²rica
 		{
 			if (tipus_estad == "mode_and_percent")
 				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor2," (", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.unitats ? " "+estad_categ.unitats : "", ")</td>");
 			else if (tipus_estad == "percent_mode")
 				cdns.push("<td style=\"text-align:right;\">", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.unitats ? " "+estad_categ.unitats : "", "</td>");
-			else //és un text
+			else //Ã©s un text
 				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor, "</td>");
 		}
 		else
@@ -1563,11 +1563,11 @@ function CreaEstadisticPerCategories(n_histograma, i_diag, tipus_estad, order)
 	var estil = ParamCtrl.capa[HistogramaFinestra.vista[n_histograma].i_capa].estil[HistogramaFinestra.vista[n_histograma].i_estil];
 	document.getElementById(DonaNomEstadistic(n_histograma)).innerHTML=CreaTextEstadisticPerCategories(n_histograma, tipus_estad, order/*, true*/);
 
-	if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
+	if (i_diag != -1) //no s'havia creat encara i per aixÃ² i_histograma estava indefinit, perÃ² estil.diagrama ja existia
 		estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
 	else
 	{
-		if (typeof estil.diagrama === "undefined") //no està creat
+		if (typeof estil.diagrama === "undefined") //no estÃ  creat
 			estil.diagrama =[]; //array de objectes
 		estil.diagrama.push({tipus: "stat_categ", stat: tipus_estad, order: order, i_histograma: n_histograma});
 	}
@@ -1608,7 +1608,7 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 			ObreFinestraSuperficie3D(i_capa, i_estil);
 	}
 
-	if (typeof estil.histograma !== "undefined" ) //potser encara no ho puc fer perquè no tinc les dades i ObreFinestraHistograma no ha acabat creant el chart encara
+	if (typeof estil.histograma !== "undefined" ) //potser encara no ho puc fer perquÃ¨ no tinc les dades i ObreFinestraHistograma no ha acabat creant el chart encara
 	{
 		if (estilDiagrama.tipus == "chart" || estilDiagrama.tipus == "chart_categ" || estilDiagrama.tipus == "matriu" ||
 					estilDiagrama.tipus == "stat" || estilDiagrama.tipus == "stat_categ")
@@ -1746,14 +1746,14 @@ function PreparaHistograma(n_histograma, i_c)
 							total += allData[i];
 						}
 						var tooltipPercentage = OKStrOfNe(tooltipData / total * 100, 2);
-						return tooltipLabel + ": " + tooltipPercentage + "%, "+ tooltipData +unitats+"²";
+						return tooltipLabel + ": " + tooltipPercentage + "%, "+ tooltipData +unitats+"Â²";
 					}
 				}
 			}
 		};
 
 		retorn_prep_histo.data=data;
-		if (retorn_prep_histo.labels.join("").length<600)  //Protencció contra llegendes massa grans.
+		if (retorn_prep_histo.labels.join("").length<600)  //ProtencciÃ³ contra llegendes massa grans.
 		{
 			for (i=0; i<retorn_prep_histo.labels.length; i++)
 			{
@@ -1800,7 +1800,7 @@ function PreparaHistograma(n_histograma, i_c)
 
 			data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
 		}
-		//En poso un de més deliveradament per tancar l'interval de útil cas.
+		//En poso un de mÃ©s deliveradament per tancar l'interval de Ãºtil cas.
 		retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
 
 		//var str=DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? ", " + DonaCadena(estil.component[i_c].desc) : "")
@@ -1826,7 +1826,7 @@ function PreparaHistograma(n_histograma, i_c)
 				}],
 				yAxes: [{
 					//type: "logarithmic",
-					scaleLabel: {display: true, labelString: retorn_prep_histo.unitats+"²"}, //aquesta és retorn_prep_histo.unitats o unitats sol? crec que lo primer
+					scaleLabel: {display: true, labelString: retorn_prep_histo.unitats+"Â²"}, //aquesta Ã©s retorn_prep_histo.unitats o unitats sol? crec que lo primer
 					ticks: { beginAtZero:true }
 				}]
 			},
@@ -1864,7 +1864,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 	retorn_prep_histo.unitats_area=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
-	if (retorn_prep_histo.unitats_area=="°")
+	if (retorn_prep_histo.unitats_area=="Â°")
 		retorn_prep_histo.unitats_area="m";
 	if (area_cella>20 && retorn_prep_histo.unitats_area=="m")
 	{
@@ -1890,7 +1890,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 	}
 	else if (tipus_estad =="mode" || tipus_estad == "percent_mode" || tipus_estad == "mode_and_percent")
 	{
-		//la sortida gràfica en cas de dues categòriques sempre és "mode_and_percent" perquè és el que té més sentit. En un futur es pot fer que la caixa posi en gris uns radials o altres, però de moment així va bé
+		//la sortida grÃ fica en cas de dues categÃ²riques sempre Ã©s "mode_and_percent" perquÃ¨ Ã©s el que tÃ© mÃ©s sentit. En un futur es pot fer que la caixa posi en gris uns radials o altres, perÃ² de moment aixÃ­ va bÃ©
 	  tipus_intern="mode_and_percent";
 
 		//deduir la paleta de colors des de estil.component[1] -> falta usar-los
@@ -1898,7 +1898,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		var colors1=ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].paleta.colors;
 	}
 
-	//en aquest context m'interessa primer no endreçar, després posar el color i després endreçar
+	//en aquest context m'interessa primer no endreÃ§ar, desprÃ©s posar el color i desprÃ©s endreÃ§ar
 	var estad_categ = CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, DonaCadena(ParamCtrl.capa[capa.valors[1].i_capa].estil[capa.valors[1].i_valor].desc), tipus_intern, "unsorted");
 	n_colors_area=estil.categories.length;
 	for (i=0, i_color=0; i_color<n_colors_area; i_color++)
@@ -1907,10 +1907,10 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 			continue;
 		estad_categ.ordre_cat[i].color=estil.paleta.colors[i_color];
 		i++;
-	 	if (i==estad_categ.ordre_cat.length) //ja no en queden més
+	 	if (i==estad_categ.ordre_cat.length) //ja no en queden mÃ©s
 	 		break;
 	}
-	//endreçar
+	//endreÃ§ar
 	if (order == "descend")
 		estad_categ.ordre_cat.sort(OrdenacioCategoriesPerValorDescendent);
 	else if (order == "ascend")
@@ -1919,11 +1919,11 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 	for (i=0; i<estad_categ.ordre_cat.length; i++)
 	{
 		retorn_prep_histo.labels[i]=estad_categ.ordre_cat[i].desc;
-		//dades pel gràfic d'àrea
+		//dades pel grÃ fic d'Ã rea
 		data_area[i]=estad_categ.ordre_cat[i].count*area_cella;
 		retorn_prep_histo.colors_area[i]=estad_categ.ordre_cat[i].color;
 
-		//dades pel gràfic de l'estadístic
+		//dades pel grÃ fic de l'estadÃ­stic
 		data_estad[i]=estad_categ.ordre_cat[i].valor;
 		if (grafic_estad_colors)
 		{
@@ -1951,7 +1951,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
  	 	responsive: true,
  	 	scales: {
  	 		xAxes: [{
- 					scaleLabel: {display: true, labelString: "Area ("+retorn_prep_histo.unitats_area+"²)"},
+ 					scaleLabel: {display: true, labelString: "Area ("+retorn_prep_histo.unitats_area+"Â²)"},
           ticks: {reverse: true},
           position: 'top',
     	}]
@@ -1963,19 +1963,19 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 					var unitats = data.datasets[tooltipItem.datasetIndex].unitats;
 					var tooltipData = estad_categ.tinc_dec ? OKStrOfNe(allData[tooltipItem.index], estad_categ.n_dec) :  allData[tooltipItem.index];
 					var tooltipPercentage = OKStrOfNe(estad_categ.ordre_cat[tooltipItem.index].count / estad_categ.count_total * 100, estad_categ.tinc_dec ? estad_categ.n_dec : 2);
-					return GetMessage("Area") + ": " + tooltipPercentage + "%, "+ tooltipData +" "+ unitats+"²";
+					return GetMessage("Area") + ": " + tooltipPercentage + "%, "+ tooltipData +" "+ unitats+"Â²";
 				}
 			}
 		}
 	};
 	retorn_prep_histo.data_area=data_area;
 
-	//en el segon gràfic el cas de tipus_intern == "mode_and_percent" és una mica especial i té una estructura de tooltip diferent
+	//en el segon grÃ fic el cas de tipus_intern == "mode_and_percent" Ã©s una mica especial i tÃ© una estructura de tooltip diferent
 	var label;
 	if (tipus_intern == "mode_and_percent")
-		label=estad_categ.desc; //ja és diu com a descriptor. No cal afegir-ho darrera si no queda "Modal class (%) of Habitat (%)"
+		label=estad_categ.desc; //ja Ã©s diu com a descriptor. No cal afegir-ho darrera si no queda "Modal class (%) of Habitat (%)"
 	else
-		label=estad_categ.desc + (estad_categ.unitats ? (" ("+estad_categ.unitats.replace("&sdot;","·")+")") : "");
+		label=estad_categ.desc + (estad_categ.unitats ? (" ("+estad_categ.unitats.replace("&sdot;","Â·")+")") : "");
 	retorn_prep_histo.options_estad={
  		legend: { display: false},
  	 	responsive: true,
@@ -1993,7 +1993,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 			callbacks: {
 				label: function(tooltipItem, data) {
 					var allData = data.datasets[tooltipItem.datasetIndex].data;
-					var unitats = data.datasets[tooltipItem.datasetIndex].unitats.replace("&sdot;","·");
+					var unitats = data.datasets[tooltipItem.datasetIndex].unitats.replace("&sdot;","Â·");
 					var tooltipData = estad_categ.tinc_dec ? OKStrOfNe(allData[tooltipItem.index], estad_categ.n_dec) :  allData[tooltipItem.index];
 					if (tipus_intern == "mode_and_percent")
 						return tooltipData + " " + unitats + " " + estad_categ.ordre_cat[tooltipItem.index].valor2;
@@ -2026,7 +2026,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 				retorn_prep_histo.valors[i]=OKStrOfNe(retorn_prep_histo.valors[i], estil.component[i_c].NDecimals);
 			data[i]=estil.histograma.component[i_c].classe[i]*area_cella;
 		}
-		//En poso un de més deliveradament per tancar l'interval de útil cas.
+		//En poso un de mÃ©s deliveradament per tancar l'interval de Ãºtil cas.
 		retorn_prep_histo.valors[i]=(estil.component[i_c].estiramentPaleta) ? (estil.component[i_c].estiramentPaleta.valorMaxim-estil.component[i_c].estiramentPaleta.valorMinim)*i/n_colors+estil.component[i_c].estiramentPaleta.valorMinim : i;
 
 		var str=DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? ", " + DonaCadena(estil.component[i_c].desc) : "")
@@ -2050,7 +2050,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 				}],
 				yAxes: [{
 					//type: "logarithmic",
-					scaleLabel: {display: true, labelString: retorn_prep_histo.unitats+"²"}, //aquesta és retorn_prep_histo.unitats o unitats sol? crec que lo primer
+					scaleLabel: {display: true, labelString: retorn_prep_histo.unitats+"Â²"}, //aquesta Ã©s retorn_prep_histo.unitats o unitats sol? crec que lo primer
 					ticks: { beginAtZero:true }
 				}]
 			},
@@ -2095,14 +2095,14 @@ function CreaHistograma(n_histograma, i_c)
 		options: retorn_prep_histo.options
 	});
 
-	//per a una finestra amb tres histogrames, el ordre en que es crida e EsHistograma és el que toca
+	//per a una finestra amb tres histogrames, el ordre en que es crida e EsHistograma Ã©s el que toca
 	//per tant el i de HistogramaFinestra.vista[n_histograma].chart hauria de coincidir amb i_c
-	if (typeof HistogramaFinestra.vista[n_histograma].chart === "undefined") //no està creat
+	if (typeof HistogramaFinestra.vista[n_histograma].chart === "undefined") //no estÃ  creat
 		HistogramaFinestra.vista[n_histograma].chart=[];
 
 	if (HistogramaFinestra.vista[n_histograma].chart.length == i_c) //el i_c que em toca posar es el que toca
-		HistogramaFinestra.vista[n_histograma].chart[i_c]=myChart; //però fent això la length s'amplia, es inteligent?
-	else //no haria de passar i vol dir que ordre és diferent a l'esperat, però almenys faig algo
+		HistogramaFinestra.vista[n_histograma].chart[i_c]=myChart; //perÃ² fent aixÃ² la length s'amplia, es inteligent?
+	else //no haria de passar i vol dir que ordre Ã©s diferent a l'esperat, perÃ² almenys faig algo
 		HistogramaFinestra.vista[n_histograma].chart[HistogramaFinestra.vista[n_histograma].chart.length]=myChart;
 }
 
@@ -2112,7 +2112,7 @@ function CreaHistogramesPerCategories(n_histograma, stat, order)
 	var retorn_prep_histo=PreparaHistogramaPerCategories(n_histograma, stat, order);
 	var estil = ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
 
-	//primer gràfic de barres: àrea
+	//primer grÃ fic de barres: Ã rea
 	var ctx_area = document.getElementById(DonaNomCanvasHistograma(HistogramaFinestra.n)+"area");
 	var myChart_area = new Chart(ctx_area, {
 		type: 'horizontalBar',
@@ -2129,12 +2129,12 @@ function CreaHistogramesPerCategories(n_histograma, stat, order)
 		options: retorn_prep_histo.options_area
 	});
 
-	if (typeof HistogramaFinestra.vista[n_histograma].chart === "undefined") //no està creat
+	if (typeof HistogramaFinestra.vista[n_histograma].chart === "undefined") //no estÃ  creat
 		HistogramaFinestra.vista[n_histograma].chart=[];
 
-	HistogramaFinestra.vista[n_histograma].chart[0]=myChart_area; //conté l'àrea
+	HistogramaFinestra.vista[n_histograma].chart[0]=myChart_area; //contÃ© l'Ã rea
 
-	//segon gràfic de barres: l'estadístic
+	//segon grÃ fic de barres: l'estadÃ­stic
 	var ctx_estad = document.getElementById(DonaNomCanvasHistograma(HistogramaFinestra.n)+"estad");
 	var myChart_estad = new Chart(ctx_estad, {
 		type: 'horizontalBar',
@@ -2150,12 +2150,12 @@ function CreaHistogramesPerCategories(n_histograma, stat, order)
 		options: retorn_prep_histo.options_estad
 	});
 
-	HistogramaFinestra.vista[n_histograma].chart[1]=myChart_estad; //conté l'àrea
+	HistogramaFinestra.vista[n_histograma].chart[1]=myChart_estad; //contÃ© l'Ã rea
 }
 
 function DonaTextDivCopiaPortapapersFinestra(prefix_nom_div)
 {
-	//Això només és pel portapapers, donat que aquesta àrea és invisible.
+	//AixÃ² nomÃ©s Ã©s pel portapapers, donat que aquesta Ã rea Ã©s invisible.
 	return "<div style=\"display: none\" id=\"" + prefix_nom_div + "_copy_form_div\"><form name=\"" + prefix_nom_div + "_copy_form\" onSubmit=\"return false;\"><textarea name=\"histo\" id=\"" + prefix_nom_div + "_copy_text\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\">kk</textarea></form></div>";
 }
 
@@ -2200,13 +2200,13 @@ var component_name=["R", "G", "B"];
 		GetMessage("Band"), "\t", estil.desc, "\t", ((estil.DescItems) ? estil.DescItems : ""), "\n",
 		GetMessage("Measure"), "\t", DonaTitolEixYSerieTemporalLocalitzacio(), "\n",
 		GetMessage("CellSize"), "\t", ParamInternCtrl.vista.CostatZoomActual, "\t", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), "\n",
-		GetMessage("CellArea"), "\t", area_cella, "\tm²\n",
+		GetMessage("CellArea"), "\t", area_cella, "\tmÂ²\n",
 		"MinX", "\t", ParamInternCtrl.vista.EnvActual.MinX, "\n",
 		"MaxX", "\t", ParamInternCtrl.vista.EnvActual.MaxX, "\n",
 		"MinY", "\t", ParamInternCtrl.vista.EnvActual.MinY, "\n",
 		"MaxY", "\t", ParamInternCtrl.vista.EnvActual.MaxY, "\n");
 
-	//Titol de la columna és el nom de cada serie.
+	//Titol de la columna Ã©s el nom de cada serie.
 	for (var i_c=0; i_c<estadistics.length; i_c++)
 	{
 		if (estadistics.length==3)
@@ -2253,7 +2253,7 @@ var chart=[];
 		for (i_c=0; i_c<data.length; i_c++)
 			cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 	}
-	//Això només és pel portapapers, donat que aquesta àrea és invisible.
+	//AixÃ² nomÃ©s Ã©s pel portapapers, donat que aquesta Ã rea Ã©s invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma),
 	 	"</div>",
 		"<div style=\"width: ", ncol, "px; position:absolute; opacity: 0.7;\">",

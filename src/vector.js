@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -92,9 +92,9 @@ var TMG, tiles, env_capa;
 		return;
 	
 		
-	// En principi si no tinc límits no té sentit que hagi més d'un nivell de tessel·lació perquè al ser un model vectorial amb el que treballem amb els objectes directament
-	// de moment sempre tenim els mateixos objectes, tot i que això podria no ser veritat en un futur, perquè en el OGC s'està treballant per fer tessel·les de vectors i es podrien 
-	// servir objectes diferents en funció del nivell de zoom
+	// En principi si no tinc lÃ­mits no tÃ© sentit que hagi mÃ©s d'un nivell de tesselÂ·laciÃ³ perquÃ¨ al ser un model vectorial amb el que treballem amb els objectes directament
+	// de moment sempre tenim els mateixos objectes, tot i que aixÃ² podria no ser veritat en un futur, perquÃ¨ en el OGC s'estÃ  treballant per fer tesselÂ·les de vectors i es podrien 
+	// servir objectes diferents en funciÃ³ del nivell de zoom
 	
 	if (typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null)
 		capa.tileMatrixSetGeometry={};
@@ -107,7 +107,7 @@ var TMG, tiles, env_capa;
 			TMG.atriObjNumerics=[{"nom": nom_camp_nObjs_tessella}];	
 	}
 	
-	// Determino l'envolupant per poder determinar l'espai de tessel·lació
+	// Determino l'envolupant per poder determinar l'espai de tesselÂ·laciÃ³
 	env_capa={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": capa.CRSgeometry};
 	if(capa.EnvTotal)
 	{
@@ -145,12 +145,12 @@ var TMG, tiles, env_capa;
 	else if (EsProjLongLat(env_capa.CRS) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
 		factor=FactorGrausAMetres;
 
-	// Calculo la tessel·lació si cal, usant el nivell 0 de l'array com a model		
+	// Calculo la tesselÂ·laciÃ³ si cal, usant el nivell 0 de l'array com a model		
 	if(typeof capa.objLimit==="undefined" || capa.objLimit==-1)
 	{
 		if (typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null)		
 		{		
-			// Si no tinc límit d'objectes faig la tessel·lació amb el costat de píxel més gran i amb una única tessel·la 
+			// Si no tinc lÃ­mit d'objectes faig la tesselÂ·laciÃ³ amb el costat de pÃ­xel mÃ©s gran i amb una Ãºnica tesselÂ·la 
 			TMG.tileMatrix=[{"TopLeftPoint": { "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY}, 
 						"TileWidth":Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(1*capa.CostatMaxim)), 
 						"TileHeight":Math.ceil((env_capa.EnvCRS.MaxY-env_capa.EnvCRS.MinY)/(1*capa.CostatMaxim)),
@@ -160,7 +160,7 @@ var TMG, tiles, env_capa;
 		}
 		else if(TMG.tileMatrix.length==1)
 		{
-			// Si no tinc límit d'objectes faig la tessel·lació amb el costat de píxel més gran perquè sinó he de fer moltíssimes peticions i això és inviable.
+			// Si no tinc lÃ­mit d'objectes faig la tesselÂ·laciÃ³ amb el costat de pÃ­xel mÃ©s gran perquÃ¨ sinÃ³ he de fer moltÃ­ssimes peticions i aixÃ² Ã©s inviable.
 			if(typeof TMG.tileMatrix[0].TopLeftPoint === "undefined")
 				TMG.tileMatrix[0].TopLeftPoint={ "x": env_capa.EnvCRS.MinX, "y": env_capa.EnvCRS.MaxY};						
 				
@@ -194,7 +194,7 @@ var TMG, tiles, env_capa;
 		return;
 	}
 
-	if((typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null) || TMG.tileMatrix.length==1)  // si l'usuari no m'ha indicat la tessel·lacó la calculo sinó faig cas del que em diu
+	if((typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null) || TMG.tileMatrix.length==1)  // si l'usuari no m'ha indicat la tesselÂ·lacÃ³ la calculo sinÃ³ faig cas del que em diu
 	{
 		if (typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null)		
 			TMG.tileMatrix=[];		
@@ -203,7 +203,7 @@ var TMG, tiles, env_capa;
 			tileWidth=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileWidth === "number")? TMG.tileMatrix[0].TileWidth:mida_tessela_vec_defecte),
 			tileHeight=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileHeight === "number")? TMG.tileMatrix[0].TileHeight:mida_tessela_vec_defecte);		
 			
-		// Creo o comprovo l'espai de tessel·lació		
+		// Creo o comprovo l'espai de tesselÂ·laciÃ³		
 		for(var i_zoom=ParamCtrl.zoom.length-1, i_tile_matrix=0; i_zoom>=0; i_zoom--,i_tile_matrix++)
 		{
 			if(ParamCtrl.zoom[i_zoom].costat>=capa.CostatMinim && ParamCtrl.zoom[i_zoom].costat<=capa.CostatMaxim)				
@@ -227,10 +227,10 @@ var TMG, tiles, env_capa;
 				
 				if(TMG.tileMatrix[i_tile_matrix].MatrixWidth==1 && TMG.tileMatrix[i_tile_matrix].MatrixHeight==1)
 				{
-					//Ajusto l'envolupant de la tessel·la de manera que l'envolupant de la capa quedi centrada a la tessel·la				
+					//Ajusto l'envolupant de la tesselÂ·la de manera que l'envolupant de la capa quedi centrada a la tesselÂ·la				
 					TMG.tileMatrix[i_tile_matrix].TopLeftPoint={"x":(env_capa.EnvCRS.MinX+(env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/2)-(TMG.tileMatrix[i_tile_matrix].costat*TMG.tileMatrix[i_tile_matrix].TileWidth/2),
 													"y":(env_capa.EnvCRS.MaxY-(env_capa.EnvCRS.MaxY-env_capa.EnvCRS.MinY)/2)+(TMG.tileMatrix[i_tile_matrix].costat*TMG.tileMatrix[i_tile_matrix].TileHeight/2)};
-					// Recalculo la tessel·lació perquè ara pot haver canviat i que necessiti més tessel·les
+					// Recalculo la tesselÂ·laciÃ³ perquÃ¨ ara pot haver canviat i que necessiti mÃ©s tesselÂ·les
 					TMG.tileMatrix[i_tile_matrix].MatrixWidth=Math.ceil((env_capa.EnvCRS.MaxX-TMG.tileMatrix[i_tile_matrix].TopLeftPoint.x)/(tileWidth*TMG.tileMatrix[i_tile_matrix].costat));
 					TMG.tileMatrix[i_tile_matrix].MatrixHeight=Math.ceil((TMG.tileMatrix[i_tile_matrix].TopLeftPoint.y-env_capa.EnvCRS.MinY)/(tileHeight*TMG.tileMatrix[i_tile_matrix].costat));
 				}				
@@ -239,7 +239,7 @@ var TMG, tiles, env_capa;
 	}
 }
 
-// Fer sol·licitar la informació dels atributs d'un punt determinat
+// Fer solÂ·licitar la informaciÃ³ dels atributs d'un punt determinat
 function ComparaObjCapaDigiIdData(x,y) {
 	//Ascendent per identificador i descendent per data
 	if (x.id < y.id) return -1;
@@ -260,17 +260,17 @@ var atrib_coll_xml, atrib_xml, tag2;
 	atrib_coll_xml=DonamElementsNodeAPartirDelNomDelTag(objecte_xml, "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "Atribut");
 	if (!atrib_coll_xml || atrib_coll_xml.length==0)
 		return;
-	atributs=[];  //Potser seria millor no esborrar-los cada cop però ara per ara ha quedat així
+	atributs=[];  //Potser seria millor no esborrar-los cada cop perÃ² ara per ara ha quedat aixÃ­
 	for(var i=0; i<atrib_coll_xml.length; i++)
 	{
 		atrib_xml=atrib_coll_xml[i];
 		atributs.push({});
 		atribut=atributs[atributs.length-1];
 
-		//Primer miro si l'atribut és consultable
+		//Primer miro si l'atribut Ã©s consultable
 		atribut.mostrar=(atrib_xml.getAttribute('mostrar')=="false") ? "no": "si";
 
-		//descripció
+		//descripciÃ³
 		tag2=GetXMLChildElementByName(atrib_xml, '*', "descripcio");
 		if(tag2 && tag2.hasChildNodes())
 			atribut.descripcio=tag2.childNodes[0].nodeValue;
@@ -336,7 +336,7 @@ function OmpleAtributsObjecteCapaDigiDesDeGeoJSONDeSOS(objecte_json, capa, featu
 			}
 		}
 	}
-	else if(objecte_json.observedProperty)// és un tipus simple
+	else if(objecte_json.observedProperty)// Ã©s un tipus simple
 	{
 		var prefix_valor=capa.namespace + "/" + capa.nom + "/observableProperty/";
 		var property_name=objecte_json.observedProperty.substring(prefix_valor.length);
@@ -503,7 +503,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			objectes=null;
 			//try {
 				//var geojson=JSON.parse(doc);
-				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 				objectes=doc.features;
 			/*}
 			catch (e) {
@@ -516,7 +516,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			{
 				for(i_obj=0; i_obj<objectes.length; i_obj++)
 				{
-					//objectes[i_obj].id=objectes[i_obj].id.substring(capa.nom.length+1); NJ no sé perquè serveix això
+					//objectes[i_obj].id=objectes[i_obj].id.substring(capa.nom.length+1); NJ no sÃ© perquÃ¨ serveix aixÃ²
 					if(id_obj_buscat==objectes[i_obj].id)
 					{
 						OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objectes[i_obj], capa.atributs, capa.objectes.features[consulta.i_obj]);
@@ -557,7 +557,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			objectes=null;
 			//try {
 				//var geojson=JSON.parse(doc);
-				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 				objectes=doc.observations;
 			/*}
 			catch (e) {
@@ -607,7 +607,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 		objectes=null;
 		//try {
 		//	var geojson=JSON.parse(doc);
-			//si hi ha una bbox es podria actualitzar però com que no la uso...
+			//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 		/*}
 		catch (e) {
 			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
@@ -648,7 +648,7 @@ function DescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 {
 var capa_digi=ParamCtrl.capa[consulta.param.i_capa];
 
-	//Carrega la informació sobre els objectes consultats
+	//Carrega la informaciÃ³ sobre els objectes consultats
 	if (0==OmpleCapaDigiAmbPropietatsObjectes(doc, consulta))
 		var retorn=consulta.funcio(consulta.param);
 	else
@@ -677,12 +677,12 @@ function ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 
 //var secondTime=false;
 
-//Retorna false si no cal o si no es pot. Retorno true si he iniciat un procés assincron per descarregar.
+//Retorna false si no cal o si no es pot. Retorno true si he iniciat un procÃ©s assincron per descarregar.
 function DescarregaPropietatsCapaDigiVistaSiCal(funcio, param)
 {
 var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=ParamInternCtrl.vista.EnvActual;
 
-	if (!capa.tipus //els objectes empotrats no poden obtenir les properties si no hi són
+	if (!capa.tipus //els objectes empotrats no poden obtenir les properties si no hi sÃ³n
 		|| !capa.objectes || !capa.objectes.features)  //falten massa coses que hi hauria d'haver
 		return false;
 
@@ -692,7 +692,7 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 	tipus=DonaTipusServidorCapa(capa);
 	for (j=0; j<capa.objectes.features.length; j++)
 	{
-		//Només vàlid per a fitxers de punts.
+		//NomÃ©s vÃ lid per a fitxers de punts.
 		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[j], capa.CRSgeometry);
 		if (env.MinX < punt.x &&
 			env.MaxX > punt.x &&
@@ -701,7 +701,7 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		{
 			if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 			{
-				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //Només hi ha les propietats de simbolització actuals carregades
+				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //NomÃ©s hi ha les propietats de simbolitzaciÃ³ actuals carregades
 					break;
 			}
 			else //if (tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
@@ -789,7 +789,7 @@ var root, capa, features, valor, tipus, i_obj;
 			var objectes=null;
 			//try {
 			//	var geojson=JSON.parse(doc);
-				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 				objectes=doc.features;
 			/*}
 			catch (e) {
@@ -800,7 +800,7 @@ var root, capa, features, valor, tipus, i_obj;
 			{
 				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
-					// objectes[i_obj_llegit].id=objectes[i_obj_llegit].id.substring(capa.nom.length+1); NJ no sé perquè serveix això
+					// objectes[i_obj_llegit].id=objectes[i_obj_llegit].id.substring(capa.nom.length+1); NJ no sÃ© perquÃ¨ serveix aixÃ²
 					i_obj=features.binarySearch(objectes[i_obj_llegit], ComparaObjCapaDigiIdData);
 					if (i_obj>=0)
 						OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objectes[i_obj_llegit], capa.atributs, features[i_obj]);
@@ -836,7 +836,7 @@ var root, capa, features, valor, tipus, i_obj;
 			var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
 			//try {
 			//	var geojson=JSON.parse(doc);
-				//si hi ha una bbox es podria actualitzar però com que no la uso...
+				//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 				objectes=doc.observations;
 			/*}
 			catch (e) {
@@ -883,7 +883,7 @@ var root, capa, features, valor, tipus, i_obj;
 	{
 		/*try {
 			var geojson=JSON.parse(doc);
-			//si hi ha una bbox es podria actualitzar però com que no la uso...
+			//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 		}
 		catch (e) {
 			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -930,7 +930,7 @@ var key;
 			}
 		}
 	}
-	/*if (time)  //Mirar bé com s'ha de fer.
+	/*if (time)  //Mirar bÃ© com s'ha de fer.
 		prop[key+time]=value;
 	else*/
 		prop[key]=value;
@@ -1014,13 +1014,13 @@ var TM=capa.tileMatrixSetGeometry.tileMatrix;
 			"y": TM[i].TopLeftPoint.y -(tile.jTile*TM[i].TileHeight*TM[i].costat)-(TM[i].TileHeight*TM[i].costat/2)};
 }
 
-//Els objectes es mantenen en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
+//Els objectes es mantenen en memÃ²ria ordenats per id. AixÃ² es fa servir per afegir atributs als objectes mÃ©s endavant.
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
 var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus, tile, i_tile_matrix=-1;
 var nObj=false, tm=null, hi_havia_objectes_tm=false;
 
-	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serà un punt
+	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serÃ  un punt
 	if(!doc)
 	{
 		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -1047,9 +1047,9 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 				{	
 					if(doc.numberOfFeatures)
-						tile.nombreObjectes=doc.numberOfFeatures;  // si WFS versió < 2.0
+						tile.nombreObjectes=doc.numberOfFeatures;  // si WFS versiÃ³ < 2.0
 					else if (doc.numberMatched)
-						tile.nombreObjectes=doc.numberMatched; // si WFS versió >= 2.0										
+						tile.nombreObjectes=doc.numberMatched; // si WFS versiÃ³ >= 2.0										
 				}
 				else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 				{
@@ -1059,11 +1059,11 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 				if(tile.nombreObjectes==0 || (tile.nombreObjectes>0 && tile.nombreObjectes<capa.objLimit))
 				{
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
-					// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
+					// Torno a fer la peticiÃ³ perÃ² ara demanant els objectes i no el nombre d'objectes
 					FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, false, consulta.funcio, consulta.param);					
 					return;
 				}
-				// Afegeixo un objecte númeric amb el nombre d'Objectes de la tessel·la
+				// Afegeixo un objecte nÃºmeric amb el nombre d'Objectes de la tesselÂ·la
 				nObj=true;
 				if((typeof tm.objNumerics==="undefined") || tm.objNumerics==null)
 					tm.objNumerics={"type":"FeatureCollection", "features":[]};
@@ -1084,7 +1084,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 				if (capa.objectes && capa.objectes.features)
 				{
 					hi_havia_objectes=true;
-					//si hi ha una bbox es podria actualitzar però com que no la uso...
+					//si hi ha una bbox es podria actualitzar perÃ² com que no la uso...
 					if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusHTTP_GET")
 						var features=doc.features;
 					else if (tipus=="TipusSOS")
@@ -1093,7 +1093,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 						var features=ExtreuITransformaSTAfeatures(doc);
 					if(features.length>0)
 					{
-						/*NJ no sé perquè serveix això
+						/*NJ no sÃ© perquÃ¨ serveix aixÃ²
 						for (i=0; i<features.length; i++)
 							features[i].id=features[i].id.substring(capa.nom.length+1); */
 						capa.objectes.features.push.apply(capa.objectes.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
@@ -1111,7 +1111,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 						var features=ExtreuITransformaSTAfeatures(doc);
 						capa.objectes={"type": "FeatureCollection", "features": features};
 					}
-					/*NJ no sé perquè serveix això
+					/*NJ no sÃ© perquÃ¨ serveix aixÃ²
 					var features=capa.objectes.features;
 					for (i=0; i<features.length; i++)
 						features[i].id=features[i].id.substring(capa.nom.length+1);*/
@@ -1140,9 +1140,9 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 				var atributs=root.attributes, atribNObjs=null;				
 				if(atributs)
 				{
-					atribNObjs=atributs.getNamedItem("numberOfFeatures");// si WFS versió < 2.0
+					atribNObjs=atributs.getNamedItem("numberOfFeatures");// si WFS versiÃ³ < 2.0
 					if(!atribNObjs)
-						atribNObjs=atributs.getNamedItem("numberMatched");// si WFS versió >= 2.0	
+						atribNObjs=atributs.getNamedItem("numberMatched");// si WFS versiÃ³ >= 2.0	
 				}
 				if(atribNObjs)
 					tile.nombreObjectes=atribNObjs.value;
@@ -1150,7 +1150,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 			if(tile.nombreObjectes==0 || (tile.nombreObjectes>0 && tile.nombreObjectes<capa.objLimit))
 			{
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
-				// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
+				// Torno a fer la peticiÃ³ perÃ² ara demanant els objectes i no el nombre d'objectes
 				FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, false, consulta.funcio, consulta.param);					
 				return;
 			}
@@ -1217,14 +1217,14 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 
 					if(objectes[i_obj].hasChildNodes)
 					{
-						//Agafo la posició dels objectes
+						//Agafo la posiciÃ³ dels objectes
 						tag=DonamElementsNodeAPartirDelNomDelTag(objectes[i_obj], "http://www.opengis.net/gml", "gml", "pos");
 						if(tag.length>0)
 						{
 							//cal_crear_vista=true;
 							valor=tag[0].childNodes[0].nodeValue;
 							var coord=valor.split(" ");
-							if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // ·$· NJ-> JM Crec que això no està bé, perquè les coordenades en el cas del SOS són de moment sempre en EPGS:4326 i  no en el sistema de sistuació acutal
+							if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // Â·$Â· NJ-> JM Crec que aixÃ² no estÃ  bÃ©, perquÃ¨ les coordenades en el cas del SOS sÃ³n de moment sempre en EPGS:4326 i  no en el sistema de sistuaciÃ³ acutal
 							{
 								feature.geometry.coordinates[0]=parseFloat(coord[1]);
 								feature.geometry.coordinates[1]=parseFloat(coord[0]);
@@ -1237,7 +1237,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 							CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 							if(consulta.seleccionar==true)
 							{
-								//Actualitzar EnvSelec, que sempre està en el sistema de coordenades actual
+								//Actualitzar EnvSelec, que sempre estÃ  en el sistema de coordenades actual
 								DonaCoordenadaPuntCRSActual(punt, feature, capa.CRSgeometry);
 								if(EnvSelec==null)
 									EnvSelec={"MinX": punt.x, "MaxX": punt.x, "MinY": punt.y, "MaxY": punt.y};
@@ -1275,7 +1275,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 
 		if (capa.objectes && capa.objectes.features)
 		{
-			//Elimino els objectes que han estat carregats més d'un cop. Això pot passar en usar tiles.
+			//Elimino els objectes que han estat carregats mÃ©s d'un cop. AixÃ² pot passar en usar tiles.
 			var features=capa.objectes.features;
 			features.sort(ComparaObjCapaDigiIdData);
 			if (hi_havia_objectes)
@@ -1300,7 +1300,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 
 		CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		/*if(consulta.seleccionar==false && cal_crear_vista)
-			CreaVistes(); Ara el redibuixat es fa en el canvas quan totes les tiles han finalitzat i no cal forçar-lo a cada tile mai.*/
+			CreaVistes(); Ara el redibuixat es fa en el canvas quan totes les tiles han finalitzat i no cal forÃ§ar-lo a cada tile mai.*/
 	}
 	else if(tm)
 	{
@@ -1309,7 +1309,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 		
 		if (tm.objNumerics && tm.objNumerics.features)
 		{
-			//Elimino els objectes que han estat carregats més d'un cop. 
+			//Elimino els objectes que han estat carregats mÃ©s d'un cop. 
 			var features=tm.objNumerics.features;
 			features.sort(ComparaObjCapaDigiIdData);
 			if (hi_havia_objectes_tm)
@@ -1341,7 +1341,7 @@ function ErrorCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 }//Fi de ErrorCapaDigiAmbObjectesDigitalitzats()
 
-//Dona l'índex dins de l'array d'atributs d'un nom d'attribut
+//Dona l'Ã­ndex dins de l'array d'atributs d'un nom d'attribut
 function DonaIAtributsDesDeNomAtribut(capa_digi, atributs, nom_atribut)
 {
 	if(atributs==null)
@@ -1359,7 +1359,7 @@ function DonaIAtributsDesDeNomAtribut(capa_digi, atributs, nom_atribut)
 	return -1;
 }
 
-//Determina el valor per una data concreta. Pensada per muntar sèries temporals
+//Determina el valor per una data concreta. Pensada per muntar sÃ¨ries temporals
 function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, feature, atribut, i_data, i_col, i_fil)
 {
 	if (atribut.calcul && !atribut.FormulaConsulta)
@@ -1370,7 +1370,7 @@ function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, feature, a
 
 	if (atribut.FormulaConsulta)
 	{
-		var p=feature.properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()
+		var p=feature.properties;  //Encara que sembla que no es fa servir, aquesta variable Ã©s necessaria pels evals()
 		var nonPropId=feature.id;
 		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, atribut.FormulaConsulta))
 			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i_col, i_fil); //idem
@@ -1462,7 +1462,7 @@ function DeterminaISimbolObjecteCapaDigi(i_nova_vista, capa_digi, atributs, esti
 	return 0;  //simbols are not indexed by NomCamp (or there are no properties in the object) so there first simbol should be used
 }
 
-//Discusió de com fer tot això: http://stackoverflow.com/questions/17578280/how-to-pass-parameters-into-image-load-event
+//DiscusiÃ³ de com fer tot aixÃ²: http://stackoverflow.com/questions/17578280/how-to-pass-parameters-into-image-load-event
 function EnCarregarSimbolCapaDigi()
 {
 	this.sha_carregat = true;
@@ -1763,15 +1763,15 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 		else
 			plantilla.push("/collections/{collectionId}/items");
 
-		if(cadena_objectes && cadena_objectes.length==1)  // si n'hi ha més caldrà fer-ho d'una altra manera, tot i que crec que de moment mai usem aquesta opció de cadena_objectes
+		if(cadena_objectes && cadena_objectes.length==1)  // si n'hi ha mÃ©s caldrÃ  fer-ho d'una altra manera, tot i que crec que de moment mai usem aquesta opciÃ³ de cadena_objectes
 			plantilla.push("/", cadena_objectes[0], "?");
 		else
 			plantilla.push("?");
 		var cp=plantilla.join("");
 		cp=cp.replace("{collectionId}", capa.nom);
 		cdns.push(cp);
-		cdns.push("crs=", capa.CRSgeometrym,"&limit=", (limit && limit!=-1)? limit:"10000000","&f=");  //·$· hauria json i no application/json
-		// ·$· en aquest cas el limit si se supera i no s'ha establert cap límit caldria continuar sol·licitant la petició amb next,...		
+		cdns.push("crs=", capa.CRSgeometrym,"&limit=", (limit && limit!=-1)? limit:"10000000","&f=");  //Â·$Â· hauria json i no application/json
+		// Â·$Â· en aquest cas el limit si se supera i no s'ha establert cap lÃ­mit caldria continuar solÂ·licitant la peticiÃ³ amb next,...		
 	}
 	else
 	{		
@@ -1786,12 +1786,12 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 	else
 		cdns.push("text/xml;subtype=gml/3.1.1/profiles/miramon/1.0.0/attributes");
 
-	if(env)  //Està en el mateix sistema de referència que la capa
+	if(env)  //EstÃ  en el mateix sistema de referÃ¨ncia que la capa
 	{
 		cdns.push("&BBOX=" , env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
 		if(completa==false)
 		{
-			if(tipus=="TipusOAPI_Features")	 //·$· Potser ha de ser més sofisticat i diferent en funció del format (json, gml,...)
+			if(tipus=="TipusOAPI_Features")	 //Â·$Â· Potser ha de ser mÃ©s sofisticat i diferent en funciÃ³ del format (json, gml,...)
 				cdns.push("&PROPERTYNAME=" , capa.nom , "/geometry");
 			else
 				cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
@@ -1803,8 +1803,8 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 	}
 	else if(cadena_objectes && tipus=="TipusWFS")
 	{
-		// NJ_28-09-2020: Sembla ser que per aquí no hi vinc mai , però de moment no ho elimino perquè potser és necessita per quan vull fer transaccions
-		// Si això al final s''usa caldrà adaptar-ho per a TipusOAPI_Features
+		// NJ_28-09-2020: Sembla ser que per aquÃ­ no hi vinc mai , perÃ² de moment no ho elimino perquÃ¨ potser Ã©s necessita per quan vull fer transaccions
+		// Si aixÃ² al final s''usa caldrÃ  adaptar-ho per a TipusOAPI_Features
 		cdns.push("&FEATUREID=",cadena_objectes.join(","));
 		if(completa==false)
 		{
@@ -1819,7 +1819,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 	}
 	else if(completa==false)
 	{
-		if(tipus=="TipusOAPI_Features")	 //·$· Potser ha de ser més sofisticat i diferent en funció del format (json, gml,...)
+		if(tipus=="TipusOAPI_Features")	 //Â·$Â· Potser ha de ser mÃ©s sofisticat i diferent en funciÃ³ del format (json, gml,...)
 			cdns.push("&PROPERTYNAME=" , capa.nom , "/geometry");
 		else
 			cdns.push("&PROPERTYNAME=" , capa.nom , "/gml:position");
@@ -1872,7 +1872,7 @@ var capa=ParamCtrl.capa[i_capa];
 		if(limit && limit!=-1)
 			cdns.push("?$count=true&$top=",limit, "&");
 		else
-			cdns.push("?$top=10000000&"); // ·$· en aquest cas el limit si se supera i no s'ha establert cap límit caldria continuar sol·licitant la petició amb next,...		
+			cdns.push("?$top=10000000&"); // Â·$Â· en aquest cas el limit si se supera i no s'ha establert cap lÃ­mit caldria continuar solÂ·licitant la peticiÃ³ amb next,...		
 	}
 	else
 	{
@@ -1895,7 +1895,7 @@ var capa=ParamCtrl.capa[i_capa];
 }
 
 //i_obj pot ser null per demanar-los tots
-//env està en el CRS actual
+//env estÃ  en el CRS actual
 function DonaRequestGetObservation(i_capa, i_obj, env)
 {
 var cdns=[];
@@ -1923,7 +1923,7 @@ function FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(i_capa_digi, env, sele
 {
 var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
-	//env està en el CRS de la capa
+	//env estÃ  en el CRS de la capa
 
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, null, env, null, false);
 	var tipus=DonaTipusServidorCapa(capa);
@@ -1989,7 +1989,7 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	else if (tipus=="TipusHTTP_GET")
 		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
 
-	//env_sol està ja en el CRS de la capa
+	//env_sol estÃ  ja en el CRS de la capa
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {i_capa_digi: i_capa_digi, i_tile: i_tile, env_sol: env_sol, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
@@ -2014,7 +2014,7 @@ var i_selec=0;
 	
 	for(var i=0; i<capa.tileMatrixSetGeometry.tileMatrix.length;i++)
 	{
-		if (capa.tileMatrixSetGeometry.tileMatrix[i].costat<=costat_actual)		// Agafo el més proper per sota	
+		if (capa.tileMatrixSetGeometry.tileMatrix[i].costat<=costat_actual)		// Agafo el mÃ©s proper per sota	
 			i_selec=i;
 	}
 	return i_selec;
@@ -2054,7 +2054,7 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 	   typeof capa.tileMatrixSetGeometry.tileMatrix=== "undefined"|| capa.tileMatrixSetGeometry.tileMatrix==null || capa.tileMatrixSetGeometry.tileMatrix.length<1)
 		return ha_calgut;
 	
-	// He de mirar quin tiles i en quin nivell de zoom cal sol·licitar
+	// He de mirar quin tiles i en quin nivell de zoom cal solÂ·licitar
 	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1)
 	{
 		i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa)		
@@ -2065,7 +2065,7 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 	}
 	else
 	{
-		// Només hi ha un nivell de zoom.
+		// NomÃ©s hi ha un nivell de zoom.
 		i_tileMatrix=0;
 		demana_objs=true;
 	}
@@ -2081,7 +2081,7 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 		vaig_a_carregar=true;		
 	}
 	
-	// Calculo els índexs de les tessel·les a demanar
+	// Calculo els Ã­ndexs de les tesselÂ·les a demanar
 	var incr_x=tileMatrix.TileWidth*tileMatrix.costat;
 	var incr_y=tileMatrix.TileHeight*tileMatrix.costat;
 	i_tessella_min=floor_DJ((env_temp.MinX-tileMatrix.TopLeftPoint.x)/incr_x);
@@ -2163,7 +2163,7 @@ var env={"MinX": minx, "MaxX": maxx, "MinY": miny, "MaxY": maxy};
 }//Fi de SeleccionaObjsCapaDigiPerEnvolupant()
 
 
-// Aquesta funció sembla ser que no s'usa enlloc (NJ 28-09-2020)
+// Aquesta funciÃ³ sembla ser que no s'usa enlloc (NJ 28-09-2020)
 function SeleccionaObjsCapaDigiPerIdentificador(id_capa, id_obj, afegir)
 {
 var i_capa;
@@ -2197,7 +2197,7 @@ var punt, i;
 				{
 					capa.objectes.features[i].seleccionat=true;
 
-					//Actualitzar EnvSelec, que sempre està en el sistema de coordenades actual
+					//Actualitzar EnvSelec, que sempre estÃ  en el sistema de coordenades actual
 					DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[i], capa.CRSgeometry);
 					if(EnvSelec==null)
 						EnvSelec={"MinX": punt.x, "MaxX": punt.x, "MinY": punt.y, "MaxY": punt.y};
@@ -2225,7 +2225,7 @@ var punt, i;
 		for(var j=0; j<id_obj.length; j++)
 			cadena_objectes[cadena_objectes.length]=id_obj[j];
 	}
-	//Faig la petició dels objectes no trobats
+	//Faig la peticiÃ³ dels objectes no trobats
 	if(cadena_objectes.length>0)
 		FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(i_capa, cadena_objectes, true);
 }//Fi de SeleccionaObjsCapaDigiPerIdentificador()
