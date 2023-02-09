@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -41,7 +41,7 @@
 var RodetVertical=false;  // Constant. el mode vertical no s'ha provat mai.
 var DatesVideo=[];  //Un array de propietats de cada "fotograma" de conforma el video: {"i_capa":, "i_data":, "i_estil:, "millisegons":, "animable":("si", "ara_no", "no"), "carregada":, "carregadaRodet":, "timeoutRodet":, "timeoutFotograma":}
 var IDataVideoMostrada;
-var IDataVideoInicial, IDataVideoFinal;  //NomÈs ˙tils al principi de la c‡rrega. DesprÈs DatesVideo Ès manipulat per eliminar les dates fora de l'interval que desapareixen del array.
+var IDataVideoInicial, IDataVideoFinal;  //Nom√©s √∫tils al principi de la c√†rrega. Despr√©s DatesVideo √©s manipulat per eliminar les dates fora de l'interval que desapareixen del array.
 var NomVideoActiu;
 var PuntsSerieTemporal=[], IconaVideoClick={}, ImgVideoStat, ImgVideoStatHistograma;
 //var EstadisticCarregatVideo=null;
@@ -58,7 +58,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps tambÈ sÛn aptes per a vÌdeos
+	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps tamb√© s√≥n aptes per a v√≠deos
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;
@@ -169,7 +169,7 @@ var data=[], i_v, i_c;
 				estadistics=CalculaEstadisticsHistograma(estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe,
 						DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
 						DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta,
-								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o Ès el nombre de colors de la paleta, o Ès 256 per totes les bandes
+								estil.capa_video[DatesVideo[i_data_video].i_data].histograma.component[i_c].classe.length  //El nombre de colors, o √©s el nombre de colors de la paleta, o √©s 256 per totes les bandes
 									));
 				data[i_c][0][i_v]={t:DatesVideo[i_data_video].millisegons, y:estadistics.mitjana+estadistics.desv_tipica};
 				data[i_c][1][i_v]={t:DatesVideo[i_data_video].millisegons, y:estadistics.mitjana};
@@ -182,7 +182,7 @@ var data=[], i_v, i_c;
 }
 
 
-//Aquesta funciÛ dona les etiquetes de temps en mode "moment" tal com ho vol la llibreria chart.js.
+//Aquesta funci√≥ dona les etiquetes de temps en mode "moment" tal com ho vol la llibreria chart.js.
 function DonaEtiquetesValorsSerieTemporalLocalitzacio()
 {
 var labels=[];
@@ -197,7 +197,7 @@ var labels=[];
 	return labels;
 }
 
-//Aquesta funciÛ dona les etiquetes de temps en mode text.
+//Aquesta funci√≥ dona les etiquetes de temps en mode text.
 function DonaTempsValorsSerieTemporalLocalitzacio()
 {
 var temps=[];
@@ -226,7 +226,7 @@ var titol=[], estil;
 		{
 			for (var i_c=0; i_c<estil.component.length; i_c++)
 				titol[i_c]=(estil.component[i_c].desc) ? DonaCadena(estil.component[i_c].desc) : DonaCadena(estil.desc);
-			return titol;  //agafem el primer tÌtol sense mÈs.
+			return titol;  //agafem el primer t√≠tol sense m√©s.
 		}
 	}
 }
@@ -288,7 +288,7 @@ function ConsultaSobreVideo(event_de_click)
 
 	if (PuntsSerieTemporal.length==0)
 	{
-		//Ara cal presentar la gr‡fica.
+		//Ara cal presentar la gr√†fica.
 		ChartConsultaSobreVideo=ObreGraficSerieTemporal("video_grafic", "video_click", "video_grafic",
 						DonaDadesEstadistiquesFotogramaDeSerieTemporal(),
 						DonaEtiquetesValorsSerieTemporalLocalitzacio(),
@@ -395,7 +395,7 @@ var cdns=[], capa, i_capa_primer_video;
 		return;
 	}
 
-	//ComenÁo pel selector de capes.
+	//Comen√ßo pel selector de capes.
 	cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
 		" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
 			  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
@@ -434,10 +434,10 @@ var cdns=[], capa, i_capa_primer_video;
 		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0px; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
 		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0px; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
-	// Desplegable d' animaciÛ o d'estadistic.
+	// Desplegable d' animaci√≥ o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
 
-	//Dibuixar els botons de progrÈs del video.
+	//Dibuixar els botons de progr√©s del video.
 	cdns.push("<span id=\"video_botons_estadistics\" style=\"visibility: hidden\"><button onClick=\"return VideoCopiaEstadistic(event);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("boto_copiar.gif"),"\" alt=\"",GetMessage("copy"),"\" title=\"",GetMessage("copy"),"\"></button></span>");
 	cdns.push("<span id=\"video_botons_animacio\"><button onClick=\"return VideoMostraEvent(event, -2);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_start.gif"),"\" alt=\"",GetMessage("toTheStart"),"\" title=\"",GetMessage("toTheStart"),"\"></button>",
 		"<button onClick=\"return VideoMostraEvent(event, -1);\"><img align=middle src=\"",AfegeixAdrecaBaseSRC("b_rewind.gif"),"\" alt=\"",GetMessage("stepBack"),"\" title=\"",GetMessage("stepBack"),"\"></button>",
@@ -466,7 +466,7 @@ var cdns=[], capa, i_capa_primer_video;
 		"</font>",
 		"</center>");
 
-	//Dibuixar la data i la barra de progrÈs del video.
+	//Dibuixar la data i la barra de progr√©s del video.
 	cdns.push("<span id=\"video_time_text\"><center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\">",
 			  GetMessage("Date"),": <span id=\"video_data\"></span></center><span>",
 			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
@@ -492,7 +492,7 @@ var cdns=[], capa, i_capa_primer_video;
 
 	contentFinestraLayer(win, name, cdns.join(""));
 
-		//Si hi ha un video actiu, activar la seva preparaciÛ.
+		//Si hi ha un video actiu, activar la seva preparaci√≥.
 	CanviaAnimacio(document.video_animacions.capa.value);
 }
 
@@ -583,8 +583,8 @@ var cdns=[];
 			cdns.push("<option value='", DatesVideo[i].millisegons, "'></option>");
 		cdns.push("</datalist>");
 	}
-	/*AtenciÛ que aquest slider est‡ dibuixat al revÈs ("direction: rtl"; de dreta a esquerra) i tots els calculs s'han d'invertir.
-	AixÚ Ès important perquË Chrome i Edge posen un color a la dreta de l'slider (que, en aquest cas, ha de quedar a l'esquerra)*/
+	/*Atenci√≥ que aquest slider est√† dibuixat al rev√©s ("direction: rtl"; de dreta a esquerra) i tots els calculs s'han d'invertir.
+	Aix√≤ √©s important perqu√® Chrome i Edge posen un color a la dreta de l'slider (que, en aquest cas, ha de quedar a l'esquerra)*/
 	cdns.push("<br>",
 		GetMessage("EndDate"), ": ",
 		DonaDataMillisegonsComATextBreu(ParamCtrl.capa[DatesVideo[IDataVideoFinal].i_capa].FlagsData, DatesVideo[IDataVideoFinal].millisegons), " ",
@@ -625,7 +625,7 @@ var cdns=[], capa, estil;
 
 	cdns=[];
 
-	//Llista per veure animaciÛ o veure estadistics
+	//Llista per veure animaci√≥ o veure estadistics
 	if (estil!=null)
 	{
 		for (var i_capa_video_actiu=0;i_capa_video_actiu<ParamCtrl.capa.length; i_capa_video_actiu++)
@@ -633,11 +633,11 @@ var cdns=[], capa, estil;
 			capa=ParamCtrl.capa[i_capa_video_actiu];
 			if (EsCapaAptePerVideo(capa) && nom_video==capa.NomVideo && capa.estil)
 			{
-				//Em quedo amb el primer i no em complico: Si n'hi ha mÈs d'un haurien de ser iguals.
+				//Em quedo amb el primer i no em complico: Si n'hi ha m√©s d'un haurien de ser iguals.
 				//De fet, cal limitar-ho a animacions d'una sola capa de moment.
 
 				estil=capa.estil[DonaIEstilFotograma(i_capa_video_actiu, estil)];
-				if (EsCapaBinaria(capa) && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot Ès massa complicat.
+				if (EsCapaBinaria(capa) && estil && estil.component && estil.component.length==1)  //Per extreure stadistics cal que la capa tingui una sola component. Si no tot √©s massa complicat.
 				{
 					cdns.push(GetMessage("View"),
 						": <select name=\"veure\" onClick=\"dontPropagateEvent(event);\" onChange=\"PosaEstadisticSerieOAnimacio(event, document.video_animacions.veure.value, -1);\">");
@@ -655,7 +655,7 @@ var cdns=[], capa, estil;
 					}
 					else
 					{
-						//Fer estadistics cl‡sics: mitjana, desviaciÛ etc.
+						//Fer estadistics cl√†sics: mitjana, desviaci√≥ etc.
 						//Considerar determinar transformades de fourier o wavelet.
 						cdns.push("<option value=\"Mitjana\">", GetMessage("Mean"), "</option>");
 						cdns.push("<option value=\"StanDev\">", GetMessage("StandardDeviation"), "</option>");
@@ -838,7 +838,7 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		DatesVideo[i_data_video].timeOutRodet=setTimeout("CanviaImatgeCapaRodet("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 75*i_data_video+75);
 	}
 
-	//Dibuixo tots els fotogrames de l'animaciÛ buits i apagats
+	//Dibuixo tots els fotogrames de l'animaci√≥ buits i apagats
 	cdns.length=0;
 	vista.ncol=ParamInternCtrl.vista.ncol;
 	vista.nfil=ParamInternCtrl.vista.nfil;
@@ -884,7 +884,7 @@ function CanviaRatioNodataNoTolera(event, valor)
 	var n_foto=0;
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		//Determino si la imatge Ès enterament nodata.
+		//Determino si la imatge √©s enterament nodata.
 		if (ratio_nodata_no_tolerat>DonaRatioNodataRodet(i_data_video))
 			n_foto++;
 	}
@@ -900,7 +900,7 @@ var ratio_nodata, inserir_slider=false;
 	//Demano totes les imatges grans per omplir el video de fotogrames
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		//Determino si la imatge Ès enterament nodata.
+		//Determino si la imatge √©s enterament nodata.
 		ratio_nodata=DonaRatioNodataRodet(i_data_video);
 		if (0.99<ratio_nodata)
 		{
@@ -926,7 +926,7 @@ var ratio_nodata, inserir_slider=false;
 		CanviaRatioNodataNoTolera(null, initial_value);
 		return;
 	}
-	//Mostrar immediatament el vÌdeo
+	//Mostrar immediatament el v√≠deo
 	CarregaVideo();
 }
 
@@ -1092,7 +1092,7 @@ var i, j, i_data_video;
 		{
 			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_video))
 			{
-				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files seg¸ents.
+				for (i=0; i<ncol; i++) //Necessari perque alguns estadistic reordenen els valors de l'array. si no els anulo influeixen en les files seg√ºents.
 					fila_calc[i][i_data_video]=null;
 				continue;
 			}
@@ -1101,7 +1101,7 @@ var i, j, i_data_video;
 			valors=capa.valors;
 			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
 			if (n_v_plena==0)
-				return;  //AixÚ no hauria d'haver passat mai
+				return;  //Aix√≤ no hauria d'haver passat mai
 
 			if (n_v_plena>1)
 			{
@@ -1262,7 +1262,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 			valors=capa.valors;
 			n_v_plena=CarregaDataViewsCapa(dv, NovaVistaVideo, DatesVideo[i_data_video].i_data, valors);
 			if (n_v_plena==0)
-				return;  //AixÚ no hauria d'haver passat mai
+				return;  //Aix√≤ no hauria d'haver passat mai
 
 			if (n_v_plena>1)
 			{
@@ -1272,7 +1272,7 @@ var i_cell=[], i_byte=[], fila=[], fila_calc=[];
 			}
 			else
 			{
-				//Es podria obtimitzar evitant que calculi el que no cal donat que nomÈs vull la darrera fila
+				//Es podria obtimitzar evitant que calculi el que no cal donat que nom√©s vull la darrera fila
 				CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, null, dv, valors, ncol, i_byte[i_data_video], i_cell[i_data_video], estil.component[0]);
 			}
 		}
@@ -1328,11 +1328,11 @@ var i_data_fil=[], t, j, i_data_video;
 	}
 	if (j<nfil)
 	{
-		//substituexo els primers temps que no sÛn animables pel primer que ho Ès
+		//substituexo els primers temps que no s√≥n animables pel primer que ho √©s
 		for (var j2=0; j2<j; j2++)
 			i_data_fil[j2]=i_data_fil[j];
 
-		//substituexo els temps que no sÛn animables pels immediatement anteriors que ho sÛn
+		//substituexo els temps que no s√≥n animables pels immediatement anteriors que ho s√≥n
 		for (j++; j<nfil; j++)
 		{
 			if (!ParticipaFotogramaDeLaSerieTemporal(i_data_fil[j]))
@@ -1414,7 +1414,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 		document.getElementById("video_botons_estadistics").style.visibility="visible";
 		document.getElementById("video_time_slider").style.visibility="hidden";
 		ApagaFotogramaVideo(IDataVideoMostrada, n);
-		//Activo el fotograma de les estadÌstiques
+		//Activo el fotograma de les estad√≠stiques
 		EncenEstadisticsVideo(n);
 		if (estadistic=="x/t")
 		{
@@ -1422,7 +1422,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			//if (EstadisticCarregatVideo!=estadistic || (IFilEixXEixTVideo!=i_fil && i_fil!=-1))
 			if (i_fil!=-1)
 			{
-				//Demano l'execuciÛ del perfil x/t
+				//Demano l'execuci√≥ del perfil x/t
 				setTimeout("CanviaImatgeBinariaEstadisticaEixXEixT(\"video_i_raster_stat\", "+i_fil+")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					GetMessage("ComputingGraphicSeries", "video")+
@@ -1435,7 +1435,7 @@ function PosaEstadisticSerieOAnimacio(event, estadistic, i_fil)
 			IFilEixXEixTVideo=-1;
 			//if (EstadisticCarregatVideo!=estadistic)
 			//{
-				//Demano l'execuciÛ del c‡lcul estadÌstic
+				//Demano l'execuci√≥ del c√†lcul estad√≠stic
 				setTimeout("CanviaImatgeBinariaEstadisticaSerieTemporal(\"video_i_raster_stat\", \""+estadistic+"\")", 50);
 				document.getElementById("video_info").innerHTML="<center><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"3\">"+
 					GetMessage("ComputingStatisticSeries", "video")+
@@ -1650,7 +1650,7 @@ function ApagaFotogramaVideo(i_data_video, n)
 function ApagaEstadisticsVideo(n)
 {
 	var elem=document.getElementById("video_l_raster_stat");
-	if (elem) // potser que no existeix-hi perquË no hi ha cap capa animable tipus IMG
+	if (elem) // potser que no existeix-hi perqu√® no hi ha cap capa animable tipus IMG
 	{
 		elem.style.opacity=0;
 		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.6,.2,.8,.4)" : null;
@@ -1681,7 +1681,7 @@ function EncenFotogramaVideo(i_data_video, n)
 function EncenEstadisticsVideo(n)
 {
 	var elem=document.getElementById("video_l_raster_stat");
-	if (elem) // potser que no existeix-hi perquË no hi ha cap capa animable tipus IMG
+	if (elem) // potser que no existeix-hi perqu√® no hi ha cap capa animable tipus IMG
 	{
 		elem.style.opacity=1;
 		elem.style.transition=(n) ? "opacity "+n/2+"s cubic-bezier(.2,.6,.4,.8)" : null;
@@ -1698,7 +1698,7 @@ var j, img, nom_icona;
 	//Actualitzo la data.
 	document.getElementById("video_data").innerHTML=DonaDataComAText(DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_data);
 
-	//Apago la barra de progrÈs de videos.
+	//Apago la barra de progr√©s de videos.
 	var n=DonaNPecesBarraVideo();
 
 	//Encenc l'element de la barra que toca.
@@ -1741,7 +1741,7 @@ var j, img, nom_icona;
 		}
 	}
 
-	//Actualitzo la posiciÛ del rodet i el fotograma actiu
+	//Actualitzo la posici√≥ del rodet i el fotograma actiu
 	var n=parseFloat(document.video_animacions.interval.value);
 	if (isNaN(n) || n<0.09)
 		n=0;
@@ -1864,14 +1864,14 @@ var n;
 		{
 			if (0==VideoMostra(opcio)) 	   //mostrar la imatge que toca.
 			{
-				//buscar la imatge seg¸ent.
+				//buscar la imatge seg√ºent.
 				i_data_a_mostrar=DeterminaIDataVideoSeguent(IDataVideoMostrada, 1)
 				if (IDataVideoMostrada==i_data_a_mostrar)
 				{
 					if (opcio==9)
-						return; //Estic al final d'una sequencia autom‡tica.
+						return; //Estic al final d'una sequencia autom√†tica.
 
-					//animaciÛ circular
+					//animaci√≥ circular
 					i_data_a_mostrar=0;
 					while (DatesVideo[i_data_a_mostrar].animable!="si")
 					{
@@ -1926,11 +1926,11 @@ var i_capa_previa;
 		i_data_a_mostrar=DeterminaIDataVideoSeguent(IDataVideoMostrada, 1);
 		if ((opcio==8 || opcio==9) && IDataVideoMostrada==i_data_a_mostrar)
 		{
-		    //Estic al final d'una sequencia autom‡tica.
+		    //Estic al final d'una sequencia autom√†tica.
 			if (opcio==9)
 				return 1;
 
-			//animaciÛ circular
+			//animaci√≥ circular
 		 	i_data_a_mostrar=0;
 			while (DatesVideo[i_data_a_mostrar].animable!="si")
 			{

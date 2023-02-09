@@ -1,4 +1,6 @@
-﻿/* 
+﻿<!DOCTYPE html>
+<html>
+<!--
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -34,78 +36,14 @@
     
     El Navegador de Mapes del MiraMon es pot actualitzar des de 
     https://github.com/grumets/MiraMonMapBrowser.
-*/
+-->
+<head>
+<title>Dotaz</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-"use strict"
+</head>
 
-function GaussianFit(){};
+<PRE>Už nejsou žádné dotazovatelné vrstvy</PRE>
 
-//GaussianFit.sqr2pi = Math.sqrt(2 * Math.PI);
-
-GaussianFit.evalAssymGaussian = function(x, r_left, r_right)
-{
-	if (x<=r_left.mean)
-		return r_left.c*Math.exp(-(x-r_left.mean)*(x-r_left.mean)/r_left.sdev_square_2)+r_left.base;
-	return r_right.c*Math.exp(-(x-r_right.mean)*(x-r_right.mean)/r_right.sdev_square_2)+r_right.base;
-}
-
-GaussianFit.CenterGaussian = function(ys)
-{
-var len=ys.length, ymax=ys[0], i_center=0;
-
-	for (var i=1; i<len; i++)
-	{
-		if (ymax<ys[i])
-		{
-			ymax=ys[i];
-			i_center=i;
-		}			
-	}
-	return i_center;
-}
-
-GaussianFit.leftGaussian = function(xs, ys, i_center)
-{
-var sigma=0, n=0, base=ys[0];
-	if (i_center==null)
-		i_center=xs.length-1;		
-
-	for (var i=0; i<i_center; i++)
-	{
-		if (base>ys[i])
-			base=ys[i];
-	}
-
-
-	for (var i=0; i<i_center; i++)
-	{
-		sigma+=(ys[i]-base)*(xs[i]-xs[i_center])*(xs[i]-xs[i_center]);
-		n+=ys[i]-base;
-	}
-	n+=ys[i_center]-base;
-	var sdev_square=sigma/(n-1)
-
-	return {mean: xs[i_center], sdev_square_2: sdev_square*2, sdev: Math.sqrt(sdev_square), base: base, c: ys[i_center]-base /* 1/(Math.sqrt(sdev_square)*GaussianFit.sqr2pi) */};
-}
-
-GaussianFit.rightGaussian = function(xs, ys, i_center)
-{
-var sigma=0, n, len=ys.length, base=ys[i_center];
-	
-	for (var i=i_center+1; i<len; i++)
-	{
-		if (base>ys[i])
-			base=ys[i];
-	}
-
-	n=ys[i_center]-base;
-	for (var i=i_center+1; i<len; i++)
-	{
-		sigma+=(ys[i]-base)*(xs[i]-xs[i_center])*(xs[i]-xs[i_center]);
-		n+=ys[i]-base;
-	}
-	var sdev_square=sigma/(n-1);
-
-	return {mean: xs[i_center], sdev_square_2: sdev_square*2, sdev: Math.sqrt(sdev_square), base: base, c: ys[i_center]-base /* 1/(Math.sqrt(sdev_square)*GaussianFit.sqr2pi) */};
-}
-
+</body>
+</html>

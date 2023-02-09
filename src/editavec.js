@@ -1,4 +1,4 @@
-/*
+Ôªø/*
   This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest progamari programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -54,7 +54,7 @@ function ErrorAvaluaRespostaTransaccio(doc, param)
 {
 var text=[], trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa];
 ;
-	// Informo a l'usuari que s'ha produÔt un error
+	// Informo a l'usuari que s'ha produ√Øt un error
 	text.push(GetMessage("InsertTransactionObjectIntoLayer", "editavec"), " \"",
 				   capa.nom, "\" ", GetMessage("hasFailed", "editavec"), ".");
 	if(param.text && param.text.length)
@@ -125,7 +125,7 @@ function AmagaLayerMissatgeTransaccio()
 	TancaFinestraLayer("misTransaccio");
 }
 
-//$$ Innacabat: Aquest sistema de missatgeria Ès particular de l'ediciÛ perÚ requereix una window nova. Considerar si aquest podria ser el sistema de missatgeria general del navegador (tal com ho fa el GeMM). TambÈ cal connectar la transacciÛ amb a lÌnia de comanda de la consula i reportar-lo com un error.
+//$$ Innacabat: Aquest sistema de missatgeria √©s particular de l'edici√≥ per√≤ requereix una window nova. Considerar si aquest podria ser el sistema de missatgeria general del navegador (tal com ho fa el GeMM). Tamb√© cal connectar la transacci√≥ amb a l√≠nia de comanda de la consula i reportar-lo com un error.
 function MostraMissatgeTransaccio(missatge)
 {
 var elem=ObreFinestra(window, "misTransaccio", GetMessage("toReportResultTransaction", "editavec"));
@@ -313,7 +313,7 @@ var cdns=[], i_capa;
 	}
 	if(i_capa==ParamCtrl.capa.length)
 	{
-		alert("No hi ha cap capa editable"); // de moment no faig gran cosa mÈs perquË en un futur proper la funciÛ d'ediciÛ ha de ser de cada capa i no s'arribar‡ aquÌ si la capa no Ès editable
+		alert("No hi ha cap capa editable"); // de moment no faig gran cosa m√©s perqu√® en un futur proper la funci√≥ d'edici√≥ ha de ser de cada capa i no s'arribar√† aqu√≠ si la capa no √©s editable
 		return;
 	}
 
@@ -331,9 +331,9 @@ var cdns=[], i_capa;
 			  GetMessage("Coordinates"),"<br>",
 			  DonaValorDeCoordActual(PuntConsultat.x,PuntConsultat.y,false, true),
 			  "</div><div align=\"left\" class=\"layereditar\"><br>");
-/*	cdns.push(DonaCadenaLang({"cat":"Data mÌnima", "spa":"Fecha mÌnima", "eng":"Minimum date", "fre":"Date minimale"}),
+/*	cdns.push(DonaCadenaLang({"cat":"Data m√≠nima", "spa":"Fecha m√≠nima", "eng":"Minimum date", "fre":"Date minimale"}),
  			  ": ", SelectorData("datemin", null, null, {"DataMostraAny": true, "DataMostraMes": false, "DataMostraDia": false}),"<br>",
-  			  DonaCadenaLang({"cat":"Data m‡xima", "spa":"Fecha m·xima", "eng":"Maximum date", "fre": "Date maximale"}),
+  			  DonaCadenaLang({"cat":"Data m√†xima", "spa":"Fecha m√°xima", "eng":"Maximum date", "fre": "Date maximale"}),
    			  ": ", SelectorData("datemax", null, null, {"DataMostraAny": true, "DataMostraMes": false, "DataMostraDia": false}),"<br>",
 			  "haccmin: <input type=\"text\" name=\"haccmin\" class=\"input_text\"><br>",
 			  "haccmax: <input type=\"text\" name=\"haccmax\" class=\"input_text\"><br>",
@@ -355,7 +355,7 @@ var cdns=[], i_capa;
 	return cdns.join("");
 }
 
-//$$ Aquesta operaciÛ NO ha estat probada mai i segurament cal repassar-la
+//$$ Aquesta operaci√≥ NO ha estat probada mai i segurament cal repassar-la
 function FesTransaccioEliminarPunt(i_capa, i_feature)
 {
 var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plantilla=[];
@@ -377,7 +377,7 @@ var	capa=ParamCtrl.capa[i_capa], feature=capa.objectes.features[i_feature], plan
 
 /*
 
-// Tot aquest codi sembla no usar-se mai i per aixÚ el deixo comentat aquÌ 2018-01-04 (JM)
+// Tot aquest codi sembla no usar-se mai i per aix√≤ el deixo comentat aqu√≠ 2018-01-04 (JM)
 var estat_pendent=0x0001;
 var estat_fi_exit=0x0002;
 var estat_fi_error=0x0004;
@@ -422,15 +422,15 @@ var trans_actual;
 		var identificador=[];
 		identificador.push(elem[0].getAttribute('fid'));
 
-		//Faig la peticiÛ GetFeature
+		//Faig la petici√≥ GetFeature
 		FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(trans_actual.i_capa, identificador, false);
 		var mis=getLayer(trans_actual.win, "missatges");
 		if(mis)
 		{
 			classLayer(mis, "mistrans");
-			contentLayer(mis, "La transacciÛ d'inserciÛ \""+i_trans+ "\" de l'element \""+
+			contentLayer(mis, "La transacci√≥ d'inserci√≥ \""+i_trans+ "\" de l'element \""+
 						 	   identificador+"\" de la capa \""+ParamCtrl.capa[trans_actual.i_capa].nom+
-							   "\" ha finalitzat amb Ëxit.") ;
+							   "\" ha finalitzat amb √®xit.") ;
 			showLayer(mis);
 			setTimeout("AmagaLayerMissatges();",5000);
 		}
@@ -448,8 +448,8 @@ var trans_actual;
 		if(mis)
 		{
 			classLayer(mis, "mistrans");
-			contentLayer(mis, "La transacciÛ d'inserciÛ \""+i_trans+ "\" d'un element de la capa \""+ParamCtrl.capa[trans_actual.i_capa].nom+
-							   "\" NO ha estat finalitzat amb Ëxit."+((elem && elem[0].childNodes[0].nodeValue) ? ("\n"+elem[0].childNodes[0].nodeValue) : ""));
+			contentLayer(mis, "La transacci√≥ d'inserci√≥ \""+i_trans+ "\" d'un element de la capa \""+ParamCtrl.capa[trans_actual.i_capa].nom+
+							   "\" NO ha estat finalitzat amb √®xit."+((elem && elem[0].childNodes[0].nodeValue) ? ("\n"+elem[0].childNodes[0].nodeValue) : ""));
 			showLayer(mis);
 			setTimeout("AmagaLayerMissatges();",5000);
 		}
