@@ -5215,7 +5215,14 @@ var MessageLang={
       "eng": "Cannot select request object because the layer doesn't exist",
       "fre": "Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas",
       "cze": "Nelze vybrat objekt požadavku, protože vrstva neexistuje"
-    }
+    },
+    "ElementsVectorialTable": {
+      "cat": "Taula d'elements vectorials",
+      "spa": "Tabla de elementos vectoriales",
+      "eng": "Vectorial elements table",
+      "fre": "Tableau des éléments vectoriels",
+      "cze": "Tabulka vektorových prvků"
+    } 
   },
   "video": {
     "NoLayerAvailableForAnimation": {
