@@ -3949,7 +3949,7 @@ var floatValor=parseFloat(valor);
 /*
 	Mostra la capa vecotrial en format taula.
  */
-const objctsToExport = {};
+const objectesAExportar = {};
 
 /* Mostra la finestra flotant de la taula per representar la capa vectorial */
 function ObreFinestraTaulaDeCapaVectorial(i_capa)
@@ -3976,7 +3976,7 @@ var objectes = capa.objectes.features;
 			atributsVisibles.push(capa.atributs[i]);
 		}
 	}
-	// Si només desitgem veure els objectes de l'àmbit
+	// Si nomï¿½s desitgem veure els objectes de l'ï¿½mbit
 	if (isNomesAmbit) 
 	{
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
@@ -3999,7 +3999,7 @@ var objectes = capa.objectes.features;
 				}
 			}
 		}
-		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		// Transpassem els objectes de l'ï¿½mbit a l'estructura que nodreix la resta de la funciï¿½.
 		objectes = objectesDinsAmbit;
 	} 
 	
@@ -4040,46 +4040,38 @@ var objectes = capa.objectes.features;
 		cdnsHtml.push("</tr>");
 		for (var i = 0, objLength = objectes.length; i < objLength; i++)
 		{
+			const objecteARepresentar = objectes[i];
 			cdnsHtml.push("<tr class='vectorial'>");
 			for (var j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
-				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objecteARepresentar.properties[atributsVisibles[j].nom], "</td>");
 				// Porta papers
-				cdnsPortapapers.push(objectes[i].properties[atributsVisibles[j].nom], "\t");
+				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
 			}
 			if (ambGeometria)
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objectes[i].geometry.coordinates.toString(), "</td>");
+				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objecteARepresentar.geometry.coordinates.toString(), "</td>");
 				// Porta papers
-				cdnsPortapapers.push(objectes[i].geometry.coordinates.toString(), "\t");
+				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 			}
-			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this, ", objectes[i], ")'></td>");
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this,", JSON.stringify(objecteARepresentar), ");'></td>");
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 			// Porta papers
 			cdnsPortapapers.push("\n");
 		}
 		cdnsHtml.push("</table>");
 	}
 
-	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
+	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de cï¿½lcul).
 	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
 	return cdnsHtml.join("");
 }
-/* Determina quins elements vectorials s'inclouran en l'exportació */
+/* Determina quins elements vectorials s'inclouran en l'exportaciï¿½ */
 function ActualitzaIndexObjectesExportar(checkbox, objecteVect)
 {
 	const indexATreballar = checkbox.value.toString();
 	console.log(indexATreballar);
-	if (checkbox.checked) 
-	{
-		objctsToExport[indexATreballar]=objecteVect;
-	}
-	else 
-	{
-		delete objctsToExport[indexATreballar];
-	}
-	//checkbox.checked ? (objctsToExport[indexATreballar]=objecteVect) : (delete objctsToExport[indexATreballar]);
-	//checkbox.checked ? console.log("Afegit objecte: " + checkbox.value) : console.log("Eliminat objecte: " + checkbox.value);
+	checkbox.checked ? (objectesAExportar[indexATreballar]=objecteVect) : (delete objectesAExportar[indexATreballar]);
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4088,7 +4080,7 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 	return portapapers;
 }
 
-// Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+// Funciï¿½ que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
 function TancaFinestra_taulaCapaVectorial() 
 {
 	TancaFinestra_anarCoord();
