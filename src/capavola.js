@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -131,7 +131,7 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 	FormAnarCoord.x=punt_coord.x;
 	FormAnarCoord.y=punt_coord.y;
 
-	//Ho transformo si cal de long/lat a les coordenades de la projecció
+	//Ho transformo si cal de long/lat a les coordenades de la projecciÃ³
 	if(form.proj[1].checked)
 	{
    	   crs_xy=DonaCoordenadesCRS(punt_coord.x,punt_coord.y,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
@@ -268,11 +268,11 @@ function EliminaCapaVolatil(i_capa, param_ctrl)
 	if (param_ctrl.ICapaVolaGPS==i_capa)
 		delete param_ctrl.ICapaVolaGPS;
 	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, param_ctrl);  /* els indexos que apuntin a 'i_capa' ja no existeixen en absolut. Intentar moure'ls no sembla una bona idea i per tant uso i_capa+1.
-						No uso AvisaDeCapaAmbIndexosACapaEsborrada() (tal com recomana CanviaIndexosCapesSpliceCapa() perquè generalment les capes volatils són desconegudes a l'usuari
-						i no hi hauria d'haver índexos des de altres capes) */
+						No uso AvisaDeCapaAmbIndexosACapaEsborrada() (tal com recomana CanviaIndexosCapesSpliceCapa() perquÃ¨ generalment les capes volatils sÃ³n desconegudes a l'usuari
+						i no hi hauria d'haver Ã­ndexos des de altres capes) */
 }
 
-//Generalment, aquesta funcio no resulta útil. Considereu usar CanviaIndexosCapesSpliceCapa() que canvia tots els índexos a totes les capes i crida aquesta funció al final.
+//Generalment, aquesta funcio no resulta Ãºtil. Considereu usar CanviaIndexosCapesSpliceCapa() que canvia tots els Ã­ndexos a totes les capes i crida aquesta funciÃ³ al final.
 function CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, param_ctrl)
 {
 	if (typeof i_capa_fi_per_sota==="undefined")
@@ -636,7 +636,7 @@ function TancaFinestra_editarVector()
 
 
 
-/* El dia 06-02-2018 descubreixo aquesta funció però no tinc idea de a que es refereix i la esborro. (JM)
+/* El dia 06-02-2018 descubreixo aquesta funciÃ³ perÃ² no tinc idea de a que es refereix i la esborro. (JM)
 function MostraFinestraInserta()
 {
 	if (!ObreFinestra(window, "inserta", DonaCadenaLang({"cat":"d'inserir",
@@ -654,7 +654,7 @@ function IniciaPosicioGPS()
 	{
 		if("https:"!=location.protocol.toLowerCase())
 		{
-			// Decideixo no dir res perquè l'usuari final no en té la culpa de que el navegador sigui http i no https
+			// Decideixo no dir res perquÃ¨ l'usuari final no en tÃ© la culpa de que el navegador sigui http i no https
 			//alert("Geolocation is not supported by this browser.");
 			CancelaPosicioGPS();
 			return;
@@ -711,7 +711,7 @@ function CancelaPosicioGPS()
 {
 	if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
 	{
-		//Potser seria millor apagar la visualització de les capes i prou?
+		//Potser seria millor apagar la visualitzaciÃ³ de les capes i prou?
 		EliminaCapaVolatil(ParamCtrl.ICapaVolaGPS, ParamCtrl);
 		ParamCtrl.MostraPosicioGPS=false;
 		if (IdPositionGPS)

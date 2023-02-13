@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -59,7 +59,7 @@ var EstarEventError=2;
 var EstarEventTotBe=3;
 
 var EventConsola=[];
-var i_EventConsola=0; //Actual d'identificador perquË sempre augmenta i ning˙ el torna a posar mai a 0
+var i_EventConsola=0; //Actual d'identificador perqu√® sempre augmenta i ning√∫ el torna a posar mai a 0
 
 function CreaIOmpleEventConsola(titol, i_capa, desc, tipus)
 {
@@ -119,7 +119,7 @@ var temp, event_consola;
 		temp=event_consola.desc;
 		if (event_consola.tipus!=TipusEventDonaProjeccioConsultaTipica && event_consola.i_capa!=-1 && ParamCtrl.capa[event_consola.i_capa].tipus=="TipusSOS" && ParamCtrl.capa[event_consola.i_capa].FormatImatge=="application/json")
 		{
-			//Afegeixo un nou par‡metre, perquË es pugui veure realment que la peticiÛ Ès JSON, ja que Ès va per la via HTTP_ACCEPT i aixÚ no es pot reproduir en un link
+			//Afegeixo un nou par√†metre, perqu√® es pugui veure realment que la petici√≥ √©s JSON, ja que √©s va per la via HTTP_ACCEPT i aix√≤ no es pot reproduir en un link
 			temp=temp+"&responseFormat=application/json";
 		}
 		temp=temp.replace("<", "&lt;");

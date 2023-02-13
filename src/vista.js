@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -44,7 +44,7 @@ var VistaImprimir={ "EnvActual": {"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0},
 				 "ncol": 0,
 				 "CostatZoomActual": 0,
 				 "i_vista": -2,
-				 "i_nova_vista": NovaVistaImprimir};  //El significat de "i_nova_vista" es pot trobar a la funció PreparaParamInternCtrl()
+				 "i_nova_vista": NovaVistaImprimir};  //El significat de "i_nova_vista" es pot trobar a la funciÃ³ PreparaParamInternCtrl()
 
 function CalculaNColNFilVistaImprimir(ncol,nfil)
 {
@@ -71,14 +71,14 @@ var i, capa;
 				DonaTipusServidorCapa(capa)!="TipusWMS" &&
 				DonaTipusServidorCapa(capa)!="TipusOAPI_Maps")
 			{
-				//Hi ha 1 capa (o més) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
+				//Hi ha 1 capa (o mÃ©s) en WMTS. En aquest cas, es fixa un nivell de zoom superior al ambit que es vol demanar.
 				costat=(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)/VistaImprimir.ncol;
 				//Buscar el costar de pixel que cumplim:
 				var i_zoom=DonaIndexNivellZoomCeil(costat);
 				if (i_zoom==-1)
 					i=ParamCtrl.capa.length;  //No ha ha cap costat que em serveixi.
 				else
-					costat=ParamCtrl.zoom[i_zoom].costat; //Ara amb el nou costat de píxel cal redefinir envolupant per excés donat que no la puc conservar totalment.
+					costat=ParamCtrl.zoom[i_zoom].costat; //Ara amb el nou costat de pÃ­xel cal redefinir envolupant per excÃ©s donat que no la puc conservar totalment.
 				break;
 			}
 	    }
@@ -123,17 +123,17 @@ var cdns=[];
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
 		cdns.push(" (", GetMessage("approx"), ". " , (d_escala>10000 ? d_escala/1000+" km" : d_escala+" m"), " " ,
-			GetMessage("atLat"), ". " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "°)");
+			GetMessage("atLat"), ". " , (OKStrOfNe((env.MaxY+env.MinY)/2,1)) , "Â°)");
 	}
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,41.42")
-		cdns.push(" (" , (GetMessage("atLat")) , " 41° 25\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 41Â° 25\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,40.60")
-		cdns.push(" (" , (GetMessage("atLat")) , " 40° 36\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 40Â° 36\')");
 	else if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="AUTO2:MERCATOR,1,0,0.0" || ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase()=="EPSG:3785")
-		cdns.push(" (" , (GetMessage("atLat")) , " 0° 0\')");
+		cdns.push(" (" , (GetMessage("atLat")) , " 0Â° 0\')");
 	cdns.push("</font></td>");
 	if (cal_desc_crs)
-		cdns.push("<td><font face=arial size=2> &nbsp;",
+		cdns.push("<td><font face=\"arial\" size=\"2\"> &nbsp;",
 				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font></td>");
 	cdns.push("</tr></table>");
 	return cdns.join("");
@@ -180,7 +180,7 @@ var e=ParamCtrl.zoom[i].costat*1000/MidaDePixelPantalla;
 	return DonaDenominadorDeLEscalaArrodonit(e);
 }
 
-//Aquesta funció converteix un nom de vista en un index de l'array ParamCtrl.VistaPermanent. Noteu que no funciona per les "vistes noves" creades per l'usuari.
+//Aquesta funciÃ³ converteix un nom de vista en un index de l'array ParamCtrl.VistaPermanent. Noteu que no funciona per les "vistes noves" creades per l'usuari.
 function DonaIVista(nom)
 {
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
@@ -195,9 +195,9 @@ var NRequestedCursor=0;
 
 //https://www.w3schools.com/cssref/pr_class_cursor.asp
 /*cursor pot ser
-	un cursor requerit (que cal cancelar més tard)
+	un cursor requerit (que cal cancelar mÃ©s tard)
 	"auto" per cancelar un cursor requerit
-	null perque la funció determini el cursor a partir del estats del botons (de fet de les variables que reflectexien l'estat dels botons)*/
+	null perque la funciÃ³ determini el cursor a partir del estats del botons (de fet de les variables que reflectexien l'estat dels botons)*/
 function CanviaCursorSobreVista(requested_cursor)
 {
 var cursor="auto";
@@ -258,7 +258,7 @@ function MouLaVista(dx,dy)
 /*Mou la vista un finestra sencera en x, y especificant -1, 0 o 1 segons el sentit desitjat:
      sx: -1 per esquerra, 0 per res, 1 per dreta.
      sy: -1 per aball,    0 per res, 1 per adalt.
-  El moviment no salta una finetra sencera exactament sino que té en compte el paràmetre psalt
+  El moviment no salta una finetra sencera exactament sino que tÃ© en compte el parÃ metre psalt
   (percentatge de salt). Crida RepintaMapesIVistes() al final*/
 function MouLaVistaSalt(sx,sy)
 {
@@ -273,8 +273,8 @@ function MouLaVistaEventDeSalt(event, sx, sy) //Afegit JM 18/09/2016
 }
 
 
-/*Mou la vista per centrar-la a la posició x,y en coordenades mapa. Crida RepintaMapesIVistes()
-  al final. Aquesta funció NO guarda la vista.*/
+/*Mou la vista per centrar-la a la posiciÃ³ x,y en coordenades mapa. Crida RepintaMapesIVistes()
+  al final. Aquesta funciÃ³ NO guarda la vista.*/
 function CentraLaVista(x,y)
 {
     ParamInternCtrl.PuntOri.x=x;
@@ -815,7 +815,7 @@ function OmpleVistaCapa(nom_vista, vista, i)
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
 	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET")
 	{
-		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
+		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //AixÃ² no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
 		CanviaImatgeCapa(win.document.getElementById(nom_vista + "_i_raster"+i), vista, i, -1, null, null, null);
 	}
@@ -823,8 +823,8 @@ var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
 		CreaMatriuCapaTiled(nom_vista, vista, i);
 }
 
-//Aquesta funció està en desús i només es fa servir pel video. Useu DonaRequestGetMap() directament. 'estil' és el nom de l'estil o null per fer servir l'estiu predeterminat a l'estructura.
-// ·$· potser ni pel vídeo
+//Aquesta funciÃ³ estÃ  en desÃºs i nomÃ©s es fa servir pel video. Useu DonaRequestGetMap() directament. 'estil' Ã©s el nom de l'estil o null per fer servir l'estiu predeterminat a l'estructura.
+// Â·$Â· potser ni pel vÃ­deo
 function DonaNomImatge(i_capa, vista, estil, pot_semitrans, i_data)
 {
 var i_estil, capa=ParamCtrl.capa[i_capa];
@@ -915,10 +915,10 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 }
 
-/* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
+/* No puc fer servir aquestas funciÃ³ donat que els PNG's progressius no es tornen a mostrar nomÃ©s fent un showLayer. Els torno a demanar sempre.
 function CanviaImatgeCapaSiCal(imatge, i_capa)
 {
-	//Aquí no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no és canviat pel nou idioma. De fet, això es podria fer durant el canvi d'idioma però és un detall massa insignificant.
+	//AquÃ­ no faig servir DonaCadenaLang() expressament. Si es canvia l'idioma mentre es mostre un "espereu_???.gif", aquest no Ã©s canviat pel nou idioma. De fet, aixÃ² es podria fer durant el canvi d'idioma perÃ² Ã©s un detall massa insignificant.
 	if ((ParamCtrl.capa[i_capa].transparencia && ParamCtrl.capa[i_capa].transparencia=="semitransparent") ||
 		imatge.src.indexOf("espereu_cat.gif")!=-1 || imatge.src.indexOf("espereu_spa.gif")!=-1 || imatge.src.indexOf("espereu_eng.gif")!=-1|| imatge.src.indexOf("espereu_fre.gif")!=-1)
 	{
@@ -937,8 +937,8 @@ var atribut=capa_digi.atributs[i_atribut];
 
 	if (atribut.FormulaConsulta)
 	{
-		// Aquí hem de pensar que passa si hi ha v[] però encara no estan carregats.
-		// En aquest punt es demanes les capes v[] per fer servir més tard una consulta per localització
+		// AquÃ­ hem de pensar que passa si hi ha v[] perÃ² encara no estan carregats.
+		// En aquest punt es demanes les capes v[] per fer servir mÃ©s tard una consulta per localitzaciÃ³
 		if (!param["v_carregat_"+i_atribut] && HiHaValorsNecessarisCapaFormulaconsulta(capa_digi, atribut.FormulaConsulta))
 		{
 			param["v_carregat_"+i_atribut]=true;
@@ -1026,7 +1026,7 @@ var lineString;
 			lineString=geometry.coordinates[c2];
 		else
 			lineString=geometry.coordinates;
-		//cal sumar sempre 0.5 perquè la linia es traça a la cantonada d'un pixel i no pel mig segons he llegit.
+		//cal sumar sempre 0.5 perquÃ¨ la linia es traÃ§a a la cantonada d'un pixel i no pel mig segons he llegit.
 		ctx.moveTo(Math.round((lineString[0][0]-env.MinX)/(env.MaxX-env.MinX)*ncol)+0.5,
 			Math.round((env.MaxY-lineString[0][1])/(env.MaxY-env.MinY)*nfil)+0.5);
 		for (var c1=1; c1<lineString.length; c1++)
@@ -1063,21 +1063,21 @@ var polygon, lineString;
 
 async function loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
 {
-	//De moment aiò només està ben implementat per capes vectorials que ja estan carregades.
+	//De moment aiÃ² nomÃ©s estÃ  ben implementat per capes vectorials que ja estan carregades.
 	//Cal pensar que passa si els objectes encara no s'han carregat. Cal cridar la carrega dels vectors de manera assincrona 
-	//aquí abans de cridar el dibuixat de la capa oculta amb un await.
+	//aquÃ­ abans de cridar el dibuixat de la capa oculta amb un await.
 	var objOculta = DonaObjCapaComABinaryArray(vista, i_capa2, ParamCtrl.capa[i_capa2].objectes);
 	ParamCtrl.capa[i_capa].valors[i_valor].datatype=objOculta.datatype;
 	ParamCtrl.capa[i_capa].valors[i_valor].nodata=[objOculta.nodata];
 	return {dades: objOculta.arrayBuffer, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
 }
 
-/*Només dibuixa objectes de tipus polígon.
-Conté l'index de objectes.features representat (l'identificador gràfic). 
+/*NomÃ©s dibuixa objectes de tipus polÃ­gon.
+ContÃ© l'index de objectes.features representat (l'identificador grÃ fic). 
 El tipus de dades i el nodata depenen de objetes.features.length. 
-* Si és <256, es un Uint8 i el 255 és el nodata; 
-* si és <65536 es un Uint16 i el nodata és el 65535; 
-* i si és <16777216 és un Uint32 i el nodata és el 16777215.*/
+* Si Ã©s <256, es un Uint8 i el 255 Ã©s el nodata; 
+* si Ã©s <65536 es un Uint16 i el nodata Ã©s el 65535; 
+* i si Ã©s <16777216 Ã©s un Uint32 i el nodata Ã©s el 16777215.*/
 function DonaObjCapaComABinaryArray(vista, i_capa, objectes)
 {
 var env=vista.EnvActual;
@@ -1092,7 +1092,7 @@ var arrayBuffer, array_uint, datatype, nodata, mida=canvas_ocult.width*canvas_oc
 
 	if (objectes.features.length<256)
 	{
-		//Cal canviar això per el arraybuffer que hi ha a valors[i]
+		//Cal canviar aixÃ² per el arraybuffer que hi ha a valors[i]
 		arrayBuffer = new ArrayBuffer(canvas_ocult.width*canvas_ocult.height);
 		datatype = "uint8";
 		nodata = 255;
@@ -1117,7 +1117,7 @@ var arrayBuffer, array_uint, datatype, nodata, mida=canvas_ocult.width*canvas_oc
 	//for (var j=0; j<objectes.features.length-1; j++)
 	for (var j=objectes.features.length-1; j>=0; j--)
 	{
-		ctx_ocult.clearRect(0, 0, canvas_ocult.width, canvas_ocult.height);  //els 4 bytes a 0 incloent opacitat que serà la meva marca de nodata.
+		ctx_ocult.clearRect(0, 0, canvas_ocult.width, canvas_ocult.height);  //els 4 bytes a 0 incloent opacitat que serÃ  la meva marca de nodata.
 		feature=objectes.features[j];
 		geometry=DonaGeometryCRSActual(feature, capa.CRSgeometry);
 		if (geometry.type=="Polygon" || geometry.type=="MultiPolygon")
@@ -1150,7 +1150,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 	if (!objectes || !objectes.features || !estil)
 		return;
 		
-	// Primer fem la precàrrega dels valors dels atributs que necessitem per simbolitzar els objectes
+	// Primer fem la precÃ rrega dels valors dels atributs que necessitem per simbolitzar els objectes
 	if (estil.simbols && estil.simbols.length)
 	{
 		for (i_simb=0; i_simb<estil.simbols.length; i_simb++)
@@ -1158,7 +1158,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			simbols=estil.simbols[i_simb];
 			if (simbols.NomCamp)
 			{
-				//Precàrrega de valors si hi ha referències ràster.
+				//PrecÃ rrega de valors si hi ha referÃ¨ncies rÃ ster.
 				i=DonaIAtributsDesDeNomAtribut(capa, atributs, simbols.NomCamp)
 				if (i==-1)
 				{
@@ -1170,7 +1170,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			}
 			if (simbols.NomCampFEscala)
 			{
-				//Precàrrega de valors si hi ha referències ràster.
+				//PrecÃ rrega de valors si hi ha referÃ¨ncies rÃ ster.
 				i=DonaIAtributsDesDeNomAtribut(capa, atributs, simbols.NomCampFEscala)
 				if (i==-1)
 				{
@@ -1184,7 +1184,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 	}
 	if (estil.NomCampSel)
 	{
-		//Precàrrega de valors de la selecció
+		//PrecÃ rrega de valors de la selecciÃ³
 		i_atri_sel=DonaIAtributsDesDeNomAtribut(capa, atributs, estil.NomCampSel)
 		if (i_atri_sel==-1)
 		{
@@ -1201,7 +1201,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			forma=estil.formes[i_forma];
 			if (forma.interior && forma.interior.NomCamp)
 			{
-				//Precàrrega de valors si hi ha referències ràster.
+				//PrecÃ rrega de valors si hi ha referÃ¨ncies rÃ ster.
 				i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa, atributs, forma.interior.NomCamp)
 				if (i_atri_interior[i_forma]==-1)
 				{
@@ -1213,7 +1213,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			}
 			if (forma.vora && forma.vora.NomCamp)
 			{
-				//Precàrrega de valors si hi ha referències ràster.
+				//PrecÃ rrega de valors si hi ha referÃ¨ncies rÃ ster.
 				i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa, atributs, forma.vora.NomCamp)
 				if (i_atri_vora[i_forma]==-1)
 				{
@@ -1228,7 +1228,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 	if (HiHaSimbolitzacioIndexadaPerPropietats(estil))
 	{
 		if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
-			return;  //ja es tornarà a cridar a si mateixa quan la crida assíncrona acabi
+			return;  //ja es tornarÃ  a cridar a si mateixa quan la crida assÃ­ncrona acabi
 	}
 	
 	// Ja tenim tot el que necessitem i anem a dibuixar els objectes
@@ -1291,7 +1291,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 				for (i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && forma.voraSel)  //Sistema que feiem servir per l'ediciÃ³
 					{
 						forma_vora=forma.voraSel;
 						un_a_vmin_ncol_vora=a_vmin_ncol_voraSel[i_forma];
@@ -1360,7 +1360,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 				for (i_forma=0; i_forma<estil.formes.length; i_forma++)
 				{
 					forma=estil.formes[i_forma];
-					if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+					if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'ediciÃ³
 					{
 						forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 						un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -1477,7 +1477,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 
 							if (i_simbol!=-1)
 							{
-								if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'edició
+								if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && simbol[i_simbol].IconaSel)  //Sistema que feiem servir per l'ediciÃ³
 									icona=simbol[i_simbol].IconaSel;
 								else if (estil.NomCampSel)
 								{
@@ -1504,8 +1504,8 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 										env_icona=DonaEnvIcona({x: coord[0],y: coord[1]}, icona);
 									if (icona.fescala>0 && EsEnvDinsEnvolupant(env_icona, env))
 									{
-										//la layer l_obj_digi té les coordenades referides a la seva layer pare que és l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
-										//la manera de fer això està extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
+										//la layer l_obj_digi tÃ© les coordenades referides a la seva layer pare que Ã©s l_capa --> No he de considerar ni els marges de la vista ni els scrolls.
+										//la manera de fer aixÃ² estÃ  extreta de: http://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
 
 										if (Array.isArray(icona))
 										{
@@ -1520,7 +1520,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 											{
 												forma=estil.formes[i_forma];
 
-												if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'edició
+												if (vista.i_nova_vista!=NovaVistaImprimir && feature.seleccionat==true && (forma.voraSel || forma.interiorSel))  //Sistema que feiem servir per l'ediciÃ³
 												{
 													forma_vora=forma.voraSel ? forma.voraSel : forma.vora;
 													un_a_vmin_ncol_vora=forma.voraSel ? a_vmin_ncol_voraSel[i_forma] : a_vmin_ncol_vora[i_forma];
@@ -1622,10 +1622,10 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 										}
 										else
 										{
-											//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que està en un altre window. El problema ha estat analitzat aquí:
+											//Hi ha un problem extrany al intentar dibuixar una imatge sobre un canvas que estÃ  en un altre window. El problema ha estat analitzat aquÃ­:
 											//https://stackoverflow.com/questions/34402718/img-from-opener-is-not-img-type-for-canvas-drawimage-in-ie-causing-type-mismatch
 											//In IE there is a problem "img from opener is not img type for canvas drawImage (DispHTMLImg, being HTMLImageElement instead) in IE causing TYPE_MISMATCH_ERR"
-											//Després d'invertir dies, he estat incapaç de trobar una manera de resoldre això en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
+											//DesprÃ©s d'invertir dies, he estat incapaÃ§ de trobar una manera de resoldre aixÃ² en IE i ha hagut de renunciar i fer un try an catch per sortir del pas. 2017-12-17 (JM)
 											if (icona.img.sha_carregat==true)
 											{
 												try
@@ -1727,7 +1727,7 @@ var neteja_canvas=true;
 		if(DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;
 	}
-	// Si la capa és tessel·lada, dibuixo l'array d'objectes numèrics (un objecte amb el nombre d'objectes que conté la tessel·la si és superior al límit indicat)
+	// Si la capa Ã©s tesselÂ·lada, dibuixo l'array d'objectes numÃ¨rics (un objecte amb el nombre d'objectes que contÃ© la tesselÂ·la si Ã©s superior al lÃ­mit indicat)
 	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 &&
 		capa.tileMatrixSetGeometry && capa.tileMatrixSetGeometry.tileMatrix)
 	{	
@@ -1744,7 +1744,7 @@ var neteja_canvas=true;
 		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.atributs, capa.objectes, capa.estil[capa.i_estil]);
 }
 
-//Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)
+//Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index Ã©s negatiu i desplaÃ§at en 1)
 function DonaNomCanvasCapaDigi(nom_vista, i)
 {
 	if (i<0)
@@ -1872,7 +1872,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 			if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusWMTS_SOAP")
 			{
 				//if(j==vista_tiled.JTileMin && i==vista_tiled.ITileMin)
-				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè el estil i el i_data sempre són null en el WMTS??
+				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: PerquÃ¨ el estil i el i_data sempre sÃ³n null en el WMTS??
 			}
 			else
 			{
@@ -1887,7 +1887,7 @@ function DonaTextMatriuCapaTiledImprimir(i_capa, ncol, nfil, env)
 {
 var cdns=[], tile_matrix;
 
-	//Donat que només és possible imprimir conservant la resolució.
+	//Donat que nomÃ©s Ã©s possible imprimir conservant la resoluciÃ³.
 	var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	if (i_tile_matrix_set==-1)
@@ -1929,7 +1929,7 @@ var cdns=[], tile_matrix;
 	clipLayer(layer_vista, dx, dy, ncol, nfil);
 
 	//Genero la taula
-	//NJ a JM: cal fer alguna modificació aquí també perquè funcioni correctament la impressió en SOAP
+	//NJ a JM: cal fer alguna modificaciÃ³ aquÃ­ tambÃ© perquÃ¨ funcioni correctament la impressiÃ³ en SOAP
 	cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
 	for (var j=j_tile_min; j<=j_tile_max; j++)
 	{
@@ -2013,16 +2013,16 @@ var estil_parella_coord=(vista.i_nova_vista==NovaVistaImprimir) ? true : false;
 var p, unitats_CRS;
 
 	if (ParamCtrl.CoordExtremes=="longlat_g")
-		unitats_CRS="°";
+		unitats_CRS="Â°";
 	else if (ParamCtrl.CoordExtremes=="proj")
 	{
 		p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		if (p=="°")
+		if (p=="Â°")
 			unitats_CRS=p;
 		else
 			unitats_CRS=" "+p;
 	}
-	else //if (ParamCtrl.CoordExtremes=="longlat_gms") -> tant pel cas gms (pq ja les té) com pel cas desconegut no poso unitats
+	else //if (ParamCtrl.CoordExtremes=="longlat_gms") -> tant pel cas gms (pq ja les tÃ©) com pel cas desconegut no poso unitats
 		unitats_CRS="";
 
 	NCreaVista++;
@@ -2232,7 +2232,7 @@ var p, unitats_CRS;
 	if(ParamCtrl.MostraBarraEscala && vista.i_nova_vista==NovaVistaPrincipal)
 	{
 		cdns.push("  <tr>",
-		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLDibuixEscala(vista.EnvActual, false) ,"</td>");  //Servirà per indicar l'escala.
+		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLDibuixEscala(vista.EnvActual, false) ,"</td>");  //ServirÃ  per indicar l'escala.
 		if (cal_coord && !cal_vora)
 			cdns.push("    <td></td>\n");
 		cdns.push("  </tr>");
@@ -2256,7 +2256,7 @@ var p, unitats_CRS;
 			{
 				cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, i));
 				if (capa.estil[capa.i_estil].TipusObj=='P')
-					cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -i-1)); //La capa oculta per rasteritzar identificadors gràfics de poligons
+					cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -i-1)); //La capa oculta per rasteritzar identificadors grÃ fics de poligons
 			}
 			else
 			{
@@ -2269,7 +2269,7 @@ var p, unitats_CRS;
 			}
 		}
 
-		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
+		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressiÃ³n tingui events.
 		{
 			//Dibuixo el rectangle de zoom sobre la vista (inicialment invisible)
 			cdns.push(textHTMLLayer(nom_vista+SufixZRectangle, DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
@@ -2355,7 +2355,7 @@ var p, unitats_CRS;
 
 		contentLayer(elem, cdns.join(""));
 
-		//Només s'hauria de fer si hi ha peticions SOAP
+		//NomÃ©s s'hauria de fer si hi ha peticions SOAP
 		RespostaGetTileWMTS_SOAP.splice(0,RespostaGetTileWMTS_SOAP.length);
 		ajaxGetTileWMTS_SOAP.splice(0,ajaxGetTileWMTS_SOAP.length);
 
@@ -2377,7 +2377,7 @@ var p, unitats_CRS;
 			{
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i))
 					timeOutCapaVista[nom_vista+"_"+i_crea_vista][i]=setTimeout("OmpleVistaCapa(\""+nom_vista+"\", "+JSON.stringify(vista)+", "+i+")", 25*i);
-				else if (capa.estil) //si la capa ara és no visible, i té estils, he de mirar si hi ha gràfics vinculats a ella per a "congelar-los"
+				else if (capa.estil) //si la capa ara Ã©s no visible, i tÃ© estils, he de mirar si hi ha grÃ fics vinculats a ella per a "congelar-los"
 				{
 					for (var i_estil=0; i_estil<capa.estil.length; i_estil++)
 						DesactivaCheckITextChartsMatriusDinamics(i, i_estil, true);
