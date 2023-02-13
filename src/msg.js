@@ -4340,6 +4340,13 @@ var MessageLang={
       "eng": "and is set otherwise",
       "fre": "et est définie autrement",
       "cze": "a jinak je nastavena"
+    },
+    "TitolLlistatNivellZoom": {
+      "cat": "Escala",
+      "spa": "Escala",
+      "eng": "Scale",
+      "fre": "Échelle",
+      "cze": "MěřítkoÉchelle"
     }
   },
   "authens": {
