@@ -3949,8 +3949,8 @@ var floatValor=parseFloat(valor);
 /*
 	Mostra la capa vecotrial en format taula.
  */
-const objectesAExportar = {};
-
+const i_objectesAExportar = {};
+var i_capaATaula = null;
 /* Mostra la finestra flotant de la taula per representar la capa vectorial */
 function ObreFinestraTaulaDeCapaVectorial(i_capa)
 {
@@ -3958,6 +3958,7 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 
 	if (!elem)
 		return;
+	i_capaATaula=i_capa;
 	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
@@ -4009,7 +4010,7 @@ var objectes = capa.objectes.features;
 		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
 		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
 		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
-		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(capa)'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
+		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
 		"</div><hr>");
 
 		// Porta papers capa info
@@ -4054,7 +4055,7 @@ var objectes = capa.objectes.features;
 				// Porta papers
 				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 			}
-			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this,", JSON.stringify(objecteARepresentar), ");'></td>");
+			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
 			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 			// Porta papers
 			cdnsPortapapers.push("\n");
@@ -4067,11 +4068,11 @@ var objectes = capa.objectes.features;
 	return cdnsHtml.join("");
 }
 /* Determina quins elements vectorials s'inclouran en l'exportaci� */
-function ActualitzaIndexObjectesExportar(checkbox, objecteVect)
+function ActualitzaIndexObjectesExportar(checkbox)
 {
 	const indexATreballar = checkbox.value.toString();
-	console.log(indexATreballar);
-	checkbox.checked ? (objectesAExportar[indexATreballar]=objecteVect) : (delete objectesAExportar[indexATreballar]);
+	// És un diccionari d'índexos on cada element és a la vegada el mateix índex.
+	checkbox.checked ? (i_objectesAExportar[indexATreballar]=indexATreballar) : (delete i_objectesAExportar[indexATreballar]);
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4083,6 +4084,7 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 // Funci� que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
 function TancaFinestra_taulaCapaVectorial() 
 {
+	i_capaATaula=null;
 	TancaFinestra_anarCoord();
 }
 
@@ -4092,7 +4094,12 @@ function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
 
-function ExportarObjectesGeoJSON(capa)
+function ExportarObjectesGeoJSON(i_capa)
 {
-	const capaExportar = {"nom": capa.desc, "CRSgeometry": capa.CRSgeometry, "objects": objctsToExport};
+const capa = ParamCtrl.capa[i_capa];
+const capaExportar = {"type": "FeatureCollection", "features": []};
+	Object.keys(i_objectesAExportar).forEach(key => {
+		capaExportar.features.push(ParamCtrl.capa[i_capa].objectes.features[key]);
+	});
+	return GuardaDadesJSONFitxerExtern(capaExportar, "capa_exportada_" + Date.now());
 }
