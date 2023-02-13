@@ -4097,9 +4097,32 @@ function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 function ExportarObjectesGeoJSON(i_capa)
 {
 const capa = ParamCtrl.capa[i_capa];
+// Valors mínims/màxims 
+const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
 const capaExportar = {"type": "FeatureCollection", "features": []};
 	Object.keys(i_objectesAExportar).forEach(key => {
-		capaExportar.features.push(ParamCtrl.capa[i_capa].objectes.features[key]);
+		const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
+		// Definir l'àmbit global dels elements exportats
+		if (objAExportar.bbox && objAExportar.bbox.length==4)
+		{
+			const iteradorIndex = objAExportar.bbox.keys();
+			for (var index of iteradorIndex)
+			{
+				// Coord del bbox Mínima
+				if (index < 2)
+				{
+					if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+				else // Coord del bbox Màxima
+				{
+					if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+			}
+			capaExportar.bbox = bboxObjectesAExportar;
+		}
+		capaExportar.features.push(objAExportar);
 	});
 	return GuardaDadesJSONFitxerExtern(capaExportar, "capa_exportada_" + Date.now());
 }
