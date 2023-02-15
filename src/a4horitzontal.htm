@@ -8,10 +8,10 @@
 
 <table width="875px">
 <tr>
-<td style="font-family: Verdana, Arial, Helvetica, sans-serif; color:#000099; font-size=20px; font-weight: bold;">
+<td style="font-family: Verdana, Arial, Helvetica, sans-serif; color:#000099; font-size:20px; font-weight: bold;">
 <!--font face="Verdana, Arial, Helvetica, sans-serif" size="+2" color="#000099"><b-->
 <script>
-	document.write(opener.opener.DonaCadenaLang({"cat":"SatCat: Servidor d'Imatges de Satèl.lit de Catalunya","spa":"SatCat: Servidor de imágenes de satélite de Cataluña","eng":"SatCat: Catalonia Satellite Image Server"}));
+	document.write(opener.opener.GetMessage("SatCatTitle", "impressio"));
 </script>
 <!--/b></font-->
 <br>
@@ -24,7 +24,7 @@
 <td>
 <font face="Verdana, Arial, Helvetica, sans-serif" size="2">
 <script>
-document.write(opener.opener.DonaCadenaLang({"cat":"<b>Sistema de Referència:</b>", "spa":"<b>Sistema de Referéncia:</b>","eng":"<b>Reference System:</b>","fre":"<b>Système de référence:</b>"}));
+document.write("<b>" + opener.opener.GetMessage("ReferSystem", "impressio") + ":</b> ");
 document.write(opener.opener.DonaDescripcioCRS(opener.opener.ParamCtrl.ImatgeSituacio[opener.opener.ParamInternCtrl.ISituacio].EnvTotal.CRS));
 </script>
 </font>
@@ -33,7 +33,7 @@ document.write(opener.opener.DonaDescripcioCRS(opener.opener.ParamCtrl.ImatgeSit
 <font face='Verdana, Arial, Helvetica, sans-serif' size="2">
 <script>
 	data = new Date();
-	document.write("<b>"+opener.opener.DonaCadenaLang({"spa":"Data de impressió","spa":"Fecha de impresión","eng":"Print date","fre":"Date d'impression"})+": </b>");
+	document.write("<b>"+opener.opener.GetMessage("PrintDate", "impressio") + ":</b> ");
 	document.write(data.getDate() + "/" + (data.getMonth()+1) +"/" +data.getFullYear());
 </script>
 </font>
@@ -46,7 +46,7 @@ createLayer(this, "vista", null, 0, 160, 700, 450, true, null);
 createLayer(this, "escala", null, 0, 610, 700, 50, true, null);
 createLayer(this, "situacio", null, 725, 160, 175, 175, true, null);
 createLayer(this, "llegenda", null, 725, 340, 200, 200, true, null);
-createLayer(this, "subtitol1", opener.opener.DonaCadenaLang({"cat":"Subtítol","spa":"Subtítulo","eng":"Subtitle","fre":"Sous-titre"}), 20, 100, 400, 100, true, "<h2><font face='Verdana'>["+ opener.opener.DonaCadenaLang({"cat":"Subtítol","spa":"Subtítulo","eng":"Subtitle","fre":"Sous-titre"})+"]</font></h2>");
+createLayer(this, "subtitol1", opener.opener.GetMessage("Subtitle", "impressio"), 20, 100, 400, 100, true, "<h2><font face='Verdana'>[" + opener.opener.GetMessage("Subtitle", "impressio") + "]</font></h2>");
 </script>
 <br>
 
