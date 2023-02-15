@@ -5708,7 +5708,7 @@ var MessageLang={
       "cze": "Při tisku zobrazení zachovejte"
     },
     "theExtent": {
-      "cat":"l\'àmbit",
+      "cat":"l'àmbit",
       "spa":"el ámbito",
       "eng":"the extent",
       "fre":"le champ",
@@ -5722,18 +5722,18 @@ var MessageLang={
       "cze": "usnesení"
     },
     "ResolutionKeptExtentChanged": {
-      "cat": "La resolució original de la vista es respecta però es canvia l\'àmbit",
+      "cat": "La resolució original de la vista es respecta però es canvia l'àmbit",
       "spa": "La resolución original de la vista se respeta pero se cambia el ámbito",
       "eng": "The original resolution of the view is kept but the extent is changed",
       "fre": "La résolution originelle de la vue est respectée mais le champ est changé",
       "cze": "Původní rozlišení zobrazení zůstává zachováno, ale mění se jeho rozsah"
     },
     "ResolutionAssignedIsLower": {
-      "cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l\'àrea de la vista a imprimir.\nPrem \'Imprimir\' per a imprimir a un resolució inferior o cancel·la i fes més petita l\'area de la vista (p.ex. canviat la mida del navegador)",
-      "spa":"La resolución asignada a la impresora por el navegador es INFERIOR a la resolución del área de la vista a imprimir.\nSeleccione \'Imprimir\' para imprimir a una resolución inferior o cancelar y haga más pequeña el área de la vista (p.ej. cambiando la medida del navegador)",
-      "eng":"The resolution assigned to the printer in a browser is LOWER than the resolution of the view area to print.\nPlease, press \'Print\' to print in a lower resolution or cancel to view area smaller (f.ex. changing browser window size)",
-      "fre":"La résolution assignée à l\'imprimante par le navigateur est INFÉRIEURE à la résolution de l\'aire de la vue à imprimer.\nAppuyer \'Imprimer\' pour imprimer à une résolution inférieure où annuler et faites plus petite l\'aire de la vue (p.ex. En changeant la taille du navigateur)",
-      "cze": "Rozlišení přiřazené tiskárně v prohlížeči je MENŠÍ než rozlišení zobrazované oblasti pro tisk.\nProsím, stiskněte \'Tisk\' pro tisk v menším rozlišení nebo zrušte zobrazení menší oblasti (např. změna velikosti okna prohlížeče)"
+      "cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l'àrea de la vista a imprimir.\nPrem 'Imprimir' per a imprimir a un resolució inferior o cancel·la i fes més petita l'area de la vista (p.ex. canviat la mida del navegador)",
+      "spa":"La resolución asignada a la impresora por el navegador es INFERIOR a la resolución del área de la vista a imprimir.\nSeleccione 'Imprimir' para imprimir a una resolución inferior o cancelar y haga más pequeña el área de la vista (p.ej. cambiando la medida del navegador)",
+      "eng":"The resolution assigned to the printer in a browser is LOWER than the resolution of the view area to print.\nPlease, press 'Print' to print in a lower resolution or cancel to view area smaller (f.ex. changing browser window size)",
+      "fre":"La résolution assignée à l'imprimante par le navigateur est INFÉRIEURE à la résolution de l'aire de la vue à imprimer.\nAppuyer 'Imprimer' pour imprimer à une résolution inférieure où annuler et faites plus petite l'aire de la vue (p.ex. En changeant la taille du navigateur)",
+      "cze": "Rozlišení přiřazené tiskárně v prohlížeči je MENŠÍ než rozlišení zobrazované oblasti pro tisk.\nProsím, stiskněte 'Tisk' pro tisk v menším rozlišení nebo zrušte zobrazení menší oblasti (např. změna velikosti okna prohlížeče)"
     },
     "ResolutionAssignedIsEnough": {
       "cat": "La resolució assignada a la impressora pel navegador és suficient per imprimir la vista",
@@ -5778,10 +5778,10 @@ var MessageLang={
       "cze": "výška"
     },
     "ScaleBar": {
-      "cat": "Barra d\'escala",
+      "cat": "Barra d'escala",
       "spa": "Barra de escala",
       "eng": "Scale Bar",
-      "fre": "Barre d\'échelle",
+      "fre": "Barre d'échelle",
       "cze": "Měřítko"
     },
     "SituationMap": {

@@ -258,7 +258,7 @@ function AnalitzarResolucioImpressio(respectar_resolucio)
 	if ((typeof respectar_resolucio=="undefined" && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.RespectarResolucioVistaImprimir) || 
 		respectar_resolucio)
 	{
-		cdns.push(opener.GetMessage("ResolutionKeptExtentChanged", "impressio")));
+		cdns.push(opener.GetMessage("ResolutionKeptExtentChanged", "impressio"));
 	}
 	else
 	{
@@ -325,7 +325,7 @@ function DibuixaEditsMides()
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
 		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirEscala\"> ", opener.GetMessage("ScaleBar", "impressio") ,"<td><input type=\"text\" name=\"ElementImprimirEscalaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
-		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", opener.GteMessage("Title") ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", opener.GetMessage("Title") ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
 		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirSituacio\"> ", opener.GetMessage("SituationMap", "impressio") ,"<td><input type=\"text\" name=\"ElementImprimirSituacioEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
