@@ -3964,9 +3964,9 @@ function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometr
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const atributsVisibles = [], objectesDinsAmbit = [];
-var objectes = capa.objectes.features;
+var objectes = capa.objectes.features, i, j;
 
-	for (var i = 0; i < capa.atributs.length; i++)
+	for (i = 0; i < capa.atributs.length; i++)
 	{
 		const attribute = capa.atributs[i];
 		if (attribute.mostrar == "si")
@@ -3974,10 +3974,10 @@ var objectes = capa.objectes.features;
 			atributsVisibles.push(capa.atributs[i]);
 		}
 	}
-	// Si nomÈs desitgem veure els objectes de l'‡mbit
+	// Si nom√©s desitgem veure els objectes de l'√†mbit
 	if (isNomesAmbit) 
 	{
-		for (var i = 0, objLength = objectes.length; i < objLength; i++)
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			const objActual = objectes[i];
 			if (objActual.geometry.type == "Point")
@@ -3997,7 +3997,7 @@ var objectes = capa.objectes.features;
 				}
 			}
 		}
-		// Transpassem els objectes de l'‡mbit a l'estructura que nodreix la resta de la funciÛ.
+		// Transpassem els objectes de l'√†mbit a l'estructura que nodreix la resta de la funci√≥.
 		objectes = objectesDinsAmbit;
 	} 
 	
@@ -4019,7 +4019,7 @@ var objectes = capa.objectes.features;
 		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
 		
 		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
-		for (var i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
 		{
 			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
 
@@ -4034,10 +4034,10 @@ var objectes = capa.objectes.features;
 		}
 		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
 		cdnsHtml.push("</tr>");
-		for (var i = 0, objLength = objectes.length; i < objLength; i++)
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			cdnsHtml.push("<tr class='vectorial'>");
-			for (var j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
 				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
 				// Porta papers
@@ -4056,7 +4056,7 @@ var objectes = capa.objectes.features;
 		cdnsHtml.push("</table>");
 	}
 
-	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de c‡lcul).
+	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de c√†lcul).
 	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
 	return cdnsHtml.join("");
 }
@@ -4067,7 +4067,7 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 	return portapapers;
 }
 
-// FunciÛ que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+// Funci√≥ que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
 function TancaFinestra_taulaCapaVectorial() 
 {
 	TancaFinestra_anarCoord();

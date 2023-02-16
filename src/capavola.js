@@ -142,7 +142,7 @@ var d, punt_coord;
 		capa.visible="si";
 		CreaVistes();
 	}
-	// Constant a 1000m per a una bona visualització del punt i dels voltants.
+	// Constant a 1000m per a una bona visualitzaciÃ³ del punt i dels voltants.
 	d=1000;
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		d/=FactorGrausAMetres;
