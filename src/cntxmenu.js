@@ -364,6 +364,11 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("RetrieveStyles", "cntxmenu"), "</a><br>");
 	}
+	if (capa.model==model_vector)
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial(", i_capa, ");TancaContextMenuCapa();\">",
+				GetMessage("ShowLikeTable", "cntxmenu"), "</a><br>");
+	}
 
 	if (cdns.length==0)
 		return false;
@@ -3940,4 +3945,136 @@ var floatValor=parseFloat(valor);
 			}
 		}
 	}
+}
+/*
+	Mostra la capa vecotrial en format taula.
+ */
+
+function ObreFinestraTaulaDeCapaVectorial(i_capa)
+{
+var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
+
+	if (!elem)
+		return;
+	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
+	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+}
+
+function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
+{
+const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
+const atributsVisibles = [], objectesDinsAmbit = [];
+var objectes = capa.objectes.features, i, j;
+
+	for (i = 0; i < capa.atributs.length; i++)
+	{
+		const attribute = capa.atributs[i];
+		if (attribute.mostrar == "si")
+		{
+			atributsVisibles.push(capa.atributs[i]);
+		}
+	}
+	// Si només desitgem veure els objectes de l'àmbit
+	if (isNomesAmbit) 
+	{
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			const objActual = objectes[i];
+			if (objActual.geometry.type == "Point")
+			{
+				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			{
+				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+		}
+		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		objectes = objectesDinsAmbit;
+	} 
+	
+	if (atributsVisibles.length > 0) 
+	{
+		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), " ", capa.desc, "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>", 
+		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
+		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",  
+		"</div><hr>");
+
+		// Porta papers capa info
+		cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
+		GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
+		"MinX", "\t", capa.objectes.bbox[0], "\n",
+		"MaxX", "\t", capa.objectes.bbox[1], "\n",
+		"MinY", "\t", capa.objectes.bbox[2], "\n",
+		"MaxY", "\t", capa.objectes.bbox[3], "\n",
+		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
+		
+		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
+		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		{
+			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
+
+			// Porta papers
+			cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+		}
+		if (ambGeometria)
+		{
+			cdnsHtml.push("<th class='vectorial' style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
+			// Porta papers
+			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
+		}
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
+		cdnsHtml.push("</tr>");
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			cdnsHtml.push("<tr class='vectorial'>");
+			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			{
+				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+				// Porta papers
+				cdnsPortapapers.push(objectes[i].properties[atributsVisibles[j].nom], "\t");
+			}
+			if (ambGeometria)
+			{
+				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objectes[i].geometry.coordinates.toString(), "</td>");
+				// Porta papers
+				cdnsPortapapers.push(objectes[i].geometry.coordinates.toString(), "\t");
+			}
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			// Porta papers
+			cdnsPortapapers.push("\n");
+		}
+		cdnsHtml.push("</table>");
+	}
+
+	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
+	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	return cdnsHtml.join("");
+}
+
+function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
+{
+	const portapapers = "<div style=\"display: none\" id=\"taulaCapaVectorial_copy_div\"><form name=\"taulaCapaVectorial_copy_form\" onSubmit=\"return false;\"><textarea id=\"taulaCapaVectorial_copy_text\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\">" + contingutACopiar + "</textarea></form></div>";
+	return portapapers;
+}
+
+// Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+function TancaFinestra_taulaCapaVectorial() 
+{
+	TancaFinestra_anarCoord();
+}
+
+function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
+{
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
+	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
