@@ -289,7 +289,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa) /* || capa.model==model_vector*/)) // Cal programar això per vector ·$·
+	if (capa.estil && capa.estil.length==1 && EsCapaBinaria(capa))
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
+				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
+	}
+	if (capa.estil && capa.estil.length==1 && capa.model==model_vector)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
@@ -418,7 +425,13 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
 
-	if (EsCapaBinaria(capa) /*|| capa.model==model_vector*/) // Cal programar això per vector ·$·
+	if (EsCapaBinaria(capa)) // Cal programar això per vector ·$·
+	{
+		cdns.push("<hr>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
+	}
+	if (capa.model==model_vector)
 	{
 		cdns.push("<hr>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
@@ -3430,7 +3443,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		/* Es construeix estructura amb colors i descripcions a mostrar. A partir dels
 		colors de "forma" amb attribut "TipusNom" i les
 		descripcions de "ItemLleg". Com relacionar els 2 arrays:
-		�ndex ItemLleg = TipusNom - 1, si la simbolitzaci� �s indexada
+		�ndex ItemLleg = TipusNom - 1, si la simbolitzaci� �s indexada
 		*/
 		const arrayColorsSelectors = [];
 
