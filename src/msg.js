@@ -19,7 +19,7 @@
 
     Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat) , Didac Pardell (d.pardell at creaf uab cat)
 	i Núria Julià (n julia at creaf uab cat) dins del grup del MiraMon. MiraMon és un projecte del
     CREAF que elabora programari de Sistema d'Informació Geogràfica
@@ -29,7 +29,7 @@
     No tots aquests productes són gratuïts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -3040,11 +3040,11 @@ var MessageLang={
       "cze": "Selektivní stažení zóny"
     },
     "MMZ_MMZX_NotInstalledDownload": {
-      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
-      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
-      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">stáhněte si ji</a> pro formát MMZ nebo MMZX (ISO 19165-1)."
+      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"https://www.miramon.cat/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
+      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"https://www.miramon.cat/mmr/esp\" target=\"_blank\">descárguelo</a>",
+      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">download it</a>",
+      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">download it</a>",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">stáhněte si ji</a> pro formát MMZ nebo MMZX (ISO 19165-1)."
     },
     "ViewLayers_MMZ_MMZX_InstalledMM": {
       "cat": "Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.",
@@ -5665,13 +5665,6 @@ var MessageLang={
     }
   },
   "impressio": {
-    "SatCatTitle": {
-      "cat": "SatCat: Servidor d'Imatges de Satèl.lit de Catalunya",
-      "spa": "SatCat: Servidor de imágenes de satélite de Cataluña",
-      "eng": "SatCat: Catalonia Satellite Image Server",
-      "fre": "SatCat: Serveur d'images satellites de Catalogne",
-      "cze": "SatCat: Satelitní obrazový server Catalonia"
-    }, 
     "ReferSystem": {
        "cat": "Sistema de Referència",
        "spa": "Sistema de Referéncia",
@@ -5802,9 +5795,9 @@ var MessageLang={
   "colors": {
     "ApplyNewColor": {
       "cat": "Per aplicar un nou color feu un clic directament sobre el color desitjat",
-			"spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
-			"eng": "To apply a new color, please click on the wished color",
-			"fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
+	  "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
+	  "eng": "To apply a new color, please click on the wished color",
+	  "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
       "cze": "Chcete-li použít novou barvu, klikněte na požadovanou barvu"
     }
   } 
