@@ -2516,6 +2516,41 @@ var MessageLang={
       "eng": "The statistical descriptor to display for the layer needs to be selected",
       "fre": "Le descripteur statistique à afficher pour la couche doit être sélectionné",
       "cze": "Je třeba vybrat statistický deskriptor, který se má pro vrstvu zobrazit"
+    },
+    "ShowLikeTable": {
+      "cat":"Mostrar format taula",
+      "spa":"Mostrar formato tabla",
+      "eng":"Show table format",
+      "fre":"Afficher le format de la table",
+      "cze":"Zobrazit formát tabulky"
+    },
+	"ViewItemsInScope": {
+      "cat":"Veure sols elements dins de l'àmbit",
+      "spa":"Ver solo elementos dentro del ámbito",
+      "eng":"View only items within the scope",
+      "fre":"Afficher uniquement les éléments du périmètre",
+      "cze":"Zobrazit pouze položky v rozsahu"
+    },
+	"ShowGeometry": {
+      "cat":"Mostrar geometria",
+      "spa":"Mostrar geometría",
+      "eng":"Show geometry",
+      "fre":"Montrer la géométrie",
+      "cze":"Zobrazit geometrii"
+    },
+	"Geometry": {
+      "cat":"Geometria",
+      "spa":"Geometría",
+      "eng":"Geometry",
+      "fre":"Géoméxtrie",
+      "cze":"Geometrie"
+   },
+	"VectorLayerValuesCopiedClipboardFormat": {
+      "cat":"Els valors de la capa vectorial han estat copiats al portaretalls en format",
+      "spa":"Los valores de la capa vectorial han sido copiados al portapapeles en formato",
+      "eng":"The values of the vector layer have been copied to clipboard in the format",
+      "fre":"Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format",
+      "cze":"Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu"
     }
   },
   "storymap": {
@@ -3091,7 +3126,7 @@ var MessageLang={
     "NoLayerSellectedForMMZ": {
       "cat": "No s'ha sel·lecionat cap capa per ser inclosa dins d'un MMZ",
       "spa": "No se ha seleccionado ninguna capa para ser incluida dentro de un MMZ",
-      "eng": "No layer has been sellected for being included on a MMZ",
+      "eng": "No layer has been sellected for being included on a MMZ", 
       "fre": "Aucune couche n'a été sélectionnée pour être insérée dans un MMZ",
       "cze": "Žádná vrstva nebyla vybrána pro zařazení do MMZ"
     },
@@ -3101,40 +3136,40 @@ var MessageLang={
       "eng": "Downloading the Cartography",
       "fre": "Téléchargement de cartographie",
       "cze": "Stažení kartografie"
-    },
+    }, 
     "NotHaveMiramonInstalled": {
-      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon",
-      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon",
+      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
+      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
       "eng": "If you don't have MiraMon Universal Map Reader installed or updated",
       "fre": "Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon",
       "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader"
     },
     "CorrectDownloadLayers": {
-      "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon",
-      "spa": "Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon",
+      "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon", 
+      "spa": "Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon", 
       "eng": "To correctly download the layers you have to have MiraMon program installed",
       "fre": "Pour télécharger les couches il faut voir installé correctement le logiciel MiraMon",
       "cze": "Pro správné stažení vrstev musíte mít nainstalovaný program MiraMon"
-    },
+    }, 
     "downloadIt": {
       "cat": "descarregueu-lo",
       "spa": "descárguelo",
       "eng": "download it",
       "fre": "téléchargez",
       "cze": "stáhnout"
-    },
+    }, 
     "GenerateDirectlyOpen": {
       "cat": "Generar i obrir directament",
-      "spa": "Generar y abrir directamente",
+      "spa": "Generar y abrir directamente", 
       "eng": "Generate and directly open",
       "fre": "Créer et ouvrir directement",
       "cze": "Generování a přímé otevření"
-    },
+    }, 
     "PrepareOffer": {
       "cat": "Preparar i oferir",
       "spa": "Preparar y ofrecer",
       "eng": "Prepare and offer",
-      "fre": "Préparer et télécharger",
+      "fre": "Préparer et télécharger", 
       "cze": "Připravte a nabídněte"
     },
     "toSaveFile": {
@@ -3150,7 +3185,7 @@ var MessageLang={
       "eng": "Process status",
       "fre": "État du processus",
       "cze": "Stav procesu"
-    },
+    }, 
     "AllLayersSameServer": {
       "cat":"Totes les capes a descarregar han de ser del mateix servidor. Desactiva",
       "spa":"Todas las capas a descargar deben residir en el mismo servidor. Desactive",
@@ -5264,7 +5299,7 @@ var MessageLang={
       "eng": "Cannot select request object because the layer doesn't exist",
       "fre": "Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas",
       "cze": "Nelze vybrat objekt požadavku, protože vrstva neexistuje"
-    },
+    }, 
     "ElementsVectorialTable": {
       "cat":"Taula d'elements vectorials",
       "spa":"Tabla de elementos vectoriales",
@@ -5694,8 +5729,8 @@ var MessageLang={
       "cze": "Podtitul"
     },
     "SizeOrientationPaper": {
-      "cat": "Mida i orientació del paper",
-      "spa": "Tamaño y orientación del papel",
+      "cat": "Mida i orientació del paper", 
+      "spa": "Tamaño y orientación del papel", 
       "eng": "Size and orientation of the paper",
       "fre": "Dimensions et position du papier",
       "cze": "Velikost a orientace papíru"
@@ -5807,5 +5842,5 @@ var MessageLang={
 	  "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
       "cze": "Chcete-li použít novou barvu, klikněte na požadovanou barvu"
     }
-  }
+  } 
 }
