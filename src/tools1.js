@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica 
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi 
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -80,16 +80,16 @@ function compatGetElementsByTag(thisElement,namespace,name)
 
 // Creada per NJ i modificada per JM
 // uri_ns pot ser null. nom_ns pot ser "*"
-// Retorna una array de totes els nodes a qualsevol nivell del arbre que compleixen amb el nom. …s lenta
+// Retorna una array de totes els nodes a qualsevol nivell del arbre que compleixen amb el nom. √âs lenta
 // Useu GetXMLChildElementByName(), sempre que sigui possible, per nodes immediatament fills del node actual.
 function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 {
 	//NJ_03_11_2016: Segons el navegador el comportament de getElementsByTagName i
-	//de getElementsByTagNameNS Ès diferent
-	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres Ès el nom del ns i el nom del tag 
-	//Per getElementsByTagName() en Opera i Chrome no funciona si indiquem el id del ns, Ès a dir, ns:name no va
-	//En IE depen de la versiÛ. En Motzilla en principi funciona amb ns:name, perÚ crec que tambÈ depen de la versiÛ
-	//Recomano usar aquesta funciÛ que provar‡ les diferents possibilitats i aixÌ Ès menys probable tenir problemes
+	//de getElementsByTagNameNS √©s diferent
+	//En Mozilla a getElementsByTagNameNS cal indicar la URI del ns i el nom del tag en d'altres √©s el nom del ns i el nom del tag
+	//Per getElementsByTagName() en Opera i Chrome no funciona si indiquem el id del ns, √©s a dir, ns:name no va
+	//En IE depen de la versi√≥. En Motzilla en principi funciona amb ns:name, per√≤ crec que tamb√© depen de la versi√≥
+	//Recomano usar aquesta funci√≥ que provar√† les diferents possibilitats i aix√≠ √©s menys probable tenir problemes
 
 	if (pare.getElementsByTagNameNS)
 	{
@@ -111,7 +111,7 @@ function DonamElementsNodeAPartirDelNomDelTag(pare, uri_ns, nom_ns, nom_tag)
 	if(fills4 && fills4.length>0)
 		return fills4;
 
-	if (pare.getElementsByTagNameNS)  //Incorporo a la funciÛ de NJ aquest truc suggerit per DD i esborro compatGetElementsByTag() que havia fet el darrer (JM) 19-08-2017
+	if (pare.getElementsByTagNameNS)  //Incorporo a la funci√≥ de NJ aquest truc suggerit per DD i esborro compatGetElementsByTag() que havia fet el darrer (JM) 19-08-2017
 	{
 		var fills5=pare.getElementsByTagNameNS("*",nom_tag); //amb qualsevol namespace
 		if (fills5 && fills5.length>0)
@@ -248,7 +248,7 @@ if(!Array.prototype.find)
 		}
 		catch(ex)
 		{
-			// En funciÛ de la versiÛ potser que no existeixi la funciÛ find()
+			// En funci√≥ de la versi√≥ potser que no existeixi la funci√≥ find()
 			for (var i=0; i<this.length; i++)
 			{
 				if (myFunction(this[i]))
@@ -262,7 +262,7 @@ if(!Array.prototype.find)
 By default, the sort() method sorts the values as strings in alphabetical and ascending order.
 Because of this, the sort() method will produce an incorrect result when sorting numbers.
 You can fix this by providing a "compare function"
-AixÚ Ès diferent de com funcionen les meves funcions sense funciÛ de comparaciÛ.*/
+Aix√≤ √©s diferent de com funcionen les meves funcions sense funci√≥ de comparaci√≥.*/
 
 /*
  * Binary search (bsearch) in a sorted array (from https://oli.me.uk/2013/06/08/searching-javascript-arrays-with-a-binary-search   http://jsfiddle.net/aryzhov/pkfst550/
@@ -309,9 +309,9 @@ function sortAscendingStringSensible(a, b)
 
 function sortAscendingStringInsensible(a, b)
 {
-	a = a.toLowerCase();
-    b = b.toLowerCase();
-   	return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	var ai = a.toLowerCase();
+	var bi = b.toLowerCase();
+   	return ((ai < bi) ? -1 : ((ai > bi) ? 1 : 0));
 }
 
 function sortAscendingNumber(a, b)
@@ -375,7 +375,7 @@ if(!Array.prototype.removeDuplicates)
 }
 
 
-/*Trim actual com DonaCadenaSenseEspaisDavantDarrera() i per tant no creem cap funciÛ per fer-ho. Useu .trim()
+/*Trim actual com DonaCadenaSenseEspaisDavantDarrera() i per tant no creem cap funci√≥ per fer-ho. Useu .trim()
 IE8 compatibility for trim*/
 if(!String.prototype.trim)
 {
@@ -468,7 +468,7 @@ function isFullscreen()
 {
 	if (window.matchMedia("(display-mode: fullscreen)").matches)
 	{
-		//AixÚ Ès un truc CSS trobat aquÌ: https://stackoverflow.com/questions/43392583/fullscreen-api-not-working-if-triggered-with-f11, combinat amb https://www.w3schools.com/jsref/met_win_matchmedia.asp
+		//Aix√≤ √©s un truc CSS trobat aqu√≠: https://stackoverflow.com/questions/43392583/fullscreen-api-not-working-if-triggered-with-f11, combinat amb https://www.w3schools.com/jsref/met_win_matchmedia.asp
 		return true;
 	}
 	else
@@ -521,7 +521,7 @@ function AfegeixAdrecaBaseSRC(s)
 	return s;
 }
 
-//Es podria haver fet millor a partir d'usar url=new URL(s) i url.pathname abans de fer aixÚ que es fa ara.
+//Es podria haver fet millor a partir d'usar url=new URL(s) i url.pathname abans de fer aix√≤ que es fa ara.
 function TreuAdreca(s)
 {
 	var i=s.lastIndexOf('/');
@@ -589,11 +589,11 @@ function MMgetCheckedRadioButton(myForm,groupName)
 
 
 //Inspired in http://stackoverflow.com/questions/126100/how-to-efficiently-count-the-number-of-keys-properties-of-an-object-in-javascrip
-//TambÈ es pot fer aixÌ: Object.keys(myobj).length (https://javascript.info/keys-values-entries)
+//Tamb√© es pot fer aix√≠: Object.keys(myobj).length (https://javascript.info/keys-values-entries)
 function CountPropertiesOfObject(myobj)
 {
-	//Object.keys --> SÛn les propietats enumerables, prÚpies de l'objecte
-	//Object.getOwnPropertyNames --> SÛn les propietats enumerables i no enumerables, prÚpies de l'objecte
+	//Object.keys --> S√≥n les propietats enumerables, pr√≤pies de l'objecte
+	//Object.getOwnPropertyNames --> S√≥n les propietats enumerables i no enumerables, pr√≤pies de l'objecte
 	if(Object.prototype.getOwnPropertyNames)
 		return Object.getOwnPropertyNames(myobj).length;
 	var count = 0, k;
@@ -608,7 +608,7 @@ var layerFinestraList = [];
 var focusedFloatingWindow=-1; //This is the floating window that last got focus (so it must be on the top) -1==no focused fWindow
 var JaAvisatSuportLayers=false;
 
-/* Aquest constructor no s'usa i es deia nomÈs com a documentaciÛ del JSON.
+/* Aquest constructor no s'usa i es deia nom√©s com a documentaci√≥ del JSON.
 function CreaPropietatsLayer(nom, ancora, contingut)
 {
 	this.nom=nom;
@@ -745,26 +745,26 @@ function getContentLayer(elem)
 	return elem.innerHTML;
 }
 
-//Si alguna de les x, y, w, h sÛn -1, no es canvia aquesta dimensiÛ.
+//Si alguna de les x, y, w, h s√≥n -1, no es canvia aquesta dimensi√≥.
 function moveLayer(elem, x, y, w, h)
 {
 	//Ara ho manipulo i ho canvio.
 	var estil=elem.style;
 	if (x!=-1)
-		estil.left = x;
+		estil.left = x+"px";
 	if (y!=-1)
-		estil.top = y;
+		estil.top = y+"px";
 	if (w!=-1)
-		estil.width = w;
+		estil.width = w+"px";
 	if (h!=-1)
-		estil.height = h;
+		estil.height = h+"px";
 }
 
 function changePosAndShowLayer(elem, x, y)
 {
 	var estil=elem.style;
-	estil.left = x;
-	estil.top = y;
+	estil.left = x+"px";
+	estil.top = y+"px";
      	estil.visibility = "visible";
 	if (NecessariLayerIFrame)
 	{
@@ -868,7 +868,7 @@ function getRectLayerName(win, name)
 //http://stackoverflow.com/questions/288699/get-the-position-of-a-div-span-tag
 function getRectLayer(elem)
 {
-	// ? Ès usat perquË FireFox no tÈ pixelLeft i suposo que left est‡ en pÌxels.
+	// ? √©s usat perqu√® FireFox no t√© pixelLeft i suposo que left est√† en p√≠xels.
 	/*var estil=elem.style;
 	RectGetRectLayer.esq=estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left));
 	RectGetRectLayer.sup=estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top));
@@ -897,10 +897,17 @@ function getRectSupLayer(elem)
 
 function spaceForLayers(win)
 {
-	if (win.document.body.clientWidth)
+/*	if (win.document.body.clientWidth)
 		ParamInternCtrl.realSpaceForLayers.width=win.document.body.clientWidth;
 	if (win.document.body.clientHeight)
-		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //AixÚ assegura que no surti un scroll a la dreta de la pantalla
+		ParamInternCtrl.realSpaceForLayers.height=win.document.body.clientHeight-4;  //Aix√≤ assegura que no surti un scroll a la dreta de la pantalla*/
+
+var div=win.document.getElementById(ParamCtrl.containerName);
+
+	if (div.clientWidth)
+		ParamInternCtrl.realSpaceForLayers.width=div.clientWidth;
+	if (div.clientHeight)
+		ParamInternCtrl.realSpaceForLayers.height=div.clientHeight-4;  //Aix√≤ assegura que no surti un scroll a la dreta de la pantalla*/
 }
 
 var SufixBarra="_barra"
@@ -980,7 +987,7 @@ var elem, rect, ancora, nom;
 
 	delta_w=ParamInternCtrl.realSpaceForLayers.width-w_previ
 	delta_h=ParamInternCtrl.realSpaceForLayers.height-h_previ;
-
+//  const layerNamesCheckList = new Map();
 	//alert(delta_w+" "+delta_h);
 	for (var i=0; i<layerList.length; i++)
 	{
@@ -988,7 +995,18 @@ var elem, rect, ancora, nom;
 		if((nom.length>SufixBarra.length && nom.substr(-SufixBarra.length)==SufixBarra) ||
 		   (nom.length>SufixCanto.length && nom.substr(-SufixCanto.length)==SufixCanto))
 			continue;
+    /**
+    * Es comprova que la capa no s'hagi redimensionat abans. Del contrari
+    * evitem que ho fagi m√©s cops.Nom√©s es guarda el nom de la capa ambd√≥s clau
+    * i valor perqu√® en realitat nom√©s utilitzem el map() per tenir una llista 
+    * de les capes tractades per√≤ no com una estructura de dades amb Informaci√≥
+    * sensible per a c√†lculs.
 
+    if (!layerNamesCheckList.has(nom))
+      layerNamesCheckList.set(nom, nom);
+    else
+      continue;
+    */
 		elem=getLayer(win, nom);
 		if (!elem)
 			continue;
@@ -1170,34 +1188,34 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_copiar", 11,
 					GetMessage("copy"),
 					"CopiaPortapapersFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\");"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_ajuda)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_ajuda", 11,
 					GetMessage("help"),
 					"AjudaFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 				"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_pop_down)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_down", 11,
 					GetMessage("popDown"),
 					"PopDownFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 	if(layerFinestraList[i_finestra].botons&boto_pop_up)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "pop_up", 11,
 					GetMessage("popUp"),
 					"PopUpFinestra_" + layerFinestraList[i_finestra].nom + "();"),
 			"</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_tancar)
-		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\">",
+		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
 			DonaTextBotoBarraFinestraLayer(layerFinestraList[i_finestra].nom, "boto_tancar", 11,
 					GetMessage("close"),
 					"TancaFinestraLayer(\"" + layerFinestraList[i_finestra].nom + "\")"),
@@ -1216,7 +1234,7 @@ var nom=name+SufixBarra;
 	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
 	    {
 			layerFinestraList[i].botons|=botons;
-			//Omplo la layer barra amb els botons i el tÌtol
+			//Omplo la layer barra amb els botons i el t√≠tol
 			OmpleBarraFinestraLayer(win,i);
 			return;
 	    }
@@ -1232,7 +1250,7 @@ var nom=name+SufixBarra;
 	    if(layerFinestraList[i].nom && layerFinestraList[i].nom==name)
 	    {
 			layerFinestraList[i].titol=titol;
-			//Omplo la layer barra amb els botons i el tÌtol
+			//Omplo la layer barra amb els botons i el t√≠tol
 			OmpleBarraFinestraLayer(win,i);
 			return;
 	    }
@@ -1272,7 +1290,7 @@ function setzIndexFinestraLayer(win, name, z)
 		setzIndexLayer(div,z);
 }
 
-/* aixÚ sembla ser un codi perdut que no s'usa i crida una funciÛ que no existeix.
+/* aix√≤ sembla ser un codi perdut que no s'usa i crida una funci√≥ que no existeix.
 function esborraFinestraLayer(win, name)
 {
 	esborraLayer(getFinestraLayer(win,name));
@@ -1389,6 +1407,20 @@ function moveFinestraLayer(win, name, x, y, w, h)
 	var div=getLayer(win,name+SufixCanto);
 	if (div)
 		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
+}
+
+//Si mida==-1 i la finestra √©s massa petita, ajusta a la mida del text. (Crideu-la abans amb mida=0 si voleu que una finestra gran es faci petita a la mida del text)
+function ajustaAllargadaAContingutFinestraLayer(win, name, mida)
+{
+var elem=getFinestraLayer(win, name);
+var rec=getRectLayer(elem);
+
+	if (mida==-1)
+		mida=elem.scrollHeight+AltBarraFinestraLayer;
+	else if (mida<AltBarraFinestraLayer)
+		mida=AltBarraFinestraLayer;
+
+	moveFinestraLayer(win, name, rec.esq, rec.sup-AltBarraFinestraLayer, rec.ample, mida);
 }
 
 function isFinestraLayerVisible(win, name)
@@ -1563,23 +1595,32 @@ var cdns=[];
 
 function createFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
-var nom, i_finestra=layerFinestraList.length;
+var nom, i_finestra;
+
+	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+	{
+		if (layerFinestraList[i_finestra].nom==name)
+		{
+			console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+			break;
+		}
+	}
 
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
-	//Creo les dos layers que formaran la layer tipus finestra amb tÌtol i botons
+	//Creo les dos layers que formaran la layer tipus finestra amb t√≠tol i botons
 
 	//Creo la barra
 	nom=name+SufixBarra;
 	createLayer(win, nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, null);
 
-	//Li assigno el seu estil de visualitzaciÛ
+	//Li assigno el seu estil de visualitzaci√≥
 	classLayer(getLayer(win, nom), "barrafinestra");
 
-	//No omplo la layer barra amb els botons i el tÌtol ho farÈ quan conegui l'idioma del navegador
-	
-	//Creo la finestra i li assigno el seu estil de visualitzaciÛ
+	//No omplo la layer barra amb els botons i el t√≠tol ho far√© quan conegui l'idioma del navegador
+
+	//Creo la finestra i li assigno el seu estil de visualitzaci√≥
 	nom=name+SufixFinestra;
 	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
 	classLayer(getLayer(win, nom), "finestra");
@@ -1600,15 +1641,15 @@ var nom, s, i_finestra=layerFinestraList.length;
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 
-	//el text de les dos layers que formaran la layer tipus finestra amb tÌtol i botons
+	//el text de les dos layers que formaran la layer tipus finestra amb t√≠tol i botons
 
 	//Creo la barra
 	nom=name+SufixBarra;
 	s=textHTMLLayer(nom, left, top, width, AltBarraFinestraLayer, ancora, {scroll: "no", visible: param.visible, ev:param.ev, save_content: false}, "barrafinestra", null);
 
-	//No omplo la layer barra amb els botons i el tÌtol ho farÈ quan conegui l'idioma del navegador
-	
-	//Creo la finestra i li assigno el seu estil de visualitzaciÛ
+	//No omplo la layer barra amb els botons i el t√≠tol ho far√© quan conegui l'idioma del navegador
+
+	//Creo la finestra i li assigno el seu estil de visualitzaci√≥
 	nom=name+SufixFinestra;
 	s+=textHTMLLayer(nom, left, (top+AltBarraFinestraLayer+1), width, (height-AltBarraFinestraLayer), ancora, param, "finestra", content);
 
@@ -1633,7 +1674,19 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 {
 
 	var z=layerList.length;
-	//Posem null a content per tal de que la funciÛ de canvi d'idioma no la repinti.
+
+	//evito que una layer es crei 2 cops
+	for (var i=0; i<z; i++)
+	{
+		if (layerList[i].nom==name)
+		{
+			console.log("textHTMLLayer is creating a layer/div with the same layer/div name twice. Old one is overwritten.");
+			z=i;
+			break;
+		}
+	}	
+
+	//Posem null a content per tal de que la funci√≥ de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
 
 	return '<div id="' + name + '" style="position:absolute; overflow:'+((param.scroll=="si") ? 'scroll' : (param.scroll=="ara_no"? 'auto':'hidden'))+'; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (param.visible ? 'visible;' : 'hidden;') + (param.bg_trans ? ' background-image:url(1tran.gif);' : '') + (param.border ? (' border:' +param.border + ';') : '') + ' z-index:' + z +';" ' + (param.ev ? param.ev+ ' ' : '') + (div_class ? 'class='+div_class : '')+'>'+
@@ -1641,8 +1694,8 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
     			'</div>';
 }
 
-/*Aquesta funciÛ afegeix un iframe per resoldre un problema del IE 6
-i la transparËncia de selects (DIV over SELECT). SoluciÛ trobada a:
+/*Aquesta funci√≥ afegeix un iframe per resoldre un problema del IE 6
+i la transpar√®ncia de selects (DIV over SELECT). Soluci√≥ trobada a:
 http://esdi.excelsystems.com/wsexmp/DIVDRP.pgm?task=showinst&wsnum=00110
 http://weblogs.asp.net/bleroy/archive/2005/08/09/how-to-put-a-div-over-a-select-in-ie.aspx
 S'ha de cridar ABANS de crear la DIV corresponent.
@@ -1669,7 +1722,7 @@ function isLayer(elem)
 	return false;
 }
 
-// FunciÛ inspirada en una de SitePoint Pty. Ltd, www.sitepoint.com
+// Funci√≥ inspirada en una de SitePoint Pty. Ltd, www.sitepoint.com
 function Ajax()
 {
 	this.req = null;
@@ -1684,7 +1737,7 @@ function Ajax()
 	this.responseXML = null;
 	this.handleResp = null;
 	this.responseFormat = 'text/plain', // 'text/plain', 'text/xml', 'object'
-	this.requestFormat = 'application/x-www-form-urlencoded'  //nomÈs per POST
+	this.requestFormat = 'application/x-www-form-urlencoded'  //nom√©s per POST
 	this.structResp=null;
 	this.mimeType = null;
 	//this.headers = [];
@@ -1709,7 +1762,7 @@ function Ajax()
 	};
 	this.doGet = function(url, hand, response_format, struct)
 	{
-		//alert(url);  //∑$∑Per a depurar
+		//alert(url);  //¬∑$¬∑Per a depurar
 		this.url = url;
 		this.handleResp = hand;
 		this.responseFormat = response_format || 'text/plain';
@@ -1788,7 +1841,7 @@ function Ajax()
 		if ((this.method == 'POST' || this.method == 'PUT') && this.responseFormat)
 			req.setRequestHeader('Accept', this.responseFormat);
 		if (this.method != 'GET')
-			req.setRequestHeader('Access-Control-Expose-Headers', '*');  //Si aixÚ es fa amb mËtode GET genera una preflight que pot fallar. En els altres casos es fa el preflight igualment...
+			req.setRequestHeader('Access-Control-Expose-Headers', '*');  //Si aix√≤ es fa amb m√®tode GET genera una preflight que pot fallar. En els altres casos es fa el preflight igualment...
 
 		for (var i=0; i<this.requestHeaders.length; i++)
 			req.setRequestHeader(this.requestHeaders[i].name, this.requestHeaders[i].value);
@@ -1833,7 +1886,7 @@ function Ajax()
 							resp = self.responseXML;
 						else
 						{
-							//Si el navegador rep application/vnd.ogc.wms_xml es pensa que no Ès XML i cal tractar-ho com a text
+							//Si el navegador rep application/vnd.ogc.wms_xml es pensa que no √©s XML i cal tractar-ho com a text
 							if (window.DOMParser)
 								resp=(new DOMParser()).parseFromString(self.responseText, "text/xml");
 							else
@@ -1944,7 +1997,7 @@ function Ajax()
 //See also loadFile() in xml.js
 
 
-//Preparo una funciÛ per descarregar les dades JSON assÌncronament
+//Preparo una funci√≥ per descarregar les dades JSON ass√≠ncronament
 //Extreta de: http://stackoverflow.com/questions/9838812/how-can-i-open-a-json-file-in-javascript-without-jquery
 function loadJSON(path, success, error, extra_param)
 {
@@ -1955,7 +2008,7 @@ var xhr = new XMLHttpRequest();
 		{
 	       	if (xhr.status === 200)
 			{
-            	if (success)
+				if (success)
 				{
 					var data;
 					try {
@@ -1970,7 +2023,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-                if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -1979,7 +2032,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-		    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+			    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -1987,8 +2043,60 @@ var xhr = new XMLHttpRequest();
 	xhr.open("GET", path, true);
 	//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=ISO-8859-1');
 	xhr.setRequestHeader('Accept', 'application/json');
-	//xhr.setRequestHeader('Accept-Charset', 'utf-8');	AixÚ no li agrada als navegadors, donen error
+	//xhr.setRequestHeader('Accept-Charset', 'utf-8');	Aix√≤ no li agrada als navegadors, donen error
 	xhr.send();
+}
+
+//The same as the previous function but expressed as a promise.
+//Good thing about this one is that you can use it syncronously in an async function by calling it as data=await promiseLoadJSON(path);
+//https://stackoverflow.com/questions/30008114/how-do-i-promisify-native-xhr
+function promiseLoadJSON(path)
+{
+	return new Promise(function(success, error)
+	{
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function()
+		{
+        	if (xhr.readyState === XMLHttpRequest.DONE)
+			{
+		       	if (xhr.status === 200)
+				{
+					if (success)
+					{
+						var data;
+						try {
+							data = JSON.parse(xhr.responseText);
+						}
+						catch (e) {
+		                			if (error)
+								return error("JSON file: \""+ path + "\". " + e);
+						}
+						success(data);
+					}
+				}
+				else
+				{
+        			if (error)
+					{
+						var s=null;
+						if (xhr.response)
+						{
+							var s=arrayBufferToString(xhr.response);
+							if (-1!=s.indexOf("<body>"))
+								s=s.substring(s.indexOf("<body>"));
+						}
+						if (xhr.status)
+				    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+						else
+							error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""));
+					}
+				}
+			}
+		};
+		xhr.open("GET", path, true);
+		xhr.setRequestHeader('Accept', 'application/json');
+		xhr.send();
+	});
 }
 
 function loadTextFile(path, mimetype, success, error, extra_param)
@@ -2025,7 +2133,7 @@ var xhr = new XMLHttpRequest();
 			}
 			else
 			{
-             	if (error)
+				if (error)
 				{
 					var s=null;
 					if (xhr.response)
@@ -2034,7 +2142,10 @@ var xhr = new XMLHttpRequest();
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+ xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
@@ -2079,7 +2190,7 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 			{
 				if (retry && retry<200)
 				{
-					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry*2 + " seconds");
+					console.log("AJAX HTTP error "+ xhr.status +" in loadBinaryFile() requesting: "+path+". Retrying in " + retry + " seconds");
 					setTimeout(loadBinaryFile, retry*1000, path, mimetype, success, retry*2, error, extra_param);
 				}
 				if (error)
@@ -2091,11 +2202,13 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 						if (-1!=s.indexOf("<body>"))
 							s=s.substring(s.indexOf("<body>"));
 					}
-					error(xhr.status + ": " +xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					if (xhr.status)
+						error(xhr.status + ": " +xhr.statusText +  ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+					else
+						error("Desconnected from the Internet." + ((retry && retry<200) ? ("\n\nRetrying in " + retry + " seconds") : "") + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
 			}
 		}
-
 	};
 	xhr.open("GET", path, true);
 	xhr.responseType = "arraybuffer";
@@ -2134,7 +2247,7 @@ var i;
 		alert(GetMessage("TheValueOf", "tools") + " $ref: \""+ref+"\" "+ GetMessage("isNotObject", "tools"));
 		return;
 	}
-	//Replico les propietats de l'objecte aquÌ
+	//Replico les propietats de l'objecte aqu√≠
 	for (var p in r)
 	{
 		if (r.hasOwnProperty(p))
@@ -2142,7 +2255,7 @@ var i;
 	}
 }
 
-/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter. 
+/*Recursive function. To call it use ResolveJSONPointerRefs(obj_root) without second parameter.
 It supports that "$ref" is a string of a single JSON Pointer or an array of JSON Pointers.
 The original object can have other properties but they should not the properties of the pointed object ($ref)
 should not have the same names.
@@ -2175,7 +2288,7 @@ function ResolveJSONPointerRefs(obj_root, obj)
 				//Protegeixo un cas extrany en que es posa "$ref": null
 				alert("A '$ref' null object found. Please remove");
 			}
-			else  //assumeixo que Ès un Array
+			else  //assumeixo que √©s un Array
 			{
 				for (var i=0; i<obj["$ref"].length; i++)
 					AddJSONPointerRefToObject(obj_root, obj, obj["$ref"][i]);
@@ -2231,7 +2344,7 @@ function RemoveOtherPropertiesInObjWithRef(obj_root, obj)
 					}
 				}
 			}
-			else //assumeixo que Ès un Array
+			else //assumeixo que √©s un Array
 			{
 				var r=[];
 				for (var i=0; i<obj["$ref"].length; i++)
@@ -2274,10 +2387,10 @@ var a=Math.floor(x);
 	return a;
 }
 
-//Arrodonir X a N decimals amb suport a positius i negatius i notaciÛ exponencial.
+//Arrodonir X a N decimals amb suport a positius i negatius i notaci√≥ exponencial.
 //Extret de http://www.merlyn.demon.co.uk/js-round.htm
 //Modificada perque si es demanen 0 decimals no es vegi el punt.
-//Sempre retorna el n˙mero com a text
+//Sempre retorna el n√∫mero com a text
 function OKStrOfNe(X, N)
 {
 var es_negatiu;
@@ -2301,8 +2414,8 @@ var es_negatiu;
 	return ((es_negatiu) ? "-" : "") + Q.substring(0,Q.length-N)+'.'+Q.substring(Q.length-N,Q.length);
 }
 
-//Pot ser que retorni el n˙mero com a text
-function multipleOf(v, m) 
+//Pot ser que retorni el n√∫mero com a text
+function multipleOf(v, m)
 {
 var r;
 
@@ -2318,7 +2431,7 @@ var r;
 }
 
 
-//Aquesta funciÛ no Ès a la llibrerira matem‡tica.
+//Aquesta funci√≥ no √©s a la llibrerira matem√†tica.
 function sinh(z)
 {
 	return (Math.exp(z)-Math.exp(-z))/2;
@@ -2336,16 +2449,16 @@ var e, d;
 		return n;
 }
 
-/*Aquesta funciÛ retorna un n˙mero positiu arrodonit per sota a una
-sola xifra significativa que nomÈs pot ser 1, 2 o 5. Joan MasÛ*/
+/*Aquesta funci√≥ retorna un n√∫mero positiu arrodonit per sota a una
+sola xifra significativa que nom√©s pot ser 1, 2 o 5. Joan Mas√≥*/
 function DonaNumeroArrodonit125(a)
 {
 	if (a<1e-20)
 		return a;
 	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
 	var n=Math.abs(a/Math.pow(10,e));
-	
-	//Ara cal arrodinir a l'enter mÈs proper:
+
+	//Ara cal arrodinir a l'enter m√©s proper:
 	if (n<2)
 		n=1;
 	else if (n<5)
@@ -2374,7 +2487,7 @@ function DonaCadenaAmbCometesBarra(cadena)
 	return s;
 }
 
-//DesprÈs de intentar fer servir l'objecte link() sense exit he hagut de fer aixÚ.
+//Despr√©s de intentar fer servir l'objecte link() sense exit he hagut de fer aix√≤.
 function DonaHost(s)
 {
 var s2;
@@ -2383,15 +2496,13 @@ var s2;
 		s2=s.substring(s.indexOf("://")+3,s.length);
 		if (-1!=s2.indexOf("/"))
 			return s2.substring(0,s2.indexOf("/"));
-		else
-			return s2;
+		return s2;
 	}
 	else
 	{
 		if (-1!=s.indexOf("/"))
 			return s.substring(0,s.indexOf("/"));
-		else
-			return s;
+		return s;
 	}
 }
 
@@ -2428,10 +2539,10 @@ function FesTestDeNavegador()
 {
     if (!document.getElementById)
     {
-		alert("Aquest navegador Ès massa antic i no suporta la funciÛ javascript document.getElementById() pel que no funcionar‡ correctament. Actualitzeu-vos.\n" +
-			"Este navegador es demassiado antiguo y no suporta la funciÛn javascript document.getElementById() por lo que no funcionar· correctamente. Actualicese.\n" + 
+		alert("Aquest navegador √©s massa antic i no suporta la funci√≥ javascript document.getElementById() pel que no funcionar√† correctament. Actualitzeu-vos.\n" +
+			"Este navegador es demassiado antiguo y no suporta la funci√≥n javascript document.getElementById() por lo que no funcionar√° correctamente. Actualicese.\n" +
 			"This browser is too old and do not supports the javascript function document.getElementById(). It will not work properly. Please upgrade it.\n" +
-			"Vous utilisez une version ancienne du navigateur qui ne supporte pas la fonction javascript document.getElementById(), par consÈquent, il ne fonctionnera pas correctement. Actualisez la version.");
+			"Vous utilisez une version ancienne du navigateur qui ne supporte pas la fonction javascript document.getElementById(), par cons√©quent, il ne fonctionnera pas correctement. Actualisez la version.");
     }
 
     var detect = navigator.userAgent.toLowerCase();
@@ -2513,15 +2624,15 @@ function FesTestDeNavegador()
 		else OS = "an unknown operating system";
     }
 
-    //Diverses precaucions sobre la versiÛ dels navegadors:
+    //Diverses precaucions sobre la versi√≥ dels navegadors:
     if (browser=="Internet Explorer")
     {
 		if (version<8)
 		{
-			alert("S'ha detectat una versiÛ " + version + " de " + browser + ". Aquest navegador de mapes necessita una versiÛ 8 o posterior per a funcionar correctament.\n" +
-				"Se ha detectado una versiÛn " + version + " de " + browser + ". Este navegador de mapas necesita una versiÛn 8 o posterior para funcionar correctamente.\n" + 
+			alert("S'ha detectat una versi√≥ " + version + " de " + browser + ". Aquest navegador de mapes necessita una versi√≥ 8 o posterior per a funcionar correctament.\n" +
+				"Se ha detectado una versi√≥n " + version + " de " + browser + ". Este navegador de mapas necesita una versi√≥n 8 o posterior para funcionar correctamente.\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 8 o greater to work properly.\n"+
-				"Une version " + version + " de " + browser + " a ÈtÈ dÈtectÈe. Ce navigateur de couches a besoin d'une version 8 o˚ postÈrieure pour bien fonctionner.");
+				"Une version " + version + " de " + browser + " a √©t√© d√©tect√©e. Ce navigateur de couches a besoin d'une version 8 o√ª post√©rieure pour bien fonctionner.");
 		}
 		var appVer = navigator.appVersion.toLowerCase();
 		var iePos = appVer.indexOf('msie');
@@ -2537,35 +2648,35 @@ function FesTestDeNavegador()
     {
 		if (version<5)
 		{
-			alert("S'ha detectat una versiÛ " + version + " de " + browser + ". Aquest navegador de mapes necessita una versiÛ 5 o posterior per a funcionar correctament (es recomana la versiÛ 7).\n" +
-				"Se ha detectado una versiÛn " + version + " de " + browser + ". Este navegador de mapas necesita una versiÛn 5 o posterior para funcionar correctamente (se recomienda la versiÛn 7).\n" + 
+			alert("S'ha detectat una versi√≥ " + version + " de " + browser + ". Aquest navegador de mapes necessita una versi√≥ 5 o posterior per a funcionar correctament (es recomana la versi√≥ 7).\n" +
+				"Se ha detectado una versi√≥n " + version + " de " + browser + ". Este navegador de mapas necesita una versi√≥n 5 o posterior para funcionar correctamente (se recomienda la versi√≥n 7).\n" +
 				"A version " + version + " of " + browser + " has been detected. This map browser need a version 5 o greater to work properly (version 7 is recomended).\n"+
-				"Une version " + version + " de " + browser + " a ÈtÈ dÈtectÈe. Ce navigateur de couches a besoin d'une version 5 o˚ postÈrieure pour bien fonctionner (nous recommandons la version 7).");
+				"Une version " + version + " de " + browser + " a √©t√© d√©tect√©e. Ce navigateur de couches a besoin d'une version 5 o√ª post√©rieure pour bien fonctionner (nous recommandons la version 7).");
 		}
     }
     else if (browser=="Opera")
     {
 		if (version<7)
 		{
-			alert("S'ha detectat una versiÛ " + version + " de " + browser + ". Actualment, no hi ha cap versiÛ de Opera que funcioni correctament amb aquest navegador de mapes, malgrat que la versiÛ 7 gairebÈ resulta compatible.\n" +
-				"Se ha detectado una versiÛn " + version + " de " + browser + ". Actualmente, no existe ninguna versiÛn de Opera que funcione correctamente con este navegador de mapas, aunque la versiÛn 7 casi resulta compatible.\n" +
+			alert("S'ha detectat una versi√≥ " + version + " de " + browser + ". Actualment, no hi ha cap versi√≥ de Opera que funcioni correctament amb aquest navegador de mapes, malgrat que la versi√≥ 7 gaireb√© resulta compatible.\n" +
+				"Se ha detectado una versi√≥n " + version + " de " + browser + ". Actualmente, no existe ninguna versi√≥n de Opera que funcione correctamente con este navegador de mapas, aunque la versi√≥n 7 casi resulta compatible.\n" +
 				"A version " + version + " of " + browser + " has been detected. Today, there is not any version of Opera that works properly with this map browser. Version 7 is almost compatible.\n" +
-				"Une version " + version + " de " + browser + " a ÈtÈ dÈtectÈe. Actuellement il n'y a aucune version d'Opera qui fonctionne bien avec ce navigateur de couches, bien que la version 7 c'est presque compatible.");
+				"Une version " + version + " de " + browser + " a √©t√© d√©tect√©e. Actuellement il n'y a aucune version d'Opera qui fonctionne bien avec ce navigateur de couches, bien que la version 7 c'est presque compatible.");
 		}
 		else if (version==7)
 		{
-			alert("S'ha detectat una versiÛ " + version + " de " + browser + ". El funcionament d'aquest navegador de mapes Ès pobre en aquesta versiÛ. Es deixa continuar amb finalitats experimentals.\n" +
-				"Se ha detectado una versiÛn " + version + " de " + browser + ". El funcionamiento de esta navegador de mapas es pobre en esta versiÛn. Se deja continuar con finalidades experimentales.\n" +
+			alert("S'ha detectat una versi√≥ " + version + " de " + browser + ". El funcionament d'aquest navegador de mapes √©s pobre en aquesta versi√≥. Es deixa continuar amb finalitats experimentals.\n" +
+				"Se ha detectado una versi√≥n " + version + " de " + browser + ". El funcionamiento de esta navegador de mapas es pobre en esta versi√≥n. Se deja continuar con finalidades experimentales.\n" +
 				"A version " + version + " of " + browser + " has been detected. El performance of this map browser is poor on this version. It is allowed to continue with experimental proposes.\n" +
-				"Une version " + version + " de " + browser + " a ÈtÈ dÈtectÈe. Le fonctionnement de ce navigateur de couches est rÈduit en cette version. On le maintient a des fins finalitÈs expÈrimentales.");
+				"Une version " + version + " de " + browser + " a √©t√© d√©tect√©e. Le fonctionnement de ce navigateur de couches est r√©duit en cette version. On le maintient a des fins finalit√©s exp√©rimentales.");
 		}
     }
     else if (version<5)
     {
-		alert("S'ha detectat la versiÛ " + version + " del navegador " + browser + ". Aquest navegador no ha estat testat i la versiÛ indicada Ès inferior a la 5. Es deixa continuar perÚ no garantim el funcionament correcte d'aquest navegador de mapes.\n" +
-			"Se ha detectado la versiÛn " + version + " del navegador " + browser + ". Este navegador no ha sido testeado y la versiÛn indicada es inferior a la 5. Es deja continuar pero no se garantiza el funcionamento correcto de este navegador de mapas.\n" +
+		alert("S'ha detectat la versi√≥ " + version + " del navegador " + browser + ". Aquest navegador no ha estat testat i la versi√≥ indicada √©s inferior a la 5. Es deixa continuar per√≤ no garantim el funcionament correcte d'aquest navegador de mapes.\n" +
+			"Se ha detectado la versi√≥n " + version + " del navegador " + browser + ". Este navegador no ha sido testeado y la versi√≥n indicada es inferior a la 5. Es deja continuar pero no se garantiza el funcionamento correcto de este navegador de mapas.\n" +
 			"Version " + version + " of the browser " + browser + " has been detected. This browser has not been tested and the indicated version is lower than 5. It is allowed to continue but we cannot guaranty a correct performance of this map browser.\n"+
-			"Une version " + version + " de " + browser + " a ÈtÈ dÈtectÈe. Ce navigateur n'a pas ÈtÈ testÈ et la version indiquÈe est antÈrieure au la version 5. On laisse poursuivre mais on ne garantit pas le fonctionnement correct de ce navigateur de couches.");
+			"Une version " + version + " de " + browser + " a √©t√© d√©tect√©e. Ce navigateur n'a pas √©t√© test√© et la version indiqu√©e est ant√©rieure au la version 5. On laisse poursuivre mais on ne garantit pas le fonctionnement correct de ce navigateur de couches.");
     }
 	MobileAndTabletWebBrowser=MobileAndTabletCheck();
 	MobileWebBrowser=MobileCheck();
@@ -2573,8 +2684,8 @@ function FesTestDeNavegador()
 
 
 /////////////////////////////////////////////
-/*DefiniciÛ de les clases propies del Navegador de Mapes de MiraMon*/
-/* Aquest constructor no s'usa i es deia nomÈs com a documentaciÛ del JSON
+/*Definici√≥ de les clases propies del Navegador de Mapes de MiraMon*/
+/* Aquest constructor no s'usa i es deia nom√©s com a documentaci√≥ del JSON
 function CadenaMultiIdioma(cat,spa,eng,fre)
 {
     this.cat=cat;
@@ -2583,9 +2694,9 @@ function CadenaMultiIdioma(cat,spa,eng,fre)
 	this.fre=fre;
 }*/
 
-var MidaDePixelPantalla=0.28;  //Mida del pÌxel de pantalla en metres. AixÚ es podria tenir com un par‡metre igual que en MiraMon
+var MidaDePixelPantalla=0.28;  //Mida del p√≠xel de pantalla en metres. Aix√≤ es podria tenir com un par√†metre igual que en MiraMon
 
-/* Aquest constructor no s'usa i es deixa nomÈs com a documentaciÛ del JSON
+/* Aquest constructor no s'usa i es deixa nom√©s com a documentaci√≥ del JSON
 function CreaParametresVistaCapaTiled(tile_matrix, i_tileMin, i_tileMax, j_tileMin, j_tileMax, dx, dy)
 {
 	this.TileMatrix=tile_matrix;
@@ -2626,7 +2737,7 @@ function CreaItemIdentificadorConsultaTipica(index,valor_id)
 	this.id=valor_id;
 }
 
-/* Aquest constructor no s'usa i es deixa nomÈs com a documentaciÛ del JSON
+/* Aquest constructor no s'usa i es deixa nom√©s com a documentaci√≥ del JSON
 function CreaItemProjeccioConsultaTipica(valor,env)
 {
 	this.valor=valor;
@@ -2643,7 +2754,7 @@ function CreaItemProjeccioConsultaTipica(valor,env)
 capa_consulta=[];
 */
 
-/* Aquest constructor no s'usa i es deixa nomÈs com a documentaciÛ del JSON
+/* Aquest constructor no s'usa i es deixa nom√©s com a documentaci√≥ del JSON
 function CreaCampConsultaTipica(previ, nom, desc, post)
 {
     this.previ=previ;
@@ -2656,7 +2767,7 @@ function CreaCapaPreguntaServidorConsultaTipica(servidor, nom, camps, crs)
 {
 	this.servidor=servidor;
 	this.nom=nom;
-	this.camps=camps;  //Array de CreaCampConsultaTipica: noms,descripcions de camps i textos anteriors i posterios, ordenats en funciÛ de com estan continguts  1er Municipis - 2on Provincies
+	this.camps=camps;  //Array de CreaCampConsultaTipica: noms,descripcions de camps i textos anteriors i posterios, ordenats en funci√≥ de com estan continguts  1er Municipis - 2on Provincies
 	this.CRS=crs;
 }
 
@@ -2664,7 +2775,7 @@ function CreaConsultaTipicaIntern(servidor, nom, camps, crs, proj_camp, id_camp)
 {
 	this.servidor=servidor;
 	this.nom=nom;
-	this.camps=camps;  //Array de CreaCampConsultaTipica:noms, descripcions de camps i textos anteriors i posterios, ordenats en funciÛ de com estan continguts  1er Municipis - 2on Provincies
+	this.camps=camps;  //Array de CreaCampConsultaTipica:noms, descripcions de camps i textos anteriors i posterios, ordenats en funci√≥ de com estan continguts  1er Municipis - 2on Provincies
 	this.CRS=crs;
 	this.proj_camp=proj_camp;  //Array de les projeccions de cada camp
 	this.id_camp=id_camp; //Array de les taules de identificadors que relacionen els diferents camps
@@ -2677,7 +2788,7 @@ var CalImprimirVista=0x0002;
 var CalImprimirSituacio=0x0004;
 var CalImprimirLlegenda=0x0008;
 var CalImprimirEscala=0x0010;
-var RespectarResolucioVistaImprimir=0x0020;  //Per contraposiciÛ a respectar ‡mbit.
+var RespectarResolucioVistaImprimir=0x0020;  //Per contraposici√≥ a respectar √†mbit.
 //var CalImprimirCoordProj=0x0040;
 //var CalImprimirCoordLongLatG=0x0080;
 //var CalImprimirCoordLongLatGMS=0x0100;
@@ -2694,11 +2805,11 @@ function CreaAccio(accio,servidor, coord, buffer, capes, camps, valors, id_trans
 	this.capes=capes; //Array de capes que es volen validar
 	this.camps=camps; //Array de camps de les capes (1 per cada capa en el mateix ordre)
 	this.valors=valors; //Array de valors dels camps (1 per cada camp en el mateix ordre)
-	this.id_trans=id_trans; //Identificador de la transacciÛ
-	this.feta=feta; //feta:true--> acciÛ despatxada, feta:false --> acciÛ cancel∑lada
+	this.id_trans=id_trans; //Identificador de la transacci√≥
+	this.feta=feta; //feta:true--> acci√≥ despatxada, feta:false --> acci√≥ cancel¬∑lada
 }
 */
-/*LlistaServOWS=[]; es deixa nomÈs com a documentaciÛ del JSON
+/*LlistaServOWS=[]; es deixa nom√©s com a documentaci√≥ del JSON
 function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 {
 	this.url=url;

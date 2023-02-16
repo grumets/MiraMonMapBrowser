@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -216,7 +216,7 @@ function ChangeSizeSVG(id, size)
 function CanviaImageBotoPolsable(event, img, nom)
 {
 	img.src=nom;
-	dontPropagateEvent(event);  //Si el botÛ est‡ sobre altres coses no propaga aquest event
+	dontPropagateEvent(event);  //Si el bot√≥ est√† sobre altres coses no propaga aquest event
 	return true;
 }
 
@@ -247,7 +247,7 @@ var cdns=[];
 	return cdns.join("");
 }
 
-//Els arguments sÛn tripletes de 'nom_img', 'nom_fitxer_img', 'p'...
+//Els arguments s√≥n tripletes de 'nom_img', 'nom_fitxer_img', 'p'...
 function CanviaPolsatEnBotonsAlternatius()
 {
 	for (var i=0; i<arguments.length; i+=3)
@@ -263,7 +263,7 @@ function CanviaPolsatEnBotonsAlternatius()
 	return true;
 }
 
-//Els arguments sÛn: l'Ìndex del botÛ premut al inici + trios de 'nom_img', 'text_groc', 'funcio'...
+//Els arguments s√≥n: l'√≠ndex del bot√≥ premut al inici + trios de 'nom_img', 'text_groc', 'funcio'...
 function CadenaBotonsAlternatius(boto_p, botons, space, size, sizep)
 {
 var j,l;
@@ -349,7 +349,7 @@ var cdns=[];
 			cdns.push((CadenaBotoPolsable("zoomall", "zoomall", GetMessage("GeneralView", "barra"),
 				"PortamAVistaGeneral();")));
 
-		// ActivaciÛ de les consultes perquË hi ha alguna capa consultable
+		// Activaci√≥ de les consultes perqu√® hi ha alguna capa consultable
 		if(~Accio.accio&AccioValidacio)
 		{
 			for (i=0; i<ParamCtrl.capa.length; i++)
@@ -361,13 +361,13 @@ var cdns=[];
 		else
 			i=0;
 
-		// ActivaciÛ de les consultes perquË hi ha alguna vector consultable
+		// Activaci√≥ de les consultes perqu√® hi ha alguna vector consultable
 		for (k=0; k<ParamCtrl.capa.length; k++)
 		{
 			if (ParamCtrl.capa[k].model==model_vector && ParamCtrl.capa[k].consultable!="no")
 				break;
 		}
-		// ActivaciÛ de les consultes perquË hi ha alguna vector editable
+		// Activaci√≥ de les consultes perqu√® hi ha alguna vector editable
 		for (j=0; j<ParamCtrl.capa.length; j++)
 		{
 			if (ParamCtrl.capa[j].model==model_vector && ParamCtrl.capa[j].editable!="no")
@@ -378,7 +378,7 @@ var cdns=[];
 			var botons=[];
 			var boto_p;
 
-			//Precaucions previes: S'eviten situacions on ParamCtrl.EstatClickSobreVista Ès incompatible amb l'estat actual del navegador
+			//Precaucions previes: S'eviten situacions on ParamCtrl.EstatClickSobreVista √©s incompatible amb l'estat actual del navegador
 			if (ParamCtrl.EstatClickSobreVista=="ClickMouMig" && !(ParamCtrl.BarraBotoMouMig))
 				ParamCtrl.EstatClickSobreVista="ClickPan1";
 			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && !(ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))
@@ -493,7 +493,7 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoEnllacWMS)
 			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();")));
 		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor("+ NumeroDeCapesVolatils(-1) +");")));
+			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));")));
 		if (ParamCtrl.BarraBotoCalculadora)
 			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();")));
 		if (ParamCtrl.BarraBotoCombiCapa)
@@ -513,6 +513,14 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
 				"ObreFinestraAjuda();")));
+
+		if (ParamCtrl.accessClientId || ParamCtrl.AltresLinks)
+			cdns.push("\n");
+		if (ParamCtrl.accessClientId)
+			cdns.push((CadenaBotoPolsable("login", "login", GetMessage("Login", "authens"), "FerLoginICarregaCapes();")));
+		if (ParamCtrl.AltresLinks)
+			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
+
 		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
 			//var boto_per_defecte=(ParamCtrl.idioma=="cat")?0:((ParamCtrl.idioma=="spa")?1:2);
@@ -532,8 +540,6 @@ var cdns=[];
 				cdns.push(" ", CadenaBotonsAlternatius("idioma_"+ParamCtrl.idiomes[boto_per_defecte], botons, true, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-6 : 17, (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil-2 : 21), "\n");
 			}
 		}
-		if (ParamCtrl.AltresLinks)
-			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
 	}
 	cdns.push("</FORM>\n");
 	var elem=getLayer(window, "barra");

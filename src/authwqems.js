@@ -26,13 +26,15 @@
 
 				if (o.options.force) {
 					var token = (o.authResponse || {}).access_token;
-					var revokeUrl = "https://www.authenix.eu/oauth/tokenrevoke";
+					//var revokeUrl = "https://idm-wqems.opsi.lecce.it/auth/realms/wqems/protocol/openid-connect/tokenrevoke";
+					var revokeUrl = "https://idm-wqems.opsi.lecce.it/auth/realms/wqems/protocol/openid-connect/logout";
 
 					var xhr = new XMLHttpRequest();
 					xhr.open("POST", revokeUrl, true);
 
 					// Send the proper header information along with the request
 					xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					xhr.setRequestHeader("Authorization", "Bearer "+ token);
 
 					// Call a function when the state changes.
 					xhr.onreadystatechange = function () {
@@ -43,7 +45,7 @@
 						}
 					}
 
-					xhr.send("token=" + token); 
+					xhr.send("client_id=wqems-miramon&refresh_token=" + (o.authResponse || {}).id_token); 
 				}
 			},
 

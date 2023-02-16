@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -57,11 +57,11 @@ var graus_no_signe=Math.abs(graus_totals);
 	if (segons<0.00001)
 		segons=0;
 	if (zeros)
-		cdns.push(floor_DJ(graus_no_signe),"∞ ",floor_DJ(minuts),"\' ",OKStrOfNe(segons,ParamCtrl.NDecimalsCoordXY),"\"");
+		cdns.push(floor_DJ(graus_no_signe),"¬∞ ",floor_DJ(minuts),"\' ",OKStrOfNe(segons,ParamCtrl.NDecimalsCoordXY),"\"");
 	else
 	{
 		if (floor_DJ(graus_no_signe)!=0)
-			cdns.push(floor_DJ(graus_no_signe),"∞ ");
+			cdns.push(floor_DJ(graus_no_signe),"¬∞ ");
 		if (floor_DJ(minuts)!=0)
 			cdns.push(floor_DJ(minuts),"\' ");
 		if (segons!=0);
@@ -80,7 +80,7 @@ function DonaDenominadorDeLEscalaArrodonit(a)
 	e-=2;
 	var n=Math.abs(a/Math.pow(10,e));
 
-	//Ara cal arrodinir a l'enter mÈs proper:
+	//Ara cal arrodinir a l'enter m√©s proper:
 	if (n<112)
 		n=100;
 	else if (n<137)
@@ -116,8 +116,7 @@ function sign(x)
 {
 	if (x < 0.0)
 		return -1;
-	else
-		return 1;
+	return 1;
 }
 
 var CanviCRS={darrerCRS: "",
@@ -195,8 +194,8 @@ function LambertConformal_Funcio_15_9a_Snyder(e, fi)
 
 function LambertAzimuthal_Funcio_3_14_Snyder(fi)
 {
-    /*Per al c‡lcul de la authalic latitude (on l'esfera tÈ la mateixa ‡rea que l'el∑lipsoide)
-    es pot usar aquest desenvolupament en sËrie  (Adams, 1921, p.85) */
+    /*Per al c√†lcul de la authalic latitude (on l'esfera t√© la mateixa √†rea que l'el¬∑lipsoide)
+    es pot usar aquest desenvolupament en s√®rie  (Adams, 1921, p.85) */
     return fi-(CanviCRS.e2/3.0+31.0*CanviCRS.e4/180.0+59.0*CanviCRS.e6/560.0)*Math.sin(2.0*fi)
     		 +(17.0*CanviCRS.e4/360.0+61.0*CanviCRS.e6/1260.0)*Math.sin(4.0*fi)
              -(383.0*CanviCRS.e6/45360.0)*Math.sin(6.0*fi);
@@ -210,14 +209,14 @@ function LambertAzimuthal_Funcio_3_12_Snyder(fi)
 		return 0.0;
 	dvar2=(1.0-CanviCRS.e*sin_fi)/dvar2;
 	if (dvar2==0)
-	    	return 0.0;
+		return 0.0;
 	var dvar1=1.0-CanviCRS.e2*sin_fi*sin_fi;
 	if (dvar1==0.0)
-	    	return 0.0;
+	    return 0.0;
 	return (1.0-CanviCRS.e2)*(sin_fi/dvar1-Math.log(dvar2)/(2.0*CanviCRS.e));
 }
 
-//Aquesta funciÛ no cal cridar-la. La criden les de canvi de projecciÛ directament si cal
+//Aquesta funci√≥ no cal cridar-la. La criden les de canvi de projecci√≥ directament si cal
 function InicialitzaCRS(crs)
 {
 var crs_up=crs.toUpperCase();
@@ -485,8 +484,8 @@ var crs_up=crs.toUpperCase();
 	CanviCRS.darrerCRS=crs_up;
 }
 
-//var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecciÛ.
-//var crs_x, crs_y;  //coordenades XY de sortida de les funcions de canvi de projecciÛ.
+//var ll_x, ll_y;  //coordenades LongLat de sortida de les funcions de canvi de projecci√≥.
+//var crs_x, crs_y;  //coordenades XY de sortida de les funcions de canvi de projecci√≥.
 
 function UTM_Geo(x,y)
 {
@@ -495,7 +494,7 @@ var ll_x, ll_y;
 	y-=CanviCRS.offset_mapa_Y;
 
 	var mu=(CanviCRS.m0+y/CanviCRS.c_tissot)/(CanviCRS.radi_a*(1.0-CanviCRS.e2/4.0-3.0*CanviCRS.e4/64.0-5.0*CanviCRS.e6/256.0));
-	//fi1 Ès 'footpoint latitude o latitud del meridi‡ central que tÈ la mateixa y que el punt (lont, lat)
+	//fi1 √©s 'footpoint latitude o latitud del meridi√† central que t√© la mateixa y que el punt (lont, lat)
 	var fi1=mu+(3.0*CanviCRS.e1/2.0-27.0*CanviCRS.e1_sobre3/32.0)*Math.sin(2.0*mu)+(21.0*CanviCRS.e1_sobre2/16.0-55.0*CanviCRS.e1_sobre4/32.0)*Math.sin(4.0*mu)+(151.0*CanviCRS.e1_sobre3/96.0)*Math.sin(6.0*mu)+(1097.0*CanviCRS.e1_sobre4/512.0)*Math.sin(8.0*mu);
 	if (fi1<Math.PI/2-0.00001 && fi1>-Math.PI/2+0.00001)
 	{
@@ -524,7 +523,7 @@ var ll_x, ll_y;
 	}
 	else
 	{
-		ll_x=CanviCRS.lambda_0;   //indeterminat perÚ podem donar CanviCRS.lambda_0
+		ll_x=CanviCRS.lambda_0;   //indeterminat per√≤ podem donar CanviCRS.lambda_0
 		if (x>0.0)
 			ll_y=Math.PI/2;
 	        else
@@ -604,7 +603,7 @@ var llr_y=ll_y*FactorGrausARadiants;
 	return {"x": crs_x, "y": crs_y};
 }
 
-//Hi ha fÚrmules especials per si fi1==90graus perÚ de moment nomÈs suporto ETRS89-LAEA que no Ès aquest cas raro.
+//Hi ha f√≤rmules especials per si fi1==90graus per√≤ de moment nom√©s suporto ETRS89-LAEA que no √©s aquest cas raro.
 function LambertAzimutalEqualArea_Geo(x,y)
 {
 	x-=CanviCRS.offset_mapa_X;
@@ -628,7 +627,7 @@ function LambertAzimutalEqualArea_Geo(x,y)
 	return {"x": ll_x*FactorRadiantsAGraus, "y": ll_y*FactorRadiantsAGraus};
 }
 
-//Hi ha fÚrmules especials per si fi1==90graus perÚ de moment nomÈs suporto ETRS89-LAEA que no Ès aquest cas raro.
+//Hi ha f√≤rmules especials per si fi1==90graus per√≤ de moment nom√©s suporto ETRS89-LAEA que no √©s aquest cas raro.
 function Geo_LambertAzimutalEqualArea(ll_x,ll_y)
 {
 var crs_x, crs_y;
@@ -998,9 +997,45 @@ var env_crs_xy={"MinX": 0, "MaxX": 0, "MinY": 0, "MaxY": 0};
     return env_crs_xy;
 }
 
+//Aquesta funci√≥ no sobreescriu env sino que retorna un duplicat.
+function TransformaEnvolupant(env, crs_ori, crs_dest)
+{
+var env_ll;
+
+	if (DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return {MinX: env.MinX, MaxX: env.MaxX, MinY: env.MinY, MaxY: env.MaxY};  //Serveixo una copia de la envolupant
+
+	env_ll=DonaEnvolupantLongLat(env, crs_ori);
+	return DonaEnvolupantCRS(env_ll, crs_dest);
+}
+
+//Aquesta funci√≥ sobreescriu el punt.
+function TransformaCoordenadesPunt(punt, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(punt.x, punt.y,crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		punt.x=crs_xy.x;
+		punt.y=crs_xy.y;
+	}
+}
+
+//Aquesta funci√≥ sobreescriu el coord array
+function TransformaCoordenadesArray(coord, crs_ori, crs_dest)
+{
+	if (!DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+	{
+		var ll=DonaCoordenadesLongLat(coord[0], coord[1], crs_ori);
+		var crs_xy=DonaCoordenadesCRS(ll.x, ll.y, crs_dest);
+		coord[0]=crs_xy.x;
+		coord[1]=crs_xy.y;
+	}
+}
+
 function EsProjLongLat(crs)
 {
-	if (DonaUnitatsCoordenadesProj(crs)=="∞")
+	if (DonaUnitatsCoordenadesProj(crs)=="¬∞")
 		return true;
 	return false;
 }
@@ -1018,10 +1053,9 @@ var crs_up=crs.toUpperCase();
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
 		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395" || crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
         	return "m";
-	else if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
-		return "∞";
-	else
-		return "m?";
+	if (crs_up=="EPSG:4326" || crs_up=="EPSG:4258" || crs_up=="CRS:84")
+		return "¬∞";
+	return "m?";
 }
 
 function DonaDescripcioCRS(crs)
@@ -1030,97 +1064,135 @@ var crs_up=crs.toUpperCase();
 
 	if (crs_up=="EPSG:32616")
 		return "UTM16N - WGS84";
-	else if (crs_up=="EPSG:32628")
+	if (crs_up=="EPSG:32628")
 		return "UTM28N - WGS84";
-	else if (crs_up=="EPSG:32629")
+	if (crs_up=="EPSG:32629")
 		return "UTM29N - WGS84";
-	else if (crs_up=="EPSG:32630")
+	if (crs_up=="EPSG:32630")
 		return "UTM30N - WGS84";
-	else if (crs_up=="EPSG:32631")
+	if (crs_up=="EPSG:32631")
 		return "UTM31N - WGS84";
-    	else if (crs_up=="EPSG:32632")
+    	if (crs_up=="EPSG:32632")
 		return "UTM32N - WGS84";
-    	else if (crs_up=="EPSG:32633")
+    	if (crs_up=="EPSG:32633")
 		return "UTM33N - WGS84";
-	else if (crs_up=="EPSG:32634")
+	if (crs_up=="EPSG:32634")
 		return "UTM34N - WGS84";
-	else if (crs_up=="EPSG:32635")
+	if (crs_up=="EPSG:32635")
 		return "UTM35N - WGS84";
-	else if (crs_up=="EPSG:32636")
+	if (crs_up=="EPSG:32636")
 		return "UTM36N - WGS84";
-	else if (crs_up=="EPSG:25829")
+	if (crs_up=="EPSG:25829")
 		return "UTM29N - ETRS89";
-	else if (crs_up=="EPSG:25830")
+	if (crs_up=="EPSG:25830")
 		return "UTM30N - ETRS89";
-	else if (crs_up=="EPSG:25831")
+	if (crs_up=="EPSG:25831")
 		return "UTM31N - ETRS89";
-	else if (crs_up=="EPSG:25832")
+	if (crs_up=="EPSG:25832")
 		return "UTM32N - ETRS89";
-	else if (crs_up=="EPSG:25833")
+	if (crs_up=="EPSG:25833")
 		return "UTM33N - ETRS89";
-	else if (crs_up=="EPSG:25834")
+	if (crs_up=="EPSG:25834")
 		return "UTM34N - ETRS89";
-	else if (crs_up=="EPSG:25835")
+	if (crs_up=="EPSG:25835")
 		return "UTM35N - ETRS89";
-	else if (crs_up=="EPSG:25836")
+	if (crs_up=="EPSG:25836")
 		return "UTM36N - ETRS89";
-	else if (crs_up=="EPSG:23029")
+	if (crs_up=="EPSG:23029")
 		return "UTM29N - ED50";
-	else if (crs_up=="EPSG:23030")
+	if (crs_up=="EPSG:23030")
 		return "UTM30N - ED50";
-	else if (crs_up=="EPSG:23031")
+	if (crs_up=="EPSG:23031")
 		return "UTM31N - ED50";
-	else if (crs_up=="EPSG:23032")
+	if (crs_up=="EPSG:23032")
 		return "UTM32N - ED50";
-	else if (crs_up=="EPSG:23033")
+	if (crs_up=="EPSG:23033")
 		return "UTM33N - ED50";
-	else if (crs_up=="EPSG:23034")
+	if (crs_up=="EPSG:23034")
 		return "UTM34N - ED50";
-	else if (crs_up=="EPSG:23035")
+	if (crs_up=="EPSG:23035")
 		return "UTM35N - ED50";
-	else if (crs_up=="EPSG:23036")
+	if (crs_up=="EPSG:23036")
 		return "UTM36N - ED50";
-	else if (crs_up=="EPSG:32736")
+	if (crs_up=="EPSG:32736")
 		return "UTM36S - WGS84";
-	else if (crs_up=="EPSG:27563")
+	if (crs_up=="EPSG:27563")
 		return GetMessage("LambertConformalConicZoneIII_NTF", "canviprj");
-	else if (crs_up=="EPSG:27572")
+	if (crs_up=="EPSG:27572")
 		return GetMessage("LambertConformalConicZoneIIext_NTF", "canviprj");
-	else if (crs_up=="EPSG:27573")
+	if (crs_up=="EPSG:27573")
 		return GetMessage("LambertConformalConicZoneIIIext_NTF", "canviprj");
-	else if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
+	if (crs_up=="AUTO2:LCC,1,14.5,38,35,41")
 		return GetMessage("LambertConformalConicICCMediterranianRegion", "canviprj");
-	else if (crs_up=="EPSG:3035")
+	if (crs_up=="EPSG:3035")
 		return "ETRS89-LAEA";
-	else if (crs_up=="AUTO2:MERCATOR,1,0,41.42")
+	if (crs_up=="AUTO2:MERCATOR,1,0,41.42")
 		return GetMessage("MercatorParallel_41d25m_ED50", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42")
+	if (crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42")
 		return GetMessage("MercatorParallel_41d25m_WGS84", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR,1,0,40.60")
+	if (crs_up=="AUTO2:MERCATOR,1,0,40.60")
 		return GetMessage("MercatorParallel_40d36m_ED50", "canviprj");
-	else if (crs_up=="AUTO2:MERCATOR,1,0,0.0")
+	if (crs_up=="AUTO2:MERCATOR,1,0,0.0")
 		return GetMessage("MercatorParallelEquator_ED50", "canviprj");
-	else if (crs_up=="EPSG:3395")
+	if (crs_up=="EPSG:3395")
 		return GetMessage("MercatorParallelEquator_WGS84", "canviprj");
-	else if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
+	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return GetMessage("WebMercator", "canviprj");
-	else if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
+	if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
 		return "long/lat - WGS84";
-	else if (crs_up=="EPSG:4258")
+	if (crs_up=="EPSG:4258")
 		return "long/lat - ETRS89";
-	else
-		return crs;  // si no hi ha descripciÛ poso el codi.
+	return crs;  // si no hi ha descripci√≥ poso el codi.
 }
 
-//Es pot posar v=null si el servei no Ès un WMS
+//Retorn null si no son quasi iguals o el crs que represent els 2 iguals o quasi iguals in upperCase.
+//Aix√≤ permet ordenar per crs considerant els que s√≥n quasi iguals
+function DonaCRSRepresentaQuasiIguals(crs1, crs2)
+{
+var crs1_up=crs1.toUpperCase(), crs2_up=crs2.toUpperCase();
+
+	if (    (crs1_up=="EPSG:25829" || crs1_up=="EPSG:32629") && 
+		(crs2_up=="EPSG:25829" || crs2_up=="EPSG:32629")  )
+		return "EPSG:25829";
+	if (    (crs1_up=="EPSG:25830" || crs1_up=="EPSG:32630") && 
+		(crs2_up=="EPSG:25830" || crs2_up=="EPSG:32630")  )
+		return "EPSG:25830";
+	if (    (crs1_up=="EPSG:25831" || crs1_up=="EPSG:32631") && 
+		(crs2_up=="EPSG:25831" || crs2_up=="EPSG:32631")  )
+		return "EPSG:25831";
+	if (    (crs1_up=="EPSG:25832" || crs1_up=="EPSG:32632") && 
+		(crs2_up=="EPSG:25832" || crs2_up=="EPSG:32632")  )
+		return "EPSG:25832";
+	if (    (crs1_up=="EPSG:25833" || crs1_up=="EPSG:32633") && 
+		(crs2_up=="EPSG:25833" || crs2_up=="EPSG:32633")  )
+		return "EPSG:25833";
+	if (    (crs1_up=="EPSG:25834" || crs1_up=="EPSG:32634") && 
+		(crs2_up=="EPSG:25834" || crs2_up=="EPSG:32634")  )
+		return "EPSG:25834";
+	if (    (crs1_up=="EPSG:25835" || crs1_up=="EPSG:32635") && 
+		(crs2_up=="EPSG:25835" || crs2_up=="EPSG:32635")  )
+		return "EPSG:25835";
+	if (    (crs1_up=="EPSG:25836" || crs1_up=="EPSG:32636") && 
+		(crs2_up=="EPSG:25836" || crs2_up=="EPSG:32636")  )
+		return "EPSG:25836";
+	if (    (crs1_up=="EPSG:3785" || crs1_up=="EPSG:3857") && 
+		(crs2_up=="EPSG:3785" || crs2_up=="EPSG:3857")  )
+		return "EPSG:3785";
+	if (    (crs1_up=="EPSG:4326" || crs1_up=="CRS:84" || crs1_up=="EPSG:4258") && 
+		(crs2_up=="EPSG:4326" || crs2_up=="CRS:84" || crs2_up=="EPSG:4258")  )
+		return "CRS:84";
+	if (crs1_up==crs2_up)
+		return crs1_up;
+	return null;
+}
+
+//v representa la versi√≥. es pot passar com a null si el servei no √©s un WMS
 function CalGirarCoordenades(crs, v)
 {
 	if((crs.toUpperCase()=="EPSG:4326" || crs.toUpperCase()=="EPSG:3035") && (!v || (v.Vers==1 && v.SubVers>=3) || v.Vers>1))
 		return true;
 	return false;
 }
-
-
 
 /*
  * Returns a CRS code in the EPSG style. In case an equivalence is not found,
@@ -1139,7 +1211,7 @@ function MMgetCRSEquivalentEPSG(codeCRS)
 	var parts= codeCRS.split(":");
 	if(parts[parts.length-3]==="EPSG" && parts[parts.length-2]==="")
 		return parts[parts.length-3]+":"+parts[parts.length-1];
-	else if(parts[parts.length-2]==="EPSG")
+	if(parts[parts.length-2]==="EPSG")
 		return parts[parts.length-2]+":"+parts[parts.length-1];
 	//Else look in our dictionary for translation
 	return {
@@ -1166,4 +1238,17 @@ var i= ParamCtrl.ImatgeSituacio.length;
 			return true;
 	}
 	return false;
+}
+
+function DonaEPSGDeURLOpengis(url)
+{
+	if(url.match("www.opengis.net/def/crs/OGC/1.3/CRS84"))
+	{
+		return "CRS:84";
+	}
+	if(url.match("www.opengis.net/def/crs/EPSG/"))
+	{
+		return "EPSG:"+url.slice(url.lastIndexOf("/")+1);
+	}
+	return null;
 }

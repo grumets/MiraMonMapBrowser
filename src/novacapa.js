@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2022 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -38,7 +38,7 @@
 
 "use strict"
 
-const OriginUsuari="usuari";
+const OrigenUsuari="usuari";
 
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
@@ -61,7 +61,11 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 						ncol: 0};
 			estil=estils[estils.length-1];
 			if (layer.esCOG && layer.uriDataTemplate)
+			{
 				estil.component=[{"i_valor": 0}];
+				if (layer.vom=="Land Water Transition Zone - Hydroperiod")
+					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
+			}
 			if (layer.categories && layer.categories.length)
 			{
 				estil.categories=[];
@@ -103,16 +107,16 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
 				tipus: servidorGC.tipus,
 				nom: layer.nom,
 				desc: layer.desc,
-				CRS: [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
+				CRS: layer.CRSs ? layer.CRSs : [ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS],
 				FormatImatge: servidorGC.formatGetMap[i_format_get_map],
-				transparencia: (servidorGC.formatGetMap[i_format_get_map]=="image/jpeg") ? "opac" : "transparent",
+				transparencia: "semitransparent",
 				CostatMinim: minim,
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
@@ -131,7 +135,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 				i_data: layer.i_data,
 				animable: (layer.data)? true: false,
 				AnimableMultiTime: (layer.data)? true:false,
-				origen: OriginUsuari}
+				origen: OrigenUsuari}
 		);
 
 	capa=ParamCtrl.capa[k];
@@ -153,21 +157,21 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		capa.valors=[{
 					"datatype": "float32",
 					"nodata": [-9999, 0]
-				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
+				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informaciÃ³ del propi TIFF
 		capa.estil=estils;
-		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
+		//CompletaDefinicioCapa() es fa mÃ©s tard dins de PreparaLecturaTiff()
 	}
 	else
 		CompletaDefinicioCapa(capa);
 
 	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa))
-		   alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
+		alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
-/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
-per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa
+/* i_capa es passa en el context que estic demanat els indexos en relaciÃ³ a una capa concreta,
+per si la definicÃ³ d'algun v[] d'aquell no indica i_capa explÃ­citament, com per exemple passa
 en crear un flistre espacial a partir d'una banda de la mateixa capa
-En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit) */
+En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i estÃ  protegit) */
 function DonaIndexosACapesDeCalcul(calcul, i_capa)
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
@@ -235,7 +239,7 @@ var env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, i;
 	{
 		if (!ParamCtrl.capa[i_capes[i]].EnvTotal)
 			return null;
-		if (i<0 && ParamCtrl.capa[i_capes[i]].EnvTotal.CRS!=ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS)
+		if (i<0 && !DonaCRSRepresentaQuasiIguals(ParamCtrl.capa[i_capes[i]].EnvTotal.CRS, ParamCtrl.capa[i_capes[i-1]].EnvTotal.CRS))
 			break;
 	}
 	if (i<i_capes.length)  //Hi ha ambits en CRSs diferents. Ho faig amb LongLat
@@ -315,9 +319,9 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
-	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no son les dades per defecte -> la capa calculada és una capa nova
+	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressiÃ³ entra en joc mÃ©s d'una capa o les dates no son les dades per defecte -> la capa calculada Ã©s una capa nova
 	{
-		//AZ: pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
+		//AZ: pensar quÃ¨ fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
 
 		ParamCtrl.capa.splice(i_capa, 0, {servidor: null,
 			versio: null,
@@ -363,23 +367,23 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 			FlagsData: null,
 			data: null,
 			i_data: 0,
-			animable:	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
-			AnimableMultiTime: false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
+			animable:	false, //Â·Â·Segurament la capa es podria declarar animable si alguna capa tÃ© els temps "current" i Ã©s multitime.
+			AnimableMultiTime: false,  //Â·Â·Segurament la capa es podria declarar AnimableMultiTime si alguna capa tÃ© els temps "current" i Ã©s multitime.
 			proces:	null,
 			ProcesMostrarTitolCapa: false,
-			origen: OriginUsuari
+			origen: OrigenUsuari
 			});
 
-		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
+		if (i_capa<ParamCtrl.capa.length)  //aixÃ² Ã©s fa desprÃ©s, donat que els Ã­ndex de capa de la capa nova es poden referir a capes que s'han mogut.
 			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
 
 		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
-		//Redibuixo el navegador perquè les noves capes siguin visibles
+		//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
 		RevisaEstatsCapes();
 		RepintaMapesIVistes();
 	}
-	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
+	else //si en l'expressiÃ³ nomÃ©s entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
 	{
 		var capa=ParamCtrl.capa[i_capa];
 		capa.estil.push({
@@ -394,7 +398,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 				nItemLlegAuto: 20,
 				ncol: 4,
 				descColorMultiplesDe: 0.01,
-				origen: OriginUsuari
+				origen: OrigenUsuari
 			});
 
 			if (capa.visible=="ara_no")
@@ -494,12 +498,12 @@ var k;
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari});
+				origen: OrigenUsuari});
 
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	//Redibuixo el navegador perquè les noves capes siguin visibles
+	//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	RepintaMapesIVistes();
 }
@@ -552,25 +556,25 @@ var k;
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari});
+				origen: OrigenUsuari});
 	
 	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	//Redibuixo el navegador perquè les noves capes siguin visibles
+	//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	RepintaMapesIVistes();
 }
 
-function IniciaDefinicioCapaTIFF(url, desc)
+function IniciaDefinicioCapaTIFF(url, desc, CRSs)
 {
 	return {servidor: url,
 				versio: null,
 				tipus: "TipusHTTP_GET",
 				nom: null,
 				desc: desc,
-				CRS: null,
+				CRS: CRSs,
 				FormatImatge: "image/tiff",
 				valors: [],
 				transparencia: "semitrasparent",
@@ -582,8 +586,8 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				estil: null,
 				i_estil: 0,
 				NColEstil: 1,
-				LlegDesplegada: true,
-				VisibleALaLlegenda: false,
+				LlegDesplegada: false,
+				VisibleALaLlegenda: true,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
@@ -592,7 +596,7 @@ function IniciaDefinicioCapaTIFF(url, desc)
 				i_data: 0,
 				animable: false,
 				AnimableMultiTime: false,
-				origen: OriginUsuari};
+				origen: OrigenUsuari};
 }
 
 async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
@@ -613,12 +617,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			return;
 		}
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
-		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=capa.CRS[0])
+		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
-		if (capa.origen==OriginUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
-			ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS==capa.CRS[0] && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
+		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
+			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
 
@@ -647,7 +651,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		return;
 	}
 
-	if (capa.origen==OriginUsuari)
+	if (capa.origen==OrigenUsuari)
 	{
 		capa.valors=[];
 		var i_v=0;
@@ -680,16 +684,16 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		}
 	}
 
-	if (capa.origen==OriginUsuari)
+	if (capa.origen==OrigenUsuari)
 	{
-		//En la versió qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
-                //En un COG, cada overview és una imatge més en el compte. La darrera és la de menys detall. Només la primera presenta resolució. Les altres s'ha de "deduir" de la relació entre mides d'imatges en pixels
+		//En la versiÃ³ qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memÃ²ria i cal evitar-ho
+                //En un COG, cada overview Ã©s una imatge mÃ©s en el compte. La darrera Ã©s la de menys detall. NomÃ©s la primera presenta resoluciÃ³. Les altres s'ha de "deduir" de la relaciÃ³ entre mides d'imatges en pixels
 		//https://geoexamples.com/other/2019/02/08/cog-tutorial.html/
 		var n_overviews = await tiff.getImageCount();
 		var lastImage = await tiff.getImage(n_overviews-1);
 
 		//var costatMin=image.getResolution()[0];  //No hi ha probrema en un costat petit (mirar la imatge molt de prop)
-		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerància sobre el costat màxim
+		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerÃ ncia sobre el costat mÃ xim
 		if (capa.CRS && capa.CRS.length)
 		{
 			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && EsProjLongLat(capa.CRS[0]))
@@ -709,7 +713,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
 		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
-		var descItems=null, metadades=null, categories=null, atributs=null;
+		var descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null;
 		if (capa.estil && capa.estil.length)
 		{
 			var estil=capa.estil[0];
@@ -721,6 +725,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				categories=JSON.parse(JSON.stringify(estil.categories));
 			if (estil.atributs)
 				atributs=JSON.parse(JSON.stringify(estil.atributs));
+			if (estil.component && estil.component.length && estil.component[0].estiramentPaleta)
+				estiramentPaleta=JSON.parse(JSON.stringify(estil.component[0].estiramentPaleta));
 		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
@@ -753,6 +759,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 						component: [
 							{
 								i_valor: i_v+i,
+								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0
 							}
 						],
 						categories: categories,
@@ -769,7 +776,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					{
 						if (i>0 && image.fileDirectory.ColorMap[i-1]==32896 && image.fileDirectory.ColorMap[ncolors+i-1]==32896 && image.fileDirectory.ColorMap[ncolors*2+i-1]==32896 && 
 							image.fileDirectory.ColorMap[i]==32896 && image.fileDirectory.ColorMap[ncolors+i]==32896 && image.fileDirectory.ColorMap[ncolors*2+i]==32896)
-							break; //Aquest color està repetit amb l'anterior i és un gris. Sembla que és el final de la paleta.
+							break; //Aquest color estÃ  repetit amb l'anterior i Ã©s un gris. Sembla que Ã©s el final de la paleta.
 						estil.paleta.colors[i]={
 								r: image.fileDirectory.ColorMap[i]>>>8,
 								g: image.fileDirectory.ColorMap[ncolors+i]>>>8,
@@ -778,16 +785,34 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					}
 					estil.ncol=1;
 				}
+				else if (categories)
+				{
+					//hi ha categories perÃ² no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+					if (!PaletesGlobals)
+						PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+					estil.paleta={colors: []};
+					estil.ItemLleg=[];
+					var ncolors=categories.length;
+					for (var i=0, j=0; i<ncolors; i++, j++)
+					{
+						if (j==20)
+							j==0;
+						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+					}
+					estil.ncol=1;					
+				}
 				else
 				{
-					estil.component[0].estiramentPaleta={auto: true};
+					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};
 					estil.nItemLlegAuto=20;
 					estil.ncol=4;
 					estil.descColorMultiplesDe=0.01;
 				}
 			}
 		}
-		capa.VisibleALaLlegenda=true;
+		capa.LlegDesplegada=true;
 	}
 }
 
@@ -803,7 +828,7 @@ var k;
 	}
 	ParamCtrl.capa.splice(k, 0, capa);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-	if (capa.CRS && capa.CRS[0]!=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase())
+	if (capa.CRS && !DonaCRSRepresentaQuasiIguals(capa.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		CreaLlegenda();
 		if (ParamCtrl.LlegendaAmagaSiForaCRS)
@@ -820,7 +845,7 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
-	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]));
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null);
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
 	{
@@ -836,8 +861,6 @@ var i_fitxer, i_event;
 			CanviaEstatEventConsola(null, i_event, EstarEventError);
 			return;
 		}
-
-
 		await CompletaDefinicioCapaTIFF(capa, tiff, urls[i_fitxer], TreuAdreca(urls[i_fitxer], 0));
 	}
 
@@ -848,7 +871,7 @@ async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
 {
 var i_fitxer;
 
-	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc); 	
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null); 	
 
 	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
 	{

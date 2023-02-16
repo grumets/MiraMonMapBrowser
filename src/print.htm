@@ -1,3 +1,4 @@
+Ôªø<!DOCTYPE html>
 <HTML>
 <!--
     This file is part of MiraMon Map Browser.
@@ -18,19 +19,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat) 
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del 
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica 
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi 
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert. 
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat) 
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del 
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica 
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi 
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert. 
     
     En particular, el Navegador de Mapes del MiraMon (client per Internet) 
-    es distribueix sota els termes de la llicËncia GNU Affero General Public 
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public 
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
     
     El Navegador de Mapes del MiraMon es pot actualitzar des de 
@@ -38,8 +39,8 @@
 -->
 
 <head>
-<title>Par‡metres de control</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Par√†metres de control</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
 <script LANGUAGE="JavaScript">
 <!--   Inici de JavaScript  
@@ -48,8 +49,8 @@
 function IniciaPrintTools()
 {
 var cdns=[], i;
-	cdns.push(opener.DonaCadenaLang({"cat":"Mida i orientaciÛ del paper", 
-			"spa":"TamaÒo y orientaciÛn del papel", 
+	cdns.push(opener.DonaCadenaLang({"cat":"Mida i orientaci√≥ del paper", 
+			"spa":"Tama√±o y orientaci√≥n del papel", 
 			"eng":"Size and orientation of the paper",
 			"fre":"Dimensions et position du papier"}),":<br>");
 	for (i=0; i<opener.ParamCtrl.PlantillaDImpressio.length; i++)
@@ -62,10 +63,10 @@ var cdns=[], i;
 							"eng":"When printing the view, keep", "fre":"En imprimant la vue, respecter"}),":<br>",
 			" <input type=\"radio\" name=\"RespectarResolucio\" value=\"false\"",
 				" onClick=\"AnalitzarResolucioImpressio(false);\"",
-				"> ", opener.DonaCadenaLang({"cat":"l\'‡mbit", "spa":"el ·mbito", "eng":"the extent", "fre":"le champ"}) ,"<br>" ,
+				"> ", opener.DonaCadenaLang({"cat":"l\'√†mbit", "spa":"el √°mbito", "eng":"the extent", "fre":"le champ"}) ,"<br>" ,
 			" <input type=\"radio\" name=\"RespectarResolucio\" value=\"true\"",
 				" onClick=\"AnalitzarResolucioImpressio(true);\"",
-				"> ", opener.DonaCadenaLang({"cat":"la resoluciÛ", "spa":"la resoluciÛn", "eng":"the resolution", "fre":"la rÈsolution"}));
+				"> ", opener.DonaCadenaLang({"cat":"la resoluci√≥", "spa":"la resoluci√≥n", "eng":"the resolution", "fre":"la r√©solution"}));
 	window.document.getElementById("print_tools").innerHTML=cdns.join("");
 }
 
@@ -73,8 +74,8 @@ function IniciaPrintBarra()
 {
 var cdns=[];
 	cdns.push("<div align=right><input TYPE=\"submit\" VALUE=\""+opener.DonaCadenaLang({"cat":"Imprimir", "spa":"Imprimir", "eng":"Print", "fre":"Imprimer"})+"\"> ",
-		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Cancel∑lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),"\" onClick=\"CancellaImpressio();\"> &nbsp;&nbsp;",
-		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Previsualitzar", "spa":"Previsualizar", "eng":"Preview", "fre":"AperÁu"}),"\" onClick=\"AplicaCanvisImpressio();\">&nbsp;&nbsp;</div>");
+		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Cancel¬∑lar", "spa":"Cancelar", "eng":"Cancel", "fre":"Annuler"}),"\" onClick=\"CancellaImpressio();\"> &nbsp;&nbsp;",
+		"<input TYPE=\"button\" VALUE=\"",opener.DonaCadenaLang({"cat":"Previsualitzar", "spa":"Previsualizar", "eng":"Preview", "fre":"Aper√ßu"}),"\" onClick=\"AplicaCanvisImpressio();\">&nbsp;&nbsp;</div>");
 	window.document.getElementById("print_barra").innerHTML=cdns.join("");
 }
 
@@ -207,7 +208,7 @@ function AplicaCanvisImpressio()
 
 function ImprimeixTot()
 {
-	//print_barra.barra.cancella.value=opener.DonaCadenaLang({"cat":"Tanca", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"});  AixÚ no va.
+	//print_barra.barra.cancella.value=opener.DonaCadenaLang({"cat":"Tanca", "spa":"Cerrar", "eng":"Close", "fre":"Quitter"});  Aix√≤ no va.
 	if (RecuperaEstatPlantilla()!=0)
 	{
 		setTimeout("ImprimeixTot()", 500);
@@ -261,28 +262,28 @@ function AnalitzarResolucioImpressio(respectar_resolucio)
 	if ((typeof respectar_resolucio=="undefined" && opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.RespectarResolucioVistaImprimir) || 
 		respectar_resolucio)
 	{
-		cdns.push(opener.DonaCadenaLang({"cat":"La resoluciÛ original de la vista es respecta perÚ es canvia l\'‡mbit.",
-					"spa":"La resoluciÛn original de la vista se respeta pero se cambia el ·mbito.",
+		cdns.push(opener.DonaCadenaLang({"cat":"La resoluci√≥ original de la vista es respecta per√≤ es canvia l\'√†mbit.",
+					"spa":"La resoluci√≥n original de la vista se respeta pero se cambia el √°mbito.",
 					"eng":"The original resolution of the view is kept but the extent is changed.",
-					"fre":"La rÈsolution originelle de la vue est respectÈe mais le champ est changÈ."}));
+					"fre":"La r√©solution originelle de la vue est respect√©e mais le champ est chang√©."}));
 	}
 	else
 	{
 		if (opener.VistaImprimir.nfil<opener.ParamInternCtrl.vista.nfil || opener.VistaImprimir.nfil<opener.ParamInternCtrl.vista.nfil)
 		{
 			cdns.push("<font color=red>",
-					opener.DonaCadenaLang({"cat":"La resoluciÛ assignada a la impressora pel navegador Ès INFERIOR a la resoluciÛ de l\'‡rea de la vista a imprimir.\nPrem \'Imprimir\' per a imprimir a un resoluciÛ inferior o cancel∑la i fes mÈs petita l\'area de la vista (p.ex. canviat la mida del navegador).",
-										"spa":"La resoluciÛn asignada a la impresora por el navegador es INFERIOR a la resoluciÛn del ·rea de la vista a imprimir.\nSeleccione \'Imprimir\' para imprimir a una resoluciÛn inferior o cancelar y haga m·s pequeÒa el ·rea de la vista (p.ej. cambiando la medida del navegador).",
+					opener.DonaCadenaLang({"cat":"La resoluci√≥ assignada a la impressora pel navegador √©s INFERIOR a la resoluci√≥ de l\'√†rea de la vista a imprimir.\nPrem \'Imprimir\' per a imprimir a un resoluci√≥ inferior o cancel¬∑la i fes m√©s petita l\'area de la vista (p.ex. canviat la mida del navegador).",
+										"spa":"La resoluci√≥n asignada a la impresora por el navegador es INFERIOR a la resoluci√≥n del √°rea de la vista a imprimir.\nSeleccione \'Imprimir\' para imprimir a una resoluci√≥n inferior o cancelar y haga m√°s peque√±a el √°rea de la vista (p.ej. cambiando la medida del navegador).",
 										"eng":"The resolution assigned to the printer in a browser is LOWER than the resolution of the view area to print.\nPlease, press \'Print\' to print in a lower resolution or cancel to view area smaller (f.ex. changing browser window size).",
-										"fre":"La rÈsolution assignÈe ‡ l\'imprimante par le navigateur est INF…RIEURE ‡ la rÈsolution de l\'aire de la vue ‡ imprimer.\nAppuyer \'Imprimer\' pour imprimer ‡ une rÈsolution infÈrieure o˘ annuler et faites plus petite l\'aire de la vue (p.ex. En changeant la taille du navigateur)."}),
+										"fre":"La r√©solution assign√©e √† l\'imprimante par le navigateur est INF√âRIEURE √† la r√©solution de l\'aire de la vue √† imprimer.\nAppuyer \'Imprimer\' pour imprimer √† une r√©solution inf√©rieure o√π annuler et faites plus petite l\'aire de la vue (p.ex. En changeant la taille du navigateur)."}),
 						"</font>");
 		}
 		else
 		{
-			cdns.push(opener.DonaCadenaLang({"cat":"La resoluciÛ assignada a la impressora pel navegador Ès suficient per imprimir la vista.",
-							"spa":"La resoluciÛn asignada a la impresora por el navegador es suficiente para imprimir la vista.",
+			cdns.push(opener.DonaCadenaLang({"cat":"La resoluci√≥ assignada a la impressora pel navegador √©s suficient per imprimir la vista.",
+							"spa":"La resoluci√≥n asignada a la impresora por el navegador es suficiente para imprimir la vista.",
 							"eng":"The resolution assigned to the printer in a browser is enough to print the view.",
-							"fre":"La rÈsolution assignÈe ‡ l'imprimante par le navigateur est suffisante  pour imprimer la vue."}));
+							"fre":"La r√©solution assign√©e √† l'imprimante par le navigateur est suffisante  pour imprimer la vue."}));
 		}
 	}
 	window.document.getElementById("print_text").innerHTML=cdns.join("");
@@ -327,7 +328,7 @@ function DibuixaEditsMides()
 	var cdns=[];
 	cdns.push("<hr>");
 	cdns.push("<table border=0 cellspacing=0 cellpadding=0>",
-			"<THEAD><TR><TH>",opener.DonaCadenaLang({"cat":"Elements a imprimir (pÌxels)", "spa":"Elementos a imprimir (pÌxeles)","eng":"Elements to print (pixels)", "fre":"…lÈments ‡ imprimer (pixels)"}),"</TH><TH>",
+			"<THEAD><TR><TH>",opener.DonaCadenaLang({"cat":"Elements a imprimir (p√≠xels)", "spa":"Elementos a imprimir (p√≠xeles)","eng":"Elements to print (pixels)", "fre":"√âl√©ments √† imprimer (pixels)"}),"</TH><TH>",
 							opener.DonaCadenaLang({"cat":"esq.", "spa":"izq.", "eng":"left", "fre":"gauche"}),"</TH><TH>",
 							opener.DonaCadenaLang({"cat":"sup.", "spa":"sup.", "eng":"top", "fre":"sup."}),"</TH><TH>",
 							opener.DonaCadenaLang({"cat":"ample", "spa":"ancho", "eng":"width", "fre":"largeur"}),"</TH><TH>",
@@ -335,13 +336,13 @@ function DibuixaEditsMides()
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "vista")))
 		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirVista\"> ", opener.DonaCadenaLang({"cat":"Vista", "spa":"Vista", "eng":"View", "fre":"Vue"}) ,"<td><input type=\"text\" name=\"ElementImprimirVistaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirVistaAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "escala")))
-		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirEscala\"> ", opener.DonaCadenaLang({"cat":"Barra d\'escala", "spa":"Barra de escala", "eng":"Scale Bar", "fre":"Barre d\'Èchelle"}) ,"<td><input type=\"text\" name=\"ElementImprimirEscalaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAlt\" size=3></td></tr>");
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirEscala\"> ", opener.DonaCadenaLang({"cat":"Barra d\'escala", "spa":"Barra de escala", "eng":"Scale Bar", "fre":"Barre d\'√©chelle"}) ,"<td><input type=\"text\" name=\"ElementImprimirEscalaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirEscalaAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "titol")))
-		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", opener.DonaCadenaLang({"cat":"TÌtol", "spa":"TÌtulo", "eng":"Title", "fre":"Titre"}) ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirTitol\"> ", opener.DonaCadenaLang({"cat":"T√≠tol", "spa":"T√≠tulo", "eng":"Title", "fre":"Titre"}) ,"</td><td><input type=\"text\" name=\"ElementImprimirTitolEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirTitolAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "situacio")))
-		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirSituacio\"> ", opener.DonaCadenaLang({"cat":"Mapa de situaciÛ", "spa":"Mapa de situaciÛn", "eng":"Situation map", "fre":"Carte de situation"}) ,"<td><input type=\"text\" name=\"ElementImprimirSituacioEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAlt\" size=3></td></tr>");
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirSituacio\"> ", opener.DonaCadenaLang({"cat":"Mapa de situaci√≥", "spa":"Mapa de situaci√≥n", "eng":"Situation map", "fre":"Carte de situation"}) ,"<td><input type=\"text\" name=\"ElementImprimirSituacioEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirSituacioAlt\" size=3></td></tr>");
 	if (opener.isLayer(opener.getLayer(window.FullImprimirWindow, "llegenda")))
-		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirLlegenda\"> ", opener.DonaCadenaLang({"cat":"Llegenda", "spa":"Leyenda", "eng":"Legend", "fre":"LÈgende"}) ,"<td><input type=\"text\" name=\"ElementImprimirLlegendaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAlt\" size=3></td></tr>");
+		cdns.push("<tr><td> <input type=\"checkbox\" name=\"ElementImprimirLlegenda\"> ", opener.DonaCadenaLang({"cat":"Llegenda", "spa":"Leyenda", "eng":"Legend", "fre":"L√©gende"}) ,"<td><input type=\"text\" name=\"ElementImprimirLlegendaEsq\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaSup\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAmple\" size=3></td><td><input type=\"text\" name=\"ElementImprimirLlegendaAlt\" size=3></td></tr>");
 
 	var n_layers_propies=0;
 	for (var i=0; i<window.FullImprimirWindow.layerList.length; i++)
@@ -357,7 +358,7 @@ function DibuixaEditsMides()
 	if (n_layers_propies>1)
 	{
 		//Omplo un select
-		cdns.push("<tr><td colspan=5><img src=1tran.gif height=5></td></tr><tr><td>"+opener.DonaCadenaLang({"cat":"Altres elements", "spa":"Otros elementos", "eng":"Other elements", "fre":"Autres ÈlÈments"})+": </td><td colspan=4><select name=\"LayersPropies\" onChange=\"print_tools.ReompleEditsMidesPropia(document.print_form.LayersPropies.options[document.print_form.LayersPropies.selectedIndex].value, false);\">");
+		cdns.push("<tr><td colspan=5><img src=1tran.gif height=5></td></tr><tr><td>"+opener.DonaCadenaLang({"cat":"Altres elements", "spa":"Otros elementos", "eng":"Other elements", "fre":"Autres √©l√©ments"})+": </td><td colspan=4><select name=\"LayersPropies\" onChange=\"print_tools.ReompleEditsMidesPropia(document.print_form.LayersPropies.options[document.print_form.LayersPropies.selectedIndex].value, false);\">");
 		var i_layer_propies=0;
 		for (var i=0; i<window.FullImprimirWindow.layerList.length; i++)
 		{
@@ -601,7 +602,7 @@ function MouLayersImpressio(primer_cop)
 			opener.showOrHideLayer(elem_llegenda, opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].CalImprimir&opener.CalImprimirLlegenda);
 		}
 
-		//Es fa el redibuixat de les layers prÚpies.
+		//Es fa el redibuixat de les layers pr√≤pies.
 		var elem_capa;
 		for (var i=0; i<opener.plantilla_dimpressio_intern[opener.IPlantillaDImpressio].LayersPropies.length; i++)
 		{
@@ -622,7 +623,8 @@ function MouLayersImpressio(primer_cop)
 // -->
 </script>
 </head>
-<body bgcolor="#D4D0C8" text="#000000" TOPMARGIN="2" LEFTMARGIN="2" MARGINWIDTH="2" MARGINHEIGHT="0" onLoad="IniciaFormulari();" onunLoad="TancaFinestraImpressio();">
+<body style="background-color:#D4D0C8; color:#000000; margin-top:2px; margin-right:2px; margin-left:2px;" onLoad="IniciaFormulari();" onunLoad="TancaFinestraImpressio();">>
+<!--body bgcolor="#D4D0C8" text="#000000" TOPMARGIN="2" LEFTMARGIN="2" MARGINWIDTH="2" MARGINHEIGHT="0" onLoad="IniciaFormulari();" onunLoad="TancaFinestraImpressio();"-->
 
 <form name="print_form" onSubmit="return print_tools.ImprimeixTot();">
 

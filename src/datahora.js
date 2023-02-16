@@ -1,4 +1,4 @@
-/*
+Ôªø/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
-    amb l'ajut de N˙ria Juli‡ (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ès un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
-    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
-    de mapes r‡sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
-    No tots aquests productes sÛn gratuÔts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    amb l'ajut de N√∫ria Juli√† (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon √©s un projecte del
+    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
+    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
+    de mapes r√†sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
+    No tots aquests productes s√≥n gratu√Øts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicËncia GNU Affero General Public
+    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -69,7 +69,7 @@ function DonaIndexDataCapa(capa, i_data)
 	return (i_data<0) ? capa.data.length+i_data : i_data;
 }
 
-//Any de 4 xifres (l'equivalment javascript Ès d.getFullYear())
+//Any de 4 xifres (l'equivalment javascript √©s d.getFullYear())
 function DonaYearJSON(data)
 {
 	if (data.year)
@@ -77,7 +77,7 @@ function DonaYearJSON(data)
 	return 1970;
 }
 
-//Mes de l'any de 1 a 12 (l'equivalment javascript Ès d.getMonth()+1)
+//Mes de l'any de 1 a 12 (l'equivalment javascript √©s d.getMonth()+1)
 function DonaMonthJSON(data)
 {
 	if (data.month)
@@ -85,7 +85,7 @@ function DonaMonthJSON(data)
 	return 1;
 }
 
-//Dia del mes de 1 a 31 (l'equivalment javascript Ès d.getDate())
+//Dia del mes de 1 a 31 (l'equivalment javascript √©s d.getDate())
 function DonaDayJSON(data)
 {
 	if (data.day)
@@ -327,7 +327,7 @@ var cdns=[];
 			cdns.push("0");
 	    cdns.push(DonaDayJSON(data));
 
-	    //Vol dir que hi ha temps, perquË en la creaciÛ sinÛ es diu hora, l'estructura s'omple com 00:00:00.
+	    //Vol dir que hi ha temps, perqu√® en la creaci√≥ sin√≥ es diu hora, l'estructura s'omple com 00:00:00.
 	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 	    {
 			if(DonaHourJSON(data)<10)
@@ -358,7 +358,7 @@ var cdns=[];
 			cdns.push("0");
 	    cdns.push(d.getDate());
 
-	    //Vol dir que hi ha temps, perquË en la creaciÛ sinÛ es diu hora, l'estructura s'omple com 00:00:00.
+	    //Vol dir que hi ha temps, perqu√® en la creaci√≥ sin√≥ es diu hora, l'estructura s'omple com 00:00:00.
 	    if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
 	    {
 			if(d.getHours()<10)
@@ -376,14 +376,14 @@ var cdns=[];
 }//fi de DonaDataJSONComATextCompacte()
 
 
-//o_data Ès una sortida en aquesta funciÛ
+//o_data √©s una sortida en aquesta funci√≥
 function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 {
-	//primer miro els separadors de guions per veure que tÈ de aaaa-mm-dd
+	//primer miro els separadors de guions per veure que t√© de aaaa-mm-dd
 	var tros_data=cadena_data.split("-");
 	o_data.year=parseInt(tros_data[0]);
 
-	if(tros_data.length==1) //NomÈs hi ha any i res mÈs
+	if(tros_data.length==1) //Nom√©s hi ha any i res m√©s
 		return {"DataMostraAny": true};
 
 	o_data.month=parseInt(tros_data[1]);
@@ -401,7 +401,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	o_data.day=parseInt(tros_data[2].substr(0, i_time));
 
 	var tros_time=(tros_data[2].substr(i_time+1)).split(":");
-	if(tros_time.length==1) //nomÈs hi ha hora
+	if(tros_time.length==1) //nom√©s hi ha hora
 	{
 		var i_z=tros_time[0].indexOf("[Z]");
 		if(i_z==-1)
@@ -421,8 +421,8 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};
 	}
 	o_data.minute=parseInt(tros_time[1]);
-	if(tros_time.length==3) //hh:mm:ss[Z]  // ∑$∑ NJ-> ? AixÚ no Ès correcte, hi ha altres formats ISO que tenen una longitud de mÈs de 3 i aquesta funciÛ no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
-	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date Ès mÈs f‡cil passar-ho a JSON i ja tenim funcions per aixÚ.
+	if(tros_time.length==3) //hh:mm:ss[Z]  // ¬∑$¬∑ NJ-> ? Aix√≤ no √©s correcte, hi ha altres formats ISO que tenen una longitud de m√©s de 3 i aquesta funci√≥ no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
+	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date √©s m√©s f√†cil passar-ho a JSON i ja tenim funcions per aix√≤.
 	{
 		var i_ms=tros_time[2].indexOf("[.]");
 		var i_z=tros_time[2].indexOf("[Z]");
@@ -450,7 +450,7 @@ if(!Date.prototype.toISOString)
 
 		if(data)
 		{
-			//Segons la ISO com a mÌnim he de mostrar l'any
+			//Segons la ISO com a m√≠nim he de mostrar l'any
 				cdns.push((data.getFullYear ? data.getFullYear() : takeYear(data)));
 			if(que_mostrar&mostra_mes)
 			{
@@ -465,7 +465,7 @@ if(!Date.prototype.toISOString)
 						cdns.push("0");
 					cdns.push((data.getDate()));
 
-						//Vol dir que hi ha temps, perquË en la creaciÛ sinÛ es diu hora, l'estructura s'omple com 00:00:00.
+						//Vol dir que hi ha temps, perqu√® en la creaci√≥ sin√≥ es diu hora, l'estructura s'omple com 00:00:00.
 					if(que_mostrar&mostra_hora)
 					{
 						if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0)
@@ -504,7 +504,7 @@ var cdns=[];
 
 	if (data && que_mostrar)
 	{
-		//Segons la ISO com a mÌnim he de mostrar l'any
+		//Segons la ISO com a m√≠nim he de mostrar l'any
 	    cdns.push(data.getFullYear ? data.getFullYear() : takeYear(data));
 		if(que_mostrar.DataMostraMes)
 		{
@@ -519,7 +519,7 @@ var cdns=[];
 					cdns.push("0");
 			    cdns.push((data.getDate()));
 
-			    //Vol dir que hi ha temps, perquË en la creaciÛ sinÛ es diu hora, l'estructura s°omple com 00:00:00.
+			    //Vol dir que hi ha temps, perqu√® en la creaci√≥ sin√≥ es diu hora, l'estructura s¬°omple com 00:00:00.
 				if(que_mostrar.DataMostraHora)
 				{
 	    			if(data.getHours()!=0 || data.getMinutes()!=0 || data.getSeconds()!=0)
@@ -559,7 +559,7 @@ var cdns=[];
 		return "";
 	if (que_mostrar)
 	{
-		//Segons la ISO com a mÌnim he de mostrar l'any perÚ nosaltres permetem altres coses deliveradament
+		//Segons la ISO com a m√≠nim he de mostrar l'any per√≤ nosaltres permetem altres coses deliveradament
 		if(que_mostrar.DataMostraAny)
 			cdns.push(DonaYearJSON(data));
 		if(que_mostrar.DataMostraMes)
@@ -576,7 +576,7 @@ var cdns=[];
 					cdns.push("0");
 				cdns.push(DonaDayJSON(data));
 
-			    	//Vol dir que hi ha temps, perquË en la creaciÛ sinÛ es diu hora, l'estructura s'omple com 00:00:00.
+			    	//Vol dir que hi ha temps, perqu√® en la creaci√≥ sin√≥ es diu hora, l'estructura s'omple com 00:00:00.
 				if(que_mostrar.DataMostraHora)
 				{
 	    				if(DonaHourJSON(data)!=0 || DonaMinuteJSON(data)!=0 || DonaSecondJSON(data)!=0)
@@ -644,7 +644,7 @@ var cdns=[];
 
 	if (que_mostrar)
 	{
-		//Segons la ISO com a mÌnim he de mostrar l'any
+		//Segons la ISO com a m√≠nim he de mostrar l'any
 		if (que_mostrar.DataMostraDia)
 			cdns.push("DD");
 		if (que_mostrar.DataMostraMes)
@@ -688,7 +688,7 @@ var df={}, cdns=[];
 
 	if (que_mostrar)
 	{
-		//Segons la ISO com a mÌnim he de mostrar l'any
+		//Segons la ISO com a m√≠nim he de mostrar l'any
 		if (que_mostrar.DataMostraDia)
 			cdns.push("DD");
 		if (que_mostrar.DataMostraMes)
@@ -749,7 +749,7 @@ function DonaUnitTimeChartJSDataHora(que_mostrar)
 	return null;
 }
 
-//Aquest funciÛ, de moment, nomÈs canvia les variables {TIME}, {TIME?f=*&year=*&month=*...} i {DIM?name=*}. En el config_schema.json s'explica una mica mÈs.
+//Aquest funci√≥, de moment, nom√©s canvia les variables {TIME}, {TIME?f=*&year=*&month=*...} i {DIM?name=*}. En el config_schema.json s'explica una mica m√©s.
 function CanviaVariablesDeCadena(s, capa, i_data)
 {
 var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
@@ -759,7 +759,7 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 		var i_data_sel=DonaIndexDataCapa(capa, i_data);
 		while(true)
 		{
-			i=s.toUpperCase().indexOf("{TIME}");  //Abans era %TIME% perÚ prefereixo fer servir una URL template.
+			i=s.toUpperCase().indexOf("{TIME}");  //Abans era %TIME% per√≤ prefereixo fer servir una URL template.
 			if (i==-1)
 				break;
 			s=s.substring(0,i) + DonaDataJSONComATextCompacte(capa.data[i_data_sel]) + s.substring(i+6);
@@ -776,7 +776,7 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 		}
 		while(true)
 		{
-			i=s.toUpperCase().indexOf("{TIME?");  //Abans era %TIME% perÚ prefereixo fer servir una URL template.
+			i=s.toUpperCase().indexOf("{TIME?");  //Abans era %TIME% per√≤ prefereixo fer servir una URL template.
 			if (i==-1)
 				break;
 			ii=s.substring(i+6,s.length).indexOf("}");
@@ -910,7 +910,7 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil;
 	return s;
 }
 
-//FunciÛ simplificada de CarregaDatesVideo() que retorna nomÈs un array de dades de totes les capes en mil∑lisegons.
+//Funci√≥ simplificada de CarregaDatesVideo() que retorna nom√©s un array de dades de totes les capes en mil¬∑lisegons.
 function CarregaDatesCapes()
 {
 var capa, dates=[];
@@ -1108,7 +1108,7 @@ var milliseg_b;
 	return sortAscendingNumber(milliseg_a, milliseg_b);
 }
 
-//Aquesta funciÛ insereix una data a l'array de dades de la capa
+//Aquesta funci√≥ insereix una data a l'array de dades de la capa
 function InsereixDataISOaCapa(data_iso, data_capa)
 {
 var d=new Date(data_iso);

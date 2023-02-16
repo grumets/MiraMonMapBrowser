@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,19 +17,19 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2021 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Núria Julià (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon és un projecte del
-    CREAF que elabora programari de Sistema d'Informació Geogràfica
-    i de Teledetecció per a la visualització, consulta, edició i anàlisi
-    de mapes ràsters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i també servidors i clients per Internet.
-    No tots aquests productes són gratuïts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
+    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon Ã©s un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
+    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
+    de mapes rÃ sters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
+    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicència GNU Affero General Public
+    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -39,7 +39,7 @@
 "use strict"
 
 //////////////////////////////////////////////////////////////////////////
-/* funcions per a gestió de llistes */
+/* funcions per a gestiÃ³ de llistes */
 var LlistaCadenes=[];
 var LlistaSenzilla=[];
 var ILlistaDeICellaLlista=[];
@@ -47,7 +47,7 @@ var NCellaLlista=[];
 var ICellaLlistaBlau=[];
 var NomEditLlavorLlista=[];
 var NomLayerLlista=[];
-var CTipicaCapa=[];
+var CTipicaCapa=[];  //Ã­ndex de la capa a "CapaConsultaPreguntaServidor" per a cada possible "ConsultaTipica" (generalment nomÃ©s n'hi ha una)
 var NCapesCTipicaCarregades=0;
 
 //var WindowDelEvent=parent.ctipica;
@@ -396,7 +396,7 @@ var elem;
 
 var timeoutActualitzaLLista=null;
 
-//Aquesta funció necessita WindowsDelEvent ple
+//Aquesta funciÃ³ necessita WindowsDelEvent ple
 function ActualitzaLlista(llavor, i_llista, keycode)
 {
 var elem;
@@ -488,6 +488,9 @@ function PosaVisibleIConsultableCapaConsultaTipica(i_ctipica)
 var retorn=1;  //No he tocat res
 var i_capa, i_capa_a_activar;
 
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return retorn;
+	
 	for(i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 	{
 		if (ParamCtrl.CapaConsultaPreguntaServidor[CTipicaCapa[i_ctipica]].nom==ParamCtrl.capa[i_capa].nom)
@@ -579,6 +582,9 @@ function PortamAAmbitConsultaTipicaCercador(i_ctipica, i_llista_buscar)
 {
 var i_ctipica_capa, i_valor;
 
+	if(!ParamCtrl.ConsultaTipica || !ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
+
 	if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
 	{
 		var i_llista=0;
@@ -661,7 +667,7 @@ var i_ctipica_capa, i_valor;
 			}
 		}
 	}
-	return;  //això no hauria de passar mai.
+	return;  //aixÃ² no hauria de passar mai.
 }
 
 function InsertaOpcioEnSelect(selector, opcio, posicio)
@@ -678,12 +684,14 @@ function InsertaOpcioEnSelect(selector, opcio, posicio)
 
 function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
+	if(!ParamCtrl.CapaConsultaPreguntaServidor)
+		return;
 	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>0)
 	{
-		//He d'actualitzar els combos amb la informació del valor seleccionat a partir d'aquest combo
+		//He d'actualitzar els combos amb la informaciÃ³ del valor seleccionat a partir d'aquest combo
 		var document_ctipica=window.document;
 		var i_camp_selec=i_camp_ctipica;
-		if(valor<0 && i_camp_selec<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length)  // S'ha escollit l'opció de --Seleccionar ---
+		if(valor<0 && i_camp_selec<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length)  // S'ha escollit l'opciÃ³ de --Seleccionar ---
 			i_camp_selec++;
 
 		var select_ctipica_anterior;
@@ -704,7 +712,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 			//Esborro el select
 			select_ctipica.options.length=0;
 
-			//Construeixo una llista amb els índexs dels camps que cumpleixen la selecció actual i les anteriors
+			//Construeixo una llista amb els Ã­ndexs dels camps que cumpleixen la selecciÃ³ actual i les anteriors
 			for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].id_camp[0].length; j++)
 			{
 				for(var z=i_camp_selec; z<ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica_capa].camps.length; z++)
@@ -751,8 +759,7 @@ function ActualitzaComboConsultaTipicaSeguents(i_ctipica, i_ctipica_capa, i_camp
 
 function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, valor)
 {
-
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length && i_camp_ctipica>=0 && valor>=0)
 	{
 		CTipicaCapa[i_ctipica]=i_ctipica_capa;
 		CTipicaValor=valor;
@@ -773,7 +780,7 @@ function PortamAAmbitConsultaTipica(i_ctipica, i_ctipica_capa, i_camp_ctipica, v
 
 function PortamAAmbitConsultaTipicaCompleta(i_ctipica, capa, valor)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -812,7 +819,7 @@ function DonaFormulariCTipicaCompleta()
 
 function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 {
-	//canvi d'ambit si la consulta és completa i hi ha sel·leccionat x,y o ambit.
+	//canvi d'ambit si la consulta Ã©s completa i hi ha selÂ·leccionat x,y o ambit.
 	var form_ctipica=DonaFormulariCTipicaCompleta();
 
 	if (form_ctipica)
@@ -837,7 +844,7 @@ function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 
 function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -852,8 +859,11 @@ function SeleccionaRadialPuntCentralConsultaTipica(i_ctipica)
 
 function SeleccionaRadialPuntCentralConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		SeleccionaRadialPuntCentralConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			SeleccionaRadialPuntCentralConsultaTipica(i);
+	}
 }
 
 function ModificaAmpleIAltFactor(ctipica, factor)
@@ -864,7 +874,7 @@ function ModificaAmpleIAltFactor(ctipica, factor)
 
 function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
+    if (ParamCtrl.ConsultaTipica && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCompleta")
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -890,34 +900,37 @@ function PosaAGrisRetallPerObjecteConsultaTipica(i_ctipica)
 
 function PosaAGrisRetallPerObjecteConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		PosaAGrisRetallPerObjecteConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			PosaAGrisRetallPerObjecteConsultaTipica(i);
+	}
 }
 
-//var ctipica_capa=0; ara és CTipicaCapa[i_ctipica]
-var CTipicaOffset=2;  //És una constant per saltar el text "seleccioneu"
+//var ctipica_capa=0; ara Ã©s CTipicaCapa[i_ctipica]
+var CTipicaOffset=2;  //Ã‰s una constant per saltar el text "seleccioneu"
 var CTipicaValor=-CTipicaOffset;
 
 function CanviaLlistaCapaConsultaTipica(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica && form_ctipica.capa)
 		{
-			CTipicaCapa[i_ctipica]=form_ctipica.capa.selectedIndex;
+			CTipicaCapa[i_ctipica]=parseInt(form_ctipica.capa.options[form_ctipica.capa.selectedIndex].value);
 			CTipicaValor=-CTipicaOffset;
 			CreaConsultaTipica(i_ctipica);
-		}
-    }
+		}	
+	}
 }
 
 
 function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 {
-    if (ParamCtrl.CapaConsultaPreguntaServidor.length)
-    {
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
+	{
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
 		if (form_ctipica)
@@ -942,12 +955,12 @@ function PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica)
 				}
 			}
 		}
-    }
+	}
 }
 
 function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 {
-    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor.length)
+    if (win && win.document && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
     {
 		//var form_ctipica=eval("window.document.ctipica"+i_ctipica);
 		var form_ctipica=window.document["ctipica"+i_ctipica];
@@ -967,23 +980,26 @@ function PosaConsultaTipicaCercadorAlPrincipi(win, i_ctipica)
 
 function PosaLlistaValorsConsultesTipiquesAlPrincipi(excepte_i_ctipica)
 {
-	for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+	if(ParamCtrl.ConsultaTipica)
 	{
-		if (i_ctipica==excepte_i_ctipica)
-			continue;
-		if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
-			PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
-			PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
-		else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
-			CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
+		{
+			if (i_ctipica==excepte_i_ctipica)
+				continue;
+			if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaDesplegables")
+				PosaConsultaTipicaDesplegableAlPrincipi(i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaCercador")
+				PosaConsultaTipicaCercadorAlPrincipi(window, i_ctipica);
+			else if (ParamCtrl.ConsultaTipica[i_ctipica].TipusConsultaTipica=="CTipicaInicials")
+				CanviaInicialCapaConsultaTipica(i_ctipica, null);
+		}
 	}
 }
 
 var InicialConsultaTipica="A";
 function CanviaInicialCapaConsultaTipica(i_ctipica, s)
 {
-	if (ParamCtrl.CapaConsultaPreguntaServidor.length)
+	if (ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length)
 	{
 		InicialConsultaTipica=s;
 		CreaConsultaTipica(i_ctipica);
@@ -1016,7 +1032,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 					cdns.push(DonaCadena(capa_pregunta_svr.camps[0].post));
 				cdns.push("</span>");
 			}
-			else //Hi ha més d'una capa
+			else //Hi ha mÃ©s d'una capa
 			{
 				cdns.push("<span class=\"text_general_consulta\">",
 				   DonaCadena(capa_pregunta_svr.camps[0].previ), " </span>" ,
@@ -1025,7 +1041,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 				{
 					for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 					{
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i, "\"" , ((i==CTipicaCapa[i_ctipica]) ? " selected" : "") , ">" ,
 						   DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 					}
 				}
@@ -1048,12 +1064,12 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 						}
 						else
 						{
-							cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaCapa[i_ctipica]) ? " SELECTED" : "") ,
+							cdns.push("  <option value=\"" , i, "\"" , (i==CTipicaCapa[i_ctipica] ? " SELECTED" : "") ,
 							   ">" , DonaCadena(ParamCtrl.CapaConsultaPreguntaServidor[i].camps[0].desc) , "</option>");
 						}
 					}
 				}
-				cdns.push("  </SELECT><span class=\"text_general_consulta\">");
+				cdns.push("  </select><span class=\"text_general_consulta\">");
 				if(capa_pregunta_svr.camps.length>1 && ctipica.TipusConsultaTipica=="CTipicaDesplegables")
 					cdns.push("<br>&nbsp;&nbsp;&nbsp;&nbsp;",
 						 DonaCadena(capa_pregunta_svr.camps[capa_pregunta_svr.camps.length-1].previ));
@@ -1062,7 +1078,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 				cdns.push("</span>");
 			}
 
-			//Valors del camp si només ni ha un o valors del camp n, n-1,...1
+			//Valors del camp si nomÃ©s ni ha un o valors del camp n, n-1,...1
 			if (capa_pregunta_svr)
 			{
 				if (ctipica.TipusConsultaTipica=="CTipicaInicials")
@@ -1140,13 +1156,13 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 					valor_opcio="document.ctipica"+i_ctipica+".valor"+0+".options[document.ctipica"+i_ctipica+".valor"+0+".selectedIndex].value";
 					cdns.push("  <select name=\"valor0\" class=\"desplegable\" onChange=\"PortamAAmbitConsultaTipica(",i_ctipica,", ",
 					   CTipicaCapa[i_ctipica] , ", 0, " , valor_opcio , ");\">" ,
-					   "  <option VALUE=\"-2\"" , ((-1==CTipicaValor) ? " SELECTED" : "") , ">" ,
+					   "  <option value=\"-2\"" , ((-1==CTipicaValor) ? " selected" : "") , ">" ,
 					   "(--", GetMessage("Select"), "--)" , "</option>" ,
-					   "  <option VALUE=\"-1\">" , "---------------" , "</option>");
+					   "  <option value=\"-1\">" , "---------------" , "</option>");
 					for (var i=0; i<capa_pregunta_svr.proj_camp[0].length; i++)
-						cdns.push("  <option VALUE=\"" , i , "\"" , ((i==CTipicaValor) ? " SELECTED" : "") , ">" ,
+						cdns.push("  <option value=\"" , i , "\"" , ((i==CTipicaValor) ? " selected" : "") , ">" ,
 							capa_pregunta_svr.proj_camp[0][i].valor , "</option>");
-					cdns.push("  </SELECT>");
+					cdns.push("  </select>");
 				}
 			}
 			cdns.push("</FORM>");
@@ -1164,11 +1180,9 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 	    {
 			cdns.push("<table border=0 cellspacing=0 cellpadding=0>" ,
 			   "<tr><td rowspan=",(ParamCtrl.CapaConsultaPreguntaServidor.length+4),
-			   "><img src=\"",
-			   AfegeixAdrecaBaseSRC("1tran.gif"),
-			   "\" height=1 width=5></td>",
-			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>Selecció de l'àmbit:</b></td></tr>");
-			//(*) Per ··· [    ][v]
+			   " height=\"1\" width=\"5\"></td>",
+			   "<td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><b>SelecciÃ³ de l'Ã mbit:</b></td></tr>");
+			//(*) Per Â·Â·Â· [    ][v]
 			var i;
 			for (i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 			{
@@ -1195,7 +1209,7 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 
 			//(*) Per envolupant X min: [  ] X max: []  Y min: [] X max: [] [Anar-hi]
 			cdns.push("<tr><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
-				"\" onClick='PosaAGrisRetallPerObjecteConsultaTipica(this);'> Per envolupant:</td><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2>mín X: <input type=\"text\" size=\"15\" name=\"MinX\" value=\"\"> màx X: <input type=\"text\" size=\"15\" name=\"MaxX\" value=\"\"><br>mín Y: <input type=\"text\" size=\"15\" name=\"MinY\" value=\"\"> màx Y: <input type=\"text\" size=\"15\" name=\"MaxY\" value=\"\"> <input TYPE=\"button\" VALUE=\"Anar-hi\" onClick=\"PortamAAmbit({\'MinX\': parseFloat(document.ctipica",
+				"\" onClick='PosaAGrisRetallPerObjecteConsultaTipica(this);'> Per envolupant:</td><td valign=top><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2>mÃ­n X: <input type=\"text\" size=\"15\" name=\"MinX\" value=\"\"> mÃ x X: <input type=\"text\" size=\"15\" name=\"MaxX\" value=\"\"><br>mÃ­n Y: <input type=\"text\" size=\"15\" name=\"MinY\" value=\"\"> mÃ x Y: <input type=\"text\" size=\"15\" name=\"MaxY\" value=\"\"> <input TYPE=\"button\" VALUE=\"Anar-hi\" onClick=\"PortamAAmbit({\'MinX\': parseFloat(document.ctipica",
 				i_ctipica,".MinX.value), \'MaxX\': parseFloat(document.ctipica",i_ctipica,".MaxX.value), \'MinY\': parseFloat(document.ctipica",i_ctipica,
 				".MinY.value), \'MaxY\': parseFloat(document.ctipica",i_ctipica,".MaxY.value)});document.ctipica",i_ctipica,".capa[",i,"].checked=true;\"></td></tr>");
 			i++;
@@ -1203,13 +1217,13 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 			//(*) Tot l'ambit disponible
 			cdns.push("<tr><td colspan=2><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2><input type=\"radio\" name=\"capa\" value=\"" , i ,
 				"\" onClick=\"PortamAVistaGeneral();document.ctipica",i_ctipica,".capa[",i,
-				"].checked=true;\"> Tot l'àmbit disponible <small>(només per a les capes més lleugeres)</small></td></tr>" ,
+				"].checked=true;\"> Tot l'Ã mbit disponible <small>(nomÃ©s per a les capes mÃ©s lleugeres)</small></td></tr>" ,
 				"<table>" ,
 				"<br><FONT FACE=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
 				"&nbsp;&nbsp;<b>En descarregar:</b><br>" ,
-				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"fulls_sencers\" CHECKED> Obtenir fulls vectorials sencers <small>(força més ràpid)</small><br>" ,
-				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"per_rectangle\"> Retallar per rectangle d'àmbit exacte <small>(més lent)</small><br>" ,
-				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"per_objecte\" DISABLED> Retallar usant l'objecte selecionat <small>(encara més lent)</small><br>" ,
+				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"fulls_sencers\" CHECKED> Obtenir fulls vectorials sencers <small>(forÃ§a mÃ©s rÃ pid)</small><br>" ,
+				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"per_rectangle\"> Retallar per rectangle d'Ã mbit exacte <small>(mÃ©s lent)</small><br>" ,
+				"&nbsp;<input type=\"radio\" name=\"retallar\" value=\"per_objecte\" DISABLED> Retallar usant l'objecte selecionat <small>(encara mÃ©s lent)</small><br>" ,
 				"</FONT></FORM>");
 	    }
 	}
@@ -1235,8 +1249,11 @@ var cdns=[], s, capa_pregunta_svr=ParamCtrl.CapaConsultaPreguntaServidor[CTipica
 
 function CreaConsultesTipiques()
 {
-	for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
-		CreaConsultaTipica(i);
+	if(ParamCtrl.ConsultaTipica)
+	{
+		for (var i=0; i<ParamCtrl.ConsultaTipica.length; i++)
+			CreaConsultaTipica(i);
+	}
 }
 
 function OmpleICarregaConsultaTipica(doc, i_event)
@@ -1251,9 +1268,9 @@ var id_camps_id_tesaure=null;
   	{
 		if(root.tagName=="ConsultaTipica")
 		{
-			//Obtinc el nom i CRS identificador de la capa consulta típica
+			//Obtinc el nom i CRS identificador de la capa consulta tÃ­pica
 			nom_capa=root.getAttribute('id_capa');
-				//Busco quin index de consulta li pertoca per començar a omplir l'estructura
+				//Busco quin index de consulta li pertoca per comenÃ§ar a omplir l'estructura
 			for(var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor.length; i++)
 			{
 				if(ParamCtrl.CapaConsultaPreguntaServidor[i].nom==nom_capa)
@@ -1277,7 +1294,7 @@ var id_camps_id_tesaure=null;
 				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp=new Array(n_camps);
 				id_camps_id_tesaure=new Array(n_camps);
 			}
-			else //Només tinc un tesaure
+			else //NomÃ©s tinc un tesaure
 			{
 				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].id_camp=null;
 				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp=new Array(1);
@@ -1342,7 +1359,7 @@ var id_camps_id_tesaure=null;
 				}
 			}
 
-		 	//Començo a llegir els tesaures de cada un dels camps
+		 	//ComenÃ§o a llegir els tesaures de cada un dels camps
 			var tesaures=root.getElementsByTagName('Tesaure');
 			for(var i=0; i<tesaures.length; i++)
 			{
@@ -1359,13 +1376,13 @@ var id_camps_id_tesaure=null;
 				if(i_camp_ctipica==-1)
 				   return;
 
-				//Ja tinc l'índex d'on haig de desar l'estructura projecció del camp
+				//Ja tinc l'Ã­ndex d'on haig de desar l'estructura projecciÃ³ del camp
 				var registres=tesaures[i].getElementsByTagName('Registres')[0];
 				var num_regs=parseInt(registres.getAttribute('NombreDeRegistres'));
 
 				ParamCtrl.CapaConsultaPreguntaServidor[i_ctipica].proj_camp[i_camp_ctipica]=new Array(num_regs);
 
-				//Començo a llegir els registres de tesaure
+				//ComenÃ§o a llegir els registres de tesaure
 				for(var z=0; z<registres.childNodes.length; z++)
 				{
 					var reg=registres.childNodes[z];
@@ -1391,7 +1408,7 @@ var id_camps_id_tesaure=null;
 	}
    	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0 && NCapesCTipicaCarregades==ParamCtrl.CapaConsultaPreguntaServidor.length)
    	{
-		//Ja les tinc totes carregades i ja puc iniciar les consultes típiques
+		//Ja les tinc totes carregades i ja puc iniciar les consultes tÃ­piques
 		IniciaConsultesTipiques();
 		CreaConsultesTipiques();
 		if(DadesPendentsAccio)
@@ -1399,7 +1416,7 @@ var id_camps_id_tesaure=null;
 			DadesPendentsAccio=false;
 			if(Accio && Accio.accio&AccioValidacio)
 			{
-				//Haig de tornar a fer un CreaLLegenda() perquè he tocat l'estat de les capes
+				//Haig de tornar a fer un CreaLLegenda() perquÃ¨ he tocat l'estat de les capes
 				CreaLlegenda();
 				BuscaValorAConsultesTipiques();
 				if(Accio.coord)
@@ -1464,18 +1481,18 @@ function BuscaValorAConsultesTipiques()
 {
 var trobat=false;
 
-	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
+	if(Accio && ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0 && Accio.valors && Accio.valors.length>0)
 	{
 		//Per cada una de les capes a validar
 		for(var i_capa_accio=0; i_capa_accio<Accio.valors.length; i_capa_accio++)
 		{
 			for(var i_tipica=0; i_tipica<ParamCtrl.CapaConsultaPreguntaServidor.length; i_tipica++)
 			{
-				//Busco si té una consulta típica amb la que pugui validar el valor demanat
+				//Busco si tÃ© una consulta tÃ­pica amb la que pugui validar el valor demanat
 				if(Accio.capes[i_capa_accio]==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].nom)
 				{
-					//Ara haig de buscar el camp a dins de la consulta típica
-					//Busco el camp a validar dins dels camps de la consulta típica de la capa
+					//Ara haig de buscar el camp a dins de la consulta tÃ­pica
+					//Busco el camp a validar dins dels camps de la consulta tÃ­pica de la capa
 					for(var i_camp=0; i_camp<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps.length; i_camp++)
 					{
 						if(Accio.camps[i_capa_accio]==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps[i_camp].nom)
@@ -1507,10 +1524,10 @@ var trobat=false;
 							break;
 						}
 					}
-					break; //aquest camp ja l'he validat i haig de passar a validar la següent capa
+					break; //aquest camp ja l'he validat i haig de passar a validar la segÃ¼ent capa
 					//else if(i_camp==ParamCtrl.CapaConsultaPreguntaServidor[i_tipica].camps.length)
-					//No he trobat el camp a dins de la consulta típica i per tant no he pogut validar
-					//Si he arribat aquí és perquè el valor indicat és incorrecte, he trobat la capa però no he trobat el valor
+					//No he trobat el camp a dins de la consulta tÃ­pica i per tant no he pogut validar
+					//Si he arribat aquÃ­ Ã©s perquÃ¨ el valor indicat Ã©s incorrecte, he trobat la capa perÃ² no he trobat el valor
 				}
 			}
 		}
@@ -1522,9 +1539,9 @@ function IniciaConsultesTipiques()
 {
 var valor;
 
-	if(ParamCtrl.CapaConsultaPreguntaServidor.length>0)
+	if(ParamCtrl.CapaConsultaPreguntaServidor && ParamCtrl.CapaConsultaPreguntaServidor.length>0)
 	{
-		//Per cada finestra de consulta típica
+		//Per cada finestra de consulta tÃ­pica
 		for (var i_ctipica=0; i_ctipica<ParamCtrl.ConsultaTipica.length; i_ctipica++)
 		{
 			if (ParamCtrl.ConsultaTipica[i_ctipica].NomCapa)
@@ -1560,13 +1577,13 @@ var valor;
 							//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 							for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[0].length; i++, i_llista++)
 							{
-								//Per cada camp busco el seu valor que possarè a llista
+								//Per cada camp busco el seu valor que possarÃ¨ a llista
 								valor="";
 								for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[0].camps.length; j++)
 								{
 									i_proj=ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[j][i].id;
 									if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[0].proj_camp[j].length || i_proj<0)
-										alert("Error: Índex de registre de projecció incorrecte "+
+										alert("Error: Ãndex de registre de projecciÃ³ incorrecte "+
 											ParamCtrl.CapaConsultaPreguntaServidor[0].id_camp[j][i].id +
 											"de camp "+ j);
 									else
@@ -1598,13 +1615,13 @@ var valor;
 								//Totes les columnnes de id_camp tenen els mateixos registres --> Per cada registre
 								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 								{
-									//Per cada camp busco el seu valor que possarè a llista
+									//Per cada camp busco el seu valor que possarÃ¨ a llista
 									valor="";
 									for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps.length; j++)
 									{
 										i_proj=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id;
 										if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j].length || i_proj<0)
-											alert("Error: Índex de registre de projecció incorrecte "+
+											alert("Error: Ãndex de registre de projecciÃ³ incorrecte "+
 												ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id +
 												"de camp "+ j);
 										else
@@ -1620,7 +1637,7 @@ var valor;
 							}
 							else
 							{
-								//La consulta només té un camps
+								//La consulta nomÃ©s tÃ© un camps
 								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
 									LlistaCadenes[i_ctipica][i_llista]=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0][i].valor +
@@ -1656,13 +1673,13 @@ var valor;
 								var i_proj=0;
 								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[0].length; i++, i_llista++)
 								{
-									//Per cada camp busco el seu valor que possarè a llista
+									//Per cada camp busco el seu valor que possarÃ¨ a llista
 									valor="";
 									for(var j=0; j<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].camps.length; j++)
 									{
 										i_proj=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id;
 										if(i_proj>=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[j].length || i_proj<0)
-											alert("Error: Índex de registre de projecció incorrecte "+
+											alert("Error: Ãndex de registre de projecciÃ³ incorrecte "+
 												ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].id_camp[j][i].id +
 												"de camp "+ j);
 										else
@@ -1684,7 +1701,7 @@ var valor;
 							}
 							else
 							{
-								//La consulta només té un camps
+								//La consulta nomÃ©s tÃ© un camps
 								for (var i=0; i<ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0].length; i++, i_llista++)
 								{
 									LlistaCadenes[i_ctipica][i_llista]=ParamCtrl.CapaConsultaPreguntaServidor[i_tipica_capa].proj_camp[0][i].valor +
@@ -1733,7 +1750,7 @@ function MostraOAmagaCtipiques()
 
 function EliminaProjCampIIdCampSiServidor(param_ctrl)
 {
-	//Elimino les consultes típiques si venen d'un servidor
+	//Elimino les consultes tÃ­piques si venen d'un servidor
 	if (param_ctrl.CapaConsultaPreguntaServidor)
 	{
 		for (var i=0; i<param_ctrl.CapaConsultaPreguntaServidor.length; i++)
