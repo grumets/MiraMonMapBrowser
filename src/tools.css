@@ -95,7 +95,7 @@ input[type="text"]
 {
 	border-style:solid;
 	border-width:1px;
-//	width:97%;
+	/*width:97%;*/
 }
 
 textarea
@@ -104,7 +104,7 @@ textarea
 	font-size:11px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	border: 1px solid #99CCFF;
-	//resize: none;
+	/*resize: none;*/
 }
 /* Coordenades */
 .text_coord{
@@ -469,7 +469,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #99CCFF;
-	//resize:both;
+	/*resize:both;*/
 }
 .cantofinestra {
 	text-align: left;
@@ -746,3 +746,32 @@ ul.floatingWindowText
 {
 	color: green;
 }*/
+
+/* *******************************************************
+ Estils de visualització dels diferents elements de la 
+ 
+		T A U L A   C A P E S   V E C T O R I A L S  
+  
+********************************************************** */
+/* Estil de les cel·les capçalera */
+th.vectorial {
+	background-color: #696969;
+    color: #fff;
+	border: 1px solid rgb(190, 190, 190);
+    padding: 0px 10px;
+}
+/* Estil files de color diferents segons paritat */
+tr.vectorial {
+	border-bottom: 1px solid rgb(133, 121, 121);
+}
+tr.vectorial:nth-child(even) {
+    background-color: #eee;
+}
+tr.vectorial:hover {
+	background-color: #D6EEEE;
+}
+/* Taula vectorial */
+table.vectorial {
+    border-collapse: collapse;
+    border: 2px solid rgb(200, 200, 200);
+}

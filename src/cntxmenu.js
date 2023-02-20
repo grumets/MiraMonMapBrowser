@@ -371,6 +371,11 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("RetrieveStyles", "cntxmenu"), "</a><br>");
 	}
+	if (capa.model==model_vector)
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial(", i_capa, ");TancaContextMenuCapa();\">",
+				GetMessage("ShowLikeTable", "cntxmenu"), "</a><br>");
+	}
 
 	if (cdns.length==0)
 		return false;
@@ -3580,7 +3585,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("OK"),
-		"\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
+	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
+			"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		GetMessage("Apply"),
+	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");' />",
 		"</div></form>");
 	return cdns.join("");
 }
@@ -3592,12 +3600,14 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 	for (var i_comp=0, compLength=estil.component.length; i_comp<compLength; i_comp++)
 	{
 		// Es fa una còpia de l'estirament de la paleta per preservar-lo després d'esser modificat.
-		if (!estil.component[i_comp].estiramentPaletaInicial)
+		if (!estil.component[i_comp].estiramentPaletaExtrems)
 		{
-			estil.component[i_comp].estiramentPaletaInicial = {
-				valorMaxim: estil.component[i_comp].estiramentPaleta.valorMaxim,
-				valorMinim: estil.component[i_comp].estiramentPaleta.valorMinim
+			estil.component[i_comp].estiramentPaletaExtrems = {
+				valorMaxim: estil.component[i_comp].estiramentPaleta.valorMaxim > estil.histograma.component[i_comp].valorMaximReal ? estil.component[i_comp].estiramentPaleta.valorMaxim : estil.histograma.component[i_comp].valorMaximReal,
+				valorMinim: estil.component[i_comp].estiramentPaleta.valorMinim < estil.histograma.component[i_comp].valorMinimReal ? estil.component[i_comp].estiramentPaleta.valorMinim : estil.histograma.component[i_comp].valorMinimReal
 			};
+			estil.component[i_comp].estiramentPaleta.valorMaxim = estil.component[i_comp].estiramentPaletaExtrems.valorMaxim;
+			estil.component[i_comp].estiramentPaleta.valorMinim = estil.component[i_comp].estiramentPaletaExtrems.valorMinim;
 		}
 
 		if (estil.component.length>2)
@@ -3623,44 +3633,43 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		// Valor mínim i valor màxim
 		// Valor unitari prement botons incrmenet/decrement. Serà 1% del rang possible.
 		var valUnitari = 1; // Per defecte.
-		const estPaletaIni = estil.component[i_comp].estiramentPaletaInicial;
+		const estPaletaExtr = estil.component[i_comp].estiramentPaletaExtrems;
 		const estPaleta = estil.component[i_comp].estiramentPaleta;
-		if (estPaletaIni)
+		if (estPaletaExtr)
 		{
-			valUnitari = (estPaletaIni.valorMaxim - estPaletaIni.valorMinim) / 100.00;
+			valUnitari = (estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim) / 100.00;
 		}
 
 		cdns.push("<label for=\"edita-estil-capa-valor-minim-", i_comp, "\">", GetMessage("Minimum"), ": </label>",
-			"<input type=\"number\" id=\"edita-estil-capa-valor-minim-",i_comp, "\" name=\"minim", i_comp,"\" min=\"", estPaletaIni.valorMinim, "\" max=\"", estPaletaIni.valorMaxim, "\" step=\"", valUnitari, "\" value=\"",
-			DonaFactorValorMinEstiramentPaleta(estPaleta), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
+			"<input type=\"text\" id=\"edita-estil-capa-valor-minim-",i_comp, "\" name=\"minim", i_comp,"\" value=\"",
+			DonaFactorValorMinEstiramentPaleta(estPaleta).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMinimReal, ", ", valUnitari,", true);\">",")", "<br>",
-			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", true);\">",
-			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 300px;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaIni.valorMaxim - estPaletaIni.valorMinim, "\" value=\"", estPaleta.valorMinim - estPaletaIni.valorMinim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\" onclick=\"dontPropagateEvent(event);\">",
+				"<div style='display: flex; align-items: stretch;'><label id=\"minEsqBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-esq-valor-minim-", i_comp, "\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", true);\">",
+			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 285px;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaleta.valorMinim - estPaletaExtr.valorMinim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\" onclick=\"dontPropagateEvent(event);\">",
 			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) + ", valUnitari,", ", valUnitari, ", true);\">",
-			"<br>");
+			"<label id=\"minDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-minim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+			"</div><br>");
 
 		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
-			"<input type=\"number\" id=\"edita-estil-capa-valor-maxim-",i_comp, "\" name=\"maxim", i_comp,"\" min=\"", estPaletaIni.valorMinim, "\" max=\"", estPaletaIni.valorMaxim, "\" step=\"", valUnitari, "\" value=\"",
-			DonaFactorValorMaxEstiramentPaleta(estPaleta), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
+			"<input type=\"text\" id=\"edita-estil-capa-valor-maxim-",i_comp, "\" name=\"maxim", i_comp,"\" value=\"",
+			DonaFactorValorMaxEstiramentPaleta(estPaleta).toFixed(3), "\" style=\"width:80px;\" onChange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\">",
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMaximReal, ", ", valUnitari, ", false);\">",")", "<br>",
+				"<div style='display: flex; align-items: stretch;'><label id=\"maxEsqBtn-", i_comp,"\" for=\"edita-estil-capa-button-fletxa-esq-valor-maxim-", i_comp, "\"  style=\"text-align: center;\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", false);\">",
-				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 300px;direction: rtl;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaIni.valorMaxim - estPaletaIni.valorMinim, "\" value=\"", estPaletaIni.valorMaxim - estPaletaIni.valorMinim -(estPaleta.valorMaxim - estPaletaIni.valorMinim), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\" onclick=\"dontPropagateEvent(event);\">",
-				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) + ", valUnitari, ", ", valUnitari, ", false);\">");
+				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 285px;direction: rtl;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim -(estPaleta.valorMaxim - estPaletaExtr.valorMinim), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\" onclick=\"dontPropagateEvent(event);\">",
+				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) + ", valUnitari, ", ", valUnitari, ", false);\">",
+				"<label id=\"maxDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+			"</div><br>");
 		if (estil.component.length>1)
 			cdns.push("</fieldset>");
 	}
 	return cdns.join("");
 }
-
-/*function AdoptRule(i_capa, i_estil, i_comp)
-{
-	const capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
-	document.getElementById("edita-estil-capa-valor-maxim-" + i_comp).value = estil.histograma.component[i_comp].valorMaximReal;
-}*/
 
 function TancarFinestra_editEstil(idDiv)
 {
@@ -4122,85 +4131,236 @@ var floatValor=parseFloat(valor);
 	if (estil && estil.component && estil.component.length > 0)
 	{
 		const estPaleta = estil.component[i_component].estiramentPaleta;
-		const estPaletaIni = estil.component[i_component].estiramentPaletaInicial;
-		if (!isNaN(estPaleta.valorMinim) && !isNaN(estPaleta.valorMaxim) && !isNaN(estPaletaIni.valorMinim) && !isNaN(estPaletaIni.valorMaxim))
+		const estPaletaExtr = estil.component[i_component].estiramentPaletaExtrems;
+		if (!isNaN(estPaleta.valorMinim) && !isNaN(estPaleta.valorMaxim) && !isNaN(estPaletaExtr.valorMinim) && !isNaN(estPaletaExtr.valorMaxim))
 		{
 			if (esMinim)
 			{
-				var valueDinsRang = 0;
+				var valorActual = 0;
 				//	Distingim entre el tipus de element "input" que preten modifica el
-				//	valor de la paleta. Diferenciem entre input.type= range/number/button
+				//	valor de la paleta. Diferenciem entre input.type= range/text/button
 				if (event.target.attributes["type"].value.localeCompare("range") == 0)
 				{
-					valueDinsRang = estPaletaIni.valorMinim + floatValor;
+					valorActual = estPaletaExtr.valorMinim + floatValor;
 				}
-				else //	Tant per input.type= number com button
+				else //	Tant per input.type= text o button
 				{
-					valueDinsRang = floatValor;
-					floatValor =  floatValor - estPaletaIni.valorMinim;
+					valorActual = floatValor;
+					floatValor =  floatValor - estPaletaExtr.valorMinim;
 				}
 
 				const textMinim = document.getElementById("edita-estil-capa-valor-minim-" + i_component);
+				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
 				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + i_component);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
-				const valueRangSuperior = estPaletaIni.valorMaxim - parseFloat(sliderMaxim.value);
-				if (parseFloat(valueDinsRang) > parseFloat(estPaletaIni.valorMinim) && parseFloat(valueDinsRang) < parseFloat(valueRangSuperior))
+				if (parseFloat(valorActual) > parseFloat(estPaletaExtr.valorMinim) && parseFloat(valorActual) < parseFloat(textMaxim.value))
 				{
-					textMinim.value = valueDinsRang;
+					textMinim.value = valorActual.toFixed(3);
 					sliderMinim.value = floatValor;
 				}
 				else
 				{
-					if (parseFloat(valueDinsRang) <= parseFloat(estPaletaIni.valorMinim))
+					if (parseFloat(valorActual) <= parseFloat(estPaletaExtr.valorMinim))
 					{
-						textMinim.value = estPaletaIni.valorMinim;
-						sliderMinim.value = sliderMinim.min;
+						const labelRangeEsqMin= document.getElementById("minEsqBtn-" + i_component);
+						const labelRangeEsqMax= document.getElementById("maxEsqBtn-" + i_component);
+						textMinim.value = valorActual.toFixed(3);
+						labelRangeEsqMin.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
+						labelRangeEsqMax.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
+						sliderMinim.max = parseFloat(sliderMinim.max) + (parseFloat(estPaletaExtr.valorMinim) - valorActual);
+						sliderMaxim.max = sliderMinim.max;
+						sliderMinim.value = 0;
+						estPaletaExtr.valorMinim = parseFloat(estPaletaExtr.valorMinim) - (parseFloat(estPaletaExtr.valorMinim) - valorActual);
 					}
 					else
 					{
-						textMinim.value = parseFloat(valueRangSuperior) - valorUnitari;
+						textMinim.value = (parseFloat(textMaxim.value) - valorUnitari).toFixed(3);
 						sliderMinim.value = parseFloat(sliderMaxim.max) - parseFloat(sliderMaxim.value) - valorUnitari;
 					}
 				}
 			}
 			else
 			{
-				var valueDinsRang = 0;
+				var valorActual = 0;
 				//	Distingim entre el tipus de element "input" que preten modifica el
-				//	valor de la paleta. Diferenciem entre input.type= range/number/button
+				//	valor de la paleta. Diferenciem entre input.type= range/text/button
 				if (event.target.attributes["type"].value.localeCompare("range") == 0)
 				{
-					valueDinsRang = estPaletaIni.valorMaxim - floatValor;
+					valorActual = estPaletaExtr.valorMaxim - floatValor;
 				}
-				else //	Tant per input.type= number com button
+				else //	Tant per input.type= text o button
 				{
-					valueDinsRang = floatValor;
-					floatValor =  estPaletaIni.valorMaxim - estPaletaIni.valorMinim -(floatValor - estPaletaIni.valorMinim);
+					valorActual = floatValor;
+					floatValor =  estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim -(floatValor - estPaletaExtr.valorMinim);
 				}
 
+				const textMinim = document.getElementById("edita-estil-capa-valor-minim-" + i_component);
 				const textMaxim = document.getElementById("edita-estil-capa-valor-maxim-" + i_component);
 				const sliderMinim = document.getElementById("edita-estil-capa-slider-valor-minim-" + i_component);
 				const sliderMaxim = document.getElementById("edita-estil-capa-slider-valor-maxim-" + i_component);
-				const valueRangInferior = estPaletaIni.valorMinim + parseFloat(sliderMinim.value);
-				if (parseFloat(valueDinsRang) > parseFloat(valueRangInferior) && parseFloat(valueDinsRang) < parseFloat(estPaletaIni.valorMaxim))
+				if (parseFloat(valorActual) > parseFloat(textMinim.value) && parseFloat(valorActual) < parseFloat(estPaletaExtr.valorMaxim))
 				{
-					textMaxim.value = valueDinsRang;
+					textMaxim.value = valorActual.toFixed(3);
 					sliderMaxim.value = floatValor;
 				}
 				else
 				{
-					if (parseFloat(valueDinsRang) >= parseFloat(estPaletaIni.valorMaxim))
+					if (parseFloat(valorActual) >= parseFloat(estPaletaExtr.valorMaxim))
 					{
-						textMaxim.value = estPaletaIni.valorMaxim;
+						const labelRangeDrtMin= document.getElementById("minDrtBtn-" + i_component);
+						const labelRangeDrtMax= document.getElementById("maxDrtBtn-" + i_component);
+						textMaxim.value = valorActual.toFixed(3);
+						labelRangeDrtMin.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
+						labelRangeDrtMax.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
 						sliderMaxim.value = 0;
+						sliderMaxim.max = valorActual - estPaletaExtr.valorMinim;
+						sliderMinim.max = sliderMaxim.max;
+						estPaletaExtr.valorMaxim = valorActual;
 					}
 					else
 					{
-						textMaxim.value =  parseFloat(valueRangInferior) + valorUnitari;
+						textMaxim.value =  (parseFloat(textMinim.value) + valorUnitari).toFixed(3);
 						sliderMaxim.value = parseFloat(sliderMinim.max) - parseFloat(sliderMinim.value) - valorUnitari;
 					}
 				}
 			}
 		}
 	}
+}
+
+function TextLimitsSliders(limitValue, esMinim)
+{
+	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
+}
+/*
+	Mostra la capa vecotrial en format taula.
+ */
+
+function ObreFinestraTaulaDeCapaVectorial(i_capa)
+{
+var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
+
+	if (!elem)
+		return;
+	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
+	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+}
+
+function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
+{
+const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
+const atributsVisibles = [], objectesDinsAmbit = [];
+var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
+
+	for (i = 0; i < attrLength; i++)
+	{
+		const attribute = capa.atributs[i];
+		if (attribute.mostrar == "si")
+		{
+			atributsVisibles.push(capa.atributs[i]);
+		}
+	}
+	// Si només desitgem veure els objectes de l'àmbit
+	if (isNomesAmbit)
+	{
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			const objActual = objectes[i];
+			if (objActual.geometry.type == "Point")
+			{
+				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			{
+				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
+				{
+					objectesDinsAmbit.push(objActual);
+				}
+			}
+		}
+		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		objectes = objectesDinsAmbit;
+	}
+
+	if (atributsVisibles.length > 0)
+	{
+		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), " ", capa.desc, "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
+		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
+		"</div><hr>");
+
+		// Porta papers capa info
+		cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
+		GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
+		"MinX", "\t", capa.objectes.bbox[0], "\n",
+		"MaxX", "\t", capa.objectes.bbox[1], "\n",
+		"MinY", "\t", capa.objectes.bbox[2], "\n",
+		"MaxY", "\t", capa.objectes.bbox[3], "\n",
+		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
+
+		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
+		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		{
+			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
+
+			// Porta papers
+			cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+		}
+		if (ambGeometria)
+		{
+			cdnsHtml.push("<th class='vectorial' style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
+			// Porta papers
+			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
+		}
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
+		cdnsHtml.push("</tr>");
+		for (i = 0, objLength = objectes.length; i < objLength; i++)
+		{
+			cdnsHtml.push("<tr class='vectorial'>");
+			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			{
+				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+				// Porta papers
+				cdnsPortapapers.push(objectes[i].properties[atributsVisibles[j].nom], "\t");
+			}
+			if (ambGeometria)
+			{
+				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objectes[i].geometry.coordinates.toString(), "</td>");
+				// Porta papers
+				cdnsPortapapers.push(objectes[i].geometry.coordinates.toString(), "\t");
+			}
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			// Porta papers
+			cdnsPortapapers.push("\n");
+		}
+		cdnsHtml.push("</table>");
+	}
+
+	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
+	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	return cdnsHtml.join("");
+}
+
+function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
+{
+	const portapapers = "<div style=\"display: none\" id=\"taulaCapaVectorial_copy_div\"><form name=\"taulaCapaVectorial_copy_form\" onSubmit=\"return false;\"><textarea id=\"taulaCapaVectorial_copy_text\" wrap=\"off\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\">" + contingutACopiar + "</textarea></form></div>";
+	return portapapers;
+}
+
+// Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+function TancaFinestra_taulaCapaVectorial()
+{
+	TancaFinestra_anarCoord();
+}
+
+function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
+{
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
+	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }

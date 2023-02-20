@@ -807,9 +807,9 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 	   Accio.coord.y=PuntConsultat.y;
 
 	   cdns.push("<div align=\"left\" class=\"TextValidacio\"><ul><li>",
-		     GetMessage("IfCorrectValidateIt", "consult"),
-			 "<br>",  GetMessage("BrowserClosedReturnForm", "consult"),
-		     "<br><br><li>", GetMessage("IfIncorrectClicksViewAgain", "consult"),
+		     GetMessage("IfCorrectValidateIt", "consult") + ".",
+			 "<br>",  GetMessage("BrowserClosedReturnForm", "consult") + ".",
+		     "<br><br><li>", GetMessage("IfIncorrectClicksViewAgain", "consult") + ".",
 		     "</ul><form name=\"Validar\" onSubmit=\"return false;\"><input type=\"button\" value=\"",
 		     GetMessage("ValidateCoordinate", "consult"),
 		     (ParamCtrl.TipusConsulta=="IncrustadaDeCop" ?

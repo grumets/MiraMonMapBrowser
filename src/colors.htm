@@ -320,13 +320,10 @@ document.write(window.opener.TextDescDelColor);
 <script>
 with(window.opener)
 {
-	this.document.write(DonaCadenaLang({"cat":"Per aplicar un nou color feu un clic directament sobre el color desitjat",
-										"spa":"Para aplicar un nuevo color haga clic directamente sobre el color deseado",
-										"eng":"To apply a new color, please click on the wished color",
-										"fre":"Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée"})+
+	this.document.write(GetMessage("ApplyNewColor", "colors")+
 					".<br>"+
 					"<form><input type=button onClick=\"TancaCaixa()\" value=\""+
-					DonaCadenaLang({"cat":"Cancel·lar","spa":"Cancelar","eng":"Cancel","fre":"Annuler"})+"\"></form>");
+					GetMessage("Cancel") + "\"></form>");
 }
 </script>
 

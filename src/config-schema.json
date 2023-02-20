@@ -799,7 +799,7 @@
 			}
 		},		
 		"TitolLlistatNivellZoom":	{ 
-			"description": "Text que figura davant del desplegable de nivells de zoom (escales)",
+			"description": "DEPRECATED: ja no s'utilitzarà, passa al fitxer msg.js. Text que figurava davant del desplegable de nivells de zoom (escales)",
 			"$ref": "#/definitions/StringOCadenaLang" 
 		},
 		"LlistatZoomFraccio": {
