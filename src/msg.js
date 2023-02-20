@@ -2551,7 +2551,7 @@ var MessageLang={
       "eng": "Percentage of transparency limited to values 0% (opaque) to 100% (transparent)",
       "fre": "Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)",
       "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)"
-    }
+    },
 	"ViewItemsInScope": {
       "cat":"Veure sols elements dins de l'àmbit",
       "spa":"Ver solo elementos dentro del ámbito",
