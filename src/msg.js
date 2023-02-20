@@ -1655,6 +1655,20 @@ var MessageLang={
     "fre": "Exécuter",
     "cze": "Spustit"
   },
+  "Thickness": {
+    "cat":"Griux",
+    "spa":"Grosor",
+    "eng":"Thickness",
+    "fre":"Épaisseur",
+    "cze":"Tloušťka"
+  },
+	"Transparency": {
+    "cat":"Transparència",
+    "spa":"Transparencia",
+    "eng":"Transparency",
+    "fre":"Transparence",
+    "cze":"Transparentnost"
+  },
   "UserConfiguration": {
     "cat": "Configuració d'usuari",
     "spa": "Configuración de usuario",
@@ -2509,6 +2523,20 @@ var MessageLang={
       "eng": "The statistical descriptor to display for the layer needs to be selected",
       "fre": "Le descripteur statistique à afficher pour la couche doit être sélectionné",
       "cze": "Je třeba vybrat statistický deskriptor, který se má pro vrstvu zobrazit."
+    },
+    "ThicknessRange": {
+      "cat": "Gruix limitat a un rang de 1 a 10px",
+      "spa": "Grosor limitado a un rango de 1 a 10px",
+      "eng": "Thickness limited to a range of 1 to 10px",
+      "fre": "Épaisseur limitée à une gamme de 1 à 10px",
+      "cze": "Tloušťka omezená na rozsah 1 až 10px"
+    },
+		"PercentageTransparencyRange": {
+      "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
+      "spa": "Porcentage de transparencia limitada a valores 0% (opaco) y 100% (transparente)",
+      "eng": "Percentage of transparency limited to values 0% (opaque) to 100% (transparent)",
+      "fre": "Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)",
+      "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)"
     }
   },
   "storymap": {
