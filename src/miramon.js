@@ -1912,6 +1912,10 @@ function TancaFinestraLayer(nom_finestra)
 		if (estil.diagrama.length == 0)
 				delete estil.diagrama;
 	}
+	else if (nom_finestra=="taulaCapaVectorial" )
+	{
+		TancaFinestra_taulaCapaVectorial();
+	}
 }
 
 function TancaFinestra_novaFinestra(nom, finestra)
@@ -2309,6 +2313,10 @@ function EsPuntDinsAmbitNavegacio(punt)
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
 }//Fi de EsPuntDinsAmbitNavegacio()
 
+function EsAmbitDinsAmbitNavegacio(ambit)
+{
+	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
+}//Fi de EsAmbitDinsAmbitNavegacio()
 
 function DonaValorDeCoordActual(x,y,negreta,input)
 {
@@ -4526,6 +4534,7 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 	createFinestraLayer(window, "editarVector", GetMessageJSON("InsertNewPoint", "miramon"), boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", GetMessageJSON("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "taulaCapaVectorial", GetMessageJSON("ElementsVectorialTable", "vector"), boto_copiar|boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;

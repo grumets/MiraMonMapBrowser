@@ -2315,7 +2315,7 @@ var p, unitats_CRS;
 				barra_slider.push("</td></tr>");
 				if (ParamCtrl.VistaEscalaNumerica && (parseInt(document.getElementById("vista").style.height,10) >= 400))
 				{
-					barra_slider.push("<tr><td align='center'><span class=\"text_allus\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", (ParamCtrl.TitolLlistatNivellZoom ? DonaCadena(ParamCtrl.TitolLlistatNivellZoom) : "Zoom:"), "<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
+					barra_slider.push("<tr><td align='center'><span class=\"text_allus text_coord\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", GetMessage("TitolLlistatNivellZoom", "miramon"), ":<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
 					barra_slider.push("<br>");
 					barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", GetMessage("goToCoordinate", "barra"), "MostraFinestraAnarCoordenadaEvent(event)"));
 					barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", GetMessage("previousView", "barra"), "RecuperaVistaPreviaEvent(event)"));
