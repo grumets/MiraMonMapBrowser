@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3987,9 +3987,9 @@ function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometr
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const atributsVisibles = [], objectesDinsAmbit = [];
-var objectes = capa.objectes.features, i, j, attrLength;
+var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
 
-	for (i = 0; i < capa.atributs.length; i++)
+	for (i = 0; i < attrLength; i++)
 	{
 		const attribute = capa.atributs[i];
 		if (attribute.mostrar == "si")
