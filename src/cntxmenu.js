@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3968,6 +3968,7 @@ var floatValor=parseFloat(valor);
 function TextLimitsSliders(limitValue, esMinim)
 {
 	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
+}
 /*
 	Mostra la capa vecotrial en format taula.
  */
@@ -3986,7 +3987,7 @@ function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometr
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const atributsVisibles = [], objectesDinsAmbit = [];
-var objectes = capa.objectes.features, i, j;
+var objectes = capa.objectes.features, i, j, attrLength;
 
 	for (i = 0; i < capa.atributs.length; i++)
 	{
