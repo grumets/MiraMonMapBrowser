@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -2538,19 +2538,19 @@ var MessageLang={
       "fre": "Épaisseur limitée à une gamme de 1 à 10px",
       "cze": "Tloušťka omezená na rozsah 1 až 10px"
     },
-		"PercentageTransparencyRange": {
-      "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
-      "spa": "Porcentage de transparencia limitada a valores 0% (opaco) y 100% (transparente)",
-      "eng": "Percentage of transparency limited to values 0% (opaque) to 100% (transparent)",
-      "fre": "Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)",
-      "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)"
-    },
     "ShowLikeTable": {
       "cat":"Mostrar format taula",
       "spa":"Mostrar formato tabla",
       "eng":"Show table format",
       "fre":"Afficher le format de la table",
       "cze":"Zobrazit formát tabulky"
+    },
+    "PercentageTransparencyRange": {
+      "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
+      "spa": "Porcentage de transparencia limitada a valores 0% (opaco) y 100% (transparente)",
+      "eng": "Percentage of transparency limited to values 0% (opaque) to 100% (transparent)",
+      "fre": "Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)",
+      "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)"
     },
 	"ViewItemsInScope": {
       "cat":"Veure sols elements dins de l'àmbit",

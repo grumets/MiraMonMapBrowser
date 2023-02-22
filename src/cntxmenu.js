@@ -289,14 +289,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.estil && capa.estil.length==1 && EsCapaBinaria(capa))
-	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
-				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
-		if(!alguna_opcio)
-			alguna_opcio=true;
-	}
-	if (capa.estil && capa.estil.length==1 && capa.model==model_vector)
+	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)  || capa.model==model_vector))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
@@ -430,13 +423,7 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
 
-	if (EsCapaBinaria(capa)) // Cal programar això per vector ·$·
-	{
-		cdns.push("<hr>");
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
-	}
-	if (capa.model==model_vector)
+	if (EsCapaBinaria(capa) || capa.model==model_vector)
 	{
 		cdns.push("<hr>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
@@ -1628,6 +1615,7 @@ var url_a_mostrar;
 	{
 		var i_sel=form.llista_serveis_OWS.options[form.llista_serveis_OWS.selectedIndex].value;
 		form.servidor.value=LlistaServOWS[i_sel].url;
+		form.cors.checked=(LlistaServOWS[i_sel].cors==true ? true : false);
 		form.cors.value=LlistaServOWS[i_sel].cors;
 	}
 }
@@ -3583,6 +3571,145 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 		}
 	}
 
+	if (capa.model == "vector")
+	{
+		/* Es construeix estructura amb colors i descripcions a mostrar. A partir dels
+		colors de "forma" amb attribut "TipusNom" i les
+		descripcions de "ItemLleg". Com relacionar els 2 arrays:
+		índex ItemLleg = TipusNom - 1, si la simbolització és indexada
+		*/
+		const arrayColorsSelectors = [];
+
+		if (estil.TipusObj == "L" && estil.ItemLleg && estil.ItemLleg.length > 0)
+		{
+			// Thicknesses to modify
+			var arrayThicknessSelectors = [];
+			if (estil.formes && estil.formes.length)
+			{
+				const lastFormaIndex = estil.formes.length - 1;
+				const lastForma = estil.formes[lastFormaIndex];
+				if (lastForma.vora && lastForma.vora.paleta && lastForma.vora.paleta.colors)
+				{
+					const isMultipleColored = lastForma.vora.NomCamp ? true : false;
+					for (var indexColors = isMultipleColored ? 1 : 0, colorsLength = lastForma.vora.paleta.colors.length; indexColors < colorsLength; indexColors++)
+					{
+							const currentColor = lastForma.vora.paleta.colors[indexColors];
+							// Index refering to ItemLleg where to find description of the color
+							const indexItemLleg = estil.ItemLleg && estil.ItemLleg.length >= indexColors && isMultipleColored ? indexColors-1 : indexColors;
+							arrayColorsSelectors.push({color:currentColor, descr:estil.ItemLleg[indexItemLleg].DescColor});
+					}
+				}
+				// Check if thickness (gruix) is available
+				if (lastForma.vora && lastForma.vora.gruix && lastForma.vora.gruix.amples)
+				{
+					arrayThicknessSelectors = lastForma.vora.gruix.amples;
+				}
+			}
+
+			if(arrayColorsSelectors && arrayColorsSelectors.length)
+			{
+				// Color HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
+				for (var indexColorSel = 0, itemsColorSelLength = arrayColorsSelectors.length; indexColorSel < itemsColorSelLength; indexColorSel++)
+				{
+					cdns.push("<tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-" + indexColorSel + "\" value=\"" + arrayColorsSelectors[indexColorSel].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-" + indexColorSel + "\">", arrayColorsSelectors[indexColorSel].descr, "</label></td></tr>");
+				}
+				cdns.push("</table></fieldset>");
+			}
+
+			if(arrayThicknessSelectors && arrayThicknessSelectors.length)
+			{
+				// Thickness HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Thickness"), ": </legend><table>");
+				cdns.push("<tr><td>", "<p class=\"Verdana11px\">", GetMessage("ThicknessRange", "cntxmenu"),"</p>","</td></tr>");
+				for (var indexThickSel = 0, itemsThickSelLength = arrayThicknessSelectors.length; indexThickSel < itemsThickSelLength; indexThickSel++)
+				{
+					cdns.push("<tr><td><input type=\"text\" name=\"Gruixos\" size=\"2\" id=\"edita-estil-gruix-" + indexThickSel + "\" value=\"" + arrayThicknessSelectors[indexThickSel] + "\"></td></tr>");
+				}
+				cdns.push("</table></fieldset>");
+			}
+		}
+		else if (estil.TipusObj == "P")
+		{
+			const voraKey = "vora";
+			const interiorKey = "interior";
+			// Alpha color values to modify
+			var arrayAlphaSelectors = [];
+
+			const formes = estil.formes.length > 0 ? estil.formes[0] : undefined;
+			// Cast object() inside "formes" to a new Map()
+			function objToMap(object)
+			{
+				return Object.keys(object).reduce(function(result, key) {
+					result.set(key, object[key]);
+					return result;
+				} , new Map());
+			}
+			if (formes !== undefined)
+			{
+				const mapFormes = objToMap(formes);
+				// Gathers all interesting keyes from map
+				const arrayKeyes = [];
+
+				if (mapFormes.has(voraKey))
+					arrayKeyes.push(voraKey);
+
+				if (mapFormes.has(interiorKey))
+					arrayKeyes.push(interiorKey);
+
+				arrayKeyes.forEach((item, i) => {
+					const objKey = item;
+					const forma = mapFormes.get(objKey);
+
+					if (forma.paleta && forma.paleta.colors && forma.paleta.colors.length > 0)
+					{
+						// The color is in hexadecimal format
+						if (forma.paleta.colors[0].indexOf("#") != -1)
+						{
+							arrayColorsSelectors.push({color:forma.paleta.colors[0], descr:objKey});
+						}
+						// The color is in RGB format
+						else if (forma.paleta.colors[0].indexOf("#") == -1)
+						{
+							const rgbDigits = forma.paleta.colors[0].slice( forma.paleta.colors[0].indexOf("(") + 1, forma.paleta.colors[0].indexOf(")"));
+							const arrayColorRGBA = rgbDigits.split(",");
+							const hexColor = "#" + ((1 << 24) + (parseInt(arrayColorRGBA[0]) << 16) + (parseInt(arrayColorRGBA[1]) << 8) + parseInt(arrayColorRGBA[2])).toString(16).slice(1);
+
+							arrayColorsSelectors.push({color:hexColor, descr:objKey});
+							if (arrayColorRGBA.length == 4)
+							{
+								arrayAlphaSelectors.push({alpha:parseFloat(arrayColorRGBA[arrayColorRGBA.length-1]), descr:objKey});
+							}
+						}
+					}
+				});
+			}
+			// Build HTML inputs
+			if(arrayColorsSelectors && arrayColorsSelectors.length)
+			{
+			// Color HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Colors"), ": </legend><table>");
+				for (var indexColorSel = 0, itemsColorSelLength = arrayColorsSelectors.length; indexColorSel < itemsColorSelLength; indexColorSel++)
+				{
+					const labelString = arrayColorsSelectors[indexColorSel].descr.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+					cdns.push("<tr><td><input type=\"color\" name=\"PaletaColors\" id=\"edita-estil-color-" + indexColorSel + "\" value=\"" + arrayColorsSelectors[indexColorSel].color + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-color-" + indexColorSel + "\">", labelString, "</label></td></tr>");
+				}
+				cdns.push("</table></fieldset>");
+			}
+
+			if(arrayAlphaSelectors && arrayAlphaSelectors.length)
+			{
+				// Transparency HTML Section
+				cdns.push("<fieldset><legend>", GetMessage("Transparency"), ": </legend><table>");
+				for (var indexTranspSel = 0, itemsTransSelLength = arrayAlphaSelectors.length; indexTranspSel < itemsTransSelLength; indexTranspSel++)
+				{
+					const labelString = arrayAlphaSelectors[indexTranspSel].descr.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+					cdns.push("<tr><td><input type=\"text\" name=\"Transparencia\" size=\"2\" id=\"edita-estil-transparencia-" + indexTranspSel + "\" value=\"" + (100 - parseInt(arrayAlphaSelectors[indexTranspSel].alpha * 100)) + "\"></td><td><label class=\"Verdana11px\" for=\"edita-estil-transparencia-" + indexTranspSel + "\">", GetMessage("PercentageTransparencyRange", "cntxmenu"), "</label></td></tr></tr>");
+				}
+				cdns.push("</table></fieldset>");
+			}
+		}
+	}
 	cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("OK"),
 	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");TancaFinestraLayer(\"editaEstil\");' />",
