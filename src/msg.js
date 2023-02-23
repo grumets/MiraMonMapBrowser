@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -220,12 +220,19 @@ var MessageLang={
     "fre": "Quitter",
     "cze": "Zavřít"
   },
-  "Print": {
+  "print": {
     "cat": "imprimir",
     "spa": "imprimir",
     "eng": "print",
     "fre": "imprimer",
-	"cze": "tisk"
+	  "cze": "tisk"
+  },
+  "Print": {
+    "cat": "Imprimir",
+    "spa": "Imprimir",
+    "eng": "Print",
+    "fre": "Imprimer",
+    "cze": "Tisk"
   },
   "indicates": {
     "cat": "indica",
@@ -1655,6 +1662,20 @@ var MessageLang={
     "fre": "Exécuter",
     "cze": "Spustit"
   },
+  "Thickness": {
+    "cat":"Griux",
+    "spa":"Grosor",
+    "eng":"Thickness",
+    "fre":"Épaisseur",
+    "cze":"Tloušťka"
+  },
+	"Transparency": {
+    "cat":"Transparència",
+    "spa":"Transparencia",
+    "eng":"Transparency",
+    "fre":"Transparence",
+    "cze":"Transparentnost"
+  },
   "UserConfiguration": {
     "cat": "Configuració d'usuari",
     "spa": "Configuración de usuario",
@@ -1916,11 +1937,11 @@ var MessageLang={
       "cze": "obsahuje odkazy na styl, který se snažíte vymazat, a tím přestane fungovat. Chcete pokračovat"
     },
     "ChooseTwoDifferentLayers": {
-      "cat": "Cal triar dues capes diferents o la mateixa en estils i/o dates diferents.",
-      "spa": "Es necesario elegir dos capas diferentes o la misma en estilos y/o fechas diferentes.",
-      "eng": "You should choose two different layers or the same in different styles and/or dates.",
-      "fre": "You should  choose two different layers or the same in different styles and/or dates.",
-      "cze": "Měli byste si vybrat dvě různé vrstvy nebo stejné v různých stylech a/nebo datech."
+      "cat": "Cal triar dues capes diferents o la mateixa en estils i/o dates diferents",
+      "spa": "Es necesario elegir dos capas diferentes o la misma en estilos y/o fechas diferentes",
+      "eng": "You should choose two different layers or the same in different styles and/or dates",
+      "fre": "You should  choose two different layers or the same in different styles and/or dates",
+      "cze": "Měli byste si vybrat dvě různé vrstvy nebo stejné v různých stylech a/nebo datech"
     },
     "_and_": {
       "cat": " i ",
@@ -2508,57 +2529,71 @@ var MessageLang={
       "spa": "Debe seleccionar el descriptor estadístico para mostrar para la capa",
       "eng": "The statistical descriptor to display for the layer needs to be selected",
       "fre": "Le descripteur statistique à afficher pour la couche doit être sélectionné",
-      "cze": "Je třeba vybrat statistický deskriptor, který se má pro vrstvu zobrazit."
+      "cze": "Je třeba vybrat statistický deskriptor, který se má pro vrstvu zobrazit"
+    },
+    "ThicknessRange": {
+      "cat": "Gruix limitat a un rang de 1 a 10px",
+      "spa": "Grosor limitado a un rango de 1 a 10px",
+      "eng": "Thickness limited to a range of 1 to 10px",
+      "fre": "Épaisseur limitée à une gamme de 1 à 10px",
+      "cze": "Tloušťka omezená na rozsah 1 až 10px"
     },
     "ShowLikeTable": {
-      "cat": "Mostrar format taula",
-      "spa": "Mostrar formato tabla",
-      "eng": "Show table format",
-      "fre": "Afficher le format de la table",
-      "cze": "Zobrazit formát tabulky"
+      "cat":"Mostrar format taula",
+      "spa":"Mostrar formato tabla",
+      "eng":"Show table format",
+      "fre":"Afficher le format de la table",
+      "cze":"Zobrazit formát tabulky"
     },
-		"ViewItemsInScope": {
-      "cat": "Veure sols elements dins de l'àmbit",
-      "spa": "Ver solo elementos dentro del ámbito",
-      "eng": "View only items within the scope",
-      "fre": "Afficher uniquement les éléments du périmètre",
-      "cze": "Zobrazit pouze položky v rozsahu"
+    "PercentageTransparencyRange": {
+      "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
+      "spa": "Porcentage de transparencia limitada a valores 0% (opaco) y 100% (transparente)",
+      "eng": "Percentage of transparency limited to values 0% (opaque) to 100% (transparent)",
+      "fre": "Pourcentage de transparence limité aux valeurs 0% (opaque) à 100% (transparent)",
+      "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)"
     },
-		"ShowGeometry": {
-      "cat": "Mostrar geometria",
-      "spa": "Mostrar geometría",
-      "eng": "Show geometry",
-      "fre": "Montrer la géométrie",
-      "cze": "Zobrazit geometrii"
+	"ViewItemsInScope": {
+      "cat":"Veure sols elements dins de l'àmbit",
+      "spa":"Ver solo elementos dentro del ámbito",
+      "eng":"View only items within the scope",
+      "fre":"Afficher uniquement les éléments du périmètre",
+      "cze":"Zobrazit pouze položky v rozsahu"
     },
-		"Geometry": {
-      "cat": "Geometria",
-      "spa": "Geometría",
-      "eng": "Geometry",
-      "fre": "Géoméxtrie",
-      "cze": "Geometrie"
+	"ShowGeometry": {
+      "cat":"Mostrar geometria",
+      "spa":"Mostrar geometría",
+      "eng":"Show geometry",
+      "fre":"Montrer la géométrie",
+      "cze":"Zobrazit geometrii"
     },
-    "ExportObject": {
-      "cat": "Exporta l'objecte",
-      "spa": "Exportar el objecto",
-      "eng": "Export object",
-      "fre": "Exporter l'objet",
-      "cze": "Objekt exportu"
-    },
-		"ExportObjects": {
-      "cat": "Exportar objectes",
-      "spa": "Exportar objectos",
-      "eng": "Export objects",
-      "fre": "Exporter les objets",
-      "cze": "Export objektů"
-    },
-		"VectorLayerValuesCopiedClipboardFormat": {
-      "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
-      "spa": "Los valores de la capa vectorial han sido copiados al portapapeles en formato",
-      "eng": "The values of the vector layer have been copied to clipboard in the format",
-      "fre": "Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format",
-      "cze": "Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu"
-	  }
+	"Geometry": {
+      "cat":"Geometria",
+      "spa":"Geometría",
+      "eng":"Geometry",
+      "fre":"Géoméxtrie",
+      "cze":"Geometrie"
+   },
+   "ExportObject": {
+     "cat": "Exporta l'objecte",
+     "spa": "Exportar el objecto",
+     "eng": "Export object",
+     "fre": "Exporter l'objet",
+     "cze": "Objekt exportu"
+   },
+   "ExportObjects": {
+     "cat": "Exportar objectes",
+     "spa": "Exportar objectos",
+     "eng": "Export objects",
+     "fre": "Exporter les objets",
+     "cze": "Export objektů"
+   },
+	"VectorLayerValuesCopiedClipboardFormat": {
+      "cat":"Els valors de la capa vectorial han estat copiats al portaretalls en format",
+      "spa":"Los valores de la capa vectorial han sido copiados al portapapeles en formato",
+      "eng":"The values of the vector layer have been copied to clipboard in the format",
+      "fre":"Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format",
+      "cze":"Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu"
+    }
   },
   "storymap": {
     "Storymaps": {
@@ -2803,9 +2838,9 @@ var MessageLang={
     "ZoomSizeIncorrectFormat": {
       "cat": "Format del valor del costat de zoom erroni",
       "spa": "Formato del lado de zoom erróneo",
-      "eng": "Zoom size format is incorrect.",
+      "eng": "Zoom size format is incorrect",
       "fre": "Format des zoom erroné",
-      "cze": "Formát velikosti zoomu je nesprávný."
+      "cze": "Formát velikosti zoomu je nesprávný"
     },
     "NumericalValueIsRequired": {
       "cat": "S'ha d'indicar un valor numèric",
@@ -2815,18 +2850,18 @@ var MessageLang={
       "cze": "Je vyžadována číselná hodnota"
     },
     "ZoomSizeNotAvailableBrowser": {
-      "cat": "El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador.",
-      "spa": "El lado de zoom solicitado no es uno de los lados disponibles en este navegador.",
-      "eng": "The requested zoom size is not available in this browser.",
-      "fre": "La taille de zoom demandée n'est pas disponible dans ce navigateur.",
-      "cze": "Požadovaná velikost zvětšení není v tomto prohlížeči k dispozici."
+      "cat": "El costat de zoom sol·licitat no és un dels costats disponibles en aquest navegador",
+      "spa": "El lado de zoom solicitado no es uno de los lados disponibles en este navegador",
+      "eng": "The requested zoom size is not available in this browser",
+      "fre": "La taille de zoom demandée n'est pas disponible dans ce navigateur",
+      "cze": "Požadovaná velikost zvětšení není v tomto prohlížeči k dispozici"
     },
     "CRSNotAvailableBrowser": {
-      "cat": "El CRS sol·licitat no te un mapa de situació associat en aquest navegador i no està disponible.",
-      "spa": "El CRS solicitado no tiene un mapa de situación asociado i no está disponibles en este navegador.",
-      "eng": "The requested CRS has no situation map associated and it is not available in this browser.",
-      "fre": "Le CRS demandé n'a pas de carte de situation associée et n'est pas disponible dans ce navigateur.",
-      "cze": "Požadovaný počítačový rezervační systém nemá přiřazenou mapu situace a v tomto prohlížeči není k dispozici."
+      "cat": "El CRS sol·licitat no te un mapa de situació associat en aquest navegador i no està disponible",
+      "spa": "El CRS solicitado no tiene un mapa de situación asociado i no está disponibles en este navegador",
+      "eng": "The requested CRS has no situation map associated and it is not available in this browser",
+      "fre": "Le CRS demandé n'a pas de carte de situation associée et n'est pas disponible dans ce navigateur",
+      "cze": "Požadovaný počítačový rezervační systém nemá přiřazenou mapu situace a v tomto prohlížeči není k dispozici"
     },
     "CoordIncorrectFormat": {
       "cat": "Format de les coordenades erroni",
@@ -2938,25 +2973,25 @@ var MessageLang={
       "cze": "Byla vybrána následující souřadnice"
     },
     "IfCorrectValidateIt": {
-      "cat": "Si és correcte, ja la podeu validar.",
-      "spa": "Si es correcta, ya la puede validar.",
-      "eng": "If it is correct, you can already validate it.",
-      "fre": "Si correcte, vous pouvez la valider.",
-      "cze": "Pokud je správná, můžete ji již potvrdit."
+      "cat": "Si és correcte, ja la podeu validar",
+      "spa": "Si es correcta, ya la puede validar",
+      "eng": "If it is correct, you can already validate it",
+      "fre": "Si correcte, vous pouvez la valider",
+      "cze": "Pokud je správná, můžete ji již potvrdit"
     },
     "BrowserClosedReturnForm": {
-      "cat": "Es tancarà la finestra de navegació i tornarà al formulari.",
-      "spa": "Se cerrará la ventana de navegación y volverá al formulario.",
-      "eng": "Browser window will be closed and will return to form.",
-      "fre": "La fenêtre du navigateur va se fermer et vous serez redirigés vers le formulaire.",
-      "cze": "Okno prohlížeče se zavře a vrátí se do formuláře."
+      "cat": "Es tancarà la finestra de navegació i tornarà al formulari",
+      "spa": "Se cerrará la ventana de navegación y volverá al formulario",
+      "eng": "Browser window will be closed and will return to form",
+      "fre": "La fenêtre du navigateur va se fermer et vous serez redirigés vers le formulaire",
+      "cze": "Okno prohlížeče se zavře a vrátí se do formuláře"
     },
     "IfIncorrectClicksViewAgain": {
-      "cat": "Si és incorrecte, torni a clicar sobre la vista.",
-      "spa": "Si es incorrecta, vuelva a cliquear sobre la vista.",
-      "eng": "If it is incorrect, click on the view again.",
-      "fre": "Si incorrecte, cliquez une autre fois sur la vue.",
-      "cze": "Pokud je nesprávná, klikněte na zobrazení znovu."
+      "cat": "Si és incorrecte, torni a clicar sobre la vista",
+      "spa": "Si es incorrecta, vuelva a cliquear sobre la vista",
+      "eng": "If it is incorrect, click on the view again",
+      "fre": "Si incorrecte, cliquez une autre fois sur la vue",
+      "cze": "Pokud je nesprávná, klikněte na zobrazení znovu"
     },
     "ValidateCoordinate": {
       "cat": "Validar Coordenada",
@@ -3082,11 +3117,11 @@ var MessageLang={
       "cze": "Selektivní stažení zóny"
     },
     "MMZ_MMZX_NotInstalledDownload": {
-      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
-      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"http://www.creaf.uab.cat/miramon/mmr/esp\" target=\"_blank\">descárguelo</a>",
-      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">download it</a>",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, <a href=\"http://www.creaf.uab.cat/miramon/mmr/usa\" target=\"_blank\">stáhněte si ji</a> pro formát MMZ nebo MMZX (ISO 19165-1)."
+      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, <a href=\"https://www.miramon.cat/mmr/cat\" target=\"_blank\">descarregueu-lo</a>",
+      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, <a href=\"https://www.miramon.cat/mmr/esp\" target=\"_blank\">descárguelo</a>",
+      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">download it</a>",
+      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">download it</a>",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, <a href=\"https://www.miramon.cat/mmr/usa\" target=\"_blank\">stáhněte si ji</a> pro formát MMZ nebo MMZX (ISO 19165-1)."
     },
     "ViewLayers_MMZ_MMZX_InstalledMM": {
       "cat": "Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.",
@@ -3115,6 +3150,97 @@ var MessageLang={
       "eng": "of downloading",
       "fre": "de téléchargement",
       "cze": "stahování"
+    },
+    "GenerationMMZMinutes": {
+        "cat": "La generació d'un MMZ podria trigar alguns minuts",
+        "spa": "La generación de un MMZ podría durar algunos minutos",
+        "eng": "Generation of an MMZ could take some minutes",
+        "fre": "La création d'un MMZ peut prendre quelques minutes",
+        "cze": "Generování MMZ může trvat několik minut"
+    },
+    "PreparingMapLayers": {
+      "cat": "Preparant un mapa amb les capes sol·licitades",
+      "spa": "Preparando un mapa con las capas solicitadas",
+      "eng": "Preparing a map with requested layers",
+      "fre": "Préparant une carte avec les couches demandées",
+      "cze": "Příprava mapy s požadovanými vrstvami"
+    },
+    "NoLayerSellectedForMMZ": {
+      "cat": "No s'ha sel·lecionat cap capa per ser inclosa dins d'un MMZ",
+      "spa": "No se ha seleccionado ninguna capa para ser incluida dentro de un MMZ",
+      "eng": "No layer has been sellected for being included on a MMZ", 
+      "fre": "Aucune couche n'a été sélectionnée pour être insérée dans un MMZ",
+      "cze": "Žádná vrstva nebyla vybrána pro zařazení do MMZ"
+    },
+    "DonwloadingCartography":{
+      "cat": "Descàrrega de cartografia",
+      "spa": "Descarga de cartografía",
+      "eng": "Downloading the Cartography",
+      "fre": "Téléchargement de cartographie",
+      "cze": "Stažení kartografie"
+    }, 
+    "NotHaveMiramonInstalled": {
+      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
+      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
+      "eng": "If you don't have MiraMon Universal Map Reader installed or updated",
+      "fre": "Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader"
+    },
+    "CorrectDownloadLayers": {
+      "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon", 
+      "spa": "Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon", 
+      "eng": "To correctly download the layers you have to have MiraMon program installed",
+      "fre": "Pour télécharger les couches il faut voir installé correctement le logiciel MiraMon",
+      "cze": "Pro správné stažení vrstev musíte mít nainstalovaný program MiraMon"
+    }, 
+    "downloadIt": {
+      "cat": "descarregueu-lo",
+      "spa": "descárguelo",
+      "eng": "download it",
+      "fre": "téléchargez",
+      "cze": "stáhnout"
+    }, 
+    "GenerateDirectlyOpen": {
+      "cat": "Generar i obrir directament",
+      "spa": "Generar y abrir directamente", 
+      "eng": "Generate and directly open",
+      "fre": "Créer et ouvrir directement",
+      "cze": "Generování a přímé otevření"
+    }, 
+    "PrepareOffer": {
+      "cat": "Preparar i oferir",
+      "spa": "Preparar y ofrecer",
+      "eng": "Prepare and offer",
+      "fre": "Préparer et télécharger", 
+      "cze": "Připravte a nabídněte"
+    },
+    "toSaveFile": {
+      "cat": "per a guardar fitxer",
+      "spa": "para guardar fichero",
+      "eng": "to save file",
+      "fre": "pour enregistrer le fichier",
+      "cze": "uložení souboru"
+    },
+    "ProcessStatus": {
+      "cat": "Estat del procés",
+      "spa": "Estado del proceso",
+      "eng": "Process status",
+      "fre": "État du processus",
+      "cze": "Stav procesu"
+    }, 
+    "AllLayersSameServer": {
+      "cat":"Totes les capes a descarregar han de ser del mateix servidor. Desactiva",
+      "spa":"Todas las capas a descargar deben residir en el mismo servidor. Desactive",
+      "eng":"All layers to download have to be in the same server. Please unselect",
+      "fre":"Toutes les couches doivent être télécharger du même serveur. Désactivez",
+      "cze": "Všechny vrstvy ke stažení musí být na stejném serveru. Zrušte prosím výběr"
+    },
+    "andTryAgain": {
+      "cat":"i torna a intentar-ho",
+      "spa":"y vuelva a intentarlo",
+      "eng":"and try it again",
+      "fre":"et réessayez",
+      "cze": "a zkuste to znovu"
     },
     "vectorial": {
       "cat": "vectorial",
@@ -4396,6 +4522,13 @@ var MessageLang={
       "eng": "and is set otherwise",
       "fre": "et est définie autrement",
       "cze": "a jinak je nastavena"
+    },
+    "TitolLlistatNivellZoom": {
+      "cat": "Escala",
+      "spa": "Escala",
+      "eng": "Scale",
+      "fre": "Échelle",
+      "cze": "MěřítkoÉchelle"
     }
   },
   "authens": {
@@ -5621,5 +5754,142 @@ var MessageLang={
       "fre": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
       "cze": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE"
     }
-  }
+  },
+  "impressio": {
+    "ReferSystem": {
+       "cat": "Sistema de Referència",
+       "spa": "Sistema de Referéncia",
+       "eng": "Reference System",
+       "fre": "Système de référence",
+       "cze": "Referenční systém"
+    },
+    "PrintDate": {
+      "cat": "Data de impressió",
+      "spa": "Fecha de impresión",
+      "eng": "Print date",
+      "fre": "Date d'impression",
+      "cze": "Vytisknout datum"
+    },
+    "Subtitle": {
+      "cat": "Subtítol",
+      "spa": "Subtítulo",
+      "eng": "Subtitle",
+      "fre": "Sous-titre",
+      "cze": "Podtitul"
+    },
+    "SizeOrientationPaper": {
+      "cat": "Mida i orientació del paper", 
+      "spa": "Tamaño y orientación del papel", 
+      "eng": "Size and orientation of the paper",
+      "fre": "Dimensions et position du papier",
+      "cze": "Velikost a orientace papíru"
+    },
+    "WhenPrintingKeep": {
+      "cat": "En imprimir la vista, respectar",
+      "spa": "Al imprimir la vista, respetar",
+      "eng": "When printing the view, keep",
+      "fre": "En imprimant la vue, respecter",
+      "cze": "Při tisku zobrazení zachovejte"
+    },
+    "theExtent": {
+      "cat":"l'àmbit",
+      "spa":"el ámbito",
+      "eng":"the extent",
+      "fre":"le champ",
+      "cze": "rozsah"
+    },
+    "theResolution": {
+      "cat": "la resolució",
+      "spa": "la resolución",
+      "eng": "the resolution",
+      "fre": "la résolution",
+      "cze": "usnesení"
+    },
+    "ResolutionKeptExtentChanged": {
+      "cat": "La resolució original de la vista es respecta però es canvia l'àmbit",
+      "spa": "La resolución original de la vista se respeta pero se cambia el ámbito",
+      "eng": "The original resolution of the view is kept but the extent is changed",
+      "fre": "La résolution originelle de la vue est respectée mais le champ est changé",
+      "cze": "Původní rozlišení zobrazení zůstává zachováno, ale mění se jeho rozsah"
+    },
+    "ResolutionAssignedIsLower": {
+      "cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l'àrea de la vista a imprimir.\nPrem 'Imprimir' per a imprimir a un resolució inferior o cancel·la i fes més petita l'area de la vista (p.ex. canviat la mida del navegador)",
+      "spa":"La resolución asignada a la impresora por el navegador es INFERIOR a la resolución del área de la vista a imprimir.\nSeleccione 'Imprimir' para imprimir a una resolución inferior o cancelar y haga más pequeña el área de la vista (p.ej. cambiando la medida del navegador)",
+      "eng":"The resolution assigned to the printer in a browser is LOWER than the resolution of the view area to print.\nPlease, press 'Print' to print in a lower resolution or cancel to view area smaller (f.ex. changing browser window size)",
+      "fre":"La résolution assignée à l'imprimante par le navigateur est INFÉRIEURE à la résolution de l'aire de la vue à imprimer.\nAppuyer 'Imprimer' pour imprimer à une résolution inférieure où annuler et faites plus petite l'aire de la vue (p.ex. En changeant la taille du navigateur)",
+      "cze": "Rozlišení přiřazené tiskárně v prohlížeči je MENŠÍ než rozlišení zobrazované oblasti pro tisk.\nProsím, stiskněte 'Tisk' pro tisk v menším rozlišení nebo zrušte zobrazení menší oblasti (např. změna velikosti okna prohlížeče)"
+    },
+    "ResolutionAssignedIsEnough": {
+      "cat": "La resolució assignada a la impressora pel navegador és suficient per imprimir la vista",
+      "spa": "La resolución asignada a la impresora por el navegador es suficiente para imprimir la vista",
+      "eng": "The resolution assigned to the printer in a browser is enough to print the view",
+      "fre": "La résolution assignée à l'imprimante par le navigateur est suffisante  pour imprimer la vue",
+      "cze": ""
+    },
+    "ElementsToPrint": {
+      "cat": "Elements a imprimir (píxels)",
+      "spa": "Elementos a imprimir (píxeles)",
+      "eng": "Elements to print (pixels)",
+      "fre": "Éléments à imprimer (pixels)",
+      "cze": "Prvky k tisku (pixely)"
+    },
+    "left": {
+      "cat": "esq.",
+      "spa": "izq.",
+      "eng": "left",
+      "fre": "gauche",
+      "cze": "vlevo"
+    },
+    "top": {
+      "cat": "sup.",
+      "spa": "sup.",
+      "eng": "top",
+      "fre": "sup.",
+      "cze": "top"
+    },
+    "width": {
+      "cat": "ample",
+      "spa": "ancho",
+      "eng": "width",
+      "fre": "largeur",
+      "cze": "šířka"
+    },
+    "height": {
+      "cat": "alt",
+      "spa": "alto",
+      "eng": "height",
+      "fre": "hauteur",
+      "cze": "výška"
+    },
+    "ScaleBar": {
+      "cat": "Barra d'escala",
+      "spa": "Barra de escala",
+      "eng": "Scale Bar",
+      "fre": "Barre d'échelle",
+      "cze": "Měřítko"
+    },
+    "SituationMap": {
+      "cat": "Mapa de situació",
+      "spa": "Mapa de situación",
+      "eng": "Situation map",
+      "fre": "Carte de situation",
+      "cze": "Situační mapa"
+    },
+    "OtherElements": {
+      "cat": "Altres elements",
+      "spa": "Otros elementos",
+      "eng": "Other elements",
+      "fre": "Autres éléments",
+      "cze": "Další prvky"
+    }
+  },
+  "colors": {
+    "ApplyNewColor": {
+      "cat": "Per aplicar un nou color feu un clic directament sobre el color desitjat",
+	  "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
+	  "eng": "To apply a new color, please click on the wished color",
+	  "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
+      "cze": "Chcete-li použít novou barvu, klikněte na požadovanou barvu"
+    }
+  } 
 }

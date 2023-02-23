@@ -297,7 +297,7 @@ var s1;
 				}
 				if(i_valor==operacio.par_input[i].valors.length)
 				{
-					alert(GetMessage("AnyValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
+					alert(GetMessage("NoValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"");
 					return -1;
 				}
 			}
@@ -328,7 +328,7 @@ var s1;
 						s1=CanviaRepresentacioCaractersProhibitsPerAtributXML(text.value);
 					else
 					{
-						var cadena_error = GetMessage("AnyValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
+						var cadena_error = GetMessage("NoValueDefinedParameter", "wps") + " \"" + DonaCadena(operacio.par_input[i].nom.desc)+ "\"";
 
 						var file=document.getElementById("e_file_"+i);
 						if(file && file.value)
