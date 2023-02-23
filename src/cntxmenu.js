@@ -4396,4 +4396,5 @@ const capaExportar = {"type": "FeatureCollection", "features": []};
 		}
 		capaExportar.features.push(objAExportar);
 	});
-	return GuardaDadesJSONFitxerExtern(capaExportar, "capa_exportada_" + Date.now());
+	return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+}

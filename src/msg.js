@@ -2593,6 +2593,13 @@ var MessageLang={
       "eng":"The values of the vector layer have been copied to clipboard in the format",
       "fre":"Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format",
       "cze":"Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu"
+    },
+  "exportedVectorObjects": {
+    "cat": "objectes_vectorials_exportats_",
+    "spa": "objetos_vectoriales_exportados",
+    "eng": "exported_vector_objects_",
+    "fre": "objets_vectoriels_exportes_",
+    "cze": "exportovane_vektorové_objekty_"
     }
   },
   "storymap": {
