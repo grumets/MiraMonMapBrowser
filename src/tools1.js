@@ -2820,8 +2820,8 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 
 
 /*
-*	Funci� per a transformar dades en quelcom
-*	capa� de ser incl�s en un anchor <a>, per exemple un Blob.
+*	Funció per a transformar els paràmetres de configuració de l'usuari en quelcom
+*	capaç de ser inclòs en un anchor <a>, per exemple un Blob.
 */
 var jsonFile = null;
 
@@ -2832,14 +2832,14 @@ function makeHrefData(data)
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
 	if (jsonFile !== null)
-		window.URL.revokeObjectURL(jsonFile);
+		window.URL.revokeObjectURL(jsonConfigFile);
 
 	jsonFile = window.URL.createObjectURL(blobData);
 	return jsonFile;
 }
 
 /*
-*	Funci� per a guardar dades en format JSON en mem�ria
+*	Funció per a guardar dades en format JSON en memòria
 */
 function GuardaDadesJSONFitxerExtern(data, fileName)
 {

@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -4220,7 +4220,7 @@ function TextLimitsSliders(limitValue, esMinim)
 	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
 }
 /*
-	Mostra la capa vecotrial en format taula.
+	Mostra la capa vectorial en format taula.
  */
 const i_objectesAExportar = {};
 var i_capaATaula = null;
@@ -4355,6 +4355,7 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 }
 
 // Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
+function TancaFinestra_taulaCapaVectorial()
 {
 	i_capaATaula=null;
 	TancaFinestra_anarCoord();
