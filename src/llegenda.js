@@ -389,7 +389,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 						alguna.consultable=1;
 					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && capa.descarregable!="no")
 						alguna.descarregable=1;
-					if (EsCapaDecarregableIndividualment(capa))
+					if (EsCapaDescarregableIndividualment(capa))
 						alguna.getcoverage=1;
 					if (capa.proces)
 						alguna.WPS=1;
@@ -731,7 +731,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 			}
 		}
 		//Botó de GetCovergage:
-		if (EsCapaDecarregableIndividualment(capa))
+		if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
 		{
 			cdns.push("<td valign=\"middle\">",
 				CadenaBotoPolsable("getcov"+i_capa, "getcov", GetMessage("Download").toLowerCase(), "MostraFinestraDownload("+i_capa+")", 14),

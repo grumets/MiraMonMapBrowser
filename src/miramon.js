@@ -954,6 +954,8 @@ function CanviaIdioma(s)
 		CreaConsultesTipiques();
 	}
 	CreaBarra(null);
+	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		ReOmpleSlider(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista);
 	CreaCoordenades();
 
 	for (var i=0; i<layerFinestraList.length; i++)

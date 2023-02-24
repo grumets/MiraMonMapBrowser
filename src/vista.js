@@ -2002,6 +2002,96 @@ function CancellaTimeOutCapaVista(nom_vista, i_crea_vista)
 	timeOutCapaVista[nom_vista+"_"+i_crea_vista]=null;
 }
 
+
+function OmpleSlider(vista)
+{
+var barra_slider=[];
+
+	if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) &&
+		vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
+	{
+		barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+		if (ParamCtrl.VistaBotonsBruixola && (parseInt(document.getElementById("vista").style.height) >= 300))
+		{
+			barra_slider.push("<tr><td align='center'>");
+			barra_slider.push(CadenaBotoPolsable('boto_nw', 'nw', GetMessage("moveNorthWest", "miramon"), 'MouLaVistaEventDeSalt(event,-1,1)'));
+			barra_slider.push(CadenaBotoPolsable("boto_n", "n", GetMessage("moveNorth", "miramon"), "MouLaVistaEventDeSalt(event,0,1)"));
+			barra_slider.push(CadenaBotoPolsable("boto_ne", "ne", GetMessage("moveNorthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,1)"));
+			barra_slider.push("<br/>");
+			barra_slider.push(CadenaBotoPolsable("boto_w", "w", GetMessage("moveWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,0)"));
+			barra_slider.push(CadenaBotoPolsable("boto_zoomall", "zoomall", GetMessage("generalView", "barra"), "PortamAVistaGeneralEvent(event)"));
+			barra_slider.push(CadenaBotoPolsable("boto_e", "e", GetMessage("moveEast", "miramon"), "MouLaVistaEventDeSalt(event,1,0)"));
+			barra_slider.push("<br/>");
+			barra_slider.push(CadenaBotoPolsable("boto_sw", "sw", GetMessage("moveSouthWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,-1)"));
+			barra_slider.push(CadenaBotoPolsable("boto_s", "s", GetMessage("moveSouth", "miramon"), "MouLaVistaEventDeSalt(event,0,-1)"));
+			barra_slider.push(CadenaBotoPolsable("boto_se", "se", GetMessage("moveSouthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,-1)"));
+			barra_slider.push("</td></tr><tr><td height='15px'></td></tr>");
+		}
+		barra_slider.push("<tr><td align='center'>");
+		if (ParamCtrl.VistaBotonsZoom)
+		{
+			barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", GetMessage("IncreaseZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
+			barra_slider.push("<br>");
+		}
+		if (ParamCtrl.VistaSliderZoom && (parseInt(document.getElementById("vista").style.height) >= 500))
+		{
+			barra_slider.push("<input id='zoomSlider' type='range' step='1' min='0' max='", (ParamCtrl.zoom.length-1), "' value='", DonaIndexNivellZoom(vista.CostatZoomActual), "' style=';' orient='vertical' onchange='PortamANivellDeZoomEvent(event, this.value);' onclick='dontPropagateEvent(event);'><br>");
+		}
+		if (ParamCtrl.VistaBotonsZoom)
+		{
+			barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", GetMessage("ReduceZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
+		}
+		barra_slider.push("</td></tr>");
+		if (ParamCtrl.VistaEscalaNumerica && (parseInt(document.getElementById("vista").style.height,10) >= 400))
+		{
+			barra_slider.push("<tr><td align='center'><span class=\"text_allus text_coord\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", GetMessage("TitolLlistatNivellZoom", "miramon"), ":<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
+			barra_slider.push("<br>");
+			barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", GetMessage("goToCoordinate", "barra"), "MostraFinestraAnarCoordenadaEvent(event)"));
+			barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", GetMessage("previousView", "barra"), "RecuperaVistaPreviaEvent(event)"));
+			if (ParamCtrl.fullScreen)
+				barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "exitfullscreen", GetMessage("exitFullScreen", "miramon"), "ExitFullScreenEvent(event)"));
+			else
+				barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "fullscreen", GetMessage("fullScreen", "miramon"), "GoFullScreenEvent(event)"));
+
+			barra_slider.push("</td></tr>");
+		}
+		barra_slider.push("</table>");
+	}
+
+	if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length &&
+		vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
+	{
+		barra_slider.push("<span style='position: absolute; bottom: 20px; right: 100px; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",  DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
+				"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
+				"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
+				"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
+		if (ParamInternCtrl.millisegons.length<300/2)
+		{
+			barra_slider.push("<datalist id='timeticks'>");
+			for (var i=0; i<ParamInternCtrl.millisegons.length; i++)
+				barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
+			barra_slider.push("</datalist>");
+		}
+		barra_slider.push("</span>");
+	}
+
+	barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",
+		DonaCadenaBotonsVistaLlegendaSituacioCoord(),
+		"</span>");
+		
+	return barra_slider.join("");	
+}
+
+function ReOmpleSlider(nom_vista, vista)
+{
+	var elem=getLayer(window, nom_vista+SufixSliderZoom);
+	if(elem)
+	{
+		var cadena_barra_slider=OmpleSlider(vista); // Creem sempre l'element que conté la barra de l'slider per poder canviar el seu interior
+		contentLayer(elem, cadena_barra_slider);
+	}
+}
+
 function CreaVistaImmediata(win, nom_vista, vista)
 {
 var cdns=[], ll;
@@ -2269,7 +2359,7 @@ var p, unitats_CRS;
 			}
 		}
 
-		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressión tingui events.
+		if (vista.i_nova_vista!=NovaVistaImprimir)  //Evito que la impressió tingui events.
 		{
 			//Dibuixo el rectangle de zoom sobre la vista (inicialment invisible)
 			cdns.push(textHTMLLayer(nom_vista+SufixZRectangle, DonaMargeEsquerraVista(vista.i_nova_vista), DonaMargeSuperiorVista(vista.i_nova_vista), vista.ncol+1, vista.nfil+1, null, {scroll: "no", visible: false, border: "1px solid " + ParamCtrl.ColorQuadratSituacio, ev: null, save_content: false}, null, null));
@@ -2277,80 +2367,8 @@ var p, unitats_CRS;
 			//Dibuixo el "tel" transparent amb els events de moure i click. Sembla que si tinc slider aquests esdeveniments no es fan servir i els altres tenen prioritat
 			cdns.push(textHTMLLayer(nom_vista+SufixTelTrans, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, "<!-- -->"));
 
-		    var barra_slider=[];
-		    if (( ParamCtrl.VistaBotonsBruixola || ParamCtrl.VistaBotonsZoom || ParamCtrl.VistaSliderZoom || ParamCtrl.VistaEscalaNumerica) &&
-			vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
-		    {
-				barra_slider.push("<table class=\"", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-				if (ParamCtrl.VistaBotonsBruixola && (parseInt(document.getElementById("vista").style.height) >= 300))
-				{
-					barra_slider.push("<tr><td align='center'>");
-					barra_slider.push(CadenaBotoPolsable('boto_nw', 'nw', GetMessage("moveNorthWest", "miramon"), 'MouLaVistaEventDeSalt(event,-1,1)'));
-					barra_slider.push(CadenaBotoPolsable("boto_n", "n", GetMessage("moveNorth", "miramon"), "MouLaVistaEventDeSalt(event,0,1)"));
-					barra_slider.push(CadenaBotoPolsable("boto_ne", "ne", GetMessage("moveNorthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,1)"));
-					barra_slider.push("<br/>");
-					barra_slider.push(CadenaBotoPolsable("boto_w", "w", GetMessage("moveWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,0)"));
-					barra_slider.push(CadenaBotoPolsable("boto_zoomall", "zoomall", GetMessage("generalView", "barra"), "PortamAVistaGeneralEvent(event)"));
-					barra_slider.push(CadenaBotoPolsable("boto_e", "e", GetMessage("moveEast", "miramon"), "MouLaVistaEventDeSalt(event,1,0)"));
-					barra_slider.push("<br/>");
-					barra_slider.push(CadenaBotoPolsable("boto_sw", "sw", GetMessage("moveSouthWest", "miramon"), "MouLaVistaEventDeSalt(event,-1,-1)"));
-					barra_slider.push(CadenaBotoPolsable("boto_s", "s", GetMessage("moveSouth", "miramon"), "MouLaVistaEventDeSalt(event,0,-1)"));
-					barra_slider.push(CadenaBotoPolsable("boto_se", "se", GetMessage("moveSouthEast", "miramon"), "MouLaVistaEventDeSalt(event,1,-1)"));
-					barra_slider.push("</td></tr><tr><td height='15px'></td></tr>");
-				}
-				barra_slider.push("<tr><td align='center'>");
-				if (ParamCtrl.VistaBotonsZoom)
-				{
-					barra_slider.push(CadenaBotoPolsable("boto_zoom_in", "zoom_in", GetMessage("IncreaseZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)+1) + ")"));
-					barra_slider.push("<br>");
-				}
-				if (ParamCtrl.VistaSliderZoom && (parseInt(document.getElementById("vista").style.height) >= 500))
-				{
-					barra_slider.push("<input id='zoomSlider' type='range' step='1' min='0' max='", (ParamCtrl.zoom.length-1), "' value='", DonaIndexNivellZoom(vista.CostatZoomActual), "' style=';' orient='vertical' onchange='PortamANivellDeZoomEvent(event, this.value);' onclick='dontPropagateEvent(event);'><br>");
-				}
-				if (ParamCtrl.VistaBotonsZoom)
-				{
-					barra_slider.push(CadenaBotoPolsable("boto_zoom_out", "zoomout", GetMessage("ReduceZoomLevel", "miramon"), "PortamANivellDeZoomEvent(event, " + (DonaIndexNivellZoom(vista.CostatZoomActual)-1) + ")"));
-				}
-				barra_slider.push("</td></tr>");
-				if (ParamCtrl.VistaEscalaNumerica && (parseInt(document.getElementById("vista").style.height,10) >= 400))
-				{
-					barra_slider.push("<tr><td align='center'><span class=\"text_allus text_coord\" style='font-family: Verdana, Arial; font-size: 0.6em;'>", GetMessage("TitolLlistatNivellZoom", "miramon"), ":<br>", EscriuDescripcioNivellZoom(DonaIndexNivellZoom(vista.CostatZoomActual), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, true), "</span>");
-					barra_slider.push("<br>");
-					barra_slider.push(CadenaBotoPolsable("boto_zoomcoord", "zoomcoord", GetMessage("goToCoordinate", "barra"), "MostraFinestraAnarCoordenadaEvent(event)"));
-					barra_slider.push(CadenaBotoPolsable("boto_zoom_bk", "zoom_bk", GetMessage("previousView", "barra"), "RecuperaVistaPreviaEvent(event)"));
-					if (ParamCtrl.fullScreen)
-						barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "exitfullscreen", GetMessage("exitFullScreen", "miramon"), "ExitFullScreenEvent(event)"));
-					else
-						barra_slider.push(CadenaBotoPolsable("boto_fullscreen", "fullscreen", GetMessage("fullScreen", "miramon"), "GoFullScreenEvent(event)"));
-
-					barra_slider.push("</td></tr>");
-				}
-				barra_slider.push("</table>");
-		    }
-
-		    if (ParamCtrl.VistaSliderData && ParamInternCtrl.millisegons.length &&
-				vista.i_nova_vista==NovaVistaPrincipal && !ParamCtrl.hideLayersOverVista)
-		    {
-				barra_slider.push("<span style='position: absolute; bottom: 20px; right: 100px; font-family: Verdana, Arial; font-size: 0.6em;' class='text_allus ", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",  DonaDataMillisegonsComATextBreu(ParamInternCtrl.FlagsData, ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual]),
-						"<input type='button' value='<' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual ? ParamInternCtrl.iMillisegonsActual-1 : 0)], ");'", (ParamInternCtrl.iMillisegonsActual==0 ? " disabled='disabled'" : ""), ">",
-						"<input id='timeSlider' type='range' style='width: 300px;' step='1' min='", ParamInternCtrl.millisegons[0], "' max='", ParamInternCtrl.millisegons[ParamInternCtrl.millisegons.length-1], "' value='", ParamInternCtrl.millisegons[ParamInternCtrl.iMillisegonsActual], "' onchange='PortamADataEvent(event, this.value);' onclick='dontPropagateEvent(event);' list='timeticks'>",
-						"<input type='button' value='>' onClick='PortamADataEvent(event, ", ParamInternCtrl.millisegons[(ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? ParamInternCtrl.millisegons.length-1 : ParamInternCtrl.iMillisegonsActual+1)], ");'", (ParamInternCtrl.iMillisegonsActual==ParamInternCtrl.millisegons.length-1 ? " disabled='disabled'" : ""), ">");
-				if (ParamInternCtrl.millisegons.length<300/2)
-				{
-					barra_slider.push("<datalist id='timeticks'>");
-					for (var i=0; i<ParamInternCtrl.millisegons.length; i++)
-						barra_slider.push("<option value='", ParamInternCtrl.millisegons[i], "'></option>");
-					barra_slider.push("</datalist>");
-				}
-				barra_slider.push("</span>");
-		    }
-
-		    barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",
-				DonaCadenaBotonsVistaLlegendaSituacioCoord(),
-				"</span>");
-		    //if (barra_slider.length) Finalment la creo sempre per poder canviar el seu interior si cal.
-		    cdns.push(textHTMLLayer(nom_vista+SufixSliderZoom, DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, barra_slider.join("")));
+		    var cadena_barra_slider=OmpleSlider(vista); // Creem sempre l'element que conté la barra de l'slider per poder canviar el seu interior
+		    cdns.push(textHTMLLayer(nom_vista+SufixSliderZoom, DonaMargeEsquerraVista(vista.i_nova_vista)+4, DonaMargeSuperiorVista(vista.i_nova_vista)+4, vista.ncol-3, vista.nfil-3, null, {scroll: "no", visible: true, ev: (ParamCtrl.ZoomUnSolClic ? "onmousedown=\"IniciClickSobreVista(event, "+vista.i_nova_vista+");\" " : "") + "onmousemove=\"MovimentSobreVista(event, "+vista.i_nova_vista+");\" onClick=\"ClickSobreVista(event, "+vista.i_nova_vista+");\" onTouchStart=\"return IniciDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchMove=\"return MovimentDitsSobreVista(event, "+vista.i_nova_vista+");\" onTouchEnd=\"return FiDitsSobreVista(event, "+vista.i_nova_vista+");\"", save_content: false, bg_trans: true}, null, cadena_barra_slider));
 		}
 
 		contentLayer(elem, cdns.join(""));
