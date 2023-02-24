@@ -2832,7 +2832,7 @@ function makeHrefData(data)
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
 	if (jsonFile !== null)
-		window.URL.revokeObjectURL(jsonConfigFile);
+		window.URL.revokeObjectURL(jsonFile);
 
 	jsonFile = window.URL.createObjectURL(blobData);
 	return jsonFile;
