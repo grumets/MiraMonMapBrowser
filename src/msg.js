@@ -2573,12 +2573,33 @@ var MessageLang={
       "fre":"Géoméxtrie",
       "cze":"Geometrie"
    },
+   "ExportObject": {
+     "cat": "Exporta l'objecte",
+     "spa": "Exportar el objecto",
+     "eng": "Export object",
+     "fre": "Exporter l'objet",
+     "cze": "Objekt exportu"
+   },
+   "ExportObjects": {
+     "cat": "Exportar objectes",
+     "spa": "Exportar objectos",
+     "eng": "Export objects",
+     "fre": "Exporter les objets",
+     "cze": "Export objektů"
+   },
 	"VectorLayerValuesCopiedClipboardFormat": {
       "cat":"Els valors de la capa vectorial han estat copiats al portaretalls en format",
       "spa":"Los valores de la capa vectorial han sido copiados al portapapeles en formato",
       "eng":"The values of the vector layer have been copied to clipboard in the format",
       "fre":"Les valeurs de la couche vectorielle ont été copiées dans le presse-papiers au format",
       "cze":"Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu"
+    },
+  "exportedVectorObjects": {
+    "cat": "objectes_vectorials_exportats_",
+    "spa": "objetos_vectoriales_exportados",
+    "eng": "exported_vector_objects_",
+    "fre": "objets_vectoriels_exportes_",
+    "cze": "exportovane_vektorové_objekty_"
     }
   },
   "storymap": {
@@ -3227,6 +3248,13 @@ var MessageLang={
       "eng":"and try it again",
       "fre":"et réessayez",
       "cze": "a zkuste to znovu"
+    },
+    "vectorial": {
+      "cat": "vectorial",
+      "spa": "vectorial",
+      "eng": "vector",
+      "fre": "vecteur",
+      "cze": "vektor"
     }
   },
   "params": {
@@ -5327,14 +5355,14 @@ var MessageLang={
       "eng": "Cannot select request object because the layer doesn't exist",
       "fre": "Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas",
       "cze": "Nelze vybrat objekt požadavku, protože vrstva neexistuje"
-    }, 
+    },
     "ElementsVectorialTable": {
-      "cat":"Taula d'elements vectorials",
-      "spa":"Tabla de elementos vectoriales",
-      "eng":"Vectorial elements table",
-      "fre":"Tableau des éléments vectoriels",
-      "cze":"Tabulka vektorových prvků"
-    }
+      "cat": "Taula d'elements vectorials",
+      "spa": "Tabla de elementos vectoriales",
+      "eng": "Vectorial elements table",
+      "fre": "Tableau des éléments vectoriels",
+      "cze": "Tabulka vektorových prvků"
+    } 
   },
   "video": {
     "NoLayerAvailableForAnimation": {

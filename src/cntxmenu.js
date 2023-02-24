@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -4220,19 +4220,22 @@ function TextLimitsSliders(limitValue, esMinim)
 	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
 }
 /*
-	Mostra la capa vecotrial en format taula.
+	Mostra la capa vectorial en format taula.
  */
-
+const i_objectesAExportar = {};
+var i_capaATaula = null;
+/* Mostra la finestra flotant de la taula per representar la capa vectorial */
 function ObreFinestraTaulaDeCapaVectorial(i_capa)
 {
 var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectorialTable", "vector"));
 
 	if (!elem)
 		return;
+	i_capaATaula=i_capa;
 	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
-
+/* Crea l'HTML per a construir la taula d'elements vectorials */
 function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
@@ -4280,6 +4283,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
 		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
 		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
+		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
 		"</div><hr>");
 
 		// Porta papers capa info
@@ -4305,24 +4309,27 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			// Porta papers
 			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
 		}
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
 		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
 		cdnsHtml.push("</tr>");
 		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
+			const objecteARepresentar = objectes[i];
 			cdnsHtml.push("<tr class='vectorial'>");
 			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
-				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objectes[i].properties[atributsVisibles[j].nom], "</td>");
+				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objecteARepresentar.properties[atributsVisibles[j].nom], "</td>");
 				// Porta papers
-				cdnsPortapapers.push(objectes[i].properties[atributsVisibles[j].nom], "\t");
+				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
 			}
 			if (ambGeometria)
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objectes[i].geometry.coordinates.toString(), "</td>");
+				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objecteARepresentar.geometry.coordinates.toString(), "</td>");
 				// Porta papers
-				cdnsPortapapers.push(objectes[i].geometry.coordinates.toString(), "\t");
+				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 			}
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objectes[i].geometry.coordinates[0], " ,",  objectes[i].geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
 			// Porta papers
 			cdnsPortapapers.push("\n");
 		}
@@ -4332,6 +4339,13 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
 	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
 	return cdnsHtml.join("");
+}
+/* Determina quins elements vectorials s'inclouran en l'exportaci� */
+function ActualitzaIndexObjectesExportar(checkbox)
+{
+	const indexATreballar = checkbox.value.toString();
+	// És un diccionari d'índexos on cada element és a la vegada el mateix índex.
+	checkbox.checked ? (i_objectesAExportar[indexATreballar]=indexATreballar) : (delete i_objectesAExportar[indexATreballar]);
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4343,6 +4357,7 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 // Funció que es crida al tancar la vista amb taula d'elements i elimina la creu punter de l'objecte localitzat.
 function TancaFinestra_taulaCapaVectorial()
 {
+	i_capaATaula=null;
 	TancaFinestra_anarCoord();
 }
 
@@ -4350,4 +4365,37 @@ function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
 	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
 	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
+}
+
+function ExportarObjectesGeoJSON(i_capa)
+{
+const capa = ParamCtrl.capa[i_capa];
+// Valors mínims/màxims 
+const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
+const capaExportar = {"type": "FeatureCollection", "features": []};
+	Object.keys(i_objectesAExportar).forEach(key => {
+		const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
+		// Definir l'àmbit global dels elements exportats
+		if (objAExportar.bbox && objAExportar.bbox.length==4)
+		{
+			const iteradorIndex = objAExportar.bbox.keys();
+			for (var index of iteradorIndex)
+			{
+				// Coord del bbox Mínima
+				if (index < 2)
+				{
+					if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+				else // Coord del bbox Màxima
+				{
+					if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+			}
+			capaExportar.bbox = bboxObjectesAExportar;
+		}
+		capaExportar.features.push(objAExportar);
+	});
+	return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
 }
