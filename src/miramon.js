@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -954,6 +954,8 @@ function CanviaIdioma(s)
 		CreaConsultesTipiques();
 	}
 	CreaBarra(null);
+	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		ReOmpleSlider(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista);
 	CreaCoordenades();
 
 	for (var i=0; i<layerFinestraList.length; i++)
