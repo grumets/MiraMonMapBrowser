@@ -317,24 +317,24 @@ function DonaOrigenEsquerraVista(elem, i_nova_vista)
 
 function DonaCoordSobreVistaDeCoordX(elem, x)
 {
-	return (x-ParamInternCtrl.vista.EnvActual.MinX)/(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)*(ParamInternCtrl.vista.ncol)-((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0) + DonaOrigenEsquerraVista(elem, -1);
+	return (x-ParamInternCtrl.vista.EnvActual.MinX)/(ParamInternCtrl.vista.EnvActual.MaxX-ParamInternCtrl.vista.EnvActual.MinX)*ParamInternCtrl.vista.ncol-((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0) + DonaOrigenEsquerraVista(elem, -1);
 }
 
 function DonaCoordSobreVistaDeCoordY(elem, y)
 {
-	return (ParamInternCtrl.vista.EnvActual.MaxY-y)/(ParamInternCtrl.vista.EnvActual.MaxY-ParamInternCtrl.vista.EnvActual.MinY)*(ParamInternCtrl.vista.nfil)-((window.document.body.scrollTop) ? window.document.body.scrollTop : 0) + DonaOrigenSuperiorVista(elem, -1);
+	return (ParamInternCtrl.vista.EnvActual.MaxY-y)/(ParamInternCtrl.vista.EnvActual.MaxY-ParamInternCtrl.vista.EnvActual.MinY)*ParamInternCtrl.vista.nfil-((window.document.body.scrollTop) ? window.document.body.scrollTop : 0) + DonaOrigenSuperiorVista(elem, -1);
 }
 
 function DonaCoordXDeCoordSobreVista(elem, i_nova_vista, x)
 {
 	var vista=DonaVistaDesDeINovaVista(i_nova_vista);
-	return vista.EnvActual.MinX+(vista.EnvActual.MaxX-vista.EnvActual.MinX)/(vista.ncol)*(((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+x-DonaOrigenEsquerraVista(elem, i_nova_vista));
+	return vista.EnvActual.MinX+(vista.EnvActual.MaxX-vista.EnvActual.MinX)/vista.ncol*(((window.document.body.scrollLeft) ? window.document.body.scrollLeft : 0)+x-DonaOrigenEsquerraVista(elem, i_nova_vista));
 }
 
 function DonaCoordYDeCoordSobreVista(elem, i_nova_vista, y)
 {
 	var vista=DonaVistaDesDeINovaVista(i_nova_vista);
-	return vista.EnvActual.MaxY-(vista.EnvActual.MaxY-vista.EnvActual.MinY)/(vista.nfil)*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-DonaOrigenSuperiorVista(elem, i_nova_vista));
+	return vista.EnvActual.MaxY-(vista.EnvActual.MaxY-vista.EnvActual.MinY)/vista.nfil*(((window.document.body.scrollTop) ? window.document.body.scrollTop : 0)+y-DonaOrigenSuperiorVista(elem, i_nova_vista));
 }
 
 function DonaCoordIDeCoordSobreVista(elem, i_nova_vista, x)

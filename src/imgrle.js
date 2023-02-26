@@ -561,12 +561,72 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 	return v_c;
 }
 
+function DonaBytesDataType(datatype)
+{
+	if (!datatype || datatype=="int8" || datatype=="uint8")
+		return 1;
+	if (datatype=="int16" || datatype=="uint16")
+		return 2;
+	if (datatype=="int32" || datatype=="uint32" || datatype=="float32")
+		return 4;
+	if (datatype=="float64")
+		return 8;
+	return 1;
+}
+
+function DonaFuncioDonaNumeroDataView(dv, datatype)
+{
+	if (!datatype)
+		return dv.getUint8;	
+	if (datatype=="int8")
+		return dv.getInt8;
+	if (datatype=="uint8")
+		return dv.getUint8;
+	if (datatype=="int16")
+		return dv.getInt16;
+	if (datatype=="uint16")
+		return dv.getUint16;
+	if (datatype=="int32")
+		return dv.getInt32;
+	if (datatype=="uint32")
+		return dv.getUint32;
+	if (datatype=="float32")
+		return dv.getFloat32;
+	if (datatype=="float64")
+		return dv.getFloat64;
+	return dv.getUint8;
+}
+
+function DonaFuncioPosaNumeroDataView(dv, datatype)
+{
+	if (!datatype)
+		return dv.setUint8;	
+	if (datatype=="int8")
+		return dv.setInt8;
+	if (datatype=="uint8")
+		return dv.setUint8;
+	if (datatype=="int16")
+		return dv.setInt16;
+	if (datatype=="uint16")
+		return dv.setUint16;
+	if (datatype=="int32")
+		return dv.setInt32;
+	if (datatype=="uint32")
+		return dv.setUint32;
+	if (datatype=="float32")
+		return dv.setFloat32;
+	if (datatype=="float64")
+		return dv.setFloat64;
+	return dv.setUint8;
+}
 
 var littleEndian = true;  //Constant
 
 function DonaValorBandaDeDadesBinariesCapa(dv, compression, datatype, ncol, i_col, i_fil)
 {
-var j, i, comptador, acumulat, i_byte=0;
+var j, i, comptador, acumulat, i_byte=0, bytesDadaType=DonaBytesDataType(datatype);
+
+	dv.donaNumero=DonaFuncioDonaNumeroDataView(dv, datatype);
 
 	//Aquesta funció es podria millorar verificant i el que retorna el servidor és un RLE indexat. De moment no ho faig.
 	if (compression && compression=="RLE")
@@ -588,39 +648,12 @@ var j, i, comptador, acumulat, i_byte=0;
 					{
 						//Ara toca llegir el valor
 						i=comptador-acumulat+i_col;
-						if (!datatype)
-							return dv.getUint8(i_byte+i, littleEndian);
-						if (datatype=="int8")
-							return dv.getInt8(i_byte+i, littleEndian);
-						if (datatype=="uint8")
-							return dv.getUint8(i_byte+i, littleEndian);
-						if (datatype=="int16")
-							return dv.getInt16(i_byte+i*2, littleEndian);
-						if (datatype=="uint16")
-							return dv.getUint16(i_byte+i*2, littleEndian);
-						if (datatype=="int32")
-							return dv.getInt32(i_byte+i*4, littleEndian);
-						if (datatype=="uint32")
-							return dv.getUint32(i_byte+i*4, littleEndian);
-						if (datatype=="float32")
-							return dv.getFloat32(i_byte+i*4, littleEndian);
-						if (datatype=="float64")
-							return dv.getFloat64(i_byte+i*8, littleEndian);
-						return dv.getUint8(i_byte+i_col, littleEndian);
+						return dv.donaNumero(i_byte+i*bytesDadaType, littleEndian);
 					}
 					else
 					{
 						//Toca saltar.
-						if (!datatype || datatype=="int8" || datatype=="uint8")
-							i_byte+=comptador;
-						else if (datatype=="int16" || datatype=="uint16")
-							i_byte+=2*comptador;
-						else if (datatype=="int32" || datatype=="uint32" || datatype=="float32")
-							i_byte+=4*comptador;
-						else if (datatype=="float64")
-							i_byte+=8*comptador;
-						else
-							i_byte+=comptador;
+						i_byte+=bytesDadaType*comptador;
 					}
 				}
 				else
@@ -629,63 +662,18 @@ var j, i, comptador, acumulat, i_byte=0;
 
 					if (j==i_fil && i_col<acumulat)
 					{
-						if (!datatype)
-							return dv.getUint8(i_byte, littleEndian);
-						if (datatype=="int8")
-							return dv.getInt8(i_byte, littleEndian);
-						if (datatype=="uint8")
-							return dv.getUint8(i_byte, littleEndian);
-						if (datatype=="int16")
-							return dv.getInt16(i_byte, littleEndian);
-						if (datatype=="uint16")
-							return dv.getUint16(i_byte, littleEndian);
-						if (datatype=="int32")
-							return dv.getInt32(i_byte, littleEndian);
-						if (datatype=="uint32")
-							return dv.getUint32(i_byte, littleEndian);
-						if (datatype=="float32")
-							return dv.getFloat32(i_byte, littleEndian);
-						if (datatype=="float64")
-							return dv.getFloat64(i_byte, littleEndian);
-						return dv.getUint8(i_byte, littleEndian);
+						return dv.donaNumero(i_byte, littleEndian);
 					}
 					else
 					{
-						if (!datatype || datatype=="int8" || datatype=="uint8")
-							i_byte++;
-						else if (datatype=="int16" || datatype=="uint16")
-							i_byte+=2;
-						else if (datatype=="int32" || datatype=="uint32" || datatype=="float32")
-							i_byte+=4;
-						else if (datatype=="float64")
-							i_byte+=8;
-						else
-							i_byte++;
+						i_byte+=bytesDadaType;
 					}
                			}
 			}
 		}
 		return 0; //No s'hauria de sortir mai per aquí
 	}
-	if (!datatype)
-		return dv.getUint8(i_fil*vista.ncol+i_col, littleEndian);
-	if (datatype=="int8")
-		return dv.getInt8(i_fil*ncol+i_col, littleEndian);
-	if (datatype=="uint8")
-		return dv.getUint8(i_fil*ncol+i_col, littleEndian);
-	if (datatype=="int16")
-		return dv.getInt16((i_fil*ncol+i_col)*2, littleEndian);
-	if (datatype=="uint16")
-		return dv.getUint16((i_fil*ncol+i_col)*2, littleEndian);
-	if (datatype=="int32")
-		return dv.getInt32((i_fil*ncol+i_col)*4, littleEndian);
-	if (datatype=="uint32")
-		return dv.getUint32((i_fil*ncol+i_col)*4, littleEndian);
-	if (datatype=="float32")
-		return dv.getFloat32((i_fil*ncol+i_col)*4, littleEndian);
-	if (datatype=="float64")
-		return dv.getFloat64((i_fil*ncol+i_col)*8, littleEndian);
-	return dv.getUint8(i_fil*ncol+i_col, littleEndian);
+	return dv.donaNumero((i_fil*ncol+i_col)*bytesDadaType, littleEndian);
 }
 
 function ErrorImatgeBinariaCapaCallback(text, extra_param)
@@ -1157,7 +1145,7 @@ var valor0, v, i_v, i, i_nodata, nodata, n_v=valors.length;
 //No suporta combinacions RGB
 function CalculaFilaDesDeBinaryArrays(fila_calc, i_data_video, histograma, dv, valors, ncol, i_byte, i_cell, component0)
 {
-var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, comptador, i_col=0, n_v=valors.length;
+var v=[], i_v, dv_i, bytesDadaType_i, valors_i, valor0, i_nodata, nodata, i, acumulat, comptador, i_col=0, n_v=valors.length;
 
 	for (i_v=0;i_v<n_v;i_v++)
 	{
@@ -1166,7 +1154,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 		dv_i=dv[i_v];
 		valors_i=valors[i_v];
 		nodata=valors_i.nodata;
-		dtype=valors_i.datatype
+		dv_i.donaNumero_i=DonaFuncioDonaNumeroDataView(dv_i, valors_i.datatype);
+		bytesDadaType_i=DonaBytesDataType(valors_i.datatype);
 		if (valors_i.compression && valors_i.compression=="RLE")
 		{
 			i=0;
@@ -1182,26 +1171,9 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 					acumulat += comptador;
 
 					for ( ; i<acumulat; i++)
-								{
-						if (!dtype)
-							{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-						else if (dtype=="int8")
-							{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-						else if (dtype=="uint8")
-							{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-						else if (dtype=="int16")
-							{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-						else if (dtype=="uint16")
-							{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-						else if (dtype=="int32")
-							{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-						else if (dtype=="uint32")
-							{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-						else if (dtype=="float32")
-							{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-						else if (dtype=="float64")
-							{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-
+					{
+						v[i_v]=dv_i.donaNumero_i(i_byte[i_v], littleEndian); 
+						i_byte[i_v]+=bytesDadaType_i;
 						i_nodata=-1;
 						if (nodata)
 							i_nodata=nodata.indexOf(v[i_v]);
@@ -1243,25 +1215,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 				else
 				{
 					acumulat += comptador;
-					if (!dtype)
-						{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-					else if (dtype=="int8")
-						{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-					else if (dtype=="uint8")
-						{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-					else if (dtype=="int16")
-						{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-					else if (dtype=="uint16")
-						{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-					else if (dtype=="int32")
-						{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-					else if (dtype=="uint32")
-						{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-					else if (dtype=="float32")
-						{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-					else if (dtype=="float64")
-						{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-
+					v[i_v]=dv_i.donaNumero_i(i_byte[i_v], littleEndian); 
+					i_byte[i_v]+=bytesDadaType_i;
 					i_nodata=-1;
 					if (nodata)
 						i_nodata=nodata.indexOf(v[i_v]);
@@ -1316,26 +1271,8 @@ var v=[], i_v, dv_i, valors_i, valor0, i_nodata, nodata, dtype, i, acumulat, com
 		{
 			for (i=0;i<ncol;i++)
 			{
-				if (!dtype)
-					v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-				else if (dtype=="int8")
-					v[i_v]=dv_i.getInt8(i_cell[i_v], littleEndian);
-				else if (dtype=="uint8")
-					v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-				else if (dtype=="int16")
-					v[i_v]=dv_i.getInt16(i_cell[i_v]*2, littleEndian);
-				else if (dtype=="uint16")
-					v[i_v]=dv_i.getUint16(i_cell[i_v]*2, littleEndian);
-				else if (dtype=="int32")
-					v[i_v]=dv_i.getInt32(i_cell[i_v]*4, littleEndian);
-				else if (dtype=="uint32")
-					v[i_v]=dv_i.getUint32(i_cell[i_v]*4, littleEndian);
-				else if (dtype=="float32")
-					v[i_v]=dv_i.getFloat32(i_cell[i_v]*4, littleEndian);
-				else if (dtype=="float64")
-					v[i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
+				v[i_v]=dv_i.donaNumero_i(i_cell[i_v]*bytesDadaType_i, littleEndian); 
 				i_cell[i_v]++;
-
 				i_nodata=-1;
 				if (nodata)
 					i_nodata=nodata.indexOf(v[i_v]);
@@ -1572,7 +1509,7 @@ function ConstrueixImatgeCanvas(data, histograma, ncol, nfil, dv, mes_duna_v, co
 {
 var i_cell=[], i_byte=[], j, i, CalculaFilaDesDeBinaryArraydv_i, i_c, valor0, valor1, i_color=[], i_color0, i_color1, a=[], a0, a1, valor_min=[], valor_min0, valor_min1, comptador, acumulat, bigint, fila=[], i_nodata, i_ndt, classe0, classe1;
 var histo_component0, component0, component1, n_v=valors.length, dv_i, v=[];
-var colors, ncolors, valors_i, nodata, dtype, una_component;
+var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 
 	for (var i_v=0; i_v<n_v; i_v++)
 	{
@@ -2012,7 +1949,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				dv_i=dv[i_v];
 				valors_i=valors[i_v];
 				nodata=valors_i.nodata;
-				dtype=valors_i.datatype
+				dv_i.donaNumero_i=DonaFuncioDonaNumeroDataView(dv_i, valors_i.datatype);
+				bytesDadaType_i=DonaBytesDataType(valors_i.datatype);
 				if (valors_i.compression && valors_i.compression=="RLE")
 				{
 					i=0;
@@ -2029,25 +1967,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 
 							for ( ; i<acumulat; i++)
                 		    			{
-								if (!dtype)
-									{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-								else if (dtype=="int8")
-									{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-								else if (dtype=="uint8")
-									{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-								else if (dtype=="int16")
-									{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-								else if (dtype=="uint16")
-									{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-								else if (dtype=="int32")
-									{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-								else if (dtype=="uint32")
-									{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-								else if (dtype=="float32")
-									{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-								else if (dtype=="float64")
-									{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-
+								v[i_v]=dv_i.donaNumero_i(i_byte[i_v], littleEndian);
+								i_byte[i_v]+=bytesDadaType_i;
 								i_nodata=-1;
 								if (nodata)
 									i_nodata=nodata.indexOf(v[i_v]);
@@ -2145,25 +2066,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 						else
 						{
 							acumulat += comptador;
-							if (!dtype)
-								{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-							else if (dtype=="int8")
-								{ v[i_v]=dv_i.getInt8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-							else if (dtype=="uint8")
-								{ v[i_v]=dv_i.getUint8(i_byte[i_v], littleEndian); i_byte[i_v]++; }
-							else if (dtype=="int16")
-								{ v[i_v]=dv_i.getInt16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-							else if (dtype=="uint16")
-								{ v[i_v]=dv_i.getUint16(i_byte[i_v], littleEndian); i_byte[i_v]+=2; }
-							else if (dtype=="int32")
-								{ v[i_v]=dv_i.getInt32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-							else if (dtype=="uint32")
-								{ v[i_v]=dv_i.getUint32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-							else if (dtype=="float32")
-								{ v[i_v]=dv_i.getFloat32(i_byte[i_v], littleEndian); i_byte[i_v]+=4; }
-							else if (dtype=="float64")
-								{ v[i_v]=dv_i.getFloat64(i_byte[i_v], littleEndian); i_byte[i_v]+=8; }
-
+							v[i_v]=dv_i.donaNumero_i(i_byte[i_v], littleEndian);
+							i_byte[i_v]+=bytesDadaType_i; 
 							i_nodata=-1;
 							if (nodata)
 								i_nodata=nodata.indexOf(v[i_v]);
@@ -2270,26 +2174,8 @@ var colors, ncolors, valors_i, nodata, dtype, una_component;
 				{
 					for (i=0;i<ncol;i++)
 					{
-						if (!dtype)
-							v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-						else if (dtype=="int8")
-							v[i_v]=dv_i.getInt8(i_cell[i_v], littleEndian);
-						else if (dtype=="uint8")
-							v[i_v]=dv_i.getUint8(i_cell[i_v], littleEndian);
-						else if (dtype=="int16")
-							v[i_v]=dv_i.getInt16(i_cell[i_v]*2, littleEndian);
-						else if (dtype=="uint16")
-							v[i_v]=dv_i.getUint16(i_cell[i_v]*2, littleEndian);
-						else if (dtype=="int32")
-							v[i_v]=dv_i.getInt32(i_cell[i_v]*4, littleEndian);
-						else if (dtype=="uint32")
-							v[i_v]=dv_i.getUint32(i_cell[i_v]*4, littleEndian);
-						else if (dtype=="float32")
-							v[i_v]=dv_i.getFloat32(i_cell[i_v]*4, littleEndian);
-						else if (dtype=="float64")
-							v[i_v]=dv_i.getFloat64(i_cell[i_v]*8, littleEndian);
+						v[i_v]=dv_i.donaNumero_i(i_cell[i_v]*bytesDadaType_i, littleEndian);
 						i_cell[i_v]++;
-
 						i_nodata=-1;
 						if (nodata)
 							i_nodata=nodata.indexOf(v[i_v]);

@@ -2677,7 +2677,8 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 
 function EsCapaDisponibleEnElCRSActual(capa)
 {
-	if (capa.CRS)
+	if (capa.CRS &&
+		!(capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus)))
 	{
 		for (var i=0; i<capa.CRS.length; i++)
 		{

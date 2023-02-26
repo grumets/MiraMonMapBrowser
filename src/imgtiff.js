@@ -219,11 +219,69 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
 {
 var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, vista);
+var capa2=ParamCtrl.capa[i_capa2];
+var bbox, width, height, dades, env_tiff;
 
-	var data = await tiff.readRasters({samples: [ParamCtrl.capa[i_capa2].valors[i_valor2].iBand ? ParamCtrl.capa[i_capa2].valors[i_valor2].iBand : 0], 
-					bbox: [vista.EnvActual.MinX, vista.EnvActual.MinY, vista.EnvActual.MaxX, vista.EnvActual.MaxY], 
-					width: vista.ncol, height: vista.nfil, 
-					fillValue: (ParamCtrl.capa[i_capa2].valors[i_valor2].nodata && ParamCtrl.capa[i_capa2].valors[i_valor2].nodata.length) ? ParamCtrl.capa[i_capa2].valors[i_valor2].nodata[0]: null 
+	if (!DonaCRSRepresentaQuasiIguals(capa2.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	{
+		//cal fer canvi de projecció;
+		//determino l'envolupant en el sistema del tiff
+		env_tiff=TransformaEnvolupant(vista.EnvActual, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa2.CRS[0]);
+		bbox=[env_tiff.MinX, env_tiff.MinY, env_tiff.MaxX, env_tiff.MaxY];
+		width=Math.floor(vista.ncol*1.1);
+		height=Math.floor(vista.nfil*1.1);
+	}
+	else
+	{
+		bbox=[vista.EnvActual.MinX, vista.EnvActual.MinY, vista.EnvActual.MaxX, vista.EnvActual.MaxY];
+		width=vista.ncol;
+		height=vista.nfil;
+	}
+
+	//Demano la imatge en el sistema propi del tiff
+	var data = await tiff.readRasters({samples: [capa2.valors[i_valor2].iBand ? capa2.valors[i_valor2].iBand : 0], 
+					bbox: bbox, 
+					width: width, height: height, 
+					fillValue: (capa2.valors[i_valor2].nodata && capa2.valors[i_valor2].nodata.length) ? capa2.valors[i_valor2].nodata[0]: null 
 					/*, resampleMethod: 'bilinear'*/});
-	return {dades: data[0].buffer, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
+
+	if (!DonaCRSRepresentaQuasiIguals(capa2.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	{
+		//canvio la imatge al sistema nou
+		var dv_tiff=new DataView(data[0].buffer);
+
+		//Demano un buffer
+		var bytesDataType=DonaBytesDataType(capa2.valors[i_valor2].datatype);
+		var dades=new ArrayBuffer(vista.ncol*vista.nfil*bytesDataType);
+		var dv_out=new DataView(dades);
+		var punt={}, y, i_fil, i_col;
+
+		dv_out.posaNumero=DonaFuncioPosaNumeroDataView(dv_out, capa2.valors[i_valor2].datatype);
+
+		//Recorro el buffer de sortida (amb i_col i i_fil)
+		for (i_fil=0; i_fil<vista.nfil; i_fil++)
+		{
+			y=vista.EnvActual.MaxY-(vista.EnvActual.MaxY-vista.EnvActual.MinY)*i_fil/vista.nfil;
+			for (i_col=0; i_col<vista.ncol; i_col++)
+			{
+				//Passo a coordenades mapa
+				punt.x=vista.EnvActual.MinX+(vista.EnvActual.MaxX-vista.EnvActual.MinX)*i_col/vista.ncol; 
+				punt.y=y;
+
+				TransformaCoordenadesPunt(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa2.CRS[0]);
+
+				//Llegeixo el valor a la posició que toca en el tiff (i_col_tiff, i_fil_tiff),
+				//Poso el valor on toca en el buffer de sortida.
+				dv_out.posaNumero((vista.ncol*i_fil+i_col)*bytesDataType, 
+						DonaValorBandaDeDadesBinariesCapa(dv_tiff, capa2.valors[i_valor2].compression, capa2.valors[i_valor2].datatype, width, 
+								Math.round((punt.x-env_tiff.MinX)/(env_tiff.MaxX-env_tiff.MinX)*width), 
+								Math.round((env_tiff.MaxY-punt.y)/(env_tiff.MaxY-env_tiff.MinY)*height)), 
+						littleEndian);
+			}
+		}
+	}
+	else
+		dades=data[0].buffer;
+
+	return {dades: dades, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
 }
