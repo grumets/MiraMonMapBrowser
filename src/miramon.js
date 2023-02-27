@@ -954,8 +954,10 @@ function CanviaIdioma(s)
 		CreaConsultesTipiques();
 	}
 	CreaBarra(null);
+	
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		ReOmpleSlider(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista);
+	
 	CreaCoordenades();
 
 	for (var i=0; i<layerFinestraList.length; i++)
@@ -4373,7 +4375,7 @@ var i_get_featureinfo;
 	i_get_featureinfo=DonaFormatFeatureInfoCapesWMS(servidorGC);
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
-		AfegeixCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+		AfegeixOModificaCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
 
 	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
 		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
@@ -4395,7 +4397,7 @@ var capa, n_capa_ini;
 			{
 				if (ParamCtrl.capesDeServei[i].servei.access)
 					RevokeLogin(ParamCtrl.capesDeServei[i].servei.access);
-				//Ara cal treure totes les capes que requreixen aquesta identificació
+				//Ara cal treure totes les capes que requereixen aquesta identificació
 				for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 				{
 					capa=ParamCtrl.capa[i_capa]
@@ -4415,12 +4417,12 @@ var capa, n_capa_ini;
 			return;  
 		}
 	}
-	CarregaArrayCapesDeServei(true, false);
+	CarregaArrayCapesDeServei(true, false, false);
 }
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capaDePunts: capesDeServei ? capesDeServei.capaDePunts : null});
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null});
 }
 
 function DonaCadenaPreguntarCarregaArrayCapesDeServei()
@@ -4429,8 +4431,8 @@ var cdns=[];
 
 	cdns.push(GetMessage("BrowserContainsLayersRequireLogin", "authens"), ".<br>",
 		GetMessage("DoYouWantToLogInNow", "authens"),
-		"<br><center><input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("OK"),"\" onClick='CarregaArrayCapesDeServei(false, true);TancaFinestraLayer(\"info\");'/> ",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Cancel"),"\" onClick='TancaFinestraLayer(\"info\");'/></center>");
+		"<br><center><input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("OK"),"\" onClick='CarregaArrayCapesDeServei(false, true, false);TancaFinestraLayer(\"info\");'/> ",
+		"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Cancel"),"\" onClick='CarregaArrayCapesDeServei(false, true, true);TancaFinestraLayer(\"info\");'/></center>");
 	return cdns.join("");
 }
 
@@ -4439,21 +4441,24 @@ function PreguntarCarregaArrayCapesDeServei()
 	IniciaFinestraInformacio(DonaCadenaPreguntarCarregaArrayCapesDeServei());
 }
 
-function CarregaArrayCapesDeServei(nomesOffline, preguntat)
+function CarregaArrayCapesDeServei(nomesOffline, preguntat, nomesSenseLogin)
 {
 	if (!ParamCtrl.capesDeServei || (nomesOffline && !ParamCtrl.accessClientId))
 		return;
 
 	var calfer=[], calferAlgun=false;
-	for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
+	if(!nomesSenseLogin)
 	{
-		calfer[i]=false;
-		if (ParamCtrl.capesDeServei[i].servei.access)
+		for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
 		{
-			var access=ParamCtrl.capesDeServei[i].servei.access;
-			if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || 
-				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="failed")
-				calferAlgun=calfer[i]=true;
+			calfer[i]=false;
+			if (ParamCtrl.capesDeServei[i].servei.access)
+			{
+				var access=ParamCtrl.capesDeServei[i].servei.access;
+				if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || 
+					ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="failed")
+					calferAlgun=calfer[i]=true;
+			}
 		}
 	}
 
@@ -4478,7 +4483,7 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat)
 		else
 		{
 			for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
-				if (calfer[i])
+				if (calfer[i] || !ParamCtrl.capesDeServei[i].servei.access)
 					CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
 		}
 	//}	
@@ -4551,7 +4556,7 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 
 	CompletaDefinicioCapes();
 
-	CarregaArrayCapesDeServei(false, false);
+	CarregaArrayCapesDeServei(false, false, false);
 
 	changeSizeLayers(window);
 	CarregaConsultesTipiques();

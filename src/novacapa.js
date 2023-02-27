@@ -40,6 +40,29 @@
 
 const OrigenUsuari="usuari";
 
+function AfegeixOModificaCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
+{
+	
+var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
+
+	// Si la capa ja existeix la modifico i sinó l'afegeixo
+	var nom_serv=DonaNomServidorSenseCaracterFinal(servidorGC.servidor).toLowerCase();
+	var tipus=DonaTipusServidorCapa(layer);
+	for(i_capa=0; i_capa<capa.length; i_capa++)
+	{
+		if (nom_serv==DonaServidorCapa(capa[i_capa]).toLowerCase() &&
+			capa[i_capa].nom==layer.nom && tipus==DonaTipusServidorCapa(capa[i_capa]))
+			break;
+	}
+	if(i_capa==capa.length)
+		return AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo);
+	
+	// Actualitzo l'array de dates
+	if(layer.data)
+		capa[i_capa].data=JSON.parse(JSON.stringify(layer.data));	
+	return;
+}
+
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
 var j, k, estils, estil, minim, maxim;
@@ -611,11 +634,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (image.getGeoKeys() && (image.getGeoKeys().ProjectedCSTypeGeoKey || image.getGeoKeys().GeographicTypeGeoKey))
 	{
+		/*NJ_27_02_2023: Trec aquesta protecció ja no cal ara que reprojectem el COG's
 		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
 		{
 			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
 			return;
-		}
+		}*/
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
 		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));

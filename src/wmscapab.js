@@ -42,6 +42,7 @@ var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
 //Suporta totes les versions de WMS
+// Si hi ha servidorGC.param_func_after.capa[].nom només es carregen les capes que hi ha a l'array.
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
 var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer={};
@@ -100,14 +101,31 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 
 	if(trobat || sistema_ref_comu)
 	{
+		var capa;
 		for(i=0; i<node_layer.childNodes.length; i++)
 		{
 			node2=node_layer.childNodes[i];
 			if(node2.nodeName=="Name")
 			{
 				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]=layer;
 				layer.nom=node2.childNodes[0].nodeValue;
+				//Si tinc un array de noms de capes a llegir, només la llegeixo si està a la llista.
+				if (servidorGC.param_func_after && servidorGC.param_func_after.capa)
+				{
+					capa=servidorGC.param_func_after.capa;
+					for(var i_capa=0; i_capa<capa.length; i_capa++)
+					{
+						if (capa[i_capa].nom==layer.nom)
+							break;
+					}
+					if (i_capa==servidorGC.param_func_after.capa.length)
+					{
+						// i=node_layer.childNodes.length;  //faig veure que no he trobat el nom: He recorregut tot l'array de nodes.  NJ-> JM no entenc perquè fas això, si ho fas no acabes de llegir els altres fills de la layer
+						break;
+					}
+				}
+				// Afegixo la capa en aquest punt on sé que té nom, i si hi ha una llista de capes és a la llista
+				servidorGC.layer[servidorGC.layer.length]=layer;
 				
 				if(pare) //hereto les coses del pare si s'ha de fer
 				{
@@ -142,7 +160,12 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 				node2=node_layer.childNodes[i];
 
 				if (node2.nodeName=="Title")
-					layer.desc=node2.childNodes[0].nodeValue;
+				{
+					if (servidorGC.param_func_after && servidorGC.param_func_after.capa && capa.desc)
+						layer.desc=capa.desc;
+					else
+						layer.desc=node2.childNodes[0].nodeValue;
+				}
 				else if(node2.nodeName=="Style")
 				{
 					node3=node2.getElementsByTagName('Name');
@@ -367,7 +390,6 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 				layer.consultable=true;
 		}
 	}
-
 	//Si aquesta layer té fills continuo llegint
 	node2=node_layer.getElementsByTagName('Layer');
 	if (node2 && node2.length)
@@ -400,7 +422,7 @@ function HiHaAlgunErrorDeParsejatGetCapabilities(doc)
 
 function ParsejaRespostaGetCapabilities(doc, servidorGC)
 {
-var root, cadena, node, node2, i, j
+var root, cadena, node, node2, i, j;
 
 	if(!doc)
 	{
@@ -836,8 +858,11 @@ var request;
 	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
 		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
 
-	request="REQUEST=GetCapabilities&VERSION="
-	request+=versio	? versio : "1.1.0";
+	request="REQUEST=GetCapabilities&VERSION=";
+	if(typeof versio==="object" && versio)
+		request+=DonaVersioComAText(versio);
+	else
+		request+=versio	? versio : "1.1.0";
 	request+="&SERVICE="
 	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
 		request+="WMS";

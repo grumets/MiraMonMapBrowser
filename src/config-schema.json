@@ -1131,12 +1131,30 @@
 							}
 						}
 					},
+					"capa": {
+						"description": "Array de capes del servidor a importar. Si les capes ja existeixen només se sobreescriu l'array de dates (serveix per tenir una llista de time sempre actualitzada). Opcional, si no hi és s'importen totes.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nom"],
+							"properties": {		
+								"nom": { 
+									"description": "Nom de la capa del servidor que cal importar.",
+									"type": "string"
+								},
+								"desc": { 
+									"description": "Descripció de la capa del servidor que s'aplicarà al importar i que sobreescriu a la de les capacitats del servidor.",
+									"type": "string"
+								}
+							}
+						}
+					},
 					"estilPerCapa": {
 						"description": "Estils a aplicar a les capes, en funció de les paraules clau o el nom de la capa (encara per definir)",
 						"type": "array"
 					},
 					"capaDePunts": {
-						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. L'array 'capa' anterior no influeix aquí i es mostren totes. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
 						"type": "object",
 						"properties": {									
 							"id": { 
