@@ -2546,6 +2546,20 @@ var MessageLang={
       "eng": "Action on the map",
       "fre": "Agir sur la carte",
       "cze": "Akce na mapě"
+    },
+    "NewStorymap": {
+      "cat": "Nou relat amb mapes",
+      "spa": "Nuevo relato con mapas",
+      "eng": "New storymaps",
+      "fre": "Nouvelle carte de l'histoire",
+      "cze": "Nové příběhové mapy"
+    },
+		"StorymapImage": {
+      "cat": "Imatge de storymaps",
+      "spa": "Imagen de storymap",
+      "eng": "Storymaps image",
+      "fre": "Image de storymaps",
+      "cze": "Obrázek příběhové mapy"
     }
   },
   "tresD": {

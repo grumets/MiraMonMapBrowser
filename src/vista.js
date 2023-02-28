@@ -287,6 +287,13 @@ function CentraLaVista(x,y)
     ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.vista.EnvActual.MinY+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual;
 }
 
+function ObtenirCentre()
+{
+	const centreX = ParamInternCtrl.vista.EnvActual.MinX + (ParamInternCtrl.vista.ncol)*ParamInternCtrl.vista.CostatZoomActual/2;
+	const centreY = ParamInternCtrl.vista.EnvActual.MinY + (ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual/2;
+	return {"x": centreX, "y": centreY};
+}
+
 var MidaFletxaInclinada=10;
 var MidaFletxaPlana=15;
 
