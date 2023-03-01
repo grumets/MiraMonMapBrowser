@@ -56,16 +56,14 @@ function TancaFinestra_triaStoryMap()
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], i_story;
-var ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap", "src": "propies/StoryMaps/afegir.svg", "url": ""};
+var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap", "src": "propies/StoryMaps/afegir.svg", "url": "", "isNew": true};
 
-	if (ParamCtrl.StoryMap === null)
+	if (ParamCtrl.StoryMap == null)
 	{
-		const aStories = [];
-		aStories.push(newStory);
-		ParamCtrl.StoryMap=aStories;
+		ParamCtrl.StoryMap = [];
+		ParamCtrl.StoryMap.push(newStory);
 	}
-	else if (ParamCtrl.StoryMap[ParamCtrl.StoryMap.length-1].url != "")
+	else if (ParamCtrl.StoryMap[ParamCtrl.StoryMap.length-1].isNew != true)
 	{
 		ParamCtrl.StoryMap.push(newStory);
 	}
@@ -82,16 +80,16 @@ var ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap"
 				"<br><table class=\"Verdana11px\">");
 
 	// Omplim totes les histories
-	i_story=0;
 	while (i_story<nstory)
 	{
+		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
 		cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"");
-		(i_story==nstory-1) ? cdns.push("TancaICreaStoryMap();\">") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");\">");
-		cdns.push("<img align='middle' src='",(ParamCtrl.StoryMap[i_real_story[i_story]].src) ? ParamCtrl.StoryMap[i_real_story[i_story]].src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
+		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();\">") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");\">");
+		cdns.push("<img align='middle' src='",(storyActual.src) ? storyActual.src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 			"<br>",
-			DonaCadena(ParamCtrl.StoryMap[i_real_story[i_story]].desc),
+			DonaCadena(storyActual.desc),
 			"</a><br></td>");
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
@@ -185,7 +183,15 @@ function SeguentPasStoryMap()
 
 function FinalitzarStoryMap()
 {
+	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>"];
+	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
+	for (let i_Story = 0, passosLength = novaStroyMap.passos.length; i_Story < passosLength; i_Story++) {
+		const pas = novaStoryMap[i_Story];
+		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
+	}
+	cdns.push("</html>");
 
+	
 }
 
 function GuardarInformacioInicialStoryMap()
@@ -200,7 +206,7 @@ function GuardarInformacioPasStoryMap()
 	if (novaStoryMap.passos == null)
 		novaStoryMap.passos = [];
 	const coordCentre = ObtenirCentre();
-	novaStoryMap.passos.push({"imatge": document.getElementById("stepImg" + comptadorPassos).src, "descripcio": tinymce.get("storyTextArea"+comptadorPassos).getContent(), "x": (coordCentre && coordCentre.x)? coordCentre.x : 0, "y": (coordCentre && coordCentre.y)? coordCentre.y : 0});
+	novaStoryMap.passos.push({"imatge": document.getElementById("stepImg" + comptadorPassos).src, "descripcio": tinymce.get("storyTextArea"+comptadorPassos).getContent(), "x": (coordCentre && coordCentre.x)? coordCentre.x : 0, "y": (coordCentre && coordCentre.y)? coordCentre.y : 0,  "zoom": ParamInternCtrl.vista.CostatZoomActual});
 	comptadorPassos++;
 }
 

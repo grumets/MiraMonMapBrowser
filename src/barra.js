@@ -508,7 +508,7 @@ var cdns=[];
 			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
 				GetMessage("InstallMiraMonReader", "barra"),
 				"InstalaLectorMapes();")));
-		if ((ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) || ParamCtrl.StoryMap === null)
+		if ((ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) || ParamCtrl.StoryMap == null)
 			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
