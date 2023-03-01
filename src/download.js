@@ -617,7 +617,7 @@ var cdns=[], missatge_mmz=false;
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 }
 
-function EsCapaDecarregableIndividualment(capa)
+function EsCapaDescarregableIndividualment(capa)
 {
 	if ((typeof capa.FormatCoverage!=="undefined" && capa.FormatCoverage!=null) ||  // Cal fer expressament diferent de null perquè si fem només fem capa.FormatCoverage, com que val 0 és false i no entra
 		 capa.DescarregaTot)
@@ -776,6 +776,13 @@ var cdns=[];
 	return;
 }
 
+function DibuixaDescarregaVector(i_capa)
+{
+const cdns=[];
+	cdns.push("<form name=\"botons_descarrega_vectorial\" onSubmit=\"GuardarCapaVectorialJSON(", i_capa,");return false;\"><center><input type=\"submit\" name=\"descarregaCapa\" id=\"descarregaCapa\" value=\"" + GetMessage("Download") + "\"></center></form>");
+	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
+}
+
 function OmpleFinestraDownload(i_capa)
 {
 var cdns=[], capa;
@@ -799,6 +806,8 @@ var cdns=[], capa;
 		DibuixaOpcionsWCS(i_capa);
 	else if (typeof capa.DescarregaTot!=="undefined" && capa.DescarregaTot!=null)
 		DibuixaTimeDescarregaTot(i_capa);
+	else if (capa.model==model_vector)
+		DibuixaDescarregaVector(i_capa);
 
 	return;
 }
@@ -808,4 +817,12 @@ function MostraFinestraDownload(i_capa)
 	if (!ObreFinestra(window, "download", GetMessage("ofDownloading", "download")))
 		return;
 	OmpleFinestraDownload(i_capa);
+}
+
+function GuardarCapaVectorialJSON(i_capa)
+{
+	const capa = ParamCtrl.capa[i_capa];
+	const dadesCapaExporta = {"type": capa.objectes.type, "bbox": capa.objectes.bbox, "features": capa.objectes.features};
+	const nomFitxer=GetMessage("layer")+"_"+GetMessage("vectorial", "download")+"_"+Date.now();
+	GuardaDadesJSONFitxerExtern(dadesCapaExporta, nomFitxer);
 }

@@ -501,7 +501,7 @@ var cdns=[];
 		cdns.push("\n");
 
 		if (ParamCtrl.BarraBotoPrint)
-			cdns.push((CadenaBotoPolsable("print", "print", GetMessage("Print"), "ObreTriaFullImprimir();")));
+			cdns.push((CadenaBotoPolsable("print", "print", GetMessage("print"), "ObreTriaFullImprimir();")));
 		if (ParamCtrl.BarraBotoPlanaPrincipal)
 			cdns.push((CadenaBotoPolsable("home", "home", GetMessage("RestartFromServer", "barra"), "RestartMiraMonMapBrowser();")));
 		if (ParamCtrl.BarraBotoInstallarMMZ)

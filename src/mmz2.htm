@@ -49,9 +49,9 @@
 
 <script>
 <!--
-document.write("<input name=\"obrir\" TYPE=\"submit\" VALUE=\""+parent.opener.DonaCadenaLang({"cat":"Generar i obrir directament", "spa":"Generar y abrir directamente", "eng":"Generate and directly open", "fre":"Créer et ouvrir directement"})+"\">"+
+document.write("<input name=\"obrir\" TYPE=\"submit\" VALUE=\""+parent.opener.GetMessage("GenerateDirectlyOpen", "download")+"\">"+
 		"</br>"+
-		"<input TYPE=\"button\" VALUE=\""+parent.opener.DonaCadenaLang({"cat":"Preparar i oferir", "spa":"Preparar y ofrecer", "eng":"Prepare and offer", "fre":"Préparer et télécharger"})+"\" onClick=\"parent.mmz1.RedibuixaMMZ(true)\"> ("+parent.opener.DonaCadenaLang({"cat":"per a guardar fitxer", "spa":"para guardar fichero", "eng":"to save file", "fre":"pour enregistrer le fichier"})+")");
+		"<input TYPE=\"button\" VALUE=\""+parent.opener.GetMessage("PrepareOffer", "download")+"\" onClick=\"parent.mmz1.RedibuixaMMZ(true)\"> ("+parent.opener.GetMessage("toSaveFile", "download")+")");
 
 // -->
 </script>

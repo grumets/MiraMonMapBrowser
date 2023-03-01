@@ -799,7 +799,7 @@
 			}
 		},		
 		"TitolLlistatNivellZoom":	{ 
-			"description": "Text que figura davant del desplegable de nivells de zoom (escales)",
+			"description": "DEPRECATED: ja no s'utilitzarà, passa al fitxer msg.js. Text que figurava davant del desplegable de nivells de zoom (escales)",
 			"$ref": "#/definitions/StringOCadenaLang" 
 		},
 		"LlistatZoomFraccio": {
@@ -1215,7 +1215,7 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},	
 					"CRS": { 
-						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En model vectorial, és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
+						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En un TIF llegit directament, representa el CRS del TIFF i només n'hi ha 1. En model vectorial, és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Sistema de referència en que la capa està disponible",

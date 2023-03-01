@@ -344,26 +344,6 @@ function MostraFinestraParametres()
 	OmpleFinestraParametres();
 }
 
-
-/*
-*	Funció per a transformar els paràmetres de configuració de l'usuari en quelcom
-*	capaç de ser inclòs en un anchor <a>, per exemple un Blob.
-*/
-var jsonConfigFile = null;
-
-function makeHrefData(userConfig)
-{
-	var data = new Blob([JSON.stringify(userConfig)], {type: 'text/json'});
-
-	// If we are replacing a previously generated file we need to
-	// manually revoke the object URL to avoid memory leaks.
-	if (jsonConfigFile !== null)
-		window.URL.revokeObjectURL(jsonConfigFile);
-
-	jsonConfigFile = window.URL.createObjectURL(data);
-	return jsonConfigFile;
-};
-
 /*
 *	Funció per a guardar el fitxer de configuració de JSON en memòria
 */
@@ -371,27 +351,12 @@ function GuardaConfiguracioUsuari(userConfig, fileName)
 {
 	if (fileName.length < 1)
 		return false
-	const jsonExtention = ".json";
 	// Fem que els canvis de ParamInternCtrl passin a ParamCtrl.
 	RecuperaValorsFinestraParametres(document.form_param, true);
 	// Guardem el nivell de zoom
 	userConfig.NivellZoomCostat = ParamInternCtrl.vista.CostatZoomActual;
 
-	var link = document.createElement('a');
-	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
-		fileName+=jsonExtention;
-	link.setAttribute('download', fileName);
-	link.setAttribute('href', makeHrefData(userConfig));
-	document.body.appendChild(link);
-
-	// wait for the link to be added to the document
-	window.requestAnimationFrame(function () {
-      		var event = new MouseEvent('click');
-		link.dispatchEvent(event);
-		document.body.removeChild(link);
-		});
-
-  return false;
+  	return GuardaDadesJSONFitxerExtern(userConfig, fileName);
 }
 
 /*

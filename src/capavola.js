@@ -115,7 +115,42 @@ function CanviaEtiquetesAnarCoord(sel)
 	}
 }//Fi de CanviaEtiquetesAnarCoord()
 
+function AnarAObjVectorialTaula(longitud, latitud)
+{
+var d, punt_coord;
 
+	if(isNaN(longitud) || isNaN(latitud))
+	{
+  	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
+	   return;
+	}
+	punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);	
+
+	if(!EsPuntDinsAmbitNavegacio(punt_coord))
+	{
+  	   alert(GetMessage("RequestedPointOutsideBrowserEnvelope", "capavola"));
+	   return;
+	}
+
+	//Dibuixo la icona per mostrar el punt consultat
+	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
+	{
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord];
+		capa.objectes.features[0].geometry.coordinates[0]=punt_coord.x;
+		capa.objectes.features[0].geometry.coordinates[1]=punt_coord.y;
+		//capa.objectes.features[0].properties.radius=d;
+		capa.visible="si";
+		CreaVistes();
+	}
+	// Constant a 1000m per a una bona visualització del punt i dels voltants.
+	d=1000;
+	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+		d/=FactorGrausAMetres;
+	var env=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
+	PortamAAmbit(env);
+	
+	//PortamAPunt(punt_coord.x,punt_coord.y);
+}
 
 function AnarACoordenada(form)
 {
