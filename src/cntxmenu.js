@@ -571,13 +571,13 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 	if(alguna_capa_afegida)
 	{
 		/*Si s'ha afegit alguna capa de servidor extern, relaxo les
-                limitacions d'àmbit de navegació per poder-me sortir del mapa
+        limitacions d'àmbit de navegació per poder-me sortir del mapa
 		de situació. En realitat, el que voldria programar és que si la
-                capa que afegixo se surt del àmbit "relaxo" però si no, doncs no
+        capa que afegixo se surt del àmbit "relaxo" però si no, doncs no
 		però no sembla que NJ llegeixi l'àmbit de la capa i per això
 		decideixo fer-ho més general*/
 		ParamCtrl.RelaxaAmbitVisualitzacio=true;
-                //Redibuixo el navegador perquè les noves capes siguin visibles
+        //Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
 		RepintaMapesIVistes();
 	}
@@ -2834,7 +2834,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 	{
 		var atribut=ParamCtrl.capa[i_capa].atributs[i_estil];
 		if (typeof atribut.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? atribut.calcul : AfageixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+			return (i_capa_ref==i_capa) ? atribut.calcul : AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
 		if (typeof atribut.FormulaConsulta!=="undefined")
 		{
 			var s=atribut.FormulaConsulta;
@@ -2853,7 +2853,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 		var component_sel=ParamCtrl.capa[i_capa].estil[i_estil].component[0], s_patro, i;
 
 		if (typeof component_sel.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? component_sel.calcul : AfageixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
+			return (i_capa_ref==i_capa) ? component_sel.calcul : AfegeixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
 		if (typeof component_sel.FormulaConsulta!=="undefined")
 		{
 			var valors=ParamCtrl.capa[i_capa].valors;
@@ -4219,6 +4219,7 @@ function TextLimitsSliders(limitValue, esMinim)
 {
 	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
 }
+
 /*
 	Mostra la capa vectorial en format taula.
  */
@@ -4235,6 +4236,7 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
 	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
 }
+
 /* Crea l'HTML per a construir la taula d'elements vectorials */
 function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
 {
@@ -4366,7 +4368,6 @@ function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
 	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
-
 function ExportarObjectesGeoJSON(i_capa)
 {
 const capa = ParamCtrl.capa[i_capa];
