@@ -65,31 +65,81 @@ var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
-var j, k, estils, estil, minim, maxim;
-var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
+var j, k, z, estils, estil, minim, maxim;
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
-
+	if (servidorGC.param_func_after && servidorGC.param_func_after.estilPerCapa)
+	{
+		var trobat=false, criteris;
+		for(j=0; j<servidorGC.param_func_after.estilPerCapa.length; j++)
+		{
+			if(servidorGC.param_func_after.estilPerCapa[j].criteris && servidorGC.param_func_after.estilPerCapa[j].estil)
+			{
+				criteris=servidorGC.param_func_after.estilPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest estil
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat l'estil a aplicar a la capa
+					estilPerCapa=servidorGC.param_func_after.estilPerCapa[j].estil;
+					break;
+				}
+			}
+		}
+		
+	}
 	if(layer.estil && layer.estil.length>0)
 	{
 		estils=[];
 		for(j=0; j<layer.estil.length; j++)
 		{
-			estils[estils.length]={nom: layer.estil[j].nom,
+			if(estilPerCapa)
+			{
+				estils[estils.length]=JSON.parse(JSON.stringify(estilPerCapa));
+				estil=estils[estils.length-1];
+				estil.nom =layer.estil[j].nom;
+				if(!estil.desc)
+					estil.desc =DonaCadenaNomDesc(layer.estil[j]);
+				if(!estil.DescItems)
+					estil.DescItems =layer.uom;
+			}
+			else
+			{
+				estils[estils.length]={nom: layer.estil[j].nom,
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
-						TipusObj: "I",
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
-			estil=estils[estils.length-1];
+				estil=estils[estils.length-1];
+			}
 			if (layer.esCOG && layer.uriDataTemplate)
 			{
-				estil.component=[{"i_valor": 0}];
-				if (layer.vom=="Land Water Transition Zone - Hydroperiod")
+				if(!estil.component)
+					estil.component=[{"i_valor": 0}];
+				if (layer.vom=="Land Water Transition Zone - Hydroperiod" && !estil.component[0].estiramentPaleta)
 					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
 			}
-			if (layer.categories && layer.categories.length)
+			if (layer.categories && layer.categories.length && !estil.categories)
 			{
 				estil.categories=[];
 				var s=layer.uom ? layer.uom : GetMessage("Class");
@@ -108,7 +158,15 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		}
 	}
 	else
-		estils=null;
+	{
+		if(estilPerCapa)
+		{
+			estils=[];
+			estils[0]=JSON.parse(JSON.stringify(estilPerCapa));
+		}
+		else
+			estils=null;
+	}
 
 	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 		minim=layer.CostatMinim;
@@ -737,20 +795,25 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
 		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
-		var descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null;
+		var estilCapa=null, descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null, formulaConsulta=null;
 		if (capa.estil && capa.estil.length)
 		{
-			var estil=capa.estil[0];
-			if (estil.DescItems)
-				descItems=estil.DescItems;
-			if (estil.metadades)
-				metadades=JSON.parse(JSON.stringify(estil.metadades));
-			if (estil.categories) 
-				categories=JSON.parse(JSON.stringify(estil.categories));
-			if (estil.atributs)
-				atributs=JSON.parse(JSON.stringify(estil.atributs));
-			if (estil.component && estil.component.length && estil.component[0].estiramentPaleta)
-				estiramentPaleta=JSON.parse(JSON.stringify(estil.component[0].estiramentPaleta));
+			estilCapa=JSON.parse(JSON.stringify(capa.estil[0]));
+			if (estilCapa.DescItems)
+				descItems=JSON.parse(JSON.stringify(estilCapa.DescItems));
+			if (estilCapa.metadades)
+				metadades=JSON.parse(JSON.stringify(estilCapa.metadades));
+			if (estilCapa.categories) 
+				categories=JSON.parse(JSON.stringify(estilCapa.categories));
+			if (estilCapa.atributs)
+				atributs=JSON.parse(JSON.stringify(estilCapa.atributs));
+			if (estilCapa.component && estilCapa.component.length)
+			{				
+				if(estilCapa.component[0].estiramentPaleta)
+					estiramentPaleta=JSON.parse(JSON.stringify(estilCapa.component[0].estiramentPaleta));
+				if(estilCapa.component[0].FormulaConsulta)
+					formulaConsulta=JSON.parse(JSON.stringify(estilCapa.component[0].FormulaConsulta));
+			}
 		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
@@ -773,6 +836,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		}
 		else
 		{
+			var estil;
 			for (var i=0; i<image.getSamplesPerPixel(); i++)
 			{
 				capa.estil.push({nom: null,
@@ -783,16 +847,18 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 						component: [
 							{
 								i_valor: i_v+i,
-								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0
+								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0,
+								FormulaConsulta: formulaConsulta
 							}
 						],
 						categories: categories,
 						atributs: atributs,
 						ColorMinimPrimer: false
 					});
-				var estil=capa.estil[capa.estil.length-1];
+				estil=capa.estil[capa.estil.length-1];
 				if (image.fileDirectory && image.fileDirectory.ColorMap)
 				{
+					// ·$· Aquí no aplico l'estil exterior perquè a dins al TIFF hi ha una paleta (NJ)
 					estil.paleta={colors: []};
 					estil.ItemLleg=[];
 					var ncolors=image.fileDirectory.ColorMap.length/3;
@@ -811,28 +877,62 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				}
 				else if (categories)
 				{
-					//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
-					if (!PaletesGlobals)
-						PaletesGlobals=await promiseLoadJSON("paletes.json");
-
-					estil.paleta={colors: []};
-					estil.ItemLleg=[];
-					var ncolors=categories.length;
-					for (var i=0, j=0; i<ncolors; i++, j++)
+					if(estilCapa && estilCapa.paleta)
 					{
-						if (j==20)
-							j==0;
-						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
-						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+						estil.paleta=JSON.parse(JSON.stringify(estilCapa.paleta));
+						if(estilCapa.ItemLleg)
+							estil.ItemLleg=JSON.parse(JSON.stringify(estilCapa.ItemLleg));
+						else
+							estil.ItemLleg=[];
+						if(typeof estilCapa.ncol!=="undefined")
+							estil.ncol=estilCapa.ncol;
+						else	
+							estil.ncol=1;
 					}
-					estil.ncol=1;					
+					else
+					{
+						//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+						if (!PaletesGlobals)
+							PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+						estil.paleta={colors: []};
+						estil.ItemLleg=[];
+						var ncolors=categories.length;
+						for (var i=0, j=0; i<ncolors; i++, j++)
+						{
+							if (j==20)
+								j==0;
+							estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+							//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+						}
+						estil.ncol=1;
+					}
 				}
 				else
 				{
-					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};
-					estil.nItemLlegAuto=20;
-					estil.ncol=4;
-					estil.descColorMultiplesDe=0.01;
+					if(estilCapa && estilCapa.paleta)
+					{
+						estil.paleta=JSON.parse(JSON.stringify(estilCapa.paleta));
+						if(estilCapa.ItemLleg)
+							estil.ItemLleg=JSON.parse(JSON.stringify(estilCapa.ItemLleg));
+						else
+						{
+							estil.ItemLleg=[];
+							estil.nItemLlegAuto=20;
+							estil.descColorMultiplesDe=0.01;
+						}
+						if(typeof estilCapa.ncol!=="undefined")
+							estil.ncol=estilCapa.ncol;
+						else	
+							estil.ncol=4;
+					}
+					else
+					{
+						estil.nItemLlegAuto=20;
+						estil.descColorMultiplesDe=0.01;
+						estil.ncol=4;
+					}
+					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};					
 				}
 			}
 		}

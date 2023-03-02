@@ -718,7 +718,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 							"</td>");
 					else
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							"<img src=\"", AfegeixAdrecaBaseSRC("descarregableg.gif"), "\" align=middle>",
+							//"<img src=\"", AfegeixAdrecaBaseSRC("descarregableg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "descarregableg", 17, null, null),
 							"</td>");
 				}
@@ -801,7 +801,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
 						else
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-						cdns.push("><select CLASS=text_petit name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
+						cdns.push("><select CLASS=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
 						   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
 						var i_data_sel=DonaIndexDataCapa(capa, null);
 						for (var i_data=0; i_data<capa.data.length; i_data++)
@@ -814,7 +814,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=3>", (EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaDataCapaPerLlegenda(i_capa, null),
+						cdns.push("<td valign=\"middle\" colspan=\"3\">", (EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaDataCapaPerLlegenda(i_capa, null),
 							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 					}
 				}
@@ -838,7 +838,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 						else
 							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 						cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
-							": <select CLASS=text_petit name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
+							": <select CLASS=\"text_petit\" name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
 							   i_capa, ",", i_dim, ", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 						for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
 						{
@@ -850,7 +850,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=3>",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
+						cdns.push("<td valign=\"middle\" colspan=\"3\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
 							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 					}
 				}
@@ -906,7 +906,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 									cdns.push("</td>");
 								}
 								else
-									cdns.push("<td colspan=3 valign=\"middle\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil,"&nbsp;",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil,"</td>");
+									cdns.push("<td colspan=\"3\" valign=\"middle\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil,"&nbsp;",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil,"</td>");
 							}
 							cdns.push("</tr>");
 						}
@@ -914,7 +914,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				    }
 				    else
 				    {
-						cdns.push("<td valign=\"middle\" colspan=3>" ,
+						cdns.push("<td valign=\"middle\" colspan=\"3\">" ,
 							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, (DonaCadenaNomDesc(capa.estil[capa.i_estil])),
 							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 				    }

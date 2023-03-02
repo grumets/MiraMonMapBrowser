@@ -41,13 +41,34 @@
 var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
+function ExtreuUnitatsDeCadenaPerWQEMS(layer, cadena)
+{
+var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:", k;
+
+	if (cadena.substr(0, str_uom.length)==str_uom)
+	{
+		layer.uom=cadena.substr(str_uom.length).trim();
+		if (layer.uom=="mg/m^3")
+			layer.uom="mg/m<sup>3</sup>";
+		else if (layer.uom=="NTU")
+			layer.uom="Nephelometric Turbidity (NTU)";
+	}
+	else if (cadena.substr(0, str_vom.length)==str_vom)
+		layer.vom=cadena.substr(str_vom.length).trim();
+	else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
+	{
+		if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
+			layer.categories[parseInt(cadena.substr(str_valueMeaning.length,k))]=cadena.substr(str_valueMeaning.length+k+1).trim();		
+	}
+}
+
 //Suporta totes les versions de WMS
 // Si hi ha servidorGC.param_func_after.capa[].nom només es carregen les capes que hi ha a l'array.
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
-var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer={};
+var i, j, node2, node3, trobat=false, cadena, cadena2, layer={};
 var minim, maxim, factor_k, factorpixel;
-var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
+
 
 	//Llegeixo les capacitats d'aquesta capa
 	//Començo pel sistema de referència
@@ -68,6 +89,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 		CostatMinim: null,
 		CostatMaxim: null,
 		CRSs: [],
+		keywords: [],
 		consultable: false,
 		estil: [],
 		uom: null,
@@ -134,6 +156,12 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 						layer.CRSs.push.apply(layer.CRSs, pare.CRSs);
 						layer.CRSs.sort(sortAscendingStringInsensible);
 						layer.CRSs.removeDuplicates(sortAscendingStringInsensible);
+					}
+					if(pare.keywords && pare.keywords.length>0)
+					{
+						layer.keywords.push.apply(layer.keywords, pare.keywords);
+						layer.keywords.sort(sortAscendingStringInsensible);
+						layer.keywords.removeDuplicates(sortAscendingStringInsensible);
 					}
 					if(pare.consultable)
 						layer.consultable=true;
@@ -223,8 +251,22 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					if(node3 && node3.length>0)
 						layer.EnvLL.MaxY=parseFloat(node3[0].childNodes[0].nodeValue);
 				}
-				else if (node2.nodeName=="KeywordList")
+				else if(node2.nodeName=="Keywords") // A la versió 1.0.0 és una única clau amb les paraules separades per coma
 				{
+					// <Keywords>MCSC, Sòl, Cobertes, Catalunya, Nivell 5, MCSC-4, 2009</Keywords>
+					cadena=node2.childNodes[0].nodeValue;
+					var array_keywords=cadena.split(",");
+					for(j=0; j<array_keywords.length; j++)
+					{
+						layer.keywords.push(array_keywords[j]);
+						
+						//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
+						ExtreuUnitatsDeCadenaPerWQEMS(layer, array_keywords[j]);
+					}
+				}
+				else if (node2.nodeName=="KeywordList") // A partir de la versió 1.1.x és una llista amb diversos nodes 
+				{
+					//<KeywordList><Keyword>Cobertes</Keyword>....</KeywordList>
 					if (node2.childNodes)
 					{
 						for(j=0; j<node2.childNodes.length; j++)
@@ -233,22 +275,10 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 							if (node3.nodeName=="Keyword")
 							{
 								cadena=node3.childNodes[0].nodeValue;
+								layer.keywords.push(cadena);
+								
 								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
-								if (cadena.substr(0, str_uom.length)==str_uom)
-								{
-									layer.uom=cadena.substr(str_uom.length).trim();
-									if (layer.uom=="mg/m^3")
-										layer.uom="mg/m<sup>3</sup>";
-									else if (layer.uom=="NTU")
-										layer.uom="Nephelometric Turbidity (NTU)";
-								}
-								else if (cadena.substr(0, str_vom.length)==str_vom)
-									layer.vom=cadena.substr(str_vom.length).trim();
-								else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
-								{
-									if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
-										layer.categories[parseInt(cadena.substr(str_valueMeaning.length,k))]=cadena.substr(str_valueMeaning.length+k+1).trim();
-								}
+								ExtreuUnitatsDeCadenaPerWQEMS(layer, cadena);
 							}
 						}
 					}

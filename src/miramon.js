@@ -1678,7 +1678,7 @@ var cdns=[], i;
 
 	if (ParamCtrl.DesplegableProj && ParamCtrl.ImatgeSituacio.length>1)
 	{
-		cdns.push("<form name=FormulProjeccio onSubmit=\"return false;\"><select CLASS=text_petit name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value));\">");
+		cdns.push("<form name=\"FormulProjeccio\" onSubmit=\"return false;\"><select CLASS=\"text_petit\" name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value));\">");
 		if (ParamCtrl.CanviProjAuto)
 		{
 			cdns.push("<OPTION VALUE=\"-1\"",(ParamCtrl.araCanviProjAuto ? " SELECTED" : "") ,">",
@@ -1706,7 +1706,7 @@ var cdns=[], i;
 		cdns.push("</select></form>");
 	}
 	else
-		cdns.push("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2> &nbsp;",
+		cdns.push("<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\"> &nbsp;",
 			DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),"</font>");
 	return cdns.join("");
 }
@@ -2175,7 +2175,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
 		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
-		cdns2.push("<center><table border=0 width=95%><tr><td><font size=1>");
+		cdns2.push("<center><table border=\"0\" width=\"95%\"><tr><td><font size=\"1\">");
 		if(cdns.length>0)
 		{
 			cdns.sort();
@@ -4422,7 +4422,7 @@ var capa, n_capa_ini;
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null});
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null });
 }
 
 function DonaCadenaPreguntarCarregaArrayCapesDeServei()
