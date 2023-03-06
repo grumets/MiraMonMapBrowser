@@ -423,7 +423,7 @@ var capa=ParamCtrl.capa[i_capa];
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
 
-	if (EsCapaBinaria(capa) || capa.model==model_vector)
+	if (EsCapaBinaria(capa) || (capa.model==model_vector && capa.estil[i_estil].TipusObj != "S"))
 	{
 		cdns.push("<hr>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",

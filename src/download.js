@@ -660,20 +660,22 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				GetMessage("DownloadLayerCompleted", "download"),"<br>",
 				"</center>");
 
-		//Aquesta part es part fer millor
-		cdns.push("<fieldset><legend><b>")
+		if (capa.data)
+		{
+			//Aquesta part es part fer millor
+			cdns.push("<fieldset><legend><b>")
 
-		if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null ||
-			(capa.DataMostraDia && capa.DataMostraHora))
-			cdns.push(GetMessage("DateTime"));
-		else if (capa.DataMostraHora)
-			cdns.push(GetMessage("Time"));
-		else
-			cdns.push(GetMessage("Date"));
-		cdns.push(":</b></legend>");
-		cdns.push(CreaSelectorAPartirDeLesDatesCapa(i_capa, "TIME", -1));
-		cdns.push("</fieldset>")
-
+			if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null ||
+				(capa.DataMostraDia && capa.DataMostraHora))
+				cdns.push(GetMessage("DateTime"));
+			else if (capa.DataMostraHora)
+				cdns.push(GetMessage("Time"));
+			else
+				cdns.push(GetMessage("Date"));
+			cdns.push(":</b></legend>");
+			cdns.push(CreaSelectorAPartirDeLesDatesCapa(i_capa, "TIME", -1));
+			cdns.push("</fieldset>")
+		}
 		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+GetMessage("Next")+"\"></center>"+
 						   "</font></form>");
 		contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
@@ -810,7 +812,6 @@ var cdns=[], capa;
 		DibuixaTimeDescarregaTot(i_capa);
 	else if (capa.model==model_vector)
 		DibuixaDescarregaVector(i_capa);
-
 	return;
 }
 
