@@ -165,6 +165,84 @@ function MouLayerContextMenuCapa(event, s)
 	}
 }
 
+function DonaEnvCalculatCapa(capa)
+{
+var i, geometry, c3, c2, c1, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, coordinates, polygon;
+	
+	if (capa.model!=model_vector || !capa.objectes || !capa.objectes.features)
+		return null;
+	
+	for (i=0; i<capa.objectes.features.length; i++)
+	{
+		geometry=capa.objectes.features[i].geometry;
+		if (geometry.type=="Point" || geometry.type=="MultiPoint")
+		{
+			for (c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
+			{
+				if (geometry.type=="MultiPoint")
+					coordinates=geometry.coordinates[c1];
+				else
+					coordinates=geometry.coordinates;
+				if (env.MinX>coordinates[c1][0])
+					env.MinX=coordinates[c1][0];
+				if (env.MaxX<coordinates[c1][0])
+					env.MaxX=coordinates[c1][0];
+				if (env.MinY>coordinates[c1][1])
+					env.MinY=coordinates[c1][1];
+				if (env.MaxY<coordinates[c1][1])
+					env.MaxY=coordinates[c1][1];
+			}
+		}
+		else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
+		{
+			for (c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+			{
+				if (geometry.type=="MultiLineString")
+					coordinates=geometry.coordinates[c2];
+				else
+					coordinates=geometry.coordinates;
+				for( c1=0; c1<coordinates.length; c1++)
+				{
+					if (env.MinX>coordinates[c1][0])
+						env.MinX=coordinates[c1][0];
+					if (env.MaxX<coordinates[c1][0])
+						env.MaxX=coordinates[c1][0];
+					if (env.MinY>coordinates[c1][1])
+						env.MinY=coordinates[c1][1];
+					if (env.MaxY<coordinates[c1][1])
+						env.MaxY=coordinates[c1][1];
+				}
+			}
+		}
+		else if(geometry.type=="Polygon" || geometry.type=="MultiPolygon")
+		{
+			for (c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+			{
+				if (geometry.type=="MultiPolygon")
+					polygon=geometry.coordinates[c3];
+				else
+					polygon=geometry.coordinates;
+				for (c2=0; c2<polygon.length; c2++)
+				{
+					coordinates=polygon[c2];
+					for( c1=0; c1<coordinates.length; c1++)
+					{
+						if (env.MinX>coordinates[c1][0])
+							env.MinX=coordinates[c1][0];
+						if (env.MaxX<coordinates[c1][0])
+							env.MaxX=coordinates[c1][0];
+						if (env.MinY>coordinates[c1][1])
+							env.MinY=coordinates[c1][1];
+						if (env.MaxY<coordinates[c1][1])
+							env.MaxY=coordinates[c1][1];
+					}
+				}
+			}
+		}
+	}
+	return {"EnvCRS": env, "CRS": capa.CRSgeometry};
+}
+
 function ZoomACapa(capa)
 {
 	if (!EsCapaDisponibleEnElCRSActual(capa) && capa.CRS && capa.CRS.length)
@@ -173,7 +251,25 @@ function ZoomACapa(capa)
 	//Si l'envolupant de la capa no cap dins del CostatMaxim s'usa. Si no, es centra a la capa i el porta al costat màxim
 	if (capa.EnvTotal)
 		PortamAAmbit(TransformaEnvolupant(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));  //Aquesta funció refresca la vista i mes
-	if (!EsCapaDinsRangDEscalesVisibles(capa))
+	else 
+	{
+		// NJ: Intento calcular l'envolupant dels objectes que pugui tenir per fer el zoom a la capa
+		var env_temp=DonaEnvCalculatCapa(capa);
+		
+		if(env_temp)
+		{
+			if(!DonaTipusServidorCapa(capa) ||		
+				((typeof capa.tileMatrixSetGeometry=== "undefined" || capa.tileMatrixSetGeometry==null) &&  
+				(typeof capa.objLimit === "undefined" || capa.objLimit!=-1)))
+			{
+				capa.EnvTotal=env_temp; // considero que tinc tots els objectes de la capa i per tant puc actualitzar l'envolupant total de la capa
+				if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
+					capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
+			}
+			PortamAAmbit(TransformaEnvolupant(env_temp.EnvCRS, env_temp.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));  //Aquesta funció refresca la vista i mes			
+		}
+	}
+	if (!EsCapaDinsRangDEscalesVisibles(capa))  // NJ: Tot i fer un canvi de nivell de zoom potser que la capa no sigui visible perquè no disposem del seu envolupant i potser que siguem en un àmbit NO visible de la capa 
 		CanviaNivellDeZoom(DonaIndexNivellZoom(capa.CostatMaxim), true); //Canviar al CostatMaxim
 }
 

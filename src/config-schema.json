@@ -1279,7 +1279,7 @@
 						"format": "uri"
 					},
 					"tileMatrixSetGeometry": {
-						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Nnomés n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
+						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
 						"type": ["object", "null"],
 						"properties": {	
 							"atriObjNumerics": {
