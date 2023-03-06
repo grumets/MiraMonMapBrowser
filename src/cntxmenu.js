@@ -1849,7 +1849,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 						  {text: "2", 		prefix: "2",  size: "width:30px"},
 						  {text: "3", 		prefix: "3",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "-", 		prefix: "-",  size: "width:30px", separa: "<br>"},
-              {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"},
+						  {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"},
 						  {text: "Abs", 	prefix: "Math.abs   (", sufix: ")", size: "width:40px"},
 						  {text: "e", 		prefix: "Math.E", size: "width:40px"},
 						  {text: "(", 		prefix: "(",  size: "width:40px"},
@@ -1964,7 +1964,8 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 		return;
 	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
 	{
-		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json")
+		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json" || 
+		((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && "geojson"==DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()))  //NJ he vist que si la extensió és geojson no em retorna el mimetype!!
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			fileread[i_fitxer] = new FileReader();
@@ -1977,7 +1978,7 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 				catch (e){
 					alert("JSON file error. " + e);
 				}
-				AfegeixCapaGeoJSON(this.nom_json, objectes, -1);
+				AfegeixCapaGeoJSON(this.nom_json, objectes, NumeroDeCapesVolatils(-1));
 			};
 			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
 			algun_fitxer_ok=true;
@@ -1995,7 +1996,7 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 	if (tiff_blobs.length>0)
 	{
 		//AfegeixCapaGeoTIFF és asincrona.
-		AfegeixCapaGeoTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : "TIFFs", tiff_blobs, -1);
+		AfegeixCapaGeoTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : "TIFFs", tiff_blobs, NumeroDeCapesVolatils(-1));
 		algun_fitxer_ok=true;
 	}
 	if (algun_fitxer_ok)
@@ -2007,9 +2008,9 @@ function CarregaFitxerURLSeleccionat(form)
 	if (form.url_fitxer.value.length<1)
 		return;
 	if (form.url_type.value=="geojson")
-		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, -1);
+		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, NumeroDeCapesVolatils(-1));
 	else
-		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), -1);
+		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), NumeroDeCapesVolatils(-1));
 	TancaFinestraLayer("afegirCapa");
 }
 
