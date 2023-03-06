@@ -55,12 +55,15 @@ var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 			break;
 	}
 	if(i_capa==capa.length)
-		return AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo);
+	{
+		 AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo);
+		 return true;
+	}
 	
 	// Actualitzo l'array de dates
 	if(layer.data)
 		capa[i_capa].data=JSON.parse(JSON.stringify(layer.data));	
-	return;
+	return false;
 }
 
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
@@ -936,7 +939,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				}
 			}
 		}
-		capa.LlegDesplegada=true;
+		//capa.LlegDesplegada=true;
 	}
 }
 

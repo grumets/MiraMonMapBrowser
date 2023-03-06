@@ -314,7 +314,7 @@ function DonaVersioComAText(v)
 	if (v.VariantVers===0 || v.VariantVers)
 		return v.Vers+"."+v.SubVers+"."+v.VariantVers;
 	else
-		return v.Vers+"."+v.SubVers
+		return v.Vers+"."+v.SubVers;
 }
 
 function DonaVersioPerNameSpaceComAText(v)
@@ -2521,7 +2521,7 @@ function CanviaNivellDeZoom(nivell, redibuixa)
 		if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
 			;
 		else
-		CreaLlegenda();
+			CreaLlegenda();
 		if (window.document.zoom.nivell)
 			window.document.zoom.nivell.selectedIndex = nivell;
 		CentraLaVista((ParamInternCtrl.vista.EnvActual.MaxX+ParamInternCtrl.vista.EnvActual.MinX)/2,(ParamInternCtrl.vista.EnvActual.MaxY+ParamInternCtrl.vista.EnvActual.MinY)/2);
@@ -3739,7 +3739,7 @@ function EliminaTotesLesCapes(Redraw)
 		if (ParamCtrl.LlegendaAmagaSiForaAmbit || ParamCtrl.LlegendaGrisSiForaAmbit)
 			;
 		else
-		CreaLlegenda();
+			CreaLlegenda();
 		RepintaMapesIVistes();
 	}
 }
@@ -4371,16 +4371,25 @@ Funció inspirada en MostraCapesCapacitatsWMS(servidorGC) i AfegeixCapesWMSAlNav
 function AfegeixCapesWMSAlNavegador(servidorGC)
 {
 var i_get_featureinfo;
+var capa_afegida, alguna_capa_afegida=false;
 
 	i_get_featureinfo=DonaFormatFeatureInfoCapesWMS(servidorGC);
 
 	for(var i_layer=0; i_layer<servidorGC.layer.length; i_layer++)
-		AfegeixOModificaCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+	{
+		capa_afegida=AfegeixOModificaCapaWMSAlNavegador(DonaFormatGetMapCapesWMS(servidorGC, i_layer), servidorGC, servidorGC.i_capa_on_afegir, i_layer, i_get_featureinfo);
+		if(!alguna_capa_afegida && capa_afegida)
+			alguna_capa_afegida=true;
+	}
 
 	if (servidorGC.param_func_after && servidorGC.param_func_after.capaDePunts)
 		AfegeixPuntsCapabilitiesACapaDePunts(servidorGC.layer, servidorGC.param_func_after.capaDePunts);
-	RevisaEstatsCapes();
-	CreaLlegenda();
+	if(alguna_capa_afegida)
+	{
+		RevisaEstatsCapes();
+		CreaLlegenda();
+		//RepintaMapesIVistes(); no puc fer això amb el TIFF perquè sinó entro en un bucle infinit
+	}
 }
 
 //Aquesta funció fa login o logout segons convingui.
