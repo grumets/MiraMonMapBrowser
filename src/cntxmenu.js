@@ -2054,14 +2054,16 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 
 function CarregaFitxersLocalsSeleccionats(form)
 {
-var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
+var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[], ext;
 
 	if (form.nom_fitxer.files.length<1)
 		return;
 	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
 	{
 		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json" || 
-		((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && "geojson"==DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()))  //NJ he vist que si la extensió és geojson no em retorna el mimetype!!
+			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
+			( "geojson"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "json"==ext)))  
+			//NJ he vist que si la extensió és geojson no em retorna el mimetype!! Segurament això depen de les extensions que té registrades cada usuari i com que sobre això no hi puc fer res afegeix-ho aquesta comprovació
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			fileread[i_fitxer] = new FileReader();
@@ -2079,7 +2081,9 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
 			algun_fitxer_ok=true;
 		}
-		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff")
+		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff" ||
+			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
+			( "tiff"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "tif"==ext || "geotiff"==ext)))
 		{
 			alert("Unrecognized file type '"+form.nom_fitxer.files[i_fitxer].type+ "' for the file '"+ form.nom_fitxer.files[i_fitxer].name + "'");
 		}
