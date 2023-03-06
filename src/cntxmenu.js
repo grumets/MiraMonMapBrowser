@@ -289,7 +289,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)  || capa.model==model_vector))
+	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)  || (capa.model==model_vector && capa.estil[0].TipusObj != "S")))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
