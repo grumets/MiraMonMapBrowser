@@ -389,7 +389,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 						alguna.consultable=1;
 					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && capa.descarregable!="no")
 						alguna.descarregable=1;
-					if (EsCapaDescarregableIndividualment(capa))
+					if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
 						alguna.getcoverage=1;
 					if (capa.proces)
 						alguna.WPS=1;
@@ -574,7 +574,6 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				else
 					cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 				cdns.push(" valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
-
 	    	}
 	    }
 

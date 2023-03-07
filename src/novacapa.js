@@ -56,7 +56,7 @@ var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 	}
 	if(i_capa==capa.length)
 	{
-		 AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo);
+		 AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, (layer.esCOG && layer.uriDataTemplate)? "ara_no": "si"); // Marco els TIFF com a visibles "ara_no" NJ_07_03_2023
 		 return true;
 	}
 	
@@ -66,7 +66,7 @@ var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 	return false;
 }
 
-function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
+function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, visible)
 {
 var j, k, z, estils, estil, minim, maxim;
 var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null;
@@ -191,7 +191,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs, visible)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
@@ -211,7 +211,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 				NColEstil: (estils && estils.length>0) ? 1: 0,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
-				visible: "si",
+				visible: visible ? visible: "si",
 				consultable: (i_get_featureinfo!=-1 && layer.consultable)? "si" : "no",
 				descarregable: "no",
 				FlagsData: layer.FlagsData,
@@ -243,6 +243,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 					"nodata": [-9999, 0]
 				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
+		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
@@ -645,13 +646,13 @@ var k;
 	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-
+		
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	RepintaMapesIVistes();
 }
 
-function IniciaDefinicioCapaTIFF(url, desc, CRSs)
+function IniciaDefinicioCapaTIFF(url, desc, CRSs, visible)
 {
 	return {servidor: url,
 				versio: null,
@@ -672,7 +673,7 @@ function IniciaDefinicioCapaTIFF(url, desc, CRSs)
 				NColEstil: 1,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
-				visible: "si",
+				visible: visible ? visible: "si",
 				consultable: "si",
 				descarregable: "no",
 				FlagsData: null,
@@ -972,7 +973,7 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
-	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null);
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null, "si");
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
 	{
@@ -998,7 +999,7 @@ async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
 {
 var i_fitxer;
 
-	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null); 	
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null, "si"); 	
 
 	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
 	{

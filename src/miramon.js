@@ -347,50 +347,9 @@ function IniciaLayerPropiaPlantillaDImpressio(i_plantilla, i_layer_propia,
 						"ILayer": i_layer};
 }
 
-function CompletaDefinicioCapa(capa, capa_vola)
+function CompletaDescarregaTotCapa(capa)
 {
-	//Càlcul de la envolupant el·lipsoidal
-	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
-		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
-
-	if (!capa.CostatMinim)
-		capa.CostatMinim=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
-	if (!capa.CostatMaxim)
-		capa.CostatMaxim=ParamCtrl.zoom[0].costat;
-
-	if (typeof capa.VisibleALaLlegenda==="undefined" || capa.VisibleALaLlegenda==null)
-		capa.VisibleALaLlegenda=true;
-
-	if (!capa.visible)
-		capa.visible="si";
-
-	if (!capa.consultable)
-		capa.consultable="si";
-
-	if (!capa.descarregable)
-		capa.descarregable="no";
-
-	if (!capa.editable)
-		capa.editable="no";
-
-	//Evito haver de posar el nom i la descripció del video si la capa és animable sola.
-	if (capa.animable && capa.AnimableMultiTime && capa.data && capa.data.length>1)
-	{
-		if (!capa.NomVideo)
-			capa.NomVideo=capa.nom;
-		if (!capa.DescVideo)
-			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
-	}
-	var tipus=DonaTipusServidorCapa(capa);
-	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
-	{
-		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
-	}
-
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features))
-		capa.model=model_vector;
-
-	if (tipus=="TipusHTTP_GET" && !capa.DescarregaTot)
+	if (DonaTipusServidorCapa(capa)=="TipusHTTP_GET" && !capa.DescarregaTot)
 	{
 		var i_format;
 		//Contrueixo la manera de descarregar automàticament.
@@ -442,7 +401,53 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		}
 		//Poso una descarrega per tot o una descàrrega per a cada valor segons calgui.
 	}
+}
 
+function CompletaDefinicioCapa(capa, capa_vola)
+{
+	//Càlcul de la envolupant el·lipsoidal
+	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
+		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
+
+	if (!capa.CostatMinim)
+		capa.CostatMinim=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat;
+	if (!capa.CostatMaxim)
+		capa.CostatMaxim=ParamCtrl.zoom[0].costat;
+
+	if (typeof capa.VisibleALaLlegenda==="undefined" || capa.VisibleALaLlegenda==null)
+		capa.VisibleALaLlegenda=true;
+
+	if (!capa.visible)
+		capa.visible="si";
+
+	if (!capa.consultable)
+		capa.consultable="si";
+
+	if (!capa.descarregable)
+		capa.descarregable="no";
+
+	if (!capa.editable)
+		capa.editable="no";
+
+	//Evito haver de posar el nom i la descripció del video si la capa és animable sola.
+	if (capa.animable && capa.AnimableMultiTime && capa.data && capa.data.length>1)
+	{
+		if (!capa.NomVideo)
+			capa.NomVideo=capa.nom;
+		if (!capa.DescVideo)
+			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
+	}
+	var tipus=DonaTipusServidorCapa(capa);
+	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
+	{
+		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
+	}
+
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features))
+		capa.model=model_vector;
+
+	CompletaDescarregaTotCapa(capa);
+	
 	if (!capa_vola)
 	{
 		if (capa.model==model_vector)
@@ -2670,11 +2675,9 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 			}
 			return false;
 		}
-		else
-			return false;
+		return false;
 	}
-	else
-		return true;
+	return true;
 }
 
 function EsCapaDisponibleEnElCRSActual(capa)
@@ -2689,8 +2692,7 @@ function EsCapaDisponibleEnElCRSActual(capa)
 		}
 		return false;
 	}
-	else
-		return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
+	return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 }
 
 var FitxerMetadadesWindow=null;
@@ -4387,8 +4389,8 @@ var capa_afegida, alguna_capa_afegida=false;
 	if(alguna_capa_afegida)
 	{
 		RevisaEstatsCapes();
-		CreaLlegenda();
-		//RepintaMapesIVistes(); no puc fer això amb el TIFF perquè sinó entro en un bucle infinit
+		//CreaLlegenda();
+		RepintaMapesIVistes(); //NJ_07_03_2023: Faig un repinta mapes i vistes perquè tot sigui més coherent, abans ja he marcat totes les capes del TIFF com visibles="ara_no" per evitar problemes i saturar el navegador amb massa peticions
 	}
 }
 

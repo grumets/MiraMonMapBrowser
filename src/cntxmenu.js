@@ -647,7 +647,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
+				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, "si");
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -661,7 +661,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
+			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, "si");
 		}
 	}
 	if(alguna_capa_afegida)
