@@ -1875,8 +1875,12 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_storyMap();
 	else if (nom_finestra=="editaEstil")
 		TancarFinestra_editEstil(nom_finestra);
+	else if (nom_finestra=="taulaCapaVectorial")
+		TancaFinestra_taulaCapaVectorial();
+	else if (nom_finestra=="mostraQualitat")
+		TancaFinestra_mostraQualitat();
 	else if (nom_finestra=="llegenda" || nom_finestra=="situacio" || nom_finestra=="coord")
-		TancaFinestra_llegenda_situacio_coord();
+		TancaFinestra_llegenda_situacio_coord();	
 	else if (nom_finestra.length>prefixNovaVistaFinestra.length && nom_finestra.substring(0, prefixNovaVistaFinestra.length) == prefixNovaVistaFinestra)
 		TancaFinestra_novaFinestra(nom_finestra, NovaVistaFinestra);
 	else if (nom_finestra.length>prefixHistogramaFinestra.length && nom_finestra.substring(0, prefixHistogramaFinestra.length) == prefixHistogramaFinestra)
@@ -1921,10 +1925,7 @@ function TancaFinestraLayer(nom_finestra)
 		if (estil.diagrama.length == 0)
 				delete estil.diagrama;
 	}
-	else if (nom_finestra=="taulaCapaVectorial" )
-	{
-		TancaFinestra_taulaCapaVectorial();
-	}
+	
 }
 
 function TancaFinestra_novaFinestra(nom, finestra)
@@ -2998,7 +2999,7 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 
 	if (tipus=="TipusWMTS_REST")
 	{
-	if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
+		if (capa.TileMatrixSet[i_tile_matrix_set].URLTemplate)
 			s=capa.TileMatrixSet[i_tile_matrix_set].URLTemplate+"";
 		else
 			s="{WMTSBaseURL}/{layer}/{style}/{time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format_extension}";
