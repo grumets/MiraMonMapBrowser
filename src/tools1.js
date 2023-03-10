@@ -1681,10 +1681,12 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 		if (layerList[i].nom==name)
 		{
 			console.log("textHTMLLayer is creating a layer/div with the same layer/div name twice. Old one is overwritten.");
-			z=i;
+			// Esborro la layer i la torno a crear sinó el z-index no queda correcte i queden coses amagades
+			layerList.splice(i,1);
+			z--;
 			break;
 		}
-	}	
+	}
 
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
