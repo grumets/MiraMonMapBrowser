@@ -4410,7 +4410,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 
 	if (atributsVisibles.length > 0)
 	{
-		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), " ", capa.desc, "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), ": ", DonaCadena(capa.desc), "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
 		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
 		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
 		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
@@ -4420,10 +4420,10 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 		// Porta papers capa info
 		cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
 		GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
-		"MinX", "\t", capa.objectes.bbox[0], "\n",
-		"MaxX", "\t", capa.objectes.bbox[1], "\n",
-		"MinY", "\t", capa.objectes.bbox[2], "\n",
-		"MaxY", "\t", capa.objectes.bbox[3], "\n",
+		"MinX", "\t", objectes[0].bbox[0], "\n",
+		"MaxX", "\t", objectes[0].bbox[1], "\n",
+		"MinY", "\t", objectes[0].bbox[2], "\n",
+		"MaxY", "\t", objectes[0].bbox[3], "\n",
 		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
 
 		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
@@ -4489,7 +4489,11 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 function TancaFinestra_taulaCapaVectorial()
 {
 	i_capaATaula=null;
-	TancaFinestra_anarCoord();
+	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
+	{
+	   ParamCtrl.capa[ParamCtrl.ICapaVolaAnarObj].visible="no";
+	   CreaVistes();
+	}
 }
 
 function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)

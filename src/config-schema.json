@@ -854,6 +854,10 @@
 			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
 			"$ref": "#/definitions/icona" 
 		},
+		"IconaAnarObj": {
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-objecte. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona"
+		},
 		"MostraPosicioGPS": {
 			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
 			"type": ["null", "boolean"]
@@ -879,7 +883,7 @@
 			"description": "Nom del fitxer de la icona que es posa al lloc del clic a la vista en un procés de validació de coordenades (generalment un GIF o PNG). Opcional",
 			"type": ["null", "string"],
 			"format": "uri"
-		},
+		},		
 		"StoryMap": {
 			"type": ["null", "array"],
 			"items": {
@@ -1149,19 +1153,51 @@
 							}
 						}
 					},
+					"dimensioPerCapa":{
+						"description": "Array de patrons (fórmules) per obtenir la descripció dels valors d'una dimensió.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["formulaDesc", "criteris"],
+							"properties": {
+								"formulaDesc":{
+									"description": "Fórmula en JS a aplicar sobre cada un dels valors de la dimensió per obtenir la descripció del valor"
+									"type": "string"
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar la formula a una dimensió de una capa. Si hi ha més d'un criteri el nexe d'unió és AND".,
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["Dimension", "keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
 					"estilPerCapa": {
 						"description": "Estils a aplicar a les capes, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
 						"type": "array",
 						"items": {
 							"type": "object",
-							"required": ["estil", "criteri"],
+							"required": ["estil", "criteris"],
 							"properties": {
 								"estil":{
 									"description": "Estil de simbolització a aplicar a les capes que cumpleixin els criteris establerts."
 									"type": "#/definitions/estil"
 								},
 								"criteris": {
-									"description": "Conjunt de criteris que cal cumpli per assignar l'estil a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"description": "Conjunt de criteris que cal complir per assignar l'estil a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
 									"type": "array",
 									"items": {
 										"type": "object",
@@ -1514,7 +1550,7 @@
 						}
 					},
 					"dimensioExtra": {
-						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors valids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció de la clau i els valors d'una dimensió",
@@ -1523,6 +1559,10 @@
 								"clau": {
 									"description": "Nom i descripció de la clau. Per exemple 'DIM_band' i 'Band'",
 									"$ref": "#/definitions/nomDescripcio"
+								},
+								"formulaDesc":{
+									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor."
+									"type": "string"
 								},
 								"valor": {
 									"type": ["array"],
