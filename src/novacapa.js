@@ -66,15 +66,65 @@ var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 	return false;
 }
 
+function DonaIndexDimensioLayerPerNom(dimensioExtra, nom)
+{
+	for(var i=0; i<dimensioExtra.length; i++)
+	{
+		if(dimensioExtra[i].clau && dimensioExtra[i].clau.nom.toLowerCase()==nom.toLowerCase())
+			return i;
+	}
+	return -1;
+}
+
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, visible)
 {
 var j, k, z, estils, estil, minim, maxim;
-var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null;
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null, dimensioPerCapa=null, i_dimensio_layer=-1;
+var trobat=false, criteris;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
+	if (servidorGC.param_func_after && servidorGC.param_func_after.dimensioPerCapa)
+	{
+		trobat=false;
+		for(j=0; j<servidorGC.param_func_after.dimensioPerCapa.length; j++)
+		{
+			if((!layer.dimensioExtra || -1!=(i_dimensio_layer=DonaIndexDimensioLayerPerNom(layer.dimensioExtra, servidorGC.param_func_after.dimensioPerCapa[j].nom))) &&
+			   servidorGC.param_func_after.dimensioPerCapa[j].criteris && servidorGC.param_func_after.dimensioPerCapa[j].formulaDesc)
+			{
+				criteris=servidorGC.param_func_after.dimensioPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest estil
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat la dimensió a aplicar a la capa
+					dimensioPerCapa=servidorGC.param_func_after.dimensioPerCapa[j];									
+					break;
+				}
+			}
+		}		
+	}
+	
 	if (servidorGC.param_func_after && servidorGC.param_func_after.estilPerCapa)
 	{
-		var trobat=false, criteris;
+		trobat=false;
 		for(j=0; j<servidorGC.param_func_after.estilPerCapa.length; j++)
 		{
 			if(servidorGC.param_func_after.estilPerCapa[j].criteris && servidorGC.param_func_after.estilPerCapa[j].estil)
@@ -215,7 +265,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 				consultable: (i_get_featureinfo!=-1 && layer.consultable)? "si" : "no",
 				descarregable: "no",
 				FlagsData: layer.FlagsData,
-				data: layer.data,
+				data: JSON.parse(JSON.stringify(layer.data)),
 				i_data: layer.i_data,
 				animable: (layer.data)? true: false,
 				AnimableMultiTime: (layer.data)? true:false,
@@ -224,13 +274,27 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 
 	capa=ParamCtrl.capa[k];
 	capa.access=(servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null;
-	capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+	
+	if(layer.dimensioExtra)
+	{
+		capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+		if(dimensioPerCapa && i_dimensio_layer!=-1)
+			capa.dimensioExtra[i_dimensio_layer].formulaDesc=dimensioPerCapa.formulaDesc;
+	}
+	else if(dimensioPerCapa)
+	{
+		capa.dimensioExtra=[{clau: {nom:servidorGC.param_func_after.dimensioPerCapa[j].nom},
+							formulaDesc: servidorGC.param_func_after.dimensioPerCapa[j].formulaDesc}];
+	}
+	else
+		capa.dimensioExtra=null;
+	
 
 	if (layer.uriMDTemplate)
 		capa.metadades={standard: layer.uriMDTemplate};
 	if (layer.EnvLL)
 		capa.EnvTotal={EnvCRS: JSON.parse(JSON.stringify(layer.EnvLL)), CRS:"EPSG:4326"};
-
+	
 	if (layer.esCOG && layer.uriDataTemplate)
 	{
 		capa.CostatMinim=minim;
@@ -655,33 +719,33 @@ var k;
 function IniciaDefinicioCapaTIFF(url, desc, CRSs, visible)
 {
 	return {servidor: url,
-				versio: null,
-				tipus: "TipusHTTP_GET",
-				nom: null,
-				desc: desc,
-				CRS: CRSs,
-				FormatImatge: "image/tiff",
-				valors: [],
-				transparencia: "semitrasparent",
-				CostatMinim: null,
-				CostatMaxim: null,
-				FormatConsulta: null,
-				separa: null,
-				DescLlegenda: desc,
-				estil: null,
-				i_estil: 0,
-				NColEstil: 1,
-				LlegDesplegada: false,
-				VisibleALaLlegenda: true,
-				visible: visible ? visible: "si",
-				consultable: "si",
-				descarregable: "no",
-				FlagsData: null,
-				data: null,
-				i_data: 0,
-				animable: false,
-				AnimableMultiTime: false,
-				origen: OrigenUsuari};
+			versio: null,
+			tipus: "TipusHTTP_GET",
+			nom: null,
+			desc: desc,
+			CRS: CRSs,
+			FormatImatge: "image/tiff",
+			valors: [],
+			transparencia: "semitrasparent",
+			CostatMinim: null,
+			CostatMaxim: null,
+			FormatConsulta: null,
+			separa: null,
+			DescLlegenda: desc,
+			estil: null,
+			i_estil: 0,
+			NColEstil: 1,
+			LlegDesplegada: false,
+			VisibleALaLlegenda: true,
+			visible: visible ? visible: "si",
+			consultable: "si",
+			descarregable: "no",
+			FlagsData: null,
+			data: null,
+			i_data: 0,
+			animable: false,
+			AnimableMultiTime: false,
+			origen: OrigenUsuari};
 }
 
 async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)

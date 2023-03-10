@@ -843,13 +843,13 @@ var salt_entre_columnes, cdns=[], capa, estil;
 						{
 							cdns.push("<OPTION VALUE=\"",i_v_dim,"\"",
 								((i_v_dim==dim.i_valor) ? " SELECTED" : "") ,
-							">", DonaCadenaNomDesc(dim.valor[i_v_dim]), "</OPTION>\n");
+							">", DonaCadenaNomDescFormula(dim.formulaDesc, dim.valor[i_v_dim]), "</OPTION>\n");
 						}
 						cdns.push("</select>", aspecte.PostDescItems, "</td></tr>");
 					}
 					else
 					{
-						cdns.push("<td valign=\"middle\" colspan=\"3\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDesc(dim.valor[dim.i_valor]),
+						cdns.push("<td valign=\"middle\" colspan=\"3\">",(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PreviDescEstilGris) ? aspecte.PreviDescEstilGris : aspecte.PreviDescEstil, DonaCadenaNomDesc(dim.clau), ": ",  DonaCadenaNomDescFormula(dim.formulaDesc,dim.valor[dim.i_valor]),
 							(EsCapaInactivaGrisALaLlegenda(capa) && aspecte.PostDescEstilGris) ? aspecte.PostDescEstilGris : aspecte.PostDescEstil, "</td>");
 					}
 				}

@@ -1158,14 +1158,18 @@
 						"type": "array",
 						"items": {
 							"type": "object",
-							"required": ["formulaDesc", "criteris"],
+							"required": ["nom", "formulaDesc", "criteris"],
 							"properties": {
+								"nom": {
+									"description": "Nom identificador de la dimensió",
+									"type": "string"
+								},
 								"formulaDesc":{
-									"description": "Fórmula en JS a aplicar sobre cada un dels valors de la dimensió per obtenir la descripció del valor"
+									"description": "Fórmula en JS a aplicar sobre cada un dels valors de la dimensió per obtenir la descripció del valor",
 									"type": "string"
 								},
 								"criteris": {
-									"description": "Conjunt de criteris que cal complir per assignar la formula a una dimensió de una capa. Si hi ha més d'un criteri el nexe d'unió és AND".,
+									"description": "Conjunt de criteris que cal complir per assignar la fórmula a una dimensió de una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
 									"type": "array",
 									"items": {
 										"type": "object",
@@ -1173,7 +1177,7 @@
 										"properties": {
 											"clau": {
 												"description": "Nom del element de la capa que ha de contenir un cert valor",
-												"enum": ["Dimension", "keyword"]
+												"enum": ["keyword"]
 											},
 											"valor": {
 												"description": "Valor de l'element de la capa indicat a clau",
@@ -1193,8 +1197,8 @@
 							"required": ["estil", "criteris"],
 							"properties": {
 								"estil":{
-									"description": "Estil de simbolització a aplicar a les capes que cumpleixin els criteris establerts."
-									"type": "#/definitions/estil"
+									"description": "Estil de simbolització a aplicar a les capes que cumpleixin els criteris establerts.",
+									"$ref": "#/definitions/estil"
 								},
 								"criteris": {
 									"description": "Conjunt de criteris que cal complir per assignar l'estil a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
@@ -1561,7 +1565,7 @@
 									"$ref": "#/definitions/nomDescripcio"
 								},
 								"formulaDesc":{
-									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor."
+									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
 									"type": "string"
 								},
 								"valor": {
@@ -1611,10 +1615,11 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},	
 					"estil": {
+					
 						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
 						"type": ["array", "null"],
 						"items": {
-							"type": "#/definitions/estil"
+							"$ref": "#/definitions/estil" 
 						}
 					},
 					"i_estil": {

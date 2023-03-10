@@ -661,9 +661,21 @@ var a={};
 	return a;
 }
 
+
 function DonaCadenaNomDesc(a)
 {
 	return a.desc ? DonaCadena(a.desc) : a.nom;
+}
+
+function DonaCadenaNomDescFormula(formula, a)
+{
+	// Si no hi ha desc i hi ha fórmula aplico la fórmula sobre el valor per obtenir la desc
+	if(a.desc)
+		return DonaCadena(a.desc);
+	if(!formula)
+		return a.nom;
+	var valor=a.nom;
+	return eval(formula);	
 }
 
 function DonaCadenaNomDescItemsLleg(estil)
@@ -4434,7 +4446,7 @@ var capa, n_capa_ini;
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null });
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null, dimensioPerCapa: capesDeServei.dimensioPerCapa ? capesDeServei.dimensioPerCapa : null });
 }
 
 function DonaCadenaPreguntarCarregaArrayCapesDeServei()
