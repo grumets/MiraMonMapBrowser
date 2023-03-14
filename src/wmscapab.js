@@ -885,8 +885,10 @@ var request;
 								param_func_after: param_func_after};
 								
 	ajaxGetCapabilities[ajaxGetCapabilities.length]=new Ajax();
+	/* NJ_13_03_2023: Joan no sé per quin motiu es va afegir això aquí però amb això no em deixa decidir com tractar aquest servei, i 
+	volen que les capes es puguin afegir les generals i les validades per usuari, així que ho trec. 
 	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
-		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
+		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]}; */
 
 	request="REQUEST=GetCapabilities&VERSION=";
 	if(typeof versio==="object" && versio)
