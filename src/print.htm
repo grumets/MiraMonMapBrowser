@@ -53,7 +53,7 @@ var cdns=[], i;
 	for (i=0; i<opener.ParamCtrl.PlantillaDImpressio.length; i++)
 	{
 		cdns.push(" <input type=\"radio\" name=\"TipusFull\" value=\"",opener.ParamCtrl.PlantillaDImpressio[i].nom,"\" onClick=\"CanviaPlantillaImpressio(true);\"> ", 
-								opener.DonaCadena(opener.ParamCtrl.PlantillaDImpressio[i].desc) ,"<br>");
+								opener.GetMessage(opener.ParamCtrl.PlantillaDImpressio[i].nom, "config") ,"<br>");
 	}
 	cdns.push("<hr>",
 			opener.GetMessage("WhenPrintingKeep", "impressio"),":<br>",

@@ -1185,7 +1185,7 @@ var nom=layerFinestraList[i_finestra].nom + SufixBarra;
 			  "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
   			  "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
 			  "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >",
-			  "&nbsp;", DonaCadena(layerFinestraList[i_finestra].titol), "</td>");
+			  "&nbsp;", GetMessage(layerFinestraList[i_finestra].nom, "config"), "</td>");
 
 	if(layerFinestraList[i_finestra].botons&boto_copiar)
 		cdns.push("<td align=\"center\" valign=\"middle\" width=\"16px\" style=\"font-size: 1px;\">",
