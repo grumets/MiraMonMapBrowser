@@ -2768,7 +2768,7 @@ var MessageLang={
       "spa": "Ir",
       "eng": "Go to",
       "fre": "Aller à",
-      "cze": "Jít do případové studie z"
+      "cze": "Přejít na"
     },
     "ofGoToCoordinate": {
       "cat": "d'anar a coordenada",

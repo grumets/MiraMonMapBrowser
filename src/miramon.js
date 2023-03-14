@@ -4517,7 +4517,7 @@ function IniciaVisualitzacio()
 {
 var nou_env={"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300};
 var nou_CRS="";
-var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
+var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName);
 
 	//div.style.overflow="hidden";
 	div.style.overflow="clip";
@@ -4530,7 +4530,10 @@ var win, i, j, l, capa, div=document.getElementById(ParamCtrl.containerName);
 	{
 		l=ParamCtrl.Layer[i];
 		if (l.resizable)
-			createFinestraLayer(window, l.name, l.title, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev ? l.ev : null), resizable:true, onresize: (l.name=="situacio" ? CreaSituacio : null)}, (l.content) ? l.content : null);
+		{
+			titolFinestra = MessageLang["config"][l.name] === undefined ? l.title : GetMessageJSON(l.name, "config");
+			createFinestraLayer(window, l.name, titolFinestra, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev ? l.ev : null), resizable:true, onresize: (l.name=="situacio" ? CreaSituacio : null)}, (l.content) ? l.content : null);
+		}
 		else
 			createLayer(window, l.name, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev) ? l.ev : null}, (l.content) ? l.content : null);
 	}
