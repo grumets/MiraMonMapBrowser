@@ -4531,7 +4531,8 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 		l=ParamCtrl.Layer[i];
 		if (l.resizable)
 		{
-			titolFinestra = MessageLang["config"][l.name] === undefined ? l.title : GetMessageJSON(l.name, "config");
+			var config_msg=MessageLang["config"][l.name];			
+			titolFinestra = ( config_msg=="[Missing message]" || config_msg==("["+GetMessage("MissingMessage")+"]")) ? l.title : GetMessageJSON(l.name, "config");
 			createFinestraLayer(window, l.name, titolFinestra, boto_tancar, l.left, l.top, l.width, l.height, l.ancora, {scroll: (l.scroll) ? l.scroll : "no", visible: (l.visible) ? l.visible : false, ev: (l.ev ? l.ev : null), resizable:true, onresize: (l.name=="situacio" ? CreaSituacio : null)}, (l.content) ? l.content : null);
 		}
 		else

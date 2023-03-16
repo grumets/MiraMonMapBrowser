@@ -5910,31 +5910,17 @@ var MessageLang={
     },
     "coord": {
       "cat": "Posició actual",
-			"spa": "Posición actual",
-			"eng": "Current position",
+	  "spa": "Posición actual",
+	  "eng": "Current position",
       "fre": "Position actuelle",
       "cze": "Současná pozice"
     },
     "situacio": {
       "cat": "Mapa de situació",
-			"spa": "Mapa de situación",
-			"eng": "Situation map",
+	  "spa": "Mapa de situación",
+	  "eng": "Situation map",
       "fre": "Carte de situation",
       "cze": "Situační mapa"
-    },
-    "A4Vertical": {
-      "cat": "A4 vertical",
-			"spa": "A4 vertical",
-			"eng": "A4 vertical",
-      "fre": "A4 verticale",
-      "cze": "A4 vertikálně"
-    },
-    "A4Horitzontal": {
-      "cat": "A4 horitzontal",
-			"spa": "A4 horizontal",
-			"eng": "A4 horizontal",
-      "fre": "A4 horizontale",
-      "cze": "A4 horizontálně"
     }
   }
 }
