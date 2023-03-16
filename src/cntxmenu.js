@@ -1972,7 +1972,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 						  {text: ".", 		prefix: ".",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "&plus;", 	prefix: "+",  size: "width:30px", separa: "<br>"},
 						  {text: "&#x78;&#x207F;", 	prefix: "**",  size: "width:40px"},
-						  {text: "m&#x25;", 	prefix: "%",  size: "width:40px", separa: "<br><br>"},
+						  {text: "&#x25;", 	prefix: "%",  size: "width:40px", separa: "<br><br>"},
 						  {text: "sin",     prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
 						  {text: "asin",    prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
 						  {text: "cos",     prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
@@ -1995,9 +1995,9 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  cdns.push("</fieldset>");
 		//Caixa multilínia per a la formula.
 		cdns.push(GetMessage("Expression"),
-			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:420px;height:100\" ></textarea><br>",
+			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:438px;height:100\" ></textarea><br>",
 			GetMessage("ResultOfSelectionAddedAsNewLayerStyleWithName", "cntxmenu"),
-			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
+			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:438px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
 		        "\" onClick='AfegeixCapaCalcul(document.CalculadoraCapes.calcul.value, document.CalculadoraCapes.nom_estil.value);TancaFinestraLayer(\"calculadoraCapa\");' />",
