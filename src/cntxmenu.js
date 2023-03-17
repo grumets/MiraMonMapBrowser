@@ -2504,7 +2504,7 @@ var estil_o_atrib;
 		"<label for=\"", prefix_id, "-valor-",i_condicio, "\" id=\"span-text-", prefix_id, "-cc-constant-",i_condicio,"\">", GetMessage("Value"), ":</label>");
 	if(capa.model==model_vector)
 	{
-		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>1)
+		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>0)
 		{
 			//·$· El més probable és que no tingui els valors de les propietats, només tindrè els que s'han consultat, caldrà fer alguna cosa com es va dfer per la qualitats
 			var feature, atribut=estil_o_atrib.nom, valors_atrib=[],i_obj, i_valor;
