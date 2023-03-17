@@ -4370,7 +4370,7 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
-const atributsVisibles = [], objectesDinsAmbit = [];
+const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
 var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
 
 	for (i = 0; i < attrLength; i++)
@@ -4403,8 +4403,12 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 					objectesDinsAmbit.push(objActual);
 				}
 			}
+			else 
+			{
+				// Casos de MultiPoint, MultiLineString i MultiPoligon no estan contemplats.
+			}
 		}
-		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		// Traspassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
 		objectes = objectesDinsAmbit;
 	}
 
@@ -4426,7 +4430,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 		"MaxY", "\t", objectes[0].bbox[3], "\n",
 		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
 
-		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
+		cdnsHtml.push("<table class='vectorial'><tr>");
 		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
 		{
 			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
@@ -4434,33 +4438,51 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			// Porta papers
 			cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
 		}
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
+		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
 		if (ambGeometria)
 		{
-			cdnsHtml.push("<th class='vectorial' style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
+			cdnsHtml.push("<th class='vectorial' style='text-align:start;'>", GetMessage("Geometry", "cntxmenu"), "</th>");
 			// Porta papers
 			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
 		}
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
 		cdnsHtml.push("</tr>");
 		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			const objecteARepresentar = objectes[i];
-			cdnsHtml.push("<tr class='vectorial'>");
+			cdnsHtml.push("<tr class='vectorial' style='height: 20px'>");
 			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
 				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objecteARepresentar.properties[atributsVisibles[j].nom], "</td>");
 				// Porta papers
 				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
 			}
+			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
 			if (ambGeometria)
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objecteARepresentar.geometry.coordinates.toString(), "</td>");
+				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap;'>");
+				// Diferenciar entre coord (x, y) i (x, y, z).
+				var numCoords = 2;
+				if (objecteARepresentar.geometry.coordinates.length > 0)
+				{
+					numCoords=objecteARepresentar.geometry.coordinates[0].length;
+				}
+
+				objecteARepresentar.geometry.coordinates.forEach((coord, index) => {
+					cdnsHtml.push((index==0 ? "(" : ", ("));
+					for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+					{
+						cdnsHtml.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+					}
+					cdnsHtml.push(")");
+				});
+				cdnsHtml.push("</td>");
+
 				// Porta papers
 				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 			}
-			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			cdnsHtml.push("</tr>");
 			// Porta papers
 			cdnsPortapapers.push("\n");
 		}
