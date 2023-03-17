@@ -2600,6 +2600,13 @@ var MessageLang={
     "eng": "exported_vector_objects_",
     "fre": "objets_vectoriels_exportes_",
     "cze": "exportovane_vektorové_objekty_"
+    },
+    "NoAttributesToDisplayForLayer": {
+      "cat": "No hi han atributs per a mostrar d'aquesta capa",
+      "spa": "No hay atributos para mostrar de esta capa",
+      "eng": "There are no attributes to display for this layer",
+      "fre": "Il n'y a pas d'attributs à afficher pour cette couche",
+      "cze": "Pro tuto vrstvu nejsou zobrazeny žádné atributy"
     }
   },
   "storymap": {

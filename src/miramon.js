@@ -1047,6 +1047,10 @@ function CanviaIdioma(s)
 	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
 		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});
 
+	elem=getFinestraLayer(window, "taulaCapaVectorial");
+	if(isLayer(elem) && isLayerVisible(elem))
+		MostraFinestraTaulaDeCapaVectorial()
+
 	if (IStoryActive!==null)
 	{
 		if (IStoryActive<0)

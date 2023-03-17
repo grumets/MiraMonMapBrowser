@@ -4361,9 +4361,14 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 
 	if (!elem)
 		return;
-	i_capaATaula=i_capa;
+	i_capaATaula = i_capa;
 	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
-	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+}
+
+function MostraFinestraTaulaDeCapaVectorial()
+{
+	const elem = getFinestraLayer(window, "taulaCapaVectorial")
+	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capaATaula));
 }
 
 /* Crea l'HTML per a construir la taula d'elements vectorials */
@@ -4388,15 +4393,17 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 		{
 			const objActual = objectes[i];
 			if (objActual.geometry.type == "Point")
-			{
-				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
+			{ 
+				// Obtinc la geometria en el CRS actual de navegació.
+				const geometryCRS = DonaGeometryCRSActual(objActual, capa.CRSgeometry);
+				if (EsPuntDinsEnvolupant({"x":geometryCRS.coordinates[0], "y":geometryCRS.coordinates[1]}, ParamInternCtrl.vista.EnvActual))
 				{
 					objectesDinsAmbit.push(objActual);
 				}
 			}
 			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
 			{
+				// Obtinc l'àmbit en el CRS actual de navegació.
 				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
 				{
@@ -4487,6 +4494,10 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			cdnsPortapapers.push("\n");
 		}
 		cdnsHtml.push("</table>");
+	}
+	else
+	{
+		cdnsHtml.push("<p style='text-align:center;'><b>" + GetMessage("NoAttributesToDisplayForLayer", "cntxmenu") + "</b></p>");
 	}
 
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
