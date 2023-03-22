@@ -115,18 +115,18 @@ function CanviaEtiquetesAnarCoord(sel)
 	}
 }//Fi de CanviaEtiquetesAnarCoord()
 
-function AnarAObjVectorialTaula(longitud, latitud)
+function AnarAObjVectorialTaula(coordX, coordY)
 {
 var d, punt_coord;
 
-	if(isNaN(longitud) || isNaN(latitud))
+	if(isNaN(coordX) || isNaN(coordY))
 	{
   	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
-	punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);	
+	punt_coord=DonaCoordenadesCRS(coordX, coordY, ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS);	
 
-	if(!EsPuntDinsAmbitNavegacio(punt_coord))
+	if(!EsPuntDinsAmbitGlobal(punt_coord))
 	{
   	   alert(GetMessage("RequestedPointOutsideBrowserEnvelope", "capavola"));
 	   return;
@@ -148,8 +148,6 @@ var d, punt_coord;
 		d/=FactorGrausAMetres;
 	var env=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
 	PortamAAmbit(env);
-	
-	//PortamAPunt(punt_coord.x,punt_coord.y);
 }
 
 function AnarACoordenada(form)

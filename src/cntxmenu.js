@@ -4401,18 +4401,16 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 					objectesDinsAmbit.push(objActual);
 				}
 			}
-			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			else
 			{
+				if (!objActual.bbox)
+					continue;
 				// Obtinc l'àmbit en el CRS actual de navegació.
 				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
 				{
 					objectesDinsAmbit.push(objActual);
 				}
-			}
-			else 
-			{
-				// Casos de MultiPoint, MultiLineString i MultiPoligon no estan contemplats.
 			}
 		}
 		// Traspassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
@@ -4465,25 +4463,60 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
 			}
 			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
+			// obtindre array de punts de coordenades.
+			var arrayCoords = [];
+			const tipusGeometria = objecteARepresentar.geometry.type;
+			if (objecteARepresentar.geometry.coordinates.length > 0)
+			{			
+				if (tipusGeometria == "Point")
+					arrayCoords = objecteARepresentar.geometry.coordinates;
+				else if (tipusGeometria == "LineString" || tipusGeometria =="MultiPoint")
+					arrayCoords = objecteARepresentar.geometry.coordinates;
+				else if (tipusGeometria == "Polygon" || tipusGeometria =="MultiLineString")
+					arrayCoords = objecteARepresentar.geometry.coordinates[0];
+				else if (tipusGeometria == "MultiPolygon")
+					arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
+			}
+			var anarCoordX, anarCoordY;
+			if ((tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon") && objecteARepresentar.bbox)
+			{
+				anarCoordX = (objecteARepresentar.bbox[0] + objecteARepresentar.bbox[2])/2;
+				anarCoordY = (objecteARepresentar.bbox[1] + objecteARepresentar.bbox[3])/2;
+			}
+			else
+			{
+				anarCoordX = objecteARepresentar.geometry.coordinates[0];
+				anarCoordY = objecteARepresentar.geometry.coordinates[1];
+			}
+			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoordX, " ,", anarCoordY, ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
+			//cdnsHtml.push("<td><button style='width=100%' onClick='PortamAAmbit(DonaEnvDeMinMaxXY(", objecteARepresentar.bbox[0], ",", objecteARepresentar.bbox[2], ",", objecteARepresentar.bbox[1], ",", objecteARepresentar.bbox[3],"))'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
 			if (ambGeometria)
 			{
 				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap;'>");
-				// Diferenciar entre coord (x, y) i (x, y, z).
-				var numCoords = 2;
-				if (objecteARepresentar.geometry.coordinates.length > 0)
+				// Diferenciar entre coord (x, y) i (x, y, z).			
+				if (tipusGeometria != "Point")
 				{
-					numCoords=objecteARepresentar.geometry.coordinates[0].length;
+					const numCoords = arrayCoords[0].length;
+					arrayCoords.forEach((coord, index) => {
+						cdnsHtml.push((index==0 ? "(" : ", ("));
+						for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+						{
+							cdnsHtml.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+						}
+						cdnsHtml.push(")");
+					});
 				}
-
-				objecteARepresentar.geometry.coordinates.forEach((coord, index) => {
-					cdnsHtml.push((index==0 ? "(" : ", ("));
+				else
+				{
+					const numCoords = arrayCoords.length;
+					cdnsHtml.push("(");
 					for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
 					{
-						cdnsHtml.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+						cdnsHtml.push(etiquetesCorrd[i_Coord]+": "+arrayCoords[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
 					}
 					cdnsHtml.push(")");
-				});
+				}
+				
 				cdnsHtml.push("</td>");
 
 				// Porta papers

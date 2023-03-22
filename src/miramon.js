@@ -2344,6 +2344,17 @@ function EsAmbitDinsAmbitNavegacio(ambit)
 	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
 }//Fi de EsAmbitDinsAmbitNavegacio()
 
+const IImgSituacioGlobal = 0;
+function EsPuntDinsAmbitGlobal(punt)
+{
+	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[IImgSituacioGlobal].EnvTotal.EnvCRS);
+}//Fi de EsPuntDinsAmbitGlobal()
+
+function EsAmbitDinsAmbitGlobal(ambit)
+{
+	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[IImgSituacioGlobal].EnvTotal.EnvCRS);
+}//Fi de EsAmbitDinsAmbitGlobal()
+
 function DonaValorDeCoordActual(x,y,negreta,input)
 {
 var cdns=[], ll, p, unitats_CRS;
@@ -2450,17 +2461,17 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 //No crida GuardaVistaPrevia()
 function CanviaAVistaGeneral()
 {
-var i_max;
+//var i_max;
 	//busco la vista de més extensió
-	i_max=0;
-	for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
+	//i_max=0;
+	/*for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
 	{
 		if ((ParamInternCtrl.EnvLLSituacio[i_max].MaxX-ParamInternCtrl.EnvLLSituacio[i_max].MinX)+
 			(ParamInternCtrl.EnvLLSituacio[i_max].MaxY-ParamInternCtrl.EnvLLSituacio[i_max].MinY)<
 		    (ParamInternCtrl.EnvLLSituacio[i].MaxX-ParamInternCtrl.EnvLLSituacio[i].MinX)+
 			(ParamInternCtrl.EnvLLSituacio[i].MaxY-ParamInternCtrl.EnvLLSituacio[i].MinY))
 				i_max=i;
-	}
+	}*/
 	/*if (i_max!=ParamInternCtrl.ISituacio)
 	{
 		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_max].EnvTotal.CRS)
