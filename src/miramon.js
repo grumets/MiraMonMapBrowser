@@ -4449,20 +4449,20 @@ function CarregaCapesDeServei(capesDeServei)
 	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null, dimensioPerCapa: capesDeServei.dimensioPerCapa ? capesDeServei.dimensioPerCapa : null });
 }
 
-function DonaCadenaPreguntarCarregaArrayCapesDeServei()
+function DonaCadenaPreguntarCarregaArrayCapesDeServei(nomesOffline)
 {
 var cdns=[];
 
 	cdns.push(GetMessage("BrowserContainsLayersRequireLogin", "authens"), ".<br>",
 		GetMessage("DoYouWantToLogInNow", "authens"),
-		"<br><center><input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("OK"),"\" onClick='CarregaArrayCapesDeServei(false, true, false);TancaFinestraLayer(\"info\");'/> ",
-		"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Cancel"),"\" onClick='CarregaArrayCapesDeServei(false, true, true);TancaFinestraLayer(\"info\");'/></center>");
+		"<br><center><input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("OK"),"\" onClick='CarregaArrayCapesDeServei(",nomesOffline,", true, false);TancaFinestraLayer(\"info\");'/> ",
+		"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Cancel"),"\" onClick='CarregaArrayCapesDeServei(",nomesOffline,", true, true);TancaFinestraLayer(\"info\");'/></center>");
 	return cdns.join("");
 }
 
-function PreguntarCarregaArrayCapesDeServei()
+function PreguntarCarregaArrayCapesDeServei(nomesOffline)
 {
-	IniciaFinestraInformacio(DonaCadenaPreguntarCarregaArrayCapesDeServei());
+	IniciaFinestraInformacio(DonaCadenaPreguntarCarregaArrayCapesDeServei(nomesOffline));
 }
 
 function CarregaArrayCapesDeServei(nomesOffline, preguntat, nomesSenseLogin)
@@ -4502,12 +4502,12 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat, nomesSenseLogin)
 		if (calferAlgun && !preguntat)
 		{
 			//Si hi ha alguna capa que requereix autentificació, el sistema de bloqueix de "pop ups" evita que surti la caixa a no ser que una acció de l'usuari ho invoqui. Per això cal una pregunta a l'usuari
-			PreguntarCarregaArrayCapesDeServei();
+			PreguntarCarregaArrayCapesDeServei(nomesOffline);
 		}
 		else
 		{
 			for (var i=0; i<ParamCtrl.capesDeServei.length; i++)
-				if (calfer[i] || !ParamCtrl.capesDeServei[i].servei.access)
+				if (calfer[i] || (!nomesOffline && !ParamCtrl.capesDeServei[i].servei.access))
 					CarregaCapesDeServei(ParamCtrl.capesDeServei[i]);
 		}
 	//}	

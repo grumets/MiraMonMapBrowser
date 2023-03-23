@@ -321,7 +321,7 @@ function MostraQualitatCapa(elem, quality, capa, i_estil)
 		contentLayer(elem, DonaCadenaMostraQualitatCapa(quality, capa, i_estil));
 }
 
-function DesplegaOPlegaIFramaQualityML(nom)
+function DesplegaOPlegaIFrameQualityML(nom)
 {
 	if (document.getElementById(nom+"iframe").style.display=="none")
 	{
@@ -343,7 +343,7 @@ var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_";
 		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
 		 "alt=\"", GetMessage("moreInfo") , "\" ",
 		 "title=\"",GetMessage("moreInfo"), "\" ",
-		 "onClick='DesplegaOPlegaIFramaQualityML(\"",nom,"\")'\"><iframe src=\"",ArrelURLQualityML, version, "/", concept,"/", id_qml, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
+		 "onClick='DesplegaOPlegaIFrameQualityML(\"",nom,"\")'\"><iframe src=\"",ArrelURLQualityML, version, "/", concept,"/", id_qml, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
 	return cdns.join("");
 }
 
