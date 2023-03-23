@@ -124,13 +124,7 @@ var d, punt_coord;
   	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
-	punt_coord=DonaCoordenadesCRS(coordX, coordY, ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS);	
-
-	if(!EsPuntDinsAmbitGlobal(punt_coord))
-	{
-  	   alert(GetMessage("RequestedPointOutsideBrowserEnvelope", "capavola"));
-	   return;
-	}
+	punt_coord=DonaCoordenadesCRS(coordX, coordY, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);	
 
 	//Dibuixo la icona per mostrar el punt consultat
 	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
