@@ -337,14 +337,9 @@ function DesplegaOPlegaIFramaQualityML(nom)
 
 function DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, concept, i, id_qml)
 {
-var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_";
+var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_", url= "ArrelURLQualityML"+ version + "/" + concept + "/" + id_qml;
 
-	cdns.push(" <img src=\"",
-		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
-		 "alt=\"", GetMessage("moreInfo") , "\" ",
-		 "title=\"",GetMessage("moreInfo"), "\" ",
-		 "onClick='DesplegaOPlegaIFramaQualityML(\"",nom,"\")'\"><iframe src=\"",ArrelURLQualityML, version, "/", concept,"/", id_qml, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
-	return cdns.join("");
+	return BotoDesplegable(nom, url, null);
 }
 
 function DonaCadenaValorsComLlistaQualitatCapa(values)

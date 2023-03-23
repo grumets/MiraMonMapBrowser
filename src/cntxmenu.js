@@ -4489,22 +4489,24 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 				anarCoordY = objecteARepresentar.geometry.coordinates[1];
 			}
 			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoordX, " ,", anarCoordY, ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
-			//cdnsHtml.push("<td><button style='width=100%' onClick='PortamAAmbit(DonaEnvDeMinMaxXY(", objecteARepresentar.bbox[0], ",", objecteARepresentar.bbox[2], ",", objecteARepresentar.bbox[1], ",", objecteARepresentar.bbox[3],"))'>", GetMessage("GoTo", "capavola"),"</button>", "</td>");
+
 			if (ambGeometria)
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap;'>");
+				cdnsHtml.push("<td>");
 				// Diferenciar entre coord (x, y) i (x, y, z).			
 				if (tipusGeometria != "Point")
 				{
 					const numCoords = arrayCoords[0].length;
+					var coordInteriors = [], nomDesplegable = capa.nom + "_feature_" + i;
 					arrayCoords.forEach((coord, index) => {
-						cdnsHtml.push((index==0 ? "(" : ", ("));
+						coordInteriors.push((index==0 ? "(" : ", ("));
 						for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
 						{
-							cdnsHtml.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+							coordInteriors.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
 						}
-						cdnsHtml.push(")");
+						coordInteriors.push(")");
 					});
+					cdnsHtml.push(GetMessage("moreInfo"), ": ", BotoDesplegable(nomDesplegable, null, coordInteriors.join("")));
 				}
 				else
 				{

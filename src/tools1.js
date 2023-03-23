@@ -2862,3 +2862,19 @@ const link = document.createElement('a');
 
   	return false;
 }
+
+// Retorna l'HTML per a crear un botó que permet desplegar contingut d'informació.
+function BotoDesplegable(nom, iFrameUrl, content)
+{
+	const cdns = [];
+	cdns.push(" <img src=\"",
+		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
+		 "alt=\"", GetMessage("moreInfo") , "\" ",
+		 "title=\"",GetMessage("moreInfo"), "\" ",
+		 "onClick='DesplegaOPlegaIFramaQualityML(\"",nom,"\")'\">");
+	if (iFrameUrl)	 
+		cdns.push("<iframe src=\"", iFrameUrl, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
+	else
+		cdns.push("<iframe srcdoc=\"", content, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
+	return cdns.join("");
+} // Fi function BotoDesplegable()
