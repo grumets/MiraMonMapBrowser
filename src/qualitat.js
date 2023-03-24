@@ -321,7 +321,7 @@ function MostraQualitatCapa(elem, quality, capa, i_estil)
 		contentLayer(elem, DonaCadenaMostraQualitatCapa(quality, capa, i_estil));
 }
 
-function DesplegaOPlegaIFramaQualityML(nom)
+function DesplegaOPlegaIFrameQualityML(nom)
 {
 	if (document.getElementById(nom+"iframe").style.display=="none")
 	{

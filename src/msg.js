@@ -407,7 +407,7 @@ var MessageLang={
     "spa": "Camp",
     "eng": "Field",
     "fre": "Champ",
-    "cze": "Pole"
+    "cze": "Proměnná"
   },
   "ofTheField": {
     "cat": "del camp",
@@ -2130,14 +2130,14 @@ var MessageLang={
       "spa": "Añada capa combinada a partir de dues capas existentes",
       "eng": "Add statistical fields to a categorical layer from another layer (of any type)",
       "fre": "Ajouter des champs statistiques à une couche catégorielle à partir d'une autre couche (de tout type)",
-      "cze": "Přidání statistických polí do kategoriální vrstvy z jiné vrstvy (libovolného typu)"
+      "cze": "Přidání statistických proměnných do kategoriální vrstvy z jiné vrstvy (libovolného typu)"
     },
     "AddStatisticalFields": {
-      "cat": "Afegir camps estadíscs",
+      "cat": "Afegir camps estadístics",
       "spa": "Añadir campos estadísticos",
       "eng": "Add statistical fields",
       "fre": "Ajouter des champs statistiques",
-      "cze": "Přidat statistická pole"
+      "cze": "Přidat statistické proměnné"
     },
     "NewLayerFromServer": {
       "cat": "Capa nova de servidor",
@@ -2200,7 +2200,7 @@ var MessageLang={
       "spa": "Combinación analítica de capas",
       "eng": "Analytical combination of layers",
       "fre": "Combinaison analytique de couches",
-      "cze": "Analytická kombinace vrstev"
+      "cze": "Kombinovat vrstvy"
     },
     "toCombineLayers": {
       "cat": "per combinar capes",
@@ -3291,7 +3291,7 @@ var MessageLang={
       "spa": "Porc. de salto lateral",
       "eng": "Lateral jump perc.",
       "fre": "Pourc. de saut latéral",
-      "cze": "Boční skok perc."
+      "cze": "Boční skok proc"
     },
     "ShowCleanMap_View": {
       "cat": "Mostra <u>v</u>ista del mapa neta",
@@ -3319,7 +3319,7 @@ var MessageLang={
       "spa": "N. decimales",
       "eng": "N. of decimal figures",
       "fre": "N. décimales",
-      "cze": "N. desetinných čísel"
+      "cze": "Počet desetinných čísel"
     },
     "Corners": {
       "cat": "Cantonades",
@@ -3781,14 +3781,14 @@ var MessageLang={
       "spa": "Mueve vista",
       "eng": "Pan view",
       "fre": "Déplace vue",
-      "cze": "Pohled na panorama"
+      "cze": "Posun pomocí kurzoru "
     },
     "CenterWhereClick": {
       "cat": "Centra on faci clic",
       "spa": "Centra donde haga clic",
       "eng": "Center where click",
       "fre": "Centre où cliquer",
-      "cze": "Středisko, kde klikněte"
+      "cze": "Klikněte pro vycentrování mapy"
     },
     "WindowZoom": {
       "cat": "Zoom de finestra",
@@ -4542,7 +4542,7 @@ var MessageLang={
       "spa": "Escala",
       "eng": "Scale",
       "fre": "Échelle",
-      "cze": "MěřítkoÉchelle"
+      "cze": "Měřítko"
     }
   },
   "authens": {
@@ -5806,25 +5806,25 @@ var MessageLang={
       "cze": "Při tisku zobrazení zachovejte"
     },
     "theExtent": {
-      "cat":"l'àmbit",
-      "spa":"el ámbito",
-      "eng":"the extent",
-      "fre":"le champ",
-      "cze": "rozsah"
+      "cat": "l'àmbit",
+      "spa": "el ámbito",
+      "eng": "the extent",
+      "fre": "le champ",
+      "cze": "rozlišení podle rozsahu mapy"
     },
     "theResolution": {
       "cat": "la resolució",
       "spa": "la resolución",
       "eng": "the resolution",
       "fre": "la résolution",
-      "cze": "usnesení"
+      "cze": "originální rozlišení mapy"
     },
     "ResolutionKeptExtentChanged": {
       "cat": "La resolució original de la vista es respecta però es canvia l'àmbit",
       "spa": "La resolución original de la vista se respeta pero se cambia el ámbito",
       "eng": "The original resolution of the view is kept but the extent is changed",
       "fre": "La résolution originelle de la vue est respectée mais le champ est changé",
-      "cze": "Původní rozlišení zobrazení zůstává zachováno, ale mění se jeho rozsah"
+      "cze": "Původní rozlišení zobrazení zůstává zachováno, ale mění rozsah zobrazení"
     },
     "ResolutionAssignedIsLower": {
       "cat":"La resolució assignada a la impressora pel navegador és INFERIOR a la resolució de l'àrea de la vista a imprimir.\nPrem 'Imprimir' per a imprimir a un resolució inferior o cancel·la i fes més petita l'area de la vista (p.ex. canviat la mida del navegador)",
@@ -5900,10 +5900,34 @@ var MessageLang={
   "colors": {
     "ApplyNewColor": {
       "cat": "Per aplicar un nou color feu un clic directament sobre el color desitjat",
-	  "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
-	  "eng": "To apply a new color, please click on the wished color",
-	  "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
+	    "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
+	    "eng": "To apply a new color, please click on the wished color",
+	    "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
       "cze": "Chcete-li použít novou barvu, klikněte na požadovanou barvu"
     }
-  } 
+  },
+  "config": {
+    // Totes les claus d'aquesta secció "config" no estan en anglès perque corresponen a les paraules reservades definides per Layers -> name, com ara llegenda, situacio, coord, etc
+    "llegenda": {
+      "cat": "Llegenda i control de les capes",
+      "spa": "Leyenda y control de capas",
+      "eng": "Legend & layer control",
+      "fre": "Contrôle des légendes et des couches",
+      "cze": "Legenda a ovládání vrstev"
+    },
+    "coord": {
+      "cat": "Posició actual",
+	  "spa": "Posición actual",
+	  "eng": "Current position",
+      "fre": "Position actuelle",
+      "cze": "Současná pozice"
+    },
+    "situacio": {
+      "cat": "Mapa de situació",
+	  "spa": "Mapa de situación",
+	  "eng": "Situation map",
+      "fre": "Carte de situation",
+      "cze": "Situační mapa"
+    }
+  }
 }

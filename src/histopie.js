@@ -110,7 +110,13 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 
 	cdns.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
-		GetMessage("Date"), "\t", capa.data ? DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data) : "", "\n",
+		GetMessage("Date"), "\t", capa.data ? DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data) : "", "\n");
+	if(capa.dimensioExtra && capa.dimensioExtra.length)
+	{
+		for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+			cdns.push(DonaCadenaNomDesc(capa.dimensioExtra[i_dim].clau), "\t", DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor]), "\n");
+	}
+	cdns.push(
 		//DonaCadenaLang({"cat": "Estil", "spa": "Estilo", "eng": "Style", "fre": "Style"}), "\t", DonaCadena(estil.desc), "\t", ((estil.DescItems) ? DonaCadena(estil.DescItems) : ""), "\n",
 		GetMessage("Style"), "\t", DonaCadena(estil.desc), "\n",
 		GetMessage("CellSize"), " (", DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS), ")\t", costat, "\n",
@@ -1740,6 +1746,11 @@ function PreparaHistograma(n_histograma, i_c)
 		var str=DonaCadena(capa.desc) + ((capa.estil.length > 1 && estil.desc)? ", " + DonaCadena(estil.desc) : "");
 		if (capa.data)
 			str+=" ("+DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data)+")";
+		if(capa.dimensioExtra && capa.dimensioExtra.length)
+		{
+			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
+		}
 		retorn_prep_histo.options={
 			title: {
 				display: true,
@@ -1819,6 +1830,11 @@ function PreparaHistograma(n_histograma, i_c)
 				((estil.component.length>1 && estil.component[i_c].desc) ? ", " + DonaCadena(estil.component[i_c].desc) : "");
 		if (capa.data)
 			str+=" ("+DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data)+")";
+		if(capa.dimensioExtra && capa.dimensioExtra.length)
+		{
+			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
+		}
 		retorn_prep_histo.options={
 			legend: {
 				display: false
@@ -2043,6 +2059,11 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		var str=DonaCadena(estil.desc) + ((estil.component.length>1 && estil.component[i_c].desc) ? ", " + DonaCadena(estil.component[i_c].desc) : "")
 		if (capa.data)
 			str+=" ("+DonaDataCapaComATextBreu(histograma.i_capa, capa.i_data)+")";
+		if(capa.dimensioExtra && capa.dimensioExtra.length)
+		{
+			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
+		}
 		retorn_prep_histo.options={
 			legend: {
 				display: false
