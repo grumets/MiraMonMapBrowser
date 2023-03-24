@@ -79,7 +79,7 @@ function DonaIndexDimensioLayerPerNom(dimensioExtra, nom)
 function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, visible)
 {
 var j, k, z, estils, estil, minim, maxim;
-var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null, dimensioPerCapa=null, i_dimensio_layer=-1;
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null, dimensioPerCapa=null, nodataPerCapa=null, i_dimensio_layer=-1;
 var trobat=false, criteris;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
@@ -121,7 +121,44 @@ var trobat=false, criteris;
 			}
 		}		
 	}
-	
+	if (servidorGC.param_func_after && servidorGC.param_func_after.nodataPerCapa)
+	{
+		trobat=false;
+		for(j=0; j<servidorGC.param_func_after.nodataPerCapa.length; j++)
+		{
+			if(servidorGC.param_func_after.nodataPerCapa[j].criteris && servidorGC.param_func_after.nodataPerCapa[j].nodata)
+			{
+				criteris=servidorGC.param_func_after.nodataPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest nodata
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat el nodata a aplicar a la capa
+					nodataPerCapa=servidorGC.param_func_after.nodataPerCapa[j].nodata;
+					break;
+				}
+			}
+		}
+		
+	}
 	if (servidorGC.param_func_after && servidorGC.param_func_after.estilPerCapa)
 	{
 		trobat=false;
@@ -302,10 +339,11 @@ var trobat=false, criteris;
 		if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 
-		capa.valors=[{
-					"datatype": "float32",
-					"nodata": [-9999, 0]
-				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
+		
+		
+		capa.valors=[{ datatype: "float32",
+					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinó no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
+					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
 		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
@@ -803,6 +841,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OrigenUsuari)
 	{
+		var nodata_usuari=(capa.valors && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
 		capa.valors=[];
 		var i_v=0;
 		for (var i=0; i<image.getSamplesPerPixel(); i++)
@@ -812,6 +851,30 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				datatype: datatype,
 				nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
 			});
+			if(nodata_usuari)
+			{
+				// intento afegir els nodata que hi pugui haver definits per l'usuari als nodata definits a dins de la imatge
+				if(capa.valors[i].nodata)
+				{
+					var j, k;
+					for(j=0; j<nodata_usuari.length; j++)
+					{
+						for(k=0; k<capa.valors[i].nodata.length; k++)
+						{
+							if(nodata_usuari[j]==capa.valors[i].nodata[k])
+								break;
+						}
+						if(k==capa.valors[i].nodata.length)
+						{
+							// no trobat, afegeixo el nodata
+							capa.valors[i].nodata.push(nodata_usuari[j]);
+						}
+					}
+				}
+				else
+					capa.valors[i].nodata=JSON.parse(JSON.stringify(nodata_usuari));
+					
+			}
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
