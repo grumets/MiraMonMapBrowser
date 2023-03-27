@@ -115,7 +115,7 @@ function CanviaEtiquetesAnarCoord(sel)
 	}
 }//Fi de CanviaEtiquetesAnarCoord()
 
-function AnarAObjVectorialTaula(coordX, coordY)
+function AnarAObjVectorialTaula(longitud, latitud)
 {
 var d, punt_coord, env_obj;
 
