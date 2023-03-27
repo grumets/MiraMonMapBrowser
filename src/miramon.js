@@ -2337,12 +2337,7 @@ function OmpleFinestraEnllac()
 function EsPuntDinsAmbitNavegacio(punt)
 {
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
-}//Fi de EsPuntDinsAmbitNavegacio()
-
-function EsAmbitDinsAmbitNavegacio(ambit)
-{
-	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
-}//Fi de EsAmbitDinsAmbitNavegacio()
+}
 
 const IImgSituacioGlobal = 0;
 function EsPuntDinsAmbitGlobal(punt)
@@ -4426,6 +4421,7 @@ var capa_afegida, alguna_capa_afegida=false;
 function FerLoginICarregaCapes()
 {
 var capa, n_capa_ini;
+	
 	if (!CalFerLogin())
 	{
 		//alert(GetMessage("SessionsAlreadyStarted", "authens"));
@@ -4461,7 +4457,7 @@ var capa, n_capa_ini;
 
 function CarregaCapesDeServei(capesDeServei)
 {
-	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null, dimensioPerCapa: capesDeServei.dimensioPerCapa ? capesDeServei.dimensioPerCapa : null });
+	FesPeticioCapacitatsIParsejaResposta(capesDeServei.servei.servidor, capesDeServei.servei.tipus, capesDeServei.servei.versio, capesDeServei.servei.cors, capesDeServei.servei.access, NumeroDeCapesVolatils(-1), AfegeixCapesWMSAlNavegador, {capa: capesDeServei.capa ? capesDeServei.capa : null, capaDePunts: capesDeServei.capaDePunts ? capesDeServei.capaDePunts : null, estilPerCapa: capesDeServei.estilPerCapa ? capesDeServei.estilPerCapa : null, dimensioPerCapa: capesDeServei.dimensioPerCapa ? capesDeServei.dimensioPerCapa : null, nodataPerCapa: capesDeServei.nodataPerCapa ? capesDeServei.nodataPerCapa : null });
 }
 
 function DonaCadenaPreguntarCarregaArrayCapesDeServei(nomesOffline)
