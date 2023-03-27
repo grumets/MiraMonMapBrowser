@@ -2607,6 +2607,13 @@ var MessageLang={
       "eng": "There are no attributes to display for this layer",
       "fre": "Il n'y a pas d'attributs à afficher pour cette couche",
       "cze": "Pro tuto vrstvu nejsou zobrazeny žádné atributy"
+    },
+    "NoObjectSelectedExport": {
+      "cat": "No s'ha seleccionat cap objecte per exportar",
+      "spa": "No se ha seleccionado ningún objeto para exportar",
+      "eng": "No object has been selected for export",
+      "fre": "Aucun objet n'a été sélectionné pour l'exportation",
+      "cze": "Pro export nebyl vybrán žádný objekt"
     }
   },
   "storymap": {
