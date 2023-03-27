@@ -1221,6 +1221,43 @@
 							}
 						}
 					},
+					"nodataPerCapa": {
+						"description": "Valors nodata a aplicar a les capes ràster, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nodata", "criteris"],
+							"properties": {
+								"nodata":{
+									"description": "Valors del nodata a aplicar a les capes que cumpleixin els criteris establerts.",
+									"type": "array",
+									"items": {
+										"description": "Valor del nodata",
+										"type": "number"
+									}
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar l'array de nodata a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+						
+					},
 					"capaDePunts": {
 						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. L'array 'capa' anterior no influeix aquí i es mostren totes. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
 						"type": "object",
