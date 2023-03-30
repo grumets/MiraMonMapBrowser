@@ -83,12 +83,12 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCa
 var trobat=false, criteris;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
-	if (servidorGC.param_func_after && servidorGC.param_func_after.dimensioPerCapa)
+	if (layer.dimensioExtra && servidorGC.param_func_after && servidorGC.param_func_after.dimensioPerCapa)
 	{
 		trobat=false;
 		for(j=0; j<servidorGC.param_func_after.dimensioPerCapa.length; j++)
 		{
-			if((!layer.dimensioExtra || -1!=(i_dimensio_layer=DonaIndexDimensioLayerPerNom(layer.dimensioExtra, servidorGC.param_func_after.dimensioPerCapa[j].nom))) &&
+			if(-1!=(i_dimensio_layer=DonaIndexDimensioLayerPerNom(layer.dimensioExtra, servidorGC.param_func_after.dimensioPerCapa[j].nom)) &&
 			   servidorGC.param_func_after.dimensioPerCapa[j].criteris && servidorGC.param_func_after.dimensioPerCapa[j].formulaDesc)
 			{
 				criteris=servidorGC.param_func_after.dimensioPerCapa[j].criteris;
@@ -317,11 +317,6 @@ var trobat=false, criteris;
 		capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
 		if(dimensioPerCapa && i_dimensio_layer!=-1)
 			capa.dimensioExtra[i_dimensio_layer].formulaDesc=dimensioPerCapa.formulaDesc;
-	}
-	else if(dimensioPerCapa)
-	{
-		capa.dimensioExtra=[{clau: {nom:servidorGC.param_func_after.dimensioPerCapa[j].nom},
-							formulaDesc: servidorGC.param_func_after.dimensioPerCapa[j].formulaDesc}];
 	}
 	else
 		capa.dimensioExtra=null;
@@ -1139,3 +1134,6 @@ var i_fitxer;
 
 	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);
 }
+
+
+
