@@ -353,7 +353,7 @@ var ctx, canvas, shadowPrevi;
 			shadowPrevi=ActivaSombraFonts(ctx)
 
 			ctx.beginPath();
-			ctx.strokeStyle=PuntsSerieTemporal[i_punt].color;;
+			ctx.strokeStyle=PuntsSerieTemporal[i_punt].color;
 			ctx.lineWidth=3;
 			var i_ini=PuntsSerieTemporal[i_punt].i+5;
 			var j_ini=PuntsSerieTemporal[i_punt].j-5;
