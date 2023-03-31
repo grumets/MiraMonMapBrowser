@@ -4371,7 +4371,7 @@ function MostraFinestraTaulaDeCapaVectorial()
 function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
-const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"], serializer =  new XMLSerializer();
+const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
 var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
 	nodePare.innerHTML = "";
 	const divCapcalera = document.createElement("div");
@@ -4556,7 +4556,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 					}
 					coordInteriors.push(")");
 				});
-				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " + BotoDesplegableDiv(nomDesplegable, coordInteriors.join("")));
+				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " + BotoDesplegableDiv(nomDesplegable, CreaContenedorTextAmbScroll(coordInteriors.join(""), 120)));
 			}
 			else
 			{
@@ -4586,6 +4586,19 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	nodePare.appendChild(divCapcalera);
 	return;
 }
+
+// Crea un conjunt de <div> anidats per a fixar una alçada concreta i la resta de contingut es mostri dins d'un scroll.
+function CreaContenedorTextAmbScroll(contingut, alcada = "50")
+{
+	const cdnsDivScroller = [];
+
+	cdnsDivScroller.push("<div style='height:", alcada,"px; position: relative;'>",
+	"<div style='max-height: 100%; overflow: auto;'>", 
+	"<div>", contingut, "</div>", "</div>", "</div>");
+
+	return cdnsDivScroller.join("");
+}
+
 /* Determina quins elements vectorials s'inclouran en l'exportació */
 function ActualitzaIndexObjectesExportar(checkbox)
 {
