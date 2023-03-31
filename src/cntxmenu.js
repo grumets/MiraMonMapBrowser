@@ -608,12 +608,12 @@ var j;
 	{
 		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 		{
-			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
+			if(-1!=servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
 				return j;
 		}
 		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 		{
-			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
+			if(-1!=servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
 				return j;
 		}
 	}
