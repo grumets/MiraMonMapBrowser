@@ -226,7 +226,7 @@ var trobat=false, criteris;
 			{
 				if(!estil.component)
 					estil.component=[{"i_valor": 0}];
-				if (layer.vom=="Land Water Transition Zone - Hydroperiod" && !estil.component[0].estiramentPaleta)
+				if ((layer.vom=="Land Water Transition Zone - Hydroperiod" || layer.vom=="Open Data - Land Water Transition Zone - Hydroperiod") && !estil.component[0].estiramentPaleta)
 					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
 			}
 			if (layer.categories && layer.categories.length && !estil.categories)

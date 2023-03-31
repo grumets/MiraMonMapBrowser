@@ -33,8 +33,7 @@ function DonaUrlAmbAccessToken(url, access_token)
 {
 	if (access_token)
 		return url + (url.indexOf('?')!=-1 ? "&" : "?") + "access_token=" + access_token;
-	else
-		return url;
+	return url;
 }
 
 function AddAccessTokenToURLIfOnline(url, access)
@@ -56,8 +55,7 @@ function AddAccessTokenToURLIfOnline(url, access)
 			}
 			return DonaUrlAmbAccessToken(url, authResponse.access_token);
 		}
-		else
-			return null;
+		return null;
 	}
 	return url;
 }
@@ -112,8 +110,10 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken="failed";
 				if (error.error.code=="cancelled")
 				{
+					/*NJ_31032023: No intento fer la petició sense login, si l'usuari cancel·la no em connecto aquest servei ni amb login ni sense. 
+					Si és com en el cas del WQEMS que el servei dona coses diferents segons si uso usuari o no ja ho hem resolt afegint el servei de les dues maneres.
 					if (confirm(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + GetMessage("ContinueWithoutAuthentication","authens") + "?"))
-						f_repeat(null, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+						f_repeat(null, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);*/
 					return;
 				}	
 				alert(GetMessage("LoginAccountFailed","authens") + " " + access.tokenType + ". " + error.error.message);
