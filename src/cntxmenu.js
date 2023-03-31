@@ -4620,7 +4620,7 @@ function TancaFinestra_taulaCapaVectorial()
 
 function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
-	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria ? checkboxGeometria.checked : false;
 	InsereixCadenaTaulaDeCapaVectorial(getFinestraLayer(window, "taulaCapaVectorial"), i_capa, ambit, geometria);
 	//contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
