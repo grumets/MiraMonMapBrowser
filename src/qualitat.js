@@ -323,7 +323,7 @@ function MostraQualitatCapa(elem, quality, capa, i_estil)
 
 function DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, concept, i, id_qml)
 {
-var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_", url= "ArrelURLQualityML"+ version + "/" + concept + "/" + id_qml;
+var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_", url= ArrelURLQualityML + version + "/" + concept + "/" + id_qml;
 
 	return BotoDesplegableIFrame(nom, url);
 }

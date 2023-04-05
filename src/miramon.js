@@ -2339,17 +2339,6 @@ function EsPuntDinsAmbitNavegacio(punt)
 	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS);
 }
 
-const IImgSituacioGlobal = 0;
-function EsPuntDinsAmbitGlobal(punt)
-{
-	return EsPuntDinsEnvolupant(punt, ParamCtrl.ImatgeSituacio[IImgSituacioGlobal].EnvTotal.EnvCRS);
-}//Fi de EsPuntDinsAmbitGlobal()
-
-function EsAmbitDinsAmbitGlobal(ambit)
-{
-	return EsEnvDinsEnvolupant(ambit, ParamCtrl.ImatgeSituacio[IImgSituacioGlobal].EnvTotal.EnvCRS);
-}//Fi de EsAmbitDinsAmbitGlobal()
-
 function DonaValorDeCoordActual(x,y,negreta,input)
 {
 var cdns=[], ll, p, unitats_CRS;
