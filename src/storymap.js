@@ -160,13 +160,13 @@ function SeguentPasStoryMap()
 		GuardarInformacioPasStoryMap()
 	}
 
-	const novaStroyMapFinestra = getFinestraLayer(window, "creaStoryMap");
-	novaStroyMapFinestra.replaceChildren();
+	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+	novaStoryMapFinestra.replaceChildren();
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
 	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, stepImg", comptadorPassos, ")'>", 
 	"<img id='stepImg", comptadorPassos, "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br>", 
 	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
-	novaStroyMapFinestra.innerHTML = htmlNextStep.join("");
+	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
@@ -185,9 +185,9 @@ function FinalitzarStoryMap()
 {
 	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>"];
 	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
-	for (let i_Story = 0, passosLength = novaStroyMap.passos.length; i_Story < passosLength; i_Story++) {
-		const pas = novaStoryMap[i_Story];
-		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
+	for (let i_Story = 0, passosLength = novaStoryMap.passos.length; i_Story < passosLength; i_Story++) {
+		const pas = novaStoryMap.passos[i_Story];
+		cdns.push("<div data-mm-center='{x:"+pas.x + ", y:" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
 	}
 	cdns.push("</html>");
 
