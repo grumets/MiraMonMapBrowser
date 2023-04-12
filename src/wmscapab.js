@@ -41,12 +41,34 @@
 var ajaxGetCapabilities=[];
 var ServidorGetCapabilities=[];
 
+function ExtreuUnitatsDeCadenaPerWQEMS(layer, cadena)
+{
+var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:", k;
+
+	if (cadena.substr(0, str_uom.length)==str_uom)
+	{
+		layer.uom=cadena.substr(str_uom.length).trim();
+		if (layer.uom=="mg/m^3")
+			layer.uom="mg/m<sup>3</sup>";
+		else if (layer.uom=="NTU")
+			layer.uom="Nephelometric Turbidity (NTU)";
+	}
+	else if (cadena.substr(0, str_vom.length)==str_vom)
+		layer.vom=cadena.substr(str_vom.length).trim();
+	else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
+	{
+		if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
+			layer.categories[parseInt(cadena.substr(str_valueMeaning.length,k))]=cadena.substr(str_valueMeaning.length+k+1).trim();		
+	}
+}
+
 //Suporta totes les versions de WMS
+// Si hi ha servidorGC.param_func_after.capa[].nom només es carregen les capes que hi ha a l'array.
 function LlegeixLayerServidorGC(servidorGC, node_layer, sistema_ref_comu, pare)
 {
-var i, j, k, node2, node3, trobat=false, cadena, cadena2, layer={};
+var i, j, node2, node3, trobat=false, cadena, cadena2, layer={};
 var minim, maxim, factor_k, factorpixel;
-var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMeaning:"
+
 
 	//Llegeixo les capacitats d'aquesta capa
 	//Començo pel sistema de referència
@@ -67,6 +89,7 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 		CostatMinim: null,
 		CostatMaxim: null,
 		CRSs: [],
+		keywords: [],
 		consultable: false,
 		estil: [],
 		uom: null,
@@ -100,14 +123,31 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 
 	if(trobat || sistema_ref_comu)
 	{
+		var capa;
 		for(i=0; i<node_layer.childNodes.length; i++)
 		{
 			node2=node_layer.childNodes[i];
 			if(node2.nodeName=="Name")
 			{
 				//Llegeix-ho la capa si té name
-				servidorGC.layer[servidorGC.layer.length]=layer;
 				layer.nom=node2.childNodes[0].nodeValue;
+				//Si tinc un array de noms de capes a llegir, només la llegeixo si està a la llista.
+				if (servidorGC.param_func_after && servidorGC.param_func_after.capa)
+				{
+					capa=servidorGC.param_func_after.capa;
+					for(var i_capa=0; i_capa<capa.length; i_capa++)
+					{
+						if (capa[i_capa].nom==layer.nom)
+							break;
+					}
+					if (i_capa==servidorGC.param_func_after.capa.length)
+					{
+						// i=node_layer.childNodes.length;  //faig veure que no he trobat el nom: He recorregut tot l'array de nodes.  NJ-> JM no entenc perquè fas això, si ho fas no acabes de llegir els altres fills de la layer
+						break;
+					}
+				}
+				// Afegixo la capa en aquest punt on sé que té nom, i si hi ha una llista de capes és a la llista
+				servidorGC.layer[servidorGC.layer.length]=layer;
 				
 				if(pare) //hereto les coses del pare si s'ha de fer
 				{
@@ -116,6 +156,12 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 						layer.CRSs.push.apply(layer.CRSs, pare.CRSs);
 						layer.CRSs.sort(sortAscendingStringInsensible);
 						layer.CRSs.removeDuplicates(sortAscendingStringInsensible);
+					}
+					if(pare.keywords && pare.keywords.length>0)
+					{
+						layer.keywords.push.apply(layer.keywords, pare.keywords);
+						layer.keywords.sort(sortAscendingStringInsensible);
+						layer.keywords.removeDuplicates(sortAscendingStringInsensible);
 					}
 					if(pare.consultable)
 						layer.consultable=true;
@@ -142,7 +188,12 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 				node2=node_layer.childNodes[i];
 
 				if (node2.nodeName=="Title")
-					layer.desc=node2.childNodes[0].nodeValue;
+				{
+					if (servidorGC.param_func_after && servidorGC.param_func_after.capa && capa.desc)
+						layer.desc=capa.desc;
+					else
+						layer.desc=node2.childNodes[0].nodeValue;
+				}
 				else if(node2.nodeName=="Style")
 				{
 					node3=node2.getElementsByTagName('Name');
@@ -200,8 +251,22 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 					if(node3 && node3.length>0)
 						layer.EnvLL.MaxY=parseFloat(node3[0].childNodes[0].nodeValue);
 				}
-				else if (node2.nodeName=="KeywordList")
+				else if(node2.nodeName=="Keywords") // A la versió 1.0.0 és una única clau amb les paraules separades per coma
 				{
+					// <Keywords>MCSC, Sòl, Cobertes, Catalunya, Nivell 5, MCSC-4, 2009</Keywords>
+					cadena=node2.childNodes[0].nodeValue;
+					var array_keywords=cadena.split(",");
+					for(j=0; j<array_keywords.length; j++)
+					{
+						layer.keywords.push(array_keywords[j]);
+						
+						//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
+						ExtreuUnitatsDeCadenaPerWQEMS(layer, array_keywords[j]);
+					}
+				}
+				else if (node2.nodeName=="KeywordList") // A partir de la versió 1.1.x és una llista amb diversos nodes 
+				{
+					//<KeywordList><Keyword>Cobertes</Keyword>....</KeywordList>
 					if (node2.childNodes)
 					{
 						for(j=0; j<node2.childNodes.length; j++)
@@ -210,22 +275,10 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 							if (node3.nodeName=="Keyword")
 							{
 								cadena=node3.childNodes[0].nodeValue;
+								layer.keywords.push(cadena);
+								
 								//Cas excepcional dels acords que WQeMS per obtenir les unitats i la descripció dels valors.
-								if (cadena.substr(0, str_uom.length)==str_uom)
-								{
-									layer.uom=cadena.substr(str_uom.length).trim();
-									if (layer.uom=="mg/m^3")
-										layer.uom="mg/m<sup>3</sup>";
-									else if (layer.uom=="NTU")
-										layer.uom="Nephelometric Turbidity (NTU)";
-								}
-								else if (cadena.substr(0, str_vom.length)==str_vom)
-									layer.vom=cadena.substr(str_vom.length).trim();
-								else if (cadena.substr(0, str_valueMeaning.length)==str_valueMeaning)
-								{
-									if (-1!=(k=cadena.substr(str_valueMeaning.length).indexOf(':')))
-										layer.categories[parseInt(cadena.substr(str_valueMeaning.length,k))]=cadena.substr(str_valueMeaning.length+k+1).trim();
-								}
+								ExtreuUnitatsDeCadenaPerWQEMS(layer, cadena);
 							}
 						}
 					}
@@ -367,7 +420,6 @@ var str_uom="UnitOfMeasure:", str_vom="SubService:", str_valueMeaning="ValueMean
 				layer.consultable=true;
 		}
 	}
-
 	//Si aquesta layer té fills continuo llegint
 	node2=node_layer.getElementsByTagName('Layer');
 	if (node2 && node2.length)
@@ -400,7 +452,7 @@ function HiHaAlgunErrorDeParsejatGetCapabilities(doc)
 
 function ParsejaRespostaGetCapabilities(doc, servidorGC)
 {
-var root, cadena, node, node2, i, j
+var root, cadena, node, node2, i, j;
 
 	if(!doc)
 	{
@@ -833,11 +885,16 @@ var request;
 								param_func_after: param_func_after};
 								
 	ajaxGetCapabilities[ajaxGetCapabilities.length]=new Ajax();
+	/* NJ_13_03_2023: Joan no sé per quin motiu es va afegir això aquí però amb això no em deixa decidir com tractar aquest servei, i 
+	volen que les capes es puguin afegir les generals i les validades per usuari, així que ho trec. 
 	if (!access && ServidorGetCapabilities[ServidorGetCapabilities.length-1].servidor=="https://geoserver-wqems.opsi.lecce.it/geoserver/wms")
-		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]};
+		ServidorGetCapabilities[ServidorGetCapabilities.length-1].access={"tokenType": "wqems", "request": ["capabilities", "map"]}; */
 
-	request="REQUEST=GetCapabilities&VERSION="
-	request+=versio	? versio : "1.1.0";
+	request="REQUEST=GetCapabilities&VERSION=";
+	if(typeof versio==="object" && versio)
+		request+=DonaVersioComAText(versio);
+	else
+		request+=versio	? versio : "1.1.0";
 	request+="&SERVICE="
 	if (tipus=="TipusWMS" || tipus=="TipusWMS_C")
 		request+="WMS";

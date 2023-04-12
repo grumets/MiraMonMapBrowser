@@ -1681,10 +1681,12 @@ function textHTMLLayer(name, left, top, width, height, ancora, param, div_class,
 		if (layerList[i].nom==name)
 		{
 			console.log("textHTMLLayer is creating a layer/div with the same layer/div name twice. Old one is overwritten.");
-			z=i;
+			// Esborro la layer i la torno a crear sinó el z-index no queda correcte i queden coses amagades
+			layerList.splice(i,1);
+			z--;
 			break;
 		}
-	}	
+	}
 
 	//Posem null a content per tal de que la funció de canvi d'idioma no la repinti.
 	layerList[z]= { "nom": name, "ancora": ancora, "contingut": ((param.save_content) ? content : null)};
@@ -2860,3 +2862,61 @@ const link = document.createElement('a');
 
   	return false;
 }
+
+// Modifica l'atribut style.display per fer apareixer o no el contenedor d'informació. 
+function DesplegaOPlegaIFrameInfo(nom)
+{
+	var iFrameContenedor = document.getElementById(nom+"iframe"), imatge = document.getElementById(nom+"img");
+	if (iFrameContenedor && imatge !== null && iFrameContenedor.tagName == "IFRAME" && imatge.tagName == "IMG")
+		DesplegaOPlegaInfo(iFrameContenedor, imatge)
+}
+
+function DesplegaOPlegaDivInfo(nom)
+{
+	var divContenedor = document.getElementById(nom+"div"), imatge = document.getElementById(nom+"img");
+	if (divContenedor !== null && imatge !== null && divContenedor.tagName == "DIV" && imatge.tagName == "IMG")
+		DesplegaOPlegaInfo(divContenedor, imatge)
+}
+
+function DesplegaOPlegaInfo(contenedor, imatge)
+{
+	if (imatge !== null && imatge.tagName == "IMG" && contenedor !== null)
+	{
+		if (contenedor.style.display=="none")
+		{
+			contenedor.style.display="inline";
+			imatge.src=AfegeixAdrecaBaseSRC("boto_contract.png");
+		}
+		else
+		{
+			contenedor.style.display="none";
+			imatge.src=AfegeixAdrecaBaseSRC("boto_expand.png");
+		}
+	}	
+}
+
+// Retorna l'HTML per a crear un botó que permet desplegar contingut d'informació en un iFrame.
+function BotoDesplegableIFrame(nom, url)
+{
+	const cdns = [];
+	cdns.push(" <img src=\"",
+		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
+		 "alt=\"", GetMessage("moreInfo") , "\" ",
+		 "title=\"",GetMessage("moreInfo"), "\" ",
+		 "onClick='DesplegaOPlegaIFrameInfo(\"",nom,"\")'\">");
+	cdns.push("<iframe src=\"", url, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
+	return cdns.join("");
+}// Fi function BotoDesplegableIFrame()
+
+// Retorna l'HTML per a crear un botó que permet desplegar contingut d'informació en un Div.
+function BotoDesplegableDiv(nom, content)
+{
+	const cdns = [];
+	cdns.push(" <img src=\"",
+		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
+		 "alt=\"", GetMessage("moreInfo") , "\" ",
+		 "title=\"",GetMessage("moreInfo"), "\" ",
+		 "onClick='DesplegaOPlegaDivInfo(\"",nom,"\")'\">");
+	cdns.push("<div id=\"",nom,"div\" style=\"display: none; overflow:scroll;\" width=\"20px\" height=\"15px\" >", content ,"</div>");
+	return cdns.join("");
+}// Fi function BotoDesplegableDiv()

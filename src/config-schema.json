@@ -854,6 +854,10 @@
 			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
 			"$ref": "#/definitions/icona" 
 		},
+		"IconaAnarObj": {
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-objecte. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona"
+		},
 		"MostraPosicioGPS": {
 			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
 			"type": ["null", "boolean"]
@@ -879,7 +883,7 @@
 			"description": "Nom del fitxer de la icona que es posa al lloc del clic a la vista en un procés de validació de coordenades (generalment un GIF o PNG). Opcional",
 			"type": ["null", "string"],
 			"format": "uri"
-		},
+		},		
 		"StoryMap": {
 			"type": ["null", "array"],
 			"items": {
@@ -1131,12 +1135,131 @@
 							}
 						}
 					},
+					"capa": {
+						"description": "Array de capes del servidor a importar. Si les capes ja existeixen només se sobreescriu l'array de dates (serveix per tenir una llista de time sempre actualitzada). Opcional, si no hi és s'importen totes.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nom"],
+							"properties": {		
+								"nom": { 
+									"description": "Nom de la capa del servidor que cal importar.",
+									"type": "string"
+								},
+								"desc": { 
+									"description": "Descripció de la capa del servidor que s'aplicarà al importar i que sobreescriu a la de les capacitats del servidor.",
+									"type": "string"
+								}
+							}
+						}
+					},
+					"dimensioPerCapa":{
+						"description": "Array de patrons (fórmules) per obtenir la descripció dels valors d'una dimensió.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nom", "formulaDesc", "criteris"],
+							"properties": {
+								"nom": {
+									"description": "Nom identificador de la dimensió",
+									"type": "string"
+								},
+								"formulaDesc":{
+									"description": "Fórmula en JS a aplicar sobre cada un dels valors de la dimensió per obtenir la descripció del valor",
+									"type": "string"
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar la fórmula a una dimensió de una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
 					"estilPerCapa": {
-						"description": "Estils a aplicar a les capes, en funció de les paraules clau o el nom de la capa (encara per definir)",
-						"type": "array"
+						"description": "Estils a aplicar a les capes, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["estil", "criteris"],
+							"properties": {
+								"estil":{
+									"description": "Estil de simbolització a aplicar a les capes que cumpleixin els criteris establerts.",
+									"$ref": "#/definitions/estil"
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar l'estil a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"nodataPerCapa": {
+						"description": "Valors nodata a aplicar a les capes ràster, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nodata", "criteris"],
+							"properties": {
+								"nodata":{
+									"description": "Valors del nodata a aplicar a les capes que cumpleixin els criteris establerts.",
+									"type": "array",
+									"items": {
+										"description": "Valor del nodata",
+										"type": "number"
+									}
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar l'array de nodata a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+						
 					},
 					"capaDePunts": {
-						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si la el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. L'array 'capa' anterior no influeix aquí i es mostren totes. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
 						"type": "object",
 						"properties": {									
 							"id": { 
@@ -1233,7 +1356,7 @@
 						"format": "uri"
 					},
 					"tileMatrixSetGeometry": {
-						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Nnomés n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
+						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
 						"type": ["object", "null"],
 						"properties": {	
 							"atriObjNumerics": {
@@ -1332,7 +1455,7 @@
 						"$ref": "#/definitions/featureCollection"
 					},				
 					"atributs": {
-						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model raster està dins de cada estil.",
+						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model ràster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
 					},			
 					"valors": {
@@ -1468,7 +1591,7 @@
 						}
 					},
 					"dimensioExtra": {
-						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors valids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció de la clau i els valors d'una dimensió",
@@ -1477,6 +1600,10 @@
 								"clau": {
 									"description": "Nom i descripció de la clau. Per exemple 'DIM_band' i 'Band'",
 									"$ref": "#/definitions/nomDescripcio"
+								},
+								"formulaDesc":{
+									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
+									"type": "string"
 								},
 								"valor": {
 									"type": ["array"],
@@ -1525,364 +1652,11 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},	
 					"estil": {
+					
 						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
 						"type": ["array", "null"],
 						"items": {
-							"type": ["object"],
-							"required": ["TipusObj"],
-							"properties": {
-								"id":	{ 
-									"description": "Identificador únic per a l'estiil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
-									"type": ["string", "null"]
-								},								
-								"nom":	{ 
-									"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a  null",
-									"type": ["string", "null"]
-								},
-								"desc":	{ 
-									"description": "Descripció l'estil per la llegenda. Opcional si només n'hi ha un",
-									"$ref": "#/definitions/StringOCadenaLang" 
-								},
-								"DescItems": { 
-									"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
-									"$ref": "#/definitions/StringOCadenaLang" 
-								},
-								"TipusObj":{ 
-									"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
-									"enum": [null, "L", "P", "S", "I"] 
-								},
-								"component": {
-									"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
-									"type": "array",
-									"items": {
-										"description": "Membre de l'array de components del estil",
-										"type": "object",
-										"properties": {
-											"calcul": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferencia entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
-												"type": "string"
-											},
-											"FormulaConsulta": { 
-												"description": "Formula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Pot usar referencies a selectors fetes amb {'i_sltr': }. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
-												"type": "string"
-											},
-											"formulaInterna": { 
-												"description": "Formula matemàtica igual a la FormulaConsulta però sense referencies a selectors. Interna; No usar.",
-												"type": "string"
-											},
-											"i_valor": { 
-												"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha FormulaConsulta o calcul. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
-												"type": "number",
-												"minimum": 0,
-												"multipleOf": 1
-											},
-											"selector": {
-												"description": "Array de les selectors. Només es pot fer servir si la capa té FormulaConsulta o un calcul. Opcional",
-												"type": "array",
-												"items": {
-													"description": "Selector per una 'FormulaConsulta' o un 'calcul'. La intenció és saber més sobre els valors de l'estil. Primer es mira si l'estil té categories i es fan servir per crear un selector a la llegenda, i si no es mira si hi ha estiramentPaleta per inidicar un interval del rang de valors recomenats",
-													"type": "object",
-													"properties": {
-														"desc":  {
-															"description": "Descripció del selector",
-															"type": "number"
-														},
-														"valorActual": {
-															"description": "Valor actualment seleccionat",
-															"type": "number"
-														},
-														"categories": {
-															"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array",
-															"$ref": "#/definitions/descripcioCategories"
-														},
-														"atributs": {
-															"description": "Array que descriu les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
-															"$ref": "#/definitions/descripcioAtributs"	
-														},
-														"estiramentPaleta": {
-															"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica",
-															"$ref": "#/definitions/estiramentPaleta"
-														}
-													}
-												}
-											}, 
-											"illum": {
-												"type": "object",
-												"description": "The sun illuminates the DEM and generates an illumination effect. The result are numbers from 1 to -1. Anything below 0 means that it is illumnated 'form the opposite side' and it is considered 0 (so, no negative values). If this object is present a DEM is simplozed as illuminations that can be used to create shadows if a semitransparent layer is added on top.",
-												"properties": {
-													"az": {
-														"description": "Azimuth: Position of the sun versus the north expressen in degress. It is clockwise. Default value is  225 (sw)",
-														"type": "number",
-														"minimum": 0,
-														"maximum": 360 
-													},
-													"elev": {
-														"description": "Elevation from the ground in degress. 0 is sunset or sunrise. 90 is the maximum elevation possible. Default value is 45",
-														"type": "number",
-														"minimum": 0,
-														"maximum": 90
-													},
-													"f":{
-														"description": "The values of the DEM exageration factor. Default value is 1",
-														"type": "number",
-														"minimum": 1
-													} 
-												}
-											},
-											"representacio": {
-												"description": "Tipus de representació gràfica. Opcional",
-												"type": "object",
-												"required": ["tipus"],
-												"properties": {
-													"tipus": {
-														"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
-														"enum": ["bar", "pie", "matriuConfusio", "3d"]
-													},
-													"dimMatriu": {
-														"type": "array",
-														"description": "INTERN: s'afegeix programaticament en definir l'origen de les dades de la matriu de confusió",
-														"items": {
-															"type": "object",
-															"properties": {
-																"i_capa": {
-																	"type": "number",
-																	"minimum": 0,
-																	"multipleOf" : 1
-																},
-																"i_estil": {
-																	"type": "number",
-																	"minimum": 0,
-																	"multipleOf" : 1
-																}
-															}
-														}
-													}
-												}
-											},
-											"tractament": {
-												"description": "Tractament de la component",
-												"$ref": "#/definitions/tractamentVariable" 
-											},
-											"desc":	{ 
-												"description": "Descripció de la component",
-												"$ref": "#/definitions/StringOCadenaLang" 
-											},
-											"NDecimals": { 
-												"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
-												"type": "number",
-												"minimum": 0,
-												"maximum": 20,
-												"multipleOf" : 1
-											},
-											"estiramentPaleta": {
-												"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
-												"$ref": "#/definitions/estiramentPaleta" 
-											},											
-											"herenciaOrigen": { 
-												"description": "INTERN: Propietats generalment de simbolització heratades de la capa original. De moment només s'utilitza per la transferència de camps estadístics.",
-												"type": "object",
-												"properties": {	
-													"nColors": {
-														"type": "number",
-														"minimum": 0,
-														"multipleOf" : 1
-													},
-													"categories" : { 
-														"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
-														"$ref": "#/definitions/descripcioCategories"
-													},
-													"atributs": {
-														"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
-														"$ref": "#/definitions/descripcioAtributs"			
-													},
-													"tractament": {
-														"description": "Tractament de la variable",
-														"$ref": "#/definitions/tractamentVariable" 
-													}
-												}
-											}
-										}
-									}
-								},
-								"categories": {
-									"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
-									"$ref": "#/definitions/descripcioCategories"
-								},
-								"atributs": {
-									"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
-									"$ref": "#/definitions/descripcioAtributs"
-								},
-								"metadades": { 
-									"description": "Metadades d'aquest estil.",
-									"$ref": "#/definitions/metadades"
-								},
-								"nItemLlegAuto": {
-									"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",
-									"type": "number",
-									"minimum": 0,
-									"multipleOf" : 1
-								},
-								"ItemLleg":	{
-									"description": "Array d'items per la llegenda de l'estil per a la llegenda. No aplica si hi ha 3 components. Permet definir els ítems de la llegenda manualment. Si es deixa a null, i en cas que hi hagi 'valors' (application/x-img), el navegador sap generar aquest array d'items de la llegenda automàticament en dues circumstàncies. Si està definit 'categories' i 'atributs' s'assumeix que l'assignació és 1 a 1 i es fa una llegenda categòrica. Si nItemLlegAuto>0 s'assumeix un estirament de paleta i es fa una llegenda numèrica. En el cas de vectors ha de ser null si la llegenda és automàtica (nItemLlegAuto>0) i hi ha una paleta",
-									"$ref": "#/definitions/itemLleg"
-								},
-								"ncol": {
-									"description": "Nombre de columnes dels ítems de la llegenda. No aplica si hi ha 3 components",
-									"type": "number",
-									"minimum": 1,
-									"multipleOf" : 1
-								},								
-								"descColorMultiplesDe": {
-									"description": "El text que descriu els colors en la llegenda automàtica ha de múltiple d'aquest valor. No aplica si hi ha 3 components",
-									"type": "number",
-									"minimum": 0
-								},
-								"ColorMinimASota": {
-									"description": "Ordenar els colors generats automàticament a la llegenda posant el valor mínim a sota de tot a la llegenda (per defecte el valor més alt va a sota). No aplica si hi ha 3 components. Això pot ser útil per les capes que mostren elevacions on intuitivament esperes les elevacions més grans a dalt. Abans es deia ColorMinimPrimer (un nom que resultava poc clar i sembla significar el contrari).",
-									"type": "boolean"
-								},
-								"paleta": {
-									"description": "Té dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
-									"$ref": "#/definitions/paleta"
-								},
-								"paletaPrevia": {
-									"description": "INTERN. Usat per guardar la paleta original si l'usuari decideix canviar-la i poder recuperar-la posteriorment.",
-									"$ref": "#/definitions/paleta"
-								},
-								"NomCampSel": {
-									"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit 'IconaSel' els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten 'icona'. Si no hi ha 'IconaSel' els objectes seleccionats (true) presenten 'icona' i els no seleccionats (false) no mostren icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
-									"type": ["string", "null"]								
-								},
-								"estilTilesObjNum": {
-									"description" : "Estil de simbolització dels objectes que es generen per mostrar el nombre d'objectes que conté una tessel·la vectorial",
-									"type": "object",
-									"multipleOf": 1,
-									"properties": {									
-										"simbols": {
-											"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
-											"$ref": "#/definitions/simbols"									
-										},										
-										"formes":{
-											"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
-											"$ref": "#/definitions/formes"									
-										},			
-										"fonts":	{
-											"description": "Fonts per representat textos dels objectes digitalitzats",
-											"$ref": "#/definitions/fonts"									
-										}
-									}
-								},
-								"simbols": {
-									"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
-									"$ref": "#/definitions/simbols"									
-								},
-								"formes": {
-									"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
-									"$ref": "#/definitions/formes"									
-								},	
-								"fonts": {
-									"description": "Fonts per representat textos dels objectes digitalitzats",
-									"$ref": "#/definitions/fonts"									
-								},
-								"histograma": {
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
-									"$ref": "#/definitions/histograma"
-								},
-								"diagrama": 
-								{
-									"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el 'model' és 'raster'",
-									"type": "array",
-									"items": 
-									{
-										"description": "Estructura que descriu un diagrama, i explica el tipus de diagrama, l'índex de la vista i el component o components de l'estil (si aplica)",
-										"type": "object",
-										"required": ["tipus"],
-										"properties": 
-										{
-											"tipus": 
-											{
-												"description": "Tipus de diagrama descrit en aquest element. És necessari per saber com tractar i actualitzar aquest diagrama",
-												"enum": 
-												[
-													"chart",
-													"chart_categ",
-													"matriu",
-													"vista3d",
-													"stat",
-													"stat_categ" 
-												]
-											},	
-											"stat": 
-											{
-												"description": "Tipus d'estadístic a representar en aquest element. Només existeix si el tipus de diagrama (propietat anterior) és stat o stat_categ. Els seus tres primers valors apliquen si és una variable categòrica, i els altres si és quantitativa",
-												"enum": 
-												[
-													"mode",
-													"percent_mode",
-													"mode_and_percent",
-													"sum",
-													"sum_area",
-													"mean", 
-													"variance",
-													"stdev",
-													"min",
-													"max",
-													"range"
-												]
-											},	
-											"order": 
-											{
-												"description": "Tipus d'ordenació per als valors a representar en els estadístics/gràfic per categories. Només aplica si tipus és chart_categ o stat_categ",
-												"enum": 
-												[
-													"ascend",
-													"descend",
-													"unsorted"
-												],
-												"default": "unsorted"
-											},
-											"left": 
-											{
-												"description": "Distància a la vora dreta. Opcional",
-												"type": "integer",
-												"minimum": 0
-											},
-											"top": 
-											{
-												"description": "Distància a la vora superior. Opcional",
-												"type": "integer",
-												"minimum": 0
-											},																	
-											"i_histograma": 
-											{
-												"description": "INTERN: lndex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
-												"type": "integer",
-												"minimum": 0
-											}
-										}
-									}
-								},								
-								"capa_video":
-								{
-									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
-									"type": "array",
-									"items": 
-									{
-										"description": "Histograma per a cada fotograma. N'hi ha tants com capa.data.length",
-										"type": "object",
-										"properties": {
-											"histograma": {
-												"description": "Historgrama per un fotograma",
-												"$ref": "#/definitions/histograma"
-											}
-										}	
-									}
-								},
-								"origen":{ 
-									"description": "INTERN: s'afegeix programaticament. Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
-									"enum": [null, "usuari"] 
-								}
-							}
+							"$ref": "#/definitions/estil" 
 						}
 					},
 					"i_estil": {
@@ -2410,7 +2184,7 @@
 			}
 		},		
 		"estiramentPaleta": {
-			"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta. Pot ser que el rang de valros sigui més gran i la paleta 'saturi'",
+			"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta. Pot ser que el rang de valors sigui més gran i la paleta 'saturi'",
 			"type": "object",
 			"properties": {
 				"valorMinim": {
@@ -2721,6 +2495,364 @@
 					}
 				}
 			]
+		},
+		"estil":{
+			"description": "Estil que pot presentar una capa",
+			"type": ["object"],
+			"required": ["TipusObj"],
+			"properties": {
+				"id":	{ 
+					"description": "Identificador únic per a l'estiil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+					"type": ["string", "null"]
+				},								
+				"nom":	{ 
+					"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a  null",
+					"type": ["string", "null"]
+				},
+				"desc":	{ 
+					"description": "Descripció l'estil per la llegenda. Opcional si només n'hi ha un",
+					"$ref": "#/definitions/StringOCadenaLang" 
+				},
+				"DescItems": { 
+					"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
+					"$ref": "#/definitions/StringOCadenaLang" 
+				},
+				"TipusObj":{ 
+					"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
+					"enum": [null, "L", "P", "S", "I"] 
+				},
+				"component": {
+					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": {
+						"description": "Membre de l'array de components del estil",
+						"type": "object",
+						"properties": {
+							"calcul": { 
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+								"type": "string"
+							},
+							"FormulaConsulta": { 
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Pot usar referencies a selectors fetes amb {'i_sltr': }. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
+								"type": "string"
+							},
+							"formulaInterna": { 
+								"description": "Fórmula matemàtica igual a la 'FormulaConsulta' però sense referencies a selectors. Interna; No usar.",
+								"type": "string"
+							},
+							"i_valor": { 
+								"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha 'FormulaConsulta' o 'calcul'. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
+								"type": "number",
+								"minimum": 0,
+								"multipleOf": 1
+							},
+							"selector": {
+								"description": "Array de les selectors. Només es pot fer servir si la capa té 'FormulaConsulta' o un 'calcul'. Opcional",
+								"type": "array",
+								"items": {
+									"description": "Selector per una 'FormulaConsulta' o un 'calcul'. La intenció és saber més sobre els valors de l'estil. Primer es mira si l'estil té categories i es fan servir per crear un selector a la llegenda, i si no es mira si hi ha estiramentPaleta per inidicar un interval del rang de valors recomenats",
+									"type": "object",
+									"properties": {
+										"desc":  {
+											"description": "Descripció del selector",
+											"type": "number"
+										},
+										"valorActual": {
+											"description": "Valor actualment seleccionat",
+											"type": "number"
+										},
+										"categories": {
+											"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array",
+											"$ref": "#/definitions/descripcioCategories"
+										},
+										"atributs": {
+											"description": "Array que descriu les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
+											"$ref": "#/definitions/descripcioAtributs"	
+										},
+										"estiramentPaleta": {
+											"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica",
+											"$ref": "#/definitions/estiramentPaleta"
+										}
+									}
+								}
+							}, 
+							"illum": {
+								"type": "object",
+								"description": "The sun illuminates the DEM and generates an illumination effect. The result are numbers from 1 to -1. Anything below 0 means that it is illumnated 'form the opposite side' and it is considered 0 (so, no negative values). If this object is present a DEM is simplozed as illuminations that can be used to create shadows if a semitransparent layer is added on top.",
+								"properties": {
+									"az": {
+										"description": "Azimuth: Position of the sun versus the north expressen in degress. It is clockwise. Default value is  225 (sw)",
+										"type": "number",
+										"minimum": 0,
+										"maximum": 360 
+									},
+									"elev": {
+										"description": "Elevation from the ground in degress. 0 is sunset or sunrise. 90 is the maximum elevation possible. Default value is 45",
+										"type": "number",
+										"minimum": 0,
+										"maximum": 90
+									},
+									"f":{
+										"description": "The values of the DEM exageration factor. Default value is 1",
+										"type": "number",
+										"minimum": 1
+									} 
+								}
+							},
+							"representacio": {
+								"description": "Tipus de representació gràfica. Opcional",
+								"type": "object",
+								"required": ["tipus"],
+								"properties": {
+									"tipus": {
+										"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
+										"enum": ["bar", "pie", "matriuConfusio", "3d"]
+									},
+									"dimMatriu": {
+										"type": "array",
+										"description": "INTERN: s'afegeix programaticament en definir l'origen de les dades de la matriu de confusió",
+										"items": {
+											"type": "object",
+											"properties": {
+												"i_capa": {
+													"type": "number",
+													"minimum": 0,
+													"multipleOf" : 1
+												},
+												"i_estil": {
+													"type": "number",
+													"minimum": 0,
+													"multipleOf" : 1
+												}
+											}
+										}
+									}
+								}
+							},
+							"tractament": {
+								"description": "Tractament de la component",
+								"$ref": "#/definitions/tractamentVariable" 
+							},
+							"desc":	{ 
+								"description": "Descripció de la component",
+								"$ref": "#/definitions/StringOCadenaLang" 
+							},
+							"NDecimals": { 
+								"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
+								"type": "number",
+								"minimum": 0,
+								"maximum": 20,
+								"multipleOf" : 1
+							},
+							"estiramentPaleta": {
+								"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
+								"$ref": "#/definitions/estiramentPaleta" 
+							},											
+							"herenciaOrigen": { 
+								"description": "INTERN: Propietats generalment de simbolització heratades de la capa original. De moment només s'utilitza per la transferència de camps estadístics.",
+								"type": "object",
+								"properties": {	
+									"nColors": {
+										"type": "number",
+										"minimum": 0,
+										"multipleOf" : 1
+									},
+									"categories" : { 
+										"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
+										"$ref": "#/definitions/descripcioCategories"
+									},
+									"atributs": {
+										"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+										"$ref": "#/definitions/descripcioAtributs"			
+									},
+									"tractament": {
+										"description": "Tractament de la variable",
+										"$ref": "#/definitions/tractamentVariable" 
+									}
+								}
+							}
+						}
+					}
+				},
+				"categories": {
+					"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
+					"$ref": "#/definitions/descripcioCategories"
+				},
+				"atributs": {
+					"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+					"$ref": "#/definitions/descripcioAtributs"
+				},
+				"metadades": { 
+					"description": "Metadades d'aquest estil.",
+					"$ref": "#/definitions/metadades"
+				},
+				"nItemLlegAuto": {
+					"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"ItemLleg":	{
+					"description": "Array d'items per la llegenda de l'estil per a la llegenda. No aplica si hi ha 3 components. Permet definir els ítems de la llegenda manualment. Si es deixa a null, i en cas que hi hagi 'valors' (application/x-img), el navegador sap generar aquest array d'items de la llegenda automàticament en dues circumstàncies. Si està definit 'categories' i 'atributs' s'assumeix que l'assignació és 1 a 1 i es fa una llegenda categòrica. Si nItemLlegAuto>0 s'assumeix un estirament de paleta i es fa una llegenda numèrica. En el cas de vectors ha de ser null si la llegenda és automàtica (nItemLlegAuto>0) i hi ha una paleta",
+					"$ref": "#/definitions/itemLleg"
+				},
+				"ncol": {
+					"description": "Nombre de columnes dels ítems de la llegenda. No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 1,
+					"multipleOf" : 1
+				},								
+				"descColorMultiplesDe": {
+					"description": "El text que descriu els colors en la llegenda automàtica ha de ser múltiple d'aquest valor. No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 0
+				},
+				"ColorMinimASota": {
+					"description": "Ordenar els colors generats automàticament a la llegenda posant el valor mínim a sota de tot a la llegenda (per defecte el valor més alt va a sota). No aplica si hi ha 3 components. Això pot ser útil per les capes que mostren elevacions on intuitivament esperes les elevacions més grans a dalt. Abans es deia ColorMinimPrimer (un nom que resultava poc clar i sembla significar el contrari).",
+					"type": "boolean"
+				},
+				"paleta": {
+					"description": "Té dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
+					"$ref": "#/definitions/paleta"
+				},
+				"paletaPrevia": {
+					"description": "INTERN. Usat per guardar la paleta original si l'usuari decideix canviar-la i poder recuperar-la posteriorment.",
+					"$ref": "#/definitions/paleta"
+				},
+				"NomCampSel": {
+					"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit 'IconaSel' els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten 'icona'. Si no hi ha 'IconaSel' els objectes seleccionats (true) presenten 'icona' i els no seleccionats (false) no mostren icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
+					"type": ["string", "null"]								
+				},
+				"estilTilesObjNum": {
+					"description" : "Estil de simbolització dels objectes que es generen per mostrar el nombre d'objectes que conté una tessel·la vectorial",
+					"type": "object",
+					"multipleOf": 1,
+					"properties": {									
+						"simbols": {
+							"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+							"$ref": "#/definitions/simbols"									
+						},										
+						"formes":{
+							"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+							"$ref": "#/definitions/formes"									
+						},			
+						"fonts":	{
+							"description": "Fonts per representat textos dels objectes digitalitzats",
+							"$ref": "#/definitions/fonts"									
+						}
+					}
+				},
+				"simbols": {
+					"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+					"$ref": "#/definitions/simbols"									
+				},
+				"formes": {
+					"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+					"$ref": "#/definitions/formes"									
+				},	
+				"fonts": {
+					"description": "Fonts per representat textos dels objectes digitalitzats",
+					"$ref": "#/definitions/fonts"									
+				},
+				"histograma": {
+					"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
+					"$ref": "#/definitions/histograma"
+				},
+				"diagrama": 
+				{
+					"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": 
+					{
+						"description": "Estructura que descriu un diagrama, i explica el tipus de diagrama, l'índex de la vista i el component o components de l'estil (si aplica)",
+						"type": "object",
+						"required": ["tipus"],
+						"properties": 
+						{
+							"tipus": 
+							{
+								"description": "Tipus de diagrama descrit en aquest element. És necessari per saber com tractar i actualitzar aquest diagrama",
+								"enum": 
+								[
+									"chart",
+									"chart_categ",
+									"matriu",
+									"vista3d",
+									"stat",
+									"stat_categ" 
+								]
+							},	
+							"stat": 
+							{
+								"description": "Tipus d'estadístic a representar en aquest element. Només existeix si el tipus de diagrama (propietat anterior) és stat o stat_categ. Els seus tres primers valors apliquen si és una variable categòrica, i els altres si és quantitativa",
+								"enum": 
+								[
+									"mode",
+									"percent_mode",
+									"mode_and_percent",
+									"sum",
+									"sum_area",
+									"mean", 
+									"variance",
+									"stdev",
+									"min",
+									"max",
+									"range"
+								]
+							},	
+							"order": 
+							{
+								"description": "Tipus d'ordenació per als valors a representar en els estadístics/gràfic per categories. Només aplica si tipus és chart_categ o stat_categ",
+								"enum": 
+								[
+									"ascend",
+									"descend",
+									"unsorted"
+								],
+								"default": "unsorted"
+							},
+							"left": 
+							{
+								"description": "Distància a la vora dreta. Opcional",
+								"type": "integer",
+								"minimum": 0
+							},
+							"top": 
+							{
+								"description": "Distància a la vora superior. Opcional",
+								"type": "integer",
+								"minimum": 0
+							},																	
+							"i_histograma": 
+							{
+								"description": "INTERN: lndex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
+								"type": "integer",
+								"minimum": 0
+							}
+						}
+					}
+				},								
+				"capa_video":
+				{
+					"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": 
+					{
+						"description": "Histograma per a cada fotograma. N'hi ha tants com capa.data.length",
+						"type": "object",
+						"properties": {
+							"histograma": {
+								"description": "Historgrama per un fotograma",
+								"$ref": "#/definitions/histograma"
+							}
+						}	
+					}
+				},
+				"origen":{ 
+					"description": "INTERN: s'afegeix programaticament. Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
+					"enum": [null, "usuari"] 
+				}
+			}
 		},
 		"nomDescripcio": {
 			"description": "Nom i descripció",

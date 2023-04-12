@@ -41,6 +41,216 @@
 var QualityML=null;
 var ArrelURLQualityML="https://www.qualityml.org/";
 
+function LlegeixReportDataQualtity(quality_element, node_DQElement)
+{
+	if(!node_DQElement || !quality_element)
+		return false;
+	
+	//·$· Potser puc agafar més propietats del id per omplir altre info
+	var result=node_DQElement.getElementsByTagName('gmd:result');
+	
+	if(!result || result.length<1)
+		return false;
+	
+	quality_element.result=[{qualityml:{measure:null, domain:null, metrics:null }}];
+	
+	var i, node, node2, cadena, quality_ml=quality_element.result[0].qualityml, index, nom;
+	
+	//  Busco la mesura
+	node=node_DQElement.getElementsByTagName('gmd:measureIdentification');
+	if(node && node.length>0)
+	{
+		node2=node[0].getElementsByTagName('gmd:MD_Identifier');
+		if(!node2 ||  node2.length<1)
+			return false;
+		node2=node2[0].getElementsByTagName('gmd:code');
+		if(!node2 ||  node2.length<1)
+			return false;
+		node2=node2[0].getElementsByTagName('gmx:Anchor');
+		if(!node2 ||  node2.length<1)
+			return false;	
+		cadena=node2[0].getAttribute("xlink:href");	
+		
+		index=cadena.indexOf('?');		
+		// Potser que el nom de la mesura sigui una URL, miro d'eliminar-ho
+		nom=(index==-1) ? cadena : cadena.slice(0, index);
+		cadena=DonaAdreca(nom).toLowerCase();
+		if(cadena=="https://www.qualityml.org/1.0/measure" || cadena=="http://www.qualityml.org/1.0/measure" || cadena=="www.qualityml.org/1.0/measure")
+			nom=TreuAdreca(nom);			
+		quality_ml.measure={name: nom};
+		
+		// Busco el domini
+		if(index!=-1)
+		{
+			index=cadena.indexOf('domain=');
+			if(index!=-1)
+			{			
+				cadena=cadena.slice(index+7);
+				var matriu=cadena.split(',');
+				quality_ml.domain=[];
+				for(i=0; i<matriu.length;i++)
+					quality_ml.domain[i]={name: matriu[i]};
+			}
+			// ·$· també hi poden haver params
+		}
+	}
+	else
+	{
+		node=node_DQElement.getElementsByTagName('gmd:nameOfMeasure');
+		if(!node || node.length<1)
+			return false;
+		node2=node[0].getElementsByTagName('gco:CharacterString');
+		if(!node2 || node2.length<1)
+			return false;
+		cadena=node2[0].textContent;	
+		quality_ml.measure={name: cadena };
+	}		
+	
+	// busco la mètrica
+	quality_ml.metrics=[];
+	for(i=0;  i<result.length; i++)
+	{
+		node=result[i].getElementsByTagName('gmd:DQ_QuantitativeResult');
+		if(!node || node.length<1)
+			continue;
+		// metrica
+		node2=node[0].getElementsByTagName('gmd:errorStatistic');
+		if(!node2 || node2.length<1)
+			continue;
+			
+		node2=node2[0].getElementsByTagName('gco:CharacterString');
+		if(node2 && node2.length>0)
+		{
+			nom=node2[0].textContent;
+			// Potser que el nom sigui una URL miro d'eliminar tot el que no cal i quedar-me només amb el nom			
+			cadena=DonaAdreca(nom).toLowerCase();
+			if(cadena=="https://www.qualityml.org/1.0/metrics" || cadena=="http://www.qualityml.org/1.0/metrics" || cadena=="www.qualityml.org/1.0/metrics")
+				nom=TreuAdreca(nom);			
+			quality_ml.metrics[quality_ml.metrics.length]={name : nom,
+													 values : {}};
+			node2=node[0].getElementsByTagName('gmd:value');
+			if(!node2 || node2.length<1)
+				continue;
+			node2=node2[0].getElementsByTagName('gco:Record');
+			if(node2 && node2.length>0)
+			{
+				quality_ml.metrics[i].values.list=[node2[0].textContent];
+				// ·$· els valors també poden tenir units quality_ml.metrics[i].values.units="m";
+				// i tipus i parammeasure
+			}
+		}			
+		/*
+		·$· de moment no tenim tipus de metrica!! caldia afegir el type!!
+		node2=(node.getElementsByTagName('gmd:valueType')[0]).getElementsByTagName('gco:RecordType')[0];
+		if(node2)
+		{
+			//Double precision real (UoM=days)
+			cadena=node2.textContent;
+			var index=cadena.indexOf('(');
+			if(index!=-1)
+			{
+				quality_ml.metrics[i].type=cadena.slice(0, index);
+				quality_ml.metrics[i].params=[];
+				cadena=cadena.slice(index+1,cadena.indexOf(')'));
+				var matriu=cadena.split(','), matriu2;
+				for(var j=0;j<matriu.length;j++)
+				{
+					matriu2=matriu[j].split('=');
+					quality_ml.metrics[i].params[j]={name: matriu2[0]
+												  value: matriu2[1]};
+				}
+			}
+			else
+			{
+				quality_ml.metrics[i].type=cadena;
+			}
+		}*/
+	}
+	return true;
+}
+
+function ParsejaDocMetadadesXMLPerOmplirQualitatCapa(doc, extra_param)
+{
+var root, node_quality, i, cadena, node, node2, node_report, i, j, k, quality_element;
+
+	if(!doc)
+	{
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
+		return;
+	}
+	root=doc.documentElement;
+	if(!root) 
+	{
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu"));
+		return;
+	}
+	//Cal comprovar que és un document de capacitats, potser és un error, en aquest cas el llegeix-ho i el mostraré directament
+	if(root.nodeName!="gmd:MD_Metadata")
+	{
+		alert(GetMessage("CannotObtainValidResponseFromServer", "cntxmenu") + "rootNode: " + root.nodeName);
+		return;
+	}
+	node_quality=root.getElementsByTagName('gmd:dataQualityInfo');
+	if(!node_quality || node_quality.length<1)
+		return;
+	
+	extra_param.quality=[];
+	for(i=0; i<node_quality.length; i++)
+	{
+		node=node_quality[i].getElementsByTagName('gmd:DQ_DataQuality');
+		if(!node || node.length<1)
+			continue;
+		node_report=node[0].getElementsByTagName('gmd:report');
+		if(!node_report || node_report.length<1)
+			continue;
+		for(j=0; j<node_report.length; j++)
+		{
+			for(k=0; k<node_report[j].childNodes.length; k++)
+			{
+				quality_element={};
+				node2=node_report[j].childNodes[k];
+				if(node2.nodeName=="gmd:DQ_AbsoluteExternalPositionalAccuracy")
+					quality_element.indicator="DQ_AbsoluteExternalPositionalAccuracy";
+				else if(node2.nodeName=="gmd:DQ_GriddedDataPositionalAccuracy")
+					quality_element.indicator="DQ_AbsoluteExternalPositionalAccuracy";
+				else if(node2.nodeName=="gmd:DQ_RelativeInternalPositionalAccuracy")
+					quality_element.indicator="DQ_AbsoluteExternalPositionalAccuracy";
+				else if(node2.nodeName=="gmd:DQ_ThematicClassificationCorrectness")
+					quality_element.indicator="DQ_AbsoluteExternalPositionalAccuracy";
+				else if(node2.nodeName=="gmd:DQ_QuantitativeAttributeAccuracy")
+					quality_element.indicator="DQ_AbsoluteExternalPositionalAccuracy";
+				else if(node2.nodeName=="gmd:DQ_NonQuantitativeAttributeAccuracy") 
+					quality_element.indicator="DQ_NonQuantitativeAttributeAccuracy";
+				else if(node2.nodeName=="gmd:DQ_CompletenessCommission")
+					quality_element.indicator="DQ_CompletenessCommission";					
+				else if(node2.nodeName=="gmd:DQ_CompletenessOmission") 
+					quality_element.indicator="DQ_CompletenessOmission";
+				else if(node2.nodeName=="gmd:DQ_AccuracyOfATimeMeasurement") 
+					quality_element.indicator="DQ_AccuracyOfATimeMeasurement";
+				else if(node2.nodeName=="gmd:DQ_TemporalConsistency") 
+					quality_element.indicator="DQ_TemporalConsistency";
+				else if(node2.nodeName=="gmd:DQ_TemporalValidity")
+					quality_element.indicator="DQ_TemporalValidity";
+				else if(node2.nodeName=="gmd:DQ_DomainConsistency")
+					quality_element.indicator="DQ_DomainConsistency";					
+				else if(node2.nodeName=="gmd:DQ_FormatConsistency")
+					quality_element.indicator="DQ_FormatConsistency";
+				else if(node2.nodeName=="gmd:DQ_TopologicalConsistency")
+					quality_element.indicator="DQ_TopologicalConsistency";
+				else if(node2.nodeName=="gmd:DQ_ConceptualConsistency")
+					quality_element.indicator="DQ_ConceptualConsistency";
+				else
+					continue;
+				// En ISO19115 DQ_NonQuantitativeAttributeAccuracy i en ISO19157 DQ_NonQuantitativeAttributeCorrectness
+				//"DQ_NonQuantitativeAttributeCorrectness",","DQ_UsabilityElement","DQ_Confidence","DQ_Representativity","DQ_Homogeneity"]
+				
+				if(LlegeixReportDataQualtity(quality_element,node2))
+					extra_param.quality.push(quality_element);
+			}
+		}
+	}
+	MostraQualitatCapa(extra_param.elem, extra_param.quality, extra_param.capa, extra_param.i_estil);
+}
 
 // Funciona tant per capa com per capa_digi
 function AfegeixQualitatACapa(capa, quality)
@@ -52,21 +262,24 @@ function AfegeixQualitatACapa(capa, quality)
 	return capa.metadades.quality[capa.metadades.quality.length]=quality;
 }
 
-function FinestraMostraQualitatCapa(elem, capa, i_estil)
+
+function TancaFinestra_mostraQualitat()
 {
-	if (!QualityML)
-	{
-		loadJSON(ArrelURLQualityML+"qualityml.json",
-				// "qualityml.json",
-			function(quality_ml, extra_param) {
-				QualityML=quality_ml;
-				MostraQualitatCapa(extra_param.elem, extra_param.capa, extra_param.i_estil);
-			},
-			function(xhr) { alert(xhr); },
-			{elem:elem, capa:capa, i_estil: i_estil});
-	}
-	else
-		MostraQualitatCapa(elem, capa, i_estil);
+	// Buido el contingut de la finestra
+	var elem=getFinestraLayer(window, "mostraQualitat");
+	if(elem)
+		contentLayer(elem, "");		
+	
+}
+
+function FinestraMostraQualitatCapa(elem, quality, capa, i_estil)
+{
+	var elem=ObreFinestra(window, "mostraQualitat", GetMessage("forShowingQualityInformation", "cntxmenu"));
+
+	if (!elem)
+		return;
+
+	MostraQualitatCapa(elem, quality, capa, i_estil);
 }
 
 function DonaIndexIndicatorQualityML(id)
@@ -79,34 +292,40 @@ function DonaIndexIndicatorQualityML(id)
 	return -1;
 }
 
-function MostraQualitatCapa(elem, capa, i_estil)
+function MostraQualitatCapa(elem, quality, capa, i_estil)
 {
-	contentLayer(elem, DonaCadenaMostraQualitatCapa(capa, i_estil));
-}
-
-function DesplegaOPlegaIFramaQualityML(nom)
-{
-	if (document.getElementById(nom+"iframe").style.display=="none")
+	if (!QualityML)
 	{
-		document.getElementById(nom+"iframe").style.display="inline";
-		document.getElementById(nom+"img").src=AfegeixAdrecaBaseSRC("boto_contract.png");
+		loadJSON(ArrelURLQualityML+"qualityml.json",
+				// "qualityml.json",
+			function(quality_ml, extra_param) {
+				QualityML=quality_ml;
+				MostraQualitatCapa(extra_param.elem, extra_param.quality, extra_param.capa, extra_param.i_estil);
+			},
+			function(xhr) { alert(xhr); },
+			{elem:elem, quality: quality, capa:capa, i_estil: i_estil});
 	}
-	else
+	else if (!quality)
 	{
-		document.getElementById(nom+"iframe").style.display="none";
-		document.getElementById(nom+"img").src=AfegeixAdrecaBaseSRC("boto_expand.png");
+		var ajax=new Ajax();
+		if (window.doAutenticatedHTTPRequest && capa.access)
+			doAutenticatedHTTPRequest(capa.access, "GET", 
+					ajax, DonaNomFitxerMetadades(capa, i_estil), null, null, 
+					ParsejaDocMetadadesXMLPerOmplirQualitatCapa, 
+					"text/xml", {elem: elem, quality: null, capa: capa, i_estil: i_estil});
+		else
+			ajax.doGet(DonaNomFitxerMetadades(capa, i_estil),
+					ParsejaDocMetadadesXMLPerOmplirQualitatCapa, "text/xml",{elem: elem, quality: null, capa: capa, i_estil: i_estil});
 	}
+	else		
+		contentLayer(elem, DonaCadenaMostraQualitatCapa(quality, capa, i_estil));
 }
 
 function DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, concept, i, id_qml)
 {
-var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_";
-	cdns.push(" <img src=\"",
-		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
-		 "alt=\"", GetMessage("moreInfo") , "\" ",
-		 "title=\"",GetMessage("moreInfo"), "\" ",
-		 "onClick='DesplegaOPlegaIFramaQualityML(\"",nom,"\")'\"><iframe src=\"",ArrelURLQualityML, version, "/", concept,"/", id_qml, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
-	return cdns.join("");
+var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_", url= ArrelURLQualityML + version + "/" + concept + "/" + id_qml;
+
+	return BotoDesplegableIFrame(nom, url);
 }
 
 function DonaCadenaValorsComLlistaQualitatCapa(values)
@@ -138,15 +357,10 @@ var cdns=[];
 	return cdns.join("");
 }
 
-function DonaCadenaMostraQualitatCapa(capa, i_estil)
+function DonaCadenaMostraQualitatCapa(quality, capa, i_estil)
 {
-var quality;
 var i_indicator, cdns=[];
 
-	if (i_estil==-1)
-		quality=capa.metadades.quality;
-	else
-		quality=capa.estil[i_estil].metadades.quality;
     cdns.push("<form name=\"QualitatCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerQualitatCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\">",
 			GetMessage("QualityOfLayer", "qualitat"), " \"",

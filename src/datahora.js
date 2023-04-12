@@ -1115,5 +1115,9 @@ var d=new Date(data_iso);
 var milliseg_a=d.getTime();
 	var i=data_capa.binarySearch(milliseg_a, sortAscendingISOiData);
 	if (i<0)  //Not present in the array
+	{
 		data_capa.splice(-i-1, 0, DonaDataJSONDesDeDate(d));
+		i=-i-1;
+	}
+	return i;
 }

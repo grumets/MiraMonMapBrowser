@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -165,6 +165,95 @@ function MouLayerContextMenuCapa(event, s)
 	}
 }
 
+function DonaEnvCalculatGeometry(geometry, env)
+{
+var c3, c2, c1, env_temp={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, coordinates, polygon;
+
+	if(env)
+		env_temp=env;
+	
+	if (geometry.type=="Point" || geometry.type=="MultiPoint")
+	{
+		for (c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
+		{
+			if (geometry.type=="MultiPoint")
+				coordinates=geometry.coordinates[c1];
+			else
+				coordinates=geometry.coordinates;
+			if (env.MinX>coordinates[0])
+				env.MinX=coordinates[0];
+			if (env.MaxX<coordinates[0])
+				env.MaxX=coordinates[0];
+			if (env.MinY>coordinates[1])
+				env.MinY=coordinates[1];
+			if (env.MaxY<coordinates[1])
+				env.MaxY=coordinates[1];
+		}
+	}
+	else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
+	{
+		for (c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+		{
+			if (geometry.type=="MultiLineString")
+				coordinates=geometry.coordinates[c2];
+			else
+				coordinates=geometry.coordinates;
+			for( c1=0; c1<coordinates.length; c1++)
+			{
+				if (env.MinX>coordinates[c1][0])
+					env.MinX=coordinates[c1][0];
+				if (env.MaxX<coordinates[c1][0])
+					env.MaxX=coordinates[c1][0];
+				if (env.MinY>coordinates[c1][1])
+					env.MinY=coordinates[c1][1];
+				if (env.MaxY<coordinates[c1][1])
+					env.MaxY=coordinates[c1][1];
+			}
+		}
+	}
+	else if(geometry.type=="Polygon" || geometry.type=="MultiPolygon")
+	{
+		for (c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
+		{
+			if (geometry.type=="MultiPolygon")
+				polygon=geometry.coordinates[c3];
+			else
+				polygon=geometry.coordinates;
+			for (c2=0; c2<polygon.length; c2++)
+			{
+				coordinates=polygon[c2];
+				for( c1=0; c1<coordinates.length; c1++)
+				{
+					if (env.MinX>coordinates[c1][0])
+						env.MinX=coordinates[c1][0];
+					if (env.MaxX<coordinates[c1][0])
+						env.MaxX=coordinates[c1][0];
+					if (env.MinY>coordinates[c1][1])
+						env.MinY=coordinates[c1][1];
+					if (env.MaxY<coordinates[c1][1])
+						env.MaxY=coordinates[c1][1];
+				}
+			}
+		}
+	}
+	return env_temp;
+}
+
+function DonaEnvCalculatCapa(capa)
+{
+var i, geometry, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300};
+	
+	if (capa.model!=model_vector || !capa.objectes || !capa.objectes.features)
+		return null;
+	
+	for (i=0; i<capa.objectes.features.length; i++)
+	{
+		geometry=capa.objectes.features[i].geometry;
+		env=DonaEnvCalculatGeometry(geometry, env);
+	}
+	return {"EnvCRS": env, "CRS": capa.CRSgeometry};
+}
+
 function ZoomACapa(capa)
 {
 	if (!EsCapaDisponibleEnElCRSActual(capa) && capa.CRS && capa.CRS.length)
@@ -173,7 +262,25 @@ function ZoomACapa(capa)
 	//Si l'envolupant de la capa no cap dins del CostatMaxim s'usa. Si no, es centra a la capa i el porta al costat màxim
 	if (capa.EnvTotal)
 		PortamAAmbit(TransformaEnvolupant(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));  //Aquesta funció refresca la vista i mes
-	if (!EsCapaDinsRangDEscalesVisibles(capa))
+	else 
+	{
+		// NJ: Intento calcular l'envolupant dels objectes que pugui tenir per fer el zoom a la capa
+		var env_temp=DonaEnvCalculatCapa(capa);
+		
+		if(env_temp)
+		{
+			if(!DonaTipusServidorCapa(capa) ||		
+				((typeof capa.tileMatrixSetGeometry=== "undefined" || capa.tileMatrixSetGeometry==null) &&  
+				(typeof capa.objLimit === "undefined" || capa.objLimit!=-1)))
+			{
+				capa.EnvTotal=env_temp; // considero que tinc tots els objectes de la capa i per tant puc actualitzar l'envolupant total de la capa
+				if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
+					capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
+			}
+			PortamAAmbit(TransformaEnvolupant(env_temp.EnvCRS, env_temp.CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));  //Aquesta funció refresca la vista i mes			
+		}
+	}
+	if (!EsCapaDinsRangDEscalesVisibles(capa))  // NJ: Tot i fer un canvi de nivell de zoom potser que la capa no sigui visible perquè no disposem del seu envolupant i potser que siguem en un àmbit NO visible de la capa 
 		CanviaNivellDeZoom(DonaIndexNivellZoom(capa.CostatMaxim), true); //Canviar al CostatMaxim
 }
 
@@ -251,7 +358,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
 				GetMessage("Metadata"), "</a><br>");
 		if(!alguna_opcio)
-			alguna_opcio=true;
+			alguna_opcio=true;			
 	}
 	if (/*((capa.tipus=="TipusWMS" || capa.tipus=="TipusHTTP_GET") && EsCapaBinaria(capa)) ||*/ capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus" || (capa.tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")))
 	{
@@ -264,10 +371,18 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	{
 		if(capa.metadades.quality)
 		{
-			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", capa.metadades.quality ,",", i_capa,", -1);TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
+		}
+		else if(capa.metadades.standard && DonaCadena(capa.metadades) && DonaExtensioFitxerSensePunt(DonaNomFitxerMetadades(capa, -1)).toLowerCase()=="xml")
+		{
+			//Puc obtenir la qualitat de les metadades
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(null,",i_capa,", -1);TancaContextMenuCapa();\">",
+					GetMessage("Quality"), "</a><br>");
+			if(!alguna_opcio)
+				alguna_opcio=true;			
 		}
 		if (capa.metadades.provenance && (capa.metadades.provenance.peticioServCSW || capa.metadades.provenance.lineage))
 		{
@@ -289,7 +404,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)  || capa.model==model_vector))
+	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)  || (capa.model==model_vector && capa.estil[0].TipusObj != "S")))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa, ",0);TancaContextMenuCapa();\">",
 				GetMessage("EditStyle", "cntxmenu"), "</a><br>");
@@ -415,15 +530,24 @@ var capa=ParamCtrl.capa[i_capa];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraCalculaQualitatCapa(",i_capa,",",i_estil,");TancaContextMenuCapa();\">",
 				GetMessage("ComputeQuality", "cntxmenu"), "</a><br>");
 	}
-	if (capa.estil[i_estil].metadades && capa.estil[i_estil].metadades.quality)
+	if (capa.estil[i_estil].metadades)
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-			GetMessage("Quality"), "</a><br>");
+		if(capa.estil[i_estil].metadades.quality)
+		{
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", capa.estil[i_estil].metadades.quality,",",i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+					GetMessage("Quality"), "</a><br>");
+		}
+		else if(capa.estil[i_estil].metadades.standard && DonaCadena(capa.estil[i_estil].metadades.standard) && DonaExtensioFitxerSensePunt(DonaNomFitxerMetadades(capa, -1)).toLowerCase()=="xml")
+		{
+			//Puc obtenir la qualitat de les metadades
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(null,", i_capa,", -1);TancaContextMenuCapa();\">",
+					GetMessage("Quality"), "</a><br>");
+		}
 	}
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
 
-	if (EsCapaBinaria(capa) || capa.model==model_vector)
+	if (EsCapaBinaria(capa) || (capa.model==model_vector && capa.estil[i_estil].TipusObj != "S"))
 	{
 		cdns.push("<hr>");
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraEditaEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
@@ -495,12 +619,12 @@ var j;
 	{
 		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 		{
-			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
+			if(-1!=servidorGC.formatGetFeatureInfo[j].indexOf("text/xml"))
 				return j;
 		}
 		for(j=0; j<servidorGC.formatGetFeatureInfo.length; j++)
 		{
-			if(servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
+			if(-1!=servidorGC.formatGetFeatureInfo[j].indexOf("text/html"))
 				return j;
 		}
 	}
@@ -551,7 +675,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 				if(!alguna_capa_afegida)
 					alguna_capa_afegida=true;
 
-				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
+				AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, "si");
 
 				if(i_on_afegir!=-1)
 					i_on_afegir++;
@@ -565,19 +689,19 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 			if(!alguna_capa_afegida)
 				alguna_capa_afegida=true;
 			i_capa=form.sel_capes.value;
-			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo);
+			AfegeixCapaWMSAlNavegador(parseInt(form["format_capa_"+i_capa].options[form["format_capa_"+i_capa].selectedIndex].value), servidorGC, i_on_afegir, i_capa, i_get_featureinfo, "si");
 		}
 	}
 	if(alguna_capa_afegida)
 	{
 		/*Si s'ha afegit alguna capa de servidor extern, relaxo les
-                limitacions d'àmbit de navegació per poder-me sortir del mapa
+        limitacions d'àmbit de navegació per poder-me sortir del mapa
 		de situació. En realitat, el que voldria programar és que si la
-                capa que afegixo se surt del àmbit "relaxo" però si no, doncs no
+        capa que afegixo se surt del àmbit "relaxo" però si no, doncs no
 		però no sembla que NJ llegeixi l'àmbit de la capa i per això
 		decideixo fer-ho més general*/
 		ParamCtrl.RelaxaAmbitVisualitzacio=true;
-                //Redibuixo el navegador perquè les noves capes siguin visibles
+        //Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
 		RepintaMapesIVistes();
 	}
@@ -1849,7 +1973,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 						  {text: "2", 		prefix: "2",  size: "width:30px"},
 						  {text: "3", 		prefix: "3",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
 						  {text: "-", 		prefix: "-",  size: "width:30px", separa: "<br>"},
-              {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"},
+						  {text: "ENT", 	prefix: "Math.trunc (", sufix: ")", size: "width:40px"},
 						  {text: "Abs", 	prefix: "Math.abs   (", sufix: ")", size: "width:40px"},
 						  {text: "e", 		prefix: "Math.E", size: "width:40px"},
 						  {text: "(", 		prefix: "(",  size: "width:40px"},
@@ -1857,7 +1981,9 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 						  {text: "pi", 		prefix: "Math.PI", size: "width:30px"},
 						  {text: "0", 		prefix: "0",  size: "width:30px"},
 						  {text: ".", 		prefix: ".",  size: "width:30px", separa: "&nbsp;&nbsp;&nbsp;&nbsp;"},
-						  {text: "&plus;", 	prefix: "+",  size: "width:30px", separa: "<br><br>"},
+						  {text: "&plus;", 	prefix: "+",  size: "width:30px", separa: "<br>"},
+						  {text: "&#x78;&#x207F;", 	prefix: "**",  size: "width:40px"},
+						  {text: "&#x25;", 	prefix: "%",  size: "width:40px", separa: "<br><br>"},
 						  {text: "sin",     prefix: "Math.sin	(", sufix: ")", size: "width:62px"},
 						  {text: "asin",    prefix: "Math.asin	(", sufix: ")", size: "width:62px"},
 						  {text: "cos",     prefix: "Math.cos	(", sufix: ")", size: "width:62px"},
@@ -1880,9 +2006,9 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  cdns.push("</fieldset>");
 		//Caixa multilínia per a la formula.
 		cdns.push(GetMessage("Expression"),
-			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:420px;height:100\" ></textarea><br>",
+			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:438px;height:100\" ></textarea><br>",
 			GetMessage("ResultOfSelectionAddedAsNewLayerStyleWithName", "cntxmenu"),
-			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"\" /><br/>",
+			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:438px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("Add"),
 		        "\" onClick='AfegeixCapaCalcul(document.CalculadoraCapes.calcul.value, document.CalculadoraCapes.nom_estil.value);TancaFinestraLayer(\"calculadoraCapa\");' />",
@@ -1958,13 +2084,16 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 
 function CarregaFitxersLocalsSeleccionats(form)
 {
-var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
+var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[], ext;
 
 	if (form.nom_fitxer.files.length<1)
 		return;
 	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
 	{
-		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json")
+		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json" || 
+			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
+			( "geojson"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "json"==ext)))  
+			//NJ he vist que si la extensió és geojson no em retorna el mimetype!! Segurament això depen de les extensions que té registrades cada usuari i com que sobre això no hi puc fer res afegeix-ho aquesta comprovació
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			fileread[i_fitxer] = new FileReader();
@@ -1977,12 +2106,14 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 				catch (e){
 					alert("JSON file error. " + e);
 				}
-				AfegeixCapaGeoJSON(this.nom_json, objectes, -1);
+				AfegeixCapaGeoJSON(this.nom_json, objectes, NumeroDeCapesVolatils(-1));
 			};
 			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
 			algun_fitxer_ok=true;
 		}
-		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff")
+		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff" ||
+			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
+			( "tiff"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "tif"==ext || "geotiff"==ext)))
 		{
 			alert("Unrecognized file type '"+form.nom_fitxer.files[i_fitxer].type+ "' for the file '"+ form.nom_fitxer.files[i_fitxer].name + "'");
 		}
@@ -1995,7 +2126,7 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[];
 	if (tiff_blobs.length>0)
 	{
 		//AfegeixCapaGeoTIFF és asincrona.
-		AfegeixCapaGeoTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : "TIFFs", tiff_blobs, -1);
+		AfegeixCapaGeoTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : "TIFFs", tiff_blobs, NumeroDeCapesVolatils(-1));
 		algun_fitxer_ok=true;
 	}
 	if (algun_fitxer_ok)
@@ -2007,9 +2138,9 @@ function CarregaFitxerURLSeleccionat(form)
 	if (form.url_fitxer.value.length<1)
 		return;
 	if (form.url_type.value=="geojson")
-		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, -1);
+		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, NumeroDeCapesVolatils(-1));
 	else
-		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), -1);
+		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), NumeroDeCapesVolatils(-1));
 	TancaFinestraLayer("afegirCapa");
 }
 
@@ -2384,7 +2515,7 @@ var estil_o_atrib;
 		"<label for=\"", prefix_id, "-valor-",i_condicio, "\" id=\"span-text-", prefix_id, "-cc-constant-",i_condicio,"\">", GetMessage("Value"), ":</label>");
 	if(capa.model==model_vector)
 	{
-		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>1)
+		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>0)
 		{
 			//·$· El més probable és que no tingui els valors de les propietats, només tindrè els que s'han consultat, caldrà fer alguna cosa com es va dfer per la qualitats
 			var feature, atribut=estil_o_atrib.nom, valors_atrib=[],i_obj, i_valor;
@@ -2834,7 +2965,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 	{
 		var atribut=ParamCtrl.capa[i_capa].atributs[i_estil];
 		if (typeof atribut.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? atribut.calcul : AfageixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+			return (i_capa_ref==i_capa) ? atribut.calcul : AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
 		if (typeof atribut.FormulaConsulta!=="undefined")
 		{
 			var s=atribut.FormulaConsulta;
@@ -2853,7 +2984,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 		var component_sel=ParamCtrl.capa[i_capa].estil[i_estil].component[0], s_patro, i;
 
 		if (typeof component_sel.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? component_sel.calcul : AfageixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
+			return (i_capa_ref==i_capa) ? component_sel.calcul : AfegeixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
 		if (typeof component_sel.FormulaConsulta!=="undefined")
 		{
 			var valors=ParamCtrl.capa[i_capa].valors;
@@ -3576,6 +3707,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("Apply"),
 	        "\" onClick='EditaEstilCapa(", i_capa, ",", i_estil, ");' />",
+				"<input type=\"button\" class=\"Verdana11px\" value=\"",
+		GetMessage("Cancel"),
+	        "\" onClick='TancaFinestraLayer(\"editaEstil\");' />",		
 		"</div></form>");
 	return cdns.join("");
 }
@@ -3593,8 +3727,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 				valorMaxim: estil.component[i_comp].estiramentPaleta.valorMaxim > estil.histograma.component[i_comp].valorMaximReal ? estil.component[i_comp].estiramentPaleta.valorMaxim : estil.histograma.component[i_comp].valorMaximReal,
 				valorMinim: estil.component[i_comp].estiramentPaleta.valorMinim < estil.histograma.component[i_comp].valorMinimReal ? estil.component[i_comp].estiramentPaleta.valorMinim : estil.histograma.component[i_comp].valorMinimReal
 			};
-			estil.component[i_comp].estiramentPaleta.valorMaxim = estil.component[i_comp].estiramentPaletaExtrems.valorMaxim;
-			estil.component[i_comp].estiramentPaleta.valorMinim = estil.component[i_comp].estiramentPaletaExtrems.valorMinim;
+			// NJ_08_03_2023: No sé per quina intenció es volia fer això però no és correcte, ja que si ho faig perdo els valors de l'estirament que tinc abans, 
+			//estil.component[i_comp].estiramentPaleta.valorMaxim = estil.component[i_comp].estiramentPaletaExtrems.valorMaxim;
+			//estil.component[i_comp].estiramentPaleta.valorMinim = estil.component[i_comp].estiramentPaletaExtrems.valorMinim;
 		}
 
 		if (estil.component.length>2)
@@ -3633,11 +3768,13 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMinimReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMinimReal, ", ", valUnitari,", true);\">",")", "<br>",
-				"<div style='display: flex; align-items: stretch;'><label id=\"minEsqBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-esq-valor-minim-", i_comp, "\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				//NJ_08_03_2023: elimino les etiquetes dels extrems perquè resulten molt confuses, sembla que siguin els màxims de les imatges i no ho són
+				//"<div style='display: flex; align-items: stretch;'><label id=\"minEsqBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-esq-valor-minim-", i_comp, "\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				"<div style='display: flex; align-items: stretch;'>",
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-minim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", true);\">",
 			"<input type=\"range\" id=\"edita-estil-capa-slider-valor-minim-",i_comp, "\" style=\"width: 285px;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaleta.valorMinim - estPaletaExtr.valorMinim, "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari, ", true);\" onclick=\"dontPropagateEvent(event);\">",
 			"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-minim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-minim-", i_comp, "').value) + ", valUnitari,", ", valUnitari, ", true);\">",
-			"<label id=\"minDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-minim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+			//"<label id=\"minDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-minim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
 			"</div><br>");
 
 		cdns.push("<label for=\"edita-estil-capa-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), ": </label>",
@@ -3646,11 +3783,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			" (", GetMessage("computed", "cntxmenu"), " ", estil.histograma.component[i_comp].valorMaximReal.toFixed(3), " ",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"", GetMessage("Adopt", "cntxmenu"),
 				"\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", ", estil.histograma.component[i_comp].valorMaximReal, ", ", valUnitari, ", false);\">",")", "<br>",
-				"<div style='display: flex; align-items: stretch;'><label id=\"maxEsqBtn-", i_comp,"\" for=\"edita-estil-capa-button-fletxa-esq-valor-maxim-", i_comp, "\"  style=\"text-align: center;\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				//"<div style='display: flex; align-items: stretch;'><label id=\"maxEsqBtn-", i_comp,"\" for=\"edita-estil-capa-button-fletxa-esq-valor-maxim-", i_comp, "\"  style=\"text-align: center;\">", GetMessage("Minimum"), " ", GetMessage("Range"), ": ", DonaFactorValorMinEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				"<div style='display: flex; align-items: stretch;'>",
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-esq-valor-maxim-",i_comp, "\" value=\"<\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) - ", valUnitari,", ", valUnitari, ", false);\">",
 				"<input type=\"range\" id=\"edita-estil-capa-slider-valor-maxim-",i_comp, "\" style=\"width: 285px;direction: rtl;\" step=\"", valUnitari, "\" min=\"", 0, "\" max=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim, "\" value=\"", estPaletaExtr.valorMaxim - estPaletaExtr.valorMinim -(estPaleta.valorMaxim - estPaletaExtr.valorMinim), "\" onchange=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", this.value, ", valUnitari,", false);\" onclick=\"dontPropagateEvent(event);\">",
 				"<input type=\"button\" id=\"edita-estil-capa-button-fletxa-dret-valor-maxim-",i_comp, "\" value=\">\" onClick=\"CanviaValorEstiramentDePaleta(event, ", i_capa, ", ", i_comp, ", ", i_estil, ", parseFloat(document.getElementById('edita-estil-capa-valor-maxim-", i_comp, "').value) + ", valUnitari, ", ", valUnitari, ", false);\">",
-				"<label id=\"maxDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
+				//"<label id=\"maxDrtBtn-", i_comp, "\" for=\"edita-estil-capa-button-fletxa-dret-valor-maxim-", i_comp, "\">", GetMessage("Maximum"), " ", GetMessage("Range"), ": ", DonaFactorValorMaxEstiramentPaleta(estPaletaExtr).toFixed(3), "</label>",
 			"</div><br>");
 		if (estil.component.length>1)
 			cdns.push("</fieldset>");
@@ -4084,13 +4222,14 @@ var elem=ObreFinestra(window, "mostraLlinatge", GetMessage("forShowingLinageInfo
 	FinestraMostraLlinatgeCapa(elem, i_capa);
 }
 
-function ObreFinestraMostraQualitatCapa(i_capa, i_estil)
+function ObreFinestraMostraQualitatCapa(qualitat, i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "mostraQualitat", GetMessage("forShowingQualityInformation", "cntxmenu"));
+
 	if (!elem)
 		return;
-	FinestraMostraQualitatCapa(elem, capa, i_estil);
+	FinestraMostraQualitatCapa(elem, qualitat, capa, i_estil);
 }
 
 function ObreFinestraFeedbackCapa(i_capa, i_estil)
@@ -4149,11 +4288,12 @@ var floatValor=parseFloat(valor);
 				{
 					if (parseFloat(valorActual) <= parseFloat(estPaletaExtr.valorMinim))
 					{
-						const labelRangeEsqMin= document.getElementById("minEsqBtn-" + i_component);
-						const labelRangeEsqMax= document.getElementById("maxEsqBtn-" + i_component);
+						//NJ_08_03_2023
+						//const labelRangeEsqMin= document.getElementById("minEsqBtn-" + i_component);
+						//const labelRangeEsqMax= document.getElementById("maxEsqBtn-" + i_component);
 						textMinim.value = valorActual.toFixed(3);
-						labelRangeEsqMin.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
-						labelRangeEsqMax.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
+						//labelRangeEsqMin.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
+						//labelRangeEsqMax.textContent = TextLimitsSliders(parseFloat(textMinim.value), true);
 						sliderMinim.max = parseFloat(sliderMinim.max) + (parseFloat(estPaletaExtr.valorMinim) - valorActual);
 						sliderMaxim.max = sliderMinim.max;
 						sliderMinim.value = 0;
@@ -4194,11 +4334,12 @@ var floatValor=parseFloat(valor);
 				{
 					if (parseFloat(valorActual) >= parseFloat(estPaletaExtr.valorMaxim))
 					{
-						const labelRangeDrtMin= document.getElementById("minDrtBtn-" + i_component);
-						const labelRangeDrtMax= document.getElementById("maxDrtBtn-" + i_component);
+						// NJ_08_03_2023
+						//const labelRangeDrtMin= document.getElementById("minDrtBtn-" + i_component); 
+						//const labelRangeDrtMax= document.getElementById("maxDrtBtn-" + i_component); 
 						textMaxim.value = valorActual.toFixed(3);
-						labelRangeDrtMin.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
-						labelRangeDrtMax.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
+						//labelRangeDrtMin.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
+						//labelRangeDrtMax.textContent = TextLimitsSliders(parseFloat(textMaxim.value), false);
 						sliderMaxim.value = 0;
 						sliderMaxim.max = valorActual - estPaletaExtr.valorMinim;
 						sliderMinim.max = sliderMaxim.max;
@@ -4215,10 +4356,6 @@ var floatValor=parseFloat(valor);
 	}
 }
 
-function TextLimitsSliders(limitValue, esMinim)
-{
-	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
-}
 /*
 	Mostra la capa vectorial en format taula.
  */
@@ -4231,16 +4368,36 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 
 	if (!elem)
 		return;
-	i_capaATaula=i_capa;
-	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
-	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+	i_capaATaula = i_capa;
+	InsereixCadenaTaulaDeCapaVectorial(elem, i_capa);
 }
-/* Crea l'HTML per a construir la taula d'elements vectorials */
-function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
+
+function MostraFinestraTaulaDeCapaVectorial()
 {
-const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
-const atributsVisibles = [], objectesDinsAmbit = [];
-var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
+	const elem = getFinestraLayer(window, "taulaCapaVectorial")
+	InsereixCadenaTaulaDeCapaVectorial(elem, i_capaATaula)
+}
+
+/* Crea l'HTML per a construir la taula d'elements vectorials */
+function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true)
+{
+const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
+const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
+var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength, env_temp;
+	nodePare.innerHTML = "";
+	const divCapcalera = document.createElement("div");
+	const paragrafTitol = divCapcalera.appendChild(document.createElement("p"));
+	paragrafTitol.setAttribute("class", "vectorial");
+	paragrafTitol.setAttribute("style", "font-size: 20px");
+	paragrafTitol.appendChild(document.createTextNode(GetMessage("Layer")+": "+DonaCadena(capa.desc)));
+
+	if (objectes.length <= 0)
+	{
+		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+		divCapcalera.insertAdjacentHTML("beforeend","<p style='text-align:center;'><b>" + GetMessage("NoObjectsToDisplay", "cntxmenu") + "</b></p>");
+		nodePare.appendChild(divCapcalera);
+		return;
+	}
 
 	for (i = 0; i < attrLength; i++)
 	{
@@ -4250,102 +4407,235 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			atributsVisibles.push(capa.atributs[i]);
 		}
 	}
+
+	const paragrafCheckboxs = document.createElement("p");
+	paragrafCheckboxs.setAttribute("class", "vectorial");
+
+	// Si no hi han atributs per mostrar, parem i mostrem missatge explicatiu.
+	if (atributsVisibles.length <=0)
+	{
+		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+		divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoAttributesToDisplayForLayer", "cntxmenu") + "</b></p>");
+		nodePare.appendChild(divCapcalera);
+		return;
+	}
+	else
+	{
+		cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
+	}
+
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
 	{
 		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			const objActual = objectes[i];
-			if (objActual.geometry.type == "Point")
-			{
-				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
-				{
+			const geometryCRS = DonaGeometryCRSActual(objActual, capa.CRSgeometry);
+			if (geometryCRS.type == "Point")
+			{ 
+				// Obtinc la geometria en el CRS actual de navegació.				
+				if (EsPuntDinsEnvolupant({"x":geometryCRS.coordinates[0], "y":geometryCRS.coordinates[1]}, ParamInternCtrl.vista.EnvActual))
 					objectesDinsAmbit.push(objActual);
-				}
 			}
-			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			else
 			{
-				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (!objActual.bbox)
+					env_temp=DonaEnvCalculatGeometry(objActual.geometry, null);
+				else
+					env_temp=DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]);
+				// Obtinc l'àmbit en el CRS actual de navegació.
+				const ambitCRS = DonaEnvolupantCRS(env_temp, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
-				{
 					objectesDinsAmbit.push(objActual);
-				}
 			}
 		}
-		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		// Traspassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
 		objectes = objectesDinsAmbit;
-	}
 
-	if (atributsVisibles.length > 0)
-	{
-		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), " ", capa.desc, "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
-		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
-		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
-		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
-		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
-		"</div><hr>");
-
-		// Porta papers capa info
-		cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
-		GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
-		"MinX", "\t", capa.objectes.bbox[0], "\n",
-		"MaxX", "\t", capa.objectes.bbox[1], "\n",
-		"MinY", "\t", capa.objectes.bbox[2], "\n",
-		"MaxY", "\t", capa.objectes.bbox[3], "\n",
-		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
-
-		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
-		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		if (objectes.length <= 0)
 		{
-			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
-
-			// Porta papers
-			cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+			paragrafCheckboxs.insertAdjacentHTML("afterbegin", cdnsFragmentsHtml.join(""));
+			divCapcalera.appendChild(paragrafCheckboxs);
+			divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+			divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoObjectsToDisplayWithinRange", "cntxmenu") + "</b></p>");
+			nodePare.appendChild(divCapcalera);
+			return;
 		}
+	}
+	cdnsFragmentsHtml.push("&nbsp;<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+	"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>&nbsp;",
+	"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>");
+	paragrafCheckboxs.insertAdjacentHTML("beforeend", cdnsFragmentsHtml.join(""));
+	divCapcalera.appendChild(paragrafCheckboxs);
+	divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+
+	// Porta papers capa info
+	if (capa.EnvTotal)
+		env_temp=capa.EnvTotal;
+	else
+		env_temp=DonaEnvCalculatCapa(capa);		
+	cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
+						 GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
+						"MinX", "\t", env_temp.EnvCRS.MinX, "\n",
+						"MaxX", "\t", env_temp.EnvCRS.MaxX, "\n",
+						"MinY", "\t", env_temp.EnvCRS.MinY, "\n",
+						"MaxY", "\t", env_temp.EnvCRS.MaxY, "\n",
+						GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
+	
+	//Comencem la taula.
+	const taulaElementsVect = document.createElement("table");
+	taulaElementsVect.setAttribute("class", "vectorial");
+
+	// Comencem la fila capçalera de la taula.
+	const filaCapcalera = document.createElement("tr");	
+	for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+	{
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + atributsVisibles[i].descripcio + "</th>");
+
+		// Porta papers
+		cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+	}
+	filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + GetMessage("ExportObject", "cntxmenu") + "</th><th class='vectorial'>" + GetMessage("GoTo", "capavola") + "</th>");
+	
+	if (ambGeometria)
+	{
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial' style='text-align:start;'>" + GetMessage("Geometry", "cntxmenu") + "</th>");
+		
+		// Porta papers
+		cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
+	}
+	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
+	
+	// Comencem files d'objectes vectorials de la taula.
+	for (i = 0, objLength = objectes.length; i < objLength; i++)
+	{
+		const objecteARepresentar = objectes[i];
+		const filaObjecte = document.createElement("tr");
+		filaObjecte.setAttribute("class", "vectorial");
+		//cdnsHtml.push("<tr class='vectorial' height='20px'>");
+		for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+		{
+			filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + objecteARepresentar.properties[atributsVisibles[j].nom] + "</td>");
+			// Porta papers
+			cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
+		}
+		filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+		// obtindre array de punts de coordenades.
+		var arrayCoords = [];
+		const tipusGeometria = objecteARepresentar.geometry.type;
+		if (objecteARepresentar.geometry.coordinates.length > 0)
+		{			
+			if (tipusGeometria == "Point")
+				arrayCoords = objecteARepresentar.geometry.coordinates;
+			else if (tipusGeometria == "LineString" || tipusGeometria =="MultiPoint")
+				arrayCoords = objecteARepresentar.geometry.coordinates;
+			else if (tipusGeometria == "Polygon" || tipusGeometria =="MultiLineString")
+				arrayCoords = objecteARepresentar.geometry.coordinates[0];
+			else if (tipusGeometria == "MultiPolygon")
+				arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
+		}
+		var anarCoordX, anarCoordY;
+		
+		if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
+		{
+			if (!objecteARepresentar.bbox)
+				env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
+			else
+				env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
+		
+			anarCoordX = (env_temp.MinX+ env_temp.MaxX)/2;
+			anarCoordY = (env_temp.MinY + env_temp.MaxY)/2;
+		}
+		else if (tipusGeometria == "Point")
+		{
+			anarCoordX = arrayCoords[0];
+			anarCoordY = arrayCoords[1];
+		}
+		else
+		{
+			anarCoordY = arrayCoords[0][1];
+			anarCoordX = arrayCoords[0][0];
+		}
+		// ·$· S'està considerant que les coordenades són en long/lat i no sempre és així estan en el CRSGeometry i per tant AnarAObjVectorialTaula no funcionarà bé si les coordenades són en un altre sistema
+		// ·$· Perque només donar un punt, si tinc o puc calcular l'àmbit del objecte i anar a l'àmbit de l'objecte		
+		filaObjecte.insertAdjacentHTML("beforeend", ["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoordX, " ,", anarCoordY, ")'>" + GetMessage("GoTo", "capavola") + "</button>" + "</td>"].join(""));
+
 		if (ambGeometria)
 		{
-			cdnsHtml.push("<th class='vectorial' style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
-			// Porta papers
-			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
-		}
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
-		cdnsHtml.push("</tr>");
-		for (i = 0, objLength = objectes.length; i < objLength; i++)
-		{
-			const objecteARepresentar = objectes[i];
-			cdnsHtml.push("<tr class='vectorial'>");
-			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			// $·$· NJ-->DP No és del tot correcte només s'està escrivint un tros del objecte!!
+			
+			// ·$· potser la geometria es podria escriure en WKT, que és el que s'acostuma a fer a les taules que tenen geometria
+			const columnaDada = document.createElement("td");
+			const coordInteriors = [];
+			// Diferenciar entre coord (x, y) i (x, y, z).			
+			if (tipusGeometria != "Point")
 			{
-				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objecteARepresentar.properties[atributsVisibles[j].nom], "</td>");
-				// Porta papers
-				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
+				const numCoords = arrayCoords[0].length, nomDesplegable = capa.nom + "_feature_" + i;;
+				arrayCoords.forEach((coord, index) => {
+					coordInteriors.push((index==0 ? "(" : ", ("));
+					for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+					{
+						coordInteriors.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+					}
+					coordInteriors.push(")");
+				});
+				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " + BotoDesplegableDiv(nomDesplegable, CreaContenedorTextAmbScroll(coordInteriors.join(""), 120)));
 			}
-			if (ambGeometria)
+			else
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objecteARepresentar.geometry.coordinates.toString(), "</td>");
-				// Porta papers
-				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
+				const numCoords = arrayCoords.length;
+				coordInteriors.push("(");
+				for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+				{
+					coordInteriors.push(etiquetesCorrd[i_Coord]+": "+arrayCoords[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+				}
+				coordInteriors.push(")");
+				columnaDada.insertAdjacentHTML("beforeend", coordInteriors.join(""));
 			}
-			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			filaObjecte.insertAdjacentElement("beforeend", columnaDada);
 			// Porta papers
-			cdnsPortapapers.push("\n");
+			cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 		}
-		cdnsHtml.push("</table>");
+		taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
+		//cdnsHtml.push("</tr>");
+		// Porta papers
+		cdnsPortapapers.push("\n");
 	}
-
+	divCapcalera.insertAdjacentElement("beforeend", taulaElementsVect);
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
-	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
-	return cdnsHtml.join("");
+	divCapcalera.insertAdjacentHTML("beforeend", DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	//cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	//return cdnsHtml.join("");
+	nodePare.appendChild(divCapcalera);
+	return;
 }
-/* Determina quins elements vectorials s'inclouran en l'exportaci� */
+
+// Crea un conjunt de <div> anidats per a fixar una alçada concreta i la resta de contingut es mostri dins d'un scroll.
+function CreaContenedorTextAmbScroll(contingut, alcada = "50")
+{
+	const cdnsDivScroller = [];
+
+	cdnsDivScroller.push("<div style='height:", alcada,"px; position: relative;'>",
+	"<div style='max-height: 100%; overflow: auto;'>", 
+	"<div>", contingut, "</div>", "</div>", "</div>");
+
+	return cdnsDivScroller.join("");
+}
+
+/* Determina quins elements vectorials s'inclouran en l'exportació */
 function ActualitzaIndexObjectesExportar(checkbox)
 {
 	const indexATreballar = checkbox.value.toString();
 	// És un diccionari d'índexos on cada element és a la vegada el mateix índex.
 	checkbox.checked ? (i_objectesAExportar[indexATreballar]=indexATreballar) : (delete i_objectesAExportar[indexATreballar]);
+}
+
+// Neteja de l'objecte d'índexos a exportar.
+function NetejaIndexosExportacio()
+{
+	for (var clau in i_objectesAExportar)
+		delete i_objectesAExportar[clau];
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4358,44 +4648,55 @@ function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
 function TancaFinestra_taulaCapaVectorial()
 {
 	i_capaATaula=null;
-	TancaFinestra_anarCoord();
+	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
+	{
+	   ParamCtrl.capa[ParamCtrl.ICapaVolaAnarObj].visible="no";
+	   CreaVistes();
+	}
 }
 
 function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
-	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
-	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria ? checkboxGeometria.checked : false;
+	InsereixCadenaTaulaDeCapaVectorial(getFinestraLayer(window, "taulaCapaVectorial"), i_capa, ambit, geometria);
+	//contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
-
 function ExportarObjectesGeoJSON(i_capa)
 {
-const capa = ParamCtrl.capa[i_capa];
-// Valors mínims/màxims 
-const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
-const capaExportar = {"type": "FeatureCollection", "features": []};
-	Object.keys(i_objectesAExportar).forEach(key => {
-		const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
-		// Definir l'àmbit global dels elements exportats
-		if (objAExportar.bbox && objAExportar.bbox.length==4)
-		{
-			const iteradorIndex = objAExportar.bbox.keys();
-			for (var index of iteradorIndex)
+	if (Object.keys(i_objectesAExportar).length > 0)
+	{
+		const capa = ParamCtrl.capa[i_capa];
+		// Valors mínims/màxims 
+		const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
+		const capaExportar = {"type": "FeatureCollection", "features": []};
+		Object.keys(i_objectesAExportar).forEach(key => {
+			const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
+			// Definir l'àmbit global dels elements exportats
+			if (objAExportar.bbox && objAExportar.bbox.length==4)
 			{
-				// Coord del bbox Mínima
-				if (index < 2)
+				const iteradorIndex = objAExportar.bbox.keys();
+				for (var index of iteradorIndex)
 				{
-					if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
-						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					// Coord del bbox Mínima
+					if (index < 2)
+					{
+						if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
+							bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					}
+					else // Coord del bbox Màxima
+					{
+						if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
+							bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					}
 				}
-				else // Coord del bbox Màxima
-				{
-					if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
-						bboxObjectesAExportar[index] = objAExportar.bbox[index];
-				}
+				capaExportar.bbox = bboxObjectesAExportar;
 			}
-			capaExportar.bbox = bboxObjectesAExportar;
-		}
-		capaExportar.features.push(objAExportar);
-	});
-	return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+			capaExportar.features.push(objAExportar);
+		});
+		return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+	}
+	else
+	{
+		alert(GetMessage("NoObjectSelectedExport", "cntxmenu"));
+	}
 }

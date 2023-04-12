@@ -117,39 +117,50 @@ function CanviaEtiquetesAnarCoord(sel)
 
 function AnarAObjVectorialTaula(longitud, latitud)
 {
-var d, punt_coord;
+var d, punt_coord, env_obj;
 
+	// 1)NJ a DP: Cal assegurar-se que longitud i latitud són en EPSG:4326 i sinó ho són indicar el sistema de referència com a paràmetre per poder fer les transformacions correctament
+	// 2)NJ a DP: Potser millor que calcular un envolupant donant un aire de 1000 m sobre un punt, el millor seria calcular l'àmbit de l'objecte i el punt central. Llavors potser la funció pot rebre la geometria
+	// i calcular totes aquestes coses.
+	
 	if(isNaN(longitud) || isNaN(latitud))
 	{
   	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
+	
 	punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);	
 
 	if(!EsPuntDinsAmbitNavegacio(punt_coord))
 	{
-  	   alert(GetMessage("RequestedPointOutsideBrowserEnvelope", "capavola"));
-	   return;
+		// La capa no es visible en el sistema de referència actual ni en el CRS actual, per tant he de canviar-ho i mirar en quina imatge de situació està continguda.
+		// Calculo un envolupant amb uns 
+		
+		ParamCtrl.araCanviProjAuto=true;
+		d=1000;
+		d/=FactorGrausAMetres;
+		env_obj=DonaEnvDeXYAmpleAlt(longitud, latitud, d, d);
+		EstableixNouCRSEnv("EPSG:4326", env_obj);
+		
+		// Recalculo el punt en el sistema que cal
+		punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);		   
 	}
-
-	//Dibuixo la icona per mostrar el punt consultat
-	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
-	{
-		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord];
-		capa.objectes.features[0].geometry.coordinates[0]=punt_coord.x;
-		capa.objectes.features[0].geometry.coordinates[1]=punt_coord.y;
-		//capa.objectes.features[0].properties.radius=d;
-		capa.visible="si";
-		CreaVistes();
-	}
-	// Constant a 1000m per a una bona visualització del punt i dels voltants.
+	
 	d=1000;
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		d/=FactorGrausAMetres;
-	var env=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
-	PortamAAmbit(env);
-	
-	//PortamAPunt(punt_coord.x,punt_coord.y);
+	env_obj=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
+
+	// Dibuixo la icona per mostrar el punt de l'objecte
+	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
+	{
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaAnarObj];
+		capa.objectes.features[0].geometry.coordinates[0]=punt_coord.x;
+		capa.objectes.features[0].geometry.coordinates[1]=punt_coord.y;
+		capa.visible="si";
+		CreaVistes();
+	}	
+	PortamAAmbit(env_obj);
 }
 
 function AnarACoordenada(form)
@@ -214,7 +225,7 @@ var punt_coord={x: parseFloat(form.coordX.value), y: parseFloat(form.coordY.valu
 	{
 	   PortamAPunt(punt_coord.x,punt_coord.y);
 	}
-}//Fi de AnarACoordenada()
+}
 
 function TransformaCoordenadesCapaVolatil(capa, crs_ori, crs_dest)
 {
@@ -233,6 +244,8 @@ function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult], crs_ori, crs_dest);
 	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord], crs_ori, crs_dest);
+	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
+		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaAnarObj], crs_ori, crs_dest);
 	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
 	{
 		TransformaCoordenadesCapaVolatil(ParamCtrl.capa[ParamCtrl.ICapaVolaEdit], crs_ori, crs_dest);
@@ -245,10 +258,9 @@ function TransformaCoordenadesCapesVolatils(crs_ori, crs_dest)
 
 function EsIndexCapaVolatil(i_capa, param_ctrl)
 {
-	if (param_ctrl.ICapaVolaPuntConsult==i_capa || param_ctrl.ICapaVolaAnarCoord==i_capa || param_ctrl.ICapaVolaEdit==i_capa || param_ctrl.ICapaVolaGPS==i_capa)
+	if (param_ctrl.ICapaVolaPuntConsult==i_capa || param_ctrl.ICapaVolaAnarCoord==i_capa || param_ctrl.ICapaVolaAnarObj==i_capa  || param_ctrl.ICapaVolaEdit==i_capa || param_ctrl.ICapaVolaGPS==i_capa)
 		return true;
-	else
-		return false;
+	return false;
 }
 
 function EliminaIndexDeCapesVolatils(param_ctrl)
@@ -257,6 +269,8 @@ function EliminaIndexDeCapesVolatils(param_ctrl)
 		delete param_ctrl.ICapaVolaPuntConsult;
 	if(typeof param_ctrl.ICapaVolaAnarCoord !== "undefined")
 		delete param_ctrl.ICapaVolaAnarCoord;
+	if(typeof param_ctrl.ICapaVolaAnarObj !== "undefined")
+		delete param_ctrl.ICapaVolaAnarObj;
 	if(typeof param_ctrl.ICapaVolaEdit !== "undefined")
 		delete param_ctrl.ICapaVolaEdit;
 	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")
@@ -273,6 +287,8 @@ function NumeroDeCapesVolatils(i_capa)
 			i++;
 		if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined")
 			i++;
+		if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")
+			i++;
 		if (typeof ParamCtrl.ICapaVolaEdit !== "undefined")
 			i++;
 		if (typeof ParamCtrl.ICapaVolaGPS !== "undefined")
@@ -283,6 +299,8 @@ function NumeroDeCapesVolatils(i_capa)
 	if (typeof ParamCtrl.ICapaVolaPuntConsult !== "undefined" && ParamCtrl.ICapaVolaPuntConsult<i_capa)
 		i++;
 	if (typeof ParamCtrl.ICapaVolaAnarCoord !== "undefined" && ParamCtrl.ICapaVolaAnarCoord<i_capa)
+		i++;
+	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined" && ParamCtrl.ICapaVolaAnarObj<i_capa)
 		i++;
 	if (typeof ParamCtrl.ICapaVolaEdit !== "undefined" && ParamCtrl.ICapaVolaEdit<i_capa)
 		i++;
@@ -298,6 +316,8 @@ function EliminaCapaVolatil(i_capa, param_ctrl)
 		delete param_ctrl.ICapaVolaPuntConsult;
 	if (param_ctrl.ICapaVolaAnarCoord==i_capa)
 		delete param_ctrl.ICapaVolaAnarCoord;
+	if (param_ctrl.ICapaVolaAnarObj==i_capa)
+		delete param_ctrl.ICapaVolaAnarObj;
 	if (param_ctrl.ICapaVolaEdit==i_capa)
 		delete param_ctrl.ICapaVolaEdit;
 	if (param_ctrl.ICapaVolaGPS==i_capa)
@@ -317,6 +337,8 @@ function CanviaIndexosCapesVolatils(n_moviment, i_capa_ini, i_capa_fi_per_sota, 
 		param_ctrl.ICapaVolaPuntConsult+=n_moviment;
 	if (typeof param_ctrl.ICapaVolaAnarCoord !== "undefined" && param_ctrl.ICapaVolaAnarCoord>=i_capa_ini && param_ctrl.ICapaVolaAnarCoord<i_capa_fi_per_sota)
 		param_ctrl.ICapaVolaAnarCoord+=n_moviment;
+	if (typeof param_ctrl.ICapaVolaAnarObj !== "undefined" && param_ctrl.ICapaVolaAnarObj>=i_capa_ini && param_ctrl.ICapaVolaAnarObj<i_capa_fi_per_sota)
+		param_ctrl.ICapaVolaAnarObj+=n_moviment;
 	if (typeof param_ctrl.ICapaVolaEdit !== "undefined" && param_ctrl.ICapaVolaEdit>=i_capa_ini && param_ctrl.ICapaVolaEdit<i_capa_fi_per_sota)
 		param_ctrl.ICapaVolaEdit+=n_moviment;
 	if (typeof param_ctrl.ICapaVolaGPS !== "undefined" && param_ctrl.ICapaVolaGPS>=i_capa_ini && param_ctrl.ICapaVolaGPS<i_capa_fi_per_sota)
@@ -503,6 +525,57 @@ function CreaCapesVolatils()
 								}
 							}
 						],
+						"ItemLleg": null,
+						"ncol": 1
+					}],
+					"i_estil": 0,
+					"NColEstil": 1,
+					"separa": null,
+					"DescLlegenda": null,
+					"LlegDesplegada": false,
+					"VisibleALaLlegenda": false,
+					"visible": "no",
+					"consultable": "no",
+					"editable": "no",
+					"FuncioEdicio": null,
+					"metadades": null
+				});
+		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
+	}
+	if (!ParamCtrl.IconaAnarObj)
+		ParamCtrl.IconaAnarObj={"icona": "mes.gif", "ncol": 9, "nfil": 9, "i": 5, "j": 5};
+	if (typeof ParamCtrl.ICapaVolaAnarObj === "undefined")
+	{
+		ParamCtrl.ICapaVolaAnarObj=i_nova_capa;
+		i_nova_capa++;
+		ParamCtrl.capa.splice(ParamCtrl.ICapaVolaAnarObj, 0, {
+					"servidor": null,
+					"versio": null,
+					"model": model_vector,
+					"nom": null,
+					"desc": null,
+					"CRSgeometry": ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,
+					"objectes": {
+						"type": "FeatureCollection",
+						"features":[{
+							"id": null,
+							"data": null,
+							//"i_simbol": 0,
+							"geometry": {
+								"type": "Point",
+								"coordinates": [0,0]
+							},
+							"properties": {},
+						}]
+					},
+					"estil": [{
+						"nom": null,
+						"desc":	null,
+						"DescItems": null,
+						"simbols": [{
+							"NomCamp": null,
+							"simbol": [{"ValorCamp": null, "icona": JSON.parse(JSON.stringify(ParamCtrl.IconaAnarObj))}]
+						}],
 						"ItemLleg": null,
 						"ncol": 1
 					}],

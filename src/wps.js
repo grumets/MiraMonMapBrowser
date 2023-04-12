@@ -671,7 +671,7 @@ function EsUnaURLValida(text)
 	//.
 	//i alguna  de les seguënts extensions
 
-	var re=/^(file|http):\/\/\w+(\.\w+)*\.\w{2,3}$/i;
+	var re=/^(file|http|https):\/\/\w+(\.\w+)*\.\w{2,3}$/i;
 	//http o file ://(n caracteres).(n caracteres)(0 ó más veces).(2 ó 3 caracteres)
 	if (re.test(text))
 		return true;

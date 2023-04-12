@@ -2142,7 +2142,7 @@ var p, unitats_CRS;
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MinX,vista.EnvActual.MaxY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (cal_vora)
 			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
-		cdns.push("    <td align=left><font face=arial size=1>\n");
+		cdns.push("    <td align=\"left\"><font face=\"arial\" size=\"1\">\n");
 		if (estil_parella_coord)
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
@@ -2167,7 +2167,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MaxX,vista.EnvActual.MaxY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		cdns.push("    <td"+ (cal_vora ? " colspan=\"2\"" : ""), " align=right><font face=arial size=1>\n");
+		cdns.push("    <td"+ (cal_vora ? " colspan=\"2\"" : ""), " align=\"right\"><font face=\"arial\" size=\"1\">\n");
 		if (estil_parella_coord)
 		{
 			if (ParamCtrl.CoordExtremes=="proj")
@@ -2199,38 +2199,38 @@ var p, unitats_CRS;
 	{
 	  cdns.push("  <tr>",
 			   "    <td><a href=\"javascript:MouLaVistaSalt(-1,1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_inc11.gif"), "\"",
-			   " width=",
-				MidaFletxaInclinada," height=",MidaFletxaInclinada," border=0></a></td>",
+			   " width=\"",
+				MidaFletxaInclinada,"\" height=\"",MidaFletxaInclinada,"\" border=\"0\"></a></td>",
 			   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"), "\"",
-			   " width=",Math.floor((vista.ncol-MidaFletxaPlana)/2)," height=",MidaFletxaInclinada,"></td>",
+			   " width=\"",Math.floor((vista.ncol-MidaFletxaPlana)/2),"\" height=\"",MidaFletxaInclinada,"\"></td>",
 			   "    <td><a href=\"javascript:MouLaVistaSalt(0,1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_pla1.gif"), "\"",
-			   " width=",MidaFletxaPlana," height=",MidaFletxaInclinada," border=0></a></td>",
+			   " width=\"",MidaFletxaPlana,"\" height=\"",MidaFletxaInclinada,"\" border=\"0\"></a></td>",
 			   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"), "\"",
-			   " width=",(Math.floor((vista.ncol-MidaFletxaPlana)/2)+(vista.ncol-MidaFletxaPlana)%2)," height=",MidaFletxaInclinada,"></td>",
+			   " width=\"",(Math.floor((vista.ncol-MidaFletxaPlana)/2)+(vista.ncol-MidaFletxaPlana)%2),"\" height=\"",MidaFletxaInclinada,"\"></td>",
 			   "    <td><a href=\"javascript:MouLaVistaSalt(1,1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_inc21.gif"), "\"",
-			   " width=",MidaFletxaInclinada," height=",MidaFletxaInclinada,
-			   " border=0></a></td>\n");
+			   " width=\"",MidaFletxaInclinada,"\" height=\"",MidaFletxaInclinada,
+			   "\" border=\"0\"></a></td>\n");
 	   cdns.push("  </tr>");
 	}
 
 	cdns.push("  <tr>");
 	if (cal_vora)
 		cdns.push("    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-	   		"\" width=",MidaFletxaInclinada," height=",Math.floor((vista.nfil-MidaFletxaPlana)/2),"></td>");
+	   		"\" width=\"",MidaFletxaInclinada,"\" height=\"",Math.floor((vista.nfil-MidaFletxaPlana)/2),"\"></td>");
 	cdns.push(
-	   "    <td colspan=", ((cal_vora) ? 3 : (cal_coord? 2: 1)), " rowspan=", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), " style=\"background-color:", ParamCtrl.ColorFonsVista ,";\" width=\"",vista.ncol,"\" height=\"",vista.nfil,"\"></td>");
+	   "    <td colspan=\"", ((cal_vora) ? 3 : (cal_coord? 2: 1)), "\" rowspan=\"", ((cal_vora) ? 3 : ((cal_coord && !estil_parella_coord)? 2: 1)), "\" style=\"background-color:", ParamCtrl.ColorFonsVista ,";\" width=\"",vista.ncol,"\" height=\"",vista.nfil,"\"></td>");
 
 	if (cal_vora)
 	  cdns.push(
 	   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-	   "\" width=",MidaFletxaInclinada," height=",Math.floor((vista.nfil-MidaFletxaPlana)/2),"></td>");
+	   "\" width=\"",MidaFletxaInclinada,"\" height=\"",Math.floor((vista.nfil-MidaFletxaPlana)/2),"\"></td>");
 	if (cal_coord)
 	{
 		if (estil_parella_coord)
 			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""),  " nowrap></td>\n");
 		else
 		{
-			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""), " valign=top nowrap><font face=arial size=1>&nbsp;&nbsp;\n");
+			cdns.push("    <td", (cal_vora ? " rowspan=\"2\"":  ""), " valign=\"top\" nowrap><font face=\"arial\" size=\"1\">&nbsp;&nbsp;\n");
 			if (ParamCtrl.CoordExtremes=="proj")
 			    cdns.push((OKStrOfNe(vista.EnvActual.MaxY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS);
 			else if (ParamCtrl.CoordExtremes=="longlat_g")
@@ -2248,18 +2248,18 @@ var p, unitats_CRS;
 		if (cal_vora)
 		  cdns.push(
 		   "    <td><a href=\"javascript:MouLaVistaSalt(-1,0);\"><img src=\"", AfegeixAdrecaBaseSRC("f_ver1.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",MidaFletxaPlana," border=0></a></td>",
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",MidaFletxaPlana,"\" border=\"0\"></a></td>",
 		   "    <td><a href=\"javascript:MouLaVistaSalt(1,0);\"><img src=\"", AfegeixAdrecaBaseSRC("f_ver2.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",MidaFletxaPlana," border=0></a></td>",
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",MidaFletxaPlana,"\" border=\"0\"></a></td>",
 		   "  </tr>",
 		   "  <tr>",
 		   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",(Math.floor((vista.nfil-MidaFletxaPlana)/2)+(vista.nfil-MidaFletxaPlana)%2),"></td>",
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",(Math.floor((vista.nfil-MidaFletxaPlana)/2)+(vista.nfil-MidaFletxaPlana)%2),"\"></td>",
 		   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",(Math.floor((vista.nfil-MidaFletxaPlana)/2)+(vista.nfil-MidaFletxaPlana)%2),"></td>\n");
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",(Math.floor((vista.nfil-MidaFletxaPlana)/2)+(vista.nfil-MidaFletxaPlana)%2),"\"></td>\n");
 		if (cal_coord)
 		{
-			cdns.push("    <td valign=bottom nowrap><font face=arial size=1>&nbsp;&nbsp;\n");
+			cdns.push("    <td valign=\"bottom\" nowrap><font face=\"arial\" size=\"1\">&nbsp;&nbsp;\n");
 			if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 			    ll=DonaCoordenadesLongLat(vista.EnvActual.MaxX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 			if (ParamCtrl.CoordExtremes=="proj")
@@ -2277,15 +2277,15 @@ var p, unitats_CRS;
 	{
 		cdns.push("  <tr>",
 		   "    <td><a href=\"javascript:MouLaVistaSalt(-1,-1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_inc12.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",MidaFletxaInclinada," border=0></a></td>",
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",MidaFletxaInclinada,"\" border=\"0\"></a></td>",
 		   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-		   "\" width=",Math.floor((vista.ncol-MidaFletxaPlana)/2)," height=",MidaFletxaInclinada,"></td>",
+		   "\" width=\"",Math.floor((vista.ncol-MidaFletxaPlana)/2),"\" height=\"",MidaFletxaInclinada,"\"></td>",
 		   "    <td><a href=\"javascript:MouLaVistaSalt(0,-1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_pla2.gif"),
-		   "\" width=",MidaFletxaPlana," height=",MidaFletxaInclinada," border=0></a></td>",
+		   "\" width=\"",MidaFletxaPlana,"\" height=\"",MidaFletxaInclinada,"\" border=\"0\"></a></td>",
 		   "    <td><img src=\"", AfegeixAdrecaBaseSRC("1gris.gif"),
-		   "\" width=",(Math.floor((vista.ncol-MidaFletxaPlana)/2)+(vista.ncol-MidaFletxaPlana)%2), " height=",MidaFletxaInclinada,"></td>",
+		   "\" width=\"",(Math.floor((vista.ncol-MidaFletxaPlana)/2)+(vista.ncol-MidaFletxaPlana)%2), "\" height=\"",MidaFletxaInclinada,"\"></td>",
 		   "    <td><a href=\"javascript:MouLaVistaSalt(1,-1);\"><img src=\"", AfegeixAdrecaBaseSRC("f_inc22.gif"),
-		   "\" width=",MidaFletxaInclinada," height=",MidaFletxaInclinada," border=0></a></td>");
+		   "\" width=\"",MidaFletxaInclinada,"\" height=\"",MidaFletxaInclinada,"\" border=\"0\"></a></td>");
 		if (cal_coord)
 		   cdns.push("    <td rowspan=\"2\"></td>");
 		cdns.push("  </tr>");
@@ -2297,7 +2297,7 @@ var p, unitats_CRS;
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MinX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		if (cal_vora)
 			cdns.push("    <td height=\"0\" width=\"10\"></td>\n");
-		cdns.push("    <td align=left><font face=arial size=1>\n");
+		cdns.push("    <td align=\"left\"><font face=\"arial\" size=\"1\">\n");
 		if (ParamCtrl.CoordExtremes=="proj")
 			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MinX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
 				  (OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
@@ -2310,7 +2310,7 @@ var p, unitats_CRS;
 
 		if (ParamCtrl.CoordExtremes=="longlat_g" || ParamCtrl.CoordExtremes=="longlat_gms")
 		    ll=DonaCoordenadesLongLat(vista.EnvActual.MaxX,vista.EnvActual.MinY,ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-		cdns.push("    <td"+ (cal_vora ? " colspan=\"2\"" : ""), " align=right><font face=arial size=1>\n");
+		cdns.push("    <td"+ (cal_vora ? " colspan=\"2\"" : ""), " align=\"right\"><font face=\"arial\" size=\"1\">\n");
 		if (ParamCtrl.CoordExtremes=="proj")
 			cdns.push("(" , (OKStrOfNe(vista.EnvActual.MaxX,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, "," ,
 					(OKStrOfNe(vista.EnvActual.MinY,ParamCtrl.NDecimalsCoordXY)), unitats_CRS, ")");
@@ -2329,7 +2329,7 @@ var p, unitats_CRS;
 	if(ParamCtrl.MostraBarraEscala && vista.i_nova_vista==NovaVistaPrincipal)
 	{
 		cdns.push("  <tr>",
-		   "    <td colspan=", (cal_vora ? 5 : (cal_coord ? 2 : 1)), " align=middle>", DonaCadenaHTMLDibuixEscala(vista.EnvActual, false) ,"</td>");  //Servirà per indicar l'escala.
+		   "    <td colspan=\"", (cal_vora ? 5 : (cal_coord ? 2 : 1)), "\" align=\"middle\">", DonaCadenaHTMLDibuixEscala(vista.EnvActual, false) ,"</td>");  //Servirà per indicar l'escala.
 		if (cal_coord && !cal_vora)
 			cdns.push("    <td></td>\n");
 		cdns.push("  </tr>");

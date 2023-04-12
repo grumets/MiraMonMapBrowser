@@ -40,33 +40,196 @@
 
 const OrigenUsuari="usuari";
 
-function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
+function AfegeixOModificaCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo)
 {
-var j, k, estils, estil, minim, maxim;
-var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
+	
+var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
+
+	// Si la capa ja existeix la modifico i sinó l'afegeixo
+	var nom_serv=DonaNomServidorSenseCaracterFinal(servidorGC.servidor).toLowerCase();
+	var tipus=DonaTipusServidorCapa(layer);
+	for(i_capa=0; i_capa<capa.length; i_capa++)
+	{
+		if (nom_serv==DonaServidorCapa(capa[i_capa]).toLowerCase() &&
+			capa[i_capa].nom==layer.nom && tipus==DonaTipusServidorCapa(capa[i_capa]))
+			break;
+	}
+	if(i_capa==capa.length)
+	{
+		 AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, (layer.esCOG && layer.uriDataTemplate)? "ara_no": "si"); // Marco els TIFF com a visibles "ara_no" NJ_07_03_2023
+		 return true;
+	}
+	
+	// Actualitzo l'array de dates
+	if(layer.data)
+		capa[i_capa].data=JSON.parse(JSON.stringify(layer.data));	
+	return false;
+}
+
+function DonaIndexDimensioLayerPerNom(dimensioExtra, nom)
+{
+	for(var i=0; i<dimensioExtra.length; i++)
+	{
+		if(dimensioExtra[i].clau && dimensioExtra[i].clau.nom.toLowerCase()==nom.toLowerCase())
+			return i;
+	}
+	return -1;
+}
+
+function AfegeixCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_afegir, i_layer, i_get_featureinfo, visible)
+{
+var j, k, z, estils, estil, minim, maxim;
+var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa, estilPerCapa=null, dimensioPerCapa=null, nodataPerCapa=null, i_dimensio_layer=-1;
+var trobat=false, criteris;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
-
+	if (layer.dimensioExtra && servidorGC.param_func_after && servidorGC.param_func_after.dimensioPerCapa)
+	{
+		trobat=false;
+		for(j=0; j<servidorGC.param_func_after.dimensioPerCapa.length; j++)
+		{
+			if(-1!=(i_dimensio_layer=DonaIndexDimensioLayerPerNom(layer.dimensioExtra, servidorGC.param_func_after.dimensioPerCapa[j].nom)) &&
+			   servidorGC.param_func_after.dimensioPerCapa[j].criteris && servidorGC.param_func_after.dimensioPerCapa[j].formulaDesc)
+			{
+				criteris=servidorGC.param_func_after.dimensioPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest estil
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat la dimensió a aplicar a la capa
+					dimensioPerCapa=servidorGC.param_func_after.dimensioPerCapa[j];									
+					break;
+				}
+			}
+		}		
+	}
+	if (servidorGC.param_func_after && servidorGC.param_func_after.nodataPerCapa)
+	{
+		trobat=false;
+		for(j=0; j<servidorGC.param_func_after.nodataPerCapa.length; j++)
+		{
+			if(servidorGC.param_func_after.nodataPerCapa[j].criteris && servidorGC.param_func_after.nodataPerCapa[j].nodata)
+			{
+				criteris=servidorGC.param_func_after.nodataPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest nodata
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat el nodata a aplicar a la capa
+					nodataPerCapa=servidorGC.param_func_after.nodataPerCapa[j].nodata;
+					break;
+				}
+			}
+		}
+		
+	}
+	if (servidorGC.param_func_after && servidorGC.param_func_after.estilPerCapa)
+	{
+		trobat=false;
+		for(j=0; j<servidorGC.param_func_after.estilPerCapa.length; j++)
+		{
+			if(servidorGC.param_func_after.estilPerCapa[j].criteris && servidorGC.param_func_after.estilPerCapa[j].estil)
+			{
+				criteris=servidorGC.param_func_after.estilPerCapa[j].criteris;
+				for(k=0; k<criteris.length; k++)
+				{
+					trobat=false;
+					if(criteris[k].clau=="Keyword" && layer.keywords && layer.keywords.length>0)
+					{
+						for(z=0; z<layer.keywords.length; z++)
+						{
+							if(criteris[k].valor.toLowerCase()==layer.keywords[z].toLowerCase())
+							{
+								trobat=true;
+								break;
+							}
+						}
+						if(!trobat)
+						{							
+							//no trobat, no cal que continui mirant els criteris d'aquest estil
+							break;
+						}
+					}
+				}
+				if(trobat)
+				{
+					// S'han complert tots els criteris i per tant he trobat l'estil a aplicar a la capa
+					estilPerCapa=servidorGC.param_func_after.estilPerCapa[j].estil;
+					break;
+				}
+			}
+		}
+		
+	}
 	if(layer.estil && layer.estil.length>0)
 	{
 		estils=[];
 		for(j=0; j<layer.estil.length; j++)
 		{
-			estils[estils.length]={nom: layer.estil[j].nom,
+			if(estilPerCapa)
+			{
+				estils[estils.length]=JSON.parse(JSON.stringify(estilPerCapa));
+				estil=estils[estils.length-1];
+				estil.nom =layer.estil[j].nom;
+				if(!estil.desc)
+					estil.desc =DonaCadenaNomDesc(layer.estil[j]);
+				if(!estil.DescItems)
+					estil.DescItems =layer.uom;
+			}
+			else
+			{
+				estils[estils.length]={nom: layer.estil[j].nom,
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
-						TipusObj: "I",
 						metadades: null,
 						ItemLleg: null,
 						ncol: 0};
-			estil=estils[estils.length-1];
+				estil=estils[estils.length-1];
+			}
 			if (layer.esCOG && layer.uriDataTemplate)
 			{
-				estil.component=[{"i_valor": 0}];
-				if (layer.vom=="Land Water Transition Zone - Hydroperiod")
+				if(!estil.component)
+					estil.component=[{"i_valor": 0}];
+				if ((layer.vom=="Land Water Transition Zone - Hydroperiod" || layer.vom=="Open Data - Land Water Transition Zone - Hydroperiod") && !estil.component[0].estiramentPaleta)
 					estil.component[0].estiramentPaleta={valorMinim: 0, valorMaxim: 365};
 			}
-			if (layer.categories && layer.categories.length)
+			if (layer.categories && layer.categories.length && !estil.categories)
 			{
 				estil.categories=[];
 				var s=layer.uom ? layer.uom : GetMessage("Class");
@@ -85,7 +248,15 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		}
 	}
 	else
-		estils=null;
+	{
+		if(estilPerCapa)
+		{
+			estils=[];
+			estils[0]=JSON.parse(JSON.stringify(estilPerCapa));
+		}
+		else
+			estils=null;
+	}
 
 	if(layer.CostatMinim && layer.CostatMinim>=ParamCtrl.zoom[ParamCtrl.zoom.length-1].costat)
 		minim=layer.CostatMinim;
@@ -107,7 +278,7 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs, visible)
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
@@ -127,11 +298,11 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 				NColEstil: (estils && estils.length>0) ? 1: 0,
 				LlegDesplegada: false,
 				VisibleALaLlegenda: true,
-				visible: "si",
+				visible: visible ? visible: "si",
 				consultable: (i_get_featureinfo!=-1 && layer.consultable)? "si" : "no",
 				descarregable: "no",
 				FlagsData: layer.FlagsData,
-				data: layer.data,
+				data: JSON.parse(JSON.stringify(layer.data)),
 				i_data: layer.i_data,
 				animable: (layer.data)? true: false,
 				AnimableMultiTime: (layer.data)? true:false,
@@ -140,13 +311,22 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 
 	capa=ParamCtrl.capa[k];
 	capa.access=(servidorGC.access) ? JSON.parse(JSON.stringify(servidorGC.access)): null;
-	capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+	
+	if(layer.dimensioExtra)
+	{
+		capa.dimensioExtra=JSON.parse(JSON.stringify(layer.dimensioExtra));
+		if(dimensioPerCapa && i_dimensio_layer!=-1)
+			capa.dimensioExtra[i_dimensio_layer].formulaDesc=dimensioPerCapa.formulaDesc;
+	}
+	else
+		capa.dimensioExtra=null;
+	
 
 	if (layer.uriMDTemplate)
 		capa.metadades={standard: layer.uriMDTemplate};
 	if (layer.EnvLL)
 		capa.EnvTotal={EnvCRS: JSON.parse(JSON.stringify(layer.EnvLL)), CRS:"EPSG:4326"};
-
+	
 	if (layer.esCOG && layer.uriDataTemplate)
 	{
 		capa.CostatMinim=minim;
@@ -154,11 +334,13 @@ var alguna_capa_afegida=false, layer=servidorGC.layer[i_layer], capa;
 		if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 
-		capa.valors=[{
-					"datatype": "float32",
-					"nodata": [-9999, 0]
-				}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
+		
+		
+		capa.valors=[{ datatype: "float32",
+					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinó no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
+					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
+		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
@@ -561,42 +743,42 @@ var k;
 	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-
+		
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
 	RepintaMapesIVistes();
 }
 
-function IniciaDefinicioCapaTIFF(url, desc, CRSs)
+function IniciaDefinicioCapaTIFF(url, desc, CRSs, visible)
 {
 	return {servidor: url,
-				versio: null,
-				tipus: "TipusHTTP_GET",
-				nom: null,
-				desc: desc,
-				CRS: CRSs,
-				FormatImatge: "image/tiff",
-				valors: [],
-				transparencia: "semitrasparent",
-				CostatMinim: null,
-				CostatMaxim: null,
-				FormatConsulta: null,
-				separa: null,
-				DescLlegenda: desc,
-				estil: null,
-				i_estil: 0,
-				NColEstil: 1,
-				LlegDesplegada: false,
-				VisibleALaLlegenda: true,
-				visible: "si",
-				consultable: "si",
-				descarregable: "no",
-				FlagsData: null,
-				data: null,
-				i_data: 0,
-				animable: false,
-				AnimableMultiTime: false,
-				origen: OrigenUsuari};
+			versio: null,
+			tipus: "TipusHTTP_GET",
+			nom: null,
+			desc: desc,
+			CRS: CRSs,
+			FormatImatge: "image/tiff",
+			valors: [],
+			transparencia: "semitrasparent",
+			CostatMinim: null,
+			CostatMaxim: null,
+			FormatConsulta: null,
+			separa: null,
+			DescLlegenda: desc,
+			estil: null,
+			i_estil: 0,
+			NColEstil: 1,
+			LlegDesplegada: false,
+			VisibleALaLlegenda: true,
+			visible: visible ? visible: "si",
+			consultable: "si",
+			descarregable: "no",
+			FlagsData: null,
+			data: null,
+			i_data: 0,
+			animable: false,
+			AnimableMultiTime: false,
+			origen: OrigenUsuari};
 }
 
 async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
@@ -611,11 +793,12 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (image.getGeoKeys() && (image.getGeoKeys().ProjectedCSTypeGeoKey || image.getGeoKeys().GeographicTypeGeoKey))
 	{
+		/*NJ_27_02_2023: Trec aquesta protecció ja no cal ara que reprojectem el COG's
 		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
 		{
 			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
 			return;
-		}
+		}*/
 		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
 		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
@@ -653,6 +836,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OrigenUsuari)
 	{
+		var nodata_usuari=(capa.valors && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
 		capa.valors=[];
 		var i_v=0;
 		for (var i=0; i<image.getSamplesPerPixel(); i++)
@@ -662,6 +846,30 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				datatype: datatype,
 				nodata: (image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null
 			});
+			if(nodata_usuari)
+			{
+				// intento afegir els nodata que hi pugui haver definits per l'usuari als nodata definits a dins de la imatge
+				if(capa.valors[i].nodata)
+				{
+					var j, k;
+					for(j=0; j<nodata_usuari.length; j++)
+					{
+						for(k=0; k<capa.valors[i].nodata.length; k++)
+						{
+							if(nodata_usuari[j]==capa.valors[i].nodata[k])
+								break;
+						}
+						if(k==capa.valors[i].nodata.length)
+						{
+							// no trobat, afegeixo el nodata
+							capa.valors[i].nodata.push(nodata_usuari[j]);
+						}
+					}
+				}
+				else
+					capa.valors[i].nodata=JSON.parse(JSON.stringify(nodata_usuari));
+					
+			}
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
@@ -713,20 +921,25 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		//Miro de recuperar si hi havia alguna cosa al estil que val la pena i ho guardo per recuperar-ho
 		//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
-		var descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null;
+		var estilCapa=null, descItems=null, metadades=null, categories=null, atributs=null, estiramentPaleta=null, formulaConsulta=null;
 		if (capa.estil && capa.estil.length)
 		{
-			var estil=capa.estil[0];
-			if (estil.DescItems)
-				descItems=estil.DescItems;
-			if (estil.metadades)
-				metadades=JSON.parse(JSON.stringify(estil.metadades));
-			if (estil.categories) 
-				categories=JSON.parse(JSON.stringify(estil.categories));
-			if (estil.atributs)
-				atributs=JSON.parse(JSON.stringify(estil.atributs));
-			if (estil.component && estil.component.length && estil.component[0].estiramentPaleta)
-				estiramentPaleta=JSON.parse(JSON.stringify(estil.component[0].estiramentPaleta));
+			estilCapa=JSON.parse(JSON.stringify(capa.estil[0]));
+			if (estilCapa.DescItems)
+				descItems=JSON.parse(JSON.stringify(estilCapa.DescItems));
+			if (estilCapa.metadades)
+				metadades=JSON.parse(JSON.stringify(estilCapa.metadades));
+			if (estilCapa.categories) 
+				categories=JSON.parse(JSON.stringify(estilCapa.categories));
+			if (estilCapa.atributs)
+				atributs=JSON.parse(JSON.stringify(estilCapa.atributs));
+			if (estilCapa.component && estilCapa.component.length)
+			{				
+				if(estilCapa.component[0].estiramentPaleta)
+					estiramentPaleta=JSON.parse(JSON.stringify(estilCapa.component[0].estiramentPaleta));
+				if(estilCapa.component[0].FormulaConsulta)
+					formulaConsulta=JSON.parse(JSON.stringify(estilCapa.component[0].FormulaConsulta));
+			}
 		}
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
@@ -749,6 +962,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		}
 		else
 		{
+			var estil;
 			for (var i=0; i<image.getSamplesPerPixel(); i++)
 			{
 				capa.estil.push({nom: null,
@@ -759,16 +973,18 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 						component: [
 							{
 								i_valor: i_v+i,
-								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0
+								NDecimals: (datatype=="float32" || datatype=="float64") ? 4 : 0,
+								FormulaConsulta: formulaConsulta
 							}
 						],
 						categories: categories,
 						atributs: atributs,
 						ColorMinimPrimer: false
 					});
-				var estil=capa.estil[capa.estil.length-1];
+				estil=capa.estil[capa.estil.length-1];
 				if (image.fileDirectory && image.fileDirectory.ColorMap)
 				{
+					// ·$· Aquí no aplico l'estil exterior perquè a dins al TIFF hi ha una paleta (NJ)
 					estil.paleta={colors: []};
 					estil.ItemLleg=[];
 					var ncolors=image.fileDirectory.ColorMap.length/3;
@@ -787,32 +1003,66 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				}
 				else if (categories)
 				{
-					//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
-					if (!PaletesGlobals)
-						PaletesGlobals=await promiseLoadJSON("paletes.json");
-
-					estil.paleta={colors: []};
-					estil.ItemLleg=[];
-					var ncolors=categories.length;
-					for (var i=0, j=0; i<ncolors; i++, j++)
+					if(estilCapa && estilCapa.paleta)
 					{
-						if (j==20)
-							j==0;
-						estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
-						//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+						estil.paleta=JSON.parse(JSON.stringify(estilCapa.paleta));
+						if(estilCapa.ItemLleg)
+							estil.ItemLleg=JSON.parse(JSON.stringify(estilCapa.ItemLleg));
+						else
+							estil.ItemLleg=[];
+						if(typeof estilCapa.ncol!=="undefined")
+							estil.ncol=estilCapa.ncol;
+						else	
+							estil.ncol=1;
 					}
-					estil.ncol=1;					
+					else
+					{
+						//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+						if (!PaletesGlobals)
+							PaletesGlobals=await promiseLoadJSON("paletes.json");
+
+						estil.paleta={colors: []};
+						estil.ItemLleg=[];
+						var ncolors=categories.length;
+						for (var i=0, j=0; i<ncolors; i++, j++)
+						{
+							if (j==20)
+								j==0;
+							estil.paleta.colors[i]=PaletesGlobals.categoric.category20.colors[j];
+							//estil.ItemLleg[i]={color: PaletesGlobals.categoric.category20.colors[j], DescColor: i};
+						}
+						estil.ncol=1;
+					}
 				}
 				else
 				{
-					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};
-					estil.nItemLlegAuto=20;
-					estil.ncol=4;
-					estil.descColorMultiplesDe=0.01;
+					if(estilCapa && estilCapa.paleta)
+					{
+						estil.paleta=JSON.parse(JSON.stringify(estilCapa.paleta));
+						if(estilCapa.ItemLleg)
+							estil.ItemLleg=JSON.parse(JSON.stringify(estilCapa.ItemLleg));
+						else
+						{
+							estil.ItemLleg=[];
+							estil.nItemLlegAuto=20;
+							estil.descColorMultiplesDe=0.01;
+						}
+						if(typeof estilCapa.ncol!=="undefined")
+							estil.ncol=estilCapa.ncol;
+						else	
+							estil.ncol=4;
+					}
+					else
+					{
+						estil.nItemLlegAuto=20;
+						estil.descColorMultiplesDe=0.01;
+						estil.ncol=4;
+					}
+					estil.component[0].estiramentPaleta=estiramentPaleta ? estiramentPaleta : {auto: true};					
 				}
 			}
 		}
-		capa.LlegDesplegada=true;
+		//capa.LlegDesplegada=true;
 	}
 }
 
@@ -845,7 +1095,7 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
-	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null);
+	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null, "si");
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
 	{
@@ -871,7 +1121,7 @@ async function AfegeixCapaGeoTIFF(desc, tiff_blobs, i_on_afegir)
 {
 var i_fitxer;
 
-	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null); 	
+	var capa=IniciaDefinicioCapaTIFF((tiff_blobs.length==1) ? tiff_blobs[0].name : null, desc, null, "si"); 	
 
 	for (i_fitxer=0; i_fitxer<tiff_blobs.length; i_fitxer++)
 	{
@@ -884,3 +1134,6 @@ var i_fitxer;
 
 	AcabaAfegeixCapaGeoTIFF(capa, i_on_afegir);
 }
+
+
+

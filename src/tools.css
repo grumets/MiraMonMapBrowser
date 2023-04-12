@@ -775,3 +775,7 @@ table.vectorial {
     border-collapse: collapse;
     border: 2px solid rgb(200, 200, 200);
 }
+/* Paragraf capçalera Taula*/
+p.vectorial {
+	padding: 0px 10px;
+}

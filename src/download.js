@@ -660,22 +660,21 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				GetMessage("DownloadLayerCompleted", "download"),"<br>",
 				"</center>");
 
-		if (capa.data)
-		{
-			//Aquesta part es part fer millor
-			cdns.push("<fieldset><legend><b>")
+		//Aquesta part es part fer millor
+		cdns.push("<fieldset><legend><b>")
 
-			if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null ||
-				(capa.DataMostraDia && capa.DataMostraHora))
-				cdns.push(GetMessage("DateTime"));
-			else if (capa.DataMostraHora)
-				cdns.push(GetMessage("Time"));
-			else
-				cdns.push(GetMessage("Date"));
-			cdns.push(":</b></legend>");
-			cdns.push(CreaSelectorAPartirDeLesDatesCapa(i_capa, "TIME", -1));
-			cdns.push("</fieldset>")
-		}
+		if (typeof capa.FlagsData==="undefined" || capa.FlagsData===null ||
+			(capa.DataMostraDia && capa.DataMostraHora))
+			cdns.push(GetMessage("DateTime"));
+		else if (capa.DataMostraHora)
+			cdns.push(GetMessage("Time"));
+		else
+			cdns.push(GetMessage("Date"));
+		
+		cdns.push(":</b></legend>");
+		cdns.push(CreaSelectorAPartirDeLesDatesCapa(i_capa, "TIME", -1));
+		cdns.push("</fieldset>")
+		
 		cdns.push("<center><input NAME=\"seguent\" ID=\"seguent\" TYPE=\"submit\" VALUE=\""+GetMessage("Next")+"\"></center>"+
 						   "</font></form>");
 		contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
@@ -778,8 +777,12 @@ var cdns=[];
 
 function DibuixaDescarregaVector(i_capa)
 {
-const cdns=[];
-	cdns.push("<form name=\"botons_descarrega_vectorial\" onSubmit=\"GuardarCapaVectorialJSON(", i_capa,");return false;\"><center><input type=\"submit\" name=\"descarregaCapa\" id=\"descarregaCapa\" value=\"" + GetMessage("Download") + "\"></center></form>");
+const cdns=[], capa=ParamCtrl.capa[i_capa];
+	cdns.push("<form name=\"botons_descarrega_vectorial\" onSubmit=\"GuardarCapaVectorialJSON(", i_capa,");return false;\">", 
+	"<center><font size=\"3\"><b>"+GetMessage("Layer")+" "+
+	DonaCadena(capa.desc)+"</b></font><br>",
+	GetMessage("DownloadLayerCompleted", "download"),"<br><br>",
+	"<input type=\"submit\" name=\"descarregaCapa\" id=\"descarregaCapa\" value=\"" + GetMessage("Download") + "\"></center></form>");
 	contentLayer(getLayer(window, "finestra_download_opcions"), cdns.join(""));
 }
 
@@ -790,8 +793,8 @@ var cdns=[], capa;
 	//<div class=\"Verdana11px\">
 	cdns.push("<center>", DonaCadena(ParamCtrl.TitolCaixa), "</center>");
 	cdns.push("<div id=\"finestra_download_opcions\" style=\"overflow-y: auto; height:250px;\"></div>");
-	cdns.push("<iframe id=\"finestra_download_hidden\" width=\"1\" height=\"1\" style=\"display:none\"></iframe>");
-	cdns.push(GetMessage("Status"), ":<div id=\"finestra_download_status\" style=\"height: 52px; width: 98%; background-color: #EEEEEE\"></div>");
+	cdns.push("<iframe id=\"finestra_download_hidden\" width=\"1\" height=\"1\" style=\"display:none;\"></iframe>");
+	cdns.push(GetMessage("Status"), ":<div id=\"finestra_download_status\" style=\"height: 52px; width: 98%; background-color: #EEEEEE;\"></div>");
 	cdns.push("<div align=\"right\"><a href=\"javascript:void(0);\" onclick='TancaFinestraLayer(\"download\");'>",
 		GetMessage("Close"),"</a></div>");
 
@@ -808,7 +811,6 @@ var cdns=[], capa;
 		DibuixaTimeDescarregaTot(i_capa);
 	else if (capa.model==model_vector)
 		DibuixaDescarregaVector(i_capa);
-
 	return;
 }
 
