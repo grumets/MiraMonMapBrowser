@@ -1047,6 +1047,10 @@ function CanviaIdioma(s)
 	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
 		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});
 
+	elem=getFinestraLayer(window, "taulaCapaVectorial");
+	if(isLayer(elem) && isLayerVisible(elem))
+		MostraFinestraTaulaDeCapaVectorial()
+
 	if (IStoryActive!==null)
 	{
 		if (IStoryActive<0)
@@ -2441,17 +2445,17 @@ function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 //No crida GuardaVistaPrevia()
 function CanviaAVistaGeneral()
 {
-var i_max;
+//var i_max;
 	//busco la vista de més extensió
-	i_max=0;
-	for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
+	//i_max=0;
+	/*for (var i=1; i<ParamCtrl.ImatgeSituacio.length; i++)
 	{
 		if ((ParamInternCtrl.EnvLLSituacio[i_max].MaxX-ParamInternCtrl.EnvLLSituacio[i_max].MinX)+
 			(ParamInternCtrl.EnvLLSituacio[i_max].MaxY-ParamInternCtrl.EnvLLSituacio[i_max].MinY)<
 		    (ParamInternCtrl.EnvLLSituacio[i].MaxX-ParamInternCtrl.EnvLLSituacio[i].MinX)+
 			(ParamInternCtrl.EnvLLSituacio[i].MaxY-ParamInternCtrl.EnvLLSituacio[i].MinY))
 				i_max=i;
-	}
+	}*/
 	/*if (i_max!=ParamInternCtrl.ISituacio)
 	{
 		if (ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS!=ParamCtrl.ImatgeSituacio[i_max].EnvTotal.CRS)

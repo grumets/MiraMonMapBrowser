@@ -165,24 +165,41 @@ function MouLayerContextMenuCapa(event, s)
 	}
 }
 
-function DonaEnvCalculatCapa(capa)
+function DonaEnvCalculatGeometry(geometry, env)
 {
-var i, geometry, c3, c2, c1, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, coordinates, polygon;
+var c3, c2, c1, env_temp={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300}, coordinates, polygon;
+
+	if(env)
+		env_temp=env;
 	
-	if (capa.model!=model_vector || !capa.objectes || !capa.objectes.features)
-		return null;
-	
-	for (i=0; i<capa.objectes.features.length; i++)
+	if (geometry.type=="Point" || geometry.type=="MultiPoint")
 	{
-		geometry=capa.objectes.features[i].geometry;
-		if (geometry.type=="Point" || geometry.type=="MultiPoint")
+		for (c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
 		{
-			for (c1=0; c1<(geometry.type=="MultiPoint" ? geometry.coordinates.length : 1); c1++)
+			if (geometry.type=="MultiPoint")
+				coordinates=geometry.coordinates[c1];
+			else
+				coordinates=geometry.coordinates;
+			if (env.MinX>coordinates[0])
+				env.MinX=coordinates[0];
+			if (env.MaxX<coordinates[0])
+				env.MaxX=coordinates[0];
+			if (env.MinY>coordinates[1])
+				env.MinY=coordinates[1];
+			if (env.MaxY<coordinates[1])
+				env.MaxY=coordinates[1];
+		}
+	}
+	else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
+	{
+		for (c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+		{
+			if (geometry.type=="MultiLineString")
+				coordinates=geometry.coordinates[c2];
+			else
+				coordinates=geometry.coordinates;
+			for( c1=0; c1<coordinates.length; c1++)
 			{
-				if (geometry.type=="MultiPoint")
-					coordinates=geometry.coordinates[c1];
-				else
-					coordinates=geometry.coordinates;
 				if (env.MinX>coordinates[c1][0])
 					env.MinX=coordinates[c1][0];
 				if (env.MaxX<coordinates[c1][0])
@@ -193,14 +210,18 @@ var i, geometry, c3, c2, c1, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY
 					env.MaxY=coordinates[c1][1];
 			}
 		}
-		else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
+	}
+	else if(geometry.type=="Polygon" || geometry.type=="MultiPolygon")
+	{
+		for (c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
 		{
-			for (c2=0; c2<(geometry.type=="MultiLineString" ? geometry.coordinates.length : 1); c2++)
+			if (geometry.type=="MultiPolygon")
+				polygon=geometry.coordinates[c3];
+			else
+				polygon=geometry.coordinates;
+			for (c2=0; c2<polygon.length; c2++)
 			{
-				if (geometry.type=="MultiLineString")
-					coordinates=geometry.coordinates[c2];
-				else
-					coordinates=geometry.coordinates;
+				coordinates=polygon[c2];
 				for( c1=0; c1<coordinates.length; c1++)
 				{
 					if (env.MinX>coordinates[c1][0])
@@ -214,31 +235,21 @@ var i, geometry, c3, c2, c1, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY
 				}
 			}
 		}
-		else if(geometry.type=="Polygon" || geometry.type=="MultiPolygon")
-		{
-			for (c3=0; c3<(geometry.type=="MultiPolygon" ? geometry.coordinates.length : 1); c3++)
-			{
-				if (geometry.type=="MultiPolygon")
-					polygon=geometry.coordinates[c3];
-				else
-					polygon=geometry.coordinates;
-				for (c2=0; c2<polygon.length; c2++)
-				{
-					coordinates=polygon[c2];
-					for( c1=0; c1<coordinates.length; c1++)
-					{
-						if (env.MinX>coordinates[c1][0])
-							env.MinX=coordinates[c1][0];
-						if (env.MaxX<coordinates[c1][0])
-							env.MaxX=coordinates[c1][0];
-						if (env.MinY>coordinates[c1][1])
-							env.MinY=coordinates[c1][1];
-						if (env.MaxY<coordinates[c1][1])
-							env.MaxY=coordinates[c1][1];
-					}
-				}
-			}
-		}
+	}
+	return env_temp;
+}
+
+function DonaEnvCalculatCapa(capa)
+{
+var i, geometry, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300};
+	
+	if (capa.model!=model_vector || !capa.objectes || !capa.objectes.features)
+		return null;
+	
+	for (i=0; i<capa.objectes.features.length; i++)
+	{
+		geometry=capa.objectes.features[i].geometry;
+		env=DonaEnvCalculatGeometry(geometry, env);
 	}
 	return {"EnvCRS": env, "CRS": capa.CRSgeometry};
 }
@@ -4345,12 +4356,6 @@ var floatValor=parseFloat(valor);
 	}
 }
 
-/* He eliminat aquests textos i per tant ara no s'usa la funció (NJ_08_03_2023)
-function TextLimitsSliders(limitValue, esMinim)
-{
-	return GetMessage(esMinim ? "Minimum" : "Maximum") + " " + GetMessage("Range") + ": " + limitValue.toFixed(3).toString();
-}*/
-
 /*
 	Mostra la capa vectorial en format taula.
  */
@@ -4363,17 +4368,36 @@ var elem=ObreFinestra(window, "taulaCapaVectorial", GetMessage("ElementsVectoria
 
 	if (!elem)
 		return;
-	i_capaATaula=i_capa;
-	contentLayer(elem, DonaCadenaTaulaDeCapaVectorial(i_capa));
-	titolFinestraLayer(window, "modificaNom", GetMessage("WhyNotVisible", "cntxmenu"));
+	i_capaATaula = i_capa;
+	InsereixCadenaTaulaDeCapaVectorial(elem, i_capa);
+}
+
+function MostraFinestraTaulaDeCapaVectorial()
+{
+	const elem = getFinestraLayer(window, "taulaCapaVectorial")
+	InsereixCadenaTaulaDeCapaVectorial(elem, i_capaATaula)
 }
 
 /* Crea l'HTML per a construir la taula d'elements vectorials */
-function DonaCadenaTaulaDeCapaVectorial(i_capa, isNomesAmbit = false, ambGeometria = true)
+function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true)
 {
-const cdnsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
-const atributsVisibles = [], objectesDinsAmbit = [];
-var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength;
+const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
+const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
+var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength, env_temp;
+	nodePare.innerHTML = "";
+	const divCapcalera = document.createElement("div");
+	const paragrafTitol = divCapcalera.appendChild(document.createElement("p"));
+	paragrafTitol.setAttribute("class", "vectorial");
+	paragrafTitol.setAttribute("style", "font-size: 20px");
+	paragrafTitol.appendChild(document.createTextNode(GetMessage("Layer")+": "+DonaCadena(capa.desc)));
+
+	if (objectes.length <= 0)
+	{
+		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+		divCapcalera.insertAdjacentHTML("beforeend","<p style='text-align:center;'><b>" + GetMessage("NoObjectsToDisplay", "cntxmenu") + "</b></p>");
+		nodePare.appendChild(divCapcalera);
+		return;
+	}
 
 	for (i = 0; i < attrLength; i++)
 	{
@@ -4383,102 +4407,235 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			atributsVisibles.push(capa.atributs[i]);
 		}
 	}
+
+	const paragrafCheckboxs = document.createElement("p");
+	paragrafCheckboxs.setAttribute("class", "vectorial");
+
+	// Si no hi han atributs per mostrar, parem i mostrem missatge explicatiu.
+	if (atributsVisibles.length <=0)
+	{
+		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+		divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoAttributesToDisplayForLayer", "cntxmenu") + "</b></p>");
+		nodePare.appendChild(divCapcalera);
+		return;
+	}
+	else
+	{
+		cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
+	}
+
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
 	{
 		for (i = 0, objLength = objectes.length; i < objLength; i++)
 		{
 			const objActual = objectes[i];
-			if (objActual.geometry.type == "Point")
-			{
-				const puntCRS = DonaCoordenadesCRS(objActual.geometry.coordinates[0], objActual.geometry.coordinates[1], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-				if (EsPuntDinsEnvolupant(puntCRS, ParamInternCtrl.vista.EnvActual))
-				{
+			const geometryCRS = DonaGeometryCRSActual(objActual, capa.CRSgeometry);
+			if (geometryCRS.type == "Point")
+			{ 
+				// Obtinc la geometria en el CRS actual de navegació.				
+				if (EsPuntDinsEnvolupant({"x":geometryCRS.coordinates[0], "y":geometryCRS.coordinates[1]}, ParamInternCtrl.vista.EnvActual))
 					objectesDinsAmbit.push(objActual);
-				}
 			}
-			else if (objActual.geometry.type == "LineString" || objActual.geometry.type == "Polygon")
+			else
 			{
-				const ambitCRS = DonaEnvolupantCRS(DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]), ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+				if (!objActual.bbox)
+					env_temp=DonaEnvCalculatGeometry(objActual.geometry, null);
+				else
+					env_temp=DonaEnvDeMinMaxXY(objActual.bbox[0], objActual.bbox[2], objActual.bbox[1], objActual.bbox[3]);
+				// Obtinc l'àmbit en el CRS actual de navegació.
+				const ambitCRS = DonaEnvolupantCRS(env_temp, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 				if (EsEnvDinsEnvolupant(ambitCRS, ParamInternCtrl.vista.EnvActual))
-				{
 					objectesDinsAmbit.push(objActual);
-				}
 			}
 		}
-		// Transpassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
+		// Traspassem els objectes de l'àmbit a l'estructura que nodreix la resta de la funció.
 		objectes = objectesDinsAmbit;
-	}
 
-	if (atributsVisibles.length > 0)
-	{
-		cdnsHtml.push("<div><p style='font-size:20px'>", GetMessage("Layer"), ": ", DonaCadena(capa.desc), "</p><input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
-		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>",
-		"<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
-		"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
-		"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",  
-		"</div><hr>");
-
-		// Porta papers capa info
-		cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
-		GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
-		"MinX", "\t", objectes[0].bbox[0], "\n",
-		"MaxX", "\t", objectes[0].bbox[1], "\n",
-		"MinY", "\t", objectes[0].bbox[2], "\n",
-		"MaxY", "\t", objectes[0].bbox[3], "\n",
-		GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
-
-		cdnsHtml.push("<table class='vectorial' style='width:100%'><tr>");
-		for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+		if (objectes.length <= 0)
 		{
-			cdnsHtml.push("<th class='vectorial'>", atributsVisibles[i].descripcio, "</th>");
-
-			// Porta papers
-			cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+			paragrafCheckboxs.insertAdjacentHTML("afterbegin", cdnsFragmentsHtml.join(""));
+			divCapcalera.appendChild(paragrafCheckboxs);
+			divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+			divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoObjectsToDisplayWithinRange", "cntxmenu") + "</b></p>");
+			nodePare.appendChild(divCapcalera);
+			return;
 		}
+	}
+	cdnsFragmentsHtml.push("&nbsp;<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+	"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>&nbsp;",
+	"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>");
+	paragrafCheckboxs.insertAdjacentHTML("beforeend", cdnsFragmentsHtml.join(""));
+	divCapcalera.appendChild(paragrafCheckboxs);
+	divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
+
+	// Porta papers capa info
+	if (capa.EnvTotal)
+		env_temp=capa.EnvTotal;
+	else
+		env_temp=DonaEnvCalculatCapa(capa);		
+	cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
+						 GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
+						"MinX", "\t", env_temp.EnvCRS.MinX, "\n",
+						"MaxX", "\t", env_temp.EnvCRS.MaxX, "\n",
+						"MinY", "\t", env_temp.EnvCRS.MinY, "\n",
+						"MaxY", "\t", env_temp.EnvCRS.MaxY, "\n",
+						GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
+	
+	//Comencem la taula.
+	const taulaElementsVect = document.createElement("table");
+	taulaElementsVect.setAttribute("class", "vectorial");
+
+	// Comencem la fila capçalera de la taula.
+	const filaCapcalera = document.createElement("tr");	
+	for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+	{
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + atributsVisibles[i].descripcio + "</th>");
+
+		// Porta papers
+		cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+	}
+	filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + GetMessage("ExportObject", "cntxmenu") + "</th><th class='vectorial'>" + GetMessage("GoTo", "capavola") + "</th>");
+	
+	if (ambGeometria)
+	{
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial' style='text-align:start;'>" + GetMessage("Geometry", "cntxmenu") + "</th>");
+		
+		// Porta papers
+		cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
+	}
+	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
+	
+	// Comencem files d'objectes vectorials de la taula.
+	for (i = 0, objLength = objectes.length; i < objLength; i++)
+	{
+		const objecteARepresentar = objectes[i];
+		const filaObjecte = document.createElement("tr");
+		filaObjecte.setAttribute("class", "vectorial");
+		//cdnsHtml.push("<tr class='vectorial' height='20px'>");
+		for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+		{
+			filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + objecteARepresentar.properties[atributsVisibles[j].nom] + "</td>");
+			// Porta papers
+			cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
+		}
+		filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+		// obtindre array de punts de coordenades.
+		var arrayCoords = [];
+		const tipusGeometria = objecteARepresentar.geometry.type;
+		if (objecteARepresentar.geometry.coordinates.length > 0)
+		{			
+			if (tipusGeometria == "Point")
+				arrayCoords = objecteARepresentar.geometry.coordinates;
+			else if (tipusGeometria == "LineString" || tipusGeometria =="MultiPoint")
+				arrayCoords = objecteARepresentar.geometry.coordinates;
+			else if (tipusGeometria == "Polygon" || tipusGeometria =="MultiLineString")
+				arrayCoords = objecteARepresentar.geometry.coordinates[0];
+			else if (tipusGeometria == "MultiPolygon")
+				arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
+		}
+		var anarCoordX, anarCoordY;
+		
+		if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
+		{
+			if (!objecteARepresentar.bbox)
+				env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
+			else
+				env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
+		
+			anarCoordX = (env_temp.MinX+ env_temp.MaxX)/2;
+			anarCoordY = (env_temp.MinY + env_temp.MaxY)/2;
+		}
+		else if (tipusGeometria == "Point")
+		{
+			anarCoordX = arrayCoords[0];
+			anarCoordY = arrayCoords[1];
+		}
+		else
+		{
+			anarCoordY = arrayCoords[0][1];
+			anarCoordX = arrayCoords[0][0];
+		}
+		// ·$· S'està considerant que les coordenades són en long/lat i no sempre és així estan en el CRSGeometry i per tant AnarAObjVectorialTaula no funcionarà bé si les coordenades són en un altre sistema
+		// ·$· Perque només donar un punt, si tinc o puc calcular l'àmbit del objecte i anar a l'àmbit de l'objecte		
+		filaObjecte.insertAdjacentHTML("beforeend", ["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoordX, " ,", anarCoordY, ")'>" + GetMessage("GoTo", "capavola") + "</button>" + "</td>"].join(""));
+
 		if (ambGeometria)
 		{
-			cdnsHtml.push("<th class='vectorial' style='width:200px'>", GetMessage("Geometry", "cntxmenu"), "</th>");
-			// Porta papers
-			cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
-		}
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("ExportObject", "cntxmenu"), "</th>");
-		cdnsHtml.push("<th class='vectorial'>", GetMessage("GoTo", "capavola"),"</th>");
-		cdnsHtml.push("</tr>");
-		for (i = 0, objLength = objectes.length; i < objLength; i++)
-		{
-			const objecteARepresentar = objectes[i];
-			cdnsHtml.push("<tr class='vectorial'>");
-			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			// $·$· NJ-->DP No és del tot correcte només s'està escrivint un tros del objecte!!
+			
+			// ·$· potser la geometria es podria escriure en WKT, que és el que s'acostuma a fer a les taules que tenen geometria
+			const columnaDada = document.createElement("td");
+			const coordInteriors = [];
+			// Diferenciar entre coord (x, y) i (x, y, z).			
+			if (tipusGeometria != "Point")
 			{
-				cdnsHtml.push("<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>", objecteARepresentar.properties[atributsVisibles[j].nom], "</td>");
-				// Porta papers
-				cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
+				const numCoords = arrayCoords[0].length, nomDesplegable = capa.nom + "_feature_" + i;;
+				arrayCoords.forEach((coord, index) => {
+					coordInteriors.push((index==0 ? "(" : ", ("));
+					for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+					{
+						coordInteriors.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+					}
+					coordInteriors.push(")");
+				});
+				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " + BotoDesplegableDiv(nomDesplegable, CreaContenedorTextAmbScroll(coordInteriors.join(""), 120)));
 			}
-			if (ambGeometria)
+			else
 			{
-				cdnsHtml.push("<td sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px'>", objecteARepresentar.geometry.coordinates.toString(), "</td>");
-				// Porta papers
-				cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
+				const numCoords = arrayCoords.length;
+				coordInteriors.push("(");
+				for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
+				{
+					coordInteriors.push(etiquetesCorrd[i_Coord]+": "+arrayCoords[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
+				}
+				coordInteriors.push(")");
+				columnaDada.insertAdjacentHTML("beforeend", coordInteriors.join(""));
 			}
-			cdnsHtml.push("<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
-			cdnsHtml.push("<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", objecteARepresentar.geometry.coordinates[0], " ,",  objecteARepresentar.geometry.coordinates[1], ")'>", GetMessage("GoTo", "capavola"),"</button>", "</td></tr>");
+			filaObjecte.insertAdjacentElement("beforeend", columnaDada);
 			// Porta papers
-			cdnsPortapapers.push("\n");
+			cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
 		}
-		cdnsHtml.push("</table>");
+		taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
+		//cdnsHtml.push("</tr>");
+		// Porta papers
+		cdnsPortapapers.push("\n");
 	}
-
+	divCapcalera.insertAdjacentElement("beforeend", taulaElementsVect);
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
-	cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
-	return cdnsHtml.join("");
+	divCapcalera.insertAdjacentHTML("beforeend", DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	//cdnsHtml.push(DonaPortapapersTaulaCapaVectorial(cdnsPortapapers.join("")));
+	//return cdnsHtml.join("");
+	nodePare.appendChild(divCapcalera);
+	return;
 }
-/* Determina quins elements vectorials s'inclouran en l'exportaci� */
+
+// Crea un conjunt de <div> anidats per a fixar una alçada concreta i la resta de contingut es mostri dins d'un scroll.
+function CreaContenedorTextAmbScroll(contingut, alcada = "50")
+{
+	const cdnsDivScroller = [];
+
+	cdnsDivScroller.push("<div style='height:", alcada,"px; position: relative;'>",
+	"<div style='max-height: 100%; overflow: auto;'>", 
+	"<div>", contingut, "</div>", "</div>", "</div>");
+
+	return cdnsDivScroller.join("");
+}
+
+/* Determina quins elements vectorials s'inclouran en l'exportació */
 function ActualitzaIndexObjectesExportar(checkbox)
 {
 	const indexATreballar = checkbox.value.toString();
 	// És un diccionari d'índexos on cada element és a la vegada el mateix índex.
 	checkbox.checked ? (i_objectesAExportar[indexATreballar]=indexATreballar) : (delete i_objectesAExportar[indexATreballar]);
+}
+
+// Neteja de l'objecte d'índexos a exportar.
+function NetejaIndexosExportacio()
+{
+	for (var clau in i_objectesAExportar)
+		delete i_objectesAExportar[clau];
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -4500,38 +4657,46 @@ function TancaFinestra_taulaCapaVectorial()
 
 function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
 {
-	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria.checked;
-	contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
+	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria ? checkboxGeometria.checked : false;
+	InsereixCadenaTaulaDeCapaVectorial(getFinestraLayer(window, "taulaCapaVectorial"), i_capa, ambit, geometria);
+	//contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
 }
 function ExportarObjectesGeoJSON(i_capa)
 {
-const capa = ParamCtrl.capa[i_capa];
-// Valors mínims/màxims 
-const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
-const capaExportar = {"type": "FeatureCollection", "features": []};
-	Object.keys(i_objectesAExportar).forEach(key => {
-		const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
-		// Definir l'àmbit global dels elements exportats
-		if (objAExportar.bbox && objAExportar.bbox.length==4)
-		{
-			const iteradorIndex = objAExportar.bbox.keys();
-			for (var index of iteradorIndex)
+	if (Object.keys(i_objectesAExportar).length > 0)
+	{
+		const capa = ParamCtrl.capa[i_capa];
+		// Valors mínims/màxims 
+		const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
+		const capaExportar = {"type": "FeatureCollection", "features": []};
+		Object.keys(i_objectesAExportar).forEach(key => {
+			const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
+			// Definir l'àmbit global dels elements exportats
+			if (objAExportar.bbox && objAExportar.bbox.length==4)
 			{
-				// Coord del bbox Mínima
-				if (index < 2)
+				const iteradorIndex = objAExportar.bbox.keys();
+				for (var index of iteradorIndex)
 				{
-					if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
-						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					// Coord del bbox Mínima
+					if (index < 2)
+					{
+						if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
+							bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					}
+					else // Coord del bbox Màxima
+					{
+						if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
+							bboxObjectesAExportar[index] = objAExportar.bbox[index];
+					}
 				}
-				else // Coord del bbox Màxima
-				{
-					if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
-						bboxObjectesAExportar[index] = objAExportar.bbox[index];
-				}
+				capaExportar.bbox = bboxObjectesAExportar;
 			}
-			capaExportar.bbox = bboxObjectesAExportar;
-		}
-		capaExportar.features.push(objAExportar);
-	});
-	return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+			capaExportar.features.push(objAExportar);
+		});
+		return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+	}
+	else
+	{
+		alert(GetMessage("NoObjectSelectedExport", "cntxmenu"));
+	}
 }

@@ -2600,6 +2600,34 @@ var MessageLang={
     "eng": "exported_vector_objects_",
     "fre": "objets_vectoriels_exportes_",
     "cze": "exportovane_vektorové_objekty_"
+    },
+    "NoAttributesToDisplayForLayer": {
+      "cat": "No hi han atributs per a mostrar d'aquesta capa",
+      "spa": "No hay atributos para mostrar de esta capa",
+      "eng": "There are no attributes to display for this layer",
+      "fre": "Il n'y a pas d'attributs à afficher pour cette couche",
+      "cze": "Pro tuto vrstvu nejsou zobrazeny žádné atributy"
+    },
+    "NoObjectSelectedExport": {
+      "cat": "No s'ha seleccionat cap objecte per exportar",
+      "spa": "No se ha seleccionado ningún objeto para exportar",
+      "eng": "No object has been selected for export",
+      "fre": "Aucun objet n'a été sélectionné pour l'exportation",
+      "cze": "Pro export nebyl vybrán žádný objekt"
+    },
+    "NoObjectsToDisplay": {
+      "cat": "No hi han objectes d'aquesta capa per mostrar",
+      "spa": "No hay objectos de esta capa para mostrar",
+      "eng": "There are no objects of this layer to display",
+      "fre": "Il n'y a pas d'objets de cette couche à afficher",
+      "cze": "Neexistují žádné objekty této vrstvy, které by bylo možné zobrazit"
+    },
+    "NoObjectsToDisplayWithinRange": {
+      "cat": "No hi han objectes d'aquesta capa dins l'àmbit de vista actual",
+      "spa": "No hay objectos de esta capa dentro de l'ámbito vista actual",
+      "eng": "There are no objects of this layer within the current view range",
+      "fre": "Il n'y a pas d'objets de cette couche dans le champ de vision actuel",
+      "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy"
     }
   },
   "storymap": {

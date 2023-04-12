@@ -321,30 +321,11 @@ function MostraQualitatCapa(elem, quality, capa, i_estil)
 		contentLayer(elem, DonaCadenaMostraQualitatCapa(quality, capa, i_estil));
 }
 
-function DesplegaOPlegaIFrameQualityML(nom)
-{
-	if (document.getElementById(nom+"iframe").style.display=="none")
-	{
-		document.getElementById(nom+"iframe").style.display="inline";
-		document.getElementById(nom+"img").src=AfegeixAdrecaBaseSRC("boto_contract.png");
-	}
-	else
-	{
-		document.getElementById(nom+"iframe").style.display="none";
-		document.getElementById(nom+"img").src=AfegeixAdrecaBaseSRC("boto_expand.png");
-	}
-}
-
 function DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, concept, i, id_qml)
 {
-var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_";
+var cdns=[], nom="MostraQualitatCapa_"+i_q+"_"+i_r+"_"+concept+"_"+i+"_", url= ArrelURLQualityML + version + "/" + concept + "/" + id_qml;
 
-	cdns.push(" <img src=\"",
-		 AfegeixAdrecaBaseSRC("boto_expand.png"), "\" id=\"",nom,"img\" ",
-		 "alt=\"", GetMessage("moreInfo") , "\" ",
-		 "title=\"",GetMessage("moreInfo"), "\" ",
-		 "onClick='DesplegaOPlegaIFrameQualityML(\"",nom,"\")'\"><iframe src=\"",ArrelURLQualityML, version, "/", concept,"/", id_qml, "\" id=\"",nom,"iframe\" style=\"display: none\" width=\"98%\" height=\"180\" scrolling=\"auto\"></iframe>");
-	return cdns.join("");
+	return BotoDesplegableIFrame(nom, url);
 }
 
 function DonaCadenaValorsComLlistaQualitatCapa(values)
