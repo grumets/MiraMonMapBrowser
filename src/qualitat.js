@@ -524,7 +524,7 @@ var MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL=254;
 var capa=ParamCtrl.capa[i_capa];
 var s=capa.nom;
 
-	if (ParamCtrl.capa[i_capa].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa].tipus))
+	if (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data);
 
 	if (i_estil==-1)
