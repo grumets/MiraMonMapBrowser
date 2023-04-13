@@ -4693,7 +4693,7 @@ function ExportarObjectesGeoJSON(i_capa)
 			}
 			capaExportar.features.push(objAExportar);
 		});
-		return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+		return GuardaDadesFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now(), ".json");
 	}
 	else
 	{

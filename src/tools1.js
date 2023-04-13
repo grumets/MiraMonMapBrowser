@@ -2827,9 +2827,9 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 */
 var jsonFile = null;
 
-function makeHrefData(data)
+function makeHrefData(data, toType = "text/json", content)
 {
-	var blobData = new Blob([JSON.stringify(data)], {type: 'text/json'});
+	var blobData = new Blob([JSON.stringify(data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
 
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
@@ -2843,14 +2843,13 @@ function makeHrefData(data)
 /*
 *	Funció per a guardar dades en format JSON en memòria
 */
-function GuardaDadesJSONFitxerExtern(data, fileName)
+function GuardaDadesFitxerExtern(data, fileName, extension = ".json", aMimeType)
 {
-const jsonExtention = ".json";
 const link = document.createElement('a');
-	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
-		fileName+=jsonExtention;
+	if (fileName.substring(fileName.length-extension.length) != extension)
+		fileName+=extension;
 	link.setAttribute('download', fileName);
-	link.setAttribute('href', makeHrefData(data));
+	link.setAttribute('href', makeHrefData(data, aMimeType));
 	document.body.appendChild(link);
 
 	// wait for the link to be added to the document

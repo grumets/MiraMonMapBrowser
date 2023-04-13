@@ -118,12 +118,18 @@ function TancaICreaStoryMap()
 {
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
+
+	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><input type='file' align='center' onChange='CarregaImatgeStoryMap(this, storyMainImage)'><img id='storyMainImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
+
 	if (!isFinestraLayer(window, "creaStoryMap"))
 	{
-		const creaStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><input type='file' align='center' onChange='CarregaImatgeStoryMap(this, storyMainImage)'><img id='storyMainImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
-		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, creaStoryMapContent.join(""));
+		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, beginingStoryMapContent.join(""));
 		//Acabem de crear la finestra creaStoryMap per això sabem que és en última posició del layerFinestraList
 		OmpleBarraFinestraLayer(window, layerFinestraList.length-1)
+	} else {
+		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+		novaStoryMapFinestra.replaceChildren();
+		novaStoryMapFinestra.innerHTML = beginingStoryMapContent.join("");
 	}
 	ObreFinestra(window, "creaStoryMap");
 }
@@ -159,7 +165,7 @@ function SeguentPasStoryMap()
 	{
 		GuardarInformacioPasStoryMap()
 	}
-
+	comptadorPassos++;
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
@@ -183,6 +189,9 @@ function SeguentPasStoryMap()
 
 function FinalitzarStoryMap()
 {
+	// Guardo l'últim pas definit en la StoryMap.
+	GuardarInformacioPasStoryMap();
+
 	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>"];
 	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
 	for (let i_Story = 0, passosLength = novaStoryMap.passos.length; i_Story < passosLength; i_Story++) {
@@ -190,15 +199,14 @@ function FinalitzarStoryMap()
 		cdns.push("<div data-mm-center='{x:"+pas.x + ", y:" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
 	}
 	cdns.push("</html>");
-
-	
+	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol, ".html")
+	TancaFinestraLayer("creaStoryMap");
 }
 
 function GuardarInformacioInicialStoryMap()
 {
 	novaStoryMap.titol = document.getElementById("title").value;
 	novaStoryMap.imatgePrincipal = document.getElementById("storyMainImage").src;
-	comptadorPassos++;
 }
 
 function GuardarInformacioPasStoryMap()
@@ -207,7 +215,6 @@ function GuardarInformacioPasStoryMap()
 		novaStoryMap.passos = [];
 	const coordCentre = ObtenirCentre();
 	novaStoryMap.passos.push({"imatge": document.getElementById("stepImg" + comptadorPassos).src, "descripcio": tinymce.get("storyTextArea"+comptadorPassos).getContent(), "x": (coordCentre && coordCentre.x)? coordCentre.x : 0, "y": (coordCentre && coordCentre.y)? coordCentre.y : 0,  "zoom": ParamInternCtrl.vista.CostatZoomActual});
-	comptadorPassos++;
 }
 
 //Inicia una Storymap
@@ -261,9 +268,12 @@ var i_story=extra_param, elem;
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
 }
-
+// Reiniciar els valors que ontervenen en la creació de l'StoryMap.
 function TancaFinestra_storyMap()
 {
+	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+	novaStoryMapFinestra.replaceChildren();
+	comptadorPassos = 0;
 	IStoryActive=null;
 }
 
