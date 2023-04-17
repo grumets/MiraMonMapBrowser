@@ -515,6 +515,13 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			url=DonaRequestSTAObservationsFeatureOfInterest(RespostaConsultaObjDigiXML[i].i_capa, null, RespostaConsultaObjDigiXML[i].i_obj, null);
 			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("STA Observations", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
 		}
+		else if(tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
+		{
+			url=capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].propertiesSource ? capa.objectes.features[RespostaConsultaObjDigiXML[i].i_obj].propertiesSource : ParamCtrl.capa[RespostaConsultaObjDigiXML[i].i_capa].servidor;
+			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("HTTP GET", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventHttpGet);
+			RespostaConsultaObjDigiXML[i].func_after=MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat;
+			RespostaConsultaObjDigiXML[i].func_error=ErrorCapaDigiAmbPropietatsObjecteDigitalitzat;
+		}
 		//ajax_consulta_capa_digi[i].doGet();
 		//loadFile(url, "text/xml", OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 
@@ -529,8 +536,11 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			else
 				loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 		}
+		else if(tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")  // no indico expressament el mimetype en aquest cas perquè he vist que no sempre respon com "text/csv" sino com "application/octet-stream" i fa que obtingui un error quan no és així
+			loadFile(url, null, OmpleAtributsObjecteCapaDigiDesDeCadenaCSV, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
 		else
 			loadFile(url, capa.FormatConsulta, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, RespostaConsultaObjDigiXML[i]);
+			
 	}
 }//Fi de FesPeticioAjaxConsultaObjDigi()
 

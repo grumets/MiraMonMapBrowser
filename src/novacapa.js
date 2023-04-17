@@ -334,12 +334,11 @@ var trobat=false, criteris;
 		if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 
-		
-		
 		capa.valors=[{ datatype: "float32",
 					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinó no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
 					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
+		GeneraUIDCapa(capa);
 		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
@@ -569,6 +568,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 	{
 		var capa=ParamCtrl.capa[i_capa];
 		capa.estil.push({
+				id: capa.estil.length,
 				nom:	null,
 				desc:	(desc_capa) ? desc_capa : "Computed style",
 				TipusObj: "P",
@@ -583,19 +583,20 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 				origen: OrigenUsuari
 			});
 
-			if (capa.visible=="ara_no")
-				CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
-			else
-				CreaLlegenda();
+		if (capa.visible=="ara_no")
+			CanviaEstatCapa(i_capa, "visible");  //CreaLlegenda(); es fa a dins.
+		else
+			CreaLlegenda();
 
-			//Defineix el nou estil com estil actiu
-			CanviaEstilCapa(i_capa, capa.estil.length-1, false);
+		//Defineix el nou estil com estil actiu
+		CanviaEstilCapa(i_capa, capa.estil.length-1, false);
 	}
 }//Fi de AfegeixCapaCalcul()
 
 function AfegeixSimbolitzacioVectorDefecteCapa(capa)
 {
 	capa.estil=[{nom: null,
+			id: 0,
 			desc: capa.desc,
 			DescItems: null,
 			TipusObj: "P",
@@ -944,7 +945,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		capa.estil=[];
 		if (image.getSamplesPerPixel()==3)
 		{
-			capa.estil.push({nom: null,
+			capa.estil.push({
+					nom: null,
 					desc: descEstil,
 					DescItems: descItems,
 					TipusObj: "I",

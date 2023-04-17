@@ -180,14 +180,14 @@ var c3, c2, c1, env_temp={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300
 				coordinates=geometry.coordinates[c1];
 			else
 				coordinates=geometry.coordinates;
-			if (env.MinX>coordinates[0])
-				env.MinX=coordinates[0];
-			if (env.MaxX<coordinates[0])
-				env.MaxX=coordinates[0];
-			if (env.MinY>coordinates[1])
-				env.MinY=coordinates[1];
-			if (env.MaxY<coordinates[1])
-				env.MaxY=coordinates[1];
+			if (env_temp.MinX>coordinates[0])
+				env_temp.MinX=coordinates[0];
+			if (env_temp.MaxX<coordinates[0])
+				env_temp.MaxX=coordinates[0];
+			if (env_temp.MinY>coordinates[1])
+				env_temp.MinY=coordinates[1];
+			if (env_temp.MaxY<coordinates[1])
+				env_temp.MaxY=coordinates[1];
 		}
 	}
 	else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
@@ -200,14 +200,14 @@ var c3, c2, c1, env_temp={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300
 				coordinates=geometry.coordinates;
 			for( c1=0; c1<coordinates.length; c1++)
 			{
-				if (env.MinX>coordinates[c1][0])
-					env.MinX=coordinates[c1][0];
-				if (env.MaxX<coordinates[c1][0])
-					env.MaxX=coordinates[c1][0];
-				if (env.MinY>coordinates[c1][1])
-					env.MinY=coordinates[c1][1];
-				if (env.MaxY<coordinates[c1][1])
-					env.MaxY=coordinates[c1][1];
+				if (env_temp.MinX>coordinates[c1][0])
+					env_temp.MinX=coordinates[c1][0];
+				if (env_temp.MaxX<coordinates[c1][0])
+					env_temp.MaxX=coordinates[c1][0];
+				if (env_temp.MinY>coordinates[c1][1])
+					env_temp.MinY=coordinates[c1][1];
+				if (env_temp.MaxY<coordinates[c1][1])
+					env_temp.MaxY=coordinates[c1][1];
 			}
 		}
 	}
@@ -224,14 +224,14 @@ var c3, c2, c1, env_temp={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300
 				coordinates=polygon[c2];
 				for( c1=0; c1<coordinates.length; c1++)
 				{
-					if (env.MinX>coordinates[c1][0])
-						env.MinX=coordinates[c1][0];
-					if (env.MaxX<coordinates[c1][0])
-						env.MaxX=coordinates[c1][0];
-					if (env.MinY>coordinates[c1][1])
-						env.MinY=coordinates[c1][1];
-					if (env.MaxY<coordinates[c1][1])
-						env.MaxY=coordinates[c1][1];
+					if (env_temp.MinX>coordinates[c1][0])
+						env_temp.MinX=coordinates[c1][0];
+					if (env_temp.MaxX<coordinates[c1][0])
+						env_temp.MaxX=coordinates[c1][0];
+					if (env_temp.MinY>coordinates[c1][1])
+						env_temp.MinY=coordinates[c1][1];
+					if (env_temp.MaxY<coordinates[c1][1])
+						env_temp.MaxY=coordinates[c1][1];
 				}
 			}
 		}
@@ -4384,6 +4384,7 @@ function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = fal
 const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
 var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength, env_temp;
+
 	nodePare.innerHTML = "";
 	const divCapcalera = document.createElement("div");
 	const paragrafTitol = divCapcalera.appendChild(document.createElement("p"));
@@ -4473,15 +4474,17 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	// Porta papers capa info
 	if (capa.EnvTotal)
 		env_temp=capa.EnvTotal;
+	else if(capa.objectes.bbox)
+		env_temp=DonaEnvDeMinMaxXY(capa.objectes.bbox[0], capa.objectes.bbox[2], capa.objectes.bbox[1], capa.objectes.bbox[3]);
 	else
-		env_temp=DonaEnvCalculatCapa(capa);		
+		env_temp=DonaEnvCalculatCapa(capa);	
 	cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
-						 GetMessage("CurrentReferenceSystem"), "\t", DonaCadena(capa.CRSgeometry), "\n",
+						 GetMessage("CurrentReferenceSystem"), "\t", capa.CRSgeometry, "\n",
 						"MinX", "\t", env_temp.EnvCRS.MinX, "\n",
 						"MaxX", "\t", env_temp.EnvCRS.MaxX, "\n",
 						"MinY", "\t", env_temp.EnvCRS.MinY, "\n",
 						"MaxY", "\t", env_temp.EnvCRS.MaxY, "\n",
-						GetMessage("Type"), "\t", DonaCadena(capa.model)," ", DonaCadena(objectes[0].geometry.type), "\n");
+						GetMessage("Type"), "\t", capa.model, " ", objectes[0].geometry.type, "\n");
 	
 	//Comencem la taula.
 	const taulaElementsVect = document.createElement("table");
@@ -4503,11 +4506,12 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial' style='text-align:start;'>" + GetMessage("Geometry", "cntxmenu") + "</th>");
 		
 		// Porta papers
-		cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");
+		cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");		
 	}
 	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
 	
 	// Comencem files d'objectes vectorials de la taula.
+	var wkt = new Wkt.Wkt();
 	for (i = 0, objLength = objectes.length; i < objLength; i++)
 	{
 		const objecteARepresentar = objectes[i];
@@ -4535,70 +4539,43 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			else if (tipusGeometria == "MultiPolygon")
 				arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
 		}
-		var anarCoordX, anarCoordY;
+		var anarCoord;
 		
-		if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
-		{
-			if (!objecteARepresentar.bbox)
-				env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
-			else
-				env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
-		
-			anarCoordX = (env_temp.MinX+ env_temp.MaxX)/2;
-			anarCoordY = (env_temp.MinY + env_temp.MaxY)/2;
-		}
-		else if (tipusGeometria == "Point")
-		{
-			anarCoordX = arrayCoords[0];
-			anarCoordY = arrayCoords[1];
-		}
+		// Calculem o agafem l'env de l'objecte
+		if (!objecteARepresentar.bbox)
+			env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
 		else
-		{
-			anarCoordY = arrayCoords[0][1];
-			anarCoordX = arrayCoords[0][0];
-		}
-		// ·$· S'està considerant que les coordenades són en long/lat i no sempre és així estan en el CRSGeometry i per tant AnarAObjVectorialTaula no funcionarà bé si les coordenades són en un altre sistema
-		// ·$· Perque només donar un punt, si tinc o puc calcular l'àmbit del objecte i anar a l'àmbit de l'objecte		
-		filaObjecte.insertAdjacentHTML("beforeend", ["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoordX, " ,", anarCoordY, ")'>" + GetMessage("GoTo", "capavola") + "</button>" + "</td>"].join(""));
+			env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
+		
+		// La coordenada del objecte
+		if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
+			anarCoord ={x:(env_temp.MinX + env_temp.MaxX)/2, y: (env_temp.MinY + env_temp.MaxY)/2};
+		else if (tipusGeometria == "Point")
+			anarCoord={x : arrayCoords[0], y : arrayCoords[1]};
+		else
+			anarCoord={x : arrayCoords[0][0], y : arrayCoords[0][1]};
+		
+		var cns_anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
+		
+		filaObjecte.insertAdjacentHTML("beforeend", cns_anar_obj.join(""));
 
 		if (ambGeometria)
 		{
-			// $·$· NJ-->DP No és del tot correcte només s'està escrivint un tros del objecte!!
-			
-			// ·$· potser la geometria es podria escriure en WKT, que és el que s'acostuma a fer a les taules que tenen geometria
 			const columnaDada = document.createElement("td");
-			const coordInteriors = [];
-			// Diferenciar entre coord (x, y) i (x, y, z).			
-			if (tipusGeometria != "Point")
-			{
-				const numCoords = arrayCoords[0].length, nomDesplegable = capa.nom + "_feature_" + i;;
-				arrayCoords.forEach((coord, index) => {
-					coordInteriors.push((index==0 ? "(" : ", ("));
-					for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
-					{
-						coordInteriors.push(etiquetesCorrd[i_Coord]+": "+coord[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
-					}
-					coordInteriors.push(")");
-				});
-				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " + BotoDesplegableDiv(nomDesplegable, CreaContenedorTextAmbScroll(coordInteriors.join(""), 120)));
-			}
+			
+			wkt.fromJson(objecteARepresentar.geometry);
+			var cadena_obj_wkt=wkt.write(), boto_desplegable=capa.nom + "_feature_" + i;
+			if (tipusGeometria == "Point")
+				columnaDada.insertAdjacentHTML("beforeend", cadena_obj_wkt);
 			else
-			{
-				const numCoords = arrayCoords.length;
-				coordInteriors.push("(");
-				for (var i_Coord = 0; i_Coord < numCoords; i_Coord++)
-				{
-					coordInteriors.push(etiquetesCorrd[i_Coord]+": "+arrayCoords[i_Coord]+ (i_Coord==numCoords-1 ? "" : ", "));
-				}
-				coordInteriors.push(")");
-				columnaDada.insertAdjacentHTML("beforeend", coordInteriors.join(""));
-			}
+				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " +  BotoDesplegableDiv(boto_desplegable, CreaContenedorTextAmbScroll(cadena_obj_wkt, 120)));
+			
 			filaObjecte.insertAdjacentElement("beforeend", columnaDada);
+			
 			// Porta papers
-			cdnsPortapapers.push(objecteARepresentar.geometry.coordinates.toString(), "\t");
+			cdnsPortapapers.push(cadena_obj_wkt, "\t");
 		}
 		taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
-		//cdnsHtml.push("</tr>");
 		// Porta papers
 		cdnsPortapapers.push("\n");
 	}
