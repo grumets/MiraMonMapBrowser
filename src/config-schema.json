@@ -145,12 +145,12 @@
 			"description": "Idiomes en els que estarà disponible el navegador",
 			"type": "array",
 			"items": {
-				"enum": ["cat", "spa", "eng", "fre"]
+				"enum": ["cat", "spa", "eng", "fre", "cze"]
 			}
 		},
 		"idioma": {
 			"description": "DEPRECATED i passat a intern: Es recomana no indicar i deixar que la configuració del navegador de web prevalgui. Idioma per defecte, idioma actual i en iniciar el navegador.",
-			"enum": ["cat", "spa", "eng", "fre"]
+			"enum": ["cat", "spa", "eng", "fre", "cze"]
 		},
 		"PlanaPrincipal": { 
 			"description": "DEPRECATED. No s'usa més. Era l'adreça i nom de la plana principal de navegador. Es feia servir en la icona de home",
@@ -578,7 +578,7 @@
 								"type": "object",
 								"properties": {
 									"id": {
-										"description": "Id de projecció de camp",
+										"description": "Identificador de projecció de camp",
 										"type": "number" 
 									},
 									"valor": {
@@ -895,7 +895,7 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},
 					"src":{
-						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la historia en format JPEG, PNG... Opcional",
+						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la història en format JPEG, PNG... Opcional",
 						"type": "string",
 						"format": "uri"
 					},
@@ -908,25 +908,25 @@
 						"$ref": "#/definitions/envolupantCRS_2D" 
 					},
 					"Ample": {
-						"description": "Ample de la caixa que conté la historìa. Opcional; si no hi és val 500",
+						"description": "Ample de la caixa que conté la història. Opcional; si no hi és val 500",
 						"type": "number",
 						"minimum": 1,
 						"multipleOf" : 1
 					},
 					"Alt": {
-						"description": "Alt de la caixa que conté la historìa. Opcional; si no hi és val 400",
+						"description": "Alt de la caixa que conté la història. Opcional; si no hi és val 400",
 						"type": "number",
 						"minimum": 1,
 						"multipleOf" : 1
 					},
 					"MargeEsq": {
-						"description": "Marge esquerra de la caixa que conté la historìa. Opcional",
+						"description": "Marge esquerra de la caixa que conté la història. Opcional",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"MargeSup": {
-						"description": "Marge superior de la caixa que conté la historìa. Opcional",
+						"description": "Marge superior de la caixa que conté la història. Opcional",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
@@ -1285,7 +1285,7 @@
 				"type": "object",
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON o un CSV o és null si hi ha un CSV per cada un dels objectes ); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1304,6 +1304,20 @@
 						},{
 							"$ref": "#/definitions/EnumTipusServidor" 
 						}]
+					},
+					"configCSV": {
+						"description": "En el cas de que tinguem un o diversos CSV que s'usen per omplir els objectes i/o les característiques dels objectes, cal definir algunes propietats del CSV per poder fer la transformació correctament.",
+						"type": [null, "object"],
+						"properties": {
+							"separadorCamps": {
+								"description": "Delimitador o separador dels camps en el CSV. Típicament potser ';' o ','. Si no s'indica s'inteterà deduir. ",
+								"type": "string"
+							},
+							"nomCampDateTime": {
+								"description": "Nom del camp del CSV que conté la data-hora del registre. Això s'usarà per omplir l'array de dates de la capa a 'capa.data' i s'usarà en els camps que siguin 'serieTemporal'.",
+								"type": "string"
+							}
+						}
 					},
 					"access": { 
 						"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
@@ -1833,7 +1847,7 @@
 						}
 					},
 					"data":	{
-						"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo. Només aplica quan el 'model' és 'raster'.",
+						"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo. Aplica quan el 'model' és 'raster' o quan el 'model' és 'vector' i s'ha definit algun 'atribut' com a 'serieTemporal'",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Data disponible per la capa",
@@ -2502,7 +2516,7 @@
 			"required": ["TipusObj"],
 			"properties": {
 				"id":	{ 
-					"description": "Identificador únic per a l'estiil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+					"description": "Identificador únic per a l'estil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
 					"type": ["string", "null"]
 				},								
 				"nom":	{ 
@@ -3059,6 +3073,10 @@
 				"type": "number"
 			}
 		},
+		"propertiesSource": {
+			"description": "URL o nom del fitxer del origen que conté les dades per obtenir les 'propertiesGeoJSON'. L'origen serà del tipus indicat a 'FormatImatge', i de moment només pot ser 'text/csv'.",
+			"type": [null, "string"]
+		},		
 		"propertiesGeoJSON": {
 			"description": "Característiques no geomètriques de l'objecte GeoJSON.",
 			"type": "object"
@@ -3202,12 +3220,16 @@
 							"geometry": {
 								"$ref": "#/definitions/geometryGeoJSON"
 							},
+							"origenProperties": {
+								"description": "Informació sobre l'origen de les caraterístiques no geomètriques de l'objecte GeoJSON. Per exemple, quan les properties venen d'un CSV on hi ha els valors de les diverses propietats.",
+								"$ref": "#/definitions/origenProperties"
+							},
 							"properties": {
 								"description": "Caraterístiques no geomètriques de l'objecte GeoJSON. El contingut és lliure però els noms de les propietats són els atributs.nom i estil.NomCamp",
 								"$ref": "#/definitions/propertiesGeoJSON"
 							},
 							"data": {
-								"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
+								"description": "NJ: Crec que això no s'usa mai enlloc, que s'usa l'array de data de la capa. Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
 								"type": ["array", "null"],
 								"items": {
 									"description": "Data disponible per la capa",
@@ -3256,6 +3278,10 @@
 					"FormulaConsulta": { 
 						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component'. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'. Intenament, 'FormulaConsulta' es transforma en 'calcul'.",
 						"type": "string"
+					},
+					"nomOri": {
+						"description": "Nom de l'atribut original, per exemple quan els atributs s'agafen d'un CSV i s'acaben transformant en un atribut o en diversos perquè van amb temps i per tant el nomOri potser diferent del nom.",
+						"type": ["string"]						
 					},
 					"nom": { 
 						"description": "Nom de l'atribut. Si el servidor és SOS hi ha 2 noms especials: __om_time__, __om_sensor__ i la resta coincidexen amb els noms de camp de la taula que conté els dades.",
@@ -3322,7 +3348,7 @@
 						"multipleOf" : 1
 					},
 					"serieTemporal": {
-						"description": "Els valors d'aquest atribut formen una series temporal que s'ha de mostrar com una gràfica",
+						"description": "Els valors d'aquest atribut formen una sèrie temporal que s'ha de mostrar com una gràfica",
 						"type": "object",
 						"required": ["color"],
 						"properties": {

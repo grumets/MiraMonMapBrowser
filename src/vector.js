@@ -87,8 +87,9 @@ function InicialitzaIComprovaTileMatrixGeometryCapaDigi(capa)
 {
 var TMG, tiles, env_capa;
 
-	if(typeof capa.tipus==="undefined" || capa.tipus==null ||
-		typeof capa.model==="undefined" || capa.model!=model_vector)
+	if( typeof capa.tipus==="undefined" || capa.tipus==null ||
+		typeof capa.model==="undefined" || capa.model!=model_vector ||
+		DonaTipusServidorCapa(capa)=="TipusHTTP_GET")  // En les capes de tipus HTTP_GET ja siguin JSON o CSV no tinc tessel·lació, de moment tinc una petició única per obtenir tot el fitxer
 		return;
 	
 		
@@ -308,6 +309,7 @@ var atrib_coll_xml, atrib_xml, tag2;
 	}
 }
 
+
 function OmpleAtributsObjecteCapaDigiDesDeGeoJSON(objecte_json, atributs, feature)
 {
 
@@ -453,11 +455,80 @@ var valor, tag, tags, property_name, camps, i;
 			feature.properties.__om_sensor__=property_name;
 		}
 	}
-}//Fi de OmpleAtributsObjecteCapaDigiDesDeSOS()
+}
 
 function OmpleAtributsObjecteCapaDigiDesDeObservacionsDeSTA(obs, feature, data)
 {
 	feature.properties=ExtreuTransformaSTAObservations(obs, data);
+}
+
+function ProcessaResultatLecturaCSVPropietatsObjecte(results)
+{
+	var param=this;
+	if(!results || !results.data ||  results.data.length<1)
+	{
+		if(param.func_error)
+			param.func_error(param);
+		return;
+	}	
+	var capa=ParamCtrl.capa[param.i_capa], feature=capa.objectes.features[param.i_obj], rows=results.data, i_row, i_atrib;
+	
+	if(!feature.properties)
+		feature.properties={};
+	if(capa.configCSV && capa.configCSV.nomCampDateTime)
+	{
+		// He de mirar si hi ha algun camp que sigui una serie temporal
+		var i_data, data_iso;
+		if(!capa.data)
+		{
+			capa.data=[];
+			capa.AnimableMultiTime=true;
+		}
+		for(i_row=0; i_row<rows.length; i_row++)
+		{
+			data_iso=rows[i_row][capa.configCSV.nomCampDateTime];			
+			i_data=InsereixDataISOaCapa(data_iso, capa.data);
+			for(i_atrib=0; i_atrib<capa.atributs.length; i_atrib++)
+			{
+				if(capa.atributs[i_atrib].nomOri)
+					feature.properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data)]=rows[i_row][capa.atributs[i_atrib].nomOri];
+			}			
+		}
+	}
+	else
+	{
+		for(i_row=0; i_row<rows.length; i_row++)
+		{
+			for(i_atrib=0; i_atrib<capa.atributs.length; i_atrib++)
+			{
+				if(capa.atributs[i_atrib].nomOri)
+					feature.properties[capa.atributs[i_atrib].nom]=rows[i_row][capa.atributs[i_atrib].nomOri];
+			}	
+		}
+	}
+	CanviaEstatEventConsola(null, param.i_event, EstarEventTotBe);
+	if(param.func_after)
+		param.func_after(param);
+}
+
+function OmpleAtributsObjecteCapaDigiDesDeCadenaCSV(doc, param)
+{
+	if(!doc)
+	{
+		if(param.func_error)
+			param.func_error(param);
+		return;
+	}
+	
+	var capa=ParamCtrl.capa[param.i_capa];
+	
+	// Si enlloc d'una cadena csv tinc un fitxer, cal que afegeixi al config del parse 
+	// download: true,
+	Papa.parse(doc, {
+				header: true,
+				delimiter: (capa.configCSV && capa.configCSV.separadorCamps) ? capa.configCSV.separadorCamps :  "",
+				complete: ProcessaResultatLecturaCSVPropietatsObjecte.bind(param),				
+				});		
 }
 
 function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
@@ -465,6 +536,32 @@ function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 	removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
 	NConsultesDigiZero++;
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+}
+
+
+function MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta)
+{
+var capa=ParamCtrl.capa[consulta.i_capa];
+
+	if (!capa.objectes || !capa.objectes.features ||
+		!capa.objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(capa.objectes.features[consulta.i_obj].properties)==0)
+	{
+		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+		NConsultesDigiZero++;
+	}
+	else
+	{
+		var text_resposta=MostraConsultaCapaDigitalitzadaComHTML(consulta.i_capa, consulta.i_obj, true, true)
+		if(!text_resposta || text_resposta=="")
+		{
+			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
+			NConsultesDigiZero++;
+		}
+		else
+		{
+			contentLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj), text_resposta);
+		}
+	}	
 }
 
 function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
@@ -479,7 +576,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 		return;
 	}
 	capa=ParamCtrl.capa[consulta.i_capa];
-	if (capa.FormatImatge!="application/json" && capa.FormatImatge!="application/geo+json")
+	if (capa.FormatImatge!="application/json" && capa.FormatImatge!="application/geo+json" && capa.FormatImatge!="text/csv")
 	{
 		root=doc.documentElement;
 
@@ -604,7 +701,6 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 	else if (capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
 	{
 		id_obj_buscat=features[consulta.i_obj].id;
-		objectes=null;
 		//try {
 		//	var geojson=JSON.parse(doc);
 			//si hi ha una bbox es podria actualitzar però com que no la uso...
@@ -621,28 +717,14 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 				OmpleAtributsObjecteCapaDigiDesDeObservacionsDeSTA(doc.Observations, capa.objectes.features[consulta.i_obj], capa.data);
 		}
 	}
-
-	if (!capa.objectes || !capa.objectes.features ||
-		!capa.objectes.features[consulta.i_obj].properties || CountPropertiesOfObject(capa.objectes.features[consulta.i_obj].properties)==0)
+	else if(capa.tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
 	{
-		removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
-		NConsultesDigiZero++;
-	}
-	else
-	{
-		var text_resposta=MostraConsultaCapaDigitalitzadaComHTML(consulta.i_capa, consulta.i_obj, true, true)
-		if(!text_resposta || text_resposta=="")
-		{
-			removeLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj));
-			NConsultesDigiZero++;
-		}
-		else
-		{
-			contentLayer(getLayer(consulta.win, "LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_obj), text_resposta);
-		}
-	}
+		; //Si vinc aquí és que ja he passat per OmpleAtributsObjecteCapaDigiDesDeCadenaCSV(), però en principi no hi he de venir mai per aquest tipus
+	}	
+	MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta);
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 }
+
 
 function DescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 {
@@ -728,10 +810,15 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		url=DonaRequestGetObservation(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("GetObservation", param.i_capa, url, TipusEventGetObservation);
 	}
-	else //if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	else if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
 	{
 		url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("STA Observations", param.i_capa, url, TipusEventGetObservation);
+	}
+	else if (tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
+	{
+		if(DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, ParamInternCtrl.vista.EnvActual, DescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event}))
+			return true;	
 	}
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		loadJSON(url, DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
@@ -764,13 +851,16 @@ function OmpleCapaDigiAmbPropietatsObjectes(doc, consulta)
 {
 var root, capa, features, valor, tipus, i_obj;
 
+	capa=ParamCtrl.capa[consulta.param.i_capa];
+	tipus=DonaTipusServidorCapa(capa);
+	if(tipus=="tipusHTTP_GET" && capa.FormatImatge=="text/csv")
+		return 0;
 	if(!doc)
 	{
 		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 		return 1;
-	}
-	capa=ParamCtrl.capa[consulta.param.i_capa];
-	if (capa.FormatImatge!="application/json" && capa.FormatImatge=="application/geo+json")
+	}	
+	if (capa.FormatImatge!="application/json" && capa.FormatImatge!="application/geo+json" && capa.FormatImatge!="text/csv")
 	{
 		root=doc.documentElement;
 
@@ -781,7 +871,7 @@ var root, capa, features, valor, tipus, i_obj;
 		}
 	}
 	features=capa.objectes.features;
-	tipus=DonaTipusServidorCapa(capa);
+	
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="tipusHTTP_GET")
 	{
 		if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
@@ -1014,7 +1104,7 @@ var TM=capa.tileMatrixSetGeometry.tileMatrix;
 			"y": TM[i].TopLeftPoint.y -(tile.jTile*TM[i].TileHeight*TM[i].costat)-(TM[i].TileHeight*TM[i].costat/2)};
 }
 
-//Els objectes es mantenen en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
+// Els objectes es mantenen en memòria ordenats per id. Això es fa servir per afegir atributs als objectes més endavant.
 function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
 var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus, tile, i_tile_matrix=-1;
@@ -1037,6 +1127,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 	}
 	else	
 		tile=null;
+	
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 	{
 		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
@@ -1124,6 +1215,12 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 			return;
 		}
 	}
+	/*else if (capa.FormatImatge=="text/csv" && tipus=="TipusHTTP_GET")
+	{
+		//·$·
+		var parsedData=DonaJSONDeCadenaCSV(doc, ";");		
+		function OmpleAtributsObjecteCapaDigiDesDeDataCSV(parsedData, atributs, feature)
+	}*/
 	else
 	{
 		root=doc.documentElement;
@@ -1952,13 +2049,15 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 	//ConsultaCapaDigi[i_consulta]=new CreaConsultaCapaDigi(i_capa_digi, -1, seleccionar);
 
 	var url=DonaRequestOWSObjectesDigi(i_capa_digi, null, cadena_objectes, false);
-	if (capa.tipus=="TipusWFS")
+	var tipus=DonaTipusServidorCapa(capa);
+	
+	if (tipus=="TipusWFS")
 		i_event=CreaIOmpleEventConsola("GetFeature", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusOAPI_Features")
+	else if (tipus=="TipusOAPI_Features")
 		i_event=CreaIOmpleEventConsola("OAPI_Features", i_capa_digi, url, TipusEventGetFeature);
-	else if (capa.tipus=="TipusSOS")
+	else if (tipus=="TipusSOS")
 		i_event=CreaIOmpleEventConsola("GetFeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
-	else if (capa.tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
+	else if (tipus=="TipusSTA" || capa.tipus=="TipusSTAplus")
 		i_event=CreaIOmpleEventConsola("STA FeatureOfInterest", i_capa_digi, url, TipusEventGetFeatureOfInterest);
 
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
@@ -1990,7 +2089,7 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi];
 		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
 
 	//env_sol està ja en el CRS de la capa
-	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
+	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {i_capa_digi: i_capa_digi, i_tile: i_tile, env_sol: env_sol, seleccionar: seleccionar, i_event: i_event, funcio: funcio, param:param});
 	else
@@ -2107,7 +2206,6 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
     	j_tessella_max=0;
     else if(j_tessella_max>=tileMatrix.MatrixHeight)
     	j_tessella_max=tileMatrix.MatrixHeight-1;
-
 	
 	for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
 	{
@@ -2130,6 +2228,47 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 				else
 					return true;
 			}
+		}
+	}
+	return ha_calgut;
+}
+
+function DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
+{
+var env_total, env_temp, env_sol;
+var ha_calgut=false, vaig_a_carregar=false;
+
+	if(DonaTipusServidorCapa(capa)!="TipusHTTP_GET" || capa.FormatImatge!="text/csv" || !capa.objectes || !capa.objectes.features)
+		return ha_calgut;
+	
+	// ·$· Potser es podria filtrar per env d'objecte i vista, però de moment no ho faig i ho demano per tots els objectes
+	// Transformo l'envolupant de la vista a coordenades vector
+	//env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
+	
+	if(!param.carregant_geo)
+	{
+		param.carregant_geo=true;
+		vaig_a_carregar=true;		
+	}
+	var features=capa.objectes.features, feature;
+	for(var i_obj=0; i_obj<features.length; i_obj++)
+	{
+		feature=features[i_obj];
+		if(feature.propertiesSource && (!feature.properties || CountPropertiesOfObject(feature.properties)==0))
+		{
+			if(vaig_a_carregar)
+			{
+				ha_calgut=true;				
+				param.i_capa=ParamCtrl.capa.indexOf(capa);
+				param.i_event=CreaIOmpleEventConsola("HTTP GET", param.i_capa, feature.propertiesSource, TipusEventHttpGet);
+				param.i_obj=i_obj;				
+				param.func_after=funcio;
+				param.func_error=ErrorCapaDigiAmbObjectesDigitalitzats;
+				// no indico expressament el mimetype en aquest cas perquè he vist que no sempre respon com "text/csv" sino com "application/octet-stream" i fa que obtingui un error quan no és així
+				loadFile(feature.propertiesSource, null, OmpleAtributsObjecteCapaDigiDesDeCadenaCSV, ErrorCapaDigiAmbObjectesDigitalitzats, param);
+			}
+			else
+				return true;
 		}
 	}
 	return ha_calgut;

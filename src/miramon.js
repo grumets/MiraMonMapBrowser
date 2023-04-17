@@ -38,7 +38,7 @@
 
 "use strict"
 
-var ToolsMMN="https://github.com/joanma747/MiraMonMapBrowser";
+var ToolsMMN="https://github.com/grumets/MiraMonMapBrowser"; //"https://github.com/joanma747/MiraMonMapBrowser";
 var VersioToolsMMN={"Vers": 6, "SubVers": 0, "VariantVers": null};
 var clientName= "MiraMon Map Browser";
 var config_schema_estil="config-schema.json#/definitions/estil";
@@ -68,7 +68,8 @@ IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("imgtiff.js");
 IncludeScript("geomet.js");
-IncludeScript("wicket.js");
+IncludeScript("papaparse.min.js"); // Extret de https://www.papaparse.com/
+IncludeScript("wicket.js"); // Extret de : https://github.com/arthur-e/Wicket
 IncludeScript("vector.js");
 IncludeScript("paletes.js");
 IncludeScript("capavola.js");
@@ -106,6 +107,7 @@ IncludeScript("Chart.bundle.min.js", true);
 IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
+
 
 IncludeScript("msg.js", true);
 
@@ -350,18 +352,18 @@ function IniciaLayerPropiaPlantillaDImpressio(i_plantilla, i_layer_propia,
 
 function CompletaDescarregaTotCapa(capa)
 {
-	if (DonaTipusServidorCapa(capa)=="TipusHTTP_GET" && !capa.DescarregaTot)
+	if (DonaTipusServidorCapa(capa)=="TipusHTTP_GET" && !capa.DescarregaTot) 
 	{
 		var i_format;
 		//Contrueixo la manera de descarregar automàticament.
 		if (!ParamCtrl.FormatDescarregaTot)
 			ParamCtrl.FormatDescarregaTot=[];
 		if (capa.model==model_vector)
-		{
-			//Hi ha el format que toca la l'array de formats?
+		{			
+			// Hi ha el format que toca la l'array de formats?
 			for (i_format=0; i_format<ParamCtrl.FormatDescarregaTot.length; i_format++)
 			{
-				if ((capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json") &&
+				if ((capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv") &&
 					(ParamCtrl.FormatDescarregaTot.extension=="json" || ParamCtrl.FormatDescarregaTot.extension=="geojson"))
 					break;
 			}
@@ -403,9 +405,20 @@ function CompletaDescarregaTotCapa(capa)
 		//Poso una descarrega per tot o una descàrrega per a cada valor segons calgui.
 	}
 }
+function GeneraUIDCapa(capa)
+{
+	// Generació de identificador de la capa i els estils
+	CreaUUIDSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
+	if (capa.estil && capa.estil.length)
+	{
+		for (var j=0; j<capa.estil.length; j++)
+			CreaIdSiCal(capa.estil[j], j);
+	}
+}
 
 function CompletaDefinicioCapa(capa, capa_vola)
-{
+{	
+	GeneraUIDCapa(capa);
 	//Càlcul de la envolupant el·lipsoidal
 	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
@@ -444,7 +457,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
 
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && capa.FormatImatge=="application/geo+json") || (capa.objectes && capa.objectes.features))
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv")) || (capa.objectes && capa.objectes.features))
 		capa.model=model_vector;
 
 	CompletaDescarregaTotCapa(capa);
@@ -1022,7 +1035,7 @@ function CanviaIdioma(s)
 
 	elem=getFinestraLayer(window, "download");
 	if(isLayer(elem) && isLayerVisible(elem))
-		OmpleFinestraDownload();
+		TancaFinestraLayer("download");  //Em falta una paràmetre per iniciar-la OmpleFinestraDownload(capa);
 
 	elem=getFinestraLayer(window, "video");
 	if(isLayer(elem) && isLayerVisible(elem))
@@ -1047,7 +1060,7 @@ function CanviaIdioma(s)
 	elem=getFinestraLayer(window, "mostraLlinatge");
 	if(isLayer(elem))  // Encara que no sigui visible vull canviar el contingut sino quan l'obri si té algun graf es mostraria en l'idioma anterior
 		OmpleFinestraLlinatge({elem: elem, i_capa: -1, redibuixat: true});
-
+		
 	elem=getFinestraLayer(window, "taulaCapaVectorial");
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraTaulaDeCapaVectorial()
@@ -1230,6 +1243,7 @@ function EsCapaDinsRangDEscalesVisibles(capa)
 	}
 	return false;
 }
+
 
 //Aquesta funció ara caldrà usar-la cada vegada que es canvii l'estat de visibilitat d'una capa
 function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
@@ -1449,7 +1463,27 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 		BuidaArrayBufferCapa(capa);
 		//Buida objectes vectorials si han vingut d'un servidor.
 		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
-			delete capa.objectes;
+		{
+			if(capa.FormatImage=="text/csv")
+			{				
+				if (capa.objectes && capa.objectes.features)
+				{
+					var features= capa.objectes.features;
+					for (var i_obj=0; i_obj<features.length; i_obj++)
+					{
+						if(features[i_obj].origenProperties)
+							delete features[i_obj].properties;							
+					}
+					if(capa.data)
+					{
+						delete capa.data;
+						capa.AnimableMultiTime=false;
+					}
+				}
+			}
+			else
+				delete capa.objectes;
+		}
 		DescarregaSimbolsCapaDigi(capa);
 		if (capa.tileMatrixSetGeometry)
 		{
@@ -3759,6 +3793,11 @@ function EliminaTotesLesCapes(Redraw)
 	}
 }
 
+function DonaIndexCapa(capa)
+{
+	return ParamCtrl.capa.indexOf(capa);
+}
+
 function DonaCapaDesDeIdCapa(id)
 {
 var capa;
@@ -4170,6 +4209,13 @@ function CreaIdSiCal(obj, i)
 	}
 }
 
+// Crea un UUID si cal
+function CreaUUIDSiCal(obj)
+{
+	if (!obj.id)
+		obj.id=create_UUID();
+}
+
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
 	var i, j, k;
@@ -4206,7 +4252,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
-		CreaIdSiCal(capa, i);
+		//CreaIdSiCal(capa, i); Traslladat a CompletaDefinicioCapa
 
 		if (protocol=="https:" && capa.servidor && host==DonaHost(capa.servidor).toLowerCase() &&
 			   protocol!=DonaProtocol(capa.servidor).toLowerCase())
@@ -4279,7 +4325,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			for (j=0; j<capa.estil.length; j++)
 			{
 				estil=capa.estil[j];
-				CreaIdSiCal(estil, j);
+				// CreaIdSiCal(estil, j);  Traslladat a CompletaDefinicioCapa
 				if (estil.atributs && estil.atributs.length)
 				{
 					for (k=0; k<estil.atributs.length; k++)
