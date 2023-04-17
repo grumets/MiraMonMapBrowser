@@ -68,6 +68,7 @@ IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("imgtiff.js");
 IncludeScript("geomet.js");
+IncludeScript("wicket.js");
 IncludeScript("vector.js");
 IncludeScript("paletes.js");
 IncludeScript("capavola.js");
