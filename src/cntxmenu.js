@@ -4473,17 +4473,17 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 
 	// Porta papers capa info
 	if (capa.EnvTotal)
-		env_temp=capa.EnvTotal;
+		env_temp=capa.EnvTotal.EnvCRS;
 	else if(capa.objectes.bbox)
 		env_temp=DonaEnvDeMinMaxXY(capa.objectes.bbox[0], capa.objectes.bbox[2], capa.objectes.bbox[1], capa.objectes.bbox[3]);
 	else
 		env_temp=DonaEnvCalculatCapa(capa);	
 	cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
 						 GetMessage("CurrentReferenceSystem"), "\t", capa.CRSgeometry, "\n",
-						"MinX", "\t", env_temp.EnvCRS.MinX, "\n",
-						"MaxX", "\t", env_temp.EnvCRS.MaxX, "\n",
-						"MinY", "\t", env_temp.EnvCRS.MinY, "\n",
-						"MaxY", "\t", env_temp.EnvCRS.MaxY, "\n",
+						"MinX", "\t", env_temp.MinX, "\n",
+						"MaxX", "\t", env_temp.MaxX, "\n",
+						"MinY", "\t", env_temp.MinY, "\n",
+						"MaxY", "\t", env_temp.MaxY, "\n",
 						GetMessage("Type"), "\t", capa.model, " ", objectes[0].geometry.type, "\n");
 	
 	//Comencem la taula.
