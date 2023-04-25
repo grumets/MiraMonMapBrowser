@@ -115,41 +115,29 @@ function CanviaEtiquetesAnarCoord(sel)
 	}
 }//Fi de CanviaEtiquetesAnarCoord()
 
-function AnarAObjVectorialTaula(longitud, latitud)
+function AnarAObjVectorialTaula(x, y, crs_obj, minX, maxX, minY, maxY)
 {
-var d, punt_coord, env_obj;
-
-	// 1)NJ a DP: Cal assegurar-se que longitud i latitud són en EPSG:4326 i sinó ho són indicar el sistema de referència com a paràmetre per poder fer les transformacions correctament
-	// 2)NJ a DP: Potser millor que calcular un envolupant donant un aire de 1000 m sobre un punt, el millor seria calcular l'àmbit de l'objecte i el punt central. Llavors potser la funció pot rebre la geometria
-	// i calcular totes aquestes coses.
-	
-	if(isNaN(longitud) || isNaN(latitud))
+	if(isNaN(x) || isNaN(y))
 	{
   	   alert(GetMessage("CoordIncorrectFormat", "capavola") + ":\n" + GetMessage("NumericalValueMustBeIndicated", "capavola") + ".");
 	   return;
 	}
 	
-	punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);	
+	var punt_coord={x:x, y:y}, env_obj={MinX: minX, MaxX: maxX, MinY: minY, MaxY: maxY};
+	
+	TransformaCoordenadesPunt(punt_coord, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	if(!EsPuntDinsAmbitNavegacio(punt_coord))
 	{
 		// La capa no es visible en el sistema de referència actual ni en el CRS actual, per tant he de canviar-ho i mirar en quina imatge de situació està continguda.
-		// Calculo un envolupant amb uns 
-		
-		ParamCtrl.araCanviProjAuto=true;
-		d=1000;
-		d/=FactorGrausAMetres;
-		env_obj=DonaEnvDeXYAmpleAlt(longitud, latitud, d, d);
-		EstableixNouCRSEnv("EPSG:4326", env_obj);
+		// Calculo un envolupant amb uns 		
+		EstableixNouCRSEnv(crs_obj, env_obj);
 		
 		// Recalculo el punt en el sistema que cal
-		punt_coord=DonaCoordenadesCRS(longitud, latitud, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);		   
+		punt_coord={x:x, y:y};
+		TransformaCoordenadesPunt(punt_coord, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	}
-	
-	d=1000;
-	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-		d/=FactorGrausAMetres;
-	env_obj=DonaEnvDeXYAmpleAlt(punt_coord.x, punt_coord.y, d, d);
+	TransformaEnvolupant(env_obj, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	// Dibuixo la icona per mostrar el punt de l'objecte
 	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")

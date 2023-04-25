@@ -1361,7 +1361,7 @@ var i_proces, i;
 		}
 		cdns.push("</select></form><div name=\"parametres_operacio_wps\" id=\"parametres_operacio_wps\"></div>",
 				  "<form name=\"ExecutaProcesCapa\" id=\"ExecutaProcesCapa\" onSubmit=\"return OmpleEstructGlobalIExecutaProces(",i_capa,");\"\>",
-				  "<center><input TYPE=\"submit\" VALUE=\"",GetMessage("Execute"),"\" /></center></form></div>");
+				  "<center><input type=\"submit\" value=\"",GetMessage("Execute"),"\" /></center></form></div>");
 	}
 	else
 	{

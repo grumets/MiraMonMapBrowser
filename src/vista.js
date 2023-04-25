@@ -1733,6 +1733,8 @@ var neteja_canvas=true;
 	{
 		if(DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;
+		if(DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
+			return;		
 	}
 	// Si la capa és tessel·lada, dibuixo l'array d'objectes numèrics (un objecte amb el nombre d'objectes que conté la tessel·la si és superior al límit indicat)
 	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 &&
