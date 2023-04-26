@@ -4477,7 +4477,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	else if(capa.objectes.bbox)
 		env_temp=DonaEnvDeMinMaxXY(capa.objectes.bbox[0], capa.objectes.bbox[2], capa.objectes.bbox[1], capa.objectes.bbox[3]);
 	else
-		env_temp=DonaEnvCalculatCapa(capa);	
+		env_temp=DonaEnvCalculatCapa(capa).EnvCRS;	
 	cdnsPortapapers.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n",
 						 GetMessage("CurrentReferenceSystem"), "\t", capa.CRSgeometry, "\n",
 						"MinX", "\t", env_temp.MinX, "\n",

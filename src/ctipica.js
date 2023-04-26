@@ -837,7 +837,7 @@ function DonaEnvolupantDescarregaAmbCTipicaCompleta()
 			return DonaEnvDeXYAmpleAlt(parseFloat(form_ctipica.x.value), parseFloat(form_ctipica.y.value), parseFloat(form_ctipica.ample.value), parseFloat(form_ctipica.alt.value));
 		if (form_ctipica.capa[i+1].checked)
 			return DonaEnvDeMinMaxXY(parseFloat(form_ctipica.MinX.value), parseFloat(form_ctipica.MaxX.value), parseFloat(form_ctipica.MinY.value), parseFloat(form_ctipica.MaxY.value));
-		return ParamCtrl.EnvTotal;
+		return ParamCtrl.EnvTotal.EnvCRS;
 	}
 	return ParamInternCtrl.vista.EnvActual;
 }
