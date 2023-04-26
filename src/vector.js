@@ -118,7 +118,7 @@ var TMG, tiles, env_capa;
 		env_capa.EnvCRS.MaxY=capa.EnvTotal.EnvCRS.MaxY;
 
 		if(capa.EnvTotal.CRS && !DonaCRSRepresentaQuasiIguals(capa.EnvTotal.CRS, env_capa.CRS))
-			TransformaEnvolupant(env_capa.EnvCRS, crs_ori, env_capa.CRS);
+			env_capa.EnvCRS=TransformaEnvolupant(env_capa.EnvCRS, crs_ori, env_capa.CRS);
 	}
 	else
 	{
