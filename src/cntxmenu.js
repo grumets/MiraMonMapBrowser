@@ -4404,27 +4404,22 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	{
 		const attribute = capa.atributs[i];
 		if (attribute.mostrar == "si")
-		{
 			atributsVisibles.push(capa.atributs[i]);
-		}
 	}
 
 	const paragrafCheckboxs = document.createElement("p");
 	paragrafCheckboxs.setAttribute("class", "vectorial");
 
 	// Si no hi han atributs per mostrar, parem i mostrem missatge explicatiu.
-	if (atributsVisibles.length <=0)
+	if (atributsVisibles.length <1)
 	{
 		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
 		divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoAttributesToDisplayForLayer", "cntxmenu") + "</b></p>");
 		nodePare.appendChild(divCapcalera);
 		return;
 	}
-	else
-	{
-		cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
-		"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
-	}
+	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",		i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+			"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
 
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
@@ -4512,72 +4507,101 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	
 	// Comencem files d'objectes vectorials de la taula.
 	var wkt = new Wkt.Wkt();
-	for (i = 0, objLength = objectes.length; i < objLength; i++)
+	
+	// Comprovo si algun atribut és sèrie temporal
+	var algun_atribut_es_serie_temporal=false;
+	if(capa.AnimableMultiTime && capa.data && capa.data.length>0)
 	{
+		for (i = 0; i < atributsVisibles.length; i++)
+		{
+			if(atributsVisibles[i].serieTemporal)
+			{
+				algun_atribut_es_serie_temporal=true;
+				break;
+			}
+		}
+	}
+	var i_data, prop, n_dates=(algun_atribut_es_serie_temporal ? capa.data.length  : 1);
+	for (i = 0, objLength = objectes.length; i < objLength; i++)
+	{		
 		const objecteARepresentar = objectes[i];
-		const filaObjecte = document.createElement("tr");
-		filaObjecte.setAttribute("class", "vectorial");
-		//cdnsHtml.push("<tr class='vectorial' height='20px'>");
-		for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+		for (i_data = 0; i_data < n_dates; i_data++)
 		{
-			filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + objecteARepresentar.properties[atributsVisibles[j].nom] + "</td>");
-			// Porta papers
-			cdnsPortapapers.push(objecteARepresentar.properties[atributsVisibles[j].nom], "\t");
-		}
-		filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + "' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
-		// obtindre array de punts de coordenades.
-		var arrayCoords = [];
-		const tipusGeometria = objecteARepresentar.geometry.type;
-		if (objecteARepresentar.geometry.coordinates.length > 0)
-		{			
-			if (tipusGeometria == "Point")
-				arrayCoords = objecteARepresentar.geometry.coordinates;
-			else if (tipusGeometria == "LineString" || tipusGeometria =="MultiPoint")
-				arrayCoords = objecteARepresentar.geometry.coordinates;
-			else if (tipusGeometria == "Polygon" || tipusGeometria =="MultiLineString")
-				arrayCoords = objecteARepresentar.geometry.coordinates[0];
-			else if (tipusGeometria == "MultiPolygon")
-				arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
-		}
-		var anarCoord;
+			const filaObjecte = document.createElement("tr");
+			filaObjecte.setAttribute("class", "vectorial");
+			//cdnsHtml.push("<tr class='vectorial' height='20px'>");
+			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			{
+				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(atributsVisibles[j].nom, capa, i_data)];
+				filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + (prop ? prop :"") + "</td>");
+				// Porta papers
+				cdnsPortapapers.push((prop ? prop :""), "\t");
+			}
+			if(i_data==0)
+			{
+				filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + 
+							"' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+				// obtindré array de punts de coordenades.
+				var arrayCoords = [];
+				const tipusGeometria = objecteARepresentar.geometry.type;
+				if (objecteARepresentar.geometry.coordinates.length > 0)
+				{			
+					if (tipusGeometria == "Point")
+						arrayCoords = objecteARepresentar.geometry.coordinates;
+					else if (tipusGeometria == "LineString" || tipusGeometria =="MultiPoint")
+						arrayCoords = objecteARepresentar.geometry.coordinates;
+					else if (tipusGeometria == "Polygon" || tipusGeometria =="MultiLineString")
+						arrayCoords = objecteARepresentar.geometry.coordinates[0];
+					else if (tipusGeometria == "MultiPolygon")
+						arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
+				}
+				var anarCoord;
 		
-		// Calculem o agafem l'env de l'objecte
-		if (!objecteARepresentar.bbox)
-			env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
-		else
-			env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
-		
-		// La coordenada del objecte
-		if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
-			anarCoord ={x:(env_temp.MinX + env_temp.MaxX)/2, y: (env_temp.MinY + env_temp.MaxY)/2};
-		else if (tipusGeometria == "Point")
-			anarCoord={x : arrayCoords[0], y : arrayCoords[1]};
-		else
-			anarCoord={x : arrayCoords[0][0], y : arrayCoords[0][1]};
-		
-		var cns_anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
-		
-		filaObjecte.insertAdjacentHTML("beforeend", cns_anar_obj.join(""));
+				// Calculem o agafem l'env de l'objecte
+				if (!objecteARepresentar.bbox)
+					env_temp=DonaEnvCalculatGeometry(objecteARepresentar.geometry, null);
+				else
+					env_temp=DonaEnvDeMinMaxXY(objecteARepresentar.bbox[0], objecteARepresentar.bbox[2], objecteARepresentar.bbox[1], objecteARepresentar.bbox[3]);
+				
+				// La coordenada del objecte
+				if (tipusGeometria == "Polygon" || tipusGeometria == "MultiPolygon")
+					anarCoord ={x:(env_temp.MinX + env_temp.MaxX)/2, y: (env_temp.MinY + env_temp.MaxY)/2};
+				else if (tipusGeometria == "Point")
+					anarCoord={x : arrayCoords[0], y : arrayCoords[1]};
+				else
+					anarCoord={x : arrayCoords[0][0], y : arrayCoords[0][1]};
+				
+				var cns_anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
+				
+				filaObjecte.insertAdjacentHTML("beforeend", cns_anar_obj.join(""));
 
-		if (ambGeometria)
-		{
-			const columnaDada = document.createElement("td");
-			
-			wkt.fromJson(objecteARepresentar.geometry);
-			var cadena_obj_wkt=wkt.write(), boto_desplegable=capa.nom + "_feature_" + i;
-			if (tipusGeometria == "Point")
-				columnaDada.insertAdjacentHTML("beforeend", cadena_obj_wkt);
+				if (ambGeometria)
+				{
+					const columnaDada = document.createElement("td");
+					
+					wkt.fromJson(objecteARepresentar.geometry);
+					var cadena_obj_wkt=wkt.write(), boto_desplegable=capa.nom + "_feature_" + i;
+					if (tipusGeometria == "Point")
+						columnaDada.insertAdjacentHTML("beforeend", cadena_obj_wkt);
+					else
+						columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " +  BotoDesplegableDiv(boto_desplegable, CreaContenedorTextAmbScroll(cadena_obj_wkt, 120)));
+					
+					filaObjecte.insertAdjacentElement("beforeend", columnaDada);
+					
+					// Porta papers
+					cdnsPortapapers.push(cadena_obj_wkt, "\t");
+				}				
+			}
 			else
-				columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " +  BotoDesplegableDiv(boto_desplegable, CreaContenedorTextAmbScroll(cadena_obj_wkt, 120)));
-			
-			filaObjecte.insertAdjacentElement("beforeend", columnaDada);
-			
+			{
+				filaObjecte.insertAdjacentHTML("beforeend", "<td></td><td></td><td></td>");
+				// Porta papers
+				cdnsPortapapers.push("\t\t\t");
+			}
+			taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
 			// Porta papers
-			cdnsPortapapers.push(cadena_obj_wkt, "\t");
+			cdnsPortapapers.push("\n");
 		}
-		taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
-		// Porta papers
-		cdnsPortapapers.push("\n");
 	}
 	divCapcalera.insertAdjacentElement("beforeend", taulaElementsVect);
 	// Div i textArea per copar contingut de la taula i exportar-lo a .csv (Full de càlcul).
