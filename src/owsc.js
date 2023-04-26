@@ -1259,7 +1259,7 @@ var i, separator_set= null, //The layer group separator must be set only in the 
 		//TransformaCoordenadesPunt(upperRight, bBox.CRS.name, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 		env= DonaEnvDeMinMaxXY(lowerLeft.x,upperRight.x,lowerLeft.y,upperRight.y);
-		TransformaEnvolupant(env, bBox.CRS.name, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+		env= TransformaEnvolupant(env, bBox.CRS.name, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 		//A new envelope is produced from the Gml bounding box
 		//And then go to that new envelope.
