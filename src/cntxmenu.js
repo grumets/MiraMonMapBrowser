@@ -4506,8 +4506,6 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
 	
 	// Comencem files d'objectes vectorials de la taula.
-	var wkt = new Wkt.Wkt();
-	
 	// Comprovo si algun atribut és sèrie temporal
 	var algun_atribut_es_serie_temporal=false;
 	if(capa.AnimableMultiTime && capa.data && capa.data.length>0)
@@ -4521,10 +4519,11 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			}
 		}
 	}
-	var i_data, prop, n_dates=(algun_atribut_es_serie_temporal ? capa.data.length  : 1);
+	var wkt = new Wkt.Wkt();
+	var cdns_anar_obj, cadena_obj_wkt, boto_desplegable, i_data, prop, n_dates=(algun_atribut_es_serie_temporal ? capa.data.length  : 1);
 	for (i = 0, objLength = objectes.length; i < objLength; i++)
 	{		
-		const objecteARepresentar = objectes[i];
+		const objecteARepresentar = objectes[i], tipusGeometria = objecteARepresentar.geometry.type;
 		for (i_data = 0; i_data < n_dates; i_data++)
 		{
 			const filaObjecte = document.createElement("tr");
@@ -4537,13 +4536,12 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 				// Porta papers
 				cdnsPortapapers.push((prop ? prop :""), "\t");
 			}
-			if(i_data==0)
-			{
-				filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + 
+			filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + 
 							"' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
+			if(i_data==0)
+			{				
 				// obtindré array de punts de coordenades.
-				var arrayCoords = [];
-				const tipusGeometria = objecteARepresentar.geometry.type;
+				var arrayCoords = [], anarCoord, anar_obj;				
 				if (objecteARepresentar.geometry.coordinates.length > 0)
 				{			
 					if (tipusGeometria == "Point")
@@ -4555,7 +4553,6 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 					else if (tipusGeometria == "MultiPolygon")
 						arrayCoords = objecteARepresentar.geometry.coordinates[0][0];					
 				}
-				var anarCoord;
 		
 				// Calculem o agafem l'env de l'objecte
 				if (!objecteARepresentar.bbox)
@@ -4571,33 +4568,33 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 				else
 					anarCoord={x : arrayCoords[0][0], y : arrayCoords[0][1]};
 				
-				var cns_anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
+				anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", 			env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
 				
-				filaObjecte.insertAdjacentHTML("beforeend", cns_anar_obj.join(""));
-
+				cdns_anar_obj= anar_obj.join("");
+				
 				if (ambGeometria)
 				{
-					const columnaDada = document.createElement("td");
-					
 					wkt.fromJson(objecteARepresentar.geometry);
-					var cadena_obj_wkt=wkt.write(), boto_desplegable=capa.nom + "_feature_" + i;
-					if (tipusGeometria == "Point")
-						columnaDada.insertAdjacentHTML("beforeend", cadena_obj_wkt);
-					else
-						columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " +  BotoDesplegableDiv(boto_desplegable, CreaContenedorTextAmbScroll(cadena_obj_wkt, 120)));
-					
-					filaObjecte.insertAdjacentElement("beforeend", columnaDada);
-					
-					// Porta papers
-					cdnsPortapapers.push(cadena_obj_wkt, "\t");
-				}				
+					cadena_obj_wkt=wkt.write();
+					boto_desplegable=capa.nom + "_feature_" + i;
+				}	
 			}
-			else
+			filaObjecte.insertAdjacentHTML("beforeend", cdns_anar_obj);
+
+			if (ambGeometria)
 			{
-				filaObjecte.insertAdjacentHTML("beforeend", "<td></td><td></td><td></td>");
+				const columnaDada = document.createElement("td");
+				
+				if (tipusGeometria == "Point")
+					columnaDada.insertAdjacentHTML("beforeend", cadena_obj_wkt);
+				else
+					columnaDada.insertAdjacentHTML("beforeend", GetMessage('moreInfo') + ": " +  BotoDesplegableDiv(boto_desplegable, CreaContenedorTextAmbScroll(cadena_obj_wkt, 120)));
+				
+				filaObjecte.insertAdjacentElement("beforeend", columnaDada);
+				
 				// Porta papers
-				cdnsPortapapers.push("\t\t\t");
-			}
+				cdnsPortapapers.push(cadena_obj_wkt, "\t");
+			}							
 			taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
 			// Porta papers
 			cdnsPortapapers.push("\n");
