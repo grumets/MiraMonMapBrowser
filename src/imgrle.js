@@ -2663,6 +2663,13 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 									if (param)
 									{
 										CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
+										
+										if (!EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[param.i_capa]))
+										{
+											CanviaEstatCapa(param.i_capa, "visible");
+											CreaLlegenda();
+											return;
+										}
 										return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
 									}
 								},
