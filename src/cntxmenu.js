@@ -3639,6 +3639,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 			if (formes !== undefined)
 			{
 				const mapFormes = objToMap(formes);
+				var descr_obj;
 				// Gathers all interesting keyes from map
 				const arrayKeyes = [];
 
@@ -3654,10 +3655,17 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 
 					if (forma.paleta && forma.paleta.colors && forma.paleta.colors.length > 0)
 					{
+						if(objKey==voraKey)
+							descr_obj=GetMessage("Vora", "cntxmenu");
+						else if (objKey==interiorKey)
+							descr_obj=GetMessage("Interior", "cntxmenu");
+						else 
+							descr_obj=objKey;
+						
 						// The color is in hexadecimal format
 						if (forma.paleta.colors[0].indexOf("#") != -1)
-						{
-							arrayColorsSelectors.push({color:forma.paleta.colors[0], descr:objKey});
+						{							
+							arrayColorsSelectors.push({color:forma.paleta.colors[0], descr:descr_obj});
 						}
 						// The color is in RGB format
 						else if (forma.paleta.colors[0].indexOf("#") == -1)
@@ -3666,10 +3674,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil];
 							const arrayColorRGBA = rgbDigits.split(",");
 							const hexColor = "#" + ((1 << 24) + (parseInt(arrayColorRGBA[0]) << 16) + (parseInt(arrayColorRGBA[1]) << 8) + parseInt(arrayColorRGBA[2])).toString(16).slice(1);
 
-							arrayColorsSelectors.push({color:hexColor, descr:objKey});
+							arrayColorsSelectors.push({color:hexColor, descr:descr_obj});
 							if (arrayColorRGBA.length == 4)
 							{
-								arrayAlphaSelectors.push({alpha:parseFloat(arrayColorRGBA[arrayColorRGBA.length-1]), descr:objKey});
+								arrayAlphaSelectors.push({alpha:parseFloat(arrayColorRGBA[arrayColorRGBA.length-1]), descr:descr_obj});
 							}
 						}
 					}

@@ -1789,6 +1789,20 @@ var MessageLang={
       "fre": "Nom du style",
       "cze": "Název stylu"
     },
+	"Vora": {
+		"cat": "Vora",
+		"spa": "Borde",
+		"eng": "Border",
+		"fre": "Bordure",
+		"cze": "Hranice"
+	},
+	"Interior": {
+		"cat": "Interior",
+		"spa": "Interior",
+		"eng": "Interior",
+		"fre": "Intérieur",
+		"cze": "Vnitřek"
+  },
     "ConfusionMatrix": {
       "cat": "Matriu de confusió",
       "spa": "Matriz de confusión",

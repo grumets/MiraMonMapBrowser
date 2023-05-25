@@ -784,13 +784,13 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 					else
 						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
 					cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
-						": <select CLASS=\"text_petit\" name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
+						": <select class=\"text_petit\" name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
 						   i_capa, ",", i_dim, ", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 					for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
 					{
-						cdns.push("<OPTION VALUE=\"",i_v_dim,"\"",
-							((i_v_dim==dim.i_valor) ? " SELECTED" : "") ,
-						">", DonaCadenaNomDescFormula(dim.formulaDesc, dim.valor[i_v_dim]), "</OPTION>\n");
+						cdns.push("<option value=\"",i_v_dim,"\"",
+							((i_v_dim==dim.i_valor) ? " selected" : "") ,
+						">", DonaCadenaNomDescFormula(dim.formulaDesc, dim.valor[i_v_dim]), "</option>\n");
 					}
 					cdns.push("</select>", aspecte.PostDescItems, "</td></tr>");
 				}
@@ -1692,6 +1692,15 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 			redibuixar_llegenda=true;
 		if (!redibuixar_llegenda && capa.LlegDesplegada && ((capa.estil[i_estil].ItemLleg && capa.estil[i_estil].ItemLleg.length>=1) || capa.estil[i_estil].nItemLlegAuto>=1))
 			redibuixar_llegenda=true;*/
+		if (capa.model==model_vector)
+		{
+			if(!redibuixar_llegenda && capa.visible!="no" && capa.visible!="ara_no" &&
+				/*capa.LlegDesplegada==false && */
+				((capa.estil[i_estil].ItemLleg && capa.estil[i_estil].ItemLleg.length<2) ||
+				 (capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length<2)))
+				redibuixar_llegenda=true;
+			
+		}
 		capa.i_estil=i_estil;
 		document.getElementById("id-descrip-lleg-capa-" + i_capa).innerHTML=DonaCadenaHTMLEstilItemLlegenda(i_capa, ParamCtrl.AspecteLlegenda, LlegendaAmbControlDeCapes|LlegendaAmbCapesNoVisibles);
 		for (var i=0; i<capa.estil.length; i++)
@@ -1707,17 +1716,10 @@ var redibuixar_llegenda=false, capa=ParamCtrl.capa[i_capa];
 				DesactivaCheckITextChartsMatriusDinamics(i_capa, i, true);
 			}
 		}
+		if (capa.model==model_vector)
+			CarregaSimbolsEstilActualCapaDigi(capa);
 	}
 
-	if (capa.model==model_vector)
-	{
-		if(!redibuixar_llegenda && capa.visible!="no" && capa.visible!="ara_no" &&
-			i_estil!=capa.i_estil && capa.LlegDesplegada==false && 
-			((capa.estil[i_estil].ItemLleg && capa.estil[i_estil].ItemLleg.length<2) ||
-			 (capa.estil[capa.i_estil].ItemLleg && capa.estil[capa.i_estil].ItemLleg.length<2)))
-			redibuixar_llegenda=true;
-		CarregaSimbolsEstilActualCapaDigi(capa);
-	}
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
 		if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
