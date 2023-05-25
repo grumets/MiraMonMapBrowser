@@ -2040,6 +2040,22 @@ var MessageLang=
       "cze": "Název stylu",
       "ger": "Name des Stils"
     },
+	"Vora": {
+		"cat": "Vora",
+		"spa": "Borde",
+		"eng": "Border",
+		"fre": "Bordure",
+		"cze": "Hranice",
+    "ger": "Grenze"
+	},
+	"Interior": {
+		"cat": "Interior",
+		"spa": "Interior",
+		"eng": "Interior",
+		"fre": "Intérieur",
+		"cze": "Vnitřek",
+    "ger": "Innere"
+  },
     "ConfusionMatrix": {
       "cat": "Matriu de confusió",
       "spa": "Matriz de confusión",

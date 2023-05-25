@@ -468,7 +468,7 @@ function ProcessaResultatLecturaCSVPropietatsObjecte(results)
 	if(!results || !results.data ||  results.data.length<1)
 	{
 		if(param.func_error)
-			param.func_error(param);
+			param.func_error(results, param);
 		return;
 	}	
 	var capa=ParamCtrl.capa[param.i_capa], feature=capa.objectes.features[param.i_obj], rows=results.data, i_row, i_atrib;
@@ -516,7 +516,7 @@ function OmpleAtributsObjecteCapaDigiDesDeCadenaCSV(doc, param)
 	if(!doc)
 	{
 		if(param.func_error)
-			param.func_error(param);
+			param.func_error(null, param);
 		return;
 	}
 	
