@@ -59,7 +59,7 @@ var MessageLang=
     "cat": "no reconnegut o implementat",
     "spa": "no reconocido o implementado",
     "eng": "neither recognized nor implemented",
-    "fre": "Ni reconnu ni mis en œuvre",
+    "fre": "ni reconnu ni mis en œuvre",
     "cze": "není rozpoznán ani implementován",
     "ger": "weder erkannt noch implementiert"
   },
@@ -493,7 +493,7 @@ var MessageLang=
     "eng": "OK",
     "fre": "Accepter",
     "cze": "OK",
-    "ger": " OK"
+    "ger": "OK"
   },
   "Cancel": {
     "cat": "Cancel·lar",
@@ -1532,8 +1532,8 @@ var MessageLang=
     "spa": "Oferta de servicio ('offering')",
     "eng": "Offering",
     "fre": "Offre de services ('offering')",
-    "cze": "Nabízející",
-    "ger": "Angebot"
+    "cze": "Nabízející ('offering')",
+    "ger": "Angebot ('offering')"
   },
   "LayerActiveAndVisible": {
     "cat": "La capa estarà activa i visible",
@@ -1805,7 +1805,7 @@ var MessageLang=
     "eng": "Load",
     "fre": "Charge",
     "cze": "Načíst",
-    "ger": "laden"
+    "ger": "Laden"
   },
   "Loading": {
     "cat": "Carregant",
@@ -1903,7 +1903,7 @@ var MessageLang=
     "cze": "Tloušťka",
     "ger": "Strichbreite"
   },
-  "Transparency": {
+	"Transparency": {
     "cat": "Transparència",
     "spa": "Transparencia",
     "eng": "Transparency",
@@ -2046,7 +2046,7 @@ var MessageLang=
 		"eng": "Border",
 		"fre": "Bordure",
 		"cze": "Hranice",
-    "ger": "Grenze"
+		"ger": "Grenze"
 	},
 	"Interior": {
 		"cat": "Interior",
@@ -2054,8 +2054,8 @@ var MessageLang=
 		"eng": "Interior",
 		"fre": "Intérieur",
 		"cze": "Vnitřek",
-    "ger": "Innere"
-  },
+		"ger": "Innere"
+	},
     "ConfusionMatrix": {
       "cat": "Matriu de confusió",
       "spa": "Matriz de confusión",
@@ -2228,7 +2228,7 @@ var MessageLang=
       "cat": "Cal triar dues capes diferents o la mateixa en estils i/o dates diferents",
       "spa": "Es necesario elegir dos capas diferentes o la misma en estilos y/o fechas diferentes",
       "eng": "You should choose two different layers or the same in different styles and/or dates",
-      "fre": "You should choose two different layers or the same in different styles and/or dates",
+      "fre": "You should  choose two different layers or the same in different styles and/or dates",
       "cze": "Měli byste si vybrat dvě různé vrstvy nebo stejné v různých stylech a/nebo datech",
       "ger": "Sie sollten zwei verschiedene Layers oder denselben Layer mit verschiedenen Stilen und/oder Daten wählen."
     },
@@ -2237,8 +2237,8 @@ var MessageLang=
       "spa": " y ",
       "eng": " and ",
       "fre": " et ",
-      "cze": " a",
-      "ger": " und"
+      "cze": " a ",
+      "ger": " und "
     },
     "CombinationOf": {
       "cat": "Combinació de ",
@@ -2246,7 +2246,7 @@ var MessageLang=
       "eng": "Combination of ",
       "fre": "Combination of ",
       "cze": "Kombinace ",
-      "ger": "Kombination von"
+      "ger": "Kombination von "
     },
     "byCategoryOf": {
       "cat": "per categoria de",
@@ -2270,7 +2270,7 @@ var MessageLang=
       "eng": " with statistics of ",
       "fre": " avec statistiques par ",
       "cze": " se statistikami ",
-      "ger": "mit Statistiken von"
+      "ger": " mit Statistiken von "
     },
     "WrongNumberElementsInLine": {
       "cat": "Nombre d'elements incorrecte a la línia",
@@ -2390,7 +2390,7 @@ var MessageLang=
       "eng": "The result of the reclassification will be added as a new style with name",
       "fre": "Le résultat du reclassement sera ajouté en tant que nouveau style avec le nom",
       "cze": "Výsledek reklasifikace bude přidán jako nový styl s názvem",
-      "ger": "Das Ergebnis der Umklassifizierung wird als neuer Stil mit folgendem Namen hinzugefügt:"
+      "ger": "Das Ergebnis der Umklassifizierung wird als neuer Stil mit folgendem Namen hinzugefügt"
     },
     "LayerForExpression": {
       "cat": "Capa per a la fórmula",
@@ -2534,7 +2534,7 @@ var MessageLang=
       "eng": "to combine layers",
       "fre": "pour correspondre des couches",
       "cze": "ke kombinaci vrstev",
-      "ger": "zum Kombinieren von Layers "
+      "ger": "zum Kombinieren von Layers"
     },
     "toReclassifyLayer": {
       "cat": "per reclassificar la capa",
@@ -2928,7 +2928,7 @@ var MessageLang=
       "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)",
       "ger": "Transparenzanteil im Bereich von 0% (undurchsichtig) bis 100% (transparent)"
     },
-    "ViewItemsInScope": {
+	"ViewItemsInScope": {
       "cat": "Veure sols elements dins de l'àmbit",
       "spa": "Ver solo elementos dentro del ámbito",
       "eng": "View only items within the scope",
@@ -2936,7 +2936,7 @@ var MessageLang=
       "cze": "Zobrazit pouze položky v rozsahu",
       "ger": "Ausschließlich Elemente im Geltungsbereich anzeigen"
     },
-    "ShowGeometry": {
+	"ShowGeometry": {
       "cat": "Mostrar geometria",
       "spa": "Mostrar geometría",
       "eng": "Show geometry",
@@ -2944,31 +2944,31 @@ var MessageLang=
       "cze": "Zobrazit geometrii",
       "ger": "Geometrie anzeigen"
     },
-    "Geometry": {
+	"Geometry": {
       "cat": "Geometria",
       "spa": "Geometría",
       "eng": "Geometry",
       "fre": "Géoméxtrie",
       "cze": "Geometrie",
       "ger": "Geometrie"
-    },
-    "ExportObject": {
-      "cat": "Exporta l'objecte",
-      "spa": "Exportar el objecto",
-      "eng": "Export object",
-      "fre": "Exporter l'objet",
+   },
+   "ExportObject": {
+     "cat": "Exporta l'objecte",
+     "spa": "Exportar el objecto",
+     "eng": "Export object",
+     "fre": "Exporter l'objet",
       "cze": "Objekt exportu",
       "ger": "Objekt exportieren"
-    },
-    "ExportObjects": {
-      "cat": "Exportar objectes",
-      "spa": "Exportar objectos",
-      "eng": "Export objects",
-      "fre": "Exporter les objets",
+   },
+   "ExportObjects": {
+     "cat": "Exportar objectes",
+     "spa": "Exportar objectos",
+     "eng": "Export objects",
+     "fre": "Exporter les objets",
       "cze": "Export objektů",
       "ger": "Objekte exportieren"
-    },
-    "VectorLayerValuesCopiedClipboardFormat": {
+   },
+	"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
       "spa": "Los valores de la capa vectorial han sido copiados al portapapeles en formato",
       "eng": "The values of the vector layer have been copied to clipboard in the format",
@@ -2976,13 +2976,13 @@ var MessageLang=
       "cze": "Hodnoty vektorové vrstvy byly zkopírovány do schránky ve formátu",
       "ger": "Die Werte des Vektorlayers wurden in die Zwischenablage im Format kopiert"
     },
-    "exportedVectorObjects": {
-      "cat": "objectes_vectorials_exportats_",
-      "spa": "objetos_vectoriales_exportados",
-      "eng": "exported_vector_objects_",
-      "fre": "objets_vectoriels_exportes_",
+  "exportedVectorObjects": {
+    "cat": "objectes_vectorials_exportats_",
+    "spa": "objetos_vectoriales_exportados",
+    "eng": "exported_vector_objects_",
+    "fre": "objets_vectoriels_exportes_",
       "cze": "exportovane_vektorové_objekty_",
-      "ger": "exportierte_Vektorobjeckte"
+      "ger": "exportierte_Vektorobjeckte_"
     },
     "NoAttributesToDisplayForLayer": {
       "cat": "No hi han atributs per a mostrar d'aquesta capa",
@@ -3092,7 +3092,7 @@ var MessageLang=
       "eng": "Map coordinates conversion has not been implemented for this reference system",
       "fre": "Conversion à coordonnées de la carte pas implémenté pour ce système de référence",
       "cze": "Převod mapových souřadnic nebyl pro tento referenční systém implementován",
-      "ger": "Die Umrechnung von Kartenkoordinaten wurde für dieses Bezugssystem nicht implementiert."
+      "ger": "Die Umrechnung von Kartenkoordinaten wurde für dieses Bezugssystem nicht implementiert"
     },
     "LambertConformalConicZoneIII_NTF": {
       "cat": "Lambert Cònica Conforme Zona III - NTF",
@@ -3574,7 +3574,7 @@ var MessageLang=
       "eng": "You have to use browser tools to place on the view.\n Later, you have to click on the view to determine the coordinate\nand the information of the point of validating.\nTo finish you have to click [Validate coordinate] or [Cancel] from the validation window.",
       "fre": "Utilisez les outils du navigateur pour vous placer sur la vue.\n Ensuite cliquez sur la vue pour déterminer la coordonné\net l'information du point à valider.\nFinalement, pressez [Valider Coordonnée] où [Annuler] de la fenêtre de validation.",
       "cze": "K umístění na zobrazení musíte použít nástroje prohlížeče.\n Později musíte kliknout na zobrazení, abyste určili souřadnice\n a informace o bodu validace.\n Pro dokončení musíte v okně validace kliknout na tlačítko [Validovat souřadnici] nebo [Zrušit].",
-      "ger": "Sie müssen die Browser-Tools verwenden, um die Ansicht zu platzieren. Später müssen Sie auf die Ansicht klicken, um die Koordinate und die Informationen des zu validierenden Punktes zu bestimmen. Zum Abschluss müssen Sie im Validierungsfenster auf [Koordi"
+      "ger": "Sie müssen die Browser-Tools verwenden, um die Ansicht zu platzieren.\n Später müssen Sie auf die Ansicht klicken, um die Koordinate und die Informationen des zu validierenden Punktes zu bestimmen.\n Zum Abschluss müssen Sie im Validierungsfenster auf [Koordi]."
     }
   },
   "download": {
@@ -3651,10 +3651,10 @@ var MessageLang=
       "ger": "des Herunterladens"
     },
     "GenerationMMZMinutes": {
-      "cat": "La generació d'un MMZ podria trigar alguns minuts",
-      "spa": "La generación de un MMZ podría durar algunos minutos",
-      "eng": "Generation of an MMZ could take some minutes",
-      "fre": "La création d'un MMZ peut prendre quelques minutes",
+        "cat": "La generació d'un MMZ podria trigar alguns minuts",
+        "spa": "La generación de un MMZ podría durar algunos minutos",
+        "eng": "Generation of an MMZ could take some minutes",
+        "fre": "La création d'un MMZ peut prendre quelques minutes",
       "cze": "Generování MMZ může trvat několik minut",
       "ger": "Die Erstellung eines MMZ kann einige Minuten dauern"
     },
@@ -3669,7 +3669,7 @@ var MessageLang=
     "NoLayerSellectedForMMZ": {
       "cat": "No s'ha sel·lecionat cap capa per ser inclosa dins d'un MMZ",
       "spa": "No se ha seleccionado ninguna capa para ser incluida dentro de un MMZ",
-      "eng": "No layer has been sellected for being included on a MMZ",
+      "eng": "No layer has been sellected for being included on a MMZ", 
       "fre": "Aucune couche n'a été sélectionnée pour être insérée dans un MMZ",
       "cze": "Žádná vrstva nebyla vybrána pro zařazení do MMZ",
       "ger": "Es wurde kein Layer für die Aufnahme in ein MMZ ausgewählt"
@@ -3681,23 +3681,23 @@ var MessageLang=
       "fre": "Téléchargement de cartographie",
       "cze": "Stažení kartografie",
       "ger": "Die Kartographie wird heruntergeladen"
-    },
+    }, 
     "NotHaveMiramonInstalled": {
-      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon",
-      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon",
+      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
+      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
       "eng": "If you don't have MiraMon Universal Map Reader installed or updated",
       "fre": "Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon",
       "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader",
       "ger": "Wenn MiraMon Universal Map Reader nicht installiert bzw. aktualisiert ist"
     },
     "CorrectDownloadLayers": {
-      "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon",
-      "spa": "Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon",
+      "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon", 
+      "spa": "Para poder descargar las capas es necesario tener correctamente instalado el programa MiraMon", 
       "eng": "To correctly download the layers you have to have MiraMon program installed",
       "fre": "Pour télécharger les couches il faut voir installé correctement le logiciel MiraMon",
       "cze": "Pro správné stažení vrstev musíte mít nainstalovaný program MiraMon",
       "ger": "Um die Layers korrekt herunterzuladen, muss das MiraMon-Programm installiert sein"
-    },
+    }, 
     "downloadIt": {
       "cat": "descarregueu-lo",
       "spa": "descárguelo",
@@ -3705,20 +3705,20 @@ var MessageLang=
       "fre": "téléchargez",
       "cze": "stáhnout",
       "ger": "Herunterladen"
-    },
+    }, 
     "GenerateDirectlyOpen": {
       "cat": "Generar i obrir directament",
-      "spa": "Generar y abrir directamente",
+      "spa": "Generar y abrir directamente", 
       "eng": "Generate and directly open",
       "fre": "Créer et ouvrir directement",
       "cze": "Generování a přímé otevření",
       "ger": "Erzeugen und sofort öffnen"
-    },
+    }, 
     "PrepareOffer": {
       "cat": "Preparar i oferir",
       "spa": "Preparar y ofrecer",
       "eng": "Prepare and offer",
-      "fre": "Préparer et télécharger",
+      "fre": "Préparer et télécharger", 
       "cze": "Připravte a nabídněte",
       "ger": "vorbereiten und anbieten"
     },
@@ -3737,7 +3737,7 @@ var MessageLang=
       "fre": "État du processus",
       "cze": "Stav procesu",
       "ger": "Prozessstatus"
-    },
+    }, 
     "AllLayersSameServer": {
       "cat": "Totes les capes a descarregar han de ser del mateix servidor. Desactiva",
       "spa": "Todas las capas a descargar deben residir en el mismo servidor. Desactive",
@@ -3797,28 +3797,28 @@ var MessageLang=
       "ger": "Seitlicher Sprung proc."
     },
     "ShowCleanMap_View": {
-      "cat": "Mostra vista del mapa neta",
-      "spa": "Muestra vista del mapa limpia",
-      "eng": "Show a clean map view",
-      "fre": "Afficher une vue de carte propre",
-      "cze": "Zobrazení čistého zobrazení mapy",
-      "ger": "Anzeigen einer sauberen Kartenansicht"
+      "cat": "Mostra <u>v</u>ista del mapa neta",
+      "spa": "Muestra <u>v</u>ista del mapa limpia",
+      "eng": "Show a clean map <u>v</u>iew",
+      "fre": "Afficher une <u>v</u>ue de carte propre",
+      "cze": "Zobrazení čistého <u>z</u>obrazení mapy",
+      "ger": "Anzeigen einer sauberen Kartenan<u>s</u>icht"
     },
     "ZoomPan_2Clicks": {
-      "cat": "Zoom i pan basat en 2 simples clics (ergonòmic)",
-      "spa": "Zoom y pan basado en 2 simples clics (ergonómico)",
-      "eng": "Zoom and pan based in 2 simples clicks (ergonomic)",
-      "fre": "Zoom et pan basé en 2 simples clics (ergonomique)",
-      "cze": "Přiblížení a posun na základě 2 jednoduchých kliknutí (ergonomické)",
-      "ger": "Zoomen und Schwenken mit 2 einfachen Klicks (ergonomisch)"
+      "cat": "Zoom i pan basat en <u>2</u> simples clics (ergonòmic)",
+      "spa": "Zoom y pan basado en <u>2</u> simples clics (ergonómico)",
+      "eng": "Zoom and pan based in <u>2</u> simples clicks (ergonomic)",
+      "fre": "Zoom et pan basé en <u>2</u> simples clics (ergonomique)",
+      "cze": "Přiblížení a posun na základě <u>2</u> jednoduchých kliknutí (ergonomické)",
+      "ger": "Zoomen und Schwenken mit <u>2</u> einfachen Klicks (ergonomisch)"
     },
     "ZoomPan_1ClickDrag": {
-      "cat": "Zoom i pan en 1 clic i arrossegant",
-      "spa": "Zoom y pan en 1 clic y arrastrando",
-      "eng": "Zoom and pan with 1 click and dragging",
-      "fre": "Zoom et pan en 1 cliques et glisser",
-      "cze": "Přiblížení a posun pomocí 1 kliknutí a tažení",
-      "ger": "Zoomen und Schwenken mit 1 Klick und Ziehen"
+      "cat": "Zoom i pan en <u>1</u> clic i arrossegant",
+      "spa": "Zoom y pan en <u>1</u> clic y arrastrando",
+      "eng": "Zoom and pan with <u>1</u> click and dragging",
+      "fre": "Zoom et pan en <u>1</u> cliques et glisser",
+      "cze": "Přiblížení a posun pomocí <u>1</u> kliknutí a tažení",
+      "ger": "Zoomen und Schwenken mit <u>1</u> Klick und Ziehen"
     },
     "NOfFigures": {
       "cat": "N. decimals",
@@ -3837,12 +3837,12 @@ var MessageLang=
       "ger": "Ecken"
     },
     "None_underlined": {
-      "cat": "cap",
-      "spa": "ninguna",
-      "eng": "none",
-      "fre": "aucune",
-      "cze": "žádné",
-      "ger": "keine"
+      "cat": "c<u>a</u>p",
+      "spa": "ningun<u>a</u>",
+      "eng": "<u>n</u>one",
+      "fre": "<u>a</u>ucune",
+      "cze": "žá<u>d</u>né",
+      "ger": "<u>k</u>eine"
     },
     "None_underlined_char": {
       "cat": "a",
@@ -3853,28 +3853,28 @@ var MessageLang=
       "ger": "n"
     },
     "Proj_underlined_p": {
-      "cat": "Proj",
-      "spa": "Proy",
-      "eng": "Proj",
-      "fre": "Proj",
-      "cze": "Proj",
-      "ger": "Proj"
+      "cat": "<u>P</u>roj",
+      "spa": "<u>P</u>roy",
+      "eng": "<u>P</u>roj",
+      "fre": "<u>P</u>roj",
+      "cze": "<u>P</u>roj",
+      "ger": "<u>P</u>roj"
     },
     "Proj_underlined_r": {
-      "cat": "Proj",
-      "spa": "Proy",
-      "eng": "Proj",
-      "fre": "Proj",
-      "cze": "Proj",
-      "ger": "Proj"
+      "cat": "P<u>r</u>oj",
+      "spa": "P<u>r</u>oy",
+      "eng": "P<u>r</u>oj",
+      "fre": "P<u>r</u>oj",
+      "cze": "P<u>r</u>oj",
+      "ger": "P<u>r</u>oj"
     },
     "ShowWindow_underlined": {
-      "cat": "Mostra finestra",
-      "spa": "Muestra ventana",
-      "eng": "Show window",
-      "fre": "Afficher la fenêtre",
-      "cze": "Zobrazit okno",
-      "ger": "Fenster anzeigen"
+      "cat": "<u>M</u>ostra finestra",
+      "spa": "<u>M</u>uestra ventana",
+      "eng": "S<u>h</u>ow window",
+      "fre": "A<u>f</u>ficher la fenêtre",
+      "cze": "<u>Z</u>obrazit okno",
+      "ger": "<u>F</u>enster anzeigen"
     },
     "ShowWindow_underlined_char": {
       "cat": "m",
@@ -4580,7 +4580,7 @@ var MessageLang=
       "eng": "A layer can not have 2 components. It must have defined 1 or 3 components",
       "fre": "Une couche ne peut pas avoir deux composants. Vous devez avoir défini un ou trois composants",
       "cze": "Vrstva nemůže mít 2 složky. Musí mít definovanou 1 nebo 3 složky",
-      "ger": "Ein Layer kann nicht 2 Komponenten haben. Es müssen 1 oder 3 Komponenten definiert sein."
+      "ger": "Ein Layer kann nicht 2 Komponenten haben. Es müssen 1 oder 3 Komponenten definiert sein"
     },
     "LayerIMGNoDefinesComponents": {
       "cat": "La capa ha estat demanada com img però no hi ha components definides al estil actual.",
@@ -5034,7 +5034,7 @@ var MessageLang=
     "CannotFindTestFields": {
       "cat": "No s'ha trobat el paràmetre 'TEST_FIELDS'",
       "spa": "No se ha encontrado el parámetro 'TEST_FIELDS'",
-      "eng": "Cannot find the 'TEST_FIELDS' parameter",
+      "eng": "Cannot find the 'TEST_FIELDS'  parameter",
       "fre": "Le paramètre 'TEST_FIELDS' n'a pas été trouvé",
       "cze": "Nelze najít parametr 'TEST_FIELDS'",
       "ger": "Der Parameter 'TEST_FIELDS' kann nicht gefunden werden"
@@ -5061,7 +5061,7 @@ var MessageLang=
       "eng": "indicated in TEST_LAYERS parameter does not exist",
       "fre": "indiquée au paramètre TEST_LAYERS n'existe pas",
       "cze": "parametr TEST_LAYERS neexistuje",
-      "ger": "Der im Parameter 'TEST_LAYERS' angegebene Wert existiert nicht"
+      "ger": "Der im Parameter TEST_LAYERS angegebene Wert existiert nicht"
     },
     "RequestedPoint": {
       "cat": "El punt sol·licitat",
@@ -5247,7 +5247,7 @@ var MessageLang=
       "eng": "Do you want to continue without authentication",
       "fre": "Faites-vous quoi continuer sans authentification",
       "cze": "Chcete pokračovat bez ověření",
-      "ger": "Möchten Sie ohne Authentifizierung fortfahren?"
+      "ger": "Möchten Sie ohne Authentifizierung fortfahren"
     },
     "SessionsAlreadyStarted": {
       "cat": "Les sessions han estat ja iniciades",
@@ -5498,7 +5498,7 @@ var MessageLang=
       "spa": "El formato de 'where' no incluye ningún 'Envelope' o 'Polygon' de 2 o más puntos",
       "eng": "The format of 'where' do not have any 'Envelope' or 'Polygon' of 2 or more points",
       "fre": "Le format de 'where' n'inclut pas de 'Envelope' ou ' Polygon ' de 2 ou plus de points",
-      "cze": "Formát 'where' nemá žádný 'Envelope' nebo 'Polygon' 2 nebo více bod.",
+      "cze": "Formát 'where' nemá žádný 'Envelope' nebo 'Polygon' 2 nebo více bod",
       "ger": "Das Format von 'wo' hat keine 'Hülle' oder 'Polygon' von 2 oder mehr Punkten"
     },
     "NonSupportedOperation": {
@@ -5507,7 +5507,7 @@ var MessageLang=
       "eng": "Non supported operation",
       "fre": "'Operation' non supportée",
       "cze": "Nepodporovaná 'Operation'",
-      "ger": "Nicht unterstützte Operation"
+      "ger": "Nicht unterstützte 'Operation'"
     },
     "NonSupportedOperationMethod": {
       "cat": "Métode d'operació",
@@ -5530,7 +5530,7 @@ var MessageLang=
       "spa": "El atributo 'href' no se encontró en la operación",
       "eng": "Attribute 'href' was not found in the operation",
       "fre": "L'attribut 'href' n'a pas été trouvé dans l'opération",
-      "cze": "V operaci nebyl nalezen atribut 'href'.",
+      "cze": "V operaci nebyl nalezen atribut 'href'",
       "ger": "Das Attribut 'href' wurde in der Operation nicht gefunden"
     },
     "requestUrlCannotObtained": {
@@ -5547,7 +5547,7 @@ var MessageLang=
       "eng": "Missing mandatory 'code' attribute on offering",
       "fre": "Manque l'attribut obligatoire 'code' sur l' 'offereing' de",
       "cze": "Chybí povinný atribut 'code' při nabízení",
-      "ger": "Fehlendes obligatorisches Attribut \"code\" für das Angebot"
+      "ger": "Fehlendes obligatorisches Attribut 'code' für das Angebot"
     },
     "NonSupportedOfferingType": {
       "cat": "Tipus d''offering' no acceptat",
@@ -5555,7 +5555,7 @@ var MessageLang=
       "eng": "Non supported offering type",
       "fre": "Type d' 'offering' non supporté",
       "cze": "Nepodporovaný typ 'offering'",
-      "ger": "Nicht unterstützter Angebotstyp"
+      "ger": "Nicht unterstützter 'offering'"
     },
     "OwsContextDocumentNotHaveFeed": {
       "cat": "El document de context OWS no té \"feed\" com a node arrel.",
@@ -5579,7 +5579,7 @@ var MessageLang=
       "eng": "Your OWSC document will not be standard compliant as you have not provided a valid title",
       "fre": "Votre document OWSC ne sera pas conforme avec le norme car vous n'avez pas fourni un titre valable",
       "cze": "Váš dokument OWSC nebude v souladu se standardem, protože jste neuvedli platný název",
-      "ger": "Ihr OWSC-Dokument ist nicht standardkonform, da Sie keinen gültigen Titel angegeben haben."
+      "ger": "Ihr OWSC-Dokument ist nicht standardkonform, da Sie keinen gültigen Titel angegeben haben"
     },
     "DownloadOwscDocument": {
       "cat": "Descarrega document OWSC",
@@ -5684,8 +5684,8 @@ var MessageLang=
       "spa": "Los índices de color deberian ir entre 0 y 255",
       "eng": "Color indices have to be between 0 and 255",
       "fre": "Les valeurs des index de couleurs doivent être comprises entre 0 et 255",
-      "cze": "Barevné indexy musí být v rozmezí 0 až 255.",
-      "ger": "Farbindizes müssen zwischen 0 und 255 liegen."
+      "cze": "Barevné indexy musí být v rozmezí 0 až 255",
+      "ger": "Farbindizes müssen zwischen 0 und 255 liegen"
     },
     "ColorNotObjectInFormat": {
       "cat": "Aquest color no es un objecte RGB en format",
@@ -5699,7 +5699,7 @@ var MessageLang=
       "cat": "Els ### són índexs de color que han d'anar de 0 a 255.",
       "spa": "Los ### són índices de color deberian ir entre 0 y 255.",
       "eng": "The ### are Color indices that have to be between 0 and 255.",
-      "fre": "Les ### sont des indices de couleur qui doivent être compris entre 0 et 255",
+      "fre": "Les ### sont des indices de couleur qui doivent être compris entre 0 et 255.",
       "cze": "### jsou barevné indexy, které musí být mezi 0 a 255.",
       "ger": "Die ### sind Farbindizes, die zwischen 0 und 255 liegen müssen."
     }
@@ -5807,7 +5807,7 @@ var MessageLang=
       "eng": "There are no observations with valid values to obtain logical consistency of attributes in this area",
       "fre": "Il n'y a pas d'observations avec des valeurs valides pour obtenir la cohérence logique des attributs dans ce domaine",
       "cze": "Neexistují žádná pozorování s platnými hodnotami, aby bylo možné získat logickou konzistenci atributů v této oblasti",
-      "ger": "Es gibt keine Beobachtungen mit gültigen Werten, um die logische Kohärenz der Attribute in diesem Bereich zu erhalten."
+      "ger": "Es gibt keine Beobachtungen mit gültigen Werten, um die logische Kohärenz der Attribute in diesem Bereich zu erhalten"
     },
     "OverallConsistencyComparisonIndividualObservation": {
       "cat": "La consistència resumida està basada en la comparació dels valors de cada observació pels atribut/s",
@@ -5838,7 +5838,7 @@ var MessageLang=
       "spa": "No hay observaciones con incertidumbre posicional en esta área",
       "eng": "There are no observations with positional uncertainty in this area",
       "fre": "Il n'y a pas d'observations avec une incertitude de position dans ce domaine",
-      "cze": "V této oblasti nejsou žádná pozorování s polohovou nejistotou.",
+      "cze": "V této oblasti nejsou žádná pozorování s polohovou nejistotou",
       "ger": "In diesem Bereich gibt es keine Beobachtungen mit Positionsunsicherheit"
     },
     "computeDataQuality": {
@@ -5925,16 +5925,17 @@ var MessageLang=
       "cat": "Llista de valors possibles ",
       "spa": "Lista de valores posibles ",
       "eng": "List of possible values ",
-      "fre": "Liste des valeurs possibles",
+      "fre": "Liste des valeurs possibles ",
       "cze": "Seznam možných hodnot ",
-      "ger": "Liste der möglichen Werte"
+      "ger": "Liste der möglichen Werte "
     },
     "valueField": {
       "cat": "valor1camp1;valor1camp2;valor1camp3",
       "spa": "valor1campo1;valor1campo2;valor1campo3",
       "eng": "value1field1;value1field2;value1field3",
       "fre": "valeur1champ1;valeur1champ2;valeur1champ3",
-      "cze": "hodnota1pole1;hodnota1pole2;hodnota1pole3"
+      "cze": "hodnota1pole1;hodnota1pole2;hodnota1pole3",
+      "ger": "Wert1Feld1;Wert1Feld2;Wert1Feld3"
     },
     "GroundTruthLayer": {
       "cat": "Capa veritat terreny",
@@ -6163,7 +6164,7 @@ var MessageLang=
       "fre": "Tableau des éléments vectoriels",
       "cze": "Tabulka vektorových prvků",
       "ger": "Tabelle von vektorialen Elementen"
-    }
+    } 
   },
   "video": {
     "NoLayerAvailableForAnimation": {
@@ -6422,7 +6423,7 @@ var MessageLang=
       "eng": "Result: ",
       "fre": "Résultat: ",
       "cze": "Výsledek: ",
-      "ger": "Ergebnis:"
+      "ger": "Ergebnis: "
     },
     "Accepted": {
       "cat": "Acceptat",
@@ -6469,8 +6470,8 @@ var MessageLang=
       "spa": "Error: ",
       "eng": "Failed: ",
       "fre": "Erreur: ",
-      "cze": "Neúspěšně:",
-      "ger": "Fehlgeschlagen:"
+      "cze": "Neúspěšně: ",
+      "ger": "Fehlgeschlagen: "
     },
     "NoValueDefinedParameter": {
       "cat": "No s'ha definit cap valor pel paràmetre",
@@ -6498,7 +6499,7 @@ var MessageLang=
     },
     "isInvalid": {
       "cat": "és invàlida",
-      "spa": " es invalida",
+      "spa": "es invalida",
       "eng": "is invalid",
       "fre": "n'est pas valide",
       "cze": "je neplatný",
@@ -6574,7 +6575,7 @@ var MessageLang=
       "eng": "Operation to execute: ",
       "fre": "Opération à exécuter: ",
       "cze": "Operace, která se má provést: ",
-      "ger": "Auszuführende Operation:"
+      "ger": "Auszuführende Operation: "
     },
     "someProcessWithoutOperation": {
       "cat": "té processos sense cap operació definida",
@@ -6611,20 +6612,20 @@ var MessageLang=
       "ger": "ajuda/eng/ajuda.htm"
     },
     "installerMMRExe": {
-      "cat": "https://www.miramon.cat/mmr/cat/exe/Inst_MMR.EXE",
-      "spa": "https://www.miramon.cat/mmr/esp/exe/Inst_MMR.EXE",
-      "eng": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
-      "fre": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
-      "cze": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.EXE",
-      "ger": "http://www.creaf.uab.cat/miramon/mmr/usa/exe/Inst_MMR.EXE"
+      "cat": "https://www.miramon.cat/mmr/cat/exe/Inst_MMR.exe",
+      "spa": "https://www.miramon.cat/mmr/esp/exe/Inst_MMR.exe",
+      "eng": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.exe",
+      "fre": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.exe",
+      "cze": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.exe",
+      "ger": "https://www.miramon.cat/mmr/usa/exe/Inst_MMR.exe"
     }
   },
   "impressio": {
     "ReferSystem": {
-      "cat": "Sistema de Referència",
-      "spa": "Sistema de Referéncia",
-      "eng": "Reference System",
-      "fre": "Système de référence",
+       "cat": "Sistema de Referència",
+       "spa": "Sistema de Referéncia",
+       "eng": "Reference System",
+       "fre": "Système de référence",
       "cze": "Referenční systém",
       "ger": "Koordinatenbezugssystem"
     },
@@ -6645,8 +6646,8 @@ var MessageLang=
       "ger": "Untertitel"
     },
     "SizeOrientationPaper": {
-      "cat": "Mida i orientació del paper",
-      "spa": "Tamaño y orientación del papel",
+      "cat": "Mida i orientació del paper", 
+      "spa": "Tamaño y orientación del papel", 
       "eng": "Size and orientation of the paper",
       "fre": "Dimensions et position du papier",
       "cze": "Velikost a orientace papíru",
@@ -6696,8 +6697,8 @@ var MessageLang=
       "cat": "La resolució assignada a la impressora pel navegador és suficient per imprimir la vista",
       "spa": "La resolución asignada a la impresora por el navegador es suficiente para imprimir la vista",
       "eng": "The resolution assigned to the printer in a browser is enough to print the view",
-      "fre": "La résolution assignée à l'imprimante par le navigateur est suffisante pour imprimer la vue",
-      "cze": "",
+      "fre": "La résolution assignée à l'imprimante par le navigateur est suffisante  pour imprimer la vue",
+      "cze": "Rozlišení přiřazené tiskárně v prohlížeči stačí k vytištění pohledu",
       "ger": "Die dem Drucker im Browser zugewiesene Auflösung reicht aus, um die Ansicht auszudrucken"
     },
     "ElementsToPrint": {
@@ -6768,34 +6769,35 @@ var MessageLang=
   "colors": {
     "ApplyNewColor": {
       "cat": "Per aplicar un nou color feu un clic directament sobre el color desitjat",
-      "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
-      "eng": "To apply a new color, please click on the wished color",
-      "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
+	    "spa": "Para aplicar un nuevo color haga clic directamente sobre el color deseado",
+	    "eng": "To apply a new color, please click on the wished color",
+	    "fre": "Pour appliquer une nouvelle couleur, faire clic sur la couleur désirée",
       "cze": "Chcete-li použít novou barvu, klikněte na požadovanou barvu",
       "ger": "Für eine Farbänderung, klicken Sie bitte auf die gewünschte Farbe"
     }
   },
   "config": {
+    // Totes les claus d'aquesta secció "config" no estan en anglès perque corresponen a les paraules reservades definides per Layers -> name, com ara llegenda, situacio, coord, etc
     "llegenda": {
       "cat": "Llegenda i control de les capes",
       "spa": "Leyenda y control de capas",
       "eng": "Legend & layer control",
       "fre": "Contrôle des légendes et des couches",
       "cze": "Legenda a ovládání vrstev",
-      "ger": "Legende & Layerkontrolle"
+      "ger": "Legenden und Layerkontrolle"
     },
     "coord": {
       "cat": "Posició actual",
-      "spa": "Posición actual",
-      "eng": "Current position",
+	  "spa": "Posición actual",
+	  "eng": "Current position",
       "fre": "Position actuelle",
       "cze": "Současná pozice",
       "ger": "aktuelle Position"
     },
     "situacio": {
       "cat": "Mapa de situació",
-      "spa": "Mapa de situación",
-      "eng": "Situation map",
+	  "spa": "Mapa de situación",
+	  "eng": "Situation map",
       "fre": "Carte de situation",
       "cze": "Situační mapa",
       "ger": "Übersichtskarte"
