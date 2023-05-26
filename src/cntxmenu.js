@@ -2965,7 +2965,42 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 	{
 		var atribut=ParamCtrl.capa[i_capa].atributs[i_estil];
 		if (typeof atribut.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? atribut.calcul : AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+			//return (i_capa_ref==i_capa) ? atribut.calcul : AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+		{
+			// Cal mirar si he de canviar la referència del càlcul en funció de si hi ha i_data i dimensions en el que s'ha seleccionat i en el càlcul que hi havia
+			if(i_capa_ref==i_capa)
+			{
+				var s=atribut.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
+				while ((inici=s.indexOf("{"))!=-1)
+				{
+					//busco una clau de tancar
+					final=s.indexOf("}");
+					if  (final==-1)
+					{
+						alert("Character '{' without '}' in 'calcul' in capa" + i_capa);
+						return s;
+					}
+					cadena=s.substring(inici, final+1);
+					//interpreto el fragment metajson
+					nou_valor=JSON.parse(cadena);
+					if (nou_valor.i_capa==i_capa &&
+						(((typeof i_valor==="undefined" || i_valor==null) && (typeof nou_valor.prop==="undefined" || nou_valor.prop==null)) ||						
+							nou_valor.prop==ParamCtrl.capa[i_capa].atributs[i_estil].nom))
+					{
+						// Estic revisant la mateixa capa en el mateix estil
+						// la reescric de nou						
+						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data);												
+						nou_calcul+=s.substring(0, inici) + nou_valor;
+					}
+					else
+						nou_calcul+=s.substring(0, inici)+cadena;
+					s=s.substring(final+1, s.length);
+				}
+				nou_calcul=nou_calcul+s;				
+				return nou_calcul;
+			}			
+			return AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+		}
 		if (typeof atribut.FormulaConsulta!=="undefined")
 		{
 			var s=atribut.FormulaConsulta;
@@ -2984,8 +3019,44 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 		var component_sel=ParamCtrl.capa[i_capa].estil[i_estil].component[0], s_patro, i;
 
 		if (typeof component_sel.calcul!=="undefined")
-			return (i_capa_ref==i_capa) ? component_sel.calcul : AfegeixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
-		if (typeof component_sel.FormulaConsulta!=="undefined")
+			//return (i_capa_ref==i_capa) ? component_sel.calcul : AfegeixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
+		{
+			// Cal fer alguna cosa aquí si la capa i_capa_ref i i_capa és la capa en qüestió i tinc dates i/o dimensions, perquè segurament en el càlcul no hi és perquè vull anar fent la que 
+			// estigui seleccionada. Però suposo que també he de poder fer la data per defecte per si per exemple vull fer el valor de la banda o del calcul *10
+			// Cal mirar si he de canviar la referència del càlcul en funció de si hi ha i_data i dimensions en el que s'ha seleccionat i en el càlcul que hi havia
+			if(i_capa_ref==i_capa)
+			{
+				var s=component_sel.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
+				while ((inici=s.indexOf("{"))!=-1)
+				{
+					//busco una clau de tancar
+					final=s.indexOf("}");
+					if  (final==-1)
+					{
+						alert("Character '{' without '}' in 'calcul' in capa" + i_capa);
+						return s;
+					}
+					cadena=s.substring(inici, final+1);
+					//interpreto el fragment metajson
+					nou_valor=JSON.parse(cadena);
+					if (nou_valor.i_capa==i_capa && (nou_valor.i_valor==i_estil || 
+						((typeof nou_valor.i_valor==="undefined" ||  nou_valor.i_valor==null) && (typeof i_estil==="undefined" ||  i_estil==null))))
+					{
+						// Estic revisant la mateixa capa en el mateix estil
+						// la reescric de nou						
+						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data);												
+						nou_calcul+=s.substring(0, inici) + nou_valor;
+					}
+					else
+						nou_calcul+=s.substring(0, inici)+cadena;
+					s=s.substring(final+1, s.length);
+				}
+				nou_calcul=nou_calcul+s;				
+				return nou_calcul;
+			}
+			return AfegeixIcapaACalcul(component_sel.calcul, i_capa, i_estil);
+		}
+		if (typeof component_sel.FormulaConsulta!=="undefined" && component_sel.FormulaConsulta!=null)
 		{
 			var valors=ParamCtrl.capa[i_capa].valors;
 			var s=component_sel.FormulaConsulta;

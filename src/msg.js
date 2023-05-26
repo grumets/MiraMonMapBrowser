@@ -2585,12 +2585,12 @@ var MessageLang=
       "ger": "Selektor"
     },
     "SelectedInLayer": {
-      "cat": "Seleccionada a la capa",
-      "spa": "Seleccionada en la capa",
-      "eng": "Selected in the layer",
-      "fre": "Sélectionné dans la couche",
-      "cze": "Vybrané ve vrstvě",
-      "ger": "In dem Layer ausgewählt"
+      "cat": "Valor seleccionat al desplegable de la llegenda",
+      "spa": "Valor seleccionado en el desplegable de la leyenda",
+      "eng": "Value selected in the legend dropdown",
+      "fre": "Valeur choisie dans la légende sélectionnable",
+      "cze": "Hodnota vybraná v rozevíracím seznamu legend",
+      "ger": "Im Legenden-Dropdown ausgewählter Wert"
     },
     "byDefault": {
       "cat": "per defecte",
