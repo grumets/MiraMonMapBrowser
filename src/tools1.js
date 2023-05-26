@@ -2829,7 +2829,7 @@ var jsonFile = null;
 
 function makeHrefData(data, toType = "text/json", content)
 {
-	var blobData = new Blob([JSON.stringify(data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
+	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
 
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.

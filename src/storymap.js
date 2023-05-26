@@ -196,7 +196,7 @@ function FinalitzarStoryMap()
 	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
 	for (let i_Story = 0, passosLength = novaStoryMap.passos.length; i_Story < passosLength; i_Story++) {
 		const pas = novaStoryMap.passos[i_Story];
-		cdns.push("<div data-mm-center='{x:"+pas.x + ", y:" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
+		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
 	}
 	cdns.push("</html>");
 	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol, ".html")
