@@ -712,10 +712,12 @@ function DonaCadena(a)
 		return a.fre;
 	if (a.cze && ParamCtrl.idioma=="cze")
 		return a.cze;
+	if (a.ger && ParamCtrl.idioma=="ger")
+		return a.ger;
 	if (a.eng)   //Si no hi ha l'idioma solicitat faig que xerri en anglès
 		return a.eng;
 
-	if (a.cat==null && a.spa==null && a.eng==null && a.fre==null && a.cze==null)  //Cas de cadena no multiidioma
+	if (a.cat==null && a.spa==null && a.eng==null && a.fre==null && a.cze==null && a.ger==null)  //Cas de cadena no multiidioma
 		return a;
 	return null;
 }
@@ -742,6 +744,9 @@ function DonaCadenaLang(cadena_lang)
 				return cadena_lang.eng;
 			case "cze":
 				if(cadena_lang.cze)return cadena_lang.cze;
+				return cadena_lang.eng;
+			case "ger":
+				if(cadena_lang.ger)return cadena_lang.ger;
 				return cadena_lang.eng;
 		}
 	}
@@ -851,6 +856,8 @@ function DonaCadenaConcret(a, idioma)
 		return a.fre;
 	if (idioma=="cze" && a!=null && a.cze!=null)
 		return a.cze;
+	if (idioma=="ger" && a!=null && a.ger!=null)
+		return a.ger;
 	return a;
 }
 
@@ -887,6 +894,7 @@ function getISOLanguageTag(language)
 		case "eng": return "en";
 		case "fre": return "fr";
 		case "cze": return "cs";
+		case "ger": return "de";
 	}
 	return "";
 }
@@ -906,6 +914,7 @@ function getMMNLanguagefromISO(isoLanguage)
 		case "es": return "spa";
 		case "fr": return "fre";
 		case "cs": return "cze";
+		case "de": return "ger";
 	}
 	return "";
 }
