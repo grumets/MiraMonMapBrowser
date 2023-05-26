@@ -137,7 +137,7 @@ function AnarAObjVectorialTaula(x, y, crs_obj, minX, maxX, minY, maxY)
 		punt_coord={x:x, y:y};
 		TransformaCoordenadesPunt(punt_coord, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	}
-	TransformaEnvolupant(env_obj, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	env_obj=TransformaEnvolupant(env_obj, crs_obj, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 
 	// Dibuixo la icona per mostrar el punt de l'objecte
 	if (typeof ParamCtrl.ICapaVolaAnarObj !== "undefined")

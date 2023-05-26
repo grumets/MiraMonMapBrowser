@@ -1605,7 +1605,7 @@
 						}
 					},
 					"dimensioExtra": {
-						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibiilltats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció de la clau i els valors d'una dimensió",
@@ -1665,8 +1665,7 @@
 						"description": "Descripció de la capa per la llegenda. Opcional.",
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},	
-					"estil": {
-					
+					"estil": {					
 						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
 						"type": ["array", "null"],
 						"items": {
