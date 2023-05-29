@@ -582,6 +582,8 @@ var a={};
 			a.fre=cadena1.fre;
 		if(typeof cadena1.cze!=="undefined")
 			a.cze=cadena1.cze;
+		if(typeof cadena1.ger!=="undefined")
+			a.ger=cadena1.ger;
 		if(typeof cadena2==="object")
 		{
 			if(typeof cadena2.cat!=="undefined")
@@ -619,6 +621,13 @@ var a={};
 				else
 					a.cze+=(cadena2.cze?cadena2.cze:"");
 			}
+			if(typeof cadena2.ger!=="undefined")
+			{
+				if(typeof a.ger==="undefined" || !a.ger)
+					a.ger=cadena2.ger;
+				else
+					a.ger+=(cadena2.ger?cadena2.ger:"");
+			}
 		}
 		else if(cadena2)
 		{
@@ -642,6 +651,10 @@ var a={};
 				a.cze=cadena2;
 			else
 				a.cze+=cadena2;
+			if(typeof a.ger==="undefined" || !a.ger)
+				a.ger=cadena2;
+			else
+				a.ger+=cadena2;
 		}
 	}
 	else if(cadena1)
@@ -657,6 +670,8 @@ var a={};
 			a.fre=cadena1 + (cadena2.fre?cadena2.fre:"");
 		if(typeof cadena2.cze!=="undefined")
 			a.cze=cadena1 + (cadena2.cze?cadena2.cze:"");
+		if(typeof cadena2.ger!=="undefined")
+			a.ger=cadena1 + (cadena2.ger?cadena2.ger:"");
 	}
 	else
 	{
@@ -671,6 +686,8 @@ var a={};
 			a.fre=cadena2.fre;
 		if(typeof cadena2.cze!=="undefined")
 			a.cze=cadena2.cze;
+		if(typeof cadena2.ger!=="undefined")
+			a.ger=cadena2.ger;
 	}
 	return a;
 }
