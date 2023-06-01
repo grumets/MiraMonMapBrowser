@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -705,7 +705,8 @@ var capa=ParamCtrl.capa[i_capa];
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
 				ParamCtrl.idioma,
-				DonaAccessTokenTypeFeedback(capa));
+				DonaAccessTokenTypeFeedback(capa),
+				"MostraFinestraFeedbackAmbScope");
 }
 
 function AdoptaEstil(params_function, guf)

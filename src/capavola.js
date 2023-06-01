@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -87,8 +87,9 @@ function MostraFinestraAnarCoordenada()
 
 function MostraFinestraAnarCoordenadaEvent(event) //Afegit Cristian 19/01/2016
 {
-	MostraFinestraAnarCoordenada()
-	dontPropagateEvent(event)
+	ComprovaCalTancarFeedbackAmbScope();
+	MostraFinestraAnarCoordenada();
+	dontPropagateEvent(event);
 }//Fi de MostraFinestraAnarCoordenada()
 
 //No usar: Useu TancaFinestraLayer("anarCoord");
@@ -100,7 +101,109 @@ function TancaFinestra_anarCoord()
 	   CreaVistes();
 	}
 }//Fi de TancaFinestra_anarCoord()
+//OG: mostra finestra que permetrà afegir envolupant a un FB
+function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
+{
+	
+	var trg=targets;
+	var lng=lang;
+	var tkn=access_token_type;
 
+	if (!ObreFinestra(window, "fbScope", GetMessage("ofUserFeedbackScope", "capavola")))
+		return;
+	
+
+	
+	OmpleFinestraFeedbackAmbScope(trg, lng, tkn);
+
+	CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+	CanviaEstatClickSobreVista("ClickRecFB1");
+	TancaFinestraLayer("feedback");
+
+	return;
+}
+
+//OG: aquesta funció és la que haurà d'omplir la finestra escrivint el codi hmtl
+function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
+{
+	var trg=JSON.stringify(targets);
+	var lng=lang;
+	var tkn=access_token_type;
+
+	var cdns=[];
+	cdns.push('<form name="FeedbackScope_win" onSubmit="return false;">',
+		'<span>', DonaCadenaLang({"cat":"Usa el ratolí per marcar una àrea d'interès:","spa":"Usa el ratón para marcar un área de interés:","eng":"Use the mouse to select an area of interest:","fre":"Utiliser la souris pour sélectionner une zone d'intérêt:"}),'</span>',
+		'<br><br>',
+		'<table class="Verdana11px" width="50%" align="center">',
+			'<tr>',
+				'<td colspan="2">',DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),'</td>',
+				'<td style="text-align:center;">Ymax</td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td style="text-align:rigth;">Xmin</td>',
+				'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="7" value="" disabled></td>',
+				'<td style="text-align:left;">Xmax</td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td style="text-align:center;">Ymin</td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+		'</table>',
+		'<table class="Verdana11px" width="50%" align="center">',
+			'<tr>',
+				'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="',GetMessage("OK"),'"'," onClick='GUFAfegirFeedbackScopeCapaMultipleTargets(",trg,", \"",lng, "\", \"",tkn,"\"",");TancaFinestraLayer(\"fbScope\");'",'></td>',
+				'<td align="center"><input class="Verdana11px" type="button" name="Tancar" value="',GetMessage("Cancel"),'"'," onClick='TancaFinestraLayer(\"fbScope\");'",'></td>',
+			'</tr>',
+		'</table>',
+	'</form>');
+	contentFinestraLayer(window, "fbScope", cdns.join(""));
+}
+
+
+function TancaFinestraFeedbackAmbScope()
+{
+	//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
+	//Aquí estem en la situació que hem tancat la caixa des del botó tancar.
+	ParamCtrl.EstatClickSobreVista="ClickConLoc";
+	CanviaEstatClickSobreVista("ClickConLoc");
+	RepintaMapesIVistes();
+}
+
+function ComprovaCalTancarFeedbackAmbScope(estat)
+{
+	//si estem fent un FB amb Scope i clickem sobre algun botó de la barra d'eines que obra una finestra nova (anar a coord, config, calc, etc.) tanquem la finestra fbScope i posem per defecte el mouse a ConLoc
+	if (ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
+	{
+		TancaFinestraLayer("fbScope");
+		//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
+		if(!estat) //Aquí estem en una situació en què estem tancant la caixa pq estem entrant a una nova finestra de l'estil anar a coord, config, calc, etc.
+		{
+			CanviaEstatClickSobreVista("ClickConLoc");
+			CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc","p");
+		} // si si que hi ha "estat", vol dir que estem seleccionant una eina de zoom, pan, etc i que CanviaEstatClickSobreVista segueix en seu curs normal.
+	}
+}
 function CanviaEtiquetesAnarCoord(sel)
 {
 	if(sel == 0)

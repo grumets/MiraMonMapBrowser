@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -2292,6 +2292,7 @@ function OmpleAfegeixCapaServidor(elem, i_capa)
 
 function IniciaFinestraAfegeixCapaServidor(i_capa)
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2300,6 +2301,7 @@ var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser",
 
 function IniciaFinestraCalculadoraCapes()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsOfLayers", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2308,6 +2310,7 @@ var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsO
 
 function IniciaFinestraCombiCapa()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "combinacioCapa", GetMessage("toCombineLayers", "cntxmenu"));
 	if (!elem)
 		return;

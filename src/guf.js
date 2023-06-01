@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -161,20 +161,20 @@ function GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, seed_div_id
 	loadFile(url, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: seed_div_id, lang: lang, access_token_type: access_token_type, callback_function: callback_function, params_function: params_function, edit_button: false});
 }
 
-function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type)
+function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type, nom_funcio_scope)
 {
 var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
-	return GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type);
+	return GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope);
 }
 
-function GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type)
+function GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope)
 {
 	for (var i=0; i<targets.length; i++)	
 	{
 		if (targets[i].codespace) //decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara
 			targets[i].codespace=targets[i].codespace.replace("https://","http://");
 	}
-	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(seed_div_id, rsc_type, targets, lang, access_token_type);
+	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope);
 	//demano el fitxer atom de feedbacks previs
 	GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(seed_div_id, rsc_type, targets, lang, access_token_type);
 }
@@ -341,6 +341,15 @@ var cdns=[];
 		document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
 		return;
 	}
+	//OG: canviem de posició el botó edit, que inicialment estava al final de tot de la llista de FB
+	if (typeof extra_param.edit_button!=="undefined" && extra_param.edit_button==false)
+	; //si el param no existeix o diu que no vull botó no el poso
+	else
+		cdns.push("<div class=\"guf_edit user\"><input type=\"button\" class=\"guf_button user\" value=\"",
+			GUFDonaCadenaLang({"cat":"Edita", "spa":"Edita", "eng":"Edit", "fre":"Éditer"}, extra_param.lang), "\"",
+			" onClick='GUFOpenNimmbus(\"", extra_param.lang, "\",\"", extra_param.access_token_type, "\");' /> ",
+			GUFDonaCadenaLang({"cat":"les teves entrades prèvies", "spa":"tus entradas previas", "eng":"your previous entries", "fre":"vos entrées précédentes"}, extra_param.lang), "</div><!-- guf_edit -->"); 
+			//fi de  "</div><!-- guf_report -->");
 	var type;
 	//cdns.push("<div class=\"guf_report user\">");
 	for (var i=0; i<owc.features.length; i++)
@@ -373,14 +382,6 @@ var cdns=[];
 			cdns.push("</fieldset>");		
 		}
 	}
-	if (typeof extra_param.edit_button!=="undefined" && extra_param.edit_button==false)
-		; //si el param no existeix o diu que no vull botó no el poso
-	else
-		cdns.push("<div class=\"guf_edit user\"><input type=\"button\" class=\"guf_button user\" value=\"",
-			GUFDonaCadenaLang({"cat":"Edita", "spa":"Edita", "eng":"Edit", "fre":"Éditer"}, extra_param.lang), "\"",
-			" onClick='GUFOpenNimmbus(\"", extra_param.lang, "\",\"", extra_param.access_token_type, "\");' /> ",
-			GUFDonaCadenaLang({"cat":"les teves entrades prèvies", "spa":"tus entradas previas", "eng":"your previous entries", "fre":"vos entrées précédentes"}, extra_param.lang), "</div><!-- guf_edit -->"); 
-	//fi de  "</div><!-- guf_report -->");
 	document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
 	for (var i=0; i<owc.features.length; i++)
 	{
@@ -885,12 +886,17 @@ function GUFDonaNomFitxerAddFeedbackMutipleTargets(targets, lang, access_token_t
 	{		
 		if (targets[i].title && targets[i].title!="" && targets[i].code && targets[i].code!="" && targets[i].codespace && targets[i].codespace!="")
 		{	//aquest target és vàlid
+			//OG: aquí afegim el bbox i el gml pol a la query que rebrà el nimmbus
 			if (n_targets==0) //i és el primer
-				url+="?target_title=" + targets[i].title + "&target_code=" + targets[i].code + "&target_codespace=" + targets[i].codespace + (targets[i].role ? ("&target_role=" + targets[i].role) : ""); 	
+				url+="?target_title=" + targets[i].title + "&target_code=" + targets[i].code + "&target_codespace=" + targets[i].codespace + (targets[i].role ? ("&target_role=" + targets[i].role) : "") +
+				 (targets[i].bbox ? ("&target_geo_bbox=" + targets[i].bbox.xmin+","+targets[i].bbox.xmax+","+targets[i].bbox.ymin+","+targets[i].bbox.ymax ): "")+
+				 (targets[i].gmlpol ? ("&target_bnd_pol=" + targets[i].gmlpol.gml) : ""); 	
 			else
 				url+="&target_title_" + (n_targets+1) + "=" + targets[i].title + "&target_code_" + (n_targets+1) + "=" + targets[i].code + 
 						"&target_codespace_" + (n_targets+1) + "=" + targets[i].codespace + 
-						(targets[i].role ? ("&target_role_" + (n_targets+1) + "=" + targets[i].role) : ""); 	
+						(targets[i].role ? ("&target_role_" + (n_targets+1) + "=" + targets[i].role) : "")+
+						(targets[i].bbox ? ("&target_geo_bbox_" + (n_targets+1) + "=" + targets[i].bbox.xmin+","+targets[i].bbox.xmax+","+targets[i].bbox.ymin+","+targets[i].bbox.ymax ): "") +
+				 		(targets[i].gmlpol ? ("&target_bnd_pol_"+ (n_targets+1) + "=" + targets[i].gmlpol.gml) : "")	; 	
 			n_targets++;
 		}		
 		
@@ -979,7 +985,7 @@ function TornaNTargetsSecundaris(targets)
 	return n_targets_secundaris;
 }
 
-function GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(div_id, rsc_type, targets, lang, access_token_type)
+function GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope) 
 {
 var cdns=[];
 var n_targets_secundaris=0;
@@ -998,6 +1004,13 @@ var n_targets_secundaris=0;
 				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}, lang), "\"",
 				  " onClick='GUFAfegirFeedbackCapaMultipleTargets(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
 
+	//OG: nou botó per afegir scope a un FB
+	if (nom_funcio_scope)
+	{
+		cdns.push("<input type=\"button\" class=\"guf_button user\" value=\"",
+				  GUFDonaCadenaLang({"cat":"Valoració d'una àrea específica", "spa":"Valoración de un área específica", "eng":"Feedback of a specific area", "fre":"Rétroaction d'un domaine spécifique"}, lang), "\"",
+				  " onClick='"+nom_funcio_scope+"(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
+	}
 	if (rsc_type != "")
 		cdns.push("</fieldset></div>");
 	else
@@ -1038,4 +1051,51 @@ function EnviaReprodUsageComAPostMessage(event)
 		GUFFeedbackWindow.postMessage(ReprodUsageForPostMessage, ClientGUF);
 		ReprodUsageForPostMessage="";
 	}
+}
+
+//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
+function GUFAfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
+{
+	//comprovem que tenim totes les coordenades
+	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
+	{
+		alert(GUFDonaCadenaLang({"cat":"Falten coordenades", "spa":"Faltan coordenadas", "eng":"Coordinates missing", "fre":"Coordonnées manquantes"}, lang));
+		TancaFinestraLayer("fbScope");
+	}
+
+	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+	
+	//ulc: upper left corner lrc: lower rigth corner
+	var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
+	var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
+	
+	var trg=JSON.parse(targets);
+	var dec=ParamCtrl.NDecimalsCoordXY;
+
+	// si les coordenades no són en lon/lat, les transformem
+	if (crs !="EPSG:4326" && crs !="CRS:84")
+	{
+		var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
+		var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+
+		for (var i=0; i<trg.length; i++)
+		{
+			//afegim el bounding box en lon/lat
+			trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec),"xmax":OKStrOfNe(lrc_ll.x,dec),"ymin": OKStrOfNe(lrc_ll.y,dec),"ymax":OKStrOfNe(ulc_ll.y,dec)};
+			//afegim el GMLpol en el crs original
+			trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+		}
+
+	}
+	else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+	{
+		for (var i=0; i<trg.length; i++)
+		{
+			//afegim el bounding box en lon/lat
+			trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
+			//afegim el GMLpol
+			trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+		}
+	}
+	GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
 }

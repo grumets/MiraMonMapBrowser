@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3285,8 +3285,15 @@ var MessageLang=
       "spa": "La geolocalización no está soportada en este navegador",
       "eng": "Geolocation is not supported by this browser",
       "fre": "La géolocalisation n'est pas prise en charge dans ce navigateur",
-      "cze": "Geolokace není tímto prohlížečem podporována",
-      "ger": "Die Geolokalisierung wird von diesem Browser nicht unterstützt"
+      "cze": "Geolokace není tímto prohlížečem podporována"
+    },
+    "ofUserFeedbackScope": {
+      "cat": "de valoració d'una àrea específica",
+      "spa": "de valoración de un área específica",
+      "eng": "of a feedback for a specific area",
+      "fre": "pour la rétroaction d'un domaine spécifique",
+      "cze": "posouzení konkrétní oblasti",
+      "ger": "einen bestimmten Bereichs"
     }
   },
   "commands": {
@@ -4311,8 +4318,15 @@ var MessageLang=
       "spa": "Ir a coordenada",
       "eng": "Go to coordinate",
       "fre": "Aller à la coordonnée",
-      "cze": "Přejít na souřadnice",
-      "ger": "Zur Koordinate gehen"
+      "cze": "Přejít na souřadnice"
+    },
+    "FBwithScope":{
+      "cat": "Definir envolupant de valoració",
+      "spa": "Definir ámbito de valoración",
+      "eng": "Define feedback's scope",
+      "fre": "Définir domaine de l'évaluation",
+      "cze": "Definujte doménu hodnocení",
+      "ger": "Definieren Sie den Umfang der Beurteilung"
     },
     "previousView": {
       "cat": "vista prèvia",
