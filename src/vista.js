@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -973,7 +973,7 @@ var capa=ParamCtrl.capa[i_capa];
 			else*/
 			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
 			{
-				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param, null, null, null);
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null);
 				return;
 			}
 		}

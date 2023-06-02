@@ -686,7 +686,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 function DonaNomFitxerDescarregaTot(i_capa, i_des, i_format, i_data)
 {
 var capa=ParamCtrl.capa[i_capa];
-var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data);
+var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data, null);
 
 	if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension)
 	{

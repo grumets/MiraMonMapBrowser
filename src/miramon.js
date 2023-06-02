@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -2805,8 +2805,8 @@ var capa=ParamCtrl.capa[i_capa];
 function DonaNomFitxerMetadades(capa, i_estil)
 {
 	if (i_estil==-1)
-		return CanviaVariablesDeCadena(DonaCadena(capa.metadades.standard), capa, null);
-	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null);
+		return CanviaVariablesDeCadena(DonaCadena(capa.metadades.standard), capa, null, null);
+	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null, null);
 }
 
 function EsCapaVisibleAAquestNivellDeZoom(capa)
