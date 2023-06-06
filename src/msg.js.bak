@@ -2995,7 +2995,7 @@ var MessageLang=
     "NoObjectSelectedExport": {
       "cat": "No s'ha seleccionat cap objecte per exportar",
       "spa": "No se ha seleccionado ningún objeto para exportar",
-      "eng": "No features has been selected for export",
+      "eng": "No object has been selected for export",
       "fre": "Aucun objet n'a été sélectionné pour l'exportation",
       "cze": "Pro export nebyl vybrán žádný objekt",
       "ger": "Es wurde kein Objekt zum Exportieren ausgewählt"
@@ -3003,7 +3003,7 @@ var MessageLang=
     "NoObjectsToDisplay": {
       "cat": "No hi han objectes d'aquesta capa per mostrar",
       "spa": "No hay objectos de esta capa para mostrar",
-      "eng": "There are no features of this layer to display",
+      "eng": "There are no objects of this layer to display",
       "fre": "Il n'y a pas d'objets de cette couche à afficher",
       "cze": "Neexistují žádné objekty této vrstvy, které by bylo možné zobrazit",
       "ger": "Es sind keine Objekte dieses Layers zum Anzeigen vorhanden"
@@ -3011,7 +3011,7 @@ var MessageLang=
     "NoObjectsToDisplayWithinRange": {
       "cat": "No hi han objectes d'aquesta capa dins l'àmbit de vista actual",
       "spa": "No hay objectos de esta capa dentro de l'ámbito vista actual",
-      "eng": "There are no feautures of this layer within the current view range",
+      "eng": "There are no objects of this layer within the current view range",
       "fre": "Il n'y a pas d'objets de cette couche dans le champ de vision actuel",
       "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy",
       "ger": "Innerhalb des aktuellen Sichtbereiches sind keine Objekte dieses Layers zum Anzeigen vorhanden"
@@ -3037,7 +3037,7 @@ var MessageLang=
     "NoStoryInThisArea": {
       "cat": "No hi ha cap relat associat a aquesta zona",
       "spa": "No hay ningún relato asociado a esta zona",
-      "eng": "There are no storymap associated with this area",
+      "eng": "There are no stories associated with this area",
       "fre": "Il n'y a pas d'histoires associées à cette zone",
       "cze": "K této oblasti nejsou přiřazeny žádné příběhy",
       "ger": "Diesem Bereich sind keine Beiträge zugeordnet"
@@ -3287,14 +3287,6 @@ var MessageLang=
       "fre": "La géolocalisation n'est pas prise en charge dans ce navigateur",
       "cze": "Geolokace není tímto prohlížečem podporována",
       "ger": "Die Geolokalisierung wird von diesem Browser nicht unterstützt"
-    },
-    "ofUserFeedbackScope": {
-      "cat": "de valoració d'una àrea específica",
-      "spa": "de valoración de un área específica",
-      "eng": "of a feedback for a specific area",
-      "fre": "pour la rétroaction d'un domaine spécifique",
-      "cze": "posouzení konkrétní oblasti",
-      "ger": "einen bestimmten Bereichs"
     }
   },
   "commands": {
@@ -3945,7 +3937,7 @@ var MessageLang=
     "InsertTransactionObjectIntoLayer": {
       "cat": "La transacció d'inserció a la capa",
       "spa": "La transacción de inserción a la capa",
-      "eng": "The insert transaction of the feature into the layer",
+      "eng": "The insert transaction of the object into the layer",
       "fre": "L'opération d'insertion de l'objet dans la couche",
       "cze": "Transakce vložení objektu do vrstvy",
       "ger": "Der Einfügevorgang des Objekts in den Layer"
@@ -3961,7 +3953,7 @@ var MessageLang=
     "InsertTransactionObject": {
       "cat": "La transacció d'inserció de l'objecte",
       "spa": "La transacción de inserción del objeto",
-      "eng": "The insert transaction of the feature",
+      "eng": "The insert transaction of the object",
       "fre": "La transaction d'insertion de l'objet",
       "cze": "Transakce vložení objektu",
       "ger": "Die Einfügetransaktion des Objekts"
@@ -4322,14 +4314,6 @@ var MessageLang=
       "cze": "Přejít na souřadnice",
       "ger": "Zur Koordinate gehen"
     },
-    "FBwithScope":{
-      "cat": "Definir envolupant de valoració",
-      "spa": "Definir ámbito de valoración",
-      "eng": "Define feedback's scope",
-      "fre": "Définir domaine de l'évaluation",
-      "cze": "Definujte doménu hodnocení",
-      "ger": "Definieren Sie den Umfang der Beurteilung"
-    },
     "previousView": {
       "cat": "vista prèvia",
       "spa": "vista previa",
@@ -4413,7 +4397,7 @@ var MessageLang=
     "TypicalOrObjectQuery": {
       "cat": "Consulta típica o per objectes",
       "spa": "Consulta típica o por objetos",
-      "eng": "Typical or feature query",
+      "eng": "Typical or object query",
       "fre": "Recherche typique où par objets",
       "cze": "Typický nebo objektový dotaz",
       "ger": "Typische oder Objektabfrage"
@@ -6168,7 +6152,7 @@ var MessageLang=
     "CannotSelectObjectLayerNoExist": {
       "cat": "No es poden seleccionar els objectes sol·licitats perquè la capa no existeix",
       "spa": "No se pueden seleccionar los objetos solicitados porquè la capa no existe",
-      "eng": "Cannot select request features because the layer doesn't exist",
+      "eng": "Cannot select request object because the layer doesn't exist",
       "fre": "Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas",
       "cze": "Nelze vybrat objekt požadavku, protože vrstva neexistuje",
       "ger": "Anfrageobjekt kann nicht ausgewählt werden, da der Layer nicht existiert"
