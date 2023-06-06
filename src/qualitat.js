@@ -659,6 +659,11 @@ function DonaAccessTokenTypeFeedback(capa)
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
+			if (!ParamInternCtrl.tokenType)
+			{
+				alert("authen.js not included in index.htm");
+				return null;
+			}
 			if (ParamInternCtrl.tokenType[tokenType].userAlreadyWelcomed)
 				return tokenType;
 		}

@@ -4551,6 +4551,11 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat, nomesSenseLogin)
 			calfer[i]=false;
 			if (ParamCtrl.capesDeServei[i].servei.access)
 			{
+				if (!ParamInternCtrl.tokenType)
+				{
+					alert("authen.js not included in index.htm");
+					return;
+				}
 				var access=ParamCtrl.capesDeServei[i].servei.access;
 				if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || 
 					ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="failed")
