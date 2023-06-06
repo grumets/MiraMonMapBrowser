@@ -3287,6 +3287,14 @@ var MessageLang=
       "fre": "La géolocalisation n'est pas prise en charge dans ce navigateur",
       "cze": "Geolokace není tímto prohlížečem podporována",
       "ger": "Die Geolokalisierung wird von diesem Browser nicht unterstützt"
+    },
+    "ofUserFeedbackScope": {
+      "cat": "de valoració d'una àrea específica",
+      "spa": "de valoración de un área específica",
+      "eng": "of a feedback for a specific area",
+      "fre": "pour la rétroaction d'un domaine spécifique",
+      "cze": "posouzení konkrétní oblasti",
+      "ger": "einen bestimmten Bereichs"
     }
   },
   "commands": {
@@ -4313,6 +4321,14 @@ var MessageLang=
       "fre": "Aller à la coordonnée",
       "cze": "Přejít na souřadnice",
       "ger": "Zur Koordinate gehen"
+    },
+    "FBwithScope":{
+      "cat": "Definir envolupant de valoració",
+      "spa": "Definir ámbito de valoración",
+      "eng": "Define feedback's scope",
+      "fre": "Définir domaine de l'évaluation",
+      "cze": "Definujte doménu hodnocení",
+      "ger": "Definieren Sie den Umfang der Beurteilung"
     },
     "previousView": {
       "cat": "vista prèvia",

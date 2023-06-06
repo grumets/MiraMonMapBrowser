@@ -69,21 +69,37 @@ var calcul_amb_icapa="";
 }
 
 
+function SonValorsDimensionsIguals(dim1, dim2)
+{
+	if((typeof dim1 !=="undefined" && typeof dim2==="undefined") || (typeof dim1 ==="undefined" && typeof dim2!=="undefined"))
+		return false;
+	if((!dim1 || typeof dim1 ==="undefined") && (!dim2 || typeof dim2 ==="undefined"))
+		return true;
+	if(dim1.length!=dim2.length)
+		return false;
+	for(var i_dim=0; i_dim<dim1.lenght; i_dim++)
+	{
+		if(dim1.clau.nom!=dim2.clau.nom || dim1.valor.nom!=dim2.valor.nom)
+			return false;
+	}
+	return true;
+}
 
-/*Aquesta funció transforma {i_capa:, i_valor:, i_data:} a v[i] i {i_capa:, prop: } a p["nom_atribut"]
+
+/*Aquesta funció transforma {i_capa:, i_valor:, i_data:, DIM_nomdim: } a v[i] i {i_capa:, prop: } a p["nom_atribut"]
 (la segona part només és vàlida per vectors).*/
 function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
 {
 var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
 //Busco la descripció de cada "valor" en la operació i creo un equivalent FormulaConsulta
 //busco una clau d'obrir
-var i, fragment, inici, final, cadena, nou_valor, c, i_capa_link;
+var i, fragment, inici, final, cadena, nou_valor, c, i_capa_link, prop_nou_valor, i_prop_nou_valor, dim, i_dim, nom_dim, valor, i_v_dim;
 var FormulaConsulta="";
 
 	fragment=calcul;
 	while ((inici=fragment.indexOf("{"))!=-1)
 	{
-		//busco una clau de tancar
+		// busco una clau de tancar
 		final=fragment.indexOf("}");
 		if  (final==-1)
 		{
@@ -128,8 +144,55 @@ var FormulaConsulta="";
 				alert("'data' " + nou_valor.i_data + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
 				break;
 			}
+			
+			// miro si hi ha dimensioExtra
+			prop_nou_valor=Object.keys(nou_valor);
+			
+			// miro si hi ha alguna dimensioExtra			
+			for(i_prop_nou_valor=0; i_prop_nou_valor<prop_nou_valor.length; i_prop_nou_valor++)
+			{
+				if(prop_nou_valor[i_prop_nou_valor].startsWith("DIM_"))  // NJ: seria equivalent a prop_nou_valor[i_prop].substring(0,4)=="DIM_"
+				{
+					if(!ParamCtrl.capa[i_capa_link].dimensioExtra)
+					{
+						alert("dimension has been indicated for a 'capa' without 'dimensioExtra' array in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
+						break;
+					}
+					dim=ParamCtrl.capa[i_capa_link].dimensioExtra;
+					// comprovo el nom
+					nom_dim=prop_nou_valor[i_prop_nou_valor].substring(4).toLowerCase();
+					for(i_dim=0; i_dim<dim.length; i_dim++)
+					{
+						if(nom_dim==dim[i_dim].clau.nom.toLowerCase())
+							break;
+					}
+					if(i_dim==dim.length)
+					{
+						alert("'dimension' " + nom_dim + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is not found");
+						break;					
+					}					
+					
+					// comprovo el valor
+					valor=nou_valor[prop_nou_valor[i_prop_nou_valor]].toLowerCase();
+					for(i_v_dim=0; i_v_dim<dim[i_dim].valor.length; i_v_dim++)
+					{
+						if(valor==dim[i_dim].valor[i_v_dim].nom.toLowerCase())
+							break;
+					}
+					if(i_v_dim==dim[i_dim].valor.length)
+					{
+						alert("value '"+valor +"' of dimension '" + nom_dim + "' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " is out of range");
+						break;					
+					}					
+					// em deso aquesta info que després necessitaré
+					if(!nou_valor.param)
+						nou_valor.param=[];
+					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_v_dim].valor});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
+				}
+			}
+			
 			/*Eliminar aquesta línia em permet diferenciar entre "la data d'ara" encara que m'ho canviïn o "la seleccionada a la capa" i si la canvien l'adopto també.
-			if (DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
+			if (DonaIndexDataCapa(ParamCtrl.capa[mi_capa_link], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa_link], null))
 				delete nou_valor.i_data;*/
 
 
@@ -163,7 +226,9 @@ var FormulaConsulta="";
 							(
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
-							) &&
+							) && 
+							SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+							&&
 							nou_valor.objectes
 							) ||
 							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa &&
@@ -172,6 +237,8 @@ var FormulaConsulta="";
 									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
 								)
+								&&
+								SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
 							)
 							)
 							break;
@@ -185,6 +252,8 @@ var FormulaConsulta="";
 						valors[i].objectes=ParamCtrl.capa[i_capa_link].objectes;
 						if (typeof nou_valor.i_data!=="undefined")
 							valors[i].i_data=nou_valor.i_data;
+						if (typeof nou_valor.param!=="undefined")
+							valors[i].param=JSON.parse(JSON.stringify(nou_valor.param));
 					}
 					FormulaConsulta+=fragment.substring(0, inici)+"valors["+i+"].objectes.features[v["+i+"]].properties[\""+nou_valor.prop+"\"]";
 				}
@@ -216,11 +285,12 @@ var FormulaConsulta="";
 					alert("i_valor " + nou_valor.i_valor + " in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut + " points to one of the 'values' that has a 'FormulaConsulta'. This is not supported yet.");
 					break;
 				}
-				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined")  //si és la mateixa capa i la mateixa data puc fer servir el valor de l'array de valors que ja existeix
+				if (typeof nou_valor.i_capa==="undefined" && typeof nou_valor.i_data==="undefined" && 
+					(typeof nou_valor.param==="undefined" || nou_valor.param.length<1))  //si és la mateixa capa i la mateixa data i les mateixes dimensions puc fer servir el valor de l'array de valors que ja existeix
 					i=nou_valor.i_valor;
 				else
 				{
-					//cerco si ja existeix un valor amb aquestes caracteristiques
+					//cerco si ja existeix un valor amb aquestes característiques
 					if (typeof ParamCtrl.capa[i_capa].valors==="undefined")
 						ParamCtrl.capa[i_capa].valors=[];
 					var valors=ParamCtrl.capa[i_capa].valors;
@@ -231,18 +301,22 @@ var FormulaConsulta="";
 							(
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
-							) &&
+							)&& 
+							SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+							&&
 							nou_valor.i_valor==i
 							) ||
 							(   typeof nou_valor.i_capa!=="undefined" && typeof valors[i].i_capa!=="undefined" && nou_valor.i_capa==valors[i].i_capa &&
 								nou_valor.i_valor==valors[i].i_valor &&
 								(
 									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
-									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
-								)
+									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
+								)&& 
+								SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
 							)
 							)
 							break;
+							
 					}
 					if (i==valors.length)
 					{
@@ -253,6 +327,8 @@ var FormulaConsulta="";
 						valors[i].i_valor=nou_valor.i_valor;
 						if (typeof nou_valor.i_data!=="undefined")
 							valors[i].i_data=nou_valor.i_data;
+						if (typeof nou_valor.param!=="undefined")
+							valors[i].param=JSON.parse(JSON.stringify(nou_valor.param));
 					}
 				}
 				FormulaConsulta+=fragment.substring(0, inici)+"v["+i+"]"; //contrueixo el fragment de FormulaConsulta
@@ -2648,40 +2724,42 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 		{
 			if (v[i])
 			{
-				//Pot ser que aquesta v[i] ens envii a una altre capa i un altre temps i amb uns altres parametres addicionals si hi ha un calcul en aquesta banda.
+				//Pot ser que aquesta v[i] ens envii a una altre capa i un altre temps i amb uns altres paràmetres addicionals si hi ha un càlcul en aquesta banda.
+								
 				var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
 				var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
 				var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
-
+								
 				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
 				{
-					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, vista))
+					var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
+					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, valors2[i_valor2].param, vista))
 					{
 						//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2), TipusEventHttpGet),
-								CanviaImatgeTiFFIndirect: function (param){
-									if (param)
+						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, valors2[i_valor2].param), TipusEventHttpGet),
+							CanviaImatgeTiFFIndirect: function (param){
+								if (param)
+								{
+									CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
+									
+									if (!EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[param.i_capa]))
 									{
-										CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
-										
-										if (!EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[param.i_capa]))
-										{
-											CanviaEstatCapa(param.i_capa, "visible");
-											CreaLlegenda();
-											return;
-										}
-										return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+										CanviaEstatCapa(param.i_capa, "visible");
+										CreaLlegenda();
+										return;
 									}
-								},
-								ErrorImatgeTIFF: function (error){
-									alert(error);
-									CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+									return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
 								}
-							};
-						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
+							},
+							ErrorImatgeTIFF: function (error){
+								alert(error);
+								CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+							}
+						};
+						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, valors2[i_valor2].param, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
 						return;
 					}
-					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, valors2[i_valor2].param, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 				}
 				else if (ParamCtrl.capa[i_capa2].model==model_vector)
 				{

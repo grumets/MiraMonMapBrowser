@@ -525,7 +525,7 @@ var capa=ParamCtrl.capa[i_capa];
 var s=capa.nom;
 
 	if (ParamCtrl.capa[i_capa].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa].tipus))
-		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data);
+		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data, null);
 
 	if (i_estil==-1)
 		return s;
@@ -710,7 +710,8 @@ var capa=ParamCtrl.capa[i_capa];
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
 				ParamCtrl.idioma,
-				DonaAccessTokenTypeFeedback(capa));
+				DonaAccessTokenTypeFeedback(capa),
+				"MostraFinestraFeedbackAmbScope");
 }
 
 function AdoptaEstil(params_function, guf)

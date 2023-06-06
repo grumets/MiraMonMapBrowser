@@ -1519,7 +1519,7 @@ var s;
 			cdns.push("GetFeatureInfo&");
 
 		cdns.push(AfegeixPartCridaComunaGetMapiGetFeatureInfo(i_capa, -1, false, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil,
-								ParamInternCtrl.vista.EnvActual, (capa.AnimableMultiTime ? DonaIndexDataCapa(capa, null) : 0 )));
+								ParamInternCtrl.vista.EnvActual, (capa.AnimableMultiTime ? DonaIndexDataCapa(capa, null) : 0 ), null));
 
 		cdns.push("&QUERY_LAYERS=" , capa.nom , "&INFO_FORMAT=" , capa.FormatConsulta);
 

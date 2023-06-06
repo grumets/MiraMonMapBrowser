@@ -1221,8 +1221,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
 			"TipusObj": "P",
 			"component": [{
-				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil) + "+" +
-					DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil) + "*" + capa[0].estil[condicio[0].i_estil].categories.length,
+				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil, condicio[0].dim) + "+" +
+					DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil, condicio[1].dim) + "*" + capa[0].estil[condicio[0].i_estil].categories.length,
 				"representacio": {
 					"tipus": "matriuConfusio",
 					"dimMatriu": [
@@ -1387,8 +1387,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 			"nom":	null,
 			"desc":	desc_estil,
 			"TipusObj": "P",
-			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil)},
-					{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil),
+			"component": [{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil, condicio[0].dim)},
+					{"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[1].i_capa, condicio[1].i_data, condicio[1].i_estil, condicio[1].dim),
 						"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
 						"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
 								"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
@@ -1610,7 +1610,7 @@ var condicio, capa, i_estil_nou, estil, i, i_value, i_color, i_color_tipic, cade
 	}
 
 	i_color_tipic=0;
-	v=DonaCadenaEstilCapaPerCalcul(-1, condicio.i_capa, condicio.i_data, condicio.i_estil);
+	v=DonaCadenaEstilCapaPerCalcul(-1, condicio.i_capa, condicio.i_data, condicio.i_estil, condicio.dim);
 	linia_reclass=cadena_reclass.split("\n");
 	for (i=i_value=0; i<linia_reclass.length; i++)
 	{
@@ -1798,7 +1798,7 @@ function EscriuCapaALaFormulaAfegeixCapa()
 var condicio=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-calcul", "-valor", 0);
 var calcul=document.CalculadoraCapes.calcul;
 	calcul.focus();
-	calcul.value = calcul.value.substring(0, calcul.selectionStart)+DonaCadenaEstilCapaPerCalcul(-1, condicio.i_capa, condicio.i_data, condicio.i_estil)+calcul.value.substring(calcul.selectionEnd);
+	calcul.value = calcul.value.substring(0, calcul.selectionStart)+DonaCadenaEstilCapaPerCalcul(-1, condicio.i_capa, condicio.i_data, condicio.i_estil, condicio.dim)+calcul.value.substring(calcul.selectionEnd);
 }
 
 function EscriuOperadorALaFormulaAfegeixCapa(prefix, sufix)
@@ -1936,7 +1936,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  "<fieldset><legend>",
 			  GetMessage("LayerForExpression", "cntxmenu"),
 			  ": </legend>");
-		//Posar uns desplegables de capes, estils i dates
+		//Posar uns desplegables de capes, estilsdates i dimensions extra
 		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
 		//Posar un botó d'afegir a la fórmula
 		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
@@ -2292,6 +2292,7 @@ function OmpleAfegeixCapaServidor(elem, i_capa)
 
 function IniciaFinestraAfegeixCapaServidor(i_capa)
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2300,6 +2301,7 @@ var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser",
 
 function IniciaFinestraCalculadoraCapes()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsOfLayers", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2308,6 +2310,7 @@ var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsO
 
 function IniciaFinestraCombiCapa()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 var elem=ObreFinestra(window, "combinacioCapa", GetMessage("toCombineLayers", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2609,6 +2612,26 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"data-",i_condicio,"\" name=\"",(param.vull_operador? "": "valor_"),"data", i_condicio, "\" />", DonaDataCapaComATextBreu(i_capa,0));
 		cdns.push("<br>");
 	}
+	
+	// Desplegable de dimensions
+	if(capa.dimensioExtra &&  capa.dimensioExtra.length)
+	{
+		var dim;
+		for(var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+		{
+			dim=capa.dimensioExtra[i_dim];			
+			cdns.push("<label for=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"dimensio-",i_dim,"-",i_condicio, "\">", DonaCadenaNomDesc(dim.clau), ": </label>");
+			cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"dimensio-",i_dim,"-",i_condicio,"\" name=\"",(param.vull_operador? "": "valor_"),"dimensio-",i_dim,"-",i_condicio, "\" style=\"width:400px;\">");			
+			for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
+			{
+				cdns.push("<option value=\"",i_v_dim,"\"",					
+				">", DonaCadenaNomDescFormula(dim.formulaDesc, dim.valor[i_v_dim]), "</option>\n");
+			}
+			cdns.push("<option value=\"null\" selected=\"selected\">" , GetMessage("SelectedInLayer", "cntxmenu"), "</option>");
+			cdns.push("</select><br>");			
+		}
+	}
+	
 	// Desplegable de les bandes disponibles
 	if(capa.model==model_vector)
 	{
@@ -2686,10 +2709,10 @@ function ActivaCondicioSeleccioCondicional(prefix_id, i_condicio, estat)
 	document.getElementById(prefix_id + "-nexe-"+i_condicio).style.display=(estat) ? "inline" : "none";
 }
 
-//i_capa és la capa que se seleccionarà per defecte en el selector. Pot ser -1 per seleccionar la primera compatible.
-//param.vull_operador: indica que vulls els operador per fer una condició per selecció
-//param.nomes_categoric: només vull capes ràster amb categories
-//param.vull_valors:
+// i_capa és la capa que se seleccionarà per defecte en el selector. Pot ser -1 per seleccionar la primera compatible.
+// param.vull_operador: indica que vulls els operador per fer una condició per selecció
+// param.nomes_categoric: només vull capes ràster amb categories
+// param.vull_valors:
 function DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param)
 {
 var cdns=[], capa, nc, capa_def, origen_vector;
@@ -2852,6 +2875,7 @@ function LlegeixParametresCondicioCapaDataEstil(prefix_id, prefix_condicio, i_co
 {
 var condicio_capa={};
 	condicio_capa.i_capa=parseInt(document.getElementById(prefix_id + prefix_condicio + "-capa-" + i_condicio).value);
+	condicio_capa.dim=[];
 	var capa=ParamCtrl.capa[condicio_capa.i_capa];
 	if (capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
@@ -2859,11 +2883,24 @@ var condicio_capa={};
 		if (!isNaN(i_time) && i_time!=null)
 			condicio_capa.i_data=i_time;
 	}
+	// Desplegable de dimensions
+	if(capa.dimensioExtra &&  capa.dimensioExtra.length)
+	{
+		var dim, i_dim, i_v_dim;
+		for(i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+		{
+			dim=capa.dimensioExtra[i_dim];			
+			var i_v_dim=parseInt(document.getElementById(prefix_id + prefix_condicio + "-dimensio-" + i_dim +"-"+i_condicio).value);
+			if (!isNaN(i_v_dim) && i_v_dim!=null)
+				condicio_capa.dim.push({clau: dim.clau, valor: dim.valor[i_v_dim]});
+		}
+	}
 	if(capa.model==model_vector)
 	{
 		if (capa.atributs && capa.atributs.length)
 			condicio_capa.i_estil=parseInt(document.getElementById(prefix_id + prefix_condicio + "-estil-" + i_condicio).value);
-	}else
+	}
+	else
 	{
 		if (capa.estil && capa.estil.length)
 			condicio_capa.i_estil=parseInt(document.getElementById(prefix_id + prefix_condicio + "-estil-" + i_condicio).value);
@@ -2935,8 +2972,8 @@ var sel_condicional={}, condicio, radials;
 	return sel_condicional;
 }
 
-//Escriu una referencia a una capa, valor i data per un càlcul (format {\"i_capa\":0, \"i_valor\":1, \"i_data\":2})
-function DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data)
+//Escriu una referència a una capa, valor i data per un càlcul (format {\"i_capa\":0, \"i_valor\":1, \"i_data\":2, \"DIM_NomDim0\": valor_dim0, \"DIM_NomDim1\": valor_dim1})
+function DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data, dimensions)
 {
 var cdns=[];
 
@@ -2955,11 +2992,23 @@ var cdns=[];
 			cdns.push(",");
 		cdns.push("\"i_data\":"+i_data);
 	}
+	if(dimensions && dimensions.length)
+	{		
+		for(var i_dim=0; i_dim<dimensions.length; i_dim++)
+		{
+			if (typeof dimensions[i_dim].valor!=="undefined" && dimensions[i_dim].valor!=null && dimensions[i_dim].valor.nom)
+			{
+				if (cdns.length!=1)
+					cdns.push(",");
+				cdns.push("\"DIM_"+dimensions[i_dim].clau.nom+"\": \""+dimensions[i_dim].valor.nom+"\"");
+			}
+		}
+	}
 	cdns.push("}");
 	return cdns.join("");
 }
 
-function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
+function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimensions)
 {
 	if(ParamCtrl.capa[i_capa].model==model_vector)
 	{
@@ -2989,7 +3038,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 					{
 						// Estic revisant la mateixa capa en el mateix estil
 						// la reescric de nou						
-						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data);												
+						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data, dimensions);												
 						nou_calcul+=s.substring(0, inici) + nou_valor;
 					}
 					else
@@ -3001,18 +3050,18 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 			}			
 			return AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
 		}
-		if (typeof atribut.FormulaConsulta!=="undefined")
+		if (typeof atribut.FormulaConsulta!=="undefined" && atribut.FormulaConsulta!=null)
 		{
 			var s=atribut.FormulaConsulta;
 			for (var i_atrib=0; i_atrib<ParamCtrl.capa[i_capa].atributs.length; i_valor++)
 			{
 				s_patro="p[\""+ParamCtrl.capa[i_capa].atributs[i_atrib].nom+"\"]";
 				while ((i=s.indexOf(s_patro))!=-1)
-					s=s.substring(0, i)+DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_atrib, i_data)+s.substring(i+s_patro.length);
+					s=s.substring(0, i)+DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_atrib, i_data, dimensions)+s.substring(i+s_patro.length);
 			}
 			return "("+ s +")";
 		}
-		return DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data);
+		return DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data, dimensions);
 	}
 	else
 	{
@@ -3044,7 +3093,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 					{
 						// Estic revisant la mateixa capa en el mateix estil
 						// la reescric de nou						
-						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data);												
+						nou_valor=DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_estil, i_data, dimensions);												
 						nou_calcul+=s.substring(0, inici) + nou_valor;
 					}
 					else
@@ -3064,11 +3113,11 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil)
 			{
 				s_patro="v["+i_valor+"]";
 				while ((i=s.indexOf(s_patro))!=-1)
-					s=s.substring(0, i)+DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data)+s.substring(i+s_patro.length);
+					s=s.substring(0, i)+DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_valor, i_data, dimensions)+s.substring(i+s_patro.length);
 			}
 			return "("+ s +")";
 		}
-		return DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, component_sel.i_valor, i_data);
+		return DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, component_sel.i_valor, i_data, dimensions);
 	}
 }
 
@@ -3092,7 +3141,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 	{
 		condicio=sel_condicional.condicio[i_condicio];
 		// Quan la capa és un vector sel_condicional.condicio[i_condicio].capa_clau.i_estil és l'índex del atribut i no de l'estil
-		calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_clau.i_capa, condicio.capa_clau.i_data, condicio.capa_clau.i_estil);
+		calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_clau.i_capa, condicio.capa_clau.i_data, condicio.capa_clau.i_estil, condicio.capa_clau.dim);
 		if (typeof condicio.operador==="undefined")
 			calcul+="!=null";
 		else
@@ -3132,7 +3181,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 				}
 			}
 			else
-				calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_valor.i_capa, condicio.capa_valor.i_data, condicio.capa_valor.i_estil);
+				calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_valor.i_capa, condicio.capa_valor.i_data, condicio.capa_valor.i_estil, condicio.capa_valor.dim);
 		}
 		if (typeof condicio.nexe!=="undefined")
 			calcul+=condicio.nexe;
@@ -4610,7 +4659,7 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			//cdnsHtml.push("<tr class='vectorial' height='20px'>");
 			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
 			{
-				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(atributsVisibles[j].nom, capa, i_data)];
+				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(atributsVisibles[j].nom, capa, i_data, null)];
 				filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + (prop ? prop :"") + "</td>");
 				// Porta papers
 				cdnsPortapapers.push((prop ? prop :""), "\t");

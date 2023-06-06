@@ -1,4 +1,4 @@
-﻿{
+{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
@@ -1480,7 +1480,7 @@
 							"type": ["object"],
 							"properties": {								
 								"param": { 
-									"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És optim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. Pot ser null",
+									"description": "Llistat de paràmetres (o dimensionsExtra) (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És òptim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. També s'usa en capes calculades per indicar les dimensions i els valors selccionats necessaris per omplir 'valors', en aquest cas es tracta d'un paràmetre INTERN. Pot ser null",
 									"type": ["array", "null"],
 									"items": {
 										"description": "Paràmetres (clau i valor)",

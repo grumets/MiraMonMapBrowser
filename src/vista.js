@@ -219,6 +219,7 @@ var cursor="auto";
 			cursor="all-scroll";  //abans "move", "grab"
 
 		if(ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" ||
+			ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2" ||
 		   ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" ||
 		   ParamCtrl.EstatClickSobreVista=="ClickMouMig")
 			cursor="crosshair";
@@ -268,7 +269,8 @@ function MouLaVistaSalt(sx,sy)
 
 function MouLaVistaEventDeSalt(event, sx, sy) //Afegit JM 18/09/2016
 {
-	MouLaVistaSalt(sx,sy)
+	ComprovaCalTancarFeedbackAmbScope();
+	MouLaVistaSalt(sx,sy);
 	dontPropagateEvent(event);
 }
 
@@ -355,6 +357,7 @@ var ZRec_1PuntClient={"x": 0, "y": 0};  //This is used for store the first point
 var ZRecSize_1Client={"x": 0, "y": 0}, ZRecSize_2Client={"x": 0, "y": 0};   //Only for touch events. I'm allowing for a negative sizes until the very last moment.
 var HiHaHagutMoviment=false, HiHaHagutPrimerClick=false;
 var NovaVistaFinestra={"n": 0, "vista":[]};
+var CoordsFB={"x1":"", "y1":"","x2":"", "y2":""};
 
 function ClickSobreVista(event, i_nova_vista)
 {
@@ -404,6 +407,25 @@ var i_vista;
 		}
 		ParamCtrl.EstatClickSobreVista="ClickZoomRec2";
 	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickRecFB1")
+	{
+		ZRec_1PuntClient.x=event.clientX;
+		ZRec_1PuntClient.y=event.clientY;
+		//Guardo les coordenades del primer click
+		CoordsFB.x1=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		CoordsFB.y1=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		{
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle),
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista),
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
+			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
+		}
+		ParamCtrl.EstatClickSobreVista="ClickRecFB2";
+	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" &&  i_nova_vista==NovaVistaPrincipal)
 	{
 		AmbitZoomRectangle.MinX=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
@@ -443,6 +465,16 @@ var i_vista;
 			PosaLlistaValorsConsultesTipiquesAlPrincipi(-1);
 		PortamAAmbit(AmbitZoomRectangle);
 		ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
+	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
+	{
+		//Guardo les coordenades del segon click
+		CoordsFB.x2=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		CoordsFB.y2=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+
+		EscriuCoordenadesAFinestraFeedbackAmbScope();
+
+		ParamCtrl.EstatClickSobreVista="ClickRecFB1";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" && i_nova_vista==NovaVistaPrincipal)
 	{
@@ -513,9 +545,53 @@ var i_vista;
 	HiHaHagutPrimerClick=false;
 }
 
+function EscriuCoordenadesAFinestraFeedbackAmbScope()
+{
+	var xmin, xmax, ymin, ymax;
+	if (CoordsFB.x1>CoordsFB.x2)
+	{
+		xmin=CoordsFB.x2;
+		xmax=CoordsFB.x1;
+	}
+	else
+	{
+		xmin=CoordsFB.x1;
+		xmax=CoordsFB.x2;
+	}
+	if (CoordsFB.y1>CoordsFB.y2)
+	{
+		ymin=CoordsFB.y2;
+		ymax=CoordsFB.y1;
+	}
+	else
+	{
+		ymin=CoordsFB.y1;
+		ymax=CoordsFB.y2;
+	}
+	//escrivim les coordenades endreçades a la finestra corresponent
+	var dec=ParamCtrl.NDecimalsCoordXY;
+
+	document.getElementById("fbscope_xmin").value=OKStrOfNe(xmin, dec);
+	document.getElementById("fbscope_xmax").value=OKStrOfNe(xmax, dec);
+	document.getElementById("fbscope_ymin").value=OKStrOfNe(ymin, dec);
+	document.getElementById("fbscope_ymax").value=OKStrOfNe(ymax, dec);
+
+	ResetCoordsFB();
+}
+
+//posem en blanc la variable Coord per la propera vegada que es defineixi un envoluant
+function ResetCoordsFB () 
+{
+		CoordsFB.x1='';
+		CoordsFB.y1='';
+		CoordsFB.x2='';
+		CoordsFB.y2='';
+}
+
 
 function CanviaEstatClickSobreVista(estat)
 {
+	ComprovaCalTancarFeedbackAmbScope(estat);
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle));
 	if(ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
@@ -744,6 +820,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	MostraValorDeCoordActual(i_nova_vista, x, y);
 	if (ParamCtrl.ZoomUnSolClic && HiHaHagutPrimerClick &&
 	    ParamCtrl.EstatClickSobreVista!="ClickZoomRec1" && ParamCtrl.EstatClickSobreVista!="ClickZoomRec2" &&
+		ParamCtrl.EstatClickSobreVista!="ClickRecFB1" && ParamCtrl.EstatClickSobreVista!="ClickRecFB2" &&
         ParamCtrl.EstatClickSobreVista!="ClickNovaVista1" && ParamCtrl.EstatClickSobreVista!="ClickNovaVista2" &&
 	    ParamCtrl.EstatClickSobreVista!="ClickPan1" && ParamCtrl.EstatClickSobreVista!="ClickPan2" &&
 		ParamCtrl.EstatClickSobreVista!="ClickEditarPunts" &&
@@ -755,7 +832,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 		ClickSobreVista(event_de_moure);
 	}
 
-	if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2")
+	if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle),
@@ -896,7 +973,7 @@ var capa=ParamCtrl.capa[i_capa];
 			else*/
 			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
 			{
-				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param, null, null, null);
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null);
 				return;
 			}
 		}

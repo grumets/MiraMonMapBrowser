@@ -339,6 +339,7 @@ var cdns=[], coord_visible, p, unitats_CRS;
 
 function MostraFinestraParametres()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	if (!ObreFinestra(window, "param", GetMessage("ofChangingParameters", "params")))
 		return;
 	OmpleFinestraParametres();
