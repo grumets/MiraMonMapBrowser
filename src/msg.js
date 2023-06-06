@@ -2916,9 +2916,9 @@ var MessageLang=
       "cat": "Mostrar com a taula",
       "spa": "Mostrar como tabla",
       "eng": "Show as table",
-      "fre": "Afficher le format de la table",
-      "cze": "Zobrazit formát tabulky",
-      "ger": "Tabellenformat anzeigen"
+      "fre": "Afficher sous forme de tableau",
+      "cze": "Zobrazit jako tabulku",
+      "ger": "Als Tabelle anzeigen"
     },
     "PercentageTransparencyRange": {
       "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
@@ -2931,10 +2931,10 @@ var MessageLang=
 	"ViewItemsInScope": {
       "cat": "Veure només objectes dins de l'àmbit",
       "spa": "Ver solo objectes dentro del ámbito",
-      "eng": "View only feature within the view",
-      "fre": "Afficher uniquement les éléments du périmètre",
-      "cze": "Zobrazit pouze položky v rozsahu",
-      "ger": "Ausschließlich Elemente im Geltungsbereich anzeigen"
+      "eng": "View only features within the scope",
+      "fre": "Ne voir que les objets dans le périmètre",
+      "cze": "Zobrazit pouze funkce v rozsahu",
+      "ger": "Nur Features innerhalb des Bereichs anzeigen"
     },
 	"ShowGeometry": {
       "cat": "Mostrar geometria",
@@ -2953,20 +2953,20 @@ var MessageLang=
       "ger": "Geometrie"
    },
    "ExportObject": {
-     "cat": "Seleccionar objecte",
-     "spa": "Seleccionar objecto",
-     "eng": "Select object",
-     "fre": "Exporter l'objet",
-      "cze": "Objekt exportu",
-      "ger": "Objekt exportieren"
+     "cat": "Seleccionar l'objecte",
+     "spa": "Seleccionar el objecto",
+     "eng": "Select the object",
+     "fre": "Sélectionnez l'objet",
+      "cze": "Vyberte objekt",
+      "ger": "Wähle das Objekt aus"
    },
    "ExportObjects": {
      "cat": "Guardar seleccionats com GeoJSON",
      "spa": "Guardar seleccionados como GeoJSON",
      "eng": "Save selected as GeoJSON",
-     "fre": "Exporter les objets",
-      "cze": "Export objektů",
-      "ger": "Objekte exportieren"
+     "fre": "Enregistrer la sélection sous GeoJSON",
+     "cze": "Uložit vybrané jako GeoJSON",
+     "ger": "Die Auswahl als GeoJSON speichern"
    },
 	"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
@@ -6177,9 +6177,9 @@ var MessageLang=
       "cat": "Taula d'objectes vectorials",
       "spa": "Tabla de objectos vectoriales",
       "eng": "Vector features' table",
-      "fre": "Tableau des éléments vectoriels",
-      "cze": "Tabulka vektorových prvků",
-      "ger": "Tabelle von vektorialen Elementen"
+      "fre": "Table d'objets vectoriels",
+      "cze": "Tabulka vektorových objektů",
+      "ger": "Tabelle mit Vektorobjekten"
     } 
   },
   "video": {
