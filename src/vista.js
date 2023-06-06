@@ -1928,14 +1928,16 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	clipLayer(layer_vista, vista_tiled.dx, vista_tiled.dy, vista.ncol, vista.nfil);
 
 	//Genero la taula
-	cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
+	cdns.push("<table style=\"border: 0px; border-collapse: collapse; padding: 0px;line-height:0px;\">");
+	//cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
 	for (var j=vista_tiled.JTileMin; j<=vista_tiled.JTileMax; j++)
 	{
-		cdns.push("  <tr cellspacing=0 cellpadding=0 height=", vista_tiled.TileMatrix.TileHeight ,">");
+		cdns.push(" <tr style=\"border: 0px; border-collapse: collapse; padding: 0px; height:",vista_tiled.TileMatrix.TileHeight,"px;\">");
+		//cdns.push("  <tr cellspacing=0 cellpadding=0  height=",vista_tiled.TileMatrix.TileHeight,">");
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
-			cdns.push("<td width=", vista_tiled.TileMatrix.TileWidth, "><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,";max-height:",vista_tiled.TileMatrix.TileHeight,";\"></td>");
+			cdns.push("<td style=\"border: 0px; border-collapse: collapse; padding: 0px; width:", vista_tiled.TileMatrix.TileWidth,"px;\"><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,";max-height:",vista_tiled.TileMatrix.TileHeight,"; \"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -2009,13 +2011,17 @@ var cdns=[], tile_matrix;
 
 	//Genero la taula
 	//NJ a JM: cal fer alguna modificació aquí també perquè funcioni correctament la impressió en SOAP
-	cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
+	cdns.push("<table style=\"border: 0px; border-spacing: 0px; padding: 0px; line-height:0px;\">");	
+	//cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
 	for (var j=j_tile_min; j<=j_tile_max; j++)
 	{
-		cdns.push("  <tr cellspacing=0 cellpadding=0 height=", tile_matrix.TileHeight ,">");
+		cdns.push(" <tr style=\"border: 0px; border-collapse: collapse; padding: 0px; height:",tile_matrix.TileHeight,"px;\">");
+		//cdns.push("  <tr cellspacing=0 cellpadding=0 height=", tile_matrix.TileHeight ,">");
 		for (var i=i_tile_min; i<=i_tile_max; i++)
 		{
-			cdns.push("<td width=", tile_matrix.TileWidth, "><img name=\"i_raster", i_capa, "_" , j , "_", i , "\" src=");
+			cdns.push("<td style=\"border: 0px; border-collapse: collapse; padding: 0px; width:", tile_matrix.TileWidth,"px;\"><img name=\"i_raster", i_capa, "_" , j , "_", i , "\" src=");
+						
+			//cdns.push("<td width=", tile_matrix.TileWidth, "><img name=\"i_raster", i_capa, "_" , j , "_", i , "\"  src=");
 			var s=DonaNomImatgeTiled(i_capa, i_tile_matrix_set, i_tile_matrix, j, i, -1, true, null);
 			var i_event;
 			if (DonaTipusServidorCapa(capa)=="TipusWMTS_REST")
