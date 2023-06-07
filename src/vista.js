@@ -1937,7 +1937,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
 			cdns.push("<td style=\"border: 0px; border-collapse: collapse; padding: 0px; width:", vista_tiled.TileMatrix.TileWidth,"px;\"><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,";max-height:",vista_tiled.TileMatrix.TileHeight,"; \"></td>");
+						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,"px;max-height:",vista_tiled.TileMatrix.TileHeight,"px;width:auto;height:auto;\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -2427,6 +2427,7 @@ var p, unitats_CRS;
 				return;
 			}
 			var capa=ParamCtrl.capa[i];
+
 			if (capa.model==model_vector)
 			{
 				cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, i));
