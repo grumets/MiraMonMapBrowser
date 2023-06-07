@@ -141,18 +141,25 @@ function CarregaImatgeStoryMap(input, imatgeId)
 	const imatge = document.getElementById(imatgeId);
 	if (input.files && input.files[0]) 
 	{
+		//const maximLongImg = 1000000; // Longitud màxima per una imatge 1.000.000
 		var reader = new FileReader();
 		reader.onload = function (e)
 		{
-			if (image) 
+			if (imatge && e.target.result) 
 			{
-				image.src=e.target.result;
-				image.width=200;
-				image.height=200;
+				const imgBase64 = btoa(e.target.result);
+				//if (imgBase64.length < maximLongImg)
+				//{
+					imatge.src="data:image/jpeg;base64," + imgBase64;
+					imatge.width=200;
+				//}
 			}
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
+	/*if (input.value) {
+		imatge.src = input.value;
+	}*/
 }
 
 function SeguentPasStoryMap()
@@ -168,16 +175,18 @@ function SeguentPasStoryMap()
 	comptadorPassos++;
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
+	const stepPictureId = "stepImg" + comptadorPassos;
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, stepImg", comptadorPassos, ")'>", 
-	"<img id='stepImg", comptadorPassos, "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br>", 
+	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\")'>", 
+	"<img id='" + stepPictureId + "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
+	//"<iframe id='" + stepPictureId + "' src='#' width='640' height='480'></iframe>",
 	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
 	tinytextarea.setAttribute("id", "storyTextArea"+comptadorPassos)
-	const imgStep = document.getElementById("stepImg" + comptadorPassos);
+	const imgStep = document.getElementById(stepPictureId);
 	imgStep.parentNode.insertBefore(tinytextarea, imgStep);
 	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
 	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
