@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -161,20 +161,20 @@ function GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, seed_div_id
 	loadFile(url, "text/xml", CarregaFeedbacksAnteriors, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: seed_div_id, lang: lang, access_token_type: access_token_type, callback_function: callback_function, params_function: params_function, edit_button: false});
 }
 
-function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type, nom_funcio_scope)
+function GUFShowFeedbackInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type, name_scope_function)
 {
 var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
-	return GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope);
+	return GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function);
 }
 
-function GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope)
+function GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function)
 {
 	for (var i=0; i<targets.length; i++)	
 	{
 		if (targets[i].codespace) //decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara
 			targets[i].codespace=targets[i].codespace.replace("https://","http://");
 	}
-	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(seed_div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope);
+	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function);
 	//demano el fitxer atom de feedbacks previs
 	GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(seed_div_id, rsc_type, targets, lang, access_token_type);
 }
@@ -985,7 +985,7 @@ function TornaNTargetsSecundaris(targets)
 	return n_targets_secundaris;
 }
 
-function GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(div_id, rsc_type, targets, lang, access_token_type, nom_funcio_scope) 
+function GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(div_id, rsc_type, targets, lang, access_token_type, name_scope_function) 
 {
 var cdns=[];
 var n_targets_secundaris=0;
@@ -1004,12 +1004,12 @@ var n_targets_secundaris=0;
 				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}, lang), "\"",
 				  " onClick='GUFAfegirFeedbackCapaMultipleTargets(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
 
-	//OG: nou botó per afegir scope a un FB
-	if (nom_funcio_scope)
+//$$OG: nou botó per afegir scope a un FB
+	if (name_scope_function)
 	{
 		cdns.push("<input type=\"button\" class=\"guf_button user\" value=\"",
 				  GUFDonaCadenaLang({"cat":"Valoració d'una àrea específica", "spa":"Valoración de un área específica", "eng":"Feedback of a specific area", "fre":"Rétroaction d'un domaine spécifique"}, lang), "\"",
-				  " onClick='"+nom_funcio_scope+"(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
+				  " onClick='"+name_scope_function+"(\"", JSON.stringify(targets).replaceAll("\"","\\\""), "\", \"", lang, "\", \"", access_token_type, "\");' />");
 	}
 	if (rsc_type != "")
 		cdns.push("</fieldset></div>");
@@ -1051,51 +1051,4 @@ function EnviaReprodUsageComAPostMessage(event)
 		GUFFeedbackWindow.postMessage(ReprodUsageForPostMessage, ClientGUF);
 		ReprodUsageForPostMessage="";
 	}
-}
-
-//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
-function GUFAfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
-{
-	//comprovem que tenim totes les coordenades
-	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
-	{
-		alert(GUFDonaCadenaLang({"cat":"Falten coordenades", "spa":"Faltan coordenadas", "eng":"Coordinates missing", "fre":"Coordonnées manquantes"}, lang));
-		TancaFinestraLayer("fbScope");
-	}
-
-	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
-	
-	//ulc: upper left corner lrc: lower rigth corner
-	var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
-	var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
-	
-	var trg=JSON.parse(targets);
-	var dec=ParamCtrl.NDecimalsCoordXY;
-
-	// si les coordenades no són en lon/lat, les transformem
-	if (crs !="EPSG:4326" && crs !="CRS:84")
-	{
-		var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
-		var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
-
-		for (var i=0; i<trg.length; i++)
-		{
-			//afegim el bounding box en lon/lat
-			trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec),"xmax":OKStrOfNe(lrc_ll.x,dec),"ymin": OKStrOfNe(lrc_ll.y,dec),"ymax":OKStrOfNe(ulc_ll.y,dec)};
-			//afegim el GMLpol en el crs original
-			trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
-		}
-
-	}
-	else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
-	{
-		for (var i=0; i<trg.length; i++)
-		{
-			//afegim el bounding box en lon/lat
-			trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
-			//afegim el GMLpol
-			trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
-		}
-	}
-	GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
 }

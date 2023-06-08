@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -149,6 +149,7 @@ function CreaEscalaFullImprimir(win)
 var TriaFullWindow=null;
 function ObreTriaFullImprimir()
 {
+	ComprovaCalTancarFeedbackAmbScope();
     if (TriaFullWindow==null || TriaFullWindow.closed)
     {
         TriaFullWindow=window.open("print.htm","FinestraPrint",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=400,height=600,left=0,top=0');

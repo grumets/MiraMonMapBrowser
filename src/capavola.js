@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -172,7 +172,7 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 		'</table>',
 		'<table class="Verdana11px" width="50%" align="center">',
 			'<tr>',
-				'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="',GetMessage("OK"),'"'," onClick='GUFAfegirFeedbackScopeCapaMultipleTargets(",trg,", \"",lng, "\", \"",tkn,"\"",");TancaFinestraLayer(\"fbScope\");'",'></td>',
+				'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="',GetMessage("OK"),'"'," onClick='AfegirFeedbackScopeCapaMultipleTargets(",trg,", \"",lng, "\", \"",tkn,"\"",");TancaFinestraLayer(\"fbScope\");'",'></td>',
 				'<td align="center"><input class="Verdana11px" type="button" name="Tancar" value="',GetMessage("Cancel"),'"'," onClick='TancaFinestraLayer(\"fbScope\");'",'></td>',
 			'</tr>',
 		'</table>',
@@ -180,6 +180,61 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	contentFinestraLayer(window, "fbScope", cdns.join(""));
 }
 
+//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
+function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
+{
+	//comprovem que tenim totes les coordenades
+	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
+	{
+		alert(GUFDonaCadenaLang({"cat":"Falten coordenades", "spa":"Faltan coordenadas", "eng":"Coordinates missing", "fre":"Coordonnées manquantes"}, lang));
+		TancaFinestraLayer("fbScope");
+	}
+
+	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+	
+	//ulc: upper left corner lrc: lower rigth corner
+	var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
+	var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
+	
+	var trg=JSON.parse(targets);
+	var dec=ParamCtrl.NDecimalsCoordXY;
+
+	// si les coordenades no són en lon/lat, les transformem
+	if (crs !="EPSG:4326" && crs !="CRS:84")
+	{
+		var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
+		var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+
+		for (var i=0; i<trg.length; i++)
+		{
+			//afegim el bbox i el gmlpol només al primary target
+			if (trg[i].role=="primary")
+			{
+				//afegim el bounding box en lon/lat
+				trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec),"xmax":OKStrOfNe(lrc_ll.x,dec),"ymin": OKStrOfNe(lrc_ll.y,dec),"ymax":OKStrOfNe(ulc_ll.y,dec)};
+				//afegim el GMLpol en el crs original
+				trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+			}
+		}
+
+	}
+	else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+	{
+		for (var i=0; i<trg.length; i++)
+		{
+			//afegim el bbox i el gmlpol només al primary target
+			if (trg[i].role=="primary")
+			{
+				//afegim el bounding box en lon/lat
+				trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
+				//afegim el GMLpol
+				trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+			}
+		}
+}
+
+	GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
+}
 
 function TancaFinestraFeedbackAmbScope()
 {
@@ -187,7 +242,7 @@ function TancaFinestraFeedbackAmbScope()
 	//Aquí estem en la situació que hem tancat la caixa des del botó tancar.
 	ParamCtrl.EstatClickSobreVista="ClickConLoc";
 	CanviaEstatClickSobreVista("ClickConLoc");
-	RepintaMapesIVistes();
+	//RepintaMapesIVistes(); //tot i que incialment m'ho havia semblat, no és necessari repintar les vistes.
 }
 
 function ComprovaCalTancarFeedbackAmbScope(estat)
@@ -201,7 +256,7 @@ function ComprovaCalTancarFeedbackAmbScope(estat)
 		{
 			CanviaEstatClickSobreVista("ClickConLoc");
 			CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc","p");
-		} // si si que hi ha "estat", vol dir que estem seleccionant una eina de zoom, pan, etc i que CanviaEstatClickSobreVista segueix en seu curs normal.
+		} // si sí que hi ha "estat", vol dir que estem seleccionant una eina de zoom, pan, etc i que CanviaEstatClickSobreVista segueix en seu curs normal.
 	}
 }
 function CanviaEtiquetesAnarCoord(sel)
