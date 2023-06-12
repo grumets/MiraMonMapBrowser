@@ -187,7 +187,7 @@ var FormulaConsulta="";
 					// em deso aquesta info que després necessitaré
 					if(!nou_valor.param)
 						nou_valor.param=[];
-					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_v_dim].valor});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
+					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_dim].valor[i_v_dim].nom});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
 				}
 			}
 			
@@ -227,7 +227,7 @@ var FormulaConsulta="";
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
 							) && 
-							SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+							SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
 							&&
 							nou_valor.objectes
 							) ||
@@ -238,7 +238,7 @@ var FormulaConsulta="";
 									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
 								)
 								&&
-								SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+								SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
 							)
 							)
 							break;
@@ -302,7 +302,7 @@ var FormulaConsulta="";
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
 							)&& 
-							SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+							SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
 							&&
 							nou_valor.i_valor==i
 							) ||
@@ -312,7 +312,7 @@ var FormulaConsulta="";
 									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
 								)&& 
-								SonValorsDimensionsExtraIguals(nou_valor.param, valors[i].param)
+								SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
 							)
 							)
 							break;

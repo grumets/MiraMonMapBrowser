@@ -1605,7 +1605,7 @@
 						}
 					},
 					"dimensioExtra": {
-						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanisme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es poden incloure en una fórmula i, per tant, no es poden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegeu 'valors.param') i que es pot utilitzar junt amb aquest per descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanisme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. Aquestes dimensions es poden incloure en una fórmula i, per tant, es poden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegeu 'valors.param') i que es pot utilitzar junt amb aquest per descriure altres dimensions. Opcional; només per capes raster; pot ser null",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció de la clau i els valors d'una dimensió",
@@ -1616,7 +1616,7 @@
 									"$ref": "#/definitions/nomDescripcio"
 								},
 								"formulaDesc":{
-									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
+									"description": "Fórmula en JavaScript(per exemple: valor.substring(0,4)+'-'+valor.substring(4,6)+'-'+valor.substring(6,8)) a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
 									"type": "string"
 								},
 								"valor": {
