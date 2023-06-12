@@ -1683,7 +1683,7 @@ var MessageLang=
     "cat": "per envolupant",
     "spa": "por envolvente",
     "eng": "by bounding box",
-    "fre": "par enveloppe",
+    "fre": "par zone de délimitation",
     "cze": "ohraničujícím polem",
     "ger": "durch Bounding Box"
   },
@@ -3295,6 +3295,30 @@ var MessageLang=
       "fre": "pour la rétroaction d'un domaine spécifique",
       "cze": "posouzení konkrétní oblasti",
       "ger": "einen bestimmten Bereichs"
+    },
+    "CheckNDecimalFigures": {
+      "cat": "El nombre de decimals configurat per l'usuari no és suficient per definir l'àmbit correctament. Modifica aquest paràmetre al menú Opcions --> N. decimals",
+      "spa": "El número de decimales configurado por el usuario no es suficiente para definir el ámbito correctamente. Modifica este parámetro en el menú Opciones --> N. decimales",
+      "eng": "The number of decimal figures defined by the user is not enougth to correctly define the bounding box. Modify this parameter in Options --> N. of decimal figures",
+      "fre": "Le nombre de décimales configuré par l'utilisateur n'est pas suffisant pour définir correctement la zone de délimitation. Modifiez ce paramètre dans le menu Options --> N. décimales",
+      "cze": "Počet desetinných míst nakonfigurovaný uživatelem nestačí ke správné definici rozsahu. Upravte tento parametr v nabídce Možnosti --> Počet desetinných míst",
+      "ger": "Die vom Benutzer konfigurierte Anzahl der Dezimalstellen reicht nicht aus, um den Bereich korrekt zu definieren. Ändern Sie diesen Parameter im Menü Optionen --> N. Dezimalstellen"
+    },
+    "MissingCoordinates": {
+      "cat": "Falten coordenades",
+      "spa": "Faltan coordenadas",
+      "eng": "Coordinates missing",
+      "fre": "Coordonnées manquantes",
+      "cze": "Chybějící souřadnice",
+      "ger": "Fehlende Koordinaten"
+    },
+    "ScopeUseMouse": {
+      "cat": "Usa el ratolí per marcar una àrea d'interès:",
+      "spa": "Usa el ratón para marcar un área de interés:",
+      "eng": "Use the mouse to select an area of interest:",
+      "fre": "Utiliser la souris pour sélectionner une zone d'intérêt:",
+      "cze": "Pomocí myši vyberte oblast zájmu:",
+      "ger": "Wählen Sie mit der Maus einen Interessenbereich aus:"
     }
   },
   "commands": {

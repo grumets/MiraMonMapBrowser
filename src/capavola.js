@@ -132,7 +132,7 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 
 	var cdns=[];
 	cdns.push('<form name="FeedbackScope_win" onSubmit="return false;">',
-		'<span>', DonaCadenaLang({"cat":"Usa el ratolí per marcar una àrea d'interès:","spa":"Usa el ratón para marcar un área de interés:","eng":"Use the mouse to select an area of interest:","fre":"Utiliser la souris pour sélectionner une zone d'intérêt:"}),'</span>',
+		'<span>', GetMessage("ScopeUseMouse","capavola"),'</span>',
 		'<br><br>',
 		'<table class="Verdana11px" width="50%" align="center">',
 			'<tr>',
@@ -186,55 +186,72 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 	//comprovem que tenim totes les coordenades
 	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
 	{
-		alert(GUFDonaCadenaLang({"cat":"Falten coordenades", "spa":"Faltan coordenadas", "eng":"Coordinates missing", "fre":"Coordonnées manquantes"}, lang));
+		alert(GetMessage("MissingCoordinates","capavola"));
 		TancaFinestraLayer("fbScope");
 	}
-
-	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
-	
-	//ulc: upper left corner lrc: lower rigth corner
-	var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
-	var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
-	
-	var trg=JSON.parse(targets);
-	var dec=ParamCtrl.NDecimalsCoordXY;
-
-	// si les coordenades no són en lon/lat, les transformem
-	if (crs !="EPSG:4326" && crs !="CRS:84")
+	else
 	{
-		var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
-		var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+		var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+	
+		//ulc: upper left corner lrc: lower rigth corner
+		var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
+		var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
+	
+		var trg=JSON.parse(targets);
+		var dec=ParamCtrl.NDecimalsCoordXY;
 
-		for (var i=0; i<trg.length; i++)
+		// si les coordenades no són en lon/lat, les transformem
+		if (crs !="EPSG:4326" && crs !="CRS:84")
 		{
-			//afegim el bbox i el gmlpol només al primary target
-			if (trg[i].role=="primary")
+			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
+			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+
+			for (var i=0; i<trg.length; i++)
 			{
-				//afegim el bounding box en lon/lat
-				trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec),"xmax":OKStrOfNe(lrc_ll.x,dec),"ymin": OKStrOfNe(lrc_ll.y,dec),"ymax":OKStrOfNe(ulc_ll.y,dec)};
-				//afegim el GMLpol en el crs original
-				trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+				//afegim el bbox i el gmlpol només al primary target
+				if (trg[i].role=="primary")
+				{
+					//afegim el bounding box en lon/lat
+					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
+					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situacions on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
+					var dec_trans=8;
+					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
+					//afegim el GMLpol en el crs original
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+				}
 			}
 		}
-
+		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+		{
+			//comprovem que les coordenades min/maxLat i min/maxLong no siguin iguals entre elles. En cas que ho siguin demanem a l'uruari que modifiqui el nombre de decimals a la configuració del navegador
+			if ((OKStrOfNe(ulc.x,dec)==OKStrOfNe(lrc.x,dec)) || (OKStrOfNe(lrc.y,dec)==OKStrOfNe(ulc.y,dec)))
+			{
+				alert(GetMessage("CheckNDecimalFigures", "capavola"));
+				TancaFinestraLayer("fbScope");
+				return;
+			}
+			else
+			{
+				for (var i=0; i<trg.length; i++)
+				{
+					//afegim el bbox i el gmlpol només al primary target
+					if (trg[i].role=="primary")
+					{
+						//afegim el bounding box en lon/lat
+						trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
+						//afegim el GMLpol
+						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					}
+				}
+			}
+		}
+	
+		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
+	
 	}
-	else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
-	{
-		for (var i=0; i<trg.length; i++)
-		{
-			//afegim el bbox i el gmlpol només al primary target
-			if (trg[i].role=="primary")
-			{
-				//afegim el bounding box en lon/lat
-				trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
-				//afegim el GMLpol
-				trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
-			}
-		}
+	return;
 }
 
-	GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
-}
 
 function TancaFinestraFeedbackAmbScope()
 {
