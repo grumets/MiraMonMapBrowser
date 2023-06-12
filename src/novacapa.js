@@ -845,7 +845,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OrigenUsuari)
 	{
-		var nodata_usuari=(capa.valors && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
+		var nodata_usuari=(capa.valors && capa.valors.length>0 && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
 		capa.valors=[];
 		var i_v=0;
 		for (var i=0; i<image.getSamplesPerPixel(); i++)
