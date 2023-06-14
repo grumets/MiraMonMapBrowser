@@ -1011,7 +1011,7 @@ var n_targets_secundaris=0;
 				  GUFDonaCadenaLang({"cat":"Afegir una valoració", "spa":"Añadir una valoración", "eng":"Add a user feedback", "fre":"Ajouter une rétroaction de l'utilisateur"}, lang), "\"",
 				  " onClick='GUFAfegirFeedbackCapaMultipleTargets(\"", JSON.stringify(targets).replaceAll("\"","\\\"").replaceAll("'","%27"), "\", \"", lang, "\", \"", access_token_type, "\");' />");
 
-//$$OG: nou botó per afegir scope a un FB
+//OG: nou botó per afegir scope a un FB
 	if (name_scope_function)
 	{
 		cdns.push("<input type=\"button\" class=\"guf_button user\" value=\"",
