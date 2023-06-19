@@ -38,7 +38,10 @@
 
 "use strict"
 
-var IStoryActive=null;
+var indexStoryMapActiu=null;
+const midaLimitImatge = 2621440; // Unitats en Bytes. Equival a 2,5MB de dades per imatge.
+const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
+
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -50,7 +53,13 @@ function MostraFinestraTriaStoryMap()
 
 function TancaFinestra_triaStoryMap()
 {
-	IStoryActive=null;
+	indexStoryMapActiu=null;
+}
+
+
+function TancaFinestra_visualitzaStoryMap()
+{
+	indexStoryMapActiu=null;
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
@@ -101,7 +110,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Cr
 	}
 	cdns.push("</table>");
 	contentFinestraLayer(win, name, cdns.join(""));
-	IStoryActive=-1;
+	indexStoryMapActiu=-1;
 }
 
 function TancaIIniciaStoryMap(i_story)
@@ -119,7 +128,7 @@ function TancaICreaStoryMap()
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
 
-	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><input type='file' align='center' onChange='CarregaImatgeStoryMap(this, storyMainImage)'><img id='storyMainImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
+	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='storyMainImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\")'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
 
 	if (!isFinestraLayer(window, "creaStoryMap"))
 	{
@@ -138,28 +147,24 @@ function TancaICreaStoryMap()
 */
 function CarregaImatgeStoryMap(input, imatgeId) 
 {
-	const imatge = document.getElementById(imatgeId);
-	if (input.files && input.files[0]) 
+	const fitxerObjectiu = input.files ? input.files[0] : null;
+	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
 	{
-		//const maximLongImg = 1000000; // Longitud màxima per una imatge 1.000.000
 		var reader = new FileReader();
 		reader.onload = function (e)
 		{
-			if (imatge && e.target.result) 
+			if (this.readyState == FileReader.DONE)
 			{
-				const imgBase64 = btoa(e.target.result);
-				//if (imgBase64.length < maximLongImg)
-				//{
-					imatge.src="data:image/jpeg;base64," + imgBase64;
+				const imatge = document.getElementById(imatgeId);
+				if (imatge && e.target.result)
+				{
+					imatge.src = this.result;
 					imatge.width=200;
-				//}
+				}
 			}
 		};
 		reader.readAsDataURL(input.files[0]);
 	}
-	/*if (input.value) {
-		imatge.src = input.value;
-	}*/
 }
 
 function SeguentPasStoryMap()
@@ -177,7 +182,7 @@ function SeguentPasStoryMap()
 	novaStoryMapFinestra.replaceChildren();
 	const stepPictureId = "stepImg" + comptadorPassos;
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input id='imgStep", comptadorPassos, "' type='file' align='center' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\")'>", 
+	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\")'>", 
 	"<img id='" + stepPictureId + "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
 	//"<iframe id='" + stepPictureId + "' src='#' width='640' height='480'></iframe>",
 	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
@@ -270,20 +275,20 @@ var i_story=extra_param, elem;
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
 	ObreFinestra(window, "storyMap")
-	IStoryActive=i_story;
+	indexStoryMapActiu=i_story;
 
 	AfegeixMarkerStoryMapVisible();
 
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
 }
-// Reiniciar els valors que ontervenen en la creació de l'StoryMap.
+// Reiniciar els valors que intervenen en la creació de l'StoryMap.
 function TancaFinestra_storyMap()
 {
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
 	comptadorPassos = 0;
-	IStoryActive=null;
+	indexStoryMapActiu=null;
 }
 
 function isElemScrolledIntoViewDiv(el, div, partial)

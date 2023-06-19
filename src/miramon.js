@@ -1074,12 +1074,12 @@ function CanviaIdioma(s)
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraTaulaDeCapaVectorial()
 
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 	{
-		if (IStoryActive<0)
+		if (indexStoryMapActiu<0)
 			MostraFinestraTriaStoryMap();
 		else
-			IniciaStoryMap(IStoryActive);
+			IniciaStoryMap(indexStoryMapActiu);
 	}
 } // Fi function CanviaIdioma()
 
@@ -1931,8 +1931,10 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_editarVector();
 	else if (nom_finestra=="triaStoryMap")
 		TancaFinestra_triaStoryMap();
-	else if (nom_finestra=="storyMap")
+	else if (nom_finestra=="creaStoryMap")
 		TancaFinestra_storyMap();
+	else if (nom_finestra=="storyMap")
+		TancaFinestra_visualitzaStoryMap();
 	else if (nom_finestra=="editaEstil")
 		TancarFinestra_editEstil(nom_finestra);
 	else if (nom_finestra=="taulaCapaVectorial")
@@ -5009,7 +5011,7 @@ function MovementMiraMonMapBrowser(event)
 function WheelMiraMonMapBrowser(event)
 {
 var elem, rect;
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 		return;
 
 	for (var z=0; z<layerFinestraList.length; z++)

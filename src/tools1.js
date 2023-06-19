@@ -1346,7 +1346,7 @@ var div, div_canto;
 		//This must be always bigger than the topmost floatingWindow zIndex
 		setzIndexLayer(div, layerList.length);
 		setzIndexLayer(getLayer(window, layerFinestraList[i_finestra].nom+SufixFinestra), layerList.length);
-		div_canto=getLayer(window, layerFinestraList[i_finestra].nom+SufixCanto)
+		div_canto=getLayer(window, layerFinestraList[i_finestra].nom+SufixCanto);
 		if (div_canto)
 			setzIndexLayer(div_canto, layerList.length);
 	}
