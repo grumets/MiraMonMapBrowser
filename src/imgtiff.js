@@ -38,7 +38,7 @@
 
 "use strict"
 
-function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
+function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista)
 {
 	var capa = ParamCtrl.capa[i_capa2];
 	var valor2 = capa.valors[i_valor2];
@@ -57,9 +57,31 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 			{
 				for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
 				{
-					var dim=capa.dimensioExtra[i_dim];
-					if (typeof dim.i_valor_tiff === "undefined" || dim.i_valor_tiff!=dim.i_valor)
+					if (typeof dim.i_valor_tiff === "undefined")
 						return null;
+					var dim=capa.dimensioExtra[i_dim], dim2= null;
+					if(dims)
+					{
+						for(var i_dim2=0; i_dim2<dims.length; i_dim2++)
+						{
+							dim2=dims[i_dim2];
+							if(dims[i_dim2].clau.nom.toLowerCase()!=dim.clau[dim.i_valor_tiff].nom.toLowerCase())
+							{	
+								dim2=dims[i_dim2];
+								break;
+							}
+						}
+					}
+					if (dim2)
+					{
+						if(dim2.valor.nom.toLowerCase()!=dim.valor[dim.i_valor_tiff].nom.toLowerCase())
+							return null;
+					}
+					else
+					{
+						if (dim.i_valor_tiff!=dim.i_valor)
+							return null;
+					}
 				}
 			}
 			return valor2.tiff;
@@ -78,9 +100,31 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, vista)
 		{
 			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
 			{
-				var dim=capa.dimensioExtra[i_dim];
-				if (typeof dim.i_valor_tiff === "undefined" || dim.i_valor_tiff!=dim.i_valor)
+				var dim=capa.dimensioExtra[i_dim], dim2= null;
+				if (typeof dim.i_valor_tiff === "undefined")
 					return null;
+				if(dims)
+				{
+					for(var i_dim2=0; i_dim2<dims.length; i_dim2++)
+					{
+						dim2=dims[i_dim2];
+						if(dims[i_dim2].clau.nom.toLowerCase()!=dim.clau[dim.i_valor_tiff].nom.toLowerCase())
+						{	
+							dim2=dims[i_dim2];
+							break;
+						}
+					}
+				}
+				if (dim2)
+				{
+					if(dim2.valor.nom.toLowerCase()!=dim.valor[dim.i_valor].nom.toLowerCase())
+						return null;
+				}
+				else
+				{
+					if (dim.i_valor_tiff!=dim.i_valor)
+						return null;
+				}
 			}
 		}
 		return capa.tiff;
@@ -100,7 +144,7 @@ async function loadGeoTIFF() {
 	window.GeoTIFFfromUrl = fromUrl;
 }
 
-function DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2)
+function DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims)
 {
 var capa = ParamCtrl.capa[i_capa2], url;
 
@@ -120,21 +164,21 @@ var capa = ParamCtrl.capa[i_capa2], url;
 
 	if (!url)
 		return "";
-	return CanviaVariablesDeCadena(url, capa, i_data2);
+	return CanviaVariablesDeCadena(url, capa, i_data2, dims);
 }
 
-async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param)
 {
 	if (!window.GeoTIFFfromUrl)
 		await loadGeoTIFF();
 	var capa = ParamCtrl.capa[i_capa2];
-	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2);
+	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims);
 
 	/*if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
 	{
 		if (null==(url=AddAccessTokenToURLIfOnline(url, capa.access)))
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param);
 			return;
 		}
 	}*/
@@ -160,7 +204,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param);
 			return null;
 		}
 	}
@@ -201,7 +245,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			capa.tiff=tiff;
 		}
 	}
-	if (capa.dimensioExtra)
+	if (!dims && capa.dimensioExtra)
 	{
 		for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
 		{
@@ -212,13 +256,13 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc, i_valor2);
 	if (capa.origen==OrigenUsuari)
 		CompletaDefinicioCapa(capa, false);
-	return {imatge: imatge, vista: vista, i_capa: i_capa, i_estil: i_estil, i_data: i_data, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
+	return {imatge: imatge, vista: vista, i_capa: i_capa, i_estil: i_estil, i_data: i_data, dims: dims, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
 }
 
 
-async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
+async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i_valor, nom_funcio_ok, funcio_ok_param)
 {
-var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, vista);
+var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista);
 var capa2=ParamCtrl.capa[i_capa2];
 var bbox, width, height, dades, env_tiff;
 
@@ -283,5 +327,5 @@ var bbox, width, height, dades, env_tiff;
 	else
 		dades=data[0].buffer;
 
-	return {dades: dades, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
+	return {dades: dades, extra_param: {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, dims: dims, i_valor: i_valor, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param}};
 }

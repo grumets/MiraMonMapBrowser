@@ -402,6 +402,13 @@ var fragment, cadena, inici, final, nou_valor;
 		nou_valor=JSON.parse(cadena);
 		if (typeof nou_valor.i_data !== "undefined")
 			return true;
+		// miro si hi ha alguna dimensioExtra
+		var prop_nou_valor=Object.keys(nou_valor);
+		for(var i_prop=0; i_prop<prop_nou_valor.length; i_prop++)
+		{
+			if(prop_nou_valor[i_prop].startsWith("DIM_"))  // NJ: seria equivalent a prop_nou_valor[i_prop].substring(0,4)=="DIM_"
+				return true;
+		}
 		fragment=fragment.substring(final+1, fragment.length);
 	}
 	return false;
@@ -500,7 +507,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
-	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no son les dades per defecte -> la capa calculada és una capa nova
+	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no són les dades per defecte o hi ha dimensionsExtra -> la capa calculada és una capa nova
 	{
 		//AZ: pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
 
@@ -805,6 +812,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
 		var bbox = image.getBoundingBox();
 		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
+		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
 			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
@@ -837,7 +845,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OrigenUsuari)
 	{
-		var nodata_usuari=(capa.valors && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
+		var nodata_usuari=(capa.valors && capa.valors.length>0 && capa.valors[0].nodata) ? capa.valors[0].nodata : null;  // em deso el nodata que l'usuari hagi pogut indicar que vol en les capesDeServei
 		capa.valors=[];
 		var i_v=0;
 		for (var i=0; i<image.getSamplesPerPixel(); i++)

@@ -491,7 +491,7 @@ function ProcessaResultatLecturaCSVPropietatsObjecte(results)
 			for(i_atrib=0; i_atrib<capa.atributs.length; i_atrib++)
 			{
 				if(capa.atributs[i_atrib].nomOri)
-					feature.properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data)]=rows[i_row][capa.atributs[i_atrib].nomOri];
+					feature.properties[CanviaVariablesDeCadena(capa.atributs[i_atrib].nom, capa, i_data, null)]=rows[i_row][capa.atributs[i_atrib].nomOri];
 			}			
 		}
 	}
@@ -1471,11 +1471,11 @@ function DeterminaValorAtributObjecteDataCapaDigi(i_nova_vista, capa, feature, a
 		var nonPropId=feature.id;
 		if (HiHaValorsNecessarisCapaFormulaconsulta(capa, atribut.FormulaConsulta))
 			var v=DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i_col, i_fil); //idem
-		return eval(CanviaVariablesDeCadena(atribut.FormulaConsulta, capa, i_data));
+		return eval(CanviaVariablesDeCadena(atribut.FormulaConsulta, capa, i_data, null));
 	}
 	if (atribut.nom=="nonPropId")
 		return feature.id;
-	return feature.properties[CanviaVariablesDeCadena(atribut.nom, capa, i_data)];
+	return feature.properties[CanviaVariablesDeCadena(atribut.nom, capa, i_data, null)];
 }
 
 //Determina el valor per la data actual
@@ -1978,6 +1978,7 @@ var capa=ParamCtrl.capa[i_capa];
 		else
 			cdns.push("('", capa.objectes.features[i_obj].id, "')?");
 	}
+	//cdns.push("$select=feature,id");
 	cdns.push("$select=feature,id&$expand=Observations($select=result,phenomenonTime,parameters;$expand=Datastream($select=unitOfMeasurement", cdns_datastream.join(""), ",ObservedProperty($select=name)),MultiDatastream($select=unitOfMeasurements", cdns_datastream.join(""), ",ObservedProperties($select=name)))");
 	if (env!=null)
 	{

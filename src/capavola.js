@@ -87,8 +87,9 @@ function MostraFinestraAnarCoordenada()
 
 function MostraFinestraAnarCoordenadaEvent(event) //Afegit Cristian 19/01/2016
 {
-	MostraFinestraAnarCoordenada()
-	dontPropagateEvent(event)
+	ComprovaCalTancarFeedbackAmbScope();
+	MostraFinestraAnarCoordenada();
+	dontPropagateEvent(event);
 }//Fi de MostraFinestraAnarCoordenada()
 
 //No usar: Useu TancaFinestraLayer("anarCoord");
@@ -100,7 +101,181 @@ function TancaFinestra_anarCoord()
 	   CreaVistes();
 	}
 }//Fi de TancaFinestra_anarCoord()
+//OG: mostra finestra que permetrà afegir envolupant a un FB
+function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
+{
+	
+	var trg=targets;
+	var lng=lang;
+	var tkn=access_token_type;
 
+	if (!ObreFinestra(window, "fbScope", GetMessage("ofUserFeedbackScope", "capavola")))
+		return;
+	
+
+	
+	OmpleFinestraFeedbackAmbScope(trg, lng, tkn);
+
+	CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+	CanviaEstatClickSobreVista("ClickRecFB1");
+	TancaFinestraLayer("feedback");
+
+	return;
+}
+
+//OG: aquesta funció és la que haurà d'omplir la finestra escrivint el codi hmtl
+function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
+{
+	var trg=JSON.stringify(targets);
+	var lng=lang;
+	var tkn=access_token_type;
+
+	var cdns=[];
+	cdns.push('<form name="FeedbackScope_win" onSubmit="return false;">',
+		'<span>', GetMessage("ScopeUseMouse","capavola"),'</span>',
+		'<br><br>',
+		'<table class="Verdana11px" width="50%" align="center">',
+			'<tr>',
+				'<td colspan="2">',DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),'</td>',
+				'<td style="text-align:center;">Ymax</td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td style="text-align:rigth;">Xmin</td>',
+				'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="7" value="" disabled></td>',
+				'<td style="text-align:left;">Xmax</td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="7" value="" disabled></td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+			'<tr>',
+				'<td></td>',
+				'<td></td>',
+				'<td style="text-align:center;">Ymin</td>',
+				'<td></td>',
+				'<td></td>',
+			'</tr>',
+		'</table>',
+		'<table class="Verdana11px" width="50%" align="center">',
+			'<tr>',
+				'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="',GetMessage("OK"),'"'," onClick='AfegirFeedbackScopeCapaMultipleTargets(",trg,", \"",lng, "\", \"",tkn,"\"",");TancaFinestraLayer(\"fbScope\");'",'></td>',
+				'<td align="center"><input class="Verdana11px" type="button" name="Tancar" value="',GetMessage("Cancel"),'"'," onClick='TancaFinestraLayer(\"fbScope\");'",'></td>',
+			'</tr>',
+		'</table>',
+	'</form>');
+	contentFinestraLayer(window, "fbScope", cdns.join(""));
+}
+
+//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
+function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
+{
+	//comprovem que tenim totes les coordenades
+	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
+	{
+		alert(GetMessage("MissingCoordinates","capavola"));
+		TancaFinestraLayer("fbScope");
+	}
+	else
+	{
+		var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
+	
+		//ulc: upper left corner lrc: lower rigth corner
+		var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
+		var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
+	
+		var trg=JSON.parse(targets);
+		var dec=ParamCtrl.NDecimalsCoordXY;
+
+		// si les coordenades no són en lon/lat, les transformem
+		if (crs !="EPSG:4326" && crs !="CRS:84")
+		{
+			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
+			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+
+			for (var i=0; i<trg.length; i++)
+			{
+				//afegim el bbox i el gmlpol només al primary target
+				if (trg[i].role=="primary")
+				{
+					//afegim el bounding box en lon/lat
+					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
+					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situacions on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
+					var dec_trans=8;
+					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
+					//afegim el GMLpol en el crs original
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+				}
+			}
+		}
+		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+		{
+			//comprovem que les coordenades min/maxLat i min/maxLong no siguin iguals entre elles. En cas que ho siguin demanem a l'uruari que modifiqui el nombre de decimals a la configuració del navegador
+			if ((OKStrOfNe(ulc.x,dec)==OKStrOfNe(lrc.x,dec)) || (OKStrOfNe(lrc.y,dec)==OKStrOfNe(ulc.y,dec)))
+			{
+				alert(GetMessage("CheckNDecimalFigures", "capavola"));
+				TancaFinestraLayer("fbScope");
+				return;
+			}
+			else
+			{
+				for (var i=0; i<trg.length; i++)
+				{
+					//afegim el bbox i el gmlpol només al primary target
+					if (trg[i].role=="primary")
+					{
+						//afegim el bounding box en lon/lat
+						trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
+						//afegim el GMLpol
+						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					}
+				}
+			}
+		}
+	
+		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
+	
+	}
+	return;
+}
+
+
+function TancaFinestraFeedbackAmbScope()
+{
+	//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
+	//Aquí estem en la situació que hem tancat la caixa des del botó tancar.
+	ParamCtrl.EstatClickSobreVista="ClickConLoc";
+	CanviaEstatClickSobreVista("ClickConLoc");
+	//RepintaMapesIVistes(); //tot i que incialment m'ho havia semblat, no és necessari repintar les vistes.
+}
+
+function ComprovaCalTancarFeedbackAmbScope(estat)
+{
+	//si estem fent un FB amb Scope i clickem sobre algun botó de la barra d'eines que obra una finestra nova (anar a coord, config, calc, etc.) tanquem la finestra fbScope i posem per defecte el mouse a ConLoc
+	if (ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
+	{
+		TancaFinestraLayer("fbScope");
+		//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
+		if(!estat) //Aquí estem en una situació en què estem tancant la caixa pq estem entrant a una nova finestra de l'estil anar a coord, config, calc, etc.
+		{
+			CanviaEstatClickSobreVista("ClickConLoc");
+			CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc","p");
+		} // si sí que hi ha "estat", vol dir que estem seleccionant una eina de zoom, pan, etc i que CanviaEstatClickSobreVista segueix en seu curs normal.
+	}
+}
 function CanviaEtiquetesAnarCoord(sel)
 {
 	if(sel == 0)

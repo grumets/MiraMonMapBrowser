@@ -525,7 +525,7 @@ var capa=ParamCtrl.capa[i_capa];
 var s=capa.nom;
 
 	if (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
-		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data);
+		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data, null);
 
 	if (i_estil==-1)
 		return s;
@@ -659,6 +659,11 @@ function DonaAccessTokenTypeFeedback(capa)
 	{
 		if (ParamCtrl.accessClientId.hasOwnProperty(tokenType))
 		{
+			if (!ParamInternCtrl.tokenType)
+			{
+				alert("authen.js not included in index.htm");
+				return null;
+			}
 			if (ParamInternCtrl.tokenType[tokenType].userAlreadyWelcomed)
 				return tokenType;
 		}
@@ -705,7 +710,8 @@ var capa=ParamCtrl.capa[i_capa];
 				s, //identificador unic
 				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
 				ParamCtrl.idioma,
-				DonaAccessTokenTypeFeedback(capa));
+				DonaAccessTokenTypeFeedback(capa),
+				"MostraFinestraFeedbackAmbScope");
 }
 
 function AdoptaEstil(params_function, guf)

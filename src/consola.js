@@ -102,6 +102,7 @@ function CanviaEstatEventConsola(event, i_event, estat)
 
 function MostraFinestraConsola()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	if (!ObreFinestra(window, "consola", GetMessage("ofWatchingReportsConsole", "consola")))
 		return;
 	OmpleFinestraConsola();

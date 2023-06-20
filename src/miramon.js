@@ -582,6 +582,8 @@ var a={};
 			a.fre=cadena1.fre;
 		if(typeof cadena1.cze!=="undefined")
 			a.cze=cadena1.cze;
+		if(typeof cadena1.ger!=="undefined")
+			a.ger=cadena1.ger;
 		if(typeof cadena2==="object")
 		{
 			if(typeof cadena2.cat!=="undefined")
@@ -619,6 +621,13 @@ var a={};
 				else
 					a.cze+=(cadena2.cze?cadena2.cze:"");
 			}
+			if(typeof cadena2.ger!=="undefined")
+			{
+				if(typeof a.ger==="undefined" || !a.ger)
+					a.ger=cadena2.ger;
+				else
+					a.ger+=(cadena2.ger?cadena2.ger:"");
+			}
 		}
 		else if(cadena2)
 		{
@@ -642,6 +651,10 @@ var a={};
 				a.cze=cadena2;
 			else
 				a.cze+=cadena2;
+			if(typeof a.ger==="undefined" || !a.ger)
+				a.ger=cadena2;
+			else
+				a.ger+=cadena2;
 		}
 	}
 	else if(cadena1)
@@ -657,6 +670,8 @@ var a={};
 			a.fre=cadena1 + (cadena2.fre?cadena2.fre:"");
 		if(typeof cadena2.cze!=="undefined")
 			a.cze=cadena1 + (cadena2.cze?cadena2.cze:"");
+		if(typeof cadena2.ger!=="undefined")
+			a.ger=cadena1 + (cadena2.ger?cadena2.ger:"");
 	}
 	else
 	{
@@ -671,6 +686,8 @@ var a={};
 			a.fre=cadena2.fre;
 		if(typeof cadena2.cze!=="undefined")
 			a.cze=cadena2.cze;
+		if(typeof cadena2.ger!=="undefined")
+			a.ger=cadena2.ger;
 	}
 	return a;
 }
@@ -1038,6 +1055,10 @@ function CanviaIdioma(s)
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraAnarCoordenada();
 
+	elem=getFinestraLayer(window, "fbScope");
+	if(isLayer(elem) && isLayerVisible(elem))
+		OmpleFinestraFeedbackAmbScope();
+
 	elem=getFinestraLayer(window, "param");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraParametres();
@@ -1372,6 +1393,7 @@ function RecuperaVistaPrevia()
 
 function RecuperaVistaPreviaEvent(event) // Afegit Cristian 19/01/2016
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	RecuperaVistaPrevia();
 	dontPropagateEvent(event);
 }
@@ -1416,6 +1438,7 @@ function PortaVistaANormalScreen()
 
 function GoFullScreenEvent(event)
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	if (ParamCtrl.fullScreen)  //This should not happen
 		alert("Already in full screen");
 
@@ -1786,6 +1809,7 @@ function CreaProjeccio()
 var TriaFullWindow=null;
 function ObreTriaFullImprimir()
 {
+	ComprovaCalTancarFeedbackAmbScope();
     if (TriaFullWindow==null || TriaFullWindow.closed)
     {
         TriaFullWindow=window.open("print.htm","FinestraPrint",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=400,height=600,left=0,top=0');
@@ -1798,6 +1822,7 @@ function ObreTriaFullImprimir()
 var AjudaWindow=null;
 function ObreFinestraAjuda()
 {
+	ComprovaCalTancarFeedbackAmbScope();
     if (AjudaWindow==null || AjudaWindow.closed)
     {
         AjudaWindow=window.open(GetMessage("helpHtm", "urls"),"FinestraAjuda",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=yes,directories=no,resizable=yes,width=780,height=580');
@@ -1809,6 +1834,7 @@ function ObreFinestraAjuda()
 
 function InstalaLectorMapes()
 {
+	ComprovaCalTancarFeedbackAmbScope();
     var instalaWindow=window.open(GetMessage("installerMMRExe", "urls"));
     ShaObertPopUp(instalaWindow);
 }
@@ -1925,6 +1951,8 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_multi_consulta();
 	else if (nom_finestra=="anarCoord")
 		TancaFinestra_anarCoord();
+	else if (nom_finestra=="fbScope")
+		TancaFinestraFeedbackAmbScope();	
 	else if (nom_finestra=="video")
 		TancaFinestra_video();
 	else if (nom_finestra=="editarVector")
@@ -2147,6 +2175,7 @@ var cdns=[], cal_coma, capa, i;
 
 function MostraFinestraEnllac()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	showFinestraLayer(window, "enllac");
 	OmpleFinestraEnllac();
 	setzIndexFinestraLayer(window, "enllac", (layerList.length-1));
@@ -2154,6 +2183,7 @@ function MostraFinestraEnllac()
 
 function MostraFinestraEnllacWMS()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	showFinestraLayer(window, "enllacWMS");
 	OmpleFinestraEnllacWMS();
 	setzIndexFinestraLayer(window, "enllacWMS", (layerList.length-1));
@@ -2481,6 +2511,7 @@ function PortamAVistaGeneral()
 }
 function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	PortamAVistaGeneral();
 	dontPropagateEvent(event);
 }
@@ -2523,6 +2554,7 @@ function PortamANivellDeZoom(nivell)
 
 function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	dontPropagateEvent(event);
 	PortamANivellDeZoom(nivell);
 }
@@ -2593,6 +2625,7 @@ function CanviaNivellDeZoom(nivell, redibuixa)
 
 function MostraFinestraVideo()
 {
+	ComprovaCalTancarFeedbackAmbScope();
 	if (!ObreFinestra(window, "video", GetMessage("timeSeries", "miramon")))
 		return;
 	PreparaIOmpleFinestraVideo();
@@ -2772,8 +2805,8 @@ var capa=ParamCtrl.capa[i_capa];
 function DonaNomFitxerMetadades(capa, i_estil)
 {
 	if (i_estil==-1)
-		return CanviaVariablesDeCadena(DonaCadena(capa.metadades.standard), capa, null);
-	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null);
+		return CanviaVariablesDeCadena(DonaCadena(capa.metadades.standard), capa, null, null);
+	return CanviaVariablesDeCadena(DonaCadena(capa.estil[i_estil].metadades.standard), capa, null, null);
 }
 
 function EsCapaVisibleAAquestNivellDeZoom(capa)
@@ -4534,6 +4567,11 @@ function CarregaArrayCapesDeServei(nomesOffline, preguntat, nomesSenseLogin)
 			calfer[i]=false;
 			if (ParamCtrl.capesDeServei[i].servei.access)
 			{
+				if (!ParamInternCtrl.tokenType)
+				{
+					alert("authen.js not included in index.htm");
+					return;
+				}
 				var access=ParamCtrl.capesDeServei[i].servei.access;
 				if (!ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken || 
 					ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="failed")
@@ -4605,6 +4643,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "seleccioEstadistic", GetMessageJSON("SelectionStatisticValue", "cntxmenu"), boto_tancar, 220, 90, 430, 265, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "editaEstil", GetMessageJSON("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 435, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessageJSON("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "fbScope", GetMessageJSON("FBwithScope", "barra"), boto_tancar, 297, 298, 350, 200, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessageJSON("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "param", GetMessageJSON("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessageJSON("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
