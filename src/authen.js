@@ -61,14 +61,14 @@ function AddAccessTokenToURLIfOnline(url, access)
 }
 
 
-function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10)
+function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11)
 {
 	if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=="logout")
 		return;
 	if (ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken)  //Parametre meu que no forma part de la llibreria
 	{
 		//Com que hi ha una caixa del hello per autentificar oberta, renuncio a obrir-ne cap altre i provo si la caixa ja s'ha despatxat més tard.
-		setTimeout(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+		setTimeout(f_repeat, 2000, access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11);
 		return;
 	}
 
@@ -102,7 +102,7 @@ function AuthResponseConnect(f_repeat, access, param1, param2, param3, param4, p
 					alert("Error: " +err.message);
 				}
 				ParamInternCtrl.tokenType[access.tokenType ? access.tokenType : "authenix"].askingAToken=false;
-				f_repeat(access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+				f_repeat(access, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11);
 			},
 			// On error
 			function(error) 
@@ -157,7 +157,7 @@ function doAutenticatedHTTPRequest(access, method, ajax, url, request_format, da
 		return;
 	}
 
-	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct, null, null);
+	AuthResponseConnect(doAutenticatedHTTPRequest, access, method, ajax, url, request_format, dataPayload, hand, response_format, struct, null, null, null);
 }
 
 function CalFerLogin()

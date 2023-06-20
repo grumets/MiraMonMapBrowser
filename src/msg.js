@@ -1683,7 +1683,7 @@ var MessageLang=
     "cat": "per envolupant",
     "spa": "por envolvente",
     "eng": "by bounding box",
-    "fre": "par enveloppe",
+    "fre": "par zone de délimitation",
     "cze": "ohraničujícím polem",
     "ger": "durch Bounding Box"
   },
@@ -2585,12 +2585,12 @@ var MessageLang=
       "ger": "Selektor"
     },
     "SelectedInLayer": {
-      "cat": "Seleccionada a la capa",
-      "spa": "Seleccionada en la capa",
-      "eng": "Selected in the layer",
-      "fre": "Sélectionné dans la couche",
-      "cze": "Vybrané ve vrstvě",
-      "ger": "In dem Layer ausgewählt"
+      "cat": "Valor seleccionat al desplegable de la llegenda",
+      "spa": "Valor seleccionado en el desplegable de la leyenda",
+      "eng": "Value selected in the legend dropdown",
+      "fre": "Valeur choisie dans la légende sélectionnable",
+      "cze": "Hodnota vybraná v rozevíracím seznamu legend",
+      "ger": "Im Legenden-Dropdown ausgewählter Wert"
     },
     "byDefault": {
       "cat": "per defecte",
@@ -2913,12 +2913,12 @@ var MessageLang=
       "ger": "Breite auf einen Bereich von 1 bis 10 Pixel begrenzt"
     },
     "ShowLikeTable": {
-      "cat": "Mostrar format taula",
-      "spa": "Mostrar formato tabla",
-      "eng": "Show table format",
-      "fre": "Afficher le format de la table",
-      "cze": "Zobrazit formát tabulky",
-      "ger": "Tabellenformat anzeigen"
+      "cat": "Mostrar com a taula",
+      "spa": "Mostrar como tabla",
+      "eng": "Show as table",
+      "fre": "Afficher sous forme de tableau",
+      "cze": "Zobrazit jako tabulku",
+      "ger": "Als Tabelle anzeigen"
     },
     "PercentageTransparencyRange": {
       "cat": "Percentatge de transparència limitada a valors 0% (opac) i 100% (transparent)",
@@ -2929,12 +2929,12 @@ var MessageLang=
       "ger": "Transparenzanteil im Bereich von 0% (undurchsichtig) bis 100% (transparent)"
     },
 	"ViewItemsInScope": {
-      "cat": "Veure sols elements dins de l'àmbit",
-      "spa": "Ver solo elementos dentro del ámbito",
-      "eng": "View only items within the scope",
-      "fre": "Afficher uniquement les éléments du périmètre",
-      "cze": "Zobrazit pouze položky v rozsahu",
-      "ger": "Ausschließlich Elemente im Geltungsbereich anzeigen"
+      "cat": "Veure només objectes dins de l'àmbit",
+      "spa": "Ver solo objectes dentro del ámbito",
+      "eng": "View only features within the scope",
+      "fre": "Ne voir que les objets dans le périmètre",
+      "cze": "Zobrazit pouze funkce v rozsahu",
+      "ger": "Nur Features innerhalb des Bereichs anzeigen"
     },
 	"ShowGeometry": {
       "cat": "Mostrar geometria",
@@ -2953,20 +2953,20 @@ var MessageLang=
       "ger": "Geometrie"
    },
    "ExportObject": {
-     "cat": "Exporta l'objecte",
-     "spa": "Exportar el objecto",
-     "eng": "Export object",
-     "fre": "Exporter l'objet",
-      "cze": "Objekt exportu",
-      "ger": "Objekt exportieren"
+     "cat": "Seleccionar l'objecte",
+     "spa": "Seleccionar el objecto",
+     "eng": "Select the object",
+     "fre": "Sélectionnez l'objet",
+      "cze": "Vyberte objekt",
+      "ger": "Wähle das Objekt aus"
    },
    "ExportObjects": {
-     "cat": "Exportar objectes",
-     "spa": "Exportar objectos",
-     "eng": "Export objects",
-     "fre": "Exporter les objets",
-      "cze": "Export objektů",
-      "ger": "Objekte exportieren"
+     "cat": "Guardar seleccionats com GeoJSON",
+     "spa": "Guardar seleccionados como GeoJSON",
+     "eng": "Save selected as GeoJSON",
+     "fre": "Enregistrer la sélection sous GeoJSON",
+     "cze": "Uložit vybrané jako GeoJSON",
+     "ger": "Die Auswahl als GeoJSON speichern"
    },
 	"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
@@ -2995,7 +2995,7 @@ var MessageLang=
     "NoObjectSelectedExport": {
       "cat": "No s'ha seleccionat cap objecte per exportar",
       "spa": "No se ha seleccionado ningún objeto para exportar",
-      "eng": "No object has been selected for export",
+      "eng": "No features has been selected for export",
       "fre": "Aucun objet n'a été sélectionné pour l'exportation",
       "cze": "Pro export nebyl vybrán žádný objekt",
       "ger": "Es wurde kein Objekt zum Exportieren ausgewählt"
@@ -3003,7 +3003,7 @@ var MessageLang=
     "NoObjectsToDisplay": {
       "cat": "No hi han objectes d'aquesta capa per mostrar",
       "spa": "No hay objectos de esta capa para mostrar",
-      "eng": "There are no objects of this layer to display",
+      "eng": "There are no features of this layer to display",
       "fre": "Il n'y a pas d'objets de cette couche à afficher",
       "cze": "Neexistují žádné objekty této vrstvy, které by bylo možné zobrazit",
       "ger": "Es sind keine Objekte dieses Layers zum Anzeigen vorhanden"
@@ -3011,7 +3011,7 @@ var MessageLang=
     "NoObjectsToDisplayWithinRange": {
       "cat": "No hi han objectes d'aquesta capa dins l'àmbit de vista actual",
       "spa": "No hay objectos de esta capa dentro de l'ámbito vista actual",
-      "eng": "There are no objects of this layer within the current view range",
+      "eng": "There are no feautures of this layer within the current view range",
       "fre": "Il n'y a pas d'objets de cette couche dans le champ de vision actuel",
       "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy",
       "ger": "Innerhalb des aktuellen Sichtbereiches sind keine Objekte dieses Layers zum Anzeigen vorhanden"
@@ -3037,7 +3037,7 @@ var MessageLang=
     "NoStoryInThisArea": {
       "cat": "No hi ha cap relat associat a aquesta zona",
       "spa": "No hay ningún relato asociado a esta zona",
-      "eng": "There are no stories associated with this area",
+      "eng": "There are no storymap associated with this area",
       "fre": "Il n'y a pas d'histoires associées à cette zone",
       "cze": "K této oblasti nejsou přiřazeny žádné příběhy",
       "ger": "Diesem Bereich sind keine Beiträge zugeordnet"
@@ -3287,6 +3287,38 @@ var MessageLang=
       "fre": "La géolocalisation n'est pas prise en charge dans ce navigateur",
       "cze": "Geolokace není tímto prohlížečem podporována",
       "ger": "Die Geolokalisierung wird von diesem Browser nicht unterstützt"
+    },
+    "ofUserFeedbackScope": {
+      "cat": "de valoració d'una àrea específica",
+      "spa": "de valoración de un área específica",
+      "eng": "of a feedback for a specific area",
+      "fre": "pour la rétroaction d'un domaine spécifique",
+      "cze": "posouzení konkrétní oblasti",
+      "ger": "einen bestimmten Bereichs"
+    },
+    "CheckNDecimalFigures": {
+      "cat": "El nombre de decimals configurat per l'usuari no és suficient per definir l'àmbit correctament. Modifica aquest paràmetre al menú Opcions --> N. decimals",
+      "spa": "El número de decimales configurado por el usuario no es suficiente para definir el ámbito correctamente. Modifica este parámetro en el menú Opciones --> N. decimales",
+      "eng": "The number of decimal figures defined by the user is not enougth to correctly define the bounding box. Modify this parameter in Options --> N. of decimal figures",
+      "fre": "Le nombre de décimales configuré par l'utilisateur n'est pas suffisant pour définir correctement la zone de délimitation. Modifiez ce paramètre dans le menu Options --> N. décimales",
+      "cze": "Počet desetinných míst nakonfigurovaný uživatelem nestačí ke správné definici rozsahu. Upravte tento parametr v nabídce Možnosti --> Počet desetinných míst",
+      "ger": "Die vom Benutzer konfigurierte Anzahl der Dezimalstellen reicht nicht aus, um den Bereich korrekt zu definieren. Ändern Sie diesen Parameter im Menü Optionen --> N. Dezimalstellen"
+    },
+    "MissingCoordinates": {
+      "cat": "Falten coordenades",
+      "spa": "Faltan coordenadas",
+      "eng": "Coordinates missing",
+      "fre": "Coordonnées manquantes",
+      "cze": "Chybějící souřadnice",
+      "ger": "Fehlende Koordinaten"
+    },
+    "ScopeUseMouse": {
+      "cat": "Usa el ratolí per marcar una àrea d'interès:",
+      "spa": "Usa el ratón para marcar un área de interés:",
+      "eng": "Use the mouse to select an area of interest:",
+      "fre": "Utiliser la souris pour sélectionner une zone d'intérêt:",
+      "cze": "Pomocí myši vyberte oblast zájmu:",
+      "ger": "Wählen Sie mit der Maus einen Interessenbereich aus:"
     }
   },
   "commands": {
@@ -3937,7 +3969,7 @@ var MessageLang=
     "InsertTransactionObjectIntoLayer": {
       "cat": "La transacció d'inserció a la capa",
       "spa": "La transacción de inserción a la capa",
-      "eng": "The insert transaction of the object into the layer",
+      "eng": "The insert transaction of the feature into the layer",
       "fre": "L'opération d'insertion de l'objet dans la couche",
       "cze": "Transakce vložení objektu do vrstvy",
       "ger": "Der Einfügevorgang des Objekts in den Layer"
@@ -3953,7 +3985,7 @@ var MessageLang=
     "InsertTransactionObject": {
       "cat": "La transacció d'inserció de l'objecte",
       "spa": "La transacción de inserción del objeto",
-      "eng": "The insert transaction of the object",
+      "eng": "The insert transaction of the feature",
       "fre": "La transaction d'insertion de l'objet",
       "cze": "Transakce vložení objektu",
       "ger": "Die Einfügetransaktion des Objekts"
@@ -4314,6 +4346,14 @@ var MessageLang=
       "cze": "Přejít na souřadnice",
       "ger": "Zur Koordinate gehen"
     },
+    "FBwithScope":{
+      "cat": "Definir envolupant de valoració",
+      "spa": "Definir ámbito de valoración",
+      "eng": "Define feedback's scope",
+      "fre": "Définir domaine de l'évaluation",
+      "cze": "Definujte doménu hodnocení",
+      "ger": "Definieren Sie den Umfang der Beurteilung"
+    },
     "previousView": {
       "cat": "vista prèvia",
       "spa": "vista previa",
@@ -4397,7 +4437,7 @@ var MessageLang=
     "TypicalOrObjectQuery": {
       "cat": "Consulta típica o per objectes",
       "spa": "Consulta típica o por objetos",
-      "eng": "Typical or object query",
+      "eng": "Typical or feature query",
       "fre": "Recherche typique où par objets",
       "cze": "Typický nebo objektový dotaz",
       "ger": "Typische oder Objektabfrage"
@@ -6152,18 +6192,18 @@ var MessageLang=
     "CannotSelectObjectLayerNoExist": {
       "cat": "No es poden seleccionar els objectes sol·licitats perquè la capa no existeix",
       "spa": "No se pueden seleccionar los objetos solicitados porquè la capa no existe",
-      "eng": "Cannot select request object because the layer doesn't exist",
+      "eng": "Cannot select request features because the layer doesn't exist",
       "fre": "Les objets demandés ne peuvent pas être sélectionnées parce que la couche n'existe pas",
       "cze": "Nelze vybrat objekt požadavku, protože vrstva neexistuje",
       "ger": "Anfrageobjekt kann nicht ausgewählt werden, da der Layer nicht existiert"
     },
     "ElementsVectorialTable": {
-      "cat": "Taula d'elements vectorials",
-      "spa": "Tabla de elementos vectoriales",
-      "eng": "Vectorial elements table",
-      "fre": "Tableau des éléments vectoriels",
-      "cze": "Tabulka vektorových prvků",
-      "ger": "Tabelle von vektorialen Elementen"
+      "cat": "Taula d'objectes vectorials",
+      "spa": "Tabla de objectos vectoriales",
+      "eng": "Vector features' table",
+      "fre": "Table d'objets vectoriels",
+      "cze": "Tabulka vektorových objektů",
+      "ger": "Tabelle mit Vektorobjekten"
     } 
   },
   "video": {

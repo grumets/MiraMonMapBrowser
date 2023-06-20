@@ -145,12 +145,12 @@
 			"description": "Idiomes en els que estarà disponible el navegador",
 			"type": "array",
 			"items": {
-				"enum": ["cat", "spa", "eng", "fre", "cze"]
+				"enum": ["cat", "spa", "eng", "fre", "cze", "ger"]
 			}
 		},
 		"idioma": {
 			"description": "DEPRECATED i passat a intern: Es recomana no indicar i deixar que la configuració del navegador de web prevalgui. Idioma per defecte, idioma actual i en iniciar el navegador.",
-			"enum": ["cat", "spa", "eng", "fre", "cze"]
+			"enum": ["cat", "spa", "eng", "fre", "cze", "ger"]
 		},
 		"PlanaPrincipal": { 
 			"description": "DEPRECATED. No s'usa més. Era l'adreça i nom de la plana principal de navegador. Es feia servir en la icona de home",
@@ -1473,14 +1473,14 @@
 						"$ref": "#/definitions/descripcioAtributs"			
 					},			
 					"valors": {
-						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'index d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
+						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'índex d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció dels valors",
 							"type": ["object"],
 							"properties": {								
 								"param": { 
-									"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És optim per una sola dimensió amb poques poques posibiilltats, quan les combinacións de valors de dimensions tenen poques posibilitats vàlides vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. Pot ser null",
+									"description": "Llistat de paràmetres (o dimensionsExtra) (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És òptim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. També s'usa en capes calculades per indicar les dimensions i els valors selccionats necessaris per omplir 'valors', en aquest cas es tracta d'un paràmetre INTERN. Pot ser null",
 									"type": ["array", "null"],
 									"items": {
 										"description": "Paràmetres (clau i valor)",
@@ -1578,25 +1578,25 @@
 									}
 								},
 								"i_capa": { 
-									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre capa en un estil tipus 'calcul'",
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra capa en un estil tipus 'calcul'",
 									"type": "number",
 									"minimum": 0,
 									"multipleOf": 1									
 								},
 								"i_data": { 
-									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre data en un estil tipus 'calcul'",
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul'",
 									"type": "number",
 									"minimum": 0,
 									"multipleOf": 1									
 								},
 								"i_valor": { 
-									"description": "INTERN: s'afegeix programaticament si la banda usa una altre banda en un estil tipus 'calcul'",
+									"description": "INTERN: s'afegeix programaticament si la banda usa una altra banda en un estil tipus 'calcul'",
 									"type": "number",
 									"minimum": 0,
 									"multipleOf": 1
 								},
 								"objectes": { 
-									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altre data en un estil tipus 'calcul' on es fa una condició vectorial sobre una capa raster. Es un 'punter' als objectes de la capa vectorial",
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul' on es fa una condició vectorial sobre una capa ràster. Es un 'punter' als objectes de la capa vectorial",
 									"type": "number",
 									"minimum": 0,
 									"multipleOf": 1									
@@ -1605,7 +1605,7 @@
 						}
 					},
 					"dimensioExtra": {
-						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanimsme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. De moment, aquestes dimensions no es podien incloure en una formula i, per tant, no espoden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegueu 'valors.param') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanisme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. Aquestes dimensions es poden incloure en una fórmula i, per tant, es poden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegeu 'valors.param') i que es pot utilitzar junt amb aquest per descriure altres dimensions. Opcional; només per capes raster; pot ser null",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció de la clau i els valors d'una dimensió",
@@ -1616,7 +1616,7 @@
 									"$ref": "#/definitions/nomDescripcio"
 								},
 								"formulaDesc":{
-									"description": "Fórmula a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
+									"description": "Fórmula en JavaScript(per exemple: valor.substring(0,4)+'-'+valor.substring(4,6)+'-'+valor.substring(6,8)) a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
 									"type": "string"
 								},
 								"valor": {
