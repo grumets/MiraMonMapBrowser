@@ -74,7 +74,17 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Cr
 	}
 	else if (ParamCtrl.StoryMap[ParamCtrl.StoryMap.length-1].isNew != true)
 	{
-		ParamCtrl.StoryMap.push(newStory);
+		//if (ParamCtrl.StoryMap.find(story => story.isNew == true))
+		const indexNovaStorymap = ParamCtrl.StoryMap.findIndex(story => story.isNew == true);
+		if (indexNovaStorymap != -1)
+		{
+			ParamCtrl.StoryMap.splice(indexNovaStorymap, 1);
+			ParamCtrl.StoryMap.push(newStory);
+		}
+		else 
+		{
+			ParamCtrl.StoryMap.push(newStory);	
+		}
 	}
 
 	while (nstory < ParamCtrl.StoryMap.length)
@@ -128,7 +138,7 @@ function TancaICreaStoryMap()
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
 
-	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='storyMainImage' src='#' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\")'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
+	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='storyMainImage' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\")'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
 
 	if (!isFinestraLayer(window, "creaStoryMap"))
 	{
@@ -151,12 +161,12 @@ function CarregaImatgeStoryMap(input, imatgeId)
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
 	{
 		var reader = new FileReader();
-		reader.onload = function (e)
+		reader.onload = function ()
 		{
 			if (this.readyState == FileReader.DONE)
 			{
 				const imatge = document.getElementById(imatgeId);
-				if (imatge && e.target.result)
+				if (imatge && this.result)
 				{
 					imatge.src = this.result;
 					imatge.width=200;
@@ -183,8 +193,7 @@ function SeguentPasStoryMap()
 	const stepPictureId = "stepImg" + comptadorPassos;
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
 	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\")'>", 
-	"<img id='" + stepPictureId + "' src='#' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
-	//"<iframe id='" + stepPictureId + "' src='#' width='640' height='480'></iframe>",
+	"<img id='" + stepPictureId + "' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
 	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
@@ -210,17 +219,33 @@ function FinalitzarStoryMap()
 	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
 	for (let i_Story = 0, passosLength = novaStoryMap.passos.length; i_Story < passosLength; i_Story++) {
 		const pas = novaStoryMap.passos[i_Story];
-		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, "<br><img src='" + pas.imatge + "' width=400></div>");
+		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, pas.imatge ? "<br><img src='" + pas.imatge + "' width=400>" : "", "</div>");
 	}
 	cdns.push("</html>");
-	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol, ".html")
+	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol.replace(/\s+/g, '_'), ".html");
+	GuardaEntradaStorymapConfig();
 	TancaFinestraLayer("creaStoryMap");
+}
+
+function GuardaEntradaStorymapConfig()
+{
+	const storyMapAGuardar = {};
+	if (novaStoryMap.titol)
+		storyMapAGuardar.desc = novaStoryMap.titol;
+	if (novaStoryMap.imatgePrincipal)
+		storyMapAGuardar.src = novaStoryMap.imatgePrincipal;
+	// Modifiquem el titol per a substituïr els espais en blanc per guions baixos. Així no suposaran un problema per a la ruta del fitxer .html. La Regex "/\s+/g" implica substituïr tots els espais en blanc, tabulacions i altres en tot el text.	
+	storyMapAGuardar.url = "propies/StoryMaps/" + novaStoryMap.titol.replace(/\s+/g, '_');
+	// Guardem la nova entrada de Storymap al config.
+	ParamCtrl.StoryMap.push(storyMapAGuardar);
 }
 
 function GuardarInformacioInicialStoryMap()
 {
 	novaStoryMap.titol = document.getElementById("title").value;
-	novaStoryMap.imatgePrincipal = document.getElementById("storyMainImage").src;
+	const imatgePortada = document.getElementById("storyMainImage");
+	if (imatgePortada && imatgePortada.src != "")
+		novaStoryMap.imatgePrincipal = imatgePortada.src;
 }
 
 function GuardarInformacioPasStoryMap()
