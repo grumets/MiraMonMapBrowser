@@ -66,7 +66,7 @@ function createLayer(win, name, desc, left, top, width, height, visible, content
   }
   else if (win.document.all || win.document.getElementById) 
   {  	// Explorer
-    win.document.writeln('<div id="' + name + '" style="position:absolute; overflow:visible; left:' + left + 'px; top:' + top + 'px; width:' + width + '; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + ' z-index:' + z + ';">');
+    win.document.writeln('<div id="' + name + '" style="position:absolute; overflow:visible; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + ' z-index:' + z + ';">');
     win.document.writeln((content) ? window.opener.parent.opener.DonaCadena(content) : "-"+name+"-");
     win.document.writeln('</div>');
   }

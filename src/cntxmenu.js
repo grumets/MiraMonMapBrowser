@@ -1895,7 +1895,7 @@ var cdns=[], i, capa;
 
 	cdns.push(GetMessage("ReclassifyingExpression", "cntxmenu"),
 				"<input type=\"button\" class=\"Verdana11px\" value=\"i\" onClick='IniciaFinestraInformacio(DonaCadenaInfoReclassificacio());'/>",
-				":<br><textarea name=\"reclassificacio\" class=\"Verdana11px\" style=\"width:440px;height:100\" ></textarea><br>",
+				":<br><textarea name=\"reclassificacio\" class=\"Verdana11px\" style=\"width:440px;height:100px\" ></textarea><br>",
 				"<hr>",
 				GetMessage("ResultOfReclassificationAddedAsNewStyleWithName", "cntxmenu"),
 				" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:400px;\" value=\"",
@@ -2006,7 +2006,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  cdns.push("</fieldset>");
 		//Caixa multilínia per a la formula.
 		cdns.push(GetMessage("Expression"),
-			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:438px;height:100\" ></textarea><br>",
+			":<br><textarea name=\"calcul\" class=\"Verdana11px\" style=\"width:438px;height:100px\" ></textarea><br>",
 			GetMessage("ResultOfSelectionAddedAsNewLayerStyleWithName", "cntxmenu"),
 			" <input type=\"text\" name=\"nom_estil\" class=\"Verdana11px\" style=\"width:438px;\" value=\"\" /><br/>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
