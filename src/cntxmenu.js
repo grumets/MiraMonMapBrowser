@@ -705,7 +705,7 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 		RevisaEstatsCapes();
 		RepintaMapesIVistes();
 	}
-}//Fi de AfegeixCapesWMSAlNavegadorForm
+}
 
 /*Aquesta funció s'ha de cridar abans o després fer capa.splice() o similars.
 Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
@@ -1101,7 +1101,6 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 	return true;
 }
 
-
 function AfegeixCapaCombicapaCategoric()
 {
 var alguna_capa_afegida=false;
@@ -1130,12 +1129,13 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		 (condicio[0].i_estil && condicio[1].i_estil && condicio[0].i_estil==condicio[1].i_estil)) &&
 	   ((typeof condicio[0].i_data==="undefined" && typeof condicio[1].i_data==="undefined") ||
 		 (!condicio[0].i_data && !condicio[1].i_data) ||
-		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) )
+		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) &&
+		 SonValorsDimensionsIguals(condicio[0].dim, condicio[1].dim)) 
+		
 	{
 		alert(GetMessage("ChooseTwoDifferentLayers", "cntxmenu"));
 		return;
 	}
-
 	capa[0]=ParamCtrl.capa[i_capes[0]];
 	capa[1]=ParamCtrl.capa[i_capes[1]];
 
@@ -1291,7 +1291,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		 (condicio[0].i_estil && condicio[1].i_estil && condicio[0].i_estil==condicio[1].i_estil)) &&
 	   ((typeof condicio[0].i_data==="undefined" && typeof condicio[1].i_data==="undefined") ||
 		 (!condicio[0].i_data && !condicio[1].i_data) ||
-		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) )
+		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) &&
+		 SonValorsDimensionsIguals(condicio[0].dim, condicio[1].dim))
 	{
 		alert(GetMessage("ChooseTwoDifferentLayers", "cntxmenu"));
 		return;
@@ -1361,7 +1362,10 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	//Creo la descripció de les categories, de moment només la original, les altres ja s'afegiran després
 	categ_noves=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].categories));
 
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),GetMessageJSON("_withStatisticOf_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), GetMessageJSON("_withStatisticOf_", "cntxmenu")),(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)));
+	var cadena_desc_llegenda=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),GetMessageJSON("_withStatisticOf_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	
+		
 	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + " " + GetMessage("byCategoryOf", "cntxmenu" ) + " " + capa[0].estil[condicio[0].i_estil].desc;
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
@@ -1370,7 +1374,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"tipus": null,
 		//"nom":	"LayerWithStatistics", //capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc;
 		"nom":	capa[1].estil[condicio[1].i_estil].desc + "WithStatisticsOf" + capa[0].estil[condicio[0].i_estil].desc,
-		"desc":	(DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + GetMessageJSON("_withStatisticOf_", "cntxmenu") + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		"desc":	cadena_desc,
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
@@ -1382,7 +1386,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 		"FormatConsulta": null,
 		"grup":	null,
 		"separa": DonaTextSeparadorCapaAfegida(i_capa),
-		"DescLlegenda": cadena_desc,
+		"DescLlegenda": cadena_desc_llegenda,
 		"estil": [{
 			"nom":	null,
 			"desc":	desc_estil,
@@ -1890,7 +1894,7 @@ var cdns=[], i, capa;
 			  GetMessage("LayerToReclassify", "cntxmenu"),
 			  ": </legend>",
 			  "<input type=\"hidden\" value=\"",i_capa,"\" id=\"", prefix_id, "-valor-capa-",0,"\" name=\"","valor_capa", 0, "\" />", DonaCadena(capa.DescLlegenda), "<br>",
-			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true}),
+			  DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, 0, {vull_operador: false, nomes_categoric: false, vull_valors: true, vull_dates: true, vull_dims: true}),
 			  "</fieldset>");
 
 	cdns.push(GetMessage("ReclassifyingExpression", "cntxmenu"),
@@ -1937,7 +1941,7 @@ var cdns=[], i, capa, hi_ha_rasters=0, operacio;
 			  GetMessage("LayerForExpression", "cntxmenu"),
 			  ": </legend>");
 		//Posar uns desplegables de capes, estilsdates i dimensions extra
-		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false}));
+		cdns.push(DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-calcul", -1, 0, {vull_operador: false, nomes_categoric: false, vull_valors: false, vull_dates: true, vull_dims: true}));
 		//Posar un botó d'afegir a la fórmula
 		cdns.push("<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("WriteInExpression", "cntxmenu"),
@@ -2047,11 +2051,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			  "<fieldset><legend>",
 			  GetMessage("Layer"),
 			  "_1: </legend>",
-				DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 0, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
+				DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 0, {vull_operador: false, nomes_categoric: true, vull_valors: false, vull_dates: true, vull_dims: true}),
 			  "</fieldset><fieldset><legend>",
 			  GetMessage("Layer"),
 			  "_2: </legend>",
-			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
+			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false, vull_dates: true, vull_dims: true}),
 			  "</fieldset>",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("AddGeometricOverlay", "cntxmenu"),
@@ -2067,11 +2071,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	  "<fieldset><legend>",
 	  GetMessage("Layer"),
 	  "_1: </legend>",
-		DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 2, {vull_operador: false, nomes_categoric: true, vull_valors: false}),
+		DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 2, {vull_operador: false, nomes_categoric: true, vull_valors: false, vull_dates: true, vull_dims: true}),
 	  "</fieldset><fieldset><legend>",
 	  GetMessage("Layer"),
 	  "_2: </legend>",
-	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false}),
+	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false, vull_dates: true, vull_dims: true}),
 	  "</fieldset>",
 	  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 	    	GetMessage("AddStatisticalFields", "cntxmenu"),
@@ -2576,7 +2580,7 @@ var estil_o_atrib;
 	{
 		//Una caixa que permeti triar un valor com a capa
 		cdns.push("<div id=\"div-", prefix_id, "-cc-capa-",i_condicio,"\" style=\"display:none\">",
-			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: false, nomes_categoric: false, vull_valors: false}),
+			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: false, nomes_categoric: false, vull_valors: false, vull_dates: true, vull_dims: true}),
 			"</div>");
 	}
 	return cdns.join("");
@@ -2591,8 +2595,8 @@ function DonaCadenaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa];
 
-	//Desplegable de dates si s'escau.
-	if (capa.AnimableMultiTime && capa.data && capa.data.length)
+	// Desplegable de dates si s'escau.
+	if (param.vull_dates && capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
 		cdns.push("<label for=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"data-",i_condicio, "\">", GetMessage("Date"), ": </label>");
 		if (capa.data.length>1)
@@ -2614,7 +2618,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	}
 	
 	// Desplegable de dimensions
-	if(capa.dimensioExtra &&  capa.dimensioExtra.length)
+	if(param.vull_dims && capa.dimensioExtra &&  capa.dimensioExtra.length)
 	{
 		var dim;
 		for(var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
@@ -2710,9 +2714,12 @@ function ActivaCondicioSeleccioCondicional(prefix_id, i_condicio, estat)
 }
 
 // i_capa és la capa que se seleccionarà per defecte en el selector. Pot ser -1 per seleccionar la primera compatible.
-// param.vull_operador: indica que vulls els operador per fer una condició per selecció
+// param.vull_operador: indica que vull els operadors per fer una condició per selecció
 // param.nomes_categoric: només vull capes ràster amb categories
 // param.vull_valors:
+// param.vull_dates: Vull que es mostri el selector de dates si la capa és multitime
+// param.vull_dims: Vull que es mostrin els selectors de les dimensions extra si la capa en té
+
 function DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, param)
 {
 var cdns=[], capa, nc, capa_def, origen_vector;
@@ -2831,7 +2838,7 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 	{
 		cdns.push("<span id=\"", prefix_id, "-nexe-", i_condicio, "\" class=\"Verdana11px\" style=\"display: "+((i_condicio==0) ? "inline" : "none")+"\"><fieldset><legend>",
 			GetMessage("Condition"), " ", i_condicio+1, ": </legend>",
-			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false}),
+			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false, vull_dates: false, vull_dims: false}),
 			"</fieldset>");
 		if (i_condicio<(MaxCondicionsSeleccioCondicional-1))
 		{
@@ -2873,15 +2880,19 @@ var elem=ObreFinestra(window, "seleccioCondicional", GetMessage("ofQueryByAttrib
 
 function LlegeixParametresCondicioCapaDataEstil(prefix_id, prefix_condicio, i_condicio)
 {
-var condicio_capa={};
+var condicio_capa={}, elem;
 	condicio_capa.i_capa=parseInt(document.getElementById(prefix_id + prefix_condicio + "-capa-" + i_condicio).value);
 	condicio_capa.dim=[];
 	var capa=ParamCtrl.capa[condicio_capa.i_capa];
 	if (capa.AnimableMultiTime && capa.data && capa.data.length)
 	{
-		var i_time=parseInt(document.getElementById(prefix_id + prefix_condicio + "-data-" + i_condicio).value);
-		if (!isNaN(i_time) && i_time!=null)
-			condicio_capa.i_data=i_time;
+		elem=document.getElementById(prefix_id + prefix_condicio + "-data-" + i_condicio);
+		if(elem) // Potser que no hi hagi desplegable de dates, per exemple en les seleccions condicionals
+		{
+			var i_time=parseInt(elem.value);
+			if (!isNaN(i_time) && i_time!=null)
+				condicio_capa.i_data=i_time;
+		}
 	}
 	// Desplegable de dimensions
 	if(capa.dimensioExtra &&  capa.dimensioExtra.length)
@@ -2890,9 +2901,13 @@ var condicio_capa={};
 		for(i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
 		{
 			dim=capa.dimensioExtra[i_dim];			
-			var i_v_dim=parseInt(document.getElementById(prefix_id + prefix_condicio + "-dimensio-" + i_dim +"-"+i_condicio).value);
-			if (!isNaN(i_v_dim) && i_v_dim!=null)
-				condicio_capa.dim.push({clau: dim.clau, valor: dim.valor[i_v_dim]});
+			elem=document.getElementById(prefix_id + prefix_condicio + "-dimensio-" + i_dim +"-"+i_condicio);
+			if(elem) // Potser que no hi hagi desplegable de dimensio, per exemple en les seleccions condicionals
+			{
+				var i_v_dim=parseInt(elem.value);
+				if (!isNaN(i_v_dim) && i_v_dim!=null)
+					condicio_capa.dim.push({clau: dim.clau, valor: dim.valor[i_v_dim]});
+			}
 		}
 	}
 	if(capa.model==model_vector)
@@ -2929,7 +2944,7 @@ var sel_condicional={}, condicio, radials;
 	sel_condicional.i_capa=i_capa;
 	var capa=ParamCtrl.capa[i_capa];
 	if (capa.estil && capa.estil.length)
-		sel_condicional.i_estil=parseInt(document.getElementById(prefix_id+"-estil").value);  //No se perquè en IE no funciona la manera clàssica.
+		sel_condicional.i_estil=parseInt(document.getElementById(prefix_id+"-estil").value);  //No sé perquè en IE no funciona la manera clàssica.
 	sel_condicional.nom_estil=document.SeleccioCondicional.nom_estil.value;
 	sel_condicional.condicio=[];
 	for (var i_condicio=0; i_condicio<MaxCondicionsSeleccioCondicional; i_condicio++)
