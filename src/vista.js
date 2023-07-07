@@ -2168,7 +2168,7 @@ var barra_slider=[];
 		barra_slider.push("</span>");
 	}
 
-	barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4; right: 4;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",
+	barra_slider.push("<span id='llegenda_situacio_coord' style='position: absolute; top: 4px; right: 4px;' class='", MobileAndTabletWebBrowser ? "finestra_superposada_opaca" : "finestra_superposada", "'>",
 		DonaCadenaBotonsVistaLlegendaSituacioCoord(),
 		"</span>");
 		

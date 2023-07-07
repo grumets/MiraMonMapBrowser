@@ -37,6 +37,10 @@
 */
 
 "use strict"
+// Variable global on desarem els img del sgv de la barra i la llegenda per així només fer un fetch per cada imatge una vegada
+// Hem vist que el nombre de vegades que es pot fer un fetch d'una imatge és finit (sembla que en Chrome és aprox. de 6000) i tal i com estava
+// fet fins ara superavem aquest límit (NJ 04-07-2023)
+var SGVBarra=[];
 
 function DonaTextImgGifSvg(id, name, filename, size, title, onclick_function_name)
 {
@@ -54,9 +58,8 @@ var cdns=[];
 	if (onclick_function_name)
 		cdns.push("onClick='", onclick_function_name,"' ");
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
-		cdns.push("border=\"0\" ");
-	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 	{
+		cdns.push("border=\"0\" ");
 		if (title)
 			cdns.push("alt=\"", title, "\" title=\"", title,"\" align=\"middle\" ",
 				"onMouseOver='if (document.getElementById(\"", id, "\").alt) window.status=document.getElementById(\"", id, "\").alt; return true;' ",
@@ -74,67 +77,88 @@ var cdns=[];
 	return cdns.join("");
 }
 
+
+
 function DonaTextBotoBarraFinestraLayer(nom_fin, nom_boto, size, title, onclick_function_name)
 {
 	return DonaTextImgGifSvg("id_"+nom_fin+"_"+nom_boto, nom_fin+"_"+nom_boto, nom_boto, size, title, onclick_function_name);
 }
 
+
+function ParseAndAssingTextSGV(img, f_next, params, text)
+{
+	var imgID = img.id;
+	
+	var parser = new DOMParser();
+	var xmlDoc = parser.parseFromString(text, "text/xml");
+
+	// Get the SVG tag, ignore the rest
+	var svg = xmlDoc.getElementsByTagName('svg')[0];
+
+	// Add replaced image's ID to the new SVG
+	if(typeof imgID !== 'undefined') 
+		svg.setAttribute('id', imgID);
+	// Add replaced image's classes to the new SVG
+	if(typeof img.className !== 'undefined') 
+		svg.setAttribute('class', img.className+' replaced-svg');
+	
+	// Remove any invalid XML tags as per http://validator.w3.org
+	svg.removeAttribute('xmlns:a');
+
+	// Check if the viewport is set, if the viewport is not set the SVG wont't scale.
+	if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) 
+		svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
+
+	if (img.height)
+		svg.setAttribute('height', img.height);
+	if (img.width)
+		svg.setAttribute('width', img.width);
+	if (img.onclick)
+		svg.onclick=img.onclick;
+	if (img.onmouseover)
+		svg.onmouseover=img.onmouseover;
+	if (img.onmouseout)
+		svg.onmouseout=img.onmouseout;
+	// Replace image with new SVG
+	if(img.parentNode) // NJ: ho protegeixo perquè a vegades arribem aquí i això és null
+		img.parentNode.replaceChild(svg, img);
+
+	if (f_next)
+		f_next(imgID, params);
+}
 /*
- * Replace an SVG img src with inline XML SVG
+ * Replace an SVG img src with inline XML SVG 
  */
 //https://stackoverflow.com/questions/24933430/img-src-svg-changing-the-styles-with-css/24933495#24933495
 //This code will be to replace them all: document.querySelectorAll('img.svg').forEach(ChangeSVGToInlineSVG())
 function ChangeSVGToInlineSVG(img, f_next, params)
 {
-	var imgID = img.id;
-
 	if (img.src.substring(img.src.lastIndexOf(".")).toLowerCase()!=".svg")
 		return true;
+	
+	
+	// Busco la imatge si ja ha estat carregada
+	let i_sgv;
+	for (i_sgv=0; i_sgv<SGVBarra.length; i_sgv++)
+	{
+		if(SGVBarra[i_sgv].src && img.src.toLowerCase()==SGVBarra[i_sgv].src.toLowerCase())
+		{
+			if(SGVBarra[i_sgv].text)
+				ParseAndAssingTextSGV(img, f_next, params, SGVBarra[i_sgv].text);
+			else
+				setTimeout(ChangeSVGToInlineSVG, 100, img, f_next, params);
+			return;
+		}
+	}	
+	i_sgv=SGVBarra.push({src: img.src})-1;
 
 	fetch(img.src).then(function(response) {
-        	return response.text();
+        return response.text();
 	}).then(function(text){
-
-	        var parser = new DOMParser();
-	        var xmlDoc = parser.parseFromString(text, "text/xml");
-
-	        // Get the SVG tag, ignore the rest
-        	var svg = xmlDoc.getElementsByTagName('svg')[0];
-
-	        // Add replaced image's ID to the new SVG
-	        if(typeof imgID !== 'undefined') {
-        		svg.setAttribute('id', imgID);
-	        }
-	        // Add replaced image's classes to the new SVG
-        	if(typeof img.className !== 'undefined') {
-			svg.setAttribute('class', img.className+' replaced-svg');
-        	}
-
-	        // Remove any invalid XML tags as per http://validator.w3.org
-        	svg.removeAttribute('xmlns:a');
-
-	        // Check if the viewport is set, if the viewport is not set the SVG wont't scale.
-        	if(!svg.getAttribute('viewBox') && svg.getAttribute('height') && svg.getAttribute('width')) {
-        		svg.setAttribute('viewBox', '0 0 ' + svg.getAttribute('height') + ' ' + svg.getAttribute('width'))
-	        }
-
-		if (img.height)
-			svg.setAttribute('height', img.height);
-		if (img.width)
-			svg.setAttribute('width', img.width);
-		if (img.onclick)
-			svg.onclick=img.onclick;
-		if (img.onmouseover)
-			svg.onmouseover=img.onmouseover;
-		if (img.onmouseout)
-			svg.onmouseout=img.onmouseout;
-	        // Replace image with new SVG
-        	img.parentNode.replaceChild(svg, img);
-
-		if (f_next)
-			f_next(imgID, params);
-
+		SGVBarra[i_sgv].text=text;
+	    ParseAndAssingTextSGV(img, f_next, params, text);
 	}).catch(function(event){
+		SGVBarra.slice(i_sgv);
 		DefaultSVGToPNG(event, img, params.format);
 	});
 }

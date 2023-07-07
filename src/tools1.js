@@ -680,8 +680,7 @@ function isLayerVisible(elem)
 {
 	if (elem.style.visibility == "hidden")
 		return false;
-	else
-		return true;
+	return true;
 }
 
 // Extret de http://www.faqts.com/knowledge_base/view.phtml/aid/5756
@@ -1707,7 +1706,7 @@ function textHTMLiframeLayer(name, left, top, width, height, visible)
 var s="";
 	if (NecessariLayerIFrame)
 	{
-	      s='<iframe src="blanc.htm" id="iframe_' + name + '" style="position:absolute; left:' + left + 'px; top:' + top + 'px; width:' + width + '; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + '"></iframe>';
+	      s='<iframe src="blanc.htm" id="iframe_' + name + '" style="position:absolute; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + '"></iframe>';
 	}
 	return s;
 }

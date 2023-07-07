@@ -1124,7 +1124,7 @@ var cdns=[];
 			if( ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorCapaWPS)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
-				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
+				cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<input class=\"Verdana11px\" readonly type=\"text\" size=\"50px\" name=\"p_text_",
 						  i_input, "\" id=\"p_text_", i_input, "\" value=\"", DonaCadena(ParamCtrl.capa[i_capa].desc),"\" />",
 						  "</form>");
@@ -1134,7 +1134,7 @@ var cdns=[];
 				var i_valor=0;
 				var i;
 				//Formulari de tipus check
-				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
+				cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<input class=\"Verdana11px\" type=\"checkbox\" id=\"p_check_", i_input, "\" name=\"p_check_", i_input,
 						  "\" value=\"boleana\"");
 				//només hauria de tenir 2 valors (si/no) (yes/no) (1/0) (true/false)
@@ -1179,7 +1179,7 @@ var cdns=[];
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
 				//Formulari de la part de l'input predefinida
-				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
+				cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<input class=\"Verdana11px\" type=\"radio\" id=\"p_opcio_", i_input, "\" name=\"p_opcio_", i_input,
 						  "\" value=\"predefinit\" onClick=\"ActivaTextPredefinit(",i_input, ");\" checked />");
 				if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputTipusRefFitxer)
@@ -1201,7 +1201,7 @@ var cdns=[];
 					var id_proces=IdProces+"_"+NIdProces;
 
 					//El selector de fitxers locals
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"e_form_input_",i_input,
 							  "\" name=\"e_form_input_",i_input, "\" action=\"",ParamCtrl.ServidorLocal,"\"",
 							  "enctype=\"multipart/form-data\" method=\"post\" target=\"retorn_fitxers_operacio_wps_",i_input,
 							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
@@ -1227,7 +1227,7 @@ var cdns=[];
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
 					//L'edit per escriure url's
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
 						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
 						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
 							  "<label for=\"u_opcio_",i_input,"\">",GetMessage("Url"),": </label>",
@@ -1236,7 +1236,7 @@ var cdns=[];
 				}
 				else
 				{
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,"\" name=\"e_form_input_",i_input, "\">",
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"e_form_input_",i_input,"\" name=\"e_form_input_",i_input, "\">",
 							  "<input class=\"Verdana11px\" type=\"radio\"  id=\"e_opcio_", i_input, "\" name=\"e_opcio_", i_input,
 							  "\" value=\"editable\" onClick=\"ActivaTextEditable(", i_input,");\" />",
 							  "<input class=\"Verdana11px\" type=\"text\" size=\"50px\" name=\"e_text_", i_input,
@@ -1247,7 +1247,7 @@ var cdns=[];
 			else if(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].InputOutputValorPredefinit)
 			{
 				cdns.push(DonaCadena(ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].nom.desc), ": ");
-				cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
+				cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 						  "<select class=\"Verdana11px\" id=\"p_sel_input_", i_input, "\" name=\"p_sel_input_", i_input, "\">");
 
 				for(i_valor=0; i_valor<ParamCtrl.capa[i_capa].proces[i_proces_sel].operacio.par_input[i_input].valors.length; i_valor++)
@@ -1268,7 +1268,7 @@ var cdns=[];
 					var id_proces=IdProces+"_"+NIdProces;
 
 					//El selector de fitxers locals
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"e_form_input_",i_input,
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"e_form_input_",i_input,
 							  "\" name=\"e_form_input_",i_input, "\" action=\"",ParamCtrl.ServidorLocal,"\"",
 							  "enctype=\"multipart/form-data\" method=\"post\" target=\"retorn_fitxers_operacio_wps_",i_input,
 							  "\" onSubmit=\"EnviarFitxerAlServidor(",i_capa,",",i_proces_sel,",",i_input,");\" >",
@@ -1294,7 +1294,7 @@ var cdns=[];
 							  "</form>",
 							  "<iframe name=\"retorn_fitxers_operacio_wps_", i_input, "\" style=\"display:none\"></iframe>");
 					//L'edit per escriure url's
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"u_form_input_",i_input,"\" name=\"u_form_input_",i_input, "\">",
 						      "<input class=\"Verdana11px\" type=\"radio\" id=\"u_opcio_", i_input, "\" name=\"u_opcio_", i_input,
 						      "\" value=\"url\" onClick=\"ActivaTextURL(",i_input, ");\" />",
 							  "<label for=\"u_opcio_",i_input,"\">",GetMessage("Url"),": </label>",
@@ -1303,7 +1303,7 @@ var cdns=[];
 				}
 				else
 				{
-					cdns.push("<form style=\"margin-top:3px;margin-bottom:0\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
+					cdns.push("<form style=\"margin-top:3px;margin-bottom:0px\" id=\"p_form_input_",i_input,"\" name=\"p_form_input_",i_input, "\">",
 							  "<input class=\"Verdana11px\" type=\"text\" size=\"60px\" name=\"e_text_", i_input,
 							  "\" id=\"e_text_",i_input, "\">",
   							  "</form>");
