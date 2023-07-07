@@ -123,7 +123,7 @@ var i_diag=-1, des_top=-9999, des_left=-9999;
 
 	titol=GetMessage("Graphic_3D", "tresD")+" " + (Superficie3DFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 	cdns.push("<div id=\"", DonaIdDivGrafic3d(Superficie3DFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"></div>",
-		"<div style=\"position: absolute; top: 20; margin-left: auto; margin-right: auto; width:", ncol, "\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
+		"<div style=\"position: absolute; top: 20px; margin-left: auto; margin-right: auto; width:", ncol, "px;\"><form name=\"", nom_grafic3d, "_3d_f\"><center>",
 			GetMessage("VerticalScale", "tresD"),
 			": <input id=\"", nom_grafic3d, "_3d_fh\" type=\"range\" step=\"0.01\" min=\"0.1\" max=\"1.0\" value=\"", vscale ,"\" onchange=\"CanviaEscalaVSuperficie3D(event, this.value, ", Superficie3DFinestra.n, ");\" oninput=\"CanviaEscalaVSuperficie3D(event, this.value, "+Superficie3DFinestra.n+");\" style=\"width: 75px\"> &nbsp;&nbsp;",
 			"Zoom", //DonaCadenaLang({"cat":"Distància", "spa":"Distancia", "eng":"Distance", "fre":"Distance"}),

@@ -284,9 +284,45 @@ function FinestraMostraQualitatCapa(elem, quality, capa, i_estil)
 
 function DonaIndexIndicatorQualityML(id)
 {
+const id_temp=id.toLowerCase();
+
 	for (var i=0; i<QualityML.indicator.length; i++)
 	{
-		if (QualityML.indicator[i].id==id)
+		if (QualityML.indicator[i].id.toLowerCase()==id_temp)
+			return i;
+	}
+	return -1;
+}
+
+function DonaIndexMeasureQualityML(id)
+{
+const id_temp=id.toLowerCase();
+
+	for (var i=0; i<QualityML.measure.length; i++)
+	{
+		if (QualityML.measure[i].id.toLowerCase()==id_temp)
+			return i;
+	}
+	return -1;
+}
+
+function DonaIndexDomainQualityML(id)
+{
+const id_temp=id.toLowerCase();
+	for (var i=0; i<QualityML.domain.length; i++)
+	{
+		if (QualityML.domain[i].id.toLowerCase()==id_temp)
+			return i;
+	}
+	return -1;
+}
+
+function DonaIndexMetricQualityML(id)
+{
+const id_temp=id.toLowerCase();
+	for (var i=0; i<QualityML.metric.length; i++)
+	{
+		if (QualityML.metric[i].id.toLowerCase()==id_temp)
 			return i;
 	}
 	return -1;
@@ -359,7 +395,7 @@ var cdns=[];
 
 function DonaCadenaMostraQualitatCapa(quality, capa, i_estil)
 {
-var i_indicator, cdns=[];
+var i_indicator, i_measure, i_domain, i_metric, cdns=[];
 
     cdns.push("<form name=\"QualitatCapa\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerQualitatCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\">",
@@ -409,15 +445,21 @@ var i_indicator, cdns=[];
 					var version=(qualityml.version) ? qualityml.version : "1.0";
 					if (qualityml.measure)
 					{
-						cdns.push("<b>Measure:</b> ", qualityml.measure.name, DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "measure", 0, qualityml.measure.name), "<br/>",
-									DonaCadenaParamQualitatCapa(qualityml.measure.param));
+						cdns.push("<b>Measure:</b> ", qualityml.measure.name);
+						i_measure=DonaIndexMeasureQualityML(qualityml.measure.name);
+						if(i_measure!=-1)
+							cdns.push(DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "measure", 0, qualityml.measure.name));
+						cdns.push("<br/>", DonaCadenaParamQualitatCapa(qualityml.measure.param));
 					}
 					if (qualityml.domain)
 					{
 						for (var i_d=0; i_d<qualityml.domain.length; i_d++)
 						{
-							cdns.push("<b>Domain:</b> ", qualityml.domain[i_d].name, DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "domain", i_d, qualityml.domain[i_d].name), "<br/>",
-									DonaCadenaParamQualitatCapa(qualityml.domain[i_d].param),
+							cdns.push("<b>Domain:</b> ", qualityml.domain[i_d].name);
+							i_domain=DonaIndexDomainQualityML(qualityml.domain[i_d].name);
+							if(i_domain!=-1)
+								cdns.push(DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "domain", i_d, qualityml.domain[i_d].name));
+							cdns.push("<br/>", DonaCadenaParamQualitatCapa(qualityml.domain[i_d].param),
 									DonaCadenaValorsComLlistaQualitatCapa(qualityml.domain[i_d].values));
 						}
 					}
@@ -425,8 +467,11 @@ var i_indicator, cdns=[];
 					{
 						for (var i_m=0; i_m<qualityml.metrics.length; i_m++)
 						{
-							cdns.push("<b>Metrics:</b> ", qualityml.metrics[i_m].name, DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "metrics", i_m, qualityml.metrics[i_m].name), "<br/>",
-									DonaCadenaParamQualitatCapa(qualityml.metrics[i_m].param),
+							cdns.push("<b>Metrics:</b> ", qualityml.metrics[i_m].name);
+							i_metric=DonaIndexMetricQualityML( qualityml.metrics[i_m].name);
+							if(i_metric!=-1)
+								cdns.push(DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "metrics", i_m, qualityml.metrics[i_m].name));
+							cdns.push("<br/>",DonaCadenaParamQualitatCapa(qualityml.metrics[i_m].param),
 									DonaCadenaValorsComLlistaQualitatCapa(qualityml.metrics[i_m].values));
 						}
 					}

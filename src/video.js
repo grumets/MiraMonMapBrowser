@@ -429,7 +429,7 @@ var cdns=[], capa, i_capa_primer_video;
 
 	//Creo la pantalla on es projecte el video.
 	cdns.push("<div id=\"video_central\" style=\"position: relative; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\">",
-		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0px; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" NAME=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></div>",
+		"<div id=\"video_pantalla\" style=\"position: absolute; bottom: 0px; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\"><img src=\"",AfegeixAdrecaBaseSRC("1gris.gif"),"\" name=\"pantalla\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></div>",
 		"<div id=\"video_click\" style=\"position: absolute; bottom: 0px; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\"><canvas id=\"video_click_canvas\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></canvas></div>",
 		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0px; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
 		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0px; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");

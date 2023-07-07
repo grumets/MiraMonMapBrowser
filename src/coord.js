@@ -56,7 +56,7 @@ var cdns=[];
 			"<table style=\"width: 100%; height: 100%;\"><tr>");
 		if (!isFinestraLayer(window, "coord"))
 		{
-			cdns.push("<td style=\"width: 1\"><span class=\"text_coord\">", (ParamCtrl.TitolCoord ? DonaCadena(ParamCtrl.TitolCoord) : "Coord: "),
+			cdns.push("<td style=\"width: 1px\"><span class=\"text_coord\">", (ParamCtrl.TitolCoord ? DonaCadena(ParamCtrl.TitolCoord) : "Coord: "),
 				   "</span></td>");
 			if (ParamCtrl.EstilCoord && ParamCtrl.EstilCoord=="area")
 				cdns.push("</tr><tr>");
