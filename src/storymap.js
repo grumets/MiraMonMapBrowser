@@ -155,7 +155,7 @@ function TancaICreaStoryMap()
 /*
 	Mostra la imatge de portada del StoryMap.
 */
-function CarregaImatgeStoryMap(input, imatgeId) 
+function CarregaImatgeStoryMap(input, imatgeId, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
@@ -165,6 +165,18 @@ function CarregaImatgeStoryMap(input, imatgeId)
 		{
 			if (this.readyState == FileReader.DONE)
 			{
+				//Reduir la mida de la imatge
+				const canvasId = "reduccioImatges";
+				
+				let canvasReduccioImg = document.getElementById(canvasId);
+				if (!canvasReduccioImg)
+				{
+					canvasReduccioImg = document.createElement("canvas");
+					canvas.insertAdjacentElement("afterend", ultimElem);
+				}
+				
+				
+
 				const imatge = document.getElementById(imatgeId);
 				if (imatge && this.result)
 				{
@@ -191,10 +203,11 @@ function SeguentPasStoryMap()
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
 	const stepPictureId = "stepImg" + comptadorPassos;
+	const ultimElementStorymapId = "ultimElementStorymap";
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\")'>", 
+	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\", \"" + ultimElementStorymapId + "\")'>", 
 	"<img id='" + stepPictureId + "' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
-	"<input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
+	"<input id='" + ultimElementStorymapId + "' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
