@@ -1352,7 +1352,7 @@
 						"$ref": "#/definitions/StringOCadenaLang" 
 					},	
 					"CRS": { 
-						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En un TIF llegit directament, representa el CRS del TIFF i només n'hi ha 1. En model vectorial, és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
+						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En model vectorial i en els ràsters de TIFF (COG), és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Sistema de referència en que la capa està disponible",
@@ -1365,7 +1365,7 @@
 						"type": "number"
 					},
 					"CRSgeometry": { 
-						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector. Opcional; si no s'indica s'adopta el del primer mapa de situació.",
+						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},

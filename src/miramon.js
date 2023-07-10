@@ -472,6 +472,9 @@ function CompletaDefinicioCapa(capa, capa_vola)
 			CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		}
 	}
+	/* NJ: En el cas del TIFF s'usa també aquest membre com en el cas de model_vector, però en aquest cas ho inicialitzem al iniciar la lectura del TIFF perquè cal que prevalgui el que diu allà
+	if (!capa.CRSgeometry)
+		capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;*/
 	if (capa.model==model_vector)
 		CarregaSimbolsEstilActualCapaDigi(capa);
 }
@@ -2771,8 +2774,8 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 
 function EsCapaDisponibleEnElCRSActual(capa)
 {
-	if (capa.CRS &&
-		!(capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus)))
+	if (capa.CRS /*&&
+		!(capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))*/)  //NJ07-07-2023 Faig que les capes TIFF passin a funcionar com les altres pel que respecte a aquest membre i el sistema original es desa a CRSgeometry
 	{
 		for (var i=0; i<capa.CRS.length; i++)
 		{
@@ -3393,7 +3396,7 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 					clau_valor.clau.nom,"=",clau_valor.valor.nom);
 			}
 		}
-		if (capa.dimensioExtra)
+		else if (capa.dimensioExtra)
 		{
 			for (var i_param=0; i_param<capa.dimensioExtra.length; i_param++)
 			{
