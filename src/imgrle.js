@@ -2729,14 +2729,15 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
 			var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
 			var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
+			
 							
 			if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
 			{
-				var valors2=(typeof valors[i].param==="undefined") ? ParamCtrl.capa[i_capa2].valors : valors;
-				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, valors2[i_valor2].param, vista))
+				var dims=valors[i].param;
+				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista))
 				{
 					//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-					var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, valors2[i_valor2].param), TipusEventHttpGet),
+					var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims), TipusEventHttpGet),
 						CanviaImatgeTiFFIndirect: function (param){
 							if (param)
 							{
@@ -2756,10 +2757,10 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 							CanviaEstatEventConsola(null, this.i_event, EstarEventError);
 						}
 					};
-					PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, valors2[i_valor2].param, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
+					PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
 					return;
 				}
-				loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, valors2[i_valor2].param, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+				loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 			}
 			else if (ParamCtrl.capa[i_capa2].model==model_vector)
 			{
@@ -2769,8 +2770,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			else
 			{
 				//var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
-				var valors2=(typeof valors[i].param==="undefined") ? ParamCtrl.capa[i_capa2].valors : valors;
-				var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors2[i_valor2]);
+				var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors[i]);
 				i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
 				loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
 			}
