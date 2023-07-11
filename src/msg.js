@@ -2456,6 +2456,14 @@ var MessageLang=
       "cze": "Přidat statistické proměnné",
       "ger": "Statistische Felder hinzufügen"
     },
+	"ResultAddedAsNewLayerWithName": {
+      "cat": "El resultat serà afegit com a una capa nova de nom",
+      "spa": "El resultado será añadido como una capa nueva de nombre",
+      "eng": "The result will be added as a new layer with name",
+      "fre": "Le résultat sera ajouté en tant que nouvelle couche avec le nom",
+      "cze": "Výsledek bude přidán jako nová vrstva s názvem",
+      "ger": "Das Ergebnis wird als neuer Layer mit Namen hinzugefügtt"
+    },
     "NewLayerFromServer": {
       "cat": "Capa nova de servidor",
       "spa": "Capa nueva de servidor",

@@ -1101,7 +1101,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 	return true;
 }
 
-function AfegeixCapaCombicapaCategoric()
+function AfegeixCapaCombicapaCategoric(desc_usu)
 {
 var alguna_capa_afegida=false;
 
@@ -1192,8 +1192,10 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 			ConcatenaCadenes(ConcatenaCadenes(ConcatenaCadenes(atrib_nous[atrib_nous.length-1].descripcio," ("),(capa[1].DescLlegenda?capa[1].DescLlegenda:capa[1].nom)),")");
 			//DonaCadena(atrib_nous[atrib_nous.length-1].descripcio)+ " ("+ (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom) + ")";
 	}
-
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")), (capa[1].DescLlegenda?capa[1].DescLlegenda : capa[1].nom));
+	var desc_capa=desc_usu ? desc_usu : (
+	ConcatenaCadenes(GetMessage("CombinationOf", "cntxmenu"), ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), ConcatenaCadenes(" ",ConcatenaCadenes(GetMessage("and"),ConcatenaCadenes(" " ,(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)))))))
+	);
+	var cadena_desc_llegenda=desc_usu ? desc_usu : (ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")), (capa[1].DescLlegenda?capa[1].DescLlegenda : capa[1].nom)));
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
@@ -1201,7 +1203,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"versio": null,
 		"tipus": null,
 		"nom":	"CombinedLayer",
-		"desc":	GetMessage("CombinationOf", "cntxmenu") + (DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)),
+		"desc":	desc_capa,
 		"CRS": (capa.length && capa[0].CRS) ? JSON.parse(JSON.stringify(capa[0].CRS)) : null,
 		"EnvTotal": DeterminaEnvTotalDeCapes(i_capes),
 		"FormatImatge": "application/x-img",
@@ -1213,12 +1215,10 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		"FormatConsulta": null,
 		"grup":	null,
 		"separa": DonaTextSeparadorCapaAfegida(i_capa),
-		"DescLlegenda": cadena_desc,
-		//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
+		"DescLlegenda": cadena_desc_llegenda,		
 		"estil": [{
 			"nom":	null,
-			"desc":	cadena_desc,
-			//(DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + " " + GetMessage("and") + " " + (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom),
+			"desc":	cadena_desc_llegenda,			
 			"TipusObj": "P",
 			"component": [{
 				"calcul": DonaCadenaEstilCapaPerCalcul(-1, condicio[0].i_capa, condicio[0].i_data, condicio[0].i_estil, condicio[0].dim) + "+" +
@@ -1275,7 +1275,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 	RepintaMapesIVistes();
 }//Fi de AfegeixCapaCombicapaCategoric()
 
-function AfegeixTransferenciaEstadistics()
+function AfegeixTransferenciaEstadistics(desc_usu)
 {
 var alguna_capa_afegida=false;
 var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atrib_nous=[], i_color_tipic;
@@ -1362,8 +1362,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	//Creo la descripció de les categories, de moment només la original, les altres ja s'afegiran després
 	categ_noves=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].categories));
 
-	var cadena_desc=ConcatenaCadenes(ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), GetMessageJSON("_withStatisticOf_", "cntxmenu")),(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)));
-	var cadena_desc_llegenda=ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),GetMessageJSON("_withStatisticOf_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom));
+	var cadena_desc=desc_usu ? desc_usu : (ConcatenaCadenes(ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), GetMessageJSON("_withStatisticOf_", "cntxmenu")),(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom))));
+	var cadena_desc_llegenda=desc_usu ? desc_usu : (ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom),GetMessageJSON("_withStatisticOf_", "cntxmenu")),(capa[1].DescLlegenda?capa[1].DescLlegenda: capa[1].nom)));
 	
 		
 	var desc_estil= capa[1].estil[condicio[1].i_estil].desc + " " + GetMessage("byCategoryOf", "cntxmenu" ) + " " + capa[0].estil[condicio[0].i_estil].desc;
@@ -2057,9 +2057,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 			  "_2: </legend>",
 			  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 1, {vull_operador: false, nomes_categoric: true, vull_valors: false, vull_dates: true, vull_dims: true}),
 			  "</fieldset>",
+			  GetMessage("ResultAddedAsNewLayerWithName", "cntxmenu"),
+			  ": <input type=\"text\" name=\"nom_capa_overlay\" class=\"Verdana11px\" style=\"width:438px;\" value=\"\" /><br/>",
 			  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     	GetMessage("AddGeometricOverlay", "cntxmenu"),
-		        "\" onClick='AfegeixCapaCombicapaCategoric();TancaFinestraLayer(\"combinacioCapa\");' /><br>",
+		        "\" onClick='AfegeixCapaCombicapaCategoric(document.CombinacioCapes.nom_capa_overlay.value);TancaFinestraLayer(\"combinacioCapa\");' /><br>",
 			"</fieldset>"
 			);
 	}
@@ -2077,9 +2079,11 @@ var cdns=[], i, capa, hi_ha_raster_categ=0;
 	  "_2: </legend>",
 	  DonaCadenaCapaDataEstilOperacioValor("afegeix-capa-capa-combicap", -1, 3, {vull_operador: false, nomes_categoric: false, vull_valors: false, vull_dates: true, vull_dims: true}),
 	  "</fieldset>",
+	  GetMessage("ResultAddedAsNewLayerWithName", "cntxmenu"),
+	  ": <input type=\"text\" name=\"nom_capa_statisctical\" class=\"Verdana11px\" style=\"width:438px;\" value=\"\" /><br/>",
 	  "<input type=\"button\" class=\"Verdana11px\" value=\"",
 	    	GetMessage("AddStatisticalFields", "cntxmenu"),
-	       "\" onClick='AfegeixTransferenciaEstadistics();TancaFinestraLayer(\"combinacioCapa\");' />",
+	       "\" onClick='AfegeixTransferenciaEstadistics(document.CombinacioCapes.nom_capa_statisctical.value);TancaFinestraLayer(\"combinacioCapa\");' />",
 		"</fieldset>"
 		);
 	cdns.push("</form>");
