@@ -156,8 +156,7 @@ var trobat=false, criteris;
 					break;
 				}
 			}
-		}
-		
+		}		
 	}
 	if (servidorGC.param_func_after && servidorGC.param_func_after.estilPerCapa)
 	{
@@ -194,8 +193,7 @@ var trobat=false, criteris;
 					break;
 				}
 			}
-		}
-		
+		}		
 	}
 	if(layer.estil && layer.estil.length>0)
 	{
@@ -278,7 +276,7 @@ var trobat=false, criteris;
 
 	ParamCtrl.capa.splice(k, 0, 
 		(layer.esCOG && layer.uriDataTemplate) ? 
-			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, layer.CRSs, visible)
+			IniciaDefinicioCapaTIFF(layer.uriDataTemplate, layer.desc, null /*layer.CRSs*/, visible)  // Com que el tiff es reprojecta trec la llista de CRS's llegida de les capacitats
 			:
 			{servidor: servidorGC.servidor,
 				versio: servidorGC.versio,
@@ -802,21 +800,23 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 	if (image.getGeoKeys() && (image.getGeoKeys().ProjectedCSTypeGeoKey || image.getGeoKeys().GeographicTypeGeoKey))
 	{
 		/*NJ_27_02_2023: Trec aquesta protecció ja no cal ara que reprojectem el COG's
-		if (capa.CRS && capa.CRS.length && capa.CRS[0]!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
+		if (capa.CRSgeometry && capa.CRSgeometry!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
 		{
 			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
 			return;
 		}*/
-		capa.CRS=["EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey)];
-		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]))
-			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
+		capa.CRSgeometry="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey);
+		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaCRS && !DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry))
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRSgeometry));
 		var bbox = image.getBoundingBox();
-		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRS[0]}
+		capa.EnvTotal={"EnvCRS": { "MinX": bbox[0], "MaxX": bbox[2], "MinY": bbox[1], "MaxY": bbox[3]}, "CRS": capa.CRSgeometry}
 		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 		if (capa.origen==OrigenUsuari && ParamCtrl.LlegendaAmagaSiForaEnv && 
-			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS[0]) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
+			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
+	else if(!capa.CRSgeometry)  // si no hi ha CRS ni l'hem pogut determinar usem el de la Imatge de situació (igual que es fa en els vectors)
+		capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
 
 	var datatype;
 
@@ -911,11 +911,11 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 		//var costatMin=image.getResolution()[0];  //No hi ha probrema en un costat petit (mirar la imatge molt de prop)
 		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerància sobre el costat màxim
-		if (capa.CRS && capa.CRS.length)
+		if (capa.CRSgeometry)
 		{
-			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && EsProjLongLat(capa.CRS[0]))
+			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && EsProjLongLat(capa.CRSgeometry))
 				costatMax*=FactorGrausAMetres; 
-			else if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) && DonaUnitatsCoordenadesProj(capa.CRS[0])=="m")
+			else if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) && DonaUnitatsCoordenadesProj(capa.CRSgeometry)=="m")
 				costatMax/=FactorGrausAMetres;
 		}
 		for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
@@ -1088,11 +1088,11 @@ var k;
 	}
 	ParamCtrl.capa.splice(k, 0, capa);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-	if (capa.CRS && !DonaCRSRepresentaQuasiIguals(capa.CRS[0], ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	if (capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		CreaLlegenda();
 		if (ParamCtrl.LlegendaAmagaSiForaCRS)
-			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRS[0]));
+			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentCRS", "cntxmenu") + ".\n" + GetMessage("OnlyVisibleInTheFollowCRS", "cntxmenu") + ": " + DonaDescripcioCRS(capa.CRSgeometry));
 	}
 	else
 		RepintaMapesIVistes();

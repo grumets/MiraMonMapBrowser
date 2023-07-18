@@ -187,7 +187,7 @@ var FormulaConsulta="";
 					// em deso aquesta info que després necessitaré
 					if(!nou_valor.param)
 						nou_valor.param=[];
-					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_dim].valor[i_v_dim].nom});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
+					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_dim].valor[i_v_dim]});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
 				}
 			}
 			
@@ -1967,7 +1967,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 					}
 				}
 			}
-	  } //End of for
+		} //End of for
 
  		if (component.length==2) //és una capa de transferència de camps estadístics a unes categories
 		{
@@ -2012,7 +2012,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 					}
 				}
 			}
-	  	} //End of for
+	  	}
 	}
 	else
 	{
@@ -2137,7 +2137,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 										}
 									}
 								}
-		          }
+							}
 						}
 						else
 						{
@@ -2615,167 +2615,168 @@ function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_fun
 var i, i_event;
 var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 
-		if (!ParamCtrl.capa[i_capa].estil || ParamCtrl.capa[i_capa].estil.length<=i_estil2)
-			return;
+	if (!ParamCtrl.capa[i_capa].estil || ParamCtrl.capa[i_capa].estil.length<=i_estil2)
+		return;
 
-		/*if (!estil.component)
-		{
-			alert(GetMessage("LayerIMGNoDefinesComponents", "imgrle") + "\n" + GetMessage("Layer") + " \"" + DonaCadena(ParamCtrl.capa[i_capa].desc));
-			return;
-		}*/
-		//arrayBuffer és "undefined" si la banda no està implicada al dibuixat i null si encara no s'ha carregar però s'espera que ho faci.
-		var valors=ParamCtrl.capa[i_capa].valors;
-		//Determina les v[i] presents a l'expressió.
-		var v=DeterminaArrayValorsNecessarisCapa(i_capa, i_estil2);
+	/*if (!estil.component)
+	{
+		alert(GetMessage("LayerIMGNoDefinesComponents", "imgrle") + "\n" + GetMessage("Layer") + " \"" + DonaCadena(ParamCtrl.capa[i_capa].desc));
+		return;
+	}*/
+	//arrayBuffer és "undefined" si la banda no està implicada al dibuixat i null si encara no s'ha carregar però s'espera que ho faci.
+	var valors=ParamCtrl.capa[i_capa].valors;
+	//Determina les v[i] presents a l'expressió.
+	var v=DeterminaArrayValorsNecessarisCapa(i_capa, i_estil2);
 
-		if (vista.i_nova_vista==NovaVistaPrincipal)
-		{
-			for (i=0; i<valors.length; i++)
-			{
-				if (v[i])
-					valors[i].arrayBuffer=null; //Marco que encara s'ha de fer
-				else
-				{
-					if (valors[i].arrayBuffer)
-						delete valors[i].arrayBuffer; //Marco que no es farà
-				}
-			}
-		}
-		else if (vista.i_nova_vista==NovaVistaImprimir)
-		{
-			for (i=0; i<valors.length; i++)
-			{
-				if (v[i])
-					valors[i].arrayBufferPrint=null; //Marco que encara s'ha de fer
-				else
-				{
-					if (valors[i].arrayBufferPrint)
-						delete valors[i].arrayBufferPrint; //Marco que no es farà
-				}
-			}
-		}
-		else if (vista.i_nova_vista==NovaVistaRodet)
-		{
-			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
-			if (!estil.capa_rodet)
-				estil.capa_rodet=[];       //Preparo guardat els histogrames petits aquí dins.
-			for (i=0; i<valors.length; i++)
-			{
-				if (!valors[i].capa_rodet)
-					valors[i].capa_rodet=[];  //Preparo l'estructura
-				if (!valors[i].capa_rodet[i_data])
-					valors[i].capa_rodet[i_data]={}  //Preparo l'estructura
-				if (v[i])
-				{
-					valors[i].capa_rodet[i_data].arrayBuffer=null;
-					valors[i].capa_rodet[i_data].i_estil=i_estil2;
-				}
-				else
-				{
-					if (valors[i].capa_rodet[i_data].arrayBuffer)
-						delete valors[i].capa_rodet[i_data].arrayBuffer;
-				}
-			}
-		}
-		else if (vista.i_nova_vista==NovaVistaVideo)
-		{
-			var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
-			if (!estil.capa_video)
-				estil.capa_video=[];       //Preparo guardat els histogrames aquí dins.
-			for (i=0; i<valors.length; i++)
-			{
-				if (!valors[i].capa_video)
-					valors[i].capa_video=[];  //Preparo l'estructura
-				if (!valors[i].capa_video[i_data])
-					valors[i].capa_video[i_data]={}  //Preparo l'estructura
-				if (v[i])
-				{
-					valors[i].capa_video[i_data].arrayBuffer=null;
-					valors[i].capa_video[i_data].i_estil=i_estil2;
-				}
-				else
-				{
-					if (valors[i].capa_video[i_data].arrayBuffer)
-						delete valors[i].capa_video[i_data].arrayBuffer;
-				}
-			}
-		}
-		else
-		{
-			for (i=0; i<valors.length; i++)
-			{
-				if (!valors[i].nova_capa)
-					valors[i].nova_capa=[];  //Preparo l'estructura
-				if (!valors[i].nova_capa[vista.i_nova_vista])
-					valors[i].nova_capa[vista.i_nova_vista]={}  //Preparo l'estructura
-				if (v[i])
-				{
-					valors[i].nova_capa[vista.i_nova_vista].arrayBuffer=null;
-					valors[i].nova_capa[vista.i_nova_vista].i_estil=i_estil2;
-				}
-				else
-				{
-					if (valors[i].nova_capa[vista.i_nova_vista].arrayBuffer)
-						delete valors[i].nova_capa[vista.i_nova_vista].arrayBuffer;
-				}
-			}
-		}
+	if (vista.i_nova_vista==NovaVistaPrincipal)
+	{
 		for (i=0; i<valors.length; i++)
 		{
 			if (v[i])
+				valors[i].arrayBuffer=null; //Marco que encara s'ha de fer
+			else
 			{
-				//Pot ser que aquesta v[i] ens envii a una altre capa i un altre temps i amb uns altres paràmetres addicionals si hi ha un càlcul en aquesta banda.
-								
-				var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
-				var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
-				var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
-								
-				if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
-				{
-					var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
-					if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, valors2[i_valor2].param, vista))
-					{
-						//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-						var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, valors2[i_valor2].param), TipusEventHttpGet),
-							CanviaImatgeTiFFIndirect: function (param){
-								if (param)
-								{
-									CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
-									
-									if (!EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[param.i_capa]))
-									{
-										CanviaEstatCapa(param.i_capa, "visible");
-										CreaLlegenda();
-										return;
-									}
-									return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
-								}
-							},
-							ErrorImatgeTIFF: function (error){
-								alert(error);
-								CanviaEstatEventConsola(null, this.i_event, EstarEventError);
-							}
-						};
-						PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, valors2[i_valor2].param, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
-						return;
-					}
-					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, valors2[i_valor2].param, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
-				}
-				else if (ParamCtrl.capa[i_capa2].model==model_vector)
-				{
-					//Si entro aquí, això hauria de ser una capa de polígons
-					loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
-				}
-				else
-				{
-					var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
-					var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors2[i_valor2]);
-					i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
-					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
-				}
+				if (valors[i].arrayBuffer)
+					delete valors[i].arrayBuffer; //Marco que no es farà
 			}
 		}
-		CanviaCursorSobreVista("progress");
+	}
+	else if (vista.i_nova_vista==NovaVistaImprimir)
+	{
+		for (i=0; i<valors.length; i++)
+		{
+			if (v[i])
+				valors[i].arrayBufferPrint=null; //Marco que encara s'ha de fer
+			else
+			{
+				if (valors[i].arrayBufferPrint)
+					delete valors[i].arrayBufferPrint; //Marco que no es farà
+			}
+		}
+	}
+	else if (vista.i_nova_vista==NovaVistaRodet)
+	{
+		var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
+		if (!estil.capa_rodet)
+			estil.capa_rodet=[];       //Preparo guardat els histogrames petits aquí dins.
+		for (i=0; i<valors.length; i++)
+		{
+			if (!valors[i].capa_rodet)
+				valors[i].capa_rodet=[];  //Preparo l'estructura
+			if (!valors[i].capa_rodet[i_data])
+				valors[i].capa_rodet[i_data]={}  //Preparo l'estructura
+			if (v[i])
+			{
+				valors[i].capa_rodet[i_data].arrayBuffer=null;
+				valors[i].capa_rodet[i_data].i_estil=i_estil2;
+			}
+			else
+			{
+				if (valors[i].capa_rodet[i_data].arrayBuffer)
+					delete valors[i].capa_rodet[i_data].arrayBuffer;
+			}
+		}
+	}
+	else if (vista.i_nova_vista==NovaVistaVideo)
+	{
+		var estil=ParamCtrl.capa[i_capa].estil[i_estil2];
+		if (!estil.capa_video)
+			estil.capa_video=[];       //Preparo guardat els histogrames aquí dins.
+		for (i=0; i<valors.length; i++)
+		{
+			if (!valors[i].capa_video)
+				valors[i].capa_video=[];  //Preparo l'estructura
+			if (!valors[i].capa_video[i_data])
+				valors[i].capa_video[i_data]={}  //Preparo l'estructura
+			if (v[i])
+			{
+				valors[i].capa_video[i_data].arrayBuffer=null;
+				valors[i].capa_video[i_data].i_estil=i_estil2;
+			}
+			else
+			{
+				if (valors[i].capa_video[i_data].arrayBuffer)
+					delete valors[i].capa_video[i_data].arrayBuffer;
+			}
+		}
+	}
+	else
+	{
+		for (i=0; i<valors.length; i++)
+		{
+			if (!valors[i].nova_capa)
+				valors[i].nova_capa=[];  //Preparo l'estructura
+			if (!valors[i].nova_capa[vista.i_nova_vista])
+				valors[i].nova_capa[vista.i_nova_vista]={}  //Preparo l'estructura
+			if (v[i])
+			{
+				valors[i].nova_capa[vista.i_nova_vista].arrayBuffer=null;
+				valors[i].nova_capa[vista.i_nova_vista].i_estil=i_estil2;
+			}
+			else
+			{
+				if (valors[i].nova_capa[vista.i_nova_vista].arrayBuffer)
+					delete valors[i].nova_capa[vista.i_nova_vista].arrayBuffer;
+			}
+		}
+	}
+	for (i=0; i<valors.length; i++)
+	{
+		if (v[i])
+		{
+			//Pot ser que aquesta v[i] ens envii a una altre capa i un altre temps i amb uns altres paràmetres addicionals si hi ha un càlcul en aquesta banda.
+							
+			var i_capa2=(typeof valors[i].i_capa==="undefined") ? i_capa : valors[i].i_capa;
+			var i_data2=(typeof valors[i].i_data==="undefined") ? i_data : valors[i].i_data;
+			var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
+			
+							
+			if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
+			{
+				var dims=valors[i].param;
+				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista))
+				{
+					//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+					var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims), TipusEventHttpGet),
+						CanviaImatgeTiFFIndirect: function (param){
+							if (param)
+							{
+								CanviaEstatEventConsola(null, this.i_event, EstarEventTotBe);
+								
+								if (!EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[param.i_capa]))
+								{
+									CanviaEstatCapa(param.i_capa, "visible");
+									CreaLlegenda();
+									return;
+								}
+								return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+							}
+						},
+						ErrorImatgeTIFF: function (error){
+							alert(error);
+							CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+						}
+					};
+					PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
+					return;
+				}
+				loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+			}
+			else if (ParamCtrl.capa[i_capa2].model==model_vector)
+			{
+				//Si entro aquí, això hauria de ser una capa de polígons
+				loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+			}
+			else
+			{
+				//var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
+				var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors[i]);
+				i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
+				loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
+			}
+		}
+	}
+	CanviaCursorSobreVista("progress");
 }
 
 function BuidaArrayBufferCapa(capa)
