@@ -747,14 +747,14 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
 					else
 						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-					cdns.push("><select CLASS=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
+					cdns.push("><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
 					   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
 					var i_data_sel=DonaIndexDataCapa(capa, null);
 					for (var i_data=0; i_data<capa.data.length; i_data++)
 					{
-						cdns.push("<OPTION VALUE=\"",i_data,"\"",
-							((i_data==i_data_sel) ? " SELECTED" : "") ,
-						">", DonaDataCapaPerLlegenda(i_capa,i_data) , "</OPTION>\n");
+						cdns.push("<option value=\"",i_data,"\"",
+							((i_data==i_data_sel) ? " selected" : "") ,
+						">", DonaDataCapaPerLlegenda(i_capa,i_data) , "</option>\n");
 					}
 					cdns.push("</select></td></tr>");
 				}
