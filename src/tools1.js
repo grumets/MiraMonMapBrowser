@@ -2323,12 +2323,15 @@ function RemoveOtherPropertiesInObjWithRef(obj_root, obj)
 		var found=false;
 		for (var k in obj)
 		{
+			if(obj.hasOwnProperty(k) && k=="type" && obj[k]=="FeatureCollection")  // No vull repassar tota la featureCollection ja que el GeoJSON no permet $ref.
+				return;
 			if (obj.hasOwnProperty(k) && k=="$ref")
 			{
 				found=true;
 				break;
 			}
 		}
+		
 		if (found)
 		{
 			if (typeof obj["$ref"]==="string")
