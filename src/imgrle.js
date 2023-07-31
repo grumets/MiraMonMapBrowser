@@ -2418,7 +2418,7 @@ var i_v, dv=[], mes_duna_v;
 var capa=ParamCtrl.capa[extra_param.i_capa], valors=capa.valors, n_v, n_v_plena;
 var estil=capa.estil[extra_param.i_estil];
 var histograma=null, imgData, ctx;
-var data
+var data;
 //cal_histo=false;
 
 	if (typeof extra_param.i_event!=="undefined")
@@ -2438,31 +2438,32 @@ var data
 
 	//Comprovo que tinc les bandes que necessito. Si no hi son, espero més.
 	n_v=valors.length;
+	var v=DeterminaArrayValorsNecessarisCapa(extra_param.i_capa, extra_param.i_estil);
 	for (i_v=0; i_v<n_v; i_v++)
 	{
 		if (extra_param.vista.i_nova_vista==NovaVistaPrincipal)
 		{
-			if (typeof valors[i_v].arrayBuffer!=="undefined" && valors[i_v].arrayBuffer==null)
+			if (v[i_v] && typeof valors[i_v].arrayBuffer!=="undefined" && valors[i_v].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaImprimir)
 		{
-			if (typeof valors[i_v].arrayBufferPrint!=="undefined" && valors[i_v].arrayBufferPrint==null)
+			if (v[i_v] && typeof valors[i_v].arrayBufferPrint!=="undefined" && valors[i_v].arrayBufferPrint==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaRodet)
 		{
-			if (typeof valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer==null)
+			if (v[i_v] && typeof valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_rodet[extra_param.i_data].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 		else if (extra_param.vista.i_nova_vista==NovaVistaVideo)
 		{
-			if (typeof valors[i_v].capa_video[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_video[extra_param.i_data].arrayBuffer==null)
+			if (v[i_v] && typeof valors[i_v].capa_video[extra_param.i_data].arrayBuffer!=="undefined" && valors[i_v].capa_video[extra_param.i_data].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 		else
 		{
-			if (typeof valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer!=="undefined" && valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer==null)
+			if (v[i_v] && typeof valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer!=="undefined" && valors[i_v].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer==null)
 				return;  //Cal esperar a la càrrega de les altres capes.
 		}
 	}
@@ -2749,7 +2750,9 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 									CreaLlegenda();
 									return;
 								}
-								return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
+								loadTiffData(param.i_capa2, param.i_valor2, param.imatge, param.vista, param.i_capa, param.i_data2, param.i_estil, param.dims, param.i_valor, param.nom_funcio_ok, param.funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+								return;
+								//return CanviaImatgeBinariaCapa(param.imatge, param.vista, param.i_capa, param.i_estil, param.i_data, param.nom_funcio_ok, param.funcio_ok_param);
 							}
 						},
 						ErrorImatgeTIFF: function (error){
@@ -2757,10 +2760,10 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 							CanviaEstatEventConsola(null, this.i_event, EstarEventError);
 						}
 					};
-					PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
-					return;
+					PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil2, i_data, dims, i, nom_funcio_ok, funcio_ok_param).then(imatgeTiffEvent.CanviaImatgeTiFFIndirect.bind(imatgeTiffEvent), imatgeTiffEvent.ErrorImatgeTIFF.bind(imatgeTiffEvent));
 				}
-				loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
+				else
+					loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i, nom_funcio_ok, funcio_ok_param).then(CanviaImatgeBinariaCapaIndirectCallback, ErrorImatgeBinariaCapaCallback);
 			}
 			else if (ParamCtrl.capa[i_capa2].model==model_vector)
 			{

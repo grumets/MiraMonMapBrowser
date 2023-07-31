@@ -1059,8 +1059,10 @@ var ob, prop={}, nom_param, ds;
 		}
 		if (ds.Thing && ds.Thing.name)
 			prop["thing"]=ds.Thing.name;
-		if (ds.Party && ds.Party.name)
-			prop["party"]=ds.Party.name;
+		/*if (ds.Party && ds.Party.name)
+			prop["party"]=ds.Party.name;*/
+		if (ds.Party && ds.Party.displayName)
+			prop["party"]=ds.Party.displayName;
 		if (ds.Project && ds.Project.name)
 			prop["project"]=ds.Project.name;
 		if (ds.License && ds.License.description)
@@ -1962,7 +1964,8 @@ var capa=ParamCtrl.capa[i_capa];
 
 	cdns_datastream.push(",name;$expand=Thing($select=name)");
 	if (capa.tipus=="TipusSTAplus")
-		cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
+		cdns_datastream.push(",Party($select=displayName),License($select=description)");
+		//cdns_datastream.push(",Party($select=name),Project($select=name),License($select=description)");
 	cdns.push("/v",DonaVersioComAText(capa.versio),"/FeaturesOfInterest");
 	if (i_obj==null)
 	{

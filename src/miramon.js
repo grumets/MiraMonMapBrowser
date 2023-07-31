@@ -1519,6 +1519,24 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 			else
 				delete capa.objectes;
 		}
+		else if (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
+		{
+			// Esborro els objectes tiff
+			if(capa.tiff)
+				delete capa.tiff;
+			if(capa.i_capa_tiff)
+				delete capa.i_capa_tiff;
+			if(capa.valors)
+			{
+				for( var i_valor=0; i_valor<capa.valors.length; i_valor++)
+				{
+					if(capa.valors[i_valor].tiff)
+						delete capa.tiff;
+					if(capa.valors[i_valor].i_capa_tiff)
+						delete capa.valors[i_valor].i_capa_tiff;
+				}
+			}
+		}
 		DescarregaSimbolsCapaDigi(capa);
 		if (capa.tileMatrixSetGeometry)
 		{
