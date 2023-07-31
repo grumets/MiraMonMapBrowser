@@ -974,7 +974,7 @@ var capa=ParamCtrl.capa[i_capa];
 			else*/
 			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
 			{
-				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null);
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
 				return;
 			}
 		}

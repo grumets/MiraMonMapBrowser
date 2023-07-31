@@ -165,7 +165,7 @@ var capa = ParamCtrl.capa[i_capa2], url;
 	return CanviaVariablesDeCadena(url, capa, i_data2, dims);
 }
 
-async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param)
+async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param)
 {
 	if (!window.GeoTIFFfromUrl)
 		await loadGeoTIFF();
@@ -176,7 +176,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 	{
 		if (null==(url=AddAccessTokenToURLIfOnline(url, capa.access)))
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
 			return;
 		}
 	}*/
@@ -202,7 +202,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
 			return null;
 		}
 	}
@@ -216,7 +216,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			if (!valor2.capa_video)
 				valor2.capa_video=[];  //Preparo l'estructura
 			if (!valor2.capa_video[i_data2])
-				valor2.capa_video[i_data]={}  //Preparo l'estructura
+				valor2.capa_video[i_data2]={}  //Preparo l'estructura
 			valor2.capa_video[i_data2].tiff=tiff;
 		}
 		else
@@ -233,7 +233,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			if (!capa.capa_video)
 				capa.capa_video=[];  //Preparo l'estructura
 			if (!capa.capa_video[i_data2])
-				capa.capa_video[i_data]={}  //Preparo l'estructura
+				capa.capa_video[i_data2]={}  //Preparo l'estructura
 			capa.capa_video[i_data2].tiff=tiff;
 		}
 		else
@@ -256,11 +256,11 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 					if(dims[i_dim2].clau.nom.toLowerCase()==dim.clau.nom.toLowerCase())
 					{	
 						var dim2=dims[i_dim2];
-						for (var i_valor=0; i_valor<dim.valor.length; i_valor++)
+						for (var i_valor_dim=0; i_valor_dim<dim.valor.length; i_valor_dim++)
 						{
-							if(dim2.valor.nom.toLowerCase()==dim.valor[i_valor].nom.toLowerCase())
+							if(dim2.valor.nom.toLowerCase()==dim.valor[i_valor_dim].nom.toLowerCase())
 							{
-								dim.i_valor_tiff=i_valor;
+								dim.i_valor_tiff=i_valor_dim;
 								break;
 							}
 						}
@@ -280,7 +280,10 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc, i_valor2);
 	if (capa.origen==OrigenUsuari)
 		CompletaDefinicioCapa(capa, false);
-	return {imatge: imatge, vista: vista, i_capa: i_capa, i_estil: i_estil, i_data: i_data, dims: dims, nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
+	return {imatge: imatge, vista: vista, 
+			i_capa2: i_capa2, i_valor2: i_valor2, i_data2: i_data2,   
+			i_capa: i_capa, i_estil: i_estil, i_data: i_data, dims: dims, i_valor: i_valor,
+			nom_funcio_ok: nom_funcio_ok, funcio_ok_param: funcio_ok_param};
 }
 
 
@@ -290,7 +293,7 @@ var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista);
 var capa2=ParamCtrl.capa[i_capa2];
 var bbox, width, height, dades, env_tiff;
 
-	if (!DonaCRSRepresentaQuasiIguals(capa2.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	if (capa2.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa2.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		//cal fer canvi de projecció;
 		//determino l'envolupant en el sistema del tiff
@@ -313,7 +316,7 @@ var bbox, width, height, dades, env_tiff;
 					fillValue: (capa2.valors[i_valor2].nodata && capa2.valors[i_valor2].nodata.length) ? capa2.valors[i_valor2].nodata[0]: null 
 					/*, resampleMethod: 'bilinear'*/});
 
-	if (!DonaCRSRepresentaQuasiIguals(capa2.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
+	if (capa2.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa2.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		//canvio la imatge al sistema nou
 		var dv_tiff=new DataView(data[0].buffer);

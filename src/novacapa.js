@@ -791,7 +791,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 {
 	var image = await tiff.getImage();
 
-	if (capa.servidor)
+	if (capa.servidor && (!capa.valors || !capa.valors[i_valor].url))
 	{
 		capa.tiff=tiff;
 		capa.i_data_tiff=0;
@@ -879,11 +879,13 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					capa.valors[i].nodata=JSON.parse(JSON.stringify(nodata_usuari));
 					
 			}
+			/* NJ_25_07_2023: A això no li trobo sentit i crec que no s'hi entra mai perquè sempre existeix capa.servidor
+			que es concatena amb capa.valors.url i a més quan vinc a aquesta funció, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
 				capa.valors[i_v+i].i_data_tiff=0;
-			}
+			}*/
 		}
 	}
 	else
@@ -893,11 +895,14 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		{
 			capa.valors[i_v+i].datatype=datatype;
 			capa.valors[i_v+i].nodata=(image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null;
+			/* NJ_25_07_2023: A això no li trobo sentit i crec que no s'hi entra mai perquè sempre existeix capa.servidor
+			que es concatena amb capa.valors.url i a més quan vinc a aquesta funció, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
 				capa.valors[i_v+i].i_data_tiff=0;
 			}
+			*/
 		}
 	}
 

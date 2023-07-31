@@ -54,7 +54,7 @@ function LlegeixReportDataQualtity(quality_element, node_DQElement)
 	
 	quality_element.result=[{qualityml:{measure:null, domain:null, metrics:null }}];
 	
-	var i, node, node2, cadena, quality_ml=quality_element.result[0].qualityml, index, nom;
+	var i, node, node2, cadena, quality_ml=quality_element.result[0].qualityml, index, nom, i_metric;
 	
 	//  Busco la mesura
 	node=node_DQElement.getElementsByTagName('gmd:measureIdentification');
@@ -108,37 +108,44 @@ function LlegeixReportDataQualtity(quality_element, node_DQElement)
 	
 	// busco la mètrica
 	quality_ml.metrics=[];
-	for(i=0;  i<result.length; i++)
+	
+	for(i=0,i_metric=0; i<result.length; i++)
 	{
 		node=result[i].getElementsByTagName('gmd:DQ_QuantitativeResult');
 		if(!node || node.length<1)
 			continue;
-		// metrica
-		node2=node[0].getElementsByTagName('gmd:errorStatistic');
+		
+		// metrica : errorStatistic no és obligatòri però value si
+		
+		//valor
+		node2=node[0].getElementsByTagName('gmd:value');
 		if(!node2 || node2.length<1)
 			continue;
-			
-		node2=node2[0].getElementsByTagName('gco:CharacterString');
+		node2=node2[0].getElementsByTagName('gco:Record');
+		if(!node2 || node2.length<1)
+			continue;
+		
+		quality_ml.metrics[i_metric]={name : null, values : {}};
+		quality_ml.metrics[i_metric].values.list=[node2[0].textContent];
+		// ·$· els valors també poden tenir units quality_ml.metrics[i].values.units="m";
+		// i tipus i param measure
+		
+		// nom de la mètrica a errorStatistic
+		node2=node[0].getElementsByTagName('gmd:errorStatistic');
 		if(node2 && node2.length>0)
-		{
-			nom=node2[0].textContent;
-			// Potser que el nom sigui una URL miro d'eliminar tot el que no cal i quedar-me només amb el nom			
-			cadena=DonaAdreca(nom).toLowerCase();
-			if(cadena=="https://www.qualityml.org/1.0/metrics" || cadena=="http://www.qualityml.org/1.0/metrics" || cadena=="www.qualityml.org/1.0/metrics")
-				nom=TreuAdreca(nom);			
-			quality_ml.metrics[quality_ml.metrics.length]={name : nom,
-													 values : {}};
-			node2=node[0].getElementsByTagName('gmd:value');
-			if(!node2 || node2.length<1)
-				continue;
-			node2=node2[0].getElementsByTagName('gco:Record');
+		{			
+			node2=node2[0].getElementsByTagName('gco:CharacterString');
 			if(node2 && node2.length>0)
 			{
-				quality_ml.metrics[i].values.list=[node2[0].textContent];
-				// ·$· els valors també poden tenir units quality_ml.metrics[i].values.units="m";
-				// i tipus i parammeasure
+				nom=node2[0].textContent;
+				// Potser que el nom sigui una URL miro d'eliminar tot el que no cal i quedar-me només amb el nom			
+				cadena=DonaAdreca(nom).toLowerCase();
+				if(cadena=="https://www.qualityml.org/1.0/metrics" || cadena=="http://www.qualityml.org/1.0/metrics" || cadena=="www.qualityml.org/1.0/metrics")
+					nom=TreuAdreca(nom);			
+				quality_ml.metrics[i_metric].name=nom;
 			}
-		}			
+		}		
+					
 		/*
 		·$· de moment no tenim tipus de metrica!! caldia afegir el type!!
 		node2=(node.getElementsByTagName('gmd:valueType')[0]).getElementsByTagName('gco:RecordType')[0];
@@ -149,22 +156,23 @@ function LlegeixReportDataQualtity(quality_element, node_DQElement)
 			var index=cadena.indexOf('(');
 			if(index!=-1)
 			{
-				quality_ml.metrics[i].type=cadena.slice(0, index);
-				quality_ml.metrics[i].params=[];
+				quality_ml.metrics[i_metric].type=cadena.slice(0, index);
+				quality_ml.metrics[i_metric].params=[];
 				cadena=cadena.slice(index+1,cadena.indexOf(')'));
 				var matriu=cadena.split(','), matriu2;
 				for(var j=0;j<matriu.length;j++)
 				{
 					matriu2=matriu[j].split('=');
-					quality_ml.metrics[i].params[j]={name: matriu2[0]
+					quality_ml.metrics[i_metric].params[j]={name: matriu2[0]
 												  value: matriu2[1]};
 				}
 			}
 			else
 			{
-				quality_ml.metrics[i].type=cadena;
+				quality_ml.metrics[i_metric].type=cadena;
 			}
 		}*/
+		i_metric++;
 	}
 	return true;
 }
@@ -467,11 +475,15 @@ var i_indicator, i_measure, i_domain, i_metric, cdns=[];
 					{
 						for (var i_m=0; i_m<qualityml.metrics.length; i_m++)
 						{
-							cdns.push("<b>Metrics:</b> ", qualityml.metrics[i_m].name);
-							i_metric=DonaIndexMetricQualityML( qualityml.metrics[i_m].name);
-							if(i_metric!=-1)
-								cdns.push(DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "metrics", i_m, qualityml.metrics[i_m].name));
-							cdns.push("<br/>",DonaCadenaParamQualitatCapa(qualityml.metrics[i_m].param),
+							if(qualityml.metrics[i_m].name) // Potser que no tinguem nom de metrica
+							{
+								cdns.push("<b>Metrics:</b> ", qualityml.metrics[i_m].name);
+								i_metric=DonaIndexMetricQualityML( qualityml.metrics[i_m].name);
+								if(i_metric!=-1)
+									cdns.push(DonaCadenaBotoExpandQualitatCapa(i_q, i_r, version, "metrics", i_m, qualityml.metrics[i_m].name));
+								cdns.push("<br/>");
+							}
+							cdns.push(DonaCadenaParamQualitatCapa(qualityml.metrics[i_m].param),
 									DonaCadenaValorsComLlistaQualitatCapa(qualityml.metrics[i_m].values));
 						}
 					}
