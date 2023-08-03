@@ -234,9 +234,9 @@ var d = new Date(millisegons);
 	}
 	if (flags_data.DataMostraHora)
 	{
-	    if (d.getHour()<10)
+	    if (d.getHours()<10)
 			cdns.push("0");
-	    cdns.push(d.getHour());
+	    cdns.push(d.getHours());
 	}
 	if (flags_data.DataMostraMinut)
 	{
