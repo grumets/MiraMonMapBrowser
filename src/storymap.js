@@ -135,25 +135,22 @@ const novaStoryMap = {};
 var comptadorPassos = 0;
 function TancaICreaStoryMap()
 {
+	const lastStoryStepElement = "lastStoryStepElement";
+	const storyStepImage = "storyMainImage";
 	//Tancar la caixa de les histories
 	TancaFinestraLayer("triaStoryMap");
 
-	const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='storyMainImage' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\")'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
-
-	if (!isFinestraLayer(window, "creaStoryMap"))
+	if (isFinestraLayer(window, "creaStoryMap"))
 	{
-		createFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, beginingStoryMapContent.join(""));
-		//Acabem de crear la finestra creaStoryMap per això sabem que és en última posició del layerFinestraList
-		OmpleBarraFinestraLayer(window, layerFinestraList.length-1)
-	} else {
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
+		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='", storyStepImage, "' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\", )'><br><br><input type='button' id='", lastStoryStepElement, "' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
 		novaStoryMapFinestra.innerHTML = beginingStoryMapContent.join("");
 	}
 	ObreFinestra(window, "creaStoryMap");
 }
 /*
-	Mostra la imatge de portada del StoryMap.
+	
 */
 function CarregaImatgeStoryMap(input, imatgeId, ultimElemId) 
 {
@@ -168,24 +165,78 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 				//Reduir la mida de la imatge
 				const canvasId = "reduccioImatges";
 				
-				let canvasReduccioImg = document.getElementById(canvasId);
+				var canvasReduccioImg = document.getElementById(canvasId);
+				let ultimElem = document.getElementById(ultimElemId);
 				if (!canvasReduccioImg)
 				{
 					canvasReduccioImg = document.createElement("canvas");
-					canvas.insertAdjacentElement("afterend", ultimElem);
+					canvasReduccioImg.setAttribute("width", "100");
+					canvasReduccioImg.setAttribute("height", "60");
+					//canvasReduccioImg.setAttribute("display", "none");
+					if (ultimElem)
+					{
+						canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+					}
+				}
+				else 
+				{
+					canvasReduccioImg.setAttribute("width", "100");
+					canvasReduccioImg.setAttribute("height", "60");
+					//canvasReduccioImg.setAttribute("display", "none");
+				}
+
+				// Arrays
+				let arrayPixels = new Uint8ClampedArray(this.result);
+				try{
+					let imgData = new ImageData(arrayPixels, 100);
+				}
+				catch(error)
+				{
+					console.log("Tenim una DOMException amb codi: " + error.code + " i nom: " + error.name);
+				}
+
+				/* 
+				
+				DP: --- Codi d'exemple trobat a: https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData ---
+
+				const ctx = canvasReduccioImg.getContext("2d");
+				const arr = new Uint8ClampedArray(40_000);
+				
+				// Fill the array with the same RGBA values
+				for (let i = 0; i < arr.length; i += 4) {
+				  arr[i + 0] = 0; // R value
+				  arr[i + 1] = 190; // G value
+				  arr[i + 2] = 0; // B value
+				  arr[i + 3] = 255; // A value
 				}
 				
+				// Initialize a new ImageData object
+				let imageData = new ImageData(arr, 200);
 				
+				// Draw image data to the canvas
+				ctx.putImageData(imageData, 20, 20);
 
+				*/
+
+				const cntx = canvasReduccioImg.getContext("2d");
+				//const imageObj = cntx.createImageData(imgData);
+				//imageObj.data.set(this.result);
+				//cntx.putImageData(imageObj, 0, 0);
+				//canvasReduccioImg.setAttribute("display", "normal");
+				cntx.putImageData(imgData, 0, 0);
 				const imatge = document.getElementById(imatgeId);
-				if (imatge && this.result)
+				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 1.0);
+				
+				if (imatge && this.result && imatgeReduida)
 				{
-					imatge.src = this.result;
+					imatge.src = imatgeReduida;
 					imatge.width=200;
 				}
 			}
 		};
-		reader.readAsDataURL(input.files[0]);
+		reader.readAsArrayBuffer(input.files[0]);
+		//reader.readAsDataURL(input.files[0]);
+		//reader.readAsText(input.files[0]);
 	}
 }
 
