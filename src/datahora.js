@@ -234,9 +234,9 @@ var d = new Date(millisegons);
 	}
 	if (flags_data.DataMostraHora)
 	{
-	    if (d.getHour()<10)
+	    if (d.getHours()<10)
 			cdns.push("0");
-	    cdns.push(d.getHour());
+	    cdns.push(d.getHours());
 	}
 	if (flags_data.DataMostraMinut)
 	{
@@ -373,10 +373,14 @@ var cdns=[];
 	    }
 	}
 	return cdns.join("");
-}//fi de DonaDataJSONComATextCompacte()
+}//fi de DonaDateComATextCompacte()
 
 
-//o_data és una sortida en aquesta funció
+/*Aquesta funció retorna FlagsData i omple o_data amb els resultat del canvi de data. Cal passar una variable inicialitzada així: odata={};
+La funció en si és una mica rara i si no interessa el retorn FlagsData potser és millor fer:
+var d=new Date(cadena_data);
+o_data=DonaDataJSONDesDeDate(d);
+*/
 function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 {
 	//primer miro els separadors de guions per veure que té de aaaa-mm-dd
@@ -392,7 +396,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 		return {"DataMostraAny": true, "DataMostraMes": true};
 
 	//Any, mes i dia i potser time
-	var i_time=tros_data[2].indexOf("[T]");
+	var i_time=tros_data[2].indexOf("T");
 	if(i_time==-1)
 	{
 		o_data.day=parseInt(tros_data[2]);
@@ -403,7 +407,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	var tros_time=(tros_data[2].substr(i_time+1)).split(":");
 	if(tros_time.length==1) //només hi ha hora
 	{
-		var i_z=tros_time[0].indexOf("[Z]");
+		var i_z=tros_time[0].indexOf("Z");
 		if(i_z==-1)
 			o_data.hour=parseInt(tros_time[0]);
 		else
@@ -413,7 +417,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	o_data.hour=parseInt(tros_time[0]);
 	if(tros_time.length==2) //hh:mm[Z]
 	{
-		var i_z=tros_time[1].indexOf("[Z]");
+		var i_z=tros_time[1].indexOf("Z");
 		if(i_z==-1)
 			o_data.minute=parseInt(tros_time[1]);
 		else
@@ -422,10 +426,9 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 	}
 	o_data.minute=parseInt(tros_time[1]);
 	if(tros_time.length==3) //hh:mm:ss[Z]  // ·$· NJ-> ? Això no és correcte, hi ha altres formats ISO que tenen una longitud de més de 3 i aquesta funció no reconeix. per exemple "2020-09-25T12:59:06.035+02:00"
-	// Jo ho he resolt fent new Date("2020-09-25T12:59:06.035+02:00"); potser no caldria fer cap parser, no? ja que un cop tens un date és més fàcil passar-ho a JSON i ja tenim funcions per això.
 	{
-		var i_ms=tros_time[2].indexOf("[.]");
-		var i_z=tros_time[2].indexOf("[Z]");
+		var i_ms=tros_time[2].indexOf(".");
+		var i_z=tros_time[2].indexOf("Z");
 		if(i_z==-1 && i_ms==-1)
 			o_data.second=parseInt(tros_time[2]);
 		else if(i_z!=-1 && i_ms==-1)
@@ -435,7 +438,7 @@ function OmpleDataJSONAPartirDeDataISO8601(o_data, cadena_data)
 			o_data.second=parseInt(tros_time[2].substr(0,i_ms));
 			o_data.millisecond=parseInt(tros_time[2].substr(i_ms+1,(i_z-i_ms)));
 		}
-		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": segon};
+		return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": true};
 	}
 	return {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true};
 }

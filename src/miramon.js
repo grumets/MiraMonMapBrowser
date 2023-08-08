@@ -4428,6 +4428,19 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 				}
 			}
 		}
+		if (capa.data && capa.data.length)
+		{
+			//Canvio des dates de tipus string ISO al format propi tipus JSON.
+			for (j=0; j<capa.data.length; j++)
+			{
+				var s=capa.data[j];
+				if (typeof s==="string")
+				{
+					capa.data[j]={};
+					OmpleDataJSONAPartirDeDataISO8601(capa.data[j], s);
+				}
+			}
+		}
 	}
 
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
