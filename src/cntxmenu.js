@@ -2114,7 +2114,10 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[], ext;
 				catch (e){
 					alert("JSON file error. " + e);
 				}
-				AfegeixCapaGeoJSON(this.nom_json, objectes, NumeroDeCapesVolatils(-1));
+				AfegeixCapaGeoJSON(NumeroDeCapesVolatils(-1), this.nom_json, objectes);
+				//Redibuixo el navegador perquè les noves capes siguin visibles
+				//RevisaEstatsCapes();
+				RepintaMapesIVistes();				
 			};
 			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
 			algun_fitxer_ok=true;
