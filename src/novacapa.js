@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -813,7 +813,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 {
 	var image = await tiff.getImage();
 
-	if (capa.servidor && (!capa.valors || !capa.valors[i_valor].url))
+	if (capa.servidor  /*&& (!capa.valors || !capa.valors[i_valor].url)*/)
 	{
 		capa.tiff=tiff;
 		capa.i_data_tiff=0;
