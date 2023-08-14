@@ -338,6 +338,29 @@ var cdns=[];
 	return cdns.join("");
 }
 
+function CalActivarConsultesALaBarra()
+{
+var i, k;
+	// Activació de les consultes perquè hi ha alguna capa consultable
+	if(~Accio.accio&AccioValidacio)
+	{
+		for (i=0; i<ParamCtrl.capa.length; i++)
+		{
+			if (ParamCtrl.capa[i].consultable!="no")
+			    break;
+		}
+	}
+	else
+		i=0;
+
+	// Activació de les consultes perquè hi ha alguna vector consultable
+	for (k=0; k<ParamCtrl.capa.length; k++)
+	{
+		if (ParamCtrl.capa[k].model==model_vector && ParamCtrl.capa[k].consultable!="no")
+			break;
+	}
+	return (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length)) ? true : false
+}
 
 function CreaBarra(crs)
 {
@@ -372,31 +395,17 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoVGeneral)
 			cdns.push((CadenaBotoPolsable("zoomall", "zoomall", GetMessage("GeneralView", "barra"),
 				"PortamAVistaGeneral();")));
+		
 
-		// Activació de les consultes perquè hi ha alguna capa consultable
-		if(~Accio.accio&AccioValidacio)
-		{
-			for (i=0; i<ParamCtrl.capa.length; i++)
-			{
-				if (ParamCtrl.capa[i].consultable!="no")
-				    break;
-			}
-		}
-		else
-			i=0;
+		var cal_consultes=CalActivarConsultesALaBarra();
 
-		// Activació de les consultes perquè hi ha alguna vector consultable
-		for (k=0; k<ParamCtrl.capa.length; k++)
-		{
-			if (ParamCtrl.capa[k].model==model_vector && ParamCtrl.capa[k].consultable!="no")
-				break;
-		}
-		// Activació de les consultes perquè hi ha alguna vector editable
+		// Activació de l'edició perquè hi ha alguna vector editable
 		for (j=0; j<ParamCtrl.capa.length; j++)
 		{
 			if (ParamCtrl.capa[j].model==model_vector && ParamCtrl.capa[j].editable!="no")
 				break;
 		}
+
 		if (ParamCtrl.BarraBotonsAlternatius)
 		{
 			var botons=[];
@@ -423,7 +432,7 @@ var cdns=[];
 				boto_p="novavista";
 			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
 				boto_p="inserta";
-			else if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
+			else if (cal_consultes) 
 				boto_p=(i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc";
 			else
 				boto_p="zoomfin";
@@ -446,7 +455,7 @@ var cdns=[];
 					   "alt": GetMessage("NewView", "barra"),
 					   "funcio": "CanviaEstatClickSobreVista(\'ClickNovaVista1\');"};
 			}
-			if (i<ParamCtrl.capa.length || (ParamCtrl.capa && k<ParamCtrl.capa.length))  //hi ha alguna capa consultable
+			if (cal_consultes) 
 			{
 				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc",
 					   "alt": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? GetMessage("Validation", "barra") : GetMessage("QueryByLocation"),

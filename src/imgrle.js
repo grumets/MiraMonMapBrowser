@@ -2735,7 +2735,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
 			{
 				var dims=valors[i].param;
-				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista))
+				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i, vista))
 				{
 					//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 					var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims), TipusEventHttpGet),

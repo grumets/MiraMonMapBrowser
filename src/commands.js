@@ -96,6 +96,12 @@ function CommandMMNSetLayersAndStyles(layers, styles)
 	return 0;
 }
 
+function CommandMMNAddGeoJSONLayer(desc, geojson, atributs, estil, data)
+{
+	AfegeixCapaGeoJSON(NumeroDeCapesVolatils(-1), desc, geojson, atributs, estil, data);
+	return 0;
+}
+
 function CommandMMNSelections(selections)
 {
 var sel, capa, estil, i_estil;
