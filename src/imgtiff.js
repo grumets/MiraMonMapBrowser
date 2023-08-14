@@ -38,28 +38,41 @@
 
 "use strict"
 
-function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista)
+function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista)
 {
-	var capa = ParamCtrl.capa[i_capa2];
-	var valor2 = capa.valors[i_valor2];
-
+	var capa2 = ParamCtrl.capa[i_capa2];
+	var valor2 = capa2.valors[i_valor2];
+	var capa, valor;
+	if(i_capa==-1)
+	{
+		capa=capa2;
+		valor=valor2;		
+	}
+	else
+	{
+		// Si tinc una capa calculada on els valors venen d'una altra capa en tiff, necessito desar l'estructura tiff a la calculada
+		// per exemple per poder fer càlculs sobre la mateixa banda en diverses dates
+		capa= ParamCtrl.capa[i_capa];
+		valor = capa.valors[i_valor];
+	}
+		
 	if (valor2.url)
 	{
 		if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
 		{
-			if (valor2.capa_video && valor2.capa_video[i_data2])
-				return valor2.capa_video[i_data2].tiff;
+			if (valor.capa_video && valor.capa_video[i_data2])
+				return valor.capa_video[i_data2].tiff;
 			return null;
 		}
-		if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==valor2.i_data_tiff)
+		if (!capa2.data || !capa2.data.length || DonaIndexDataCapa(capa2, i_data2)==valor.i_data_tiff)
 		{
-			if (capa.dimensioExtra)
+			if (capa2.dimensioExtra)
 			{
-				for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+				for (var i_dim=0; i_dim<capa2.dimensioExtra.length; i_dim++)
 				{
 					if (typeof dim.i_valor_tiff === "undefined")
 						return null;
-					var dim=capa.dimensioExtra[i_dim], dim2= null;
+					var dim=capa2.dimensioExtra[i_dim], dim2= null;
 					if(dims)
 					{
 						for(var i_dim2=0; i_dim2<dims.length; i_dim2++)
@@ -83,7 +96,7 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista)
 					}
 				}
 			}
-			return valor2.tiff;
+			return valor.tiff;
 		}
 		return null;
 	}
@@ -93,13 +106,13 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista)
 			return capa.capa_video[i_data2].tiff;
 		return null;
 	}
-	if (!capa.data || !capa.data.length || DonaIndexDataCapa(capa, i_data2)==capa.i_data_tiff)
+	if (!capa2.data || !capa2.data.length || DonaIndexDataCapa(capa2, i_data2)==capa.i_data_tiff)
 	{
-		if (capa.dimensioExtra)
+		if (capa2.dimensioExtra)
 		{
-			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+			for (var i_dim=0; i_dim<capa2.dimensioExtra.length; i_dim++)
 			{
-				var dim=capa.dimensioExtra[i_dim], dim2= null;
+				var dim=capa2.dimensioExtra[i_dim], dim2= null;
 				if (typeof dim.i_valor_tiff === "undefined")
 					return null;
 				if(dims)
@@ -169,23 +182,34 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 {
 	if (!window.GeoTIFFfromUrl)
 		await loadGeoTIFF();
-	var capa = ParamCtrl.capa[i_capa2];
+	var capa, capa2 = ParamCtrl.capa[i_capa2];
+	var valor, valor2 = capa2.valors[i_valor2];
 	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims);
-
-	/*if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+	
+	if(i_capa==-1)
 	{
-		if (null==(url=AddAccessTokenToURLIfOnline(url, capa.access)))
+		capa=capa2;
+		valor=valor2;		
+	}
+	else
+	{
+		// Si tinc una capa calculada on els valors venen d'una altra capa en tiff, necessito desar l'estructura tiff a la calculada
+		// per exemple per poder fer càlculs sobre la mateixa banda en diverses dates
+		capa= ParamCtrl.capa[i_capa];
+		valor = capa.valors[i_valor];
+	}
+	/*if (window.doAutenticatedHTTPRequest && capa2.access && capa2.access.request && capa2.access.request.indexOf("map")!=-1)
+	{
+		if (null==(url=AddAccessTokenToURLIfOnline(url, capa2.access)))
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa2.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
 			return;
 		}
 	}*/
 
-	var valor2 = capa.valors[i_valor2];
-
-	if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+	if (window.doAutenticatedHTTPRequest && capa2.access && capa2.access.request && capa2.access.request.indexOf("map")!=-1)
 	{
-		var authResponse=hello(capa.access.tokenType).getAuthResponse();
+		var authResponse=hello(capa2.access.tokenType).getAuthResponse();
 		if (IsAuthResponseOnline(authResponse))
 		{
 			if (authResponse.error)
@@ -202,7 +226,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			AuthResponseConnect(PreparaLecturaTiff, capa.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
+			AuthResponseConnect(PreparaLecturaTiff, capa2.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
 			return null;
 		}
 	}
@@ -213,17 +237,17 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 	{
 		if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
 		{
-			if (!valor2.capa_video)
-				valor2.capa_video=[];  //Preparo l'estructura
-			if (!valor2.capa_video[i_data2])
-				valor2.capa_video[i_data2]={}  //Preparo l'estructura
-			valor2.capa_video[i_data2].tiff=tiff;
+			if (!valor.capa_video)
+				valor.capa_video=[];  //Preparo l'estructura
+			if (!valor.capa_video[i_data2])
+				valor.capa_video[i_data2]={}  //Preparo l'estructura
+			valor.capa_video[i_data2].tiff=tiff;
 		}
 		else
 		{
-			if (capa.data && capa.data.length)
-				valor2.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
-			valor2.tiff=tiff;
+			if (capa2.data && capa2.data.length)
+				valor.i_data_tiff=DonaIndexDataCapa(capa2, i_data2);
+			valor.tiff=tiff;
 		}
 	}
 	else
@@ -238,19 +262,19 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}
 		else
 		{
-			if (capa.data && capa.data.length)
-				capa.i_data_tiff=DonaIndexDataCapa(capa, i_data2);
+			if (capa2.data && capa2.data.length)
+				capa.i_data_tiff=DonaIndexDataCapa(capa2, i_data2);
 			capa.tiff=tiff;
 		}
 	}
 	//Actualitzo el valor de la darrera dimensió demanada
-	if (capa.dimensioExtra)
+	if (capa2.dimensioExtra)
 	{
 		if(dims)
 		{
-			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+			for (var i_dim=0; i_dim<capa2.dimensioExtra.length; i_dim++)
 			{
-				var dim=capa.dimensioExtra[i_dim];
+				var dim=capa2.dimensioExtra[i_dim];
 				for(var i_dim2=0; i_dim2<dims.length; i_dim2++)
 				{
 					if(dims[i_dim2].clau.nom.toLowerCase()==dim.clau.nom.toLowerCase())
@@ -270,16 +294,16 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		}	
 		else
 		{
-			for (var i_dim=0; i_dim<capa.dimensioExtra.length; i_dim++)
+			for (var i_dim=0; i_dim<capa2.dimensioExtra.length; i_dim++)
 			{
-				var dim=capa.dimensioExtra[i_dim];
+				var dim=capa2.dimensioExtra[i_dim];
 				dim.i_valor_tiff=dim.i_valor;
 			}
 		}
 	}
-	await CompletaDefinicioCapaTIFF(capa, tiff, url, capa.desc, i_valor2);
-	if (capa.origen==OrigenUsuari)
-		CompletaDefinicioCapa(capa, false);
+	await CompletaDefinicioCapaTIFF(capa2, tiff, url, capa2.desc, i_valor);
+	if (capa2.origen==OrigenUsuari)
+		CompletaDefinicioCapa(capa2, false);
 	return {imatge: imatge, vista: vista, 
 			i_capa2: i_capa2, i_valor2: i_valor2, i_data2: i_data2,   
 			i_capa: i_capa, i_estil: i_estil, i_data: i_data, dims: dims, i_valor: i_valor,
@@ -289,7 +313,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 
 async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, dims, i_valor, nom_funcio_ok, funcio_ok_param)
 {
-var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, vista);
+var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista);
 var capa2=ParamCtrl.capa[i_capa2];
 var bbox, width, height, dades, env_tiff;
 

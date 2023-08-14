@@ -451,6 +451,25 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		if (!capa.DescVideo)
 			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
 	}
+
+	if (capa.data && capa.data.length)
+	{
+		//Canvio des dates de tipus string ISO al format propi tipus JSON.
+		var flagdata;
+		for (var j=0; j<capa.data.length; j++)
+		{
+			var s=capa.data[j];
+			if (typeof s==="string")
+			{
+				capa.data[j]={};
+				flagdata=OmpleDataJSONAPartirDeDataISO8601(capa.data[j], s);
+			}
+		}
+		capa.AnimableMultiTime=true;
+		if (!capa.FlagsData)
+			capa.FlagsData=flagdata;
+	}
+
 	var tipus=DonaTipusServidorCapa(capa);
 	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
 	{
@@ -4425,19 +4444,6 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 							}
 						}
 					}
-				}
-			}
-		}
-		if (capa.data && capa.data.length)
-		{
-			//Canvio des dates de tipus string ISO al format propi tipus JSON.
-			for (j=0; j<capa.data.length; j++)
-			{
-				var s=capa.data[j];
-				if (typeof s==="string")
-				{
-					capa.data[j]={};
-					OmpleDataJSONAPartirDeDataISO8601(capa.data[j], s);
 				}
 			}
 		}

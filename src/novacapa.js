@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -265,6 +265,7 @@ var trobat=false, criteris;
 	else
 		maxim=ParamCtrl.zoom[0].costat;
 
+	calia_consultes=CalActivarConsultesALaBarra();
 
 	if(i_on_afegir==-1)
 		k=ParamCtrl.capa.length;
@@ -342,6 +343,9 @@ var trobat=false, criteris;
 	}
 	else
 		CompletaDefinicioCapa(capa);
+
+	if (calia_consultes!=CalActivarConsultesALaBarra())
+		CreaBarra(null);
 
 	if (ParamCtrl.LlegendaAmagaSegonsEscala && !EsCapaDinsRangDEscalesVisibles(capa))
 		alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
@@ -508,6 +512,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no són les dades per defecte o hi ha dimensionsExtra -> la capa calculada és una capa nova
 	{
 		//AZ: pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
+		var calia_consultes=CalActivarConsultesALaBarra();
 
 		ParamCtrl.capa.splice(i_capa, 0, {servidor: null,
 			versio: null,
@@ -567,6 +572,10 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 		//Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
+
+		if (calia_consultes!=CalActivarConsultesALaBarra())
+			CreaBarra(null);
+
 		RepintaMapesIVistes();
 	}
 	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
@@ -598,9 +607,11 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 	}
 }//Fi de AfegeixCapaCalcul()
 
-function AfegeixSimbolitzacioVectorDefecteCapa(capa)
+function AfegeixSimbolitzacioVectorDefecteCapa(capa, tinc_estil)
 {
-	capa.estil=[{nom: null,
+	if (!tinc_estil)
+	{
+		capa.estil=[{nom: null,
 			id: 0,
 			desc: capa.desc,
 			DescItems: null,
@@ -645,7 +656,7 @@ function AfegeixSimbolitzacioVectorDefecteCapa(capa)
 				}	
 			]
 		}];
-
+	}
 	capa.separa=null;
 	capa.DescLlegenda=capa.desc;
 	capa.i_estil=0;
@@ -657,6 +668,9 @@ function AfegeixSimbolitzacioVectorDefecteCapa(capa)
 function AfegeixCapaGeoJSON_URL(url, i_on_afegir)
 {
 var k;
+
+	var calia_consultes=CalActivarConsultesALaBarra();
+
 	if(i_on_afegir==-1)
 		k=ParamCtrl.capa.length;
 	else
@@ -688,11 +702,15 @@ var k;
 				AnimableMultiTime: false,
 				origen: OrigenUsuari});
 
-	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k], false);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
 	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
+
+	if (calia_consultes!=CalActivarConsultesALaBarra())
+		CreaBarra(null);
+
 	RepintaMapesIVistes();
 }
 
@@ -712,9 +730,13 @@ function DefineixAtributsCapaVectorSiCal(capa)
 	}
 }
 
-function AfegeixCapaGeoJSON(desc, objectes, i_on_afegir)
+//No crida RepintaMapesIVistes(); Cal fer-ho manualment després.
+function AfegeixCapaGeoJSON(i_on_afegir, desc, objectes, atributs, estil, data)
 {
 var k;
+
+	var calia_consultes=CalActivarConsultesALaBarra();
+
 	if(i_on_afegir==-1)
 		k=ParamCtrl.capa.length;
 	else
@@ -730,29 +752,29 @@ var k;
 				desc: desc,
 				CRSgeometry: "EPSG:4326",
 				objectes: objectes,
-				atributs: null,
+				atributs: atributs ? atributs : null,
 				FormatImatge: "application/json",
 				transparencia: "opac",
 				CostatMinim: null,
 				CostatMaxim: null,
 				FormatConsulta: null,
+				estil: estil ? estil : null,
 				visible: "si",
 				consultable: "si",
 				descarregable: "no",
 				FlagsData: null,
-				data: null,
-				i_data: 0,
+				data: data ? data : null,
+				i_data: data ? -1 : 0,
 				animable: false,
-				AnimableMultiTime: false,
 				origen: OrigenUsuari});
 	
-	DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
-	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k]);
+	if (!atributs)
+		DefineixAtributsCapaVectorSiCal(ParamCtrl.capa[k]);
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k], estil ? true : false);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
-		
-	//Redibuixo el navegador perquè les noves capes siguin visibles
-	//RevisaEstatsCapes();
-	RepintaMapesIVistes();
+
+	if (calia_consultes!=CalActivarConsultesALaBarra())
+		CreaBarra(null);
 }
 
 function IniciaDefinicioCapaTIFF(url, desc, CRSs, visible)
@@ -791,7 +813,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 {
 	var image = await tiff.getImage();
 
-	if (capa.servidor && (!capa.valors || !capa.valors[i_valor].url))
+	if (capa.servidor  /*&& (!capa.valors || !capa.valors[i_valor].url)*/)
 	{
 		capa.tiff=tiff;
 		capa.i_data_tiff=0;
