@@ -149,94 +149,98 @@ function TancaICreaStoryMap()
 	}
 	ObreFinestra(window, "creaStoryMap");
 }
-/*
-	
-*/
+
 function CarregaImatgeStoryMap(input, imatgeId, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
+	var height = 3200, width = 5120;
+
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
 	{
-		var reader = new FileReader();
-		reader.onload = function ()
-		{
-			if (this.readyState == FileReader.DONE)
-			{
-				//Reduir la mida de la imatge
-				const canvasId = "reduccioImatges";
-				
-				var canvasReduccioImg = document.getElementById(canvasId);
-				let ultimElem = document.getElementById(ultimElemId);
-				if (!canvasReduccioImg)
+		const canvasId = "reduccioImatges";
+		const midesPromise = new Promise((resolve, reject) => {
+
+			//Mirem la mida de la imatge
+			const urlIamge = URL.createObjectURL(fitxerObjectiu);
+			const imageToMesure = new Image();
+
+			imageToMesure.onload =  function () {
+				URL.revokeObjectURL(this.src);
+				if (this.height && this.width)
 				{
-					canvasReduccioImg = document.createElement("canvas");
-					canvasReduccioImg.setAttribute("width", "100");
-					canvasReduccioImg.setAttribute("height", "60");
-					//canvasReduccioImg.setAttribute("display", "none");
-					if (ultimElem)
+					resolve([this.width, this.height]);
+				}
+				else
+				{
+					reject(new Error("Error carregant la imatge."))
+				}
+			};
+
+			imageToMesure.src = urlIamge;
+
+		}).then(result => {
+			return new Promise ((resolve, reject) => {
+				
+				var reader = new FileReader();
+				reader.onload = function ()
+				{
+					if (this.readyState == FileReader.DONE)
 					{
-						canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+						let arrayPixels = new Uint8ClampedArray(this.result);
+						
+						var canvasReduccioImg = document.getElementById(canvasId);
+						let ultimElem = document.getElementById(ultimElemId);
+						if (!canvasReduccioImg)
+						{
+							canvasReduccioImg = document.createElement("canvas");
+							canvasReduccioImg.setAttribute("id", canvasId);
+
+							if (ultimElem)
+							{
+								canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+							}
+						} 
+
+						try{
+							
+							var imageData = canvasReduccioImg.getContext('2d').createImageData(result[0], result[1]);
+							imageData.data.set(arrayPixels);
+							resolve(imageData);
+							//resolve(new ImageData(arrayPixels, result[0], result[1])); no funciona
+						}
+						catch(error)
+						{
+							reject(console.log("Tenim una DOMException amb codi: " + error.code + " i nom: " + error.name));
+						}
 					}
-				}
-				else 
+				};
+
+				reader.readAsArrayBuffer(input.files[0]);
+			});
+		}).then(result => {
+			
+			var canvasReduccioImg = document.getElementById(canvasId);
+			let ultimElem = document.getElementById(ultimElemId);
+			if (!canvasReduccioImg)
+			{
+				canvasReduccioImg = document.createElement("canvas");
+
+				if (ultimElem)
 				{
-					canvasReduccioImg.setAttribute("width", "100");
-					canvasReduccioImg.setAttribute("height", "60");
-					//canvasReduccioImg.setAttribute("display", "none");
+					canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
 				}
-
-				// Arrays
-				let arrayPixels = new Uint8ClampedArray(this.result);
-				try{
-					let imgData = new ImageData(arrayPixels, 100);
-				}
-				catch(error)
-				{
-					console.log("Tenim una DOMException amb codi: " + error.code + " i nom: " + error.name);
-				}
-
-				/* 
-				
-				DP: --- Codi d'exemple trobat a: https://developer.mozilla.org/en-US/docs/Web/API/ImageData/ImageData ---
-
-				const ctx = canvasReduccioImg.getContext("2d");
-				const arr = new Uint8ClampedArray(40_000);
-				
-				// Fill the array with the same RGBA values
-				for (let i = 0; i < arr.length; i += 4) {
-				  arr[i + 0] = 0; // R value
-				  arr[i + 1] = 190; // G value
-				  arr[i + 2] = 0; // B value
-				  arr[i + 3] = 255; // A value
-				}
-				
-				// Initialize a new ImageData object
-				let imageData = new ImageData(arr, 200);
-				
-				// Draw image data to the canvas
-				ctx.putImageData(imageData, 20, 20);
-
-				*/
-
-				const cntx = canvasReduccioImg.getContext("2d");
-				//const imageObj = cntx.createImageData(imgData);
-				//imageObj.data.set(this.result);
-				//cntx.putImageData(imageObj, 0, 0);
-				//canvasReduccioImg.setAttribute("display", "normal");
-				cntx.putImageData(imgData, 0, 0);
+			}
+			const cntx = canvasReduccioImg.getContext("2d");
+				cntx.putImageData(result, 0, 0, 0, 0, result.width/2, result.height/2);
 				const imatge = document.getElementById(imatgeId);
 				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 1.0);
 				
-				if (imatge && this.result && imatgeReduida)
+				if (imatge && imatgeReduida)
 				{
 					imatge.src = imatgeReduida;
-					imatge.width=200;
 				}
-			}
-		};
-		reader.readAsArrayBuffer(input.files[0]);
-		//reader.readAsDataURL(input.files[0]);
-		//reader.readAsText(input.files[0]);
+
+		});
 	}
 }
 
