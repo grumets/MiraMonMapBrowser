@@ -59,9 +59,15 @@ function DonaDataJSONDesDeDate(d)
 
 //Dona un index que es pot aplicar directament a l'array de capes. 'i_data' pot ser null si volem la data per defecte. Com a 'capa' pots fer servir ParamCtrl.capa[i_capa]
 function DonaIndexDataCapa(capa, i_data)
-{
+{	
 	if (i_data==null)
 		return capa.i_data<0 ? capa.data.length+capa.i_data : capa.i_data;
+	
+	if(typeof i_data === "string")
+	{
+		// intento parsejar per si fos un i_sel, i_sel correspont a capa.i_data
+		return DonaIndexDataCapa(capa, eval(i_data.replaceAll('i_sel', capa.i_data)));
+	}
 	if (i_data>=capa.data.length)
 		return capa.data.length-1;
 	if (-i_data>capa.data.length)
@@ -261,6 +267,7 @@ var d = new Date(millisegons);
 function DonaDataCapaPerLlegenda(i_capa, i_data)
 {
 var data, cdns=[], capa=ParamCtrl.capa[i_capa];
+
 	cdns.push(DonaDataCapaComATextBreu(i_capa, i_data));
 	if (capa.FlagsData && capa.FlagsData.properties)
 	{
