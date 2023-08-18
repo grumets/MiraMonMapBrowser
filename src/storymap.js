@@ -153,11 +153,11 @@ function TancaICreaStoryMap()
 function CarregaImatgeStoryMap(input, imatgeId, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
-	var height = 3200, width = 5120;
 
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
 	{
 		const canvasId = "reduccioImatges";
+		let canvasReduccioImg = document.getElementById(canvasId);
 		const midesPromise = new Promise((resolve, reject) => {
 
 			//Mirem la mida de la imatge
@@ -187,8 +187,6 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 					if (this.readyState == FileReader.DONE)
 					{
 						let arrayPixels = new Uint8ClampedArray(this.result);
-						
-						var canvasReduccioImg = document.getElementById(canvasId);
 						let ultimElem = document.getElementById(ultimElemId);
 						if (!canvasReduccioImg)
 						{
@@ -218,28 +216,16 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 				reader.readAsArrayBuffer(input.files[0]);
 			});
 		}).then(result => {
-			
-			var canvasReduccioImg = document.getElementById(canvasId);
-			let ultimElem = document.getElementById(ultimElemId);
-			if (!canvasReduccioImg)
-			{
-				canvasReduccioImg = document.createElement("canvas");
-
-				if (ultimElem)
-				{
-					canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
-				}
-			}
-			const cntx = canvasReduccioImg.getContext("2d");
-				cntx.putImageData(result, 0, 0, 0, 0, result.width/2, result.height/2);
-				const imatge = document.getElementById(imatgeId);
-				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 1.0);
 				
-				if (imatge && imatgeReduida)
-				{
-					imatge.src = imatgeReduida;
-				}
-
+			const cntx = canvasReduccioImg.getContext("2d");
+			cntx.putImageData(result, 0, 0, 0, 0, result.width/2, result.height/2);
+			const imatge = document.getElementById(imatgeId);
+			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0);
+			
+			if (imatge && imatgeReduida)
+			{
+				imatge.src = imatgeReduida;
+			}
 		});
 	}
 }
