@@ -169,7 +169,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 
 			cdns.push("\n",	GetMessage("ModalClass"));
 			for (i_c=0; i_c<n_comp_usar; i_c++)
-				cdns.push("\t", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true));
+				cdns.push("\t", DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, estadistics_categorics[i_c].i_moda, true));
 
 			cdns.push("\n",	GetMessage("PercentageMode"));
 			for (i_c=0; i_c<n_comp_usar; i_c++)
@@ -197,7 +197,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					i_cat=estil.component[0].estiramentPaleta ? Math.floor(i/a0+valor_min0) : i;
 					if (!estil.categories[i_cat])
 						continue;
-					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true));
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, i_cat, true));
 
 					for (i_c=0; i_c<n_comp_usar; i_c++)
 					{
@@ -359,18 +359,20 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		var i_cat;
 		var estadistics_categorics=CalculaEstadisticsCategorics(estil.histograma.component[0].classe);
 
-		//primer poso les unitats de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les unitats dels atributs estadístics són la descripció de la segona categoria
+		//primer poso les UoM de la segona capa de la combinació: -> quan s'ha creat la capa combinada, les UoM dels attributes estadístics són la descripció de la segona categoria
 		cdns.push(GetMessage("ClassDescription", "histopie"), "\t");
 				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
+		var attributesArray=Object.keys(estil.component[1].herenciaOrigen.attributes);
 		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
-			cdns.push(estil.component[1].herenciaOrigen.atributs[0].descripcio ? estil.component[1].herenciaOrigen.atributs[0].descripcio : estil.component[1].herenciaOrigen.atributs[0].nom);
+			cdns.push(estil.component[1].herenciaOrigen.attributes[attributesArray[0]].descripcio ? estil.component[1].herenciaOrigen.attributes[attributesArray[0]].descripcio : attributesArray[0]);
 		else
 		{
-			for (i_cat=0; i_cat<estil.atributs.length; i_cat++)
+			attributesArray=Object.keys(estil.attributes);
+			for (i_cat=0; i_cat<attributesArray.length; i_cat++)
 			{
-				if (estil.atributs[i_cat].nom == "$stat$_sum" && estil.atributs[i_cat].unitats)
+				if (attributesArray[i_cat] == "$stat$_sum" && estil.attributes[attributesArray[i_cat]].UoM)
 				{
-					cdns.push(estil.atributs[i_cat].unitats);
+					cdns.push(estil.attributes[attributesArray[i_cat]].UoM);
 					break;
 				}
 			}
@@ -381,7 +383,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 		for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 		{
 				if (estil.categories[i_cat])
-					cdns.push("\t", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true));
+					cdns.push("\t", DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, i_cat, true));
 		}
 
 
@@ -411,11 +413,11 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 					cdns.push("\t", estil.histograma.component[0].classe[i_cat]/estadistics_categorics.recompte*100);
 			}
 
-			cdns.push("\n",	GetMessage("ModalClass"), "\t", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, estadistics_categorics.i_moda, true));
+			cdns.push("\n",	GetMessage("ModalClass"), "\t", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.attributes, estadistics_categorics.i_moda, true));
 			for (i_cat=0; i_cat<estil.categories.length; i_cat++)
 			{
 				if (estil.categories[i_cat])
-					cdns.push("\t", estil.categories[i_cat]["$stat$_i_mode"] ? DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, estil.categories[i_cat]["$stat$_i_mode"], true) : 0);
+					cdns.push("\t", estil.categories[i_cat]["$stat$_i_mode"] ? DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.attributes, estil.categories[i_cat]["$stat$_i_mode"], true) : 0);
 			}
 
 			cdns.push("\n",	GetMessage("PercentageMode"), "\t",  estadistics_categorics.recompte_moda/estadistics_categorics.recompte*100);
@@ -565,7 +567,7 @@ function CanviOpcionsHistograma(event)
 						//HistogramaFinestra.vista[n_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 						HistogramaFinestra.vista[n_histo].chart[1].config.data.datasets=[{data: retorn_prep_histo.data_estad,
 														backgroundColor: retorn_prep_histo.colors_estad,
-														unitats: retorn_prep_histo.unitats_estad}];
+														unitats: retorn_prep_histo.UoM_estad}];
 						HistogramaFinestra.vista[n_histo].chart[1].options=retorn_prep_histo.options_estad;
 						HistogramaFinestra.vista[n_histo].chart[1].update();
 					}
@@ -765,7 +767,7 @@ var tipus_chart;
 		{
 			tipus_chart="stat";
 			//tip_est_intern=tipus_estad;
-			var s=DonaTitolEstadistic(estil.categories, estil.atributs, stat);
+			var s=DonaTitolEstadistic(estil.categories, estil.attributes, stat);
 			titol=GetMessage("Statistic")+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
 			//titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
@@ -807,7 +809,7 @@ var tipus_chart;
 				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
 		}
 
-		//titol=((estil.categories && estil.atributs) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
+		//titol=((estil.categories && estil.attributes) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
 		else
@@ -906,7 +908,7 @@ function SonCategoriesIguals(estil1, estil2)
 			continue;
 		if (!estil1.categories[i_cat] || !estil2.categories[i_cat])
 			return false;
-		if (DonaTextCategoriaDesDeColor(estil1.categories, estil1.atributs, i_cat, true)!=DonaTextCategoriaDesDeColor(estil2.categories, estil2.atributs, i_cat, true))
+		if (DonaTextCategoriaDesDeColor(estil1.categories, estil1.attributes, i_cat, true)!=DonaTextCategoriaDesDeColor(estil2.categories, estil2.attributes, i_cat, true))
 			return false;
 	}
 	return true;
@@ -915,7 +917,7 @@ function SonCategoriesIguals(estil1, estil2)
 function CreaTextMatriuDeConfusio(i_histograma, es_html)
 {
 var histograma=HistogramaFinestra.vista[i_histograma];
-var cdns=[], ncol, nfil, j, v, cella, capa=[], estil=[], estil_nou, categories_iguals, suma_fil=[], suma_col=[], suma_total, encert, creuament, acumulat, area_cella, unitats, n_decimals, kappa, ncol_mostrades, nfil_mostrades;
+var cdns=[], ncol, nfil, j, v, cella, capa=[], estil=[], estil_nou, categories_iguals, suma_fil=[], suma_col=[], suma_total, encert, creuament, acumulat, area_cella, unitats_CRS, n_decimals, kappa, ncol_mostrades, nfil_mostrades;
 var literal_total="Total", literal_sembla=GetMessage("Similarity", "histopie");
 var costat=ParamInternCtrl.vista.CostatZoomActual;
 var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
@@ -929,14 +931,14 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	estil[1]=capa[1].estil[estil_nou.component[0].representacio.dimMatriu[1].i_estil];
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
-	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	unitats_CRS=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
-		unitats="m";
-	if (area_cella>10000 && unitats=="m")
+		unitats_CRS="m";
+	if (area_cella>10000 && unitats_CRS=="m")
 	{
 		n_decimals=(area_cella>1000000)? 0 : 2;
 		area_cella*=0.000001;
-		unitats="km";
+		unitats_CRS="km";
 	}
 	else
 		n_decimals=0;
@@ -1008,7 +1010,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 	{
 		cdns.push("<table class=\"text_petit\"><tr><th></th><th></th><th colspan=\"", ncol_mostrades+2, "\">",
 			DonaCadenaNomDesc(capa[0]),
-			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats, "²)");
+			(DonaCadena(estil[0].desc) ? (" " + DonaCadena(estil[0].desc)) : ""), " (", unitats_CRS, "²)");
 		if (categories_iguals)
 			cdns.push(" (Kappa: ", kappa, ")");
 		cdns.push("</th></tr>",
@@ -1024,8 +1026,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 		cdns.push(GetMessage("Rows"), "\t", nfil, "\t", GetMessage("Shown"), "\t", nfil_mostrades, "\n");
 		if (categories_iguals)
 			cdns.push(GetMessage("KappaCoef"), "\t", kappa, "\n");
-		//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats, "²\n");
-		cdns.push(GetMessage("ContingencyTable"), "\t", "Units", "\t", unitats, "²\n");
+		//cdns.push(DonaCadenaLang({"cat":"Matriu de confusió", "spa":"Matriz de confusión", "eng":"Confusion matrix", "fre":"Matrice de confusion"}), "\t", "Units", "\t", unitats_CRS, "²\n");
+		cdns.push(GetMessage("ContingencyTable"), "\t", "Units", "\t", unitats_CRS, "²\n");
 		cdns.push("\t");
 	}
 
@@ -1035,8 +1037,8 @@ var i_situacio=ParamInternCtrl.ISituacio;
 		if (!estil[0].categories[i_cat] || (categories_iguals ? suma_col[i_cat]==0 && suma_fil[i_cat]==0 : suma_col[i_cat]==0))
 			continue;
 		if (es_html)
-			cdns.push("<th style=\"vertical-align: bottom; text-align: center; height:", DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].atributs, i_cat, true).length*4, "px;\"><div class=\"text_vertical\" style=\"width: 15px;\">");
-		cdns.push(DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].atributs, i_cat, true));
+			cdns.push("<th style=\"vertical-align: bottom; text-align: center; height:", DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].attributes, i_cat, true).length*4, "px;\"><div class=\"text_vertical\" style=\"width: 15px;\">");
+		cdns.push(DonaTextCategoriaDesDeColor(estil[0].categories, estil[0].attributes, i_cat, true));
 		if (es_html)
 			cdns.push("</div></th>");
 		else
@@ -1068,11 +1070,11 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			if (j==0)
 				cdns.push("<td style=\"vertical-align: bottom; text-align: center;\" rowspan=\"", nfil_mostrades+2, "\"><div class=\"text_vertical\" style=\"width: 15px;\">",
 					DonaCadenaNomDesc(capa[1]),
-					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats, "²)</div></td>");
+					(DonaCadena(estil[1].desc) ? (" " + DonaCadena(estil[1].desc)) : ""), " (", unitats_CRS, "²)</div></td>");
 			//Categories de la capa 2
 			cdns.push("<td style=\"white-space: nowrap; text-align: right;\">");
 		}
-		cdns.push(DonaTextCategoriaDesDeColor(estil[1].categories, estil[1].atributs, j_cat, true));
+		cdns.push(DonaTextCategoriaDesDeColor(estil[1].categories, estil[1].attributes, j_cat, true));
 		cdns.push(es_html ? "</td>" : "\t");
 		for (var i_cat=0; i_cat<estil[0].categories.length; i_cat++)
 		{
@@ -1197,13 +1199,13 @@ function CreaTextEstadistic(i_histograma, tipus_estad)
 var histograma=HistogramaFinestra.vista[i_histograma];
 var estil=ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
 var cdns=[];
-var i_c, ncolors, area_cella, unitats;
+var i_c, ncolors, area_cella, unitats_CRS;
 var costat=ParamInternCtrl.vista.CostatZoomActual;
 var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
 var i_situacio=ParamInternCtrl.ISituacio;
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
-	unitats=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	unitats_CRS=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
 
 	//cdns.push("<span style=\"font-size: 4vw\">");
 	//·$· depen del text a posar caldrà més curt o llarg, fer alguna cosa com posar-ho a una cadena deduir el numero segons la longitud de la cadena?
@@ -1223,7 +1225,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			if (tipus_estad == "mode")
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
-					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), "<br>");
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, estadistics_categorics[i_c].i_moda, true), "<br>");
 			}
 			else if (tipus_estad == "percent_mode")
 			{
@@ -1233,7 +1235,7 @@ var i_situacio=ParamInternCtrl.ISituacio;
 			else if (tipus_estad == "mode_and_percent")
 			{
 				for (i_c=0; i_c<n_comp_usar; i_c++)
-					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, estadistics_categorics[i_c].i_moda, true), " ("+ OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %)<br>"); //va % perquè és text per finestra
+					cdns.push(DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, estadistics_categorics[i_c].i_moda, true), " ("+ OKStrOfNe(estil.histograma.component[i_c].classe[estadistics_categorics[i_c].i_moda]/estadistics_categorics[i_c].recompte*100, 3), " %)<br>"); //va % perquè és text per finestra
 			}
 			// if (estil.component.length==2) cas especial --> cal pensar com ho fem
 	}
@@ -1433,8 +1435,8 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 	estad_categ.ordre_cat=[];
 	estad_categ.tinc_dec=false; //en alguns casos si no n'ho havia no vull posar un valor per defecte a 2, i en altres casos si
 	estad_categ.n_dec=2;
-	estad_categ.unitats=null;
-	estad_categ.desc=DonaTitolEstadistic(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, tipus_estad) +
+	estad_categ.UoM=null;
+	estad_categ.desc=DonaTitolEstadistic(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.attributes, tipus_estad) +
 			" " + GetMessage("of") + " " + desc_capa2;
 
 	var tipus_intern;
@@ -1443,20 +1445,21 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 	else
 		tipus_intern = tipus_estad;
 
-	for (var i_atrib=0; i_atrib<estil.atributs.length; i_atrib++)
+	var attributesArray=Object.keys(estil.attributes);
+	for (var i_atrib=0; i_atrib<attributesArray.length; i_atrib++)
 	{
-			if (estil.atributs[i_atrib].nom == ("$stat$_"+tipus_intern)) //per "mode_and_percent" miro unitats i decimals de percent_mode :)
-			{
-				if (estil.atributs[i_atrib].unitats)
-					estad_categ.unitats=estil.atributs[i_atrib].unitats;
+		if (attributesArray[i_atrib] == ("$stat$_"+tipus_intern)) //per "mode_and_percent" miro UoM i decimals de percent_mode :)
+		{
+			if (estil.attributes[attributesArray[i_atrib]].UoM)
+				estad_categ.UoM=estil.attributes[attributesArray[i_atrib]].UoM;
 
-				if (estil.atributs[i_atrib].NDecimals)
-				{
-					estad_categ.tinc_dec=true;
-					estad_categ.n_dec=estil.atributs[i_atrib].NDecimals;
-				}
-				break;
+			if (estil.attributes[attributesArray[i_atrib]].NDecimals)
+			{
+				estad_categ.tinc_dec=true;
+				estad_categ.n_dec=estil.attributes[attributesArray[i_atrib]].NDecimals;
 			}
+			break;
+		}
 	}
 
 	for (var i_cat=0; i_cat<estil.categories.length; i_cat++)
@@ -1485,7 +1488,7 @@ function CreaEstructuraAreaIValorEstadCategoriesEndrecades(estil, desc_capa2, ti
 			estad_categ.ordre_cat[estad_categ.ordre_cat.length-1].count=estil.categories[i_cat]["$stat$_count"];
 			estad_categ.count_total+=estil.categories[i_cat]["$stat$_count"];
 		}
-		estad_categ.ordre_cat[estad_categ.ordre_cat.length-1].desc=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true);
+		estad_categ.ordre_cat[estad_categ.ordre_cat.length-1].desc=DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, i_cat, true);
 	}
 	if (order)
 	{
@@ -1518,11 +1521,11 @@ var area_cella, i_cat;
 	{
 		var estadistics_categorics=CalculaEstadisticsCategorics_AgrupatsDesDeCategories(estil.categories);
 		if (tipus_estad == "mode")
-			cdns.push(": ", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, estadistics_categorics.i_moda, true), "</p>");
+			cdns.push(": ", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.attributes, estadistics_categorics.i_moda, true), "</p>");
 		else if (tipus_estad == "percent_mode")
 			cdns.push(": ", OKStrOfNe(estadistics_categorics.recompte_moda/estadistics_categorics.recompte*100, estad_categ.n_dec), "%</p>");
 		else if (tipus_estad == "mode_and_percent")
-			cdns.push(": ", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.atributs, estadistics_categorics.i_moda, true),
+			cdns.push(": ", DonaTextCategoriaDesDeColor(estil.component[1].herenciaOrigen.categories, estil.component[1].herenciaOrigen.attributes, estadistics_categorics.i_moda, true),
 					" (", OKStrOfNe(estadistics_categorics.recompte_moda/estadistics_categorics.recompte*100, estad_categ.n_dec), "%)</p>");
 	}
 	else
@@ -1530,21 +1533,21 @@ var area_cella, i_cat;
 		var estadistics=CalculaEstadisticsHistograma_AgrupatsDesDeCategories(estil.categories, DonaFactorValorMinEstiramentPaleta(estil.component[1].estiramentPaleta),
 				DonaFactorValorMaxEstiramentPaleta(estil.component[1].estiramentPaleta, estil.component[1].herenciaOrigen.ncolors));
 		if (tipus_estad == "sum")
-			cdns.push(": ", estadistics.suma, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estadistics.suma, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "sum_area")
-			cdns.push(": ", estadistics.suma*area_cella, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estadistics.suma*area_cella, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "mean")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.mitjana, estad_categ.n_dec) : estadistics.mitjana, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.mitjana, estad_categ.n_dec) : estadistics.mitjana, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "variance")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.varianca, estad_categ.n_dec) : estadistics.varianca, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.varianca, estad_categ.n_dec) : estadistics.varianca, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "stdev")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.desv_tipica, estad_categ.n_dec) : estadistics.desv_tipica, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.desv_tipica, estad_categ.n_dec) : estadistics.desv_tipica, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "min")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_min, estad_categ.n_dec) : estadistics.valor_min, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_min, estad_categ.n_dec) : estadistics.valor_min, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "max")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_max, estad_categ.n_dec) : estadistics.valor_max, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_max, estad_categ.n_dec) : estadistics.valor_max, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 		else if (tipus_estad == "range")
-			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_max-estadistics.valor_min+1, estad_categ.n_dec) : estadistics.valor_max-estadistics.valor_min+1, estad_categ.unitats ? " "+estad_categ.unitats : "","</p>");
+			cdns.push(": ", estad_categ.tinc_dec ? OKStrOfNe(estadistics.valor_max-estadistics.valor_min+1, estad_categ.n_dec) : estadistics.valor_max-estadistics.valor_min+1, estad_categ.UoM ? " "+estad_categ.UoM : "","</p>");
 	}
 
 	//taula per categories
@@ -1560,14 +1563,14 @@ var area_cella, i_cat;
 		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
 		{
 			if (tipus_estad == "mode_and_percent")
-				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor2," (", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.unitats ? " "+estad_categ.unitats : "", ")</td>");
+				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor2," (", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.UoM ? " "+estad_categ.UoM : "", ")</td>");
 			else if (tipus_estad == "percent_mode")
-				cdns.push("<td style=\"text-align:right;\">", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.unitats ? " "+estad_categ.unitats : "", "</td>");
+				cdns.push("<td style=\"text-align:right;\">", OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec), estad_categ.UoM ? " "+estad_categ.UoM : "", "</td>");
 			else //és un text
 				cdns.push("<td style=\"text-align:right;\">", estad_categ.ordre_cat[i_cat].valor, "</td>");
 		}
 		else
-			cdns.push("<td style=\"text-align:right;\">", estad_categ.tinc_dec ? OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec) : estad_categ.ordre_cat[i_cat].valor, estad_categ.unitats ? " "+estad_categ.unitats : "", "</td>");
+			cdns.push("<td style=\"text-align:right;\">", estad_categ.tinc_dec ? OKStrOfNe(estad_categ.ordre_cat[i_cat].valor, estad_categ.n_dec) : estad_categ.ordre_cat[i_cat].valor, estad_categ.UoM ? " "+estad_categ.UoM : "", "</td>");
 	}
 	cdns.push("</table>");
 
@@ -1601,7 +1604,7 @@ function DonaTractamentComponent(estil, i_c)
 {
 	if (estil.component[i_c].tractament)
 		return estil.component[i_c].tractament;
-	return (estil.categories && estil.atributs) ? "categoric" : "quantitatiu";
+	return (estil.categories && estil.attributes) ? "categoric" : "quantitatiu";
 }
 
 function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, disabled)
@@ -1720,7 +1723,7 @@ function PreparaHistograma(n_histograma, i_c)
 		retorn_prep_histo.unitats="km";
 	}
 
-	if (estil.categories && estil.atributs)
+	if (estil.categories && estil.attributes)
 	{
 		//var total_celles=0;
 		var a0=DonaFactorAEstiramentPaleta(estil.component[i_c].estiramentPaleta, n_colors);
@@ -1738,7 +1741,7 @@ function PreparaHistograma(n_histograma, i_c)
 				continue;
 			}
 			data[i]=estil.histograma.component[i_c].classe[i_color]*area_cella;
-			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i_cat, true);
+			retorn_prep_histo.labels[i]=DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, i_cat, true);
 			i++;
 		}
 
@@ -1886,7 +1889,7 @@ var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista
 var i_situacio=ParamInternCtrl.ISituacio;
 var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [], colors_estad: []};
 
-	if (estil.component.length!=2 || !estil.categories || !estil.atributs || !estil.paleta || !estil.paleta.colors)
+	if (estil.component.length!=2 || !estil.categories || !estil.attributes || !estil.paleta || !estil.paleta.colors)
 		return;
 
 	area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
@@ -2002,7 +2005,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 	if (tipus_intern == "mode_and_percent")
 		label=estad_categ.desc; //ja és diu com a descriptor. No cal afegir-ho darrera si no queda "Modal class (%) of Habitat (%)"
 	else
-		label=estad_categ.desc + (estad_categ.unitats ? (" ("+estad_categ.unitats.replace("&sdot;","·")+")") : "");
+		label=estad_categ.desc + (estad_categ.UoM ? (" ("+estad_categ.UoM.replace("&sdot;","·")+")") : "");
 	retorn_prep_histo.options_estad={
  		legend: { display: false},
  	 	responsive: true,
@@ -2030,7 +2033,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		}
 	};
 	retorn_prep_histo.data_estad=data_estad;
-	retorn_prep_histo.unitats_estad = estad_categ.unitats ? estad_categ.unitats : "";
+	retorn_prep_histo.UoM_estad = estad_categ.UoM ? estad_categ.UoM : "";
 
 
  /*}	/*
@@ -2176,7 +2179,7 @@ function CreaHistogramesPerCategories(n_histograma, stat, order)
 				data: retorn_prep_histo.data_estad,
 				backgroundColor: retorn_prep_histo.colors_estad,
 				borderWidth: 0,
-				unitats: retorn_prep_histo.unitats_estad
+				unitats: retorn_prep_histo.UoM_estad
 			}]
 		},
 		options: retorn_prep_histo.options_estad

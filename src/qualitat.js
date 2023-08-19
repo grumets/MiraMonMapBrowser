@@ -837,15 +837,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 	if (!capa_digi.objectes.features)
 		return false;
 
-	for (i_camp=0; i_camp<capa_digi.atributs.length; i_camp++)
-	{
-		if (capa_digi.atributs[i_camp].nom==param.atribut)
-		{
-			camp=capa_digi.atributs[i_camp];
-			break;
-		}
-	}
-	if (i_camp==capa_digi.atributs.length)
+	if (!capa_digi.attributes[param.attribute_name])
 		return false;
 
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
@@ -861,22 +853,22 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 		    feature.properties.__om_time__=="" ||
 			feature.properties.__om_time__==null)
 			continue;*/
-		if (typeof feature.properties[param.atribut]==="undefined" ||
-			feature.properties[param.atribut]=="" ||
-			feature.properties[param.atribut]==null)
+		if (typeof feature.properties[param.attribute]==="undefined" ||
+			feature.properties[param.attribute]=="" ||
+			feature.properties[param.attribute]==null)
 			continue;
 
 		n++;
 
 		if (camp.format=="dd/mm/yyyy")
 		{
-			var dateParts = feature.properties[param.atribut].split("/");
+			var dateParts = feature.properties[param.attribute].split("/");
 			if (!dateParts || dateParts.length!=3)
 				continue;
 			data_obj=new Date(dateParts[2]+"-"+dateParts[1]+"-"+dateParts[0]);  //fet així pensa que el text és hora UTC que és el mateix que passa amb la lectura dels formularis
 		}
 		else
-			data_obj=new Date(feature.properties[param.atribut]);
+			data_obj=new Date(feature.properties[param.attribute]);
 		if(data_obj>= param.data_ini && data_obj<=param.data_fi)
 			n_valids++;
 	}
@@ -890,7 +882,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_TemporalValidity",
 		statement: GetMessage("ConsistencyBasedOnComparisonObservation","qualitat") +
-			" \'"+param.atribut+"\' "+
+			" \'"+param.attribute+"\' "+
 			GetMessage("dataIntervalSpecified", "qualitat")+ ". " +
 			GetMessage("ThereAre") +
 			" " + (n_dins-n) + " "+
@@ -915,7 +907,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 						value: param.data_fi.toJSON()
 					}],
 					values:{
-						list:[param.atribut]
+						list:[param.attribute]
 					}
 				}],
 				metrics: [{
@@ -1054,8 +1046,8 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 			continue;
 		n_dins++;
 
-		// El primer atribut a avaluar la consistència lògica és obligatòri, per tant, si l'objecte que vaig a mirar no té aquest
-		// atribut no el considero dins de l'avalució
+		// El primer attribute a avaluar la consistència lògica és obligatòri, per tant, si l'objecte que vaig a mirar no té aquest
+		// attribute no el considero dins de l'avalució
 		if (typeof feature.properties[param.atributlogic1]==="undefined" ||
 		    feature.properties[param.atributlogic1]=="" ||
 			feature.properties[param.atributlogic1]==null)
@@ -1129,7 +1121,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistent
 
 function CalculaQualExacPosicDesDeCampUncertainty(param)
 {
-var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, i, unitats;
+var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, i, UoM;
 
 	if (!capa_digi.objectes.features)
 		return false;
@@ -1142,11 +1134,11 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 			continue;
 		n_dins++;
 
-		if (typeof feature.properties[param.atribut]!=="undefined" &&
-			feature.properties[param.atribut]!=null)
+		if (typeof feature.properties[param.attribute_name]!=="undefined" &&
+			feature.properties[param.attribute_name]!=null)
 		{
-			desv_tip+=(feature.properties[param.atribut]*
-				feature.properties[param.atribut])
+			desv_tip+=(feature.properties[param.attribute_name]*
+				feature.properties[param.attribute_name])
 			n++;
 		}
 	}
@@ -1158,23 +1150,23 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 
 	desv_tip=Math.sqrt(desv_tip/n);
 
-	i=DonaIAtributsDesDeNomAtribut(capa_digi, capa_digi.atributs, param.atribut);
+	i=DonaIAttributesDesDeNomAttribute(capa_digi, capa_digi.attributes, param.attribute_name);
 	if (i==-1)
 	{
 		alert(GetMessage("WrongAttributeName", "qualitat") + " " +
-				param.atribut + "  " +
+				param.attribute_name + "  " +
 				GetMessage("computeDataQuality", "qualitat") + " " +
 				DonaCadenaNomDesc(capa_digi));
-		unitats=null;
+		UoM=null;
 	}
 	else
-		unitats=capa_digi.atributs[i].unitats;
+		UoM=capa_digi.attributes[param.attribute_name].UoM;
 
 	AfegeixQualitatACapa(capa_digi, {
 		scope: ((n_dins==capa_digi.objectes.features.length) ? null : {env: {EnvCRS: JSON.parse(JSON.stringify(ParamInternCtrl.vista.EnvActual)), CRS: ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS}}),
 		indicator: "DQ_AbsoluteExternalPositionalAccuracy",
 		statement: GetMessage("AccuracyPositionalUncertainty", "quality") +
-			" " +param.atribut+". " +
+			" " +param.attribute_name+". " +
 			GetMessage("ThereAre") +
 			" " + (n_dins-n) + " "+
 			GetMessage("of") +
@@ -1189,8 +1181,8 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 				domain: [{
 					name: "DifferentialErrors2D",
 					values: {
-						list: [param.atribut],
-						units : (unitats ? unitats : null)
+						list: [param.attribute_name],
+						units : (UoM ? UoM : null)
 					}
 				}],
 				metrics: [{
@@ -1201,7 +1193,7 @@ var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, 
 					}],
 					values: {
 						list: [desv_tip],
-						units: (unitats ? unitats : null)
+						units: (UoM ? UoM : null)
 					}
 				}]
 			}
@@ -1221,7 +1213,7 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 			var sel_camp=form.camp_incertesa;
 			if(sel_camp.selectedIndex<sel_camp.length)
 			{
-				param={i_capa: i_capa, intencions: "qualitat", atribut: sel_camp.options[sel_camp.selectedIndex].value};
+				param={i_capa: i_capa, intencions: "qualitat", attribute_name: sel_camp.options[sel_camp.selectedIndex].value};
 				if(DescarregaPropietatsCapaDigiVistaSiCal(CalculaQualExacPosicDesDeCampUncertainty, param))
 					return;
 				retorn=CalculaQualExacPosicDesDeCampUncertainty(param);
@@ -1317,8 +1309,8 @@ var sel=form.metode_eval_qual, i, capa=ParamCtrl.capa[i_capa], retorn=false, par
 				return;
 			}
 
-			param= {i_capa: i_capa, intencions: "qualitat", atribut: sel_camp.options[sel_camp.selectedIndex].value, data_ini: date_ini, data_fi: date_fi};
-			if(DescarregaPropietatsCapaDigiVistaSiCal(CalculaValidessaTemporal,param))
+			param= {i_capa: i_capa, intencions: "qualitat", attribute_name: sel_camp.options[sel_camp.selectedIndex].value, data_ini: date_ini, data_fi: date_fi};
+			if(DescarregaPropietatsCapaDigiVistaSiCal(CalculaValidessaTemporal, param))
 				return;
 			retorn=CalculaValidessaTemporal(param);
 
@@ -1355,11 +1347,12 @@ var cdns=[];
 				GetMessage("FieldPositionalUncertainty", "qualitat"),
 			  "</legend>");
 	cdns.push("<select name=\"camp_incertesa\" class=\"Verdana11px\" >");
-	if(capa.atributs)
+	if(capa.attributes)
 	{
-		for(var i=0; i<capa.atributs.length; i++)
-			cdns.push("<option value=\"",capa.atributs[i].nom,"\"", (i==0 ? " selected ":""), "\>",
-					(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+		var attributesArray=Object.keys(capa.attributes);
+		for(var i=0; i<attributesArray.length; i++)
+			cdns.push("<option value=\"", attributesArray[i], "\"", (i==0 ? " selected ":""), "\>",
+					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
 	}
 	cdns.push("</select></fieldset>");
 	return cdns.join("");
@@ -1374,30 +1367,31 @@ var cdns=[];
 			  "</legend>");
 
 	cdns.push("<select name=\"camp_logic1\" class=\"Verdana11px\" >");
-	if(capa.atributs)
+	if(capa.attributes)
 	{
-		for(var i=0; i<capa.atributs.length; i++)
-			cdns.push("<option value=\"",capa.atributs[i].nom,"\"", (i==0 ? " selected ":""), "\>",
-				(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+		var attributesArray=Object.keys(capa.attributes);
+		for(var i=0; i<attributesArray.length; i++)
+			cdns.push("<option value=\"", attributesArray[i],"\"", (i==0 ? " selected ":""), "\>",
+				(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
 	}
 	cdns.push("</select><br>");
 	cdns.push("<select name=\"camp_logic2\" class=\"Verdana11px\">");
-	if(capa.atributs)
+	if(capa.attributes)
 	{
 		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
-		for(var i=0; i<capa.atributs.length; i++)
-			cdns.push("<option value=\"",capa.atributs[i].nom,"\" \>",
-					(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+		for(var i=0; i<attributesArray.length; i++)
+			cdns.push("<option value=\"", attributesArray[i], "\" \>",
+					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
 	}
 	cdns.push("</select><br>");
 	cdns.push("<select name=\"camp_logic3\" class=\"Verdana11px\">");
 
-	if(capa.atributs)
+	if(capa.attributes)
 	{
 		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
-		for(var i=0; i<capa.atributs.length; i++)
-			cdns.push("<option value=\"",capa.atributs[i].nom,"\" \>",
-				   (DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+		for(var i=0; i<attributesArray.length; i++)
+			cdns.push("<option value=\"", attributesArray[i], "\" \>",
+				   (DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
 	}
 	cdns.push("</select><br>");
 	cdns.push(GetMessage("ListPossibleValues", "qualitat"), " (", GetMessage("separatedBy"), " ;)",
@@ -1427,11 +1421,12 @@ var cdns=[];
 				GetMessage("TemporalField"),
 			  "</legend>");
 	cdns.push("<select name=\"camp_temporal\" class=\"Verdana11px\" >");
-	if(capa.atributs)
+	if(capa.attributes)
 	{
-		for(var i=0; i<capa.atributs.length; i++)
-			cdns.push("<option value=\"",capa.atributs[i].nom,"\"", (i==0 ? " selected ":""), "\>",
-					(DonaCadena(capa.atributs[i].descripcio) ? DonaCadena(capa.atributs[i].descripcio) : capa.atributs[i].nom));
+		var attributesArray=Object.keys(capa.attributes);
+		for(var i=0; i<attributesArray.length; i++)
+			cdns.push("<option value=\"", attributesArray[i], "\"", (i==0 ? " selected ":""), "\>",
+					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
 	}
 	cdns.push("</select></fieldset>");
 

@@ -180,7 +180,7 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	contentFinestraLayer(window, "fbScope", cdns.join(""));
 }
 
-//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
+//OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
 function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
 {
 	//comprovem que tenim totes les coordenades
@@ -645,14 +645,13 @@ function CreaCapesVolatils()
 							},
 						}]
 					},
-					"atributs": [
+					"attributes": { "radius":
 						{
-							"nom": "radius",
 							"descripcio": "Buffer",
-							"unitats": "m",
+							"UoM": "m",
 							"mostrar": "si"
 						}
-					],
+					},
 					"estil": [{
 						"nom": null,
 						"desc":	null,
@@ -786,14 +785,13 @@ function CreaCapesVolatils()
 							},
 						}]
 					},
-					"atributs": [
+					"attributes": { "uncertainty":
 						{
-							"nom": "uncertainty",
 							"descripcio": "Uncertainty",
-							"unitats": "m",
+							"UoM": "m",
 							"mostrar": "si"
 						}
-					],
+					},
 					"estil": [{
 						"nom": null,
 						"desc":	null,

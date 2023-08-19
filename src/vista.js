@@ -1005,26 +1005,27 @@ function CanviaImatgeCapaSiCal(imatge, i_capa)
 	}
 }*/
 
-function PrecarregaValorsArrayBinaryAtributSiCal(i_atribut, funcio, param)
+function PrecarregaValorsArrayBinaryAttributeSiCal(i_attribute, funcio, param)
 {
-var capa_digi=ParamCtrl.capa[param.i_capa];
-var atribut=capa_digi.atributs[i_atribut];
+var capa=ParamCtrl.capa[param.i_capa];
+var attributeArray=Object.keys(capa.attributes);
+var attribute=capa.attributes[attributeArray[i_attribute]];
 
-	if (atribut.calcul && !atribut.FormulaConsulta)
-		atribut.FormulaConsulta=DonaFormulaConsultaDesDeCalcul(atribut.calcul, param.i_capa, i_atribut);
+	if (attribute.calcul && !attribute.FormulaConsulta)
+		attribute.FormulaConsulta=DonaFormulaConsultaDesDeCalcul(attribute.calcul, param.i_capa, i_attribute);
 
-	if (atribut.FormulaConsulta)
+	if (attribute.FormulaConsulta)
 	{
 		// Aquí hem de pensar que passa si hi ha v[] però encara no estan carregats.
 		// En aquest punt es demanes les capes v[] per fer servir més tard una consulta per localització
-		if (!param["v_carregat_"+i_atribut] && HiHaValorsNecessarisCapaFormulaconsulta(capa_digi, atribut.FormulaConsulta))
+		if (!param["v_carregat_"+i_attribute] && HiHaValorsNecessarisCapaFormulaconsulta(capa, attribute.FormulaConsulta))
 		{
-			param["v_carregat_"+i_atribut]=true;
-			CanviaImatgeBinariaCapa(null, param.vista, param.i_capa, i_atribut, -1, funcio, param);
+			param["v_carregat_"+i_attribute]=true;
+			CanviaImatgeBinariaCapa(null, param.vista, param.i_capa, i_attribute, -1, funcio, param);
 			return true;
 		}
 	}
-	param["v_carregat_"+i_atribut]=true;
+	param["v_carregat_"+i_attribute]=true;
 	return false;
 }
 
@@ -1053,18 +1054,18 @@ function DesactivaSombraFonts(ctx, shadowPrevi)
 	ctx.shadowColor=shadowPrevi.color;
 }
 
-function PreparaCtxColorVoraOInterior(vista, capa_digi, feature, previ, ctx, ctx_style, estil_interior_o_vora, atribut, a, valor_min, ncolors, i_col, i_fil)
+function PreparaCtxColorVoraOInterior(vista, capa_digi, feature, previ, ctx, ctx_style, estil_interior_o_vora, attribute, a, valor_min, ncolors, i_col, i_fil)
 {
 	var i_color, valor;
 	if (!estil_interior_o_vora || !estil_interior_o_vora)
 		return;
 	previ[ctx_style]=ctx[ctx_style];
-	if (typeof atribut==="undefined")
+	if (typeof attribute==="undefined")
 	{
 		ctx[ctx_style]=estil_interior_o_vora.paleta.colors[0];
 		return;
 	}
-	valor=DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa_digi, feature, atribut, i_col, i_fil);
+	valor=DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa_digi, feature, attribute, i_col, i_fil);
 	if (isNaN(valor))
 	{
 		ctx[ctx_style]="rgba(255,255,255,0)";
@@ -1217,7 +1218,7 @@ var arrayBuffer, array_uint, datatype, nodata, mida=canvas_ocult.width*canvas_oc
 	return {arrayBuffer: arrayBuffer, datatype: datatype, nodata: nodata};
 }
 
-function DibuixaObjCapaDigiAVista(param, neteja_canvas, atributs, objectes, estil)
+function DibuixaObjCapaDigiAVista(param, neteja_canvas, attributes, objectes, estil)
 {	
 var nom_vista=param.nom_vista, vista=param.vista;
 var capa=ParamCtrl.capa[param.i_capa];
@@ -1227,8 +1228,11 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 
 	if (!objectes || !objectes.features || !estil)
 		return;
+
+	if (attributes)
+		var attributesArray=Object.keys(attributes);
 		
-	// Primer fem la precàrrega dels valors dels atributs que necessitem per simbolitzar els objectes
+	// Primer fem la precàrrega dels valors dels attributes que necessitem per simbolitzar els objectes
 	if (estil.simbols && estil.simbols.length)
 	{
 		for (i_simb=0; i_simb<estil.simbols.length; i_simb++)
@@ -1237,25 +1241,25 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			if (simbols.NomCamp)
 			{
 				//Precàrrega de valors si hi ha referències ràster.
-				i=DonaIAtributsDesDeNomAtribut(capa, atributs, simbols.NomCamp)
+				i=DonaIAttributesDesDeNomAtribut(capa, attributes, simbols.NomCamp)
 				if (i==-1)
 				{
-					AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa);
+					AlertaNomAttributeIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa);
 					return ;
 				}
-				if (PrecarregaValorsArrayBinaryAtributSiCal(i, OmpleVistaCapaDigiIndirect, param))
+				if (PrecarregaValorsArrayBinaryAttributeSiCal(i, OmpleVistaCapaDigiIndirect, param))
 					return;
 			}
 			if (simbols.NomCampFEscala)
 			{
 				//Precàrrega de valors si hi ha referències ràster.
-				i=DonaIAtributsDesDeNomAtribut(capa, atributs, simbols.NomCampFEscala)
+				i=DonaIAttributesDesDeNomAttribute(capa, attributes, simbols.NomCampFEscala)
 				if (i==-1)
 				{
-					AlertaNomAtributIncorrecteSimbolitzar(simbols.NomCampFEscala, "simbols.NomCampFEscala", capa);
+					AlertaNomAttributeIncorrecteSimbolitzar(simbols.NomCampFEscala, "simbols.NomCampFEscala", capa);
 					return ;
 				}
-				if (PrecarregaValorsArrayBinaryAtributSiCal(i, OmpleVistaCapaDigiIndirect, param))
+				if (PrecarregaValorsArrayBinaryAttributeSiCal(i, OmpleVistaCapaDigiIndirect, param))
 					return;
 			}
 		}
@@ -1263,13 +1267,13 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 	if (estil.NomCampSel)
 	{
 		//Precàrrega de valors de la selecció
-		i_atri_sel=DonaIAtributsDesDeNomAtribut(capa, atributs, estil.NomCampSel)
+		i_atri_sel=DonaIAttributesDesDeNomAttribute(capa, attributes, estil.NomCampSel)
 		if (i_atri_sel==-1)
 		{
-			AlertaNomAtributIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa);
+			AlertaNomAttributeIncorrecteSimbolitzar(estil.NomCampSel, "estil.NomCampSel", capa);
 			return ;
 		}
-		if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_sel, OmpleVistaCapaDigiIndirect, param))
+		if (PrecarregaValorsArrayBinaryAttributeSiCal(i_atri_sel, OmpleVistaCapaDigiIndirect, param))
 			return;
 	}
 	if (estil.formes && estil.formes.length)
@@ -1280,25 +1284,25 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			if (forma.interior && forma.interior.NomCamp)
 			{
 				//Precàrrega de valors si hi ha referències ràster.
-				i_atri_interior[i_forma]=DonaIAtributsDesDeNomAtribut(capa, atributs, forma.interior.NomCamp)
+				i_atri_interior[i_forma]=DonaIAttributesDesDeNomAttribute(capa, attributes, forma.interior.NomCamp)
 				if (i_atri_interior[i_forma]==-1)
 				{
-					AlertaNomAtributIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa);
+					AlertaNomAttributeIncorrecteSimbolitzar(forma.interior.NomCamp, "forma.interior.NomCamp", capa);
 					return ;
 				}
-				if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_interior[i_forma], OmpleVistaCapaDigiIndirect, param))
+				if (PrecarregaValorsArrayBinaryAttributeSiCal(i_atri_interior[i_forma], OmpleVistaCapaDigiIndirect, param))
 					return;
 			}
 			if (forma.vora && forma.vora.NomCamp)
 			{
 				//Precàrrega de valors si hi ha referències ràster.
-				i_atri_vora[i_forma]=DonaIAtributsDesDeNomAtribut(capa, atributs, forma.vora.NomCamp)
+				i_atri_vora[i_forma]=DonaIAttributesDesDeNomAttribute(capa, attributes, forma.vora.NomCamp)
 				if (i_atri_vora[i_forma]==-1)
 				{
-					AlertaNomAtributIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa);
+					AlertaNomAttributeIncorrecteSimbolitzar(forma.vora.NomCamp, "forma.vora.NomCamp", capa);
 					return ;
 				}
-				if (PrecarregaValorsArrayBinaryAtributSiCal(i_atri_vora[i_forma], OmpleVistaCapaDigiIndirect, param))
+				if (PrecarregaValorsArrayBinaryAttributeSiCal(i_atri_vora[i_forma], OmpleVistaCapaDigiIndirect, param))
 					return;
 			}
 		}
@@ -1376,7 +1380,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, feature, atributs[i_atri_sel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -1411,7 +1415,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 
 					if (!forma_vora)
 						continue;
-					PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, atributs[i_atri_vora[i_forma]], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+					PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, attributes[forma.vora.NomCamp], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 					if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 						ctx.lineWidth = 1;
 					else
@@ -1447,7 +1451,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, feature, atributs[i_atri_sel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -1505,10 +1509,10 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					if (!forma_vora && !forma_interior)
 						continue;
 					if (forma_interior)
-						PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "fillStyle", forma_interior, atributs[i_atri_interior[i_forma]], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+						PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "fillStyle", forma_interior, attributes[forma.interior.NomCamp], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 					if (forma_vora)
 					{
-						PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, atributs[i_atri_vora[i_forma]], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+						PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, attributes[forma.vora.NomCamp], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 
 						if (!forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 							ctx.lineWidth = 1;
@@ -1551,7 +1555,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 							else if (simbol.length==1 && !simbols.NomCamp)
 								i_simbol=0;
 							else
-								i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa, atributs, estil, feature, i_simb, i_col, i_fil);
+								i_simbol=DeterminaISimbolObjecteCapaDigi(vista.i_nova_vista, capa, attributes, estil, feature, i_simb, i_col, i_fil);
 
 							if (i_simbol!=-1)
 							{
@@ -1559,7 +1563,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 									icona=simbol[i_simbol].IconaSel;
 								else if (estil.NomCampSel)
 								{
-									if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, feature, atributs[i_atri_sel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+									if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 										icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].IconaSel: simbol[i_simbol].icona);
 									else
 										icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].icona: null);
@@ -1571,7 +1575,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 								{
 									if (simbols.NomCampFEscala)
 									{
-										icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa, atributs, estil, feature, i_simb, i_col, i_fil, simbols.NomCampFEscala);
+										icona.fescala=DeterminaValorObjecteCapaDigi(vista.i_nova_vista, capa, attributes, estil, feature, i_simb, i_col, i_fil, simbols.NomCampFEscala);
 										if (typeof icona.fescala==="undefined" || isNaN(icona.fescala) || icona.fescala<=0)
 											icona.fescala=-1;
 									}
@@ -1607,7 +1611,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 												}
 												else if (estil.NomCampSel)
 												{
-													if(DeterminaValorAtributObjecteCapaDigi(vista.i_nova_vista, capa, feature, atributs[i_atri_sel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per atribut en vectors
+													if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 													{
 														if (forma.voraSel)
 														{
@@ -1665,9 +1669,9 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 												if (!forma_vora && !forma_interior)
 													continue;
 												if (forma_interior)
-													PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "fillStyle", forma_interior, atributs[i_atri_interior[i_forma]], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
+													PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "fillStyle", forma_interior, attributes[forma.interior.NomCamp], un_a_vmin_ncol_interior.a, un_a_vmin_ncol_interior.valor_min, un_a_vmin_ncol_interior.ncolors, i_col, i_fil);
 												if (forma_vora)
-													PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, atributs[i_atri_vora[i_forma]], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
+													PreparaCtxColorVoraOInterior(vista, capa, feature, previ, ctx, "strokeStyle", forma_vora, attributes[forma.vora.NomCamp], un_a_vmin_ncol_vora.a, un_a_vmin_ncol_vora.valor_min, un_a_vmin_ncol_vora.ncolors, i_col, i_fil);
 												if (!forma_vora || !forma_vora.gruix || !forma_vora.gruix.amples || !forma_vora.gruix.amples.length)
 													ctx.lineWidth = 1;
 												else
@@ -1743,7 +1747,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 						env.MinY < coord[1] &&
 						env.MaxY > coord[1])
 					{
-						valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa, atributs, estil, feature, i_simb, i_col, i_fil, estil.fonts.NomCampText);
+						valor=DeterminaTextValorObjecteCapaDigi(vista.i_nova_vista, capa, attributes, estil, feature, i_simb, i_col, i_fil, estil.fonts.NomCampText);
 						if (typeof valor!=="undefined" && (typeof valor!=="string" || valor!="") && (typeof valor!=="number" || !isNaN(valor)))
 						{
 							previ.shadow=ActivaSombraFonts(ctx);
@@ -1759,7 +1763,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 							}
 							if (font.align)
 								ctx.textAlign=font.align;
-							ctx.fillText(valor, i_col-font.i, i_fil-font.j);
+							ctx.fillText(valor + (attributes[estil.fonts.NomCampText].UoMSymbol ? " " + attributes[estil.fonts.NomCampText].UoMSymbol : ""), i_col-font.i, i_fil-font.j);
 							if (font.color)
 								ctx.fillStyle=previ.fillStyle;
 							DesactivaSombraFonts(ctx, previ.shadow);
@@ -1821,7 +1825,7 @@ var neteja_canvas=true;
 		}		
 	}
 	if (capa.objectes && capa.objectes.features)
-		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.atributs, capa.objectes, capa.estil[capa.i_estil]);
+		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.objectes, capa.estil[capa.i_estil]);
 }
 
 //Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)

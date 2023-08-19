@@ -185,7 +185,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
-	if (estil.categories && estil.atributs)
+	if (estil.categories && estil.attributes)
 	{
 		var desc, nodata=null, i_nodata;
 
@@ -200,7 +200,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		{
 			if (!estil.categories[i_color])
 				continue;
-			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, i_color, true);
+			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.attributes, i_color, true);
 			if (desc=="")
 				continue;
 			if (nodata)
@@ -245,9 +245,9 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		else if (i_color<0)
 			i_color=0;
 
-		if (estil.categories && estil.atributs)
+		if (estil.categories && estil.attributes)
 		{
-			value_text=DonaDescCategoriaDesDeColor(estil.categories, estil.atributs, parseInt(value), true);
+			value_text=DonaDescCategoriaDesDeColor(estil.categories, estil.attributes, parseInt(value), true);
 			if (value_text=="")
 				continue;
 		}
@@ -423,7 +423,7 @@ var cdns=[], cal_retorn=false;
 		{
 			var selector=estil.component[0].selector[i_sltr];
 
-			if (selector.categories && selector.categories.length && selector.atributs)
+			if (selector.categories && selector.categories.length && selector.attributes)
 			{
 				if (selector.categories.length>1)
 				{
@@ -433,7 +433,7 @@ var cdns=[], cal_retorn=false;
 						cal_retorn=true;
 					cdns.push(DonaCadena(selector.desc), ": ",
 					        "<select id=\"selector-lleg-", i_capa, "-i_estil-", capa.i_estil, "-sltr-", i_sltr, "\" onChange=\"CanviaSelectorEstilCapa(this, "+i_capa+", "+capa.i_estil+", 0, " +i_sltr+ ");\">",
-						DonaCadenaOpcionsCategories(selector.categories, selector.atributs, selector.valorActual, sortCategoriesValueAscendent),
+						DonaCadenaOpcionsCategories(selector.categories, selector.attributes, selector.valorActual, sortCategoriesValueAscendent),
 						"</select>");
 				}
 			}
