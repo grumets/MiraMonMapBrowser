@@ -1035,17 +1035,20 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 
 function MostraGraficSerieTemporalAttribute(win, nom_canvas, i_capa, i_obj, i_atr)
 {
-var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons;
+var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons, v;
 var attributesArray=Object.keys(capa.attributes);
 
 	for (var i_data=0; i_data<capa.data.length; i_data++)
 	{
+		v=parseFloat(DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, capa.objectes.features[i_obj], capa.attributes[attributesArray[i_atr]], attributesArray[i_atr], i_data, PuntConsultat.i, PuntConsultat.j));
+		if (isNaN(v))
+			continue;
 		millisegons=DonaDateDesDeDataJSON(capa.data[i_data]).getTime();
-		data[i_data]={t:millisegons, y:parseFloat(DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, capa.objectes.features[i_obj], capa.attributes[attributesArray[i_atr]], attributesArray[i_atr], i_data, PuntConsultat.i, PuntConsultat.j))};
-		labels[i_data]=moment(millisegons);
-		temps[i_data]=DonaDataCapaComATextBreu(i_capa, i_data);
+		data.push({t:millisegons, y:v});
+		labels.push(moment(millisegons));
+		temps.push(DonaDataCapaComATextBreu(i_capa, i_data));
 	}
-	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.attributes[attributesArray[i_atr]].descripcio, capa.attributes[attributesArray[i_atr]].serieTemporal.color, capa.FlagsData);
+	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.attributes[attributesArray[i_atr]].descripcio ? capa.attributes[attributesArray[i_atr]].descripcio : attributesArray[i_atr], capa.attributes[attributesArray[i_atr]].serieTemporal.color, capa.FlagsData);
 }
 
 function MostraGraficPerfilConsula(win, nom_canvas, capa, perfil, titol_perfil)

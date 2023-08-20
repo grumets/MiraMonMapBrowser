@@ -1500,7 +1500,9 @@ function DeterminaTextValorAttributeObjecteCapaDigi(i_nova_vista, capa_digi, fea
 function DeterminaTextValorAttributeObjecteDataCapaDigi(i_nova_vista, capa_digi, feature, attribute, attribute_name, i_data, i_col, i_fil)
 {
 	var valor=DeterminaValorAttributeObjecteDataCapaDigi(i_nova_vista, capa_digi, feature, attribute, attribute_name, i_data, i_col, i_fil);
-	if (attribute.NDecimals || attribute.NDecimals===0)
+	if (typeof valor === "undefined")
+		valor=Number.NaN;
+	if (!isNaN(valor) && (attribute.NDecimals || attribute.NDecimals===0))
 		return OKStrOfNe(valor, attribute.NDecimals);
 	return valor;
 }
