@@ -24,18 +24,18 @@
 		"AttributeDescription": {
 			"title": "GeoJSON meaning vocabulary meta-schema",
 			"type": "object",
-			"$comment": "The name of the property is the name of the atribut. If the server is SOS there are 2 special names: __om_time__, __om_sensor__ and the rest match the field names of the table containing the data.",
+			"$comment": "The name of the property is the name of the attribute. If the server is SOS there are 2 special names can be used __om_time__, __om_sensor__ and the rest match the field names of the table containing the data. The properties that define each attribute can be de ones defined below or properties from JSON schema itself if indicated in this comment. For the moment, only 'description' is implemented. Others from 'string' (https://json-schema.org/understanding-json-schema/reference/string.html) or number can be useful (https://json-schema.org/understanding-json-schema/reference/numeric.html).",
 			"properties": {
-				"nomOri": {
+				"originalName": {
 					"description": "Name of the original attribute. Optional. If the attributes are taken from a CSV and are transformed into one or more attributes (because they are associated with time). In this case the nomOri maybe different from the property name.",
 					"type": [ "string", "null" ]
 				},
-				"simbol": {
-					"description": "Symbol of the attribute. Note that it is not the units of measurement symbol. For example, the letter 'sigma' can represent standard deviation. It will be used in the compact display (coordinates box) if defined. Created for statistical attributes, but can be used elsewhere.",
+				"symbol": {
+					"description": "Symbol of the attribute. Note that it is not the units of measurement symbol but the attribute itself. For example, the letter 'σ' (sigma) usually represents the standard deviation. It will be used in the compact display (coordinates box) if defined. Created for statistical attributes, but can be used elsewhere.",
 					"type": [ "string", "null" ]
 				},
 				"descripcio": {
-					"description": "Description of the attribute in multiple languages.",
+					"description": "Description of the attribute in multiple languages. If you do not need multilanguage support, please use 'description'",
 					"$ref": "#/definitions/StringOCadenaLang"
 				},
 				"definition": {
@@ -57,11 +57,11 @@
 					"format": "uri"
 				},
 				"calcul": {
-					"description": "Fórmula matemàtica per transformar els valors d'una o més properties d'una altra capa vectorial o raster. Per a apuntar a una capa raster consulteu l'explicació dins de 'component' per apuntar a una capa vectorial usarem {'i_capa': 2, 'prop': 'nom_flor'} per referirnos a la capa 2 que és de 'model'='vector'. Només es pot fer servir si hi ha capa.objectes a la capa indicada. Si no indiqueu i_capa s'asumeix 'aquesta' capa. Per a cada objecte {'i_capa': 2, 'prop': 'nom_flor'} (o l'equivalment per capes raster per cada píxel) es transforma en el valor i un cop fet la fórmula es evaluada com una sintàxi JavaScript.",
+					"description": "Mathematical formula to transform the values of one or more properties of another vector or raster 'capa'. To point to a raster 'capa', see the explanation in 'component'; to point to a vector 'capa', we should use {'i_capa': 2, 'prop': 'flower_name'} to refer to 'capa' 2 which is of 'model' ='vector'. Can only be used if there are capa.objectes on the given 'capa'. If you do not specify i_capa, this 'capa' is assumed. For each 'objecte' {'i_capa': 2, 'prop': 'flower_name'} (or the equivalent for raster 'capa' for each pixel) is transformed into the value and, once done, the formula is evaluated as JavaScript syntax.",
 					"type": "string"
 				},
 				"FormulaConsulta": {
-					"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component'. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'. Intenament, 'FormulaConsulta' es transforma en 'calcul'.",
+					"description": "Mathematical formula to transform the values of objectes[].feature[].properties of this 'capa' (or into values[]). To know about v[0] etc see the explanation under 'component'. Use p['name'] to indicate the name of the property inside properties. You can also specify nomPropId to refer to the feature identifier (e.g. the feature id, in case of GeoJSON). Can only be used if there is capa.valors or capa.objectes. If you want to choose a value from another 'capa' use 'calcul' instead. Internally, 'FormulaConsulta' is transformed into 'calcul'.",
 					"type": "string"
 				},
 				"separador": {
@@ -90,19 +90,19 @@
 					"enum": [ "si", "no", "si_ple" ]
 				},
 				"mida": {
-					"description": "Implementation pending. Attribute size. Optional. Maximum width the field type can have. In the case of numerical types it is the maximum precision. In the case of strings it is the maximum length in characters. In the case of date-time it is the maximum length in characters of the representation of the date-time as text.",
+					"description": "Implementation pending (maxLength should be used instead of 'mida'). Attribute size. Optional. Maximum width the field type can have. In the case of numerical types it is the maximum precision. In the case of strings it is the maximum length in characters. In the case of date-time it is the maximum length in characters of the representation of the date-time as text.",
 					"type": "number"
 				},
 				"pDecimals": {
 					"description": "Implementation pending. Number of decimals places of the attribute. It only applies if the attribute is of type 'number'. Optional. (Note: do not confused with NDecimals, which is the number of decimals to display in the screen).",
 					"type": "number"
 				},
-				"format": {
-					"description": "It is the format in which we receive the value from the server. Currently it is only used for a very specific thing in the interpretation of dates. In the future it could be combined with a 'type' to indicate whether string, date, number, float...",
+				"presentation": {
+					"description": "It is the format in which we receive the value from the server. Currently it is only used for a very specific thing in the interpretation of dates. In the future it could be combined with to the JSON schema 'type' to indicate whether string, date, number, float... and 'format'.",
 					"enum": [ "dd/mm/yyyy" ]
 				},
 				"NDecimals": {
-					"description": "Number of decimal places of the displayed values per screen. Optional, not indicated precision is not truncated.",
+					"description": "Number of decimal places to be displayed in the screen. Optional, when not indicated, precision is not truncated.",
 					"type": "number",
 					"minimum": 0,
 					"maximum": 20,

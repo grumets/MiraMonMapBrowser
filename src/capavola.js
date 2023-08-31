@@ -529,8 +529,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features":[{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -580,8 +578,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -634,8 +630,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0, 0]
@@ -647,7 +641,7 @@ function CreaCapesVolatils()
 					},
 					"attributes": { "radius":
 						{
-							"descripcio": "Buffer",
+							"description": "Buffer",
 							"UoM": "m",
 							"mostrar": "si"
 						}
@@ -721,8 +715,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features":[{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -774,8 +766,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0, 0]
@@ -787,7 +777,7 @@ function CreaCapesVolatils()
 					},
 					"attributes": { "uncertainty":
 						{
-							"descripcio": "Uncertainty",
+							"description": "Uncertainty",
 							"UoM": "m",
 							"mostrar": "si"
 						}

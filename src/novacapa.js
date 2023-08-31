@@ -723,7 +723,7 @@ function DefineixAtributsCapaVectorSiCal(capa)
 		capa.attributes={};
 		for (var j in capa.objectes.features[0].properties)
 		{
-			capa.attributes[j]={"descripcio": j,
+			capa.attributes[j]={"description": j,
 						"mostrar": "si_ple"};
 		}
 	}

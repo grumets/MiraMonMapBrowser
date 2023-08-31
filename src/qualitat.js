@@ -860,7 +860,7 @@ var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], n_valids=0, n=0, n_dins=0, 
 
 		n++;
 
-		if (camp.format=="dd/mm/yyyy")
+		if (camp.presentation=="dd/mm/yyyy")
 		{
 			var dateParts = feature.properties[param.attribute].split("/");
 			if (!dateParts || dateParts.length!=3)
@@ -1352,7 +1352,7 @@ var cdns=[];
 		var attributesArray=Object.keys(capa.attributes);
 		for(var i=0; i<attributesArray.length; i++)
 			cdns.push("<option value=\"", attributesArray[i], "\"", (i==0 ? " selected ":""), "\>",
-					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
+					DonaCadenaDescripcioAttribute(attributesArray[i], capa.attributes[attributesArray[i]], false));
 	}
 	cdns.push("</select></fieldset>");
 	return cdns.join("");
@@ -1372,7 +1372,7 @@ var cdns=[];
 		var attributesArray=Object.keys(capa.attributes);
 		for(var i=0; i<attributesArray.length; i++)
 			cdns.push("<option value=\"", attributesArray[i],"\"", (i==0 ? " selected ":""), "\>",
-				(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
+				DonaCadenaDescripcioAttribute(attributesArray[i], capa.attributes[attributesArray[i]], false));
 	}
 	cdns.push("</select><br>");
 	cdns.push("<select name=\"camp_logic2\" class=\"Verdana11px\">");
@@ -1381,7 +1381,7 @@ var cdns=[];
 		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
 		for(var i=0; i<attributesArray.length; i++)
 			cdns.push("<option value=\"", attributesArray[i], "\" \>",
-					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
+					DonaCadenaDescripcioAttribute(attributesArray[i], capa.attributes[attributesArray[i]], false));
 	}
 	cdns.push("</select><br>");
 	cdns.push("<select name=\"camp_logic3\" class=\"Verdana11px\">");
@@ -1391,7 +1391,7 @@ var cdns=[];
 		cdns.push("<option value=\"camp_logic_empty\" selected \>", "--", GetMessage("empty"), "--");
 		for(var i=0; i<attributesArray.length; i++)
 			cdns.push("<option value=\"", attributesArray[i], "\" \>",
-				   (DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
+				   DonaCadenaDescripcioAttribute(attributesArray[i], capa.attributes[attributesArray[i]], false));
 	}
 	cdns.push("</select><br>");
 	cdns.push(GetMessage("ListPossibleValues", "qualitat"), " (", GetMessage("separatedBy"), " ;)",
@@ -1426,7 +1426,7 @@ var cdns=[];
 		var attributesArray=Object.keys(capa.attributes);
 		for(var i=0; i<attributesArray.length; i++)
 			cdns.push("<option value=\"", attributesArray[i], "\"", (i==0 ? " selected ":""), "\>",
-					(DonaCadena(capa.attributes[attributesArray[i]].descripcio) ? DonaCadena(capa.attributes[attributesArray[i]].descripcio) : attributesArray[i]));
+					DonaCadenaDescripcioAttribute(attributesArray[i], capa.attributes[attributesArray[i]], false));
 	}
 	cdns.push("</select></fieldset>");
 

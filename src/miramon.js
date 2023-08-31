@@ -720,6 +720,13 @@ function DonaCadenaNomDesc(a)
 	return a.desc ? DonaCadena(a.desc) : a.nom;
 }
 
+function DonaCadenaDescripcioAttribute(nom, a, compacte)
+{
+	if (compacte && a.symbol)
+		return a.symbol;
+	return a.descripcio ? DonaCadena(a.descripcio) : (a.description ? a.description : (a.symbol ? a.symbol : a.nom));
+}
+
 function DonaCadenaNomDescFormula(formula, a)
 {
 	// Si no hi ha desc i hi ha fórmula aplico la fórmula sobre el valor per obtenir la desc
@@ -3563,10 +3570,7 @@ var attributesArray=Object.keys(attributes);
 				(!categories[i_color][attributesArray[i_a]] || categories[i_color][attributesArray[i_a]].length==0)))
 			continue; //si és no mostrable o és si_ple i buit no el mostro
 
-		if (compacte)
-			desc_atrib=(attributes[attributesArray[i_a]].simbol ? attributes[attributesArray[i_a]].simbol : (attributes[attributesArray[i_a]].descripcio ? DonaCadena(attributes[attributesArray[i_a]].descripcio) : attributesArray[i_a]));
-		else
-			desc_atrib=(attributes[attributesArray[i_a]].descripcio ? DonaCadena(attributes[attributesArray[i_a]].descripcio) : (attributes[attributesArray[i_a]].simbol ? attributes[attributesArray[i_a]].simbol : attributesArray[i_a]));
+		desc_atrib=DonaCadenaDescripcioAttribute(attributesArray[i_a], attributes[attributesArray[i_a]], true);
 
 		if (attributes[attributesArray[i_a]].NDecimals)
 			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][attributesArray[i_a]], attributes[attributesArray[i_a]].NDecimals);

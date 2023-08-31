@@ -146,7 +146,7 @@ var esNODATA, esLink, esImatge;
 
 					}
 					consulta.attributes[tag.attributes[j].name]={
-										"descripcio": tag.attributes[j].name,
+										"description": tag.attributes[j].name,
 										"valor": tag.attributes[j].value,
 										"UoM": null,
 										"mostrar": "si",
@@ -206,7 +206,7 @@ var esNODATA, esLink, esImatge;
 					}
 					if(valor)
 					{
-						consulta.attributes[nom]={"descripcio": descripcio,
+						consulta.attributes[nom]={"description": descripcio,
 										"valor": valor,
 										"UoM": UoM,
 										"mostrar": "si",
@@ -265,7 +265,7 @@ var i, j;
 		for (j in doc.features[i].properties)
 		{
 			consulta.attributtes[j]={
-						"descripcio": j,
+						"description": j,
 						"valor": doc.features[i].properties[j],
 						"mostrar": "si",
 						"UoM": null,
@@ -636,13 +636,13 @@ var cdns=[], capa, feature, attribute, atr;
 		atr=capa.attributes[attributesArray[i]];
 		if(atr.mostrar=="no" || atr.serieTemporal)
 			continue;
-		cdns.push((DonaCadena(atr.descripcio) ? DonaCadena(atr.descripcio) : attributesArray[i]), "\t", DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, atr, attributesArray[i], i_data, PuntConsultat.i, PuntConsultat.j));
+		cdns.push(DonaCadenaDescripcioAttribute(attributesArray[i], atr, false), "\t", DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, atr, attributesArray[i], i_data, PuntConsultat.i, PuntConsultat.j));
 		if (atr.UoM)
 			cdns.push("\t", atr.UoM);
 		cdns.push("\n");
 	}
 
-	cdns.push(GetMessage("Date"), "\t", DonaCadena(attribute.descripcio));
+	cdns.push(GetMessage("Date"), "\t", DonaCadenaDescripcioAttribute(attributesArray[i_atr], attribute, false));
 	if (attribute.UoM)
 		cdns.push(" (", attribute.UoM, ")");
 	cdns.push("\n");
@@ -675,7 +675,7 @@ var cdns=[], ncol=440, nfil=220, capa=ParamCtrl.capa[i_capa];
 
 	if (attribute.definition)
 		cdns.push("<a href=\"", attribute.definition, "\" target=\"_blank\">"); 
-	cdns.push(DonaCadena(attribute.descripcio) ? DonaCadena(attribute.descripcio) : attribute_name);
+	cdns.push(DonaCadenaDescripcioAttribute(attribute_name, attribute, false) );
 	if (attribute.definition)
 		cdns.push("</a>"); 
 
@@ -1048,7 +1048,7 @@ var attributesArray=Object.keys(capa.attributes);
 		labels.push(moment(millisegons));
 		temps.push(DonaDataCapaComATextBreu(i_capa, i_data));
 	}
-	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, capa.attributes[attributesArray[i_atr]].descripcio ? capa.attributes[attributesArray[i_atr]].descripcio : attributesArray[i_atr], capa.attributes[attributesArray[i_atr]].serieTemporal.color, capa.FlagsData);
+	CreaGraficSerieTemporalSimple(win.document.getElementById(nom_canvas), data, labels, temps, DonaCadenaDescripcioAttribute(attributesArray[i_atr], capa.attributes[attributesArray[i_atr]], false), capa.attributes[attributesArray[i_atr]].serieTemporal.color, capa.FlagsData);
 }
 
 function MostraGraficPerfilConsula(win, nom_canvas, capa, perfil, titol_perfil)

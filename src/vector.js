@@ -281,7 +281,7 @@ var atrib_coll_xml, atrib_xml, tag2, nom;
 		//descripció
 		tag2=GetXMLChildElementByName(atrib_xml, '*', "descripcio");
 		if(tag2 && tag2.hasChildNodes())
-			attribute.descripcio=tag2.childNodes[0].nodeValue;
+			attribute.description=tag2.childNodes[0].nodeValue;
 		//unitats
 		tag2=GetXMLChildElementByName(atrib_xml, '*', "unitats");
 		if(tag2 && tag2.hasChildNodes())
@@ -495,8 +495,8 @@ function ProcessaResultatLecturaCSVPropietatsObjecte(results)
 			i_data=InsereixDataISOaCapa(data_iso, capa.data);
 			for(i_atrib=0; i_atrib<attributesArray.length; i_atrib++)
 			{
-				if(capa.attributes[attributesArray[i_atrib]].nomOri)
-					feature.properties[CanviaVariablesDeCadena(attributesArray[i_atrib], capa, i_data, null)]=rows[i_row][capa.attributes[attributesArray[i_atrib]].nomOri];
+				if(capa.attributes[attributesArray[i_atrib]].originalName)
+					feature.properties[CanviaVariablesDeCadena(attributesArray[i_atrib], capa, i_data, null)]=rows[i_row][capa.attributes[attributesArray[i_atrib]].originalName];
 			}			
 		}
 	}
@@ -506,8 +506,8 @@ function ProcessaResultatLecturaCSVPropietatsObjecte(results)
 		{
 			for(i_atrib=0; i_atrib<attributesArray.length; i_atrib++)
 			{
-				if(capa.attributes[attributesArray[i_atrib]].nomOri)
-					feature.properties[attributesArray[i_atrib]]=rows[i_row][capa.attributes[attributesArray[i_atrib]].nomOri];
+				if(capa.attributes[attributesArray[i_atrib]].originalName)
+					feature.properties[attributesArray[i_atrib]]=rows[i_row][capa.attributes[attributesArray[i_atrib]].originalName];
 			}	
 		}
 	}

@@ -364,7 +364,7 @@ var histograma, prefix_div_copy, capa, estil, costat, env, i_situacio, area_cell
 				// això acaba donant el nom de la capa combinada, que no és el que vull aqui -> "\t", (estil.component[1].desc ? estil.component[1].desc : DonaCadenaNomDescItemsLleg(estil)));
 		var attributesArray=Object.keys(estil.component[1].herenciaOrigen.attributes);
 		if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona també es categòrica
-			cdns.push(estil.component[1].herenciaOrigen.attributes[attributesArray[0]].descripcio ? estil.component[1].herenciaOrigen.attributes[attributesArray[0]].descripcio : attributesArray[0]);
+			cdns.push(DonaCadenaDescripcioAttribute(attributesArray[0], estil.component[1].herenciaOrigen.attributes[attributesArray[0]], false));
 		else
 		{
 			attributesArray=Object.keys(estil.attributes);
