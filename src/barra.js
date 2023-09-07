@@ -341,6 +341,7 @@ var cdns=[];
 function CalActivarConsultesALaBarra()
 {
 var i, k;
+
 	// Activació de les consultes perquè hi ha alguna capa consultable
 	if(~Accio.accio&AccioValidacio)
 	{
@@ -364,22 +365,22 @@ var i, k;
 
 function CreaBarra(crs)
 {
-var i, j, k;
+var i, j;
 var cdns=[];
 
 	if (ParamCtrl.BarraNomesDescarrega)
 	{
-		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return ObtenirMMZ();\">");
+		cdns.push("<form name=\"zoom\" method=\"GET\" onSubmit=\"return ObtenirMMZ();\">");
 		ParamCtrl.EstatClickSobreVista="ClickMouMig";
-		cdns.push("<CENTER>",
+		cdns.push("<center>",
 		   (CadenaBotoPolsable("getmmz_text", "getmmz_text", GetMessage("Download"), "ObtenirMMZ();")),
 		   "&nbsp;&nbsp;&nbsp;",
 		   (CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"), "ObreFinestraAjuda();")),
-		   "</CENTER>");
+		   "</center>");
 	}
 	else // Barra completa
 	{
-		cdns.push("<FORM NAME=\"zoom\" METHOD=\"GET\" onSubmit=\"return PortamANivellDeZoom(document.zoom.nivell.value)\">\n");
+		cdns.push("<form name=\"zoom\" method=\"GET\" onSubmit=\"return PortamANivellDeZoom(document.zoom.nivell.value)\">\n");
 		if (ParamCtrl.BarraBotoMes)
 		   	cdns.push((CadenaBotoPolsable("zoom_in", "zoom_in", GetMessage("ZoomIn", "barra"),
 				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+1);")));
@@ -418,7 +419,7 @@ var cdns=[];
 				ParamCtrl.EstatClickSobreVista="ClickConLoc";
 			else if ((ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2") && !(ParamCtrl.BarraBotoNovaVista))
 				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
-			if (ParamCtrl.EstatClickSobreVista=="ClickConLoc" && (!(i<ParamCtrl.capa.length) && (ParamCtrl.capa && !(k<ParamCtrl.capa.length))))
+			if (ParamCtrl.EstatClickSobreVista=="ClickConLoc" && !cal_consultes) // && (!(i<ParamCtrl.capa.length) && (ParamCtrl.capa && !(k<ParamCtrl.capa.length))))
 				ParamCtrl.EstatClickSobreVista="ClickZoomRec1";
 
 
@@ -433,7 +434,7 @@ var cdns=[];
 			else if (ParamCtrl.EstatClickSobreVista=="ClickEditarPunts" && (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length)))   //hi ha alguna capa digitalitzable
 				boto_p="inserta";
 			else if (cal_consultes) 
-				boto_p=(i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc";
+				boto_p=(/*i<ParamCtrl.capa.length &&*/ Accio.accio&AccioValidacio) ? "conval" : "conloc";
 			else
 				boto_p="zoomfin";
 
@@ -457,8 +458,8 @@ var cdns=[];
 			}
 			if (cal_consultes) 
 			{
-				botons[botons.length]={"src": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? "conval" : "conloc",
-					   "alt": (i<ParamCtrl.capa.length && Accio.accio&AccioValidacio) ? GetMessage("Validation", "barra") : GetMessage("QueryByLocation"),
+				botons[botons.length]={"src": (/*i<ParamCtrl.capa.length &&*/ Accio.accio&AccioValidacio) ? "conval" : "conloc",
+					   "alt": (/*i<ParamCtrl.capa.length && */ Accio.accio&AccioValidacio) ? GetMessage("Validation", "barra") : GetMessage("QueryByLocation"),
 					   "funcio": "CanviaEstatClickSobreVista(\'ClickConLoc\');"};
 			}
 			if (ParamCtrl.BarraBotoInsereix || (ParamCtrl.capa && j<ParamCtrl.capa.length))
@@ -485,13 +486,13 @@ var cdns=[];
 					DonaCadena(ParamCtrl.TitolLlistatNivellZoom) :
 					"Zoom:"),
 			   "</span>",
-			   "<select CLASS=text_petit name=\"nivell\" onChange=\"PortamANivellDeZoom(parseInt(document.zoom.nivell.value));\">\n");
+			   "<select class=\"text_petit\" name=\"nivell\" onChange=\"PortamANivellDeZoom(parseInt(document.zoom.nivell.value));\">\n");
 
 			for (var i=0; i<ParamCtrl.zoom.length; i++)
 			{
-			    cdns.push("<OPTION VALUE=\"",i,"\"",
-			    	((i==DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)) ? " SELECTED" : "") ,">",
-				(EscriuDescripcioNivellZoom(i, crs ? crs : ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, false)), "</OPTION>\n");
+			    cdns.push("<option value=\"",i,"\"",
+			    	((i==DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)) ? " selected" : "") ,">",
+				(EscriuDescripcioNivellZoom(i, crs ? crs : ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, false)), "</option>\n");
 			}
 			cdns.push("</select>\n");
 		}
@@ -574,7 +575,7 @@ var cdns=[];
 			}
 		}
 	}
-	cdns.push("</FORM>\n");
+	cdns.push("</form>\n");
 	var elem=getLayer(window, "barra");
 	if (isLayer(elem))
 	{
