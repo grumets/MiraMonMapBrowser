@@ -720,6 +720,13 @@ function DonaCadenaNomDesc(a)
 	return a.desc ? DonaCadena(a.desc) : a.nom;
 }
 
+function DonaCadenaDescripcioAttribute(nom, a, compacte)
+{
+	if (compacte)
+		return a.symbol ? a.symbol : nom;
+	return a.descripcio ? DonaCadena(a.descripcio) : (a.description ? a.description : (a.symbol ? a.symbol : nom));
+}
+
 function DonaCadenaNomDescFormula(formula, a)
 {
 	// Si no hi ha desc i hi ha fórmula aplico la fórmula sobre el valor per obtenir la desc
@@ -1634,11 +1641,7 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 						{
 							estil.diagrama[i_diagrama].chart=[];
 							for (var i_c=0; i_c<estil.component.length; i_c++)
-							{
 								var retorn_prep_histo=PreparaHistograma(estil.diagrama[i_diagrama].i_histograma, i_c);
-								/*estil.diagrama[i_diagrama].chart.push({labels: retorn_prep_histo.label, valors: (retorn_prep_histo.valors ? retorn_prep_histo.valors : null),
-									data: retorn_prep_histo.data, backgroundColor: retorn_prep_histo.colors, unitats: retorn_prep_histo.unitats, options: retorn_prep_histo.options});* /
-							}
 						}
 						else if (estil.diagrama[i_diagrama].tipus == "matriu")
 							estil.diagrama[i_diagrama].matriu=CreaTextMatriuDeConfusio(estil.diagrama[i_diagrama].i_histograma, true);
@@ -3528,18 +3531,19 @@ var capa=ParamCtrl.capa[i_capa];
 }
 
 //Igual que la funció posterior però retorna sempre un text
-function DonaTextCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
+function DonaTextCategoriaDesDeColor(categories, attributes, i_color, filtra_stats, compacte)
 {
-	return DonaCadena(DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte));
+	return DonaCadena(DonaDescCategoriaDesDeColor(categories, attributes, i_color, filtra_stats, compacte));
 }
 
-//Aquesta funció assumeix que hi ha estil.categories i estil.atributs. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
-function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats, compacte)
+//Aquesta funció assumeix que hi ha estil.categories i estil.attributes. Si alguna descripció era undefined, obvia aquesta i continua amb les altres. Si la cadena és multiidioma es retorna un objecte
+function DonaDescCategoriaDesDeColor(categories, attributes, i_color, filtra_stats, compacte)
 {
-	if (atributs.length==1)
+var attributesArray=Object.keys(attributes);
+	if (attributesArray.length==1)
 	{
-		if (categories[i_color] && categories[i_color][atributs[0].nom])
-			return categories[i_color][atributs[0].nom];
+		if (categories[i_color] && categories[i_color][attributesArray[0]])
+			return categories[i_color][attributesArray[0]];
 		return "";
 	}
 	if (!categories[i_color])
@@ -3554,31 +3558,28 @@ function DonaDescCategoriaDesDeColor(categories, atributs, i_color, filtra_stats
 	else
 		value_text="<br>";
 
-	for (var i_a=0; i_a<atributs.length; i_a++)
+	for (var i_a=0; i_a<attributesArray.length; i_a++)
 	{
-		if (!categories[i_color][atributs[i_a].nom])
-			continue; //return ""; -> per algun atribut pot no haver valor però puc mostrar els altres
+		if (!categories[i_color][attributesArray[i_a]])
+			continue; //return ""; -> per algun attribute pot no haver valor però puc mostrar els altres
 
-		if (filtra_stats && atributs[i_a].nom.substring(0,7) == "$stat$_")
+		if (filtra_stats && attributesArray[i_a].substring(0,7) == "$stat$_")
 			continue; //en un context de "nomes_atrib_simples" els stat no els vull mostrar
 
-		if (atributs[i_a].mostrar == "no" || (atributs[i_a].mostrar == "si_ple" &&
-				(!categories[i_color][atributs[i_a].nom] || categories[i_color][atributs[i_a].nom].length==0)))
+		if (attributes[attributesArray[i_a]].mostrar == "no" || (attributes[attributesArray[i_a]].mostrar == "si_ple" &&
+				(!categories[i_color][attributesArray[i_a]] || categories[i_color][attributesArray[i_a]].length==0)))
 			continue; //si és no mostrable o és si_ple i buit no el mostro
 
-		if (compacte)
-			desc_atrib=(atributs[i_a].simbol ? atributs[i_a].simbol : (atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : atributs[i_a].nom));
-		else
-			desc_atrib=(atributs[i_a].descripcio ? DonaCadena(atributs[i_a].descripcio) : (atributs[i_a].simbol ? atributs[i_a].simbol : atributs[i_a].nom));
+		desc_atrib=DonaCadenaDescripcioAttribute(attributesArray[i_a], attributes[attributesArray[i_a]], true);
 
-		if (atributs[i_a].NDecimals)
-			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][atributs[i_a].nom], atributs[i_a].NDecimals);
+		if (attributes[attributesArray[i_a]].NDecimals)
+			value_text+= desc_atrib + ": " + OKStrOfNe(categories[i_color][attributesArray[i_a]], attributes[attributesArray[i_a]].NDecimals);
 		else
-			value_text+= desc_atrib + ": " + categories[i_color][atributs[i_a].nom];
-		if (atributs[i_a].unitats)
-			value_text+=" "+atributs[i_a].unitats;
+			value_text+= desc_atrib + ": " + categories[i_color][attributesArray[i_a]];
+		if (attributes[attributesArray[i_a]].UoM)
+			value_text+=" "+attributes[attributesArray[i_a]].UoM;
 		i_ple++;
-		if (i_a+1<atributs.length)
+		if (i_a+1<attributesArray.length)
 		{
 			if (compacte)
 				value_text+="; "
@@ -4298,9 +4299,68 @@ function CreaUUIDSiCal(obj)
 		obj.id=create_UUID();
 }
 
+function ComprovaConsistenciaAttributesMostrar(attributes, ref_source_attrib)
+{
+	var attributesArray=Object.keys(attributes);
+	if (attributesArray.length)
+	{
+		for (var j=0; j<attributesArray.length; j++)
+		{
+			if (attributes[attributesArray[j]].mostrar)
+			{
+				if (attributes[attributesArray[j]].mostrar != "si" && attributes[attributesArray[j]].mostrar != "si_ple" && attributes[attributesArray[j]].mostrar != "no")
+				{
+					if (attributes[attributesArray[j]].mostrar == true || attributes[attributesArray[j]].mostrar == false)
+					{
+						if (!avis_mostrar_attributes)
+						{
+							alert(GetMessage("TheProperty") + " attributes.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
+											" " + ref_source_attrib);
+							avis_mostrar_attributes=true;
+						}
+						if (attributes[attributesArray[j]].mostrar)
+							attributes[attributesArray[j]].mostrar = "si";
+						else
+							attributes[attributesArray[j]].mostrar = "no";
+						}
+					else
+					{
+						if (!avis_mostrar_attributes)
+						{
+							alert(GetMessage("TheProperty") + " attributes.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetOtherwise", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("YouMayContinue") + ". " + ref_source_attrib);
+							avis_mostrar_attributes=true;
+						}
+						attributes[attributesArray[j]].mostrar = "si";
+					}
+				}
+			}
+		}
+	}
+}
+
+function CanviaAtributsPerAttributesSiCalParamCtrl(prop, ref_source_attrib)
+{
+	if (prop.atributs)
+	{
+		alert("The property \"atributs\" is no longer supported. Use \"attributes\ (with its new format) instead. " 
+				 + GetMessage("YouMayContinue") + "." +
+				 " " + ref_source_attrib);
+		prop.attributes={};
+		for (var i=0; i<prop.atributs.length; i++)
+		{
+			prop.attributes[prop.atributs[i].nom]=JSON.parse(JSON.stringify(prop.atributs[i]));
+			if (prop.attributes[prop.atributs[i].nom].unitats)
+				prop.attributes[prop.atributs[i].nom].UoM=prop.attributes[prop.atributs[i].nom].unitats;
+			delete prop.attributes[prop.atributs[i].nom].unitats;
+			delete prop.attributes[prop.atributs[i].nom].nom;
+		}
+		delete prop.atributs;
+	}
+}
+
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
-	var i, j, k;
+var i, j;
 
 	if (!param_ctrl.VistaPermanent)
 		param_ctrl.VistaPermanent=[{"nom": "vista"}]; //Això és el sistema antic, on només hi podia haver una vista. Si no m'ho especifiquen assumeixo això.
@@ -4312,7 +4372,7 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 	}
 
 	// arreglem els config.json que deien mostrar: true false errònimament
-	var avis_mostrar_atributs=false;
+	var avis_mostrar_attributes=false;
 	var capa, estil;
 
 	var protocol=location.protocol.toLowerCase();
@@ -4348,41 +4408,11 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 					" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 			capa.transparencia="semitransparent";
 		}
-
-		if (capa.atributs && capa.atributs.length)
-		{
-			for (j=0; j<capa.atributs.length; j++)
-			{
-				if (capa.atributs[j].mostrar)
-				{
-					if (capa.atributs[j].mostrar != "si" && capa.atributs[j].mostrar != "si_ple" && capa.atributs[j].mostrar != "no")
-					{
-						if (capa.atributs[j].mostrar == true || capa.atributs[j].mostrar == false)
-						{
-							if (!avis_mostrar_atributs)
-							{
-								alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
-										" " + GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
-								avis_mostrar_atributs=true;
-							}
-							if (capa.atributs[j].mostrar)
-								capa.atributs[j].mostrar = "si";
-							else
-								capa.atributs[j].mostrar = "no";
-						}
-						else
-						{
-							if (!avis_mostrar_atributs)
-							{
-								alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetOtherwise", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("YouMayContinue") + "." + " capa = " + DonaCadenaNomDesc(capa));
-								avis_mostrar_atributs=true;
-							}
-							capa.atributs[j].mostrar = "si";
-						}
-					}
-				}
-			}
-		}
+	
+		CanviaAtributsPerAttributesSiCalParamCtrl(capa, GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
+		
+		if (capa.attributes)
+			ComprovaConsistenciaAttributesMostrar(capa.attributes, GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 
 		if ((capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img"))
 		{
@@ -4408,41 +4438,11 @@ function ComprovaConsistenciaParamCtrl(param_ctrl)
 			{
 				estil=capa.estil[j];
 				// CreaIdSiCal(estil, j);  Traslladat a CompletaDefinicioCapa
-				if (estil.atributs && estil.atributs.length)
-				{
-					for (k=0; k<estil.atributs.length; k++)
-					{
-						if (estil.atributs[k].mostrar)
-						{
-							if (estil.atributs[k].mostrar != "si" && estil.atributs[k].mostrar != "si_ple" && estil.atributs[k].mostrar != "no")
-							{
-								if (estil.atributs[k].mostrar == true || estil.atributs[k].mostrar == false)
-								{
-									if (!avis_mostrar_atributs)
-									{
-										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetTo", "miramon") + " \"true/false\". " + GetMessage("YouMayContinue") + "." +
-												" estil = " + DonaCadenaNomDesc(estil));
-												avis_mostrar_atributs=true;
-									}
-									if (estil.atributs[k].mostrar)
-										estil.atributs[k].mostrar = "si";
-									else
-										estil.atributs[k].mostrar = "no";
-								}
-								else
-								{
-									if (!avis_mostrar_atributs)
-									{
-										alert(GetMessage("TheProperty") + " atributs.mostrar " + GetMessage("mustBe") + " \"si\", \"si_ple\", \"no\" " + GetMessage("andIsInsteadSetOtherwise", "miramon") + ". " + GetMessage("ValueIgnoredAttributeShowable", "miramon") + ". " + GetMessage("YouMayContinue") + "." +
-												+ " estil = " + DonaCadenaNomDesc(estil));
-										avis_mostrar_atributs=true;
-									}
-									estil.atributs[k].mostrar = "si";
-								}
-							}
-						}
-					}
-				}
+
+				CanviaAtributsPerAttributesSiCalParamCtrl(estil, " capa = " + DonaCadenaNomDesc(capa) + " estil = " + DonaCadenaNomDesc(estil));
+
+				if (estil.attributes)
+					ComprovaConsistenciaAttributesMostrar(estil.attributes, " capa = " + DonaCadenaNomDesc(capa) + " estil = " + DonaCadenaNomDesc(estil));
 			}
 		}
 	}

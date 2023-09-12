@@ -40,11 +40,11 @@
 
 //Definits aquí i usats a histpie.js i a cntxmenu.js
 
-function DonaTitolEstadistic(categories, atributs, tipus_estad)
+function DonaTitolEstadistic(categories, attributes, tipus_estad)
 {
 var titol="";
 
-	if (categories && atributs) //cas categòric
+	if (categories && attributes) //cas categòric
 	{
 		if (tipus_estad == "mode")
 			titol=GetMessage("ModalClass");

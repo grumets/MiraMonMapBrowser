@@ -1,0 +1,162 @@
+{
+	"title": "GeoJSON properties meaning schema",
+	"$schema": "http://json-schema.org/draft/2019-09/schema#",
+	"$id": "https://meaning.ad4gd.eu/json-meta/meaning",
+	"$vocabulary": {
+		"https://json-schema.org/draft/2019-09/vocab/core": true,
+		"https://json-schema.org/draft/2019-09/vocab/applicator": true,
+		"https://json-schema.org/draft/2019-09/vocab/validation": true,
+		"https://json-schema.org/draft/2019-09/vocab/meta-data": true,
+		"https://json-schema.org/draft/2019-09/vocab/format": false,
+		"https://json-schema.org/draft/2019-09/vocab/content": true,
+		"https://meaning.ad4gd.eu/json-meta/meaning": false
+	},
+	"$recursiveAnchor": true,
+	"allOf": [
+		{
+			"$ref": "https://json-schema.org/draft/2019-09/schema"
+		},
+		{
+			"$ref": "#/definitions/AttributeDescription"
+		}
+	],
+	"definitions": {
+		"AttributeDescription": {
+			"title": "GeoJSON meaning vocabulary meta-schema",
+			"type": "object",
+			"$comment": "The name of the property is the name of the attribute. If the server is SOS there are 2 special names can be used __om_time__, __om_sensor__ and the rest match the field names of the table containing the data. The properties that define each attribute can be de ones defined below or properties from JSON schema itself if indicated in this comment. For the moment, only 'description' is implemented. Others from 'string' (https://json-schema.org/understanding-json-schema/reference/string.html) or number can be useful (https://json-schema.org/understanding-json-schema/reference/numeric.html).",
+			"properties": {
+				"originalName": {
+					"description": "Name of the original attribute. Optional. If the attributes are taken from a CSV and are transformed into one or more attributes (because they are associated with time). In this case the nomOri maybe different from the property name.",
+					"type": [ "string", "null" ]
+				},
+				"symbol": {
+					"description": "Symbol of the attribute. Note that it is not the units of measurement symbol but the attribute itself. For example, the letter 'σ' (sigma) usually represents the standard deviation. It will be used in the compact display (coordinates box) if defined. Created for statistical attributes, but can be used elsewhere.",
+					"type": [ "string", "null" ]
+				},
+				"descripcio": {
+					"description": "Description of the attribute in multiple languages. If you do not need multilanguage support, please use 'description'",
+					"$ref": "#/definitions/StringOCadenaLang"
+				},
+				"definition": {
+					"description": "A URI that defines the observedProperty or the variable. You may find the right definitions in https://qudt.org/2.1/vocab/quantitykind, http://vocabs.lter-europe.net/EnvThes or https://www.eea.europa.eu/help/glossary/eea-glossary.",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
+				"UoM": {
+					"description": "Units of measurement of the attribute. Formerly refered as 'unitats'",
+					"type": [ "string", "null" ]
+				},
+				"UoMSymbol": {
+					"description": "Symbol of the units of measurement of the atributte.",
+					"type": [ "string", "null" ]
+				},
+				"UoMDefinition": {
+					"description": "A URI that defines the units of measurement of the observedProperty or variable. You may find the right definitions in https://qudt.org/2.1/vocab/unit",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
+				"calcul": {
+					"description": "Mathematical formula to transform the values of one or more properties of another vector or raster 'capa'. To point to a raster 'capa', see the explanation in 'component'; to point to a vector 'capa', we should use {'i_capa': 2, 'prop': 'flower_name'} to refer to 'capa' 2 which is of 'model' ='vector'. Can only be used if there are capa.objectes on the given 'capa'. If you do not specify i_capa, this 'capa' is assumed. For each 'objecte' {'i_capa': 2, 'prop': 'flower_name'} (or the equivalent for raster 'capa' for each pixel) is transformed into the value and, once done, the formula is evaluated as JavaScript syntax.",
+					"type": "string"
+				},
+				"FormulaConsulta": {
+					"description": "Mathematical formula to transform the values of objectes[].feature[].properties of this 'capa' (or into values[]). To know about v[0] etc see the explanation under 'component'. Use p['name'] to indicate the name of the property inside properties. You can also specify nomPropId to refer to the feature identifier (e.g. the feature id, in case of GeoJSON). Can only be used if there is capa.valors or capa.objectes. If you want to choose a value from another 'capa' use 'calcul' instead. Internally, 'FormulaConsulta' is transformed into 'calcul'.",
+					"type": "string"
+				},
+				"separador": {
+					"description": "Separator of the next block of attributes",
+					"$ref": "#/definitions/StringOCadenaLang"
+				},
+				"esLink": {
+					"description": "Is the attribute value a link?",
+					"type": "boolean"
+				},
+				"descLink": {
+					"description": "Description of the link",
+					"$ref": "#/definitions/StringOCadenaLang"
+				},
+				"esImatge": {
+					"description": "Is the attribute value a image URI?. This forces the attribute to appear as an embedded image in the query box",
+					"type": "boolean"
+				},
+				"FormatVideo": {
+					"description": "If the attribute is a link to a video, this is the video format. This forces the attribute to appear as an embedded video with a play button in the query box. It should be a MIME type. Example: video/mp4. optional",
+					"type": "string",
+					"format": "uri"
+				},
+				"mostrar": {
+					"description": "Should it be shown in the query box? Can be 'si' (always), 'no' (never), 'si_ple' (it will only be displayed if the attribute has content).",
+					"enum": [ "si", "no", "si_ple" ]
+				},
+				"mida": {
+					"description": "Implementation pending (maxLength should be used instead of 'mida'). Attribute size. Optional. Maximum width the field type can have. In the case of numerical types it is the maximum precision. In the case of strings it is the maximum length in characters. In the case of date-time it is the maximum length in characters of the representation of the date-time as text.",
+					"type": "number"
+				},
+				"pDecimals": {
+					"description": "Implementation pending. Number of decimals places of the attribute. It only applies if the attribute is of type 'number'. Optional. (Note: do not confused with NDecimals, which is the number of decimals to display in the screen).",
+					"type": "number"
+				},
+				"presentation": {
+					"description": "It is the format in which we receive the value from the server. Currently it is only used for a very specific thing in the interpretation of dates. In the future it could be combined with to the JSON schema 'type' to indicate whether string, date, number, float... and 'format'.",
+					"enum": [ "dd/mm/yyyy" ]
+				},
+				"NDecimals": {
+					"description": "Number of decimal places to be displayed in the screen. Optional, when not indicated, precision is not truncated.",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 20,
+					"multipleOf": 1
+				},
+				"serieTemporal": {
+					"description": "The values of this attribute form a time series that will be displayed as a graph.",
+					"type": "object",
+					"required": [ "color" ],
+					"properties": {
+						"color": {
+							"description": "Line color in the graph",
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"StringOCadenaLang": {
+			"description": "String or multilanguage object.",
+			"oneOf": [
+				{
+					"type": [ "string", "null" ]
+				},
+				{
+					"type": "object",
+					"properties": {
+						"cat": {
+							"description": "Català",
+							"type": [ "string", "null" ]
+						},
+						"spa": {
+							"description": "Español",
+							"type": [ "string", "null" ]
+						},
+						"eng": {
+							"description": "English",
+							"type": [ "string", "null" ]
+						},
+						"fre": {
+							"description": "Français",
+							"type": [ "string", "null" ]
+						},
+						"cze": {
+							"description": "Čeština",
+							"type": [ "string", "null" ]
+						},
+						"ger": {
+							"description": "Deutsch",
+							"type": [ "string", "null" ]
+						}
+					}
+				}
+			]
+		}
+	}
+}

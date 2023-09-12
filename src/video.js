@@ -650,7 +650,7 @@ var cdns=[], capa, estil;
 						{
 							if (!estil.categories[i])
 								continue;
-							cdns.push("<option value=\"NDeValor_"+i+"\">", GetMessage("NumPhotosValue", "video"), " ", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, i, true), "</option>");
+							cdns.push("<option value=\"NDeValor_"+i+"\">", GetMessage("NumPhotosValue", "video"), " ", DonaTextCategoriaDesDeColor(estil.categories, estil.atrributes, i, true), "</option>");
 						}
 					}
 					else

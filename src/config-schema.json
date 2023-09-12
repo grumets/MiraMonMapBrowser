@@ -40,7 +40,7 @@
 					},
 					"title": {
 						"description": "Titol de la divisió. Només aplica quan la divisió és 'resizable'",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"left": { 
 						"description": "Distància a la vora dreta quan la finestra medeix SpaceForLayers.width",
@@ -88,7 +88,7 @@
 					},
 					"content": {
 						"description": "Contingut html de l'interior de la layer. Opcional. Pot ser null",
-						"$ref": "#/definitions/StringOCadenaLang"
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang"
 					}
 				}
 			}
@@ -166,17 +166,17 @@
 				},
 				"text":	{ 
 					"description": "Contingut de la divisió que fa de títol del navegador",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				}
 			}
 		},
 		"titol": { 
 			"description": "Títol del navegador usat a les faixes blaves de les caixes del navegador i de les caixes filles",
-			"$ref": "#/definitions/StringOCadenaLang" 
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 		},
 		"TitolCaixa": { 
 			"description": "Títol del navegador usat a l'interior d'algunes caixes filles",
-			"$ref": "#/definitions/StringOCadenaLang" 
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 		},
 		"ncol": { 
 			"description": "Amplada de la caixa (requadre) de la vista en píxels. Si NColNFilAuto és true, no es fa servir.",
@@ -230,7 +230,7 @@
 		},
 		"TitolCoord": { 
 			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' . Deprecated. Useu la capacitat de títol de les layers redimensionables en el seu lloc",
-			"$ref": "#/definitions/StringOCadenaLang" 
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 		},
 		"EstilCoord": { 
 			"description": "Estil del recurs de coordenada actual. Per defecte és 'text' que es mostre en úna sola línia. 'area' ho mostra en un recurs multilínia",
@@ -424,7 +424,7 @@
 					},
 					"desc": { 
 						"description": "Títol de la plantilla d'impressió. Es mostra als selectors",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"src": { 
 						"description": "Nom del fitxer HTML que conté la plantilla d'impressió",
@@ -524,7 +524,7 @@
 							"properties": {
 								"previ":	{ 
 									"description": "Text previ al descriptor del camp de la consulta típica",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								},
 								"nom":	{ 
 									"description": "Nom del camp de la consulta típica en format CadenaDeCampBD4 del MiraMon",
@@ -532,11 +532,11 @@
 								},
 								"desc":	{ 
 									"description": "Descriptor del camp de la consulta típica",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								},
 								"post":	{ 
 									"description": "Text previ llistat de valors del camp",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								}
 							}
 						}
@@ -790,7 +790,7 @@
 				},
 				"text_boto": {
 					"description": "Text que descriu el botó",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"funcio": {
 					"description": "Nom de la funció que gestiona l'acció resultat de prémer el botó",
@@ -800,7 +800,7 @@
 		},		
 		"TitolLlistatNivellZoom":	{ 
 			"description": "DEPRECATED: ja no s'utilitzarà, passa al fitxer msg.js. Text que figurava davant del desplegable de nivells de zoom (escales)",
-			"$ref": "#/definitions/StringOCadenaLang" 
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 		},
 		"LlistatZoomFraccio": {
 			"description": "Mostrar una fracció com a representació de nivell de zoom al desplegable de nivells de zoom", 
@@ -892,7 +892,7 @@
 				"properties": {
 					"desc": {
 						"description": "Títol de la historia",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"src":{
 						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la història en format JPEG, PNG... Opcional",
@@ -901,7 +901,7 @@
 					},
 					"url": {
 						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-histos={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre data-mm-histos, es tanquen tots els histogrames; IdCapa* a de ser una capa d'arrays binaris)",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
 						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. No implementat encara",
@@ -1345,11 +1345,11 @@
 					},
 					"desc": { 
 						"description": "Descripció de la capa al servidor o digitalitzada",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"atribucio": { 
 						"description": "Entitat a qui cal atribuir l'autoria de les dades de la capa. Opcional",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},	
 					"CRS": { 
 						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En model vectorial i en els ràsters de TIFF (COG), és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
@@ -1468,7 +1468,7 @@
 						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
 						"$ref": "#/definitions/featureCollection"
 					},				
-					"atributs": {
+					"attributes": {
 						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model ràster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
 					},			
@@ -1659,11 +1659,11 @@
 					},				
 					"separa": { 
 						"description": "Separador de capes a la llegenda. Opcional.",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"DescLlegenda": { 
 						"description": "Descripció de la capa per la llegenda. Opcional.",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},	
 					"estil": {					
 						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
@@ -1753,7 +1753,7 @@
 							"properties": {
 								"desc": { 
 									"description": "Descripció del contingut de la descàrrega",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								},
 								"url": {
 									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FormulaConsulta només si la darrera involucra un sol v[].. Si no hi ha cap parametre DIM, s'assumeix que totes les dimensions extra s'empaqueten en un sol fitxer.",
@@ -1783,7 +1783,7 @@
 					},
 					"DescVideo": { 
 						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.desc. Només aplica quan el 'model' és 'raster'.",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"FlagsData": {
 						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Si no s'indica els desplegables de data surten en blanc.",
@@ -1826,15 +1826,15 @@
 									"properties": {
 										"DescLlegenda": { 
 											"description": "Descripció del paràmetre. Ha de ser molt curt perquè els desplegable de dates no es faci molt ample",
-											"$ref": "#/definitions/StringOCadenaLang" 
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 										},
 										"desc": { 
 											"description": "Descripció del paràmetre. Sense limitacions d'espai. De moment no es fa servir. Opcional",
-											"$ref": "#/definitions/StringOCadenaLang" 
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 										},
 										"formula": { 
 											"description": "Fòrmula que s'avaluarà per obtenir el valor del paràmetre. Les variables han de començar per data i tenen l'estructura #/definitions/data. Generalment consulten membres de histo. p.ex.  data.histo.classe_nodata",
-											"$ref": "#/definitions/StringOCadenaLang" 
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 										},
 										"unitats": {
 											"description": "Unitats del resultat de la fòrmula. Opcional",
@@ -2063,11 +2063,11 @@
 			"properties": {
 				"CapcaleraLlegenda": {
 					"description": "Text inicial, abans de les entrades de les capes de la llegenda",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"PeuLlegenda":	{
 					"description": "Text final, després de les entrades de les capes de la llegenda",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"PreviSepara":	{
 					"description": "Format HTML que es posa abans del separador entre capes de la llegenda",
@@ -2139,7 +2139,7 @@
 					},
 					"DescColor": { 
 						"description": "Descripció del color o del símbol que surt a la llegenda",
-						"$ref": "#/definitions/StringOCadenaLang" 
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					}
 				}
 			}
@@ -2524,11 +2524,11 @@
 				},
 				"desc":	{ 
 					"description": "Descripció l'estil per la llegenda. Opcional si només n'hi ha un",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"DescItems": { 
 					"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"TipusObj":{ 
 					"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
@@ -2578,7 +2578,7 @@
 											"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array",
 											"$ref": "#/definitions/descripcioCategories"
 										},
-										"atributs": {
+										"attributes": {
 											"description": "Array que descriu les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
 											"$ref": "#/definitions/descripcioAtributs"	
 										},
@@ -2648,7 +2648,7 @@
 							},
 							"desc":	{ 
 								"description": "Descripció de la component",
-								"$ref": "#/definitions/StringOCadenaLang" 
+								"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 							},
 							"NDecimals": { 
 								"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
@@ -2674,7 +2674,7 @@
 										"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
 										"$ref": "#/definitions/descripcioCategories"
 									},
-									"atributs": {
+									"attributes": {
 										"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 										"$ref": "#/definitions/descripcioAtributs"			
 									},
@@ -2691,7 +2691,7 @@
 					"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
 					"$ref": "#/definitions/descripcioCategories"
 				},
-				"atributs": {
+				"attributes": {
 					"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 					"$ref": "#/definitions/descripcioAtributs"
 				},
@@ -2878,7 +2878,7 @@
 				},
 				"desc":	{ 
 					"description": "Descripció",
-					"$ref": "#/definitions/StringOCadenaLang"
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang"
 				}
 			}
 		},
@@ -2893,7 +2893,7 @@
 				},
 				"desc":	{ 
 					"description": "Descriptor",
-					"$ref": "#/definitions/StringOCadenaLang" 							
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 							
 				},
 				"sel": {
 					"description": "Indica si aquest ítem està seleccionat", 
@@ -2927,7 +2927,7 @@
 				},
 				"desc1": {
 					"description": "Valor mínim",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"v2": {
 					"description": "Valor màxim",
@@ -2935,7 +2935,7 @@
 				},
 				"desc2": {
 					"description": "Valor màxim",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"sel": {
 					"description": "Valor seleccionat",
@@ -3273,101 +3273,10 @@
 			}
 		},		
 		"descripcioAtributs": {
-			"description": "Array que descriu els atributs. Si un atribut no és aquí descrit no es mostra mai a les consultes. A més, l'ordre de la defició de l'array d'atributs (aquests array) mana ordre en que les propietats es veuen a les consultes.",
-			"type": ["array", "null"],
-			"items": {
-				"description": "Propietats de l'atribut",
-				"type": "object",
-				"required": [ "nom" ],
-				"properties": {
-					"calcul": { 
-						"description": "Fórmula matemàtica per transformar els valors d'una o més properties d'una altra capa vectorial o raster. Per a apuntar a una capa raster consulteu l'explicació dins de 'component' per apuntar a una capa vectorial usarem {'i_capa': 2, 'prop': 'nom_flor'} per referirnos a la capa 2 que és de 'model'='vector'. Només es pot fer servir si hi ha capa.objectes a la capa indicada. Si no indiqueu i_capa s'asumeix 'aquesta' capa. Per a cada objecte {'i_capa': 2, 'prop': 'nom_flor'} (o l'equivalment per capes raster per cada píxel) es transforma en el valor i un cop fet la fórmula es evaluada com una sintàxi JavaScript.",
-						"type": "string"
-					},
-					"FormulaConsulta": { 
-						"description": "Formula matemàtica per transformar els valors dels objectes[].feature[].properties d'aquesta capa (o en valors[]). Per saber sobre v[0] etc consulteu l'explicació dins de 'component'. Useu p['nom'] per indicar el nom de la property dins de properties. També podeu indicar nonPropId per referir-vos a l'indentificador de l'objecte (p.ex. el feature id, en cas de GeoJSON). Només es pot fer servir si hi ha capa.valors o capa.objectes. Si voleu triar un valor d'un altre capa useu 'calcul'. Intenament, 'FormulaConsulta' es transforma en 'calcul'.",
-						"type": "string"
-					},
-					"nomOri": {
-						"description": "Nom de l'atribut original, per exemple quan els atributs s'agafen d'un CSV i s'acaben transformant en un atribut o en diversos perquè van amb temps i per tant el nomOri potser diferent del nom.",
-						"type": ["string"]						
-					},
-					"nom": { 
-						"description": "Nom de l'atribut. Si el servidor és SOS hi ha 2 noms especials: __om_time__, __om_sensor__ i la resta coincidexen amb els noms de camp de la taula que conté els dades.",
-						"type": ["string"]
-					},
-					"descripcio": { 
-						"description": "Descripció de l'atribut",
-						"$ref": "#/definitions/StringOCadenaLang" 
-					},
-					"simbol": { 
-						"description": "Símbol de l'atribut, per exemple la lletra sigma per a la desviació estàndard (no és el símbol de les unitats). S'usarà en la visualització compacta (caixa de coordenades) si està definit. Creat per als atributs estadístics, però es pot usar per tots.",
-						"type": ["string", "null"]
-					},
-					"unitats": { 
-						"description": "Unitats de l'atribut",
-						"type": ["string", "null"]
-					},
-					"separador": { 
-						"description": "separador  de l'atribut",
-						"$ref": "#/definitions/StringOCadenaLang" 
-					},
-					"esLink": {
-						"description": "És un link?",
-						"type": "boolean"
-					},
-					"descLink":{ 
-						"description": "Descripció del link",
-						"$ref": "#/definitions/StringOCadenaLang" 
-					},					
-					"esImatge": {
-						"description": "És una imatge?",
-						"type": "boolean"
-					},
-					"FormatVideo": {
-						"description": "Si és un link a un video, el dormat del video. Això farà que es mostri com un video amb un botó de play. És un format MIME. Exemple video/mp4. Optional",
-						"type": "string",
-						"format": "uri"
-					},
-					"mostrar": {
-						"description": "S'ha de mostrar? Pot ser 'si' (sempre), 'no' (mai), 'si_ple' (només es mostrarà si l'atribut té contingut)",											
-						"enum": ["si", "no", "si_ple"]
-					},
-					"tipus": { 					
-						"description": "Pendent d'implementació. Tipus d'atribut. Opcional. string, number, dateTime, boolean (considerar si té sentit binary, object, array.",											
-						"enum": ["string", "number", "date", "boolean", "binary"]
-					},
-					"mida":  { 					
-						"description": "Pendent d'implementació. Mida de l'atribut. Opcional. Amplada màxima que pot tenir el tipus de camp. En el cas de tipus numèrics és la màxima precisió. En el cas de cadenes és la màxima longitud en caràcters.En el cas de data-hora és la màxima longitud en caràcters de la representació de la data-hora com a text.",
-						"type": "number" 
-					},
-					"pDecimals": { 					
-						"description": "Pendent d'implementació. Nombre de decimals de l'atribut (propietat). Només aplica si l'atribut és de tipus 'number'. Opcional. (No confondre amb NDecimals, que és el nombre de decimals que es vol mostrar per pantalla.)",
-						"type": "number"						
-					},
-					"format": {
-						"description": "És el format en que ens arriba el valor del servidor. De moment només es fa servir per una cosa molt concreta de la interpretació de dates. En un futur es podria combinar amb un 'tipus' per indicar si string, date, number, float...",
-						"enum": ["dd/mm/yyyy"]
-					},
-					"NDecimals": { 
-						"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
-						"type": "number",
-						"minimum": 0,
-						"maximum": 20,
-						"multipleOf" : 1
-					},
-					"serieTemporal": {
-						"description": "Els valors d'aquest atribut formen una sèrie temporal que s'ha de mostrar com una gràfica",
-						"type": "object",
-						"required": ["color"],
-						"properties": {
-							"color": {
-								"description": "Color de la línia de la gràfica",
-								"type": "string"
-							}
-						}
-					}
-				}
+			"description": "Objecte que descriu els atributs. Si un atribut no és aquí descrit no es mostra mai a les consultes. A més, l'ordre de la defició dels atributs (aquest objecte) mana ordre en que les propietats es veuen a les consultes.",
+			"type": "object",
+			"additionalProperties": { 
+				"$ref": "config_attributes_metaschema.json#/definitions/AttributeDescription"
 			}
 		},
 		"tractamentVariable": {
@@ -3448,11 +3357,11 @@
 			"properties": {
 				"standard": {
 					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ). {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions es descriuen al mateix fitxer de metadades",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"document": {
 					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"guf": {
 					"description": "DEPRECATED: Tota capa pot tenir feedback. Abans indicava si es pot llegir i proporcionar geospatial user feedback sobre aquest item",
@@ -3499,7 +3408,7 @@
 				},
 				"statement": {
 					"description": "Textual information on how to interpret the data or that complements the quality result",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},							
 				"result": {
 					"description": "Array of results",
@@ -3622,7 +3531,7 @@
 			"properties": { 
 				"statement": {
 					"description": "Textual information on the lineage of the data",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"grup":{
 					"description":"Grup de processos de llinatge",
@@ -3660,7 +3569,7 @@
 				},
 				"purpose": {
 					"description": "Textual description of the process",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"timeDate": {
 					"description": "When the process was done",
@@ -3691,7 +3600,7 @@
 							"properties": {
 								"name": {
 									"description": "Name of the algortihm ",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								},
 								"responsibleParty": {				
 									"type": "array",
@@ -3701,7 +3610,7 @@
 								},
 								"functionality": {
 									"description": "Functionality given by the algorithm",
-									"$ref": "#/definitions/StringOCadenaLang" 
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 								}
 							}
 						}						
@@ -3726,11 +3635,11 @@
 				},
 				"name": {
 					"description": " En el cas de paràmetres de tipus Param#, hi pot haver un nom més descriptiu del paràmetre",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"purpose": {
 					"description": "Description of the parameter",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"direction": {
 					"description": "Sentit del paràmetre",
@@ -3762,7 +3671,7 @@
 				},
 				"description": {
 					"description": "Description of the source",
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"responsibleParty": {				
 					"type": "array",
@@ -3797,7 +3706,7 @@
 				},
 				"desc":{
 					"description": "Descripció del grup", 
-					"$ref": "#/definitions/StringOCadenaLang" 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				}
 			}
 		},
