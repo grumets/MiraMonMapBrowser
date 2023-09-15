@@ -39,7 +39,6 @@
 "use strict"
 
 var indexStoryMapActiu=null;
-const midaLimitImatge = 2621440; // Unitats en Bytes. Equival a 2,5MB de dades per imatge.
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
 
 
@@ -154,7 +153,7 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
 
-	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType) && fitxerObjectiu.size <= midaLimitImatge)
+	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType))
 	{
 		const canvasId = "reduccioImatges";
 		let canvasReduccioImg = document.getElementById(canvasId);
@@ -220,7 +219,7 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 			const cntx = canvasReduccioImg.getContext("2d");
 			cntx.putImageData(result, 0, 0, 0, 0, result.width/2, result.height/2);
 			const imatge = document.getElementById(imatgeId);
-			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0);
+			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 			
 			if (imatge && imatgeReduida)
 			{
