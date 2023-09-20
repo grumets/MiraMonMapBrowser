@@ -167,7 +167,7 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 				URL.revokeObjectURL(this.src);
 				if (this.height && this.width)
 				{
-					resolve([this.width, this.height]);
+					resolve(this);
 				}
 				else
 				{
@@ -176,48 +176,25 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 			};
 
 			imageToMesure.src = urlIamge;
-
 		}).then(result => {
-			return new Promise ((resolve, reject) => {
+
+			let ultimElem = document.getElementById(ultimElemId);
+			if (!canvasReduccioImg)
+			{
+				canvasReduccioImg = document.createElement("canvas");
+				canvasReduccioImg.setAttribute("id", canvasId);
 				
-				var reader = new FileReader();
-				reader.onload = function ()
+				if (ultimElem)
 				{
-					if (this.readyState == FileReader.DONE)
-					{
-						let arrayPixels = new Uint8ClampedArray(this.result);
-						let ultimElem = document.getElementById(ultimElemId);
-						if (!canvasReduccioImg)
-						{
-							canvasReduccioImg = document.createElement("canvas");
-							canvasReduccioImg.setAttribute("id", canvasId);
+					canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+				}
+			} 
 
-							if (ultimElem)
-							{
-								canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
-							}
-						} 
+			canvasReduccioImg.width = result.width/2;
+			canvasReduccioImg.height = result.height/2;
 
-						try{
-							
-							var imageData = canvasReduccioImg.getContext('2d').createImageData(result[0], result[1]);
-							imageData.data.set(arrayPixels);
-							resolve(imageData);
-							//resolve(new ImageData(arrayPixels, result[0], result[1])); no funciona
-						}
-						catch(error)
-						{
-							reject(console.log("Tenim una DOMException amb codi: " + error.code + " i nom: " + error.name));
-						}
-					}
-				};
-
-				reader.readAsArrayBuffer(input.files[0]);
-			});
-		}).then(result => {
-				
 			const cntx = canvasReduccioImg.getContext("2d");
-			cntx.putImageData(result, 0, 0, 0, 0, result.width/2, result.height/2);
+			cntx.drawImage(result, 0, 0, result.width/2, result.height/2);
 			const imatge = document.getElementById(imatgeId);
 			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 			
