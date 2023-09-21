@@ -48,7 +48,7 @@
 					"type": [ "string", "null" ]
 				},
 				"UoMSymbol": {
-					"description": "Symbol of the units of measurement of the atributte.",
+					"description": "Symbol of the units of measurement of the attribute.",
 					"type": [ "string", "null" ]
 				},
 				"UoMDefinition": {
