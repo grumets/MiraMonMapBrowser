@@ -1329,23 +1329,23 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, a
 	// b/ afegir els estadístics
 	if (DonaTractamentComponent(capa[1].estil[condicio[1].i_estil], 0)=="categoric")
 	{
-		atrib_nous["$stat$_i_mode"]={description: GetMessage("ModalClass"), mostrar: "no"};
-		atrib_nous["$stat$_mode"]={description: GetMessage("ModalClass"), mostrar: "si_ple"};
-		atrib_nous["$stat$_percent_mode"]={description: GetMessage("PercentageMode"), mostrar: "si_ple", UoM: "%", NDecimals: n_dec_estad};
+		atrib_nous["$stat$_i_mode"]={descripcio: GetMessageJSON("ModalClass"), mostrar: "no"};
+		atrib_nous["$stat$_mode"]={descripcio: GetMessageJSON("ModalClass"), mostrar: "si_ple"};
+		atrib_nous["$stat$_percent_mode"]={descripcio: GetMessageJSON("PercentageMode"), mostrar: "si_ple", UoM: "%", NDecimals: n_dec_estad};
 	}
 	else
 	{
 		var n_atrib_ori=atrib_nous.length;
 		/* marco alguns a mostrar "no" per provar que lo de darrera va, però després la idea és que quan s'esculli que vols crear estadístics
 		quins vols que es mostrin (es calculen sempre tots)*/
-		atrib_nous["$stat$_sum"]={description: GetMessage("Sum"), mostrar: "si_ple", symbol: "&Sigma;"};
-		atrib_nous["$stat$_sum_area"]={description: GetMessage("SumArea"), mostrar: "si_ple", symbol: "&Sigma;<small>a</small>"};
-		atrib_nous["$stat$_mean"]={description: GetMessage("Mean"), mostrar: "si_ple", symbol: "x&#772"}; //x-bar
-		atrib_nous["$stat$_variance"]={description: GetMessage("Variance"), mostrar: "si_ple", symbol: "&sigma;²"};
-		atrib_nous["$stat$_stdev"]={description: GetMessage("StandardDeviation"), mostrar: "si_ple", symbol: "&sigma;"};
-		atrib_nous["$stat$_min"]={description: GetMessage("Minimum"), mostrar: "si_ple", symbol: "Min"};
-		atrib_nous["$stat$_max"]={description: GetMessage("Maximum"), mostrar: "si_ple", symbol: "Max"};
-		atrib_nous["$stat$_range"]={description: GetMessage("Range"), mostrar: "si_ple"};
+		atrib_nous["$stat$_sum"]={descripcio: GetMessageJSON("Sum"), mostrar: "si_ple", symbol: "&Sigma;"};
+		atrib_nous["$stat$_sum_area"]={descripcio: GetMessageJSON("SumArea"), mostrar: "si_ple", symbol: "&Sigma;<small>a</small>"};
+		atrib_nous["$stat$_mean"]={descripcio: GetMessageJSON("Mean"), mostrar: "si_ple", symbol: "x&#772"}; //x-bar
+		atrib_nous["$stat$_variance"]={descripcio: GetMessageJSON("Variance"), mostrar: "si_ple", symbol: "&sigma;²"};
+		atrib_nous["$stat$_stdev"]={descripcio: GetMessageJSON("StandardDeviation"), mostrar: "si_ple", symbol: "&sigma;"};
+		atrib_nous["$stat$_min"]={descripcio: GetMessageJSON("Minimum"), mostrar: "si_ple", symbol: "Min"};
+		atrib_nous["$stat$_max"]={descripcio: GetMessageJSON("Maximum"), mostrar: "si_ple", symbol: "Max"};
+		atrib_nous["$stat$_range"]={descripcio: GetMessageJSON("Range"), mostrar: "si_ple"};
 
 		if (capa[1].estil[condicio[1].i_estil].DescItems)
 		{

@@ -124,6 +124,8 @@ var esNODATA, esLink, esImatge;
 					}
 				}
 			}
+			if(!consulta.attributes)
+				consulta.attributes={};
 			for(i=0; i<arrel.childNodes.length; i++)
 			{
 				tag=arrel.childNodes[i];
@@ -261,7 +263,8 @@ var i, j;
 	{
 		if (!doc.features[i].properties)
 			continue;
-
+		if(!consulta.attributes)
+			consulta.attributes={};
 		for (j in doc.features[i].properties)
 		{
 			consulta.attributtes[j]={
@@ -294,7 +297,7 @@ function MostraConsultaComHTML(consulta)
 
 		if(consulta.estat==EstatXMLOmplert)
 		{
-			attributesArray=Object.keys(consulta.attributes)
+			var attributesArray=Object.keys(consulta.attributes);
 			if(attributesArray.length>0)
 			{
 				var i_capa_validar=-1;
@@ -311,11 +314,11 @@ function MostraConsultaComHTML(consulta)
 				}
 				for(var i=0; i<attributesArray.length; i++)
 				{
-					if(consulta.attribute[attributesArray[i]].mostrar=="no")
+					if(consulta.attributes[attributesArray[i]].mostrar=="no")
 						continue;
-					if(consulta.attribute[attributesArray[i]].mostrar=="si_ple" && (typeof consulta.attribute[attributesArray[i]].valor === "undefined" || consulta.attribute[attributesArray[i]].valor==null || consulta.attribute[attributesArray[i]].valor==""))
+					if(consulta.attributes[attributesArray[i]].mostrar=="si_ple" && (typeof consulta.attributes[attributesArray[i]].valor === "undefined" || consulta.attributes[attributesArray[i]].valor==null || consulta.attributes[attributesArray[i]].valor==""))
 						continue;
-					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, 0, i, attributesArray[i], consulta.attribute[attributesArray[i]], consulta.attribute[attributesArray[i]].separador, consulta.attribute[attributesArray[i]].valor, i_capa_validar, true));
+					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, 0, i, attributesArray[i], consulta.attributes[attributesArray[i]], consulta.attributes[attributesArray[i]].separador, consulta.attributes[attributesArray[i]].valor, i_capa_validar, true));
 				}
 				contentLayer(elem, cdns.join(""));
 				//Com posar la serieTemporal aquí? Tot depen de com vinguin els valors. Tal com està ara hi ha un valor per cada attribute o sigui no anem bé.

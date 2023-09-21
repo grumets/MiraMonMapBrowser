@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -722,9 +722,9 @@ function DonaCadenaNomDesc(a)
 
 function DonaCadenaDescripcioAttribute(nom, a, compacte)
 {
-	if (compacte && a.symbol)
-		return a.symbol;
-	return a.descripcio ? DonaCadena(a.descripcio) : (a.description ? a.description : (a.symbol ? a.symbol : a.nom));
+	if (compacte)
+		return a.symbol ? a.symbol : nom;
+	return a.descripcio ? DonaCadena(a.descripcio) : (a.description ? a.description : (a.symbol ? a.symbol : nom));
 }
 
 function DonaCadenaNomDescFormula(formula, a)
