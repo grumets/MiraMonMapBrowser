@@ -136,7 +136,7 @@ function TancaICreaStoryMap()
 {
 	const lastStoryStepElement = "lastStoryStepElement";
 	const storyStepImage = "storyMainImage";
-	//Tancar la caixa de les histories
+	//Tancar la finestra de la graella de les histories
 	TancaFinestraLayer("triaStoryMap");
 
 	if (isFinestraLayer(window, "creaStoryMap"))
@@ -149,7 +149,7 @@ function TancaICreaStoryMap()
 	ObreFinestra(window, "creaStoryMap");
 }
 
-function CarregaImatgeStoryMap(input, imatgeId, ultimElemId) 
+function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
 
@@ -165,7 +165,7 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 
 			imageToMesure.onload =  function () {
 				URL.revokeObjectURL(this.src);
-				if (this.height && this.width)
+				if (this)
 				{
 					resolve(this);
 				}
@@ -195,12 +195,13 @@ function CarregaImatgeStoryMap(input, imatgeId, ultimElemId)
 
 			const cntx = canvasReduccioImg.getContext("2d");
 			cntx.drawImage(result, 0, 0, result.width/2, result.height/2);
-			const imatge = document.getElementById(imatgeId);
+			const tinyEditor = tinymce.get(tinyEditId);
 			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 			
-			if (imatge && imatgeReduida)
+			if (tinyEditor && imatgeReduida)
 			{
-				imatge.src = imatgeReduida;
+				let writenOnTiny = tinyEditor.getContent();
+				tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width= 400>");
 			}
 		});
 	}
@@ -220,23 +221,31 @@ function SeguentPasStoryMap()
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
 	const stepPictureId = "stepImg" + comptadorPassos;
+	const tinyTextId = "storyTextArea"+comptadorPassos;
 	const ultimElementStorymapId = "ultimElementStorymap";
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + stepPictureId + "\", \"" + ultimElementStorymapId + "\")'>", 
+	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + ultimElementStorymapId + "\")'>", 
 	"<img id='" + stepPictureId + "' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
 	"<input id='" + ultimElementStorymapId + "' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
-	tinytextarea.setAttribute("id", "storyTextArea"+comptadorPassos)
+	tinytextarea.setAttribute("id", tinyTextId)
 	const imgStep = document.getElementById(stepPictureId);
 	imgStep.parentNode.insertBefore(tinytextarea, imgStep);
 	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
 	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
 
 	tinymce.init({
-        target: tinytextarea
+        target: tinytextarea,
+		toolbar: 'insertImageButton',
+		setup: (editor) => {
+			editor.ui.registry.addButton('insertImageButton', {
+				text: 'Attach Image',
+				onAction: (_) => editor.insertContent(`&nbsp;<strong>It's my button!</strong>&nbsp;`)
+			  });
+		}
     });
 }
 
