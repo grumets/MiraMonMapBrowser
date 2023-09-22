@@ -1065,7 +1065,7 @@ function PreparaCtxColorVoraOInterior(vista, capa_digi, feature, previ, ctx, ctx
 		ctx[ctx_style]=estil_interior_o_vora.paleta.colors[0];
 		return;
 	}
-	valor=DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa_digi, feature, attribute, i_col, i_fil);
+	valor=DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa_digi, feature, attribute, estil_interior_o_vora.NomCamp, i_col, i_fil);
 	if (isNaN(valor))
 	{
 		ctx[ctx_style]="rgba(255,255,255,0)";
@@ -1241,7 +1241,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 			if (simbols.NomCamp)
 			{
 				//Precàrrega de valors si hi ha referències ràster.
-				i=DonaIAttributesDesDeNomAtribut(capa, attributes, simbols.NomCamp)
+				i=DonaIAttributesDesDeNomAttribute(capa, attributes, simbols.NomCamp)
 				if (i==-1)
 				{
 					AlertaNomAttributeIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa);
@@ -1380,7 +1380,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
+						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], estil.NomCampSel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -1451,7 +1451,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					}
 					else if (estil.NomCampSel)
 					{
-						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
+						if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], estil.NomCampSel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 						{
 							if (forma.voraSel)
 							{
@@ -1563,7 +1563,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 									icona=simbol[i_simbol].IconaSel;
 								else if (estil.NomCampSel)
 								{
-									if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
+									if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], estil.NomCampSel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 										icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].IconaSel: simbol[i_simbol].icona);
 									else
 										icona=(simbol[i_simbol].IconaSel ?simbol[i_simbol].icona: null);
@@ -1611,7 +1611,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 												}
 												else if (estil.NomCampSel)
 												{
-													if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
+													if(DeterminaValorAttributeObjecteCapaDigi(vista.i_nova_vista, capa, feature, attributes[estil.NomCampSel], estil.NomCampSel, i_col, i_fil)==true)  //Sistema que fen servir per les consultes per attribute en vectors
 													{
 														if (forma.voraSel)
 														{
