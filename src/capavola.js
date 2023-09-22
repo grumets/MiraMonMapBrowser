@@ -180,7 +180,7 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	contentFinestraLayer(window, "fbScope", cdns.join(""));
 }
 
-//OG: afegim el bbox i el gmlpol als atributs del target abans d'enviar-ho al NiMMbus.
+//OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
 function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
 {
 	//comprovem que tenim totes les coordenades
@@ -529,8 +529,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features":[{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -580,8 +578,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -634,8 +630,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0, 0]
@@ -645,14 +639,13 @@ function CreaCapesVolatils()
 							},
 						}]
 					},
-					"atributs": [
+					"attributes": { "radius":
 						{
-							"nom": "radius",
-							"descripcio": "Buffer",
-							"unitats": "m",
+							"description": "Buffer",
+							"UoM": "m",
 							"mostrar": "si"
 						}
-					],
+					},
 					"estil": [{
 						"nom": null,
 						"desc":	null,
@@ -722,8 +715,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features":[{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0,0]
@@ -775,8 +766,6 @@ function CreaCapesVolatils()
 						"type": "FeatureCollection",
 						"features": [{
 							"id": null,
-							"data": null,
-							//"i_simbol": 0,
 							"geometry": {
 								"type": "Point",
 								"coordinates": [0, 0]
@@ -786,14 +775,13 @@ function CreaCapesVolatils()
 							},
 						}]
 					},
-					"atributs": [
+					"attributes": { "uncertainty":
 						{
-							"nom": "uncertainty",
-							"descripcio": "Uncertainty",
-							"unitats": "m",
+							"description": "Uncertainty",
+							"UoM": "m",
 							"mostrar": "si"
 						}
-					],
+					},
 					"estil": [{
 						"nom": null,
 						"desc":	null,

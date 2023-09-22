@@ -96,9 +96,9 @@ function CommandMMNSetLayersAndStyles(layers, styles)
 	return 0;
 }
 
-function CommandMMNAddGeoJSONLayer(desc, geojson, atributs, estil, data)
+function CommandMMNAddGeoJSONLayer(desc, geojson, attributes, estil, data)
 {
-	AfegeixCapaGeoJSON(NumeroDeCapesVolatils(-1), desc, geojson, atributs, estil, data);
+	AfegeixCapaGeoJSON(NumeroDeCapesVolatils(-1), desc, geojson, attributes, estil, data);
 	return 0;
 }
 
@@ -129,13 +129,7 @@ var sel, capa, estil, i_estil;
 		
 		if(capa.model==model_vector)
 		{
-			for (var i_atr=0; i_atr<capa.atributs.length; i_atr++)
-			{
-				if(sel.id==capa.atributs[i_atr].nom)
-					continue;
-			}
-			capa.atributs[i_atr]={"nom": sel.id,
-						"FormulaConsulta": sel.q,
+			capa.attributes[sel.id]={"FormulaConsulta": sel.q,
 						"desc": sel.id};
 			estil.NomCampSel=sel.id;
 		}

@@ -40,7 +40,7 @@
 
 function AfegeixIcapaACalcul(calcul, i_capa, estil_o_atribut)
 {
-var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
+var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in attributes " : " estil ";
 var fragment, inici, final, cadena, nou_valor;
 var calcul_amb_icapa="";
 	fragment=calcul;
@@ -90,7 +90,7 @@ function SonValorsDimensionsIguals(dim1, dim2)
 (la segona part només és vàlida per vectors).*/
 function DonaFormulaConsultaDesDeCalcul(calcul, i_capa, estil_o_atribut)
 {
-var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in atributs " : " estil ";
+var text_estil_attribut=ParamCtrl.capa[i_capa].model==model_vector ? " name in attributes " : " estil ";
 //Busco la descripció de cada "valor" en la operació i creo un equivalent FormulaConsulta
 //busco una clau d'obrir
 var i, fragment, inici, final, cadena, nou_valor, c, i_capa_link, prop_nou_valor, i_prop_nou_valor, dim, i_dim, nom_dim, valor, i_v_dim;
@@ -399,7 +399,7 @@ var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
 	{
 		for (i=0; i<valors.length; i++)
 		{
-			if (capa.atributs[i_estil_o_atrib].FormulaConsulta.indexOf("v["+i+"]")!=-1)
+			if (capa.attributes[i_estil_o_atrib].FormulaConsulta.indexOf("v["+i+"]")!=-1)
 				v[i]=true;
 		}
 		return v;
@@ -575,8 +575,8 @@ var capa=ParamCtrl.capa[i_capa], estil, component, valors=capa.valors, valor, i_
 
 	if (component.length==1 || component.length==2)
 	{
-		if (estil.categories && estil.atributs)
-			return DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, v_c[0], false, compacte);
+		if (estil.categories && estil.attributes)
+			return DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, v_c[0], false, compacte);
 		return (typeof component[0].NDecimals!=="undefined" && component[0].NDecimals!=null) ? OKStrOfNe(v_c[0], component[0].NDecimals) : v_c[0].toString();
 	}
 	var cdns=[];
@@ -1984,7 +1984,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 					if (estad_cat.recompte)
 					{
 						categories[i_categ]["$stat$_i_mode"]=estad_cat.i_moda;
-						categories[i_categ]["$stat$_mode"]=DonaTextCategoriaDesDeColor(component1.herenciaOrigen.categories, component1.herenciaOrigen.atributs, estad_cat.i_moda, true);
+						categories[i_categ]["$stat$_mode"]=DonaTextCategoriaDesDeColor(component1.herenciaOrigen.categories, component1.herenciaOrigen.attributes, estad_cat.i_moda, true);
 						categories[i_categ]["$stat$_percent_mode"]=categories[i_categ]["$stat$_histo"].classe[estad_cat.i_moda]/estad_cat.recompte*100;
 					}
 				}
@@ -2572,7 +2572,7 @@ var data;
 					//HistogramaFinestra.vista[i_histo].chart[0].config.data.valors=(retorn_prep_histo.valors ? retorn_prep_histo.valors : null);
 					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].data=retorn_prep_histo.data_estad;
 					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].backgroundColor=retorn_prep_histo.colors_estad;
-					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].unitats=retorn_prep_histo.unitats_estad;
+					HistogramaFinestra.vista[i_histo].chart[1].config.data.datasets[0].unitats=retorn_prep_histo.UoM_estad;
 					HistogramaFinestra.vista[i_histo].chart[1].options=retorn_prep_histo.options_estad;
 					HistogramaFinestra.vista[i_histo].chart[1].update();
 				}
@@ -2610,7 +2610,7 @@ var data;
 	}
 }
 
-//Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per atributs calculats de capes vectorials a partir de capes raster.
+//Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per attributes calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
 var i, i_event;

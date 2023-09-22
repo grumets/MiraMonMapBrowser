@@ -792,37 +792,42 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 				}
 			}
 		}
-		if (capa.atributs && capa.atributs.length)
+		if (capa.attributes)
 		{
-			for (j=0; j<capa.atributs.length; j++)
+			var attributes=capa.attributes;
+			var attributesArray=Object.keys(attributes);
+			if (attributesArray.length)
 			{
-				if (capa.atributs[j].calcul)
+				for (j=0; j<attributesArray.length; j++)
 				{
-					calcul="";
-					fragment=capa.atributs[j].calcul;
-					while ((inici=fragment.indexOf('{'))!=-1)
+					if (attributes[attributesArray[j]].calcul)
 					{
-						//busco una clau de tancar
-						final=fragment.indexOf('}');
-						if (final==-1)
+						calcul="";
+						fragment=attributes[attributesArray[j]].calcul;
+						while ((inici=fragment.indexOf('{'))!=-1)
 						{
-							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
-							break;
+							//busco una clau de tancar
+							final=fragment.indexOf('}');
+							if (final==-1)
+							{
+								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
+								break;
+							}
+							cadena=fragment.substring(inici, final+1);
+							//interpreto el fragment metajson
+							nou_valor=JSON.parse(cadena);
+							if (nou_valor.i_capa>=i_capa_ini && nou_valor.i_capa<i_capa_fi_per_sota)
+							{
+								nou_valor.i_capa+=n_moviment;
+								calcul+=fragment.substring(0, inici)+JSON.stringify(nou_valor);
+							}
+							else
+								calcul+=fragment.substring(0, inici)+cadena;
+							fragment=fragment.substring(final+1, fragment.length);
 						}
-						cadena=fragment.substring(inici, final+1);
-						//interpreto el fragment metajson
-						nou_valor=JSON.parse(cadena);
-						if (nou_valor.i_capa>=i_capa_ini && nou_valor.i_capa<i_capa_fi_per_sota)
-						{
-							nou_valor.i_capa+=n_moviment;
-							calcul+=fragment.substring(0, inici)+JSON.stringify(nou_valor);
-						}
-						else
-							calcul+=fragment.substring(0, inici)+cadena;
-						fragment=fragment.substring(final+1, fragment.length);
+						calcul+=fragment;
+						attributes[attributesArray[j]].calcul=calcul;
 					}
-					calcul+=fragment;
-					capa.atributs[j].calcul=calcul;
 				}
 			}
 		}
@@ -853,31 +858,37 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 				}
 			}
 		}
-		if (capa.atributs && capa.atributs.length)
+		if (capa.attributes)
 		{
-			for (j=0; j<capa.atributs.length; j++)
+			var attributes=capa.attributes;
+			var attributesArray=Object.keys(attributes);
+		
+			if (attributesArray.length)
 			{
-				if (!capa.atributs[j].calcul)
-					continue;
-				fragment=capa.atributs[j].calcul;
-				while ((inici=fragment.indexOf('{'))!=-1)
+				for (j=0; j<attributesArray.length; j++)
 				{
-					//busco una clau de tancar
-					final=fragment.indexOf('}');
-					if (final==-1)
+					if (!attributes[attributesArray[j]].calcul)
+						continue;
+					fragment=attributes[attributesArray[j]].calcul;
+					while ((inici=fragment.indexOf('{'))!=-1)
 					{
-						alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
-						break;
+						//busco una clau de tancar
+						final=fragment.indexOf('}');
+						if (final==-1)
+						{
+							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
+							break;
+						}
+						cadena=fragment.substring(inici, final+1);
+						//interpreto el fragment metajson
+						nou_valor=JSON.parse(cadena);
+						if (nou_valor.i_capa==i_capa)
+						{
+							if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
+								return false;
+						}
+						fragment=fragment.substring(final+1, fragment.length);
 					}
-					cadena=fragment.substring(inici, final+1);
-					//interpreto el fragment metajson
-					nou_valor=JSON.parse(cadena);
-					if (nou_valor.i_capa==i_capa)
-					{
-						if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesEraseContinue", "cntxmenu") + "?"))
-							return false;
-					}
-					fragment=fragment.substring(final+1, fragment.length);
 				}
 			}
 		}
@@ -988,16 +999,18 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 				}
 			}
 		}
-		if (capa.atributs && capa.atributs.length)
+		if (capa.attributes)
 		{
-			for (j=0; j<capa.atributs.length; j++)
+			var attributes=capa.attributes;
+			var attributesArray=Object.keys(attributes);
+			if (attributesArray.length)
 			{
-				if (capa.atributs[j].calcul)
+				for (j=0; j<attributesArray.length; j++)
 				{
-					if (capa.atributs[j].calcul)
+					if (attributes[attributesArray[j]].calcul)
 					{
 						calcul="";
-						fragment=capa.atributs[j].calcul;
+						fragment=attributes[attributesArray[j]].calcul;
 						while ((inici=fragment.indexOf('{'))!=-1)
 						{
 							//busco una clau de tancar
@@ -1020,7 +1033,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 							fragment=fragment.substring(final+1, fragment.length);
 						}
 						calcul+=fragment;
-						capa.atributs[j].calcul=calcul;
+						attributes[attributesArray[j]].calcul=calcul;
 					}
 				}
 			}
@@ -1035,31 +1048,36 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 	for(var i=0; i<ParamCtrl.capa.length; i++)
 	{
 		capa=ParamCtrl.capa[i];
-		if (capa.atributs && capa.atributs.length)
+		if (capa.attributes)
 		{
-			for (j=0; j<capa.atributs.length; j++)
+			var attributes=capa.attributes;
+			var attributesArray=Object.keys(attributes);
+			if (attributesArray.length)
 			{
-				if (!capa.atributs[j].calcul)
-					continue;
-				fragment=capa.atributs[j].calcul;
-				while ((inici=fragment.indexOf('{'))!=-1)
+				for (j=0; j<attributesArray.length; j++)
 				{
-					//busco una clau de tancar
-					final=fragment.indexOf('}');
-					if (final==-1)
+					if (!capa.attributes[attributesArray[j]].calcul)
+						continue;
+					fragment=capa.attributes[attributesArray[j]].calcul;
+					while ((inici=fragment.indexOf('{'))!=-1)
 					{
-						alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
-						break;
+						//busco una clau de tancar
+						final=fragment.indexOf('}');
+						if (final==-1)
+						{
+							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
+							break;
+						}
+						cadena=fragment.substring(inici, final+1);
+						//interpreto el fragment metajson
+						nou_valor=JSON.parse(cadena);
+						if (nou_valor.i_capa==i_capa && nou_valor.i_estil==i_estil)
+						{
+							if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
+								return false;
+						}
+						fragment=fragment.substring(final+1, fragment.length);
 					}
-					cadena=fragment.substring(inici, final+1);
-					//interpreto el fragment metajson
-					nou_valor=JSON.parse(cadena);
-					if (nou_valor.i_capa==i_capa && nou_valor.i_estil==i_estil)
-					{
-						if (false==confirm(GetMessage("TheLayer") + " " + DonaCadena(capa.desc) + " " + GetMessage("containsReferencesStyleEraseContinue", "cntxmenu") + "?"))
-							return false;
-					}
-					fragment=fragment.substring(final+1, fragment.length);
 				}
 			}
 		}
@@ -1105,7 +1123,7 @@ function AfegeixCapaCombicapaCategoric(desc_usu)
 {
 var alguna_capa_afegida=false;
 
-var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib_nous, colors=[], i_color_tipic;
+var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes, atrib_nous, colors=[], i_color_tipic;
 
 	if (!PaletesGlobals)
 	{
@@ -1170,31 +1188,29 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 		}
 	}
 
-	//Creo la descripció des atributs
-	atributs=[capa[0].estil[condicio[0].i_estil].atributs, capa[1].estil[condicio[1].i_estil].atributs];
-	atrib_nous=[];
+	//Creo la descripció des attributes
+	two_attributes=[capa[0].estil[condicio[0].i_estil].attributes, 
+		capa[1].estil[condicio[1].i_estil].attributes];
+	atrib_nous={};
 
-	for (var i=0; i<atributs[0].length; i++)
+	var attributesArray=Object.keys(two_attributes[0]);
+	for (var i=0; i<attributesArray.length; i++)
 	{
-		atrib_nous.push(JSON.parse(JSON.stringify(atributs[0][i])));
-		atrib_nous[atrib_nous.length-1].nom+="1";
-		if (atrib_nous[atrib_nous.length-1].descripcio)
-			atrib_nous[atrib_nous.length-1].descripcio=
-			ConcatenaCadenes(ConcatenaCadenes(ConcatenaCadenes(atrib_nous[atrib_nous.length-1].descripcio," ("),(capa[0].DescLlegenda?capa[0].DescLlegenda:capa[0].nom)),")");
-			//DonaCadena(atrib_nous[atrib_nous.length-1].descripcio)+ " ("+ (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom) + ")";
+		atrib_nous[attributesArray+"1"]=JSON.parse(JSON.stringify(two_attributes[0][attributesArray[i]]));
+		if (atrib_nous[attributesArray+"1"].descripcio)
+			atrib_nous[attributesArray+"1"].descripcio=
+				ConcatenaCadenes(ConcatenaCadenes(ConcatenaCadenes(atrib_nous[attributesArray+"1"].descripcio," ("),(capa[0].DescLlegenda?capa[0].DescLlegenda:capa[0].nom)),")");
 	}
-	for (var i=0; i<atributs[1].length; i++)
+	for (var i=0; i<two_attributes[1].length; i++)
 	{
-		atrib_nous.push(JSON.parse(JSON.stringify(atributs[1][i])));
-		atrib_nous[atrib_nous.length-1].nom+="2";
-		if (atrib_nous[atrib_nous.length-1].descripcio)
-			atrib_nous[atrib_nous.length-1].descripcio=
-			ConcatenaCadenes(ConcatenaCadenes(ConcatenaCadenes(atrib_nous[atrib_nous.length-1].descripcio," ("),(capa[1].DescLlegenda?capa[1].DescLlegenda:capa[1].nom)),")");
-			//DonaCadena(atrib_nous[atrib_nous.length-1].descripcio)+ " ("+ (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom) + ")";
+		atrib_nous[attributesArray+"2"]=JSON.parse(JSON.stringify(two_attributes[1][attributesArray[i]]));
+		if (atrib_nous[attributesArray+"1"].descripcio)
+			atrib_nous[attributesArray+"1"].descripcio=
+				ConcatenaCadenes(ConcatenaCadenes(ConcatenaCadenes(atrib_nous[attributesArray+"1"].descripcio," ("),(capa[1].DescLlegenda?capa[1].DescLlegenda:capa[1].nom)),")");
 	}
 	var desc_capa=desc_usu ? desc_usu : (
-	ConcatenaCadenes(GetMessage("CombinationOf", "cntxmenu"), ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), ConcatenaCadenes(" ",ConcatenaCadenes(GetMessage("and"),ConcatenaCadenes(" " ,(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom)))))))
-	);
+	ConcatenaCadenes(GetMessage("CombinationOf", "cntxmenu"), 
+			ConcatenaCadenes((DonaCadena(capa[0].desc) ? DonaCadena(capa[0].desc) : (DonaCadena(capa[0].DescLlegenda) ? DonaCadena(capa[0].DescLlegenda): capa[0].nom)), ConcatenaCadenes(" ",ConcatenaCadenes(GetMessage("and"),ConcatenaCadenes(" " ,(DonaCadena(capa[1].desc) ? DonaCadena(capa[1].desc) : (DonaCadena(capa[1].DescLlegenda) ? DonaCadena(capa[1].DescLlegenda): capa[1].nom))))))));
 	var cadena_desc_llegenda=desc_usu ? desc_usu : (ConcatenaCadenes(ConcatenaCadenes((capa[0].DescLlegenda ? capa[0].DescLlegenda: capa[0].nom), GetMessageJSON("_and_", "cntxmenu")), (capa[1].DescLlegenda?capa[1].DescLlegenda : capa[1].nom)));
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
@@ -1237,7 +1253,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 				}
 			}],
 			"categories": cat_noves,
-			"atributs": atrib_nous,
+			"attributes": atrib_nous,
 			"metadades": null,
 			"ncol": 1,
 			"paleta": {
@@ -1278,7 +1294,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, atributs, atrib
 function AfegeixTransferenciaEstadistics(desc_usu)
 {
 var alguna_capa_afegida=false;
-var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atrib_nous=[], i_color_tipic;
+var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, atrib_nous, i_color_tipic;
 
 	condicio[0]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 2);
 	condicio[1]=LlegeixParametresCondicioCapaDataEstil("afegeix-capa-capa-combicap", "-valor", 3);
@@ -1307,55 +1323,69 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 
 	var n_dec_estad=4;
 
-	//Creo la descripció dels atributs
-	// a/ les categories com a primer atribut i tots els estadístics de la segona capa després
-	for (var i_atrib_capa_0=0; i_atrib_capa_0<capa[0].estil[condicio[0].i_estil].atributs.length; i_atrib_capa_0++)
-		atrib_nous.push(JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].atributs[i_atrib_capa_0])));
+	//Creo la descripció dels attributes
+	// a/ les categories com a primer attribute i tots els estadístics de la segona capa després
+	atrib_nous=JSON.parse(JSON.stringify(capa[0].estil[condicio[0].i_estil].attributes));
 	// b/ afegir els estadístics
 	if (DonaTractamentComponent(capa[1].estil[condicio[1].i_estil], 0)=="categoric")
 	{
-		atrib_nous.push({nom: "$stat$_i_mode", descripcio: GetMessage("ModalClass"), mostrar: "no"});
-		atrib_nous.push({nom: "$stat$_mode", descripcio: GetMessage("ModalClass"), mostrar: "si_ple"});
-		atrib_nous.push({nom: "$stat$_percent_mode", descripcio: GetMessage("PercentageMode"), mostrar: "si_ple", unitats: "%", NDecimals: n_dec_estad});
+		atrib_nous["$stat$_i_mode"]={descripcio: GetMessageJSON("ModalClass"), mostrar: "no"};
+		atrib_nous["$stat$_mode"]={descripcio: GetMessageJSON("ModalClass"), mostrar: "si_ple"};
+		atrib_nous["$stat$_percent_mode"]={descripcio: GetMessageJSON("PercentageMode"), mostrar: "si_ple", UoM: "%", NDecimals: n_dec_estad};
 	}
 	else
 	{
 		var n_atrib_ori=atrib_nous.length;
 		/* marco alguns a mostrar "no" per provar que lo de darrera va, però després la idea és que quan s'esculli que vols crear estadístics
 		quins vols que es mostrin (es calculen sempre tots)*/
-		atrib_nous.push({nom: "$stat$_sum", descripcio: GetMessage("Sum"), mostrar: "si_ple", simbol: "&Sigma;"});
-		atrib_nous.push({nom: "$stat$_sum_area", descripcio: GetMessage("SumArea"), mostrar: "si_ple", simbol: "&Sigma;<small>a</small>"});
-		atrib_nous.push({nom: "$stat$_mean", descripcio: GetMessage("Mean"), mostrar: "si_ple", simbol: "x&#772"}); //x-bar
-		atrib_nous.push({nom: "$stat$_variance", descripcio: GetMessage("Variance"), mostrar: "si_ple", simbol: "&sigma;²"});
-		atrib_nous.push({nom: "$stat$_stdev", descripcio: GetMessage("StandardDeviation"), mostrar: "si_ple", simbol: "&sigma;"});
-		atrib_nous.push({nom: "$stat$_min", descripcio: GetMessage("Minimum"), mostrar: "si_ple", simbol: "Min"});
-		atrib_nous.push({nom: "$stat$_max", descripcio: GetMessage("Maximum"), mostrar: "si_ple", simbol: "Max"});
-		atrib_nous.push({nom: "$stat$_range", descripcio: GetMessage("Range"), mostrar: "si_ple"});
+		atrib_nous["$stat$_sum"]={descripcio: GetMessageJSON("Sum"), mostrar: "si_ple", symbol: "&Sigma;"};
+		atrib_nous["$stat$_sum_area"]={descripcio: GetMessageJSON("SumArea"), mostrar: "si_ple", symbol: "&Sigma;<small>a</small>"};
+		atrib_nous["$stat$_mean"]={descripcio: GetMessageJSON("Mean"), mostrar: "si_ple", symbol: "x&#772"}; //x-bar
+		atrib_nous["$stat$_variance"]={descripcio: GetMessageJSON("Variance"), mostrar: "si_ple", symbol: "&sigma;²"};
+		atrib_nous["$stat$_stdev"]={descripcio: GetMessageJSON("StandardDeviation"), mostrar: "si_ple", symbol: "&sigma;"};
+		atrib_nous["$stat$_min"]={descripcio: GetMessageJSON("Minimum"), mostrar: "si_ple", symbol: "Min"};
+		atrib_nous["$stat$_max"]={descripcio: GetMessageJSON("Maximum"), mostrar: "si_ple", symbol: "Max"};
+		atrib_nous["$stat$_range"]={descripcio: GetMessageJSON("Range"), mostrar: "si_ple"};
 
 		if (capa[1].estil[condicio[1].i_estil].DescItems)
 		{
-			for (var i=n_atrib_ori; i<atrib_nous.length; i++)
-				atrib_nous[i].unitats=capa[1].estil[condicio[1].i_estil].DescItems;
+			atrib_nous["$stat$_sum"].UoM=
+				//atrib_nous["$stat$_sum_area"].UoM=
+				atrib_nous["$stat$_mean"].UoM=
+				//atrib_nous["$stat$_variance"].UoM=
+				atrib_nous["$stat$_stdev"].UoM=
+				atrib_nous["$stat$_min"].UoM=
+				atrib_nous["$stat$_max"].UoM=
+				atrib_nous["$stat$_range"].UoM=
+					capa[1].estil[condicio[1].i_estil].DescItems;
 
-			//per la sum_area les unitats són diferents -> buscar DonaUnitatsCoordenadesProj(crs) per mirar quines unitats he de concatenar al darrera
-			atrib_nous[n_atrib_ori+1].unitats=capa[1].estil[condicio[1].i_estil].DescItems+"&sdot;m²";
-			//la variança són les unitats al quadrat :)
-			atrib_nous[n_atrib_ori+3].unitats="("+atrib_nous[n_atrib_ori+3].unitats+")²";
+
+			//per la sum_area les UoM són diferents -> buscar DonaUnitatsCoordenadesProj(crs) per mirar quines unitats he de concatenar al darrera
+			atrib_nous["$stat$_sum_area"].UoM=capa[1].estil[condicio[1].i_estil].DescItems+"&sdot;m²";
+			//la variança són les UoM al quadrat
+			atrib_nous["$stat$_variance"]="("+capa[1].estil[condicio[1].i_estil].DescItems+")²";
 		}
-		else //per la sum_area les unitats són les "no unitats"*m2 :)
-			atrib_nous[n_atrib_ori+1].unitats="m²";
+		else //per la sum_area les UoM són les "no UoM"*m2 :)
+			atrib_nous["$stat$_sum_area"].UoM="m²";
 
 		if (capa[1].estil[condicio[1].i_estil].component[0].NDecimals)
 		{
-			for (var i=n_atrib_ori; i<atrib_nous.length; i++)
-				atrib_nous[i].NDecimals=capa[1].estil[condicio[1].i_estil].component[0].NDecimals;
+			atrib_nous["$stat$_sum"].NDecimals=
+				atrib_nous["$stat$_sum_area"].NDecimals=
+				atrib_nous["$stat$_mean"].NDecimals=
+				atrib_nous["$stat$_variance"].NDecimals=
+				atrib_nous["$stat$_stdev"].NDecimals=
+				atrib_nous["$stat$_min"].NDecimals=
+				atrib_nous["$stat$_max"].NDecimals=
+				atrib_nous["$stat$_range"].NDecimals=
+					capa[1].estil[condicio[1].i_estil].component[0].NDecimals;
 		}
 		else /*si no hi havien decimals definits, en poso "2" pels camps calculats (on ens sortiran), però no als
 			altres (així la suma, el rang, etc. els veure sesne decimals com la cpa original, pex DTM en m enters)*/
 		{
-			atrib_nous[n_atrib_ori+2].NDecimals=n_dec_estad;	//mean
-			atrib_nous[n_atrib_ori+3].NDecimals=n_dec_estad;	//variance
-			atrib_nous[n_atrib_ori+4].NDecimals=n_dec_estad;	//stdev
+			atrib_nous["$stat$_mean"].NDecimals=n_dec_estad;
+			atrib_nous["$stat$_variance"].NDecimals=n_dec_estad;
+			atrib_nous["$stat$_stdev"].NDecimals=n_dec_estad;
 		}
 	}
 
@@ -1396,12 +1426,12 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 						"estiramentPaleta": capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].component[0].estiramentPaleta)) : null,
 						"herenciaOrigen": {"nColors": (capa[1].estil[condicio[1].i_estil].paleta && capa[1].estil[condicio[1].i_estil].paleta.colors) ? capa[1].estil[condicio[1].i_estil].paleta.colors.length : 256,
 								"categories": capa[1].estil[condicio[1].i_estil].categories ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].categories)) : null,
-								"atributs": capa[1].estil[condicio[1].i_estil].atributs ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].atributs)) : null,
+								"attributes": capa[1].estil[condicio[1].i_estil].attributes ? JSON.parse(JSON.stringify(capa[1].estil[condicio[1].i_estil].attributes)) : null,
 								"tractament": DonaTractamentComponent(capa[1].estil[condicio[1].i_estil], 0)
 						}
 				}],
 			"categories": categ_noves,
-			"atributs": atrib_nous,
+			"attributes": atrib_nous,
 			"metadades": null,
 			"ncol": 1,
 			"paleta": (capa[0].estil[condicio[0].i_estil].paleta && capa[0].estil[condicio[0].i_estil].paleta.colors) ? {
@@ -1439,7 +1469,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, atributs, atr
 	RepintaMapesIVistes();
 }//Fi de AfegeixTransferenciaEstadistics()
 
-function DonaOldNewDeCadenaReclass(linia_reclass, i_linia, categories,atributs)
+function DonaOldNewDeCadenaReclass(linia_reclass, i_linia, categories, attributes)
 {
 var i, old_value, old_up_value, new_value, desc_value, inici, final;
 
@@ -1521,12 +1551,13 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 	}
 	else
 	{
+		var attributesArray=Object.keys(attributes);
 		if(-1!=old_value.search(/["|']/i)) 	//no pot ser indexOf perquè és una regular expression
 		{
 			old_value=TreuCometesDePrincipiIFinalDeCadena(old_value);
 			for(i=0; i<categories.length; i++)
 			{
-				if(categories[i] && categories[i][atributs[0].nom].toLowerCase()==old_value.toLowerCase())
+				if(categories[i] && categories[i][attributesArray[0]].toLowerCase()==old_value.toLowerCase())
 				{
 					old_value=i;
 					break;
@@ -1543,7 +1574,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			new_value=TreuCometesDePrincipiIFinalDeCadena(new_value.trim());
 			for(i=0; i<categories.length; i++)
 			{
-				if(categories[i] && categories[i][atributs[0].nom].toLowerCase()==new_value.toLowerCase())
+				if(categories[i] && categories[i][attributesArray[0]].toLowerCase()==new_value.toLowerCase())
 				{
 					new_value=i;
 					break;
@@ -1563,7 +1594,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			old_up_value=TreuCometesDePrincipiIFinalDeCadena(old_up_value.trim());
 			for(i=0; i<categories.length; i++)
 			{
-				if(categories[i] && categories[i][atributs[0].nom].toLowerCase()==old_up_value.toLowerCase())
+				if(categories[i] && categories[i][attributesArray[0]].toLowerCase()==old_up_value.toLowerCase())
 				{
 					old_up_value=i;
 					break;
@@ -1618,7 +1649,7 @@ var condicio, capa, i_estil_nou, estil, i, i_value, i_color, i_color_tipic, cade
 	linia_reclass=cadena_reclass.split("\n");
 	for (i=i_value=0; i<linia_reclass.length; i++)
 	{
-		if(value=DonaOldNewDeCadenaReclass(linia_reclass[i], i, estil.categories, estil.atributs))
+		if(value=DonaOldNewDeCadenaReclass(linia_reclass[i], i, estil.categories, estil.attributes))
 		{
 			if (i_value==0)
 				cadena_calcul=v;
@@ -1631,13 +1662,14 @@ var condicio, capa, i_estil_nou, estil, i, i_value, i_color, i_color_tipic, cade
 			// He d'afegir o modificar les noves descripcions
 			if(estil.categories)
 			{
+				attributesArray=Object.keys(estil.attributes);
 				if(!estil.categories[value.new_value])
 				{
 					estil.categories[value.new_value]={};
-					estil.categories[value.new_value][estil.atributs[0].nom]=value.desc_value;
+					estil.categories[value.new_value][attributesArray[0]]=value.desc_value;
 				}
 				else if (value.desc_value)
-					estil.categories[value.new_value][estil.atributs[0].nom]=value.desc_value;
+					estil.categories[value.new_value][attributesArray[0]]=value.desc_value;
 			}
 
 			// Modifico la paleta
@@ -1824,7 +1856,7 @@ var condicio, reclassificacio, valor, text_valor;
 	reclassificacio.focus();
 	valor=document.ReclassificadoraCapes["valor"+0].value;
 	if(valor && valor!="")
-		text_valor="\""+DonaTextCategoriaDesDeColor(ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].categories, ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].atributs, valor, true)+"\"";
+		text_valor="\""+DonaTextCategoriaDesDeColor(ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].categories, ParamCtrl.capa[condicio.i_capa].estil[condicio.i_estil].attributes, valor, true)+"\"";
 	else
 		text_valor="";
 	reclassificacio.value = reclassificacio.value.substring(0, reclassificacio.selectionStart)+text_valor+reclassificacio.value.substring(reclassificacio.selectionEnd);
@@ -2420,17 +2452,17 @@ var estil=capa.estil[i_estil];
 
 	//Una caixa que permeti triar un valor com a constant
 	//cdns.push("<div id=\"div-", prefix_id, "-cc-constant-",i_condicio,"\" style=\"display:inline;\">");
-	if (estil.categories && estil.categories.length && estil.atributs)
+	if (estil.categories && estil.categories.length && estil.attributes)
 	{
 		cdns.push("<label for=\"", prefix_id, "-valor-",i_condicio, "\">", GetMessage("Value"), ":</label>");
 		if (estil.categories.length>1)
 		{
 			cdns.push("<select  id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">",
-				DonaCadenaOpcionsCategories(estil.categories, estil.atributs, 0, sortCategoriesValueAscendent),
+				DonaCadenaOpcionsCategories(estil.categories, estil.attributes, 0, sortCategoriesValueAscendent),
 				"</select>");
 		}
 		else
-			cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil.categories, estil.atributs, 0, true));
+			cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, 0, true));
 		cdns.push("<br>");
 
 		//Posar un botó d'afegir a l'expressió de reclassificació
@@ -2458,7 +2490,7 @@ function sortCategoriesValueAscendent(a,b)
 	return ((a.value<b.value) ? -1 : ((a.value>b.value) ? 1 : 0));
 }
 
-function DonaCadenaOpcionsCategories(categories, atributs, i_cat_sel, f_ordena)
+function DonaCadenaOpcionsCategories(categories, attributes, i_cat_sel, f_ordena)
 {
 var cdns=[];
 	if (f_ordena)
@@ -2467,7 +2499,7 @@ var cdns=[];
 		for (var i_cat=0; i_cat<categories.length; i_cat++)
 		{
 			if (categories[i_cat])
-				cat.push({i_cat: i_cat, value: DonaTextCategoriaDesDeColor(categories, atributs, i_cat, true)});
+				cat.push({i_cat: i_cat, value: DonaTextCategoriaDesDeColor(categories, attributes, i_cat, true)});
 		}
 		cat.sort(f_ordena);
 		for (var i=0; i<cat.length; i++)
@@ -2484,7 +2516,7 @@ var cdns=[];
 		{
 			cdns.push("<option value=\"",i_cat,"\"",
 					((i_cat==i_cat_sel) ? " selected=\"selected\"" : "") ,
-				">", DonaTextCategoriaDesDeColor(categories, atributs, i_cat, true), "</option>");
+				">", DonaTextCategoriaDesDeColor(categories, attributes, i_cat, true), "</option>");
 		}
 	}
 	return cdns.join("");
@@ -2496,7 +2528,10 @@ var cdns=[], nc, capa=ParamCtrl.capa[i_capa];
 var estil_o_atrib;
 
 	if(capa.model==model_vector)
-		estil_o_atrib=capa.atributs[i_estil_o_atrib];
+	{
+		var attributesArray=Object.keys(capa.attributes);
+		estil_o_atrib=capa.attributes[attributesArray[i_estil_o_atrib]];
+	}
 	else
 		estil_o_atrib=capa.estil[i_estil_o_atrib];
 
@@ -2532,19 +2567,19 @@ var estil_o_atrib;
 		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>0)
 		{
 			//·$· El més probable és que no tingui els valors de les propietats, només tindrè els que s'han consultat, caldrà fer alguna cosa com es va dfer per la qualitats
-			var feature, atribut=estil_o_atrib.nom, valors_atrib=[],i_obj, i_valor;
+			var feature, attribute_name=attributesArray[i_estil_o_atrib], valors_atrib=[],i_obj, i_valor;
 
 			for (i_obj=0; i_obj<capa.objectes.features.length; i_obj++)
 			{
 				feature=capa.objectes.features[i_obj];
-				if (typeof feature.properties[atribut]==="undefined" ||
-		    		feature.properties[atribut]=="" ||
-					feature.properties[atribut]==null)
+				if (typeof feature.properties[attribute_name]==="undefined" ||
+		    		feature.properties[attribute_name]=="" ||
+					feature.properties[attribute_name]==null)
 					continue;
-				if (valors_atrib.length==0 || valors_atrib[valors_atrib.length-1]!=DonaCadena(feature.properties[atribut]))  //Això evita que si n'hi ha de repetits seguits es posin a la llista
-					valors_atrib.push(DonaCadena(feature.properties[atribut]));
+				if (valors_atrib.length==0 || valors_atrib[valors_atrib.length-1]!=DonaCadena(feature.properties[attribute_name]))  //Això evita que si n'hi ha de repetits seguits es posin a la llista
+					valors_atrib.push(DonaCadena(feature.properties[attribute_name]));
 			}
-			// pensar de fer una funció específica per nombres si acabo posant tipus als atributs
+			// pensar de fer una funció específica per nombres si acabo posant tipus als attributes
 			valors_atrib.sort(sortAscendingStringSensible);
 			valors_atrib.removeDuplicates(sortAscendingStringSensible);
 
@@ -2563,16 +2598,16 @@ var estil_o_atrib;
 	}
 	else
 	{
-		if (estil_o_atrib.categories && estil_o_atrib.categories.length && estil_o_atrib.atributs)
+		if (estil_o_atrib.categories && estil_o_atrib.categories.length && estil_o_atrib.attributes)
 		{
 			if (estil_o_atrib.categories.length>1)
 			{
 				cdns.push("<select id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" style=\"width:400px;\">",
-					DonaCadenaOpcionsCategories(estil_o_atrib.categories, estil_o_atrib.atributs, 0, sortCategoriesValueAscendent),
+					DonaCadenaOpcionsCategories(estil_o_atrib.categories, estil_o_atrib.attributes, 0, sortCategoriesValueAscendent),
 					"</select>");
 			}
 			else
-				cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil_o_atrib.categories, estil_o_atrib.atributs, 0, true));
+				cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-valor-",i_condicio,"\" name=\"valor", i_condicio, "\" />", DonaTextCategoriaDesDeColor(estil_o_atrib.categories, estil_o_atrib.attributes, 0, true));
 			cdns.push("<br>");
 		}
 		else
@@ -2646,26 +2681,28 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	// Desplegable de les bandes disponibles
 	if(capa.model==model_vector)
 	{
-		if (capa.atributs && capa.atributs.length)
+		if (capa.attributes)
 		{
+			var attributesArray=Object.keys(capa.attributes);
+			if (attributesArray.length)
 			cdns.push("<label for=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"estil-",i_condicio, "\">", GetMessage("Field"), ": </label>");
-			if (capa.atributs.length>1)
+			if (attributesArray.length>1)
 			{
 				cdns.push("<select id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"estil-", i_condicio, "\" name=\"",(param.vull_operador? "" : "valor_"),"estil", i_condicio, "\" style=\"width:400px;\"");
 				if (param.vull_operador)
 					cdns.push(" onChange='CanviaOperadorValorSeleccioCondicional(\"", prefix_id, "\", ", i_capa, ", ", i_condicio, ", parseInt(document.getElementById(\"", prefix_id, "-",(param.vull_operador? "": "valor-"), "estil-", i_condicio, "\").value));'");
 				cdns.push(">");
-				for (var i_atrib=0; i_atrib<capa.atributs.length; i_atrib++)
+				for (var i_atrib=0; i_atrib<attributesArray.length; i_atrib++)
 				{
 					cdns.push("<option value=\"",i_atrib,"\"",
 							((i_atrib==0) ? " selected=\"selected\"" : "") ,
-						">", DonaCadena(capa.atributs[i_atrib].descripcio)?DonaCadena(capa.atributs[i_atrib].descripcio):capa.atributs[i_atrib].nom , "</option>");
+						">", DonaCadenaDescripcioAttribute(capa.attributes[attributesArray[i_atrib]], attributesArray[i_atrib], false), "</option>");
 				}
 				cdns.push("</select>");
 			}
 			else
 				cdns.push("<input type=\"hidden\" value=\"0\" id=\"", prefix_id, "-",(param.vull_operador? "": "valor-"),"estil-", i_condicio, "\" name=\"",
-						 (param.vull_operador? "": "valor_"),"estil", i_condicio, "\" />", DonaCadena(capa.atributs[0].descripcio)?DonaCadena(capa.atributs[0].descripcio): capa.atributs[0].nom);
+						 (param.vull_operador? "": "valor_"),"estil", i_condicio, "\" />", DonaCadenaDescripcioAttribute(attributesArray[0], capa.attributes[attributesArray[0]], false));
 			cdns.push("<br>");
 		}
 	}
@@ -2919,8 +2956,12 @@ var condicio_capa={}, elem;
 	}
 	if(capa.model==model_vector)
 	{
-		if (capa.atributs && capa.atributs.length)
-			condicio_capa.i_estil=parseInt(document.getElementById(prefix_id + prefix_condicio + "-estil-" + i_condicio).value);
+		if (capa.attributes)
+		{
+			var attributesArray=Object.keys(capa.attributes);
+			if (attributesArray.length)
+				condicio_capa.i_estil=parseInt(document.getElementById(prefix_id + prefix_condicio + "-estil-" + i_condicio).value);
+		}
 	}
 	else
 	{
@@ -3005,7 +3046,10 @@ var cdns=[];
 	if (cdns.length!=1)
 		cdns.push(",");
 	if(ParamCtrl.capa[i_capa].model==model_vector)
-		cdns.push("\"prop\": \"", (typeof i_valor!=="undefined" && i_valor!=null) ? ParamCtrl.capa[i_capa].atributs[i_valor].nom : "", "\"");
+	{
+		attributesArray=Object.keys(ParamCtrl.capa[i_capa].attributes);
+		cdns.push("\"prop\": \"", (typeof i_valor!=="undefined" && i_valor!=null) ? attributesArray[i_valor] : "", "\"");
+	}
 	else
 		cdns.push("\"i_valor\":", (typeof i_valor!=="undefined" && i_valor!=null) ? i_valor : 0);
 	if (typeof i_data!=="undefined" && i_data!=null /*&& DonaIndexDataCapa(ParamCtrl.capa[i_capa], null)!=i_data*/)
@@ -3034,14 +3078,15 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimen
 {
 	if(ParamCtrl.capa[i_capa].model==model_vector)
 	{
-		var atribut=ParamCtrl.capa[i_capa].atributs[i_estil];
-		if (typeof atribut.calcul!=="undefined")
-			//return (i_capa_ref==i_capa) ? atribut.calcul : AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+		var attributesArray=Object.keys(ParamCtrl.capa[i_capa].attributes)
+		var attribute=ParamCtrl.capa[i_capa].attributes[attributesArray[i_estil]];
+		if (typeof attribute.calcul!=="undefined")
+			//return (i_capa_ref==i_capa) ? attribute.calcul : AfegeixIcapaACalcul(attribute.calcul, i_capa, attributesArray[i_estil]);
 		{
 			// Cal mirar si he de canviar la referència del càlcul en funció de si hi ha i_data i dimensions en el que s'ha seleccionat i en el càlcul que hi havia
 			if(i_capa_ref==i_capa)
 			{
-				var s=atribut.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
+				var s=attribute.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
 				while ((inici=s.indexOf("{"))!=-1)
 				{
 					//busco una clau de tancar
@@ -3056,7 +3101,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimen
 					nou_valor=JSON.parse(cadena);
 					if (nou_valor.i_capa==i_capa &&
 						(((typeof i_valor==="undefined" || i_valor==null) && (typeof nou_valor.prop==="undefined" || nou_valor.prop==null)) ||						
-							nou_valor.prop==ParamCtrl.capa[i_capa].atributs[i_estil].nom))
+							nou_valor.prop==attributesArray[i_estil]))
 					{
 						// Estic revisant la mateixa capa en el mateix estil
 						// la reescric de nou						
@@ -3070,14 +3115,14 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimen
 				nou_calcul=nou_calcul+s;				
 				return nou_calcul;
 			}			
-			return AfegeixIcapaACalcul(atribut.calcul, i_capa, atribut.nom);
+			return AfegeixIcapaACalcul(attribute.calcul, i_capa, attributesArray[i_estil]);
 		}
-		if (typeof atribut.FormulaConsulta!=="undefined" && atribut.FormulaConsulta!=null)
+		if (typeof attribute.FormulaConsulta!=="undefined" && attribute.FormulaConsulta!=null)
 		{
-			var s=atribut.FormulaConsulta;
-			for (var i_atrib=0; i_atrib<ParamCtrl.capa[i_capa].atributs.length; i_valor++)
+			var s=attribute.FormulaConsulta;
+			for (var i_atrib=0; i_atrib<attributesArray.length; i_valor++)
 			{
-				s_patro="p[\""+ParamCtrl.capa[i_capa].atributs[i_atrib].nom+"\"]";
+				s_patro="p[\""+attributesArray[i_atrib]+"\"]";
 				while ((i=s.indexOf(s_patro))!=-1)
 					s=s.substring(0, i)+DonaReferenciaACapaPerCalcul(i_capa_ref, i_capa, i_atrib, i_data, dimensions)+s.substring(i+s_patro.length);
 			}
@@ -3162,7 +3207,7 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 	for (var i_condicio=0; i_condicio<sel_condicional.condicio.length; i_condicio++)
 	{
 		condicio=sel_condicional.condicio[i_condicio];
-		// Quan la capa és un vector sel_condicional.condicio[i_condicio].capa_clau.i_estil és l'índex del atribut i no de l'estil
+		// Quan la capa és un vector sel_condicional.condicio[i_condicio].capa_clau.i_estil és l'índex del attribute i no de l'estil
 		calcul+=DonaCadenaEstilCapaPerCalcul(i_capa, condicio.capa_clau.i_capa, condicio.capa_clau.i_data, condicio.capa_clau.i_estil, condicio.capa_clau.dim);
 		if (typeof condicio.operador==="undefined")
 			calcul+="!=null";
@@ -3178,16 +3223,19 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 					selectors.push({});
 					selector=selectors[selectors.length-1];
 					if(capa.model==model_vector)
-						estil_o_atrib=ParamCtrl.capa[condicio.capa_clau.i_capa].atributs[condicio.capa_clau.i_estil];
+					{
+						var attributesArray=Object.keys(ParamCtrl.capa[condicio.capa_clau.i_capa].attributes);
+						estil_o_atrib=ParamCtrl.capa[condicio.capa_clau.i_capa].attributes[attributesArray[condicio.capa_clau.i_estil]];
+					}
 					else
 					{
 						estil_o_atrib=ParamCtrl.capa[condicio.capa_clau.i_capa].estil[condicio.capa_clau.i_estil];
 						selector.desc=DonaCadenaNomDescItemsLleg(estil_o_atrib);
 					}
-					if (estil_o_atrib.categories && estil_o_atrib.categories.length && estil_o_atrib.atributs)
+					if (estil_o_atrib.categories && estil_o_atrib.categories.length && estil_o_atrib.attributes)
 					{
 						selector.categories=JSON.parse(JSON.stringify(estil_o_atrib.categories));
-						selector.atributs=JSON.parse(JSON.stringify(estil_o_atrib.atributs));
+						selector.attributes=JSON.parse(JSON.stringify(estil_o_atrib.attributes));
 					}
 					if (estil_o_atrib.estiramentPaleta)
 						selector.estiramentPaleta=JSON.parse(JSON.stringify(estil_o_atrib.estiramentPaleta));
@@ -3213,13 +3261,14 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 
 	if(capa.model==model_vector)
 	{
-		// Creo un atribut nou que contindrà el càlcul
-		var i_atrib_nou=capa.atributs.length;
+		// Creo un attribute nou que contindrà el càlcul
+		var attributesArray=Object.keys(capa.attributes);
+		//var i_atrib_nou=attributesArray.length;
 		var i=0, index=0, nom_proposat=sel_condicional.nom_estil.replaceAll(' ', '_');
 
-		while(i<capa.atributs.length)
+		while(i<attributesArray.length)
 		{
-			if(nom_proposat==capa.atributs[i].nom)
+			if(nom_proposat==attributesArray[i])
 			{
 				index++;
 				nom_proposat=nom_proposat+index;
@@ -3229,9 +3278,8 @@ var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, 
 			i++;
 		}
 
-		capa.atributs[i_atrib_nou]={"nom": nom_proposat,
-									"calcul":calcul,
-									"desc":sel_condicional.nom_estil + index!= 0 ? index:""};
+		capa.attributes[nom_proposat]={"calcul":calcul,
+						"desc":sel_condicional.nom_estil + index!= 0 ? index:""};
 		estil.NomCampSel=nom_proposat;
 	}
 	else
@@ -3371,21 +3419,22 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	  					" "+DonaCadena(ParamCtrl.capa[capa.valors[0].i_capa].estil[capa.valors[0].i_valor].desc)+": </legend>";
 	    value_text+="<table style=\"width:100%;text-align:left;font-size:inherit\"><tr><td rowspan=\"2\">";
 
-	    //només poso per triar els que els atributs de la capa categorica inicial indiquen com a mostrables
+	    //només poso per triar els que els attributes de la capa categorica inicial indiquen com a mostrables
 	    if (estil.component[1].herenciaOrigen.tractament=="categoric") //la segona és categòrica també
 	    {
-	    	for (i_atrib=0, recompte=0; i_atrib<estil.atributs.length; i_atrib++)
+		var attributesArray=Object.keys(estil.attributes);
+	    	for (i_atrib=0, recompte=0; i_atrib<attributesArray.length; i_atrib++)
 	    	{
-	    		if (!estil.atributs[i_atrib].nom || estil.atributs[i_atrib].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
+	    		if (!attributesArray[i_atrib] || estil.attributes[attributesArray[i_atrib]].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
 	    			continue;
-	    		//if (estil.atributs[i_atrib].nom == "$stat$_i_mode") -> no la miro perquè ja inicialment es declara com a mostrar = "no"
-	    		if (estil.atributs[i_atrib].nom == "$stat$_mode")
+	    		//if (attributesArray[i_atrib] == "$stat$_i_mode") -> no la miro perquè ja inicialment es declara com a mostrar = "no"
+	    		if (attributesArray[i_atrib] == "$stat$_mode")
 	    		{
 	    			value_text+="<input type=\"radio\" id=\"stat_mode_2\" name=\"stat\" value=\"mode_2\"><label for=\"stat_mode_2\">"+GetMessage("ModalClass")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-	    		if (estil.atributs[i_atrib].nom == "$stat$_percent_mode")
+	    		if (attributesArray[i_atrib] == "$stat$_percent_mode")
 	    		{
 	    			value_text+="<input type=\"radio\" id=\"stat_percent_mode_2\" name=\"stat\" value=\"percent_mode_2\"><label for=\"stat_percent_mode_2\">"+GetMessage("PercentageMode")+"</label><br>";
 	    			recompte++;
@@ -3396,63 +3445,63 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 						value_text+="<input type=\"radio\" id=\"stat_mode_and_percent_2\" name=\"stat\" value=\"mode_and_percent_2\" checked=\"true\"><label for=\"stat_mode_and_percent_2\">"+
 						GetMessage("ModalClass")+" ("+GetMessage("PercentageMode")+")</label><br>";
 	  	}
-			else //la segona és QC
-			{
-	    	for (i_atrib=0, recompte=0; i_atrib<estil.atributs.length; i_atrib++)
-	    	{
-	    		if (!estil.atributs[i_atrib].nom || estil.atributs[i_atrib].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
+		else //la segona és QC
+		{
+	    	    for (i_atrib=0, recompte=0; i_atrib<attributesArray.length; i_atrib++)
+	    	    {
+	    		if (!attributesArray[i_atrib] || estil.attributes[attributesArray[i_atrib]].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
 	    			continue;
 
 	    		//primer mirar sui_ple, pq si es que no no cal q em proecupi si él nom és un dles que m¡0interessa , oq igualment no es mostrara
-					if (estil.atributs[i_atrib].nom == "$stat$_sum")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"stat_sum_2\">"+GetMessage("Sum")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_sum")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"stat_sum_2\">"+GetMessage("Sum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_sum_area")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_sum_area_2\" name=\"stat\" value=\"sum_area_2\"><label for=\"stat_sum_area_2\">"+GetMessage("SumArea")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_sum_area")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_sum_area_2\" name=\"stat\" value=\"sum_area_2\"><label for=\"stat_sum_area_2\">"+GetMessage("SumArea")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_mean")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_mean_2\" name=\"stat\" value=\"mean_2\" checked=\"true\"><label for=\"stat_mean_2\">"+GetMessage("Mean")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_mean")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_mean_2\" name=\"stat\" value=\"mean_2\" checked=\"true\"><label for=\"stat_mean_2\">"+GetMessage("Mean")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_variance")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_variance_2\" name=\"stat\" value=\"variance_2\"><label for=\"stat_variance_2\">"+GetMessage("Variance")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_variance")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_variance_2\" name=\"stat\" value=\"variance_2\"><label for=\"stat_variance_2\">"+GetMessage("Variance")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_stdev")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_stdev_2\" name=\"stat\" value=\"stdev_2\"><label for=\"stat_stdev_2\">"+GetMessage("StandardDeviation")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_stdev")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_stdev_2\" name=\"stat\" value=\"stdev_2\"><label for=\"stat_stdev_2\">"+GetMessage("StandardDeviation")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_min")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_min_2\" name=\"stat\" value=\"min_2\"><label for=\"stat_min_2\">"+GetMessage("Minimum")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_min")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_min_2\" name=\"stat\" value=\"min_2\"><label for=\"stat_min_2\">"+GetMessage("Minimum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_max")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_max_2\" name=\"stat\" value=\"max_2\"><label for=\"stat_max_2\">"+GetMessage("Maximum")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_max")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_max_2\" name=\"stat\" value=\"max_2\"><label for=\"stat_max_2\">"+GetMessage("Maximum")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-					if (estil.atributs[i_atrib].nom == "$stat$_range")
-					{
-						value_text+="<input type=\"radio\" id=\"stat_range_2\" name=\"stat\" value=\"range_2\"><label for=\"stat_range_2\">"+GetMessage("Range")+"</label><br>";
+			if (attributesArray[i_atrib] == "$stat$_range")
+			{
+				value_text+="<input type=\"radio\" id=\"stat_range_2\" name=\"stat\" value=\"range_2\"><label for=\"stat_range_2\">"+GetMessage("Range")+"</label><br>";
 	    			recompte++;
 	    			continue;
 	    		}
-				}
+		    }
   		}
   		if (recompte > 0)
   		{
@@ -4532,8 +4581,9 @@ function MostraFinestraTaulaDeCapaVectorial()
 function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true)
 {
 const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
-const atributsVisibles = [], objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
-var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, objLength, env_temp;
+const attributesVisibles = {}, objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
+var attributesArray=Object.keys(capa.attributes);
+var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length, objLength, env_temp;
 
 	nodePare.innerHTML = "";
 	const divCapcalera = document.createElement("div");
@@ -4552,16 +4602,17 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 
 	for (i = 0; i < attrLength; i++)
 	{
-		const attribute = capa.atributs[i];
+		const attribute = capa.attributes[attributesArray[i]];
 		if (attribute.mostrar == "si")
-			atributsVisibles.push(capa.atributs[i]);
+			attributesVisibles[attributesArray[i]]=capa.attributes[attributesArray[i]];
 	}
 
 	const paragrafCheckboxs = document.createElement("p");
 	paragrafCheckboxs.setAttribute("class", "vectorial");
 
-	// Si no hi han atributs per mostrar, parem i mostrem missatge explicatiu.
-	if (atributsVisibles.length <1)
+	// Si no hi han attributes per mostrar, parem i mostrem missatge explicatiu.
+	var attributtesVisiblesArray=Object.keys(attributesVisibles);
+	if (attributtesVisiblesArray.length <1)
 	{
 		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
 		divCapcalera.insertAdjacentHTML("beforeend", "<p style='text-align:center;'><b>" + GetMessage("NoAttributesToDisplayForLayer", "cntxmenu") + "</b></p>");
@@ -4637,12 +4688,12 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 
 	// Comencem la fila capçalera de la taula.
 	const filaCapcalera = document.createElement("tr");	
-	for (i = 0, attrLength = atributsVisibles.length; i < attrLength; i++)
+	for (i = 0, attrLength = attributtesVisiblesArray.length; i < attrLength; i++)
 	{
-		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + atributsVisibles[i].descripcio + "</th>");
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + DonaCadenaDescripcioAttribute(attributtesVisiblesArray, attributesVisibles[attributtesVisiblesArray[i]], true) + "</th>");
 
 		// Porta papers
-		cdnsPortapapers.push(atributsVisibles[i].descripcio, "\t");
+		cdnsPortapapers.push(attributesVisibles[attributtesVisiblesArray[i]].descripcio, "\t");
 	}
 	filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + GetMessage("ExportObject", "cntxmenu") + "</th><th class='vectorial'>" + GetMessage("GoTo", "capavola") + "</th>");
 	
@@ -4656,21 +4707,21 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
 	
 	// Comencem files d'objectes vectorials de la taula.
-	// Comprovo si algun atribut és sèrie temporal
-	var algun_atribut_es_serie_temporal=false;
+	// Comprovo si algun attribute és sèrie temporal
+	var algun_attribute_es_serie_temporal=false;
 	if(capa.AnimableMultiTime && capa.data && capa.data.length>0)
 	{
-		for (i = 0; i < atributsVisibles.length; i++)
+		for (i = 0; i < attributtesVisiblesArray.length; i++)
 		{
-			if(atributsVisibles[i].serieTemporal)
+			if(attributesVisibles[attributtesVisiblesArray[i]].serieTemporal)
 			{
-				algun_atribut_es_serie_temporal=true;
+				algun_attribute_es_serie_temporal=true;
 				break;
 			}
 		}
 	}
 	var wkt = new Wkt.Wkt();
-	var cdns_anar_obj, cadena_obj_wkt, boto_desplegable, i_data, prop, n_dates=(algun_atribut_es_serie_temporal ? capa.data.length  : 1);
+	var cdns_anar_obj, cadena_obj_wkt, boto_desplegable, i_data, prop, n_dates=(algun_attribute_es_serie_temporal ? capa.data.length  : 1);
 	for (i = 0, objLength = objectes.length; i < objLength; i++)
 	{		
 		const objecteARepresentar = objectes[i], tipusGeometria = objecteARepresentar.geometry.type;
@@ -4679,9 +4730,9 @@ var objectes = capa.objectes.features, i, j, attrLength = capa.atributs.length, 
 			const filaObjecte = document.createElement("tr");
 			filaObjecte.setAttribute("class", "vectorial");
 			//cdnsHtml.push("<tr class='vectorial' height='20px'>");
-			for (j = 0, attrLength = atributsVisibles.length; j < attrLength; j++)
+			for (j = 0, attrLength = attributtesVisiblesArray.length; j < attrLength; j++)
 			{
-				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(atributsVisibles[j].nom, capa, i_data, null)];
+				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(attributtesVisiblesArray[j], capa, i_data, null)];
 				filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + (prop ? prop :"") + "</td>");
 				// Porta papers
 				cdnsPortapapers.push((prop ? prop :""), "\t");
