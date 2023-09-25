@@ -144,7 +144,7 @@ var esNODATA, esLink, esImatge;
 						For future code quality, you should avoid using node object properties and methods on attribute objects:
 						On algunes d'aquestes propietats és el nodeValue que passa a ser value.
 						nodeName passa a ser name.
-						Compte que això només és per attributtes elements */
+						Compte que això només és per attributes elements */
 
 					}
 					consulta.attributes[tag.attributes[j].name]={
@@ -267,7 +267,7 @@ var i, j;
 			consulta.attributes={};
 		for (j in doc.features[i].properties)
 		{
-			consulta.attributtes[j]={
+			consulta.attributes[j]={
 						"description": j,
 						"valor": doc.features[i].properties[j],
 						"mostrar": "si",
