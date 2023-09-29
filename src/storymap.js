@@ -40,7 +40,8 @@
 
 var indexStoryMapActiu=null;
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
-
+const midesDivId = "divMidesImatge", dialogId = "midesDialog", inputWidthId = "widthMesure", inputHeightId = "heightMesure";
+const resultatMidesImatge = [];
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -178,33 +179,68 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 			imageToMesure.src = urlIamge;
 		}).then(result => {
 
+			const divMidesImg = document.createElement("div");
 			let ultimElem = document.getElementById(ultimElemId);
-			if (!canvasReduccioImg)
-			{
-				canvasReduccioImg = document.createElement("canvas");
-				canvasReduccioImg.setAttribute("id", canvasId);
-				
-				if (ultimElem)
-				{
-					canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
-				}
-			} 
-
-			canvasReduccioImg.width = result.width/2;
-			canvasReduccioImg.height = result.height/2;
-
-			const cntx = canvasReduccioImg.getContext("2d");
-			cntx.drawImage(result, 0, 0, result.width/2, result.height/2);
-			const tinyEditor = tinymce.get(tinyEditId);
-			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+			divMidesImg.setAttribute("id", midesDivId);
 			
-			if (tinyEditor && imatgeReduida)
+			if (ultimElem)
 			{
-				let writenOnTiny = tinyEditor.getContent();
-				tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width= 400>");
+				ultimElem.insertAdjacentElement("afterend", divMidesImg);
+				divMidesImg.innerHTML = CreaDialogMidesImatge(result);
+				const favDialog = document.getElementById(dialogId);
+				favDialog.addEventListener("close", (event) => {
+					// Després de tancar el missatge emergent de les mides.
+					const resultatMides = event.currentTarget.returnValue.split(',');					
+					let ultimElem = document.getElementById(ultimElemId);
+					if (!canvasReduccioImg)
+					{
+						canvasReduccioImg = document.createElement("canvas");
+						canvasReduccioImg.setAttribute("id", canvasId);
+						
+						if (ultimElem)
+						{
+							canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+						}
+					} 
+
+					canvasReduccioImg.width = resultatMides[0];
+					canvasReduccioImg.height = resultatMides[1];
+
+					const cntx = canvasReduccioImg.getContext("2d");
+					cntx.drawImage(result, 0, 0, resultatMides[0], resultatMides[1]);
+					const tinyEditor = tinymce.get(tinyEditId);
+					const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+					
+					if (tinyEditor && imatgeReduida)
+					{ 
+						let writenOnTiny = tinyEditor.getContent();
+						tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width=" + resultatMides[0] + ">");
+					}
+				});
+				const inputWidth = document.getElementById(inputWidthId);
+				inputWidth.addEventListener("change", (event) => {
+					resultatMidesImatge[0] = event.currentTarget.value;
+				});
+				const inputHeight = document.getElementById(inputHeightId);
+				inputHeight.addEventListener("change", (event) => {
+					resultatMidesImatge[1] = event.currentTarget.value;
+				});
+				const confirmBtn = document.getElementById("confirmBtn");
+				confirmBtn.addEventListener("click", (event) => {
+					event.preventDefault(); // We don't want to submit this fake form
+					favDialog.close(resultatMidesImatge); // Have to send the select box value here.
+				});
+				favDialog.showModal();
 			}
 		});
 	}
+}
+
+function CreaDialogMidesImatge(imatge)
+{
+	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
+	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='numbers' id='", inputHeightId, "'></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
+	return dialogHtml.join("");
 }
 
 function SeguentPasStoryMap()
@@ -220,11 +256,12 @@ function SeguentPasStoryMap()
 	comptadorPassos++;
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
+	const stepInputFileId = "imgStep" + comptadorPassos;
 	const stepPictureId = "stepImg" + comptadorPassos;
 	const tinyTextId = "storyTextArea"+comptadorPassos;
 	const ultimElementStorymapId = "ultimElementStorymap";
 	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input id='imgStep", comptadorPassos, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + ultimElementStorymapId + "\")'>", 
+	"<input hidden id='" + stepInputFileId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + ultimElementStorymapId + "\")'>", 
 	"<img id='" + stepPictureId + "' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
 	"<input id='" + ultimElementStorymapId + "' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
@@ -240,11 +277,14 @@ function SeguentPasStoryMap()
 	tinymce.init({
         target: tinytextarea,
 		toolbar: 'insertImageButton',
+		promotion: false,
+		min_height: 300,
+		min_width: 400,
 		setup: (editor) => {
 			editor.ui.registry.addButton('insertImageButton', {
 				text: 'Attach Image',
-				onAction: (_) => editor.insertContent(`&nbsp;<strong>It's my button!</strong>&nbsp;`)
-			  });
+				onAction: (_) => document.getElementById(stepInputFileId).click()
+			});
 		}
     });
 }
