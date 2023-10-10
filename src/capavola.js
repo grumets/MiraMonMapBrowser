@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -114,11 +114,11 @@ function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	
 
 	
+	TancaFinestraLayer("feedback");
 	OmpleFinestraFeedbackAmbScope(trg, lng, tkn);
 
-	CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
-	CanviaEstatClickSobreVista("ClickRecFB1");
-	TancaFinestraLayer("feedback");
+	//per defecte deixo marcat que volem un fbScope rectangular
+	mostraSelecFBScope(0);
 
 	return;
 }
@@ -131,45 +131,14 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	var tkn=access_token_type;
 
 	var cdns=[];
+	//escollim si volem un punt o un rectangle:
 	cdns.push('<form name="FeedbackScope_win" onSubmit="return false;">',
-		'<span>', GetMessage("ScopeUseMouse","capavola"),'</span>',
-		'<br><br>',
-		'<table class="Verdana11px" width="50%" align="center">',
-			'<tr>',
-				'<td colspan="2">',DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS),'</td>',
-				'<td style="text-align:center;">Ymax</td>',
-				'<td></td>',
-				'<td></td>',
-			'</tr>',
-			'<tr>',
-				'<td></td>',
-				'<td></td>',
-				'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="7" value="" disabled></td>',
-				'<td></td>',
-				'<td></td>',
-			'</tr>',
-			'<tr>',
-				'<td style="text-align:rigth;">Xmin</td>',
-				'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="7" value="" disabled></td>',
-				'<td></td>',
-				'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="7" value="" disabled></td>',
-				'<td style="text-align:left;">Xmax</td>',
-			'</tr>',
-			'<tr>',
-				'<td></td>',
-				'<td></td>',
-				'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="7" value="" disabled></td>',
-				'<td></td>',
-				'<td></td>',
-			'</tr>',
-			'<tr>',
-				'<td></td>',
-				'<td></td>',
-				'<td style="text-align:center;">Ymin</td>',
-				'<td></td>',
-				'<td></td>',
-			'</tr>',
+		'<table class="Verdana11px" width="100%" align="center">',
+			'<td><span>',GetMessage("ScopeUseMouse","capavola"),'</span></td>',
+			'<td><input type="radio" id="FBarea" name="FB_scope_type" value="area" checked onclick="mostraSelecFBScope(0);TancaFinestraEmergent_multi_consulta();"><label for="area">',GetMessage("ScopeTypeArea","capavola"),'</label></td>',
+			'<td><input type="radio" id="FBpoint" name="FB_scope_type" value="punt" onclick="mostraSelecFBScope(1);"><label for="point">',GetMessage("ScopeTypePoint","capavola"),'</label></td>',
 		'</table>',
+		'<div id=fbScopeType></div><br>',
 		'<table class="Verdana11px" width="50%" align="center">',
 			'<tr>',
 				'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="',GetMessage("OK"),'"'," onClick='AfegirFeedbackScopeCapaMultipleTargets(",trg,", \"",lng, "\", \"",tkn,"\"",");TancaFinestraLayer(\"fbScope\");'",'></td>',
@@ -178,6 +147,97 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 		'</table>',
 	'</form>');
 	contentFinestraLayer(window, "fbScope", cdns.join(""));
+}
+
+//OG: en funció de si l'usuari vol fer FB sobre un punt o una àrea, mostrem un formulari o un altre.
+function mostraSelecFBScope(type)
+{
+	var tp=type;
+	var cdns=[];
+	
+	if (tp==0)
+	{
+		CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+		CanviaEstatClickSobreVista("ClickRecFB1");
+
+		document.getElementById("fbScopeType").innerHTML='<br><br>'+
+			'<table class="Verdana11px" width="50%" align="center">'+
+				'<tr>'+
+					'<td colspan="2">'+ DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)+'</td>'+
+					'<td style="text-align:center;">Ymax</td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="7" value="" disabled></td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td style="text-align:rigth;">Xmin</td>'+
+					'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="7" value="" disabled></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="7" value="" disabled></td>'+
+					'<td style="text-align:left;">Xmax</td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="7" value="" disabled></td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td style="text-align:center;">Ymin</td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+			'</table>';
+	}
+		
+	//si "punt":
+	if (tp==1){
+
+		CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+		CanviaEstatClickSobreVista("ClickPointFB");
+
+		document.getElementById("fbScopeType").innerHTML='<br><br>'+
+		'<table class="Verdana11px" width="75%" align="center">'+
+		'<tr>'+
+			'<td colspan="2">'+ DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)+'</td>'+
+			'<td></td>'+
+			'<td></td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td style="text-align:rigth;">X:</td>'+
+			'<td><input class="Verdana11px" id="fbscope_x" name="fbscope_x" type="text" size="7" value="" disabled></td>'+
+			'<td style="text-align:rigth;">Y:</td>'+
+			'<td><input class="Verdana11px" id="fbscope_y" name="fbscope_y" type="text" size="7" value="" disabled></td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="hidden" size="7" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="hidden" size="7" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="hidden" size="7" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="hidden" size="7" value="" disabled></td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+			'<td>&nbsp;</td>'+
+		'</tr>'+
+		'</table>';
+	}
 }
 
 //OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
@@ -213,7 +273,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 				{
 					//afegim el bounding box en lon/lat
 					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
-					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situacions on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
+					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
 					var dec_trans=8;
 					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
 					//afegim el GMLpol en el crs original
@@ -223,6 +283,28 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 		}
 		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
 		{
+			//comprovem si el que volem enviar és un "punt" (no és un punt realment, és un pol mida píxel). En aquest cas acceptem 8 decimals, sinó ens passa que podem no tenir prou precissió.
+			if (document.getElementById("fbscope_x") && document.getElementById("fbscope_y"))
+			{
+				var dec=8;
+				if ((OKStrOfNe(ulc.x,dec)!=OKStrOfNe(lrc.x,dec)) && (OKStrOfNe(lrc.y,dec)!=OKStrOfNe(ulc.y,dec)))
+		{
+					for (var i=0; i<trg.length; i++)
+					{
+						//afegim el bbox i el gmlpol només al primary target
+						if (trg[i].role=="primary")
+						{
+							//afegim el bounding box en lon/lat
+							trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
+							//afegim el GMLpol
+							trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+						}
+					}
+				}
+
+			}
+			else  //aquí estem enviant un polígon.
+			{
 			//comprovem que les coordenades min/maxLat i min/maxLong no siguin iguals entre elles. En cas que ho siguin demanem a l'uruari que modifiqui el nombre de decimals a la configuració del navegador
 			if ((OKStrOfNe(ulc.x,dec)==OKStrOfNe(lrc.x,dec)) || (OKStrOfNe(lrc.y,dec)==OKStrOfNe(ulc.y,dec)))
 			{
@@ -241,6 +323,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 						trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
 						//afegim el GMLpol
 						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+						}
 					}
 				}
 			}
@@ -257,15 +340,17 @@ function TancaFinestraFeedbackAmbScope()
 {
 	//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
 	//Aquí estem en la situació que hem tancat la caixa des del botó tancar.
+	//primer comprovem si estàvem digitalitzant un punt. Si és així, esborrem la creu:
+	if (document.getElementById("FBpoint").checked)
+		TancaFinestra_multi_consulta();
 	ParamCtrl.EstatClickSobreVista="ClickConLoc";
 	CanviaEstatClickSobreVista("ClickConLoc");
-	//RepintaMapesIVistes(); //tot i que incialment m'ho havia semblat, no és necessari repintar les vistes.
 }
 
 function ComprovaCalTancarFeedbackAmbScope(estat)
 {
 	//si estem fent un FB amb Scope i clickem sobre algun botó de la barra d'eines que obra una finestra nova (anar a coord, config, calc, etc.) tanquem la finestra fbScope i posem per defecte el mouse a ConLoc
-	if (ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
+	if (((ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2") && ((estat!="ClickPointFB")&&(estat!="ClickRecFB1"))) || ((ParamCtrl.EstatClickSobreVista=="ClickPointFB")&&(estat!="ClickRecFB1")))
 	{
 		TancaFinestraLayer("fbScope");
 		//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
