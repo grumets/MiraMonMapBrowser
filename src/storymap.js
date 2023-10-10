@@ -131,8 +131,8 @@ function TancaIIniciaStoryMap(i_story)
 }
 
 // Deficinció de la nova StoryMap
-const novaStoryMap = {};
-var comptadorPassos = 0;
+var novaStoryMap = {};
+
 function TancaICreaStoryMap()
 {
 	const lastStoryStepElement = "lastStoryStepElement";
@@ -149,7 +149,12 @@ function TancaICreaStoryMap()
 	}
 	ObreFinestra(window, "creaStoryMap");
 }
-
+/**
+ * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
+ * @param {*} input Element DOM tipus input que incorpora la imatge. 
+ * @param {*} tinyEditId Identificador del editor Tiny.
+ * @param {*} ultimElemId Identificador de l'últim element de la vista Storymap.
+ */
 function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
@@ -187,8 +192,8 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 			{
 				ultimElem.insertAdjacentElement("afterend", divMidesImg);
 				divMidesImg.innerHTML = CreaDialogMidesImatge(result);
-				const favDialog = document.getElementById(dialogId);
-				favDialog.addEventListener("close", (event) => {
+				const midesDialog = document.getElementById(dialogId);
+				midesDialog.addEventListener("close", (event) => {
 					// Després de tancar el missatge emergent de les mides.
 					const resultatMides = event.currentTarget.returnValue.split(',');					
 					let ultimElem = document.getElementById(ultimElemId);
@@ -227,63 +232,68 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 				});
 				const confirmBtn = document.getElementById("confirmBtn");
 				confirmBtn.addEventListener("click", (event) => {
-					event.preventDefault(); // We don't want to submit this fake form
-					favDialog.close(resultatMidesImatge); // Have to send the select box value here.
+					event.preventDefault();
+					midesDialog.close(resultatMidesImatge); // S'envia les mides introduïdes al diàleg.
 				});
-				favDialog.showModal();
+				midesDialog.showModal();
 			}
 		});
 	}
 }
-
+/**
+ * Crea un diàleg que apareix flotant al centre de la pantalla per a que l'usuari decideixi
+ * sobre la mida de la imatge que vol incorporar al Storymap. 
+ * @param {*} imatge El fitxer imatge que es vol incloure a la Storymap.
+ * @returns Cadena HTML amb les mides de la imatge que es preten carregar i 2 caixes de text per indicar-ne les noves mides.
+ */
 function CreaDialogMidesImatge(imatge)
 {
 	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
-	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='numbers' id='", inputHeightId, "'></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
+	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
 	return dialogHtml.join("");
 }
 
 function SeguentPasStoryMap()
-{
-	if (comptadorPassos == 0)
-	{
-		GuardarInformacioInicialStoryMap()
-	}
-	else 
-	{
-		GuardarInformacioPasStoryMap()
-	}
-	comptadorPassos++;
+{	
+	GuardarInformacioInicialStoryMap();
+	
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
-	const stepInputFileId = "imgStep" + comptadorPassos;
-	const stepPictureId = "stepImg" + comptadorPassos;
-	const tinyTextId = "storyTextArea"+comptadorPassos;
-	const ultimElementStorymapId = "ultimElementStorymap";
-	const htmlNextStep = ["<div id='stepStoryMap", comptadorPassos, "'>",
-	"<input hidden id='" + stepInputFileId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + ultimElementStorymapId + "\")'>", 
-	"<img id='" + stepPictureId + "' alt='", GetMessage("StorymapImage", "storymap"), "'/><br><br>", 
-	"<input id='" + ultimElementStorymapId + "' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'><br><br>", "<input type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
+	const tinyTextId = "storyTextArea";
+	const inputImageId = "imagePicker";
+	const endButtonId= "endUpButton";
+	const htmlNextStep = ["<div id='storyMapInterface'>", 
+	"<input hidden id='" + inputImageId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + endButtonId + "\")'>",
+	"<input id='", endButtonId,"' type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
 	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
 	tinytextarea.setAttribute("id", tinyTextId)
-	const imgStep = document.getElementById(stepPictureId);
-	imgStep.parentNode.insertBefore(tinytextarea, imgStep);
-	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
-	imgStep.parentNode.insertBefore(document.createElement("br"), imgStep);
+	const endBtn = document.getElementById(endButtonId);
+	endBtn.parentNode.insertBefore(tinytextarea, endBtn);
+	endBtn.parentNode.insertBefore(document.createElement("br"), endBtn);
 
 	tinymce.init({
         target: tinytextarea,
-		toolbar: 'insertImageButton',
+		toolbar: 'undo redo styles bold italic alignleft aligncenter alignright alignjustify | insertImageButton insertLocationZoom bullist numlist outdent indent',
 		promotion: false,
-		min_height: 300,
-		min_width: 400,
+		min_height: 375,
+		min_width: 700,
 		setup: (editor) => {
 			editor.ui.registry.addButton('insertImageButton', {
-				text: 'Attach Image',
-				onAction: (_) => document.getElementById(stepInputFileId).click()
+				text: 'Attach image',
+				tooltip: 'Opens image selector files',
+				onAction: (_) => document.getElementById(inputImageId).click()
+			});
+			editor.ui.registry.addButton('insertLocationZoom', {
+				text: 'Record place',
+				icon: 'location.png',
+				tooltip: 'Insert current longitude, latitude and zoom',
+				onAction: (_) => {
+					const coordCentre = ObtenirCentre();
+					editor.insertContent("<img data-mm-center='{\"x\":"+coordCentre.x + ", \"y\":" + coordCentre.y + "}' data-mm-zoom='"+ ParamInternCtrl.vista.CostatZoomActual +"' src='location.png'/>");
+				}
 			});
 		}
     });
@@ -291,16 +301,10 @@ function SeguentPasStoryMap()
 
 function FinalitzarStoryMap()
 {
-	// Guardo l'últim pas definit en la StoryMap.
-	GuardarInformacioPasStoryMap();
+	// Guardo la descripció definida en la StoryMap.
+	GuardarDescripcioStoryMapTinymce();
 
-	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>"];
-	// Parsejar l'objecte novaStoryMap segons el format del htm de les altres Stories.
-	for (let i_Story = 0, passosLength = novaStoryMap.passos.length; i_Story < passosLength; i_Story++) {
-		const pas = novaStoryMap.passos[i_Story];
-		cdns.push("<div data-mm-center='{\"x\":"+pas.x + ", \"y\":" + pas.y + "}' data-mm-zoom='"+ pas.zoom +"'>", pas.descripcio, pas.imatge ? "<br><img src='" + pas.imatge + "' width=400>" : "", "</div>");
-	}
-	cdns.push("</html>");
+	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>", "<div>", novaStoryMap.descripcio, "</div>","</html>"];
 	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol.replace(/\s+/g, '_'), ".html");
 	GuardaEntradaStorymapConfig();
 	TancaFinestraLayer("creaStoryMap");
@@ -327,12 +331,9 @@ function GuardarInformacioInicialStoryMap()
 		novaStoryMap.imatgePrincipal = imatgePortada.src;
 }
 
-function GuardarInformacioPasStoryMap()
+function GuardarDescripcioStoryMapTinymce()
 {
-	if (novaStoryMap.passos == null)
-		novaStoryMap.passos = [];
-	const coordCentre = ObtenirCentre();
-	novaStoryMap.passos.push({"imatge": document.getElementById("stepImg" + comptadorPassos).src, "descripcio": tinymce.get("storyTextArea"+comptadorPassos).getContent(), "x": (coordCentre && coordCentre.x)? coordCentre.x : 0, "y": (coordCentre && coordCentre.y)? coordCentre.y : 0,  "zoom": ParamInternCtrl.vista.CostatZoomActual});
+	novaStoryMap.descripcio = tinymce.get("storyTextArea").getContent();
 }
 
 //Inicia una Storymap
@@ -391,7 +392,7 @@ function TancaFinestra_storyMap()
 {
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
-	comptadorPassos = 0;
+	novaStoryMap = {};
 	indexStoryMapActiu=null;
 }
 
