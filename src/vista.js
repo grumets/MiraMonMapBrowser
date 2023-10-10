@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -222,7 +222,7 @@ var cursor="auto";
 		if(ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" ||
 			ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2" ||
 		   ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" ||
-		   ParamCtrl.EstatClickSobreVista=="ClickMouMig")
+		   ParamCtrl.EstatClickSobreVista=="ClickMouMig" || ParamCtrl.EstatClickSobreVista=="ClickPointFB")
 			cursor="crosshair";
 		else if (ParamCtrl.EstatClickSobreVista=="ClickConLoc")
 			cursor="help";
@@ -366,6 +366,7 @@ var ZRecSize_1Client={"x": 0, "y": 0}, ZRecSize_2Client={"x": 0, "y": 0};   //On
 var HiHaHagutMoviment=false, HiHaHagutPrimerClick=false;
 var NovaVistaFinestra={"n": 0, "vista":[]};
 var CoordsFB={"x1":"", "y1":"","x2":"", "y2":""};
+var PuntFB={"i": 0, "j": 0, "x": 0.0, "y": 0.0, "i_nova_vista": -1};
 
 function ClickSobreVista(event, i_nova_vista)
 {
@@ -433,6 +434,27 @@ var i_vista;
 			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
 		}
 		ParamCtrl.EstatClickSobreVista="ClickRecFB2";
+	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickPointFB")
+	{
+		//com que en realitat les coordenades son transformades de la resolució de pantalla, el punt és un quadrat d'un píxel pantalla, així que les coordenades les calculo movent la dada que em dona el cursor mitja fila i mitja columa.
+		CoordsFB.x1=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientX-0.5));
+		CoordsFB.x2=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientX+0.5));
+		CoordsFB.y1=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientY-0.5));
+		CoordsFB.y2=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientY+0.5));
+
+		
+		//aquí guardem la fila columna original i la coordenada x,y del click. Servirà per pintar la creu al lloc on ha clickat l'usuari.
+		PuntFB.i=DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		PuntFB.j=DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+	
+		PuntFB.x=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		PuntFB.y=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		PuntFB.i_nova_vista=i_nova_vista;
+
+		PintaCreuFBPoint(PuntFB);
+		EscriuCoordenadesAFinestraFeedbackAmbScope();
+		ParamCtrl.EstatClickSobreVista=="ClickPointFB";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" &&  i_nova_vista==NovaVistaPrincipal)
 	{
@@ -553,6 +575,65 @@ var i_vista;
 	HiHaHagutPrimerClick=false;
 }
 
+function PintaCreuFBPoint(punt) // copiat i modificat de consult.js "function ConsultaSobreVista"
+{
+	if (ParamCtrl.IconaConsulta || ParamCtrl.IconaValidacio)
+	{
+		var cal_crear;
+		var puntConsultat=punt;
+		var capa=ParamCtrl.capa[ParamCtrl.ICapaVolaPuntConsult];
+		capa.objectes.features[0].geometry.coordinates[0]=puntConsultat.x;
+		capa.objectes.features[0].geometry.coordinates[1]=puntConsultat.y;
+		if (capa.visible=="no")  //Vol dir que CreaVistaImmediata no haurà creat la layer per contenir aquesta creuta de la consulta i s'ha de fer.
+			cal_crear=true;
+		else
+			cal_crear=false;
+		capa.visible="ara_no";
+
+		if(Accio && Accio.accio&AccioValidacio && ParamCtrl.IconaValidacio)
+		{
+			capa.objectes.features[0].seleccionat=true;
+			capa.visible="si";
+		}
+		else if (ParamCtrl.IconaConsulta)
+		{
+			capa.objectes.features[0].seleccionat=false;
+			capa.visible="si";
+		}
+		if (cal_crear)
+		{
+			var elem;
+			var zindex_temp;
+			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+			{
+				insertContentLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle), "beforeBegin", CreaCapaDigiLayer(ParamCtrl.VistaPermanent[i_vista].nom, puntConsultat.i_nova_vista, ParamCtrl.ICapaVolaPuntConsult));
+				//if (capa.visible!="si" && EsObjDigiVisibleAAquestNivellDeZoom(capa))
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(puntConsultat.i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
+				//Canvio el Z order de les capes del tel i de l'slider del zoom.
+				zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
+				elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom);
+				if (elem)
+				{
+					//Poso l'slider a dalt de tot
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom)));
+					setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixSliderZoom), zindex_temp);
+					zindex_temp=getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult));
+				}
+				//Poso el tel_tran per sobre de la capa de la consulta.
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+ParamCtrl.ICapaVolaPuntConsult), getzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixTelTrans)));
+				setzIndexLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixTelTrans), zindex_temp);
+			}
+		}
+		else
+		{
+			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+			{
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, DonaVistaDesDeINovaVista(puntConsultat.i_nova_vista), ParamCtrl.ICapaVolaPuntConsult);
+			}
+		}
+	}
+}
+
 function EscriuCoordenadesAFinestraFeedbackAmbScope()
 {
 	var xmin, xmax, ymin, ymax;
@@ -578,11 +659,35 @@ function EscriuCoordenadesAFinestraFeedbackAmbScope()
 	}
 	//escrivim les coordenades endreçades a la finestra corresponent
 	var dec=ParamCtrl.NDecimalsCoordXY;
+	//estem en el cas de digitalitzar un punt:
+	// * escric una coordenada central a la finestra, encara que en realitat enviarem un poligon. Faig cas dels decimals configurats
+	// * la resta de coordenades es guarden amb tots els decimals. Al estar digitalitzant poligons d'un sol píxel, si faig cas dels decimals configurats pel navegador no tinc prou precissió per generar un pol tant petit
+	if (document.getElementById("fbscope_y"))
+	{
+		var y=(ymax+ymin)/2;
+		document.getElementById("fbscope_y").value=OKStrOfNe(y, dec);
+		document.getElementById("fbscope_ymin").value=ymin;
+		document.getElementById("fbscope_ymax").value=ymax;
+	}
+	else // estem digitalitzant un FB de tipus pol. En aquest cas fem cas dels decimals definits.
+	{
+		document.getElementById("fbscope_ymin").value=OKStrOfNe(ymin, dec);
+		document.getElementById("fbscope_ymax").value=OKStrOfNe(ymax, dec);
+	}
 
+	//igual que el cas anterior però per les x
+	if (document.getElementById("fbscope_x"))
+	{
+		var x=(xmax+xmin)/2;
+		document.getElementById("fbscope_x").value=OKStrOfNe(x, dec);
+		document.getElementById("fbscope_xmin").value=xmin;
+		document.getElementById("fbscope_xmax").value=xmax;
+	}
+	else
+	{
 	document.getElementById("fbscope_xmin").value=OKStrOfNe(xmin, dec);
 	document.getElementById("fbscope_xmax").value=OKStrOfNe(xmax, dec);
-	document.getElementById("fbscope_ymin").value=OKStrOfNe(ymin, dec);
-	document.getElementById("fbscope_ymax").value=OKStrOfNe(ymax, dec);
+	}
 
 	ResetCoordsFB();
 }
@@ -828,7 +933,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	MostraValorDeCoordActual(i_nova_vista, x, y);
 	if (ParamCtrl.ZoomUnSolClic && HiHaHagutPrimerClick &&
 	    ParamCtrl.EstatClickSobreVista!="ClickZoomRec1" && ParamCtrl.EstatClickSobreVista!="ClickZoomRec2" &&
-		ParamCtrl.EstatClickSobreVista!="ClickRecFB1" && ParamCtrl.EstatClickSobreVista!="ClickRecFB2" &&
+		ParamCtrl.EstatClickSobreVista!="ClickRecFB1" && ParamCtrl.EstatClickSobreVista!="ClickRecFB2" && ParamCtrl.EstatClickSobreVista!="ClickPointFB" &&
         ParamCtrl.EstatClickSobreVista!="ClickNovaVista1" && ParamCtrl.EstatClickSobreVista!="ClickNovaVista2" &&
 	    ParamCtrl.EstatClickSobreVista!="ClickPan1" && ParamCtrl.EstatClickSobreVista!="ClickPan2" &&
 		ParamCtrl.EstatClickSobreVista!="ClickEditarPunts" &&

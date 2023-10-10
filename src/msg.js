@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3337,12 +3337,28 @@ var MessageLang=
       "ger": "Fehlende Koordinaten"
     },
     "ScopeUseMouse": {
-      "cat": "Usa el ratolí per marcar una àrea d'interès:",
-      "spa": "Usa el ratón para marcar un área de interés:",
-      "eng": "Use the mouse to select an area of interest:",
-      "fre": "Utiliser la souris pour sélectionner une zone d'intérêt:",
-      "cze": "Pomocí myši vyberte oblast zájmu:",
-      "ger": "Wählen Sie mit der Maus einen Interessenbereich aus:"
+      "cat": "Usa el ratolí per marcar",
+      "spa": "Usa el ratón para marcar",
+      "eng": "Use the mouse to select",
+      "fre": "Utiliser la souris pour sélectionner",
+      "cze": "Použijte myš k výběru",
+      "ger": "Benutzen Sie die Maus zum Auswählen"
+    },
+    "ScopeTypeArea": {
+      "cat": "una àrea",
+      "spa": "un área",
+      "eng": "an area",
+      "fre": "une zone",
+      "cze": "oblast",
+      "ger": "ein Gebiet"
+    },
+    "ScopeTypePoint": {
+      "cat": "un punt",
+      "spa": "un punto",
+      "eng": "a point",
+      "fre": "un point",
+      "cze": "bod",
+      "ger": "ein Punkt"
     }
   },
   "commands": {
