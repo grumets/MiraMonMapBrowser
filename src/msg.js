@@ -3183,6 +3183,16 @@ var MessageLang=
       "ger": "Web Mercator"
     }
   },
+  "vista":{
+    "WrongDefinedArea":{
+      "cat": "Les coordenades introduïdes no defineixen una àrea",
+      "spa": "Las coordenadas introducidas no definen un área",
+      "eng": "Selected coordinates doesn't define an area",
+      "fre": "Les coordonnées entrées ne définissent pas une zone",
+      "cze": "Zadané souřadnice nedefinují oblast",
+      "ger": "Die eingegebenen Koordinaten definieren kein Gebiet"
+    }
+  },
   "capavola": {
     "Proj": {
       "cat": "Proj",

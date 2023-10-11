@@ -171,21 +171,21 @@ function mostraSelecFBScope(type)
 				'<tr>'+
 					'<td></td>'+
 					'<td></td>'+
-					'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="7" value="" disabled></td>'+
+					'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="text" size="8" value="" disabled></td>'+
 					'<td></td>'+
 					'<td></td>'+
 				'</tr>'+
 				'<tr>'+
 					'<td style="text-align:rigth;">Xmin</td>'+
-					'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="7" value="" disabled></td>'+
+					'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="text" size="8" value="" disabled></td>'+
 					'<td></td>'+
-					'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="7" value="" disabled></td>'+
+					'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="text" size="8" value="" disabled></td>'+
 					'<td style="text-align:left;">Xmax</td>'+
 				'</tr>'+
 				'<tr>'+
 					'<td></td>'+
 					'<td></td>'+
-					'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="7" value="" disabled></td>'+
+					'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="text" size="8" value="" disabled></td>'+
 					'<td></td>'+
 					'<td></td>'+
 				'</tr>'+
@@ -214,27 +214,15 @@ function mostraSelecFBScope(type)
 		'</tr>'+
 		'<tr>'+
 			'<td style="text-align:rigth;">X:</td>'+
-			'<td><input class="Verdana11px" id="fbscope_x" name="fbscope_x" type="text" size="7" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_x" name="fbscope_x" type="text" size="8" value="" disabled></td>'+
 			'<td style="text-align:rigth;">Y:</td>'+
-			'<td><input class="Verdana11px" id="fbscope_y" name="fbscope_y" type="text" size="7" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_y" name="fbscope_y" type="text" size="8" value="" disabled></td>'+
 		'</tr>'+
 		'<tr>'+
-			'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="hidden" size="7" value="" disabled></td>'+
-			'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="hidden" size="7" value="" disabled></td>'+
-			'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="hidden" size="7" value="" disabled></td>'+
-			'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="hidden" size="7" value="" disabled></td>'+
-		'</tr>'+
-		'<tr>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
-		'</tr>'+
-		'<tr>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
-			'<td>&nbsp;</td>'+
+			'<td><input class="Verdana11px" id="fbscope_xmin" name="fbscope_xmin" type="hidden" size="8" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_ymin" name="fbscope_ymin" type="hidden" size="8" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_xmax" name="fbscope_xmax" type="hidden" size="8" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="fbscope_ymax" name="fbscope_ymax" type="hidden" size="8" value="" disabled></td>'+
 		'</tr>'+
 		'</table>';
 	}
@@ -243,6 +231,9 @@ function mostraSelecFBScope(type)
 //OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
 function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
 {
+	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS; //mirem el SR
+	var trg=JSON.parse(targets);
+	var dec=ParamCtrl.NDecimalsCoordXY; //per defecte agafarem els decimals configurats
 	//comprovem que tenim totes les coordenades
 	if (!document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value || !document.getElementById("fbscope_xmin").value || !document.getElementById("fbscope_ymax").value)
 	{
@@ -251,18 +242,20 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 	}
 	else
 	{
-		var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
 	
 		//ulc: upper left corner lrc: lower rigth corner
 		var ulc={"x": document.getElementById("fbscope_xmin").value, "y":document.getElementById("fbscope_ymax").value};
 		var lrc={"x": document.getElementById("fbscope_xmax").value, "y":document.getElementById("fbscope_ymin").value};
+	}
 	
-		var trg=JSON.parse(targets);
-		var dec=ParamCtrl.NDecimalsCoordXY;
-
+	//comprovem si el que volem enviar correspon a un punt
+	if ((document.getElementById("fbscope_x")) && (document.getElementById("fbscope_y")))
+	{
 		// si les coordenades no són en lon/lat, les transformem
 		if (crs !="EPSG:4326" && crs !="CRS:84")
 		{
+			//ulc:upper left corner. lrc: lower right corner
+			//convertim coordenades a lon/lat
 			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
 			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
 
@@ -274,36 +267,62 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					//afegim el bounding box en lon/lat
 					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
 					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
-					var dec_trans=8;
-					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
+					var dec_g=9;
+					var dif_g=0.0000000045;
+					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc_ll.x)-dif_g).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc_ll.x)+dif_g).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc_ll.y)+dif_g).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc_ll.y)-dif_g).toString(),dec_g)};
 					//afegim el GMLpol en el crs original
-					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					//modifiquem les coordenades per generar un pol de 1 mm de costat
+					var dec_m=3;
+					var dif_m=0.0005;
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 				}
 			}
 		}
 		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
 		{
-			//comprovem si el que volem enviar és un "punt" (no és un punt realment, és un pol mida píxel). En aquest cas acceptem 8 decimals, sinó ens passa que podem no tenir prou precissió.
-			if (document.getElementById("fbscope_x") && document.getElementById("fbscope_y"))
+			for (var i=0; i<trg.length; i++)
 			{
-				var dec=8;
-				if ((OKStrOfNe(ulc.x,dec)!=OKStrOfNe(lrc.x,dec)) && (OKStrOfNe(lrc.y,dec)!=OKStrOfNe(ulc.y,dec)))
+				//afegim el bbox i el gmlpol només al primary target
+				if (trg[i].role=="primary")
 		{
+					//afegim el bounding box en lon/lat
+					var dec_g=9;
+					var dif=0.0000000045;
+					// li sumem/restem un diferencial de 0.0000000045 a les coordenades en graus, que és l'equivalent de 0.5 mm per generar micropols de 1 mm de costat.
+					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g)};
+					//afegim el GMLpol
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+				}
+			}
+		}
+		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
+
+	}
+	//estem en el cas d'un pol
+	else
+			{
+		// si les coordenades no són en lon/lat, les transformem
+		if (crs !="EPSG:4326" && crs !="CRS:84")
+		{
+			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
+			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
 					for (var i=0; i<trg.length; i++)
 					{
 						//afegim el bbox i el gmlpol només al primary target
 						if (trg[i].role=="primary")
 						{
 							//afegim el bounding box en lon/lat
-							trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
-							//afegim el GMLpol
+					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
+					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
+					var dec_trans=9;
+					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
+					//afegim el GMLpol en el crs original
 							trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 						}
 					}
 				}
 
-			}
-			else  //aquí estem enviant un polígon.
+		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
 			{
 			//comprovem que les coordenades min/maxLat i min/maxLong no siguin iguals entre elles. En cas que ho siguin demanem a l'uruari que modifiqui el nombre de decimals a la configuració del navegador
 			if ((OKStrOfNe(ulc.x,dec)==OKStrOfNe(lrc.x,dec)) || (OKStrOfNe(lrc.y,dec)==OKStrOfNe(ulc.y,dec)))
@@ -327,7 +346,6 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					}
 				}
 			}
-		}
 	
 		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
 	
