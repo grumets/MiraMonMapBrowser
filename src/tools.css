@@ -166,6 +166,14 @@ textarea
 	color: #000099;
 }
 
+.button_image_dialog{
+	opacity: 1.0;
+}
+.button_image_dialog:disabled{
+	opacity: 0.5;
+}
+.button_image_dialog:hover{
+}
 
 /* *******************************************************
  Estils de espereu si us plau de la vista

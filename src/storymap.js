@@ -41,7 +41,7 @@
 var indexStoryMapActiu=null;
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
 const midesDivId = "divMidesImatge", dialogId = "midesDialog", inputWidthId = "widthMesure", inputHeightId = "heightMesure";
-const resultatMidesImatge = [];
+var resultatMidesImatge = {};
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -195,46 +195,97 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 				const midesDialog = document.getElementById(dialogId);
 				midesDialog.addEventListener("close", (event) => {
 					// Després de tancar el missatge emergent de les mides.
-					const resultatMides = event.currentTarget.returnValue.split(',');					
-					let ultimElem = document.getElementById(ultimElemId);
-					if (!canvasReduccioImg)
-					{
-						canvasReduccioImg = document.createElement("canvas");
-						canvasReduccioImg.setAttribute("id", canvasId);
-						
-						if (ultimElem)
+					let resultatMides = JSON.parse(event.currentTarget.returnValue);
+					resultatMides = adaptImageGivenOneDimension(resultatMides, result);
+					if (resultatMides) {
+						let ultimElem = document.getElementById(ultimElemId);
+						if (!canvasReduccioImg)
 						{
-							canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+							canvasReduccioImg = document.createElement("canvas");
+							canvasReduccioImg.setAttribute("id", canvasId);
+							
+							if (ultimElem)
+							{
+								canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+							}
+						} 
+	
+						canvasReduccioImg.width = resultatMides.width;
+						canvasReduccioImg.height = resultatMides.height;
+	
+						const cntx = canvasReduccioImg.getContext("2d");
+						cntx.drawImage(result, 0, 0, resultatMides.width, resultatMides.height);
+						const tinyEditor = tinymce.get(tinyEditId);
+						const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+						// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
+						if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
+						{ 
+							let writenOnTiny = tinyEditor.getContent();
+							tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width=" + resultatMides.width + ">");
 						}
-					} 
-
-					canvasReduccioImg.width = resultatMides[0];
-					canvasReduccioImg.height = resultatMides[1];
-
-					const cntx = canvasReduccioImg.getContext("2d");
-					cntx.drawImage(result, 0, 0, resultatMides[0], resultatMides[1]);
-					const tinyEditor = tinymce.get(tinyEditId);
-					const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
-					
-					if (tinyEditor && imatgeReduida)
-					{ 
-						let writenOnTiny = tinyEditor.getContent();
-						tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width=" + resultatMides[0] + ">");
 					}
+					resultatMidesImatge = {};
 				});
 				const inputWidth = document.getElementById(inputWidthId);
 				inputWidth.addEventListener("change", (event) => {
-					resultatMidesImatge[0] = event.currentTarget.value;
+					resultatMidesImatge.width = event.currentTarget.value;
+					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
 				});
 				const inputHeight = document.getElementById(inputHeightId);
 				inputHeight.addEventListener("change", (event) => {
-					resultatMidesImatge[1] = event.currentTarget.value;
+					resultatMidesImatge.height = event.currentTarget.value;
+					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
 				});
 				const confirmBtn = document.getElementById("confirmBtn");
 				confirmBtn.addEventListener("click", (event) => {
 					event.preventDefault();
-					midesDialog.close(resultatMidesImatge); // S'envia les mides introduïdes al diàleg.
+					midesDialog.close(JSON.stringify(resultatMidesImatge)); // S'envia les mides introduïdes al diàleg.
 				});
+
+				const checkForValues = new Function("inputWidth", "inputHeight", "return (!inputWidth.value && !inputHeight.value)");
+				function adaptImageGivenOneDimension(midesAdaptImatge, imatgeOriginal) {
+					if(midesAdaptImatge) {
+						const midesKeys = Object.keys(midesAdaptImatge);
+						const numKeys = midesKeys.length;
+						if(numKeys==2) 
+						{
+							return midesAdaptImatge;
+						} 
+						else if(numKeys == 1)
+						{
+							if(imatgeOriginal.width >= imatgeOriginal.height)
+							{
+								const proporcio = imatgeOriginal.width/imatgeOriginal.height;
+								if(midesKeys[0]=="width")
+								{
+									return {width: midesAdaptImatge.width, height: midesAdaptImatge.width / proporcio};
+								}
+								else
+								{
+									return {width: midesAdaptImatge.height * proporcio, height: midesAdaptImatge.height};
+								}
+							} 
+							else 
+							{
+								const proporcio = imatgeOriginal.height/imatgeOriginal.width;
+								if(midesKeys[0]=="width")
+								{
+									return {width: midesAdaptImatge.width, height: midesAdaptImatge.width * proporcio};
+								}
+								else
+								{
+									return {width: midesAdaptImatge.height / proporcio, height: midesAdaptImatge.height};
+								}
+							}
+						} 
+						else  
+						{
+							return;
+						}
+					}
+					return;
+				};
+
 				midesDialog.showModal();
 			}
 		});
@@ -249,7 +300,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 function CreaDialogMidesImatge(imatge)
 {
 	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
-	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
+	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' class='button_image_dialog' disabled='true' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
 	return dialogHtml.join("");
 }
 
@@ -276,7 +327,7 @@ function SeguentPasStoryMap()
 
 	tinymce.init({
         target: tinytextarea,
-		toolbar: 'undo redo styles bold italic alignleft aligncenter alignright alignjustify | insertImageButton insertLocationZoom bullist numlist outdent indent',
+		toolbar: 'undo redo styles bold italic insertImageButton insertLocationZoom | alignleft aligncenter alignright alignjustify bullist numlist outdent indent',
 		promotion: false,
 		min_height: 375,
 		min_width: 700,
