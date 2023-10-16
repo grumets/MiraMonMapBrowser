@@ -40,7 +40,7 @@
 
 var indexStoryMapActiu=null;
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
-const midesDivId = "divMidesImatge", dialogId = "midesDialog", inputWidthId = "widthMesure", inputHeightId = "heightMesure";
+const midesDivId = "divMidesImatge", dialogMidesId = "midesDialog", inputWidthId = "widthMesure", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", dialogCaracId = "caracDialog";
 var resultatMidesImatge = {};
 
 //Mostra la finestra que conté el llistat d'històries
@@ -192,7 +192,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 			{
 				ultimElem.insertAdjacentElement("afterend", divMidesImg);
 				divMidesImg.insertAdjacentElement("afterbegin", CreaDialogMidesImatge(result));
-				const midesDialog = document.getElementById(dialogId);
+				const midesDialog = document.getElementById(dialogMidesId);
 				midesDialog.addEventListener("close", (event) => {
 					// Després de tancar el missatge emergent de les mides.
 					let resultatMides = JSON.parse(event.currentTarget.returnValue);
@@ -236,7 +236,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 					resultatMidesImatge.height = event.currentTarget.value;
 					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
 				});
-				const confirmBtn = document.getElementById("confirmBtn");
+				const confirmBtn = document.getElementById(confirmImageBtnId);
 				confirmBtn.addEventListener("click", (event) => {
 					event.preventDefault();
 					midesDialog.close(JSON.stringify(resultatMidesImatge)); // S'envia les mides introduïdes al diàleg.
@@ -300,9 +300,18 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 function CreaDialogMidesImatge(imatge)
 {
 	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
-	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' class='button_image_dialog' disabled='true' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='", confirmImageBtnId, "' class='button_image_dialog' disabled='true' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
 
-	return CreaDialog(dialogId, dialogHtml.join(""));
+	return CreaDialog(dialogMidesId, dialogHtml.join(""));
+}
+
+function CreaDialogCaracteristiquesNavagador(imatge)
+{
+	const chBoxTempsId = "chboxTime", chBoxCapesId = "chboxCapes", chBoxZoomId = "chboxZoom", chBoxCoordId = "chboxCoord"; 
+	const textMides = "Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:" 
+	const dialogHtml = ["<form><p>Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:</p><div align-items='stretch'><p style='align: center'><input type='checkbox' id='", chBoxCoordId, "'><label for='", chBoxCoordId, "'>Coordenades</label><input type='checkbox' id='", chBoxZoomId, "'><label for='", chBoxZoomId, "'>Zoom</label><input type='checkbox' id='", chBoxCapesId, "'><label for='", chBoxCapesId, "'>Capes</label><input type='checkbox' id='", chBoxTempsId, "'><label for='", chBoxTempsId, "'>Temps</label></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmCaracBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+
+	return CreaDialog(dialogCaracId, dialogHtml.join(""));
 }
 
 function CreaDialog(identificadorDialog, contingutHtml)
