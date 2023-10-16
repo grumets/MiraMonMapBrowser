@@ -185,13 +185,13 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 		}).then(result => {
 
 			const divMidesImg = document.createElement("div");
-			let ultimElem = document.getElementById(ultimElemId);
 			divMidesImg.setAttribute("id", midesDivId);
+			let ultimElem = document.getElementById(ultimElemId);
 			
 			if (ultimElem)
 			{
 				ultimElem.insertAdjacentElement("afterend", divMidesImg);
-				divMidesImg.innerHTML = CreaDialogMidesImatge(result);
+				divMidesImg.insertAdjacentElement("afterbegin", CreaDialogMidesImatge(result));
 				const midesDialog = document.getElementById(dialogId);
 				midesDialog.addEventListener("close", (event) => {
 					// Després de tancar el missatge emergent de les mides.
@@ -300,8 +300,17 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 function CreaDialogMidesImatge(imatge)
 {
 	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
-	const dialogHtml = ["<dialog id='", dialogId, "'><form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' class='button_image_dialog' disabled='true' formmethod='dialog' value='default'>Confirm</button></p></div></form></dialog>"];
-	return dialogHtml.join("");
+	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label for='", inputWidthId, "'>Amplada reduida (px):</label><input type='numbers' id='", inputWidthId, "'><label for='", inputHeightId, "'>Alçada reduida (px):</label><input type='text' pattern='\d*' title='Only digits' id='", inputHeightId, "'></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='confirmBtn' class='button_image_dialog' disabled='true' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+
+	return CreaDialog(dialogId, dialogHtml.join(""));
+}
+
+function CreaDialog(identificadorDialog, contingutHtml)
+{
+	const dialog = document.createElement("dialog");
+	dialog.setAttribute("id", identificadorDialog);
+	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
+	return dialog;
 }
 
 function SeguentPasStoryMap()
