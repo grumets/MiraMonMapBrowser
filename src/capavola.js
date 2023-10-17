@@ -269,7 +269,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
 					var dec_g=9;
 					var dif_g=0.0000000045;
-					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc_ll.x)-dif_g).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc_ll.x)+dif_g).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc_ll.y)+dif_g).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc_ll.y)-dif_g).toString(),dec_g)};
+					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc_ll.x)-dif_g).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc_ll.x)+dif_g).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc_ll.y)-dif_g).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc_ll.y)+dif_g).toString(),dec_g)};
 					//afegim el GMLpol en el crs original
 					//modifiquem les coordenades per generar un pol de 1 mm de costat
 					var dec_m=3;
@@ -289,7 +289,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					var dec_g=9;
 					var dif=0.0000000045;
 					// li sumem/restem un diferencial de 0.0000000045 a les coordenades en graus, que és l'equivalent de 0.5 mm per generar micropols de 1 mm de costat.
-					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g)};
+					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc.y)-dif).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc.y)+dif).toString(),dec_g)};
 					//afegim el GMLpol
 					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 				}
