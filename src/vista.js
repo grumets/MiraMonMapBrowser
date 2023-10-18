@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -113,12 +113,17 @@ function DonaCadenaHTMLDibuixEscala(env, cal_desc_crs)
 var cdns=[];
 
 	var escala=DonaNumeroArrodonit125((env.MaxX-env.MinX)*0.4);
+	var unitats_CRS, p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
+	if (p=="°")
+		unitats_CRS=p;
+	else
+		unitats_CRS=" "+p;
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" width=\"1\" height=\"3\" border=\"0\"></td></tr>",
 			"<tr><td align=\"middle\" style=\"font-size: 1px;\"><img src=\"",
 			AfegeixAdrecaBaseSRC("1negre.gif"),
 			"\" width=\"", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
 		  	"\" height=\"2\"></td></tr>",
-			"<tr><td align=\"middle\"><font face=\"arial\" size=\"1\">", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+			"<tr><td align=\"middle\"><font face=\"arial\" size=\"1\">", escala, unitats_CRS);
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
