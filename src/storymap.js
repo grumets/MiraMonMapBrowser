@@ -39,9 +39,17 @@
 "use strict"
 
 var indexStoryMapActiu=null;
+const tinyTextId = "storyTextArea";
+// Extensions imatges permeses.
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
-const midesDivId = "divMidesImatge", dialogMidesId = "midesDialog", inputWidthId = "widthMesure", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", dialogCaracId = "caracDialog";
+// Identificadors diàlegs
+const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog";
+// Dialeg Mida Imatges components
+const inputWidthId = "widthMesure", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn";
+// Dialeg Característiques checkbox Identificadors and Names
+const chBoxTempsId = "chboxTime", chboxTempsName = "time", chBoxCapesId = "chboxCapes", chboxCapesName = "layers", chBoxZoomId = "chboxZoom", chboxZoomName = "zoom", chBoxCoordId = "chboxCoord", chboxCoordName = "coordinates", confirmCaractBtnId = "confirmCaractBtn";
 var resultatMidesImatge = {};
+var resultatCaract = {};
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -152,10 +160,9 @@ function TancaICreaStoryMap()
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
  * @param {*} input Element DOM tipus input que incorpora la imatge. 
- * @param {*} tinyEditId Identificador del editor Tiny.
  * @param {*} ultimElemId Identificador de l'últim element de la vista Storymap.
  */
-function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId) 
+function CarregaImatgeStoryMap(input, ultimElemId) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
 
@@ -185,7 +192,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 		}).then(result => {
 
 			const divMidesImg = document.createElement("div");
-			divMidesImg.setAttribute("id", midesDivId);
+			divMidesImg.setAttribute("id", "midesImgDiv");
 			let ultimElem = document.getElementById(ultimElemId);
 			
 			if (ultimElem)
@@ -195,7 +202,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 				const midesDialog = document.getElementById(dialogMidesId);
 				midesDialog.addEventListener("close", (event) => {
 					// Després de tancar el missatge emergent de les mides.
-					let resultatMides = JSON.parse(event.currentTarget.returnValue);
+					let resultatMides = JSON.parse(event.target.returnValue);
 					resultatMides = adaptImageGivenOneDimension(resultatMides, result);
 					if (resultatMides) {
 						let ultimElem = document.getElementById(ultimElemId);
@@ -215,7 +222,7 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 	
 						const cntx = canvasReduccioImg.getContext("2d");
 						cntx.drawImage(result, 0, 0, resultatMides.width, resultatMides.height);
-						const tinyEditor = tinymce.get(tinyEditId);
+						const tinyEditor = tinymce.get(tinyTextId);
 						const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 						// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
 						if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
@@ -228,12 +235,12 @@ function CarregaImatgeStoryMap(input, tinyEditId, ultimElemId)
 				});
 				const inputWidth = document.getElementById(inputWidthId);
 				inputWidth.addEventListener("change", (event) => {
-					resultatMidesImatge.width = event.currentTarget.value;
+					resultatMidesImatge.width = event.target.value;
 					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
 				});
 				const inputHeight = document.getElementById(inputHeightId);
 				inputHeight.addEventListener("change", (event) => {
-					resultatMidesImatge.height = event.currentTarget.value;
+					resultatMidesImatge.height = event.target.value;
 					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
 				});
 				const confirmBtn = document.getElementById(confirmImageBtnId);
@@ -305,13 +312,12 @@ function CreaDialogMidesImatge(imatge)
 	return CreaDialog(dialogMidesId, dialogHtml.join(""));
 }
 
-function CreaDialogCaracteristiquesNavagador(imatge)
+function CreaDialogCaracteristiquesNavagador()
 {
-	const chBoxTempsId = "chboxTime", chBoxCapesId = "chboxCapes", chBoxZoomId = "chboxZoom", chBoxCoordId = "chboxCoord"; 
 	const textMides = "Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:" 
-	const dialogHtml = ["<form><p>Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:</p><div align-items='stretch'><p style='align: center'><input type='checkbox' id='", chBoxCoordId, "'><label for='", chBoxCoordId, "'>Coordenades</label><input type='checkbox' id='", chBoxZoomId, "'><label for='", chBoxZoomId, "'>Zoom</label><input type='checkbox' id='", chBoxCapesId, "'><label for='", chBoxCapesId, "'>Capes</label><input type='checkbox' id='", chBoxTempsId, "'><label for='", chBoxTempsId, "'>Temps</label></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='confirmCaracBtn' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+	const dialogHtml = ["<form><p>Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:</p><div align-items='stretch'><p style='align: center'><input type='checkbox' id='", chBoxCoordId, "' name='", chboxCoordName,"'><label for='", chBoxCoordId, "'>Coordenades</label><input type='checkbox' id='", chBoxZoomId, "' name='", chboxZoomName,"'><label for='", chBoxZoomId, "'>Zoom</label><input type='checkbox' id='", chBoxCapesId, "' name='", chboxCapesName,"'><label for='", chBoxCapesId, "'>Capes</label><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>Temps</label></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
 
-	return CreaDialog(dialogCaracId, dialogHtml.join(""));
+	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
 
 function CreaDialog(identificadorDialog, contingutHtml)
@@ -322,17 +328,79 @@ function CreaDialog(identificadorDialog, contingutHtml)
 	return dialog;
 }
 
+function MostraDialogCaracteristiquesNavegador(ultimElemId)
+{
+	const divCaract = document.createElement("div");
+	divCaract.setAttribute("id", "caractDiv");
+	let ultimElem = document.getElementById(ultimElemId);
+	
+	if (ultimElem)
+	{
+		ultimElem.insertAdjacentElement("afterend", divCaract);
+		divCaract.insertAdjacentElement("afterbegin", CreaDialogCaracteristiquesNavagador());
+		const caractDialog = document.getElementById(dialogCaractId);
+
+		caractDialog.addEventListener("close", (event) => {
+			let resultatCaractUsuari = JSON.parse(event.target.returnValue);
+
+			if(resultatCaractUsuari[chboxZoomName]["status"])
+			{
+				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+			}
+
+			if(resultatCaractUsuari[chboxCoordName]["status"])
+			{
+				const coordCentre = ObtenirCentre();
+				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: "'{\"x\":"+coordCentre.x + ", \"y\":" + coordCentre.y + "}'"};
+			}
+
+			let imatgeResultatCaract = document.createElement("img");
+			imatgeResultatCaract.setAttribute("src", "location.png");
+
+			Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+				if(resultatCaractUsuari[caracteristica]["attribute"])
+				{
+					imatgeResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+				}
+			});
+			const tinyEditor = tinymce.get(tinyTextId);
+			//tinyEditor.insertContent(imatgeResultatCaract);
+			let writenOnTiny = tinyEditor.getContent();
+			tinyEditor.setContent(writenOnTiny + imatgeResultatCaract.outerHTML);
+		});
+
+		function saveCheckStatus(checkbox)
+		{
+			resultatCaract[checkbox.name]["status"] = checkbox.checked;
+		};
+
+		const contenedorCheckbox = document.querySelector("dialog[id='"+ dialogCaractId + "']");
+		const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
+		checkboxes.forEach(checkbox => {
+			checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
+			resultatCaract[checkbox.name] = {status: false};
+		});
+		
+		const confirmBtn = document.getElementById(confirmCaractBtnId);
+		confirmBtn.addEventListener("click", (event) => {
+			event.preventDefault();
+			caractDialog.close(JSON.stringify(resultatCaract)); // S'envia les mides introduïdes al diàleg.
+		});
+
+		caractDialog.showModal();
+	}
+}
+
 function SeguentPasStoryMap()
 {	
 	GuardarInformacioInicialStoryMap();
 	
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
-	const tinyTextId = "storyTextArea";
 	const inputImageId = "imagePicker";
 	const endButtonId= "endUpButton";
 	const htmlNextStep = ["<div id='storyMapInterface'>", 
-	"<input hidden id='" + inputImageId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + tinyTextId + "\", \"" + endButtonId + "\")'>",
+	"<input hidden id='" + inputImageId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + endButtonId + "\")'>",
 	"<input id='", endButtonId,"' type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
 
@@ -352,17 +420,15 @@ function SeguentPasStoryMap()
 		setup: (editor) => {
 			editor.ui.registry.addButton('insertImageButton', {
 				text: 'Attach image',
+				icon: "image",
 				tooltip: 'Opens image selector files',
 				onAction: (_) => document.getElementById(inputImageId).click()
 			});
 			editor.ui.registry.addButton('insertLocationZoom', {
 				text: 'Record place',
-				icon: 'location.png',
+				icon: 'ordered-list',
 				tooltip: 'Insert current longitude, latitude and zoom',
-				onAction: (_) => {
-					const coordCentre = ObtenirCentre();
-					editor.insertContent("<img data-mm-center='{\"x\":"+coordCentre.x + ", \"y\":" + coordCentre.y + "}' data-mm-zoom='"+ ParamInternCtrl.vista.CostatZoomActual +"' src='location.png'/>");
-				}
+				onAction: (_) => MostraDialogCaracteristiquesNavegador(endButtonId)
 			});
 		}
     });
