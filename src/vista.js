@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -114,10 +114,8 @@ var cdns=[];
 
 	var escala=DonaNumeroArrodonit125((env.MaxX-env.MinX)*0.4);
 	var unitats_CRS, p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
-	if (p=="°")
-		unitats_CRS=p;
-	else
-		unitats_CRS=" "+p;
+	unitats_CRS=((p=="°") ? "" : " ") + p;
+
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" width=\"1\" height=\"3\" border=\"0\"></td></tr>",
 			"<tr><td align=\"middle\" style=\"font-size: 1px;\"><img src=\"",
 			AfegeixAdrecaBaseSRC("1negre.gif"),

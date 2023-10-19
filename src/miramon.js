@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -1894,9 +1894,7 @@ function EscriuCostatIUnitatsZoom(i, crs)
 	if (EsProjLongLat(crs))
 		return g_gms(ParamCtrl.zoom[i].costat, false);
 	var p=DonaUnitatsCoordenadesProj(crs);
-	if (p=="°")
-		return ParamCtrl.zoom[i].costat+p;
-	return ParamCtrl.zoom[i].costat+" "+p;
+	return ParamCtrl.zoom[i].costat+((p=="°") ? "" : " ")+p;
 }
 
 function EscriuDescripcioNivellZoom(i, crs, vull_retorns)

@@ -469,7 +469,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (capa.estil && capa.estil.length==1 && (EsCapaBinaria(capa)/* || capa.model==model_vector*/)) // Cal programar això per vector ·$·
+	if (capa.estil && (EsCapaBinaria(capa)/* || capa.model==model_vector*/)) // Cal programar això per vector ·$·
 	{
 		if(alguna_opcio)
 		{
