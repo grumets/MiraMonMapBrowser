@@ -44,9 +44,9 @@ const tinyTextId = "storyTextArea";
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
 // Identificadors diàlegs
 const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog";
-// Dialeg Mida Imatges components
+// Dialeg Mida Imatges identificadors
 const inputWidthId = "widthMesure", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn";
-// Dialeg Característiques checkbox Identificadors and Names
+// Dialeg Característiques checkbox identificadors i noms
 const chBoxTempsId = "chboxTime", chboxTempsName = "time", chBoxCapesId = "chboxCapes", chboxCapesName = "layers", chBoxZoomId = "chboxZoom", chboxZoomName = "zoom", chBoxCoordId = "chboxCoord", chboxCoordName = "coordinates", confirmCaractBtnId = "confirmCaractBtn";
 var resultatMidesImatge = {};
 var resultatCaract = {};
@@ -168,8 +168,6 @@ function CarregaImatgeStoryMap(input, ultimElemId)
 
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType))
 	{
-		const canvasId = "reduccioImatges";
-		let canvasReduccioImg = document.getElementById(canvasId);
 		const midesPromise = new Promise((resolve, reject) => {
 
 			//Mirem la mida de la imatge
@@ -191,110 +189,8 @@ function CarregaImatgeStoryMap(input, ultimElemId)
 			imageToMesure.src = urlIamge;
 		}).then(result => {
 
-			const divMidesImg = document.createElement("div");
-			divMidesImg.setAttribute("id", "midesImgDiv");
-			let ultimElem = document.getElementById(ultimElemId);
-			
-			if (ultimElem)
-			{
-				ultimElem.insertAdjacentElement("afterend", divMidesImg);
-				divMidesImg.insertAdjacentElement("afterbegin", CreaDialogMidesImatge(result));
-				const midesDialog = document.getElementById(dialogMidesId);
-				midesDialog.addEventListener("close", (event) => {
-					// Després de tancar el missatge emergent de les mides.
-					let resultatMides = JSON.parse(event.target.returnValue);
-					resultatMides = adaptImageGivenOneDimension(resultatMides, result);
-					if (resultatMides) {
-						let ultimElem = document.getElementById(ultimElemId);
-						if (!canvasReduccioImg)
-						{
-							canvasReduccioImg = document.createElement("canvas");
-							canvasReduccioImg.setAttribute("id", canvasId);
-							
-							if (ultimElem)
-							{
-								canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
-							}
-						} 
-	
-						canvasReduccioImg.width = resultatMides.width;
-						canvasReduccioImg.height = resultatMides.height;
-	
-						const cntx = canvasReduccioImg.getContext("2d");
-						cntx.drawImage(result, 0, 0, resultatMides.width, resultatMides.height);
-						const tinyEditor = tinymce.get(tinyTextId);
-						const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
-						// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
-						if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
-						{ 
-							let writenOnTiny = tinyEditor.getContent();
-							tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width=" + resultatMides.width + ">");
-						}
-					}
-					resultatMidesImatge = {};
-				});
-				const inputWidth = document.getElementById(inputWidthId);
-				inputWidth.addEventListener("change", (event) => {
-					resultatMidesImatge.width = event.target.value;
-					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
-				});
-				const inputHeight = document.getElementById(inputHeightId);
-				inputHeight.addEventListener("change", (event) => {
-					resultatMidesImatge.height = event.target.value;
-					confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
-				});
-				const confirmBtn = document.getElementById(confirmImageBtnId);
-				confirmBtn.addEventListener("click", (event) => {
-					event.preventDefault();
-					midesDialog.close(JSON.stringify(resultatMidesImatge)); // S'envia les mides introduïdes al diàleg.
-				});
+			MostraDialogImatgeNavegador(result, ultimElemId);
 
-				const checkForValues = new Function("inputWidth", "inputHeight", "return (!inputWidth.value && !inputHeight.value)");
-				function adaptImageGivenOneDimension(midesAdaptImatge, imatgeOriginal) {
-					if(midesAdaptImatge) {
-						const midesKeys = Object.keys(midesAdaptImatge);
-						const numKeys = midesKeys.length;
-						if(numKeys==2) 
-						{
-							return midesAdaptImatge;
-						} 
-						else if(numKeys == 1)
-						{
-							if(imatgeOriginal.width >= imatgeOriginal.height)
-							{
-								const proporcio = imatgeOriginal.width/imatgeOriginal.height;
-								if(midesKeys[0]=="width")
-								{
-									return {width: midesAdaptImatge.width, height: midesAdaptImatge.width / proporcio};
-								}
-								else
-								{
-									return {width: midesAdaptImatge.height * proporcio, height: midesAdaptImatge.height};
-								}
-							} 
-							else 
-							{
-								const proporcio = imatgeOriginal.height/imatgeOriginal.width;
-								if(midesKeys[0]=="width")
-								{
-									return {width: midesAdaptImatge.width, height: midesAdaptImatge.width * proporcio};
-								}
-								else
-								{
-									return {width: midesAdaptImatge.height / proporcio, height: midesAdaptImatge.height};
-								}
-							}
-						} 
-						else  
-						{
-							return;
-						}
-					}
-					return;
-				};
-
-				midesDialog.showModal();
-			}
 		});
 	}
 }
@@ -315,7 +211,7 @@ function CreaDialogMidesImatge(imatge)
 function CreaDialogCaracteristiquesNavagador()
 {
 	const textMides = "Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:" 
-	const dialogHtml = ["<form><p>Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:</p><div align-items='stretch'><p style='align: center'><input type='checkbox' id='", chBoxCoordId, "' name='", chboxCoordName,"'><label for='", chBoxCoordId, "'>Coordenades</label><input type='checkbox' id='", chBoxZoomId, "' name='", chboxZoomName,"'><label for='", chBoxZoomId, "'>Zoom</label><input type='checkbox' id='", chBoxCapesId, "' name='", chboxCapesName,"'><label for='", chBoxCapesId, "'>Capes</label><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>Temps</label></p><p style='align: center'><button value='cancel' formmethod='dialog'>Cancel</button><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+	const dialogHtml = ["<form><p>Selecciona les característiques del mapa i les capes a preservar per a aquest punt de l'Storymap:</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxCoordId, "' name='", chboxCoordName,"'><label for='", chBoxCoordId, "'>Coordenades</label></p><p><input type='checkbox' id='", chBoxZoomId, "' name='", chboxZoomName,"'><label for='", chBoxZoomId, "'>Zoom</label></p><p><input type='checkbox' id='", chBoxCapesId, "' name='", chboxCapesName,"'><label for='", chBoxCapesId, "'>Capes</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>Temps</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button><button value='cancel' formmethod='dialog'>Cancel</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
@@ -326,6 +222,116 @@ function CreaDialog(identificadorDialog, contingutHtml)
 	dialog.setAttribute("id", identificadorDialog);
 	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
 	return dialog;
+}
+
+function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
+{
+	const divMidesImg = document.createElement("div");
+	divMidesImg.setAttribute("id", "midesImgDiv");
+	let ultimElem = document.getElementById(ultimElemId);
+	
+	if (ultimElem)
+	{
+		ultimElem.insertAdjacentElement("afterend", divMidesImg);
+		divMidesImg.insertAdjacentElement("afterbegin", CreaDialogMidesImatge(imatgeSeleccionada));
+		const midesDialog = document.getElementById(dialogMidesId);
+		midesDialog.addEventListener("close", (event) => {
+			// Després de tancar el missatge emergent de les mides.
+			let resultatMides = JSON.parse(event.target.returnValue);
+			resultatMides = adaptImageGivenOneDimension(resultatMides, imatgeSeleccionada);
+			if (resultatMides) {
+				let ultimElem = document.getElementById(ultimElemId);
+				const canvasId = "reduccioImatges";
+				let canvasReduccioImg = document.getElementById(canvasId);
+				if (!canvasReduccioImg)
+				{
+					canvasReduccioImg = document.createElement("canvas");
+					canvasReduccioImg.setAttribute("id", canvasId);
+					
+					if (ultimElem)
+					{
+						canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
+					}
+				} 
+
+				canvasReduccioImg.width = resultatMides.width;
+				canvasReduccioImg.height = resultatMides.height;
+
+				const cntx = canvasReduccioImg.getContext("2d");
+				cntx.drawImage(imatgeSeleccionada, 0, 0, resultatMides.width, resultatMides.height);
+				const tinyEditor = tinymce.get(tinyTextId);
+				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+				// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
+				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
+				{ 
+					let writenOnTiny = tinyEditor.getContent();
+					tinyEditor.setContent(writenOnTiny + "<br><br><img src='" + imatgeReduida + "' width=" + resultatMides.width + ">");
+				}
+			}
+			resultatMidesImatge = {};
+		});
+		const inputWidth = document.getElementById(inputWidthId);
+		inputWidth.addEventListener("change", (event) => {
+			resultatMidesImatge.width = event.target.value;
+			confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
+		});
+		const inputHeight = document.getElementById(inputHeightId);
+		inputHeight.addEventListener("change", (event) => {
+			resultatMidesImatge.height = event.target.value;
+			confirmBtn.disabled = checkForValues(inputWidth, inputHeight);
+		});
+		const confirmBtn = document.getElementById(confirmImageBtnId);
+		confirmBtn.addEventListener("click", (event) => {
+			event.preventDefault();
+			midesDialog.close(JSON.stringify(resultatMidesImatge)); // S'envia les mides introduïdes al diàleg.
+		});
+
+		const checkForValues = new Function("inputWidth", "inputHeight", "return (!inputWidth.value && !inputHeight.value)");
+		function adaptImageGivenOneDimension(midesAdaptImatge, imatgeOriginal) {
+			if(midesAdaptImatge) {
+				const midesKeys = Object.keys(midesAdaptImatge);
+				const numKeys = midesKeys.length;
+				if(numKeys==2) 
+				{
+					return midesAdaptImatge;
+				} 
+				else if(numKeys == 1)
+				{
+					if(imatgeOriginal.width >= imatgeOriginal.height)
+					{
+						const proporcio = imatgeOriginal.width/imatgeOriginal.height;
+						if(midesKeys[0]=="width")
+						{
+							return {width: midesAdaptImatge.width, height: midesAdaptImatge.width / proporcio};
+						}
+						else
+						{
+							return {width: midesAdaptImatge.height * proporcio, height: midesAdaptImatge.height};
+						}
+					} 
+					else 
+					{
+						const proporcio = imatgeOriginal.height/imatgeOriginal.width;
+						if(midesKeys[0]=="width")
+						{
+							return {width: midesAdaptImatge.width, height: midesAdaptImatge.width * proporcio};
+						}
+						else
+						{
+							return {width: midesAdaptImatge.height / proporcio, height: midesAdaptImatge.height};
+						}
+					}
+				} 
+				else  
+				{
+					return;
+				}
+			}
+			return;
+		};
+
+		midesDialog.showModal();
+	}
 }
 
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
@@ -352,6 +358,17 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 			{
 				const coordCentre = ObtenirCentre();
 				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: "'{\"x\":"+coordCentre.x + ", \"y\":" + coordCentre.y + "}'"};
+			}
+
+			if(resultatCaractUsuari[chboxCapesName]["status"])
+			{
+				let capesVisiblesIds = [];
+				ParamCtrl.capa.filter(capa => { 
+					if (capa.visible=="si")
+						capesVisiblesIds.push(capa.id);
+				});
+				if (capesVisiblesIds.length > 0)
+					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
 			}
 
 			let imatgeResultatCaract = document.createElement("img");

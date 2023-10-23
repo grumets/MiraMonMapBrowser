@@ -58,6 +58,12 @@ a:hover { text-decoration: underline}
 	font-weight: bold;
 }
 
+.horizontalSpreadElements {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+  }
 
 /* General forms style */
 select
