@@ -249,121 +249,114 @@ var hihacanvis, node, attribute;
 			if (darrerNodeStoryMapVisibleExecutat==node)
 				return false;
 
-			for (var i_at = 0; i_at < node.attributes.length; i_at++)
+			if (node.dataset.mmCrs)   //NEcessito aplicar aquest abans que tots els altres.
 			{
-				attribute=node.attributes[i_at];
-				if (attribute.name=='data-mm-crs')   //NEcessito aplicar aquest abans que tots els altres.
+				if (node.dataset.mmCrs.trim().length)
 				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetCRS(attribute.value.trim()))
-							hihacanvis=true;
-					}
+					if (0==CommandMMNSetCRS(node.dataset.mmCrs.trim()))
+						hihacanvis=true;
 				}
 			}
-			for (var i_at = 0; i_at < node.attributes.length; i_at++)
+			
+			if (node.dataset.mmCenter)
 			{
-				attribute=node.attributes[i_at];
-				if (attribute.name=="data-mm-center")
+				var mmcenter = node.dataset.mmCenter.trim();
+				if (mmcenter.length)
 				{
-					var mmcenter = attribute.value.trim();
-					if (mmcenter.length)
-					{
-						var punt;
-						try {
-							punt=JSON.parse(mmcenter);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
-							break;
-						}
-						if (0==CommandMMNSetCenterCoord(punt))
-							hihacanvis=true;
+					var punt;
+					try {
+						punt=JSON.parse(mmcenter);
 					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+					catch (e) {
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+									GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
+						break;
+					}
+					if (0==CommandMMNSetCenterCoord(punt))
+						hihacanvis=true;
 				}
-				else if (attribute.name=='data-mm-zoom')
+				else
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+			}
+			
+			if (node.dataset.mmZoom)
+			{
+				if (node.dataset.mmZoom.trim().length)
 				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-							hihacanvis=true;
-					}
+					if (0==CommandMMNSetZoom(parseFloat(node.dataset.mmZoom.trim())))
+						hihacanvis=true;
 				}
-				else if (attribute.name=="data-mm-layers")
+			}
+
+			if (node.dataset.mmLayers)
+			{
+				CommandMMNSetLayersAndStyles(node.dataset.mmLayers.trim(), 
+						(node.dataset.mmStyles) ? node.dataset.mmStyles.trim() : null, 
+						"data-mm-layers");
+				hihacanvis=true;
+			}
+
+			if (node.dataset.mmTime)
+			{
+				var datejson;
+				var mmtime = node.dataset.mmTime.trim();
+				if (mmtime.length)
 				{
-					for (var i_styles = 0; i_styles < node.attributes.length; i_styles++)
+					try
 					{
-						if (node.attributes[i_styles].name=="data-mm-styles")
-							break;
+						datejson=JSON.parse(mmtime);
 					}
-					CommandMMNSetLayersAndStyles(attribute.value.trim(), 
-							(i_styles == node.attributes.length) ? null : node.attributes[i_styles].value.trim(), 
-							"data-mm-layers");
-					hihacanvis=true;
+					catch (e)
+					{
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
+									GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
+						break;
+					}
+					if (0==CommandMMNSetChangeDateTime(datejson))
+						hihacanvis=true;
 				}
-				else if (attribute.name=="data-mm-time")
+			}
+
+			if (node.dataset.mmSels)
+			{
+				var mmsels = "["+node.dataset.mmSels.trim().replaceAll('¨', '\'')+"]";
+				if (mmsels.length>3)
 				{
-					var datejson;
-					var mmtime = attribute.value.trim();
-					if (mmtime.length)
-					{
-						try
-						{
-							datejson=JSON.parse(mmtime);
-						}
-						catch (e)
-						{
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
-										GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
-							break;
-						}
-						if (0==CommandMMNSetChangeDateTime(datejson))
-							hihacanvis=true;
+					var sels;
+					try {
+						sels=JSON.parse(mmsels);
 					}
+					catch (e) {
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+									GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
+						break;
+					}
+					if (0==CommandMMNSelections(sels))
+						hihacanvis=true;
 				}
-				else if (attribute.name=='data-mm-sels')
+				else
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+			}
+
+			if (node.dataset.mmHistos)
+			{
+				var mmhistos = "["+node.dataset.mmHistos.trim()+"]";
+				if (mmhistos.length>3)
 				{
-					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
-					if (mmsels.length>3)
-					{
-						var sels;
-						try {
-							sels=JSON.parse(mmsels);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
-							break;
-						}
-						if (0==CommandMMNSelections(sels))
-							hihacanvis=true;
+					var histos;
+					try {
+						histos=JSON.parse(mmhistos);
 					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=='data-mm-histos')
-				{
-					var mmhistos = "["+attribute.value.trim()+"]";
-					if (mmhistos.length>3)
-					{
-						var histos;
-						try {
-							histos=JSON.parse(mmhistos);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
-							break;
-						}
-						if (0==CommandMMNHistograms(histos))
-							hihacanvis=true;
+					catch (e) {
+						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+									GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
+						break;
 					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+					if (0==CommandMMNHistograms(histos))
+						hihacanvis=true;
 				}
+				else
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 			}
 			if (hihacanvis)
 			{
