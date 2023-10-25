@@ -357,7 +357,8 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 			if(resultatCaractUsuari[chboxCoordName]["status"])
 			{
 				const coordCentre = ObtenirCentre();
-				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: "'{\"x\":"+coordCentre.x + ", \"y\":" + coordCentre.y + "}'"};
+				const puntCentral = {x: coordCentre.x, y: coordCentre.y};
+				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(puntCentral)};
 			}
 
 			if(resultatCaractUsuari[chboxCapesName]["status"])
