@@ -233,8 +233,6 @@ function RecorreNodesFillsAttributsStoryMapVisible(div, nodes)
 {
 var hihacanvis, node, attribute;
 
-	//var div=getFinestraLayer(window, "storyMap");
-
 	for (var i = 0; i < nodes.length; i++)
 	{
 		node=nodes[i];
