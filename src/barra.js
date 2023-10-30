@@ -541,7 +541,7 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoInstallarMMZ)
 			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
 				GetMessage("InstallMiraMonReader", "barra"),
-				"InstalaLectorMapes();")));
+				"PreguntaDescarregaMMReader();")));
 		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
 			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)

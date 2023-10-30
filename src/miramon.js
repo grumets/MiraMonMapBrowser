@@ -1875,6 +1875,17 @@ function ObreFinestraAjuda()
         AjudaWindow.focus();
 }
 
+function PreguntaDescarregaMMReader() {
+	if (confirm("Are you sure to download the MM Reader?"))
+	{ 
+		InstalaLectorMapes();
+	}
+	else
+	{
+		;
+	}
+}
+
 function InstalaLectorMapes()
 {
 	ComprovaCalTancarFeedbackAmbScope();
