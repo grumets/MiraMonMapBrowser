@@ -207,8 +207,9 @@ function CarregaImatgeStoryMap(input, ultimElemId)
  */
 function CreaDialogMidesImatge(imatge)
 {
-	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>." 
-	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + lableWidthId + "' for='", inputWidthId, "'>Amplada reduida (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' pattern='[+-]?([0-9]*[.])?[0-9]+' title='Only digits'><label id='" + lableHeightId + "' for='", inputHeightId, "'>Alçada reduida (" + percentageUnit + "):</label><input type='text' pattern='[+-]?([0-9]*[.])?[0-9]+' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>Elegeix la unitat de mesura:</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>Mantindre proporcionalitat</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='", confirmImageBtnId, "' class='button_image_dialog' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
+	const textMides = "Mides actuals de la imatge: <b>" + imatge.width + "px amplada</b>, <b>" + imatge.height + "px alçada</b>."
+	const solsNombresRegexp = new RegExp(/[+-]?([0-9]*[.])?[0-9]+/);
+	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + lableWidthId + "' for='", inputWidthId, "'>Amplada reduida (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' pattern='" + solsNombresRegexp + "' title='Only digits'><label id='" + lableHeightId + "' for='", inputHeightId, "'>Alçada reduida (" + percentageUnit + "):</label><input type='text' pattern='" + solsNombresRegexp + "' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>Elegeix la unitat de mesura:</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>Mantindre proporcionalitat</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>Cancel</button><button id='", confirmImageBtnId, "' class='button_image_dialog' formmethod='dialog' value='default'>Confirm</button></p></div></form>"];
 
 	return CreaDialog(dialogMidesId, dialogHtml.join(""));
 }
@@ -242,8 +243,8 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.width;
 			limitsMidesImatge["width"][pixelUnit] = imatgeSeleccionada.width * limitsMidesImatge["width"][percentageUnit] / 100;
 			limitsMidesImatge.height = {};
-			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["width"][percentageUnit] / proporcio;
-			limitsMidesImatge["height"][pixelUnit] = imatgeSeleccionada.height * limitsMidesImatge["height"][percentageUnit] / 100;
+			limitsMidesImatge["height"][pixelUnit] = limitsMidesImatge["width"][pixelUnit] / proporcio;
+			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatgeSeleccionada.height;
 		}
 		else 
 		{
@@ -252,8 +253,8 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.height;
 			limitsMidesImatge["height"][pixelUnit] = imatgeSeleccionada.height * limitsMidesImatge["height"][percentageUnit] / 100;
 			limitsMidesImatge.width = {};
-			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["height"][percentageUnit] / proporcio;
-			limitsMidesImatge["width"][pixelUnit] = imatgeSeleccionada.width * limitsMidesImatge["width"][percentageUnit] / 100;
+			limitsMidesImatge["width"][pixelUnit] = limitsMidesImatge["height"][pixelUnit] / proporcio;
+			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatgeSeleccionada.width;
 		}	
 	}
 
@@ -303,29 +304,36 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 			}
 			resultatMidesImatge = {};
 		});
+		// Entrada de mides imatge
 		const inputWidth = document.getElementById(inputWidthId);
 		inputWidth.value = limitsMidesImatge["width"][percentageUnit];
 		resultatMidesImatge.width = limitsMidesImatge["width"][percentageUnit];
 		inputWidth.addEventListener("change", (event) => {
 			resultatMidesImatge.width = parseFloat(event.target.value);
-			confirmBtn.disabled = checkForEmptyValues(inputWidth, inputHeight);
+			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 		});
 		const inputHeight = document.getElementById(inputHeightId);
 		inputHeight.value = limitsMidesImatge["height"][percentageUnit];
 		resultatMidesImatge.height = limitsMidesImatge["height"][percentageUnit];
 		inputHeight.addEventListener("change", (event) => {
 			resultatMidesImatge.height = parseFloat(event.target.value);
-			confirmBtn.disabled = checkForEmptyValues(inputWidth, inputHeight);
+			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 		});
+		// Chackbox Propocional
 		const chboxProportional = document.getElementById(chboxProportionalId);
 		chboxProportional.addEventListener("change", (event) => {
-			event.target.checked;
-			confirmBtn.disabled = checkForEmptyValues(inputWidth, inputHeight);
+			if (event.target.checked)
+			{
+				resultatMidesImatge = adaptImageGivenOneDimension(resultatMidesImatge, imatgeSeleccionada);
+				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+			}
 		});
+		// Selector de unitats
 		const selector = document.getElementById(selectSizeUnitId);
 		selector.addEventListener("change", (event) => {
-			updateLabelUnits(event.target.value);
+			updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
 		});
+		// Botó de confirmació
 		const confirmBtn = document.getElementById(confirmImageBtnId);
 		confirmBtn.addEventListener("click", (event) => {
 			event.preventDefault();
@@ -338,9 +346,11 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 				alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
 			}
 		});
-
-		const checkForEmptyValues = new Function("inputWidth", "inputHeight", "return (!inputWidth.value && !inputHeight.value)");
-
+		
+		// Comprovem que no tenim valors en els caixetins de mides.
+		const checkForEmptyValuesOrNonNumbers = new Function("inputWidth", "inputHeight", "return isNaN(parseFloat(inputWidth.value)) || isNaN(parseFloat(inputHeight.value))");
+		
+		// Comprovem per les proporcions de la imatges quines són les mides més amplies que ens podem permetre.
 		function checkImageLimits()
 		{
 			const unitatSeleccionada = selector.value == percentageUnit ? percentageUnit : pixelUnit;
@@ -366,76 +376,114 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 					return (resultatMidesImatge.width*imatgeSeleccionada.width/100) * (resultatMidesImatge.height*imatgeSeleccionada.height/100) <= numMaximPixels;
 
 				}
-				//return resultatMidesImatge.width <= limitsMidesImatge["width"][unitatSeleccionada] && resultatMidesImatge.height <= limitsMidesImatge["height"][unitatSeleccionada];
 			}
 		}
-
+		// En tenir només 1 de les dos mides definides, com adaptem l'altra dimensió per a que mantingui la proporció.
 		function adaptImageGivenOneDimension(midesAdaptImatge, imatgeOriginal) {
-			if(midesAdaptImatge) {
-				const midesKeys = Object.keys(midesAdaptImatge);
-				const numKeys = midesKeys.length;
-				if(numKeys==2) 
+			
+			let proporcio = 0;
+
+			if((!isNaN(midesAdaptImatge.width) && !isNaN(midesAdaptImatge.height))) 
+			{
+				// Quan tenim dos valors prenem la base del width per buscar la proporcionalitat. Decisió arbitraria.
+				let proporcio =  imatgeOriginal.width / imatgeOriginal.height;
+				if (selector.value == percentageUnit)
 				{
-					return midesAdaptImatge;
-				} 
-				else if(numKeys == 1)
+					let valorPxWidth = midesAdaptImatge.width * imatgeOriginal.width / 100;
+					let valorPxHeight = valorPxWidth / proporcio;
+
+					return {width: valorPxWidth * 100 / imatgeOriginal.width, height: valorPxHeight * 100 / imatgeOriginal.height}
+				}
+				else
 				{
-					if(imatgeOriginal.width >= imatgeOriginal.height)
+					return {width: midesAdaptImatge.width, height: midesAdaptImatge.width / proporcio}
+				}
+			} 
+			else if(isNaN(midesAdaptImatge.height))
+			{
+				if(esImatgeApaisada)
+				{
+					const proporcio = imatgeOriginal.width/imatgeOriginal.height;
+					if(midesKeys[0]=="width")
 					{
-						const proporcio = imatgeOriginal.width/imatgeOriginal.height;
-						if(midesKeys[0]=="width")
-						{
+						if (selector.value == percentageUnit)
+							return {width: midesAdaptImatge.width * imatgeOriginal.width / 100, height: (midesAdaptImatge.width * imatgeOriginal.width / 100) / proporcio};	
+						else 
 							return {width: midesAdaptImatge.width, height: midesAdaptImatge.width / proporcio};
-						}
-						else
-						{
-							return {width: midesAdaptImatge.height * proporcio, height: midesAdaptImatge.height};
-						}
-					} 
-					else 
+					}
+					else
 					{
-						const proporcio = imatgeOriginal.height/imatgeOriginal.width;
-						if(midesKeys[0]=="width")
-						{
-							return {width: midesAdaptImatge.width, height: midesAdaptImatge.width * proporcio};
-						}
+						if (selector.value == percentageUnit)
+							return {width: (midesAdaptImatge.height * imatgeOriginal.height / 100) * proporcio, height: midesAdaptImatge.height * imatgeOriginal.height / 100};
 						else
-						{
-							return {width: midesAdaptImatge.height / proporcio, height: midesAdaptImatge.height};
-						}
+						return {width: midesAdaptImatge.height * proporcio, height: midesAdaptImatge.height};
 					}
 				} 
-				else  
+				else 
 				{
-					return;
+					const proporcio = imatgeOriginal.height/imatgeOriginal.width;
+					if(midesKeys[0]=="width")
+					{
+						if (selector.value == percentageUnit)
+							return {width: midesAdaptImatge.width * imatgeOriginal.width / 100, height: (midesAdaptImatge.width * imatgeOriginal.width / 100) * proporcio};
+						else
+							return {width: midesAdaptImatge.width, height: midesAdaptImatge.width * proporcio};
+					}
+					else
+					{
+						if (selector.value == percentageUnit)
+							return {width: (midesAdaptImatge.height * imatgeOriginal.heigth / 100) / proporcio, height: midesAdaptImatge.height * imatgeOriginal.heigth / 100};
+						else
+							return {width: midesAdaptImatge.height / proporcio, height: midesAdaptImatge.height};
+					}
 				}
-			}
-			return;
+			} 
+			else  
+				return;
 		};
-
+		
+		// Actualitzem els valors dels caixetins amb nous valors.
 		function updateSizeInputValues(widthField, heightField) 
 		{
 			inputWidth.value = widthField;
 			inputHeight.value = heightField;
 		}
 
-		function updateLabelUnits(nextUnit)
-		{
-				const labelWidth = document.getElementById(lableWidthId);
-				const labelHeight = document.getElementById(lableHeightId);
-				if (nextUnit == percentageUnit)
-				{
-					labelWidth.innerText = labelWidth.innerText.replace(pixelUnit, percentageUnit);
-					labelHeight.innerText = labelHeight.innerText.replace(pixelUnit, percentageUnit);
-				}
-				else 
-				{
-					labelWidth.innerText = labelWidth.innerText.replace(percentageUnit, pixelUnit);
-					labelHeight.innerText = labelHeight.innerText.replace(percentageUnit, pixelUnit);
-				}
-		}
+		// Actualitzem les unitats de mesura i els valors de les mides segons el nou valor del selector d'unitats.
+		function updateUnitChangeInputValuesLabelUnits(nextUnit, imatgeOriginal)
+		{	
+			// Actualitza etiquetes unitats.
+			const labelWidth = document.getElementById(lableWidthId);
+			const labelHeight = document.getElementById(lableHeightId);
+			if (nextUnit == percentageUnit)
+			{
+				labelWidth.innerText = labelWidth.innerText.replace(pixelUnit, percentageUnit);
+				labelHeight.innerText = labelHeight.innerText.replace(pixelUnit, percentageUnit);
+			}
+			else 
+			{
+				labelWidth.innerText = labelWidth.innerText.replace(percentageUnit, pixelUnit);
+				labelHeight.innerText = labelHeight.innerText.replace(percentageUnit, pixelUnit);
+			}
 
-		updateSizeInputValues(limitsMidesImatge.width[percentageUnit], limitsMidesImatge.height[percentageUnit])
+			// Actualitza valors caixetins segons nova unitat de mesura.
+			let updatedWidth = 0;
+			let updatedHeight = 0;
+			// Passem de valors en píxels a valors en percentatge.
+			if (selector.value == percentageUnit)
+			{
+				updatedWidth = !isNaN(resultatMidesImatge.width) ? resultatMidesImatge.width * 100 / imatgeOriginal.width : NaN;
+				updatedHeight = !isNaN(resultatMidesImatge.height) ? resultatMidesImatge.height * 100 / imatgeOriginal.height : NaN;
+			}
+			else // Passem de valors en percentatge a valors en píxels.
+			{
+				updatedWidth = !isNaN(resultatMidesImatge.width) ? resultatMidesImatge.width * imatgeOriginal.width / 100 : NaN;
+				updatedHeight = !isNaN(resultatMidesImatge.height) ? resultatMidesImatge.height * imatgeOriginal.height / 100 : NaN;
+			}
+
+			updateSizeInputValues(updatedWidth, updatedHeight);
+			
+		}
 
 		midesDialog.showModal();
 	}
