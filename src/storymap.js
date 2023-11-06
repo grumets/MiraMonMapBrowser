@@ -234,25 +234,23 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 	const esImatgeApaisada = imatgeSeleccionada.width >= imatgeSeleccionada.height;
 	function calcularLimitImatges(imatgeSeleccionada)
 	{
-		let proporcio = 0;
+		let proporcio = imatgeSeleccionada.height/imatgeSeleccionada.width;
 		if (esImatgeApaisada)
 		{
-			proporcio = imatgeSeleccionada.width/imatgeSeleccionada.height;
 			limitsMidesImatge.width = {};
 			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.width;
-			limitsMidesImatge["width"][pixelUnit] = imatgeSeleccionada.width * limitsMidesImatge["width"][percentageUnit] / 100;
+			limitsMidesImatge["width"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.height = {};
-			limitsMidesImatge["height"][pixelUnit] = limitsMidesImatge["width"][pixelUnit] / proporcio;
+			limitsMidesImatge["height"][pixelUnit] = limitsMidesImatge["width"][pixelUnit] * proporcio;
 			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatgeSeleccionada.height;
 		}
 		else 
 		{
-			proporcio = imatgeSeleccionada.height/imatgeSeleccionada.width;
 			limitsMidesImatge.height = {};
 			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.height;
-			limitsMidesImatge["height"][pixelUnit] = imatgeSeleccionada.height * limitsMidesImatge["height"][percentageUnit] / 100;
+			limitsMidesImatge["height"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.width = {};
-			limitsMidesImatge["width"][pixelUnit] = limitsMidesImatge["height"][pixelUnit] / proporcio;
+			limitsMidesImatge["width"][pixelUnit] = limitsMidesImatge["height"][pixelUnit] * (1 / proporcio);
 			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatgeSeleccionada.width;
 		}	
 	}
@@ -340,6 +338,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 			{
 				resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
 				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 			}
 		});
 		// Selector de unitats
@@ -370,21 +369,20 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 		// Comprovem per les proporcions de la imatges quines són les mides més amplies que ens podem permetre.
 		function checkImageLimits()
 		{
-			const unitatSeleccionada = selector.value == percentageUnit ? percentageUnit : pixelUnit;
 			if (chboxProportional.checked)
 			{
 				if (esImatgeApaisada)
 				{
-					return resultatMidesImatge.width <= limitsMidesImatge["width"][unitatSeleccionada];
+					return resultatMidesImatge.width <= limitsMidesImatge["width"][selector.value];
 				}
 				else 
 				{
-					return resultatMidesImatge.height <= limitsMidesImatge["height"][unitatSeleccionada];
+					return resultatMidesImatge.height <= limitsMidesImatge["height"][selector.value];
 				}
 			}
 			else
 			{
-				if (unitatSeleccionada == pixelUnit)
+				if (selector.value == pixelUnit)
 				{
 					return resultatMidesImatge.width*resultatMidesImatge.height <= numMaximPixels;
 				}
@@ -399,23 +397,22 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 		// En tenir només 1 de les dos mides definides, com adaptem l'altra dimensió per a que mantingui la proporció.
 		function adaptImageGivenProportionaly(midesAdaptImatge, imatgeOriginal, novaMesura) {
 			
-			//if((!isNaN(midesAdaptImatge.width) && !isNaN(midesAdaptImatge.height)) || (!isNaN(midesAdaptImatge.width) && isNaN(midesAdaptImatge.height)))
 			if(!(isNaN(midesAdaptImatge.width) && isNaN(midesAdaptImatge.height)))
 			{
-				let proporcio =  imatgeOriginal.width / imatgeOriginal.height;
+				let proporcio =  imatgeOriginal.height / imatgeOriginal.width;
 				// Quan tenim dos valors prenem la base del width per buscar la proporcionalitat. Decisió arbitraria.
 				if (!isNaN(midesAdaptImatge.width) && (novaMesura == inputWidth || novaMesura == null))
 				{
 					if (selector.value == percentageUnit)
 					{
 						let valorPxWidth = midesAdaptImatge.width * imatgeOriginal.width / 100;
-						let valorPxHeight = esImatgeApaisada ? valorPxWidth / proporcio : valorPxWidth * proporcio;
+						let valorPxHeight = proporcio * valorPxWidth;
 	
-						return {width: valorPxWidth * 100 / imatgeOriginal.width, height: valorPxHeight * 100 / imatgeOriginal.height};
+						return {width: midesAdaptImatge.width, height: valorPxHeight * 100 / imatgeOriginal.height};
 					}
 					else
 					{
-						return {width: midesAdaptImatge.width, height: (esImatgeApaisada ? midesAdaptImatge.width / proporcio : midesAdaptImatge.width * proporcio )};
+						return {width: midesAdaptImatge.width, height: proporcio * midesAdaptImatge.width};
 					}
 				}
 				else 
@@ -423,13 +420,13 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 					if (selector.value == percentageUnit)
 					{
 						let valorPxHeight = midesAdaptImatge.height * imatgeOriginal.height / 100;
-						let valorPxWidth = esImatgeApaisada ? valorPxHeight / proporcio : valorPxHeight * proporcio;
+						let valorPxWidth =  valorPxHeight * imatgeOriginal.width / imatgeOriginal.height;
 	
 						return {width: valorPxWidth * 100 / imatgeOriginal.width, height: valorPxHeight * 100 / imatgeOriginal.height};
 					}
 					else
 					{
-						return {width: (esImatgeApaisada ? midesAdaptImatge.height * proporcio : midesAdaptImatge.height / proporcio), height: midesAdaptImatge.height};
+						return {width:  midesAdaptImatge.height * (1 / proporcio), height: midesAdaptImatge.height};
 					}
 				}
 			} 
@@ -477,12 +474,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 			updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
 			
 		}
-
-		/*function calcularPixelsDePercentatges()
-		{
-			return {width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100};
-		}*/
-
+		
 		midesDialog.showModal();
 	}
 }
