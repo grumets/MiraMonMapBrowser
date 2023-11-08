@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -1893,7 +1893,8 @@ function EscriuCostatIUnitatsZoom(i, crs)
 {
 	if (EsProjLongLat(crs))
 		return g_gms(ParamCtrl.zoom[i].costat, false);
-	return ParamCtrl.zoom[i].costat+DonaUnitatsCoordenadesProj(crs);
+	var p=DonaUnitatsCoordenadesProj(crs);
+	return ParamCtrl.zoom[i].costat+((p=="°") ? "" : " ")+p;
 }
 
 function EscriuDescripcioNivellZoom(i, crs, vull_retorns)
@@ -3346,20 +3347,26 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 
 function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
-var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
+var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 
 	tipus=DonaTipusServidorCapa(capa);
 	if (tipus=="TipusOAPI_Maps")
 	{
+		if (capa.estil && capa.estil.length)
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 		if(capa.URLTemplate)
 			plantilla=capa.URLTemplate+"?";
 		else
+		{
+			if (capa.estil && capa.estil.length && capa.estil[i_estil2].nom)
 			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
 
+			else
+				plantilla="/collections/{collectionId}/map?";
+		}
 		plantilla=plantilla.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 			if (capa.estil[i_estil2].nom)
 	 			plantilla=plantilla.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
@@ -3371,11 +3378,12 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 	}
 
 	if (tipus=="TipusOAPI_Maps")
-		cdns.push("bbox-crs=");
+		cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
+				  "&bbox-crs="); // crs del bounding-box
 	else if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
-		cdns.push("SRS=");
+		cdns.push("SRS="); // CRS de la imatge idel BBOX
 	else
-		cdns.push("CRS=");
+		cdns.push("CRS=");  // CRS de la imatge idel BBOX
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	if (tipus=="TipusOAPI_Maps")
 		 cdns.push("&bbox=");
