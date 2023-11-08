@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -113,12 +113,15 @@ function DonaCadenaHTMLDibuixEscala(env, cal_desc_crs)
 var cdns=[];
 
 	var escala=DonaNumeroArrodonit125((env.MaxX-env.MinX)*0.4);
+	var unitats_CRS, p=DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)
+	unitats_CRS=((p=="°") ? "" : " ") + p;
+
 	cdns.push("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" width=\"1\" height=\"3\" border=\"0\"></td></tr>",
 			"<tr><td align=\"middle\" style=\"font-size: 1px;\"><img src=\"",
 			AfegeixAdrecaBaseSRC("1negre.gif"),
 			"\" width=\"", Math.round(escala/ParamInternCtrl.vista.CostatZoomActual),
 		  	"\" height=\"2\"></td></tr>",
-			"<tr><td align=\"middle\"><font face=\"arial\" size=\"1\">", escala, DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS));
+			"<tr><td align=\"middle\"><font face=\"arial\" size=\"1\">", escala, unitats_CRS);
 	if (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
 		var d_escala=DonaDenominadorDeLEscalaArrodonit(escala*FactorGrausAMetres*Math.cos((env.MaxY+env.MinY)/2*FactorGrausARadiants))
@@ -439,9 +442,7 @@ var i_vista;
 	{
 		//com que en realitat les coordenades son transformades de la resolució de pantalla, el punt és un quadrat d'un píxel pantalla, així que les coordenades les calculo movent la dada que em dona el cursor mitja fila i mitja columa.
 		CoordsFB.x1=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientX-0.5));
-		CoordsFB.x2=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientX+0.5));
 		CoordsFB.y1=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientY-0.5));
-		CoordsFB.y2=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientY+0.5));
 
 		
 		//aquí guardem la fila columna original i la coordenada x,y del click. Servirà per pintar la creu al lloc on ha clickat l'usuari.
@@ -637,6 +638,26 @@ function PintaCreuFBPoint(punt) // copiat i modificat de consult.js "function Co
 function EscriuCoordenadesAFinestraFeedbackAmbScope()
 {
 	var xmin, xmax, ymin, ymax;
+	var dec=ParamCtrl.NDecimalsCoordXY; //decimals definits per l'usuari
+
+	//mirem si estem en la situació que l'usuari fa FB d'un punt
+	if ((document.getElementById("fbscope_x")) && (document.getElementById("fbscope_y"))) //fbscope_x i fbscope_y --> només existeixen quan hem seleccionat FB de tipus point
+	{
+		document.getElementById("fbscope_y").value=OKStrOfNe(CoordsFB.y1, dec); //aquesta és la coordenada que es mostra a la caixa, amb el num de decimals configurat.
+		document.getElementById("fbscope_x").value=OKStrOfNe(CoordsFB.x1, dec);
+
+		document.getElementById("fbscope_xmin").value=CoordsFB.x1; // aquesta és la coordenada amb tots els decimals. La guardo en un lloc invisible i la guardo repetida a propòsit per després generar el micropolígon que representa el punt.
+		document.getElementById("fbscope_xmax").value=CoordsFB.x1;
+		document.getElementById("fbscope_ymin").value=CoordsFB.y1;
+		document.getElementById("fbscope_ymax").value=CoordsFB.y1;
+	}
+	else if ((CoordsFB.x1==CoordsFB.x2)||(CoordsFB.y1==CoordsFB.y2)) //l'usuari està digitalitzant un FB de tipus pol però les coordenades introduides no defineixen cap àrea
+	{
+		alert(GetMessage("WrongDefinedArea", "vista"));
+		TancaFinestraLayer("fbScope");
+	}
+	else //l'usuari està digitalitzant un FB de tipus pol i les coordenades son correctes
+	{
 	if (CoordsFB.x1>CoordsFB.x2)
 	{
 		xmin=CoordsFB.x2;
@@ -657,34 +678,9 @@ function EscriuCoordenadesAFinestraFeedbackAmbScope()
 		ymin=CoordsFB.y1;
 		ymax=CoordsFB.y2;
 	}
-	//escrivim les coordenades endreçades a la finestra corresponent
-	var dec=ParamCtrl.NDecimalsCoordXY;
-	//estem en el cas de digitalitzar un punt:
-	// * escric una coordenada central a la finestra, encara que en realitat enviarem un poligon. Faig cas dels decimals configurats
-	// * la resta de coordenades es guarden amb tots els decimals. Al estar digitalitzant poligons d'un sol píxel, si faig cas dels decimals configurats pel navegador no tinc prou precissió per generar un pol tant petit
-	if (document.getElementById("fbscope_y"))
-	{
-		var y=(ymax+ymin)/2;
-		document.getElementById("fbscope_y").value=OKStrOfNe(y, dec);
-		document.getElementById("fbscope_ymin").value=ymin;
-		document.getElementById("fbscope_ymax").value=ymax;
-	}
-	else // estem digitalitzant un FB de tipus pol. En aquest cas fem cas dels decimals definits.
-	{
+		//escrivim les coordenades endreçades a la finestra corresponent
 		document.getElementById("fbscope_ymin").value=OKStrOfNe(ymin, dec);
 		document.getElementById("fbscope_ymax").value=OKStrOfNe(ymax, dec);
-	}
-
-	//igual que el cas anterior però per les x
-	if (document.getElementById("fbscope_x"))
-	{
-		var x=(xmax+xmin)/2;
-		document.getElementById("fbscope_x").value=OKStrOfNe(x, dec);
-		document.getElementById("fbscope_xmin").value=xmin;
-		document.getElementById("fbscope_xmax").value=xmax;
-	}
-	else
-	{
 	document.getElementById("fbscope_xmin").value=OKStrOfNe(xmin, dec);
 	document.getElementById("fbscope_xmax").value=OKStrOfNe(xmax, dec);
 	}

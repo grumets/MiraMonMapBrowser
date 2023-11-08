@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3197,6 +3197,16 @@ var MessageLang=
       "fre": "Web Mercator",
       "cze": "Web Mercator",
       "ger": "Web Mercator"
+    }
+  },
+  "vista":{
+    "WrongDefinedArea":{
+      "cat": "Les coordenades introduïdes no defineixen una àrea",
+      "spa": "Las coordenadas introducidas no definen un área",
+      "eng": "Selected coordinates doesn't define an area",
+      "fre": "Les coordonnées entrées ne définissent pas une zone",
+      "cze": "Zadané souřadnice nedefinují oblast",
+      "ger": "Die eingegebenen Koordinaten definieren kein Gebiet"
     }
   },
   "capavola": {
