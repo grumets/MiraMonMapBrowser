@@ -4505,6 +4505,14 @@ var MessageLang=
       "fre": "Installer le Lecteur Universel de Cartes du Miramon",
       "cze": "Instalace univerzální čtečky map MiraMon",
       "ger": "MiraMon Universal Map Reader installieren"
+    },
+    "SureToDownloadMMR": {
+      "cat": "Segur que vols descarregar MiraMon Reader?",
+      "spa": "¿Seguro que quieres descarrgar MiraMon Reader?",
+      "eng": "Are you sure to download the MiraMon Reader?",
+      "fre": "Êtes-vous sûr de télécharger le MiraMon Reader?",
+      "cze": "Určitě jste si stáhli čtečku MiraMon Reader?",
+      "ger": "Sind Sie sicher, dass Sie den MiraMon Reader herunterladen möchten?"
     }
   },
   "llegenda": {

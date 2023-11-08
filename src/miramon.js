@@ -1875,15 +1875,35 @@ function ObreFinestraAjuda()
         AjudaWindow.focus();
 }
 
-function PreguntaDescarregaMMReader() {
-	if (confirm("Are you sure to download the MM Reader?"))
-	{ 
-		InstalaLectorMapes();
-	}
-	else
-	{
-		;
-	}
+const dialogDescarregaMMRId = "dialogDescarregaMMR";
+function PreguntaDescarregaMMReader(identificadorAncoraDialeg) 
+{
+		let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
+		
+		if (!dialogDescarrega)
+		{
+			let elemAncora = document.getElementById(identificadorAncoraDialeg);
+	
+			if (elemAncora)
+			{
+				const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+
+				dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
+				elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
+				
+				// Botó de confirmació
+				const boto = document.getElementById("botoConfirmarDescarga");
+				boto.addEventListener("click", (event) => {
+					event.preventDefault();
+					InstalaLectorMapes();
+					dialogDescarrega.close();			
+				});
+			}
+			else
+				return; 
+		}
+
+		dialogDescarrega.showModal();	
 }
 
 function InstalaLectorMapes()
@@ -5160,4 +5180,13 @@ function ProcessMessageMiraMonMapBrowser(event)
 		return;
 	eval(event.data);
 	RepintaMapesIVistes();
+}
+
+// Retorna un objecte dialeg per a mostrar com a missatge superposat i bloquejant.
+function CreaDialog(identificadorDialog, contingutHtml)
+{
+	const dialog = document.createElement("dialog");
+	dialog.setAttribute("id", identificadorDialog);
+	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
+	return dialog;
 }

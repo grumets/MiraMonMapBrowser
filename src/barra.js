@@ -539,9 +539,12 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoPlanaPrincipal)
 			cdns.push((CadenaBotoPolsable("home", "home", GetMessage("RestartFromServer", "barra"), "RestartMiraMonMapBrowser();")));
 		if (ParamCtrl.BarraBotoInstallarMMZ)
-			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
-				GetMessage("InstallMiraMonReader", "barra"),
-				"PreguntaDescarregaMMReader();")));
+		{
+			const instMmrNomBoto = "instmmr";
+			cdns.push((CadenaBotoPolsable(instMmrNomBoto, "instmmr",
+			GetMessage("InstallMiraMonReader", "barra"),
+			"PreguntaDescarregaMMReader('id_barra_" + instMmrNomBoto + "');")));
+		}
 		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
 			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
 		if (ParamCtrl.BarraBotoAjuda)
