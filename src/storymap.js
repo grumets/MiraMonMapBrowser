@@ -631,7 +631,7 @@ function GuardarInformacioInicialStoryMap()
 
 function GuardarDescripcioStoryMapTinymce()
 {
-	novaStoryMap.descripcio = tinymce.get("storyTextArea").getContent();
+	novaStoryMap.descripcio = tinymce.get(tinyTextId).getContent();
 }
 
 //Inicia una Storymap
@@ -689,6 +689,7 @@ var i_story=extra_param, elem;
 function TancaFinestra_storyMap()
 {
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+	tinymce.remove("textarea");
 	novaStoryMapFinestra.replaceChildren();
 	novaStoryMap = {};
 	indexStoryMapActiu=null;
