@@ -3081,6 +3081,126 @@ var MessageLang=
       "fre": "Image de storymaps",
       "cze": "Obrázek příběhové mapy",
       "ger": "Storymaps Bild"
+    },
+    "AttachImage": {
+      "cat": "Adjuntar imatge",
+      "spa": "Adjuntar imagen",
+      "eng": "Attach image",
+      "fre": "Joindre une image",
+      "cze": "Připojit obrázek",
+      "ger": "Bild anhängen"
+    },
+    "OpensImageFilesSelector": {
+      "cat": "Obre selector de fitxers d'imatge",
+      "spa": "Abre selector de ficheros de imagen",
+      "eng": "Opens image files selector",
+      "fre": "Ouvre le sélecteur de fichiers image",
+      "cze": "Otevře výběr obrazových souborů",
+      "ger": "Öffnet den Selektor für Bilddateien"
+    },
+    "RecordCharacteristics": {
+      "cat": "Registre de caracterísitques",
+      "spa": "Registro de caracterísitcas",
+      "eng": "Record characteristics",
+      "fre": "Caractéristiques de l'enregistrement",
+      "cze": "Vlastnosti záznamů",
+      "ger": "Kenndaten der Bescheinigung"
+    },
+    "SavesMapCharacteristics":{
+      "cat": "Guarda les característiques actuals del mapa (longitud, latitud, zoom...)",
+      "spa": "Guarda las características actuales del mapa (longitud, latitud, zoom...)",
+      "eng": "Saves current map characteristics (longitude, latitude, zoom...)",
+      "fre": "Sauvegarde des caractéristiques de la carte actuelle (longitude, latitude, zoom...)",
+      "cze": "Uloží aktuální charakteristiky mapy (zeměpisná délka, šířka, přiblížení...)",
+      "ger": "Speichert die aktuellen Karteneigenschaften (Längengrad, Breitengrad, Zoom...)"
+    },
+    "OriginalMeasurementsImage": {
+      "cat": "Mides originals de la imatge",
+      "spa": "Medidas originales de la imagen",
+      "eng": "Original measurements of the image",
+      "fre": "Mesures originales de l'image",
+      "cze": "Původní měření obrazu",
+      "ger": "Originalmessungen des Bildes"
+    },
+    "pxWidth": {
+      "cat": "px amplada",
+      "spa": "px anchura",
+      "eng": "px width",
+      "fre": "px largeur",
+      "cze": "px šířka",
+      "ger": "px Breite"
+    },
+    "pxHeight": {
+      "cat": "px alçada",
+      "spa": "px altura",
+      "eng": "px height",
+      "fre": "px hauteur",
+      "cze": "px výška",
+      "ger": "px Höhe"
+    },
+    "ReducedWidth": {
+      "cat": "Amplada reduida",
+      "spa": "Anchura reducida",
+      "eng": "Reduced width",
+      "fre": "Largeur réduite",
+      "cze": "Zmenšená šířka",
+      "ger": "Reduzierte Breite"
+    },
+    "ReducedHeight": {
+      "cat": "Alçada reduïda",
+      "spa": "Altura reducida",
+      "eng": "Reduced height",
+      "fre": "Hauteur réduite",
+      "cze": "Zmenšená výška",
+      "ger": "Reduzierte Höhe"
+    },
+    "ChooseUnitMeasurement": {
+      "cat": "Escull la unitat de mesura",
+      "spa": "Escoge la unidad de medida",
+      "eng": "Choose the unit of measurement",
+      "fre": "Choisir l'unité de mesure",
+      "cze": "Výběr měrné jednotky",
+      "ger": "Wählen Sie die Maßeinheit"
+    },
+    "MaintainProportionality": {
+      "cat": "Mantenir proporcionalitat",
+      "spa": "Mantener proporcionalidad",
+      "eng": "Maintain proportionality",
+      "fre": "Maintenir la proportionnalité",
+      "cze": "Zachování proporcionality",
+      "ger": "Wahrung der Verhältnismäßigkeit"
+    },
+    "SelectMapFeatures": {
+      "cat": "Selecciona les característiques del mapa per a aquest punt de l'Storymap",
+      "spa": "Selecciona las características del mapa para este punto del Storymap",
+      "eng": "Select the map features for this Storymap point",
+      "fre": "Sélectionner les éléments de la carte pour ce point Storymap",
+      "cze": "Výběr prvků mapy pro tento bod mapy Storymap",
+      "ger": "Wählen Sie die Kartenmerkmale für diesen Storymap-Punkt aus"
+    },
+    "Zoom": {
+      "cat": "Zoom",
+      "spa": "Zoom",
+      "eng": "Zoom",
+      "fre": "Zoom",
+      "cze": "Zoom",
+      "ger": "Zoom"
+    },
+    "Times": {
+      "cat": "Temps",
+      "spa": "Tiempos",
+      "eng": "Times",
+      "fre": "Temps",
+      "cze": "Times",
+      "ger": "Zeiten"
+    },
+    "Styles": {
+      "cat": "Estils",
+      "spa": "Estilos",
+      "eng": "Styles",
+      "fre": "Styles",
+      "cze": "Styly",
+      "ger": "Stile"
     }
   },
   "tresD": {
