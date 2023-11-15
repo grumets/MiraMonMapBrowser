@@ -40,11 +40,18 @@
 
 var indexStoryMapActiu=null;
 const tinyTextId = "storyTextArea";
+// Crea inici Storymap identificadors.
+const storyTitolId = "titolRelat";
+const inputThumbnailId = "inputThumbnail";
+const imageThumbnailId = "imageThumbnail";
 // Límit de mida per imatges. Establerta en píxels.
+const midaImatgeMiniaturaMaximaPx = 150;
 const midaImatgeMaximaPx = 500;
 const numMaximPixels = Math.pow(midaImatgeMaximaPx, 2);
 // Extensions imatges permeses.
 const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "image/jpeg";
+// Identificador input imatges internes del Storymap.
+const inputImageId = "imagePicker";
 // Identificadors diàlegs
 const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog";
 // Dialeg Mida Imatges identificadors
@@ -78,7 +85,7 @@ function TancaFinestra_visualitzaStoryMap()
 //Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Crear nova HistoryMap", "src": "propies/StoryMaps/afegir.svg", "url": "", "isNew": true};
+var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "propies/StoryMaps/afegir.svg", "url": "", "isNew": true};
 
 	if (ParamCtrl.StoryMap == null)
 	{
@@ -117,8 +124,8 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": "Cr
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
-		cdns.push("<td valign=\"top\"><a href=\"javascript:void(0)\" onclick=\"");
-		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();\">") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");\">");
+		cdns.push("<td valign='top'><a href='javascript:void(0)' onclick='");
+		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
 		cdns.push("<img align='middle' src='",(storyActual.src) ? storyActual.src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
 			"<br>",
 			DonaCadena(storyActual.desc),
@@ -148,8 +155,6 @@ var novaStoryMap = {};
 
 function TancaICreaStoryMap()
 {
-	const lastStoryStepElement = "lastStoryStepElement";
-	const storyStepImage = "storyMainImage";
 	//Tancar la finestra de la graella de les histories
 	TancaFinestraLayer("triaStoryMap");
 
@@ -157,7 +162,7 @@ function TancaICreaStoryMap()
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='title' name='title' minlength='1' size='25'><br><br><img id='", storyStepImage, "' alt='", GetMessage("StorymapImage", "storymap"), "' /><br><input type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"storyMainImage\", )'><br><br><input type='button' id='", lastStoryStepElement, "' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
+		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25'><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' /><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
 		novaStoryMapFinestra.innerHTML = beginingStoryMapContent.join("");
 	}
 	ObreFinestra(window, "creaStoryMap");
@@ -165,39 +170,90 @@ function TancaICreaStoryMap()
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
  * @param {*} input Element DOM tipus input que incorpora la imatge. 
- * @param {*} ultimElemId Identificador de l'últim element de la vista Storymap.
  */
-function CarregaImatgeStoryMap(input, ultimElemId) 
+function CarregaImatgeStoryMap(input) 
 {
 	const fitxerObjectiu = input.files ? input.files[0] : null;
 
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == pngMIMETType || fitxerObjectiu.type == jpgMIMEType || fitxerObjectiu.type == jpegMIMEType))
 	{
-		const midesPromise = new Promise((resolve, reject) => {
-
-			//Mirem la mida de la imatge
-			const urlIamge = URL.createObjectURL(fitxerObjectiu);
-			const imageToMesure = new Image();
-
-			imageToMesure.onload =  function () {
-				URL.revokeObjectURL(this.src);
-				if (this)
-				{
-					resolve(this);
-				}
-				else
-				{
-					reject(new Error("Error carregant la imatge."))
-				}
-			};
-
-			imageToMesure.src = urlIamge;
-		}).then(result => {
-
-			MostraDialogImatgeNavegador(result, ultimElemId);
-
-		});
+		if (input.id == inputImageId)
+		{
+			CarregaImatgeRelatStoryMap(fitxerObjectiu);
+		}
+		else if (input.id == inputThumbnailId)
+		{
+			CarregaImatgeMiniaturaStoryMap(fitxerObjectiu);
+		}
 	}
+}
+
+/**
+ * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
+ * @param {*} fitxerImatge Element DOM tipus input que incorpora la imatge. 
+ */
+function CarregaImatgeRelatStoryMap(fitxerImatge) 
+{
+	const midesPromise = new Promise((resolve, reject) => {
+
+		//Mirem la mida de la imatge
+		const urlIamge = URL.createObjectURL(fitxerImatge);
+		const imageToMesure = new Image();
+
+		imageToMesure.onload =  function () {
+			URL.revokeObjectURL(this.src);
+			if (this)
+			{
+				resolve(this);
+			}
+			else
+			{
+				reject(new Error("Error carregant la imatge."))
+			}
+		};
+
+		imageToMesure.src = urlIamge;
+	}).then(result => {
+
+		MostraDialogImatgeNavegador(result);
+
+	});
+}
+/**
+ * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> de portada del relat.    
+ * @param {*} fitxerImatge Element DOM tipus input que incorpora la imatge. 
+ */
+function CarregaImatgeMiniaturaStoryMap(fitxerImatge) 
+{
+	//Mirem la mida de la imatge
+	const urlIamge = URL.createObjectURL(fitxerImatge);
+	const imageToMesure = new Image();
+	try{
+		imageToMesure.onload =  function () {
+			URL.revokeObjectURL(this.src);
+			if (this)
+			{
+				const canvasThumbnailId = "canvasReduccioThumbnail";
+				let canvasReduccioThumbnail = document.getElementById(canvasThumbnailId);
+				if (!canvasReduccioThumbnail)
+				{
+					canvasReduccioThumbnail = document.createElement("canvas");
+					canvasReduccioThumbnail.setAttribute("id", canvasThumbnailId);
+				}
+				canvasReduccioThumbnail.width = midaImatgeMiniaturaMaximaPx;
+				canvasReduccioThumbnail.height = midaImatgeMiniaturaMaximaPx * this.height / this.width;
+				const cntx = canvasReduccioThumbnail.getContext("2d");
+				cntx.drawImage(this, 0, 0, canvasReduccioThumbnail.width, canvasReduccioThumbnail.height);
+				document.getElementById(imageThumbnailId).src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
+ 			}
+		}
+	}
+	catch (err)
+	{
+		throw new Error(GetMessage("ErrorReadingImages", "storymap") + ":", {cause: err});
+	}
+
+	imageToMesure.src = urlIamge;
 }
 /**
  * Crea un diàleg que apareix flotant al centre de la pantalla per a que l'usuari decideixi
@@ -228,7 +284,7 @@ function CreaDialog(identificadorDialog, contingutHtml)
 	return dialog;
 }
 
-function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
+function MostraDialogImatgeNavegador(imatgeSeleccionada)
 {
 	const esImatgeApaisada = imatgeSeleccionada.width >= imatgeSeleccionada.height;
 	function calcularLimitImatges(imatgeSeleccionada)
@@ -255,32 +311,24 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 	}
 
 	calcularLimitImatges(imatgeSeleccionada);
-
-	const divMidesImg = document.createElement("div");
-	divMidesImg.setAttribute("id", "midesImgDiv");
-	let ultimElem = document.getElementById(ultimElemId);
+	// Element del DOM que ens permet anclar el dialeg
+	let anchorElement = document.getElementById(inputImageId);
 	
-	if (ultimElem)
+	if (anchorElement)
 	{
-		ultimElem.insertAdjacentElement("afterend", divMidesImg);
-		divMidesImg.insertAdjacentElement("afterbegin", CreaDialogMidesImatge(imatgeSeleccionada));
-		const midesDialog = document.getElementById(dialogMidesId);
+		const midesDialog = CreaDialogMidesImatge(imatgeSeleccionada);
+		anchorElement.insertAdjacentElement("afterend", midesDialog);
+		
 		midesDialog.addEventListener("close", (event) => {
 			// Després de tancar el missatge emergent de les mides.
 			let resultatMides = JSON.parse(event.target.returnValue);
 			if (resultatMides) {
-				let ultimElem = document.getElementById(ultimElemId);
 				const canvasId = "reduccioImatges";
 				let canvasReduccioImg = document.getElementById(canvasId);
 				if (!canvasReduccioImg)
 				{
 					canvasReduccioImg = document.createElement("canvas");
 					canvasReduccioImg.setAttribute("id", canvasId);
-					
-					if (ultimElem)
-					{
-						canvasReduccioImg.insertAdjacentElement("afterend", ultimElem);
-					}
 				} 
 
 				canvasReduccioImg.width = resultatMides.width;
@@ -480,15 +528,12 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, ultimElemId)
 
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
-	const divCaract = document.createElement("div");
-	divCaract.setAttribute("id", "caractDiv");
 	let ultimElem = document.getElementById(ultimElemId);
 	
 	if (ultimElem)
 	{
-		ultimElem.insertAdjacentElement("afterend", divCaract);
-		divCaract.insertAdjacentElement("afterbegin", CreaDialogCaracteristiquesNavagador());
-		const caractDialog = document.getElementById(dialogCaractId);
+		const caractDialog = CreaDialogCaracteristiquesNavagador();
+		ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
 		caractDialog.addEventListener("close", (event) => {
 			let resultatCaractUsuari = JSON.parse(event.target.returnValue);
@@ -526,7 +571,6 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				}
 			});
 			const tinyEditor = tinymce.get(tinyTextId);
-			//tinyEditor.insertContent(imatgeResultatCaract);
 			let writenOnTiny = tinyEditor.getContent();
 			tinyEditor.setContent(writenOnTiny + imatgeResultatCaract.outerHTML);
 		});
@@ -559,14 +603,13 @@ function SeguentPasStoryMap()
 	
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	novaStoryMapFinestra.replaceChildren();
-	const inputImageId = "imagePicker";
 	const endButtonId= "endUpButton";
-	const htmlNextStep = ["<div id='storyMapInterface'>", 
-	"<input hidden id='" + inputImageId + "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"" + endButtonId + "\")'>",
-	"<input id='", endButtonId,"' type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
-	novaStoryMapFinestra.innerHTML = htmlNextStep.join("");
+	const htmlExternTiny = ["<div id='storyMapInterface'>", 
+	"<input hidden id='", inputImageId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this)'>",
+	"<input id ='", endButtonId, "'type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
+	novaStoryMapFinestra.innerHTML = htmlExternTiny.join("");
 
-	// Creo aquest textarea fora de l'string "htmlNextStep" per a que l'eina tinymce el detecti i el pugui substituir
+	// Creo aquest textarea fora de l'string "htmlExternTiny" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
 	tinytextarea.setAttribute("id", tinyTextId)
 	const endBtn = document.getElementById(endButtonId);
@@ -622,8 +665,8 @@ function GuardaEntradaStorymapConfig()
 
 function GuardarInformacioInicialStoryMap()
 {
-	novaStoryMap.titol = document.getElementById("title").value;
-	const imatgePortada = document.getElementById("storyMainImage");
+	novaStoryMap.titol = document.getElementById(storyTitolId).value;
+	const imatgePortada = document.getElementById(imageThumbnailId);
 	if (imatgePortada && imatgePortada.src != "")
 		novaStoryMap.imatgePrincipal = imatgePortada.src;
 }

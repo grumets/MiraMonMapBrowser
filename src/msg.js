@@ -3074,13 +3074,13 @@ var MessageLang=
       "cze": "Nové příběhové mapy",
       "ger": "Neue Storymaps"
     },
-		"StorymapImage": {
-      "cat": "Imatge de storymaps",
-      "spa": "Imagen de storymap",
-      "eng": "Storymaps image",
-      "fre": "Image de storymaps",
-      "cze": "Obrázek příběhové mapy",
-      "ger": "Storymaps Bild"
+		"StorymapThumbnailImage": {
+      "cat": "Imatge en miniatura de relat",
+      "spa": "Imagen en miniatura de relato",
+      "eng": "Storymap thumbnail image",
+      "fre": "Image miniature de la Storymap",
+      "cze": "Obrázek miniatury mapy příběhu",
+      "ger": "Miniaturansicht der Storymap"
     },
     "AttachImage": {
       "cat": "Adjuntar imatge",
@@ -3201,6 +3201,14 @@ var MessageLang=
       "fre": "Styles",
       "cze": "Styly",
       "ger": "Stile"
+    },
+    "ErrorReadingImages": {
+      "cat": "Error carregant la imatge",
+      "spa": "Error cargando la imagen",
+      "eng": "Error loading image",
+      "fre": "Erreur de chargement de l'image",
+      "cze": "Chyba při načítání obrázku",
+      "ger": "Fehler beim Laden eines Bildes"
     }
   },
   "tresD": {
