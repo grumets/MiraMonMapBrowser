@@ -541,9 +541,9 @@ var cdns=[];
 		if (ParamCtrl.BarraBotoInstallarMMZ)
 		{
 			const instMmrNomBoto = "instmmr";
-			cdns.push((CadenaBotoPolsable(instMmrNomBoto, "instmmr",
-			GetMessage("InstallMiraMonReader", "barra"),
-			"PreguntaDescarregaMMReader('id_barra_" + instMmrNomBoto + "');")));
+			cdns.push(CadenaBotoPolsable(instMmrNomBoto, "instmmr",
+						GetMessage("InstallMiraMonReader", "barra"),
+						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}
 		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
 			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));

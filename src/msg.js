@@ -4512,17 +4512,17 @@ var MessageLang=
       "cat": "Instal·lar el Lector Universal de Mapes del MiraMon",
       "spa": "Instalar el Lector Universal de Mapas de MiraMon",
       "eng": "Install MiraMon Universal Map Reader",
-      "fre": "Installer le Lecteur Universel de Cartes du Miramon",
-      "cze": "Instalace univerzální čtečky map MiraMon",
+      "fre": "Installer le Lecteur Universel de Cartes du MiraMon",
+      "cze": "Instalace MiraMon Universal Map Reader",
       "ger": "MiraMon Universal Map Reader installieren"
     },
     "SureToDownloadMMR": {
-      "cat": "Segur que vols descarregar MiraMon Reader?",
-      "spa": "¿Seguro que quieres descarrgar MiraMon Reader?",
-      "eng": "Are you sure to download the MiraMon Reader?",
-      "fre": "Êtes-vous sûr de télécharger le MiraMon Reader?",
-      "cze": "Určitě jste si stáhli čtečku MiraMon Reader?",
-      "ger": "Sind Sie sicher, dass Sie den MiraMon Reader herunterladen möchten?"
+      "cat": "Segur que vols descarregar el Lector Universal de Mapes del MiraMon?",
+      "spa": "¿Seguro que quieres descargar el Lector Universal de Mapas de MiraMon?",
+      "eng": "Are you sure to download the MiraMon Universal Map Reader?",
+      "fre": "Êtes-vous sûr de télécharger le Lecteur Universel de Cartes du MiraMon?",
+      "cze": "Určitě jste si stáhli čtečku MiraMon Universal Map Reader?",
+      "ger": "Sind Sie sicher, dass Sie den MiraMon Universal Map Reader herunterladen möchten?"
     }
   },
   "llegenda": {

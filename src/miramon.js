@@ -109,6 +109,7 @@ IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
 
 
+
 IncludeScript("msg.js", true);
 
 var IdProces=Math.random()*100000;
@@ -3390,8 +3391,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 		else
 		{
 			if (capa.estil && capa.estil.length && capa.estil[i_estil2].nom)
-			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
-
+				plantilla="/collections/{collectionId}/styles/{styleId}/map?";
 			else
 				plantilla="/collections/{collectionId}/map?";
 		}
@@ -3407,7 +3407,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
-
+	
 	if (tipus=="TipusOAPI_Maps")
 		cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
 				  "&bbox-crs="); // crs del bounding-box
@@ -3416,6 +3416,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 	else
 		cdns.push("CRS=");  // CRS de la imatge idel BBOX
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	
 	if (tipus=="TipusOAPI_Maps")
 		 cdns.push("&bbox=");
 	else
@@ -3425,12 +3426,13 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
 	else
 		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
+	
+	
 	if(tipus=="TipusOAPI_Maps")
 	{
 		cdns.push("&width=" , ncol , "&height=" , nfil,
-				"&f=" , capa.FormatImatge,
+				"&f=" , (capa.FormatImatge == "image/heif" ? "hej2" : capa.FormatImatge),
 				((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
-
 	}
 	else
 	{
@@ -3651,10 +3653,9 @@ var attributesArray=Object.keys(attributes);
 
 function EsCapaBinaria(capa)
 {
-	return capa.FormatImatge=="application/x-img" ||
+	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
 	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 }
-
 
 
 function DonaCadenaBotonsVistaLlegendaSituacioCoord()
@@ -5190,11 +5191,3 @@ function ProcessMessageMiraMonMapBrowser(event)
 	RepintaMapesIVistes();
 }
 
-// Retorna un objecte dialeg per a mostrar com a missatge superposat i bloquejant.
-function CreaDialog(identificadorDialog, contingutHtml)
-{
-	const dialog = document.createElement("dialog");
-	dialog.setAttribute("id", identificadorDialog);
-	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
-	return dialog;
-}
