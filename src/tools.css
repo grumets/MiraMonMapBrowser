@@ -58,6 +58,19 @@ a:hover { text-decoration: underline}
 	font-weight: bold;
 }
 
+.horizontalSpreadElements {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.buttonDialog {
+	flex: 1 auto;
+	margin: 5px;
+	line-height: 1.5;
+}
 
 /* General forms style */
 select
