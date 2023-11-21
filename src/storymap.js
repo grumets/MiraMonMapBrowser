@@ -57,11 +57,11 @@ const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog";
 // Dialeg Mida Imatges identificadors
 const lableWidthId = "labelWidth", inputWidthId = "widthMesure", lableHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
-const chBoxTempsId = "chboxTime", chboxTempsName = "time", chBoxCapesId = "chboxCapes", chboxCapesName = "layers", chBoxZoomId = "chboxZoom", chboxZoomName = "zoom", chBoxCoordId = "chboxCoord", chboxCoordName = "coordinates", confirmCaractBtnId = "confirmCaractBtn";
+const chBoxTempsId = "chboxTime", chboxTempsName = "time", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "PositionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates";
 const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
-var resultatCaract = {};
+var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}};
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -124,12 +124,11 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
-		cdns.push("<td valign='top'><a href='javascript:void(0)' onclick='");
+		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;' href='javascript:void(0)' onclick='");
 		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
-		cdns.push("<img align='middle' src='",(storyActual.src) ? storyActual.src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'>",
-			"<br>",
+		cdns.push("<img src='",(storyActual.src) ? storyActual.src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
-			"</a><br></td>");
+			"</p></a><br></td>");
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
@@ -271,7 +270,7 @@ function CreaDialogMidesImatge(imatge)
 
 function CreaDialogCaracteristiquesNavagador()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + ":</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxCoordId, "' name='", chboxCoordName,"'><label for='", chBoxCoordId, "'>" + GetMessage("Coordinates") + "</label></p><p><input type='checkbox' id='", chBoxZoomId, "' name='", chboxZoomName,"'><label for='", chBoxZoomId, "'>" + GetMessage("Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesId, "' name='", chboxCapesName,"'><label for='", chBoxCapesId, "'>" + GetMessage("Layers") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button><button value='cancel' formmethod='dialog'>Cancel</button></div></form>"];
+	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + ":</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button><button value='cancel' formmethod='dialog'>Cancel</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
@@ -529,7 +528,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
 	let ultimElem = document.getElementById(ultimElemId);
-	
+
 	if (ultimElem)
 	{
 		const caractDialog = CreaDialogCaracteristiquesNavagador();
@@ -538,27 +537,29 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		caractDialog.addEventListener("close", (event) => {
 			let resultatCaractUsuari = JSON.parse(event.target.returnValue);
 
-			if(resultatCaractUsuari[chboxZoomName]["status"])
-			{
-				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
-			}
-
-			if(resultatCaractUsuari[chboxCoordName]["status"])
+			if(resultatCaractUsuari[chboxPosZoomName]["status"])
 			{
 				const coordCentre = ObtenirCentre();
 				const puntCentral = {x: coordCentre.x, y: coordCentre.y};
 				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(puntCentral)};
+				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
 			}
 
-			if(resultatCaractUsuari[chboxCapesName]["status"])
+			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
 			{
-				let capesVisiblesIds = [];
+				const capesVisiblesIds = [];
+				const estilsCapesIds = [];
 				ParamCtrl.capa.filter(capa => { 
 					if (capa.visible=="si")
+					{
 						capesVisiblesIds.push(capa.id);
+						estilsCapesIds.push(capa.i_estil)
+					}
 				});
 				if (capesVisiblesIds.length > 0)
 					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
+				if (estilsCapesIds.length > 0)
+					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
 			}
 
 			let imatgeResultatCaract = document.createElement("img");

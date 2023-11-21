@@ -4032,9 +4032,8 @@ var capa, j, i, i_estil;
 						else
 						{
 							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].id!=capa_estil[j])
-								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " +
-								    GetMessage("ForLayer") + " " + capa_visible[j]);
-					    	}
+								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " + GetMessage("ForLayer") + " " + capa_visible[j]);
+					    }
 					}
 				}
 

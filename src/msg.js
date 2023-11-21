@@ -3183,7 +3183,7 @@ var MessageLang=
       "spa": "Zoom",
       "eng": "Zoom",
       "fre": "Zoom",
-      "cze": "Zoom",
+      "cze": "Přiblížení",
       "ger": "Zoom"
     },
     "Times": {
@@ -3209,6 +3209,30 @@ var MessageLang=
       "fre": "Erreur de chargement de l'image",
       "cze": "Chyba při načítání obrázku",
       "ger": "Fehler beim Laden eines Bildes"
+    },
+    "Layers&Styles": {
+      "cat": "Capes i estils",
+      "spa": "Capas y estilos",
+      "eng": "Layers and styles",
+      "fre": "Couches et styles",
+      "cze": "Vrstvy a styly",
+      "ger": "Layers und Stile"
+    },
+    "Position&Zoom": {
+      "cat": "Posició i zoom",
+      "spa": "Posición y zoom",
+      "eng": "Position and zoom",
+      "fre": "Position et zoom",
+      "cze": "Poloha a přiblížení",
+      "ger": "Position und Zoom"
+    },
+    "SaveMapCharactMandatory": {
+      "cat": "Per tal de guardar les caracterísitques del mapa, és obligatori haver seleccionat prèviament el fragment del relat que s'està intentant caracteritzar",
+      "spa": "Para guardar las características del mapa, es obligatorio haber seleccionado previamente el fragmento del relato que se está intentando caracterizar",
+      "eng": "To save the map characteristics, is mandatory to previously had select the fragment of the storymap which you're trying to characterize",
+      "fre": "Pour enregistrer les caractéristiques de la carte, est obligatoire de précédemment avoir sélectionné le fragment du storymap que vous essayez de caractériser",
+      "cze": "Chcete-li uložit vlastnosti mapy, je povinné, aby dříve měl vybrat fragment storymap, který se snažíte charakterizovat",
+      "ger": "Um die Karteneigenschaften zu speichern, ist obligatorisch, vorher das Fragment der Storymap auszuwählen, die Sie charakterisieren möchten"
     }
   },
   "tresD": {
