@@ -697,9 +697,9 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	}
 	else
 		cdns.push("<td valign=\"middle\">",
-					(CadenaBotoPolsable("excutewps"+i_capa, "executewps",
+					CadenaBotoPolsable("excutewps"+i_capa, "executewps",
 							GetMessage("processingService", "llegenda"),
-							"IniciaFinestraExecutaProcesCapa("+i_capa+")")),
+							"IniciaFinestraExecutaProcesCapa("+i_capa+")"),
 					"</td>");
 
 
@@ -1155,9 +1155,9 @@ var salt_entre_columnes, cdns=[], capa, estil;
 		}
 		else
 			cdns.push("<td valign=\"middle\">",
-						(CadenaBotoPolsable("excutewps"+i_capa, "executewps",
+						CadenaBotoPolsable("excutewps"+i_capa, "executewps",
 								GetMessage("processingService", "llegenda"),
-								"IniciaFinestraExecutaProcesCapa("+i_capa+")")),
+								"IniciaFinestraExecutaProcesCapa("+i_capa+")"),
 						"</td>");
 
 
