@@ -138,6 +138,8 @@ function MMgetElementTextByTag(thisElement,namespace,name)
 	return null;
 }
 
+/* NJ_21_11_2023 Aquestes dues funcions tenen el mateix nom i intentent fer coses similars
+però no són idèntiques i NO es fan servir enlloc. A partir d'aquest dia les comento*//*
 /*
  * Returns the currently checked button in the form passed as a first argument
  * which is part of the radioButton group 'buttonName', which corresponds
@@ -146,6 +148,7 @@ function MMgetElementTextByTag(thisElement,namespace,name)
  * @param {string} groupName
  * @returns {DOMInputElement}
  */
+/*
 function MMgetCheckedRadioButton(form,buttonName)
 {
 	var radios= form.getElementsByTagName("input");
@@ -156,6 +159,28 @@ function MMgetCheckedRadioButton(form,buttonName)
 	}
 	return null;
 }
+*/
+/*
+ * Returns the currently selected button of the group with name 'groupName' in
+ * the 'myForm' form. In case there is no radio button with that name, or
+ * none is checked, it returns null.
+ * @param {DOMForm} myForm
+ * @param {string} groupName
+ * @returns {DOMRadioButton}
+ */
+ 
+/*
+function MMgetCheckedRadioButton(myForm,groupName)
+{
+	var group= myForm.elements;
+
+	for (var i=0;i<group.length;i++)
+		if(group[i].name===groupName && group[i].checked)
+			return group[i];
+
+	return null;
+}
+*/
 
 function EsborraTotesOptionDeSelect(selector)
 {
@@ -568,25 +593,6 @@ function DonaAdrecaAbsoluta(url)
 }
 
 
-/*
- * Returns the currently selected button of the group with name 'groupName' in
- * the 'myForm' form. In case there is no radio button with that name, or
- * none is checked, it returns null.
- * @param {DOMForm} myForm
- * @param {string} groupName
- * @returns {DOMRadioButton}
- */
-function MMgetCheckedRadioButton(myForm,groupName)
-{
-	var group= myForm.elements;
-
-	for (var i=0;i<group.length;i++)
-		if(group[i].name===groupName && group[i].checked)
-			return group[i];
-
-	return null;
-}
-
 
 //Inspired in http://stackoverflow.com/questions/126100/how-to-efficiently-count-the-number-of-keys-properties-of-an-object-in-javascrip
 //També es pot fer així: Object.keys(myobj).length (https://javascript.info/keys-values-entries)
@@ -599,6 +605,16 @@ function CountPropertiesOfObject(myobj)
 	var count = 0, k;
 	for (k in myobj) if (myobj.hasOwnProperty(k)) count++;
 	return count;
+}
+
+
+// Retorna un objecte diàleg per a mostrar com a missatge superposat i bloquejant.
+function CreaDialog(identificadorDialog, contingutHtml)
+{
+	const dialog = document.createElement("dialog");
+	dialog.setAttribute("id", identificadorDialog);
+	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
+	return dialog;
 }
 
 /*Funcions d'utilitat general inspirades en codis trobats a la Internet*/

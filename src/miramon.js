@@ -109,6 +109,7 @@ IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
 
 
+
 IncludeScript("msg.js", true);
 
 var IdProces=Math.random()*100000;
@@ -1875,6 +1876,37 @@ function ObreFinestraAjuda()
         AjudaWindow.focus();
 }
 
+const dialogDescarregaMMRId = "dialogDescarregaMMR";
+function PreguntaDescarregaMMReader(identificadorAncoraDialeg) 
+{
+		let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
+		
+		if (!dialogDescarrega)
+		{
+			let elemAncora = document.getElementById(identificadorAncoraDialeg);
+	
+			if (elemAncora)
+			{
+				const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+
+				dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
+				elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
+				
+				// Botó de confirmació
+				const boto = document.getElementById("botoConfirmarDescarga");
+				boto.addEventListener("click", (event) => {
+					event.preventDefault();
+					InstalaLectorMapes();
+					dialogDescarrega.close();			
+				});
+			}
+			else
+				return; 
+		}
+
+		dialogDescarrega.showModal();	
+}
+
 function InstalaLectorMapes()
 {
 	ComprovaCalTancarFeedbackAmbScope();
@@ -3361,8 +3393,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 		else
 		{
 			if (capa.estil && capa.estil.length && capa.estil[i_estil2].nom)
-			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
-
+				plantilla="/collections/{collectionId}/styles/{styleId}/map?";
 			else
 				plantilla="/collections/{collectionId}/map?";
 		}
@@ -3378,7 +3409,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
-
+	
 	if (tipus=="TipusOAPI_Maps")
 		cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
 				  "&bbox-crs="); // crs del bounding-box
@@ -3387,6 +3418,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 	else
 		cdns.push("CRS=");  // CRS de la imatge idel BBOX
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	
 	if (tipus=="TipusOAPI_Maps")
 		 cdns.push("&bbox=");
 	else
@@ -3396,12 +3428,13 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
 	else
 		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
+	
+	
 	if(tipus=="TipusOAPI_Maps")
 	{
 		cdns.push("&width=" , ncol , "&height=" , nfil,
-				"&f=" , capa.FormatImatge,
+				"&f=" , (capa.FormatImatge == "image/heif" ? "hej2" : capa.FormatImatge),
 				((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
-
 	}
 	else
 	{
@@ -3622,10 +3655,9 @@ var attributesArray=Object.keys(attributes);
 
 function EsCapaBinaria(capa)
 {
-	return capa.FormatImatge=="application/x-img" ||
+	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
 	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 }
-
 
 
 function DonaCadenaBotonsVistaLlegendaSituacioCoord()
@@ -5160,3 +5192,4 @@ function ProcessMessageMiraMonMapBrowser(event)
 	eval(event.data);
 	RepintaMapesIVistes();
 }
+
