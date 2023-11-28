@@ -255,9 +255,9 @@ var cdns=[];
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 		cdns.push("alt=\"", text_groc, "\" title=\"", text_groc, "\" ",
 		"onClick='this.src=\"", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\";", funcio, "' ",
-		"onmousedown='CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');' ",
-		"onmouseover='if (this.alt) window.status=this.alt; return true;' ",
-		"onmouseout='this.src=\"", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\";if (this.alt) window.status=\"\"; return true;'");
+		"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
+		"onmouseover=\"if (this.alt) window.status=this.alt; return true;\" ",
+		"onmouseout=\"this.src='", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "';if (this.alt) window.status=''; return true;\"");
 	else
 	{
 		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", text_groc.replaceAll("'", "&apos;"), "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
