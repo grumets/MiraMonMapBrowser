@@ -119,6 +119,14 @@ textarea
 	border: 1px solid #99CCFF;
 	/*resize: none;*/
 }
+
+dialog
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	border: 2px solid #99CCFF;
+}
+
 /* Coordenades */
 .text_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;

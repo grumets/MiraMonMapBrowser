@@ -254,10 +254,10 @@ var cdns=[];
 			"height=\"", (size ? size : ((ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22)), "\" ");
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 		cdns.push("alt=\"", text_groc, "\" title=\"", text_groc, "\" ",
-			"onClick=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';", funcio, "\" ",
-			"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
-			"onmouseover=\"if (this.alt) window.status=this.alt; return true;\" ",
-			"onmouseout=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';if (this.alt) window.status=\'\'; return true;\"");
+		"onClick='this.src=\"", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\";", funcio, "' ",
+		"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
+		"onmouseover=\"if (this.alt) window.status=this.alt; return true;\" ",
+		"onmouseout=\"this.src='", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "';if (this.alt) window.status=''; return true;\"");
 	else
 	{
 		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", text_groc.replaceAll("'", "&apos;"), "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
@@ -543,7 +543,7 @@ var cdns=[];
 			const instMmrNomBoto = "instmmr";
 			cdns.push(CadenaBotoPolsable(instMmrNomBoto, "instmmr",
 						GetMessage("InstallMiraMonReader", "barra"),
-						"PreguntaDescarregaMMReader('id_barra_" + instMmrNomBoto + "');"));
+						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}
 		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
