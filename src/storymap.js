@@ -53,7 +53,7 @@ const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "ima
 // Identificador input imatges internes del Storymap.
 const inputImageId = "imagePicker";
 // Identificadors diàlegs
-const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog";
+const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog", dialogAlertaId = "dialogAlerta";
 // Dialeg Mida Imatges identificadors
 const lableWidthId = "labelWidth", inputWidthId = "widthMesure", lableHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
@@ -82,7 +82,7 @@ function TancaFinestra_visualitzaStoryMap()
 	indexStoryMapActiu=null;
 }
 
-//Omple la finestra amb el llistat d'històries (i mostra la imatge(s) de pre-visualització de la història).
+//Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "propies/StoryMaps/afegir.svg", "url": "", "isNew": true};
@@ -94,7 +94,6 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	}
 	else if (ParamCtrl.StoryMap[ParamCtrl.StoryMap.length-1].isNew != true)
 	{
-		//if (ParamCtrl.StoryMap.find(story => story.isNew == true))
 		const indexNovaStorymap = ParamCtrl.StoryMap.findIndex(story => story.isNew == true);
 		if (indexNovaStorymap != -1)
 		{
@@ -106,12 +105,17 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 			ParamCtrl.StoryMap.push(newStory);	
 		}
 	}
-
+	let indexSeg = 0;
 	while (nstory < ParamCtrl.StoryMap.length)
 	{
 		if (ParamCtrl.StoryMap[nstory].EnvTotal && !EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
+		{
+			nstory++;
 			continue;
-		i_real_story[nstory]=nstory;  //This transforms filtered story index into unfiltered index.
+		}
+			
+		i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
+		indexSeg++;
 		nstory++;
 	}
 	cdns.push("<br>",
@@ -119,16 +123,16 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 				"<br><table class=\"Verdana11px\">");
 
 	// Omplim totes les histories
-	while (i_story<nstory)
+	while (i_story<i_real_story.length)
 	{
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
-		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;' href='javascript:void(0)' onclick='");
+		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block; background:", storyActual.compartida? "green" : "red", ";' href='javascript:void(0)' onclick='");
 		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
 		cdns.push("<img src='",(storyActual.src) ? storyActual.src : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
-			"</p></a><br></td>");
+			"</p></a><input type='image' name='upload' style='position:relative; top:0px; right:0px; height:50px; width:50px;' src='pujada_nuvol.svg' alt='Upload storymap' onclick='CompartirStorymap(", i_real_story[i_story] ,")'><br></td>");
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
@@ -270,16 +274,19 @@ function CreaDialogMidesImatge(imatge)
 
 function CreaDialogCaracteristiquesNavagador()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + ":</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>Confirm</button><button value='cancel' formmethod='dialog'>Cancel</button></div></form>"];
+	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + ":</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
 
-function CreaDialog(identificadorDialog, contingutHtml)
+function CreaDialogAlertaSeleccio()
 {
-	const dialog = document.createElement("dialog");
-	dialog.setAttribute("id", identificadorDialog);
-	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
+	const dialogHtml = ["<form><div><p>" + GetMessage("SaveMapCharactMandatory", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></div></form>"];
+
+	const dialog = CreaDialog(dialogAlertaId, dialogHtml.join(""));
+
+	dialog.setAttribute("max-width", "25%");
+
 	return dialog;
 }
 
@@ -535,45 +542,75 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
 		caractDialog.addEventListener("close", (event) => {
-			let resultatCaractUsuari = JSON.parse(event.target.returnValue);
-
-			if(resultatCaractUsuari[chboxPosZoomName]["status"])
+			
+			if (event.target.returnValue != "")
 			{
-				const coordCentre = ObtenirCentre();
-				const puntCentral = {x: coordCentre.x, y: coordCentre.y};
-				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(puntCentral)};
-				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
-			}
-
-			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
-			{
-				const capesVisiblesIds = [];
-				const estilsCapesIds = [];
-				ParamCtrl.capa.filter(capa => { 
-					if (capa.visible=="si")
+				let resultatCaractUsuari = JSON.parse(event.target.returnValue);
+				
+				if(resultatCaractUsuari[chboxPosZoomName]["status"])
+				{
+					const coordCentre = ObtenirCentre();
+					const puntCentral = {x: coordCentre.x, y: coordCentre.y};
+					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(puntCentral)};
+					resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+				}
+	
+				if(resultatCaractUsuari[chboxCapesStyleName]["status"])
+				{
+					const capesVisiblesIds = [];
+					const estilsCapesIds = [];
+					ParamCtrl.capa.filter(capa => { 
+						if (capa.visible=="si")
+						{
+							capesVisiblesIds.push(capa.id);
+							estilsCapesIds.push(capa.i_estil)
+						}
+					});
+					if (capesVisiblesIds.length > 0)
+						resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
+					if (estilsCapesIds.length > 0)
+						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+				}
+	
+				let divResultatCaract = document.createElement("div");
+	
+				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+					if(resultatCaractUsuari[caracteristica]["attribute"])
 					{
-						capesVisiblesIds.push(capa.id);
-						estilsCapesIds.push(capa.i_estil)
+						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
 					}
 				});
-				if (capesVisiblesIds.length > 0)
-					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
-				if (estilsCapesIds.length > 0)
-					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
-			}
-
-			let imatgeResultatCaract = document.createElement("img");
-			imatgeResultatCaract.setAttribute("src", "location.png");
-
-			Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-				if(resultatCaractUsuari[caracteristica]["attribute"])
+				const tinyEditor = tinymce.get(tinyTextId);
+				const tinyParent = tinyEditor.selection.getNode();
+				if (tinyParent && tinyParent.childNodes)
 				{
-					imatgeResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+					{
+						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+						divResultatCaract.appendChild(tinyParent);
+					}
+					else
+					{
+						const nodesEditor = Array.from(tinyParent.childNodes);
+						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+					}
 				}
-			});
-			const tinyEditor = tinymce.get(tinyTextId);
-			let writenOnTiny = tinyEditor.getContent();
-			tinyEditor.setContent(writenOnTiny + imatgeResultatCaract.outerHTML);
+			}
+			else
+			{
+				let dialogAlerta = document.getElementById(dialogAlertaId);
+		
+				if (!dialogAlerta)
+				{
+					dialogAlerta = CreaDialogAlertaSeleccio();
+					ultimElem.insertAdjacentElement("afterend", dialogAlerta);
+				}
+
+				dialogAlerta.showModal();
+			}
 		});
 
 		function saveCheckStatus(checkbox)
@@ -591,7 +628,9 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		const confirmBtn = document.getElementById(confirmCaractBtnId);
 		confirmBtn.addEventListener("click", (event) => {
 			event.preventDefault();
-			caractDialog.close(JSON.stringify(resultatCaract)); // S'envia les mides introduïdes al diàleg.
+			const tinyEditor = tinymce.get(tinyTextId);
+			// S'envia les mides introduïdes al diàleg o bé buit
+			(tinyEditor.selection.getContent({format: "html"}) != "") ? caractDialog.close(JSON.stringify(resultatCaract)) : caractDialog.close();
 		});
 
 		caractDialog.showModal();
@@ -619,7 +658,8 @@ function SeguentPasStoryMap()
 
 	tinymce.init({
         target: tinytextarea,
-		toolbar: 'undo redo styles bold italic insertImageButton insertLocationZoom | alignleft aligncenter alignright alignjustify bullist numlist outdent indent',
+		plugins: 'code',
+		toolbar: 'undo redo styles bold italic insertImageButton insertLocationZoom | alignleft aligncenter alignright alignjustify bullist numlist outdent indent code',
 		promotion: false,
 		min_height: 375,
 		min_width: 740,
@@ -642,24 +682,23 @@ function SeguentPasStoryMap()
 
 function FinalitzarStoryMap()
 {
-	// Guardo la descripció definida en la StoryMap.
-	GuardarDescripcioStoryMapTinymce();
-
-	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>", "<div>", novaStoryMap.descripcio, "</div>","</html>"];
-	GuardaDadesFitxerExtern(cdns.join(""), novaStoryMap.titol.replace(/\s+/g, '_'), ".html");
+	const tinyEditor = tinymce.get(tinyTextId);
+	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>", "<div>", tinyEditor.getContent({format: "html"}), "</div>","</html>"];
+	novaStoryMap.relat = cdns;
 	GuardaEntradaStorymapConfig();
 	TancaFinestraLayer("creaStoryMap");
 }
 
 function GuardaEntradaStorymapConfig()
 {
-	const storyMapAGuardar = {};
+	const storyMapAGuardar = {compartida: "false"};
 	if (novaStoryMap.titol)
 		storyMapAGuardar.desc = novaStoryMap.titol;
-	if (novaStoryMap.imatgePrincipal)
-		storyMapAGuardar.src = novaStoryMap.imatgePrincipal;
-	// Modifiquem el titol per a substituïr els espais en blanc per guions baixos. Així no suposaran un problema per a la ruta del fitxer .html. La Regex "/\s+/g" implica substituïr tots els espais en blanc, tabulacions i altres en tot el text.	
-	storyMapAGuardar.url = "propies/StoryMaps/" + novaStoryMap.titol.replace(/\s+/g, '_');
+	if (novaStoryMap.imatgePortada)
+		storyMapAGuardar.srcData = novaStoryMap.imatgePortada;
+	if (novaStoryMap.relat)
+		storyMapAGuardar.html = novaStoryMap.relat;
+
 	// Guardem la nova entrada de Storymap al config.
 	ParamCtrl.StoryMap.push(storyMapAGuardar);
 }
@@ -669,12 +708,7 @@ function GuardarInformacioInicialStoryMap()
 	novaStoryMap.titol = document.getElementById(storyTitolId).value;
 	const imatgePortada = document.getElementById(imageThumbnailId);
 	if (imatgePortada && imatgePortada.src != "")
-		novaStoryMap.imatgePrincipal = imatgePortada.src;
-}
-
-function GuardarDescripcioStoryMapTinymce()
-{
-	novaStoryMap.descripcio = tinymce.get(tinyTextId).getContent();
+		novaStoryMap.imatgePortada = imatgePortada.src;
 }
 
 //Inicia una Storymap
@@ -967,4 +1001,16 @@ function ExecutaAttributsStoryMapVisible()
 	var div=getFinestraLayer(window, "storyMap")
 	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
+}
+
+// Puja al Nimmbus un relat de mapes.
+function CompartirStorymap(i_story)
+{
+	const relatACompartir = ParamCtrl.StoryMap[i_story];
+	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: relatACompartir.desc, codespace: ParamCtrl.ServidorLocal}],
+			{abstract: null, specific_usage: GetMessage("ShareStorymap", "storymap"),
+			ru_code: JSON.stringify(relatACompartir.html), ru_code_media_type: "application/json",
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
+			},
+			ParamCtrl.idioma, "");
 }

@@ -42,6 +42,7 @@ var ToolsMMN="https://github.com/grumets/MiraMonMapBrowser"; //"https://github.c
 var VersioToolsMMN={"Vers": 6, "SubVers": 0, "VariantVers": null};
 var clientName= "MiraMon Map Browser";
 var config_schema_estil="config-schema.json#/definitions/estil";
+var config_schema_storymap="config-schema.json#/properties/storymap";
 
 function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers; }
 
