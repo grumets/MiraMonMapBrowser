@@ -685,6 +685,7 @@ function FinalitzarStoryMap()
 	const tinyEditor = tinymce.get(tinyTextId);
 	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br>", "<div>", tinyEditor.getContent({format: "html"}), "</div>","</html>"];
 	novaStoryMap.relat = cdns;
+	novaStoryMap.identificador = novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
 	TancaFinestraLayer("creaStoryMap");
 }
@@ -692,15 +693,20 @@ function FinalitzarStoryMap()
 function GuardaEntradaStorymapConfig()
 {
 	const storyMapAGuardar = {compartida: "false"};
-	if (novaStoryMap.titol)
-		storyMapAGuardar.desc = novaStoryMap.titol;
-	if (novaStoryMap.imatgePortada)
-		storyMapAGuardar.srcData = novaStoryMap.imatgePortada;
-	if (novaStoryMap.relat)
-		storyMapAGuardar.html = novaStoryMap.relat;
+	if (novaStoryMap.identificador && novaStoryMap.identificador != "")
+	{
+		storyMapAGuardar.id = novaStoryMap.identificador;
+		
+		if (novaStoryMap.titol)
+			storyMapAGuardar.desc = novaStoryMap.titol;
+		if (novaStoryMap.imatgePortada)
+			storyMapAGuardar.srcData = novaStoryMap.imatgePortada;
+		if (novaStoryMap.relat)
+			storyMapAGuardar.html = novaStoryMap.relat;
 
-	// Guardem la nova entrada de Storymap al config.
-	ParamCtrl.StoryMap.push(storyMapAGuardar);
+		// Guardem la nova entrada de Storymap al config.
+		ParamCtrl.StoryMap.push(storyMapAGuardar);
+	}
 }
 
 function GuardarInformacioInicialStoryMap()

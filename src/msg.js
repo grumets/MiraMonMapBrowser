@@ -3233,6 +3233,14 @@ var MessageLang=
       "fre": "Pour enregistrer les caractéristiques de la carte, est obligatoire de précédemment avoir sélectionné le fragment du storymap que vous essayez de caractériser",
       "cze": "Chcete-li uložit vlastnosti mapy, je povinné, aby dříve měl vybrat fragment storymap, který se snažíte charakterizovat",
       "ger": "Um die Karteneigenschaften zu speichern, ist obligatorisch, vorher das Fragment der Storymap auszuwählen, die Sie charakterisieren möchten"
+    },
+    "ShareStorymap": {
+      "cat": "Compartir relat",
+      "spa": "Compartir relato",
+      "eng": "Share storymap",
+      "fre": "Partager storymap",
+      "cze": "Sdílet mapu příběhu",
+      "ger": "Storymap teilen"
     }
   },
   "tresD": {
