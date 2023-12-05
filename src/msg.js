@@ -3098,21 +3098,21 @@ var MessageLang=
       "cze": "Otevře výběr obrazových souborů",
       "ger": "Öffnet den Selektor für Bilddateien"
     },
-    "RecordCharacteristics": {
-      "cat": "Registre de caracterísitques",
-      "spa": "Registro de caracterísitcas",
-      "eng": "Record characteristics",
-      "fre": "Caractéristiques de l'enregistrement",
-      "cze": "Vlastnosti záznamů",
-      "ger": "Kenndaten der Bescheinigung"
+    "SyncWithMap": {
+      "cat": "Sincronitzar amb al mapa",
+      "spa": "Sincronizar con el mapa",
+      "eng": "Sync with the map",
+      "fre": "Synchroniser avec la carte",
+      "cze": "Synchronizace s mapou",
+      "ger": "Sync mit der Karte"
     },
     "SavesMapCharacteristics":{
-      "cat": "Guarda les característiques actuals del mapa (longitud, latitud, zoom...)",
-      "spa": "Guarda las características actuales del mapa (longitud, latitud, zoom...)",
-      "eng": "Saves current map characteristics (longitude, latitude, zoom...)",
-      "fre": "Sauvegarde des caractéristiques de la carte actuelle (longitude, latitude, zoom...)",
-      "cze": "Uloží aktuální charakteristiky mapy (zeměpisná délka, šířka, přiblížení...)",
-      "ger": "Speichert die aktuellen Karteneigenschaften (Längengrad, Breitengrad, Zoom...)"
+      "cat": "Guarda les característiques actuals del mapa (longitud, latitud, zoom...) per un fragment concret del relat",
+      "spa": "Guarda las características actuales del mapa (longitud, latitud, zoom...) para un fragmento concreto del relato",
+      "eng": "Saves the current features of the map (length, latitude, zoom...) for a concrete fragment of the story",
+      "fre": "Enregistrer les caractéristiques actuelles de la carte (longueur, latitude, zoom...) pour un fragment concret de l'histoire",
+      "cze": "Ukládá aktuální vlastnosti mapy (délka, šířka, zoom...) pro konkrétní fragment příběhu",
+      "ger": "Speichert die aktuellen Features der Karte (Länge, Breite, Zoom...) für ein konkretes Fragment der Geschichte"
     },
     "OriginalMeasurementsImage": {
       "cat": "Mides originals de la imatge",
@@ -3227,12 +3227,12 @@ var MessageLang=
       "ger": "Position und Zoom"
     },
     "SaveMapCharactMandatory": {
-      "cat": "Per tal de guardar les caracterísitques del mapa, és obligatori haver seleccionat prèviament el fragment del relat que s'està intentant caracteritzar",
-      "spa": "Para guardar las características del mapa, es obligatorio haber seleccionado previamente el fragmento del relato que se está intentando caracterizar",
-      "eng": "To save the map characteristics, is mandatory to previously had select the fragment of the storymap which you're trying to characterize",
-      "fre": "Pour enregistrer les caractéristiques de la carte, est obligatoire de précédemment avoir sélectionné le fragment du storymap que vous essayez de caractériser",
-      "cze": "Chcete-li uložit vlastnosti mapy, je povinné, aby dříve měl vybrat fragment storymap, který se snažíte charakterizovat",
-      "ger": "Um die Karteneigenschaften zu speichern, ist obligatorisch, vorher das Fragment der Storymap auszuwählen, die Sie charakterisieren möchten"
+      "cat": "Per tal de sincronitzar el mapa amb alguna part del relat, és necessari haver seleccionat prèviament el fragment del relat que es vol sincronitzar",
+      "spa": "Para sincronizar el mapa con alguna parte del relato, es necesario haber seleccionado previamente el fragmento del relato que se quiere sincronizar",
+      "eng": "To synchronize the map with some part of the story, it is necessary to have previously selected the fragment of the story that you want to synchronize",
+      "fre": "Pour synchroniser la carte avec une partie de l'histoire, il est nécessaire d'avoir préalablement sélectionné le fragment de l'histoire que vous voulez synchroniser",
+      "cze": "Chcete-li synchronizovat mapu s nějakou částí příběhu, je nutné, aby dříve vybral fragment příběhu, který chcete synchronizovat",
+      "ger": "Um die Karte mit einem Teil der Geschichte zu synchronisieren, ist es notwendig, vorher das Fragment der Geschichte ausgewählt zu haben, die Sie synchronisieren möchten"
     },
     "ShareStorymap": {
       "cat": "Compartir relat",
