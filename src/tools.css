@@ -70,6 +70,7 @@ a:hover { text-decoration: underline}
 	flex: 1 auto;
 	margin: 5px;
 	line-height: 1.5;
+	max-width: 80px;
 }
 
 /* General forms style */
@@ -192,8 +193,6 @@ dialog
 }
 .button_image_dialog:disabled{
 	opacity: 0.5;
-}
-.button_image_dialog:hover{
 }
 
 /* *******************************************************

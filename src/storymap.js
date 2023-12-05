@@ -166,7 +166,7 @@ function TancaICreaStoryMap()
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25'><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' /><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'><br><br><input type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
+		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25'><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' /><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'><br><br><input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap()'>"];
 		novaStoryMapFinestra.innerHTML = beginingStoryMapContent.join("");
 	}
 	ObreFinestra(window, "creaStoryMap");
@@ -268,7 +268,7 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 function CreaDialegMidesImatge(imatge)
 {
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
-	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + lableWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + lableHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button class='button_image_dialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button><button id='", confirmImageBtnId, "' class='button_image_dialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button></p></div></form>"];
+	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + lableWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + lableHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
 	return CreaDialog(dialogMidesId, dialogHtml.join(""));
 }
@@ -656,7 +656,7 @@ function SeguentPasStoryMap()
 	const endButtonId= "endUpButton";
 	const htmlExternTiny = ["<div id='storyMapInterface'>", 
 	"<input hidden id='", inputImageId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this)'>",
-	"<input id ='", endButtonId, "'type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
+	"<input id ='", endButtonId, "' class='buttonDialog' type='button' value='", GetMessage("End"), "' onClick='FinalitzarStoryMap()'>"];
 	novaStoryMapFinestra.innerHTML = htmlExternTiny.join("");
 
 	// Creo aquest textarea fora de l'string "htmlExternTiny" per a que l'eina tinymce el detecti i el pugui substituir
