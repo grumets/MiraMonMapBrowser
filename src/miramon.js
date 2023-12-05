@@ -5045,6 +5045,10 @@ function FinalitzaMiraMonMapBrowser()
 		MMZWindow.close();
 		MMZWindow=null;
 	}
+	if (!isEmpty(novaStoryMap))
+	{
+		TancaFinestraLayer("creaStoryMap");
+	}
 	if (window.opener)
 		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser closed"}), "*");
 

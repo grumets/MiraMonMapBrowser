@@ -2937,3 +2937,8 @@ function BotoDesplegableDiv(nom, content)
 	cdns.push("<div id=\"",nom,"div\" style=\"display: none; overflow:scroll;\" width=\"20px\" height=\"15px\" >", content ,"</div>");
 	return cdns.join("");
 }// Fi function BotoDesplegableDiv()
+
+// Comprova si un objecte no té claus, i per tant és buit. 
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
