@@ -63,6 +63,8 @@ const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}};
 const nomImgPuntSincr = "sincrPoint";
+// Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
+const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -674,6 +676,7 @@ function SeguentPasStoryMap()
 		promotion: false,
 		min_height: 375,
 		min_width: 740,
+		language: idiomesTiny[ParamCtrl.idioma],
 		setup: (editor) => {
 			editor.ui.registry.addButton("insertImageButton", {
 				text: GetMessage("AttachImage", "storymap"),
