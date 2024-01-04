@@ -76,6 +76,7 @@ IncludeScript("capavola.js");
 IncludeScript("editavec.js", true);
 IncludeScript("datahora.js");
 IncludeScript("video.js");
+IncludeScript("cube.js");
 IncludeScript("stats.js");
 IncludeScript("gaussian_fit_1d.js");
 IncludeScript("phenology.js");
@@ -4727,7 +4728,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "multi_consulta", GetMessageJSON("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "param", GetMessageJSON("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessageJSON("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "video", GetMessageJSON("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "video", GetMessageJSON("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 2, 1, 900, 610, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessageJSON("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
 	createFinestraLayer(window, "reclassificaCapa", GetMessageJSON("ReclassifierLayerValues", "miramon"), boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculaQualitat", GetMessageJSON("ComputeQuality", "cntxmenu"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);

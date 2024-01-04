@@ -6289,6 +6289,11 @@ var MessageLang=
       "cze": "Animace",
       "ger": "Animationen"
     },
+    "DataCube": {
+      "cat": "Cub de dades",
+      "spa": "Cubo de datos",
+      "eng": "Data cube"
+    },
     "Graph": {
       "cat": "Gràfic",
       "spa": "Gráfico",
