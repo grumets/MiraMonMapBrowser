@@ -6257,9 +6257,14 @@ var MessageLang=
       "cze": "Pro animaci v této oblasti nebo zvětšení není k dispozici žádná vrstva.",
       "ger": "Es ist keiner Layer für die Animation in diesem Bereich oder Zoom verfügbar."
     },
+    "ReferenceLayer": {
+      "cat": "Capa de referència",
+      "spa": "Capa de referencia",
+      "eng": "Reference layer"
+    },
     "TimeSeries": {
-      "cat": "Sèries temporals",
-      "spa": "Series temporales",
+      "cat": "Sèrie temporal",
+      "spa": "Serie temporal",
       "eng": "Time series",
       "fre": "Séries chronologiques",
       "cze": "Časová řada",

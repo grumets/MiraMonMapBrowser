@@ -382,7 +382,17 @@ var cdns=[], capa, i_capa_primer_video;
 	//Començo pel selector de capes.
 	cdns.push("<form name=\"video_animacions\" METHOD=\"GET\" onSubmit=\"return CanviaAnimacio(document.video_animacions.capa.value);\">",
 		" <table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=left>"+DonaCadena(ParamCtrl.TitolCaixa)+"</td>",
-			  "<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+		"<td align=right><font face=\"Verdana, Arial, Helvetica, sans-serif\" size=2>",
+		GetMessage("ReferenceLayer", "video"),
+		": <select name=\"caparef\" onChange=\"CanviaImatgeCapaRefVideo(document.video_animacions.caparef.value);\">",
+		"<option value=\"-1\" selected> -- ", GetMessage("none"), " --</option>");
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{
+		capa=ParamCtrl.capa[i_capa];
+		if (!EsCapaAptePerVideo(capa) && EsCapaVisibleAAquestNivellDeZoom(capa))
+			cdns.push("<option value=\"", i_capa ,"\">", DonaCadenaNomDesc(capa),"</option>");
+	}
+	cdns.push("</select>",
 			  GetMessage("TimeSeries", "video"),
 			  ": <select name=\"capa\" onChange=\"CanviaAnimacio(document.video_animacions.capa.value);\">");
 
@@ -455,7 +465,7 @@ var cdns=[], capa, i_capa_primer_video;
 			"<span id=\"video_time_slider\"><center><img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\">");
 	var n=DonaNPecesBarraVideo();
 	for (var i=0; i<n; i++)
-		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\">");
+		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_bl.png"), "\" border=\"0\" name=\"video_evol",i,"\" onMouseOver=\"CanviaFotogramaSiPuntABarra(event,",i,");\" onMouseOut=\"CancellaCanviaFotogramaSiPuntABarra();\">");
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("evol_mrg.png"), "\" border=\"0\"></center></span>");
 
 	if (ParamCtrl.IconaConsulta && !IconaVideoClick.img || !IconaVideoClick.img.sha_carregat || IconaVideoClick.img.hi_ha_hagut_error)
@@ -489,7 +499,8 @@ function CanviaEstatAnimable(boto, i_data_video)
 				clearTimeout(DatesVideo[i_data_video].timeOutFotograma);
 			var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 			vista.i_nova_vista=NovaVistaVideo;
-			DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 50);
+			//DatesVideo[i_data_video].timeoutFotograma=setTimeout("CanviaImatgeCapaVideo("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 50);
+			DatesVideo[i_data_video].timeoutFotograma=setTimeout(CanviaImatgeCapaVideo, 50, i_data_video, vista, DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DatesVideo[i_data_video].i_data);
 		}
 		DatesVideo[i_data_video].animable="si";
 		if (IFilEixXEixTVideo==IFilEixXEixTVideoRes)
@@ -537,6 +548,21 @@ function CanviaImatgeCapaVideo(i_data_video, vista, i_capa, i_estil, i_data)
 {
 	var image=document.getElementById("video_i_raster"+i_data_video);
 	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaVideo, i_data_video);
+}
+
+function CanviaImatgeCapaRefVideo(i_capa)
+{
+	if (i_capa==-1)
+		document.getElementById("video_l_raster_ref").style.opacity=0;
+	else
+	{
+		var cdns=[];
+		cdns.push(EsCapaBinaria(ParamCtrl.capa[i_capa]) ? "<canvas id=\"video_i_raster_ref\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster_ref\" name=\"video_i_raster_ref\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">");
+		document.getElementById("video_l_raster_ref").innerHTML=cdns.join("");
+		document.getElementById("video_l_raster_ref").style.opacity=1;
+		var image=document.getElementById("video_i_raster_ref");
+		CanviaImatgeCapa(image, ParamInternCtrl.vista, i_capa, -1, null, null, null);
+	}
 }
 
 function CanviaValorDataVideoInicialFinal(event, millisegons, final)
@@ -833,7 +859,8 @@ var ncol, nfil;
 	//Demano totes les imatges petites per omplir el rodet de fotogrames
 	for (i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
-		DatesVideo[i_data_video].timeOutRodet=setTimeout("CanviaImatgeCapaRodet("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 75*i_data_video+75);
+		//DatesVideo[i_data_video].timeOutRodet=setTimeout("CanviaImatgeCapaRodet("+i_data_video+", "+JSON.stringify(vista)+", "+DatesVideo[i_data_video].i_capa+", "+DatesVideo[i_data_video].i_estil+", "+DatesVideo[i_data_video].i_data+")", 75*i_data_video+75);
+		DatesVideo[i_data_video].timeOutRodet=setTimeout(CanviaImatgeCapaRodet, 75*i_data_video+75, i_data_video, JSON.parse(JSON.stringify(vista)), DatesVideo[i_data_video].i_capa, DatesVideo[i_data_video].i_estil, DatesVideo[i_data_video].i_data);
 	}
 
 	//Dibuixo tots els fotogrames de l'animació buits i apagats
@@ -848,38 +875,28 @@ var ncol, nfil;
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatRodet()", 600);
 }
 
-/*function DonaCadenaHTMLVideoAnimacio(ncol, nfil)
-{
-var cdns=[];
-	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-	{
-		//http://www.greywyvern.com/?post=337
-		cdns.push("<div id=\"video_l_raster",i_data_video,"\" style=\"position: absolute; width:", ncol, "px; height:", nfil, "px; opacity:0;\" >",
-			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
-			"</div>");
-	}
-	return cdns.join("");	
-}*/
-
-/*Les mateixes divisions serveixen també pel mode "data cube".*/
+/*Les mateixes divisions serveixen pel mode "animacio" i pel mode "cube".*/
 function DonaCadenaHTMLVideoAnimacio(ncol, nfil)
 {
 var cdns=[];
 
 	cdns.push("<div class=\"viewport-video\" id=\"viewport_video\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
-		"<div class=\"video-set\" id=\"video_set\" style=\"width:", ncol, "px; height:", nfil, "px;\">");
+		"<div class=\"video-set\" id=\"video_set\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
+		"<div class=\"frame-video\" id=\"video_f_raster_ref\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
+		"<div id=\"video_l_raster_ref\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px; opacity:0;\" >",
+		"</div></div>");
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
+		//http://www.greywyvern.com/?post=337
 		cdns.push("<div class=\"frame-video\" id=\"video_f_raster",i_data_video,"\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 			"<div class=\"frame-video-image\" id=\"video_l_raster",i_data_video,"\" style=\"width:", ncol, "px; height:", nfil, "px; opacity:0;\">",
 			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
 			"</div>",
 			"</div>");
 	}
-	//if (EsCapaBinaria(ParamCtrl.capa[DatesVideo[0].i_capa]))
 	cdns.push("<div class=\"frame-video\" id=\"video_f_raster_stat\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 		"<div id=\"video_l_raster_stat\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px; opacity:0;\" >",
-		"<canvas id=\"video_i_raster_stat\" width=\"", ParamInternCtrl.vista.ncol, "px\" height=\"", ParamInternCtrl.vista.nfil, "px\"></canvas>",
+		"<canvas id=\"video_i_raster_stat\" width=\"", ncol, "px\" height=\"", nfil, "px\"></canvas>",
 		"</div></div>",
 		"<div id=\"video_f_click\" class=\"frame-video\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 		"<div id=\"video_click\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px;\"><canvas id=\"video_click_canvas\" width=\"", ncol, "px\" height=\"", nfil, "px\"></canvas></div></div>",
@@ -913,11 +930,13 @@ function AsignaEstilVideoAnimacio()
 	element.classList.add("video-set");
 	element.style[userPrefixCube.js + 'Transform'] = '';
 
-	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
-		AsignaEstilFrameAnimacio("video_f_raster"+i_data_video, "frame-video", "frame-cube", "video_l_raster"+i_data_video, "frame-video-image", "frame-cube-image")
+	AsignaEstilFrameAnimacio("video_f_raster_ref", "frame-video", "frame-cube", "video_l_raster_ref", "frame-video-image", "frame-cube-image");
 
-	AsignaEstilFrameAnimacio("video_f_raster_stat", "frame-video", "frame-cube", "video_l_raster_stat", "frame-video-image", "frame-cube-image")
-	AsignaEstilFrameAnimacio("video_f_click", "frame-video", "frame-cube", "video_click", "frame-video-image", "frame-cube-image")
+	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
+		AsignaEstilFrameAnimacio("video_f_raster"+i_data_video, "frame-video", "frame-cube", "video_l_raster"+i_data_video, "frame-video-image", "frame-cube-image");
+
+	AsignaEstilFrameAnimacio("video_f_raster_stat", "frame-video", "frame-cube", "video_l_raster_stat", "frame-video-image", "frame-cube-image");
+	AsignaEstilFrameAnimacio("video_f_click", "frame-video", "frame-cube", "video_click", "frame-video-image", "frame-cube-image");
 }
 
 function AsignaEstilFrameCube(div_f, styleFAnimacio, styleFCube, div_i, styleIAnimacio, styleICube, i_data_video)
@@ -932,6 +951,8 @@ function AsignaEstilFrameCube(div_f, styleFAnimacio, styleFCube, div_i, styleIAn
 	element.classList.add(styleICube);
 }
 
+var PosicioCapaRef=0;
+
 function AsignaEstilVideoDatacube()
 {
 	var element=document.getElementById("viewport_video");
@@ -945,10 +966,31 @@ function AsignaEstilVideoDatacube()
 	element=document.getElementById("video_set");
 	element.classList.remove("video-set");
 	element.classList.add("video-cube");
+
+	AsignaEstilFrameCube("video_f_raster_ref", "frame-video", "frame-cube", "video_l_raster_ref", "frame-video-image", "frame-cube-image", DatesVideo.length-1);
+	PosicioCapaRef=ParamInternCtrl.vista.ncol;
+	document.getElementById("video_f_raster_ref").style[userPrefixCube.js + 'Transform'] = 'rotateY(180deg) translateZ(' + (ParamInternCtrl.vista.ncol/2 - PosicioCapaRef) + 'px)';
+
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		AsignaEstilFrameCube("video_f_raster"+i_data_video, "frame-video", "frame-cube", "video_l_raster"+i_data_video, "frame-video-image", "frame-cube-image", i_data_video);
+
 	AsignaEstilFrameCube("video_f_raster_stat", "frame-video", "frame-cube", "video_l_raster_stat", "frame-video-image", "frame-cube-image", 0)
 	AsignaEstilFrameCube("video_f_click", "frame-video", "frame-cube", "video_click", "frame-video-image", "frame-cube-image", 0)
+}
+
+function WheelVideoEvent(event)
+{
+	if (parseInt(document.video_animacions.caparef.value)==-1)
+		return;
+	
+	PosicioCapaRef+=Math.sign(event.deltaY)*10;
+	if (PosicioCapaRef<1) 
+		PosicioCapaRef=1;
+	else if (PosicioCapaRef>ParamInternCtrl.vista.ncol)
+		PosicioCapaRef=ParamInternCtrl.vista.ncol;
+
+	document.getElementById("video_f_raster_ref").style[userPrefixCube.js + 'Transform'] = 'rotateY(180deg) translateZ(' + (ParamInternCtrl.vista.ncol/2 - PosicioCapaRef) + 'px)';
+	event.preventDefault();
 }
 
 function PosaFotogramaDavantVideoCube(i_data_video_davant)
@@ -1070,6 +1112,9 @@ var vista=JSON.parse(JSON.stringify(ParamInternCtrl.vista));
 		timeoutVideoInfo=null;
 	}
 	timeoutVideoInfo=setTimeout("ActualitzaNCarregatVideo()", 1000);
+
+	CanviaImatgeCapaRefVideo(document.video_animacions.caparef.value);
+
 }//Fi de CanviaVideo()
 
 function CanviaAnimacio(nom_video)
@@ -1742,16 +1787,27 @@ function ActivaFotogramaVideo(i_data_video)
 		img.src=AfegeixAdrecaBaseSRC("evol_pnt_blau_fotog.png");
 }
 
+var CanviaFotogramaSiPuntABarraId=null;
+
 function CanviaFotogramaSiPuntABarra(event, i)
 {
 var img=document["video_evol"+i];
 var nom_icona=TreuAdreca(img.src);
 
+	if (CanviaFotogramaSiPuntABarraId)
+		clearTimeout(CanviaFotogramaSiPuntABarraId);
+
 	if (nom_icona!="evol_bl_fotog.png" && nom_icona!="evol_blau_fotog.png" &&
 	    nom_icona!="evol_pnt_fotog.png" && nom_icona!="evol_pnt_blau_fotog.png")
 		return;
 
-	MostraFotogramaAillat(DonaIDataVideoDesDePosicioDeFrameEstiratLinealment(i, DonaNPecesBarraVideo()), true);
+	CanviaFotogramaSiPuntABarraId=setTimeout(MostraFotogramaAillat, 500, DonaIDataVideoDesDePosicioDeFrameEstiratLinealment(i, DonaNPecesBarraVideo()), true);
+}
+
+function CancellaCanviaFotogramaSiPuntABarra()
+{
+	if (CanviaFotogramaSiPuntABarraId)
+		clearTimeout(CanviaFotogramaSiPuntABarraId);
 }
 
 function DonaNPerApagaEncenFotograma()
@@ -1922,6 +1978,7 @@ var j, img, nom_icona;
 		;
 	else
 		ApagaFotogramaVideo(IDataVideoMostrada, n);
+
 	if (actualitza_fotograma_video)
 	{
 		if (IFilEixXEixTVideo==IFilEixXEixTVideoRes)

@@ -5138,7 +5138,11 @@ var elem, rect;
 		{
 			elem=getFinestraLayer(window, layerFinestraList[z].nom);
 			if (isLayer(elem) && isLayerVisible(elem))
+			{
+				if (layerFinestraList[z].nom=="video")
+					WheelVideoEvent(event);
 				return;
+			}
 		}
 	}
 
