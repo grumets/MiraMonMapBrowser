@@ -427,7 +427,7 @@ var cdns=[], capa, i_capa_primer_video;
 		"<div id=\"video_info\" class=\"text_allus\" style=\"position: absolute; top: 0px; margin-left: auto; margin-right: auto; width:", ParamInternCtrl.vista.ncol, "px; height:", ParamInternCtrl.vista.nfil, "px;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\"></div>",
 		"<div id=\"video_botons\" class=\"finestra_superposada text_allus\" style=\"position: absolute; bottom: 0px; margin-left: auto; margin-right: auto;\" onClick=\"ClickSobreVideo(event);\" onMouseMove=\"MouSobreVideo(event);\">");
 
-	// Desplegable d' animació o d'estadistic.
+	// Desplegable d'animació o d'estadistic.
 	cdns.push("<center><span id=\"video_veure\"></span>");
 
 	//Dibuixar els botons de progrés del video.
@@ -558,7 +558,7 @@ function CanviaImatgeCapaRefVideo(i_capa)
 	{
 		var cdns=[];
 		cdns.push(EsCapaBinaria(ParamCtrl.capa[i_capa]) ? "<canvas id=\"video_i_raster_ref\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster_ref\" name=\"video_i_raster_ref\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">");
-		document.getElementById("video_l_raster_ref").innerHTML=cdns.join("");
+		document.getElementById("video_m_raster_ref").innerHTML=cdns.join("");
 		document.getElementById("video_l_raster_ref").style.opacity=1;
 		var image=document.getElementById("video_i_raster_ref");
 		CanviaImatgeCapa(image, ParamInternCtrl.vista, i_capa, -1, null, null, null);
@@ -883,7 +883,10 @@ var cdns=[];
 	cdns.push("<div class=\"viewport-video\" id=\"viewport_video\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 		"<div class=\"video-set\" id=\"video_set\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 		"<div class=\"frame-video\" id=\"video_f_raster_ref\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
-		"<div id=\"video_l_raster_ref\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px; opacity:0;\" >",
+		"<div id=\"video_l_raster_ref\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px; opacity:0;\">",
+		"<div id=\"video_m_raster_ref\" class=\"frame-video-image\" style=\"bottom: 0px; width:", ncol, "px; height:", nfil, "px;\"></div>",
+		"<div id=\"video_date_raster_ref\" class=\"frame-video-image text_allus\" style=\"font-size: medium;font-family: font-family: Verdana, Arial, Helvetica, sans-serif; text-align: justify;text-align-last: right;bottom: 0px; width:", ncol, "px; height:", nfil, "px;\" >",
+		"</div>",
 		"</div></div>");
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 	{
@@ -931,6 +934,7 @@ function AsignaEstilVideoAnimacio()
 	element.style[userPrefixCube.js + 'Transform'] = '';
 
 	AsignaEstilFrameAnimacio("video_f_raster_ref", "frame-video", "frame-cube", "video_l_raster_ref", "frame-video-image", "frame-cube-image");
+	document.getElementById("video_date_raster_ref").innerHTML="";
 
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		AsignaEstilFrameAnimacio("video_f_raster"+i_data_video, "frame-video", "frame-cube", "video_l_raster"+i_data_video, "frame-video-image", "frame-cube-image");
@@ -970,6 +974,7 @@ function AsignaEstilVideoDatacube()
 	AsignaEstilFrameCube("video_f_raster_ref", "frame-video", "frame-cube", "video_l_raster_ref", "frame-video-image", "frame-cube-image", DatesVideo.length-1);
 	PosicioCapaRef=ParamInternCtrl.vista.ncol;
 	document.getElementById("video_f_raster_ref").style[userPrefixCube.js + 'Transform'] = 'rotateY(180deg) translateZ(' + (ParamInternCtrl.vista.ncol/2 - PosicioCapaRef) + 'px)';
+	PosaDataSobreCapaVideoRef(PosicioCapaRef, IDataVideoMostrada);
 
 	for (var i_data_video=0; i_data_video<DatesVideo.length; i_data_video++)
 		AsignaEstilFrameCube("video_f_raster"+i_data_video, "frame-video", "frame-cube", "video_l_raster"+i_data_video, "frame-video-image", "frame-cube-image", i_data_video);
@@ -978,18 +983,39 @@ function AsignaEstilVideoDatacube()
 	AsignaEstilFrameCube("video_f_click", "frame-video", "frame-cube", "video_click", "frame-video-image", "frame-cube-image", 0)
 }
 
+function PosaDataSobreCapaVideoRef(posCapaRef, i_data_video_davant)
+{
+var pos, d, millisegons;
+
+	var i_davant=DonaPosicioDeFrameEstiratLinealment(i_data_video_davant, ParamInternCtrl.vista.ncol);
+
+	pos=posCapaRef+i_davant;
+	if (pos>ParamInternCtrl.vista.ncol)
+	{
+		d=ParamInternCtrl.vista.ncol+(i_davant-DonaPosicioDeFrameEstiratLinealment(IDataVideoMostrada-1, ParamInternCtrl.vista.ncol));
+		millisegons=DatesVideo[0].millisegons+(pos-d)*(DatesVideo[DatesVideo.length-1].millisegons-DatesVideo[0].millisegons)/(ParamInternCtrl.vista.ncol);
+	}
+	else
+		millisegons=DatesVideo[0].millisegons+pos*(DatesVideo[DatesVideo.length-1].millisegons-DatesVideo[0].millisegons)/(ParamInternCtrl.vista.ncol);
+
+	document.getElementById("video_date_raster_ref").innerHTML=DonaDataMillisegonsComATextBreu(ParamCtrl.capa[DatesVideo[IDataVideoMostrada].i_capa].FlagsData, millisegons);
+}
+
+
 function WheelVideoEvent(event)
 {
-	if (parseInt(document.video_animacions.caparef.value)==-1)
+	if (parseInt(document.video_animacions.caparef.value)==-1 || IFilEixXEixTVideo!=IFilEixXEixTVideoRes)
 		return;
 	
-	PosicioCapaRef+=Math.sign(event.deltaY)*10;
+	PosicioCapaRef-=Math.sign(event.deltaY)*10;
 	if (PosicioCapaRef<1) 
 		PosicioCapaRef=1;
 	else if (PosicioCapaRef>ParamInternCtrl.vista.ncol)
 		PosicioCapaRef=ParamInternCtrl.vista.ncol;
 
 	document.getElementById("video_f_raster_ref").style[userPrefixCube.js + 'Transform'] = 'rotateY(180deg) translateZ(' + (ParamInternCtrl.vista.ncol/2 - PosicioCapaRef) + 'px)';
+	PosaDataSobreCapaVideoRef(PosicioCapaRef, IDataVideoMostrada);
+
 	event.preventDefault();
 }
 
@@ -1008,6 +1034,7 @@ var pos, d;
 		
 		document.getElementById("video_f_raster"+i_data_video).style[userPrefixCube.js + 'Transform'] = 'rotateY(180deg) translateZ(' + (ParamInternCtrl.vista.ncol/2 - pos) + 'px)';
 	}
+	PosaDataSobreCapaVideoRef(PosicioCapaRef, i_data_video_davant);
 }
 
 function DonaRatioNodataRodet(i_data_video)
