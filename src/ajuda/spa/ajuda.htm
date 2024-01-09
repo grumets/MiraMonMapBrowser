@@ -1,22 +1,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Ajuda del Navegador de Mapes del MiraMon</title><link href="ajuda.css" rel="stylesheet" type="text/css">
+<title>Ayuda del Navegador de Mapas del MiraMon</title>
+<link href="ajuda.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 </head>
 <body leftmargin="2" topmargin="2" bgcolor="#ffffff" link="#cc3333" marginheight="2" marginwidth="2" text="#0000ff">
 <a name="INICI"></a>
 <table class="taula_titol">
   <tr><td><a href="http://www.creaf.uab.cat/miramon"><img src="mm_gaudi_curt_gisrs.gif" alt="Plana web del MiraMon " align="left" border="0" height="80" hspace="0" width="392"></a></td></tr>
-  <tr><td colspan="2" bgcolor="#0000ff" class="titol_prin">&nbsp;&nbsp;&nbsp;Navegador de Mapes del MiraMon</td></tr>
+  <tr><td colspan="2" bgcolor="#0000ff" class="titol_prin">&nbsp;&nbsp;&nbsp;Navegador de Mapas del MiraMon</td></tr>
 </table>
 <br>
 <table class="general">
   <tr>     
 	<td align="rigth" valign="top" width="25%"> 
 	<table class="taula_seccio">
-		<tr class="tr_seccio"><td colspan="3" class="titol_t1">Índex</td></tr>		
-		<tr><td colspan="3"><a href="#introduccio" class="vincle_index">Introducció</a></td></tr>
+		<tr class="tr_seccio"><td colspan="3" class="titol_t1">Índice</td></tr>		
+		<tr><td colspan="3"><a href="#introduccio" class="vincle_index">Introducción</a></td></tr>
 		<tr><td colspan="3"><a href="#teledeteccio" class="vincle_index">La Teledetecció</a></td></tr>
 		<tr>
 			<td class="td_subseccio">1</td>	
@@ -109,7 +110,7 @@
 		</tr>
 		<tr>
 			<td class="td_subseccio">4</td>	
-			<td colspan="2"><a href="#descarr_zona" class="vincle_index">Instal·lació del Lector de Mapes de MiraMon</a></td>
+			<td colspan="2"><a href="#mmr" class="vincle_index">Instal·lació del Lector de Mapes de MiraMon</a></td>
 		</tr>
 		<tr>
 			<td class="td_subseccio">5</td>	
@@ -117,21 +118,27 @@
 		</tr>
 		<tr>
 			<td class="td_subseccio">6</td>	
-			<td colspan="2"><a href="#animacions" class="vincle_index">Canvi de projecció automàtica</a></td>
+			<td colspan="2"><a href="#projeccio" class="vincle_index">Canvi de projecció automàtica</a></td>
 		</tr>
 		<tr>
 			<td class="td_subseccio">7</td>	
-			<td colspan="2"><a href="#animacions" class="vincle_index">Afegir capes d'altres servidors</a></td>
+			<td colspan="2"><a href="#capes" class="vincle_index">Afegir capes d'altres servidors</a></td>
+		</tr>
+		<tr>
+			<td class="td_subseccio">8</td>	
+			<td colspan="2"><a href="#relats" class="vincle_index">Crear relatos de mapas</a></td>
 		</tr>
     </table>
 	</td>
     <td width="1%"></td>
     <td align="center" valign="top" width="74%"> 
 	<table class="taula_seccio">
-		<tr class="tr_seccio"><td colspan="3"><a name="INTRODUCCIO"><span class="titol_t1">Introducció</span></a></td></tr>
+		<tr class="tr_seccio"><td colspan="3"><a name="INTRODUCCIO"><span class="titol_t1">Introducción</span></a></td></tr>
         <tr> 
-	       <td><p class="text_general">Un navegador de mapes és un portal format per un conjunt de planes HTML, que ens permet visualitzar, consultar o descarregar capes subministrades per un o diversos servidors Web de mapes. <br> Aquests navegadors acosten la cartografia i el SIG als usuaris, eliminant la necessitat d'una formació específica en aquests camps, així com obviant la necessitat d'un <i>software</i> específic.</p> 
-          <p class="text_general">El Navegador de Mapes de MiraMon ha estat realitzat amb tecnologies conformes als estàndards internacionals: Web Map Service (ISO 19128), Web Map Tile Service, Web Feature Service i Web Coverage Service, elaborats per Open Geospatial Consortium i ISO. Gràcies a això, s'aconsegueix dotar-lo d'interoperabilitat, i per tant, és possible integrar en el Navegador la informació provinent de diferents servidors fins hi tot elaborats per diferents fabricants. WMS i WMTS són útils per mostrar les capes i per realitzar consultes per localització (obtenir informació addicional sobre un punt d'un mapa), WFS facilitat les descàrregues de mapes vectorials i la visualització i consulta d'objectes individualitzats i WCS facilita les descàrregues de mapes ràster.</p>
+	       <td><p class="text_general">
+			Un navegador de mapas es un portal formado por un conjunto de planas HTML, que nos permite visualizar, consultar o descargar capas suministradas por uno o varios servidores Web de mapas. <br> 
+			Estos navegadores acercan la cartografía y el SIG a los usuarios, eliminando la necesidad de una formación específica en estos campos, así como obviando la necesidad de un <i>software</i> específico.</p> 
+          <p class="text_general">El Navegador de Mapas de MiraMon ha sido realizado con tecnologías conformes a los estándares internacionales: Web Map Service (ISO 19128), Web Map Tile Service, Web Feature Service y Web Coverage Service, elaborados por Open Geospatial Consortium e iSO. Gracias a esto, se consigue dotarlo de interoperabilidad, y por tanto, es posible integrar en el Navegador la información proveniente de diferentes servidores hasta todo elaborados por diferentes fabricantes. WMS y WMTS son útiles para mostrar las capas y para realizar consultas por localización (obtener información adicional sobre un punto de un mapa), WFS facilidad las descargas de mapas vectoriales y la visualización y consulta de objetos individualizados y WCS facilita las descargas de mapas ráster.</p>
 		  </td>
         </tr>
       </table>
@@ -1362,7 +1369,7 @@ automàticament.</p></td>
 	<table class="taula_seccio">
 	  <tr class="tr_seccio">
 		<td width="3%" class="titol_t1">7</td>
-		<td width="97%"><a name="projeccio"><span class="titol_t1">Afegir capes d'altres servidors</span></a></td>
+		<td width="97%"><a name="capes"><span class="titol_t1">Afegir capes d'altres servidors</span></a></td>
 		<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
 	  </tr>
 	</table>	
@@ -1405,6 +1412,50 @@ capes afegides.</p>
 		</table>
 	   </td>
 	</tr>
-</table>
+</table><p></p>
+<table border="0" cellspacing="0" width="100%">
+	<tr>
+		<td width="3%"></td>
+		<td width="97%">
+		<table class="taula_seccio">
+		  <tr class="tr_seccio">
+			<td width="3%" class="titol_t1">8</td>
+			<td width="97%"><a name="relats"><span class="titol_t1">Crear relatos de mapas</span></a></td>
+			<td align="center" valign="middle" width="3%"><a href="#INICI"><img src="tornar_inici.gif" alt="Inici" border="0" height="12" width="12"></a></td> 
+		  </tr>
+		</table>	
+		</td>
+	  </tr>
+		<tr>
+		   <td width="3%"></td>	   
+		   <td width="97%">
+		   <table>
+		   <tr>
+			<td valign="top"><p class="text_general">Haciendo clic sobre el botón de relatos de mapas se abre una parrilla con los relatos ya existentes y al final de esta encontramos la casilla para empezar a crear un nuevo relato. Aparece una nueva ventana con cajetines para escribir el título del relato y seleccionar una imagen de portada. El botón siguiente nos lleva ya a la ventana de redacción del cuerpo del relato.</p>
+	<p class="text_general">
+		La parte central está reservada por la edición del texto. A la parte superior de la zona de edición disponemos de varios botones modificadores del texto, uno para añadir imágenes al relato, otro para sincronizar el mapa con un fragmento del relato y un último botón para mostrar otros botones. Entre estos otros botones encontramos más funciones para modificar el texto y en último lugar tenemos un botón para ver y editar todo el relato en formato HTML.</p>
+			<div align="center"><img src="../cat/relatsEdicioHTML.png" border="0" height="300" width="463">
+			</div>
+			<p class="text_general">
+				Las imágenes añadidas se pueden redimensionar mediante un pop-up que aparece después de haber escogido la imagen. Hay preestablecido un límite máximo de la medida de la imagen de 250.000 píxeles (500x500 píxeles) para evitar problemas de almacenamiento de los relatos. Si se supera este máximo es obligatorio reducir las dimensiones de la imagen para poderla incluir al relato.</p>
+				<div align="center"><img src="../cat/relatsEdicioImatge.png" border="0" height="160" width="541">
+				</div>
+			<p class="text_general">
+				Para sacar provecho del mapa disponemos de una función para sincronizar una parte del relato con la situación y capas visibles en un momento determinado del mapa. Esto quiere decir que al leer este fragmento del relato el mapa cambiará su disposición para mostrarnos algo que se adecua en el texto. Para hacerlo es necesario haber preseleccionado el fragmento a sincronizar antes de pulsar el botón para hacer la sincronización, del contrario aparece un mensaje de aviso para recordarlo. Una vez sincronizada un determinado fragmento de relato se simboliza mediante un pequeño icono situado al final de este.</p>
+				<div align="center"><img src="../cat/relatsEdicioSincro.png" border="0" height="250" width="384">
+				</div>
+				<br>
+				<div align="center"><img src="../cat/relatsEdicioComplet.png" border="0" height="472" width="384">
+				</div>
+				<p class="text_general">Para finalizar el relato se pulsa el botón Fin. El relato recientemente creado aparecerá al final de la parrilla de relatos y ofrecerá la opción de subirlo al Nimmbus para poderlo compartir con otros usuarios y/o guardarlo por sesiones futuras.</p>
+			</td>
+			<td width="1%"></td>
+			<td><img src="../cat/relatMapaEdicio.png" border="0" height="388" width="597"></td>
+			<td width="3%"> </td>
+			</tr>
+			</table>
+		   </td>
+		</tr>
+	</table>
 </body>
 </html>
