@@ -58,6 +58,20 @@ a:hover { text-decoration: underline}
 	font-weight: bold;
 }
 
+.horizontalSpreadElements {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.buttonDialog {
+	flex: 1 auto;
+	margin: 5px;
+	line-height: 1.5;
+	max-width: 80px;
+}
 
 /* General forms style */
 select
@@ -106,6 +120,14 @@ textarea
 	border: 1px solid #99CCFF;
 	/*resize: none;*/
 }
+
+dialog
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	border: 2px solid #99CCFF;
+}
+
 /* Coordenades */
 .text_coord{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -166,6 +188,12 @@ textarea
 	color: #000099;
 }
 
+.button_image_dialog{
+	opacity: 1.0;
+}
+.button_image_dialog:disabled{
+	opacity: 0.5;
+}
 
 /* *******************************************************
  Estils de espereu si us plau de la vista
@@ -589,6 +617,98 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 ::-webkit-scrollbar-button:single-button:horizontal:increment:hover {
   border-color: transparent transparent transparent #777777;
 }
+
+/* *******************************************************
+ Estils del video i el datacube 
+ 
+           F I N E S T R A   D ' A N I M A C I O 
+  
+********************************************************** */
+.viewport-video{
+}
+
+.viewport-cube {
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  -ms-perspective: 800px;
+  -o-perspective: 800px;
+  perspective: 800px;
+  -webkit-perspective-origin: 50% 200px;
+  -moz-perspective-origin: 50% 200px;
+  -ms-perspective-origin: 50% 200px;
+  -o-perspective-origin: 50% 200px;
+  perspective-origin: 50% 200px;
+  -webkit-transform: scale(0.8, 0.8);
+  -moz-transform: scale(0.8, 0.8);
+  -ms-transform: scale(0.8, 0.8);
+  -o-transform: scale(0.8, 0.8);
+  transform: scale(0.8, 0.8);
+  -webkit-box-reflect: below 170px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0%, transparent), to(rgba(250, 250, 250, 0.1)));
+}
+
+.video-set{
+}
+
+.video-cube {
+  position: relative;
+  margin: 0 auto;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateX(136deg) rotateY(1122deg);
+  -moz-transform: rotateX(136deg) rotateY(1122deg);
+  -ms-transform: rotateX(136deg) rotateY(1122deg);
+  -o-transform: rotateX(136deg) rotateY(1122deg);
+  transform: rotateX(136deg) rotateY(1122deg); }
+
+.frame-video{
+	position: absolute;
+}
+
+.frame-cube {
+  overflow: hidden;
+  position: absolute;
+  opacity: 0.9;
+  -webkit-touch-callout: none;
+  -moz-touch-callout: none;
+  -ms-touch-callout: none;
+  -o-touch-callout: none;
+  touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none; 
+  -webkit-transform: rotateY(180deg) translateZ(200px);
+  -moz-transform: rotateY(180deg) translateZ(200px);
+  -ms-transform: rotateY(180deg) translateZ(200px);
+  -o-transform: rotateY(180deg) translateZ(200px);
+  transform: rotateY(180deg) translateZ(200px); 
+}
+
+.frame-cube:hover {
+  cursor: pointer; }
+
+.frame-cube:active {
+  cursor: pointer; }
+
+.frame-video-image{
+	position: absolute;
+}
+
+.frame-cube-image {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  -webkit-transition: color 600ms;
+  -moz-transition: color 600ms;
+  -ms-transition: color 600ms;
+  -o-transition: color 600ms;
+  transition: color 600ms; }
 
 /* *******************************************************
  Estils de visualització dels diferents elements de la 

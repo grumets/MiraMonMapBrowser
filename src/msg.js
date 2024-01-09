@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3065,6 +3065,182 @@ var MessageLang=
       "fre": "Agir sur la carte",
       "cze": "Akce na mapě",
       "ger": "Aktion auf der Karte"
+    },
+    "NewStorymap": {
+      "cat": "Nou relat amb mapes",
+      "spa": "Nuevo relato con mapas",
+      "eng": "New storymaps",
+      "fre": "Nouvelle carte de l'histoire",
+      "cze": "Nové příběhové mapy",
+      "ger": "Neue Storymaps"
+    },
+		"StorymapThumbnailImage": {
+      "cat": "Imatge en miniatura de relat",
+      "spa": "Imagen en miniatura de relato",
+      "eng": "Storymap thumbnail image",
+      "fre": "Image miniature de la Storymap",
+      "cze": "Obrázek miniatury mapy příběhu",
+      "ger": "Miniaturansicht der Storymap"
+    },
+    "AttachImage": {
+      "cat": "Adjuntar imatge",
+      "spa": "Adjuntar imagen",
+      "eng": "Attach image",
+      "fre": "Joindre une image",
+      "cze": "Připojit obrázek",
+      "ger": "Bild anhängen"
+    },
+    "OpensImageFilesSelector": {
+      "cat": "Obre selector de fitxers d'imatge",
+      "spa": "Abre selector de ficheros de imagen",
+      "eng": "Opens image files selector",
+      "fre": "Ouvre le sélecteur de fichiers image",
+      "cze": "Otevře výběr obrazových souborů",
+      "ger": "Öffnet den Selektor für Bilddateien"
+    },
+    "SyncWithMap": {
+      "cat": "Sincronitzar amb al mapa",
+      "spa": "Sincronizar con el mapa",
+      "eng": "Sync with the map",
+      "fre": "Synchroniser avec la carte",
+      "cze": "Synchronizace s mapou",
+      "ger": "Sync mit der Karte"
+    },
+    "SavesMapCharacteristics":{
+      "cat": "Guarda les característiques actuals del mapa (longitud, latitud, zoom...) per un fragment concret del relat",
+      "spa": "Guarda las características actuales del mapa (longitud, latitud, zoom...) para un fragmento concreto del relato",
+      "eng": "Saves the current features of the map (length, latitude, zoom...) for a concrete fragment of the story",
+      "fre": "Enregistrer les caractéristiques actuelles de la carte (longueur, latitude, zoom...) pour un fragment concret de l'histoire",
+      "cze": "Ukládá aktuální vlastnosti mapy (délka, šířka, zoom...) pro konkrétní fragment příběhu",
+      "ger": "Speichert die aktuellen Features der Karte (Länge, Breite, Zoom...) für ein konkretes Fragment der Geschichte"
+    },
+    "OriginalMeasurementsImage": {
+      "cat": "Mides originals de la imatge",
+      "spa": "Medidas originales de la imagen",
+      "eng": "Original measurements of the image",
+      "fre": "Mesures originales de l'image",
+      "cze": "Původní měření obrazu",
+      "ger": "Originalmessungen des Bildes"
+    },
+    "pxWidth": {
+      "cat": "px amplada",
+      "spa": "px anchura",
+      "eng": "px width",
+      "fre": "px largeur",
+      "cze": "px šířka",
+      "ger": "px Breite"
+    },
+    "pxHeight": {
+      "cat": "px alçada",
+      "spa": "px altura",
+      "eng": "px height",
+      "fre": "px hauteur",
+      "cze": "px výška",
+      "ger": "px Höhe"
+    },
+    "ReducedWidth": {
+      "cat": "Amplada reduida",
+      "spa": "Anchura reducida",
+      "eng": "Reduced width",
+      "fre": "Largeur réduite",
+      "cze": "Zmenšená šířka",
+      "ger": "Reduzierte Breite"
+    },
+    "ReducedHeight": {
+      "cat": "Alçada reduïda",
+      "spa": "Altura reducida",
+      "eng": "Reduced height",
+      "fre": "Hauteur réduite",
+      "cze": "Zmenšená výška",
+      "ger": "Reduzierte Höhe"
+    },
+    "ChooseUnitMeasurement": {
+      "cat": "Escull la unitat de mesura",
+      "spa": "Escoge la unidad de medida",
+      "eng": "Choose the unit of measurement",
+      "fre": "Choisir l'unité de mesure",
+      "cze": "Výběr měrné jednotky",
+      "ger": "Wählen Sie die Maßeinheit"
+    },
+    "MaintainProportionality": {
+      "cat": "Mantenir proporcionalitat",
+      "spa": "Mantener proporcionalidad",
+      "eng": "Maintain proportionality",
+      "fre": "Maintenir la proportionnalité",
+      "cze": "Zachování proporcionality",
+      "ger": "Wahrung der Verhältnismäßigkeit"
+    },
+    "SelectMapFeatures": {
+      "cat": "Selecciona les característiques del mapa per a aquest punt de l'Storymap",
+      "spa": "Selecciona las características del mapa para este punto del Storymap",
+      "eng": "Select the map features for this Storymap point",
+      "fre": "Sélectionner les éléments de la carte pour ce point Storymap",
+      "cze": "Výběr prvků mapy pro tento bod mapy Storymap",
+      "ger": "Wählen Sie die Kartenmerkmale für diesen Storymap-Punkt aus"
+    },
+    "Zoom": {
+      "cat": "Zoom",
+      "spa": "Zoom",
+      "eng": "Zoom",
+      "fre": "Zoom",
+      "cze": "Přiblížení",
+      "ger": "Zoom"
+    },
+    "Times": {
+      "cat": "Temps",
+      "spa": "Tiempos",
+      "eng": "Times",
+      "fre": "Temps",
+      "cze": "Times",
+      "ger": "Zeiten"
+    },
+    "Styles": {
+      "cat": "Estils",
+      "spa": "Estilos",
+      "eng": "Styles",
+      "fre": "Styles",
+      "cze": "Styly",
+      "ger": "Stile"
+    },
+    "ErrorReadingImages": {
+      "cat": "Error carregant la imatge",
+      "spa": "Error cargando la imagen",
+      "eng": "Error loading image",
+      "fre": "Erreur de chargement de l'image",
+      "cze": "Chyba při načítání obrázku",
+      "ger": "Fehler beim Laden eines Bildes"
+    },
+    "Layers&Styles": {
+      "cat": "Capes i estils",
+      "spa": "Capas y estilos",
+      "eng": "Layers and styles",
+      "fre": "Couches et styles",
+      "cze": "Vrstvy a styly",
+      "ger": "Layers und Stile"
+    },
+    "Position&Zoom": {
+      "cat": "Posició i zoom",
+      "spa": "Posición y zoom",
+      "eng": "Position and zoom",
+      "fre": "Position et zoom",
+      "cze": "Poloha a přiblížení",
+      "ger": "Position und Zoom"
+    },
+    "SaveMapCharactMandatory": {
+      "cat": "Per tal de sincronitzar el mapa amb alguna part del relat, és necessari haver seleccionat prèviament el fragment del relat que es vol sincronitzar",
+      "spa": "Para sincronizar el mapa con alguna parte del relato, es necesario haber seleccionado previamente el fragmento del relato que se quiere sincronizar",
+      "eng": "To synchronize the map with some part of the story, it is necessary to have previously selected the fragment of the story that you want to synchronize",
+      "fre": "Pour synchroniser la carte avec une partie de l'histoire, il est nécessaire d'avoir préalablement sélectionné le fragment de l'histoire que vous voulez synchroniser",
+      "cze": "Chcete-li synchronizovat mapu s nějakou částí příběhu, je nutné, aby dříve vybral fragment příběhu, který chcete synchronizovat",
+      "ger": "Um die Karte mit einem Teil der Geschichte zu synchronisieren, ist es notwendig, vorher das Fragment der Geschichte ausgewählt zu haben, die Sie synchronisieren möchten"
+    },
+    "ShareStorymap": {
+      "cat": "Compartir relat",
+      "spa": "Compartir relato",
+      "eng": "Share storymap",
+      "fre": "Partager storymap",
+      "cze": "Sdílet mapu příběhu",
+      "ger": "Storymap teilen"
     }
   },
   "tresD": {
@@ -3181,6 +3357,16 @@ var MessageLang=
       "fre": "Web Mercator",
       "cze": "Web Mercator",
       "ger": "Web Mercator"
+    }
+  },
+  "vista":{
+    "WrongDefinedArea":{
+      "cat": "Les coordenades introduïdes no defineixen una àrea",
+      "spa": "Las coordenadas introducidas no definen un área",
+      "eng": "Selected coordinates doesn't define an area",
+      "fre": "Les coordonnées entrées ne définissent pas une zone",
+      "cze": "Zadané souřadnice nedefinují oblast",
+      "ger": "Die eingegebenen Koordinaten definieren kein Gebiet"
     }
   },
   "capavola": {
@@ -4502,9 +4688,17 @@ var MessageLang=
       "cat": "Instal·lar el Lector Universal de Mapes del MiraMon",
       "spa": "Instalar el Lector Universal de Mapas de MiraMon",
       "eng": "Install MiraMon Universal Map Reader",
-      "fre": "Installer le Lecteur Universel de Cartes du Miramon",
-      "cze": "Instalace univerzální čtečky map MiraMon",
+      "fre": "Installer le Lecteur Universel de Cartes du MiraMon",
+      "cze": "Instalace MiraMon Universal Map Reader",
       "ger": "MiraMon Universal Map Reader installieren"
+    },
+    "SureToDownloadMMR": {
+      "cat": "Segur que vols descarregar el Lector Universal de Mapes del MiraMon?",
+      "spa": "¿Seguro que quieres descargar el Lector Universal de Mapas de MiraMon?",
+      "eng": "Are you sure to download the MiraMon Universal Map Reader?",
+      "fre": "Êtes-vous sûr de télécharger le Lecteur Universel de Cartes du MiraMon?",
+      "cze": "Určitě jste si stáhli čtečku MiraMon Universal Map Reader?",
+      "ger": "Sind Sie sicher, dass Sie den MiraMon Universal Map Reader herunterladen möchten?"
     }
   },
   "llegenda": {
@@ -6239,9 +6433,14 @@ var MessageLang=
       "cze": "Pro animaci v této oblasti nebo zvětšení není k dispozici žádná vrstva.",
       "ger": "Es ist keiner Layer für die Animation in diesem Bereich oder Zoom verfügbar."
     },
+    "ReferenceLayer": {
+      "cat": "Capa de referència",
+      "spa": "Capa de referencia",
+      "eng": "Reference layer"
+    },
     "TimeSeries": {
-      "cat": "Sèries temporals",
-      "spa": "Series temporales",
+      "cat": "Sèrie temporal",
+      "spa": "Serie temporal",
       "eng": "Time series",
       "fre": "Séries chronologiques",
       "cze": "Časová řada",
@@ -6270,6 +6469,11 @@ var MessageLang=
       "fre": "Animations",
       "cze": "Animace",
       "ger": "Animationen"
+    },
+    "DataCube": {
+      "cat": "Cub de dades",
+      "spa": "Cubo de datos",
+      "eng": "Data cube"
     },
     "Graph": {
       "cat": "Gràfic",

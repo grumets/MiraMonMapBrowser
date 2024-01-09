@@ -44,7 +44,7 @@ var SGVBarra=[];
 
 function DonaTextImgGifSvg(id, name, filename, size, title, onclick_function_name)
 {
-var cdns=[];	
+var cdns=[];
 
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(filename + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
 		 "id=\"", id, "\" ");
@@ -181,7 +181,7 @@ function ChangeTitleColorsSVG(id, params)
 		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
 		if (!svg)
 			return;
-			
+
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
@@ -254,10 +254,10 @@ var cdns=[];
 			"height=\"", (size ? size : ((ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22)), "\" ");
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 		cdns.push("alt=\"", text_groc, "\" title=\"", text_groc, "\" ",
-			"onClick=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';", funcio, "\" ",
-			"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
-			"onmouseover=\"if (this.alt) window.status=this.alt; return true;\" ",
-			"onmouseout=\"this.src=\'", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\';if (this.alt) window.status=\'\'; return true;\"");
+		"onClick='this.src=\"", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "\";", funcio, "' ",
+		"onmousedown=\"CanviaImageBotoPolsable(event, this, '", AfegeixAdrecaBaseSRC(fitxer + "p.gif"), "');\" ",
+		"onmouseover=\"if (this.alt) window.status=this.alt; return true;\" ",
+		"onmouseout=\"this.src='", AfegeixAdrecaBaseSRC(fitxer + ".gif"), "';if (this.alt) window.status=''; return true;\"");
 	else
 	{
 		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {title: \"", text_groc.replaceAll("'", "&apos;"), "\", colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
@@ -299,7 +299,7 @@ var cdns=[];
 		cdns.push( "<img align=\"absmiddle\" src=\"" ,
 			AfegeixAdrecaBaseSRC(botons[j].src),
 			((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) && boto_p==botons[j].src ? "p" : ""),
-			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"), 
+			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"),
 			"\" ",
 			"id=\"id_barra_", botons[j].src, "\" name=\"", botons[j].src, "\" "+
 			"width=\"", (sizep ? (boto_p==botons[j].src ? sizep : size) : ((ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23)), "\" ");
@@ -373,29 +373,29 @@ var cdns=[];
 		cdns.push("<form name=\"zoom\" method=\"GET\" onSubmit=\"return ObtenirMMZ();\">");
 		ParamCtrl.EstatClickSobreVista="ClickMouMig";
 		cdns.push("<center>",
-		   (CadenaBotoPolsable("getmmz_text", "getmmz_text", GetMessage("Download"), "ObtenirMMZ();")),
+		   CadenaBotoPolsable("getmmz_text", "getmmz_text", GetMessage("Download"), "ObtenirMMZ();"),
 		   "&nbsp;&nbsp;&nbsp;",
-		   (CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"), "ObreFinestraAjuda();")),
+		   CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"), "ObreFinestraAjuda();"),
 		   "</center>");
 	}
 	else // Barra completa
 	{
 		cdns.push("<form name=\"zoom\" method=\"GET\" onSubmit=\"return PortamANivellDeZoom(document.zoom.nivell.value)\">\n");
 		if (ParamCtrl.BarraBotoMes)
-		   	cdns.push((CadenaBotoPolsable("zoom_in", "zoom_in", GetMessage("ZoomIn", "barra"),
-				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+1);")));
+		   	cdns.push(CadenaBotoPolsable("zoom_in", "zoom_in", GetMessage("ZoomIn", "barra"),
+				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)+1);"));
 		if (ParamCtrl.BarraBotoMenys)
-			cdns.push((CadenaBotoPolsable("zoomout", "zoomout", GetMessage("ZoomOut", "barra"),
-				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)-1);")));
+			cdns.push(CadenaBotoPolsable("zoomout", "zoomout", GetMessage("ZoomOut", "barra"),
+				"PortamANivellDeZoom(DonaIndexNivellZoom(ParamInternCtrl.vista.CostatZoomActual)-1);"));
 		if (ParamCtrl.BarraBotoAnarCoord)
-			cdns.push((CadenaBotoPolsable("zoomcoord", "zoomcoord", GetMessage("GoToCoordinate", "barra"),
-				"MostraFinestraAnarCoordenada()")));
+			cdns.push(CadenaBotoPolsable("zoomcoord", "zoomcoord", GetMessage("GoToCoordinate", "barra"),
+				"MostraFinestraAnarCoordenada()"));
 		if (ParamCtrl.BarraBotoBack)
-			cdns.push((CadenaBotoPolsable("zoom_bk", "zoom_bk", GetMessage("PreviousView", "barra"),
-				"RecuperaVistaPrevia();")));
+			cdns.push(CadenaBotoPolsable("zoom_bk", "zoom_bk", GetMessage("PreviousView", "barra"),
+				"RecuperaVistaPrevia();"));
 		if (ParamCtrl.BarraBotoVGeneral)
-			cdns.push((CadenaBotoPolsable("zoomall", "zoomall", GetMessage("GeneralView", "barra"),
-				"PortamAVistaGeneral();")));
+			cdns.push(CadenaBotoPolsable("zoomall", "zoomall", GetMessage("GeneralView", "barra"),
+				"PortamAVistaGeneral();"));
 		
 
 		var cal_consultes=CalActivarConsultesALaBarra();
@@ -512,48 +512,51 @@ var cdns=[];
 		{
 		 	if (ParamCtrl.capa[i].animable)
 			{
-				cdns.push((CadenaBotoPolsable("video", "video", GetMessage("TimeSeriesAnimations", "barra"),
-					"MostraFinestraVideo();")),"\n");
+				cdns.push(CadenaBotoPolsable("video", "video", GetMessage("TimeSeriesAnimations", "barra"),
+					"MostraFinestraVideo();"),"\n");
 				break;
 			}
 		}
 
 		if (ParamCtrl.BarraBotoCaixaParam)
-			cdns.push((CadenaBotoPolsable("param", "param", GetMessage("Options"), "MostraFinestraParametres();")));
+			cdns.push(CadenaBotoPolsable("param", "param", GetMessage("Options"), "MostraFinestraParametres();"));
 		if (ParamCtrl.BarraBotoConsola)
-			cdns.push((CadenaBotoPolsable("consola", "consola", GetMessage("Console", "consola"), "MostraFinestraConsola();")));
+			cdns.push(CadenaBotoPolsable("consola", "consola", GetMessage("Console", "consola"), "MostraFinestraConsola();"));
 		if (ParamCtrl.BarraBotoEnllac)
-			cdns.push((CadenaBotoPolsable("enllac", "enllac", GetMessage("LinkToMap", "barra"), "MostraFinestraEnllac();")));
+			cdns.push(CadenaBotoPolsable("enllac", "enllac", GetMessage("LinkToMap", "barra"), "MostraFinestraEnllac();"));
 		if (ParamCtrl.BarraBotoEnllacWMS)
-			cdns.push((CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();")));
+			cdns.push(CadenaBotoPolsable("enllacWMS", "enllacWMS", GetMessage("LinksToServers", "barra"), "MostraFinestraEnllacWMS();"));
 		if (ParamCtrl.BarraBotoAfegeixCapa)
-			cdns.push((CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));")));
+			cdns.push(CadenaBotoPolsable("afegirCapa", "afegirCapa", GetMessage("AddLayers"), "IniciaFinestraAfegeixCapaServidor(NumeroDeCapesVolatils(-1));"));
 		if (ParamCtrl.BarraBotoCalculadora)
-			cdns.push((CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();")));
+			cdns.push(CadenaBotoPolsable("calculadora", "calculadora", GetMessage("LayerCalculator", "cntxmenu"), "IniciaFinestraCalculadoraCapes();"));
 		if (ParamCtrl.BarraBotoCombiCapa)
-			cdns.push((CadenaBotoPolsable("combicapa", "combicapa", GetMessage("AnalyticalCombinationLayers", "cntxmenu"), "IniciaFinestraCombiCapa();")));
+			cdns.push(CadenaBotoPolsable("combicapa", "combicapa", GetMessage("AnalyticalCombinationLayers", "cntxmenu"), "IniciaFinestraCombiCapa();"));
 		cdns.push("\n");
 
 		if (ParamCtrl.BarraBotoPrint)
-			cdns.push((CadenaBotoPolsable("print", "print", GetMessage("print"), "ObreTriaFullImprimir();")));
+			cdns.push(CadenaBotoPolsable("print", "print", GetMessage("print"), "ObreTriaFullImprimir();"));
 		if (ParamCtrl.BarraBotoPlanaPrincipal)
-			cdns.push((CadenaBotoPolsable("home", "home", GetMessage("RestartFromServer", "barra"), "RestartMiraMonMapBrowser();")));
+			cdns.push(CadenaBotoPolsable("home", "home", GetMessage("RestartFromServer", "barra"), "RestartMiraMonMapBrowser();"));
 		if (ParamCtrl.BarraBotoInstallarMMZ)
-			cdns.push((CadenaBotoPolsable("instmmr", "instmmr",
-				GetMessage("InstallMiraMonReader", "barra"),
-				"InstalaLectorMapes();")));
+		{
+			const instMmrNomBoto = "instmmr";
+			cdns.push(CadenaBotoPolsable(instMmrNomBoto, "instmmr",
+						GetMessage("InstallMiraMonReader", "barra"),
+						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
+		}
 		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
-			cdns.push((CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();")));
+			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
-			cdns.push((CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
-				"ObreFinestraAjuda();")));
+			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
+				"ObreFinestraAjuda();"));
 
 		if (ParamCtrl.accessClientId || ParamCtrl.AltresLinks)
 			cdns.push("\n");
 		if (ParamCtrl.accessClientId)
-			cdns.push((CadenaBotoPolsable("login", "login", GetMessage("Login", "authens"), "FerLoginICarregaCapes();")));
+			cdns.push(CadenaBotoPolsable("login", "login", GetMessage("Login", "authens"), "FerLoginICarregaCapes();"));
 		if (ParamCtrl.AltresLinks)
-			cdns.push((CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio)));
+			cdns.push(CadenaBotoPolsable(ParamCtrl.AltresLinks.boto, ParamCtrl.AltresLinks.boto, DonaCadena(ParamCtrl.AltresLinks.text_boto), ParamCtrl.AltresLinks.funcio));
 
 		if (ParamCtrl.BarraBotonsIdiomes && ParamCtrl.idiomes.length>1)
 		{
@@ -584,4 +587,3 @@ var cdns=[];
 			window.document.zoom.nivell.focus();
 	}
 }//Fi de CreaBarra()
-

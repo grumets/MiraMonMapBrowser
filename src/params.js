@@ -357,7 +357,7 @@ function GuardaConfiguracioUsuari(userConfig, fileName)
 	// Guardem el nivell de zoom
 	userConfig.NivellZoomCostat = ParamInternCtrl.vista.CostatZoomActual;
 
-  	return GuardaDadesJSONFitxerExtern(userConfig, fileName);
+  	return GuardaDadesFitxerExtern(userConfig, fileName, ".json");
 }
 
 /*

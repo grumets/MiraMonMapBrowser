@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -42,6 +42,7 @@ var ToolsMMN="https://github.com/grumets/MiraMonMapBrowser"; //"https://github.c
 var VersioToolsMMN={"Vers": 6, "SubVers": 0, "VariantVers": null};
 var clientName= "MiraMon Map Browser";
 var config_schema_estil="config-schema.json#/definitions/estil";
+var config_schema_storymap="config-schema.json#/properties/storymap";
 
 function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers; }
 
@@ -76,6 +77,7 @@ IncludeScript("capavola.js");
 IncludeScript("editavec.js", true);
 IncludeScript("datahora.js");
 IncludeScript("video.js");
+IncludeScript("cube.js");
 IncludeScript("stats.js");
 IncludeScript("gaussian_fit_1d.js");
 IncludeScript("phenology.js");
@@ -107,6 +109,7 @@ IncludeScript("Chart.bundle.min.js", true);
 IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
+
 
 
 IncludeScript("msg.js", true);
@@ -1124,12 +1127,12 @@ function CanviaIdioma(s)
 	if(isLayer(elem) && isLayerVisible(elem))
 		MostraFinestraTaulaDeCapaVectorial()
 
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 	{
-		if (IStoryActive<0)
+		if (indexStoryMapActiu<0)
 			MostraFinestraTriaStoryMap();
 		else
-			IniciaStoryMap(IStoryActive);
+			IniciaStoryMap(indexStoryMapActiu);
 	}
 } // Fi function CanviaIdioma()
 
@@ -1875,6 +1878,37 @@ function ObreFinestraAjuda()
         AjudaWindow.focus();
 }
 
+const dialogDescarregaMMRId = "dialogDescarregaMMR";
+function PreguntaDescarregaMMReader(identificadorAncoraDialeg) 
+{
+		let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
+		
+		if (!dialogDescarrega)
+		{
+			let elemAncora = document.getElementById(identificadorAncoraDialeg);
+	
+			if (elemAncora)
+			{
+				const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+
+				dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
+				elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
+				
+				// Botó de confirmació
+				const boto = document.getElementById("botoConfirmarDescarga");
+				boto.addEventListener("click", (event) => {
+					event.preventDefault();
+					InstalaLectorMapes();
+					dialogDescarrega.close();			
+				});
+			}
+			else
+				return; 
+		}
+
+		dialogDescarrega.showModal();	
+}
+
 function InstalaLectorMapes()
 {
 	ComprovaCalTancarFeedbackAmbScope();
@@ -1893,7 +1927,8 @@ function EscriuCostatIUnitatsZoom(i, crs)
 {
 	if (EsProjLongLat(crs))
 		return g_gms(ParamCtrl.zoom[i].costat, false);
-	return ParamCtrl.zoom[i].costat+DonaUnitatsCoordenadesProj(crs);
+	var p=DonaUnitatsCoordenadesProj(crs);
+	return ParamCtrl.zoom[i].costat+((p=="°") ? "" : " ")+p;
 }
 
 function EscriuDescripcioNivellZoom(i, crs, vull_retorns)
@@ -2002,8 +2037,10 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_editarVector();
 	else if (nom_finestra=="triaStoryMap")
 		TancaFinestra_triaStoryMap();
-	else if (nom_finestra=="storyMap")
+	else if (nom_finestra=="creaStoryMap")
 		TancaFinestra_storyMap();
+	else if (nom_finestra=="storyMap")
+		TancaFinestra_visualitzaStoryMap();
 	else if (nom_finestra=="editaEstil")
 		TancarFinestra_editEstil(nom_finestra);
 	else if (nom_finestra=="taulaCapaVectorial")
@@ -2311,7 +2348,7 @@ var elem=getLayer(window, "enllacWMS_finestra");
     {
 		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false;
 
-		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+		for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
 			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
 		cdns2.push("<center><table border=\"0\" width=\"95%\"><tr><td><font size=\"1\">");
@@ -2320,13 +2357,13 @@ var elem=getLayer(window, "enllacWMS_finestra");
 			cdns.sort();
 			if (ParamCtrl.ServidorLocal)
 			{
-				for (i=0; i<cdns.length; i++)
+				for (i=0, cdnsLength=cdns.length; i<cdnsLength; i++)
 				{
 					if (ParamCtrl.ServidorLocal==cdns[i])
 					{
 						array_tipus.length=0;
 						//Necessito saber el tipus.
-						for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+						for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
 						{
 							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 							{
@@ -3346,20 +3383,25 @@ function DonaRequestServiceMetadata(servidor, versio, tipus, suporta_cors)
 
 function AfegeixPartCridaComunaGetMapiGetFeatureInfo(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
 {
-var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
+var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 
 	tipus=DonaTipusServidorCapa(capa);
 	if (tipus=="TipusOAPI_Maps")
 	{
+		if (capa.estil && capa.estil.length)
+			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 		if(capa.URLTemplate)
 			plantilla=capa.URLTemplate+"?";
 		else
-			plantilla="/collections/{collectionId}/styles/{styleId}/map?";
-
+		{
+			if (capa.estil && capa.estil.length && capa.estil[i_estil2].nom)
+				plantilla="/collections/{collectionId}/styles/{styleId}/map?";
+			else
+				plantilla="/collections/{collectionId}/map?";
+		}
 		plantilla=plantilla.replace("{collectionId}", capa.nom);
 		if (capa.estil && capa.estil.length)
 		{
-			i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 			if (capa.estil[i_estil2].nom)
 	 			plantilla=plantilla.replace("{styleId}", capa.estil[i_estil2].nom);
 			else
@@ -3369,14 +3411,16 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
-
+	
 	if (tipus=="TipusOAPI_Maps")
-		cdns.push("bbox-crs=");
+		cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
+				  "&bbox-crs="); // crs del bounding-box
 	else if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
-		cdns.push("SRS=");
+		cdns.push("SRS="); // CRS de la imatge idel BBOX
 	else
-		cdns.push("CRS=");
+		cdns.push("CRS=");  // CRS de la imatge idel BBOX
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+	
 	if (tipus=="TipusOAPI_Maps")
 		 cdns.push("&bbox=");
 	else
@@ -3386,12 +3430,13 @@ var cdns=[], tipus, plantilla, i_estil2, capa=ParamCtrl.capa[i];
 		cdns.push(env.MinY , "," , env.MinX , "," , env.MaxY , "," , env.MaxX);
 	else
 		cdns.push(env.MinX , "," , env.MinY , "," , env.MaxX , "," , env.MaxY);
+	
+	
 	if(tipus=="TipusOAPI_Maps")
 	{
 		cdns.push("&width=" , ncol , "&height=" , nfil,
-				"&f=" , capa.FormatImatge,
+				"&f=" , (capa.FormatImatge == "image/heif" ? "hej2" : capa.FormatImatge),
 				((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
-
 	}
 	else
 	{
@@ -3612,10 +3657,9 @@ var attributesArray=Object.keys(attributes);
 
 function EsCapaBinaria(capa)
 {
-	return capa.FormatImatge=="application/x-img" ||
+	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
 	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 }
-
 
 
 function DonaCadenaBotonsVistaLlegendaSituacioCoord()
@@ -4022,9 +4066,8 @@ var capa, j, i, i_estil;
 						else
 						{
 							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].id!=capa_estil[j])
-								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " +
-								    GetMessage("ForLayer") + " " + capa_visible[j]);
-					    	}
+								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " + GetMessage("ForLayer") + " " + capa_visible[j]);
+					    }
 					}
 				}
 
@@ -4687,7 +4730,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "multi_consulta", GetMessageJSON("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "param", GetMessageJSON("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "download", GetMessageJSON("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "video", GetMessageJSON("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 20, 1, 900, 610, "NWCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "video", GetMessageJSON("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 2, 1, 900, 610, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "consola", GetMessageJSON("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
 	createFinestraLayer(window, "reclassificaCapa", GetMessageJSON("ReclassifierLayerValues", "miramon"), boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculaQualitat", GetMessageJSON("ComputeQuality", "cntxmenu"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
@@ -4706,7 +4749,8 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", GetMessageJSON("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "taulaCapaVectorial", GetMessageJSON("ElementsVectorialTable", "vector"), boto_copiar|boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-
+	createFinestraLayer(window, "creaStoryMap", GetMessageJSON("NewStorymap", "storymap"), boto_tancar, 420, 150, 750, 500, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
 
@@ -5002,6 +5046,10 @@ function FinalitzaMiraMonMapBrowser()
 		MMZWindow.close();
 		MMZWindow=null;
 	}
+	if (!isEmpty(novaStoryMap))
+	{
+		TancaFinestraLayer("creaStoryMap");
+	}
 	if (window.opener)
 		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser closed"}), "*");
 
@@ -5088,7 +5136,7 @@ function MovementMiraMonMapBrowser(event)
 function WheelMiraMonMapBrowser(event)
 {
 var elem, rect;
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 		return;
 
 	for (var z=0; z<layerFinestraList.length; z++)
@@ -5097,7 +5145,11 @@ var elem, rect;
 		{
 			elem=getFinestraLayer(window, layerFinestraList[z].nom);
 			if (isLayer(elem) && isLayerVisible(elem))
+			{
+				if (layerFinestraList[z].nom=="video")
+					WheelVideoEvent(event);
 				return;
+			}
 		}
 	}
 
@@ -5150,3 +5202,4 @@ function ProcessMessageMiraMonMapBrowser(event)
 	eval(event.data);
 	RepintaMapesIVistes();
 }
+

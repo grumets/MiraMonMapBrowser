@@ -826,5 +826,5 @@ function GuardarCapaVectorialJSON(i_capa)
 	const capa = ParamCtrl.capa[i_capa];
 	const dadesCapaExporta = {"type": capa.objectes.type, "bbox": capa.objectes.bbox, "features": capa.objectes.features};
 	const nomFitxer=GetMessage("layer")+"_"+GetMessage("vectorial", "download")+"_"+Date.now();
-	GuardaDadesJSONFitxerExtern(dadesCapaExporta, nomFitxer);
+	GuardaDadesFitxerExtern(dadesCapaExporta, nomFitxer, ".json");
 }
