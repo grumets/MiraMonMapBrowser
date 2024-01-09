@@ -6260,7 +6260,10 @@ var MessageLang=
     "ReferenceLayer": {
       "cat": "Capa de referència",
       "spa": "Capa de referencia",
-      "eng": "Reference layer"
+      "eng": "Reference layer",
+	  "fre": "Couche de référence",
+	  "cze": "Referenční vrstva",
+	  "ger": "Referenzebene"
     },
     "TimeSeries": {
       "cat": "Sèrie temporal",
@@ -6297,7 +6300,10 @@ var MessageLang=
     "DataCube": {
       "cat": "Cub de dades",
       "spa": "Cubo de datos",
-      "eng": "Data cube"
+      "eng": "Data cube",
+	  "fre": "Cube de données",
+	  "cze": "Datovou kostkou",
+	  "ger": "Datenwürfel"
     },
     "Graph": {
       "cat": "Gràfic",
