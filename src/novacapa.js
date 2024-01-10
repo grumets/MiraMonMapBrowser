@@ -714,12 +714,12 @@ var k;
 	RepintaMapesIVistes();
 }
 
-function DefineixAtributsCapaVectorSiCal(capa)
+function DefineixAttributesCapaVectorSiCal(capa)
 {
 	if (!capa.attributes && capa.objectes && capa.objectes.features && capa.objectes.features.length && 
 		capa.objectes.features[0].properties)
 	{
-		//Si els attributes no estaven definits es defineixen de manera trivial
+		// Si els attributes no estaven definits es defineixen de manera trivial
 		capa.attributes={};
 		for (var j in capa.objectes.features[0].properties)
 		{
