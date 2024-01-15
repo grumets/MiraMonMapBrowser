@@ -191,6 +191,14 @@ var MessageLang=
     "cze": "Zpětná vazba",
     "ger": "Rückmeldung"
   },
+  "Definition":{
+      "cat": "Definició",
+      "spa": "Definición",
+      "eng": "Definition",
+      "fre": "Définition",
+      "cze": "Definice",
+      "ger": "Definition"
+   },
   "PieChart": {
     "cat": "Gràfic circular",
     "spa": "Gráfico circular",

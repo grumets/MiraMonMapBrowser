@@ -216,6 +216,7 @@ var trobat=false, criteris;
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
 						metadades: null,
+						defintion: null,
 						ItemLleg: null,
 						ncol: 0};
 				estil=estils[estils.length-1];
@@ -540,6 +541,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 					estiramentPaleta: {auto: true}
 				}],
 				metadades: null,
+				definition: null,
 				nItemLlegAuto: 20,
 				ncol: 4,
 				descColorMultiplesDe: 0.01
@@ -553,6 +555,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 			consultable:	"si",
 			descarregable:	"no",
 			metadades:	null,
+			definition: null,
 			NomVideo:	null,
 			DescVideo:	null,
 			FlagsData: null,
@@ -591,6 +594,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 					estiramentPaleta: {auto: true}
 				}],
 				metadades: null,
+				definition: null,
 				nItemLlegAuto: 20,
 				ncol: 4,
 				descColorMultiplesDe: 0.01,
@@ -617,6 +621,7 @@ function AfegeixSimbolitzacioVectorDefecteCapa(capa, tinc_estil)
 			DescItems: null,
 			TipusObj: "P",
 			metadades: null,
+			definition: null,
 			ItemLleg: [
 				{
 					color: "#377200",
@@ -985,6 +990,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					DescItems: descItems,
 					TipusObj: "I",
 					metadades: metadades,
+					definition: null,
 					component: [
 						{
 							i_valor: i_v,
@@ -1006,6 +1012,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 						DescItems: descItems,
 						TipusObj: "P",
 						metadades: metadades,
+						definition: null,
 						component: [
 							{
 								i_valor: i_v+i,
