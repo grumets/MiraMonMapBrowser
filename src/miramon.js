@@ -2860,7 +2860,23 @@ function EsCapaDisponibleEnElCRSActual(capa)
 	}
 	return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 }
+var FitxerDefinitionWindow=null;
+function ObreFinestraFitxerDefinition(i_capa, i_estil)
+{
+var capa=ParamCtrl.capa[i_capa];
+var url=(i_estil==-1) ? DonaCadena(capa.definition) : DonaCadena(capa.estil[i_estil].definition);
 
+	if (FitxerDefinitionWindow==null || FitxerDefinitionWindow.closed)
+	{
+		FitxerDefinitionWindow=window.open(url,"FitxerDefinition",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
+		ShaObertPopUp(FitxerDefinitionWindow);
+	}
+	else
+	{
+		FitxerDefinitionWindow.location.href=url;
+		FitxerDefinitionWindow.focus();
+	}
+}
 var FitxerMetadadesWindow=null;
 function ObreFinestraFitxerMetadades(i_capa, i_estil)
 {
@@ -2936,7 +2952,7 @@ function MMnewTileMatrixSetFromImageURL(wmts_img_url,tileCRS)
 		setName= subdirs[i-4], //TileMatrixSet name id
 		myTileMatrixSet,
 		myTileMatrixName= subdirs[i-3],
-		myEstil= [{"nom": subdirs[i-5], "desc":	null, "DescItems": null, "TipusObj": "I", "metadades": null, "ItemLleg": [{ "color": "#888888", "DescColor": null}], "ncol": 1}],
+		myEstil= [{"nom": subdirs[i-5], "desc":	null, "DescItems": null, "TipusObj": "I", "metadades": null, "definition": null, "ItemLleg": [{ "color": "#888888", "DescColor": null}], "ncol": 1}],
 		myLayer= subdirs[i-6],
 		myServer= subdirs.slice(0,i-7).join("/");
 

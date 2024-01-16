@@ -1777,6 +1777,11 @@
 						"description": "Metadades per aquesta capa. Opcional.",
 						"$ref": "#/definitions/metadades"
 					},
+					"definition":
+					{
+						"description": "URL multidiomàtica que defineix o explica que és el contingut de la capa.",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
 					"NomVideo": { 
 						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el 'model' és 'raster'.",
 						"type": ["string", "null"]
@@ -2698,6 +2703,11 @@
 				"metadades": { 
 					"description": "Metadades d'aquest estil.",
 					"$ref": "#/definitions/metadades"
+				},
+				"definition":
+				{
+					"description": "URL multidiomàtica que defineix o explica que és el contingut de l'estil.",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
 				"nItemLlegAuto": {
 					"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",

@@ -191,6 +191,14 @@ var MessageLang=
     "cze": "Zpětná vazba",
     "ger": "Rückmeldung"
   },
+  "Definition":{
+      "cat": "Definició",
+      "spa": "Definición",
+      "eng": "Definition",
+      "fre": "Définition",
+      "cze": "Definice",
+      "ger": "Definition"
+   },
   "PieChart": {
     "cat": "Gràfic circular",
     "spa": "Gráfico circular",
@@ -1216,7 +1224,7 @@ var MessageLang=
     "ger": "Zweck"
   },
   "Start": {
-    "cat": "Inici ",
+    "cat": "Inici",
     "spa": "Inicio",
     "eng": "Start",
     "fre": "Départ",
@@ -1232,7 +1240,7 @@ var MessageLang=
     "ger": "Typ"
   },
   "Attribute": {
-    "cat": "Atribut: ",
+    "cat": "Atribut:",
     "spa": "Atributo:",
     "eng": "Attribute:",
     "fre": "Attribut:",
@@ -1584,7 +1592,7 @@ var MessageLang=
     "ger": "Ansicht schließen und öffnen"
   },
   "CloseOpenNewSelectedLayers": {
-    "cat": "Tanca la visualització actual i obra una nova amb les capes seleccionades",
+    "cat": "Tanca la visualització actual i obre una nova amb les capes seleccionades",
     "spa": "Cierra la visualización actual y abre una nueva con las capas seleccionadas",
     "eng": "Close the current visualization and open a new one with the selected layers",
     "fre": "Fermez la visualisation en cours et ouvrez une nouvelle avec les couches choisies",
@@ -2185,7 +2193,7 @@ var MessageLang=
       "ger": "ist im aktuellen CRS nicht sichtbar"
     },
     "notVisibleInCurrentView": {
-      "cat": "no és visible en àmbit actual de la vista",
+      "cat": "no és visible en l'àmbit actual de la vista",
       "spa": "no es visible en el ámbito actual de la vista",
       "eng": "is not visible in the current view extent",
       "fre": "n'est pas visible dans l'étendue de la vue actuelle",
@@ -2378,7 +2386,7 @@ var MessageLang=
     },
     "ReclassifyingExpression": {
       "cat": "Fórmula de reclassificació",
-      "spa": "Fórmula de reclasificación:",
+      "spa": "Fórmula de reclasificación",
       "eng": "Reclassifying expression",
       "fre": "Formule de reclassement",
       "cze": "Výraz pro reklasifikaci",
@@ -2416,6 +2424,46 @@ var MessageLang=
       "cze": "Operátory a funkce pro výraz",
       "ger": "Operatoren und Funktionen für den Ausdruck"
     },
+	"SelectionAppliesToLayer" : {
+		"cat": "La selecció aplica sobre la capa ",
+		"spa": "La selección aplica sobre la capa ",
+		"eng": "Selection applies to layer ",
+		"fre": "La sélection s'applique sur la couche ",
+		"cze": "Výběr platí pro vrstvu ",
+		"ger": "Die Auswahl gilt für Layer "
+	},
+	"andTheFieldOf" : {
+		"cat": " i el camp ",
+		"spa": " y el campo ",
+		"eng": " and the field of ",
+		"fre": " et le champ ",
+		"cze": " a pole ",
+		"ger": " und das Feld "
+	},
+	"butFirstCondition" : {
+		"cat": ", però la primera condició es fa sobre el camp ",
+		"spa": ", pero la primera condición se realiza sobre el campo ",
+		"eng": ", but the first condition is performed on the field of ",
+		"fre": ", mais la première condition est réalisée sur le champ ",
+		"cze": ", ale první podmínka se provádí na poli ",
+		"ger": ", die erste Bedingung gilt jedoch für das Feld "
+	},			
+	"TheResultingValuesWillBe": {
+		"cat": ". Els valors resultant seran del camp ",
+		"spa": ". Los valores resultantes serán del campo ",
+		"eng": ". The resulting values will be from the field of ",
+		"fre": ". Les valeurs résultantes proviendront du champ ",
+		"cze": ". Výsledné hodnoty budou na poli ",
+		"ger": ". Die resultierenden Werte stammen aus dem Feld "
+	},
+	"evenIfTheConditionApliesToAnotherField": {
+		"cat": " encara que la condició apliqui sobre un altre camp. Estàs segur que és això el que vols fer?",
+		"spa": " aunque la condición aplique sobre otro campo. ¿Estás seguro de que esto es lo que quieres hacer?",
+		"eng": " even if the condition applies to another field. Are you sure this is what you want to do?",
+		"fre": " même si la condition s'applique à un autre champ. Etes-vous sûr que c'est ce que vous voulez faire?",
+		"cze": " , i když se podmínka vztahuje na jiné pole. Jste si jistý, že toto je to, co chcete dělat?",
+		"ger": " , auch wenn die Bedingung auf ein anderes Feld zutrifft. Sind Sie sicher, dass Sie das wirklich tun möchten?"
+	},	
     "ResultOfSelectionAddedAsNewLayerStyleWithName": {
       "cat": "El resultat de la selecció serà afegit com a una capa/estil nou de nom",
       "spa": "El resultado de la selección será añadido como una capa/estilo nuevo de nombre",
@@ -6260,7 +6308,10 @@ var MessageLang=
     "ReferenceLayer": {
       "cat": "Capa de referència",
       "spa": "Capa de referencia",
-      "eng": "Reference layer"
+      "eng": "Reference layer",
+	  "fre": "Couche de référence",
+	  "cze": "Referenční vrstva",
+	  "ger": "Referenzebene"
     },
     "TimeSeries": {
       "cat": "Sèrie temporal",
@@ -6297,7 +6348,10 @@ var MessageLang=
     "DataCube": {
       "cat": "Cub de dades",
       "spa": "Cubo de datos",
-      "eng": "Data cube"
+      "eng": "Data cube",
+	  "fre": "Cube de données",
+	  "cze": "Datovou kostkou",
+	  "ger": "Datenwürfel"
     },
     "Graph": {
       "cat": "Gràfic",
