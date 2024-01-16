@@ -1359,11 +1359,11 @@ var div, div_canto;
 		div.old_zIndex= div.style.zIndex;
 
 		//This must be always bigger than the topmost floatingWindow zIndex
-		setzIndexLayer(div, layerList.length);
-		setzIndexLayer(getLayer(window, layerFinestraList[i_finestra].nom+SufixFinestra), layerList.length);
-		div_canto=getLayer(window, layerFinestraList[i_finestra].nom+SufixCanto);
+		setzIndexLayer(div, layerList.length-1);
+		setzIndexLayer(getLayer(window, layerFinestraList[i_finestra].nom+SufixFinestra), layerList.length-1);
+		div_canto=getLayer(window, layerFinestraList[i_finestra].nom+SufixCanto)
 		if (div_canto)
-			setzIndexLayer(div_canto, layerList.length);
+			setzIndexLayer(div_canto, layerList.length-1);
 	}
 	focusedFloatingWindow=i_finestra;
 }

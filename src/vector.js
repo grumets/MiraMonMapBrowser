@@ -105,7 +105,10 @@ var TMG, tiles, env_capa;
 	if(typeof capa.objLimit!=="undefined" && capa.objLimit!=-1)
 	{		
 		if(typeof TMG.atriObjNumerics==="undefined" || TMG.atriObjNumerics==null)
-			TMG.atriObjNumerics=[{"nom": nom_camp_nObjs_tessella}];	
+		{
+			TMG.atriObjNumerics={};	
+			TMG.atriObjNumerics[nom_camp_nObjs_tessella]={}; 
+	}
 	}
 	
 	// Determino l'envolupant per poder determinar l'espai de tessel·lació
@@ -1086,7 +1089,7 @@ var features=[], foi;
 		{
 			features.push(foi.feature);
 			features[features.length-1].id=foi["@iot.id"];
-			features[features.length-1].properties=[];
+			features[features.length-1].properties={};
 		}
 		else
 		{
@@ -1095,7 +1098,7 @@ var features=[], foi;
 					id: foi["@iot.id"],
 					geometry: foi.feature,
 					//properties: ExtreuTransformaSTAObservations(foi.Observations)}
-					properties: []});
+					properties: {}});
 		}
 	}
 	return features;
@@ -1174,7 +1177,9 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 							"id" : (tile.iTile +"_"+tile.jTile),										
 							"geometry": {"type": "Point","coordinates": [puntCentre.x, puntCentre.y]}, 
 							"properties": {}};								
-				objecteNum.properties[capa.tileMatrixSetGeometry.atriObjNumerics[0].nom]=tile.nombreObjectes;
+				var attributesObjNum=Object.keys(capa.tileMatrixSetGeometry.atriObjNumerics);
+				if(attributesObjNum && attributesObjNum[0])
+					objecteNum.properties[attributesObjNum[0]]=tile.nombreObjectes;
 				tm.objNumerics.features.push(objecteNum);														
 			}
 			if(!nObj)
@@ -1270,7 +1275,9 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 							"id" : (tile.iTile +"_"+tile.jTile),										
 							"geometry": {"type": "Point","coordinates": [puntCentre.x, puntCentre.y]}, 
 							"properties": {}};
-			objecteNum.properties[capa.tileMatrixSetGeometry.atriObjNumerics[0].nom]=tile.nombreObjectes;
+			var attributesObjNum=Object.keys(capa.tileMatrixSetGeometry.atriObjNumerics);
+			if(attributesObjNum && attributesObjNum[0])
+				objecteNum.properties[attributesObjNum[0]]=tile.nombreObjectes;
 			tm.objNumerics.features.push(objecteNum);																	
 		}
 		if(!nObj)

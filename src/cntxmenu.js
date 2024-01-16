@@ -353,6 +353,13 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
+	if (capa.definition && DonaCadena(capa.definition))
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerDefinition(", i_capa, ", -1);TancaContextMenuCapa();\">",
+				GetMessage("Definition"), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;			
+	}
 	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades))
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
@@ -519,6 +526,11 @@ var capa=ParamCtrl.capa[i_capa];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"EsborrarEstilCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 							GetMessage("DeleteStyle", "cntxmenu"), "</a>");
 		cdns.push("<hr>");
+	}
+	if (capa.estil[i_estil].definition && DonaCadena(capa.estil[i_estil].definition))
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerDefinition(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+				GetMessage("Definition"), "</a><br>");
 	}
 	if (capa.estil[i_estil].metadades && capa.estil[i_estil].metadades.standard && DonaCadena(capa.estil[i_estil].metadades.standard))
 	{
@@ -1255,6 +1267,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes,
 			"categories": cat_noves,
 			"attributes": atrib_nous,
 			"metadades": null,
+			"definition": null,
 			"ncol": 1,
 			"paleta": {
 				"colors": colors
@@ -1269,6 +1282,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes,
 		"consultable":	"si",
 		"descarregable":	"no",
 		"metadades":	null,
+		"definition": null,
 		"NomVideo":	null,
 		"DescVideo":	null,
 		"FlagsData": null,
@@ -1433,6 +1447,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, a
 			"categories": categ_noves,
 			"attributes": atrib_nous,
 			"metadades": null,
+			"definition": null,
 			"ncol": 1,
 			"paleta": (capa[0].estil[condicio[0].i_estil].paleta && capa[0].estil[condicio[0].i_estil].paleta.colors) ? {
 				"colors": capa[0].estil[condicio[0].i_estil].paleta.colors
@@ -1447,6 +1462,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, a
 		"consultable":	"si",
 		"descarregable":	"no",
 		"metadades":	null,
+		"definition": null,
 		"NomVideo":	null,
 		"DescVideo":	null,
 		"FlagsData": null,
@@ -2904,9 +2920,35 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 		" \"", DonaCadena(capa.DescLlegenda), "\"<br/>",
 		"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		GetMessage("OK"),
-	        "\" onClick='CreaBandaSeleccioCondicional(\"", prefix_id, "\",", i_capa,");TancaFinestraLayer(\"seleccioCondicional\");' />",
+	        "\" onClick='ComprovaISiCalCreaBandaSeleccioCondicional(\"", prefix_id, "\",", i_capa,",\"seleccioCondicional\");' />",
 		"</div></form>");
 	return cdns.join("");
+}
+
+
+function ComprovaISiCalCreaBandaSeleccioCondicional(prefix_id, i_capa, nom_finestra)
+{
+var sel_condicional, capa;
+
+	var sel_condicional=LlegeixParametresSeleccioCondicional(prefix_id, i_capa);
+	capa=ParamCtrl.capa[i_capa];
+	if(sel_condicional.condicio && sel_condicional.condicio[0].capa_clau && i_capa==sel_condicional.condicio[0].capa_clau.i_capa && 
+		capa.estil && sel_condicional.i_estil!=sel_condicional.condicio[0].capa_clau.i_estil)
+	{
+		var capa_clau=sel_condicional.condicio[0].capa_clau;
+		var contingut_msg=GetMessage("SelectionAppliesToLayer","cntxmenu")+"\""+DonaCadena(capa.DescLlegenda)+"\""+
+			GetMessage("andTheFieldOf","cntxmenu")+
+			"\""+(DonaCadena(capa.estil[sel_condicional.i_estil].desc)?DonaCadena(capa.estil[sel_condicional.i_estil].desc): capa.estil[sel_condicional.i_estil].nom)+"\""+
+			GetMessage("butFirstCondition","cntxmenu")+
+			"\""+(DonaCadena(capa.estil[capa_clau.i_estil].desc)?DonaCadena(capa.estil[capa_clau.i_estil].desc):capa.estil[capa_clau.i_estil].nom)+"\""+			
+			GetMessage("TheResultingValuesWillBe","cntxmenu")+
+			"\""+(DonaCadena(capa.estil[sel_condicional.i_estil].desc)?DonaCadena(capa.estil[sel_condicional.i_estil].desc): capa.estil[sel_condicional.i_estil].nom)+"\""+
+			GetMessage("evenIfTheConditionApliesToAnotherField","cntxmenu");
+		if(false==confirm(contingut_msg))
+			return;
+	}
+	CreaBandaSeleccioCondicional(prefix_id, i_capa);
+	TancaFinestraLayer(nom_finestra);
 }
 
 function FinestraSeleccioCondicional(elem, i_capa)
@@ -2994,7 +3036,8 @@ var sel_condicional={}, condicio, radials;
 	if (capa.estil && capa.estil.length)
 		sel_condicional.i_estil=parseInt(document.getElementById(prefix_id+"-estil").value);  //No sé perquè en IE no funciona la manera clàssica.
 	sel_condicional.nom_estil=document.SeleccioCondicional.nom_estil.value;
-	sel_condicional.condicio=[];
+	sel_condicional.condicio=[];		
+	
 	for (var i_condicio=0; i_condicio<MaxCondicionsSeleccioCondicional; i_condicio++)
 	{
 		sel_condicional.condicio[i_condicio]={};
@@ -3193,6 +3236,7 @@ function CreaBandaSeleccioCondicional(prefix_id, i_capa)
 var sel_condicional, i_estil_nou, estil, calcul, capa, condicio, estil_o_atrib, selectors=null, selector;
 
 	sel_condicional=LlegeixParametresSeleccioCondicional(prefix_id, i_capa);
+	
 	//Crea un nou estil
 	capa=ParamCtrl.capa[i_capa];
 
