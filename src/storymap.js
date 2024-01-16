@@ -121,7 +121,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	cdns.push("<br>",
+	cdns.push("<button type='button' style='position: relative; right:5px;' onclick='DemanaStorymapsNimmbus(", name, ");'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
 
@@ -147,6 +147,34 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	cdns.push("</table>");
 	contentFinestraLayer(win, name, cdns.join(""));
 	indexStoryMapActiu=-1;
+}
+
+function DemanaStorymapsNimmbus(name)
+{
+	// El relat no està relacionat amb una capa solament, per tant, com s'hauria de modificar 
+	// els paràmetres de la crida GUF per a no dependre d'aquest camp? Utilitzem la URL del navegador, perquè el relat pertany al navegador en si, no a cap capa.
+	const urlIdNavegador = window.location.href;
+	const elem = getFinestraLayer(window, name);
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", urlIdNavegador, "",
+	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
+		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
+	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
+}
+
+function AdoptaStorymap(params_function, guf)
+{
+	if (!guf)
+	{
+		// modificar text missatge per relats.
+		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StyleCannotImported", "qualitat") + ".");
+		TancaFinestraLayer('feedbackAmbEstils');
+		return;
+	}
+
+	while (box.firstChild) {
+		// The list is LIVE so it will re-index each call
+		box.removeChild(box.firstChild);
+	  }
 }
 
 function TancaIIniciaStoryMap(i_story)
@@ -280,7 +308,7 @@ function CreaDialegMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + ":</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
@@ -552,9 +580,10 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 			
 			if (event.target.returnValue != "")
 			{	
+				let resultatCaractUsuari = "";
 				try
 				{
-					let resultatCaractUsuari = JSON.parse(event.target.returnValue);
+					resultatCaractUsuari = JSON.parse(event.target.returnValue);
 				}
 				catch(e)
 				{
