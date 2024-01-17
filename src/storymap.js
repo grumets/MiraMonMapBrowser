@@ -121,7 +121,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	cdns.push("<button type='button' style='position: relative; right:5px;' onclick='DemanaStorymapsNimmbus(", name, ");'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",
+	cdns.push("<button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
 
@@ -153,9 +153,9 @@ function DemanaStorymapsNimmbus(name)
 {
 	// El relat no està relacionat amb una capa solament, per tant, com s'hauria de modificar 
 	// els paràmetres de la crida GUF per a no dependre d'aquest camp? Utilitzem la URL del navegador, perquè el relat pertany al navegador en si, no a cap capa.
-	const urlIdNavegador = window.location.href;
+	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", urlIdNavegador, "",
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", "Maresmenca", urlIdNavegador,
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
 	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
