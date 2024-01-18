@@ -1,4 +1,4 @@
-﻿{
+{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
@@ -1948,7 +1948,7 @@
 				"VariantVers":	{ "type": ["string", "number", "null"] }
 			}
 		},		
-		"URLLangoStringOCadenaLang" :{
+		"URLLangOStringOCadenaLang" :{
 			"description": "objecte que pot contenir una URL multidiomàtica o un text també multidiomàtic",			
 			"oneOf":[{
 					"type": "null"
@@ -2574,7 +2574,7 @@
 						"type": "object",
 						"properties": {
 							"calcul": { 
-								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa. Si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_data pot ser també un string que contingui una expressió matemàtica on '{i_sel}' representa la data capa.i_data (p.ex. '{i_sel}-1' vol dir la data anterior a la seleccionada a la capa). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
 								"type": "string"
 							},
 							"FormulaConsulta": { 
@@ -2734,7 +2734,7 @@
 				"explanation":
 				{
 					"description": "URL multidiomàtica que defineix o explica que és el contingut de l'estil. Compte no confondre amb la 'definition' de la variable que apunta a un diccionari i no a una descripció pròpia.",
-					"$ref": "#/definitions/URLLangoStringOCadenaLang" 					
+					"$ref": "#/definitions/URLLangOStringOCadenaLang" 					
 				},
 				"nItemLlegAuto": {
 					"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",
