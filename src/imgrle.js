@@ -68,18 +68,44 @@ var calcul_amb_icapa="";
 	return calcul_amb_icapa+fragment;
 }
 
-
-function SonValorsDimensionsIguals(dim1, dim2)
+function CompteValorsDimensions(dim, nomesExtra)
 {
-	if((typeof dim1 !=="undefined" && typeof dim2==="undefined") || (typeof dim1 ==="undefined" && typeof dim2!=="undefined"))
-		return false;
-	if((!dim1 || typeof dim1 ==="undefined") && (!dim2 || typeof dim2 ==="undefined"))
-		return true;
-	if(dim1.length!=dim2.length)
-		return false;
-	for(var i_dim=0; i_dim<dim1.lenght; i_dim++)
+	if (!dim || !dim.length)
+		return 0;
+	if (nomesExtra)
 	{
-		if(dim1.clau.nom!=dim2.clau.nom || dim1.valor.nom!=dim2.valor.nom)
+		for(var n_dim=0, i_dim=0; i_dim<dim.length; i_dim++)
+		{
+			if (nomesExtra && dim[i_dim].esExtra)
+				n_dim++;
+		}
+		return n_dim;
+	}
+	return dim.length;
+}
+
+
+//Usar per a comparar valors.param. 
+function SonValorsDimensionsIguals(dim1, dim2, nomesExtra)
+{
+	if (!dim1 && !dim2)
+		return true;
+	if (CompteValorsDimensions(dim1, nomesExtra)!=CompteValorsDimensions(dim2, nomesExtra))
+		return false;
+	if (CompteValorsDimensions(dim1, nomesExtra)==0 && CompteValorsDimensions(dim2, nomesExtra)==0)
+		return true;
+	for(var i_dim1=0; i_dim1<dim1.length; i_dim1++)
+	{
+		if (nomesExtra && !dim1[i_dim1].esExtra)
+			continue;
+		for(var i_dim2=0; i_dim2<dim2.length; i_dim2++)
+		{
+			if (nomesExtra && !dim2[i_dim2].esExtra)
+				continue;
+			if (dim1[i_dim1].clau.nom==dim2[i_dim2].clau.nom && dim1[i_dim1].valor.nom==dim2[i_dim2].valor.nom)
+				break;
+		}
+		if (i_dim2==dim2.length)  //No he trobat cap equivalent
 			return false;
 	}
 	return true;
@@ -187,7 +213,11 @@ var FormulaConsulta="";
 					// em deso aquesta info que després necessitaré
 					if(!nou_valor.param)
 						nou_valor.param=[];
-					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_dim].valor[i_v_dim]});   // deso nom de dimensió i valor de la dimensió per si canvia el nombre de valors,...
+					nou_valor.param.push({clau: dim[i_dim].clau, valor: dim[i_dim].valor[i_v_dim], esExtra: true});  /* De moment 
+									apunto al nom de dimensió i valor de la dimensió en 
+									l'array de param (com si for un estil amb valors de dimensions fixes) 
+									Més tard, si s'incorpara a la llista de valors aquest membre s'ha de
+									"deapcopy" (p.ex. amb JSON.parse(JSON.stringify()) ).*/
 				}
 			}
 			
@@ -227,7 +257,7 @@ var FormulaConsulta="";
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
 							) && 
-							SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
+							SonValorsDimensionsIguals(nou_valor.param, valors[i].param, true)
 							&&
 							nou_valor.objectes
 							) ||
@@ -238,7 +268,7 @@ var FormulaConsulta="";
 									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data))
 								)
 								&&
-								SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
+								SonValorsDimensionsIguals(nou_valor.param, valors[i].param, true)
 							)
 							)
 							break;
@@ -302,7 +332,7 @@ var FormulaConsulta="";
 								(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 								(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[i_capa], valors[i].i_data))
 							)&& 
-							SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
+							SonValorsDimensionsIguals(nou_valor.param, valors[i].param, true)
 							&&
 							nou_valor.i_valor==i
 							) ||
@@ -311,8 +341,9 @@ var FormulaConsulta="";
 								(
 									(typeof nou_valor.i_data==="undefined" && typeof valors[i].i_data==="undefined") ||
 									(typeof nou_valor.i_data!=="undefined" && typeof valors[i].i_data!=="undefined" && DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], nou_valor.i_data)==DonaIndexDataCapa(ParamCtrl.capa[nou_valor.i_capa], valors[i].i_data)) 
-								)&& 
-								SonValorsDimensionsIguals(nou_valor.param, valors[i].param)
+								)
+								&& 
+								SonValorsDimensionsIguals(nou_valor.param, valors[i].param, true)
 							)
 							)
 							break;
