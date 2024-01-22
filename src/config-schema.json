@@ -570,7 +570,7 @@
 					},
 					"id_camp": { 
 						"description": "Array de camps. Pot ser null si només n'hi ha un. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor. Caldria documentar-ho millor però ara no ho entenc del tot",
-						"type": "array",
+						"type": ["array", "null"],
 						"items": {
 							"description": "Array de registres",
 							"type": "array",
@@ -1469,7 +1469,7 @@
 						"$ref": "#/definitions/featureCollection"
 					},				
 					"attributes": {
-						"description": "Array que descriu les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model ràster està dins de cada estil.",
+						"description": "Objecte que conté noms que descriuen les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model ràster està dins de cada estil.",
 						"$ref": "#/definitions/descripcioAtributs"			
 					},			
 					"valors": {
@@ -1480,7 +1480,7 @@
 							"type": ["object"],
 							"properties": {								
 								"param": { 
-									"description": "Llistat de paràmetres (o dimensionsExtra) (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És òptim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest descriure altres dimensions. Opcional. També s'usa en capes calculades per indicar les dimensions i els valors selccionats necessaris per omplir 'valors', en aquest cas es tracta d'un paràmetre INTERN. Pot ser null",
+									"description": "Llistat de paràmetres (o dimensionsExtra) (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És òptim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest pre descriure altres dimensions. Opcional. També s'usa en capes calculades per indicar les dimensions i els valors selccionats necessaris per omplir 'valors', en aquest cas es tracta d'un paràmetre INTERN. Pot ser null",
 									"type": ["array", "null"],
 									"items": {
 										"description": "Paràmetres (clau i valor)",
@@ -1493,6 +1493,9 @@
 											"valor": {
 												"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
 												"$ref": "#/definitions/nomDescripcio"
+											}
+											"esExtra": {
+												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres.",
 											}
 										}
 									}
@@ -1777,10 +1780,10 @@
 						"description": "Metadades per aquesta capa. Opcional.",
 						"$ref": "#/definitions/metadades"
 					},
-					"definition":
+					"explanation":
 					{
 						"description": "URL multidiomàtica que defineix o explica que és el contingut de la capa.",
-						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+						"$ref": "#/definitions/URLLangoStringOCadenaLang" 
 					},
 					"NomVideo": { 
 						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el 'model' és 'raster'.",
@@ -1947,19 +1950,28 @@
 				"SubVers":	{ "type": "number", "minimum": 0, "multipleOf" : 1 },
 				"VariantVers":	{ "type": ["string", "number", "null"] }
 			}
-		},
-		"StringOCadenaLang":{
-			"description": "string o objecte multidioma",
+		},		
+		"URLLangOStringOCadenaLang" :{
+			"description": "objecte que pot contenir una URL multidiomàtica o un text també multidiomàtic",			
 			"oneOf":[{
-					"type": ["string", "null"]
+					"type": "null"
 				},
 				{
 					"type": "object",
 					"properties": {
-						"cat": { "type": ["string", "null"] },
-						"spa": { "type": ["string", "null"] },
-						"eng": { "type": ["string", "null"] },
-						"fra": { "type": ["string", "null"] }
+						"URL":	{ 
+							"description": "URL única o multidiomàtica",
+							"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+						}
+					}
+				},
+				{
+					"type": "object",
+					"properties": {
+						"text":	{ 
+							"description": "text únic o multidiomàtic",
+							"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+						}
 					}
 				}
 			]
@@ -2531,6 +2543,24 @@
 					"description": "Descripció l'estil per la llegenda. Opcional si només n'hi ha un",
 					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 				},
+				"definition": {
+					"description": "PENDENT: A URI that defines the observedProperty or the variable represented by this style. Normalment només s'usa en model raster, perquè els vectors ja tenen els attributes que descriuen això, però hi ha casos en que pot tenir sentit, per exemple unes corbes de nivell vectorial. You may find the right definitions in https://qudt.org/2.1/vocab/quantitykind, http://vocabs.lter-europe.net/EnvThes or https://www.eea.europa.eu/help/glossary/eea-glossary.",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
+				"UoM": {
+					"description": "PENDENT: Units of measurement of the variable represented by this style. Formerly refered as 'unitats'",
+					"type": [ "string", "null" ]
+				},
+				"UoMSymbol": {
+					"description": "PENDENT: Symbol of the units of measurement of the variable represented by this style.",
+					"type": [ "string", "null" ]
+				},
+				"UoMDefinition": {
+					"description": "PENDENT: A URI that defines the units of measurement of the variable represented by this style. You may find the right definitions in https://qudt.org/2.1/vocab/unit",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
 				"DescItems": { 
 					"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
 					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
@@ -2547,7 +2577,7 @@
 						"type": "object",
 						"properties": {
 							"calcul": { 
-								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa; si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa. Si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_data pot ser també un string que contingui una expressió matemàtica on '{i_sel}' representa la data capa.i_data (p.ex. '{i_sel}-1' vol dir la data anterior a la seleccionada a la capa). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
 								"type": "string"
 							},
 							"FormulaConsulta": { 
@@ -2584,7 +2614,7 @@
 											"$ref": "#/definitions/descripcioCategories"
 										},
 										"attributes": {
-											"description": "Array que descriu les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
+											"description": "Objecte que conté noms que descriuen les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
 											"$ref": "#/definitions/descripcioAtributs"	
 										},
 										"estiramentPaleta": {
@@ -2680,7 +2710,7 @@
 										"$ref": "#/definitions/descripcioCategories"
 									},
 									"attributes": {
-										"description": "Array que descriu les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+										"description": "Objecte que conté noms que descriuen les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 										"$ref": "#/definitions/descripcioAtributs"			
 									},
 									"tractament": {
@@ -2697,17 +2727,17 @@
 					"$ref": "#/definitions/descripcioCategories"
 				},
 				"attributes": {
-					"description": "Array que descriu les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+					"description": "Objecte que conté noms que descriuen les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
 					"$ref": "#/definitions/descripcioAtributs"
 				},
 				"metadades": { 
 					"description": "Metadades d'aquest estil.",
 					"$ref": "#/definitions/metadades"
 				},
-				"definition":
+				"explanation":
 				{
-					"description": "URL multidiomàtica que defineix o explica que és el contingut de l'estil.",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					"description": "URL multidiomàtica que defineix o explica que és el contingut de l'estil. Compte no confondre amb la 'definition' de la variable que apunta a un diccionari i no a una descripció pròpia.",
+					"$ref": "#/definitions/URLLangOStringOCadenaLang" 					
 				},
 				"nItemLlegAuto": {
 					"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",

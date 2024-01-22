@@ -2860,21 +2860,45 @@ function EsCapaDisponibleEnElCRSActual(capa)
 	}
 	return EsTileMatrixSetDeCapaDisponbleEnElCRSActual(capa);
 }
-var FitxerDefinitionWindow=null;
-function ObreFinestraFitxerDefinition(i_capa, i_estil)
+var FitxerExplanationWindow=null;
+function ObreFinestraExplanation(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
-var url=(i_estil==-1) ? DonaCadena(capa.definition) : DonaCadena(capa.estil[i_estil].definition);
+var url=(i_estil==-1) ? (capa.explanation.URL ? DonaCadena(capa.explanation.URL) : null):
+						(capa.estil[i_estil].explanation.URL ? DonaCadena(capa.estil[i_estil].explanation.URL):null);
+var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.text) : null) :
+						(capa.estil[i_estil].explanation.text ? DonaCadena(capa.estil[i_estil].explanation.text):null);
 
-	if (FitxerDefinitionWindow==null || FitxerDefinitionWindow.closed)
+	if(url)
 	{
-		FitxerDefinitionWindow=window.open(url,"FitxerDefinition",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
-		ShaObertPopUp(FitxerDefinitionWindow);
+		if (FitxerExplanationWindow==null || FitxerExplanationWindow.closed)
+		{
+			FitxerExplanationWindow=window.open(url,"FitxerExplanation",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
+			ShaObertPopUp(FitxerExplanationWindow);
 	}
 	else
 	{
-		FitxerDefinitionWindow.location.href=url;
-		FitxerDefinitionWindow.focus();
+			FitxerExplanationWindow.location.href=url;
+			FitxerExplanationWindow.focus();
+	}
+}
+	else if(text)
+	{
+		// Obro una finestraLayer i hi incrusto el Text
+		var elem=ObreFinestra(window, "mostraExplanation", GetMessage("Explanation"));
+		if (!elem)
+			return;
+		
+		var cdns=[];
+		
+		cdns.push("<form name=\"ExplanationCapa\" onSubmit=\"return false;\">");
+		cdns.push("<div id=\"LayerExplanationCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\">",
+			GetMessage("ExplanationOfLayer"), " \"",
+			(DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+		if (i_estil!=-1)
+			cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
+		cdns.push("\"<br/><br/>", text, "<br/>");
+		contentLayer(elem, cdns.join(""));
 	}
 }
 var FitxerMetadadesWindow=null;
@@ -2952,7 +2976,7 @@ function MMnewTileMatrixSetFromImageURL(wmts_img_url,tileCRS)
 		setName= subdirs[i-4], //TileMatrixSet name id
 		myTileMatrixSet,
 		myTileMatrixName= subdirs[i-3],
-		myEstil= [{"nom": subdirs[i-5], "desc":	null, "DescItems": null, "TipusObj": "I", "metadades": null, "definition": null, "ItemLleg": [{ "color": "#888888", "DescColor": null}], "ncol": 1}],
+		myEstil= [{"nom": subdirs[i-5], "desc":	null, "DescItems": null, "TipusObj": "I", "metadades": null, "explanation": null, "ItemLleg": [{ "color": "#888888", "DescColor": null}], "ncol": 1}],
 		myLayer= subdirs[i-6],
 		myServer= subdirs.slice(0,i-7).join("/");
 
@@ -4750,6 +4774,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "calculaQualitat", GetMessageJSON("ComputeQuality", "cntxmenu"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "mostraLlinatge", GetMessageJSON("Lineage"), boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraQualitat", GetMessageJSON("Quality"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "mostraExplanation", GetMessageJSON("Explanation"), boto_tancar, 200, 150, 400, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);	
 	createFinestraLayer(window, "feedback", GetMessageJSON("Feedback"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", GetMessageJSON("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", GetMessageJSON("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);

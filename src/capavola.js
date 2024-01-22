@@ -660,7 +660,8 @@ function CreaCapesVolatils()
 					"consultable": "no",
 					"editable": "no",
 					"FuncioEdicio": null,
-					"metadades": null
+					"metadades": null,
+					"explanation": null
 				});
 		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
@@ -712,7 +713,8 @@ function CreaCapesVolatils()
 					"consultable": "no",
 					"editable": "no",
 					"FuncioEdicio": null,
-					"metadades": null
+					"metadades": null,
+					"explanation": null
 				});
 		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
@@ -797,7 +799,8 @@ function CreaCapesVolatils()
 					"consultable": "no",
 					"editable": "no",
 					"FuncioEdicio": null,
-					"metadades": null
+					"metadades": null,
+					"explanation": null
 				});
 		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
@@ -846,7 +849,8 @@ function CreaCapesVolatils()
 					"consultable": "no",
 					"editable": "no",
 					"FuncioEdicio": null,
-					"metadades": null
+					"metadades": null,
+					"explanation": null
 				});
 		CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 	}
@@ -933,7 +937,8 @@ function CreaCapesVolatils()
 					"consultable": "no",
 					"editable": "no",
 					"FuncioEdicio": null,
-					"metadades": null
+					"metadades": null,
+					"explanation": null
 				});
 			CanviaIndexosCapesSpliceCapa(1, i_nova_capa, -1, ParamCtrl);
 		}
