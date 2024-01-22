@@ -353,10 +353,10 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<hr>");
 		alguna_opcio=false;
 	}
-	if (capa.definition && DonaCadena(capa.definition))
+	if (capa.explanation && DonaCadena(capa.explanation))
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerDefinition(", i_capa, ", -1);TancaContextMenuCapa();\">",
-				GetMessage("Definition"), "</a><br>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraExplanation(", i_capa, ", -1);TancaContextMenuCapa();\">",
+				GetMessage("Explanation"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;			
 	}
@@ -527,10 +527,10 @@ var capa=ParamCtrl.capa[i_capa];
 							GetMessage("DeleteStyle", "cntxmenu"), "</a>");
 		cdns.push("<hr>");
 	}
-	if (capa.estil[i_estil].definition && DonaCadena(capa.estil[i_estil].definition))
+	if (capa.estil[i_estil].explanation && DonaCadena(capa.estil[i_estil].explanation))
 	{
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerDefinition(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-				GetMessage("Definition"), "</a><br>");
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraExplanation(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+				GetMessage("Explanation"), "</a><br>");
 	}
 	if (capa.estil[i_estil].metadades && capa.estil[i_estil].metadades.standard && DonaCadena(capa.estil[i_estil].metadades.standard))
 	{
@@ -1267,7 +1267,8 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes,
 			"categories": cat_noves,
 			"attributes": atrib_nous,
 			"metadades": null,
-			"definition": null,
+			"explanation": null,
+			
 			"ncol": 1,
 			"paleta": {
 				"colors": colors
@@ -1282,7 +1283,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes,
 		"consultable":	"si",
 		"descarregable":	"no",
 		"metadades":	null,
-		"definition": null,
+		"explanation": null,
 		"NomVideo":	null,
 		"DescVideo":	null,
 		"FlagsData": null,
@@ -1447,7 +1448,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, a
 			"categories": categ_noves,
 			"attributes": atrib_nous,
 			"metadades": null,
-			"definition": null,
+			"explanation": null,
 			"ncol": 1,
 			"paleta": (capa[0].estil[condicio[0].i_estil].paleta && capa[0].estil[condicio[0].i_estil].paleta.colors) ? {
 				"colors": capa[0].estil[condicio[0].i_estil].paleta.colors
@@ -1462,7 +1463,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, categ_noves, attributes, a
 		"consultable":	"si",
 		"descarregable":	"no",
 		"metadades":	null,
-		"definition": null,
+		"explanation": null,
 		"NomVideo":	null,
 		"DescVideo":	null,
 		"FlagsData": null,

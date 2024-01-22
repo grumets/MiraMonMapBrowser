@@ -871,21 +871,49 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	return cdns.join("");
 }
 
-function CanviaDataDeCapaMultitime(i_capa, i_data)
+function CanviaDataDeCapaMultitime(i_capa_data, i_data)
 {
-var capa=ParamCtrl.capa[i_capa];
+var capa=ParamCtrl.capa[i_capa_data];
 
 	capa.i_data=i_data;
 	if (capa.model==model_vector)
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+		{
+			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
+		}
 	}
 	else
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+		{
+			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+				OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
+		}
 	}
+	//Cal buscar si altres capes depenen del temps d'aquesta capa i demanar també la seva repintada
+	for (var i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{
+		capa=ParamCtrl.capa[i_capa];
+		if (i_capa==i_capa_data || capa.model==model_vector || !capa.valors || capa.valors.length==0)
+			continue;
+		var v=DeterminaArrayValorsNecessarisCapa(i_capa, capa.i_estil);
+		if (!v || v.length<capa.valors.length)
+			continue;
+		for (var i_valor=0; i_valor<capa.valors.length; i_valor++)
+		{
+			if (v[i_valor] && (typeof capa.valors[i_valor].i_data==="undefined" || (typeof capa.valors[i_valor].i_data==="string" && capa.valors[i_valor].i_data.indexOf("{i_sel}")!=-1)))
+			{
+				for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+				{
+					if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+						OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+				}
+				break;
+			}
+		}
+	}	
 }
 
 function CanviaValorDimensioExtraDeCapa(i_capa, i_dim, i_valor)
@@ -894,7 +922,11 @@ var dim=ParamCtrl.capa[i_capa].dimensioExtra[i_dim];
 
 	dim.i_valor=i_valor;
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
-		OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+	{
+		if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+	}
+	//Caldria mirar si hi ha altres capes que també depenen de la selecció aquesta dimensió extra i repintar-les. Ara no tinc temps de fer-ho. (JM)
 }
 
 var LlegendaAmbControlDeCapes=0x01;

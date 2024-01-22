@@ -199,6 +199,22 @@ var MessageLang=
       "cze": "Definice",
       "ger": "Definition"
    },
+   "Explanation":{
+      "cat": "Explicació",
+      "spa": "Explicación",
+      "eng": "Explanation",
+      "fre": "Explication",
+      "cze": "Vysvětlení",
+      "ger": "Erläuterung"
+   },
+   "ExplanationOfLayer":{
+      "cat": "Explicació de la capa",
+      "spa": "Explicación de la capa ",
+      "eng": "Explanation of the layer",
+      "fre": "Explication de la couche",
+      "cze": "Vysvětlení vrstvy",
+      "ger": "Erläuterung des Layers"
+   },
   "PieChart": {
     "cat": "Gràfic circular",
     "spa": "Gráfico circular",
