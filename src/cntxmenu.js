@@ -719,6 +719,18 @@ var i_on_afegir=servidorGC.i_capa_on_afegir;
 	}
 }
 
+function BuscaClauTancarJSON(fragment)
+{
+var dinsCadena=false;
+	for (var i=0; i<fragment.length; i++) {
+		if (fragment.charAt(i)=='"')
+			dinsCadena=dinsCadena ? false : true;
+		else if (fragment.charAt(i)=='}' && !dinsCadena)
+			return i;
+	}
+	return -1;	
+}
+
 /*Aquesta funció s'ha de cridar abans o després fer capa.splice() o similars.
 Revisa totes les capes però només canvia els indexos de les capes i_capa_ini (inclosa) en endavant. Per tant el valor que cal passar a i_capa_ini no depèn
 de si capa.splice() es fa abans o després de la crida a aquesta funció. Si capa.splice() es fa abans, els indexos encara tenen els valors antics igualment.
@@ -767,8 +779,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 							fragment=capa.estil[j].component[k].calcul;
 							while ((inici=fragment.indexOf('{'))!=-1)
 							{
-								//busco una clau de tancar
-								final=fragment.indexOf('}');
+								final=BuscaClauTancarJSON(fragment);
 								if (final==-1)
 								{
 									alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -818,8 +829,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 						fragment=attributes[attributesArray[j]].calcul;
 						while ((inici=fragment.indexOf('{'))!=-1)
 						{
-							//busco una clau de tancar
-							final=fragment.indexOf('}');
+							final=BuscaClauTancarJSON(fragment);
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -884,8 +894,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 					fragment=attributes[attributesArray[j]].calcul;
 					while ((inici=fragment.indexOf('{'))!=-1)
 					{
-						//busco una clau de tancar
-						final=fragment.indexOf('}');
+						final=BuscaClauTancarJSON(fragment)
 						if (final==-1)
 						{
 							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -917,8 +926,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 						fragment=capa.estil[j].component[k].calcul;
 						while ((inici=fragment.indexOf('{'))!=-1)
 						{
-							//busco una clau de tancar
-							final=fragment.indexOf('}');
+							final=BuscaClauTancarJSON(fragment);
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -971,8 +979,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 							fragment=capa.estil[j].component[k].calcul;
 							while ((inici=fragment.indexOf('{'))!=-1)
 							{
-								//busco una clau de tancar
-								final=fragment.indexOf('}');
+								final=BuscaClauTancarJSON(fragment);
 								if (final==-1)
 								{
 									alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -1025,8 +1032,7 @@ var capa, j, k, d, fragment, cadena, calcul, final, nou_valor, inici, calcul;
 						fragment=attributes[attributesArray[j]].calcul;
 						while ((inici=fragment.indexOf('{'))!=-1)
 						{
-							//busco una clau de tancar
-							final=fragment.indexOf('}');
+							final=BuscaClauTancarJSON(fragment);
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -1073,8 +1079,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 					fragment=capa.attributes[attributesArray[j]].calcul;
 					while ((inici=fragment.indexOf('{'))!=-1)
 					{
-						//busco una clau de tancar
-						final=fragment.indexOf('}');
+						final=BuscaClauTancarJSON(fragment);
 						if (final==-1)
 						{
 							alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -1106,8 +1111,7 @@ var capa, j, k, fragment, cadena, inici, final, nou_valor;
 						fragment=capa.estil[j].component[k].calcul;
 						while ((inici=fragment.indexOf('{'))!=-1)
 						{
-							//busco una clau de tancar
-							final=fragment.indexOf('}');
+							final=BuscaClauTancarJSON(fragment);
 							if (final==-1)
 							{
 								alert("Character '{' without '}' in 'calcul' in capa" + i_capa + " estil " + i_estil);
@@ -3133,8 +3137,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimen
 				var s=attribute.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
 				while ((inici=s.indexOf("{"))!=-1)
 				{
-					//busco una clau de tancar
-					final=s.indexOf("}");
+					final=BuscaClauTancarJSON(s);
 					if  (final==-1)
 					{
 						alert("Character '{' without '}' in 'calcul' in capa" + i_capa);
@@ -3189,8 +3192,7 @@ function DonaCadenaEstilCapaPerCalcul(i_capa_ref, i_capa, i_data, i_estil, dimen
 				var s=component_sel.calcul, inici, final, cadena, nou_valor, nou_calcul="";							
 				while ((inici=s.indexOf("{"))!=-1)
 				{
-					//busco una clau de tancar
-					final=s.indexOf("}");
+					final=BuscaClauTancarJSON(s);
 					if  (final==-1)
 					{
 						alert("Character '{' without '}' in 'calcul' in capa" + i_capa);

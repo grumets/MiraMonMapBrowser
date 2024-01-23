@@ -46,8 +46,7 @@ var calcul_amb_icapa="";
 	fragment=calcul;
 	while ((inici=fragment.indexOf("{"))!=-1)
 	{
-		//busco una clau de tancar
-		final=fragment.indexOf("}");
+		final=BuscaClauTancarJSON(fragment);
 		if  (final==-1)
 		{
 			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
@@ -125,8 +124,7 @@ var FormulaConsulta="";
 	fragment=calcul;
 	while ((inici=fragment.indexOf("{"))!=-1)
 	{
-		// busco una clau de tancar
-		final=fragment.indexOf("}");
+		final=BuscaClauTancarJSON(fragment);
 		if  (final==-1)
 		{
 			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
@@ -378,8 +376,7 @@ var FormulaConsulta="";
 	fragment=component.FormulaConsulta;
 	while ((inici=fragment.indexOf("{"))!=-1)
 	{
-		//busco una clau de tancar
-		final=fragment.indexOf("}");
+		final=BuscaClauTancarJSON(fragment);
 		if  (final==-1)
 		{
 			alert("Character '{' without '}' in 'calcul' in capa" + i_capa + text_estil_attribut + estil_o_atribut);
