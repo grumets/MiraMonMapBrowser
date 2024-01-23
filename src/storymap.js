@@ -121,11 +121,9 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	
-	cdns.push(/*"<button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",*/
+	cdns.push("<button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
-	
 
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
@@ -137,9 +135,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		(storyActual.isNew) ? cdns.push("TancaICreaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
 		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
-			"</p></a></td>");
-			//<input type='image' name='upload' style='position:relative; top:0px; right:0px; height:50px; width:50px;' src='pujada_nuvol.svg' alt='Upload storymap' onclick='CompartirStorymap(", i_real_story[i_story] ,")'/><br>
-
+			"</p></a><input type='image' name='upload' style='position:relative; top:0px; right:0px; height:50px; width:50px;' src='pujada_nuvol.svg' alt='Upload storymap' onclick='CompartirStorymap(", i_real_story[i_story] ,")'><br></td>");
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
@@ -748,7 +744,7 @@ function FinalitzarStoryMap()
 	// Eliminem les imatges que indiquen cada punt del l¡relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
-	const cdns = ["<html><h1>"+novaStoryMap.titol+"</h1><br><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>"];
+	const cdns = ["<html><h1>"+ novaStoryMap.titol + "</h1><br><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>"];
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
