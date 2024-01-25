@@ -382,7 +382,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
 				{ 
 					let writenOnTiny = tinyEditor.getContent();
-					tinyEditor.setContent(writenOnTiny + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + ">");
+					tinyEditor.setContent(writenOnTiny + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>", { format: 'html' });
 				}
 			}
 			resultatMidesImatge = {};
@@ -882,20 +882,15 @@ var node, attribute;
 			continue;
 		if (node.attributes)
 		{
-			for (var i_at = 0; i_at < node.attributes.length; i_at++)
+			if (node.dataset.mmCrs || node.dataset.mmCenter || node.dataset.mmZoom || node.dataset.mmLayers ||
+			node.dataset.mmTime || node.dataset.mmSels || node.dataset.mmHistos)
 			{
-				attribute=node.attributes[i_at];
-				if (attribute.name=='data-mm-crs' || attribute.name=="data-mm-center" || attribute.name=='data-mm-zoom' || attribute.name=="data-mm-layers" ||
-					attribute.name=="data-mm-time" || attribute.name=='data-mm-sels' || attribute.name=='data-mm-histos')
-				{
-					//Afegir el simbol dins
-					// Create a text node:
-					var divNode = document.createElement("span");
-					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, "storymap_mm_action_"+i_mm, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
-					i_mm++;
-					node.insertBefore(divNode, node.children[0]);
-					break;
-				}
+				//Afegir el simbol dins
+				// Create a text node:
+				var divNode = document.createElement("span");
+				divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, "storymap_mm_action_"+i_mm, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+				i_mm++;
+				node.insertBefore(divNode, node.children[0]);
 			}
 		}
 		if (node.childNodes && node.childNodes.length)
