@@ -1983,6 +1983,22 @@ var MessageLang=
     "cze": "Špatný formát hodnot v řádku",
     "ger": "Falsches Werteformat in der Zeile"
   },
+  "Share": {
+    "cat": "Compartir",
+    "spa": "Compartir",
+    "eng": "Share",
+    "fre": "Partager",
+    "cze": "Sdílet",
+    "ger": "Teilen"
+  },
+  "Edit": {
+    "cat": "Editar",
+    "spa": "Editar",
+    "eng": "Edit",
+    "fre": "Editer",
+    "cze": "Upravit",
+    "ger": "Bearbeiten"
+  },
   "cntxmenu": {
     "ShareLayer": {
       "cat": "Compartir capa",

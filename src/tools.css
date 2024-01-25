@@ -73,6 +73,14 @@ a:hover { text-decoration: underline}
 	max-width: 80px;
 }
 
+button.center {
+	padding: 1px 6px 1px 6px;
+}
+button.center > img,
+button.center > span {
+  vertical-align: middle;
+}
+
 /* General forms style */
 select
 {
