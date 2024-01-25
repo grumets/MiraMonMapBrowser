@@ -363,8 +363,7 @@ var fragment, cadena, i_capes=[], inici, final, nou_valor;
 	fragment=calcul;
 	while ((inici=fragment.indexOf('{'))!=-1)
 	{
-		//busco una clau de tancar
-		final=fragment.indexOf('}');
+		final=BuscaClauTancarJSON(fragment);
 		if (final==-1)
 		{
 			alert("Character '{' without '}' in 'calcul'" + (typeof i_capa!=="undefined" ? (" in capa" + i_capa) : ""));
@@ -393,8 +392,7 @@ var fragment, cadena, inici, final, nou_valor;
 	fragment=calcul;
 	while ((inici=fragment.indexOf('{'))!=-1)
 	{
-		//busco una clau de tancar
-		final=fragment.indexOf('}');
+		final=BuscaClauTancarJSON(fragment);
 		if (final==-1)
 		{
 			alert("Character '{' without '}' in 'calcul'");
