@@ -301,7 +301,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			}
 		}
 	}
-	await CompletaDefinicioCapaTIFF(capa2, tiff, url, capa2.desc, i_valor);
+	await CompletaDefinicioCapaTIFF(capa2, tiff, url, capa2.desc, i_valor2);
 	if (capa2.origen==OrigenUsuari)
 		CompletaDefinicioCapa(capa2, false);
 	return {imatge: imatge, vista: vista, 

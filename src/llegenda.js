@@ -892,7 +892,8 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
 	}
@@ -900,7 +901,8 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
 	}
@@ -915,11 +917,13 @@ var capa=ParamCtrl.capa[i_capa_data];
 			continue;
 		for (var i_valor=0; i_valor<capa.valors.length; i_valor++)
 		{
-			if (v[i_valor] && (typeof capa.valors[i_valor].i_data==="undefined" || (typeof capa.valors[i_valor].i_data==="string" && capa.valors[i_valor].i_data.indexOf("{i_sel}")!=-1)))
+			if (v[i_valor] && (typeof capa.valors[i_valor].i_capa!=="undefined" && capa.valors[i_valor].i_capa==i_capa_data) && 
+				(typeof capa.valors[i_valor].i_data==="undefined" || (typeof capa.valors[i_valor].i_data==="string" && capa.valors[i_valor].i_data.indexOf("{i_sel}")!=-1)))
 			{
 				for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
-					if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+					if(EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
+					//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
 						OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
 				}
 				break;
