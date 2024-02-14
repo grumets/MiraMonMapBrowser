@@ -932,17 +932,19 @@ var capa=ParamCtrl.capa[i_capa_data];
 	}	
 }
 
-function CanviaValorDimensioExtraDeCapa(i_capa, i_dim, i_valor)
+function CanviaValorDimensioExtraDeCapa(i_capa_dim, i_dim, i_valor)
 {
-var dim=ParamCtrl.capa[i_capa].dimensioExtra[i_dim];
+var capa=ParamCtrl.capa[i_capa_dim], dim=capa.dimensioExtra[i_dim];
 
 	dim.i_valor=i_valor;
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
-		if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
-			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+		if (EsCapaVisibleEnAquestaVista(i_vista,i_capa_dim))
+			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_dim);
 	}
+	
 	//Caldria mirar si hi ha altres capes que també depenen de la selecció aquesta dimensió extra i repintar-les. Ara no tinc temps de fer-ho. (JM)
+	// ·$· NJ No estic segura de que calgui perquè no sé si es pot posar la dimensió per defecte, suposo que si
 }
 
 var LlegendaAmbControlDeCapes=0x01;
