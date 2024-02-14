@@ -57,11 +57,11 @@ const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog", dialogAler
 // Dialeg Mida Imatges identificadors
 const lableWidthId = "labelWidth", inputWidthId = "widthMesure", lableHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
-const chBoxTempsId = "chboxTime", chboxTempsName = "time", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates";
+const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates";
 const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
-var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}};
+var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
 const nomImgPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
@@ -123,7 +123,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	cdns.push(/*"<button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/> Download Story Maps</button>", "<br>",*/
+	cdns.push("<button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/>", GetMessage("RetrieveStorymap", "storymap"), "</button>", "<br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
 
@@ -157,13 +157,19 @@ function DemanaStorymapsNimmbus(name)
 	// El relat no està relacionat amb una capa solament, per tant, com s'hauria de modificar 
 	// els paràmetres de la crida GUF per a no dependre d'aquest camp? Utilitzem la URL del navegador, perquè el relat pertany al navegador en si, no a cap capa.
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
+	const urlServidor = new URL(urlIdNavegador);
 	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", "Maresmenca", urlIdNavegador,
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", urlServidor.host, urlIdNavegador,
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
+	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, {i_storymap: 0});
 }
-
+/**
+ * Ens permet descarregar un relat concret que estigui disponible a la plataforma Nimmbus i pel nostre mapa. 
+ * @param {*} params_function 
+ * @param {*} guf 
+ * @returns 
+ */
 function AdoptaStorymap(params_function, guf)
 {
 	if (!guf)
@@ -212,7 +218,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' src='", (i_relat != "nou" ? storyToEdit.srcData : ""), "'/><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br><input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
+		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""), "/><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br><input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
 		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
 	}
 
@@ -295,7 +301,9 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				canvasReduccioThumbnail.height = midaImatgeMiniaturaMaximaPx * this.height / this.width;
 				const cntx = canvasReduccioThumbnail.getContext("2d");
 				cntx.drawImage(this, 0, 0, canvasReduccioThumbnail.width, canvasReduccioThumbnail.height);
-				document.getElementById(imageThumbnailId).src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
+				const imageThumbnail = document.getElementById(imageThumbnailId);
+				imageThumbnail.setAttribute("style", "visibility:visible;");
+				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
  			}
 		}
 	}
@@ -325,7 +333,7 @@ function CreaDialegMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Times", "storymap") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
@@ -588,8 +596,8 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 	const ultimElem = document.getElementById(ultimElemId);
 	const tinyEditor = tinymce.get(tinyTextId);
 
-	if (ultimElem && tinyEditor.selection.getContent({format: "html"}) != "")
-	{
+	/*if (ultimElem && tinyEditor.selection.getContent({format: "html"}) != "")
+	{*/
 		const caractDialog = CreaDialegSincronitzarAmbMapa();
 		ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
@@ -621,11 +629,11 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				{
 					const capesVisiblesIds = [];
 					const estilsCapesIds = [];
-					ParamCtrl.capa.filter(capa => { 
+					ParamCtrl.capa.forEach(capa => { 
 						if (capa.visible=="si")
 						{
 							capesVisiblesIds.push(capa.id);
-							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "")
+							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
 						}
 					});
 					if (capesVisiblesIds.length > 0)
@@ -633,7 +641,27 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					if (estilsCapesIds.length > 0)
 						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
 				}
-	
+				
+				if (resultatCaractUsuari[chboxTempsName]["status"])
+				{
+					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
+					let indexCorregit = 0;
+					let dataCapaAComparar;
+
+					ParamCtrl.capa.forEach((capaActual) => {
+						if (capaActual.data && capaActual.data.length)
+						{
+							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
+							 dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
+							if (dataResultat < dataCapaAComparar) {
+								dataResultat = dataCapaAComparar;
+							}			
+						}
+					});
+ 
+					resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+				}
+
 				let divResultatCaract = document.createElement("div");
 	
 				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
@@ -663,11 +691,11 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					const paragrafImatge = document.createElement("p");
 					const imatgeSincr = document.createElement("img");
 
-					imatgeSincr.src = "storymap_sincro.svg";
+					imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
 					imatgeSincr.setAttribute("style","width:22px; height:22px;")
 					imatgeSincr.setAttribute("name",nomImgPuntSincr);
 					paragrafImatge.appendChild(imatgeSincr);
-					divResultatCaract.appendChild(paragrafImatge);
+					divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
 				}
 			}
 		});
@@ -691,7 +719,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		});
 
 		caractDialog.showModal();
-	}
+	/*}
 	else
 	{
 		let dialogAlerta = document.getElementById(dialogAlertaId);
@@ -703,7 +731,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		}
 
 		dialogAlerta.showModal();
-	}
+	}*/
 }
 
 function SeguentPasStoryMap(i_relat)
@@ -775,7 +803,7 @@ function FinalitzarStoryMap(estemEditant = false)
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
-	const cdns = ["<html><h1 id='title'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>"];
+	const cdns = "<html><h1 id='title'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
@@ -878,10 +906,10 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		divBotons.setAttribute("class", "horizontalSpreadElements");
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'><img src='editar_contingut.svg' alt='", GetMessage("Edit"), "' width='25'/> ", GetMessage("Edit"), "</button>"].join(""));
 
-		/*if (relatACarregar.compartida !=null && !relatACarregar.compartida)
+		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'><img src='pujada_nuvol.svg' alt='", GetMessage("Share"), "' width='25'/> ", GetMessage("Share"), "</button>"].join(""));
-		}*/
+		}
 		const title = DOMStorymap.querySelector("#title");
 		if (title !== null)
 		{
@@ -1050,7 +1078,7 @@ var hihacanvis, node, attribute;
 									GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
 						break;
 					}
-					if (0==CommandMMNSetChangeDateTime(datejson))
+					if (0==CommandMMNSetDateTime(datejson))
 						hihacanvis=true;
 				}
 			}
@@ -1134,9 +1162,10 @@ function ExecutaAttributsStoryMapVisible()
 function CompartirStorymap(i_story)
 {
 	const relatACompartir = ParamCtrl.StoryMap[i_story];
-	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: relatACompartir.desc, codespace: ParamCtrl.ServidorLocal}],
-			{abstract: null, specific_usage: GetMessage("ShareStorymap", "storymap"),
-			ru_code: JSON.stringify(relatACompartir.html), ru_code_media_type: "application/json",
+	const urlServidor = new URL(ParamCtrl.ServidorLocal);
+	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
+			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
+			ru_code: JSON.stringify(relatACompartir.html), ru_code_media_type: "text/html",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
 			},
 			ParamCtrl.idioma, "");

@@ -3266,14 +3266,6 @@ var MessageLang=
       "cze": "Přiblížení",
       "ger": "Zoom"
     },
-    "Times": {
-      "cat": "Temps",
-      "spa": "Tiempos",
-      "eng": "Times",
-      "fre": "Temps",
-      "cze": "Times",
-      "ger": "Zeiten"
-    },
     "Styles": {
       "cat": "Estils",
       "spa": "Estilos",
@@ -3321,6 +3313,14 @@ var MessageLang=
       "fre": "Partager storymap",
       "cze": "Sdílet mapu příběhu",
       "ger": "Storymap teilen"
+    },
+    "RetrieveStorymap": {
+      "cat": "Recuperar relats",
+      "spa": "Recuperar relatos",
+      "eng": "Retrieve storymaps",
+      "fre": "Récupérer des storymaps",
+      "cze": "Získat data příběhů",
+      "ger": "Storymaps abrufen"
     }
   },
   "tresD": {

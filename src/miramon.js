@@ -5238,7 +5238,7 @@ var elem, rect;
 
 function ProcessMessageMiraMonMapBrowser(event)
 {
-	if (event.data.substring(0, 10)!="CommandMMN")
+	if (typeof event.data !== "string" || event.data.substring(0, 10)!="CommandMMN")
 		return;
 	eval(event.data);
 	RepintaMapesIVistes();
