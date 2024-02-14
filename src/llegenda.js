@@ -112,7 +112,7 @@ var cdns=[];
 		cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(estil.ItemLleg[0].color), "\">");
 	else if (estil.TipusObj=="L" || estil.TipusObj=="P")
 	{
-		cdns.push('<span style="width:' , 16 - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[0].color, (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1;border-style:solid' : '') , ';display:inline-block;vertical-align:middle"></span>');
+		cdns.push('<span style="width:' , 16 - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[0].color, (EsColorSimilar(estil.ItemLleg[0].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1px;border-style:solid' : '') , ';display:inline-block;vertical-align:middle"></span>');
 		/*cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td><img src=\"" ,
 					AfegeixAdrecaBaseSRC(DonaFitxerColor(estil.ItemLleg[0].color)), "\" width=\"18\" height=\"",
 					((estil.TipusObj=="P") ? 10 : 2), "\"></td></tr></table>");*/
@@ -141,7 +141,7 @@ var cdns=[];
 					cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(estil.ItemLleg[l].color), "\">");
 				else if (estil.TipusObj=="L" || estil.TipusObj=="P")
 				{
-					cdns.push('<span style="width:', 12 - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0),'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[l].color, (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1;border-style:solid' : ''), ';display:inline-block;vertical-align:middle"></span>');
+					cdns.push('<span style="width:', 12 - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0),'px;height:', ((estil.TipusObj=="P") ? 8 : 3) - (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? 2 : 0), 'px;background:', estil.ItemLleg[l].color, (EsColorSimilar(estil.ItemLleg[l].color, ParamCtrl.ColorFonsPlana) ? ';border-color:'+ invertColor(ParamCtrl.ColorFonsPlana) +';border-width:1px;border-style:solid' : ''), ';display:inline-block;vertical-align:middle"></span>');
 					/*cdns.push("<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"><tr><td style=\"font-size: 1px;\"><img src=\"",
 						AfegeixAdrecaBaseSRC(DonaFitxerColor(estil.ItemLleg[l].color)),
 						"\" width=\"10\" height=\"",
@@ -880,7 +880,8 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
 	}
@@ -888,7 +889,8 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
 	}
@@ -903,11 +905,13 @@ var capa=ParamCtrl.capa[i_capa_data];
 			continue;
 		for (var i_valor=0; i_valor<capa.valors.length; i_valor++)
 		{
-			if (v[i_valor] && (typeof capa.valors[i_valor].i_data==="undefined" || (typeof capa.valors[i_valor].i_data==="string" && capa.valors[i_valor].i_data.indexOf("{i_sel}")!=-1)))
+			if (v[i_valor] && (typeof capa.valors[i_valor].i_capa!=="undefined" && capa.valors[i_valor].i_capa==i_capa_data) && 
+				(typeof capa.valors[i_valor].i_data==="undefined" || (typeof capa.valors[i_valor].i_data==="string" && capa.valors[i_valor].i_data.indexOf("{i_sel}")!=-1)))
 			{
 				for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
-					if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
+					if(EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
+					//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
 						OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
 				}
 				break;
@@ -916,17 +920,19 @@ var capa=ParamCtrl.capa[i_capa_data];
 	}	
 }
 
-function CanviaValorDimensioExtraDeCapa(i_capa, i_dim, i_valor)
+function CanviaValorDimensioExtraDeCapa(i_capa_dim, i_dim, i_valor)
 {
-var dim=ParamCtrl.capa[i_capa].dimensioExtra[i_dim];
+var capa=ParamCtrl.capa[i_capa_dim], dim=capa.dimensioExtra[i_dim];
 
 	dim.i_valor=i_valor;
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 	{
-		if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
-			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
+		if (EsCapaVisibleEnAquestaVista(i_vista,i_capa_dim))
+			OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_dim);
 	}
+	
 	//Caldria mirar si hi ha altres capes que també depenen de la selecció aquesta dimensió extra i repintar-les. Ara no tinc temps de fer-ho. (JM)
+	// ·$· NJ No estic segura de que calgui perquè no sé si es pot posar la dimensió per defecte, suposo que si
 }
 
 var LlegendaAmbControlDeCapes=0x01;
