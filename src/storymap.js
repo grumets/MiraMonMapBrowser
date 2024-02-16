@@ -41,8 +41,9 @@
 var indexStoryMapActiu=null;
 const tinyTextId = "storyTextArea";
 // Crea inici Storymap identificadors.
-const storyTitolId = "titolRelat";
+const inputstoryTitolId = "inputtitolRelat";
 const inputThumbnailId = "inputThumbnail";
+const h1TitleStorymap = "titleStorymap";
 const imageThumbnailId = "imageThumbnail";
 // Límit de mida per imatges. Establerta en píxels.
 const midaImatgeMiniaturaMaximaPx = 150;
@@ -180,10 +181,27 @@ function AdoptaStorymap(params_function, guf)
 		return;
 	}
 
-	while (box.firstChild) {
-		// The list is LIVE so it will re-index each call
-		box.removeChild(box.firstChild);
-	  }
+	const storyMapAGuardar = {compartida: true};
+	const relatSencer = new DocumentFragment();
+	relatSencer.prepend(guf.usage.usage_descr.code);
+	// Trobem la imatge de portada si n'hi ha.
+	const imgPortada = relatSencer.querySelector("img[id='" + imageThumbnailId + "']");
+	if (imgPortada) 
+	{
+		storyMapAGuardar.srcData = imgPortada.outerHTML;
+		relatSencer.removeChild(imgPortada);
+	}
+	// Trobem el títol del relat si n'hi ha
+	const titol = relatSencer.querySelector("h1[id='" + h1TitleStorymap + "']");
+	if (titol) 
+	{
+		storyMapAGuardar.desc = titol.textContent;
+		relatSencer.removeChild(titol);
+	}
+	const parser = new XMLSerializer();
+	storyMapAGuardar.html = parser.serializeToString(relatSencer);
+
+	ParamCtrl.StoryMap.push(storyMapAGuardar);
 }
 
 function TancaIIniciaStoryMap(i_story)
@@ -218,7 +236,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", storyTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""), "/><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br><input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
+		const beginingStoryMapContent = ["<label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputstoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br><img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""), "/><br><input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br><input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
 		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
 	}
 
@@ -784,7 +802,7 @@ function SeguentPasStoryMap(i_relat)
 			const parser = new DOMParser();
 			const DOMStorymap = parser.parseFromString(relat, "text/html");
 
-			const title = DOMStorymap.querySelector("#title");
+			const title = DOMStorymap.querySelector("#" + h1TitleStorymap);
 			if (title !== null)
 			{
 				title.remove();
@@ -803,7 +821,7 @@ function FinalitzarStoryMap(estemEditant = false)
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
-	const cdns = "<html><h1 id='title'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
+	const cdns = "<html><h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
@@ -841,7 +859,7 @@ function GuardaEntradaStorymapConfig()
 
 function GuardarInformacioInicialStoryMap()
 {
-	novaStoryMap.titol = document.getElementById(storyTitolId).value;
+	novaStoryMap.titol = document.getElementById(inputstoryTitolId).value;
 	const imatgePortada = document.getElementById(imageThumbnailId);
 	if (imatgePortada && imatgePortada.src != "")
 		novaStoryMap.imatgePortada = imatgePortada.src;
@@ -910,7 +928,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'><img src='pujada_nuvol.svg' alt='", GetMessage("Share"), "' width='25'/> ", GetMessage("Share"), "</button>"].join(""));
 		}
-		const title = DOMStorymap.querySelector("#title");
+		const title = DOMStorymap.querySelector("#"+ h1TitleStorymap);
 		if (title !== null)
 		{
 			title.insertAdjacentElement("beforebegin", divBotons);
@@ -1163,9 +1181,18 @@ function CompartirStorymap(i_story)
 {
 	const relatACompartir = ParamCtrl.StoryMap[i_story];
 	const urlServidor = new URL(ParamCtrl.ServidorLocal);
+
+	// Modifiquem l'html del relat per incloure la imatge de portada dins del propi relat i així poder-la recuperarun cop la recuperem.
+	const relatFragDoc = new DocumentFragment();
+	relatFragDoc.prepend(relatACompartir.html);
+	const imgPortada = document.createElement("img");
+	imgPortada.setAttribute("src", relatACompartir.srcData);
+	imgPortada.setAttribute("id", imageThumbnailId);
+	relatFragDoc.prepend(imgPortada.outerHTML);
+
 	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
-			ru_code: JSON.stringify(relatACompartir.html), ru_code_media_type: "text/html",
+			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
 			},
 			ParamCtrl.idioma, "");
