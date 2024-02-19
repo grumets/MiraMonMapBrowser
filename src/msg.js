@@ -3321,7 +3321,15 @@ var MessageLang=
       "fre": "Récupérer des storymaps",
       "cze": "Získat data příběhů",
       "ger": "Storymaps abrufen"
-    }
+    },
+    "StorymapCannotImported": {
+      "cat": "No es pot importar el relat",
+      "spa": "No se puede importar el relato",
+      "eng": "The storymap cannot be imported",
+      "fre": "Le storymap ne peut pas être importé",
+      "cze": "Storymap nelze importovat",
+      "ger": "Der Storymap kann nicht importiert werden"
+    },
   },
   "tresD": {
     "Graphic_3D": {

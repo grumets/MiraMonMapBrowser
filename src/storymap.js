@@ -176,31 +176,37 @@ function AdoptaStorymap(params_function, guf)
 	if (!guf)
 	{
 		// modificar text missatge per relats.
-		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StyleCannotImported", "qualitat") + ".");
+		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StorymapCannotImported", "storymap") + ".");
 		TancaFinestraLayer('feedbackAmbEstils');
 		return;
 	}
 
 	const storyMapAGuardar = {compartida: true};
-	const relatSencer = new DocumentFragment();
-	relatSencer.prepend(guf.usage.usage_descr.code);
+	const parserAWeb = new DOMParser();
+	const relatSencer = parserAWeb.parseFromString(guf.usage.usage_descr.code, "text/html");
+	const errorNode = relatSencer.querySelector("parsererror");
+	if (errorNode) {
+		console.log(errorNode.innerHTML);
+		return;
+	}
+
 	// Trobem la imatge de portada si n'hi ha.
-	const imgPortada = relatSencer.querySelector("img[id='" + imageThumbnailId + "']");
+	const imgPortada = relatSencer.querySelector("img#" + imageThumbnailId);
 	if (imgPortada) 
 	{
-		storyMapAGuardar.srcData = imgPortada.outerHTML;
-		relatSencer.removeChild(imgPortada);
+		storyMapAGuardar.srcData = imgPortada.src;
+		imgPortada.remove();
 	}
 	// Trobem el títol del relat si n'hi ha
-	const titol = relatSencer.querySelector("h1[id='" + h1TitleStorymap + "']");
+	const titol = relatSencer.querySelector("h1#" + h1TitleStorymap);
 	if (titol) 
 	{
 		storyMapAGuardar.desc = titol.textContent;
-		relatSencer.removeChild(titol);
+		titol.remove();
 	}
 	const parser = new XMLSerializer();
 	storyMapAGuardar.html = parser.serializeToString(relatSencer);
-
+	
 	ParamCtrl.StoryMap.push(storyMapAGuardar);
 }
 
@@ -869,7 +875,7 @@ function GuardarInformacioInicialStoryMap()
 function IniciaStoryMap(i_story)
 {
 	const relatACarregar = ParamCtrl.StoryMap[i_story];
-	if (relatACarregar.compartida == false) 
+	if (relatACarregar.html && relatACarregar.html.length) 
 	{
 		// Relat creat en el propi navegador i que no té fitxer .html, està al config.json directament.
 		CarregaStoryMap(relatACarregar.html, i_story);
