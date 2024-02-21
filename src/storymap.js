@@ -673,7 +673,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					let dataCapaAComparar;
 
 					ParamCtrl.capa.forEach((capaActual) => {
-						if (capaActual.data && capaActual.data.length)
+						if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
 						{
 							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
 							 dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
