@@ -155,23 +155,20 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 
 function DemanaStorymapsNimmbus(name)
 {
-	// El relat no està relacionat amb una capa solament, per tant, com s'hauria de modificar 
-	// els paràmetres de la crida GUF per a no dependre d'aquest camp? Utilitzem la URL del navegador, perquè el relat pertany al navegador en si, no a cap capa.
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
 	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", urlServidor.host, urlIdNavegador,
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlIdNavegador,
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, {i_storymap: 0});
+	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
 }
 /**
  * Ens permet descarregar un relat concret que estigui disponible a la plataforma Nimmbus i pel nostre mapa. 
- * @param {*} params_function 
  * @param {*} guf 
  * @returns 
  */
-function AdoptaStorymap(params_function, guf)
+function AdoptaStorymap(guf)
 {
 	if (!guf)
 	{
@@ -1187,19 +1184,22 @@ function CompartirStorymap(i_story)
 {
 	const relatACompartir = ParamCtrl.StoryMap[i_story];
 	const urlServidor = new URL(ParamCtrl.ServidorLocal);
-
-	// Modifiquem l'html del relat per incloure la imatge de portada dins del propi relat i així poder-la recuperarun cop la recuperem.
 	const relatFragDoc = new DocumentFragment();
+	
 	relatFragDoc.prepend(relatACompartir.html);
-	const imgPortada = document.createElement("img");
-	imgPortada.setAttribute("src", relatACompartir.srcData);
-	imgPortada.setAttribute("id", imageThumbnailId);
-	relatFragDoc.prepend(imgPortada.outerHTML);
-
+	
+	if (relatACompartir.srcData) 
+	{
+		// Modifiquem l'html del relat per incloure la imatge de portada dins del propi relat i així poder-la recuperar en un futur.
+		const imgPortada = document.createElement("img");
+		imgPortada.setAttribute("src", relatACompartir.srcData);
+		imgPortada.setAttribute("id", imageThumbnailId);
+		relatFragDoc.prepend(imgPortada.outerHTML);
+	}
+	
 	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
-			},
-			ParamCtrl.idioma, "");
+			}, ParamCtrl.idioma, "");
 }

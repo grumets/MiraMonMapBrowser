@@ -579,7 +579,7 @@ var capa=ParamCtrl.capa[i_capa];
 
 function CompartirEstilCapa(i_capa, i_estil)
 {
-var s, text="";
+var s;
 var capa=ParamCtrl.capa[i_capa];
 
 	//el TARGET de l'estil compartit és la seva capa "mare"
