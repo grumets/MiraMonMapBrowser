@@ -2294,6 +2294,8 @@ function DonaDescripcioTipusServidor(tipus)
 		return "OAPI Map Tiles";
 	if(tipus=="TipusOAPI_Features")
 		return "OAPI Features";
+	if(tipus=="TipusOAPI_Coverages")
+		return "OAPI Coverages";
 	if(tipus=="TipusHTTP_GET")
 		return "HTTP GET";
 	
@@ -3573,6 +3575,67 @@ var cdns=[], tipus, capa=ParamCtrl.capa[i];
 	return s;
 }
 
+function DonaRequestGetCoverage(i_capa, i_estil, ncol, nfil, env, i_data, valors_i)
+{
+var cdns=[], capa=ParamCtrl.capa[i_capa], plantilla;
+
+	if(capa.URLTemplate)
+		plantilla=capa.URLTemplate+"?";
+	else
+		plantilla="/collections/{collectionId}/coverage?";
+	
+	plantilla=plantilla.replace("{collectionId}", capa.nom);
+		
+	cdns.push(plantilla);
+	
+	cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
+			  "&bbox-crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS); // crs del bounding-box
+	cdns.push("&bbox=");
+	
+	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  null))
+		cdns.push(env.MinY,",",env.MinX,",",env.MaxY,",",env.MaxX);
+	else
+		cdns.push(env.MinX,",",env.MinY,",",env.MaxX,",",env.MaxY);
+	
+	cdns.push("&width=",ncol,"&height=",nfil,"&f=",(capa.FormatImatge == "image/heif" ? "hej2" : (capa.FormatImatge == "image/tiff" ? "tif" : capa.FormatImatge)));	
+	
+	// He de demanar les properties (o bandes) per cada valor de l'estil seleccionat
+	if (valors_i && valors_i.param)  // Quan tinc dades binaries
+	{
+		var clau_valor;
+		cdns.push("&properties=");		
+		for (var i_param=0; i_param<valors_i.param.length; i_param++)
+		{
+			clau_valor=valors_i.param[i_param];
+			//Si la clau no comença per "DIM_", llavors ho afegeixo jo
+			cdns.push((i_param==0? "": ","), clau_valor.valor.nom);				
+		}
+	}
+	else if(capa.estil && capa.estil.length)  // Per quan no tinc dades binaries i estic descarregant una coverage tipus PNG, ho tracto tot com un map
+	{
+		var i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+		if (capa.estil[i_estil2].nom)
+		{
+			if (EsCapaBinaria(capa))
+			{
+				alert("A binary array layer cannot have a 'estil' with 'nom'. The 'nom' is being disabled. Please use valors instead of style names");
+				capa.estil[i_estil2].nom=null;
+			}
+			else
+				cdns.push("&properties=", capa.estil[i_estil2].nom);
+		}
+	}
+	else
+	{
+		cdns.push("&properties=*");	
+}
+	if (capa.AnimableMultiTime)
+		cdns.push("&datetime=",(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));	
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
+
+}
+
+
 function EsborraSeleccio()
 {
 	for (var i=0; i<ParamCtrl.capa.length; i++)
@@ -3695,7 +3758,7 @@ var attributesArray=Object.keys(attributes);
 function EsCapaBinaria(capa)
 {
 	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
-	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
+	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || capa.tipus=="TipusOAPI_Coverages" || !capa.tipus))
 }
 
 

@@ -38,11 +38,12 @@
 
 "use strict"
 
-function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista)
+function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista, url_peticio)
 {
-	var capa2 = ParamCtrl.capa[i_capa2];
-	var valor2 = capa2.valors[i_valor2];
-	var capa, valor;
+var capa2 = ParamCtrl.capa[i_capa2];
+var valor2 = capa2.valors[i_valor2];
+var capa, valor;
+
 	if(i_capa==-1)
 	{
 		capa=capa2;
@@ -56,6 +57,25 @@ function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista)
 		valor = capa.valors[i_valor];
 	}
 		
+	if (capa2.tipus=="TipusOAPI_Coverages")
+	{
+		if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
+		{
+			if (valor.capa_video && valor.capa_video[i_data2])
+			{
+				if((valor.capa_video[i_data2].url && url_peticio && valor.capa_video[i_data2].url==url_peticio) ||
+					(valor.capa_video[i_data2].url && !url_peticio))
+					return valor.capa_video[i_data2].tiff;
+				valor.capa_video[i_data2].url=null;
+				return null;
+			}
+			return null;
+		}
+		if((valor.url && url_peticio && valor.url==url_peticio) || (valor.url && !url_peticio))
+			return valor.tiff;
+		valor.url=null;
+		return null;
+	}
 	if (valor2.url)
 	{
 		if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
@@ -155,6 +175,7 @@ async function loadGeoTIFF() {
 	window.GeoTIFFfromUrl = fromUrl;
 }
 
+
 function DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims)
 {
 var capa = ParamCtrl.capa[i_capa2], url;
@@ -184,7 +205,12 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 		await loadGeoTIFF();
 	var capa, capa2 = ParamCtrl.capa[i_capa2];
 	var valor, valor2 = capa2.valors[i_valor2];
-	var url = DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims);
+	var url;
+	
+	if(capa2.tipus=="TipusOAPI_Coverages")
+		url=DonaRequestGetCoverage(i_capa2, -1, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valor2);
+	else
+		url=DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims);
 	
 	if(i_capa==-1)
 	{
@@ -233,7 +259,7 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 	else
 		var tiff = await GeoTIFFfromUrl(url);
 
-	if (valor2.url)
+	if (valor2.url || capa2.tipus=="TipusOAPI_Coverages")
 	{
 		if (vista.i_nova_vista==NovaVistaRodet || vista.i_nova_vista==NovaVistaVideo)
 		{
@@ -242,12 +268,16 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			if (!valor.capa_video[i_data2])
 				valor.capa_video[i_data2]={}  //Preparo l'estructura
 			valor.capa_video[i_data2].tiff=tiff;
+			if(capa2.tipus=="TipusOAPI_Coverages")
+				valor.capa_video[i_data2].url=url;
 		}
 		else
 		{
 			if (capa2.data && capa2.data.length)
 				valor.i_data_tiff=DonaIndexDataCapa(capa2, i_data2);
 			valor.tiff=tiff;
+			if(capa2.tipus=="TipusOAPI_Coverages")
+				valor.url=url;
 		}
 	}
 	else
@@ -316,6 +346,12 @@ async function loadTiffData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i
 var fillValue, tiff=DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista);
 var capa2=ParamCtrl.capa[i_capa2];
 var bbox, width, height, dades, env_tiff;
+
+	if(!tiff)
+	{
+		alert( "Error reading TIFF file");
+		return null;
+	}
 
 	if (capa2.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa2.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 	{
