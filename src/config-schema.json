@@ -1493,9 +1493,9 @@
 											"valor": {
 												"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
 												"$ref": "#/definitions/nomDescripcio"
-											}
+											},
 											"esExtra": {
-												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres.",
+												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres."
 											}
 										}
 									}

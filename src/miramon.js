@@ -410,7 +410,7 @@ function CompletaDescarregaTotCapa(capa)
 function GeneraUIDCapa(capa)
 {
 	// Generació de identificador de la capa i els estils
-	CreaUUIDSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
+	CreaIdHashCapaSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
 	if (capa.estil && capa.estil.length)
 	{
 		for (var j=0; j<capa.estil.length; j++)
@@ -4373,7 +4373,46 @@ function CreaIdSiCal(obj, i)
 	}
 }
 
-// Crea un UUID si cal
+function DonaTextIdentificatiuCapa(capa)
+{
+var cdns=[], i_capa;
+	
+	i_capa=ParamCtrl.capa.indexOf(capa);
+	if(ParamCtrl.ICapaVolaPuntConsult==i_capa)
+		cdns.push("ICapaVolaPuntConsult");
+	else if(ParamCtrl.ICapaVolaAnarCoord==i_capa)
+		cdns.push("ICapaVolaAnarCoord");
+	else if(ParamCtrl.ICapaVolaAnarObj==i_capa)
+		cdns.push("ICapaVolaAnarObj");
+	else if(ParamCtrl.ICapaVolaEdit==i_capa)
+		cdns.push("ICapaVolaEdit");
+	else if(ParamCtrl.ICapaVolaGPS==i_capa)
+		cdns.push("ICapaVolaGPS");
+	else
+	{
+		if(capa.servidor)
+			cdns.push(capa.servidor);
+		if(capa.nom)
+			cdns.push(capa.nom);
+		if(capa.tipus)
+			cdns.push(capa.tipus);
+		if(capa.model)
+			cdns.push(capa.model);
+		if(capa.CRSgeometry)
+			cdns.push(capa.CRSgeometry);	
+	}
+	return cdns.join("");	
+}
+
+
+// Crea un UUID si cal basat en un algoritme hash reproduïble i no aleàtori
+function CreaIdHashCapaSiCal(obj)
+{
+	if (!obj.id)
+		obj.id=stringToHash(DonaTextIdentificatiuCapa(obj)).toString();
+}
+
+// Crea un UUID si cal basat en un algoritme aleatòri
 function CreaUUIDSiCal(obj)
 {
 	if (!obj.id)
