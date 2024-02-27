@@ -62,7 +62,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps també són aptes per a vídeos
+	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps i les  TipusOAPI_Coverages també són aptes per a vídeos
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;

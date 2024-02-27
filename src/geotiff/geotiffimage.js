@@ -809,7 +809,7 @@ class GeoTIFFImage {
   getOrigin() {
     const tiePoints = this.fileDirectory.ModelTiepoint;
     const modelTransformation = this.fileDirectory.ModelTransformation;
-    if (tiePoints && tiePoints.length === 6) {
+    if (tiePoints && tiePoints.length >= 6) {  // NJ_15_02_2024 Hi havia això tiePoints.length === 6  i provoca que no pugui llegir una imatge perquè té una long de 24, no sé perquè
       return [
         tiePoints[3],
         tiePoints[4],

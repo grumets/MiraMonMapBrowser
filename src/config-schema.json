@@ -1978,7 +1978,7 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG i GeoJSON. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET", "TipusOAPI_Coverages"]
 		},
 		"access": 
 		{

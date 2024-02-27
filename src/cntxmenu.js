@@ -96,11 +96,18 @@ function EsborrarCapa(i_capa)
 {
 	if (AvisaDeCapaAmbIndexosACapaEsborrada(i_capa)==false)
 		return;
-	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no te sentit; i ja hem avisat que no anirà bé.
+	var separador=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa].separa));  // em deso el separador per si cal afegir-ho a la següent capa de la llegenda
+	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no té sentit; i ja hem avisat que no anirà bé.
 	ParamCtrl.capa.splice(i_capa, 1);
+	if(i_capa<ParamCtrl.capa.length) //Podria ser que no hi hagués cap més capa
+	{
+		if(!ParamCtrl.capa[i_capa].separa)
+			ParamCtrl.capa[i_capa].separa=separador;		
+	}
 	RevisaEstatsCapes();
 	RepintaMapesIVistes();
 }
+
 
 function EsborrarEstilCapa(i_capa, i_estil)
 {
@@ -1164,8 +1171,7 @@ var condicio=[], capa=[], i_capes, i_cat, categories, cat_noves, two_attributes,
 	   ((typeof condicio[0].i_data==="undefined" && typeof condicio[1].i_data==="undefined") ||
 		 (!condicio[0].i_data && !condicio[1].i_data) ||
 		 (condicio[0].i_data && condicio[1].i_data && condicio[0].i_data==condicio[1].i_data)) &&
-		 SonValorsDimensionsIguals(condicio[0].dim, condicio[1].dim)) 
-		
+		 SonValorsDimensionsIguals(condicio[0].dim, condicio[1].dim)) 		
 	{
 		alert(GetMessage("ChooseTwoDifferentLayers", "cntxmenu"));
 		return;
@@ -2903,7 +2909,7 @@ var cdns=[], consulta, nexe, capa, primer_i_estil_valid=null;
 	{
 		cdns.push("<span id=\"", prefix_id, "-nexe-", i_condicio, "\" class=\"Verdana11px\" style=\"display: "+((i_condicio==0) ? "inline" : "none")+"\"><fieldset><legend>",
 			GetMessage("Condition"), " ", i_condicio+1, ": </legend>",
-			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false, vull_dates: false, vull_dims: false}),
+			DonaCadenaCapaDataEstilOperacioValor(prefix_id, i_capa, i_condicio, {vull_operador: true, nomes_categoric: false, vull_valors: false, vull_dates: true, vull_dims: true}),
 			"</fieldset>");
 		if (i_condicio<(MaxCondicionsSeleccioCondicional-1))
 		{

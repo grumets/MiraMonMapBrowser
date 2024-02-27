@@ -526,6 +526,28 @@ function create_UUID(guions){
 }
 
 
+function stringToHash(string) 
+{
+	// Inspirat en https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript 
+	
+//set variable hash as 0
+var hash = 0, i, ch;
+
+	// if the length of the string is 0, return 0
+	if (string.length == 0) return hash;
+	
+	for (i = 0 ;i<string.length ; i++)
+	{
+		ch = string.charCodeAt(i);
+		hash = ((hash << 5) - hash) + ch;
+				
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+}
+
+
+
 function MMgetFileExtension(fileName)
 {
 	var re= /(?:\.([^.]+))?$/;
