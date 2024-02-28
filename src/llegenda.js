@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -557,12 +557,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					if (capa.grup!=null && capa.grup!="")
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							//"<img src=\"",AfegeixAdrecaBaseSRC("ara_no_radiog.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_radiog", 14, null, null),
 							"</td>");
 					else
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">", 
-							//<img src=\"", AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_visibleg", 17, null, null),
 							"</td>");
 				}
@@ -576,12 +574,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			{
 				if (capa.visible=="ara_no")
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_radiog.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_radiog", 14, null, null),
 						"</td>");
 				else
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("radiog.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "radiog", 14, null, null),
 						"</td>");
 			}
@@ -589,12 +585,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			{
 				if (capa.visible=="ara_no")
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_visibleg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "ara_no_visibleg", 17, null, null),
 						"</td>");
 				else
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("visibleg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("v_ll_capa"+i_capa, null, "visibleg", 17, null, null),
 						"</td>");
 			}
@@ -612,7 +606,6 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			{
 				if (ParamCtrl.LlegendaIconesInactivesGrises)
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 						"</td>");
 				else
@@ -624,12 +617,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 		{
 			if (capa.consultable=="ara_no")
 				cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-					//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
 					DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 					"</td>");
 			else
 				cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-					//"<img src=\"", AfegeixAdrecaBaseSRC("consultableg.gif"), "\" align=middle>",
 					DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
 					"</td>");
 		}
@@ -648,7 +639,6 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					if (ParamCtrl.LlegendaIconesInactivesGrises)
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
 							"</td>");
 					else
@@ -659,12 +649,10 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			{
 				if (capa.descarregable=="ara_no")
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
 						"</td>");
 				else
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("descarregableg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "descarregableg", 17, null, null),
 						"</td>");
 			}
@@ -1108,7 +1096,6 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				{
 					if (ParamCtrl.LlegendaIconesInactivesGrises)
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 							"</td>");
 					else
@@ -1120,12 +1107,10 @@ var salt_entre_columnes, cdns=[], capa, estil;
 			{
 				if (capa.consultable=="ara_no")
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_consultableg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 						"</td>");
 				else
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						//"<img src=\"", AfegeixAdrecaBaseSRC("consultableg.gif"), "\" align=middle>",
 						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
 						"</td>");
 			}
@@ -1144,7 +1129,6 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					{
 						if (ParamCtrl.LlegendaIconesInactivesGrises)
 							cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-								//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
 								DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
 								"</td>");
 						else
@@ -1155,12 +1139,10 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				{
 					if (capa.descarregable=="ara_no")
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							//"<img src=\"", AfegeixAdrecaBaseSRC("ara_no_descarregableg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "ara_no_descarregableg", 17, null, null),
 							"</td>");
 					else
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-							//"<img src=\"", AfegeixAdrecaBaseSRC("descarregableg.gif"), "\" align=middle>",
 							DonaTextImgGifSvg("d_ll_capa"+i_capa, null, "descarregableg", 17, null, null),
 							"</td>");
 				}

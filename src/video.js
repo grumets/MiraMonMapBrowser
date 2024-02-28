@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -62,7 +62,7 @@ function OrdenacioCapesVideoData(x,y)
 
 function EsCapaAptePerVideo(capa)
 {
-	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps també són aptes per a vídeos
+	if (capa.NomVideo!=null && (DonaTipusServidorCapa(capa)=="TipusWMS" || DonaTipusServidorCapa(capa)=="TipusHTTP_GET") &&   // Segurament les capes en TipusOAPI_Maps i les  TipusOAPI_Coverages també són aptes per a vídeos
 		EsCapaDinsRangDEscalesVisibles(capa) && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
 		capa.animable==true && capa.data)
 		return true;

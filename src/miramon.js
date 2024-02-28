@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -42,6 +42,7 @@ var ToolsMMN="https://github.com/grumets/MiraMonMapBrowser"; //"https://github.c
 var VersioToolsMMN={"Vers": 6, "SubVers": 0, "VariantVers": null};
 var clientName= "MiraMon Map Browser";
 var config_schema_estil="config-schema.json#/definitions/estil";
+var config_schema_storymap="config-schema.json#/properties/storymap";
 
 function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers; }
 
@@ -410,7 +411,7 @@ function CompletaDescarregaTotCapa(capa)
 function GeneraUIDCapa(capa)
 {
 	// Generació de identificador de la capa i els estils
-	CreaUUIDSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
+	CreaIdHashCapaSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
 	if (capa.estil && capa.estil.length)
 	{
 		for (var j=0; j<capa.estil.length; j++)
@@ -1124,14 +1125,14 @@ function CanviaIdioma(s)
 		
 	elem=getFinestraLayer(window, "taulaCapaVectorial");
 	if(isLayer(elem) && isLayerVisible(elem))
-		MostraFinestraTaulaDeCapaVectorial()
+		MostraFinestraTaulaDeCapaVectorial();
 
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 	{
-		if (IStoryActive<0)
+		if (indexStoryMapActiu<0)
 			MostraFinestraTriaStoryMap();
 		else
-			IniciaStoryMap(IStoryActive);
+			IniciaStoryMap(indexStoryMapActiu);
 	}
 } // Fi function CanviaIdioma()
 
@@ -2036,8 +2037,10 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_editarVector();
 	else if (nom_finestra=="triaStoryMap")
 		TancaFinestra_triaStoryMap();
+	else if (nom_finestra=="creaStoryMap")
+		TancaFinestra_creaStoryMap();
 	else if (nom_finestra=="storyMap")
-		TancaFinestra_storyMap();
+		TancaFinestra_visualitzaStoryMap();
 	else if (nom_finestra=="editaEstil")
 		TancarFinestra_editEstil(nom_finestra);
 	else if (nom_finestra=="taulaCapaVectorial")
@@ -2294,6 +2297,8 @@ function DonaDescripcioTipusServidor(tipus)
 		return "OAPI Map Tiles";
 	if(tipus=="TipusOAPI_Features")
 		return "OAPI Features";
+	if(tipus=="TipusOAPI_Coverages")
+		return "OAPI Coverages";
 	if(tipus=="TipusHTTP_GET")
 		return "HTTP GET";
 	
@@ -2343,24 +2348,25 @@ var elem=getLayer(window, "enllacWMS_finestra");
 
     if(isLayer(elem) && isLayerVisible(elem))
     {
-		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false;
+		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false, capesLength=ParamCtrl.capa.length;
 
-		for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+		for (i_capa=0; i_capa<capesLength; i_capa++)
 			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
 		cdns2.push("<center><table border=\"0\" width=\"95%\"><tr><td><font size=\"1\">");
-		if(cdns.length>0)
+		var cdnsLength=cdns.length;
+		if(cdnsLength>0)
 		{
 			cdns.sort();
 			if (ParamCtrl.ServidorLocal)
 			{
-				for (i=0; i<cdns.length; i++)
+				for (i=0; i<cdnsLength; i++)
 				{
 					if (ParamCtrl.ServidorLocal==cdns[i])
 					{
 						array_tipus.length=0;
 						//Necessito saber el tipus.
-						for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+						for (i_capa=0; i_capa<capesLength; i_capa++)
 						{
 							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 							{
@@ -2399,12 +2405,12 @@ var elem=getLayer(window, "enllacWMS_finestra");
 				}
 			}
 			servidor_local_trobat=false;
-			for (i=0; i<cdns.length; i++)
+			for (i=0; i<cdnsLength; i++)
 			{
 				if ((!ParamCtrl.ServidorLocal || ParamCtrl.ServidorLocal.toLowerCase()!=cdns[i].toLowerCase()) && (i==0 || cdns[i-1].toLowerCase()!=cdns[i].toLowerCase()))
 				{
 					array_tipus.length=0;
-					for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+					for (i_capa=0; i_capa<capesLength; i_capa++)
 					{
 						if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 						{
@@ -3573,6 +3579,67 @@ var cdns=[], tipus, capa=ParamCtrl.capa[i];
 	return s;
 }
 
+function DonaRequestGetCoverage(i_capa, i_estil, ncol, nfil, env, i_data, valors_i)
+{
+var cdns=[], capa=ParamCtrl.capa[i_capa], plantilla;
+
+	if(capa.URLTemplate)
+		plantilla=capa.URLTemplate+"?";
+	else
+		plantilla="/collections/{collectionId}/coverage?";
+	
+	plantilla=plantilla.replace("{collectionId}", capa.nom);
+		
+	cdns.push(plantilla);
+	
+	cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
+			  "&bbox-crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS); // crs del bounding-box
+	cdns.push("&bbox=");
+	
+	if(CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS,  null))
+		cdns.push(env.MinY,",",env.MinX,",",env.MaxY,",",env.MaxX);
+	else
+		cdns.push(env.MinX,",",env.MinY,",",env.MaxX,",",env.MaxY);
+	
+	cdns.push("&width=",ncol,"&height=",nfil,"&f=",(capa.FormatImatge == "image/heif" ? "hej2" : (capa.FormatImatge == "image/tiff" ? "tif" : capa.FormatImatge)));	
+	
+	// He de demanar les properties (o bandes) per cada valor de l'estil seleccionat
+	if (valors_i && valors_i.param)  // Quan tinc dades binaries
+	{
+		var clau_valor;
+		cdns.push("&properties=");		
+		for (var i_param=0; i_param<valors_i.param.length; i_param++)
+		{
+			clau_valor=valors_i.param[i_param];
+			//Si la clau no comença per "DIM_", llavors ho afegeixo jo
+			cdns.push((i_param==0? "": ","), clau_valor.valor.nom);				
+		}
+	}
+	else if(capa.estil && capa.estil.length)  // Per quan no tinc dades binaries i estic descarregant una coverage tipus PNG, ho tracto tot com un map
+	{
+		var i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
+		if (capa.estil[i_estil2].nom)
+		{
+			if (EsCapaBinaria(capa))
+			{
+				alert("A binary array layer cannot have a 'estil' with 'nom'. The 'nom' is being disabled. Please use valors instead of style names");
+				capa.estil[i_estil2].nom=null;
+			}
+			else
+				cdns.push("&properties=", capa.estil[i_estil2].nom);
+		}
+	}
+	else
+	{
+		cdns.push("&properties=*");	
+}
+	if (capa.AnimableMultiTime)
+		cdns.push("&datetime=",(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));	
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
+
+}
+
+
 function EsborraSeleccio()
 {
 	for (var i=0; i<ParamCtrl.capa.length; i++)
@@ -3695,7 +3762,7 @@ var attributesArray=Object.keys(attributes);
 function EsCapaBinaria(capa)
 {
 	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
-	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
+	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || capa.tipus=="TipusOAPI_Coverages" || !capa.tipus))
 }
 
 
@@ -4103,9 +4170,8 @@ var capa, j, i, i_estil;
 						else
 						{
 							if (capa_estil[j]!=null && capa_estil[j]!="" && capa.estil[0].id!=capa_estil[j])
-								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " +
-								    GetMessage("ForLayer") + " " + capa_visible[j]);
-					    	}
+								alert(GetMessage("CannotFindStyle") + " " + capa_estil[j] + " " + GetMessage("ForLayer") + " " + capa_visible[j]);
+					    }
 					}
 				}
 
@@ -4373,7 +4439,46 @@ function CreaIdSiCal(obj, i)
 	}
 }
 
-// Crea un UUID si cal
+function DonaTextIdentificatiuCapa(capa)
+{
+var cdns=[], i_capa;
+	
+	i_capa=ParamCtrl.capa.indexOf(capa);
+	if(ParamCtrl.ICapaVolaPuntConsult==i_capa)
+		cdns.push("ICapaVolaPuntConsult");
+	else if(ParamCtrl.ICapaVolaAnarCoord==i_capa)
+		cdns.push("ICapaVolaAnarCoord");
+	else if(ParamCtrl.ICapaVolaAnarObj==i_capa)
+		cdns.push("ICapaVolaAnarObj");
+	else if(ParamCtrl.ICapaVolaEdit==i_capa)
+		cdns.push("ICapaVolaEdit");
+	else if(ParamCtrl.ICapaVolaGPS==i_capa)
+		cdns.push("ICapaVolaGPS");
+	else
+	{
+		if(capa.servidor)
+			cdns.push(capa.servidor);
+		if(capa.nom)
+			cdns.push(capa.nom);
+		if(capa.tipus)
+			cdns.push(capa.tipus);
+		if(capa.model)
+			cdns.push(capa.model);
+		if(capa.CRSgeometry)
+			cdns.push(capa.CRSgeometry);	
+	}
+	return cdns.join("");	
+}
+
+
+// Crea un UUID si cal basat en un algoritme hash reproduïble i no aleàtori
+function CreaIdHashCapaSiCal(obj)
+{
+	if (!obj.id)
+		obj.id=stringToHash(DonaTextIdentificatiuCapa(obj)).toString();
+}
+
+// Crea un UUID si cal basat en un algoritme aleatòri
 function CreaUUIDSiCal(obj)
 {
 	if (!obj.id)
@@ -4788,7 +4893,8 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", GetMessageJSON("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "taulaCapaVectorial", GetMessageJSON("ElementsVectorialTable", "vector"), boto_copiar|boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-
+	createFinestraLayer(window, "creaStoryMap", GetMessageJSON("NewStorymap", "storymap"), boto_tancar, 420, 150, 750, 500, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
 
@@ -5170,7 +5276,7 @@ function MovementMiraMonMapBrowser(event)
 function WheelMiraMonMapBrowser(event)
 {
 var elem, rect;
-	if (IStoryActive!==null)
+	if (indexStoryMapActiu!==null)
 		return;
 
 	for (var z=0; z<layerFinestraList.length; z++)
@@ -5231,7 +5337,7 @@ var elem, rect;
 
 function ProcessMessageMiraMonMapBrowser(event)
 {
-	if (event.data.substring(0, 10)!="CommandMMN")
+	if (typeof event.data !== "string" || event.data.substring(0, 10)!="CommandMMN")
 		return;
 	eval(event.data);
 	RepintaMapesIVistes();

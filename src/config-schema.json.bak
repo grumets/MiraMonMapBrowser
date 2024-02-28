@@ -1,0 +1,3798 @@
+﻿{
+ 	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Navegador de Mapes del MiraMon",
+	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
+	"type": "object",
+	"required": ["VersioConfigMMN", "SpaceForLayers" ],
+	"properties": {
+		"VersioConfigMMN": { 
+			"description": "Versió del fitxer config",
+			"$ref": "#/definitions/versio" 
+		},
+		"SpaceForLayers": {
+			"type": "object",
+			"description": "Amplada i alçada del navegador per defecte en píxels. Noteu que la finestra definida per aquestes mesures és la base per les posicions i dimensions de les differents Layer.",
+			"required": ["width", "height"],
+			"properties": {
+				"width": { 
+					"type": "number",
+					"minimum": 1,
+					"multipleOf" : 1
+				},
+				"height": { 
+					"type": "number",
+					"minimum": 1,
+					"multipleOf" : 1
+				}
+			}
+		},
+		"Layer": {
+			"type": "array",
+			"items": 
+			{
+				"type": "object",
+				"description": "Llista de Layers que es crearà internament amb createLayer(). Heu d'interpretar el vell concepte de netscape de 'layer' com una moderna 'div' en HTML.",
+				"required": ["name", "left", "top", "width", "height", "ancora"],
+				"properties": {
+					"name": {
+						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord' i 'ctipica' ",
+						"type": "string"
+					},
+					"title": {
+						"description": "Titol de la divisió. Només aplica quan la divisió és 'resizable'",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"left": { 
+						"description": "Distància a la vora dreta quan la finestra medeix SpaceForLayers.width",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"top": { 
+						"description": "Distància a la vora superior quan la finestra medeix SpaceForLayers.height",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"width": { 
+						"description": "Ample de la layer quan la finestra medeix SpaceForLayers.width",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"height": { 
+						"description": "Alt de la layer quan la finestra medeix SpaceForLayers.height",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"ancora": {
+						"description": "Com s'ancora la finestra als extrems de la finestra del navegador. Es fan servir punts cardinals 'NSEW' (es manté la distància amb el punt cardinal) o 'nsew' (es manté una distància proporcionalment al punt cardinal) i 'CR' (es manté l'ample (Columns) o l'alt (Rows)). p.ex. 'NW'",
+						"type": "string"
+					},
+					"scroll": {
+						"description": "La layer presenta scrolls? Pot ser 'si' (sempre), 'ara_no' (automàtiques), 'no' (no scrolls)",
+						"enum": ["no", "ara_no", "si"]
+					},
+					"visible": {
+						"description": "La divisió es crea com a visible immediatament?. Pot ser true o false",
+						"type": "boolean"
+					},  
+					"resizable": {
+						"description": "La divisió és una caixa redimensionable?. Pot ser true o false",
+						"type": "boolean"
+					},
+					"ev": {
+						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. La propietat 'resizable' activa events de mouse que no es poden redefinir aquí. Opcional. Pot ser null",
+						"type": ["string", "null"]
+					},
+					"content": {
+						"description": "Contingut html de l'interior de la layer. Opcional. Pot ser null",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang"
+					}
+				}
+			}
+		},
+		"hideLayersOverVista": {
+			"description": "Mostra les layers que hi ha sobre la/les vista/es. Si es true, la vista es veu neta (sense cap botó o finestra superposada). Per defecte és 'false'",
+			"type": "boolean"
+		},
+		"containerName": {
+			"description": "Nom de la divisió que conté el navegador. INTERN; no usar. S'omple a partir del nom indicat a StartMiraMonMapBrowser(div_name)",
+			"type": "string"
+		},
+		"config_json": {
+			"description": "El propi config.json com a text. INTERN; no usar. S'omple al iniciar el navegador",
+			"type": "string"
+		},
+		"ServidorLocal": { 
+			"description": "Adreça i nom del servidor local, típicament una url de la cgi que es fa servir més. Si hi ha alguna capa on servidor és null, llavors es fa servir aquest valor i esdevé obligatori.",
+			"type": "string",
+			"format": "uri"
+		},
+		"VersioServidorLocal": { 
+			"description": "Versió en que es faran les peticions OWS al ServidorLocal",
+			"$ref": "#/definitions/versio" 
+		},
+		"CorsServidorLocal": { 
+			"description": "El ServidorLocal suporta CORS (Cross-Origin Resource Sharing)?",
+			"type": "boolean"
+		},
+		"TipusServidorLocal": {
+			"description": "Tipus de servei del ServidorLocal",
+			"$ref": "#/definitions/EnumTipusServidor" 
+		},
+		"accessClientId":
+		{
+			"description": "Noms i client IDs dels applicacions d'autentificació",
+			"type": "object",
+			"properties": {
+				"authenix": { "type": "string"},
+				"wqems": { "type": "string"}
+			}
+		},
+		"AdrecaBaseSRC": { 
+			"description": "Adreça base de les imatges del navegador. Pot ser una cadena buida",
+			"type": "string",
+			"format": "uri"
+		},
+		"WPSschemaURL": { 
+			"description": "Adreça base dels esquemes de validació pel servei WPS",
+			"type": "string",
+			"format": "uri"
+		},
+		"idiomes":	{
+			"description": "Idiomes en els que estarà disponible el navegador",
+			"type": "array",
+			"items": {
+				"enum": ["cat", "spa", "eng", "fre", "cze", "ger"]
+			}
+		},
+		"idioma": {
+			"description": "DEPRECATED i passat a intern: Es recomana no indicar i deixar que la configuració del navegador de web prevalgui. Idioma per defecte, idioma actual i en iniciar el navegador.",
+			"enum": ["cat", "spa", "eng", "fre", "cze", "ger"]
+		},
+		"PlanaPrincipal": { 
+			"description": "DEPRECATED. No s'usa més. Era l'adreça i nom de la plana principal de navegador. Es feia servir en la icona de home",
+			"type": "string" 
+		},
+		"TitolNavegador": {
+			"type": "object",
+			"description": "Nom de la divisió (layer) i contingut que fan de títol del navegador",
+			"properties": {
+				"layer": { 
+					"description": "Nom de la divisió que fa de títol del navegador",
+					"type": "string" 
+				},
+				"text":	{ 
+					"description": "Contingut de la divisió que fa de títol del navegador",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				}
+			}
+		},
+		"titol": { 
+			"description": "Títol del navegador usat a les faixes blaves de les caixes del navegador i de les caixes filles",
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+		},
+		"TitolCaixa": { 
+			"description": "Títol del navegador usat a l'interior d'algunes caixes filles",
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+		},
+		"ncol": { 
+			"description": "Amplada de la caixa (requadre) de la vista en píxels. Si NColNFilAuto és true, no es fa servir.",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"nfil": { 
+			"description": "Alçada de la caixa (requadre) de la vista en píxels. Si NColNFilAuto és true, no es fa servir.",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"NColNFilAuto":  { 
+			"description": "Amplada i alçada automàtica. Per defecte val true",
+			"type": "boolean"
+		},
+		"psalt":	{ 
+			"description": "Percentatge de salt dels moviments laterals de la vista (en tant per cent).",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"MargeEsqVista": { 
+			"description": "Marge des de la vora esquerra de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"MargeSupVista": { 
+			"description": "Marge des de la vora superior de la divisió (layer) i la caixa de navegació del mapa. Opcional. Deprecated: es recomana no posar-lo o deixar-lo a 0, donat que podem definir la divisió començant on vulguem",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"fullScreen": {
+			"description": "Indica si la vista ha estar en pantalla completa. Opcional. El valor per defecte és false. Només té sentit si hi ha una sola vista en el navegador",
+			"type": "boolean"
+		},
+		"ColorFonsVista": { 
+			"description": "Color de fons de la vista. Es sol deixar a gris o blau marí. Típicament amb el format #RRGGBB",
+			"type": "string"
+		},
+		"ColorQuadratSituacio":	{ 
+			"description": "Color del rectangle que es dibuixa sobre el mapa de situació. Cal escollir un color que contrasti amb els colors del mapa de situació. Típicament amb el format #RRGGBB",
+			"type": "string"
+		},
+		"ColorFonsPlana": { 
+			"description": "Color de fons de totes les divisions (layers) del navegador. Típicament amb el format #RRGGBB",
+			"type": "string"
+		},
+		"TitolCoord": { 
+			"description": "Títol del recurs de coordenada actual. Típicament val 'Coord:' . Deprecated. Useu la capacitat de títol de les layers redimensionables en el seu lloc",
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+		},
+		"EstilCoord": { 
+			"description": "Estil del recurs de coordenada actual. Per defecte és 'text' que es mostre en úna sola línia. 'area' ho mostra en un recurs multilínia",
+			"enum": [null, "text", "area"]
+		},
+		"NDecimalsCoordXY": { 
+			"description": "Nombre de decimals dels valors de les coordenades mostrats per pantalla",
+			"type": "number",
+			"minimum": 0,
+			"maximum": 20,
+			"multipleOf" : 1
+		},
+		"CoordExtremes": { 
+			"description": "Tipus de coordenades escrites a les cantonades de la vista",
+			"enum": [null, "proj", "longlat_g", "longlat_gms"]
+		},
+		"CoordActualProj": {
+			"description": "Representar les coordenades de la projecció a la caixa de la posició actual. És combinable amb CoordActualLongLatG Opcional",
+			"type": "boolean"
+		},
+		"CoordActualLongLatG": {
+			"description": "Representar les coordenades en long/lat en graus a la caixa de la posició actual. És combinable amb CoordActualProj. Opcional",
+			"type": "boolean"
+		},
+		"CoordActualLongLatGMS": {
+			"description": "Representar les coordenades en long/lat en graus, minuts i segons a la caixa de la posició actual. Només té efecte si CoordActualLongLatG és true. Opcional si no es posa les coordenades long/lat estant en graus decimals.",
+			"type": "boolean"
+		},
+		"zoom": {
+			"description": "Array de nivells de zoom que tindrà el navegador. Ordenats amb el número més gran primer",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["costat" ],
+				"properties": {
+					"costat": {
+						"description": "Costat del nivell de zoom que tindrà el navegador",
+						"type": "number",
+						"minimum": 0
+					}
+				}
+			}
+		},
+		"NivellZoomCostat":	{
+			"description": "Costat del nivell de zoom inicial. Ha de ser un dels valors de l'array anterior",
+			"type": "number",
+			"minimum": 0
+		},
+		"ConsultableSegonsEscala": {
+			"description": "Si la capa no és visible per escala cal que tampoc sigui consultable per escala?",
+			"type": "boolean"
+		},
+		"DesplegableProj": {
+			"description": "Si s'han definit més d'una projecció, cal mostrar un desplegable de les diferents projecció disponibles?",
+			"type": "boolean"
+		},
+		"CanviProjAuto": {
+			"description": "Si s'han definit més d'una projecció, cal que el navegador de mapes ofereix la possibilitat de canviar automàticament de projecció a la més adient?",
+			"type": "boolean"
+		},
+		"araCanviProjAuto": {
+			"description": "Interna, no usar.  Si CanviProjAuto i si s'han definit més d'una projecció, cal que el navegador de mapes seleccioni la possibilitat de canviar automàticament de projecció al iniciar?. Si no es declara és el que passa per defecte. Només si és false s'evita que es seleccioni en començar.",
+			"type": "boolean"
+		},
+		"ZoomUnSolClic": {
+			"description": "Cal definir el zoom per rectangle prement el botó del ratolí i arrossegant? (per contraposició a fer un clic, moure's i fer un segon clic)",
+			"type": "boolean"
+		},
+		"ZoomContinu":	{
+			"description": "Es pot escollir qualsevol valor de nivell de zoom que no estigui al array de zoom? (no recomanat)",
+			"type": "boolean"
+		},
+		"UsaSempreMeuServidor": {
+			"description": "Totes les peticions han de passar pel servidor local amb el paràmetre no estandarditzat ServerToRequest suportat pel servidor del MiraMon i fer peticions en cascada?", 
+			"type": "boolean"
+		},
+		"MostraBarraEscala": {
+			"description": "Mostrar la barra d'escala?",
+			"type": "boolean"
+		},
+		"RelaxaAmbitVisualitzacio": {
+			"description": "Permetre navegar per fora del mapa de situació?",
+			"type": "boolean"
+		},
+		"VoraVistaGrisa": {
+			"description": "Emmarcar la barra d'escala amb una vora gris que conté fletxes per a fer moviments laterals de la vista (estèticament no es recomana)",
+			"type": "boolean"
+		},
+		"TransparenciaDesDeServidor": {
+			"description": "Demanar la capa amb estil semitransparent al servidor. Només suportat pels servidors del MiraMon. (No recomanat)",
+			"type": "boolean"
+		},
+		"ImatgeSituacio": {
+			"description": "Array d'imatges de situació usades en la divisió del mapa de situació. Generalment hi ha un mapa de situació per a cada projecció disponible i també per cada àmbit desconnectat si s'escau",
+			"type": "array",
+			"items": {
+				"type": "object",	
+				"required": ["EnvTotal", "nom", "Ample", "Alt"],
+				"properties": {
+					"EnvTotal":	{
+						"description": "Envolupant representada pel mapa de situació. El CRS és també el CRS de la pròpia imatge de situació",
+						"$ref": "#/definitions/envolupantCRS_2D" 
+					},
+					"servidor": { 
+						"description": "URL del servidor WMS. Opcional, si no s'indica, s'assumeix que el nom conté el nom de fitxer directament. Si s'índica null és el servidor local",
+						"type": "string",
+						"format": "uri"
+					},
+					"versio": { 
+						"description": "Versió del servei WMS. Opcional; si no s'indica s'assumeix VersioServidorLocal",
+						"$ref": "#/definitions/versio" 
+					},
+					"tipus": { 
+						"description": "Tipus de servei. Només se suporta 'TipusWMS'.  Opcional; si no s'indica s'assumeix TipusServidorLocal",
+						"$ref": "#/definitions/EnumTipusServidor" 
+					},					
+					"nom":	{ 
+						"description": "Nom del fitxer de la imatge que fa de rectangle de situació o el nom de la capa si s'extreu d'un servei WMS",
+						"type": "string",
+						"format": "uri"
+					},
+					"NomEstil": { 
+						"description": "Nom de l'estil usat en la petició WMS per obtenir el rectangle de situació si s'extreu d'un servei WMS",
+						"type": "string",
+						"format": "uri"
+					},
+					"FormatImatge": {
+						"description": "Format en que s'ha de demanar la imatge de situació al servidor si s'extreu d'un servei WMS. És un format MIME. Optional",
+						"type": ["string", "null"],
+						"format": "uri"
+					},
+					"Ample": { 
+						"description": "Ample del fitxer de la imatge que fa mapa de situació en píxels",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"Alt": { 
+						"description": "Alt del fitxer de la imatge que fa mapa de situació en píxels. Opcional en el cas servidor WMS o es calcula automaticament.",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MargeEsq": {
+						"description": "Marge des de la vora esquerra de la divisió (layer) i el mapa de situació. Opcional",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"MargeSup": {
+						"description": "Marge des de la vora superior de la divisió (layer) i el mapa de situació. Opcional",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
+		"AmpleAltSituacioAuto":	{
+			"description": "El mapa de situació es pot deformar per omplir tota la divisió (layer) del mapa de situació?",
+			"type": "boolean"
+		},
+		"ISituacioOri": {
+			"description": "Índex del mapa de situació (començant des de 0) usat inicialment per navegador de mapes",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"PuntOri": {
+			"description": "Punt central de la vista en iniciar en navegador. L'envolupant de la vista inicial es defineix a partir d'aquest punt i de NivellZoomCostat",
+			"$ref": "#/definitions/punt2D" 
+		},
+		"AspecteLlegenda":	{
+			"description": "Elements per a controlar l'aspecte de la llegenda a la visualització",
+			"$ref": "#/definitions/aspecteLlegenda" 
+		},
+		"AspecteLlegendaImpressio": {
+			"description": "Elements per a controlar l'aspecte de la llegenda a la impressió. Especialment útil si a la visualització s'han definit lletres blanques",
+			"$ref": "#/definitions/aspecteLlegenda" 
+		},
+		"PlantillaDImpressio": {
+			"description": "Array de les plantilles d'impressió",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["nom", "desc", "src", "ample", "alt"],
+				"properties": {
+					"nom":	{ 
+						"description": "Nom de la plantilla d'impressió",
+						"type": "string"
+					},
+					"desc": { 
+						"description": "Títol de la plantilla d'impressió. Es mostra als selectors",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"src": { 
+						"description": "Nom del fitxer HTML que conté la plantilla d'impressió",
+						"type": "string",
+						"format": "uri"
+					},
+					"ample": {
+						"description": "Ample del document HTML de la plantilla d'impressió",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"alt": {
+						"description": "Alt del document HTML de la plantilla d'impressió",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
+		"LlegendaAmagaSegonsEscala":	{
+			"description": "Amaga les entrades de les capes a la llegenda quan no siguin visibles per escala.", 
+			"type": "boolean"
+		},
+		"LlegendaGrisSegonsEscala": {
+			"description": "Posa en l'estil les entrades de les capes a la llegenda quan no siguin visibles per escala a gris.", 
+			"type": "boolean"
+		},
+		"LlegendaAmagaSiForaAmbit": {
+			"description": "Amaga les entrades de les capes a la llegenda si la capa no està disponible en l'àmbit de visualització actual", 
+			"type": "boolean"
+		},
+		"LlegendaGrisSiForaAmbit": {
+			"description": "Posa a gris les entrades de les capes a la llegenda si la capa no està disponible en l'àmbit de visualització actual", 
+			"type": "boolean"
+		},		
+		"LlegendaAmagaSiForaCRS": {
+			"description": "Amaga les entrades de les capes a la llegenda si la capa no està disponible en el CRS actual", 
+			"type": "boolean"
+		},
+		"LlegendaGrisSiForaCRS": {
+			"description": "Posa a gris les entrades de les capes a la llegenda si la capa no està disponible en el CRS actual", 
+			"type": "boolean"
+		},		
+		"LlegendaAmagaSeparaNoCapa": {
+			"description": "Amaga el separador de capes si no hi ha cap capa visible fins al proper separador", 
+			"type": "boolean"
+		},
+		"LlegendaIconesInactivesGrises": {
+			"description": "Les icones que no es poden fer servir es posen a gris. De no indicar-se les icones inactives no són visibles.", 
+			"type": "boolean"
+		},
+		"LlegendaGrupsComARadials": {
+			"description": "Les capes que formen part d'un grup canvien el botó de selecció (check) per un botó alternatiu (radial)", 
+			"type": "boolean"
+		},
+		"LlegendaLligaVisibleAmbCtipica": {
+			"description": "Les capes que són consultades amb l'eina de consulta típica es fan visibles i consultables", 
+			"type": "boolean"
+		},
+		"LlegendaLligaVisibleAmbDescarregable": {
+			"description": "Si una capa no està visible tampoc no serà descarregable", 
+			"type": "boolean"
+		},
+		"LlegendaMostraCapaSencera": {
+			"description": "Posar l'opció 'Mostra sencera' al botó dret de les capes a la llegenda. Això resulta útil si el navegador té capes petites en diversos llocs allunyats que costen de trobar.", 
+			"type": "boolean"
+		},
+		"CapaConsultaPreguntaServidor": {
+			"description": "Array de capes per a fer la consulta típica. Array de definicions de consultes típiques (quina capa s'usa, quins camps, etc)",
+			"type": ["array", "null"],
+			"items": {
+				"type": "object",
+				"required": ["camps"],
+				"properties": {
+					"servidor":	{ 
+						"description": "Adreça i nom del servidor del MiraMon per a les consultes típiques. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) vol dir que els objectes estan definits directament al 'proj_camp' i no es demanen a cap servidor.",
+						"type": ["string", "null"],
+						"format": "uri"
+					},
+					"cors": { 
+						"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+						"type": "boolean"
+					},
+					"nom":	
+					{ 
+						"description": "Nom de la capa del servidor del MiraMon per a les consultes típiques",
+						"type": "string"
+					},
+					"camps": {
+						"description": "Array de camps per a les consultes típiques",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["previ", "nom", "desc", "post"],
+							"properties": {
+								"previ":	{ 
+									"description": "Text previ al descriptor del camp de la consulta típica",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								},
+								"nom":	{ 
+									"description": "Nom del camp de la consulta típica en format CadenaDeCampBD4 del MiraMon",
+									"type": "string" 
+								},
+								"desc":	{ 
+									"description": "Descriptor del camp de la consulta típica",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								},
+								"post":	{ 
+									"description": "Text previ llistat de valors del camp",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								}
+							}
+						}
+					},
+					"CRS": { 
+						"description": "Sistema de referència de la capa sobre la que es fa la consulta típica",
+						"type": "string",
+						"format": "uri"
+					},
+					"proj_camp": { 
+						"description": "Projecció per a cada camp. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor",
+						"type": "array",
+						"items": {
+							"description": "Projecció d'un camp",
+							"type": "array",
+							"items": {
+								"description": "Element de la projecció d'un camp",
+								"type": "object",
+								"properties": {
+									"valor": {
+										"description": "Valor únic dins de la projecció",
+										"type": "string" 
+									},
+									"env": { 
+										"description": "Envolupant ocupat pels objectes que tenen aquest valor únic dins de la projecció",
+										"$ref": "#/definitions/envolupant2D" 
+									}
+								}
+							}
+						}
+					},
+					"id_camp": { 
+						"description": "Array de camps. Pot ser null si només n'hi ha un. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor. Caldria documentar-ho millor però ara no ho entenc del tot",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Array de registres",
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"description": "Identificador de projecció de camp",
+										"type": "number" 
+									},
+									"valor": {
+										"description": "Valor a la projecció",
+										"type": "string" 
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"ConsultaTipica": {
+			"description": "Array de divisions (layers) que contindran les consultes típiques",
+			"type": ["array","null"],
+			"items": {
+				"type": "object",
+				"required": ["nom", "TipusConsultaTipica", "NomCapa"],
+				"properties": {
+					"nom":	{ 
+						"description": "Nom de la divisió (layer) que ha de contenir les eines per a la interacció de l'usuari en la consulta típica",
+						"type": "string" 
+					},
+					"TipusConsultaTipica": { 
+						"description": "Tipus de representació de la consulta típica",
+						"enum": ["CTipicaCompleta", "CTipicaDesplegables", "CTipicaInicials", "CTipicaCercador"]
+					},
+					"NomCapa": { 
+						"description": "Array de les capes sobre les que es fa la consulta típica",
+						"type": "array",
+						"items": {
+							"description": "Nom de la capa sobre la que farem a la consulta típica",
+							"type": "string" 
+						}
+					}
+				}
+			}
+		},
+		"VistaPermanent":	{
+			"description": "Array dels noms de les divisions permanents (layers) que han de contenir vistes. Opcional. Si no està definit se suposa que hi ha una única Layer anomenada 'vista'",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["nom"],
+				"properties": {
+					"nom":	{
+						"description": "Nom de la divisió permanent (layer) que han de contenir la vista",
+						"type": "string" 
+					}
+				}
+			}
+		},
+		"BarraEstil": {
+			"description": "Estil de la barra de botons", 
+			"type": "object",
+			"properties": {		
+				"ncol": { 
+					"description": "Amplada de cada botó de la barra de botons. Opcional. Per defecte val 23",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"nfil": { 
+					"description": "Alçada de cada botó de la barra de botons. Opcional. Per defecte val 22",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"colors": {
+					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill",
+					"type": "object",
+					"additionalProperties": { 
+						"description": "The the color of this element class. De moment els botons SVG que distribuim tenen un estil de fons anomenat 'cls-1' i un estil de contorns anomenat 'cls-2' i aquestes serien les 2 propietats a indicar.",
+						"type": "string"
+					}
+				}
+			}
+		},
+		"BarraBotoMes": {
+			"description": "Mostrar el botó d'acostar-se a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoMenys": {
+			"description": "Mostrar el botó d'allunyar-se a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoBack": {
+			"description": "Mostrar el botó de vista prèvia a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoVGeneral": {
+			"description": "Mostrar el botó de vista general a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotonsAlternatius": {
+			"description": "Mostrar els botons alternatius (pan, consulta per localització, centrar, zoom per rectangle, finestra instantània, etc) a la barra de botons. S'anomenen alternatius perquè modifiquen el comportament del ratolí sobre la vista del navegador", 
+			"type": "boolean"
+		},
+		"BarraBotoMouMig":	{
+			"description": "Mostrar el botó de centrar a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoNovaVista": {
+			"description": "Mostrar el botó de finestra instantània a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraEscala": {
+			"description": "Mostrar el desplegable d'escales a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoCaixaParam": {
+			"description": "Mostrar el botó per accedir a la caixa de configuració a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoPrint": {
+			"description": "Mostrar el botó d'imprimir a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoPlanaPrincipal": {
+			"description": "Mostrar el botó d'anar la plana principal a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoAjuda": {
+			"description": "Mostrar el botó d'ajuda a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoInstallarMMZ": {
+			"description": "Mostrar el botó per instal·lar el Lector Universal de Mapes del MiraMon a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotonsIdiomes": {
+			"description": "Mostrar els botons per a canviar l'idioma a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoAnarCoord":	{
+			"description": "Mostrar el botó de la finestra d'anar a coordenada a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoMapaNet":	{
+			"description": "Mostrar el botó per amagar o mostrar les coses que hi ha sobre la vista i aconseguir un mapa net", 
+			"type": "boolean"
+		},
+		"BarraBotoConsola": {
+			"description": "Mostrar el botó de la consola de comandes als servidors a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoEnllac": {
+			"description": "Mostrar un botó a la barra de botons per obrir una caixa amb un enllaç a l'estat del mapa i per crear una document de context", 
+			"type": "boolean"
+		},
+		"BarraBotoInsereix": {
+			"description": "Mostrar el botó d'afegir un objecte a la barra de botons. Si activeu aquesta opció encara que no hi hagi capa ObjDigi editable, vol dir que es podrà afegir un marcador temporal", 
+			"type": "boolean"
+		},
+		"BarraBotoEnllacWMS":	{
+			"description": "Mostrar el botó per a veure les URLs dels servidors d'aquest navegador a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraBotoAfegeixCapa": {
+			"description": "Mostrar un botó a la barra de botons per obrir una finestra per sol·licitar les capacitats d'una servidor i d'afegir una capa d'un servidor", 
+			"type": "boolean"
+		},
+		"BarraBotoCalculadora": {
+			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer operacions de càlcul entre capes i afegir el resultat com una capa o estil nou", 
+			"type": "boolean"
+		},
+		"BarraBotoCombiCapa": {
+			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer combinacions analítiques entre capes i afegir el resultat com una capa o estil nou", 
+			"type": "boolean"
+		},
+		"BarraBotoCTipica":	{
+			"description": "Mostrar el botó per iniciar una consulta típica a la barra de botons", 
+			"type": "boolean"
+		},
+		"BarraNomesDescarrega":  {
+			"description": "Canviar la barra de botons per un botó de descàrrega (no recomanat)", 
+			"type": "boolean"
+		},
+		"VistaBotonsBruixola": {
+			"description": "Mostrar uns botons de desplaçaments laterals sobre el mapa de la vista", 
+			"type": "boolean"
+		},
+		"VistaBotonsZoom": {
+			"description": "Mostrar uns botons per acostar-se i allunyar-se sobre el mapa de la vista", 
+			"type": "boolean"
+		},
+		"VistaEscalaNumerica": {
+			"description": "Mostrar el valor del nivell de zoom sobre el mapa de la vista", 
+			"type": "boolean"
+		},
+		"VistaSliderZoom": {
+			"description": "Mostrar una barra de desplaçament vertical per acostar-se i allunyar-se sobre el mapa de la vista", 
+			"type": "boolean"
+		},
+		"VistaSliderData": {
+			"description": "Mostrar una barra de desplaçament horitzontal per moure's en el temps sobre el mapa de la vista. No te efecte si no hi ha cap capa amb 'data' definit", 
+			"type": "boolean"
+		},
+		"AltresLinks": {
+			"description": "Mostrar un botó amb una funcionalitat específica definida aquí", 
+			"type": ["object", "null"],
+			"required": ["boto", "text_boto", "funcio"],
+			"properties": {
+				"boto":	{
+					"description": "Fragment del nom del fitxer GIF que conté el dibuix del botó",
+					"type": "string",
+					"format": "uri"
+				},
+				"text_boto": {
+					"description": "Text que descriu el botó",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"funcio": {
+					"description": "Nom de la funció que gestiona l'acció resultat de prémer el botó",
+					"type": "string"
+				}
+			}
+		},		
+		"TitolLlistatNivellZoom":	{ 
+			"description": "DEPRECATED: ja no s'utilitzarà, passa al fitxer msg.js. Text que figurava davant del desplegable de nivells de zoom (escales)",
+			"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+		},
+		"LlistatZoomFraccio": {
+			"description": "Mostrar una fracció com a representació de nivell de zoom al desplegable de nivells de zoom", 
+			"type": "boolean"
+		},
+		"LlistatZoomMidaPixel": {
+			"description": "Mostrar la mida del costat de píxel com a representació de nivell de zoom al desplegable de nivells de zoom", 
+			"type": "boolean"
+		},
+		"LlistatZoomEscalaAprox": {
+			"description": "Mostrar l'escala aproximada com a representació de nivell de zoom al desplegable de nivells de zoom", 
+			"type": "boolean"
+		},
+		"EstatClickSobreVista":	{
+			"description": "Quina és la funcionalitat inicial que s'obté de fer un clic sobre la vista (i que condiciona l'estat dels botons alternatius). Les alternatives són: consulta per localització (ClickConLoc), centra la vista (ClickMouMig), primer clic de zoom de rectangle (ClickZoomRec1), segon clic de zoom de rectangle. (ClickZoomRec2, Intern; no useu), primer clic de la creació d'una finestra instantània (ClickNovaVista1), segon de la creació d'una finestra instantània. (ClickNovaVista2, Intern; no useu), primer clic de pan (ClickPan1), segon clic de pan (ClickPan2. Intern; no useu), mode edició de punts (ClickEditarPunts)",
+			"enum": ["ClickConLoc", "ClickMouMig", "ClickZoomRec1", "ClickZoomRec2", "ClickNovaVista1", "ClickNovaVista2", "ClickPan1", "ClickPan2", "ClickEditarPunts"]
+		},
+		"TipusConsulta": {
+			"description": "Tipus de consulta per localització (ConsultaDeCop no està al codi però crec que és l'alternativa per defecte)",
+			"enum": ["FinestraSeguentCapa", "FinestraDeCop", "IncrustadaDeCop", "ConsultaDeCop"]
+		},
+		"IconaConsulta": {
+			"description": "Icona que representa el lloc on s'ha fet clic en una consulta per localització. Opcional. Si no n'hi a es posa una per defecte.",
+			"$ref": "#/definitions/icona" 
+		},
+		"PlantillaConsulta": {
+			"description": "Plantilla HTML per a mostrar el resultats de la consulta per localització",
+			"type": "object",
+			"required": ["src", "ample", "alt"],
+			"properties": {
+				"src": { 
+					"description": "Adreça i nom de la plantilla HTML per a la consulta per localització",
+					"type": "string",
+					"format": "uri"
+				},
+				"ample": { 
+					"description": "Ample de la plantilla de la consulta per localització",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"alt": { 
+					"description": "Alt de la plantilla de la consulta per localització",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				}
+			}
+		},
+		"IconaAnarCoord": {
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona" 
+		},
+		"IconaAnarObj": {
+			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-objecte. Opcional. Si no n'hi ha es posa una per defecte.",
+			"$ref": "#/definitions/icona"
+		},
+		"MostraPosicioGPS": {
+			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
+			"type": ["null", "boolean"]
+		},
+		"IconaPosicioGPS": {
+			"description": "Interna, no usar. Actualment actua (i si no es posa, en posem una per defecte). És la icona que representa el lloc on es troba el dispositiu. MiraMon es reserva el dret a canviar el comportament per pintar la ruta GPS (sense icona) i eliminar aquesta entrada.",
+			"$ref": "#/definitions/icona" 
+		},
+		"IconaEdicio": {
+			"description": "Nom del fitxer de la icona que adoptaran els objectes digitalitzats (generalment un GIF o PNG). Opcional",
+			"type": ["null", "string"],
+			"format": "uri"
+		},
+		"FuncioIconaEdicio": {
+			"description": "Nom de la funció que s'executa quan s'insereix un objecte digitalitzat. Opcional",
+			"type": ["null", "string"]
+		},
+		"FuncioCanviProjeccio": {
+			"description": "Nom de la funció que s'executa quan es fa un canvi de projecció. Opcional",
+			"type": ["null", "string"]
+		},
+		"IconaValidacio": {
+			"description": "Nom del fitxer de la icona que es posa al lloc del clic a la vista en un procés de validació de coordenades (generalment un GIF o PNG). Opcional",
+			"type": ["null", "string"],
+			"format": "uri"
+		},		
+		"StoryMap": {
+			"type": ["null", "array"],
+			"items": {
+				"type": ["object"],
+				"required": ["desc", "url"],
+				"properties": {
+					"desc": {
+						"description": "Títol de la historia",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"src":{
+						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la història en format JPEG, PNG... Opcional",
+						"type": "string",
+						"format": "uri"
+					},
+					"url": {
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-histos={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre data-mm-histos, es tanquen tots els histogrames; IdCapa* a de ser una capa d'arrays binaris)",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"EnvTotal": {
+						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. No implementat encara",
+						"$ref": "#/definitions/envolupantCRS_2D" 
+					},
+					"Ample": {
+						"description": "Ample de la caixa que conté la història. Opcional; si no hi és val 500",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"Alt": {
+						"description": "Alt de la caixa que conté la història. Opcional; si no hi és val 400",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MargeEsq": {
+						"description": "Marge esquerra de la caixa que conté la història. Opcional",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"MargeSup": {
+						"description": "Marge superior de la caixa que conté la història. Opcional",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
+		"TempsRefresc": { 
+			"description": "Temps de refresc de l'estat del procés de creació i resposta a una petició d'un MMZ a un WCS. (Implica una nova interacció amb el servidor)",
+			"type": "number",
+			"minimum": 0,
+			"multipleOf" : 1
+		},
+		"DescarregesCertificades": {
+			"description": "Demanar que les descarregues siguin generades pel servidor com MMZs certificats", 
+			"type": "boolean"
+		},
+		"ParGetCoverage": {
+			"description": "Array de Paràmetres del GetCoverage del WCS 1.0",
+			"type": ["array", "null"],
+			"items": {
+				"type": ["object"],
+				"required": ["nom", "ll"],
+				"properties": {
+					"nom": {
+						"description": "Nom dels paràmetres de GetCoverage",
+						"type": "string" 
+					},
+					"ll": {
+						"description": "Llista dels paràmetres de GetCoverage",
+						"type": "array",
+						"items": {
+							"oneOf":[
+								{
+									"type": "object",
+									"properties": {
+										"nom":	{ 
+											"description": "Nom i la descripció del paràmetre WCS",
+											"$ref": "#/definitions/nomDescripcio"
+										},
+										"cardin": {
+											"description": "La cardinalitat del paràmetre GetCoverage és 1 (es representarà com a botons radials). Si el nom és TIME, valors i valors null llavors mostra un selector de temps amb els elements de capa[].data.",
+											"enum": ["1"]
+										},
+										"valors": {
+											"description": "Llista dels possible valors del paràmetre WCS",
+											"type": ["array", "null"],
+											"items": {
+												"description": "Possible valor del paràmetre i si està seleccionat WCS",
+												"$ref": "#/definitions/nomDescripcioSel"
+											}
+										}
+									}
+								},
+								{
+									"type": "object",
+									"properties": {
+										"nom":	{ 
+											"description": "Nom i la descripció del paràmetre WCS",
+											"$ref": "#/definitions/nomDescripcio"
+										},
+										"cardin": {
+											"description": "La cardinalitat del paràmetre GetCoverage és n (es representarà com a checkboxes de les que es poden marcar més d'una com activa)",
+											"enum": ["n"]
+										},
+										"valors": {
+											"description": "Llista dels possible valors del paràmetre WCS",
+											"type": ["array"],
+											"items": {
+												"description": "Possible valor del paràmetre i si està seleccionat WCS",
+												"$ref": "#/definitions/nomDescripcioSel"
+											}
+										}
+									}
+								},
+								{
+									"type": "object",
+									"properties": {
+										"nom":	{ 
+											"description": "Nom i la descripció del paràmetre WCS",
+											"$ref": "#/definitions/nomDescripcio"
+										},
+										"cardin": {
+											"description": "La ardinalitat del paràmetre GetCoverage és i (es representarà com un rectangel editable per posar un número dins d'un interval)",
+											"enum": ["i"]
+										},
+										"valors": {
+											"description": "Interval de valors del paràmetre WCS",
+											"$ref": "#/definitions/intervalValorsDescripcionsSel"
+										}
+									}
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		"FormatGetCoverage": {
+			"description": "Array de formats del GetCoverage del WCS 1.0",
+			"type": ["array", "null"],
+			"items": {
+				"type": ["object"],
+				"required": ["nom", "ll"],
+				"properties": {
+					"nom": {
+						"description": "Nom dels formats de GetCoverage",
+						"type": "string" 
+					},
+					"ll": {
+						"description": "Llista dels formats de GetCoverage",
+						"type": "array",
+						"items": {
+							"description": "Nom i descripció del format admès pel GetCoverage del WCS i si està seleccionat",
+							"$ref": "#/definitions/nomDescripcioSel"
+						}
+					}
+				}
+			}
+		},
+		"ResGetCoverage":	{
+			"description": "Array de resolucions del GetCoverage del WCS 1.0",
+			"type": ["array", "null"],
+			"items": {
+				"type": ["object"],
+				"required": ["nom", "ll"],
+				"properties": {
+					"nom": {
+						"description": "Nom de les resolucions del GetCoverage",
+						"type": "string" 
+					},
+					"CRS": {
+						"description": "CRS en que la capa està dispoinble. Opcional, si no s'indica s'assumeix que la cap està disponible en tots els CRSs",
+						"type": "string" 
+					},
+					"ll": {
+						"description": "Resolucions de GetCoverage",
+						"type": "object",
+						"properties": {
+							"x":{
+								"description": "Component x dels valors de la resolució del GetCoverage del WCS",
+								"$ref": "#/definitions/intervalValorsDescripcionsSel"
+							},
+							"y":{
+								"description": "Component y dels valors de la resolució del GetCoverage del WCS",
+								"$ref": "#/definitions/intervalValorsDescripcionsSel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"FormatDescarregaTot": {
+			"description": "Array de formats de descàrrega directe de la capa",
+			"type": ["array", "null"],
+			"items": {
+				"type": "object",
+				"required": ["format"],
+				"properties": {
+					"format":{
+						"description": "Nom i descripció del format admès per descàrrega directa",
+						"$ref": "#/definitions/nomDescripcio"
+					},
+					"extension": 
+					{
+						"description": "Extensió del fitxer sense punt",
+						"type": "string" 
+					}
+				}
+			}
+		},
+		"capesDeServei": {
+			"description": "Array de serveis que el navegador intentarà convertir en capes en iniciar",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {									
+					"servei": { 
+						"description": "Servei del que extreure capes",
+						"type": "object",
+						"properties": {									
+							"servidor": { 
+								"description": "Adreça i nom del servidor. Si és null s'agafa el ServidorLocal.",
+								"type": ["string", "null"],
+								"format": "uri"
+							},
+							"versio": { 
+								"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
+								"$ref": "#/definitions/versio" 
+							},
+							"cors": { 
+								"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+								"type": "boolean"
+							},
+							"tipus": {
+								"description": "Tipus de servei per aquesta capa. Si és null s'agafa el TipusServidorLocal.",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"$ref": "#/definitions/EnumTipusServidor" 
+								}]
+							},
+							"access": { 
+								"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
+								"$ref": "#/definitions/access"
+							}
+						}
+					},
+					"capa": {
+						"description": "Array de capes del servidor a importar. Si les capes ja existeixen només se sobreescriu l'array de dates (serveix per tenir una llista de time sempre actualitzada). Opcional, si no hi és s'importen totes.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nom"],
+							"properties": {		
+								"nom": { 
+									"description": "Nom de la capa del servidor que cal importar.",
+									"type": "string"
+								},
+								"desc": { 
+									"description": "Descripció de la capa del servidor que s'aplicarà al importar i que sobreescriu a la de les capacitats del servidor.",
+									"type": "string"
+								}
+							}
+						}
+					},
+					"dimensioPerCapa":{
+						"description": "Array de patrons (fórmules) per obtenir la descripció dels valors d'una dimensió.",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nom", "formulaDesc", "criteris"],
+							"properties": {
+								"nom": {
+									"description": "Nom identificador de la dimensió",
+									"type": "string"
+								},
+								"formulaDesc":{
+									"description": "Fórmula en JS a aplicar sobre cada un dels valors de la dimensió per obtenir la descripció del valor",
+									"type": "string"
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar la fórmula a una dimensió de una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"estilPerCapa": {
+						"description": "Estils a aplicar a les capes, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["estil", "criteris"],
+							"properties": {
+								"estil":{
+									"description": "Estil de simbolització a aplicar a les capes que cumpleixin els criteris establerts.",
+									"$ref": "#/definitions/estil"
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar l'estil a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"nodataPerCapa": {
+						"description": "Valors nodata a aplicar a les capes ràster, en funció d'un dels elements de la capa a les capacitats (com ara una paraula clau o el nom de la capa).",
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": ["nodata", "criteris"],
+							"properties": {
+								"nodata":{
+									"description": "Valors del nodata a aplicar a les capes que cumpleixin els criteris establerts.",
+									"type": "array",
+									"items": {
+										"description": "Valor del nodata",
+										"type": "number"
+									}
+								},
+								"criteris": {
+									"description": "Conjunt de criteris que cal complir per assignar l'array de nodata a una capa. Si hi ha més d'un criteri el nexe d'unió és AND",
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["clau", "valor"],
+										"properties": {
+											"clau": {
+												"description": "Nom del element de la capa que ha de contenir un cert valor",
+												"enum": ["keyword"]
+											},
+											"valor": {
+												"description": "Valor de l'element de la capa indicat a clau",
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+						
+					},
+					"capaDePunts": {
+						"description": "Id de la capa de punts que s'alimenta automàticament amb les posicions del centre de les envolupants les capes afegides. Resulta útil si el servei presenta capes que ocupen poca àrea però que estan allunyades entre elles i costen de veure en una vista general. L'array 'capa' anterior no influeix aquí i es mostren totes. Aquesta funcionalintat és opcional. Si no s'indica no s'alimenta cap capa",
+						"type": "object",
+						"properties": {									
+							"id": { 
+								"description": "Capa vectorial embeguda on inserir les posicions. La capa ha d'estar completament definida incluent l'array d'atributs. Ha de tenir també creat 'objectes' amb un array de 'features' que provablement tindrà 0 elements abans d'importar el servei.",
+								"type": "string"
+							},
+							"properties": {
+								"description": "Per a cada 'feature' la 'geometry' es calcula sola però les 'properties' a heretar de cada capa importada s'indiquen aquí. Recordeu que si no s'indica aquest nom al array d'atributs de la definició de la capa de punts, aquest no apareixerà. De moment pot ser 'nom', 'desc', 'CostatMinim', 'CostatMaxim', 'uriDataTemplate' i 'uriMDTemplate'",
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							}
+						}
+					}  
+				}
+			}
+		}, 
+		"capa":	{
+			"description": "Array de capes del navegador",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {									
+					"servidor": { 
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON o un CSV o és null si hi ha un CSV per cada un dels objectes ); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
+						"type": ["string", "null"],
+						"format": "uri"
+					},
+					"versio": { 
+						"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
+						"$ref": "#/definitions/versio" 
+					},
+					"cors": { 
+						"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+						"type": "boolean"
+					},
+					"tipus": {
+						"description": "Tipus de servei per aquesta capa. Si el 'model' és 'ràster' i és null s'agafa el TipusServidorLocal. Si el 'model' és 'vector' i és null s'enten que els objectes estan predefinits i no cal anar a un servidor.",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"$ref": "#/definitions/EnumTipusServidor" 
+						}]
+					},
+					"configCSV": {
+						"description": "En el cas de que tinguem un o diversos CSV que s'usen per omplir els objectes i/o les característiques dels objectes, cal definir algunes propietats del CSV per poder fer la transformació correctament.",
+						"type": "object",
+						"properties": {
+							"separadorCamps": {
+								"description": "Delimitador o separador dels camps en el CSV. Típicament potser ';' o ','. Si no s'indica s'inteterà deduir. ",
+								"type": "string"
+							},
+							"nomCampDateTime": {
+								"description": "Nom del camp del CSV que conté la data-hora del registre. Això s'usarà per omplir l'array de dates de la capa a 'capa.data' i s'usarà en els camps que siguin 'serieTemporal'.",
+								"type": "string"
+							}
+						}
+					},
+					"access": { 
+						"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
+						"$ref": "#/definitions/access"
+					},
+					"model": {
+						"description": "Model de dades de la capa. Si no es defineix es determina automàticament.",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"enum": ["raster", "vector"]
+						}]
+					},
+					"namespace": {
+						"description": "Espai de noms utilitzat. Només s'usa quan el 'model' és 'vector'. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
+						"type": ["string", "null"]
+					},
+					"id":	{ 
+						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de la capa a l'array. Indiqueu un 'id' si la capa no te nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors. L'id indicat aquí identifica la capa del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+						"type": ["string", "null"]
+					},					
+					"nom":	{ 
+						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan 'model' és 'ràster'.",
+						"type": ["string", "null"]
+					},
+					"desc": { 
+						"description": "Descripció de la capa al servidor o digitalitzada",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"atribucio": { 
+						"description": "Entitat a qui cal atribuir l'autoria de les dades de la capa. Opcional",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},	
+					"CRS": { 
+						"description": "Els sistemes de referència en que la capa està disponible (normalment perquè els servidor no pot servir altres CRS que no siguin els de la llista). Opcional. Si és null vol dir que està disponible en tots el CRS de ImatgeSituacio. En model vectorial i en els ràsters de TIFF (COG), és sempre possible passar d'un CRS a un altre i per tant, normalment no és útil limitar-ho i es deixa a null.",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Sistema de referència en que la capa està disponible",
+							"type": "string",
+							"format": "uri"
+						}
+					},
+					"objLimit": {
+						"description": "Nombre màxim d'objectes a representar en una tessel·la vectorial, quan el nombre d'objectes en una tessel·la superi aquest nombre es mostrarà una icona amb el nombre d'objectes contingut a la tessel·la. Si no hi és o val -1 vol dir que no es vol aplicar cap límit. Només aplica quan el 'model' és 'vector'.",
+						"type": "number"
+					},
+					"CRSgeometry": { 
+						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
+						"type": ["string", "null"],
+						"format": "uri"
+					},
+					"tileMatrixSetGeometry": {
+						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
+						"type": ["object", "null"],
+						"properties": {	
+							"atriObjNumerics": {
+								"description": "Array que descriu les propietats dels objectes de tipus numèric (definits a tileMatrix com a 'objNumerics' i obtinguts dinàmicament). Hi haurà el nom del camp que serà usat per crear els 'objNumerics' i per simbolitzar la font d'aquests objectes. Si no s'indica res, es crearà automàticament amb el nom '__nObjsTessella'",
+								"$ref": "#/definitions/descripcioAtributs"			
+							},			
+							"tileMatrix":  {
+								"description": "Array de tileMatrix amb els paràmetres de tessel·lació.",
+								"allOf": [
+									{ 	"$ref": "#/definitions/tileMatrix"},
+									{
+										"properties": {
+											"objNumerics" : 
+											{ 	
+												"description": "Interna No usar. Array d'objectes amb el nombre d'objectes de cada una de les tessel·les del tileMatrix que ha estat sol·licitada i que conté un nombre d'objectes superior al límit per tessel·la.",								
+												"$ref": "#/definitions/featureCollection"
+											}
+										}
+									}		
+								]									
+							},	
+							"tilesSol": {
+								"description": "Interna; no usar. Array de tiles sol·licitats. Si la capa no té 'ObjLimit' només n'hi haurà un, sinó se'n crearan de manera paral·lela als nivells de zoom de la capa fins que totes les tessel·les continguin objectes i no només el nombre d'objectes inclosos.",								
+								"type": ["array", "null"],
+								"items": {																		
+									"type": "object",
+									"properties": {										
+										"iTile": {											
+											"description": "Índex de tessel·la en l'eix de les x.",								
+											"type": "number"
+										},
+										"jTile": {											
+											"description": "Índex de tessel·la en l'eix de les y.",								
+											"type": "number"
+										},
+										"costat": {
+											"description": "Costat de píxel (nivell de zoom) del TileMatrix.",
+											"type": "number"
+										},
+										"nombreObjectes": {
+											"description": "Nombre d'objectes de la tessel·la. -1 indica desconegut.",								
+											"type": "number"
+										}													
+									}
+								}										
+							}
+						}
+					},
+					"TileMatrixSet":{
+						"description": "Descripció de les TileMatrixSet suportades per la capa o null si la capa no és WMTS. Només aplica quan el 'model' és 'raster'.",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Descripció i paràmetres de la TileMatrixSet",
+							"type": "object",
+							"properties": {								
+								"nom": { 
+									"description": "Nom del TileMatrixSet suportat per la capa. Obligatori per WMTS però opcional per WMS-C",
+									"type": ["string", "null"]
+								},
+								"CRS": { 
+									"description": "Sistema de referència del TileMatrixSet",
+									"type": "string",
+									"format": "uri"
+								},
+								"URLTemplate": { 
+									"description": "Plantilla URL de la capa WMTS REST. Deixeu-ho a null en els altres casos",
+									"type": ["string", "null"]
+								},
+								"TileMatrix":  {
+									"description": "Array de tileMatrix amb la seva descripció i paràmetres de tessel·lació",
+									"$ref": "#/definitions/tileMatrix"
+								}
+							}
+						}
+					},
+					"EnvTotal": {
+						"description": "Envolupant total de la capa. Opcional",
+						"oneOf":[{
+								"type": "null"
+							},
+							{
+								"$ref": "#/definitions/envolupantCRS_2D" 
+							}
+						]
+					},
+					"EnvTotalLL": {
+						"description": "Interna; no usar. Envolupant total de la capa traduida a Lat/Long",
+						"$ref": "#/definitions/envolupant2D" 
+					},					
+					"FormatImatge": { 
+						"description": "Format en que s'ha de demanar la capa al servidor per a la visualització. Malgrat el nom també aplica per vectors. En vectors, si no s'indica es considera XML. És un format MIME excepte per wmts-rest que és l'extensió del fitxer amb punt o sense.",
+						"type": ["string", "null"]
+					},
+					"objectes": {
+						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
+						"$ref": "#/definitions/featureCollection"
+					},				
+					"attributes": {
+						"description": "Objecte que conté noms que descriuen les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector'. En el model ràster està dins de cada estil.",
+						"$ref": "#/definitions/descripcioAtributs"			
+					},			
+					"valors": {
+						"description": "Descripció dels valors d'aquesta capa. Està definit com un array per permetre WMS amb dimensions extra (p.ex. per comunicar multibandes). Sol ser necessari incloure cada un d'aquest valors com a mínim en un estil usant les 'component' amb 'i_valor':i o en una FormulaConsulta com v[i] (on i és l'índex d'ordre aquest array. Obligatori quan el FormatImatge és application/x-img o image/tiff. Només aplica quan el 'model' és 'raster'",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Descripció dels valors",
+							"type": ["object"],
+							"properties": {								
+								"param": { 
+									"description": "Llistat de paràmetres (o dimensionsExtra) (clau i valor) que descriuen noms de dimensions-extra del WMS i valors per obtenir la banda en questió. Aquest mecanisme està dissenyat per poder descriure cada combinació de valors de dimensions per separat. És òptim per una sola dimensió amb poques poques possibilitats, quan les combinacions de valors de dimensions tenen poques possibilitats vàlides o quan és necessari incloure alguna combinació en una FormulaConsulta. Hi ha un mecanisme complementari a aquest per definir les dimensions de manera independent (vegeu 'dimensioExtra') i que es pot utilitzar junt amb aquest per descriure altres dimensions. Opcional. També s'usa en capes calculades per indicar les dimensions i els valors selccionats necessaris per omplir 'valors', en aquest cas es tracta d'un paràmetre INTERN. Pot ser null",
+									"type": ["array", "null"],
+									"items": {
+										"description": "Paràmetres (clau i valor)",
+										"type": "object",
+										"properties": {
+											"clau": {
+												"description": "Nom i descripció de la clau. Per exemple 'DIM_band' i 'Band'",
+												"$ref": "#/definitions/nomDescripcio"
+											},
+											"valor": {
+												"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
+												"$ref": "#/definitions/nomDescripcio"
+											},
+											"esExtra": {
+												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres."
+											}
+										}
+									}
+								},
+								"datatype": { 
+									"description": "Tipus de dades dels valors",
+									"enum": [ "int8", "uint8", "int16", "uint16", "int32", "uint32", "float32", "float64" ]
+								},
+								"compression": { 
+									"description": "En quin format l'array de valors està comprimit",
+									"enum": [ null, "RLE" ]
+								},
+								"nodata": { 
+									"description": "Valors del nodata",
+									"type": "array",
+									"items": {
+										"description": "Valor del nodata",
+										"type": "number"
+									}
+								},
+								"url": {
+									"description": "Si cada valor està contingut en un fitxer diferent, part final del nom del fitxer llegit amb TipusHTTP_GET que es concatena amb 'servidor'. Només aplica per TIFF. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre llegir una capa multitime. Opcional. Si no s'indica es fa servir 'servidor' sense afegir res",
+									"type": ["string", "null"],
+									"format": "uri"
+								},
+								"iBand": {
+									"description": "Index de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
+									"type": "number"
+								},
+								"arrayBuffer": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal",
+									"type": "string",
+									"contentEncoding": "binary"
+								},
+								"arrayBufferPrint": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la impressió",
+									"type": "string",
+									"contentEncoding": "binary"
+								},
+								"capa_rodet": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tot el rodet. N'hi ha tants com capa.data.length",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'un frame del rodet",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
+											}
+										}
+									}
+								},
+								"capa_video": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tots els fotogrames del video. N'hi ha tants com capa.data.length",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'un fotograma del video",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
+											}
+										}
+									}
+								},
+								"nova_capa": {
+									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de tots els fotogrames del video. N'hi ha tants com noves vistes",
+									"type": "array",
+									"items": {
+										"description": "L'array binari de valors d'una nova vista",
+										"type": "object",
+										"properties": {
+											"arrayBuffer": {
+												"description": "L'array binari de valors",
+												"type": "string",
+												"contentEncoding": "binary"
+											}
+										}
+									}
+								},
+								"i_capa": { 
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra capa en un estil tipus 'calcul'",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1									
+								},
+								"i_data": { 
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul'",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1									
+								},
+								"i_valor": { 
+									"description": "INTERN: s'afegeix programaticament si la banda usa una altra banda en un estil tipus 'calcul'",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1
+								},
+								"objectes": { 
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul' on es fa una condició vectorial sobre una capa ràster. Es un 'punter' als objectes de la capa vectorial",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf": 1									
+								}
+							}
+						}
+					},
+					"dimensioExtra": {
+						"description": "Llistat de paràmetres (clau i valor) que descriuen noms de dimensions-extra del WMS i els valors vàlids per cada una. Aquest mecanisme està dissenyat per poder descriure les dimensions de manera indepentent. És l'únic mecanisme possible quan FormatImatge NO és application/x-img. Quan el FormatImatge és application/x-img, resulta òptim per a dimensions amb moltes posibilitats o quan hi ha més d'una dimensió i totes les combinacións de valors de dimensions són vàlides. Aquestes dimensions es poden incloure en una fórmula i, per tant, es poden fer càlculs entre combinacions. Hi ha un mecanisme complementari a aquest per definir les combinacions de dimensions de manera directe (vegeu 'valors.param') i que es pot utilitzar junt amb aquest per descriure altres dimensions. Opcional; només per capes raster; pot ser null",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Descripció de la clau i els valors d'una dimensió",
+							"type": "object",
+							"properties": {
+								"clau": {
+									"description": "Nom i descripció de la clau. Per exemple 'DIM_band' i 'Band'",
+									"$ref": "#/definitions/nomDescripcio"
+								},
+								"formulaDesc":{
+									"description": "Fórmula en JavaScript(per exemple: valor.substring(0,4)+'-'+valor.substring(4,6)+'-'+valor.substring(6,8)) a aplicar sobre els valors de la dimensió per obtenir la descripció del valor.",
+									"type": "string"
+								},
+								"valor": {
+									"type": ["array"],
+									"items": {
+										"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
+										"$ref": "#/definitions/nomDescripcio"
+									}
+								},
+								"i_valor": {
+									"description": "Índex de valor que es mostrarà seleccionat, començant des de 0",
+									"type": "number",
+									"minimum": 0,
+									"multipleOf" : 1
+								}
+							}
+						}
+					},
+					"transparencia":	{
+						"description": "Indica si la capa pot ser potencialment transparent o semitransparent en la visualització: no (opac), si (transparent) o semitransparent. Opcional",
+						"enum": ["opac", "transparent", "semitransparent"]
+					},															
+					"CostatMinim": {
+						"description": "Costat mínim dels nivells de zoom suportats per la capa. Opcional. Si no s'indica s'assumeix el zoom més petit",
+						"type": "number",
+						"minimum": 0
+					},
+					"CostatMaxim":	{
+						"description": "Costat màxim dels nivells de zoom suportats per la capa. Opcional. Si no s'indica s'assumeix el zoom més gran",
+						"type": "number",
+						"minimum": 0
+					},														
+					"FormatConsulta": { 
+						"description": "Format en que s'ha de demanar la capa al servidor per a la consulta per localització. És un format MIME excepte per wmts-rest que és l'extensió del fitxer amb punt o sense. Si la capa no és consultable es deixa a null. No aplica per a capes digitalitzades",
+						"type": ["string", "null"]
+					},
+					"grup":	{ 
+						"description": "Nom del grup de la capa. Les capes del mateix grup es consideren alternatives l'úna de l'altre. Opcional.",
+						"type": ["string", "null"]
+					},				
+					"separa": { 
+						"description": "Separador de capes a la llegenda. Opcional.",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"DescLlegenda": { 
+						"description": "Descripció de la capa per la llegenda. Opcional.",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},	
+					"estil": {					
+						"description": "Array d'estils en que la capa es pot presentar. Opcional si es demana l'estil per defecte",
+						"type": ["array", "null"],
+						"items": {
+							"$ref": "#/definitions/estil" 
+						}
+					},
+					"i_estil": {
+						"description": "Índex de l'estil que es mostrarà seleccionat, començant des de 0",
+						"type": "number",
+						"minimum": 0,
+						"multipleOf" : 1
+					},
+					"NColEstil": {
+						"description": "Nombre de columnes de la llista d'estils d'aquesta capa.",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"LlegDesplegada": {
+						"description": "Els ítems de la llegenda estan desplegats per aquesta capa?. Opcional. Per defecte és false", 
+						"type": "boolean"
+					},					
+					"VisibleALaLlegenda": {
+						"description": "La capa és visible a la llegenda?. Opcional. Per defecte és true", 
+						"type": "boolean"
+					},
+					"visible": {
+						"description": "Estat de visibilitat de la capa. Possibilitats: mai (no), es mostra no visible però l'usuari la pot activar (ara_no), si (si, semitransparent). Opcional. Per defecte és 'si'", 
+						"enum": ["no", "ara_no", "si", "semitransparent"]
+					},
+					"visible_vista": {
+						"description": "Array dels índexs de les divisions (layers) de vista que inclouen aquesta capa. Opcional: null vol dir totes",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Índex de divisió (layer) que han de contenir la capa. L'ordre està definit en l'array de vista",
+							"type": "number",
+							"minimum": 0,
+							"multipleOf" : 1
+						}
+					},
+					"consultable": {
+						"description": "Estat de la capa per a la consulta. Possibilitats: mai (no), no està consultable però l'usuari la pot activar (ara_no), si (si). Opcional. Per defecte és 'si'", 
+						"enum": [null, "no", "ara_no", "si"]
+					},																				
+					"descarregable": {
+						"description": "La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage'. Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no', No té sentit quan el 'model' és 'vector'.", 						
+						"enum": [null, "no", "ara_no", "si"]
+					},
+					"ParamCoverage": {
+						"description": "Índex (començant per 0) de ParGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
+					},
+					"FormatCoverage": {
+						"description": "Índex (començant per 0) de FormatGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
+					},
+					"ResCoverage":	{
+						"description": "Índex (començant per 0) de ResGetCoverage que se suporta en aquesta capa. No existeix quan el 'model' és 'vector'.",
+						"oneOf": [{
+							"type": "integer",
+							"minimum": 0
+						},
+						{
+							"type": "null"
+						}] 
+					},
+					"DescarregaTot": {
+						"description": "Array de descàrregues directes per aquesta capa. Si la capa és TipusHTTP_GET i no s'indica, es construeix automàticament",
+						"type": ["array", "null"],
+						"items": {
+							"required": ["url", "format"],
+							"type": ["object"],
+							"properties": {
+								"desc": { 
+									"description": "Descripció del contingut de la descàrrega",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								},
+								"url": {
+									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FormulaConsulta només si la darrera involucra un sol v[]. Si no hi ha cap paràmetre DIM, s'assumeix que totes les dimensions extra s'empaqueten en un sol fitxer.",
+									"type": "string",
+									"format": "uri"
+								},
+								"format": {
+									"description": "Array d'index de FormatDescarregaTot",
+									"type": ["array", "null"],
+									"items": {
+										"description": "Índex (començant per 0) de la descripció del format a FormatDescarregaTot que aquesta capa suporta",
+										"type": ["number", "null"],
+										"minimum": 0,
+										"multipleOf" : 1
+									}
+								}
+							}
+						}
+					},
+					"metadades": {
+						"description": "Metadades per aquesta capa. Opcional.",
+						"$ref": "#/definitions/metadades"
+					},
+					"explanation":
+					{
+						"description": "URL multidiomàtica que defineix o explica que és el contingut de la capa.",
+						"$ref": "#/definitions/URLLangoStringOCadenaLang" 
+					},
+					"NomVideo": { 
+						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el 'model' és 'raster'.",
+						"type": ["string", "null"]
+					},
+					"DescVideo": { 
+						"description": "Descripció del vídeo. Totes les capes amb el mateix nom de vídeo es mostren animades. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.desc. Només aplica quan el 'model' és 'raster'.",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					},
+					"FlagsData": {
+						"description": "Opcions de mostrar les dades d'una manera més fàcil d'interpretar. Si no s'indica els desplegables de data surten en blanc.",
+						"type": ["object", "null"],
+						"properties": {
+							"DataMostraAny": {
+								"description": "Mostrar l'any", 
+								"type": "boolean"
+							},
+							"DataMostraMes": {
+								"description": "Mostrar el mes", 
+								"type": "boolean"
+							},
+							"DataMostraDia": {
+								"description": "Mostrar el dia", 
+								"type": "boolean"
+							},
+							"DataMostraHora": {
+								"description": "Mostrar l'hora", 
+								"type": "boolean"
+							},
+							"DataMostraMinut": {
+								"description": "Mostrar el minut", 
+								"type": "boolean"
+							},
+							"DataMostraSegon": {
+								"description": "Mostrar el segon", 
+								"type": "boolean"
+							},
+							"DataMostraDescLlegenda": {
+								"description": "Mostrar descripció de la llegenda", 
+								"type": "boolean"
+							},
+							"properties": {
+								"description": "Propietats a mostrar al desplegable de dades de la llegenda (p.ex. Qualitat, recobriment...). Opcional", 
+								"type": "array",
+								"items": {
+									"description": "Una propietat",
+									"type": "object",
+									"properties": {
+										"DescLlegenda": { 
+											"description": "Descripció del paràmetre. Ha de ser molt curt perquè els desplegable de dates no es faci molt ample",
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+										},
+										"desc": { 
+											"description": "Descripció del paràmetre. Sense limitacions d'espai. De moment no es fa servir. Opcional",
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+										},
+										"formula": { 
+											"description": "Fòrmula que s'avaluarà per obtenir el valor del paràmetre. Les variables han de començar per data i tenen l'estructura #/definitions/data. Generalment consulten membres de histo. p.ex.  data.histo.classe_nodata",
+											"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+										},
+										"unitats": {
+											"description": "Unitats del resultat de la fòrmula. Opcional",
+											"type": "string" 
+										}
+									}
+								}	  
+							}
+						}
+					},
+					"data":	{
+						"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo. Aplica quan el 'model' és 'raster' o quan el 'model' és 'vector' i s'ha definit algun 'atribut' com a 'serieTemporal'",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Data disponible per la capa",
+							"$ref": "#/definitions/data" 
+						}
+					},
+					"i_data": { 
+						"description": "Índex de data seleccionada per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc. Només aplica quan el 'model' és 'raster'.",
+						"type": ["number", "null"],
+						"minimum": -1,
+						"multipleOf" : 1
+					},
+					"animable":	{
+						"description": "La capa participa d'un vídeo. Opcional. Per defecte val false. Només aplica quan el 'model' és 'raster'.", 
+						"type": ["boolean", "null"]
+					},
+					"AnimableMultiTime": {
+						"description": "Necessari per forçar un desplegable de temps a la llegenda. Opcional. Per defecte val false. En el model ràster també indica que cal usar l'array de data per fer el vídeo.", 
+						"type": ["boolean","null"]
+					},
+					"proces": {
+						"description": "Array de processos a serveis WPS 1.0.0 lligats a aquesta capa. Només aplica quan el 'model' és 'raster'. Opcional",
+						"type": ["array", "null"],
+						"items": {
+							"type": ["object"],
+							"properties": {
+								"operacio": {
+									"description": "Operació (No pot ser un array)",
+									"type": ["object"],
+									"properties": {
+										"servidor": {
+											"description": "URL del servei de processos",
+											"type": "string",
+											"format": "uri"
+										},
+										"versio": { 
+											"description": "Versió del servei de processos",
+											"$ref": "#/definitions/versio" 
+										},
+										"cors": { 
+											"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
+											"type": "boolean"
+										},
+										"id_operacio": {
+											"description": "Nom i descripció de l'operació",
+											"$ref": "#/definitions/nomDescripcio"
+										},
+										"par_input": { 
+											"description": "Paràmetres d'entrada de l'operació",
+											"$ref": "#/definitions/paramProces" 
+										},
+										"par_output": { 
+											"description": "Paràmetres de sortida de l'operació",
+											"$ref": "#/definitions/paramProces" 
+										}
+									}
+								},
+								"capa_wps": {
+									"description": "fitxer o url de la capa que s'està visualitzant accessible pel servidor de processos que executarà la operació",
+									"type": "string",
+									"format": "uri"
+								}
+							}
+						}
+					},
+					"ProcesMostrarTitolCapa": {
+						"description": "Mostrar el títol del capa en el procés. Només aplica quan el 'model' és 'raster'.", 
+						"type": ["boolean","null"]
+					},
+					"editable": {
+						"description": "Estat de la capa per l'edició. Possibilitats: mai (no), no està editable però l'usuari la pot activar (ara_no), si (si). Només aplica quan el 'model' és 'vector'.", 
+						"enum": [null, "no", "ara_no", "si"]
+					},
+					"FuncioEdicio": {
+						"description": "Nom de la funció que s'executa si la capa és la seleccionada per la edició. Opcional. Només aplica quan el 'model' és 'vector'.",
+						"type": ["null", "string"]
+					},
+					"origen": {
+						"description": "INTERN: s'afegeix programaticament. Origen de la capa. Permet saber si és una capa definida al navegador original, si és definida per l'usuari o si és importada. Té implicacions amb les opcions permeses amb aquesta capa (per exemple només es podran esborrar les capes pròpies o importades, o només es podran compartir les capes pròpies)",
+						"enum": [null, "usuari"] 
+					}
+				}
+			}
+		}
+	},
+	"definitions":{ 
+		"versio": {
+			"description": "versio",
+			"type": ["object", "null"],
+			"required": ["Vers", "SubVers"],
+			"properties": {
+				"Vers":	{ "type": "number", "minimum": 0, "multipleOf" : 1 },
+				"SubVers":	{ "type": "number", "minimum": 0, "multipleOf" : 1 },
+				"VariantVers":	{ "type": ["string", "number", "null"] }
+			}
+		},		
+		"URLLangOStringOCadenaLang" :{
+			"description": "objecte que pot contenir una URL multidiomàtica o un text també multidiomàtic",			
+			"oneOf":[{
+					"type": "null"
+				},
+				{
+					"type": "object",
+					"properties": {
+						"URL":	{ 
+							"description": "URL única o multidiomàtica",
+							"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+						}
+					}
+				},
+				{
+					"type": "object",
+					"properties": {
+						"text":	{ 
+							"description": "text únic o multidiomàtic",
+							"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+						}
+					}
+				}
+			]
+		},
+		"EnumTipusServidor": {
+			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG i GeoJSON. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET", "TipusOAPI_Coverages"]
+		},
+		"access": 
+		{
+			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. En aquest cas cal incloure al index.htm la llibreria 'hello.js', la 'authen.js' i les 'authen*.js que s'indiquin a tokenType.", 
+			"type": "object",
+			"properties": {
+				"tokenType": {
+					"description": "Nom del servei d'autentificació.", 
+					"enum": ["authenix", "wqems"]
+				},
+				"request": {
+					"description": "Llista de requests que necessiten autentificació", 
+					"type": ["null", "array"],
+					"items": {
+						"description": "Request que necessita autentificació", 
+						"enum": ["transaction", "capabilities", "consultaLink", "map"]
+					}
+				}
+			}
+		},
+		"envolupantCRS_2D": {
+			"description": "Envolupant 2D i CRS",
+			"type": "object",	
+			"required": ["EnvCRS", "CRS"],
+			"properties": {
+				"EnvCRS": { "$ref": "#/definitions/envolupant2D" },
+				"CRS":	{ "type": "string", "format": "uri" }
+			}
+		},
+		"envolupant2D": {
+			"description": "Envolupant 2D",
+			"type": "object",
+			"required": ["MinX", "MaxX" , "MinY", "MaxY"],
+			"properties": {
+				"MinX":	{ "type": "number" },
+				"MaxX": { "type": "number" },
+				"MinY":	{ "type": "number" },
+				"MaxY":	{ "type": "number" }
+			}
+		},
+		"punt2D": {
+			"description": "Punt 2D",
+			"type": "object",
+			"properties": {
+				"x": { "type": "number" },
+				"y": { "type": "number" }
+			}		
+		},
+		"tileMatrix": {
+			"description": "Descripció i paràmetres dels TileMatrixs",
+			"type": ["array"],
+			"items": {
+				"description": "Descripció i paràmetres d'un TileMatrix",
+				"type": "object",
+				"properties": {																	
+					"Identifier":	{ 
+						"description": "Identificador del TileMatrix",
+						"type": "string"
+					},
+					"costat": {
+						"description": "Costat de píxel (nivell de zoom) del TileMatrix",
+						"type": "number",
+						"minimum": 0
+					},
+					"TopLeftPoint":	{
+						"description": "Posició de la coordenada del origen superior esquerra del tallat del TileMatrix",
+						"$ref": "#/definitions/punt2D" 
+					},
+					"TileWidth":	{
+						"description": "Ample de cada tessel·la en píxels per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"TileHeight": {
+						"description": "Alt de cada tessel·la en píxels per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MatrixWidth": {
+						"description": "Nombre de tessel·les en la direcció x per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					},
+					"MatrixHeight": {
+						"description": "Nombre de tessel·les en la direcció y per aquest TileMatrix",
+						"type": "number",
+						"minimum": 1,
+						"multipleOf" : 1
+					}
+				}
+			}
+		},
+		"aspecteLlegenda":	{
+			"description": "Elements per condicionar l'aspecte de la llegenda",
+			"type": "object",
+			"properties": {
+				"CapcaleraLlegenda": {
+					"description": "Text inicial, abans de les entrades de les capes de la llegenda",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"PeuLlegenda":	{
+					"description": "Text final, després de les entrades de les capes de la llegenda",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"PreviSepara":	{
+					"description": "Format HTML que es posa abans del separador entre capes de la llegenda",
+					"type": "string" 
+				},
+				"PostSepara": {
+					"description": "Format HTML que es posa després del separador entre capes de la llegenda",
+					"type": "string" 
+				},
+				"PreviDescLlegenda": {
+					"description": "Format HTML que es posa l'inici del títol de la capa a la llegenda",
+					"type": "string" 
+				},
+				"PostDescLlegenda": {
+					"description": "Format HTML que es posa al final del títol de la capa a la llegenda",
+					"type": "string" 
+				},
+				"PreviDescLlegendaGris": {
+					"description": "Format HTML que es posa l'inici del títol de la capa a de la llegenda quan aquesta està gris",
+					"type": "string" 
+				},
+				"PostDescLlegendaGris": {
+					"description": "Format HTML que es posa al final del títol de la capa a de la llegenda quan aquesta està gris",
+					"type": "string" 
+				},
+				"PreviDescEstil": {
+					"description": "Format HTML que es posa l'inici del nom del estil de la capa a la llegenda",
+					"type": "string" 
+				},
+				"PostDescEstil":	{
+					"description": "Format HTML que es posa al final del nom del estil de la capa a la llegenda",
+					"type":"string" 
+				},
+				"PreviDescEstilGris": {
+					"description": "Format HTML que es posa l'inici del nom del estil de la capa a la llegenda quan aquesta està gris",
+					"type": "string" 
+				},
+				"PostDescEstilGris":	{
+					"description": "Format HTML que es posa al final del nom del estil de la capa a la llegenda quan aquesta està gris",
+					"type":"string" 
+				},
+				"PreviDescItems": {
+					"description": "Format HTML que es posa a l'inici de la descripció de tots els ítems de la llegenda de la capa a la llegenda. A vegades conté les unitats, etc",
+					"type": "string" 
+				},
+				"PostDescItems": {
+					"description": "Format HTML que es posa al final de la descripció de tots els ítems de la llegenda de la capa a la llegenda",
+					"type": "string" 
+				},
+				"PreviDescColor":	{
+					"description": "Format HTML que es posa a l'inici de la descripció de cada ítem (color o símbol) de la llegenda de la capa a la llegenda",
+					"type": "string" 
+				},
+				"PostDescColor": {
+					"description": "Format HTML que es posa al final de la descripció de cada ítem (color o símbol)de la llegenda de la capa a la llegenda",
+					"type": "string" 
+				}
+			}
+		},
+		"itemLleg": {
+			"description": "Descripció i propietats dels ítems de la llegenda",
+			"type": ["array", "null"],
+			"items": {
+				"type": ["object"],
+				"properties": {
+					"color":	{
+						"description": "Nom del color o el nom del fitxer que fa de símbol (això darrer si 'TipusObj' és 'S')",
+						"type": "string"												
+					},
+					"DescColor": { 
+						"description": "Descripció del color o del símbol que surt a la llegenda",
+						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+					}
+				}
+			}
+		},
+		"HexaOrJSONColor": 
+		{
+			"oneOf": [
+				{
+					"description": "Color de la paleta en format #RRGGBB o en format RGB(r,g,b) o RGBA(r,g,b,a) on r, g i b van de 0 a 255 i a va de 0 a 1 (on 0 es totalment transparent i 1 opac). Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
+					"type": "string"
+				},
+				{
+					"description": "JSON RGB color",
+					"type": "object",
+					"required": ["r", "g", "b"],
+					"properties": {
+						"r": { "type": "integer", "minimum": 0, "maximum": 255},
+						"g": { "type": "integer", "minimum": 0, "maximum": 255},
+						"b": { "type": "integer", "minimum": 0, "maximum": 255}
+					}
+				}
+			]
+		},
+		"paleta": {
+			"description": "Paleta de colors",
+			"type": "object",
+			"properties": {
+				"colors": {
+					"description": "Colors de la paleta",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"$ref": "#/definitions/HexaOrJSONColor"
+					}
+				},
+				"ramp": {
+					"description": "Palette colors defined by ramps. Internally it will be convered to 'colors'.",
+					"type": "array",
+					"minItems": 2,
+					"items": {
+						"type": "object",
+						"required": ["i_color", "color"],
+						"properties": {
+							"i_color": {
+								"description": "Index of the color in the pallete. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap with the previous index, in between colors will be linear interpolated",
+								"type": "integer",
+								"minimum": 0
+							},
+							"color": {
+								"$ref": "#/definitions/HexaOrJSONColor"
+							}
+						} 
+					}
+				}
+			}
+		},		
+		"estiramentPaleta": {
+			"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta. Pot ser que el rang de valors sigui més gran i la paleta 'saturi'",
+			"type": "object",
+			"properties": {
+				"valorMinim": {
+					"description": "Valor mínim",
+					"type": "number"
+				},
+				"valorMaxim": {
+					"description": "Valor màxim",
+					"type": "number"
+				},
+				"auto": {
+					"description": "Cal deteriminar el mínim i màxim de manera automàtica. Opcional. Valor per defecte és 'false'.",
+					"type": "boolean"
+				}
+			}
+		},
+		"colorIndexat": { 
+			"type": "object",
+			"required": ["paleta"],
+			"properties":{
+				"NomCamp": {
+					"description": "Nom del camp per triar el color d'omplir la forma",
+					"type": ["string", "null"]
+				},
+				"paleta": {
+					"description": "Paleta de colors per omplir l'interior de les formes. Pot ser un sol color per fer les formes de color constant",
+					"$ref": "#/definitions/paleta"
+				},
+				"estiramentPaleta": {
+					"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
+					"$ref": "#/definitions/estiramentPaleta" 											
+				}
+			}
+		},
+		"simbols": {
+			"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+			"type": ["array", "null"],
+			"items": {
+				"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, totes comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
+				"type": "object",
+				"required": ["simbol"],
+				"properties": {
+					"NomCamp": {
+						"description": "Nom del camp per triar el símbol o la forma a presentat a la vista",
+						"type": ["string", "null"]
+					},
+					"NomCampFEscala": {
+						"description": "Nom del camp per triar un factor d'escalat del símbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+						"type": ["string", "null"]
+					},
+					"simbol": {
+						"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Símbol o forma i camp",
+							"type": "object",
+							"required": ["icona"],
+							"properties": {
+								"ValorCamp": {
+									"description": "Valor del camp NomCamp per triar el símbol per presentat a la vista. Opcional si no s'indica s'assumeix simbol constant",
+									"type": ["string", "number", "boolean"]
+								},
+								"icona": {
+									"description": "icona",
+									"$ref": "#/definitions/icona" 
+								},
+								"IconaSel": {
+									"description": "icona quan està seleccionada a partir de 'NomCampSel'",
+									"$ref": "#/definitions/icona" 
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"formes": {
+			"type": ["array", "null"],
+			"items": {
+				"type": "object",
+				"properties": {
+					"interior": {
+						"description": "Com omplir l'interior de les geometries 2D",
+						"$ref": "#/definitions/colorIndexat"
+					},
+					"vora": { 
+						"description": "Com pintar les línies: vores de les geometries 2D o les geometries 1D",
+						"allOf": [
+							{ "$ref": "#/definitions/colorIndexat"},
+							{
+								"properties": {
+									"gruix": 
+									{
+										"description": "L'ample de la línia. És un array en preparació per possible indexat per camp",
+										"type": "object",
+										"properties": {
+											"amples": {
+												"type": ["array"],
+												"items": {
+													"type": "integer", 
+													"minimum": 0
+												}
+											}
+										} 
+									},
+									"patro": {
+										"description": "Patró de la línia. És un array en preparació per possible indexat per camp",
+										"type": "object",
+										"properties": {
+											"separacions": {
+												"type": ["array"],
+												"items": {
+													"description": "The same content as in canvas setLineDash. An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units)  (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash).",
+													"type": "array",
+													"items": {
+														"type": "integer", 
+														"minimum": 0
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						]
+					}
+				}
+			}
+		},
+		"fonts": {
+			"description": "Fonts per representat textos dels objectes digitalitzats",
+			"type": ["object", "null"],
+			"properties": {
+				"NomCamp": {
+					"description": "Nom del camp per triar l'estil per presentat a la vista",
+					"type": ["string", "null"]
+				},
+				"NomCampText": {
+					"description": "Nom del camp del text que es presentarà a la vista",
+					"type": ["string", "null"]
+				},
+				"aspecte": {
+					"description": "Estils pels textos dels objectes digitalitzats",
+					"type": ["array", "null"],
+					"items": {
+						"description": "Estil i camp",
+						"type": "object",
+						"properties": {
+							"ValorCamp": {
+								"description": "Valor del camp NomCamp per triar l'estil del text per presentat a la vista",
+								"type": "string"
+							},
+							"font": {
+								"description": "Font del text per presentat a la vista",
+								"type": "object",
+								"required": ["font", "i", "j"],
+								"properties": {
+									"font": {
+										"description": "Font (aspecte, mida,... ). Exemple '10px Verdana'.",
+										"type": "string"
+									},
+									"color": {
+										"description": "Color de text. Exemple '#B50000'.",
+										"type": "string"
+									},
+									"align": {
+										"description": "Tipus d'alineació horitzontal.",
+										"enum": ["left", "right", "center"]
+									},
+									"i": {
+										"description": "Offset de la posició de punt calent en l'eix de columnes, per exemple per no sobre posar el text amb una icona.",
+										"type": "number",
+										"multipleOf" : 1
+									},
+									"j": {
+										"description": "Offset de la posició del punt calent en l'eix de files",
+										"type": "number",
+										"multipleOf" : 1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"icona": {
+			"oneOf": 
+			[
+				{
+					"description": "Descripció d'una icona",
+					"type": "object",
+					"required": ["icona", "ncol", "nfil", "i", "j"],
+					"properties": {
+						"icona": {
+							"description": "URL del fitxer que fa d'icona (generalment un GIF, PNG o un altres format que el navegador sap pintar com a una imatge",
+							"type": "string",
+							"format": "uri"
+						},
+						"ncol": {
+							"description": "Nombre de columnes de la icona",
+							"type": "number",
+							"minimum": 1,
+							"multipleOf" : 1
+						},
+						"nfil": { 
+							"description": "Nombre de files de la icona",
+							"type": "number",
+							"minimum": 1,
+							"multipleOf" : 1
+						},
+						"i": {
+							"description": "Posició del píxel que fa de punt calent en l'eix de columnes. 0 vol dir l'extrem esquerra de la icona. El punt calent és el punt on s'apliquen les coordenades terreny. Per exemple, en una 'gota' el punt calent se situa sota la gota",
+							"type": "number",
+							"multipleOf" : 1
+						},
+						"j": {
+							"description": "Posició del píxel que fa de punt calent en l'eix de files. 0 vol dir l'exterm superior de la icona",
+							"type": "number",
+							"multipleOf" : 1
+						}
+					}
+				},
+				{
+					"description": "Cercle o quadrat renderitzat com un script en el canvas",
+					"type": "object",
+					"required": ["type"],
+					"properties": {
+						"type": {
+							"description": "És fàcil d'ampliar",
+							"enum": ["circle", "square"]
+						},						
+						"r": {
+							"description": "Radi del cercle o costat del quadrat. No compatible amb l'ús de a",
+							"type": "number"
+						},
+						"a": {
+							"description": "Àrea del cercle o del quadrat. No compatible amb l'ús de r",
+							"type": "number"
+						},
+						"unitats": 
+						{
+							"description": "Unitats base del ràdi o de l'àrea. El valors per defecte és 'px' (pixels)",
+							"enum": ["px", "m"]
+						},
+						"i": {
+							"description": "Offset de la posició del punt calent en l'eix de columnes. El punt calent és el punt on s'apliquen les coordenades terreny. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les columnes. ",
+							"type": "number",
+							"multipleOf" : 1
+						},
+						"j": {
+							"description": "Offset de la posició del punt calent en l'eix de files. 0 vol dir que el cercle o el quadrat que centrat en l'eix de les files.",
+							"type": "number",
+							"multipleOf" : 1
+						}
+					}
+				},
+				{
+					"description": "Descripció d'una forma que es pot renderitzar com un script en el canvas",
+					"type": "array",
+					"items": {
+						"oneOf": [
+						{
+							"type": "object",
+							"required": ["type", "r"],
+							"properties": {
+								"type": {
+									"enum": ["circle", "arc"]
+								},						
+								"r": {
+									"description": "Radi (en píxels) del arc de cercle",
+									"type": "number",
+									"multipleOf" : 1
+								},
+								"a_ini": {
+									"description": "Angle (en graus) d'inici de l'arc. Opcional. No indicar en el tipus cercle. Si no s'indica s'assumeix 0",
+									"type": "number",
+									"multipleOf" : 1
+								},
+								"a_end": {
+									"description": "Angle (en en graus) de fi de l'arc. Opcional. No indicar en el tipus cercle. Si no s'indica s'assumeix 360",
+									"type": "number",
+									"multipleOf" : 1
+								}
+							}
+						},
+						{
+							"type": "object",
+							"required": ["type", "coordinates"],
+							"properties": {
+								"type": {
+									"enum": ["polyline"]
+								},						
+								"coordinates": {
+									"type": "array",
+									"items": {
+										"type": "array",
+										"minItems": 2,
+										"maxItems": 2,
+										"items": {
+											"type": "number",
+											"multipleOf" : 1
+										}			
+									}
+								}
+							}
+						}]
+					}
+				}
+			]
+		},
+		"estil":{
+			"description": "Estil que pot presentar una capa",
+			"type": ["object"],
+			"required": ["TipusObj"],
+			"properties": {
+				"id":	{ 
+					"description": "Identificador únic per a l'estil en la capa. Si no s'indica, es copia del nom automàticament; si no hi ha nom i com a darrer recurs, es fa servir el número d'ordre de l'estil a l'array. Indiqueu un 'id' si l'estil no té nom. L'id indicat aquí identifica l'estil del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+					"type": ["string", "null"]
+				},								
+				"nom":	{ 
+					"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a  null",
+					"type": ["string", "null"]
+				},
+				"desc":	{ 
+					"description": "Descripció l'estil per la llegenda. Opcional si només n'hi ha un",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"definition": {
+					"description": "PENDENT: A URI that defines the observedProperty or the variable represented by this style. Normalment només s'usa en model raster, perquè els vectors ja tenen els attributes que descriuen això, però hi ha casos en que pot tenir sentit, per exemple unes corbes de nivell vectorial. You may find the right definitions in https://qudt.org/2.1/vocab/quantitykind, http://vocabs.lter-europe.net/EnvThes or https://www.eea.europa.eu/help/glossary/eea-glossary.",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
+				"UoM": {
+					"description": "PENDENT: Units of measurement of the variable represented by this style. Formerly refered as 'unitats'",
+					"type": [ "string", "null" ]
+				},
+				"UoMSymbol": {
+					"description": "PENDENT: Symbol of the units of measurement of the variable represented by this style.",
+					"type": [ "string", "null" ]
+				},
+				"UoMDefinition": {
+					"description": "PENDENT: A URI that defines the units of measurement of the variable represented by this style. You may find the right definitions in https://qudt.org/2.1/vocab/unit",
+					"type": [ "string", "null" ],
+					"format": "uri"
+				},
+				"DescItems": { 
+					"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"TipusObj":{ 
+					"description": "Tipus d'objecte per la llegenda. No aplica si hi ha 3 components. Pel model de dades ràster useu 'L' (línies rasteritzades), 'P' (polígons rateritzats, mapes categorics o imatges continues amb paleta) i 'I' (ortofotos i similars). Pel model de dades vector useu 'S' (símbols-punts) 'L' (línies) o 'P' (polígons) tenen sentit. No indicar per no desplegar valors a la llegenda",
+					"enum": [null, "L", "P", "S", "I"] 
+				},
+				"component": {
+					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": {
+						"description": "Membre de l'array de components del estil",
+						"type": "object",
+						"properties": {
+							"calcul": { 
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'una altra capa o una altra data (p.ex. pot servir per calcular la diferència entre dues dates d'una capa contínua, una combinació analítica entre dues capes categòriques, ...). Useu {'i_capa':0, 'i_valor':1, 'i_data':2} per indicar el segon valor de l'array de valors de la primera capa en el tercer temps, etc (també podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc). Només es pot fer servir si hi ha capa.valors a la capa indicada. Si no indiqueu i_capa s'assumeix 'aquesta' capa. Si no indiqueu i_data d'assumeix la data seleccionada (capa.i_data). i_data pot ser també un string que contingui una expressió matemàtica on '{i_sel}' representa la data capa.i_data (p.ex. '{i_sel}-1' vol dir la data anterior a la seleccionada a la capa). i_valor ha d'apuntar a una banda amb 'i_valor' (no pot ser un 'estil' amb 'calcul' o 'FormulaConsulta')",
+								"type": "string"
+							},
+							"FormulaConsulta": { 
+								"description": "Fórmula matemàtica per transformar els valors d'una o més bandes d'aquesta capa en la i_data seleccionada (p.ex. pot servir per reescalar el valor d'una banda, per fer un NDVI entre 2 bandes, ...). Useu v[0] per indicar el primer array de valors, etc. Pot usar referencies a selectors fetes amb {'i_sltr': }. Només es pot fer servir si hi ha capa.valors. Si voleu triar un valor d'un altre capa o un altre i_data useu 'calcul'",
+								"type": "string"
+							},
+							"formulaInterna": { 
+								"description": "Fórmula matemàtica igual a la 'FormulaConsulta' però sense referencies a selectors. Interna; No usar.",
+								"type": "string"
+							},
+							"i_valor": { 
+								"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha 'FormulaConsulta' o 'calcul'. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
+								"type": "number",
+								"minimum": 0,
+								"multipleOf": 1
+							},
+							"selector": {
+								"description": "Array de les selectors. Només es pot fer servir si la capa té 'FormulaConsulta' o un 'calcul'. Opcional",
+								"type": "array",
+								"items": {
+									"description": "Selector per una 'FormulaConsulta' o un 'calcul'. La intenció és saber més sobre els valors de l'estil. Primer es mira si l'estil té categories i es fan servir per crear un selector a la llegenda, i si no es mira si hi ha estiramentPaleta per inidicar un interval del rang de valors recomenats",
+									"type": "object",
+									"properties": {
+										"desc":  {
+											"description": "Descripció del selector",
+											"type": "number"
+										},
+										"valorActual": {
+											"description": "Valor actualment seleccionat",
+											"type": "number"
+										},
+										"categories": {
+											"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array",
+											"$ref": "#/definitions/descripcioCategories"
+										},
+										"attributes": {
+											"description": "Objecte que conté noms que descriuen les propietats de les categories d'aquesta component. Mireu les altres descripcions per a més detalls",
+											"$ref": "#/definitions/descripcioAtributs"	
+										},
+										"estiramentPaleta": {
+											"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica",
+											"$ref": "#/definitions/estiramentPaleta"
+										}
+									}
+								}
+							}, 
+							"illum": {
+								"type": "object",
+								"description": "The sun illuminates the DEM and generates an illumination effect. The result are numbers from 1 to -1. Anything below 0 means that it is illumnated 'form the opposite side' and it is considered 0 (so, no negative values). If this object is present a DEM is simplozed as illuminations that can be used to create shadows if a semitransparent layer is added on top.",
+								"properties": {
+									"az": {
+										"description": "Azimuth: Position of the sun versus the north expressen in degress. It is clockwise. Default value is  225 (sw)",
+										"type": "number",
+										"minimum": 0,
+										"maximum": 360 
+									},
+									"elev": {
+										"description": "Elevation from the ground in degress. 0 is sunset or sunrise. 90 is the maximum elevation possible. Default value is 45",
+										"type": "number",
+										"minimum": 0,
+										"maximum": 90
+									},
+									"f":{
+										"description": "The values of the DEM exageration factor. Default value is 1",
+										"type": "number",
+										"minimum": 1
+									} 
+								}
+							},
+							"representacio": {
+								"description": "Tipus de representació gràfica. Opcional",
+								"type": "object",
+								"required": ["tipus"],
+								"properties": {
+									"tipus": {
+										"description": "Externament es pot posar '3d' per forçar l'aparició de la visualització 3d al menú. El programa decideix automaticament si presentar un pie (si ni ha categories definides) o un histrograma, però podeu indicar 'pie' o 'bar' per forçar una decisió diferent a l'automàtica. S'afegeix programaticament en definir un combicapa (matriu de confusió). Opcional",
+										"enum": ["bar", "pie", "matriuConfusio", "3d"]
+									},
+									"dimMatriu": {
+										"type": "array",
+										"description": "INTERN: s'afegeix programaticament en definir l'origen de les dades de la matriu de confusió",
+										"items": {
+											"type": "object",
+											"properties": {
+												"i_capa": {
+													"type": "number",
+													"minimum": 0,
+													"multipleOf" : 1
+												},
+												"i_estil": {
+													"type": "number",
+													"minimum": 0,
+													"multipleOf" : 1
+												}
+											}
+										}
+									}
+								}
+							},
+							"tractament": {
+								"description": "Tractament de la component",
+								"$ref": "#/definitions/tractamentVariable" 
+							},
+							"desc":	{ 
+								"description": "Descripció de la component",
+								"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+							},
+							"NDecimals": { 
+								"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
+								"type": "number",
+								"minimum": 0,
+								"maximum": 20,
+								"multipleOf" : 1
+							},
+							"estiramentPaleta": {
+								"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
+								"$ref": "#/definitions/estiramentPaleta" 
+							},											
+							"herenciaOrigen": { 
+								"description": "INTERN: Propietats generalment de simbolització heratades de la capa original. De moment només s'utilitza per la transferència de camps estadístics.",
+								"type": "object",
+								"properties": {	
+									"nColors": {
+										"type": "number",
+										"minimum": 0,
+										"multipleOf" : 1
+									},
+									"categories" : { 
+										"description": "Llista de les descripcions alfanumèriques del valors numèrics d'aquesta component. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex. si els valors comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img.",
+										"$ref": "#/definitions/descripcioCategories"
+									},
+									"attributes": {
+										"description": "Objecte que conté noms que descriuen les propietats de les categories d'aquesta component. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+										"$ref": "#/definitions/descripcioAtributs"			
+									},
+									"tractament": {
+										"description": "Tractament de la variable",
+										"$ref": "#/definitions/tractamentVariable" 
+									}
+								}
+							}
+						}
+					}
+				},
+				"categories": {
+					"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
+					"$ref": "#/definitions/descripcioCategories"
+				},
+				"attributes": {
+					"description": "Objecte que conté noms que descriuen les propietats de les categories. Si un atribut no és aquí descrit no es mostra mai a les consultes (encara que estigui com a propietat a les categories). A més l'ordre dels atributs aquí mana ordre en que es mostren (i no el que hi ha a les categories. Només aplica si el 'model' és 'raster' en application/x-img. En el model vectorial està a la arrel de 'capa'.",
+					"$ref": "#/definitions/descripcioAtributs"
+				},
+				"metadades": { 
+					"description": "Metadades d'aquest estil.",
+					"$ref": "#/definitions/metadades"
+				},
+				"explanation":
+				{
+					"description": "URL multidiomàtica que defineix o explica que és el contingut de l'estil. Compte no confondre amb la 'definition' de la variable que apunta a un diccionari i no a una descripció pròpia.",
+					"$ref": "#/definitions/URLLangOStringOCadenaLang" 					
+				},
+				"nItemLlegAuto": {
+					"description": "Nombre d'ítems a la llegenda. Indica que la llegenda es genera automàticament a partir de la paleta (Deixeu ItemLleg a null). En la resta de casos, el nombre real d'ítems a la llegenda s'obté de ItemLleg.length). No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 0,
+					"multipleOf" : 1
+				},
+				"ItemLleg":	{
+					"description": "Array d'items per la llegenda de l'estil per a la llegenda. No aplica si hi ha 3 components. Permet definir els ítems de la llegenda manualment. Si es deixa a null, i en cas que hi hagi 'valors' (application/x-img), el navegador sap generar aquest array d'items de la llegenda automàticament en dues circumstàncies. Si està definit 'categories' i 'atributs' s'assumeix que l'assignació és 1 a 1 i es fa una llegenda categòrica. Si nItemLlegAuto>0 s'assumeix un estirament de paleta i es fa una llegenda numèrica. En el cas de vectors ha de ser null si la llegenda és automàtica (nItemLlegAuto>0) i hi ha una paleta",
+					"$ref": "#/definitions/itemLleg"
+				},
+				"ncol": {
+					"description": "Nombre de columnes dels ítems de la llegenda. No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 1,
+					"multipleOf" : 1
+				},								
+				"descColorMultiplesDe": {
+					"description": "El text que descriu els colors en la llegenda automàtica ha de ser múltiple d'aquest valor. No aplica si hi ha 3 components",
+					"type": "number",
+					"minimum": 0
+				},
+				"ColorMinimASota": {
+					"description": "Ordenar els colors generats automàticament a la llegenda posant el valor mínim a sota de tot a la llegenda (per defecte el valor més alt va a sota). No aplica si hi ha 3 components. Això pot ser útil per les capes que mostren elevacions on intuitivament esperes les elevacions més grans a dalt. Abans es deia ColorMinimPrimer (un nom que resultava poc clar i sembla significar el contrari).",
+					"type": "boolean"
+				},
+				"paleta": {
+					"description": "Té dues funcions. Paleta de colors o de símbols per contruir la llegenda de les capes WMS/WMTS renderitzades en el servidor i rebudes com imatges image/png o similars. Paleta de colors a aplicar a les capes WMS renderitzades al client i en FormatImatge application/x-img quan s'ha definit només 1 component; si no s'indica s'aplica una paleta de 256 grisos",
+					"$ref": "#/definitions/paleta"
+				},
+				"paletaPrevia": {
+					"description": "INTERN. Usat per guardar la paleta original si l'usuari decideix canviar-la i poder recuperar-la posteriorment.",
+					"$ref": "#/definitions/paleta"
+				},
+				"NomCampSel": {
+					"description": "Nom del camp que conté un càlcul/expressió de selecció que dona com a resultat un booleà per indicar si l'objecte està seleccionat. Si hi ha definit 'IconaSel' els objectes seleccionats (true) presenten aquesta icona i els no seleccionats (false) presenten 'icona'. Si no hi ha 'IconaSel' els objectes seleccionats (true) presenten 'icona' i els no seleccionats (false) no mostren icona (desapareixen). Opcional. Si no hi és, tots els objectes es representen com a no seleccionats. Només aplica per vectors",
+					"type": ["string", "null"]								
+				},
+				"estilTilesObjNum": {
+					"description" : "Estil de simbolització dels objectes que es generen per mostrar el nombre d'objectes que conté una tessel·la vectorial",
+					"type": "object",
+					"multipleOf": 1,
+					"properties": {									
+						"simbols": {
+							"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+							"$ref": "#/definitions/simbols"									
+						},										
+						"formes":{
+							"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+							"$ref": "#/definitions/formes"									
+						},			
+						"fonts":	{
+							"description": "Fonts per representat textos dels objectes digitalitzats",
+							"$ref": "#/definitions/fonts"									
+						}
+					}
+				},
+				"simbols": {
+					"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+					"$ref": "#/definitions/simbols"									
+				},
+				"formes": {
+					"description": "Com pintar les geometries (icones que són formes o objectes de tipus línia o polígon)",
+					"$ref": "#/definitions/formes"									
+				},	
+				"fonts": {
+					"description": "Fonts per representat textos dels objectes digitalitzats",
+					"$ref": "#/definitions/fonts"									
+				},
+				"histograma": {
+					"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
+					"$ref": "#/definitions/histograma"
+				},
+				"diagrama": 
+				{
+					"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": 
+					{
+						"description": "Estructura que descriu un diagrama, i explica el tipus de diagrama, l'índex de la vista i el component o components de l'estil (si aplica)",
+						"type": "object",
+						"required": ["tipus"],
+						"properties": 
+						{
+							"tipus": 
+							{
+								"description": "Tipus de diagrama descrit en aquest element. És necessari per saber com tractar i actualitzar aquest diagrama",
+								"enum": 
+								[
+									"chart",
+									"chart_categ",
+									"matriu",
+									"vista3d",
+									"stat",
+									"stat_categ" 
+								]
+							},	
+							"stat": 
+							{
+								"description": "Tipus d'estadístic a representar en aquest element. Només existeix si el tipus de diagrama (propietat anterior) és stat o stat_categ. Els seus tres primers valors apliquen si és una variable categòrica, i els altres si és quantitativa",
+								"enum": 
+								[
+									"mode",
+									"percent_mode",
+									"mode_and_percent",
+									"sum",
+									"sum_area",
+									"mean", 
+									"variance",
+									"stdev",
+									"min",
+									"max",
+									"range"
+								]
+							},	
+							"order": 
+							{
+								"description": "Tipus d'ordenació per als valors a representar en els estadístics/gràfic per categories. Només aplica si tipus és chart_categ o stat_categ",
+								"enum": 
+								[
+									"ascend",
+									"descend",
+									"unsorted"
+								],
+								"default": "unsorted"
+							},
+							"left": 
+							{
+								"description": "Distància a la vora dreta. Opcional",
+								"type": "integer",
+								"minimum": 0
+							},
+							"top": 
+							{
+								"description": "Distància a la vora superior. Opcional",
+								"type": "integer",
+								"minimum": 0
+							},																	
+							"i_histograma": 
+							{
+								"description": "INTERN: lndex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
+								"type": "integer",
+								"minimum": 0
+							}
+						}
+					}
+				},								
+				"capa_video":
+				{
+					"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. Només aplica si el 'model' és 'raster'",
+					"type": "array",
+					"items": 
+					{
+						"description": "Histograma per a cada fotograma. N'hi ha tants com capa.data.length",
+						"type": "object",
+						"properties": {
+							"histograma": {
+								"description": "Historgrama per un fotograma",
+								"$ref": "#/definitions/histograma"
+							}
+						}	
+					}
+				},
+				"origen":{ 
+					"description": "INTERN: s'afegeix programaticament. Origen de l'estil. Permet saber si és un estil definit al navegador original, si és definit per l'usuari o si és importat. Té implicacions amb les opcions permeses amb aquest estil (per exemple només es podran esborrar els estils propis o importats, o només es podran compartir els estils propis)",
+					"enum": [null, "usuari"] 
+				}
+			}
+		},
+		"nomDescripcio": {
+			"description": "Nom i descripció",
+			"type": "object",
+			"required": ["nom"],
+			"properties": {
+				"nom":	{ 
+					"description": "Nom",
+					"type": "string" 
+				},
+				"desc":	{ 
+					"description": "Descripció",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang"
+				}
+			}
+		},
+		"nomDescripcioSel": {
+			"description": "Nom, descripció i selecció",
+			"type": "object",
+			"required": ["nom"],
+			"properties": {
+				"nom":	{ 
+					"description": "Nom",
+					"type": "string" 
+				},
+				"desc":	{ 
+					"description": "Descriptor",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 							
+				},
+				"sel": {
+					"description": "Indica si aquest ítem està seleccionat", 
+					"type": "boolean"
+				}
+			}
+		},
+		"keyValuePair":
+		{
+			"description": "Parella clau i valor",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "name of the parameter",
+					"type": "string"
+				},
+				"value": {
+					"description": "value of the parameter",
+					"type": "string"
+				}
+			}
+		},
+		"intervalValorsDescripcionsSel": {
+			"description": "Interval de valors i valor seleccionat",
+			"type": "object",
+			"required": ["v1", "v2", "sel"],
+			"properties": {
+				"v1": {
+					"description": "Valor mínim",
+					"type": "number"
+				},
+				"desc1": {
+					"description": "Valor mínim",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"v2": {
+					"description": "Valor màxim",
+					"type": "number"
+				},
+				"desc2": {
+					"description": "Valor màxim",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"sel": {
+					"description": "Valor seleccionat",
+					"type": "number"
+				}
+			}
+		},
+		"data": {
+			"oneOf": 
+			[
+				{
+					"description": "Data en ISO",
+					"type": "string",
+					"format": "date-time" 
+				},
+				{
+					"description": "Data en JSON",
+					"type": "object",
+					"properties": {
+						"year": {
+							"description": "Any",
+							"type": "number",
+							"multipleOf": 1
+						},
+						"month": {
+							"description": "Mes",
+							"type": "number",
+							"multipleOf": 1
+						},
+						"day": {
+							"description": "Dia",
+							"type": "number",
+							"multipleOf": 1
+						},
+						"hour": {
+							"description": "Hora",
+							"type": "number",
+							"multipleOf": 1
+						},
+						"minute": {
+							"description": "Minut",
+							"type": "number",
+							"multipleOf": 1
+						},				
+						"second": {
+							"description": "Segon",
+							"type": "number",
+							"multipleOf": 1
+						},
+						"histo": {
+							"description": "Histograma de valors que representa l'escena sencera aquesta data. Serveix per mostrar algun d'aquest valors en el desplegable de dades de la llegenda. El que es mostra realment es configura a partir de FlagsData.properties. Opcional",
+							"$ref": "#/definitions/histograma" 
+						}
+					}
+				}
+			]
+		},
+		"paramProces": {
+			"description": "Paràmetres d'entrada o de sortida d'una operació d'un procés",
+			"type": ["array", "null"],
+			"items": {
+				"description": "Símbol i camp",
+				"type": "object",
+				"properties": {
+					"nom": {
+						"description": "Nom i descripció del paràmetre",
+						"$ref": "#/definitions/nomDescripcio"
+					},
+					"valors": {
+						"description": "Array de valors predefinits o null si no n'hi ha",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Nom i descripció del valor predefinit i si està seleccionat",
+							"$ref": "#/definitions/nomDescripcioSel"
+						}
+					},
+					"InputOutputValorEditable": {
+						"description": "L'usuari pot indicar un valor per al paràmetre", 
+						"type": "boolean"
+					}, 
+					"InputOutputValorPredefinit": {
+						"description": "L'usuari ha de seleccionar el valor d'una llista de valors predefinits en l'estructura. Combinat amb InputOutputValorEditable indica que la llista és oberta i l'usuari pot editar", 
+						"type": "boolean"
+					},
+					"InputOutputValorCapaWPS": {
+						"description": "·És un valor predefinit que prové del membre capa_wps de l'estructura capa", 
+						"type": "boolean"
+					},
+					"InputOutputValorBoolea": {
+						"description": "El valor està limitat a una llista predefinida de tipus boleà (true/false) (yes/no (0/1). A l'usuari se li mostra amb un checkbutton", 
+						"type": "boolean"
+					},
+					"InputOutputTipusReferencia": {
+						"description": "El valor es passa per referència al procés", 
+						"type": "boolean"
+					},
+					"InputOutputTipusRefFitxer": {
+						"description": "El valor és un nom de fitxer que es passa per referència i les dades del fitxers seran enviades prèviament al servidor", 
+						"type": "boolean"
+					},
+					"InputOutputTipusDada": {
+						"description": "El valor que s'envia directament. No apareix al codi. Més endavant hi podria haver InputOutputTipusDadaFitxer que s'enviaria directament al fer la petició en gml", 
+						"type": "boolean"
+					},
+					"formats": {
+						"description": "Array de les extensions del fitxers sense el punt permesos si el paràmetre és de tipus fitxer. ·És null si admet qualsevol extensió o el paràmetre no és un fitxer",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Extensió del fitxer sense el punt",
+							"type": "string"
+						}
+					},
+					"activa": {
+						"description": "Array de processos i valors d'activació",
+						"type": ["array", "null"],
+						"items": {
+							"description": "Procés i valors d'activació",
+							"type": "object",
+							"properties": {
+								"valor_a": {
+									"description": "·És un valor que fa que s'activin els processos. Exmples: si, yes, 1, no, false, true (tots entre cometes)",
+									"type": "string"
+								},
+								"id_proces_a": {
+									"description": "Array dels processos a activar",
+									"type": ["array", "null"],
+									"items": {
+										"description": "Identificador de procés a activar",
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"bboxGeoJSON": {
+			"description": "Àmbit format per un array de 4 coordenades",
+			"type": "array",
+			"minItems": 4, 
+			"maxItems": 4,
+			"items": {
+				"type": "number"
+			}
+		},
+		"origenProperties": {
+			"description": "URL o nom del fitxer del origen que conté les dades per obtenir les 'propertiesGeoJSON'. L'origen serà del tipus indicat a 'FormatImatge', i de moment només pot ser 'text/csv'.",
+			"type": "string"
+		},		
+		"propertiesGeoJSON": {
+			"description": "Característiques no geomètriques de l'objecte GeoJSON.",
+			"type": "object"
+		},
+		"coordinate" :{
+			"description": "Un vèrtex",
+			"type": ["array"],
+			"minItems": 2,
+			"maxItems": 3,
+			"items": {
+				"description": "coordenada com un double",
+				"type": "number"
+			}
+		},
+		"geometryGeoJSON": {
+			"description": "Caraterístiques geomètriques de l'objecte",
+			"type": "object",
+			"required": ["type", "coordinates"],
+			"oneOf": [
+				{
+					"properties": {
+						"type": {"enum": ["Point"]},
+						"coordinates": {
+							"$ref": "#/definitions/coordinate"
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["MultiPoint"]},
+						"coordinates": {
+							"description": "Un multipoint",
+							"type": ["array"],
+							"minItems": 1,
+							"items": {
+								"$ref": "#/definitions/coordinate"
+							}
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["LineString"]},
+						"coordinates": {
+							"description": "Una linia",
+							"type": ["array"],
+							"minItems": 2,
+							"items": {
+								"$ref": "#/definitions/coordinate"
+							}
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["MultiLineString"]},
+						"coordinates": {
+							"description": "Un multilinestring",
+							"type": ["array"],
+							"minItems": 1,
+							"items": {
+								"description": "Una linia",
+								"type": ["array"],
+								"minItems": 2,
+								"items": {
+									"$ref": "#/definitions/coordinate"
+								}
+							}
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["Polygon"]},
+						"coordinates": {
+							"description": "Un polígon",
+							"type": ["array"],
+							"minItems": 1,
+							"items": {
+								"description": "Un anell",
+								"type": ["array"],
+								"minItems": 2,
+								"items": {
+									"$ref": "#/definitions/coordinate"
+								}
+							}
+						}
+					}
+				},
+				{
+					"properties": {
+						"type": {"enum": ["MultiPolygon"]},
+						"coordinates": {
+							"description": "Un polipolígon",
+							"type": ["array"],
+							"minItems": 1,
+							"items": {
+								"description": "Un polígon",
+								"type": ["array"],
+								"minItems": 1,
+								"items": {
+									"description": "Un anell",
+									"type": ["array"],
+									"minItems": 2,
+									"items": {
+										"$ref": "#/definitions/coordinate"
+									}
+								}
+							}
+						}
+					}
+				}
+			]
+		},
+		"featureCollection": {
+			"description": "La col·lecció d'objectes vectorial en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84",
+			"type": ["object", "null"],
+			"required": [ "type", "features" ],
+			"properties": {
+				"type": {"enum": ["FeatureCollection"]},
+				"bbox": {
+					"description": "Àmbit de la capa",
+					"$ref": "#/definitions/bboxGeoJSON"
+				},
+				"features": {
+					"type": ["array", "null"],
+					"items": {
+						"description": "Objecte digitalitzat o recuperat d'un servei OWS",
+						"type": "object",
+						"required": [ "type", "geometry", "properties" ],
+						"properties": {
+							"type": {"enum": ["Feature"]},
+							"id": {
+								"description": "Identificador del objecte de la capa digitalitzat o recuperat d'un servei OWS",
+								"type": "string"
+							},
+							"bbox": {
+								"description": "Àmbit de l'objecte",
+								"$ref": "#/definitions/bboxGeoJSON"
+							},									
+							"geometry": {
+								"$ref": "#/definitions/geometryGeoJSON"
+							},
+							"origenProperties": {
+								"description": "Informació sobre l'origen de les caraterístiques no geomètriques de l'objecte GeoJSON. Per exemple, quan les properties venen d'un CSV on hi ha els valors de les diverses propietats.",
+								"$ref": "#/definitions/origenProperties"
+							},
+							"properties": {
+								"description": "Caraterístiques no geomètriques de l'objecte GeoJSON. El contingut és lliure però els noms de les propietats són els atributs.nom i estil.NomCamp",
+								"$ref": "#/definitions/propertiesGeoJSON"
+							},
+							"data": {
+								"description": "NJ: Crec que això no s'usa mai enlloc, que s'usa l'array de data de la capa. Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
+								"type": ["array", "null"],
+								"items": {
+									"description": "Data disponible per la capa",
+									"$ref": "#/definitions/data" 
+								}
+							},
+							"geometryCRSactual": {
+								"description": "Interna. No usar. Geometria igual que 'geometry' però en el CRS actual de navegació. Si CRS capa i crs navegació són iguals aquests contingut no és vàlid.",
+								"$ref": "#/definitions/geometryGeoJSON"
+							},
+							"seleccionat": {
+								"description": "L'objecte es simbolitza com a seleccionat. Per defecte és false",
+								"type": "boolean"
+							}
+						}
+					}
+				}
+			}
+		},
+		"descripcioCategories": { 
+			"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
+			"type": ["array", "null"],
+			"items": {
+				"description": "Descripció alfanumèrica del valor i-essim (o null). Object és equivalment a propertiesGeoJSON",
+				"oneOf":[{
+						"type": ["null"]
+					},
+					{
+						"$ref": "#/definitions/propertiesGeoJSON"
+					}
+				]
+			}
+		},		
+		"descripcioAtributs": {
+			"description": "Objecte que descriu els atributs. Si un atribut no és aquí descrit no es mostra mai a les consultes. A més, l'ordre de la defició dels atributs (aquest objecte) mana ordre en que les propietats es veuen a les consultes.",
+			"type": "object",
+			"additionalProperties": { 
+				"$ref": "config_attributes_metaschema.json#/definitions/AttributeDescription"
+			}
+		},
+		"tractamentVariable": {
+			"description": "Tractament matemàtic de la variable. Té efectes en els histogrames, els estadístics i les operacions de comparació de les seleccions. Opcional, per defecte es consider 'categoric' si hi ha categories i 'quantitatiu' si no n'hi ha",
+			"enum": ["quantitatiu", "ordinal", "categoric"]
+		},
+		"histograma": {
+			"description": "Un histograma, composat per les seves clases.",
+			"type": "object",
+			"properties": 
+			{
+				"component": {
+					"description": "Cada component té les seves classes definides a part i els seus màxims i mínims reals. N'hi tants com estil.component.length",
+					"type": "array",
+					"items": {
+						"description": "Membre de l'array de components del histograma.",
+						"type": "object",
+						"properties": {
+							"classe": {
+								"description": "Nombre de cel·les de cada classe. N'hi ha tants com valor de la paleta o per 256 valors si no hi ha paleta",
+								"type": "array",
+								"items": {
+									"description": "Nombre de cel·les per una classe donada",
+									"type": "number"
+								}
+							},
+							"valorMinimReal": {
+								"description": "És el valor mínim de l'array binary",
+								"type": "number"
+							},
+							"valorMaximReal": {
+								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. És el valor màxim de l'array",
+								"type": "number"
+							},
+							"sumaValorsReal": {
+								"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors. És la suma de tots els valors de l'array",
+								"type": "number"
+							}
+						}
+					}
+				},
+				"classe_nodata": {
+					"description": "Nombre de cel·les on una o més de les component de array binari és assignada a nodata",
+					"type": "number"
+				}								
+			}
+		},
+		"valuesOrStyle":
+		{
+			"description": "values in the form of a list or as a reference to another style of the same layer",
+			"oneOf":[{
+				"type": "object",
+				"required": ["list"],
+				"properties": {
+					"list": {"type": "array"},
+					"units": {
+						"description": "Units of the metric",
+						"type": "string" 
+					}					
+				}
+			},{
+				"type": "object",
+				"required": ["i_estil"],
+				"properties": {
+					"i_estil": {
+						"description": "Pointers to i_estil in this capa representing this metric",
+						"type": "array", 
+						"items": {
+							"type": "number"
+						}
+					}
+				}
+			}]
+		},
+		"metadades": {
+			"description": "Informació addicional de la capa: metadades standard, quality, documentació, publicacions, feedback...",
+			"type": ["object","null"],
+			"properties": {
+				"standard": {
+					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ). {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions es descriuen al mateix fitxer de metadades",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"document": {
+					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"guf": {
+					"description": "DEPRECATED: Tota capa pot tenir feedback. Abans indicava si es pot llegir i proporcionar geospatial user feedback sobre aquest item",
+ 					"type": "boolean"
+				},				
+				"provenance": {
+					"type": ["object","null"],
+					"properties": {
+						"peticioServCSW": {
+							"description": "Indica si el lineage s'obté dinàmicament del servidor de la capa fent una petició CSW (true) o bé el lineage és estàtic (false) i si n'hi ha, està escrit directament en el config.json ",
+							"type": "boolean"
+						},
+						"lineage": {
+							"description": "Informació sobre el llinatge de les dades",
+							"$ref": "#/definitions/lineage" 
+						}
+					}
+				},							
+				"quality": {
+					"description": "Informació sobre la qualitat de les dades",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/qualityElement"
+					}
+				}
+			}
+		},
+		"qualityElement": {
+			"description": "Un element de qualitat de les dades",
+			"type": "object",
+			"required": ["indicator"],
+			"properties": { 
+				"scope": {
+					"type": "object",
+					"properties":{
+						"env": {
+							"description": "Envolupant de element de qualitat. Normalment no n'hi ha i afecta a tota la capa",
+							"$ref": "#/definitions/envolupantCRS_2D" 
+						}
+					}
+				},
+				"indicator": {
+					"enum": ["DQ_CompletenessCommission", "DQ_CompletenessOmission", "DQ_ConceptualConsistency","DQ_FormatConsistency","DQ_TopologicalConsistency","DQ_AbsoluteExternalPositionalAccuracy","DQ_RelativeInternalPositionalAccuracy","DQ_GriddedDataPositionalAccuracy","DQ_AccuracyOfATimeMeasurement","DQ_TemporalConsistency","DQ_TemporalValidity","DQ_ThematicClassificationCorrectness","DQ_NonQuantitativeAttributeCorrectness","DQ_QuantitativeAttributeAccuracy","DQ_UsabilityElement","DQ_Confidence","DQ_Representativity","DQ_Homogeneity"]
+				},
+				"statement": {
+					"description": "Textual information on how to interpret the data or that complements the quality result",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},							
+				"result": {
+					"description": "Array of results",
+					"type": "array",
+					"items": {
+						"oneOf": [{
+							"type": "object",
+							"required": ["qualityml"],
+							"properties":
+							{
+								"qualityml": {
+									"type": "object",
+									"required": ["measure", "domain", "metrics"],
+									"properties": { 
+										"version": {
+											"description": "Version of the qualityml. Optional. The default value is 1.0",
+											"type": "string"
+										},
+										"measure": {
+											"description": "A measure in qualityml",
+											"type": "object",
+											"required": ["name"],
+											"properties": {
+												"name": {
+													"description": "A measure id in qualityml",
+													"type": "string"
+												},
+												"param": {
+													"description": "key and value pair parameters",
+													"type": "array",
+													"items": {
+														"$ref": "#/definitions/keyValuePair"
+													}
+												}
+											}
+										},
+										"domain": {
+											"description": "Array of domains in qualityml",
+											"type": "array",
+											"items": {
+												"description": "A domain in qualityml",
+												"type": "object",
+												"required": ["name"],
+												"properties": {
+													"name": {
+														"description": "A domain id in qualityml",
+														"type": "string"
+													},
+													"param": {
+														"description": "key and value pair parameters",
+														"type": "array",
+														"items": {
+															"$ref": "#/definitions/keyValuePair"
+														}
+													},											
+													"values": {
+														"description": "Array of values where the metrics has been applied",
+														"oneOf":[{
+															"description": "Values with known position",
+															"$ref": "#/definitions/featureCollection"
+														},{
+															"description": "Values as a list of numbers",
+															"type": "object",
+															"required": ["list"],
+															"properties": {
+																"list": {"type": "array"},
+																"units" : {"type": "string"}
+															}
+														}]
+													}
+												}
+											}
+										},
+										"metrics": {
+											"description": "Array of metrics in qualityml",
+											"type": "array",
+											"items": {											
+												"description": "A metric in qualityml",
+												"type": "object",
+												"required": ["name", "values"],
+												"properties": {
+													"name": {
+														"description": "A metric id in qualityml",
+														"type": "string"
+													},
+													"param": {
+														"description": "key and value pair parameters",
+														"type": "array",
+														"items": {
+															"$ref": "#/definitions/keyValuePair"
+														}
+													},
+													"values": {
+														"description": "values of the metric",
+														"$ref": "#/definitions/valuesOrStyle"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						},{
+							"type": "object",
+							"required": ["values"],
+							"properties": {
+								"values": {
+									"description": "values of the metric",
+									"$ref": "#/definitions/valuesOrStyle"
+								}
+							}
+						}]
+					}
+				}
+			}
+		},
+		"lineage": {
+			"description": "Llinatge de les dades",
+			"type": "object",
+			"properties": { 
+				"statement": {
+					"description": "Textual information on the lineage of the data",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"grup":{
+					"description":"Grup de processos de llinatge",
+					"$ref": "#/definitions/grupProcessos"
+				},
+				"processes": {
+					"description": "Processes applied to this dataset",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/processStep"
+					}
+				},
+				"sources": {
+					"description": "Sources used to generate this dataset",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/source"
+					}
+				}
+			}
+		},
+		"processStep": {
+			"description": "Process applied to this dataset",
+			"type": "object",
+			"properties": {
+				"grup":{
+					"description":"Grup de processos de llinatge. Tots els processos del mateix grup i consecutius es representaran agrupats.",
+					"$ref": "#/definitions/grupProcessos"
+				},
+				"processor": {				
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/responsability"					
+					}
+				},
+				"purpose": {
+					"description": "Textual description of the process",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"timeDate": {
+					"description": "When the process was done",
+					"type": "string"
+				},				
+				"executable": {
+					"description": "Name of the executable file or service url",
+					"type": "object",
+					"properties": {
+						"reference": {
+							"description": "Name of the executable file or service url",
+							"type": "string",
+							"format": "uri"
+						},
+						"compilationDate": {
+							"description": "When the executable was produced. It is a way to recognize the version of the executable.",
+							"type": "string"
+						},
+						"responsibleParty": {				
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/responsability"					
+							}
+						},
+						"algorithm": {
+							"description": "Algorithm implemented by the executable",
+							"type": "object",
+							"properties": {
+								"name": {
+									"description": "Name of the algortihm ",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								},
+								"responsibleParty": {				
+									"type": "array",
+									"items": {
+										"$ref": "#/definitions/responsability"					
+									}
+								},
+								"functionality": {
+									"description": "Functionality given by the algorithm",
+									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+								}
+							}
+						}						
+					}
+				},
+				"parameters": {
+					"description": "Input ans output parameters submited to the executable",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/inOut"
+					}					
+				}
+			}
+		},
+		"inOut": {
+			"description": "Sources used to generate this dataset",
+			"type": "object",
+			"properties": {
+				"id": {
+					"description": "Per a les aplicacions de MiraMon aquest paràmetres val Param# (paràmetre sense barra) o un nom de modificador (paràmetre amb barra) però sense la barra",
+					"type": "string"
+				},
+				"name": {
+					"description": " En el cas de paràmetres de tipus Param#, hi pot haver un nom més descriptiu del paràmetre",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"purpose": {
+					"description": "Description of the parameter",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"direction": {
+					"description": "Sentit del paràmetre",
+					"enum": ["in", "out", "inOut"]
+				},
+				"valueType": {
+					"description": "type of parameter",
+					"enum": ["string", "number", "boolean", "date", "source", "null"]
+				},
+				"value": {
+					"description": "Value of the parameter except for a source",
+					"type": "string"
+				},
+				"units" : {"type": "string"},
+				"source": {
+					"description": "Value of a source type parameter",
+					"$ref": "#/definitions/source"
+				}
+			}
+		},
+		"source": {
+			"description": "Sources used to generate this dataset",
+			"type": "object",
+			"properties": {
+				"reference": {
+					"description": "Name or url of the source",
+					"type": "string",
+					"format": "uri"
+				},
+				"description": {
+					"description": "Description of the source",
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				},
+				"responsibleParty": {				
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/responsability"					
+					}
+				},
+				"processes": {
+					"description": "Processes applied to this dataset",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/processStep"
+					}
+				},
+				"sources": {
+					"description": "Sources used to generate this dataset",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/source"
+					}
+				}
+			}
+		},
+		"grupProcessos":{
+			"description": "Serveix per definir un grup de processos",
+			"type": "object",
+			 "properties": {
+				"id": {
+					"description": "Identificador del grup", 
+					"type": "string"
+					
+				},
+				"desc":{
+					"description": "Descripció del grup", 
+					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
+				}
+			}
+		},
+		"responsability": {
+			"description": "Responsability",
+			"type": "object",
+			 "properties": {
+				"role": {
+					"description": "Role of the party", 
+					"type": "string"
+				},
+				"party": {
+					"description": "Responsable party",
+					"type": "object",
+					"anyOf":[
+						{
+							"properties": {
+								"organisation":{
+									"description": "Responsable organization",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name of the organization",
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						{
+							"properties": {
+								"individual":{
+									"description": "Responsable individual",
+									"type": "object",
+									"properties": {
+										"name": {
+											"description": "Name of the individual",
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+}

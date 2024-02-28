@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat) , Didac Pardell (d.pardell at creaf uab cat)
@@ -1983,6 +1983,22 @@ var MessageLang=
     "cze": "Špatný formát hodnot v řádku",
     "ger": "Falsches Werteformat in der Zeile"
   },
+  "Share": {
+    "cat": "Compartir",
+    "spa": "Compartir",
+    "eng": "Share",
+    "fre": "Partager",
+    "cze": "Sdílet",
+    "ger": "Teilen"
+  },
+  "Edit": {
+    "cat": "Editar",
+    "spa": "Editar",
+    "eng": "Edit",
+    "fre": "Editer",
+    "cze": "Upravit",
+    "ger": "Bearbeiten"
+  },
   "cntxmenu": {
     "ShareLayer": {
       "cat": "Compartir capa",
@@ -3129,7 +3145,199 @@ var MessageLang=
       "fre": "Agir sur la carte",
       "cze": "Akce na mapě",
       "ger": "Aktion auf der Karte"
-    }
+    },
+    "NewStorymap": {
+      "cat": "Nou relat amb mapes",
+      "spa": "Nuevo relato con mapas",
+      "eng": "New storymaps",
+      "fre": "Nouvelle carte de l'histoire",
+      "cze": "Nové příběhové mapy",
+      "ger": "Neue Storymaps"
+    },
+	"StorymapThumbnailImage": {
+      "cat": "Imatge en miniatura del relat",
+      "spa": "Imagen en miniatura del relato",
+      "eng": "Storymap thumbnail image",
+      "fre": "Image miniature de la carte de l'histoire",
+      "cze": "Obrázek miniatury mapy příběhu",
+      "ger": "Miniaturansicht der Storymap"
+    },
+	"SelectImage": {
+	  "cat": "Seleccionar imatge",
+      "spa": "Seleccionar imagen",
+      "eng": "Select image",
+      "fre": "Sélectionner une image",
+      "cze": "Vyberte obrázek",
+      "ger": "Bild auswählen"
+	},
+    "AttachImage": {
+      "cat": "Adjuntar imatge",
+      "spa": "Adjuntar imagen",
+      "eng": "Attach image",
+      "fre": "Joindre une image",
+      "cze": "Připojit obrázek",
+      "ger": "Bild anhängen"
+    },
+    "OpensImageFilesSelector": {
+      "cat": "Obre selector de fitxers d'imatge",
+      "spa": "Abre selector de ficheros de imagen",
+      "eng": "Opens image files selector",
+      "fre": "Ouvre le sélecteur de fichiers image",
+      "cze": "Otevře výběr obrazových souborů",
+      "ger": "Öffnet den Selektor für Bilddateien"
+    },
+    "SyncWithMap": {
+      "cat": "Sincronitzar amb al mapa",
+      "spa": "Sincronizar con el mapa",
+      "eng": "Sync with the map",
+      "fre": "Synchroniser avec la carte",
+      "cze": "Synchronizace s mapou",
+      "ger": "Sync mit der Karte"
+    },
+    "SavesMapCharacteristics":{
+      "cat": "Guarda les característiques actuals del mapa (longitud, latitud, zoom...) per un fragment concret del relat",
+      "spa": "Guarda las características actuales del mapa (longitud, latitud, zoom...) para un fragmento concreto del relato",
+      "eng": "Saves the current features of the map (length, latitude, zoom...) for a concrete fragment of the story",
+      "fre": "Enregistrer les caractéristiques actuelles de la carte (longueur, latitude, zoom...) pour un fragment concret de l'histoire",
+      "cze": "Ukládá aktuální vlastnosti mapy (délka, šířka, zoom...) pro konkrétní fragment příběhu",
+      "ger": "Speichert die aktuellen Features der Karte (Länge, Breite, Zoom...) für ein konkretes Fragment der Geschichte"
+    },
+    "OriginalMeasurementsImage": {
+      "cat": "Mides originals de la imatge",
+      "spa": "Medidas originales de la imagen",
+      "eng": "Original measurements of the image",
+      "fre": "Mesures originales de l'image",
+      "cze": "Původní měření obrazu",
+      "ger": "Originalmessungen des Bildes"
+    },
+    "pxWidth": {
+      "cat": "px amplada",
+      "spa": "px anchura",
+      "eng": "px width",
+      "fre": "px largeur",
+      "cze": "px šířka",
+      "ger": "px Breite"
+    },
+    "pxHeight": {
+      "cat": "px alçada",
+      "spa": "px altura",
+      "eng": "px height",
+      "fre": "px hauteur",
+      "cze": "px výška",
+      "ger": "px Höhe"
+    },
+    "ReducedWidth": {
+      "cat": "Amplada reduida",
+      "spa": "Anchura reducida",
+      "eng": "Reduced width",
+      "fre": "Largeur réduite",
+      "cze": "Zmenšená šířka",
+      "ger": "Reduzierte Breite"
+    },
+    "ReducedHeight": {
+      "cat": "Alçada reduïda",
+      "spa": "Altura reducida",
+      "eng": "Reduced height",
+      "fre": "Hauteur réduite",
+      "cze": "Zmenšená výška",
+      "ger": "Reduzierte Höhe"
+    },
+    "ChooseUnitMeasurement": {
+      "cat": "Escull la unitat de mesura",
+      "spa": "Escoge la unidad de medida",
+      "eng": "Choose the unit of measurement",
+      "fre": "Choisir l'unité de mesure",
+      "cze": "Výběr měrné jednotky",
+      "ger": "Wählen Sie die Maßeinheit"
+    },
+    "MaintainProportionality": {
+      "cat": "Mantenir proporcionalitat",
+      "spa": "Mantener proporcionalidad",
+      "eng": "Maintain proportionality",
+      "fre": "Maintenir la proportionnalité",
+      "cze": "Zachování proporcionality",
+      "ger": "Wahrung der Verhältnismäßigkeit"
+    },
+    "SelectMapFeatures": {
+      "cat": "Selecciona les característiques del mapa per a aquest punt del relat",
+      "spa": "Selecciona las características del mapa para este punto del relato",
+      "eng": "Select the map features for this point in the story",
+      "fre": "Sélectionnez les caractéristiques cartographiques pour ce point de l'histoire",
+      "cze": "Vyberte prvky mapy pro tento bod příběhu",
+      "ger": "Wählen Sie die Kartenfunktionen für diesen Punkt in der Story aus"
+    },
+    "Zoom": {
+      "cat": "Zoom",
+      "spa": "Zoom",
+      "eng": "Zoom",
+      "fre": "Zoom",
+      "cze": "Přiblížení",
+      "ger": "Zoom"
+    },
+    "Styles": {
+      "cat": "Estils",
+      "spa": "Estilos",
+      "eng": "Styles",
+      "fre": "Styles",
+      "cze": "Styly",
+      "ger": "Stile"
+    },
+    "ErrorReadingImages": {
+      "cat": "Error carregant la imatge",
+      "spa": "Error cargando la imagen",
+      "eng": "Error loading image",
+      "fre": "Erreur de chargement de l'image",
+      "cze": "Chyba při načítání obrázku",
+      "ger": "Fehler beim Laden eines Bildes"
+    },
+    "Layers&Styles": {
+      "cat": "Capes i estils",
+      "spa": "Capas y estilos",
+      "eng": "Layers and styles",
+      "fre": "Couches et styles",
+      "cze": "Vrstvy a styly",
+      "ger": "Layers und Stile"
+    },
+    "Position&Zoom": {
+      "cat": "Posició i zoom",
+      "spa": "Posición y zoom",
+      "eng": "Position and zoom",
+      "fre": "Position et zoom",
+      "cze": "Poloha a přiblížení",
+      "ger": "Position und Zoom"
+    },
+    "SaveMapCharactMandatory": {
+      "cat": "Per tal de sincronitzar el mapa amb alguna part del relat, és necessari haver seleccionat prèviament el fragment del relat que es vol sincronitzar",
+      "spa": "Para sincronizar el mapa con alguna parte del relato, es necesario haber seleccionado previamente el fragmento del relato que se quiere sincronizar",
+      "eng": "To synchronize the map with some part of the story, it is necessary to have previously selected the fragment of the story that you want to synchronize",
+      "fre": "Pour synchroniser la carte avec une partie de l'histoire, il est nécessaire d'avoir préalablement sélectionné le fragment de l'histoire que vous voulez synchroniser",
+      "cze": "Chcete-li synchronizovat mapu s nějakou částí příběhu, je nutné, aby dříve vybral fragment příběhu, který chcete synchronizovat",
+      "ger": "Um die Karte mit einem Teil der Geschichte zu synchronisieren, ist es notwendig, vorher das Fragment der Geschichte ausgewählt zu haben, die Sie synchronisieren möchten"
+    },
+    "ShareStorymap": {
+      "cat": "Compartir relat",
+      "spa": "Compartir relato",
+      "eng": "Share storymap",
+      "fre": "Partager histoire",
+      "cze": "Sdílet mapu příběhu",
+      "ger": "Storymap teilen"
+    },
+    "RetrieveStorymap": {
+      "cat": "Recuperar relats",
+      "spa": "Recuperar relatos",
+      "eng": "Retrieve storymaps",
+      "fre": "Récupérer des histoires",
+      "cze": "Získat data příběhů",
+      "ger": "Storymaps abrufen"
+    },
+    "StorymapCannotImported": {
+      "cat": "No es pot importar el relat",
+      "spa": "No se puede importar el relato",
+      "eng": "The storymap cannot be imported",
+      "fre": "L'histoire ne peut pas être importé",
+      "cze": "Storymap nelze importovat",
+      "ger": "Der Storymap kann nicht importiert werden"
+    },
   },
   "tresD": {
     "Graphic_3D": {

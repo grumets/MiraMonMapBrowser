@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -524,6 +524,28 @@ function create_UUID(guions){
     });
     return uuid;
 }
+
+
+function stringToHash(string) 
+{
+	// Inspirat en https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript 
+	
+//set variable hash as 0
+var hash = 0, i, ch;
+
+	// if the length of the string is 0, return 0
+	if (string.length == 0) return hash;
+	
+	for (i = 0 ;i<string.length ; i++)
+	{
+		ch = string.charCodeAt(i);
+		hash = ((hash << 5) - hash) + ch;
+				
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+}
+
 
 
 function MMgetFileExtension(fileName)
@@ -2846,9 +2868,14 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 */
 var jsonFile = null;
 
+// function makeHrefData(data, toType = "text/json", content) // No s'usa mai el content i el mimetype de json no és text/json sinó application/json
 function makeHrefData(data)
 {
-	var blobData = new Blob([JSON.stringify(data)], {type: 'text/json'});
+	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: 'application/json'});
+// No entenc aquesta línia, ho del type barrejat amb data i content que no es té mai i sempre és indefinit
+// No s'usa enlloc del codi de manera que ho tiro endarrera i només agafo ho que aplica a data
+
+//	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
 
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
@@ -2939,3 +2966,7 @@ function BotoDesplegableDiv(nom, content)
 	cdns.push("<div id=\"",nom,"div\" style=\"display: none; overflow:scroll;\" width=\"20px\" height=\"15px\" >", content ,"</div>");
 	return cdns.join("");
 }// Fi function BotoDesplegableDiv()
+// Comprova si un objecte no té claus, i per tant és buit. 
+function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}

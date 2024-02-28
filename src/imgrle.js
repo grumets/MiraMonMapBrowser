@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -419,6 +419,9 @@ var valors=capa.valors;
 function DeterminaArrayValorsNecessarisCapa(i_capa, i_estil_o_atrib)
 {
 var capa=ParamCtrl.capa[i_capa], valors=capa.valors, v=[], i;
+
+	if(!valors)
+		return v;
 
 	for (i=0; i<valors.length; i++)
 		v[i]=false;
@@ -2760,13 +2763,23 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			var i_valor2=(typeof valors[i].i_valor==="undefined") ? i : valors[i].i_valor;
 			
 							
-			if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || !ParamCtrl.capa[i_capa2].tipus))
+			if (ParamCtrl.capa[i_capa2].FormatImatge=="image/tiff" && (ParamCtrl.capa[i_capa2].tipus=="TipusHTTP_GET" || ParamCtrl.capa[i_capa2].tipus=="TipusOAPI_Coverages" || !ParamCtrl.capa[i_capa2].tipus))
 			{
 				var dims=valors[i].param;
-				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i, vista))
+				var url_dades=null;
+				if(ParamCtrl.capa[i_capa2].tipus=="TipusOAPI_Coverages")
+					url_dades=DonaRequestGetCoverage(i_capa2, -1, vista.ncol, vista.nfil, vista.EnvActual, i_data2, ParamCtrl.capa[i_capa2].valors[i_valor2]);
+				else
+					url_dades=DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims);
+				if (!DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i, vista, url_dades))
 				{
+					if(ParamCtrl.capa[i_capa2].tipus=="TipusOAPI_Coverages")						
+						i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa2, url_dades, TipusEventGetCoverage);
+					else
+						i_event=CreaIOmpleEventConsola("HTTP GET", i_capa2, url_dades, TipusEventHttpGet);
+					
 					//Sistema per passar un altre argument a la funció d'error a partir de canviar l'scope de "this" amb .bind: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-					var imatgeTiffEvent={i_event: CreaIOmpleEventConsola("HTTP GET", i_capa2, DonaUrlLecturaTiff(i_capa2, i_valor2, i_data2, dims), TipusEventHttpGet),
+					var imatgeTiffEvent={i_event: i_event,
 						CanviaImatgeTiFFIndirect: function (param){
 							if (param)
 							{
@@ -2800,15 +2813,23 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 			}
 			else
 			{
+				var url_dades;
 				//var valors2=(typeof valors[i].i_capa==="undefined") ? valors : ParamCtrl.capa[i_capa2].valors;
-				var url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors[i]);
-				i_event=CreaIOmpleEventConsola("GetMap", i_capa2, url_dades, TipusEventGetMap);
-				if(window.httploadHeif && ParamCtrl.capa[i_capa2].FormatImatge=="image/heif")
-				{					
-					httploadHeif(url_dades, CanviaImatgeBinariaCapaCallback, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :funcio_ok_param});
-				}
+				if(ParamCtrl.capa[i_capa2].tipus=="TipusOAPI_Coverages")
+				{
+					url_dades=DonaRequestGetCoverage(i_capa2, -1, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors[i]);
+					i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa2, url_dades, TipusEventGetCoverage);
+				}				
 				else
-					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: 	vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :	 funcio_ok_param});
+				{
+					url_dades=DonaRequestGetMap(i_capa2, -1, true, vista.ncol, vista.nfil, vista.EnvActual, i_data2, valors[i]);
+					i_event=CreaIOmpleEventConsola((ParamCtrl.capa[i_capa2].tipus=="TipusOAPI_Maps" ? "OAPI_Maps" : "GetMap"), i_capa2, url_dades, TipusEventGetMap);
+				}
+				
+				if(window.httploadHeif && ParamCtrl.capa[i_capa2].FormatImatge=="image/heif")					
+					httploadHeif(url_dades, CanviaImatgeBinariaCapaCallback, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :funcio_ok_param});
+				else
+					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :	 funcio_ok_param});
 			}
 		}
 	}

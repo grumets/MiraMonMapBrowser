@@ -22,7 +22,7 @@
     The NiMMbus JavaScript Client can be updated from
     https://github.com/grumets/NiMMbus.
 
-    Copyright 2014, 2023 Xavier Pons
+    Copyright 2014, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de l'Alaitz Zabala (alaitz zabala at uab cat)
@@ -56,8 +56,8 @@ function GUFIncludeScript(url, late)   //https://stackoverflow.com/questions/950
 
 	if (late)
 	{
-	script.setAttributeNode(document.createAttribute("async"));
-	script.setAttributeNode(document.createAttribute("defer"));
+		script.setAttributeNode(document.createAttribute("async"));
+		script.setAttributeNode(document.createAttribute("defer"));
 	}
 	script.src = url;  // set its src to the provided URL
 	document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead). Ja ho he fet.

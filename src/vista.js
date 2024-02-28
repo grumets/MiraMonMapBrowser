@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -291,6 +291,13 @@ function CentraLaVista(x,y)
     ParamInternCtrl.vista.EnvActual.MinY=ParamInternCtrl.PuntOri.y-(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual/2;
     //ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.PuntOri.y+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual/2;
     ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.vista.EnvActual.MinY+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual;
+}
+
+function DonaCentreVista()
+{
+	const centreX = ParamInternCtrl.vista.EnvActual.MinX + (ParamInternCtrl.vista.ncol)*ParamInternCtrl.vista.CostatZoomActual/2;
+	const centreY = ParamInternCtrl.vista.EnvActual.MinY + (ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual/2;
+	return {"x": centreX, "y": centreY};
 }
 
 var MidaFletxaInclinada=10;
@@ -992,7 +999,7 @@ var elem=getLayer(window, "atribucio");
 function OmpleVistaCapa(nom_vista, vista, i)
 {
 var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
-	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET")
+	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET" || tipus=="TipusOAPI_Coverages")
 	{
 		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
@@ -1053,34 +1060,42 @@ var capa=ParamCtrl.capa[i_capa];
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
 	{
-		var url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
-		var url_dades_real=url_dades;
-		if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
+		var url_dades, url_dades_real, tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
+		if(tipus=="TipusOAPI_Coverages")
+			url_dades_real=url_dades=DonaRequestGetCoverage(i_capa, i_estil, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		else
 		{
-			/*var authResponse=hello(capa.access.tokenType).getAuthResponse();
-			if (IsAuthResponseOnline(authResponse))
+			url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+			url_dades_real=url_dades;
+			if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
 			{
-				if (authResponse.error)
+				/*var authResponse=hello(capa.access.tokenType).getAuthResponse();
+				if (IsAuthResponseOnline(authResponse))
 				{
-					alert(authResponse.error.message)
+					if (authResponse.error)
+					{
+						alert(authResponse.error.message)
+						return;
+					}
+					if (authResponse.error_description)
+					{
+						alert(authResponse.error_description)
+						return;
+					}
+					url_dades_real+= "&" + "access_token=" + authResponse.access_token;
+				}
+				else*/
+				if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
+				{
+					AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
 					return;
 				}
-				if (authResponse.error_description)
-				{
-					alert(authResponse.error_description)
-					return;
-				}
-				url_dades_real+= "&" + "access_token=" + authResponse.access_token;
-			}
-			else*/
-			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
-			{
-				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
-				return;
 			}
 		}
-		if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusOAPI_Maps")
+		if (tipus=="TipusOAPI_Maps")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
+		else if(tipus=="TipusOAPI_Coverages")
+			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverage", i_capa, url_dades, TipusEventGetCoverage);
 		else
 			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
 		if (nom_funcio_ok)

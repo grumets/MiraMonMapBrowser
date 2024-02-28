@@ -750,6 +750,10 @@
 			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer combinacions analítiques entre capes i afegir el resultat com una capa o estil nou", 
 			"type": "boolean"
 		},
+		"BarraBotoStoryMaps": {
+			"description": "Mostrar un botó a la barra de botons per obrir la finestra que permet veure les storymaps descrites al navegador o afegir-ne de noves", 
+			"type": "boolean"
+		},
 		"BarraBotoCTipica":	{
 			"description": "Mostrar el botó per iniciar una consulta típica a la barra de botons", 
 			"type": "boolean"
@@ -1493,9 +1497,9 @@
 											"valor": {
 												"description": "Nom i descripció del valor. Per exemple '1' i 'red, 670nm'",
 												"$ref": "#/definitions/nomDescripcio"
-											}
+											},
 											"esExtra": {
-												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres.",
+												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres."
 											}
 										}
 									}
@@ -1978,7 +1982,7 @@
 		},
 		"EnumTipusServidor": {
 			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG i GeoJSON. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET"]
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET", "TipusOAPI_Coverages"]
 		},
 		"access": 
 		{

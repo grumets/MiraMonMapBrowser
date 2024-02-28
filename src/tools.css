@@ -70,6 +70,15 @@ a:hover { text-decoration: underline}
 	flex: 1 auto;
 	margin: 5px;
 	line-height: 1.5;
+	max-width: 80px;
+}
+
+button.center {
+	padding: 1px 6px 1px 6px;
+}
+button.center > img,
+button.center > span {
+  vertical-align: middle;
 }
 
 /* General forms style */
@@ -187,6 +196,12 @@ dialog
 	color: #000099;
 }
 
+.button_image_dialog{
+	opacity: 1.0;
+}
+.button_image_dialog:disabled{
+	opacity: 0.5;
+}
 
 /* *******************************************************
  Estils de espereu si us plau de la vista

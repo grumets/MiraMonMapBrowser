@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -545,7 +545,8 @@ var cdns=[];
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}
-		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
+		//if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) // NJ: Canvio això i afegeixo un botó perquè sinó no puc afegir històries noves 
+		if (ParamCtrl.BarraBotoStoryMaps)
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
