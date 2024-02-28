@@ -3162,6 +3162,14 @@ var MessageLang=
       "cze": "Obrázek miniatury mapy příběhu",
       "ger": "Miniaturansicht der Storymap"
     },
+	"SelectImage": {
+	  "cat": "Seleccionar imatge",
+      "spa": "Seleccionar imagen",
+      "eng": "Select image",
+      "fre": "Sélectionner une image",
+      "cze": "Vyberte obrázek",
+      "ger": "Bild auswählen"
+	},
     "AttachImage": {
       "cat": "Adjuntar imatge",
       "spa": "Adjuntar imagen",
