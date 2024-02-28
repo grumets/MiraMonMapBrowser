@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -44,7 +44,7 @@ var SGVBarra=[];
 
 function DonaTextImgGifSvg(id, name, filename, size, title, onclick_function_name)
 {
-var cdns=[];
+var cdns=[];	
 
 	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC(filename + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif")), "\" ",
 		 "id=\"", id, "\" ");
@@ -181,7 +181,7 @@ function ChangeTitleColorsSVG(id, params)
 		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
 		if (!svg)
 			return;
-
+			
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
@@ -299,7 +299,7 @@ var cdns=[];
 		cdns.push( "<img align=\"absmiddle\" src=\"" ,
 			AfegeixAdrecaBaseSRC(botons[j].src),
 			((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) && boto_p==botons[j].src ? "p" : ""),
-			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"),
+			(ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"), 
 			"\" ",
 			"id=\"id_barra_", botons[j].src, "\" name=\"", botons[j].src, "\" "+
 			"width=\"", (sizep ? (boto_p==botons[j].src ? sizep : size) : ((ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23)), "\" ");
@@ -545,7 +545,8 @@ var cdns=[];
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}
-		if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)
+		//if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) // NJ: Canvio això i afegeixo un botó perquè sinó no puc afegir històries noves 
+		if (ParamCtrl.BarraBotoStoryMaps)
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
@@ -587,3 +588,4 @@ var cdns=[];
 			window.document.zoom.nivell.focus();
 	}
 }//Fi de CreaBarra()
+

@@ -17,10 +17,10 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
-    amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
+    amb l'ajut de Alba Brobia (a brobia at creaf uab cat) i Dídac Pardell
     dins del grup del MiraMon. MiraMon és un projecte del
     CREAF que elabora programari de Sistema d'Informació Geogràfica
     i de Teledetecció per a la visualització, consulta, edició i anàlisi
@@ -69,6 +69,9 @@ const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre:
 // Origen dels relats fets per usuaris.
 const relatUsuari = "usuari";
 
+
+IncludeScript("tinymce/js/tinymce/tinymce.min.js");
+
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
 {
@@ -91,7 +94,7 @@ function TancaFinestra_visualitzaStoryMap()
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "propies/StoryMaps/afegir.svg", "url": "", "isNew": true};
+var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
 
 	if (ParamCtrl.StoryMap == null)
 	{
@@ -645,7 +648,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				
 				if(resultatCaractUsuari[chboxPosZoomName]["status"])
 				{
-					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(ObtenirCentre())};
+					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
 					resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
 				}
 	
@@ -956,7 +959,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	ExecutaAttributsStoryMapVisible();
 }
 // Reiniciar els valors que intervenen en la creació de l'StoryMap.
-function TancaFinestra_storyMap()
+function TancaFinestra_creaStoryMap()
 {
 	const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 	tinymce.remove("textarea");

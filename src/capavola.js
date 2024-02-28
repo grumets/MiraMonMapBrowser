@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -542,6 +542,7 @@ function EliminaIndexDeCapesVolatils(param_ctrl)
 	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")
 		delete param_ctrl.ICapaVolaGPS;
 }
+
 
 function NumeroDeCapesVolatils(i_capa)
 {

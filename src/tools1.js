@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1398,7 +1398,8 @@ function showFinestraLayer(win, name)
 	if (div)
 		showLayer(div);
 
-	setTopFloatingWindow(getFloatingWindowId(name));
+	setTopFloatingWindow(getFloatingWindowId(name)); 
+	
 }
 
 function hideFinestraLayer(win, name)
@@ -2867,9 +2868,14 @@ function CreaLListaServidorsOWS(url, nom, tipus, categoria)
 */
 var jsonFile = null;
 
-function makeHrefData(data, toType = "text/json", content)
+// function makeHrefData(data, toType = "text/json", content) // No s'usa mai el content i el mimetype de json no és text/json sinó application/json
+function makeHrefData(data)
 {
-	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
+	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: 'application/json'});
+// No entenc aquesta línia, ho del type barrejat amb data i content que no es té mai i sempre és indefinit
+// No s'usa enlloc del codi de manera que ho tiro endarrera i només agafo ho que aplica a data
+
+//	var blobData = new Blob([((typeof data === "object") ? JSON.stringify(data) : data)], {type: "data:" + toType + ";charset=utf-8, " + encodeURIComponent(content)});
 
 	// If we are replacing a previously generated file we need to
 	// manually revoke the object URL to avoid memory leaks.
@@ -2883,13 +2889,14 @@ function makeHrefData(data, toType = "text/json", content)
 /*
 *	Funció per a guardar dades en format JSON en memòria
 */
-function GuardaDadesFitxerExtern(data, fileName, extension = ".json", aMimeType)
+function GuardaDadesJSONFitxerExtern(data, fileName)
 {
+const jsonExtention = ".json";
 const link = document.createElement('a');
-	if (fileName.substring(fileName.length-extension.length) != extension)
-		fileName+=extension;
+	if (fileName.substring(fileName.length-jsonExtention.length) != jsonExtention)
+		fileName+=jsonExtention;
 	link.setAttribute('download', fileName);
-	link.setAttribute('href', makeHrefData(data, aMimeType));
+	link.setAttribute('href', makeHrefData(data));
 	document.body.appendChild(link);
 
 	// wait for the link to be added to the document
@@ -2959,7 +2966,6 @@ function BotoDesplegableDiv(nom, content)
 	cdns.push("<div id=\"",nom,"div\" style=\"display: none; overflow:scroll;\" width=\"20px\" height=\"15px\" >", content ,"</div>");
 	return cdns.join("");
 }// Fi function BotoDesplegableDiv()
-
 // Comprova si un objecte no té claus, i per tant és buit. 
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;

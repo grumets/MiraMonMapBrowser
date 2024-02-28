@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -293,7 +293,7 @@ function CentraLaVista(x,y)
     ParamInternCtrl.vista.EnvActual.MaxY=ParamInternCtrl.vista.EnvActual.MinY+(ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual;
 }
 
-function ObtenirCentre()
+function DonaCentreVista()
 {
 	const centreX = ParamInternCtrl.vista.EnvActual.MinX + (ParamInternCtrl.vista.ncol)*ParamInternCtrl.vista.CostatZoomActual/2;
 	const centreY = ParamInternCtrl.vista.EnvActual.MinY + (ParamInternCtrl.vista.nfil)*ParamInternCtrl.vista.CostatZoomActual/2;

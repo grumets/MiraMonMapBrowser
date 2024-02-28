@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2023 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1125,7 +1125,7 @@ function CanviaIdioma(s)
 		
 	elem=getFinestraLayer(window, "taulaCapaVectorial");
 	if(isLayer(elem) && isLayerVisible(elem))
-		MostraFinestraTaulaDeCapaVectorial();
+		MostraFinestraTaulaDeCapaVectorial()
 
 	if (indexStoryMapActiu!==null)
 	{
@@ -2038,7 +2038,7 @@ function TancaFinestraLayer(nom_finestra)
 	else if (nom_finestra=="triaStoryMap")
 		TancaFinestra_triaStoryMap();
 	else if (nom_finestra=="creaStoryMap")
-		TancaFinestra_creaStoryMap();
+		TancaFinestra_storyMap();
 	else if (nom_finestra=="storyMap")
 		TancaFinestra_visualitzaStoryMap();
 	else if (nom_finestra=="editaEstil")
@@ -2348,25 +2348,24 @@ var elem=getLayer(window, "enllacWMS_finestra");
 
     if(isLayer(elem) && isLayerVisible(elem))
     {
-		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false, capesLength=ParamCtrl.capa.length;
+		var serv_l=null, serv_temp, cdns=[], array_tipus=[], cdns2=[], i, i_capa, tipus_acumulat, servidor_local_trobat=false;
 
-		for (i_capa=0; i_capa<capesLength; i_capa++)
+		for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
 			cdns.push(DonaServidorCapa(ParamCtrl.capa[i_capa]));
 
 		cdns2.push("<center><table border=\"0\" width=\"95%\"><tr><td><font size=\"1\">");
-		var cdnsLength=cdns.length;
-		if(cdnsLength>0)
+		if(cdns.length>0)
 		{
 			cdns.sort();
 			if (ParamCtrl.ServidorLocal)
 			{
-				for (i=0; i<cdnsLength; i++)
+				for (i=0, cdnsLength=cdns.length; i<cdnsLength; i++)
 				{
 					if (ParamCtrl.ServidorLocal==cdns[i])
 					{
 						array_tipus.length=0;
 						//Necessito saber el tipus.
-						for (i_capa=0; i_capa<capesLength; i_capa++)
+						for (i_capa=0, capesLength=ParamCtrl.capa.length; i_capa<capesLength; i_capa++)
 						{
 							if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 							{
@@ -2405,12 +2404,12 @@ var elem=getLayer(window, "enllacWMS_finestra");
 				}
 			}
 			servidor_local_trobat=false;
-			for (i=0; i<cdnsLength; i++)
+			for (i=0; i<cdns.length; i++)
 			{
 				if ((!ParamCtrl.ServidorLocal || ParamCtrl.ServidorLocal.toLowerCase()!=cdns[i].toLowerCase()) && (i==0 || cdns[i-1].toLowerCase()!=cdns[i].toLowerCase()))
 				{
 					array_tipus.length=0;
-					for (i_capa=0; i_capa<capesLength; i_capa++)
+					for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
 					{
 						if (cdns[i]==DonaServidorCapa(ParamCtrl.capa[i_capa]))
 						{
@@ -5189,6 +5188,10 @@ function FinalitzaMiraMonMapBrowser()
 	{
 		MMZWindow.close();
 		MMZWindow=null;
+	}
+	if (!isEmpty(novaStoryMap))
+	{
+		TancaFinestraLayer("creaStoryMap");
 	}
 	if (window.opener)
 		window.opener.postMessage(JSON.stringify({msg: "MiraMon Map Browser closed"}), "*");

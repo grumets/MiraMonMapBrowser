@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat) , Didac Pardell (d.pardell at creaf uab cat)
@@ -3154,11 +3154,11 @@ var MessageLang=
       "cze": "Nové příběhové mapy",
       "ger": "Neue Storymaps"
     },
-		"StorymapThumbnailImage": {
-      "cat": "Imatge en miniatura de relat",
-      "spa": "Imagen en miniatura de relato",
+	"StorymapThumbnailImage": {
+      "cat": "Imatge en miniatura del relat",
+      "spa": "Imagen en miniatura del relato",
       "eng": "Storymap thumbnail image",
-      "fre": "Image miniature de la Storymap",
+      "fre": "Image miniature de la carte de l'histoire",
       "cze": "Obrázek miniatury mapy příběhu",
       "ger": "Miniaturansicht der Storymap"
     },
@@ -3251,12 +3251,12 @@ var MessageLang=
       "ger": "Wahrung der Verhältnismäßigkeit"
     },
     "SelectMapFeatures": {
-      "cat": "Selecciona les característiques del mapa per a aquest punt de l'Storymap",
-      "spa": "Selecciona las características del mapa para este punto del Storymap",
-      "eng": "Select the map features for this Storymap point",
-      "fre": "Sélectionner les éléments de la carte pour ce point Storymap",
-      "cze": "Výběr prvků mapy pro tento bod mapy Storymap",
-      "ger": "Wählen Sie die Kartenmerkmale für diesen Storymap-Punkt aus"
+      "cat": "Selecciona les característiques del mapa per a aquest punt del relat",
+      "spa": "Selecciona las características del mapa para este punto del relato",
+      "eng": "Select the map features for this point in the story",
+      "fre": "Sélectionnez les caractéristiques cartographiques pour ce point de l'histoire",
+      "cze": "Vyberte prvky mapy pro tento bod příběhu",
+      "ger": "Wählen Sie die Kartenfunktionen für diesen Punkt in der Story aus"
     },
     "Zoom": {
       "cat": "Zoom",
@@ -3310,7 +3310,7 @@ var MessageLang=
       "cat": "Compartir relat",
       "spa": "Compartir relato",
       "eng": "Share storymap",
-      "fre": "Partager storymap",
+      "fre": "Partager histoire",
       "cze": "Sdílet mapu příběhu",
       "ger": "Storymap teilen"
     },
@@ -3318,7 +3318,7 @@ var MessageLang=
       "cat": "Recuperar relats",
       "spa": "Recuperar relatos",
       "eng": "Retrieve storymaps",
-      "fre": "Récupérer des storymaps",
+      "fre": "Récupérer des histoires",
       "cze": "Získat data příběhů",
       "ger": "Storymaps abrufen"
     },
@@ -3326,7 +3326,7 @@ var MessageLang=
       "cat": "No es pot importar el relat",
       "spa": "No se puede importar el relato",
       "eng": "The storymap cannot be imported",
-      "fre": "Le storymap ne peut pas être importé",
+      "fre": "L'histoire ne peut pas être importé",
       "cze": "Storymap nelze importovat",
       "ger": "Der Storymap kann nicht importiert werden"
     },

@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -826,5 +826,5 @@ function GuardarCapaVectorialJSON(i_capa)
 	const capa = ParamCtrl.capa[i_capa];
 	const dadesCapaExporta = {"type": capa.objectes.type, "bbox": capa.objectes.bbox, "features": capa.objectes.features};
 	const nomFitxer=GetMessage("layer")+"_"+GetMessage("vectorial", "download")+"_"+Date.now();
-	GuardaDadesFitxerExtern(dadesCapaExporta, nomFitxer, ".json");
+	GuardaDadesJSONFitxerExtern(dadesCapaExporta, nomFitxer);
 }

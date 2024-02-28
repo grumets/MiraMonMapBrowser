@@ -750,10 +750,6 @@
 			"description": "Mostrar un botó a la barra de botons per obrir una finestra que permet fer combinacions analítiques entre capes i afegir el resultat com una capa o estil nou", 
 			"type": "boolean"
 		},
-		"BarraBotoStoryMaps": {
-			"description": "Mostrar un botó a la barra de botons per obrir la finestra que permet veure les storymaps descrites al navegador o afegir-ne de noves", 
-			"type": "boolean"
-		},
 		"BarraBotoCTipica":	{
 			"description": "Mostrar el botó per iniciar una consulta típica a la barra de botons", 
 			"type": "boolean"
