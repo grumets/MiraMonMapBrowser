@@ -96,7 +96,7 @@ function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
 
-	if (ParamCtrl.StoryMap == null)
+	if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length == 0)
 	{
 		ParamCtrl.StoryMap = [];
 		ParamCtrl.StoryMap.push(newStory);
@@ -127,7 +127,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/>",
+	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
 				GetMessage("RetrieveStorymap", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
@@ -363,7 +363,7 @@ function CreaDialegMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"'><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"'><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"'><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialogCaractId, dialogHtml.join(""));
 }
@@ -934,11 +934,11 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		const DOMStorymap = parser.parseFromString(relatACarregar.html, "text/html");
 		let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
-		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'><img src='editar_contingut.svg' alt='", GetMessage("Edit"), "' width='25'/> ", GetMessage("Edit"), "</button>"].join(""));
+		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
 
 		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
 		{
-			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'><img src='pujada_nuvol.svg' alt='", GetMessage("Share"), "' width='25'/> ", GetMessage("Share"), "</button>"].join(""));
+			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
 		const title = DOMStorymap.querySelector("#"+ h1TitleStorymap);
 		if (title !== null)

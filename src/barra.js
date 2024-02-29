@@ -11,7 +11,7 @@
     See the GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General
-    Public License along with MiraMon Map Browser.
+    Public License along wiFth MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
 
     MiraMon Map Browser can be updated from
@@ -545,7 +545,7 @@ var cdns=[];
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}		
-		if (ParamCtrl.BarraBotoStoryMaps || (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length))
+		if (ParamCtrl.BarraBotoStoryMaps || ParamCtrl.StoryMap)
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
