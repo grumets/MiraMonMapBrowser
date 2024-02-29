@@ -127,7 +127,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		indexSeg++;
 		nstory++;
 	}
-	cdns.push("<br><button style='position:relative; right:5px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/>",
+	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'><img src='baixada_nuvol.svg' alt='Download' width='23'/>",
 				GetMessage("RetrieveStorymap", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
