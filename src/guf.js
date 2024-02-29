@@ -903,7 +903,7 @@ function GUFDonaNomFitxerAddFeedbackMutipleTargets(targets, lang, access_token_t
 						"&target_codespace_" + (n_targets+1) + "=" + targets[i].codespace + 
 						(targets[i].role ? ("&target_role_" + (n_targets+1) + "=" + targets[i].role) : "")+
 						(targets[i].bbox ? ("&target_geo_bbox_" + (n_targets+1) + "=" + targets[i].bbox.xmin+","+targets[i].bbox.xmax+","+targets[i].bbox.ymin+","+targets[i].bbox.ymax ): "") +
-				 		(targets[i].gmlpol ? ("&target_bnd_pol_"+ (n_targets+1) + "=" + targets[i].gmlpol.gml) : "")	; 	
+				 		(targets[i].gmlpol ? ("&target_bnd_pol_"+ (n_targets+1) + "=" + targets[i].gmlpol.gml) : ""); 	
 			n_targets++;
 		}		
 		
