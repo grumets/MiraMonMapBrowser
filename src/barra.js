@@ -11,7 +11,7 @@
     See the GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General
-    Public License along wiFth MiraMon Map Browser.
+    Public License along with MiraMon Map Browser.
     If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
 
     MiraMon Map Browser can be updated from

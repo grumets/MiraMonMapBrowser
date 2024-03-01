@@ -624,144 +624,128 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
 	const ultimElem = document.getElementById(ultimElemId);
-	const tinyEditor = tinymce.get(tinyTextId);
 
-	/*if (ultimElem && tinyEditor.selection.getContent({format: "html"}) != "")
-	{*/
-		const caractDialog = CreaDialegSincronitzarAmbMapa();
-		ultimElem.insertAdjacentElement("afterend", caractDialog);		
+	const caractDialog = CreaDialegSincronitzarAmbMapa();
+	ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
-		caractDialog.addEventListener("close", (event) => {
-			
-			if (event.target.returnValue != "")
-			{	
-				let resultatCaractUsuari = "";
-				try
+	caractDialog.addEventListener("close", (event) => {
+		
+		if (event.target.returnValue != "")
+		{	
+			let resultatCaractUsuari = "";
+			try
+			{
+				resultatCaractUsuari = JSON.parse(event.target.returnValue);
+			}
+			catch(e)
+			{
+				if (e instanceof SyntaxError && event.target.returnValue == "cancel")
 				{
-					resultatCaractUsuari = JSON.parse(event.target.returnValue);
-				}
-				catch(e)
-				{
-					if (e instanceof SyntaxError && event.target.returnValue == "cancel")
-					{
-						// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
-						return
-					}
-				}
-				
-				if(resultatCaractUsuari[chboxPosZoomName]["status"])
-				{
-					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
-					resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
-				}
-	
-				if(resultatCaractUsuari[chboxCapesStyleName]["status"])
-				{
-					const capesVisiblesIds = [];
-					const estilsCapesIds = [];
-					ParamCtrl.capa.forEach(capa => { 
-						if (capa.visible=="si")
-						{
-							capesVisiblesIds.push(capa.id);
-							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
-						}
-					});
-					if (capesVisiblesIds.length > 0)
-						resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
-					if (estilsCapesIds.length > 0)
-						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
-				}
-				
-				if (resultatCaractUsuari[chboxTempsName]["status"])
-				{
-					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
-					let indexCorregit = 0;
-					let dataCapaAComparar;
-
-					ParamCtrl.capa.forEach((capaActual) => {
-						if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
-						{
-							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
-							 dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-							if (dataResultat < dataCapaAComparar) {
-								dataResultat = dataCapaAComparar;
-							}			
-						}
-					});
- 
-					resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
-				}
-
-				let divResultatCaract = document.createElement("div");
-	
-				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-					if(resultatCaractUsuari[caracteristica]["attribute"])
-					{
-						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
-					}
-				});
-				const tinyEditor = tinymce.get(tinyTextId);
-				const tinyParent = tinyEditor.selection.getNode();
-				if (tinyParent && tinyParent.childNodes)
-				{
-					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
-					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
-					{
-						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
-						divResultatCaract.appendChild(tinyParent);
-					}
-					else
-					{
-						const nodesEditor = Array.from(tinyParent.childNodes);
-						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
-						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
-						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
-					}
-					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-					const paragrafImatge = document.createElement("p");
-					const imatgeSincr = document.createElement("img");
-
-					imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
-					imatgeSincr.setAttribute("style","width:22px; height:22px;")
-					imatgeSincr.setAttribute("name",nomImgPuntSincr);
-					paragrafImatge.appendChild(imatgeSincr);
-					divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+					// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
+					return
 				}
 			}
-		});
+			
+			if(resultatCaractUsuari[chboxPosZoomName]["status"])
+			{
+				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
+				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+			}
 
-		function saveCheckStatus(checkbox)
-		{
-			resultatCaract[checkbox.name]["status"] = checkbox.checked;
-		};
+			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
+			{
+				const capesVisiblesIds = [];
+				const estilsCapesIds = [];
+				ParamCtrl.capa.forEach(capa => { 
+					if (capa.visible=="si")
+					{
+						capesVisiblesIds.push(capa.id);
+						estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+					}
+				});
+				if (capesVisiblesIds.length > 0)
+					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
+				if (estilsCapesIds.length > 0)
+					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+			}
+			
+			if (resultatCaractUsuari[chboxTempsName]["status"])
+			{
+				let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
+				let indexCorregit = 0;
+				let dataCapaAComparar;
 
-		const contenedorCheckbox = document.querySelector("dialog[id='"+ dialogCaractId + "']");
-		const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
-		checkboxes.forEach(checkbox => {
-			checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
-			resultatCaract[checkbox.name] = {status: false};
-		});
-		
-		const confirmBtn = document.getElementById(confirmCaractBtnId);
-		confirmBtn.addEventListener("click", (event) => {
-			event.preventDefault();
-			caractDialog.close(JSON.stringify(resultatCaract));
-		});
+				ParamCtrl.capa.forEach((capaActual) => {
+					if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
+					{
+						indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
+							dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
+						if (dataResultat < dataCapaAComparar) {
+							dataResultat = dataCapaAComparar;
+						}			
+					}
+				});
 
-		caractDialog.showModal();
-	/*}
-	else
-	{
-		let dialogAlerta = document.getElementById(dialogAlertaId);
+				resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+			}
 
-		if (!dialogAlerta)
-		{
-			dialogAlerta = CreaDialegAlertaSeleccio();
-			ultimElem.insertAdjacentElement("afterend", dialogAlerta);
+			let divResultatCaract = document.createElement("div");
+
+			Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+				if(resultatCaractUsuari[caracteristica]["attribute"])
+				{
+					divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+				}
+			});
+			const tinyEditor = tinymce.get(tinyTextId);
+			const tinyParent = tinyEditor.selection.getNode();
+			if (tinyParent && tinyParent.childNodes)
+			{
+				// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+				if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+				{
+					tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+					divResultatCaract.appendChild(tinyParent);
+				}
+				else
+				{
+					const nodesEditor = Array.from(tinyParent.childNodes);
+					const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+					tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+					nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+				}
+				// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
+				const paragrafImatge = document.createElement("p");
+				const imatgeSincr = document.createElement("img");
+
+				imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
+				imatgeSincr.setAttribute("style","width:22px; height:22px;")
+				imatgeSincr.setAttribute("name",nomImgPuntSincr);
+				paragrafImatge.appendChild(imatgeSincr);
+				divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+			}
 		}
+	});
 
-		dialogAlerta.showModal();
-	}*/
+	function saveCheckStatus(checkbox)
+	{
+		resultatCaract[checkbox.name]["status"] = checkbox.checked;
+	};
+
+	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialogCaractId + "']");
+	const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
+	checkboxes.forEach(checkbox => {
+		checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
+		resultatCaract[checkbox.name] = {status: true};
+	});
+	
+	const confirmBtn = document.getElementById(confirmCaractBtnId);
+	confirmBtn.addEventListener("click", (event) => {
+		event.preventDefault();
+		caractDialog.close(JSON.stringify(resultatCaract));
+	});
+
+	caractDialog.showModal();
 }
 
 function SeguentPasStoryMap(i_relat)
