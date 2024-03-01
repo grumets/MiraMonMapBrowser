@@ -544,9 +544,8 @@ var cdns=[];
 			cdns.push(CadenaBotoPolsable(instMmrNomBoto, "instmmr",
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
-		}
-		//if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length) // NJ: Canvio això i afegeixo un botó perquè sinó no puc afegir històries noves 
-		if (ParamCtrl.BarraBotoStoryMaps)
+		}		
+		if (ParamCtrl.BarraBotoStoryMaps || ParamCtrl.StoryMap)
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
