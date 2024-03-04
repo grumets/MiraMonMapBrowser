@@ -96,7 +96,7 @@ function OmpleFinestraTriaStoryMap(win, name)
 {
 var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
 
-	if (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length == 0)
+	if (!ParamCtrl.StoryMap || ParamCtrl.StoryMap.length == 0)
 	{
 		ParamCtrl.StoryMap = [];
 		ParamCtrl.StoryMap.push(newStory);
