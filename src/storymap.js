@@ -64,6 +64,7 @@ const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
 const nomImgPuntSincr = "sincrPoint";
+const nomSvgPuntSincr = "sincrSvgPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 // Origen dels relats fets per usuaris.
@@ -621,6 +622,9 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 	}
 }
 
+// Imatge o svg per a indicar el punt exacte on es produeix la sincronització del relat amb el mapa. 
+let imgSvgSincroMapa;
+
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
 	const ultimElem = document.getElementById(ultimElemId);
@@ -646,10 +650,13 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				}
 			}
 			
+			let hiHaCheckboxSeleccionat = false;
+
 			if(resultatCaractUsuari[chboxPosZoomName]["status"])
 			{
 				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
 				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+				hiHaCheckboxSeleccionat = true;
 			}
 
 			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
@@ -664,9 +671,14 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					}
 				});
 				if (capesVisiblesIds.length > 0)
+				{
 					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
+				}
 				if (estilsCapesIds.length > 0)
+				{
 					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+				}
+				hiHaCheckboxSeleccionat = true;
 			}
 			
 			if (resultatCaractUsuari[chboxTempsName]["status"])
@@ -680,49 +692,59 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					{
 						indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
 							dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-						if (dataResultat < dataCapaAComparar) {
+						if (dataResultat < dataCapaAComparar) 
+						{
 							dataResultat = dataCapaAComparar;
 						}			
 					}
 				});
 
 				resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+				hiHaCheckboxSeleccionat = true;
 			}
 
-			let divResultatCaract = document.createElement("div");
-
-			Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-				if(resultatCaractUsuari[caracteristica]["attribute"])
-				{
-					divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
-				}
-			});
-			const tinyEditor = tinymce.get(tinyTextId);
-			const tinyParent = tinyEditor.selection.getNode();
-			if (tinyParent && tinyParent.childNodes)
+			if (hiHaCheckboxSeleccionat) 
 			{
-				// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
-				if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
-				{
-					tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
-					divResultatCaract.appendChild(tinyParent);
-				}
-				else
-				{
-					const nodesEditor = Array.from(tinyParent.childNodes);
-					const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
-					tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
-					nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
-				}
-				// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-				const paragrafImatge = document.createElement("p");
-				const imatgeSincr = document.createElement("img");
+				let divResultatCaract = document.createElement("div");
 
-				imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
-				imatgeSincr.setAttribute("style","width:22px; height:22px;")
-				imatgeSincr.setAttribute("name",nomImgPuntSincr);
-				paragrafImatge.appendChild(imatgeSincr);
-				divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+					if(resultatCaractUsuari[caracteristica]["attribute"])
+					{
+						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+					}
+				});
+				const tinyEditor = tinymce.get(tinyTextId);
+				const tinyParent = tinyEditor.selection.getNode();
+				if (tinyParent && tinyParent.childNodes)
+				{
+					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+					{
+						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+						divResultatCaract.appendChild(tinyParent);
+					}
+					else
+					{
+						const nodesEditor = Array.from(tinyParent.childNodes);
+						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+					}
+					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
+					//const paragrafImatge = document.createElement("p");
+					/*const imatgeSincr = document.createElement("img");
+	
+					imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
+					imatgeSincr.setAttribute("style","width:22px; height:22px;")
+					imatgeSincr.setAttribute("name",nomImgPuntSincr);
+					paragrafImatge.appendChild(imatgeSincr);*/
+					const tinyEditorBody = tinyEditor.getBody();
+					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomImgPuntSincr + "']");
+					/*let imgSvg = */CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
+					//divResultatCaract.insertAdjacentHTML("afterbegin", imgSvg);
+					//divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+				}
+			
 			}
 		}
 	});
@@ -929,10 +951,8 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		{
 			title.insertAdjacentElement("beforebegin", divBotons);
 		}
-		
-		const seiralizer = new XMLSerializer();
 
-		text_html = seiralizer.serializeToString(DOMStorymap);
+		text_html = new XMLSerializer().serializeToString(DOMStorymap);
 	}
 	
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
@@ -964,7 +984,10 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	{
 		//Partially visible elements return true:
 		//return rect_div.top < rect_el.bottom && rect_div.bottom > rect_el.top;
-		return rect_div.top <= rect_el.top+rect_el.height*partial && rect_div.bottom >= rect_el.top;
+
+		// DPS: return rect_div.top <= rect_el.top+rect_el.height*partial && rect_div.bottom >= rect_el.top;
+		const elem_Y = rect_el.top + rect_el.height*partial;
+		return rect_div.top <= elem_Y && rect_div.bottom >= rect_el.top;
 	}
 	//Only completely visible elements return true:
 	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
@@ -1195,4 +1218,79 @@ function CompartirStorymap(i_story)
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
 			}, ParamCtrl.idioma, "");
+}
+
+function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
+{
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+	{
+		var cdns=[];
+		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
+			"id=\"", nomImgPuntSincr, indexImatge, "\" name=\"", nomImgPuntSincr, "\" ",
+			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
+			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
+		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
+	}
+	else
+	{
+		fetch("storymap_action.svg").then(function(response) {
+			return response.text();
+		}).then(function(text){
+			var xmlDoc = new DOMParser().parseFromString(text, "text/xml");
+			var svg = xmlDoc.getElementsByTagName('svg')[0];
+			svg.setAttribute('id', nomSvgPuntSincr + indexImatge);
+			svg.setAttribute('name', nomSvgPuntSincr);
+			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil)
+				svg.setAttribute('height', ParamCtrl.BarraEstil.nfil);
+			else 
+			svg.setAttribute('height', '22');
+			
+			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol)
+				svg.setAttribute('width', ParamCtrl.BarraEstil.ncol);
+			else
+				svg.setAttribute('width', '23');
+			
+				ChangeTitleColorsSVGElement(svg, {title: GetMessage('SyncWithMap', 'storymap'), colors: ParamCtrl.BarraEstil.colors});
+				
+			divRef.insertAdjacentElement("afterbegin", svg);
+		}).catch(function(event){
+			console.log("Error loading "+event.target.src);
+			return;
+		});
+	}
+}
+
+// Aplicar colors per a la imatge SVG tant al fons com al path. Vairant amb el primer paràmetre punter al element svg. 
+function ChangeTitleColorsSVGElement(svg, params)
+{
+	if (params)
+	{
+		if (!svg)
+			return;
+			
+		if (params.title)
+		{
+			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
+			{
+				var newNode = document.createElementNS("http://www.w3.org/2000/svg", "title");
+				svg.insertBefore(newNode, svg.firstChild);
+			}
+			svg.getElementsByTagName("title")[0].textContent=params.title;
+		}
+		if (params.width)
+			svg.setAttribute('width', params.width);
+		if (params.height)
+			svg.setAttribute('height', params.height);
+		if (params.colors)
+		{
+			for(var c in params.colors)
+			{
+				if (svg.getElementsByClassName(c))
+				{
+					for (var i=0; i<svg.getElementsByClassName(c).length; i++)
+						svg.getElementsByClassName(c)[i].style.fill=params.colors[c];
+				}
+			}
+		}
+	}
 }
