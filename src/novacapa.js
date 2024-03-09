@@ -1,4 +1,4 @@
-ï»¿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2024 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan MasÃ³ Pau (joan maso at uab cat)
-    amb l'ajut de NÃºria JuliÃ  (n julia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon Ã©s un projecte del
-    CREAF que elabora programari de Sistema d'InformaciÃ³ GeogrÃ fica
-    i de TeledetecciÃ³ per a la visualitzaciÃ³, consulta, ediciÃ³ i anÃ lisi
-    de mapes rÃ sters i vectorials. Aquest programari inclou
-    aplicacions d'escriptori i tambÃ© servidors i clients per Internet.
-    No tots aquests productes sÃ³n gratuÃ¯ts o de codi obert.
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del
+    CREAF que elabora programari de Sistema d'Informació Geogràfica
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llicÃ¨ncia GNU Affero General Public
+    es distribueix sota els termes de la llicència GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -45,7 +45,7 @@ function AfegeixOModificaCapaWMSAlNavegador(i_format_get_map, servidorGC, i_on_a
 	
 var i_capa, layer=servidorGC.layer[i_layer], capa=ParamCtrl.capa;
 
-	// Si la capa ja existeix la modifico i sinÃ³ l'afegeixo
+	// Si la capa ja existeix la modifico i sinó l'afegeixo
 	var nom_serv=DonaNomServidorSenseCaracterFinal(servidorGC.servidor).toLowerCase();
 	var tipus=DonaTipusServidorCapa(layer);
 	for(i_capa=0; i_capa<capa.length; i_capa++)
@@ -114,7 +114,7 @@ var trobat=false, criteris;
 				}
 				if(trobat)
 				{
-					// S'han complert tots els criteris i per tant he trobat la dimensiÃ³ a aplicar a la capa
+					// S'han complert tots els criteris i per tant he trobat la dimensió a aplicar a la capa
 					dimensioPerCapa=servidorGC.param_func_after.dimensioPerCapa[j];									
 					break;
 				}
@@ -216,7 +216,7 @@ var trobat=false, criteris;
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
 						metadades: null,
-						defintion: null,
+						explanation: null,
 						ItemLleg: null,
 						ncol: 0};
 				estil=estils[estils.length-1];
@@ -335,12 +335,17 @@ var trobat=false, criteris;
 			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 
 		capa.valors=[{ datatype: "float32",
-					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinÃ³ no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
-					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informaciÃ³ del propi TIFF
+					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinó no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
+					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
-		GeneraUIDCapa(capa);
-		CompletaDescarregaTotCapa(capa); // aixÃ² ho necessito fer per marcar la capa com a descarregable
-		//CompletaDefinicioCapa() es fa mÃ©s tard dins de PreparaLecturaTiff()
+		if (capa.estil && capa.estil.length)
+		{
+			for (var j=0; j<capa.estil.length; j++)
+				CreaIdSiCal(capa.estil[j]);
+		}
+		CreaIdSiCal(capa);
+		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
+		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}
 	else
 		CompletaDefinicioCapa(capa);
@@ -352,10 +357,10 @@ var trobat=false, criteris;
 		alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentZoom", "cntxmenu"));
 }
 
-/* i_capa es passa en el context que estic demanat els indexos en relaciÃ³ a una capa concreta,
-per si la definicÃ³ d'algun v[] d'aquell no indica i_capa explÃ­citament, com per exemple passa
+/* i_capa es passa en el context que estic demanat els indexos en relació a una capa concreta,
+per si la definicó d'algun v[] d'aquell no indica i_capa explícitament, com per exemple passa
 en crear un flistre espacial a partir d'una banda de la mateixa capa
-En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i estÃ  protegit) */
+En contextos on no te sentit (per exemple a AfegeixCapaCalcul no es passa i està protegit) */
 function DonaIndexosACapesDeCalcul(calcul, i_capa)
 {
 var fragment, cadena, i_capes=[], inici, final, nou_valor;
@@ -508,9 +513,9 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 	var i_capa=Math.min.apply(Math, i_capes); //https://www.w3schools.com/js/js_function_apply.asp
 
-	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressiÃ³ entra en joc mÃ©s d'una capa o les dates no sÃ³n les dades per defecte o hi ha dimensionsExtra -> la capa calculada Ã©s una capa nova
+	if (i_capes.length>1 || AlgunaCapaAmbDataNoDefecteACalcul(calcul)) //Si en l'expressió entra en joc més d'una capa o les dates no són les dades per defecte o hi ha dimensionsExtra -> la capa calculada és una capa nova
 	{
-		//AZ: pensar quÃ¨ fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
+		//AZ: pensar què fer amb origen en aquest cas, si es posa a nivell de capa (encara no al config.json) i/o de estil
 		var calia_consultes=CalActivarConsultesALaBarra();
 
 		ParamCtrl.capa.splice(i_capa, 0, {servidor: null,
@@ -559,19 +564,19 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 			FlagsData: null,
 			data: null,
 			i_data: 0,
-			animable:	false, //Â·Â·Segurament la capa es podria declarar animable si alguna capa tÃ© els temps "current" i Ã©s multitime.
-			AnimableMultiTime: false,  //Â·Â·Segurament la capa es podria declarar AnimableMultiTime si alguna capa tÃ© els temps "current" i Ã©s multitime.
+			animable:	false, //··Segurament la capa es podria declarar animable si alguna capa té els temps "current" i és multitime.
+			AnimableMultiTime: false,  //··Segurament la capa es podria declarar AnimableMultiTime si alguna capa té els temps "current" i és multitime.
 			proces:	null,
 			ProcesMostrarTitolCapa: false,
 			origen: OrigenUsuari
 			});
 
-		if (i_capa<ParamCtrl.capa.length)  //aixÃ² Ã©s fa desprÃ©s, donat que els Ã­ndex de capa de la capa nova es poden referir a capes que s'han mogut.
+		if (i_capa<ParamCtrl.capa.length)  //això és fa després, donat que els índex de capa de la capa nova es poden referir a capes que s'han mogut.
 			CanviaIndexosCapesSpliceCapa(1, i_capa, -1, ParamCtrl);
 
 		CompletaDefinicioCapa(ParamCtrl.capa[i_capa]);
 
-		//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
+		//Redibuixo el navegador perquè les noves capes siguin visibles
 		RevisaEstatsCapes();
 
 		if (calia_consultes!=CalActivarConsultesALaBarra())
@@ -579,7 +584,7 @@ var i_capes=DonaIndexosACapesDeCalcul(calcul);
 
 		RepintaMapesIVistes();
 	}
-	else //si en l'expressiÃ³ nomÃ©s entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
+	else //si en l'expressió només entra en joc una capa (la i_capa) -> la capa calculada s'afegeix com un estil de la mateixa
 	{
 		var capa=ParamCtrl.capa[i_capa];
 		capa.estil.push({
@@ -708,7 +713,7 @@ var k;
 	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k], false);
 	CompletaDefinicioCapa(ParamCtrl.capa[k]);
 
-	//Redibuixo el navegador perquÃ¨ les noves capes siguin visibles
+	//Redibuixo el navegador perquè les noves capes siguin visibles
 	//RevisaEstatsCapes();
 
 	if (calia_consultes!=CalActivarConsultesALaBarra())
@@ -732,7 +737,7 @@ function DefineixAttributesCapaVectorSiCal(capa)
 	}
 }
 
-//No crida RepintaMapesIVistes(); Cal fer-ho manualment desprÃ©s.
+//No crida RepintaMapesIVistes(); Cal fer-ho manualment després.
 function AfegeixCapaGeoJSON(i_on_afegir, desc, objectes, attributes, estil, data)
 {
 var k;
@@ -823,7 +828,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (image.getGeoKeys() && (image.getGeoKeys().ProjectedCSTypeGeoKey || image.getGeoKeys().GeographicTypeGeoKey))
 	{
-		/*NJ_27_02_2023: Trec aquesta protecciÃ³ ja no cal ara que reprojectem el COG's
+		/*NJ_27_02_2023: Trec aquesta protecció ja no cal ara que reprojectem el COG's
 		if (capa.CRSgeometry && capa.CRSgeometry!="EPSG:"+(image.getGeoKeys().ProjectedCSTypeGeoKey ? image.getGeoKeys().ProjectedCSTypeGeoKey : image.getGeoKeys().GeographicTypeGeoKey))
 		{
 			alert("Incompatible CRSs among the set of TIFF files. Add them separatelly.");
@@ -839,7 +844,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 			DonaCRSRepresentaQuasiIguals(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry) && !EsEnvDinsMapaSituacio(capa.EnvTotal.EnvCRS))
 			alert(GetMessage("NewLayerAdded", "cntxmenu")+", \'"+DonaCadenaNomDesc(capa)+"\' "+GetMessage("notVisibleInCurrentView", "cntxmenu") + ".");
 	}
-	else if(!capa.CRSgeometry)  // si no hi ha CRS ni l'hem pogut determinar usem el de la Imatge de situaciÃ³ (igual que es fa en els vectors)
+	else if(!capa.CRSgeometry)  // si no hi ha CRS ni l'hem pogut determinar usem el de la Imatge de situació (igual que es fa en els vectors)
 		capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
 
 	var datatype;
@@ -903,8 +908,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					capa.valors[i].nodata=JSON.parse(JSON.stringify(nodata_usuari));
 					
 			}
-			/* NJ_25_07_2023: A aixÃ² no li trobo sentit i crec que no s'hi entra mai perquÃ¨ sempre existeix capa.servidor
-			que es concatena amb capa.valors.url i a mÃ©s quan vinc a aquesta funciÃ³, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
+			/* NJ_25_07_2023: A això no li trobo sentit i crec que no s'hi entra mai perquè sempre existeix capa.servidor
+			que es concatena amb capa.valors.url i a més quan vinc a aquesta funció, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
@@ -919,8 +924,8 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		{
 			capa.valors[i_v+i].datatype=datatype;
 			capa.valors[i_v+i].nodata=(image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null;
-			/* NJ_25_07_2023: A aixÃ² no li trobo sentit i crec que no s'hi entra mai perquÃ¨ sempre existeix capa.servidor
-			que es concatena amb capa.valors.url i a mÃ©s quan vinc a aquesta funciÃ³, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
+			/* NJ_25_07_2023: A això no li trobo sentit i crec que no s'hi entra mai perquè sempre existeix capa.servidor
+			que es concatena amb capa.valors.url i a més quan vinc a aquesta funció, excepte quan he afegit un fitxer tiff des d'afegeix capa, ja he omplert valors amb el tiff i i_data_tiff
 			if (!capa.servidor)
 			{
 				capa.valors[i_v+i].tiff=tiff;
@@ -932,14 +937,14 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 
 	if (capa.origen==OrigenUsuari)
 	{
-		//En la versiÃ³ qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memÃ²ria i cal evitar-ho
-                //En un COG, cada overview Ã©s una imatge mÃ©s en el compte. La darrera Ã©s la de menys detall. NomÃ©s la primera presenta resoluciÃ³. Les altres s'ha de "deduir" de la relaciÃ³ entre mides d'imatges en pixels
+		//En la versió qeu hem provat de geotiff.js, si demanes un costat molt gran (mires de la imatge molt "de lluny") la llibreria demana massa memòria i cal evitar-ho
+                //En un COG, cada overview és una imatge més en el compte. La darrera és la de menys detall. Només la primera presenta resolució. Les altres s'ha de "deduir" de la relació entre mides d'imatges en pixels
 		//https://geoexamples.com/other/2019/02/08/cog-tutorial.html/
 		var n_overviews = await tiff.getImageCount();
 		var lastImage = await tiff.getImage(n_overviews-1);
 
 		//var costatMin=image.getResolution()[0];  //No hi ha probrema en un costat petit (mirar la imatge molt de prop)
-		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerÃ ncia sobre el costat mÃ xim
+		var costatMax=image.getResolution()[0]*image.getWidth()/lastImage.getWidth()*4;  // El 4 s'ha posat per permetre una certa tolerància sobre el costat màxim
 		if (capa.CRSgeometry)
 		{
 			if (DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m" && EsProjLongLat(capa.CRSgeometry))
@@ -1025,7 +1030,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 				estil=capa.estil[capa.estil.length-1];
 				if (image.fileDirectory && image.fileDirectory.ColorMap)
 				{
-					// Â·$Â· AquÃ­ no aplico l'estil exterior perquÃ¨ a dins al TIFF hi ha una paleta (NJ)
+					// ·$· Aquí no aplico l'estil exterior perquè a dins al TIFF hi ha una paleta (NJ)
 					estil.paleta={colors: []};
 					estil.ItemLleg=[];
 					var ncolors=image.fileDirectory.ColorMap.length/3;
@@ -1033,7 +1038,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					{
 						if (i>0 && image.fileDirectory.ColorMap[i-1]==32896 && image.fileDirectory.ColorMap[ncolors+i-1]==32896 && image.fileDirectory.ColorMap[ncolors*2+i-1]==32896 && 
 							image.fileDirectory.ColorMap[i]==32896 && image.fileDirectory.ColorMap[ncolors+i]==32896 && image.fileDirectory.ColorMap[ncolors*2+i]==32896)
-							break; //Aquest color estÃ  repetit amb l'anterior i Ã©s un gris. Sembla que Ã©s el final de la paleta.
+							break; //Aquest color està repetit amb l'anterior i és un gris. Sembla que és el final de la paleta.
 						estil.paleta.colors[i]={
 								r: image.fileDirectory.ColorMap[i]>>>8,
 								g: image.fileDirectory.ColorMap[ncolors+i]>>>8,
@@ -1058,7 +1063,7 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 					}
 					else
 					{
-						//hi ha categories perÃ² no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
+						//hi ha categories però no hi ha paleta dins del TIFF. En aquest cas, agafo una paleta de les globals.
 						if (!PaletesGlobals)
 							PaletesGlobals=await promiseLoadJSON("paletes.json");
 

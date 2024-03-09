@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -1095,7 +1095,7 @@ var capa=ParamCtrl.capa[i_capa];
 		if (tipus=="TipusOAPI_Maps")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
 		else if(tipus=="TipusOAPI_Coverages")
-			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverage", i_capa, url_dades, TipusEventGetCoverage);
+			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa, url_dades, TipusEventGetCoverage);
 		else
 			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
 		if (nom_funcio_ok)

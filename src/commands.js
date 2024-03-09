@@ -1,4 +1,4 @@
-Ôªø/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -19,17 +19,17 @@
 
     Copyright 2001, 2024 Xavier Pons
 
-    Aquest codi JavaScript ha estat idea de Joan Mas√≥ Pau (joan maso at uab cat)
+    Aquest codi JavaScript ha estat idea de Joan MasÛ Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat)
-    dins del grup del MiraMon. MiraMon √©s un projecte del
-    CREAF que elabora programari de Sistema d'Informaci√≥ Geogr√†fica
-    i de Teledetecci√≥ per a la visualitzaci√≥, consulta, edici√≥ i an√†lisi
-    de mapes r√†sters i vectorials. Aquest progamari programari inclou
-    aplicacions d'escriptori i tamb√© servidors i clients per Internet.
-    No tots aquests productes s√≥n gratu√Øts o de codi obert.
+    dins del grup del MiraMon. MiraMon Ès un projecte del
+    CREAF que elabora programari de Sistema d'InformaciÛ Geogr‡fica
+    i de TeledetecciÛ per a la visualitzaciÛ, consulta, ediciÛ i an‡lisi
+    de mapes r‡sters i vectorials. Aquest progamari programari inclou
+    aplicacions d'escriptori i tambÈ servidors i clients per Internet.
+    No tots aquests productes sÛn gratuÔts o de codi obert.
 
     En particular, el Navegador de Mapes del MiraMon (client per Internet)
-    es distribueix sota els termes de la llic√®ncia GNU Affero General Public
+    es distribueix sota els termes de la llicËncia GNU Affero General Public
     License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
 
     El Navegador de Mapes del MiraMon es pot actualitzar des de
@@ -39,7 +39,7 @@
 "use strict"
 
 //----
-
+//costat is a number
 function CommandMMNSetZoom(costat)
 {
 	if (isNaN(costat))
@@ -60,6 +60,7 @@ function CommandMMNSetZoom(costat)
 	return 1;
 }
 
+//crs is a string
 function CommandMMNSetCRS(crs)
 {
 	ParamCtrl.araCanviProjAuto=false;
@@ -72,6 +73,7 @@ function CommandMMNSetCRS(crs)
 	return retorn;
 }
 
+//punt is an object as deifned in config-schema/definitions/punt2D
 function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
@@ -83,6 +85,7 @@ function CommandMMNSetCenterCoord(punt)
 	return 0;
 }
 
+//datejson is a json structure as defined in config-schema/definitions/data
 function CommandMMNSetDateTime(datejson)
 {
 	var date=DonaDateDesDeDataJSON(datejson);
@@ -90,10 +93,18 @@ function CommandMMNSetDateTime(datejson)
 	return 0;
 }
 
+//layers is an array of capa ids (strings)
+//styles is an array of style ids (strings)
 function CommandMMNSetLayersAndStyles(layers, styles)
 {
 	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, "CommandMMNSetLayersAndStyles");
 	return 0;
+}
+
+/*layerdims=[{"ly": id, "dims": [clau: valor}]}]*/
+function CommandMMNSetLayersExtraDimensions(layerdims)
+{
+	return CanviaDimensionsExtraDeCapes(layerdims, "CommandMMNSetLayerExtraDimensions");
 }
 
 function CommandMMNAddGeoJSONLayer(desc, geojson, attributes, estil, data)
@@ -152,9 +163,11 @@ var sel, capa, estil, i_estil;
 		//Defineix el nou estil com estil actiu
 		capa.i_estil=i_estil;
 	}
+	return 0;
 }
 
-function CommandMMNHistograms(histos)
+//histos is an array of {ly: `IdCapa1`, stl: `IdStyle1`', type': `veure diagrama.tipus`, stat: `veure diagrama.stat`, order: `veure diagrama.order`}
+function CommandMMNDiagrams(histos)
 {
 var histo, capa, estil, i_estil;
 
@@ -175,7 +188,7 @@ var histo, capa, estil, i_estil;
 		if (estil)
 		{
 			i_estil=capa.estil.indexOf(estil);	
-			capa.i_estil=i_estil; //Defineix el nou estil com estil actiu. Si no ho faig l'histograma no es veur√†.
+			capa.i_estil=i_estil; //Defineix el nou estil com estil actiu. Si no ho faig l'histograma no es veur‡.
 		}
 		else
 			i_estil=-1;  //estil actual
@@ -185,4 +198,36 @@ var histo, capa, estil, i_estil;
 
 		ObreFinestraHistograma(ParamCtrl.capa.indexOf(capa), i_estil, histo.type, histo.stat, histo.order);
 	}
+	return 0;
+}
+
+function ExecuteSerializedCommandMMN(functionName, redibuixar, param1, param2, param3, param4, param5)
+{
+	var retorn;
+	if (typeof window[functionName]==="function")
+	{
+		if (functionName=="CommandMMNSetZoom" || functionName=="CommandMMNSetCRS")
+			retorn=window[functionName](param1);
+		else if (functionName=="CommandMMNSetLayersAndStyles")
+			retorn=window[functionName](param1, param2);
+		else if (functionName=="CommandMMNAddGeoJSONLayer")
+			//(desc, geojson, attributes, estil, data)
+			retorn=window[functionName](param1, JSON.parse(param2), JSON.parse(param3), param4, JSON.parse(param5));
+		else
+		{
+			try {
+				var param1Obj=JSON.parse(param1);
+			}
+			catch (e) {
+				alert(GetMessage("WrongFormatParameter")+ ": " + functionName + ". " + e + ". " +
+						GetMessage("ParameterValueFoundIs", "storymap") + ": "  + param1);
+				return 1;
+			}
+			retorn=window[functionName](param1Obj);
+		}
+		if (retorn==0 && redibuixar)
+			RepintaMapesIVistes();
+		return;
+	}
+	alert(functionName + " is not a recognized function name");
 }

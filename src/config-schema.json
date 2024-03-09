@@ -1,4 +1,4 @@
-﻿{
+{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
@@ -904,7 +904,7 @@
 						"format": "uri"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles:   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-histos={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els histogrames no indicats i si no hi ha el paramentre data-mm-histos, es tanquen tots els histogrames; IdCapa* a de ser una capa d'arrays binaris)",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles (algunes comentes han de ser dobles però no ho puc posar aquí):   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-diags={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els diagrames no indicats i si no hi ha el paramentre data-mm-diags, es tanquen tots els histogrames; IdCapa* ha de ser una capa d'arrays binaris) (6) data-mm-extradims={'ly': , 'dims': {`clau`: `valor`}}, {'ly': , 'dims': {`clau`: `valor`}}, ... Es també possible posar botons que tinguin onClick='ExecuteDataMMAttributes('data-mm-center', '{'x': `number`, 'y': `number`}', ...)",
 						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
@@ -1499,7 +1499,8 @@
 												"$ref": "#/definitions/nomDescripcio"
 											},
 											"esExtra": {
-												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres."
+												"description": "Aquest param prové d'una dimensioExtra. INTERN; no usar. Algunes vegades (p.ex en calculs) les 'dimensioExtra' es repliquen com  a parametres de valor i convé saber el seu origen per distingir-les de les altres.",
+												"type": "boolean" 
 											}
 										}
 									}
@@ -2574,7 +2575,7 @@
 					"enum": [null, "L", "P", "S", "I"] 
 				},
 				"component": {
-					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB). De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
+					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB) o 2 components per fer combinacions de categories entre 2 capes i matrius de confusió. De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
 					"type": "array",
 					"items": {
 						"description": "Membre de l'array de components del estil",
