@@ -22,7 +22,7 @@
     The NiMMbus JavaScript Client can be updated from
     https://github.com/grumets/NiMMbus.
 
-    Copyright 2014, 2023 Xavier Pons
+    Copyright 2014, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de l'Alaitz Zabala (alaitz zabala at uab cat)
@@ -50,10 +50,10 @@ var Msg_Indefinit={cat: "Indefinit", spa: "Indefinido", eng: "Undefined", fre: "
 // *  GUF standard code lists  *
 // *****************************
 
-// GUF Table 1 — Contents of data dictionary tables
-// GUF Table 2 — QCM_Publication extension elements
+// GUF Table 1 - Contents of data dictionary tables
+// GUF Table 2 - QCM_Publication extension elements
 
-// GUF Table 3 — QCM_CitationMotivationCode type
+// GUF Table 3 - QCM_CitationMotivationCode type
 /*var QCM_CitationMotivationCode=
   "compare
 	"derive
@@ -67,7 +67,7 @@ var Msg_Indefinit={cat: "Indefinit", spa: "Indefinido", eng: "Undefined", fre: "
 	"reply
 	"link*/
 
-// GUF Table 4 — QCM_PublicationCategoryCode type
+// GUF Table 4 - QCM_PublicationCategoryCode type
 var QCM_PublicationCategoryCode={"undefined": Msg_Indefinit,
 		"bookChapter": {cat: "Capítol de llibre", spa: "Capítulo de libro", eng: "Book chapter", fre: "Chapitre du livre"},
 		"book": {cat: "Llibre", spa: "Libro", eng: "Book", fre: "Livre"},
@@ -85,11 +85,11 @@ var QCM_PublicationCategoryCode={"undefined": Msg_Indefinit,
 		"videoAudio": {cat: "Vídeo o àudio", spa: "Vídeo o audio", eng: "Video or audio", fre: "Vidéo ou audio"},
 		"tutorialManual": {cat: "Tutorial o Manual", spa: "Tutorial o Manual", eng: "Tutorial or Manual", fre: "Tutoriel ou manuel"}};
 
-// GUF Table 5 — QCM_ DiscoveredIssue data type
-// GUF Table 6 — GUF_FeedbackItem data type
-// GUF Table 7 — GUF_UserInformation data type
+// GUF Table 5 - QCM_ DiscoveredIssue data type
+// GUF Table 6 - GUF_FeedbackItem data type
+// GUF Table 7 - GUF_UserInformation data type
 
-// GUF Table 8 — GUF_UserRoleCode code list
+// GUF Table 8 - GUF_UserRoleCode code list
 var GUF_UserRoleCode={"commercialDataProd": {cat: "Productor comercial de dades", spa: "Productor comercial de datos", eng: "Commercial data producer", fre: "Producteur de données commerciales"},
 		"commercialAddedValue": {cat: "Afegir valor a les dades comercials", spa: "Añadir valor a los datos comerciales", eng: "Commercial added value", fre: "Valeur ajoutée commerciale"},
 		"researchDataProd": {cat: "Productor de dades científiques", spa: "Productor de datos científicos", eng: "Scientific data producer", fre: "Producteur de données scientifiques"},
@@ -97,17 +97,17 @@ var GUF_UserRoleCode={"commercialDataProd": {cat: "Productor comercial de dades"
 		"decisionMaker": {cat: "Responsables de presa de decisions", spa: "Responsables de toma de decisiones", eng: "Decision maker", fre: "Décideur"},
 		"generalPublic": {cat: "Públic general", spa: "Público general", eng: "General public", fre: "Grand public"}};
 
-// GUF Table 9 — GUF_FeedbackTarget data type
+// GUF Table 9 - GUF_FeedbackTarget data type
 
-// GUF Table 10 — GUF_TargetRoleCode code list
+// GUF Table 10 - GUF_TargetRoleCode code list
 var GUF_TargetRoleCode={"undefined": Msg_Indefinit,
 		"primary": {cat: "Primari", spa: "Primario", eng: "Primary", fre: "Principale"},
 		"secondary": {cat: "Secundari", spa: "Secundario", eng: "Secondary", fre: "Secondaire"},
 		"supplementary": {cat: "Suplementari", spa: "Suplementario", eng: "Supplementary", fre: "Supplémentaire"}};
 
-// GUF Table 11 — GUF_UserComment data type
+// GUF Table 11 - GUF_UserComment data type
 
-// GUF Table 12 — GUF_MotivationCode code list
+// GUF Table 12 - GUF_MotivationCode code list
 var GUF_MotivationCode={"undefined": Msg_Indefinit,
 		"comment": {cat: "Comentari", spa: "Comentario", eng: "Comment", fre: "Commentaire"},
 		"question": {cat: "Pregunta", spa: "Pregunta", eng: "Question", fre: "Question"},
@@ -118,9 +118,9 @@ var GUF_MotivationCode={"undefined": Msg_Indefinit,
 		"resolution": {cat: "Resolució", spa: "Resolución", eng: "Resolution", fre: "Résolution"},
 		"moderation": {cat: "Moderació", spa: "Moderación", eng: "Moderation", fre: "Modération"}};
 
-// GUF Table 13 — GUF_UsageReport data type
+// GUF Table 13 - GUF_UsageReport data type
 			
-// GUF Table 14 — GUF_ReportAspectCode code list
+// GUF Table 14 - GUF_ReportAspectCode code list
 var GUF_ReportAspectCode={
 		"usage": {cat: "Ús", spa: "Uso", eng: "Usage", fre: "Usage"},
 		"fitnessForPurpose": {cat: "Adequació a un propòsit", spa: "Adecuación a un propósito", eng: "Fitness for purpose", fre: "Aptitude à l'emploi"},
@@ -128,10 +128,10 @@ var GUF_ReportAspectCode={
 		"alternative": {cat: "Alternativa", spa: "Alternativa", eng: "Alternative", fre: "Alternative"}, 
 		"problem": {cat: "Problema", spa: "Problema", eng: "Problem", fre: "Problème"}};
 
-// GUF Table 15 — GUF_Rating data type
-// GUF Table 16 — GUF_SignificantEvent data type
+// GUF Table 15 - GUF_Rating data type
+// GUF Table 16 - GUF_SignificantEvent data type
 
-// GUF Table 17 — GUF_SignificantEventTypeCode code list
+// GUF Table 17 - GUF_SignificantEventTypeCode code list
 /*var GUF_SignificantEventTypeCode={"undefined": Msg_Indefinit,
 		"hurricaneNatural":
 		"volcanicEruptionNatural":
@@ -153,7 +153,7 @@ var GUF_ReportAspectCode={
 		"mobileSensorAnomaly":
 		"sensorAlarm": };*/
 
-// GUF Table 18 — GUF_RatingCode numeric code type
+// GUF Table 18 - GUF_RatingCode numeric code type
 /*var	GUF_RatingCode=
 		1 oneStar Very bad
 		2 twoStars Bad
@@ -161,27 +161,27 @@ var GUF_ReportAspectCode={
 		4 fourStars Good
 		5 fiveStars Excellent */	
 	
-// GUF Table 19 — GUF_ThumbsCode numeric code type
+// GUF Table 19 - GUF_ThumbsCode numeric code type
 /*var GUF_ThumbsCode=
 		-1 thumbsDown Thumbs down
 		1 thumbsUp Thumbs up */
 
-// GUF Table 20 — GUF_SignCode numeric code type
+// GUF Table 20 - GUF_SignCode numeric code type
 /* var GUF_SignCode=
 		-1 negative Negative
 		0 neutral Neutral
 		1 positive Positive*/
 		
-// GUF Table 21 — UFS_FeedbackSummary data type
-// GUF Table 22 — UFS_ExpertiseLevelCount data type
-// GUF Table 23 — UFS_UserRoleCount data type
-// GUF Table 24 — UFS_TagCount data type
-// GUF Table 25 — UFS_KeywordCount data type
-// GUF Table 26 — UFS_RatingCount data type
-// GUF Table 27 — UFS_RatingExpertiseLevelCount data type
-// GUF Table 28 — UFC_FeedbackResponse data type
-// GUF Table 29 — UFC_FeedbackCollection data type
-// GUF Table 30 — UFC_ResponsePagination data type
+// GUF Table 21 - UFS_FeedbackSummary data type
+// GUF Table 22 - UFS_ExpertiseLevelCount data type
+// GUF Table 23 - UFS_UserRoleCount data type
+// GUF Table 24 - UFS_TagCount data type
+// GUF Table 25 - UFS_KeywordCount data type
+// GUF Table 26 - UFS_RatingCount data type
+// GUF Table 27 - UFS_RatingExpertiseLevelCount data type
+// GUF Table 28 - UFC_FeedbackResponse data type
+// GUF Table 29 - UFC_FeedbackCollection data type
+// GUF Table 30 - UFC_ResponsePagination data type
 
 
 
@@ -212,7 +212,7 @@ var CI_DateTypeCode={"undefined": Msg_Indefinit,
 		"revision": {cat: "revisió", spa: "revisión", eng: "revision", fre: "révision"},
 		"expiry": {cat: "expiració", spa: "expiración", eng: "expiry", fre: "expiration"},
 		"lastUpdate": {cat: "darrera actualització", spa: "última actualitzación", eng: "last update", fre: "dernière mise à jour"},
-		"lastRevision": {cat: "darrera revisió", spa: "úlima revisión", eng: "last revision", fre: "dernière révision"},
+		"lastRevision": {cat: "darrera revisió", spa: "última revisión", eng: "last revision", fre: "dernière révision"},
 		"nextUpdate": {cat: "propera actualització", spa: "próxima actualización", eng: "", fre: "prochaine mise à jour"},
 		"unavailable": {cat: "no disponible", spa: "no disponible", eng: "unavailable", fre: "non disponible"},
 		"inForce": {cat: "en vigor", spa: "en vigor", eng: "in force", fre: "en vigueur"},
