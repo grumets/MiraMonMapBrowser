@@ -3306,13 +3306,13 @@ var MessageLang=
       "cze": "Poloha a přiblížení",
       "ger": "Position und Zoom"
     },
-    "SaveMapCharactMandatory": {
-      "cat": "Per tal de sincronitzar el mapa amb alguna part del relat, és necessari haver seleccionat prèviament el fragment del relat que es vol sincronitzar",
-      "spa": "Para sincronizar el mapa con alguna parte del relato, es necesario haber seleccionado previamente el fragmento del relato que se quiere sincronizar",
-      "eng": "To synchronize the map with some part of the story, it is necessary to have previously selected the fragment of the story that you want to synchronize",
-      "fre": "Pour synchroniser la carte avec une partie de l'histoire, il est nécessaire d'avoir préalablement sélectionné le fragment de l'histoire que vous voulez synchroniser",
-      "cze": "Chcete-li synchronizovat mapu s nějakou částí příběhu, je nutné, aby dříve vybral fragment příběhu, který chcete synchronizovat",
-      "ger": "Um die Karte mit einem Teil der Geschichte zu synchronisieren, ist es notwendig, vorher das Fragment der Geschichte ausgewählt zu haben, die Sie synchronisieren möchten"
+    "TitleStoryMandatory": {
+      "cat": "És obligatori especificar un títol per al relat",
+      "spa": "Es obligatorio especificar un título para el relato",
+      "eng": "It is mandatory to specify a title for the story",
+      "fre": "Il est obligatoire de donner un titre à cette histoire",
+      "cze": "Je nutné uvést název příběhu",
+      "ger": "Es ist obligatorisch, einen Titel für die Geschichte anzugeben"
     },
     "ShareStorymap": {
       "cat": "Compartir relat",

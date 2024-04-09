@@ -41,7 +41,7 @@
 var indexStoryMapActiu=null;
 const tinyTextId = "storyTextArea";
 // Crea inici Storymap identificadors.
-const inputstoryTitolId = "inputtitolRelat";
+const inputStoryTitolId = "inputTitolRelat";
 const inputThumbnailId = "inputThumbnail";
 const h1TitleStorymap = "titleStorymap";
 const imageThumbnailId = "imageThumbnail";
@@ -54,7 +54,7 @@ const pngMIMETType = "image/png", jpgMIMEType = "image/jpg", jpegMIMEType = "ima
 // Identificador input imatges internes del Storymap.
 const inputImageId = "imagePicker";
 // Identificadors diàlegs
-const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog", dialogAlertaId = "dialogAlerta";
+const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol";
 // Dialeg Mida Imatges identificadors
 const lableWidthId = "labelWidth", inputWidthId = "widthMesure", lableHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
@@ -240,17 +240,43 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 		TancaFinestraLayer("triaStoryMap");
 	}
 
+	function comprovaTitol(event)
+	{	
+		const finestra = event.target.parentNode;
+		const inputTitolRelat = document.getElementById(inputStoryTitolId);
+		if (inputTitolRelat && inputTitolRelat.value && inputTitolRelat.value != "")
+			SeguentPasStoryMap(i_relat);
+		else
+		{
+			const dialegNodeList = finestra.querySelectorAll("dialog[id='"+ dialegAlertaTitolId + "']");
+			if (dialegNodeList && dialegNodeList.length != 0)
+				dialegNodeList[0].show();
+			else
+			{
+				const caractDialog = CreaDialegAlertaTitol();
+				finestra.insertAdjacentElement("beforeend", caractDialog);
+				caractDialog.show();
+			}
+		}
+	};	
+
 	if (isFinestraLayer(window, "creaStoryMap"))
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputstoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
+		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
 						"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
 						"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
 						"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
-						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>",
-						"<input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
+						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
+		const inputBtnNext = document.createElement("input");
+		inputBtnNext.setAttribute("type", "button");
+		inputBtnNext.setAttribute("class", "buttonDialog");
+		inputBtnNext.setAttribute("value", GetMessage("Next"));						
+		inputBtnNext.addEventListener("click", comprovaTitol);
+						
 		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
+		novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
 	}
 
 	ObreFinestra(window, "creaStoryMap");
@@ -346,6 +372,21 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	imageToMesure.src = urlIamge;
 }
 /**
+ * Crea un diàleg per avisar a l'usuari la falta d'un títol per al relat.
+ * @returns 
+ */
+function CreaDialegAlertaTitol()
+{
+	const dialogHtml = ["<form><p>" + GetMessage("TitleStoryMandatory", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></form>"];
+
+	const dialog = CreaDialog(dialegAlertaTitolId, dialogHtml.join(""));
+
+	dialog.setAttribute("style", "max-width: 25%;");
+
+	return dialog;
+}
+
+/**
  * Crea un diàleg que apareix flotant al centre de la pantalla per a que l'usuari decideixi
  * sobre la mida de la imatge que vol incorporar al Storymap. 
  * @param {*} imatge El fitxer imatge que es vol incloure a la Storymap.
@@ -356,7 +397,7 @@ function CreaDialegMidesImatge(imatge)
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
 	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + lableWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + lableHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
-	return CreaDialog(dialogMidesId, dialogHtml.join(""));
+	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
 /**
  * Crea un diàleg per a elegir quines característiques del mapa mantindre per un determinat fragment del relat.
@@ -366,18 +407,7 @@ function CreaDialegSincronitzarAmbMapa()
 {
 	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
-	return CreaDialog(dialogCaractId, dialogHtml.join(""));
-}
-
-function CreaDialegAlertaSeleccio()
-{
-	const dialogHtml = ["<form><div><p>" + GetMessage("SaveMapCharactMandatory", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></div></form>"];
-
-	const dialog = CreaDialog(dialogAlertaId, dialogHtml.join(""));
-
-	dialog.setAttribute("style", "max-width: 25%;");
-
-	return dialog;
+	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }
 
 function MostraDialogImatgeNavegador(imatgeSeleccionada)
@@ -740,9 +770,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					paragrafImatge.appendChild(imatgeSincr);*/
 					const tinyEditorBody = tinyEditor.getBody();
 					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomImgPuntSincr + "']");
-					/*let imgSvg = */CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
-					//divResultatCaract.insertAdjacentHTML("afterbegin", imgSvg);
-					//divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
 				}
 			
 			}
@@ -754,7 +782,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		resultatCaract[checkbox.name]["status"] = checkbox.checked;
 	};
 
-	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialogCaractId + "']");
+	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
 	const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
 	checkboxes.forEach(checkbox => {
 		checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
@@ -839,7 +867,7 @@ function FinalitzarStoryMap(estemEditant = false)
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
-	const cdns = "<html><h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
+	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + "<div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
@@ -877,7 +905,8 @@ function GuardaEntradaStorymapConfig()
 
 function GuardarInformacioInicialStoryMap()
 {
-	novaStoryMap.titol = document.getElementById(inputstoryTitolId).value;
+	novaStoryMap.titol = document.getElementById(inputStoryTitolId).value;
+	
 	const imatgePortada = document.getElementById(imageThumbnailId);
 	if (imatgePortada && imatgePortada.src != "")
 		novaStoryMap.imatgePortada = imatgePortada.src;
@@ -946,11 +975,8 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
-		const title = DOMStorymap.querySelector("#"+ h1TitleStorymap);
-		if (title !== null)
-		{
-			title.insertAdjacentElement("beforebegin", divBotons);
-		}
+		
+		DOMStorymap.body.insertAdjacentElement("afterbegin", divBotons);
 
 		text_html = new XMLSerializer().serializeToString(DOMStorymap);
 	}
@@ -1220,6 +1246,8 @@ function CompartirStorymap(i_story)
 			}, ParamCtrl.idioma, "");
 }
 
+var svgSincroStorymapElement;
+
 function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 {
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
@@ -1233,41 +1261,45 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 	}
 	else
 	{
-		fetch("storymap_action.svg").then(function(response) {
-			return response.text();
-		}).then(function(text){
-			var xmlDoc = new DOMParser().parseFromString(text, "text/xml");
-			var svg = xmlDoc.getElementsByTagName('svg')[0];
-			svg.setAttribute('id', nomSvgPuntSincr + indexImatge);
-			svg.setAttribute('name', nomSvgPuntSincr);
-			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil)
-				svg.setAttribute('height', ParamCtrl.BarraEstil.nfil);
-			else 
-			svg.setAttribute('height', '22');
-			
-			if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol)
-				svg.setAttribute('width', ParamCtrl.BarraEstil.ncol);
-			else
-				svg.setAttribute('width', '23');
-			
-				ChangeTitleColorsSVGElement(svg, {title: GetMessage('SyncWithMap', 'storymap'), colors: ParamCtrl.BarraEstil.colors});
+		if (svgSincroStorymapElement)
+		{
+			divRef.insertAdjacentElement("afterbegin", svgSincroStorymapElement);
+		}
+		else
+		{
+			fetch("storymap_action.svg").then(function(response) {
+				return response.text();
+			}).then(function(text){
+				var xmlDoc = new DOMParser().parseFromString(text, "text/xml");
+				var svg = xmlDoc.getElementsByTagName('svg')[0];
+				svg.setAttribute('id', nomSvgPuntSincr + indexImatge);
+				svg.setAttribute('name', nomSvgPuntSincr);
+				if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil)
+					svg.setAttribute('height', ParamCtrl.BarraEstil.nfil);
+				else 
+					svg.setAttribute('height', '22');
 				
-			divRef.insertAdjacentElement("afterbegin", svg);
-		}).catch(function(event){
-			console.log("Error loading "+event.target.src);
-			return;
-		});
+				if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol)
+					svg.setAttribute('width', ParamCtrl.BarraEstil.ncol);
+				else
+					svg.setAttribute('width', '23');
+				
+				ChangeTitleColorsSVGElement(svg, {title: GetMessage('SyncWithMap', 'storymap'), colors: ParamCtrl.BarraEstil.colors});
+				svgSincroStorymapElement = svg;
+				divRef.insertAdjacentElement("afterbegin", svg);
+			}).catch(function(event){
+				console.log("Error loading "+event.target.src);
+				return;
+			});
+		}
 	}
 }
 
-// Aplicar colors per a la imatge SVG tant al fons com al path. Vairant amb el primer paràmetre punter al element svg. 
+// Aplicar colors per a la imatge SVG.
 function ChangeTitleColorsSVGElement(svg, params)
 {
-	if (params)
+	if (params && svg)
 	{
-		if (!svg)
-			return;
-			
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
