@@ -2900,7 +2900,7 @@
 						"type": "object",
 						"properties": {
 							"histograma": {
-								"description": "Historgrama per un fotograma",
+								"description": "Histograma per un fotograma",
 								"$ref": "#/definitions/histograma"
 							}
 						}	
@@ -3031,7 +3031,7 @@
 							"multipleOf": 1
 						},
 						"histo": {
-							"description": "Histograma de valors que representa l'escena sencera aquesta data. Serveix per mostrar algun d'aquest valors en el desplegable de dades de la llegenda. El que es mostra realment es configura a partir de FlagsData.properties. Opcional",
+							"description": "Histograma de valors que representa l'escena sencera per aquesta data. Serveix per mostrar algun d'aquest valors en el desplegable de dades de la llegenda. El que es mostra realment es configura a partir de FlagsData.properties. Opcional",
 							"$ref": "#/definitions/histograma" 
 						}
 					}

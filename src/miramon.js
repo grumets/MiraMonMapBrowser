@@ -1906,32 +1906,32 @@ function ObreFinestraAjuda()
 const dialogDescarregaMMRId = "dialogDescarregaMMR";
 function PreguntaDescarregaMMReader(identificadorAncoraDialeg) 
 {
-		let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
-		
-		if (!dialogDescarrega)
-		{
-			let elemAncora = document.getElementById(identificadorAncoraDialeg);
+	let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
 	
-			if (elemAncora)
-			{
-				const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+	if (!dialogDescarrega)
+	{
+		let elemAncora = document.getElementById(identificadorAncoraDialeg);
 
-				dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
-				elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
-				
-				// Botó de confirmació
-				const boto = document.getElementById("botoConfirmarDescarga");
-				boto.addEventListener("click", (event) => {
-					event.preventDefault();
-					InstalaLectorMapes();
-					dialogDescarrega.close();			
-				});
-			}
-			else
-				return; 
+		if (elemAncora)
+		{
+			const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+
+			dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
+			elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
+			
+			// Botó de confirmació
+			const boto = document.getElementById("botoConfirmarDescarga");
+			boto.addEventListener("click", (event) => {
+				event.preventDefault();
+				InstalaLectorMapes();
+				dialogDescarrega.close();			
+			});
 		}
+		else
+			return; 
+	}
 
-		dialogDescarrega.showModal();	
+	dialogDescarrega.showModal();	
 }
 
 function InstalaLectorMapes()
@@ -2906,13 +2906,13 @@ var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.tex
 		{
 			FitxerExplanationWindow=window.open(url,"FitxerExplanation",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
 			ShaObertPopUp(FitxerExplanationWindow);
-	}
-	else
-	{
+		}
+		else
+		{
 			FitxerExplanationWindow.location.href=url;
 			FitxerExplanationWindow.focus();
+		}
 	}
-}
 	else if(text)
 	{
 		// Obro una finestraLayer i hi incrusto el Text
@@ -2932,6 +2932,7 @@ var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.tex
 		contentLayer(elem, cdns.join(""));
 	}
 }
+
 var FitxerMetadadesWindow=null;
 function ObreFinestraFitxerMetadades(i_capa, i_estil)
 {
@@ -3720,7 +3721,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], plantilla;
 	else
 	{
 		cdns.push("&properties=*");	
-}
+	}
 	if (capa.AnimableMultiTime)
 		cdns.push("&datetime=",(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));	
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
