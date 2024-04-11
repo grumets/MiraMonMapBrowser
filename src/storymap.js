@@ -63,8 +63,7 @@ const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
-const nomImgPuntSincr = "sincrPoint";
-const nomSvgPuntSincr = "sincrSvgPoint";
+const nomPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 // Origen dels relats fets per usuaris.
@@ -769,7 +768,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					imatgeSincr.setAttribute("name",nomImgPuntSincr);
 					paragrafImatge.appendChild(imatgeSincr);*/
 					const tinyEditorBody = tinyEditor.getBody();
-					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomImgPuntSincr + "']");
+					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
 				}
 			
@@ -863,7 +862,7 @@ function FinalitzarStoryMap(estemEditant = false)
 {
 	const tinyEditor = tinymce.get(tinyTextId);
 	const tinyEditorBody = tinyEditor.getBody();
-	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomImgPuntSincr + "']");
+	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
@@ -1246,7 +1245,7 @@ function CompartirStorymap(i_story)
 			}, ParamCtrl.idioma, "");
 }
 
-var svgSincroStorymapElement;
+var imgSvgIconaSincroMapa;
 
 function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 {
@@ -1254,16 +1253,18 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 	{
 		var cdns=[];
 		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
-			"id=\"", nomImgPuntSincr, indexImatge, "\" name=\"", nomImgPuntSincr, "\" ",
+			"id=\"", nomPuntSincr, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
 			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
 			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
 		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
 	}
 	else
 	{
-		if (svgSincroStorymapElement)
+		if (imgSvgIconaSincroMapa)
 		{
-			divRef.insertAdjacentElement("afterbegin", svgSincroStorymapElement);
+			const svgClone = imgSvgIconaSincroMapa.cloneNode(true);
+			svgClone.setAttribute('id', nomPuntSincr + indexImatge);
+			divRef.insertAdjacentElement("afterbegin", svgClone);
 		}
 		else
 		{
@@ -1285,8 +1286,16 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 					svg.setAttribute('width', '23');
 				
 				ChangeTitleColorsSVGElement(svg, {title: GetMessage('SyncWithMap', 'storymap'), colors: ParamCtrl.BarraEstil.colors});
-				svgSincroStorymapElement = svg;
-				divRef.insertAdjacentElement("afterbegin", svg);
+				/* 	Com que el Tiny editor considera que els svg poden ser un problema de següertat 
+					(https://www.tiny.cloud/docs/tinymce/latest/image/#basic-setup), no accepta elements del tipus <svg>.
+					En lloc seu es crea aquest <img> que conté la imatge llegida en <svg>.
+				*/
+				const imgDeSvg = document.createElement("img");
+				imgDeSvg.setAttribute("src", "data:image/svg+xml;UTF8," + encodeURI(svg.outerHTML));
+				imgDeSvg.setAttribute('id', nomPuntSincr + indexImatge);
+				imgDeSvg.setAttribute('name', nomPuntSincr);
+				imgSvgIconaSincroMapa = imgDeSvg;
+				divRef.insertAdjacentElement("afterbegin", imgDeSvg);
 			}).catch(function(event){
 				console.log("Error loading "+event.target.src);
 				return;
