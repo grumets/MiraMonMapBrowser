@@ -982,7 +982,13 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
-	ObreFinestra(window, "storyMap")
+	let storyWindow = ObreFinestra(window, "storyMap");
+	const imgTransparent = document.createElement("img");
+	imgTransparent.src = "1tran.gif";
+	const boundingRectWindow = storyWindow.getBoundingClientRect();
+	imgTransparent.width = boundingRectWindow.width;
+	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
+	storyWindow.insertAdjacentElement("beforeend", imgTransparent);
 	indexStoryMapActiu=i_story;
 
 	AfegeixMarkerStoryMapVisible();
