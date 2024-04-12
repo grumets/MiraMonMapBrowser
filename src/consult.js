@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -72,15 +72,223 @@ function CanviaRepresentacioCaractersProhibitsPerAtributXML(cadena)
 	return cadena;
 }
 
-function OmpleRespostaConsultaXML(doc, consulta)
+function OmpleRespostaConsultaXMLTipusGeatureInfoResponse(arrel, consulta)
 {
-var root;
 var text_sortida;
 var tag, tag2;
 var i, j, z;
 var nom, descripcio, valor, UoM, separador, descLink;
 var n_fills_NODATA;
 var esNODATA, esLink, esImatge;
+
+	if(!arrel)
+	{
+		consulta.estat=EstatErrorXMLNoNodes;
+		return 1;
+	}
+	if(arrel.hasChildNodes())
+	{
+		var i_capa_validar=-1;
+		if(Accio && Accio.accio&AccioValidacio && Accio.capes)
+		{
+			for(i=0; i<Accio.capes.length; i++)
+			{
+				if(Accio.capes[i]==consulta.capa.nom)
+				{
+					i_capa_validar=i;
+					break;
+				}
+			}
+		}
+		if(!consulta.attributes)
+			consulta.attributes={};
+		for(i=0; i<arrel.childNodes.length; i++)
+		{
+			tag=arrel.childNodes[i];
+			if(tag.tagName!="FIELDS")
+				continue;
+			for(j=0; j<tag.attributes.length; j++)
+			{
+				if(i_capa_validar!=-1 && tag.attributes[j].name==Accio.camps[i_capa_validar])
+				{
+					Accio.valors[i_capa_validar]=tag.attributes[j].value;
+
+					/* NJ_02_06_2017: Segons el W3schools
+					DOM 4 Warning
+					In the W3C DOM Core, the Attr (attribute) object inherits all properties and methods from the Node object.
+					In DOM 4, the Attr object no longer inherits from Node.
+					For future code quality, you should avoid using node object properties and methods on attribute objects:
+					On algunes d'aquestes propietats és el nodeValue que passa a ser value.
+					nodeName passa a ser name.
+					Compte que això només és per attributes elements */
+
+				}
+				consulta.attributes[tag.attributes[j].name]={
+									"description": tag.attributes[j].name,
+									"valor": tag.attributes[j].value,
+									"UoM": null,
+									"mostrar": "si",
+									"esNODATA": false,
+									"separador": null,
+									"esLink": false,
+									"descLink": null,
+									"esImatge": false};
+			}
+			for(j=0; j<tag.childNodes.length; j++)
+			{
+				if(tag.childNodes[j].nodeName!="FIELD")
+					continue;
+
+				nom=null; descripcio=null; valor=null; UoM=null;
+				esNODATA=false;	separador=null; esLink=false; descLink=null;
+				esImatge=false;
+
+				tag2=tag.childNodes[j];
+				for (z=0; z<tag2.attributes.length; z++)
+				{
+					if(tag2.attributes[z].name=="value")
+						valor=tag2.attributes[z].value;
+					else if(tag2.attributes[z].name=="name")
+						nom=tag2.attributes[z].value;
+					if(tag2.attributes[z].name=="title")
+						descripcio=tag2.attributes[z].value;
+					else if(tag2.attributes[z].name=="units")
+						UoM=tag2.attributes[z].value;
+					else if(tag2.attributes[z].name=="is_NODATA")
+					{
+						if(tag2.attributes[z].value=="yes")
+						{
+							esNODATA=true;
+							n_fills_NODATA++;
+						}
+					}
+					else if(tag2.attributes[z].name=="separator")
+					{
+						separador=tag2.attributes[z].value;
+						separador=CanviaRepresentacioCaractersProhibitsXMLaCaractersText(separador);
+					}
+					else if(tag2.attributes[z].name=="is_link")
+					{
+						if(tag2.attributes[z].value=="yes")
+							esLink=true;
+					}
+					else if(tag2.attributes[z].name=="desc_link")
+					{
+						descLink=tag2.attributes[z].value;
+					}
+					else if(tag2.attributes[z].name=="is_image")
+					{
+						if(tag2.attributes[z].value=="yes")
+							esImatge=true;
+					}
+				}
+				if(valor)
+				{
+					consulta.attributes[nom]={"description": descripcio,
+									"valor": valor,
+									"UoM": UoM,
+									"mostrar": "si",
+									"esNODATA": esNODATA,
+									"separador": separador,
+									"esLink": esLink,
+									"descLink": descLink,
+									"esImatge": esImatge};
+					if(i_capa_validar!=-1 && nom==Accio.camps[i_capa_validar])
+						Accio.valors[i_capa_validar]=valor;
+				}
+			}
+
+		}
+		
+		//Haig de calcular si tots els attributes són NODATA i si és aixì
+		//consulta.estat=EstatXMLTrobatsZero;
+		n_fills_NODATA=0;
+		var attributesArray=consulta.attributes;
+		for(i=0; i<attributesArray.length; i++)
+		{
+			if(consulta.attributes[attributesArray[i]].esNODATA==true)
+				n_fills_NODATA++;
+		}
+		if(n_fills_NODATA==attributesArray.length)
+			consulta.estat=EstatXMLTrobatsZero;
+		else
+			consulta.estat=EstatXMLOmplert;
+	}
+	else
+		consulta.estat=EstatXMLTrobatsZero;
+	return 0;
+}
+
+function OmpleRespostaConsultaXMLTipusWFSFeatureCollection(arrel, consulta)
+{
+var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attribute;
+
+	if(!arrel)
+	{
+		consulta.estat=EstatErrorXMLNoNodes;
+		return 1;
+	}
+	var features=arrel.getElementsByTagNameNS('*',"featureMember"); 
+	if (!features || features.length<1)
+	{
+		consulta.estat=EstatXMLTrobatsZero;
+		return 0;
+	}
+	consulta.estat=EstatXMLTrobatsZero;
+	for(i_obj=0; i_obj<features.length; i_obj++)
+	{
+		objecte=GetXMLChildElementByName(features[0], '*', capa.nom);
+		if(objecte && objecte.hasChildNodes())
+		{
+			// he d'agafar els fills que són de tipus atributs, és a dir, que no comencen amb el NS gml o wfs
+			// o llegir l'esquema i buscar els que són de tipus propietat o mirar només els que estan definits a la capa a propietats
+			// o agafar-ho tot hi hagi el que hi hagi
+			//·$·
+			if(!consulta.attributes)
+				consulta.attributes={};
+			for(i_attr=0; i_attr<objecte.childNodes.length; i_attr++)
+			{				
+				if(objecte.childNodes[i_attr].localName)
+					nom_attr=objecte.childNodes[i_attr].localName;
+				else
+					nom_attr=objecte.childNodes[i_attr].nodeName;
+				
+				// Miro si la capa té atrributs i si cal copio totes les propietats de l'atribut per mostrar la consulta
+				if(capa.attributes)
+					attribute=capa.attributes[nom_attr];
+				else if(capa.estil && capa.estil[capa.i_estil].attributes)
+					attribute=capa.estil[capa.i_estil].attributes[nom_attr];
+				else
+					attribute=null;
+				if(attribute)
+				{
+					consulta.attributes[nom_attr]=JSON.parse(JSON.stringify(attribute));
+					consulta.attributes[nom_attr].valor=(objecte.childNodes[0].childNodes ? objecte.childNodes[0].childNodes[0].nodeValue: null);
+				}
+				else
+				{
+					consulta.attributes[nom_attr]={
+						"description": nom_attr,
+						"valor": objecte.childNodes[0].childNodes ? objecte.childNodes[0].childNodes[0].nodeValue: null,
+						"mostrar": "si",
+						"UoM": null,
+						"esNODATA": false,
+						"separador": null,
+						"esLink": false,
+						"descLink": null,
+						"esImatge": false};
+				}
+				if(consulta.estat!=EstatXMLOmplert)
+					consulta.estat=EstatXMLOmplert;
+			}
+		}
+	}
+	return 0;
+}
+
+function OmpleRespostaConsultaXML(doc, consulta)
+{
+var root;
 
 	if(!doc)
 	{
@@ -100,146 +308,24 @@ var esNODATA, esLink, esImatge;
 				consulta.estat=EstatErrorXMLTipusDesconegut;
 				return 1;
 			}
+			return OmpleRespostaConsultaXMLTipusGeatureInfoResponse(arrel, consulta);
 		}
 		else if(root.tagName=="FeatureInfoResponse")
 		{
 			arrel=root;
+			return OmpleRespostaConsultaXMLTipusGeatureInfoResponse(arrel, consulta);
+		}
+		else if(root.tagName=="wfs:FeatureCollection")
+		{
+			arrel=root;
+			return OmpleRespostaConsultaXMLTipusWFSFeatureCollection(arrel, consulta);
 		}
 		else
 		{
+			
 			consulta.estat=EstatErrorXMLTipusDesconegut;
 			return 1;
 		}
-		if(arrel.hasChildNodes())
-		{
-			var i_capa_validar=-1;
-			if(Accio && Accio.accio&AccioValidacio && Accio.capes)
-			{
-				for(i=0; i<Accio.capes.length; i++)
-				{
-					if(Accio.capes[i]==consulta.capa.nom)
-					{
-						i_capa_validar=i;
-						break;
-					}
-				}
-			}
-			if(!consulta.attributes)
-				consulta.attributes={};
-			for(i=0; i<arrel.childNodes.length; i++)
-			{
-				tag=arrel.childNodes[i];
-				if(tag.tagName!="FIELDS")
-					continue;
-				for(j=0; j<tag.attributes.length; j++)
-				{
-					if(i_capa_validar!=-1 && tag.attributes[j].name==Accio.camps[i_capa_validar])
-					{
-						Accio.valors[i_capa_validar]=tag.attributes[j].value;
-
-						/* NJ_02_06_2017: Segons el W3schools
-						DOM 4 Warning
-						In the W3C DOM Core, the Attr (attribute) object inherits all properties and methods from the Node object.
-						In DOM 4, the Attr object no longer inherits from Node.
-						For future code quality, you should avoid using node object properties and methods on attribute objects:
-						On algunes d'aquestes propietats és el nodeValue que passa a ser value.
-						nodeName passa a ser name.
-						Compte que això només és per attributes elements */
-
-					}
-					consulta.attributes[tag.attributes[j].name]={
-										"description": tag.attributes[j].name,
-										"valor": tag.attributes[j].value,
-										"UoM": null,
-										"mostrar": "si",
-										"esNODATA": false,
-										"separador": null,
-										"esLink": false,
-										"descLink": null,
-										"esImatge": false};
-				}
-				for(j=0; j<tag.childNodes.length; j++)
-				{
-					if(tag.childNodes[j].nodeName!="FIELD")
-						continue;
-
-					nom=null; descripcio=null; valor=null; UoM=null;
-					esNODATA=false;	separador=null; esLink=false; descLink=null;
-					esImatge=false;
-
-					tag2=tag.childNodes[j];
-					for (z=0; z<tag2.attributes.length; z++)
-					{
-						if(tag2.attributes[z].name=="value")
-							valor=tag2.attributes[z].value;
-						else if(tag2.attributes[z].name=="name")
-							nom=tag2.attributes[z].value;
-						if(tag2.attributes[z].name=="title")
-							descripcio=tag2.attributes[z].value;
-						else if(tag2.attributes[z].name=="units")
-							UoM=tag2.attributes[z].value;
-						else if(tag2.attributes[z].name=="is_NODATA")
-						{
-							if(tag2.attributes[z].value=="yes")
-							{
-								esNODATA=true;
-								n_fills_NODATA++;
-							}
-						}
-						else if(tag2.attributes[z].name=="separator")
-						{
-							separador=tag2.attributes[z].value;
-							separador=CanviaRepresentacioCaractersProhibitsXMLaCaractersText(separador);
-						}
-						else if(tag2.attributes[z].name=="is_link")
-						{
-							if(tag2.attributes[z].value=="yes")
-								esLink=true;
-						}
-						else if(tag2.attributes[z].name=="desc_link")
-						{
-							descLink=tag2.attributes[z].value;
-						}
-						else if(tag2.attributes[z].name=="is_image")
-						{
-							if(tag2.attributes[z].value=="yes")
-								esImatge=true;
-						}
-					}
-					if(valor)
-					{
-						consulta.attributes[nom]={"description": descripcio,
-										"valor": valor,
-										"UoM": UoM,
-										"mostrar": "si",
-										"esNODATA": esNODATA,
-										"separador": separador,
-										"esLink": esLink,
-										"descLink": descLink,
-										"esImatge": esImatge};
-						if(i_capa_validar!=-1 && nom==Accio.camps[i_capa_validar])
-							Accio.valors[i_capa_validar]=valor;
-					}
-				}
-
-			}
-			//Haig de calcular si tots els attributes són NODATA i si és aixì
-			//consulta.estat=EstatXMLTrobatsZero;
-			n_fills_NODATA=0;
-			var attributesArray=consulta.attributes;
-			for(i=0; i<attributesArray.length; i++)
-			{
-				if(consulta.attributes[attributesArray[i]].esNODATA==true)
-					n_fills_NODATA++;
-			}
-			if(n_fills_NODATA==attributesArray.length)
-				consulta.estat=EstatXMLTrobatsZero;
-			else
-				consulta.estat=EstatXMLOmplert;
-		}
-		else
-			consulta.estat=EstatXMLTrobatsZero;
-		return 0;
 	}
 	else
 	{
@@ -250,7 +336,7 @@ var esNODATA, esLink, esImatge;
 
 function OmpleRespostaConsultaGeoJSON(doc, consulta)
 {
-var i, j;
+var i, j, capa=consulta.capa, attribute;
 
 	if (doc.type!="FeatureCollection" || !doc.features)
 	{
@@ -267,7 +353,20 @@ var i, j;
 			consulta.attributes={};
 		for (j in doc.features[i].properties)
 		{
-			consulta.attributes[j]={
+			if(capa.attributes)
+				attribute=capa.attributes[j];
+			else if(capa.estil && capa.estil[capa.i_estil].attributes)
+				attribute=capa.estil[capa.i_estil].attributes[j];
+			else
+				attribute=null;
+			if(attribute)
+			{
+				consulta.attributes[j]=JSON.parse(JSON.stringify(attribute));
+				consulta.attributes[j].valor=doc.features[i].properties[j];
+			}
+			else
+			{
+				consulta.attributes[j]={
 						"description": j,
 						"valor": doc.features[i].properties[j],
 						"mostrar": "si",
@@ -277,6 +376,7 @@ var i, j;
 						"esLink": false,
 						"descLink": null,
 						"esImatge": false};
+			}
 			consulta.estat=EstatXMLOmplert;
 		}
 	}
