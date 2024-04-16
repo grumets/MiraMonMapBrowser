@@ -380,8 +380,6 @@ function CreaDialegAlertaTitol()
 
 	const dialog = CreaDialog(dialegAlertaTitolId, dialogHtml.join(""));
 
-	dialog.setAttribute("style", "max-width: 25%;");
-
 	return dialog;
 }
 
@@ -760,13 +758,6 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
 					}
 					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-					//const paragrafImatge = document.createElement("p");
-					/*const imatgeSincr = document.createElement("img");
-	
-					imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
-					imatgeSincr.setAttribute("style","width:22px; height:22px;")
-					imatgeSincr.setAttribute("name",nomImgPuntSincr);
-					paragrafImatge.appendChild(imatgeSincr);*/
 					const tinyEditorBody = tinyEditor.getBody();
 					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
@@ -812,7 +803,6 @@ function SeguentPasStoryMap(i_relat)
 	// Creo aquest textarea fora de l'string "htmlExternTiny" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
 	tinytextarea.setAttribute("id", tinyTextId)
-	//tinytextarea.innerHTML = "hello <input data-attr-invent='styyle:\"elmeue\"'></input> world"
 	const endBtn = document.getElementById(endButtonId);
 	endBtn.parentNode.insertBefore(tinytextarea, endBtn);
 	endBtn.parentNode.insertBefore(document.createElement("br"), endBtn);
@@ -982,20 +972,68 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
-	let storyWindow = ObreFinestra(window, "storyMap");
+	ObreFinestra(window, "storyMap");
+	AfegeixEspaiTransparent(window);
+	AfegeixMarkerStoryMapVisible();
+
+	indexStoryMapActiu=i_story;
+	darrerNodeStoryMapVisibleExecutat=null;
+	ExecutaAttributsStoryMapVisible();
+}
+
+/* 	Afegeix una imatge transparent al final del relat per tal que
+	l'última línia de text pugui arribar fins dalt de tot de la finestra.
+*/
+var imgEspaiBlancNom = "imgEspaiBlanc"
+function AfegeixEspaiTransparent(window)
+{
+	let storyWindow = getFinestraLayer(window, "storyMap");
 	const imgTransparent = document.createElement("img");
-	imgTransparent.src = "1tran.gif";
+	imgTransparent.setAttribute("name", imgEspaiBlancNom);
+	imgTransparent.src = "1negre.gif";
 	const boundingRectWindow = storyWindow.getBoundingClientRect();
 	imgTransparent.width = boundingRectWindow.width;
 	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
 	storyWindow.insertAdjacentElement("beforeend", imgTransparent);
-	indexStoryMapActiu=i_story;
+	
+	const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
+	if (cantoRedimensionaStoryMap) {
+		const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
+		if (imgRedimensiona.onmousedown.length == 1)
+		{
+			imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
 
-	AfegeixMarkerStoryMapVisible();
+			// Trobar índex de la finestra
+			let i_finestra
+			for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+			{
+				if (layerFinestraList[i_finestra].nom=="storyMap")
+				{
+					console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+					break;
+				}
+			}
+			imgRedimensiona.addEventListener("mousedown", function(event){
+				ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
+			});
 
-	darrerNodeStoryMapVisibleExecutat=null;
-	ExecutaAttributsStoryMapVisible();
+			imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
+		}
+	}
 }
+// Actualitza la mida de la imatge transparent quan es redimensioni la finestra del relat.
+function ActualitzaEspaiTransparent()
+{
+	let storyWindow = getFinestraLayer(window, "storyMap");
+	const imgTransparent = storyWindow.querySelector("img[name=" + imgEspaiBlancNom + "]");
+	if (imgTransparent)
+	{
+		const boundingRectWindow = storyWindow.getBoundingClientRect();
+		imgTransparent.width = boundingRectWindow.width;
+		imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
+	}
+}
+
 // Reiniciar els valors que intervenen en la creació de l'StoryMap.
 function TancaFinestra_creaStoryMap()
 {
@@ -1212,6 +1250,7 @@ var hihacanvis, node, attribute;
 
 var timerExecutaAttributsStoryMapVisible=null;
 
+// TODO: Utilitzar aquesta funció per tal de crear botó del Tiny on crei botons per executar attributs de mm-data...	
 function ExecutaAttributsStoryMapVisibleEvent(event)
 {
 	if (timerExecutaAttributsStoryMapVisible)
@@ -1279,8 +1318,6 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 			}).then(function(text){
 				var xmlDoc = new DOMParser().parseFromString(text, "text/xml");
 				var svg = xmlDoc.getElementsByTagName('svg')[0];
-				svg.setAttribute('id', nomSvgPuntSincr + indexImatge);
-				svg.setAttribute('name', nomSvgPuntSincr);
 				if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil)
 					svg.setAttribute('height', ParamCtrl.BarraEstil.nfil);
 				else 
