@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -39,15 +39,20 @@
 "use strict"
 
 //----
-
+//costat is a number
 function CommandMMNSetZoom(costat)
 {
+var nivell;
+
 	if (isNaN(costat))
 	{
 		alert(GetMessage("ZoomSizeIncorrectFormat", "commmands") + ":\n" + GetMessage("NumericalValueIsRequired", "commmands") +".");
 		return;
 	}
-	for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
+	nivell=DonaIndexNivellZoom(costat); // NJ: No puc fer la comparació amb igual perquè sinó no ho trobo perquè pot haver porqueria en els decimals
+	CanviaNivellDeZoom(nivell, false);
+	
+	/*for (var nivell=0; nivell<ParamCtrl.zoom.length; nivell++)
 	{
 		if (ParamCtrl.zoom[nivell].costat==costat)
 		{
@@ -56,10 +61,11 @@ function CommandMMNSetZoom(costat)
 		}
 	}
 	if (nivell==ParamCtrl.zoom.length)
-		alert(GetMessage("ZoomSizeNotAvailableBrowser", "commands"));
+		alert(GetMessage("ZoomSizeNotAvailableBrowser", "commands")); */
 	return 1;
 }
 
+//crs is a string
 function CommandMMNSetCRS(crs)
 {
 	ParamCtrl.araCanviProjAuto=false;
@@ -72,6 +78,7 @@ function CommandMMNSetCRS(crs)
 	return retorn;
 }
 
+//punt is an object as deifned in config-schema/definitions/punt2D
 function CommandMMNSetCenterCoord(punt)
 {
 	if(typeof punt.x === 'undefined' || typeof punt.y === 'undefined' || isNaN(punt.x) || isNaN(punt.y))
@@ -83,6 +90,7 @@ function CommandMMNSetCenterCoord(punt)
 	return 0;
 }
 
+//datejson is a json structure as defined in config-schema/definitions/data
 function CommandMMNSetDateTime(datejson)
 {
 	var date=DonaDateDesDeDataJSON(datejson);
@@ -90,10 +98,18 @@ function CommandMMNSetDateTime(datejson)
 	return 0;
 }
 
+//layers is an array of capa ids (strings)
+//styles is an array of style ids (strings)
 function CommandMMNSetLayersAndStyles(layers, styles)
 {
 	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, "CommandMMNSetLayersAndStyles");
 	return 0;
+}
+
+/*layerdims=[{"ly": id, "dims": [clau: valor}]}]*/
+function CommandMMNSetLayersExtraDimensions(layerdims)
+{
+	return CanviaDimensionsExtraDeCapes(layerdims, "CommandMMNSetLayerExtraDimensions");
 }
 
 function CommandMMNAddGeoJSONLayer(desc, geojson, attributes, estil, data)
@@ -152,9 +168,11 @@ var sel, capa, estil, i_estil;
 		//Defineix el nou estil com estil actiu
 		capa.i_estil=i_estil;
 	}
+	return 0;
 }
 
-function CommandMMNHistograms(histos)
+//histos is an array of {ly: `IdCapa1`, stl: `IdStyle1`', type': `veure diagrama.tipus`, stat: `veure diagrama.stat`, order: `veure diagrama.order`}
+function CommandMMNDiagrams(histos)
 {
 var histo, capa, estil, i_estil;
 
@@ -185,4 +203,36 @@ var histo, capa, estil, i_estil;
 
 		ObreFinestraHistograma(ParamCtrl.capa.indexOf(capa), i_estil, histo.type, histo.stat, histo.order);
 	}
+	return 0;
+}
+
+function ExecuteSerializedCommandMMN(functionName, redibuixar, param1, param2, param3, param4, param5)
+{
+	var retorn;
+	if (typeof window[functionName]==="function")
+	{
+		if (functionName=="CommandMMNSetZoom" || functionName=="CommandMMNSetCRS")
+			retorn=window[functionName](param1);
+		else if (functionName=="CommandMMNSetLayersAndStyles")
+			retorn=window[functionName](param1, param2);
+		else if (functionName=="CommandMMNAddGeoJSONLayer")
+			//(desc, geojson, attributes, estil, data)
+			retorn=window[functionName](param1, JSON.parse(param2), JSON.parse(param3), param4, JSON.parse(param5));
+		else
+		{
+			try {
+				var param1Obj=JSON.parse(param1);
+			}
+			catch (e) {
+				alert(GetMessage("WrongFormatParameter")+ ": " + functionName + ". " + e + ". " +
+						GetMessage("ParameterValueFoundIs", "storymap") + ": "  + param1);
+				return 1;
+			}
+			retorn=window[functionName](param1Obj);
+		}
+		if (retorn==0 && redibuixar)
+			RepintaMapesIVistes();
+		return;
+	}
+	alert(functionName + " is not a recognized function name");
 }

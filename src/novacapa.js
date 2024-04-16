@@ -216,7 +216,7 @@ var trobat=false, criteris;
 						desc: DonaCadenaNomDesc(layer.estil[j]),
 						DescItems: layer.uom,
 						metadades: null,
-						defintion: null,
+						explanation: null,
 						ItemLleg: null,
 						ncol: 0};
 				estil=estils[estils.length-1];
@@ -338,7 +338,7 @@ var trobat=false, criteris;
 					   nodata: (nodataPerCapa)? JSON.parse(JSON.stringify(nodataPerCapa)) : null //[-9999, 0] NJ Ho trec perque sinó no puc distingir entre el que m'ha dit l'usuari i el que he posat per defecte
 					}],  //provisional. CompletaDefinicioCapaTIFF ho reescriu amb informació del propi TIFF
 		capa.estil=estils;
-		GeneraUIDCapa(capa);
+		GeneraUIDCapa(capa); // Aquesta funció ja genera els id de la capa i dels estils si cal
 		CompletaDescarregaTotCapa(capa); // això ho necessito fer per marcar la capa com a descarregable
 		//CompletaDefinicioCapa() es fa més tard dins de PreparaLecturaTiff()
 	}

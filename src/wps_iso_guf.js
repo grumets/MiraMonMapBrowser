@@ -45,11 +45,13 @@
 
 /*Aquesta funció fa un subconjunt del que fa encodeURIComponent(), que hem 
   observat que remplaça les lletres accentuades per caràcters unicode i això no va bé.*/
-function DonaCadenaPerValorDeFormulari(s)
-{
-	//("\\?", "%3F" > http://stackoverflow.com/questions/889957/escaping-question-mark-in-regex-javascript
-	return s.replaceAll("#", "%23").replaceAll("+", "%2B").replaceAll("&", "%26").replaceAll("=", "%3D").replaceAll("?", "%3F");  
-}
+  function DonaCadenaPerValorDeFormulari(s)
+  {
+	  //("\\?", "%3F" > http://stackoverflow.com/questions/889957/escaping-question-mark-in-regex-javascript
+	  //return s.replaceAll("#", "%23").replaceAll("+", "%2B").replaceAll("&", "%26").replaceAll("=", "%3D").replaceAll("?", "%3F"); 
+	  // es canvia d'estrategia per donar sortida a caràcters com "<" i ">" 
+	  return encodeURIComponent(s);
+  }
 
 function DonaTextDesDeNmsElement(item, namespace, element)
 {
@@ -636,14 +638,16 @@ var usage, usage_descr, discov_issue;
 											guf.target[guf.target.length-1].maxlong=DonaCoordenadaDesDeGcoDecimal(GetXMLElementByName(target_item, "gex", "eastBoundLongitude"));
 											guf.target[guf.target.length-1].minlat=DonaCoordenadaDesDeGcoDecimal(GetXMLElementByName(target_item, "gex", "southBoundLatitude"));
 											guf.target[guf.target.length-1].maxlat=DonaCoordenadaDesDeGcoDecimal(GetXMLElementByName(target_item, "gex", "northBoundLatitude"));
-												}
+										}
 										var gmlpol=GetXMLElementByName(target_item, "gex", "EX_BoundingPolygon");
 										if (gmlpol){
 											guf.target[guf.target.length-1].gmlpol=DonaTextDesDeGexPolygon(gmlpol);
-											}
-										guf.target[guf.target.length-1].scope=true;
 										}
-										// hi podrien haver més coses com online resources
+										guf.target[guf.target.length-1].scope=true;
+									}
+								
+									// hi podrien haver més coses com online resources
+
 									}
 								}
 							}
@@ -705,7 +709,8 @@ var usage, usage_descr, discov_issue;
 					 
 								elem=GetXMLElementByName(usage_descr, "qcm", "code");
 								if (elem)
-									guf.usage.usage_descr.code=decodeURI(DonaTextDesDeGcoCharacterString(elem));
+									//guf.usage.usage_descr.code=decodeURI(DonaTextDesDeGcoCharacterString(elem));
+									guf.usage.usage_descr.code=(DonaTextDesDeGcoCharacterString(elem));
 	
 								elem=GetXMLElementByName(usage_descr, "qcm", "codeLinkage");
 								guf.usage.usage_descr.codeLink=OmpleEstructuraOnlineResource(elem);	//if (elem) protegit dins
@@ -724,7 +729,8 @@ var usage, usage_descr, discov_issue;
 																
 								elem=GetXMLElementByName(usage_descr, "qcm", "schema");
 								if (elem)
-									guf.usage.usage_descr.schema=decodeURI(DonaTextDesDeGcoCharacterString(elem));
+									//guf.usage.usage_descr.schema=decodeURI(DonaTextDesDeGcoCharacterString(elem));
+									guf.usage.usage_descr.schema=(DonaTextDesDeGcoCharacterString(elem));
 
 								elem=GetXMLElementByName(usage_descr, "qcm", "suggestedApplication");
 								if (elem)

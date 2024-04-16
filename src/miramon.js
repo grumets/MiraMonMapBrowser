@@ -95,14 +95,15 @@ IncludeScript("download.js");
 IncludeScript("storymap.js");
 IncludeScript("params.js");
 IncludeScript("commands.js");
-//IncludeScript("xml.js");   //Ja les carrega el GUF.js
-//IncludeScript("owc_atom.js");  //Ja les carrega el guf.js
-//IncludeScript("wps_iso_guf.js", true);  //Ja les carrega el GUF.js
-//IncludeScript("guf_locale.js", true);   //Ja les carrega el GUF.js
+//IncludeScript("xml.js");   //Ja el carrega el GUF.js
+//IncludeScript("owc_atom.js");  //Ja el carrega el guf.js
+//IncludeScript("wps_iso_guf.js", true);  //Ja el carrega el GUF.js
+//IncludeScript("guf_locale.js", true);   //Ja el carrega el GUF.js
+//IncludeScript("Nmmblang", true);   //Ja el carrega el GUF.js
+IncludeScript("guf.js", true);
 IncludeScript("gml.js", true);
 IncludeScript("owsc.js", true);
 IncludeScript("wps.js", true);
-IncludeScript("guf.js", true);
 IncludeScript("histopie.js", true);
 IncludeScript("jsonpointer.js");
 IncludeScript("Chart.bundle.min.js", true);
@@ -408,10 +409,115 @@ function CompletaDescarregaTotCapa(capa)
 		//Poso una descarrega per tot o una descàrrega per a cada valor segons calgui.
 	}
 }
+
+
+/* GENERACIÓ DE IDENTIFICADORS PER CAPA i ESTILS */
+
+// Crea un UUID si cal basat en un algoritme aleatòri
+function CreaUUIDSiCal(obj) 
+{
+	if (!obj.id)
+		obj.id=create_UUID();
+}
+
+//Crea un identificador des de del nom o l'i d'ordre
+function CreaIdSiCal(obj, i)
+{
+	if (!obj.id)
+	{
+		if (obj.nom)
+			obj.id=obj.nom;
+		else
+			obj.id=i.toString();  // obj.id=create_UUID(); Això s'usua en els estils potser també estaria bé usar un hash enlloc de l'ordre o d'un UUID
+	}
+}
+
+function DonaTextIdentificatiuCapa(capa)
+{
+var cdns=[], i_capa;
+	
+	i_capa=ParamCtrl.capa.indexOf(capa);
+	if(ParamCtrl.ICapaVolaPuntConsult==i_capa)
+	{
+		cdns.push((ParamCtrl.ServidorLocal) ? ParamCtrl.ServidorLocal : location.href);
+		cdns.push("_", "ICapaVolaPuntConsult");
+	}
+	else if(ParamCtrl.ICapaVolaAnarCoord==i_capa)
+	{
+		cdns.push((ParamCtrl.ServidorLocal) ? ParamCtrl.ServidorLocal : location.href);
+		cdns.push("_", "ICapaVolaAnarCoord");
+	}
+	else if(ParamCtrl.ICapaVolaAnarObj==i_capa)
+	{
+		cdns.push((ParamCtrl.ServidorLocal) ? ParamCtrl.ServidorLocal: location.href);
+		cdns.push("_", "ICapaVolaAnarObj");
+	}
+	else if(ParamCtrl.ICapaVolaEdit==i_capa)
+	{
+		cdns.push((ParamCtrl.ServidorLocal) ? ParamCtrl.ServidorLocal : location.href);
+		cdns.push("_", "ICapaVolaEdit");
+	}
+	else if(ParamCtrl.ICapaVolaGPS==i_capa)
+	{
+		cdns.push((ParamCtrl.ServidorLocal) ? ParamCtrl.ServidorLocal: location.href);
+		cdns.push("_", "ICapaVolaGPS");
+	}
+	else
+	{
+		cdns.push(DonaServidorCapa(capa));
+		if(capa.nom)
+			cdns.push("_", capa.nom);		
+		cdns.push("_", DonaTipusServidorCapa(capa));
+		if(capa.format)
+			cdns.push("_", capa.format);	
+	}
+	return cdns.join("");	
+}// Fi de DonaTextIdentificatiuCapa()
+
+function DonaTextIdentificatiuCapaPerIdHash(capa)
+{
+var cdns=[], i_capa;
+	
+	cdns.push(DonaTextIdentificatiuCapa(capa));
+	i_capa=ParamCtrl.capa.indexOf(capa);
+	cdns.push("_", DonaVersioServidorCapa(capa));
+	if(capa.model)
+		cdns.push("_", capa.model);		
+	if(capa.CRSgeometry)
+		cdns.push("_", capa.CRSgeometry);
+	return cdns.join("");	
+}
+
+// Crea un UUID si cal basat en un algoritme hash reproduïble i no aleàtori
+function CreaIdOIdHashCapaSiCal(obj)
+{
+	if (obj.id)
+		return;
+	
+	// Primer intento generar un identificador descriptiu
+	var id=DonaTextIdentificatiuCapa(obj).toLowerCase();
+	// Ara miro que no estigui assigant a capa capa
+	for(var i=0; i<ParamCtrl.capa.length; i++)
+	{
+		if(ParamCtrl.capa[i].id  && ParamCtrl.capa[i].id.toLowerCase()==id)
+			break; // No el puc usar
+	}
+	if(i==ParamCtrl.capa.length)
+	{
+		// id no trobat i el puc usar
+		obj.id=id;
+		return;
+	}
+	obj.id=stringToHash(DonaTextIdentificatiuCapaPerIdHash(obj)).toString();
+	return;
+}
+
+
+
 function GeneraUIDCapa(capa)
 {
 	// Generació de identificador de la capa i els estils
-	CreaIdHashCapaSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
+	CreaIdOIdHashCapaSiCal(capa);  // en el cas de la capa el faig més complexe perquè sinó em surten repetits
 	if (capa.estil && capa.estil.length)
 	{
 		for (var j=0; j<capa.estil.length; j++)
@@ -1881,32 +1987,32 @@ function ObreFinestraAjuda()
 const dialogDescarregaMMRId = "dialogDescarregaMMR";
 function PreguntaDescarregaMMReader(identificadorAncoraDialeg) 
 {
-		let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
-		
-		if (!dialogDescarrega)
-		{
-			let elemAncora = document.getElementById(identificadorAncoraDialeg);
+	let dialogDescarrega = document.getElementById(dialogDescarregaMMRId);
 	
-			if (elemAncora)
-			{
-				const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+	if (!dialogDescarrega)
+	{
+		let elemAncora = document.getElementById(identificadorAncoraDialeg);
 
-				dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
-				elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
-				
-				// Botó de confirmació
-				const boto = document.getElementById("botoConfirmarDescarga");
-				boto.addEventListener("click", (event) => {
-					event.preventDefault();
-					InstalaLectorMapes();
-					dialogDescarrega.close();			
-				});
-			}
-			else
-				return; 
+		if (elemAncora)
+		{
+			const dialogHtml = ["<form><p>", GetMessage("SureToDownloadMMR", "barra"), "</p><div class='horizontalSpreadElements'><button id='botoConfirmarDescarga' class='buttonDialog' formmethod='dialog' value='default'>", GetMessage("OK"), "</button><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("Cancel"), "</button></div></form>"];
+
+			dialogDescarrega = CreaDialog(dialogDescarregaMMRId, dialogHtml.join(""));
+			elemAncora.insertAdjacentElement("afterend", dialogDescarrega);
+			
+			// Botó de confirmació
+			const boto = document.getElementById("botoConfirmarDescarga");
+			boto.addEventListener("click", (event) => {
+				event.preventDefault();
+				InstalaLectorMapes();
+				dialogDescarrega.close();			
+			});
 		}
+		else
+			return; 
+	}
 
-		dialogDescarrega.showModal();	
+	dialogDescarrega.showModal();	
 }
 
 function InstalaLectorMapes()
@@ -2881,13 +2987,13 @@ var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.tex
 		{
 			FitxerExplanationWindow=window.open(url,"FitxerExplanation",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
 			ShaObertPopUp(FitxerExplanationWindow);
-	}
-	else
-	{
+		}
+		else
+		{
 			FitxerExplanationWindow.location.href=url;
 			FitxerExplanationWindow.focus();
+		}
 	}
-}
 	else if(text)
 	{
 		// Obro una finestraLayer i hi incrusto el Text
@@ -2907,6 +3013,7 @@ var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.tex
 		contentLayer(elem, cdns.join(""));
 	}
 }
+
 var FitxerMetadadesWindow=null;
 function ObreFinestraFitxerMetadades(i_capa, i_estil)
 {
@@ -3551,6 +3658,69 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 	return cdns.join("");
 }
 
+//layerdims=[{ly: id, dims: [clau: valor}]}]
+//Aquesta funció no força un redibuixat.
+function CanviaDimensionsExtraDeCapes(layerdims, param_name_dim_extra)
+{
+	var capa, ly_dims, hihacanvis=false;
+
+	for (var j=0; j<layerdims.length; j++)
+	{
+		var ly_dims=layerdims[j];
+		var ly_dimsArray=Object.keys(ly_dims.dims);
+		for (var i=0; i<ParamCtrl.capa.length; i++)
+		{
+			capa=ParamCtrl.capa[i];
+			if (ly_dims.ly==capa.id)
+			{
+				if (capa.dimensioExtra)
+				{
+					for (var i_lydims_dim=0; i_lydims_dim<ly_dimsArray.length; i_lydims_dim++)
+					{	
+						var ly_clau=ly_dimsArray[i_lydims_dim];
+						var ly_valor=ly_dims.dims[ly_dimsArray[i_lydims_dim]];
+						for (var i_param=0; i_param<capa.dimensioExtra.length; i_param++)
+						{
+							if (capa.dimensioExtra[i_param].clau.nom==ly_clau)
+							{
+								var clau_valor=capa.dimensioExtra[i_param];
+								for (var i_valor=0; i_valor<clau_valor.valor.length; i_valor++)
+								{
+									if (clau_valor.valor[i_valor].nom==ly_valor)
+									{
+										if (clau_valor.i_valor!=i_valor)
+										{
+											hihacanvis=true;
+											clau_valor.i_valor=i_valor;
+										}
+										break;
+									}
+								}
+								if (i_valor==clau_valor.valor.length)
+									alert("La dimensio de la capa no suporta el valor solicitat" + " " + capa_visible[j] + " " +
+										GetMessage("indicatedAt") + " " +  param_name_dim_extra);
+								break;
+							}
+						}
+						if (i_param==capa.dimensioExtra.length)
+							alert("La capa no te la dimensio extra solicidada" + " " + capa_visible[j] + " " +
+								GetMessage("indicatedAt") + " " +  param_name_dim_extra);
+					}
+				}
+				else
+					alert("La capa no te dimensions" + " " + capa_visible[j] + " " +
+						GetMessage("indicatedAt") + " " +  param_name_dim_extra);
+				break;
+			}
+		}
+		if (i==ParamCtrl.capa.length)
+			alert(GetMessage("CannotFindLayer") + " " + capa_visible[j] + " " +
+					GetMessage("indicatedAt") + " " +  param_name_dim_extra);
+	}
+	return (hihacanvis) ? 0 : 1;
+}
+
+
 //i_estil és un index d'estil o -1 si ha de ser l'estil indicat a la capa
 //i_data és un número (positiu o negatiu o null si ha de ser la dada indicada a la capa.
 function DonaRequestGetMap(i, i_estil, pot_semitrans, ncol, nfil, env, i_data, valors_i)
@@ -3632,7 +3802,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], plantilla;
 	else
 	{
 		cdns.push("&properties=*");	
-}
+	}
 	if (capa.AnimableMultiTime)
 		cdns.push("&datetime=",(DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)],capa.FlagsData)));	
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), ParamCtrl.UsaSempreMeuServidor ? true : false, DonaCorsServidorCapa(capa));
@@ -4427,64 +4597,6 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 	IniciaVisualitzacio();
 }
 
-//Crea un identificador des de del nom o l'i d'ordre
-function CreaIdSiCal(obj, i)
-{
-	if (!obj.id)
-	{
-		if (obj.nom)
-			obj.id=obj.nom;
-		else
-			obj.id=i.toString();
-	}
-}
-
-function DonaTextIdentificatiuCapa(capa)
-{
-var cdns=[], i_capa;
-	
-	i_capa=ParamCtrl.capa.indexOf(capa);
-	if(ParamCtrl.ICapaVolaPuntConsult==i_capa)
-		cdns.push("ICapaVolaPuntConsult");
-	else if(ParamCtrl.ICapaVolaAnarCoord==i_capa)
-		cdns.push("ICapaVolaAnarCoord");
-	else if(ParamCtrl.ICapaVolaAnarObj==i_capa)
-		cdns.push("ICapaVolaAnarObj");
-	else if(ParamCtrl.ICapaVolaEdit==i_capa)
-		cdns.push("ICapaVolaEdit");
-	else if(ParamCtrl.ICapaVolaGPS==i_capa)
-		cdns.push("ICapaVolaGPS");
-	else
-	{
-		if(capa.servidor)
-			cdns.push(capa.servidor);
-		if(capa.nom)
-			cdns.push(capa.nom);
-		if(capa.tipus)
-			cdns.push(capa.tipus);
-		if(capa.model)
-			cdns.push(capa.model);
-		if(capa.CRSgeometry)
-			cdns.push(capa.CRSgeometry);	
-	}
-	return cdns.join("");	
-}
-
-
-// Crea un UUID si cal basat en un algoritme hash reproduïble i no aleàtori
-function CreaIdHashCapaSiCal(obj)
-{
-	if (!obj.id)
-		obj.id=stringToHash(DonaTextIdentificatiuCapa(obj)).toString();
-}
-
-// Crea un UUID si cal basat en un algoritme aleatòri
-function CreaUUIDSiCal(obj)
-{
-	if (!obj.id)
-		obj.id=create_UUID();
-}
-
 function ComprovaConsistenciaAttributesMostrar(attributes, ref_source_attrib)
 {
 	var attributesArray=Object.keys(attributes);
@@ -4580,7 +4692,6 @@ var i, j;
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
-		//CreaIdSiCal(capa, i); Traslladat a CompletaDefinicioCapa
 
 		if (protocol=="https:" && capa.servidor && host==DonaHost(capa.servidor).toLowerCase() &&
 			   protocol!=DonaProtocol(capa.servidor).toLowerCase())
@@ -4623,7 +4734,6 @@ var i, j;
 			for (j=0; j<capa.estil.length; j++)
 			{
 				estil=capa.estil[j];
-				// CreaIdSiCal(estil, j);  Traslladat a CompletaDefinicioCapa
 
 				CanviaAtributsPerAttributesSiCalParamCtrl(estil, " capa = " + DonaCadenaNomDesc(capa) + " estil = " + DonaCadenaNomDesc(estil));
 
@@ -4894,7 +5004,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "misTransaccio", GetMessageJSON("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "taulaCapaVectorial", GetMessageJSON("ElementsVectorialTable", "vector"), boto_copiar|boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "creaStoryMap", GetMessageJSON("NewStorymap", "storymap"), boto_tancar, 420, 150, 750, 500, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-	
+
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;
 
