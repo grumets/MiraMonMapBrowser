@@ -990,7 +990,7 @@ function AfegeixEspaiTransparent(window)
 	let storyWindow = getFinestraLayer(window, "storyMap");
 	const imgTransparent = document.createElement("img");
 	imgTransparent.setAttribute("name", imgEspaiBlancNom);
-	imgTransparent.src = "1negre.gif";
+	imgTransparent.src = "1tran.gif";
 	const boundingRectWindow = storyWindow.getBoundingClientRect();
 	imgTransparent.width = boundingRectWindow.width;
 	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
