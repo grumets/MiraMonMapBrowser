@@ -1634,7 +1634,7 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 		//Buida objectes vectorials si han vingut d'un servidor.
 		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
 		{
-			if(capa.FormatImage=="text/csv")
+			if(capa.FormatImage=="text/csv" && !capa.servidor)
 			{				
 				if (capa.objectes && capa.objectes.features)
 				{
@@ -4599,7 +4599,8 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function ComprovaConsistenciaAttributesMostrar(attributes, ref_source_attrib)
 {
-	var attributesArray=Object.keys(attributes);
+var attributesArray=Object.keys(attributes), avis_mostrar_attributes=false;
+
 	if (attributesArray.length)
 	{
 		for (var j=0; j<attributesArray.length; j++)
@@ -4670,7 +4671,6 @@ var i, j;
 	}
 
 	// arreglem els config.json que deien mostrar: true false errònimament
-	var avis_mostrar_attributes=false;
 	var capa, estil;
 
 	var protocol=location.protocol.toLowerCase();
