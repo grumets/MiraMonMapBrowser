@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -284,7 +284,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 			{
 				//afegim el bbox i el gmlpol només al primary target
 				if (trg[i].role=="primary")
-		{
+				{
 					//afegim el bounding box en lon/lat
 					var dec_g=9;
 					var dif=0.0000000045;
@@ -296,34 +296,32 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 			}
 		}
 		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
-
 	}
 	//estem en el cas d'un pol
 	else
-			{
+	{
 		// si les coordenades no són en lon/lat, les transformem
 		if (crs !="EPSG:4326" && crs !="CRS:84")
 		{
 			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
 			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
-					for (var i=0; i<trg.length; i++)
-					{
-						//afegim el bbox i el gmlpol només al primary target
-						if (trg[i].role=="primary")
-						{
-							//afegim el bounding box en lon/lat
-					//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
-					//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
-					var dec_trans=9;
-					trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
-					//afegim el GMLpol en el crs original
-							trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
-						}
-					}
-				}
-
-		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+			for (var i=0; i<trg.length; i++)
 			{
+				//afegim el bbox i el gmlpol només al primary target
+				if (trg[i].role=="primary")
+				{
+					//afegim el bounding box en lon/lat
+			//al fer la transformació a graus no podem deixar el mateix nombre de decimals definit per al sistema de referència original pq es perd precissió. 
+			//Podria passar que el sistema de referència original tingués definits 0 decimals i això ens podria portar a una situació on les lats i/o les long fossin idèntiques entre elles i la CGI no les guardés (la CGI sempre comprova que minLat<maxLat i minLong<maxLong, en cas contrari no es guarda el bbox)
+			var dec_trans=9;
+			trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
+			//afegim el GMLpol en el crs original
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+				}
+			}
+		}
+		else // les coordenades son en lon/lat,per tant, tant el bbox com el GMLpol s'ecriuen en lon/lat
+		{
 			//comprovem que les coordenades min/maxLat i min/maxLong no siguin iguals entre elles. En cas que ho siguin demanem a l'uruari que modifiqui el nombre de decimals a la configuració del navegador
 			if ((OKStrOfNe(ulc.x,dec)==OKStrOfNe(lrc.x,dec)) || (OKStrOfNe(lrc.y,dec)==OKStrOfNe(ulc.y,dec)))
 			{
@@ -342,13 +340,11 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 						trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
 						//afegim el GMLpol
 						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
-						}
 					}
 				}
 			}
-	
+		}	
 		GUFAfegirFeedbackCapaMultipleTargets(trg, lang, access_token_type);
-	
 	}
 	return;
 }
@@ -542,6 +538,7 @@ function EliminaIndexDeCapesVolatils(param_ctrl)
 	if(typeof param_ctrl.ICapaVolaGPS !== "undefined")
 		delete param_ctrl.ICapaVolaGPS;
 }
+
 
 function NumeroDeCapesVolatils(i_capa)
 {
