@@ -910,47 +910,7 @@ function DonaCadenaLang(cadena_lang)
 
 function GetMessage(msg_id, section)
 {
-	if (section)
-	{
-		if (-1!=section.indexOf("."))
-		{
-			var sections=section.split("."), place=MessageLang;
-			for (var i=0; i<sections.length; i++)
-			{
-				if (!place[sections[i]])
-				{
-					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
-					return "["+GetMessage("MissingMessage")+"]";
-				}
-				place=place[sections[i]];
-			}
-			if (!place[msg_id])
-			{
-				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-				return "["+GetMessage("MissingMessage")+"]";
-			}
-			return DonaCadenaLang(place[msg_id]);
-		}
-		if (!MessageLang[section])
-		{
-			alert("MessageLang Error: I cannot found section \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
-		}
-		if (!MessageLang[section][msg_id])
-		{
-			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
-		}
-		return DonaCadenaLang(MessageLang[section][msg_id]);
-	}
-	if (!MessageLang[msg_id])
-	{
-		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
-		if (msg_id=="MissingMessage")
-			return "[Missing message]"
-		return "["+GetMessage("MissingMessage")+"]";
-	}
-	return DonaCadenaLang(MessageLang[msg_id]);
+	return DonaCadenaLang(GetMessageJSON(msg_id, section));
 }
 
 function GetMessageJSON(msg_id, section)
@@ -965,26 +925,26 @@ function GetMessageJSON(msg_id, section)
 				if (!place[sections[i]])
 				{
 					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
-					return "["+GetMessage("MissingMessage")+"]";
+					return GetMessageJSON("MissingMessageInBrackets");
 				}
 				place=place[sections[i]];
 			}
 			if (!place[msg_id])
 			{
 				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-				return "["+GetMessage("MissingMessage")+"]";
+				return GetMessageJSON("MissingMessageInBrackets");
 			}
 			return place[msg_id];
 		}
 		if (!MessageLang[section])
 		{
 			alert("MessageLang Error: I cannot found section \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
+			return GetMessageJSON("MissingMessageInBrackets");
 		}
 		if (!MessageLang[section][msg_id])
 		{
 			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
+			return GetMessageJSON("MissingMessageInBrackets");
 		}
 		return MessageLang[section][msg_id];
 	}
@@ -993,7 +953,7 @@ function GetMessageJSON(msg_id, section)
 		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
 		if (msg_id=="MissingMessage")
 			return "[Missing message]"
-		return "["+GetMessage("MissingMessage")+"]";
+		return GetMessage("MissingMessageInBrackets");
 	}
 	return MessageLang[msg_id];
 }
