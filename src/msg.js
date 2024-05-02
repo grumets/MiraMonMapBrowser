@@ -55,6 +55,14 @@ var MessageLang=
     "cze": "Chybějící zpráva",
     "ger": "Fehlende Meldung"
   },
+  "MissingMessageInBrackets": {
+    "cat": "[Missatge no trobat]",
+    "spa": "[Mensage no encontrado]",
+    "eng": "[Missing message]",
+    "fre": "[Message non trouvé]",
+	"cze": "[Chybějící zpráva]",
+    "ger": "[Fehlende Meldung]"
+  },
   "neitherRecognizedNorImplemented": {
     "cat": "no reconnegut o implementat",
     "spa": "no reconocido o implementado",
