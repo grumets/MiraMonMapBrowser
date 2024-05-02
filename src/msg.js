@@ -3338,6 +3338,14 @@ var MessageLang=
       "cze": "Storymap nelze importovat",
       "ger": "Der Storymap kann nicht importiert werden"
     },
+    "manual": {
+      "cat": "manual",
+      "spa": "manual",
+      "eng": "manual",
+      "fre": "manuel",
+      "cze": "manuální",
+      "ger": "handbuch"
+    }
   },
   "tresD": {
     "Graphic_3D": {

@@ -912,8 +912,8 @@ function getRectLayer(elem)
 	RectGetRectLayer.ample=estil.pixelWidth ? estil.pixelWidth : ((estil.width=="") ? 0 : parseInt(estil.width));
 	RectGetRectLayer.alt=estil.pixelHeight ? estil.pixelHeight : ((estil.height=="") ? 0 : parseInt(estil.height));*/
 	var offsets = elem.getBoundingClientRect();
-	return {"esq": offsets.left + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft,
-		"sup": offsets.top + window.pageYOffset - elem.ownerDocument.documentElement.clientTop,
+	return {"esq": offsets.left + window.scrollX - elem.ownerDocument.documentElement.clientLeft,
+		"sup": offsets.top + window.scrollY - elem.ownerDocument.documentElement.clientTop,
 		"ample": Math.round(offsets.right-offsets.left),
 		"alt": Math.round(offsets.bottom-offsets.top)};
 }
@@ -922,14 +922,14 @@ function getRectEsqLayer(elem)
 {
 	//var estil=elem.style;
 	//return estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left));
-	return Math.round(elem.getBoundingClientRect().left) + window.pageXOffset - elem.ownerDocument.documentElement.clientLeft;
+	return Math.round(elem.getBoundingClientRect().left) + window.scrollX - elem.ownerDocument.documentElement.clientLeft;
 }
 
 function getRectSupLayer(elem)
 {
 	//var estil=elem.style;
 	//return estil.pixelTop ? estil.pixelTop : ((estil.top=="") ? 0 : parseInt(estil.top));
-	return Math.round(elem.getBoundingClientRect().top) + window.pageYOffset - elem.ownerDocument.documentElement.clientTop;
+	return Math.round(elem.getBoundingClientRect().top) + window.scrollY - elem.ownerDocument.documentElement.clientTop;
 }
 
 function spaceForLayers(win)
@@ -1662,7 +1662,18 @@ var nom, i_finestra;
 	//Creo la finestra i li assigno el seu estil de visualització
 	nom=name+SufixFinestra;
 	createLayer(win, nom, left, (top+AltBarraFinestraLayer), width, (height-AltBarraFinestraLayer), ancora, param, content);
-	classLayer(getLayer(win, nom), "finestra");
+	let finestraCreada = getLayer(win, nom);
+	
+	// Registrem els oients als events especificats a param.ev
+	/*if (param.ev && typeof param.ev === 'object')
+	{
+		Object.keys(param.ev).forEach((nomEvent) => {
+			finestraCreada.addEventListener(nomEvent, param.ev[nomEvent]);
+			//console.log(nomEvent);
+		});
+	}*/
+
+	classLayer(finestraCreada, "finestra");
 
 	if (param.resizable)
 	{

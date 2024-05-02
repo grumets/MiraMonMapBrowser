@@ -65,6 +65,11 @@ var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomNam
 const nomPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
+const arrayAlcadesScrollIAccions = [];
+const identificadorDivAccioMapa = "AccioMapa_";
+var contadorAccionsMapa = 0;
+const indentificadorSelectorControls = "controls";
+const controlScroll = "scroll", controlManual = "manual";
 
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
@@ -851,6 +856,13 @@ function FinalitzarStoryMap(estemEditant = false)
 	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
+	// Identifiquem cada <div> amb atributs d'acció al mapa.
+	const arrayImgsAccions = tinyEditorBody.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
+	arrayImgsAccions.forEach((divElement) => { 
+		divElement.setAttribute("id", identificadorDivAccioMapa+contadorAccionsMapa);
+		contadorAccionsMapa++;
+	});
+	contadorAccionsMapa = 0;
 
 	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + "<div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
 	novaStoryMap.relat = cdns;
@@ -933,6 +945,8 @@ var base;
 function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
+const previaAccio = 0;
+const seguentAccio = 1;
 
 	if (relatACarregar.desc)
 		titolFinestraLayer(window, "storyMap", DonaCadena(relatACarregar.desc));
@@ -948,10 +962,81 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	}
 
 	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
-	{	
-		// Afegim els botons d'edició dins de la finestra de visualització:
+	{			
 		const parser = new DOMParser();
 		const DOMStorymap = parser.parseFromString(relatACarregar.html, "text/html");
+
+		// Crear controls per a navegació en el relat. 
+		let divControlsNavegacio = document.createElement("div");
+		divControlsNavegacio.setAttribute("class", "horizontalSpreadElements");
+
+		//Opció radio buttons
+		/*let radioScroll = document.createElement("input");
+		radioScroll.setAttribute("type", "radio");
+		radioScroll.setAttribute("id", controlScroll);
+		radioScroll.setAttribute("name", indentificadorSelectorControls);
+		radioScroll.setAttribute("value", controlScroll);
+		radioScroll.setAttribute("checked", "checked");
+		let labelScrollRadio = document.createElement("label");
+		labelScrollRadio.setAttribute("for", controlScroll);
+		labelScrollRadio.innerHTML = GetMessage("automatic");
+		let radioManual = document.createElement("input");
+		radioManual.setAttribute("type", "radio");
+		radioManual.setAttribute("id", controlManual);
+		radioManual.setAttribute("name", indentificadorSelectorControls);
+		radioManual.setAttribute("value", controlManual);
+		let labelManualRadio = document.createElement("label");
+		labelManualRadio.setAttribute("for", controlManual);
+		labelManualRadio.setAttribute("style", "padding=2px;");
+		labelManualRadio.innerHTML = GetMessage("manual", "storymap");*/
+
+
+		let selector = document.createElement("select");
+		selector.setAttribute("id", indentificadorSelectorControls);
+		selector.setAttribute("style", "padding: 2px;");		
+
+		let opcioScroll = document.createElement("option");
+		opcioScroll.setAttribute("value", controlScroll);
+		opcioScroll.innerHTML = GetMessage("automatic");
+		let opcioManual = document.createElement("option");
+		opcioManual.setAttribute("value", controlManual);
+		opcioManual.innerHTML = GetMessage("manual", "storymap");
+
+		selector.appendChild(opcioScroll);
+		selector.appendChild(opcioManual);
+
+		/*divControlsNavegacio.appendChild(labelScrollRadio);
+		divControlsNavegacio.appendChild(radioScroll);
+		divControlsNavegacio.appendChild(labelManualRadio);
+		divControlsNavegacio.appendChild(radioManual);*/
+
+		// Botons següent i previ
+		let previBoto = document.createElement("input");
+		previBoto.setAttribute("type", "button");
+		previBoto.className = "button_image_dialog";
+		previBoto.classList.add("center");
+		previBoto.setAttribute("name", "controlAccio");
+		previBoto.setAttribute("disabled", "disabled");
+		previBoto.setAttribute("value", GetMessage("Previous"));
+		//previBoto.addEventListener("click", reprodueixAccioMapa);
+		let seguentBoto = document.createElement("input");
+		seguentBoto.setAttribute("type", "button");
+		seguentBoto.className = "button_image_dialog";
+		seguentBoto.classList.add("center");
+		seguentBoto.setAttribute("name", "controlAccio");
+		seguentBoto.setAttribute("disabled", "disabled");
+		seguentBoto.setAttribute("value", GetMessage("Next"));
+		//seguentBoto.addEventListener("click", reprodueixAccioMapa);
+		
+		divControlsNavegacio.appendChild(selector);
+		let divBotonsAccio = document.createElement("div");
+		divBotonsAccio.setAttribute("class", "horizontalSpreadElements");
+		divBotonsAccio.appendChild(previBoto);
+		divBotonsAccio.appendChild(seguentBoto);
+		divControlsNavegacio.appendChild(divBotonsAccio);
+		DOMStorymap.body.insertAdjacentElement("afterbegin", divControlsNavegacio);
+
+		// Afegim els botons d'edició dins de la finestra de visualització:
 		let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
@@ -967,14 +1052,117 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	}
 	
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
-
 	ObreFinestra(window, "storyMap");
+	
+	document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
+		if (button.value == GetMessage("Next"))
+		{
+			button.addEventListener("click", function () {
+				if (contadorAccionsMapa < arrayAlcadesScrollIAccions.length)
+				{
+					const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+					getLayer(window, "storyMap"+SufixFinestra).scrollBy(0, infoAccio.y);
+					ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+					contadorAccionsMapa++;
+				}
+				if (contadorAccionsMapa == arrayAlcadesScrollIAccions.length)
+					contadorAccionsMapa--;
+			});
+		}	
+		else if (button.value == GetMessage("Previous"))
+		{
+			button.addEventListener("click", function () {
+				
+
+				if (contadorAccionsMapa >= 0)
+				{
+					const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+					getLayer(window, "storyMap"+SufixFinestra).scrollBy(0, infoAccio.y);
+					ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+					contadorAccionsMapa--;
+				}
+				if (contadorAccionsMapa < 0)
+					contadorAccionsMapa = 0;
+			});
+		}
+	});
+
+	document.querySelector("#"+indentificadorSelectorControls).addEventListener("change", function() {
+		let finestraStorymap = document.getElementById("storyMap" + SufixFinestra);
+
+		if (this.value == controlScroll)
+		{
+			if (finestraStorymap)
+			{
+				//finestraStorymap.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
+				finestraStorymap.onscroll = ExecutaAttributsStoryMapVisibleEvent;
+			}
+			document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
+				button.setAttribute("disabled", "disabled");
+			});
+		}
+		else if (this.value == controlManual)
+		{
+			if (finestraStorymap)
+			{
+				//finestraStorymap.removeEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
+				finestraStorymap.onscroll = null;
+			}
+			document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
+				button.removeAttribute("disabled");
+			});
+			contadorAccionsMapa = 0;
+		}
+	});
+
+	/*document.querySelectorAll("input[name=\""+indentificadorSelectorControls + "\"").forEach(element => {
+		element.addEventListener("change", function(event) {
+			console.log(event.target.value);
+		});
+	});*/
+
+	ExtreuAlcadesIAccionsDivisions(text_html);
 	AfegeixEspaiTransparent(window);
 	AfegeixMarkerStoryMapVisible();
 
 	indexStoryMapActiu=i_story;
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
+}
+
+function ExtreuAlcadesIAccionsDivisions(textHtml)
+{
+	const domFromText = new DOMParser().parseFromString(textHtml, "text/html");
+	const arrayDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
+	
+	if (arrayDivAccions.length > 0)
+	{
+		let divAccio;
+		
+		for(contadorAccionsMapa=0; contadorAccionsMapa < arrayDivAccions.length; contadorAccionsMapa++)
+		{	
+			let datasetTransformat=[];
+			divAccio = document.getElementById(identificadorDivAccioMapa+contadorAccionsMapa);
+			const atributsPropis = divAccio.dataset;
+			const primeraVolta = true;
+			for (var key in atributsPropis)
+			{	
+				const prefix = "data-mm-";
+				let transformacioClau = prefix + String.fromCharCode(key.charCodeAt(2)+32) + key.substring(3);
+				datasetTransformat.push(transformacioClau);
+				datasetTransformat.push(atributsPropis[key]);
+			}
+			arrayAlcadesScrollIAccions.push({"y": divAccio.getBoundingClientRect().y, "datasetTransformat": datasetTransformat});
+		}
+	}	
+}
+
+function transformaAtributsPropis(value, key, map)
+{
+	const prefix = "data-mm-"; 
+	let transformacioClau = prefix + String.fromCharCode(key.charCodeAt(2)+32) + key.substring(3);
+	this.push(transformacioClau);
+	this.push(value);
 }
 
 /* 	Afegeix una imatge transparent al final del relat per tal que
@@ -1065,6 +1253,7 @@ function AfegeixMarkerStoryMapVisible()
 	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
 }
 
+const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
 {
@@ -1089,7 +1278,7 @@ var node, attribute;
 					//Afegir el simbol dins
 					// Create a text node:
 					var divNode = document.createElement("span");
-					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, "storymap_mm_action_"+i_mm, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
 					i_mm++;
 					node.insertBefore(divNode, node.children[0]);
 					break;
@@ -1124,145 +1313,147 @@ var attributes=[];
 function ExecuteDataMMAttributesArray(attributes)
 {
 var hihacanvis, attribute;
+const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
+	
+	hihacanvis=false;
 
-			hihacanvis=false;
+	for (var i_at = 0; i_at < attributes.length; i_at++)
+	{
+		attribute=attributes[i_at];
+		if (attribute.name=='data-mm-crs')   //Necessito aplicar aquest abans que tots els altres.
+		{
+			if (attribute.value.trim().length)
+			{
+				if (0==CommandMMNSetCRS(attribute.value.trim()))
+					hihacanvis=true;
+			}
+		}
+	}
+	for (var i_at = 0; i_at < attributes.length; i_at++)
+	{
+		attribute=attributes[i_at];
+		if (attribute.name=="data-mm-center")
+		{
+			var mmcenter = attribute.value.trim();
+			if (mmcenter.length)
+			{
+				var punt;
+				try {
+					punt=JSON.parse(mmcenter);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
+					break;
+				}
+				if (0==CommandMMNSetCenterCoord(punt))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=='data-mm-zoom')
+		{
+			if (attribute.value.trim().length)
+			{
+				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
+					hihacanvis=true;
+			}
+		}
+		else if (attribute.name=="data-mm-layers")
+		{
+			for (var i_styles = 0; i_styles < attributes.length; i_styles++)
+			{
+				if (attributes[i_styles].name=="data-mm-styles")
+					break;
+			}
+			if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
+					(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
+					"data-mm-layers"))
+				hihacanvis=true;
+		}
+		else if (attribute.name=="data-mm-time")
+		{
+			var datejson;
+			var mmtime = attribute.value.trim();
+			if (mmtime.length)
+			{
+				try
+				{
+					datejson=JSON.parse(mmtime);
+				}
+				catch (e)
+				{
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
+								GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
+					break;
+				}
+				if (0==CommandMMNSetChangeDateTime(datejson))
+					hihacanvis=true;
+			}
+		}
+		else if (attribute.name=='data-mm-sels')
+		{
+			var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
+			if (mmsels.length>3)
+			{
+				var sels;
+				try {
+					sels=JSON.parse(mmsels);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
+					break;
+				}
+				if (0==CommandMMNSelections(sels))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=='data-mm-diags')
+		{
+			var mmdiags = "["+attribute.value.trim()+"]";
+			if (mmdiags.length>3)
+			{
+				var diags;
+				try {
+					diags=JSON.parse(mmdiags);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
+					break;
+				}
+				if (0==CommandMMNDiagrams(diags))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=="data-mm-extradims")
+		{
+			var mmlayerdims = "["+attribute.value.trim()+"]";
+			if (mmlayerdims.length>3)
+			{
+				var layerdims;
+				try {
+					layerdims=JSON.parse(mmlayerdims);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmlayerdims);
+					break;
+				}
+				if (0==CommandMMNSetLayersExtraDimensions(layerdims))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+	}
 
-			for (var i_at = 0; i_at < attributes.length; i_at++)
-			{
-				attribute=attributes[i_at];
-				if (attribute.name=='data-mm-crs')   //Necessito aplicar aquest abans que tots els altres.
-				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetCRS(attribute.value.trim()))
-							hihacanvis=true;
-					}
-				}
-			}
-			for (var i_at = 0; i_at < attributes.length; i_at++)
-			{
-				attribute=attributes[i_at];
-				if (attribute.name=="data-mm-center")
-				{
-					var mmcenter = attribute.value.trim();
-					if (mmcenter.length)
-					{
-						var punt;
-						try {
-							punt=JSON.parse(mmcenter);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
-							break;
-						}
-						if (0==CommandMMNSetCenterCoord(punt))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=='data-mm-zoom')
-				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-							hihacanvis=true;
-					}
-				}
-				else if (attribute.name=="data-mm-layers")
-				{
-					for (var i_styles = 0; i_styles < attributes.length; i_styles++)
-					{
-						if (attributes[i_styles].name=="data-mm-styles")
-							break;
-					}
-					if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
-							(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
-							"data-mm-layers"))
-						hihacanvis=true;
-				}
-				else if (attribute.name=="data-mm-time")
-				{
-					var datejson;
-					var mmtime = attribute.value.trim();
-					if (mmtime.length)
-					{
-						try
-						{
-							datejson=JSON.parse(mmtime);
-						}
-						catch (e)
-						{
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
-										GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
-							break;
-						}
-						if (0==CommandMMNSetChangeDateTime(datejson))
-							hihacanvis=true;
-					}
-				}
-				else if (attribute.name=='data-mm-sels')
-				{
-					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
-					if (mmsels.length>3)
-					{
-						var sels;
-						try {
-							sels=JSON.parse(mmsels);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
-							break;
-						}
-						if (0==CommandMMNSelections(sels))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=='data-mm-diags')
-				{
-					var mmdiags = "["+attribute.value.trim()+"]";
-					if (mmdiags.length>3)
-					{
-						var diags;
-						try {
-							diags=JSON.parse(mmdiags);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
-							break;
-						}
-						if (0==CommandMMNDiagrams(diags))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=="data-mm-extradims")
-				{
-					var mmlayerdims = "["+attribute.value.trim()+"]";
-					if (mmlayerdims.length>3)
-					{
-						var layerdims;
-						try {
-							layerdims=JSON.parse(mmlayerdims);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmlayerdims);
-							break;
-						}
-						if (0==CommandMMNSetLayersExtraDimensions(layerdims))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-			}
 	if (!diags)
 		TancaTotsElsHistogramaFinestra();
 	return hihacanvis;
@@ -1308,7 +1499,7 @@ var timerExecutaAttributsStoryMapVisible=null;
 // TODO: Utilitzar aquesta funció per tal de crear botó del Tiny on crei botons per executar attributs de mm-data...	
 function ExecutaAttributsStoryMapVisibleEvent(event)
 {
-	if (timerExecutaAttributsStoryMapVisible)
+	if (event !== undefined && timerExecutaAttributsStoryMapVisible)
 		clearTimeout(timerExecutaAttributsStoryMapVisible);
 	timerExecutaAttributsStoryMapVisible=setTimeout(ExecutaAttributsStoryMapVisible,500);
 }
