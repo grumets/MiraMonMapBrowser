@@ -41,8 +41,8 @@
 var indexStoryMapActiu=null;
 const tinyTextStoryMapId = "storyTextArea";
 // Crea inici Storymap identificadors.
-const inputstoryTitolId = "inputtitolRelat";
-const inputThumbnailStoryMapId = "inputThumbnail";
+const inputStoryTitolId = "inputTitolRelat";
+const inputThumbnailId = "inputThumbnail";
 const h1TitleStorymap = "titleStorymap";
 const imageThumbnailId = "imageThumbnail";
 // Límit de mida per imatges. Establerta en píxels.
@@ -53,7 +53,7 @@ const numMaximPixelsStorymap = Math.pow(midaImatgeMaximaPx, 2);
 // Identificador input imatges internes del Storymap.
 const inputImageStorymapId = "imagePicker";
 // Identificadors diàlegs
-const dialogCaractId = "caractDialog", dialogMidesId = "midesDialog", dialogAlertaId = "dialogAlerta";
+const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol";
 // Dialeg Mida Imatges identificadors
 const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
@@ -62,7 +62,7 @@ const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
-const nomImgPuntSincr = "sincrPoint";
+const nomPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 
@@ -235,17 +235,43 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 		TancaFinestraLayer("triaStoryMap");
 	}
 
+	function comprovaTitol(event)
+	{	
+		const finestra = event.target.parentNode;
+		const inputTitolRelat = document.getElementById(inputStoryTitolId);
+		if (inputTitolRelat && inputTitolRelat.value && inputTitolRelat.value != "")
+			SeguentPasStoryMap(i_relat);
+		else
+		{
+			const dialegNodeList = finestra.querySelectorAll("dialog[id='"+ dialegAlertaTitolId + "']");
+			if (dialegNodeList && dialegNodeList.length != 0)
+				dialegNodeList[0].show();
+			else
+			{
+				const caractDialog = CreaDialegAlertaTitol();
+				finestra.insertAdjacentElement("beforeend", caractDialog);
+				caractDialog.show();
+			}
+		}
+	};	
+
 	if (isFinestraLayer(window, "creaStoryMap"))
 	{
 		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputstoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
+		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
 						"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
-						"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailStoryMapId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
-						"<input id='", inputThumbnailStoryMapId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
-						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>",
-						"<input class='buttonDialog' type='button' value='", GetMessage("Next"), "' onClick='SeguentPasStoryMap(\"", i_relat, "\")'>"];
+						"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
+						"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
+						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
+		const inputBtnNext = document.createElement("input");
+		inputBtnNext.setAttribute("type", "button");
+		inputBtnNext.setAttribute("class", "buttonDialog");
+		inputBtnNext.setAttribute("value", GetMessage("Next"));						
+		inputBtnNext.addEventListener("click", comprovaTitol);
+						
 		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
+		novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
 	}
 
 	ObreFinestra(window, "creaStoryMap");
@@ -341,6 +367,19 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	imageToMesure.src = urlIamge;
 }
 /**
+ * Crea un diàleg per avisar a l'usuari la falta d'un títol per al relat.
+ * @returns 
+ */
+function CreaDialegAlertaTitol()
+{
+	const dialogHtml = ["<form><p>" + GetMessage("TitleStoryMandatory", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></form>"];
+
+	const dialog = CreaDialog(dialegAlertaTitolId, dialogHtml.join(""));
+
+	return dialog;
+}
+
+/**
  * Crea un diàleg que apareix flotant al centre de la pantalla per a que l'usuari decideixi
  * sobre la mida de la imatge que vol incorporar al Storymap. 
  * @param {*} imatge El fitxer imatge que es vol incloure a la Storymap.
@@ -351,7 +390,7 @@ function CreaDialegMidesImatge(imatge)
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
 	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
-	return CreaDialog(dialogMidesId, dialogHtml.join(""));
+	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
 /**
  * Crea un diàleg per a elegir quines característiques del mapa mantindre per un determinat fragment del relat.
@@ -361,18 +400,7 @@ function CreaDialegSincronitzarAmbMapa()
 {
 	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
-	return CreaDialog(dialogCaractId, dialogHtml.join(""));
-}
-
-function CreaDialegAlertaSeleccio()
-{
-	const dialogHtml = ["<form><div><p>" + GetMessage("SaveMapCharactMandatory", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></div></form>"];
-
-	const dialog = CreaDialog(dialogAlertaId, dialogHtml.join(""));
-
-	dialog.setAttribute("style", "max-width: 25%;");
-
-	return dialog;
+	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }
 
 function MostraDialogImatgeNavegador(imatgeSeleccionada)
@@ -617,6 +645,9 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 	}
 }
 
+// Imatge o svg per a indicar el punt exacte on es produeix la sincronització del relat amb el mapa. 
+let imgSvgSincroMapa;
+
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
 	const ultimElem = document.getElementById(ultimElemId);
@@ -642,10 +673,13 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				}
 			}
 			
+			let hiHaCheckboxSeleccionat = false;
+
 			if(resultatCaractUsuari[chboxPosZoomName]["status"])
 			{
 				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
 				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+				hiHaCheckboxSeleccionat = true;
 			}
 
 			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
@@ -660,9 +694,14 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					}
 				});
 				if (capesVisiblesIds.length > 0)
+				{
 					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
+				}
 				if (estilsCapesIds.length > 0)
+				{
 					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+				}
+				hiHaCheckboxSeleccionat = true;
 			}
 			
 			if (resultatCaractUsuari[chboxTempsName]["status"])
@@ -676,49 +715,50 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					{
 						indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
 							dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-						if (dataResultat < dataCapaAComparar) {
+						if (dataResultat < dataCapaAComparar) 
+						{
 							dataResultat = dataCapaAComparar;
 						}			
 					}
 				});
 
 				resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+				hiHaCheckboxSeleccionat = true;
 			}
 
-			let divResultatCaract = document.createElement("div");
-
-			Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-				if(resultatCaractUsuari[caracteristica]["attribute"])
-				{
-					divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
-				}
-			});
-			const tinyEditor = tinymce.get(tinyTextStoryMapId);
-			const tinyParent = tinyEditor.selection.getNode();
-			if (tinyParent && tinyParent.childNodes)
+			if (hiHaCheckboxSeleccionat) 
 			{
-				// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
-				if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
-				{
-					tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
-					divResultatCaract.appendChild(tinyParent);
-				}
-				else
-				{
-					const nodesEditor = Array.from(tinyParent.childNodes);
-					const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
-					tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
-					nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
-				}
-				// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-				const paragrafImatge = document.createElement("p");
-				const imatgeSincr = document.createElement("img");
+				let divResultatCaract = document.createElement("div");
 
-				imatgeSincr.src = AfegeixAdrecaBaseSRC("storymap_action" + (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors ? ".svg" : ".gif"));
-				imatgeSincr.setAttribute("style","width:22px; height:22px;")
-				imatgeSincr.setAttribute("name",nomImgPuntSincr);
-				paragrafImatge.appendChild(imatgeSincr);
-				divResultatCaract.insertAdjacentElement("afterbegin", paragrafImatge);
+				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+					if(resultatCaractUsuari[caracteristica]["attribute"])
+					{
+						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+					}
+				});
+				const tinyEditor = tinymce.get(tinyTextStoryMapId);
+				const tinyParent = tinyEditor.selection.getNode();
+				if (tinyParent && tinyParent.childNodes)
+				{
+					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+					{
+						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+						divResultatCaract.appendChild(tinyParent);
+					}
+					else
+					{
+						const nodesEditor = Array.from(tinyParent.childNodes);
+						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+					}
+					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
+					const tinyEditorBody = tinyEditor.getBody();
+					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
+					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
+				}
+			
 			}
 		}
 	});
@@ -728,7 +768,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		resultatCaract[checkbox.name]["status"] = checkbox.checked;
 	};
 
-	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialogCaractId + "']");
+	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
 	const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
 	checkboxes.forEach(checkbox => {
 		checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
@@ -759,7 +799,6 @@ function SeguentPasStoryMap(i_relat)
 	// Creo aquest textarea fora de l'string "htmlExternTiny" per a que l'eina tinymce el detecti i el pugui substituir
 	const tinytextarea = document.createElement("textarea");
 	tinytextarea.setAttribute("id", tinyTextStoryMapId)
-	//tinytextarea.innerHTML = "hello <input data-attr-invent='styyle:\"elmeue\"'></input> world"
 	const endBtn = document.getElementById(endButtonId);
 	endBtn.parentNode.insertBefore(tinytextarea, endBtn);
 	endBtn.parentNode.insertBefore(document.createElement("br"), endBtn);
@@ -809,11 +848,11 @@ function FinalitzarStoryMap(estemEditant = false)
 {
 	const tinyEditor = tinymce.get(tinyTextStoryMapId);
 	const tinyEditorBody = tinyEditor.getBody();
-	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomImgPuntSincr + "']");
+	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
 	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
 
-	const cdns = "<html><h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1><div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
+	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + "<div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
@@ -851,7 +890,8 @@ function GuardaEntradaStorymapConfig()
 
 function GuardarInformacioInicialStoryMap()
 {
-	novaStoryMap.titol = document.getElementById(inputstoryTitolId).value;
+	novaStoryMap.titol = document.getElementById(inputStoryTitolId).value;
+	
 	const imatgePortada = document.getElementById(imageThumbnailId);
 	if (imatgePortada && imatgePortada.src != "")
 		novaStoryMap.imatgePortada = imatgePortada.src;
@@ -920,27 +960,76 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
-		const title = DOMStorymap.querySelector("#"+ h1TitleStorymap);
-		if (title !== null)
-		{
-			title.insertAdjacentElement("beforebegin", divBotons);
-		}
 		
-		const seiralizer = new XMLSerializer();
+		DOMStorymap.body.insertAdjacentElement("afterbegin", divBotons);
 
-		text_html = seiralizer.serializeToString(DOMStorymap);
+		text_html = new XMLSerializer().serializeToString(DOMStorymap);
 	}
 	
 	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 
-	ObreFinestra(window, "storyMap")
-	indexStoryMapActiu=i_story;
-
+	ObreFinestra(window, "storyMap");
+	AfegeixEspaiTransparent(window);
 	AfegeixMarkerStoryMapVisible();
 
+	indexStoryMapActiu=i_story;
 	darrerNodeStoryMapVisibleExecutat=null;
 	ExecutaAttributsStoryMapVisible();
 }
+
+/* 	Afegeix una imatge transparent al final del relat per tal que
+	l'última línia de text pugui arribar fins dalt de tot de la finestra.
+*/
+var imgEspaiBlancNom = "imgEspaiBlanc"
+function AfegeixEspaiTransparent(window)
+{
+	let storyWindow = getFinestraLayer(window, "storyMap");
+	const imgTransparent = document.createElement("img");
+	imgTransparent.setAttribute("name", imgEspaiBlancNom);
+	imgTransparent.src = "1tran.gif";
+	const boundingRectWindow = storyWindow.getBoundingClientRect();
+	imgTransparent.width = boundingRectWindow.width;
+	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
+	storyWindow.insertAdjacentElement("beforeend", imgTransparent);
+	
+	const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
+	if (cantoRedimensionaStoryMap) {
+		const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
+		if (imgRedimensiona.onmousedown.length == 1)
+		{
+			imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
+
+			// Trobar índex de la finestra
+			let i_finestra
+			for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+			{
+				if (layerFinestraList[i_finestra].nom=="storyMap")
+				{
+					console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+					break;
+				}
+			}
+			imgRedimensiona.addEventListener("mousedown", function(event){
+				ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
+			});
+
+			imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
+		}
+	}
+}
+// Actualitza la mida de la imatge transparent quan es redimensioni la finestra del relat.
+function ActualitzaEspaiTransparent()
+{
+	let storyWindow = getFinestraLayer(window, "storyMap");
+	const imgTransparent = storyWindow.querySelector("img[name=" + imgEspaiBlancNom + "]");
+	if (imgTransparent)
+	{
+		const boundingRectWindow = storyWindow.getBoundingClientRect();
+		imgTransparent.width = boundingRectWindow.width;
+		imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
+	}
+}
+
 // Reiniciar els valors que intervenen en la creació de l'StoryMap.
 function TancaFinestra_creaStoryMap()
 {
@@ -960,7 +1049,10 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	{
 		//Partially visible elements return true:
 		//return rect_div.top < rect_el.bottom && rect_div.bottom > rect_el.top;
-		return rect_div.top <= rect_el.top+rect_el.height*partial && rect_div.bottom >= rect_el.top;
+
+		// DPS: return rect_div.top <= rect_el.top+rect_el.height*partial && rect_div.bottom >= rect_el.top;
+		const elem_Y = rect_el.top + rect_el.height*partial;
+		return rect_div.top <= elem_Y && rect_div.bottom >= rect_el.top;
 	}
 	//Only completely visible elements return true:
 	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
@@ -1213,6 +1305,7 @@ var node;
 
 var timerExecutaAttributsStoryMapVisible=null;
 
+// TODO: Utilitzar aquesta funció per tal de crear botó del Tiny on crei botons per executar attributs de mm-data...	
 function ExecutaAttributsStoryMapVisibleEvent(event)
 {
 	if (timerExecutaAttributsStoryMapVisible)
@@ -1250,4 +1343,93 @@ function CompartirStorymap(i_story)
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
 			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
 			}, ParamCtrl.idioma, "");
+}
+
+var imgSvgIconaSincroMapa;
+
+function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
+{
+	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+	{
+		var cdns=[];
+		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
+			"id=\"", nomPuntSincr, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
+			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
+			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
+		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
+	}
+	else
+	{
+		if (imgSvgIconaSincroMapa)
+		{
+			const svgClone = imgSvgIconaSincroMapa.cloneNode(true);
+			svgClone.setAttribute('id', nomPuntSincr + indexImatge);
+			divRef.insertAdjacentElement("afterbegin", svgClone);
+		}
+		else
+		{
+			fetch("storymap_action.svg").then(function(response) {
+				return response.text();
+			}).then(function(text){
+				var xmlDoc = new DOMParser().parseFromString(text, "text/xml");
+				var svg = xmlDoc.getElementsByTagName('svg')[0];
+				if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil)
+					svg.setAttribute('height', ParamCtrl.BarraEstil.nfil);
+				else 
+					svg.setAttribute('height', '22');
+				
+				if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol)
+					svg.setAttribute('width', ParamCtrl.BarraEstil.ncol);
+				else
+					svg.setAttribute('width', '23');
+				
+				ChangeTitleColorsSVGElement(svg, {title: GetMessage('SyncWithMap', 'storymap'), colors: ParamCtrl.BarraEstil.colors});
+				/* 	Com que el Tiny editor considera que els svg poden ser un problema de següertat 
+					(https://www.tiny.cloud/docs/tinymce/latest/image/#basic-setup), no accepta elements del tipus <svg>.
+					En lloc seu es crea aquest <img> que conté la imatge llegida en <svg>.
+				*/
+				const imgDeSvg = document.createElement("img");
+				imgDeSvg.setAttribute("src", "data:image/svg+xml;UTF8," + encodeURI(svg.outerHTML));
+				imgDeSvg.setAttribute('id', nomPuntSincr + indexImatge);
+				imgDeSvg.setAttribute('name', nomPuntSincr);
+				imgSvgIconaSincroMapa = imgDeSvg;
+				divRef.insertAdjacentElement("afterbegin", imgDeSvg);
+			}).catch(function(event){
+				console.log("Error loading "+event.target.src);
+				return;
+			});
+		}
+	}
+}
+
+// Aplicar colors per a la imatge SVG.
+function ChangeTitleColorsSVGElement(svg, params)
+{
+	if (params && svg)
+	{
+		if (params.title)
+		{
+			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
+			{
+				var newNode = document.createElementNS("http://www.w3.org/2000/svg", "title");
+				svg.insertBefore(newNode, svg.firstChild);
+			}
+			svg.getElementsByTagName("title")[0].textContent=params.title;
+		}
+		if (params.width)
+			svg.setAttribute('width', params.width);
+		if (params.height)
+			svg.setAttribute('height', params.height);
+		if (params.colors)
+		{
+			for(var c in params.colors)
+			{
+				if (svg.getElementsByClassName(c))
+				{
+					for (var i=0; i<svg.getElementsByClassName(c).length; i++)
+						svg.getElementsByClassName(c)[i].style.fill=params.colors[c];
+				}
+			}
+		}
+	}
 }

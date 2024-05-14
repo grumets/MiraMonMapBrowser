@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -44,6 +44,8 @@ var FactorGrausAMetres=111319.5
 
 var M_PI_2=Math.PI/2;
 var M_PI_4=Math.PI/4
+
+var CRSIds=[];
 
 function g_gms(graus_totals, zeros)
 {
@@ -75,7 +77,7 @@ function DonaDenominadorDeLEscalaArrodonit(a)
 	if (a<1e-20)
 		return a;
 	var e=Math.floor(Math.log(a)/Math.LN10);    //dona l'exponent en base 10
-        if (e<2)
+    if (e<2)
 		return a;
 	e-=2;
 	var n=Math.abs(a/Math.pow(10,e));
@@ -738,15 +740,15 @@ var crs_up;
 
 	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
-        	crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
-	        crs_up=="EPSG:32736")
+        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
+	    crs_up=="EPSG:32736")
         	return UTM_Geo(x,y);
 	if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
 		return LambertConicaConforme_Geo(x,y);
 	if (crs_up=="EPSG:3035")
 		return LambertAzimutalEqualArea_Geo(x,y);
 	if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
-		     crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
+		crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
 		return Mercator_Geo(x,y);
 	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return Mercator_esferica_Geo(x,y);
@@ -772,15 +774,15 @@ var crs_up;
 	crs_up=crs.toUpperCase();
 	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
-        	crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
-	        crs_up=="EPSG:32736")
+        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
+	    crs_up=="EPSG:32736")
         	return Geo_UTM(ll_x,ll_y);
 	if (crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41")
 		return Geo_LambertConicaConforme(ll_x,ll_y);
 	if (crs_up=="EPSG:3035")
 		return Geo_LambertAzimutalEqualArea(ll_x,ll_y);
 	if (crs_up=="AUTO2:MERCATOR,1,0,41.42" || crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
-	     crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
+	    crs_up=="AUTO2:MERCATOR_WGS84,1,0,41.42" || crs_up=="EPSG:3395")
 		return Geo_Mercator(ll_x,ll_y);
 	if (crs_up=="EPSG:3785" || crs_up=="EPSG:3857")
 		return Geo_Mercator_esferica(ll_x,ll_y);
@@ -1046,8 +1048,8 @@ var crs_up=crs.toUpperCase();
 
 	if (crs_up=="EPSG:32616" || crs_up=="EPSG:32628" || crs_up=="EPSG:32629" || crs_up=="EPSG:32630" || crs_up=="EPSG:32631" || crs_up=="EPSG:32632" || crs_up=="EPSG:32633" || crs_up=="EPSG:32634" || crs_up=="EPSG:32635" || crs_up=="EPSG:32636" ||
 		crs_up=="EPSG:25829" || crs_up=="EPSG:25830" || crs_up=="EPSG:25831" || crs_up=="EPSG:25832" || crs_up=="EPSG:25833" || crs_up=="EPSG:25834" || crs_up=="EPSG:25835" || crs_up=="EPSG:25836" ||
-	        crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
-        	crs_up=="EPSG:32736" ||
+	    crs_up=="EPSG:23029" || crs_up=="EPSG:23030" || crs_up=="EPSG:23031" || crs_up=="EPSG:23032" || crs_up=="EPSG:23033" || crs_up=="EPSG:23034" || crs_up=="EPSG:23035" || crs_up=="EPSG:23036" ||
+        crs_up=="EPSG:32736" ||
 		crs_up=="EPSG:27563" || crs_up=="EPSG:27572" || crs_up=="EPSG:27573" || crs_up=="AUTO2:LCC,1,14.5,38,35,41" || crs_up=="AUTO2:MERCATOR,1,0,41.42" ||
 		crs_up=="EPSG:3035" || 
 		crs_up=="AUTO2:MERCATOR,1,0,40.60" || crs_up=="AUTO2:MERCATOR,1,0,0.0" ||
@@ -1058,11 +1060,72 @@ var crs_up=crs.toUpperCase();
 	return "m?";
 }
 
+function InicialitzaArrayDeCRSIds()
+{
+	CRSIds.push(
+		{id:"EPSG:32616",desc:"UTM16N - WGS84"},
+		{id:"EPSG:32628",desc:"UTM28N - WGS84"},
+		{id:"EPSG:32629",desc:"UTM29N - WGS84"},
+		{id:"EPSG:32630",desc:"UTM30N - WGS84"},
+		{id:"EPSG:32631",desc:"UTM31N - WGS84"},
+		{id:"EPSG:32632",desc:"UTM32N - WGS84"},
+		{id:"EPSG:32633",desc:"UTM33N - WGS84"},
+		{id:"EPSG:32634",desc:"UTM34N - WGS84"},
+		{id:"EPSG:32635",desc:"UTM35N - WGS84"},
+		{id:"EPSG:32636",desc:"UTM36N - WGS84"},
+		
+		{id:"EPSG:25829",desc:"UTM29N - ETRS89"},
+		{id:"EPSG:25830",desc:"UTM30N - ETRS89"},
+		{id:"EPSG:25831",desc:"UTM31N - ETRS89"},
+		{id:"EPSG:25832",desc:"UTM32N - ETRS89"},
+		{id:"EPSG:25833",desc:"UTM33N - ETRS89"},
+		{id:"EPSG:25834",desc:"UTM34N - ETRS89"},
+		{id:"EPSG:25835",desc:"UTM35N - ETRS89"},
+		{id:"EPSG:25836",desc:"UTM36N - ETRS89"},
+		
+		{id:"EPSG:23029",desc:"UTM29N - ED50"},
+		{id:"EPSG:23030",desc:"UTM30N - ED50"},
+		{id:"EPSG:23031",desc:"UTM31N - ED50"},
+		{id:"EPSG:23032",desc:"UTM32N - ED50"},
+		{id:"EPSG:23033",desc:"UTM33N - ED50"},
+		{id:"EPSG:23034",desc:"UTM34N - ED50"},
+		{id:"EPSG:23035",desc:"UTM35N - ED50"},
+		{id:"EPSG:23036",desc:"UTM36N - ED50"},
+		{id:"EPSG:32736",desc:"UTM36S - WGS84"},
+		
+		{id:"EPSG:27563",desc:GetMessageJSON("LambertConformalConicZoneIII_NTF", "canviprj")},
+		{id:"EPSG:27572",desc:GetMessageJSON("LambertConformalConicZoneIIext_NTF", "canviprj")},
+		{id:"EPSG:27573",desc:GetMessageJSON("LambertConformalConicZoneIIIext_NTF", "canviprj")},
+		{id:"AUTO2:LCC,1,14.5,38,35,41",desc:GetMessageJSON("LambertConformalConicICCMediterranianRegion", "canviprj")},
+		{id:"EPSG:3035",desc:"ETRS89-LAEA"},
+		
+		{id:"AUTO2:MERCATOR,1,0,41.42",desc:GetMessageJSON("MercatorParallel_41d25m_ED50", "canviprj")},
+		{id:"AUTO2:MERCATOR_WGS84,1,0,41.42",desc: GetMessageJSON("MercatorParallel_41d25m_WGS84", "canviprj")},
+		{id:"AUTO2:MERCATOR,1,0,40.60",desc:GetMessageJSON("MercatorParallel_40d36m_ED50", "canviprj")},
+		{id:"AUTO2:MERCATOR,1,0,0.0",desc:GetMessageJSON("MercatorParallelEquator_ED50", "canviprj")},
+		{id:"EPSG:3395",desc:GetMessageJSON("MercatorParallelEquator_WGS84", "canviprj")},
+		
+		{id:"EPSG:3785",desc:"long/lat - WGS84"},
+		{id:"EPSG:3857",desc: GetMessageJSON("WebMercator", "canviprj")},
+		{id:"EPSG:4326",desc:"long/lat - WGS84"},
+		{id:"CRS:84",desc:"long/lat - WGS84"},
+		{id:"EPSG:4258",desc:"long/lat - ETRS89"}
+	);
+}
+
 function DonaDescripcioCRS(crs)
 {
-var crs_up=crs.toUpperCase();
+var i, crs_up=crs.toUpperCase();
 
-	if (crs_up=="EPSG:32616")
+	if(CRSIds.length<1)
+		InicialitzaArrayDeCRSIds();
+
+	for (i = 0; i < CRSIds.length; i++) 
+	{
+		if (CRSIds[i].id === crs_up)
+			return DonaCadena(CRSIds[i].desc);
+	}
+	/*if (crs_up=="EPSG:32616")
 		return "UTM16N - WGS84";
 	if (crs_up=="EPSG:32628")
 		return "UTM28N - WGS84";
@@ -1072,9 +1135,9 @@ var crs_up=crs.toUpperCase();
 		return "UTM30N - WGS84";
 	if (crs_up=="EPSG:32631")
 		return "UTM31N - WGS84";
-    	if (crs_up=="EPSG:32632")
+    if (crs_up=="EPSG:32632")
 		return "UTM32N - WGS84";
-    	if (crs_up=="EPSG:32633")
+    if (crs_up=="EPSG:32633")
 		return "UTM33N - WGS84";
 	if (crs_up=="EPSG:32634")
 		return "UTM34N - WGS84";
@@ -1141,7 +1204,7 @@ var crs_up=crs.toUpperCase();
 	if (crs_up=="EPSG:4326" || crs_up=="CRS:84")
 		return "long/lat - WGS84";
 	if (crs_up=="EPSG:4258")
-		return "long/lat - ETRS89";
+		return "long/lat - ETRS89";*/
 	return crs;  // si no hi ha descripció poso el codi.
 }
 

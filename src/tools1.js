@@ -1616,18 +1616,19 @@ function ExecutaMovimentRedirigitFinestraLayer(event)
 		MovimentFinestraLayerPerLaBarra(event, iFinestraLayerFora);
 }
 
-
+var nomImgRedimensiona = "imgRedimensiona";
 function textHTMLImgCantoFinestra(i_finestra)
 {
 var cdns=[];
 
-	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("canto.png"),
-					 "\" alt=\"", GetMessage("resize"), "\" ",
-					 "title=\"", GetMessage("resize"), "\" ",
-					 "onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentRedimensionant);\" ",
-					 "onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
-  			  		 "onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
-			  		 "onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >");
+	cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("canto.png"),"\"",
+			"name=\"", nomImgRedimensiona,"\"",
+			"alt=\"", GetMessage("resize"), "\" ",
+			"title=\"", GetMessage("resize"), "\" ",
+			"onmousedown=\"ActivaMovimentFinestraLayer(event, ",i_finestra,", movimentRedimensionant);\" ",
+			"onmouseup=\"DesactivaMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			"onmouseout=\"RedirigeixMovimentFinestraLayer(event, ",i_finestra,");\" ",
+			"onmousemove=\"MovimentFinestraLayerPerLaBarra(event, ",i_finestra,");\" >");
 	return cdns.join("");
 }
 

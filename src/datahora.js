@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -858,40 +858,43 @@ var i, ii, k, p, kvp, query, valor, i_v, num_of_vs, v, estil, param;
 			alert("Format error in '{DIM?', Key 'name' not found.");
 			break;
 		}
-		estil=capa.estil[capa.i_estil];
-		if (!estil || !estil.component[0])
+		if(capa.estil)
 		{
-			alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
-			break;
-		}
-		if (estil.component[0].i_valor)
-		{
-			valor=capa.valors[estil.component[0].i_valor];
-			if (!valor)
+			estil=capa.estil[capa.i_estil];
+			if (!estil || !estil.component[0])
 			{
 				alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
 				break;
 			}
-		}
-		else if (estil.component[0].FormulaConsulta)
-		{
-			//Determinio si hi ha un sol v[i] a la fórmula i en aquest cas, no hi ha problema en continuar.
-			num_of_vs=0;
-			v=DeterminaArrayValorsNecessarisCapa(ParamCtrl.capa.indexOf(capa), capa.i_estil);
-			for (i_v=0; i_v<capa.valors.length; i_v++)
+			if (estil.component[0].i_valor)
 			{
-				if (v[i_v])
+				valor=capa.valors[estil.component[0].i_valor];
+				if (!valor)
 				{
-					valor=capa.valors[i_v];
-					num_of_vs++;
-					if (num_of_vs>1)
-						break;
+					alert("Cannot find '" + query.name + "' extracted from the KVP '{DIM?' expression in the selected style");
+					break;
 				}
 			}
-			if (num_of_vs!=1 || !valor)
+			else if (estil.component[0].FormulaConsulta)
 			{
-				alert("There is ambiguity in the values of '" + query.name + "' extracted from the KVP '{DIM?' expression. This is probably because this style is an expression. Try to select another style.");
-				break;
+				//Determinio si hi ha un sol v[i] a la fórmula i en aquest cas, no hi ha problema en continuar.
+				num_of_vs=0;
+				v=DeterminaArrayValorsNecessarisCapa(ParamCtrl.capa.indexOf(capa), capa.i_estil);
+				for (i_v=0; i_v<capa.valors.length; i_v++)
+				{
+					if (v[i_v])
+					{
+						valor=capa.valors[i_v];
+						num_of_vs++;
+						if (num_of_vs>1)
+							break;
+					}
+				}
+				if (num_of_vs!=1 || !valor)
+				{
+					alert("There is ambiguity in the values of '" + query.name + "' extracted from the KVP '{DIM?' expression. This is probably because this style is an expression. Try to select another style.");
+					break;
+				}
 			}
 		}
 		param=dims?dims:((valor && valor.param) ? valor.param : null);
