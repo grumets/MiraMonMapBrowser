@@ -545,7 +545,7 @@ var cdns=[];
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
 		}		
-		if (ParamCtrl.BarraBotoStoryMaps || (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length))
+		if (ParamCtrl.BarraBotoStoryMaps || Object.hasOwn(ParamCtrl, "StoryMap"))
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
