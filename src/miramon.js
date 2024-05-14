@@ -910,47 +910,7 @@ function DonaCadenaLang(cadena_lang)
 
 function GetMessage(msg_id, section)
 {
-	if (section)
-	{
-		if (-1!=section.indexOf("."))
-		{
-			var sections=section.split("."), place=MessageLang;
-			for (var i=0; i<sections.length; i++)
-			{
-				if (!place[sections[i]])
-				{
-					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
-					return "["+GetMessage("MissingMessage")+"]";
-				}
-				place=place[sections[i]];
-			}
-			if (!place[msg_id])
-			{
-				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-				return "["+GetMessage("MissingMessage")+"]";
-			}
-			return DonaCadenaLang(place[msg_id]);
-		}
-		if (!MessageLang[section])
-		{
-			alert("MessageLang Error: I cannot found section \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
-		}
-		if (!MessageLang[section][msg_id])
-		{
-			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
-		}
-		return DonaCadenaLang(MessageLang[section][msg_id]);
-	}
-	if (!MessageLang[msg_id])
-	{
-		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
-		if (msg_id=="MissingMessage")
-			return "[Missing message]"
-		return "["+GetMessage("MissingMessage")+"]";
-	}
-	return DonaCadenaLang(MessageLang[msg_id]);
+	return DonaCadenaLang(GetMessageJSON(msg_id, section));
 }
 
 function GetMessageJSON(msg_id, section)
@@ -965,26 +925,26 @@ function GetMessageJSON(msg_id, section)
 				if (!place[sections[i]])
 				{
 					alert("MessageLang Error: I cannot found section \""+sections[i]+"\" in \""+section+"\"");
-					return "["+GetMessage("MissingMessage")+"]";
+					return GetMessageJSON("MissingMessageInBrackets");
 				}
 				place=place[sections[i]];
 			}
 			if (!place[msg_id])
 			{
 				alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-				return "["+GetMessage("MissingMessage")+"]";
+				return GetMessageJSON("MissingMessageInBrackets");
 			}
 			return place[msg_id];
 		}
 		if (!MessageLang[section])
 		{
 			alert("MessageLang Error: I cannot found section \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
+			return GetMessageJSON("MissingMessageInBrackets");
 		}
 		if (!MessageLang[section][msg_id])
 		{
 			alert("MessageLang Error: I cannot found message id \""+msg_id+"\" in \""+section+"\"");
-			return "["+GetMessage("MissingMessage")+"]";
+			return GetMessageJSON("MissingMessageInBrackets");
 		}
 		return MessageLang[section][msg_id];
 	}
@@ -993,7 +953,7 @@ function GetMessageJSON(msg_id, section)
 		alert("MessageLang Error: I cannot found message id \""+msg_id+"\" as a 'root' message");
 		if (msg_id=="MissingMessage")
 			return "[Missing message]"
-		return "["+GetMessage("MissingMessage")+"]";
+		return GetMessage("MissingMessageInBrackets");
 	}
 	return MessageLang[msg_id];
 }
@@ -1634,7 +1594,7 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 		//Buida objectes vectorials si han vingut d'un servidor.
 		if (capa.model==model_vector && (capa.tipus=="TipusWFS" || capa.tipus=="TipusOAPI_Features" || capa.tipus=="TipusSOS" || capa.tipus=="TipusHTTP_GET"))
 		{
-			if(capa.FormatImage=="text/csv")
+			if(capa.FormatImage=="text/csv" && !capa.servidor)
 			{				
 				if (capa.objectes && capa.objectes.features)
 				{
@@ -4599,7 +4559,8 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 
 function ComprovaConsistenciaAttributesMostrar(attributes, ref_source_attrib)
 {
-	var attributesArray=Object.keys(attributes);
+var attributesArray=Object.keys(attributes), avis_mostrar_attributes=false;
+
 	if (attributesArray.length)
 	{
 		for (var j=0; j<attributesArray.length; j++)
@@ -4670,7 +4631,6 @@ var i, j;
 	}
 
 	// arreglem els config.json que deien mostrar: true false errònimament
-	var avis_mostrar_attributes=false;
 	var capa, estil;
 
 	var protocol=location.protocol.toLowerCase();

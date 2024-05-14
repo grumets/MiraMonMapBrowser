@@ -200,8 +200,8 @@ var esNODATA, esLink, esImatge;
 
 		}
 		
-		//Haig de calcular si tots els attributes són NODATA i si és aixì
-		//consulta.estat=EstatXMLTrobatsZero;
+		// He de calcular si tots els attributes són NODATA i si és aixì
+		// consulta.estat=EstatXMLTrobatsZero;
 		n_fills_NODATA=0;
 		var attributesArray=consulta.attributes;
 		for(i=0; i<attributesArray.length; i++)
@@ -218,10 +218,10 @@ var esNODATA, esLink, esImatge;
 		consulta.estat=EstatXMLTrobatsZero;
 	return 0;
 }
-
+			
 function OmpleRespostaConsultaXMLTipusWFSFeatureCollection(arrel, consulta)
 {
-var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attribute;
+var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attributes;
 
 	if(!arrel)
 	{
@@ -235,12 +235,25 @@ var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attribute;
 		return 0;
 	}
 	consulta.estat=EstatXMLTrobatsZero;
+	
+	if(capa.attributes)
+		attributes=capa.attributes;
+	else if(capa.estil && capa.estil[capa.i_estil].attributes)
+		attributes=capa.estil[capa.i_estil].attributes;
+	else
+		attributes=null;
+	
+	if(attributes)
+		consulta.attributes=JSON.parse(JSON.stringify(attributes));
+	else
+		consulta.attributes={};
+	
 	for(i_obj=0; i_obj<features.length; i_obj++)
 	{
 		objecte=GetXMLChildElementByName(features[0], '*', capa.nom);
 		if(objecte && objecte.hasChildNodes())
 		{
-			// he d'agafar els fills que són de tipus atributs, és a dir, que no comencen amb el NS gml o wfs
+			// He d'agafar els fills que són de tipus atributs, és a dir, que no comencen amb el NS gml o wfs
 			// o llegir l'esquema i buscar els que són de tipus propietat o mirar només els que estan definits a la capa a propietats
 			// o agafar-ho tot hi hagi el que hi hagi
 			//·$·
@@ -253,16 +266,8 @@ var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attribute;
 				else
 					nom_attr=objecte.childNodes[i_attr].nodeName;
 				
-				// Miro si la capa té atrributs i si cal copio totes les propietats de l'atribut per mostrar la consulta
-				if(capa.attributes)
-					attribute=capa.attributes[nom_attr];
-				else if(capa.estil && capa.estil[capa.i_estil].attributes)
-					attribute=capa.estil[capa.i_estil].attributes[nom_attr];
-				else
-					attribute=null;
-				if(attribute)
+				if(attributes)
 				{
-					consulta.attributes[nom_attr]=JSON.parse(JSON.stringify(attribute));
 					consulta.attributes[nom_attr].valor=(objecte.childNodes[0].childNodes ? objecte.childNodes[0].childNodes[0].nodeValue: null);
 				}
 				else
@@ -336,34 +341,35 @@ var root;
 
 function OmpleRespostaConsultaGeoJSON(doc, consulta)
 {
-var i, j, capa=consulta.capa, attribute;
+var i, j, capa=consulta.capa, attributes;
 
 	if (doc.type!="FeatureCollection" || !doc.features)
 	{
 		consulta.estat=EstatXMLTrobatsZero;
 		return 1;
 	}
-
 	consulta.estat=EstatXMLTrobatsZero;
+	if(capa.attributes)
+		attributes=capa.attributes;
+	else if(capa.estil && capa.estil[capa.i_estil].attributes)
+		attributes=capa.estil[capa.i_estil].attributes;
+	else
+		attributes=null;
+	
+	if(attributes)
+		consulta.attributes=JSON.parse(JSON.stringify(attributes));
+	else
+		consulta.attributes={};
+	
 	for(i=0; i<doc.features.length; i++)
 	{
 		if (!doc.features[i].properties)
 			continue;
-		if(!consulta.attributes)
-			consulta.attributes={};
+		
 		for (j in doc.features[i].properties)
 		{
-			if(capa.attributes)
-				attribute=capa.attributes[j];
-			else if(capa.estil && capa.estil[capa.i_estil].attributes)
-				attribute=capa.estil[capa.i_estil].attributes[j];
-			else
-				attribute=null;
-			if(attribute)
-			{
-				consulta.attributes[j]=JSON.parse(JSON.stringify(attribute));
+			if(attributes)
 				consulta.attributes[j].valor=doc.features[i].properties[j];
-			}
 			else
 			{
 				consulta.attributes[j]={
@@ -384,20 +390,43 @@ var i, j, capa=consulta.capa, attribute;
 }//Fi de OmpleRespostaConsultaGeoJSON()
 
 
+function DeterminaTextValorAttributeConsultaDataCapa(capa, properties, attribute, attribute_name, i_data)
+{
+	if (attribute.calcul && !attribute.FormulaConsulta)
+	{
+		alert("Irregular situation in the code. This needs to be solved in the feature collection level.");
+		return null;
+	}
+	var valor;
+	if (attribute.FormulaConsulta)
+	{
+		var p=properties;  //Encara que sembla que no es fa servir, aquesta variable és necessaria pels evals()		
+		valor=eval(CanviaVariablesDeCadena(attribute.FormulaConsulta, capa, i_data, null));
+	}
+	else
+		valor=attribute.valor;
+
+	if (typeof valor === "undefined")
+		valor=Number.NaN;
+	if (!isNaN(valor) && (attribute.NDecimals || attribute.NDecimals===0))
+		return OKStrOfNe(valor, attribute.NDecimals);
+	return valor;
+}
+
 function MostraConsultaComHTML(consulta)
 {
 	if(consulta)
 	{
-		var cdns=[];
+		var cdns=[], capa=ParamCtrl.capa[consulta.i_capa];
 		var elem=getLayer(consulta.win, consulta.nom_layer);
 		cdns.push("<span class='TitolRepostaConsulta'>",
-			(DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].desc) : (DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda) ? DonaCadena(ParamCtrl.capa[consulta.i_capa].DescLlegenda): ParamCtrl.capa[consulta.i_capa].nom )),
-			(ParamCtrl.capa[consulta.i_capa].AnimableMultiTime? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
+			(DonaCadena(capa.desc) ? DonaCadena(capa.desc) : (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom )),
+			(capa.AnimableMultiTime? " "+DonaDataCapaComATextBreu(consulta.i_capa, null) : ""),
 			"</span><hr size=\"2\">");
 
 		if(consulta.estat==EstatXMLOmplert)
 		{
-			var attributesArray=Object.keys(consulta.attributes);
+			var separador=null, attribute, valor, attributesArray=Object.keys(consulta.attributes);
 			if(attributesArray.length>0)
 			{
 				var i_capa_validar=-1;
@@ -412,13 +441,25 @@ function MostraConsultaComHTML(consulta)
 						}
 					}
 				}
+				// Necessito construir un array de propietats per fer els càlculs
+				var properties={};
+				for(var i=0; i<attributesArray.length; i++)
+					properties[attributesArray[i]]=consulta.attributes[attributesArray[i]].valor;
+				
 				for(var i=0; i<attributesArray.length; i++)
 				{
-					if(consulta.attributes[attributesArray[i]].mostrar=="no")
+					attribute=consulta.attributes[attributesArray[i]];
+					if (attribute.separador && DonaCadena(attribute.separador))
+						separador=attribute.separador;
+					if(attribute.mostrar=="no")
 						continue;
-					if(consulta.attributes[attributesArray[i]].mostrar=="si_ple" && (typeof consulta.attributes[attributesArray[i]].valor === "undefined" || consulta.attributes[attributesArray[i]].valor==null || consulta.attributes[attributesArray[i]].valor==""))
+					// Miro si hi ha algun camp calculat
+					valor=DeterminaTextValorAttributeConsultaDataCapa(capa, properties, attribute, attributesArray[i]);
+					if(attribute.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 						continue;
-					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, 0, i, attributesArray[i], consulta.attributes[attributesArray[i]], consulta.attributes[attributesArray[i]].separador, consulta.attributes[attributesArray[i]].valor, i_capa_validar, true));
+					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, 0, i, attributesArray[i], attribute, separador, valor, i_capa_validar, true));
+					if (separador)
+						separador=null;
 				}
 				contentLayer(elem, cdns.join(""));
 				//Com posar la serieTemporal aquí? Tot depen de com vinguin els valors. Tal com està ara hi ha un valor per cada attribute o sigui no anem bé.
@@ -477,7 +518,8 @@ function OmpleRespostaConsultaNoHiHaDadesSiCal(win)
 
 function OmpleRespostaConsultaXMLiEscriuEnHTML(doc, consulta)
 {
-	if (IsXMLMimeType(consulta.capa.FormatConsulta) || consulta.capa.FormatConsulta=="application/json")
+	if (IsXMLMimeType(consulta.capa.FormatConsulta) || 
+		consulta.capa.FormatConsulta=="application/json")
 	{
 		if (consulta.capa.FormatConsulta=="application/json")
 			OmpleRespostaConsultaGeoJSON(doc, consulta);
