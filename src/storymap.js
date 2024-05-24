@@ -65,11 +65,13 @@ var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomNam
 const nomPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
-const arrayAlcadesScrollIAccions = [];
+let arrayAlcadesScrollIAccions = [];
 const identificadorDivAccioMapa = "AccioMapa_";
 var contadorAccionsMapa = 0;
 const indentificadorSelectorControls = "controls";
 const controlScroll = "scroll", controlManual = "manual";
+const divRelatId = "divRelat";
+const idImgSvgAccioMapa = "id_storymap_mm_action_";
 
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
@@ -945,9 +947,16 @@ var base;
 function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
-const previaAccio = 0;
-const seguentAccio = 1;
 
+	contadorAccionsMapa= 0;
+	const finestraRelat = getFinestraLayer(window, "storyMap");
+	const childNodesFinestraRelat = finestraRelat.childNodes;
+	
+	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
+	while (childNodesFinestraRelat.firstChild) {
+		childNodesFinestraRelat.removeChild(childNodesFinestraRelat.firstChild);
+	}
+	  
 	if (relatACarregar.desc)
 		titolFinestraLayer(window, "storyMap", DonaCadena(relatACarregar.desc));
 
@@ -962,83 +971,86 @@ const seguentAccio = 1;
 	}
 
 	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
-	{			
-		const parser = new DOMParser();
-		const DOMStorymap = parser.parseFromString(relatACarregar.html, "text/html");
+	{		
+		// Crear el marc per al relat de mapes. 
+		let divRelat = document.createElement("div");
+		divRelat.setAttribute("id", divRelatId);
+		divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
+		divRelat.insertAdjacentHTML("afterbegin", relatACarregar.html);
+		
+		/* Tot canvi que hihagientre les nodesfills del relat volem estar-ne al corrent 
+			i així saber quan podem calcular les alçades correctes dels <div> amb acció al mapa.*/
+		const mutationObserver = new MutationObserver(function(changes, observer) {
+			const imgBlanc = document.querySelector("img[name='"+ imgEspaiBlancNom +"']");
+			const imgAccio = document.querySelectorAll("img[id^=" + idImgSvgAccioMapa);
+			if(changes[0].target.contains(imgBlanc) && imgAccio && changes[0].target.contains(imgAccio[0]))
+			{
+				// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
+				ExtreuAlcadesIAccionsDivisions(changes[0].target.innerHTML);
+				observer.disconnect();
+			}
+		});
 
-		// Crear controls per a navegació en el relat. 
-		let divControlsNavegacio = document.createElement("div");
-		divControlsNavegacio.setAttribute("class", "horizontalSpreadElements");
+		mutationObserver.observe(divRelat, {childList: true, subtree: true, attributes: false, characterData: false});
 
-		//Opció radio buttons
-		/*let radioScroll = document.createElement("input");
-		radioScroll.setAttribute("type", "radio");
-		radioScroll.setAttribute("id", controlScroll);
-		radioScroll.setAttribute("name", indentificadorSelectorControls);
-		radioScroll.setAttribute("value", controlScroll);
-		radioScroll.setAttribute("checked", "checked");
-		let labelScrollRadio = document.createElement("label");
-		labelScrollRadio.setAttribute("for", controlScroll);
-		labelScrollRadio.innerHTML = GetMessage("automatic");
-		let radioManual = document.createElement("input");
-		radioManual.setAttribute("type", "radio");
-		radioManual.setAttribute("id", controlManual);
-		radioManual.setAttribute("name", indentificadorSelectorControls);
-		radioManual.setAttribute("value", controlManual);
-		let labelManualRadio = document.createElement("label");
-		labelManualRadio.setAttribute("for", controlManual);
-		labelManualRadio.setAttribute("style", "padding=2px;");
-		labelManualRadio.innerHTML = GetMessage("manual", "storymap");*/
-
-
-		let selector = document.createElement("select");
-		selector.setAttribute("id", indentificadorSelectorControls);
-		selector.setAttribute("style", "padding: 2px;");		
-
-		let opcioScroll = document.createElement("option");
-		opcioScroll.setAttribute("value", controlScroll);
-		opcioScroll.innerHTML = GetMessage("automatic");
-		let opcioManual = document.createElement("option");
-		opcioManual.setAttribute("value", controlManual);
-		opcioManual.innerHTML = GetMessage("manual", "storymap");
-
-		selector.appendChild(opcioScroll);
-		selector.appendChild(opcioManual);
-
-		/*divControlsNavegacio.appendChild(labelScrollRadio);
-		divControlsNavegacio.appendChild(radioScroll);
-		divControlsNavegacio.appendChild(labelManualRadio);
-		divControlsNavegacio.appendChild(radioManual);*/
-
+		// Text explicatiu controls
+		let definicio = document.createElement("label");
+		definicio.innerHTML = GetMessage("ActionOnMap", "storymap") + ":";
+		definicio.className = "control";
 		// Botons següent i previ
 		let previBoto = document.createElement("input");
 		previBoto.setAttribute("type", "button");
 		previBoto.className = "button_image_dialog";
 		previBoto.classList.add("center");
+		previBoto.classList.add("control");
 		previBoto.setAttribute("name", "controlAccio");
-		previBoto.setAttribute("disabled", "disabled");
 		previBoto.setAttribute("value", GetMessage("Previous"));
-		//previBoto.addEventListener("click", reprodueixAccioMapa);
+		previBoto.addEventListener("click", function () {
+			contadorAccionsMapa--;
+			if (contadorAccionsMapa >= 0)
+			{
+				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+				divRelat.scrollTo({top: infoAccio.y, left: 0, behavior: "smooth"});
+				ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+			}
+			if (contadorAccionsMapa < 0)
+				contadorAccionsMapa = 0;
+		});
+
 		let seguentBoto = document.createElement("input");
 		seguentBoto.setAttribute("type", "button");
 		seguentBoto.className = "button_image_dialog";
 		seguentBoto.classList.add("center");
+		seguentBoto.classList.add("control");
 		seguentBoto.setAttribute("name", "controlAccio");
-		seguentBoto.setAttribute("disabled", "disabled");
 		seguentBoto.setAttribute("value", GetMessage("Next"));
-		//seguentBoto.addEventListener("click", reprodueixAccioMapa);
+		seguentBoto.addEventListener("click", function () {
+			contadorAccionsMapa++;
+			if (contadorAccionsMapa < arrayAlcadesScrollIAccions.length)
+			{
+				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+				divRelat.scrollTo({top: infoAccio.y, left: 0, behavior: "smooth"});
+				ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+			}
+			if (contadorAccionsMapa == arrayAlcadesScrollIAccions.length)
+				contadorAccionsMapa--;
+		});
+
+		let divDivisio = document.createElement("div");
+		divDivisio.setAttribute("class", "control");
 		
-		divControlsNavegacio.appendChild(selector);
 		let divBotonsAccio = document.createElement("div");
 		divBotonsAccio.setAttribute("class", "horizontalSpreadElements");
+		divBotonsAccio.setAttribute("style", "height: 100%;");
+		divBotonsAccio.appendChild(divDivisio);
+		divBotonsAccio.appendChild(definicio);
 		divBotonsAccio.appendChild(previBoto);
 		divBotonsAccio.appendChild(seguentBoto);
-		divControlsNavegacio.appendChild(divBotonsAccio);
-		DOMStorymap.body.insertAdjacentElement("afterbegin", divControlsNavegacio);
 
 		// Afegim els botons d'edició dins de la finestra de visualització:
 		let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
+		divBotons.setAttribute("style", "height: 8%");
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
 
 		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
@@ -1046,83 +1058,20 @@ const seguentAccio = 1;
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
 		
-		DOMStorymap.body.insertAdjacentElement("afterbegin", divBotons);
+		divBotons.appendChild(divBotonsAccio);
 
-		text_html = new XMLSerializer().serializeToString(DOMStorymap);
+		finestraRelat.insertAdjacentElement("afterbegin", divRelat);
+		finestraRelat.insertAdjacentElement("afterbegin", divBotons);
+		
+		// Línia horitzontal separadora amb inici del relat.
+		let liniaHoritzontal = document.createElement("hr");
+		liniaHoritzontal.className = "separadorHoritzonal";
+		divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
 	}
 	
-	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
 	ObreFinestra(window, "storyMap");
 	
-	document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
-		if (button.value == GetMessage("Next"))
-		{
-			button.addEventListener("click", function () {
-				if (contadorAccionsMapa < arrayAlcadesScrollIAccions.length)
-				{
-					const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
-					getLayer(window, "storyMap"+SufixFinestra).scrollBy(0, infoAccio.y);
-					ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
-					contadorAccionsMapa++;
-				}
-				if (contadorAccionsMapa == arrayAlcadesScrollIAccions.length)
-					contadorAccionsMapa--;
-			});
-		}	
-		else if (button.value == GetMessage("Previous"))
-		{
-			button.addEventListener("click", function () {
-				
-
-				if (contadorAccionsMapa >= 0)
-				{
-					const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
-					getLayer(window, "storyMap"+SufixFinestra).scrollBy(0, infoAccio.y);
-					ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
-					contadorAccionsMapa--;
-				}
-				if (contadorAccionsMapa < 0)
-					contadorAccionsMapa = 0;
-			});
-		}
-	});
-
-	document.querySelector("#"+indentificadorSelectorControls).addEventListener("change", function() {
-		let finestraStorymap = document.getElementById("storyMap" + SufixFinestra);
-
-		if (this.value == controlScroll)
-		{
-			if (finestraStorymap)
-			{
-				//finestraStorymap.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-				finestraStorymap.onscroll = ExecutaAttributsStoryMapVisibleEvent;
-			}
-			document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
-				button.setAttribute("disabled", "disabled");
-			});
-		}
-		else if (this.value == controlManual)
-		{
-			if (finestraStorymap)
-			{
-				//finestraStorymap.removeEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-				finestraStorymap.onscroll = null;
-			}
-			document.querySelectorAll("input[name='controlAccio']").forEach((button) => {
-				button.removeAttribute("disabled");
-			});
-			contadorAccionsMapa = 0;
-		}
-	});
-
-	/*document.querySelectorAll("input[name=\""+indentificadorSelectorControls + "\"").forEach(element => {
-		element.addEventListener("change", function(event) {
-			console.log(event.target.value);
-		});
-	});*/
-
-	ExtreuAlcadesIAccionsDivisions(text_html);
-	AfegeixEspaiTransparent(window);
+	AfegeixEspaiTransparent();
 	AfegeixMarkerStoryMapVisible();
 
 	indexStoryMapActiu=i_story;
@@ -1132,19 +1081,21 @@ const seguentAccio = 1;
 
 function ExtreuAlcadesIAccionsDivisions(textHtml)
 {
+	// Netegem l'array d'antics càlculs
+	arrayAlcadesScrollIAccions = [];
+
 	const domFromText = new DOMParser().parseFromString(textHtml, "text/html");
 	const arrayDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
 	
 	if (arrayDivAccions.length > 0)
 	{
 		let divAccio;
-		
-		for(contadorAccionsMapa=0; contadorAccionsMapa < arrayDivAccions.length; contadorAccionsMapa++)
+		let contadorAccionsTransformades= 0;
+		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
 			let datasetTransformat=[];
-			divAccio = document.getElementById(identificadorDivAccioMapa+contadorAccionsMapa);
+			divAccio = document.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
 			const atributsPropis = divAccio.dataset;
-			const primeraVolta = true;
 			for (var key in atributsPropis)
 			{	
 				const prefix = "data-mm-";
@@ -1169,39 +1120,48 @@ function transformaAtributsPropis(value, key, map)
 	l'última línia de text pugui arribar fins dalt de tot de la finestra.
 */
 var imgEspaiBlancNom = "imgEspaiBlanc"
-function AfegeixEspaiTransparent(window)
+function AfegeixEspaiTransparent()
 {
-	let storyWindow = getFinestraLayer(window, "storyMap");
 	const imgTransparent = document.createElement("img");
+	let storyWindow = getFinestraLayer(window, "storyMap");
 	imgTransparent.setAttribute("name", imgEspaiBlancNom);
 	imgTransparent.src = "1tran.gif";
 	const boundingRectWindow = storyWindow.getBoundingClientRect();
 	imgTransparent.width = boundingRectWindow.width;
 	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
-	storyWindow.insertAdjacentElement("beforeend", imgTransparent);
+
+	const divRelat = document.getElementById(divRelatId);
+	if (divRelat) {
+		
+		divRelat.insertAdjacentElement("beforeend", imgTransparent);
 	
-	const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
-	if (cantoRedimensionaStoryMap) {
-		const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
-		if (imgRedimensiona.onmousedown.length == 1)
-		{
-			imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
-
-			// Trobar índex de la finestra
-			let i_finestra
-			for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+		const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
+		if (cantoRedimensionaStoryMap) {
+			const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
+			if (imgRedimensiona.onmousedown.length == 1)
 			{
-				if (layerFinestraList[i_finestra].nom=="storyMap")
+				/*
+				* Elimino l'event de redimensió per posteriorment afegir-lo de nou mitjaçant la funció "addEventListener()" 
+				* i així poder enllaçar 2 funcions diferents al mateix event.
+				*/
+				imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
+	
+				// Trobar índex de la finestra
+				let i_finestra
+				for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
 				{
-					console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
-					break;
+					if (layerFinestraList[i_finestra].nom=="storyMap")
+					{
+						console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+						break;
+					}
 				}
+				imgRedimensiona.addEventListener("mousedown", function(event){
+					ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
+				});
+	
+				imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
 			}
-			imgRedimensiona.addEventListener("mousedown", function(event){
-				ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
-			});
-
-			imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
 		}
 	}
 }
@@ -1278,7 +1238,7 @@ var node, attribute;
 					//Afegir el simbol dins
 					// Create a text node:
 					var divNode = document.createElement("span");
-					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+					divNode.innerHTML=DonaTextImgGifSvg(idImgSvgAccioMapa + i_mm, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
 					i_mm++;
 					node.insertBefore(divNode, node.children[0]);
 					break;

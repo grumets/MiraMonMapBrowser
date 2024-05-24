@@ -907,3 +907,36 @@ table.vectorial {
 p.vectorial {
 	padding: 0px 10px;
 }
+
+/* *******************************************************
+ Estils de visualització dels diferents elements dels
+ 
+		C O N T R O L S   A C C I O N S   M A P A   R E L A T S 
+  
+********************************************************** */
+/* Entre botons del relat*/
+div.control {
+	background-color: black;
+	flex: 0.5;
+	height: 100%;
+	width: 0.5px;
+}
+.control {
+	flex: 15;
+}
+label.control {
+	flex: 20;
+	text-align: center;
+}
+
+div.fullHeight {
+	height: 100%;
+}
+
+.separadorHoritzonal {
+	position: relative;
+	width: 100%;
+	background-color: black;
+	height: 0.5px;
+	margin: 0;
+}
