@@ -2153,18 +2153,18 @@ function CarregaFitxersLocalsSeleccionats(form)
 {
 var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[], ext;
 
-	if (form.nom_fitxer.files.length<1)
+	if (form.nom_fitxer_local.files.length<1)
 		return;
-	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
+	for (i_fitxer=0; i_fitxer<form.nom_fitxer_local.files.length; i_fitxer++)
 	{
-		if (form.nom_fitxer.files[i_fitxer].type=="application/json" || form.nom_fitxer.files[i_fitxer].type=="application/geo+json" || 
-			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
-			( "geojson"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "json"==ext)))  
+		if (form.nom_fitxer_local.files[i_fitxer].type=="application/json" || form.nom_fitxer_local.files[i_fitxer].type=="application/geo+json" || 
+			((typeof form.nom_fitxer_local.files[i_fitxer].type==="undefined" || form.nom_fitxer_local.files[i_fitxer].type==null || form.nom_fitxer_local.files[i_fitxer].type=="") && 
+			( "geojson"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer_local.files[i_fitxer].name).toLowerCase()) || "json"==ext)))  
 			//NJ he vist que si la extensió és geojson no em retorna el mimetype!! Segurament això depen de les extensions que té registrades cada usuari i com que sobre això no hi puc fer res afegeix-ho aquesta comprovació
 		{
 			//https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript
 			fileread[i_fitxer] = new FileReader();
-			fileread[i_fitxer].nom_json=form.nom_fitxer.files[i_fitxer].name;  //Així onload pot saber el nom del fitxer
+			fileread[i_fitxer].nom_json=form.nom_fitxer_local.files[i_fitxer].name;  //Així onload pot saber el nom del fitxer
 			fileread[i_fitxer].onload = function(e) {
 				var objectes;
 				try{
@@ -2178,20 +2178,20 @@ var algun_fitxer_ok=false, fileread=[], i_fitxer, tiff_blobs=[], ext;
 				//RevisaEstatsCapes();
 				RepintaMapesIVistes();				
 			};
-			fileread[i_fitxer].readAsText(form.nom_fitxer.files[i_fitxer]);
+			fileread[i_fitxer].readAsText(form.nom_fitxer_local.files[i_fitxer]);
 			algun_fitxer_ok=true;
 		}
-		else if (form.nom_fitxer.files[i_fitxer].type!="image/tiff" ||
-			((typeof form.nom_fitxer.files[i_fitxer].type==="undefined" || form.nom_fitxer.files[i_fitxer].type==null || form.nom_fitxer.files[i_fitxer].type=="") && 
-			( "tiff"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer.files[i_fitxer].name).toLowerCase()) || "tif"==ext || "geotiff"==ext)))
+		else if (form.nom_fitxer_local.files[i_fitxer].type!="image/tiff" ||
+			((typeof form.nom_fitxer_local.files[i_fitxer].type==="undefined" || form.nom_fitxer_local.files[i_fitxer].type==null || form.nom_fitxer_local.files[i_fitxer].type=="") && 
+			( "tiff"==(ext=DonaExtensioFitxerSensePunt(form.nom_fitxer_local.files[i_fitxer].name).toLowerCase()) || "tif"==ext || "geotiff"==ext)))
 		{
-			alert("Unrecognized file type '"+form.nom_fitxer.files[i_fitxer].type+ "' for the file '"+ form.nom_fitxer.files[i_fitxer].name + "'");
+			alert("Unrecognized file type '"+form.nom_fitxer_local.files[i_fitxer].type+ "' for the file '"+ form.nom_fitxer_local.files[i_fitxer].name + "'");
 		}
 	}
-	for (i_fitxer=0; i_fitxer<form.nom_fitxer.files.length; i_fitxer++)
+	for (i_fitxer=0; i_fitxer<form.nom_fitxer_local.files.length; i_fitxer++)
 	{
-		if (form.nom_fitxer.files[i_fitxer].type=="image/tiff")
-			tiff_blobs.push(form.nom_fitxer.files[i_fitxer]);
+		if (form.nom_fitxer_local.files[i_fitxer].type=="image/tiff")
+			tiff_blobs.push(form.nom_fitxer_local.files[i_fitxer]);
 	}
 	if (tiff_blobs.length>0)
 	{
@@ -2207,17 +2207,260 @@ function CarregaFitxerURLSeleccionat(form)
 {
 	if (form.url_fitxer.value.length<1)
 		return;
-	if (form.url_type.value=="geojson")
+	if (form.file_type.value=="geojson")
 		AfegeixCapaGeoJSON_URL(form.url_fitxer.value, NumeroDeCapesVolatils(-1));
 	else
 		AfegeixCapaGeoTIFF_URL(form.url_fitxer.value.split(" "), NumeroDeCapesVolatils(-1));
 	TancaFinestraLayer("afegirCapa");
 }
 
+function ProcessaResultatLecturaFitxerLocalCSVObjectesIPropietats(results)
+{
+var capa=this;
+
+	return ParsejaCSVObjectesIPropietats(results, capa);
+}
+
+function LlegeixParametresCSV(form)
+{
+	if(!form.camp_geo.value)
+		return null;		
+	var separador;
+	if(form.fieldDelimitador.value=="tab")
+		separador="\t";
+	else if(form.fieldDelimitador.value=="comma")
+		separador=",";
+	else if(form.fieldDelimitador.value=="semicolon")
+		separador=";";
+	else if(form.fieldDelimitador.value=="space")
+		separador=" ";
+	else //if(form.fieldDelimitador.value=="text")
+		separador=form.separa_csv.value;
+		
+	var configuracio={
+			  header: (form.header_csv.checked) ? true : false,
+			  encoding: (form.encoding_crs.value && form.encoding_crs.value!="utf-8") ? form.encoding_crs.value : "",		
+			  separadorCamps: separador,
+			  nomCampDateTime : form.camp_time.value ? form.camp_time.value: null,
+			  nomCampGeometria: form.camp_geo.value};
+	return configuracio;
+}
+
+function CarregaCapaCSVLocal(i_on_afegir, form)
+{
+var k, configuracio;
+
+	if(!form.nom_fitxer_local.files[0].name)
+		return;
+	
+	if(null==(configuracio=LlegeixParametresCSV(form)))
+		return;	
+	
+	var capa={servidor: form.nom_fitxer_local.files[0].name,
+		versio: null,
+		tipus: "TipusHTTP_GET",
+		model: model_vector,
+		configCSV: JSON.parse(JSON.stringify(configuracio)),					
+		nom: null,
+		desc: TreuAdreca(form.nom_fitxer_local.files[0].name),
+		CRSgeometry: form.crs_csv.value ? form.crs_csv.value: "EPSG:4326",
+		objectes: null,
+		attributes: null,
+		FormatImatge: "text/csv",
+		transparencia: "opac",
+		CostatMinim: null,
+		CostatMaxim: null,
+		FormatConsulta: null,
+		visible: "si",
+		consultable: "si",
+		descarregable: "no",
+		FlagsData: null,
+		data: null,
+		i_data: 0,
+		animable: false,
+		AnimableMultiTime: false,
+		origen: OrigenUsuari};
+			
+	
+	Papa.parse(form.nom_fitxer_local.files[0], {
+							header: (capa.configCSV && capa.configCSV.header) ? capa.configCSV.header : true,
+							encoding: (capa.configCSV && capa.configCSV.encoding) ? capa.configCSV.encoding : "",
+							delimiter: (capa.configCSV && capa.configCSV.separadorCamps) ? capa.configCSV.separadorCamps :  "",
+							complete: ProcessaResultatLecturaFitxerLocalCSVObjectesIPropietats.bind(capa),				
+							});
+							
+	capa.tipus=null;
+
+	var calia_consultes=CalActivarConsultesALaBarra();
+
+	if(i_on_afegir==-1)
+		k=ParamCtrl.capa.length;
+	else
+	{
+		k=i_on_afegir;
+		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
+	}
+	ParamCtrl.capa.splice(k, 0, capa);
+
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k], false);
+	CompletaDefinicioCapa(ParamCtrl.capa[k]);
+
+	//Redibuixo el navegador perquè les noves capes siguin visibles
+	//RevisaEstatsCapes();
+
+	if (calia_consultes!=CalActivarConsultesALaBarra())
+		CreaBarra(null);
+
+	RepintaMapesIVistes();
+}
+
+function CarregaFitxerLocalOURLSeleccionat(form)
+{
+	// Cal que faci alguna comprovació entre extensió i tipus perquè sino no s'enten		
+	if(form.file_type.value=="geojson" || form.file_type.value=="geotiff")
+	{
+		if(form.source_type.value=="local")
+		{
+			CarregaFitxersLocalsSeleccionats(form);
+			return;
+		}
+		else //if(form.source_type.value=="url")
+		{
+			CarregaFitxerURLSeleccionat(form);
+			return;
+		}				
+	}
+	else if(form.file_type.value=="csv")
+	{
+		if (form.source_type.value=="url")
+		{
+			if (form.url_fitxer.value.length<1)
+				return;
+			var configuracio={};
+			if(null==(configuracio=LlegeixParametresCSV(form)))
+				return;	
+			
+			AfegeixCapaCSV_URL(NumeroDeCapesVolatils(-1), configuracio, form.crs_csv.value ? form.crs_csv.value: "EPSG:4326");
+			TancaFinestraLayer("afegirCapa");
+			return;
+		}
+		else  if(form.source_type.value=="local")
+		{
+			CarregaCapaCSVLocal(NumeroDeCapesVolatils(-1), form);	
+			TancaFinestraLayer("afegirCapa");			
+			return;
+		}
+	}
+	return;
+	
+}
+
+function PlegaFieldSet(form)
+{
+	form.configCSV.height="8px"; /* for IE purposes, this can't be 0 */
+	form.configCSV.overflow="hidden";
+	form.configCSV.overflow="-moz-hidden-unscrollable";
+	form.configCSV.padding="2px";
+	form.configCSV.legend.span.before.content="+"; /* add a plus sign to indicate that it can be expanded still (since not active) */
+  //padding: 10px 10px 10px 10px; 
+  //margin: 10px 10px 10px 10px; 
+
+}
+
+var FieldSetPlegatConfigCSV=true, FieldSetDesactivatConfigCSV=true;
+			
+function PlegaDesplegaFieldSetConfiguracio(form)
+{
+	if(FieldSetPlegatConfigCSV && FieldSetDesactivatConfigCSV==false)
+	{
+		form.configCSV.className="deplegat";		
+		document.getElementById("titolconfigCSV").innerHTML="- " + GetMessage("Parameters")+" (CSV)";
+		FieldSetPlegatConfigCSV=false;
+	}
+	else
+	{
+		form.configCSV.className="plegat";
+		document.getElementById("titolconfigCSV").innerHTML="+ " + GetMessage("Parameters")+" (CSV)";
+		FieldSetPlegatConfigCSV=true;
+	}
+}
+function DesactivaParametresCSV(form)
+{
+	FieldSetDesactivatConfigCSV=true;
+	form.configCSV.disabled=true;
+	PlegaDesplegaFieldSetConfiguracio(form);
+}
+
+function ActivaParametresCSV(form)
+{
+	form.configCSV.disabled=false;
+	FieldSetDesactivatConfigCSV=false;
+}
+
+function DonaCadenaDesplegableCRS(id_desplegable, selectedCRS)
+{
+var cdns=[], i, crs_up= (selectedCRS ? selectedCRS.toUpperCase(): "EPSG:4326");
+
+	if(CRSIds.length<1)
+		InicialitzaArrayDeCRSIds();
+
+	cdns.push("<select name=\"crs_",id_desplegable,"\" id=\"crs_",id_desplegable,"\">");
+	
+	for (i = 0; i < CRSIds.length; i++) 
+		cdns.push("<option value=\"",CRSIds[i].id,"\"", (crs_up==CRSIds[i].id ? "selected":""), ">",DonaCadena(CRSIds[i].desc),"</option>");
+	
+	cdns.push("</select>");	
+	return cdns.join("");
+}
+
+function DonaCadenaDesplegableEncoding(id_desplegable, selectedEncoding)
+{
+var LlistaEncoding=[
+	{id:"windows-1252", desc: "Windows 1252 (Western Latin)"},
+	{id:"utf-8", desc: "UTF-8"},
+	{id:"iso8859-2", desc: "ISO-8859-2 (Latin 2)"},
+	{id:"iso8859-3", desc: "ISO-8859-3 (Latin 3)"},
+	{id:"iso8859-4", desc: "ISO-8859-4 (Latin 4)"},
+	{id:"iso8859-5", desc: "ISO-8859-5 (Cyrillic)"},
+	{id:"iso8859-6", desc: "ISO-8859-6, ecma-114 (Arabic)"},
+	{id:"iso8859-7", desc: "ISO-8859-7 (greek)"},
+	{id:"iso8859-8", desc: "ISO-8859-8 (hebrew)"},
+	{id:"iso-8859-8-i", desc: "ISO-8859-8-I (logical)"},
+	{id:"iso-8859-10", desc: "ISO-8859-10 (Latin 6)"},
+	{id:"iso-8859-11", desc: "Windows-874, DOS-874"},
+	{id:"iso-8859-13", desc: "ISO-8859-13"},
+	{id:"iso-8859-14", desc: "ISO-8859-14"},
+	{id:"iso-8859-15", desc: "ISO-8859-15 (Latin 9)"},
+	{id:"iso-8859-16", desc: "ISO-8859-16"},
+	{id:"windows-1250", desc: "Windows-1250"},
+	{id:"windows-1251", desc: "Windows-1251"},
+	{id:"windows-1253", desc: "Windows-1253"},
+	{id:"iso-8859-9", desc: "ISO 8859-9, windows-1254, Latin 5"},
+	{id:"windows-1255", desc: "Windows-1255"},
+	{id:"windows-1256", desc: "Windows-1256"},
+	{id:"windows-1257", desc: "Windows-1257"},
+	{id:"windows-1258", desc: "Windows-1258"},
+	{id:"cp866", desc: "IBM866"},				
+	{id:"koi8", desc: "KOI8-R"},	
+	{id:"koi8-ru", desc: "KOI8-U"},	
+	{id:"macintosh", desc: "Macintosh"},	
+	{id:"x-mac-cyrillic", desc: "X-MAC-Cyrillic"}	
+	];
+var cdns=[], i, encoding_up=(selectedEncoding ? selectedEncoding.toLowerCaseCase() : "utf-8");
+	
+	cdns.push("<select name=\"encoding_",id_desplegable,"\" id=\"encoding_",id_desplegable,"\">");	
+	for (i = 0; i < LlistaEncoding.length; i++) 
+		cdns.push("<option value=\"",LlistaEncoding[i].id,"\"", (encoding_up==LlistaEncoding[i].id ? "selected":""), ">",DonaCadena(LlistaEncoding[i].desc),"</option>");
+	
+	cdns.push("</select>");	
+	return cdns.join("");
+}
+			
 function DonaCadenaAfegeixCapaServidor(url, i_capa)
 {
 var cdns=[], i;
 
+	// From server
 	cdns.push("<div class=\"Verdana11px\" style=\"position:absolute; left:10px; top:10px;\">",
 		"<form name=\"AfegeixCapaServidor\" onSubmit=\"return false;\">");
 	cdns.push("<div id=\"LayerAfegeixCapaServidor\">",
@@ -2271,27 +2514,66 @@ var cdns=[], i;
 	}
 	cdns.push("</fieldset>",
 	          "</div></form>");
-	//https://stackoverflow.com/questions/5138719/change-default-text-in-input-type-file
-	cdns.push("<form name=\"AfegeixCapaLocal\" onSubmit=\"return false;\">",
-			"<fieldset><legend>",
-			GetMessage("NewLayerFromDisk", "cntxmenu"),
-			": </legend>",
-			"<button class=\"Verdana11px\" onclick=\"document.getElementById('openLocalLayer').click()\">"+GetMessage("Open")+"</button> (GeoJSON, GeoTIFF ",GetMessage("or")," COG)",
-			"<input type=\"file\" name=\"nom_fitxer\" id=\"openLocalLayer\" accept=\".json,.geojson,.tif,.tiff\" style=\"display:none\" multiple=\"multiple\" onChange=\"CarregaFitxersLocalsSeleccionats(form)\">",
-		"</fieldset></form>");
-	cdns.push("<form name=\"AfegeixCapaURL\" onSubmit=\"return false;\">",
-			"<fieldset><legend>",
-			GetMessage("NewLayerFromURL", "cntxmenu"),
-			": </legend>",
-			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoJSON\" name=\"url_type\" value=\"geojson\" checked=\"checked\"><label for=\"RadioAddUrlTypeGeoJSON\">GeoJSON</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-			"<input type=\"radio\" id=\"RadioAddUrlTypeGeoTIFF\" name=\"url_type\" value=\"geotiff\"><label for=\"RadioAddUrlTypeGeoTIFF\">GeoTIFF ",GetMessage("or")," COG</label><br>",
-			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"https://\""), " />",
+			  
+	// From file
+	FieldSetPlegatConfigCSV=true;
+	//https://stackoverflow.com/questions/5138719/change-default-text-in-input-type-file	
+	cdns.push("<form name=\"AfegeixCapaFitxer\" onSubmit=\"return false;\">",
+			"<fieldset><legend>", GetMessage("NewLayerFromFile", "cntxmenu"),": </legend>",
+			"<input type=\"radio\" id=\"RadioAddFileTypeCSV\" name=\"file_type\" value=\"csv\" onclick=\"ActivaParametresCSV(form);\"><label for=\"RadioAddFileTypeCSV\">CSV ",GetMessage("or")," TXT</label>&nbsp;&nbsp;&nbsp;&nbsp;",			
+			"<input type=\"radio\" id=\"RadioAddFileTypeGeoJSON\" name=\"file_type\" value=\"geojson\" checked=\"checked\" onclick=\"DesactivaParametresCSV(form);\"><label for=\"RadioAddUrlTypeGeoJSON\">GeoJSON</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+			"<input type=\"radio\" id=\"RadioAddFileTypeGeoTIFF\" name=\"file_type\" value=\"geotiff\" onclick=\"DesactivaParametresCSV(form);\"><label for=\"RadioAddUrlTypeGeoTIFF\">GeoTIFF ",GetMessage("or")," COG</label><br>",			
+			"<fieldset><legend>",GetMessage("Source"),"</legend>",		
+			"<input type=\"radio\" id=\"RadioAddFileSourceLocalFile\" name=\"source_type\" value=\"local\" ",
+			"onclick=\"ActivaBotoFitxerDeFontLocal(form);\"><label for=\"RadioAddFileSourceLocalFile\">",GetMessage("LocalDrive", "cntxmenu"),": </label>",						
+			"<input type=\"file\" name=\"nom_fitxer_local\" id=\"openLocalFile\" class=\"Verdana11px\" disabled accept=\".json;.geojson;.tiff;.tif;.cog;.csv;.txt\"><br>",					
+			"<input type=\"radio\" id=\"RadioAddFileSourceURL\" name=\"source_type\" value=\"url\" checked=\"checked\"",
+			"onclick=\"ActivaEditFitxerDeURL(form);\"><label for=\"RadioAddFileSourceURL\">URL: </label>",
+			"<input type=\"text\" name=\"url_fitxer\" style=\"width:400px;\" ", (url ? "value=\"" + url + "\"" : "placeholder=\"https://\""), " /></fieldset>",
+			"<fieldset name=\"configCSV\" id=\"configCSV\" class=\"plegat\" disabled>",
+			"<legend name=\"titolconfigCSV\" id=\"titolconfigCSV\" onClick=\"PlegaDesplegaFieldSetConfiguracio(form);\">",FieldSetPlegatConfigCSV ? "+ ": "- ", 
+			GetMessage("Parameters")," (CSV): </legend>", 
+			"<label for=\"encoding_csv\">", GetMessage("Encoding", "cntxmenu"), ": </label>",
+			DonaCadenaDesplegableEncoding("csv"),"<br>",
+			"<fieldset><legend>", GetMessage("CSVFieldDelimiter", "cntxmenu"),": </legend>",	
+			"<input type=\"radio\" id=\"TabDelimiter\" name=\"fieldDelimitador\" value=\"tab\">",
+			"<label for=\"TabDelimiter\">Tab</label>",	
+			"<input type=\"radio\" id=\"commaDelimiter\" name=\"fieldDelimitador\" value=\"comma\" checked=\"checked\">",
+			"<label for=\"commaDelimiter\">", GetMessage("Comma", "cntxmenu"),"</label>",	
+			"<input type=\"radio\" id=\"semicolonDelimiter\" name=\"fieldDelimitador\" value=\"semicolon\">",
+			"<label for=\"semicolonDelimiter\">", GetMessage("Semicolon", "cntxmenu"),"</label>",	
+			"<input type=\"radio\" id=\"spaceDelimiter\" name=\"fieldDelimitador\" value=\"space\">",
+			"<label for=\"spaceDelimiter\">", GetMessage("Space", "cntxmenu"),"</label>",	
+			"<input type=\"radio\" id=\"textDelimiter\" name=\"fieldDelimitador\" value=\"text\">",	
+			"<input type=\"text\" id=\"separa_csv\" name=\"separa_csv\" style=\"width:30px;\">","</fieldset>",
+			"<input type=\"checkbox\" id=\"header_csv\" name=\"header_csv\" checked=\"checked\"><label for=\"header_csv\">", GetMessage("FirstLineContainsFieldsName", "cntxmenu"), "</label><br>",
+			"<fieldset><legend>", GetMessage("Geometry", "cntxmenu"),": </legend>",	
+			"<label for=\"crs_csv\">CRS: </label>",
+			DonaCadenaDesplegableCRS("csv"),"<br>",			
+			"<label for=\"camp_geo\">",GetMessage("CSVNameGeoField", "cntxmenu"),": </label>",
+			"<input type=\"text\" id=\"camp_geo\" name=\"camp_geo\" style=\"width:200px;\"><br>",
+			"</fieldset>",
+			"<label for=\"camp_time\">",GetMessage("CSVNameDateTimeField", "cntxmenu"),": </label>",
+			"<input type=\"text\" id=\"camp_time\" name=\"camp_time\" style=\"width:200px;\"><br>",
+			"</fieldset>",
 			"<input type=\"button\" class=\"Verdana11px\" value=\"",
 		     GetMessage("Add"),
-			"\" onClick=\"CarregaFitxerURLSeleccionat(form)\" />",
-		"</fieldset></form>");
+			"\" onClick=\"CarregaFitxerLocalOURLSeleccionat(form)\" />",
+		"</fieldset></form>");		
 	cdns.push("</div>");
 	return cdns.join("");
+}
+
+function ActivaEditFitxerDeURL(form)
+{
+	form.url_fitxer.disabled=false;
+	form.nom_fitxer_local.disabled=true;
+}
+
+function ActivaBotoFitxerDeFontLocal(form)
+{
+	form.url_fitxer.disabled=true;
+	form.nom_fitxer_local.disabled=false;
 }
 
 function MostraCapesCapacitatsWMS(servidorGC)

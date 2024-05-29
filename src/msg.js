@@ -2560,6 +2560,14 @@ var MessageLang=
       "cze": "Nová vrstva ze serveru",
       "ger": "Neuer Layer vom Server"
     },
+	"NewLayerFromFile": {
+      "cat": "Capa nova de fitxer",
+      "spa": "Capa nueva de fichero",
+      "eng": "New layer from file",
+      "fre": "Nouvelle couche du fichier",
+      "cze": "Nová vrstva ze souboru",
+      "ger": "Neuer Layer aus Datei"
+    },	
     "NewLayerFromDisk": {
       "cat": "Capa nova de disc local",
       "spa": "Capa nueva de disco local",
@@ -2576,7 +2584,87 @@ var MessageLang=
       "cze": "Nová vrstva z adresy URL",
       "ger": "Neuer Layer von URL"
     },
-    "SpecifyServerURL": {
+	"LocalDrive": {
+      "cat": "Disc local",
+      "spa": "Disco local",
+      "eng": "Local drive",
+      "fre": "Lecteur local",
+      "cze": "Místní jednotka",
+      "ger": "Lokale Laufwerk"
+    },
+	"Encoding" : {
+		"cat": "Codificació",
+		"spa": "Codificación",
+		"eng": "Encoding",
+		"fre": "Codage",
+		"cze": "Kódování",
+		"ger": "Kodierung"		
+	},
+	"Comma": {
+		"cat": "Coma",
+		"spa": "Coma",
+		"eng": "Comma",
+		"fre": "Virgule",
+		"cze": "Čárka",
+		"ger": "Komma"
+	},	
+	"Semicolon": {
+		"cat": "Punt i coma",
+		"spa": "Punto y coma",
+		"eng": "Semicolon",
+		"fre": "Point-virgule",
+		"cze": "Středník",
+		"ger": "Semikolon"
+	},	
+	"Space": {
+		"cat": "Espai",
+		"spa": "Espacio",
+		"eng": "Space",
+		"fre": "Espace",
+		"cze": "Mezera",
+		"ger": "Leerzeichen"
+	},	
+	"CSVFieldDelimiter": {
+		"cat": "Delimitador de camps",
+		"spa": "Delimitador de campos",
+		"eng": "Field delimiter",
+		"fre": "Délimiteur de champs",
+		"cze": "Vymezovač polí",
+		"ger": "Feldtrennzeichen"
+	},
+	"FirstLineContainsFieldsName":{
+		"cat": "La primera línia conté els noms dels camps",
+		"spa": "La primera línea contiene los nombres de los campos",
+		"eng": "First line contains field names",
+		"fre": "La première ligne contient les noms des champs",
+		"cze": "První řádek obsahuje názvy polí",
+		"ger": "Die erste Zeile enthält Feldnamen"
+	},
+	"Geometry": {
+		"cat": "Geometria",
+		"spa": "Geometría",
+		"eng": "Geometry",
+		"fre": "Géométrie",
+		"cze": "Geometrii",
+		"ger": "Geometrie"
+	},
+	"CSVNameGeoField": {
+		"cat": "Nom del camp que conté la geometria",
+		"spa": "Nombre del campo con la geometría",
+		"eng": "Field name that contains the geometry",
+		"fre": "Nom du champ contenant la géométrie",
+		"cze": "Název pole obsahujícího geometrii",
+		"ger": "Name des Feldes mit der Geometrie"
+	},
+	"CSVNameDateTimeField": {
+		"cat": "Nom del camp que conté la data-hora",
+		"spa": "Nombre del campo con la fecha-hora",
+		"eng": "Field name that contains date-time",
+		"fre": "Nom du champ contenant la date-heure",
+		"cze": "Název pole s datem a časem",
+		"ger": "Name des Feldes mit Datum und Uhrzeit"
+	},
+	"SpecifyServerURL": {
       "cat": "Especifica l'adreça URL del servidor",
       "spa": "Especifique la dirección URL del servidor",
       "eng": "Specify the server URL",

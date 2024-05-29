@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2024 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -108,7 +108,7 @@ var TMG, tiles, env_capa;
 		{
 			TMG.atriObjNumerics={};	
 			TMG.atriObjNumerics[nom_camp_nObjs_tessella]={}; 
-	}
+		}
 	}
 	
 	// Determino l'envolupant per poder determinar l'espai de tessel·lació
@@ -261,6 +261,7 @@ function OmpleAttributesObjecteCapaDigiDesDeWFS(objecte_xml, attributes, feature
 var attribute;
 var atrib_coll_xml, atrib_xml, tag2, nom;
 
+	// NJ_11_04_2024: Crec que de la manera que està programat només trobarà els attributs que venen d'un servidor del nostres, potser cal tocar alguna cosa i provar altres serveis WFS amb format XML	
 	atrib_coll_xml=DonamElementsNodeAPartirDelNomDelTag(objecte_xml, "http://miramon.uab.cat/ogc/schemas/atribut", "mmatrib", "Atribut");
 	if (!atrib_coll_xml || atrib_coll_xml.length==0)
 		return;
@@ -468,6 +469,103 @@ function OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(obs, feature, data
 	feature.properties=ExtreuTransformaSTAObservations(obs, data);
 }
 
+function ParsejaCSVObjectesIPropietats(results, capa)
+{
+	if(!results || !results.data ||  results.data.length<1)
+		return 0;
+	if(!capa || !capa.configCSV || !capa.configCSV.nomCampGeometria)
+		return 0;
+	// Camp geometria
+	if(!capa.objectes)
+		capa.objectes={"type": "FeatureCollection", "features": []};
+	
+	// Camp multitime
+	if(capa.configCSV.nomCampDateTime)
+	{
+		if(!capa.data)
+		{
+			capa.data=[];
+			capa.AnimableMultiTime=true;
+		}
+	}
+	
+	var rows=results.data, i_row, row, i_atrib, i_obj, i_data=-1, data_iso, wkt = new Wkt.Wkt(), wkt_obj, geometria, feature, 
+			attributesArray=capa.attributes ? Object.keys(capa.attributes): null,
+			attributesRowArray;
+	
+	if(!capa.attributes)
+		capa.attributes={};
+	// cada fila del csv és un objecte amb les seves propietats
+	for(i_row=0; i_row<rows.length; i_row++)
+	{
+		row=rows[i_row];
+		wkt_obj=row[capa.configCSV.nomCampGeometria];
+		if(wkt_obj)
+		{
+			wkt.read(wkt_obj);
+			geometria=wkt.toJson();
+			// ·$· no faig cap transformació de les coordenades m'en refio del que s'ha documentat a CRSGeometry
+			i_obj=capa.objectes.features.push({type: "Feature",
+										geometry: geometria,
+										properties: {}})-1;
+										
+			if(capa.configCSV.nomCampDateTime)
+			{
+				data_iso=row[capa.configCSV.nomCampDateTime];			
+				i_data=InsereixDataISOaCapa(data_iso, capa.data);
+			}
+			if(attributesArray)
+			{				
+				for(i_atrib=0; i_atrib<attributesArray.length; i_atrib++)
+				{
+					if(capa.attributes[attributesArray[i_atrib]].originalName)
+						capa.objectes.features[i_obj].properties[CanviaVariablesDeCadena(attributesArray[i_atrib], capa, i_data, null)]=row[capa.attributes[attributesArray[i_atrib]].originalName];
+					else
+						capa.objectes.features[i_obj].properties[CanviaVariablesDeCadena(attributesArray[i_atrib], capa, i_data, null)]=row[capa.attributes[attributesArray[i_atrib]]];
+				}	
+			}
+			else
+			{
+				attributesRowArray=Object.keys(row);
+				for(i_atrib=0; i_atrib<attributesRowArray.length; i_atrib++)
+				{
+					if(attributesRowArray[i_atrib]!=capa.configCSV.nomCampGeometria)
+					{
+						capa.objectes.features[i_obj].properties[attributesRowArray[i_atrib]]=row[attributesRowArray[i_atrib]];
+						
+						if(!capa.attributes[attributesRowArray[i_atrib]])
+							capa.attributes[attributesRowArray[i_atrib]]={originalName:attributesRowArray[i_atrib], descripcio : attributesRowArray[i_atrib], mostrar: true};
+					}
+				}
+			}
+		}
+	}
+	return 1;
+}
+
+function ProcessaResultatLecturaCSVObjectesIPropietats(results)
+{
+var param=this;
+
+	if(!results || !results.data ||  results.data.length<1)
+	{
+		if(param.func_error)
+			param.func_error(results, param);
+		return;
+	}	
+	var capa=ParamCtrl.capa[param.i_capa];
+	if(0==ParsejaCSVObjectesIPropietats(results, capa))
+	{
+		if(param.func_error)
+			param.func_error(results, param);
+		return;
+	}
+	CanviaEstatEventConsola(null, param.i_event, EstarEventTotBe);
+	if(param.func_after)
+		param.func_after(param);
+}
+
+
 function ProcessaResultatLecturaCSVPropietatsObjecte(results)
 {
 	var param=this;
@@ -533,9 +631,31 @@ function OmpleAttributesObjecteCapaDigiDesDeCadenaCSV(doc, param)
 	// Si enlloc d'una cadena csv tinc un fitxer, cal que afegeixi al config del parse 
 	// download: true,
 	Papa.parse(doc, {
-				header: true,
+				header: (capa.configCSV && capa.configCSV.header) ? capa.configCSV.header : true,
+				encoding: (capa.configCSV && capa.configCSV.encoding) ? capa.configCSV.encoding : "",
 				delimiter: (capa.configCSV && capa.configCSV.separadorCamps) ? capa.configCSV.separadorCamps :  "",
 				complete: ProcessaResultatLecturaCSVPropietatsObjecte.bind(param),				
+				});		
+}
+
+function OmpleObjectesIAttributesCapaDigiDesDeCadenaCSV(doc, param)
+{
+	if(!doc)
+	{
+		if(param.func_error)
+			param.func_error(null, param);
+		return;
+	}
+	
+	var capa=ParamCtrl.capa[param.i_capa];
+	
+	// Si enlloc d'una cadena csv tinc un fitxer, cal que afegeixi al config del parse 
+	// download: true,
+	Papa.parse(doc, {
+				header: (capa.configCSV && capa.configCSV.header) ? capa.configCSV.header : true,
+				encoding: (capa.configCSV && capa.configCSV.encoding) ? capa.configCSV.encoding : "",
+				delimiter: (capa.configCSV && capa.configCSV.separadorCamps) ? capa.configCSV.separadorCamps :  "",
+				complete: ProcessaResultatLecturaCSVObjectesIPropietats.bind(param),				
 				});		
 }
 
@@ -1496,7 +1616,7 @@ function DeterminaValorAttributeObjecteDataCapaDigi(i_nova_vista, capa, feature,
 //Determina el valor per la data actual
 function DeterminaValorAttributeObjecteCapaDigi(i_nova_vista, capa, feature, attribute, attribute_name, i_col, i_fil)
 {
-	return DeterminaValorAttributeObjecteDataCapaDigi(i_nova_vista, capa, feature, attribute, attribute_name, null, i_col, i_fil)
+	return DeterminaValorAttributeObjecteDataCapaDigi(i_nova_vista, capa, feature, attribute, attribute_name, null, i_col, i_fil);
 }
 
 function DeterminaTextValorAttributeObjecteCapaDigi(i_nova_vista, capa_digi, feature, attribute, attribute_name, i_col, i_fil)
@@ -1931,6 +2051,7 @@ var cdns=[], c_afegir="", capa=ParamCtrl.capa[i_capa], camps_implicats, i, tipus
 		{
 			cdns.push("&PROPERTYNAME=");
 			c_afegir="";
+			camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
 			for(i=0; i<camps_implicats.length; i++)
 				if(camps_implicats[i] && camps_implicats[i]!="")
 					cdns.c_afegir+=","+capa.nom + "/",+camps_implicats[i];
@@ -2256,6 +2377,49 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 			}
 		}
 	}
+	return ha_calgut;
+}
+
+function DemanaFitxerObjectesIPropietatsDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
+{
+var env_total, env_temp, env_sol;
+var ha_calgut=false, vaig_a_carregar=false;
+
+	if(DonaTipusServidorCapa(capa)!="TipusHTTP_GET" || !capa.servidor ||
+		(capa.FormatImatge!="text/csv" && capa.FormatImatge!="application/json" && capa.FormatImatge!="application/geo+json") || 
+		(capa.objectes && capa.objectes.features && capa.objectes.features.length>0))
+		return ha_calgut;
+	
+	// ·$· Potser es podria filtrar per env d'objecte i vista, però de moment no ho faig i ho demano per tots els objectes
+	// Transformo l'envolupant de la vista a coordenades vector
+	//env_temp=TransformaEnvolupant(env, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
+	
+	if(!param.carregant_geo)
+	{
+		param.carregant_geo=true;
+		vaig_a_carregar=true;		
+	}
+	if(vaig_a_carregar)
+	{
+		ha_calgut=true;				
+		param.i_capa=ParamCtrl.capa.indexOf(capa);
+		param.i_capa_digi=param.i_capa;
+		param.i_event=CreaIOmpleEventConsola("HTTP GET", param.i_capa, capa.servidor, TipusEventHttpGet);
+		param.i_tile=-1;
+		param.func_after=funcio;
+		param.func_error=ErrorCapaDigiAmbObjectesDigitalitzats;
+		if(capa.FormatImatge=="text/csv")
+		{
+			// no indico expressament el mimetype en aquest cas perquè he vist que no sempre respon com "text/csv" sino com "application/octet-stream" i fa que obtingui un error quan no és així
+			loadFile(capa.servidor, null, OmpleObjectesIAttributesCapaDigiDesDeCadenaCSV, ErrorCapaDigiAmbObjectesDigitalitzats, param);
+		}
+		else  //fitxers en JSON
+		{
+			loadJSON(capa.servidor, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, param);
+		}
+	}
+	else
+		return true;
 	return ha_calgut;
 }
 

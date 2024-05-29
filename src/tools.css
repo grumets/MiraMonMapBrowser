@@ -98,7 +98,8 @@ input
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	border-color: #99CCFF;
 }
-input[type="button"],[type="submit"],button
+
+input[type="button"],[type="submit"],button,input[type="file"]::file-selector-button
 {
 	font-weight:bold;
 	color:white;
@@ -108,11 +109,12 @@ input[type="button"],[type="submit"],button
 	border-width: 2px;
 	border-style: solid;/*none | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset*/
 }
-input[type="button"]:hover,[type="submit"]:hover,button:hover
+input[type="button"]:hover,[type="submit"]:hover,button:hover,[type="file"]::file-selector-button:hover
 {
 	border-style: outset;
 	cursor:pointer;
 }
+ 
 input[type="text"]
 {
 	border-style:solid;
@@ -135,6 +137,34 @@ dialog
 	font-size:11px;
 	border: 2px solid #99CCFF;
 }
+
+
+/* Inspirat en  https://codepen.io/dtomyn/pen/vYOryd*/
+fieldset{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+fieldset.plegat {	
+	overflow: hidden;
+	height: 8px; 
+	/*overflow-anchor: none;*/
+	padding: 2px;
+} 
+fieldset.plegat > legend {
+	cursor: pointer;
+}
+fieldset.desplegat {
+	height: auto; /* if it is active then make the height as big as it needs to be */
+	overflow: auto;	
+	padding: 10px;
+}
+fieldset.desplegat > legend {
+	cursor: pointer;
+}
+
+
+
+
 
 /* Coordenades */
 .text_coord{
@@ -927,6 +957,7 @@ div.control {
 label.control {
 	flex: 20;
 	text-align: center;
+	padding: 0 1%;
 }
 
 div.fullHeight {
