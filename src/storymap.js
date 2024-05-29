@@ -49,7 +49,6 @@ const imageThumbnailId = "imageThumbnail";
 const midaImatgeMiniaturaMaximaPx = 150;
 const midaImatgeMaximaPx = 500;
 const numMaximPixelsStorymap = Math.pow(midaImatgeMaximaPx, 2);
-// Extensions imatges permeses.
 // Identificador input imatges internes del Storymap.
 const inputImageStorymapId = "imagePicker";
 // Identificadors diàlegs
@@ -72,7 +71,7 @@ const indentificadorSelectorControls = "controls";
 const controlScroll = "scroll", controlManual = "manual";
 const divRelatId = "divRelat";
 const idImgSvgAccioMapa = "id_storymap_mm_action_";
-
+const ancoraRelat = "ancoraRelat"; 
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 //Mostra la finestra que conté el llistat d'històries
@@ -146,7 +145,6 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
 		"</p></a></td>");
-			//style='position:relative; top:0px; right:0px; height:50px; width:50px;'
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
@@ -976,10 +974,13 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		let divRelat = document.createElement("div");
 		divRelat.setAttribute("id", divRelatId);
 		divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
+		divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
 		divRelat.insertAdjacentHTML("afterbegin", relatACarregar.html);
 		
-		/* Tot canvi que hihagientre les nodesfills del relat volem estar-ne al corrent 
-			i així saber quan podem calcular les alçades correctes dels <div> amb acció al mapa.*/
+		/* 
+		*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
+		*	i així saber quan podem calcular les alçades correctes dels <div> amb acció al mapa.
+		*/
 		const mutationObserver = new MutationObserver(function(changes, observer) {
 			const imgBlanc = document.querySelector("img[name='"+ imgEspaiBlancNom +"']");
 			const imgAccio = document.querySelectorAll("img[id^=" + idImgSvgAccioMapa);
@@ -1010,8 +1011,18 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 			if (contadorAccionsMapa >= 0)
 			{
 				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
-				divRelat.scrollTo({top: infoAccio.y, left: 0, behavior: "smooth"});
-				ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+				if (ancoraNavegacio)
+				{
+					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.click();
+				}
+				else 
+				{
+					ancoraNavegacio = document.createElement("a");
+					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.click();
+				}
 			}
 			if (contadorAccionsMapa < 0)
 				contadorAccionsMapa = 0;
@@ -1029,8 +1040,18 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 			if (contadorAccionsMapa < arrayAlcadesScrollIAccions.length)
 			{
 				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
-				divRelat.scrollTo({top: infoAccio.y, left: 0, behavior: "smooth"});
-				ExecuteDataMMAttributes(...infoAccio.datasetTransformat);
+				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+				if (ancoraNavegacio)
+				{
+					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.click();
+				}
+				else 
+				{
+					ancoraNavegacio = document.createElement("a");
+					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.click();
+				}
 			}
 			if (contadorAccionsMapa == arrayAlcadesScrollIAccions.length)
 				contadorAccionsMapa--;
@@ -1089,7 +1110,7 @@ function ExtreuAlcadesIAccionsDivisions(textHtml)
 	
 	if (arrayDivAccions.length > 0)
 	{
-		let divAccio;
+		let divAccio, imgAccio;
 		let contadorAccionsTransformades= 0;
 		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
@@ -1103,17 +1124,10 @@ function ExtreuAlcadesIAccionsDivisions(textHtml)
 				datasetTransformat.push(transformacioClau);
 				datasetTransformat.push(atributsPropis[key]);
 			}
-			arrayAlcadesScrollIAccions.push({"y": divAccio.getBoundingClientRect().y, "datasetTransformat": datasetTransformat});
+			imgAccio = divAccio.querySelector("img[id^='" + idImgSvgAccioMapa + "']");
+			arrayAlcadesScrollIAccions.push({"identificadorImg": imgAccio.id, "datasetTransformat": datasetTransformat});
 		}
 	}	
-}
-
-function transformaAtributsPropis(value, key, map)
-{
-	const prefix = "data-mm-"; 
-	let transformacioClau = prefix + String.fromCharCode(key.charCodeAt(2)+32) + key.substring(3);
-	this.push(transformacioClau);
-	this.push(value);
 }
 
 /* 	Afegeix una imatge transparent al final del relat per tal que
@@ -1441,6 +1455,15 @@ var node;
 			if (ExecuteDataMMAttributesArray(node.attributes))
 			{
 				darrerNodeStoryMapVisibleExecutat=node;
+				/* 	
+				*	Actualitzem l'índex de l'última acció de mapa executada per tal que 
+				*	els botons "next" i "previous" en cas d'utilitzar-se executin l'acció correcta.
+				*/
+				if (typeof(node) == "object" && node.getAttribute("id"))
+				{
+					const nodeId = node.getAttribute("id");
+					contadorAccionsMapa = parseInt(nodeId.slice(nodeId.indexOf("_")+1));
+				}
 				RepintaMapesIVistes();
 				return true;
 			}
