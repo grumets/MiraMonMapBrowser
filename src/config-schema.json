@@ -1,4 +1,4 @@
-{
+﻿{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
@@ -1313,12 +1313,24 @@
 						"description": "En el cas de que tinguem un o diversos CSV que s'usen per omplir els objectes i/o les característiques dels objectes, cal definir algunes propietats del CSV per poder fer la transformació correctament.",
 						"type": "object",
 						"properties": {
+							"header": {
+								"description": "La primera fila del CSV conté els noms dels camps? Per defecte val 'true'.",
+								"type": "boolean"
+							},
+							"encoding" : {
+								"description": "Codificació de caràcters del fitxer. Per defecte val 'utf-8'",
+								"type": "string"
+							},
 							"separadorCamps": {
-								"description": "Delimitador o separador dels camps en el CSV. Típicament potser ';' o ','. Si no s'indica s'inteterà deduir. ",
+								"description": "Delimitador o separador dels camps en el CSV. Típicament potser ';' o ','. Si no s'indica s'intentarà deduir. ",
 								"type": "string"
 							},
 							"nomCampDateTime": {
 								"description": "Nom del camp del CSV que conté la data-hora del registre. Això s'usarà per omplir l'array de dates de la capa a 'capa.data' i s'usarà en els camps que siguin 'serieTemporal'.",
+								"type": "string"
+							},
+							"nomCampGeometria": {
+								"description": "Nom del camp del CSV que conté la geometria en format WKT.",
 								"type": "string"
 							}
 						}
@@ -2255,10 +2267,10 @@
 			}
 		},
 		"simbols": {
-			"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+			"description": "Símbols o formes pels objectes digitalitzats base i sobrecarregats",
 			"type": ["array", "null"],
 			"items": {
-				"description": "Simbols o formes pels objectes digitalitzats. Si les icones són formes, totes comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
+				"description": "Símbols o formes pels objectes digitalitzats. Si les icones són formes, totes comparteixen el mateix color de vora i d'interior però puc dibuixar més d'una forma.",
 				"type": "object",
 				"required": ["simbol"],
 				"properties": {
@@ -2267,11 +2279,11 @@
 						"type": ["string", "null"]
 					},
 					"NomCampFEscala": {
-						"description": "Nom del camp per triar un factor d'escalat del símbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
+						"description": "Nom del camp per triar un factor d'escalat del símbols o formes. Si voleu controlar la mida dels objectes en metres, feu una forma que tinguit r=1 amb unitats m i esculliu un atribut que tingui valors en metres. Si no s'indica l'escalat val 1 (les mides dels objectes on escalen). ",
 						"type": ["string", "null"]
 					},
 					"simbol": {
-						"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el simbol és constant",
+						"description": "Símbols o formes pels objectes digitalitzats. Pot ser un sol element si el símbol és constant",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Símbol o forma i camp",
@@ -2575,7 +2587,7 @@
 					"enum": [null, "L", "P", "S", "I"] 
 				},
 				"component": {
-					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB) o 2 components per fer combinacions de categories entre 2 capes i matrius de confusió. De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles aparaixeran a la consulta. Només aplica si el 'model' és 'raster'",
+					"description": "Array de components del estil. Només hauria haver-hi 1 (amb paleta) o 3 components (com a combinació RGB) o 2 components per fer combinacions de categories entre 2 capes i matrius de confusió. De fet, si hi ha més de 3 components, les 3 primeres es fan servir per les components RGB de la visualitació, però totes elles apareixeran a la consulta. Només aplica si el 'model' és 'raster'",
 					"type": "array",
 					"items": {
 						"description": "Membre de l'array de components del estil",
@@ -2801,7 +2813,7 @@
 					}
 				},
 				"simbols": {
-					"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
+					"description": "Símbols o formes pels objectes digitalitzats base i sobrecarregats",
 					"$ref": "#/definitions/simbols"									
 				},
 				"formes": {

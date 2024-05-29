@@ -74,18 +74,26 @@ function CanviaRepresentacioCaractersProhibitsPerAtributXML(cadena)
 
 function OmpleRespostaConsultaXMLTipusGeatureInfoResponse(arrel, consulta)
 {
-var text_sortida;
-var tag, tag2;
-var i, j, z;
-var nom, descripcio, valor, UoM, separador, descLink;
-var n_fills_NODATA;
-var esNODATA, esLink, esImatge;
+var text_sortida, tag, tag2, i, j, z;
+var nom, descripcio, valor, UoM, separador, descLink, attributes, capa=consulta.capa;
+var n_fills_NODATA, esNODATA, esLink, esImatge;
 
 	if(!arrel)
 	{
 		consulta.estat=EstatErrorXMLNoNodes;
 		return 1;
 	}
+	if(capa.attributes)
+		attributes=capa.attributes;
+	else if(capa.estil && capa.estil[capa.i_estil].attributes)
+		attributes=capa.estil[capa.i_estil].attributes;
+	else
+		attributes=null;	
+	if(attributes)
+		consulta.attributes=JSON.parse(JSON.stringify(attributes));
+	else if(!consulta.attributes)
+		consulta.attributes={};
+	
 	if(arrel.hasChildNodes())
 	{
 		var i_capa_validar=-1;
@@ -100,8 +108,7 @@ var esNODATA, esLink, esImatge;
 				}
 			}
 		}
-		if(!consulta.attributes)
-			consulta.attributes={};
+		
 		for(i=0; i<arrel.childNodes.length; i++)
 		{
 			tag=arrel.childNodes[i];
@@ -123,7 +130,10 @@ var esNODATA, esLink, esImatge;
 					Compte que això només és per attributes elements */
 
 				}
-				consulta.attributes[tag.attributes[j].name]={
+				if(attributes)
+					consulta.attributes[tag.attributes[j].name].valor=tag.attributes[j].value;
+				else
+					consulta.attributes[tag.attributes[j].name]={
 									"description": tag.attributes[j].name,
 									"valor": tag.attributes[j].value,
 									"UoM": null,
@@ -182,9 +192,13 @@ var esNODATA, esLink, esImatge;
 							esImatge=true;
 					}
 				}
+
 				if(valor)
 				{
-					consulta.attributes[nom]={"description": descripcio,
+					if(attributes)
+						consulta.attributes[nom].valor=valor;
+					else
+						consulta.attributes[nom]={"description": descripcio,
 									"valor": valor,
 									"UoM": UoM,
 									"mostrar": "si",
@@ -197,7 +211,6 @@ var esNODATA, esLink, esImatge;
 						Accio.valors[i_capa_validar]=valor;
 				}
 			}
-
 		}
 		
 		// He de calcular si tots els attributes són NODATA i si és aixì
@@ -221,7 +234,7 @@ var esNODATA, esLink, esImatge;
 			
 function OmpleRespostaConsultaXMLTipusWFSFeatureCollection(arrel, consulta)
 {
-var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attributes;
+var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attributes, capa=consulta.capa;
 
 	if(!arrel)
 	{
@@ -257,8 +270,6 @@ var prop, i_obj, i_attr, capa=consulta.capa, objecte, nom_attr, attributes;
 			// o llegir l'esquema i buscar els que són de tipus propietat o mirar només els que estan definits a la capa a propietats
 			// o agafar-ho tot hi hagi el que hi hagi
 			//·$·
-			if(!consulta.attributes)
-				consulta.attributes={};
 			for(i_attr=0; i_attr<objecte.childNodes.length; i_attr++)
 			{				
 				if(objecte.childNodes[i_attr].localName)

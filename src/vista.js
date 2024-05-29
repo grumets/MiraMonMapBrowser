@@ -1924,6 +1924,8 @@ var neteja_canvas=true;
 	{
 		if(DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;
+		if(DemanaFitxerObjectesIPropietatsDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
+			return;	
 		if(DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;		
 	}

@@ -613,52 +613,86 @@ function AfegeixSimbolitzacioVectorDefecteCapa(capa, tinc_estil)
 {
 	if (!tinc_estil)
 	{
-		capa.estil=[{nom: null,
-			id: 0,
-			desc: capa.desc,
-			DescItems: null,
-			TipusObj: "P",
-			metadades: null,
-			explanation: null,
-			ItemLleg: [
-				{
-					color: "#377200",
-					DescColor: capa.desc
-				}
-			],
-			ncol: 1,
-			simbols:
-			[{
-				simbol:
-				[
-					{
-						icona:
-						{
-							type: "circle",
-							r: 6
-						}
-					}
-				]
-			}],
-			formes: [
-				{
-					vora: {
-						paleta: {
-							colors: [
-								"#377200"
-							]
-						}
-					},
-					interior: {
-						paleta: {
-							colors: [
-								"rgba(25,48,0,0.3)"
-							]
-						}
-					}
-				}	
-			]
-		}];
+		var tipus=null;
+		if(capa.objectes && capa.objectes.features && capa.objectes.features.length>0 && capa.objectes.features[0].geometry)
+		{
+			var geometry=capa.objectes.features[0].geometry;
+			if(geometry.type=="Point" || geometry.type=="MultiPoint")
+				tipus="S";
+			else if(geometry.type=="LineString" || geometry.type=="MultiLineString")
+				tipus="L";
+			else  if(geometry.type=="Polygon" || geometry.type=="MultiPolygon")
+				tipus="P";				
+		}		
+		if(tipus && tipus=="S")
+		{
+			capa.estil=[{nom: null,
+				id: 0,
+				desc: capa.desc,
+				DescItems: null,
+				TipusObj: tipus,
+				metadades: null,
+				explanation: null,
+				ItemLleg: [{color: "#377200", DescColor: capa.desc}],
+				ncol: 1,
+				simbols: [{simbol:[{icona:{type: "circle", r: 6}}]}],
+				formes: [{
+					vora: {paleta: {colors: ["#377200"]}},
+					interior: { paleta: {colors: ["rgba(25,48,0,0.3)"]}}
+				}]				
+			}];
+		}
+		else if(tipus && tipus=="L")
+		{
+			capa.estil=[{nom: null,
+				id: 0,
+				desc: capa.desc,
+				DescItems: null,
+				TipusObj: tipus,
+				metadades: null,
+				explanation: null,
+				ItemLleg: [{color: "#377200", DescColor: capa.desc}],
+				ncol: 1,
+				formes: [{
+					vora: {paleta: {colors: ["#377200"]}}
+				}]				
+			}];
+		}
+		else if(tipus && tipus=="P")
+		{
+			capa.estil=[{nom: null,
+				id: 0,
+				desc: capa.desc,
+				DescItems: null,
+				TipusObj: tipus,
+				metadades: null,
+				explanation: null,
+				ItemLleg: [{color: "#377200", DescColor: capa.desc}],
+				ncol: 1,				
+				formes: [{
+					vora: {paleta: {colors: ["#377200"]}},
+					interior: { paleta: {colors: ["rgba(25,48,0,0.3)"]}}
+				}]	
+			}];
+		}
+		else
+		{
+			capa.estil=[{nom: null,
+				id: 0,
+				desc: capa.desc,
+				DescItems: null,
+				TipusObj: "P",
+				metadades: null,
+				explanation: null,
+				ItemLleg: [{color: "#377200", DescColor: capa.desc}],
+				ncol: 1,	
+				simbols: [{simbol:[{icona:{type: "circle", r: 6}}]}],				
+				formes: [{
+					vora: {paleta: {colors: ["#377200"]}},
+					interior: { paleta: {colors: ["rgba(25,48,0,0.3)"]}}
+				}]	
+			}];
+		}
 	}
 	capa.separa=null;
 	capa.DescLlegenda=capa.desc;
@@ -731,6 +765,60 @@ function DefineixAttributesCapaVectorSiCal(capa)
 		}
 	}
 }
+
+
+function AfegeixCapaCSV_URL(i_on_afegir, configuracio, CRS)
+{
+var k;
+
+	var calia_consultes=CalActivarConsultesALaBarra();
+
+	if(i_on_afegir==-1)
+		k=ParamCtrl.capa.length;
+	else
+	{
+		k=i_on_afegir;
+		CanviaIndexosCapesSpliceCapa(1, k, -1, ParamCtrl);
+	}
+	
+	ParamCtrl.capa.splice(k, 0, {servidor: url,
+				versio: null,
+				tipus: "TipusHTTP_GET",
+				model: model_vector,
+				configCSV: JSON.parse(JSON.stringify(configuracio)),					
+				nom: null,
+				desc: TreuAdreca(url),
+				CRSgeometry: CRS ? CRS: "EPSG:4326",
+				objectes: null,
+				attributes: null,
+				FormatImatge: "text/csv",
+				transparencia: "opac",
+				CostatMinim: null,
+				CostatMaxim: null,
+				FormatConsulta: null,
+				visible: "si",
+				consultable: "si",
+				descarregable: "no",
+				FlagsData: null,
+				data: null,
+				i_data: 0,
+				animable: false,
+				AnimableMultiTime: false,
+				origen: OrigenUsuari});
+
+	AfegeixSimbolitzacioVectorDefecteCapa(ParamCtrl.capa[k], false);
+	CompletaDefinicioCapa(ParamCtrl.capa[k]);
+
+	//Redibuixo el navegador perquè les noves capes siguin visibles
+	//RevisaEstatsCapes();
+
+	if (calia_consultes!=CalActivarConsultesALaBarra())
+		CreaBarra(null);
+
+	RepintaMapesIVistes();
+}
+
+
 
 //No crida RepintaMapesIVistes(); Cal fer-ho manualment després.
 function AfegeixCapaGeoJSON(i_on_afegir, desc, objectes, attributes, estil, data)
