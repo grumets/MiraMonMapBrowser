@@ -1545,6 +1545,7 @@ var layer_finestra=layerFinestraList[i_finestra];
 	iFinestraLayerFora=-1;
 }
 
+const min_finestra_width = 100, min_finestra_height = 38;
 function MovimentFinestraLayerPerLaBarra(event, i_finestra)
 {
 var layer_finestra=layerFinestraList[i_finestra];
@@ -1576,11 +1577,22 @@ var layer_finestra=layerFinestraList[i_finestra];
 		}
 		else //if(layer_finestra.estat_click==movimentRedimensionant)
 		{
+			let min_current_width = min_finestra_width;
+			let min_current_height = min_finestra_height;
+			// Si la finestra té una mida mínima especifica la respectem canviant els valors per defecte (h: 38, w: 100).
+			if (layer_finestra.min_size_finestra && layer_finestra.min_size_finestra.w)
+			{
+				min_current_width = layer_finestra.min_size_finestra.w;
+			}
+			if (layer_finestra.min_size_finestra && layer_finestra.min_size_finestra.h)
+			{
+				min_current_height = layer_finestra.min_size_finestra.h;
+			}
 			//Impedeixo que la caixa es faci massa petita al redimensionar.
-			if (layer_finestra.pos_ini_finestra.w+dx<100)
-				dx=100-layer_finestra.pos_ini_finestra.w;
-			if (layer_finestra.pos_ini_finestra.h+dy<38)
-				dy=38-layer_finestra.pos_ini_finestra.h;
+			if (layer_finestra.pos_ini_finestra.w+dx<min_current_width)
+				dx=min_current_width-layer_finestra.pos_ini_finestra.w;
+			if (layer_finestra.pos_ini_finestra.h+dy<min_current_height)
+				dy=min_current_height-layer_finestra.pos_ini_finestra.h;
 			moveLayer(getFinestraLayer(window, layer_finestra.nom), -1, -1, layer_finestra.pos_ini_finestra.w+dx, layer_finestra.pos_ini_finestra.h+dy);
 			moveLayer(getLayer(window, layer_finestra.nom+SufixBarra), -1, -1, layer_finestra.pos_ini_finestra.w+dx, -1);
 			if (layer_finestra.onresize && typeof layer_finestra.onresize==="function")
@@ -1644,7 +1656,6 @@ var nom, i_finestra;
 			break;
 		}
 	}
-
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
 			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null};
 

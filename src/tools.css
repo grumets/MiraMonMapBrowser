@@ -966,6 +966,7 @@ div.fullHeight {
 
 .separadorHoritzonal {
 	position: relative;
+	top: 0px;
 	width: 100%;
 	background-color: black;
 	height: 0.5px;

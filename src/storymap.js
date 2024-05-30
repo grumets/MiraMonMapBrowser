@@ -74,6 +74,33 @@ const idImgSvgAccioMapa = "id_storymap_mm_action_";
 const ancoraRelat = "ancoraRelat"; 
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
+// Especificitat de la funció creaFinestraLayer per a l'Storymap.
+function createStorymapFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
+{
+	const min_width_finestra_storymap = 335, min_height_finestra_storymap = 400;
+	createFinestraLayer(window, name, titol, botons, left, top, width, height, ancora, param, content);
+
+	let currentStyle;
+	const barraStorymap = getLayer(win, name+SufixBarra);
+	currentStyle = barraStorymap.getAttribute("style");
+	barraStorymap.setAttribute("style", currentStyle + ` min-width: ${min_width_finestra_storymap}px; min-height: ${min_height_finestra_storymap}px;`);
+
+	const finestraStorymap = getLayer(win, name+SufixFinestra);
+	currentStyle = finestraStorymap.getAttribute("style");
+	finestraStorymap.setAttribute("style", currentStyle + ` min-width: ${min_width_finestra_storymap}px; min-height: ${min_height_finestra_storymap}px;`);
+	
+	let i_finestra;
+
+	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+	{
+		if (layerFinestraList[i_finestra].nom==name)
+		{
+			layerFinestraList[i_finestra].min_size_finestra = {w: min_width_finestra_storymap, h: min_height_finestra_storymap};
+			break;
+		}
+	}
+}
+
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
 {
@@ -91,6 +118,7 @@ function TancaFinestra_triaStoryMap()
 function TancaFinestra_visualitzaStoryMap()
 {
 	indexStoryMapActiu=null;
+	contadorAccionsMapa = 0;
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
@@ -1071,7 +1099,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		// Afegim els botons d'edició dins de la finestra de visualització:
 		let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
-		divBotons.setAttribute("style", "height: 8%");
+		divBotons.setAttribute("style", "height: 8%; position: relative; top: 0 px; left: 0 px");
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
 
 		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
@@ -1362,7 +1390,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 								GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
 					break;
 				}
-				if (0==CommandMMNSetChangeDateTime(datejson))
+				if (0==CommandMMNSetDateTime(datejson))
 					hihacanvis=true;
 			}
 		}
@@ -1459,7 +1487,7 @@ var node;
 				*	Actualitzem l'índex de l'última acció de mapa executada per tal que 
 				*	els botons "next" i "previous" en cas d'utilitzar-se executin l'acció correcta.
 				*/
-				if (typeof(node) == "object" && node.getAttribute("id"))
+				if (node.getAttribute("id"))
 				{
 					const nodeId = node.getAttribute("id");
 					contadorAccionsMapa = parseInt(nodeId.slice(nodeId.indexOf("_")+1));
