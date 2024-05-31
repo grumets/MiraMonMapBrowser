@@ -323,7 +323,7 @@ function CarregaImatgeStoryMap(input)
 		{
 			CarregaImatgeRelatStoryMap(fitxerObjectiu);
 		}
-		else if (input.id == inputThumbnailStoryMapId)
+		else if (input.id == inputThumbnailId)
 		{
 			CarregaImatgeMiniaturaStoryMap(fitxerObjectiu);
 		}
@@ -493,8 +493,15 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
 				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
 				{ 
-					let writenOnTiny = tinyEditor.getContent();
-					tinyEditor.setContent(writenOnTiny + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>", { format: 'html' });
+					const nodeImatge = tinyEditor.selection.getNode();
+					const rangCursor = tinyEditor.selection.getRng();
+					/*const parser = new DOMParser();
+					const previHtmlText = parser.parseFromString(nodeImatge.innerHTML.substring(0, rangCursor.startOffset), 'text/html');
+					const postHtmlText = parser.parseFromString(nodeImatge.innerHTML.substring(rangCursor.startOffset, nodeImatge.innerHTML.length), 'text/html');*/
+					const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
+					const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
+
+					nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>" + postHtml;
 				}
 			}
 			resultatMidesImatge = {};
@@ -976,11 +983,10 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 
 	contadorAccionsMapa= 0;
 	const finestraRelat = getFinestraLayer(window, "storyMap");
-	const childNodesFinestraRelat = finestraRelat.childNodes;
 	
 	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
-	while (childNodesFinestraRelat.firstChild) {
-		childNodesFinestraRelat.removeChild(childNodesFinestraRelat.firstChild);
+	while (finestraRelat.firstChild) {
+		finestraRelat.removeChild(finestraRelat.firstChild);
 	}
 	  
 	if (relatACarregar.desc)
