@@ -2647,7 +2647,7 @@ var MessageLang=
 		"fre": "Géométrie",
 		"cze": "Geometrii",
 		"ger": "Geometrie"
-	},
+	},	
 	"CSVNameGeoField": {
 		"cat": "Nom del camp que conté la geometria",
 		"spa": "Nombre del campo con la geometría",
@@ -2655,6 +2655,30 @@ var MessageLang=
 		"fre": "Nom du champ contenant la géométrie",
 		"cze": "Název pole obsahujícího geometrii",
 		"ger": "Name des Feldes mit der Geometrie"
+	},
+	"NameFieldWith": {
+		"cat": "Nom del camp amb",
+		"spa": "Nombre del campo con",
+		"eng": "Field name with",
+		"fre": "Nom du champ avec",
+		"cze": "Název pole s",
+		"ger": "Feldname mit"
+	},
+	"XField": {
+		"cat": "coordenada X",
+		"spa": "coordenada X",
+		"eng": "X coordinate",
+		"fre": "coordonnée X",
+		"cze": "X-souřadnicí",
+		"ger": "X-Koordinate"
+	},
+	"YField": {
+		"cat": "coordenada Y",
+		"spa": "coordenada Y",
+		"eng": "Y coordinate",
+		"fre": "coordonnée Y",
+		"cze": "Y-souřadnicí",
+		"ger": "Y-Koordinate"
 	},
 	"CSVNameDateTimeField": {
 		"cat": "Nom del camp que conté la data-hora",
