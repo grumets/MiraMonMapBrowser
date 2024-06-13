@@ -52,11 +52,11 @@ const numMaximPixelsStorymap = Math.pow(midaImatgeMaximaPx, 2);
 // Identificador input imatges internes del Storymap.
 const inputImageStorymapId = "imagePicker";
 // Identificadors diàlegs
-const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol";
+const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol", dialegAlertaInsercioId = "alertaInsercioDialeg";
 // Dialeg Mida Imatges identificadors
 const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
 // Dialeg Característiques checkbox identificadors i noms
-const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates";
+const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates", formCheckboxesId = "formCheckboxes";
 const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
@@ -72,6 +72,8 @@ const controlScroll = "scroll", controlManual = "manual";
 const divRelatId = "divRelat";
 const idImgSvgAccioMapa = "id_storymap_mm_action_";
 const ancoraRelat = "ancoraRelat"; 
+const confirmNoInsercioId = "confirmNoInsercio";
+const paragrafContinuacioId = "pContinuacio";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -276,15 +278,15 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			SeguentPasStoryMap(i_relat);
 		else
 		{
-			const dialegNodeList = finestra.querySelectorAll("dialog[id='"+ dialegAlertaTitolId + "']");
-			if (dialegNodeList && dialegNodeList.length != 0)
-				dialegNodeList[0].show();
-			else
+			let dialegTitol = document.getElementById(dialegAlertaTitolId);
+			
+			if (!dialegTitol)
 			{
-				const caractDialog = CreaDialegAlertaTitol();
-				finestra.insertAdjacentElement("beforeend", caractDialog);
-				caractDialog.show();
+				dialegTitol = CreaDialegAlertaTitol();
+				finestra.appendChild(dialegTitol);
 			}
+			
+			dialegTitol.show();
 		}
 	};	
 
@@ -431,9 +433,54 @@ function CreaDialegMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialegCaractId, dialogHtml.join(""));
+}
+
+/*
+* Infroma a l'usuari que l'acció del mapa o la imatge que es vol inserir no és possible.
+*/
+function creaDialegInsercioIncorrecta()
+{
+	const dialogHtml = ["<form><p>" + GetMessage("NotPossibleInsertNewContent", "storymap") + "</p><div style='align-items: center;'><button id='", confirmNoInsercioId, "' formmethod='dialog' value='cancel'>" + GetMessage("OK") + "</button></div></form>"];
+
+	return CreaDialog(dialegMidesId, dialogHtml.join(""));
+}
+
+// Funció per avaluar la ideoneitat del lloc del relat a adjuntar una modificació per inserir una imatge o bé una acció de mapa.
+function esPermetModificacio(nodeObjectiu, tinyBody)
+{
+	const regexpImgId = new RegExp(`^${nomPuntSincr}`);
+	if (comprovaNodePareAmbAccio(nodeObjectiu, tinyBody))
+		return false;
+	else if (regexpImgId.test(nodeObjectiu.id))
+		return false;
+	else 
+		return true;
+
+	function comprovaNodePareAmbAccio(nodeObjectiu, tinyBody)
+	{
+		if (nodeObjectiu.nodeName == "DIV")
+		{
+			if (nodeObjectiu.hasAttributes())
+			{
+				//Com comprovar que hi han attributs propis amb forma de data-mm-... 
+				const regex = new RegExp(`^data-mm-`);
+				const attributsNode = nodeObjectiu.attributes;
+				for (const atribut of attributsNode)
+				{
+					if (regex.test(atribut.name))
+						return true;	
+				}
+			}
+		}
+		// Hem comprovat tots els nodes i els seus pares fins assegurar-nos que no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del node objectiu inicial.
+		if (nodeObjectiu.parentNode === tinyBody)
+			return false;
+		//Recursivitat per seguir comprovant els pares de la gerarquia ascendent.
+		return comprovaNodePareAmbAccio(nodeObjectiu.parentNode, tinyBody);
+	}
 }
 
 function MostraDialogImatgeNavegador(imatgeSeleccionada)
@@ -468,13 +515,17 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 	
 	if (anchorElement)
 	{
-		const midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
-		anchorElement.insertAdjacentElement("afterend", midesDialog);
-		
-		midesDialog.addEventListener("close", (event) => {
+		let midesDialog = document.getElementById(dialegMidesId);
+		if (!midesDialog)
+		{
+			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
+			anchorElement.parentNode.appendChild(midesDialog);
+			
+			midesDialog.addEventListener("close", (event) => {
 			// Després de tancar el missatge emergent de les mides.
 			let resultatMides = JSON.parse(event.target.returnValue);
-			if (resultatMides) {
+			if (resultatMides) 
+			{
 				const canvasId = "reduccioImatges";
 				let canvasReduccioImg = document.getElementById(canvasId);
 				if (!canvasReduccioImg)
@@ -494,84 +545,113 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
 				{ 
 					const nodeImatge = tinyEditor.selection.getNode();
-					const rangCursor = tinyEditor.selection.getRng();
-					/*const parser = new DOMParser();
-					const previHtmlText = parser.parseFromString(nodeImatge.innerHTML.substring(0, rangCursor.startOffset), 'text/html');
-					const postHtmlText = parser.parseFromString(nodeImatge.innerHTML.substring(rangCursor.startOffset, nodeImatge.innerHTML.length), 'text/html');*/
-					const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
-					const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
+					if (esPermetModificacio(nodeImatge, tinyEditor.getBody()))
+					{
+						const rangCursor = tinyEditor.selection.getRng();
+						const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
+						const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
 
-					nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>" + postHtml;
+						nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>" + postHtml;
+					}
+					else
+					{
+						const finestraRelats = document.getElementById("creaStoryMap_finestra");
+						let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+						if (dialegInsercio)
+						{
+							if (!finestraRelats.contains(dialegInsercio))
+							{
+								finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+							}
+						}
+						else
+						{
+							dialegInsercio = creaDialegInsercioIncorrecta();
+							finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+						}
+							
+						dialegInsercio.show();
+					}
 				}
 			}
 			resultatMidesImatge = {};
-		});
+			});
+			// Caixetí d'amplada
+			const inputWidth = document.getElementById(inputWidthId);
+			inputWidth.addEventListener("change", (event) => {
+				if (chboxProportional.checked)
+				{
+					resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada, event.target);
+					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+				}
+				else
+				{
+					resultatMidesImatge.width = parseFloat(event.target.value);
+				}
+				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
+			});
+			// Caixetí d'alçada
+			const inputHeight = document.getElementById(inputHeightId);
+			inputHeight.addEventListener("change", (event) => {
+				if (chboxProportional.checked)
+				{
+					resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada, event.target);
+					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+				}
+				else
+				{
+					resultatMidesImatge.height = parseFloat(event.target.value);
+				}			
+				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
+			});
+			// Checkbox Propocional
+			const chboxProportional = document.getElementById(chboxProportionalId);
+			chboxProportional.addEventListener("change", (event) => {
+				if (event.target.checked)
+				{
+					resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
+					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+					confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
+				}
+			});
+			// Selector de unitats
+			const selector = document.getElementById(selectSizeUnitId);
+			selector.addEventListener("change", (event) => {
+				updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
+			});
+			// Botó de confirmació
+			const confirmBtn = document.getElementById(confirmImageBtnId);
+			confirmBtn.addEventListener("click", (event) => {
+				event.preventDefault();
+				if (checkImageLimits())
+				{
+					let midesConfirmades = 0;
+					selector.value == percentageUnit ? midesConfirmades = JSON.stringify({width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100}) : midesConfirmades = JSON.stringify(resultatMidesImatge);
+
+					midesDialog.close(midesConfirmades); // S'envia les mides en pixels al diàleg.	
+				}
+				else 
+				{
+					alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
+				}
+			});
+		}
+		
+		
 		// Entrada de mides imatge
 		const inputWidth = document.getElementById(inputWidthId);
 		inputWidth.value = limitsMidesImatge["width"][percentageUnit];
 		resultatMidesImatge.width = limitsMidesImatge["width"][percentageUnit];
-		inputWidth.addEventListener("change", (event) => {
-			if (chboxProportional.checked)
-			{
-				resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada, event.target);
-				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-			}
-			else
-			{
-				resultatMidesImatge.width = parseFloat(event.target.value);
-			}
-			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-		});
+		
 		const inputHeight = document.getElementById(inputHeightId);
 		inputHeight.value = limitsMidesImatge["height"][percentageUnit];
 		resultatMidesImatge.height = limitsMidesImatge["height"][percentageUnit];
-		inputHeight.addEventListener("change", (event) => {
-			if (chboxProportional.checked)
-			{
-				resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada, event.target);
-				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-			}
-			else
-			{
-				resultatMidesImatge.height = parseFloat(event.target.value);
-			}			
-			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-		});
-		// Checkbox Propocional
-		const chboxProportional = document.getElementById(chboxProportionalId);
-		chboxProportional.addEventListener("change", (event) => {
-			if (event.target.checked)
-			{
-				resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
-				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-			}
-		});
-		// Selector de unitats
-		const selector = document.getElementById(selectSizeUnitId);
-		selector.addEventListener("change", (event) => {
-			updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
-		});
-		// Botó de confirmació
-		const confirmBtn = document.getElementById(confirmImageBtnId);
-		confirmBtn.addEventListener("click", (event) => {
-			event.preventDefault();
-			if (checkImageLimits())
-			{
-				let midesConfirmades = 0;
-				selector.value == percentageUnit ? midesConfirmades = JSON.stringify({width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100}) : midesConfirmades = JSON.stringify(resultatMidesImatge);
-
-				midesDialog.close(midesConfirmades); // S'envia les mides en pixels al diàleg.	
-			}
-			else 
-			{
-				alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
-			}
-		});
-		
+				
 		// Comprovem que no tenim valors en els caixetins de mides.
 		const checkForEmptyValuesOrNonNumbers = new Function("inputWidth", "inputHeight", "return isNaN(parseFloat(inputWidth.value)) || isNaN(parseFloat(inputHeight.value))");
 		
+		const selector = document.getElementById(selectSizeUnitId);
+
 		// Comprovem per les proporcions de la imatges quines són les mides més amplies que ens podem permetre.
 		function checkImageLimits()
 		{
@@ -690,118 +770,146 @@ let imgSvgSincroMapa;
 
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
-	const ultimElem = document.getElementById(ultimElemId);
+	let caractDialog = document.getElementById(dialegCaractId);
+	if (!caractDialog)
+	{
+		const ultimElem = document.getElementById(ultimElemId);
+		caractDialog = CreaDialegSincronitzarAmbMapa();
+		ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
-	const caractDialog = CreaDialegSincronitzarAmbMapa();
-	ultimElem.insertAdjacentElement("afterend", caractDialog);		
-
-	caractDialog.addEventListener("close", (event) => {
-		
-		if (event.target.returnValue != "")
-		{	
-			let resultatCaractUsuari = "";
-			try
-			{
-				resultatCaractUsuari = JSON.parse(event.target.returnValue);
-			}
-			catch(e)
-			{
-				if (e instanceof SyntaxError && event.target.returnValue == "cancel")
-				{
-					// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
-					return
-				}
-			}
+		caractDialog.addEventListener("close", (event) => {
 			
-			let hiHaCheckboxSeleccionat = false;
-
-			if(resultatCaractUsuari[chboxPosZoomName]["status"])
-			{
-				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
-				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
-				hiHaCheckboxSeleccionat = true;
-			}
-
-			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
-			{
-				const capesVisiblesIds = [];
-				const estilsCapesIds = [];
-				ParamCtrl.capa.forEach(capa => { 
-					if (capa.visible=="si")
+			if (event.target.returnValue != "")
+			{	
+				let resultatCaractUsuari = "";
+				try
+				{
+					resultatCaractUsuari = JSON.parse(event.target.returnValue);
+				}
+				catch(e)
+				{
+					if (e instanceof SyntaxError && event.target.returnValue == "cancel")
 					{
-						capesVisiblesIds.push(capa.id);
-						estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+						// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
+						return
 					}
-				});
-				if (capesVisiblesIds.length > 0)
-				{
-					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
 				}
-				if (estilsCapesIds.length > 0)
-				{
-					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
-				}
-				hiHaCheckboxSeleccionat = true;
-			}
-			
-			if (resultatCaractUsuari[chboxTempsName]["status"])
-			{
-				let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
-				let indexCorregit = 0;
-				let dataCapaAComparar;
+				
+				let hiHaCheckboxSeleccionat = false;
 
-				ParamCtrl.capa.forEach((capaActual) => {
-					if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
-					{
-						indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
-							dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-						if (dataResultat < dataCapaAComparar) 
+				if(resultatCaractUsuari[chboxPosZoomName]["status"])
+				{
+					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
+					resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+					hiHaCheckboxSeleccionat = true;
+				}
+
+				if(resultatCaractUsuari[chboxCapesStyleName]["status"])
+				{
+					const capesVisiblesIds = [];
+					const estilsCapesIds = [];
+					ParamCtrl.capa.forEach(capa => { 
+						if (capa.visible=="si")
 						{
-							dataResultat = dataCapaAComparar;
-						}			
-					}
-				});
-
-				resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
-				hiHaCheckboxSeleccionat = true;
-			}
-
-			if (hiHaCheckboxSeleccionat) 
-			{
-				let divResultatCaract = document.createElement("div");
-
-				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-					if(resultatCaractUsuari[caracteristica]["attribute"])
+							capesVisiblesIds.push(capa.id);
+							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+						}
+					});
+					if (capesVisiblesIds.length > 0)
 					{
-						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+						resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
 					}
-				});
+					if (estilsCapesIds.length > 0)
+					{
+						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+					}
+					hiHaCheckboxSeleccionat = true;
+				}
+				
+				if (resultatCaractUsuari[chboxTempsName]["status"])
+				{
+					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
+					let indexCorregit = 0;
+					let dataCapaAComparar;
+
+					ParamCtrl.capa.forEach((capaActual) => {
+						if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
+						{
+							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
+								dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
+							if (dataResultat < dataCapaAComparar) 
+							{
+								dataResultat = dataCapaAComparar;
+							}			
+						}
+					});
+
+					resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+					hiHaCheckboxSeleccionat = true;
+				}
+				
 				const tinyEditor = tinymce.get(tinyTextStoryMapId);
 				const tinyParent = tinyEditor.selection.getNode();
-				if (tinyParent && tinyParent.childNodes)
+				if (hiHaCheckboxSeleccionat) 
 				{
-					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
-					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+					let divResultatCaract = document.createElement("div");
+		
+					Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+						if(resultatCaractUsuari[caracteristica]["attribute"])
+						{
+							divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+						}
+					});
+					
+					if (tinyParent && tinyParent.childNodes)
 					{
-						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
-						divResultatCaract.appendChild(tinyParent);
+						// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+						if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+						{
+							tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+							divResultatCaract.appendChild(tinyParent);
+
+						}
+						else
+						{
+							const nodesEditor = Array.from(tinyParent.childNodes);
+							const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+							tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+							nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+						}
+
+						if (esUltimNodeFill(divResultatCaract, tinyEditor.getBody()))
+						{
+							let paragrafContinuacioRelat = document.createElement("p");
+							paragrafContinuacioRelat.setAttribute("id", paragrafContinuacioId);
+							paragrafContinuacioRelat.setAttribute("style", "font: italic 16px/2 cursive;");
+							paragrafContinuacioRelat.innerText = " -	" + GetMessage("NextStoryMapContent", "storymap") +"	-";
+							tinyEditor.getBody().appendChild(paragrafContinuacioRelat);
+						}
+
+						// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
+						const tinyEditorBody = tinyEditor.getBody();
+						const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
+						CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
 					}
-					else
-					{
-						const nodesEditor = Array.from(tinyParent.childNodes);
-						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
-						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
-						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
-					}
-					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-					const tinyEditorBody = tinyEditor.getBody();
-					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
-					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
+				
 				}
-			
 			}
-		}
-	});
+		});
+		// Events per als checkboxs
+		const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
+		const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
+		checkboxes.forEach(checkbox => {
+			checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
+			resultatCaract[checkbox.name] = {status: true};
+		});
+		// Event per al botó de confirmació.
+		const confirmBtn = document.getElementById(confirmCaractBtnId);
+		confirmBtn.addEventListener("click", (event) => {
+			event.preventDefault();
+			caractDialog.close(JSON.stringify(resultatCaract));
+		});
+	}
 
 	function saveCheckStatus(checkbox)
 	{
@@ -809,19 +917,55 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 	};
 
 	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
-	const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
-	checkboxes.forEach(checkbox => {
-		checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
-		resultatCaract[checkbox.name] = {status: true};
-	});
-	
-	const confirmBtn = document.getElementById(confirmCaractBtnId);
-	confirmBtn.addEventListener("click", (event) => {
-		event.preventDefault();
-		caractDialog.close(JSON.stringify(resultatCaract));
-	});
+	// Per tal que els checkboxs i els valors d'estat d'aquests guardats a resultatCaract es corresponguin, resetejo els checkbox al seu valor inicial de "checked" o "no checked".
+	const formCheckbox = contenedorCheckbox.querySelector("form[id='" + formCheckboxesId + "']");
+	if (formCheckbox)
+		formCheckbox.reset();
 
-	caractDialog.showModal();
+	const tinyEditor = tinymce.get(tinyTextStoryMapId);
+	const tinyParent = tinyEditor.selection.getNode();
+	if (esPermetModificacio(tinyParent, tinyEditor.getBody()))
+	{
+		caractDialog.showModal();
+	}
+	else
+	{
+		//const tinyContainer = tinyEditor.getContainer();
+		const finestraRelats = document.getElementById("creaStoryMap_finestra");
+		let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+		if (dialegInsercio)
+		{
+			if (!finestraRelats.contains(dialegInsercio))
+			{
+				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+			}
+		}
+		else
+		{
+			dialegInsercio = creaDialegInsercioIncorrecta();			
+			finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+		}
+		
+		dialegInsercio.show();
+	}
+}
+
+// Comprova si el node del primer paràmetre correspon amb l'últim del relat. 
+function esUltimNodeFill(divCaracteristiques, tinyBody)
+{
+	let arrayChilds = Array.from(tinyBody.childNodes);
+	return arrayChilds[arrayChilds.length -1] === divCaracteristiques;
+}
+
+// Substitueix el contingut automàtic de l'últim paràgraf per l'introduït per l'usuari.
+function netejaUltimParagraf(modificacio) 
+{
+	if (modificacio.element && modificacio.element.id == paragrafContinuacioId && !modificacio.element.selectionChange)
+	{
+		modificacio.element.innerHTML = "&nbsp;";
+		modificacio.element.removeAttribute("id");
+		modificacio.element.removeAttribute("style");
+	}
 }
 
 function SeguentPasStoryMap(i_relat)
@@ -865,6 +1009,9 @@ function SeguentPasStoryMap(i_relat)
 				tooltip: GetMessage("SavesMapCharacteristics", "storymap"),
 				onAction: (_) => MostraDialogCaracteristiquesNavegador(endButtonId)
 			});
+			editor.on("NodeChange", modificacioNode => {
+				netejaUltimParagraf(modificacioNode);
+			});
 		}
     }).then((initEditors) => {
 		if (initEditors && initEditors.length > 0 && i_relat != "nou")
@@ -890,7 +1037,13 @@ function FinalitzarStoryMap(estemEditant = false)
 	const tinyEditorBody = tinyEditor.getBody();
 	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
-	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
+	imatgesSincro.forEach((imatge) => imatge.remove());
+	//Eliminem el paràgraf afegit automàticament en cas que hi fos
+	let paragrafAutomatic = tinyEditorBody.querySelector("p[id='" + paragrafContinuacioId + "']");
+	if (paragrafAutomatic)
+	{
+		paragrafAutomatic.remove();
+	}
 	// Identifiquem cada <div> amb atributs d'acció al mapa.
 	const arrayImgsAccions = tinyEditorBody.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
 	arrayImgsAccions.forEach((divElement) => { 

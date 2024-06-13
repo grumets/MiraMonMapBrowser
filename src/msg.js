@@ -3441,6 +3441,22 @@ var MessageLang=
       "fre": "manuel",
       "cze": "manuální",
       "ger": "handbuch"
+    },
+    "NotPossibleInsertNewContent": {
+      "cat": "No es possible d'inserir aquest contingut aquí",
+      "spa": "No es posible de instertar este contenido aqui",
+      "eng": "It isn't possible to insert this content here",
+      "fre": "Il n'est pas possible d'insérer ce contenu ici",
+      "cze": "Tento obsah sem není možné vložit",
+      "ger": "Es ist nicht möglich, diesen Inhalt hier einzufügen"
+    },
+    "NextStoryMapContent": {
+      "cat": "Continua la redacció del relat aquí",
+      "spa": "Continua la redacción del relato aquí",
+      "eng": "Continue the story map writing here",
+      "fre": "Continuer l'écriture de la carte d'histoire ici",
+      "cze": "Pokračujte v psaní příběhu",
+      "ger": "Weiter die Geschichte Karte schreiben hier"
     }
   },
   "tresD": {
