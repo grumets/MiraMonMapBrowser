@@ -3021,7 +3021,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					cdns.push("<option value=\"",i_atrib,"\"",
 							((i_atrib==0) ? " selected=\"selected\"" : "") ,
-						">", DonaCadenaDescripcioAttribute(capa.attributes[attributesArray[i_atrib]], attributesArray[i_atrib], false), "</option>");
+						">", DonaCadenaDescripcioAttribute(attributesArray[i_atrib], capa.attributes[attributesArray[i_atrib]], false), "</option>");
 				}
 				cdns.push("</select>");
 			}
