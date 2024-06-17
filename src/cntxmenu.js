@@ -2256,16 +2256,10 @@ var camp_geo=null, camp_x=null, camp_y=null;
 	return configuracio;
 }
 
-function CarregaCapaCSVLocal(i_on_afegir, form)
+function CarregaCapaCSVLocal(i_on_afegir, configuracio, form)
 {
-var k, configuracio;
+var k;
 
-	if(!form.nom_fitxer_local.files[0].name)
-		return;
-	
-	if(null==(configuracio=LlegeixParametresCSV(form)))
-		return;	
-	
 	var capa={servidor: form.nom_fitxer_local.files[0].name,
 		versio: null,
 		tipus: "TipusHTTP_GET",
@@ -2356,7 +2350,12 @@ function CarregaFitxerLocalOURLSeleccionat(form)
 		}
 		else  if(form.source_type.value=="local")
 		{
-			CarregaCapaCSVLocal(NumeroDeCapesVolatils(-1), form);	
+			if(!form.nom_fitxer_local.files[0].name)
+				return;
+			var configuracio={};
+			if(null==(configuracio=LlegeixParametresCSV(form)))
+				return;
+			CarregaCapaCSVLocal(NumeroDeCapesVolatils(-1), configuracio, form);	
 			TancaFinestraLayer("afegirCapa");			
 			return;
 		}
@@ -2566,9 +2565,9 @@ var cdns=[], i;
 			"<input type=\"radio\" id=\"TipusGeoPunt\" name=\"tipus_geo\" value=\"camp\">",
 				"<label for=\"TipusGeoPunt\">", GetMessage("NameFieldWith", "cntxmenu"),": </label><br>",
 				"&nbsp;&nbsp;&nbsp;<label for=\"camp_geo_punt_x\">",GetMessage("XField", "cntxmenu"),": </label>",
-				"<input type=\"text\" id=\"camp_geo_punt_x\" name=\"camp_geo\" style=\"width:250px;\"><br>",
+				"<input type=\"text\" id=\"camp_geo_punt_x\" name=\"camp_geo_punt_x\" style=\"width:250px;\"><br>",
 				"&nbsp;&nbsp;&nbsp;<label for=\"camp_geo_punt_y\">",GetMessage("YField", "cntxmenu"),": </label>",
-				"<input type=\"text\" id=\"camp_geo_punt_y\" name=\"camp_geo\" style=\"width:250px;\"><br>",
+				"<input type=\"text\" id=\"camp_geo_punt_y\" name=\"camp_geo_punt_y\" style=\"width:250px;\"><br>",
 			"</fieldset>",
 			"<label for=\"camp_time\">",GetMessage("CSVNameDateTimeField", "cntxmenu"),": </label>",
 			"<input type=\"text\" id=\"camp_time\" name=\"camp_time\" style=\"width:200px;\"><br>",
