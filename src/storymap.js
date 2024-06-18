@@ -341,7 +341,7 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 	const midesPromise = new Promise((resolve, reject) => {
 
 		//Mirem la mida de la imatge
-		const urlIamge = URL.createObjectURL(fitxerImatge);
+		const urlImage = URL.createObjectURL(fitxerImatge);
 		const imageToMesure = new Image();
 
 		imageToMesure.onload =  function () {
@@ -356,7 +356,7 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 			}
 		};
 
-		imageToMesure.src = urlIamge;
+		imageToMesure.src = urlImage;
 	}).then(result => {
 
 		MostraDialogImatgeNavegador(result);
@@ -523,8 +523,8 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 			
 			midesDialog.addEventListener("close", (event) => {
 			// Després de tancar el missatge emergent de les mides.
-			let resultatMides = JSON.parse(event.target.returnValue);
-			if (resultatMides) 
+			let resultatDialeg = JSON.parse(event.target.returnValue);
+			if (resultatDialeg) 
 			{
 				const canvasId = "reduccioImatges";
 				let canvasReduccioImg = document.getElementById(canvasId);
@@ -533,12 +533,13 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 					canvasReduccioImg = document.createElement("canvas");
 					canvasReduccioImg.setAttribute("id", canvasId);
 				} 
-
-				canvasReduccioImg.width = resultatMides.width;
-				canvasReduccioImg.height = resultatMides.height;
+				let imatgeADibuixar = new Image();
+				imatgeADibuixar.src = resultatDialeg.imatge;
+				canvasReduccioImg.width = resultatDialeg.width;
+				canvasReduccioImg.height = resultatDialeg.height;
 
 				const cntx = canvasReduccioImg.getContext("2d");
-				cntx.drawImage(imatgeSeleccionada, 0, 0, resultatMides.width, resultatMides.height);
+				cntx.drawImage(imatgeADibuixar, 0, 0, resultatDialeg.width, resultatDialeg.height);
 				const tinyEditor = tinymce.get(tinyTextStoryMapId);
 				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 				// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
@@ -551,7 +552,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 						const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
 						const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
 
-						nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>" + postHtml;
+						nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatDialeg.width + "/>" + postHtml;
 					}
 					else
 					{
@@ -573,7 +574,9 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 						dialegInsercio.show();
 					}
 				}
+				//cntx.reset();
 			}
+			//URL.revokeObjectURL(resultatDialeg.imatge);
 			resultatMidesImatge = {};
 			});
 			// Caixetí d'amplada
@@ -625,10 +628,10 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				event.preventDefault();
 				if (checkImageLimits())
 				{
-					let midesConfirmades = 0;
-					selector.value == percentageUnit ? midesConfirmades = JSON.stringify({width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100}) : midesConfirmades = JSON.stringify(resultatMidesImatge);
-
-					midesDialog.close(midesConfirmades); // S'envia les mides en pixels al diàleg.	
+					let midesConfirmadesImatge = 0;
+					selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
+					midesConfirmadesImatge.imatge = imatgeSeleccionada.src;
+					midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels i la imatge elegida diàleg.	
 				}
 				else 
 				{
