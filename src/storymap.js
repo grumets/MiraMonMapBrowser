@@ -1055,7 +1055,7 @@ function FinalitzarStoryMap(estemEditant = false)
 	});
 	contadorAccionsMapa = 0;
 
-	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + "<div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
+	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + tinyEditor.getContent({format: "html"}) + "</html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
