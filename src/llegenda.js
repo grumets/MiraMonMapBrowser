@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -187,7 +187,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 
 	if (estil.categories && estil.attributes)
 	{
-		var desc, nodata=null, i_nodata;
+		var desc, nodata=null, i_nodata, i_clr;
 
 		//La llegenda es pot generar a partir de la llista de categories i la paleta.
 		estil.ItemLleg=[];
@@ -196,11 +196,12 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		if (estil.component && estil.component.length==1 && typeof estil.component[0].i_valor !=="undefined" && estil.component[0].i_valor!=null)
 			nodata=capa.valors[estil.component[0].i_valor].nodata;
 		
-		for (var i=0, i_color=0; i_color<ncolors; i_color++)
+		for (i_color=0; i_color<ncolors; i_color++)
 		{
-			if (!estil.categories[i_color])
+			i_clr=i_color + (estil.component[0].estiramentPaleta && estil.component[0].estiramentPaleta.valorMinim ? estil.component[0].estiramentPaleta.valorMinim : 0);
+			if (!estil.categories[i_clr])
 				continue;
-			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.attributes, i_color, true);
+			desc=DonaDescCategoriaDesDeColor(estil.categories, estil.attributes, i_clr, true);
 			if (desc=="")
 				continue;
 			if (nodata)
@@ -209,8 +210,7 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 				if (i_nodata>=0)
 					continue;
 			}
-			estil.ItemLleg[i]={"color": (colors) ? RGB_color(colors[i_color]) : RGB(i_color,i_color,i_color), "DescColor": desc};
-			i++;
+			estil.ItemLleg.push({"color": (colors) ? RGB_color(colors[i_color]) : RGB(i_color,i_color,i_color), "DescColor": desc});
 		}	
 		return;
 	}
