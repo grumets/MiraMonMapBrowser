@@ -3457,6 +3457,14 @@ var MessageLang=
       "fre": "Continuer l'écriture de la carte d'histoire ici",
       "cze": "Pokračujte v psaní příběhu",
       "ger": "Weiter die Geschichte Karte schreiben hier"
+    },
+    "UnicStroymapWriting": {
+      "cat": "Es permet editar tant sols un relat a vegada",
+      "spa": "Se permite editar sólo un reato a la vez",
+      "eng": "It is allowed editing only one storymap at a time",
+      "fre": "Il est permis d'éditer seulement un storymap à la fois",
+      "cze": "Je povoleno editovat pouze jednu mapu příběhu najednou",
+      "ger": "Es ist erlaubt, nur eine Storymap zu einer Zeit zu bearbeiten"
     }
   },
   "tresD": {

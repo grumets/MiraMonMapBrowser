@@ -52,9 +52,9 @@ const numMaximPixelsStorymap = Math.pow(midaImatgeMaximaPx, 2);
 // Identificador input imatges internes del Storymap.
 const inputImageStorymapId = "imagePicker";
 // Identificadors diàlegs
-const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol", dialegAlertaInsercioId = "alertaInsercioDialeg";
+const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "alertaTitol", dialegAlertaInsercioId = "alertaInsercioDialeg", dialegAlertaRedaccioEnCursId = "alertaRedaccioEnCurs";
 // Dialeg Mida Imatges identificadors
-const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
+const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit", textMidesImatgeId = "textMidesImatge";
 // Dialeg Característiques checkbox identificadors i noms
 const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates", formCheckboxesId = "formCheckboxes";
 const pixelUnit = "px", percentageUnit = "%";
@@ -64,7 +64,7 @@ var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomNam
 const nomPuntSincr = "sincrPoint";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
-let arrayAlcadesScrollIAccions = [];
+let arrayIdsImgAccions = [];
 const identificadorDivAccioMapa = "AccioMapa_";
 var contadorAccionsMapa = 0;
 const indentificadorSelectorControls = "controls";
@@ -256,19 +256,71 @@ var idRelatEditat = "";
 
 function TancaICreaEditaStoryMap(i_relat = "nou")
 {
-	let storyToEdit;
-	if (i_relat != "nou")
+	if (!comprovaRedaccioRelatEnCurs())
 	{
-		TancaFinestraLayer("storyMap");
+		let storyToEdit;
+		if (i_relat != "nou")
+		{
+			TancaFinestraLayer("storyMap");
 
-		storyToEdit = ParamCtrl.StoryMap[i_relat];
-		idRelatEditat = storyToEdit.id;
-	}
+			storyToEdit = ParamCtrl.StoryMap[i_relat];
+			idRelatEditat = storyToEdit.id;
+		}
+		else
+		{
+			//Tancar la finestra de la graella de les histories
+			TancaFinestraLayer("triaStoryMap");
+		}
+
+		if (isFinestraLayer(window, "creaStoryMap"))
+			{
+				const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+				novaStoryMapFinestra.replaceChildren();
+				const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
+								"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
+								"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
+								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
+								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
+				const inputBtnNext = document.createElement("input");
+				inputBtnNext.setAttribute("type", "button");
+				inputBtnNext.setAttribute("class", "buttonDialog");
+				inputBtnNext.setAttribute("value", GetMessage("Next"));						
+				inputBtnNext.addEventListener("click", comprovaTitol);
+								
+				novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
+			}
+		
+			ObreFinestra(window, "creaStoryMap");
+	} 
 	else
 	{
-		//Tancar la finestra de la graella de les histories
-		TancaFinestraLayer("triaStoryMap");
+		
+		let dialegRedaccioCurs = document.getElementById(dialegAlertaRedaccioEnCursId);
+		
+		if (!dialegRedaccioCurs)
+		{
+			dialegRedaccioCurs = CreaDialegRedaccioRelatEnCurs();
+		}
+
+		let finestra;
+		if (i_relat != "nou")
+		{
+			finestra = getFinestraLayer(window, "storyMap");
+		}
+		else 
+		{
+			finestra = getFinestraLayer(window, "triaStoryMap");
+		}
+		
+		if (!finestra.contains(dialegAlertaRedaccioEnCursId))
+		{
+			finestra.appendChild(dialegRedaccioCurs);
+		}
+
+		dialegRedaccioCurs.show();	
 	}
+	
 
 	function comprovaTitol(event)
 	{	
@@ -288,28 +340,13 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			
 			dialegTitol.show();
 		}
-	};	
-
-	if (isFinestraLayer(window, "creaStoryMap"))
-	{
-		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
-		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
-						"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
-						"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
-						"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
-						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
-		const inputBtnNext = document.createElement("input");
-		inputBtnNext.setAttribute("type", "button");
-		inputBtnNext.setAttribute("class", "buttonDialog");
-		inputBtnNext.setAttribute("value", GetMessage("Next"));						
-		inputBtnNext.addEventListener("click", comprovaTitol);
-						
-		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
-		novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
 	}
 
-	ObreFinestra(window, "creaStoryMap");
+	function comprovaRedaccioRelatEnCurs()
+	{
+		const style = getFinestraLayer(window, "creaStoryMap").getAttribute("style");
+		return style.includes("visible");
+	}
 }
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
@@ -338,31 +375,85 @@ function CarregaImatgeStoryMap(input)
  */
 function CarregaImatgeRelatStoryMap(fitxerImatge) 
 {
-	const midesPromise = new Promise((resolve, reject) => {
+	//Mirem la mida de la imatge
+	const urlImage = URL.createObjectURL(fitxerImatge);
+	const imageToMesure = new Image();
+	
+	imageToMesure.onload =  function () {
+		
+		function obtenImatgeSeleccionada() 
+		{
+			var imatge = null;
+			return {
+			  get: function() { imatge; },  
+			  set: function(novaImatge) { imatge = novaImatge; }
+			};
+		}
+		var imatgeSeleccionadaFunc = obtenImatgeSeleccionada();
+		imatgeSeleccionadaFunc.set(this);
 
-		//Mirem la mida de la imatge
-		const urlImage = URL.createObjectURL(fitxerImatge);
-		const imageToMesure = new Image();
+		MostraDialogImatgeNavegador(imatgeSeleccionadaFunc, mostraImatgeRedimensionada);
+	};
 
-		imageToMesure.onload =  function () {
-			URL.revokeObjectURL(this.src);
-			if (this)
+	imageToMesure.onerror = function() {
+		new Error("Error carregant la imatge.");
+	};
+
+	// Callback function to really draw image file allready read but with right sizes.
+	function mostraImatgeRedimensionada(midesImatge)
+	{
+		const canvasId = "reduccioImatges";
+		let canvasReduccioImg = document.getElementById(canvasId);
+		if (!canvasReduccioImg)
+		{
+			canvasReduccioImg = document.createElement("canvas");
+			canvasReduccioImg.setAttribute("id", canvasId);
+		} 
+		canvasReduccioImg.width = midesImatge.width;
+		canvasReduccioImg.height = midesImatge.height;
+
+		const cntx = canvasReduccioImg.getContext("2d");
+		cntx.drawImage(imageToMesure, 0, 0, midesImatge.width, midesImatge.height);
+		const tinyEditor = tinymce.get(tinyTextStoryMapId);
+		const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+		
+		if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
+		{ 
+			const nodeImatge = tinyEditor.selection.getNode();
+			if (esPermetModificacio(nodeImatge, tinyEditor.getBody()))
 			{
-				resolve(this);
+				const rangCursor = tinyEditor.selection.getRng();
+				const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
+				const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
+
+				nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
 			}
 			else
 			{
-				reject(new Error("Error carregant la imatge."))
+				const finestraRelats = document.getElementById("creaStoryMap_finestra");
+				let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+				if (dialegInsercio)
+				{
+					if (!finestraRelats.contains(dialegInsercio))
+					{
+						finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+					}
+				}
+				else
+				{
+					dialegInsercio = creaDialegInsercioIncorrecta();
+					finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+				}
+					
+				dialegInsercio.show();
 			}
-		};
+		}
+		URL.revokeObjectURL(urlImage);
+	}
 
-		imageToMesure.src = urlImage;
-	}).then(result => {
-
-		MostraDialogImatgeNavegador(result);
-
-	});
+	imageToMesure.src = urlImage;
 }
+
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> de portada del relat.    
  * @param {*} fitxerImatge Element DOM tipus input que incorpora la imatge. 
@@ -402,6 +493,19 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	imageToMesure.src = urlIamge;
 }
 /**
+ * Crea un diàleg per avisar a l'usuari de la presència d'un relat en redacció en curs. Només permetrem redactar 1 relat a la vegada.
+ * @returns 
+ */
+function CreaDialegRedaccioRelatEnCurs()
+{
+	const dialogHtml = ["<form><p>" + GetMessage("UnicStroymapWriting", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></form>"];
+
+	const dialog = CreaDialog(dialegAlertaRedaccioEnCursId, dialogHtml.join(""));
+
+	return dialog;
+}
+
+/**
  * Crea un diàleg per avisar a l'usuari la falta d'un títol per al relat.
  * @returns 
  */
@@ -423,10 +527,17 @@ function CreaDialegAlertaTitol()
 function CreaDialegMidesImatge(imatge)
 {
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
-	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
+	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
 	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
+// Actualitza les mides de la imatge en el text del dialeg.
+function ActualitzaTextMidesImatge(imatge)
+{
+	const textMidesImatge = document.getElementById(textMidesImatgeId);
+	textMidesImatge.innerHTML = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
+}
+
 /**
  * Crea un diàleg per a elegir quines característiques del mapa mantindre per un determinat fragment del relat.
  * @returns 
@@ -483,33 +594,33 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 	}
 }
 
-function MostraDialogImatgeNavegador(imatgeSeleccionada)
+function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 {
-	const esImatgeApaisada = imatgeSeleccionada.width >= imatgeSeleccionada.height;
-	function calcularLimitImatges(imatgeSeleccionada)
+	const esImatgeApaisada = imatgeSeleccionada.get().width >= imatgeSeleccionada.get().height;
+	function calcularLimitImatges(imatge)
 	{
-		let proporcio = imatgeSeleccionada.height/imatgeSeleccionada.width;
+		let proporcio = imatge.height/imatge.width;
 		if (esImatgeApaisada)
 		{
 			limitsMidesImatge.width = {};
-			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.width;
+			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatge.width;
 			limitsMidesImatge["width"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.height = {};
 			limitsMidesImatge["height"][pixelUnit] = limitsMidesImatge["width"][pixelUnit] * proporcio;
-			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatgeSeleccionada.height;
+			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatge.height;
 		}
 		else 
 		{
 			limitsMidesImatge.height = {};
-			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.height;
+			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatge.height;
 			limitsMidesImatge["height"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.width = {};
 			limitsMidesImatge["width"][pixelUnit] = limitsMidesImatge["height"][pixelUnit] * (1 / proporcio);
-			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatgeSeleccionada.width;
+			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatge.width;
 		}	
 	}
 
-	calcularLimitImatges(imatgeSeleccionada);
+	calcularLimitImatges(imatgeSeleccionada.get());
 	// Element del DOM que ens permet anclar el dialeg
 	let anchorElement = document.getElementById(inputImageStorymapId);
 	
@@ -518,73 +629,22 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 		let midesDialog = document.getElementById(dialegMidesId);
 		if (!midesDialog)
 		{
-			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
+			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada.get());
 			anchorElement.parentNode.appendChild(midesDialog);
 			
 			midesDialog.addEventListener("close", (event) => {
-			// Després de tancar el missatge emergent de les mides.
-			let resultatDialeg = JSON.parse(event.target.returnValue);
-			if (resultatDialeg) 
-			{
-				const canvasId = "reduccioImatges";
-				let canvasReduccioImg = document.getElementById(canvasId);
-				if (!canvasReduccioImg)
-				{
-					canvasReduccioImg = document.createElement("canvas");
-					canvasReduccioImg.setAttribute("id", canvasId);
-				} 
-				let imatgeADibuixar = new Image();
-				imatgeADibuixar.src = resultatDialeg.imatge;
-				canvasReduccioImg.width = resultatDialeg.width;
-				canvasReduccioImg.height = resultatDialeg.height;
-
-				const cntx = canvasReduccioImg.getContext("2d");
-				cntx.drawImage(imatgeADibuixar, 0, 0, resultatDialeg.width, resultatDialeg.height);
-				const tinyEditor = tinymce.get(tinyTextStoryMapId);
-				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
-				// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
-				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
-				{ 
-					const nodeImatge = tinyEditor.selection.getNode();
-					if (esPermetModificacio(nodeImatge, tinyEditor.getBody()))
-					{
-						const rangCursor = tinyEditor.selection.getRng();
-						const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
-						const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
-
-						nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + resultatDialeg.width + "/>" + postHtml;
-					}
-					else
-					{
-						const finestraRelats = document.getElementById("creaStoryMap_finestra");
-						let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
-						if (dialegInsercio)
-						{
-							if (!finestraRelats.contains(dialegInsercio))
-							{
-								finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
-							}
-						}
-						else
-						{
-							dialegInsercio = creaDialegInsercioIncorrecta();
-							finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
-						}
-							
-						dialegInsercio.show();
-					}
-				}
-				//cntx.reset();
-			}
-			//URL.revokeObjectURL(resultatDialeg.imatge);
-			resultatMidesImatge = {};
+				// Després de tancar el missatge emergent de les mides.
+				resultatMidesImatge = {};
+				let resultatDialeg = JSON.parse(event.target.returnValue);
+				
+				callback(resultatDialeg);
 			});
 			// Caixetí d'amplada
 			const inputWidth = document.getElementById(inputWidthId);
 			inputWidth.addEventListener("change", (event) => {
 				if (chboxProportional.checked)
 				{
-					resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada, event.target);
+					resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada.get(), event.target);
 					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
 				}
 				else
@@ -598,7 +658,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 			inputHeight.addEventListener("change", (event) => {
 				if (chboxProportional.checked)
 				{
-					resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada, event.target);
+					resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada.get(), event.target);
 					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
 				}
 				else
@@ -612,7 +672,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 			chboxProportional.addEventListener("change", (event) => {
 				if (event.target.checked)
 				{
-					resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
+					resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada.get(), null);
 					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
 					confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 				}
@@ -620,7 +680,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 			// Selector de unitats
 			const selector = document.getElementById(selectSizeUnitId);
 			selector.addEventListener("change", (event) => {
-				updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
+				updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada.get());
 			});
 			// Botó de confirmació
 			const confirmBtn = document.getElementById(confirmImageBtnId);
@@ -629,9 +689,8 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				if (checkImageLimits())
 				{
 					let midesConfirmadesImatge = 0;
-					selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
-					midesConfirmadesImatge.imatge = imatgeSeleccionada.src;
-					midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels i la imatge elegida diàleg.	
+					selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.get().width/100, height: resultatMidesImatge.height*imatgeSeleccionada.get().height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
+					midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels.	
 				}
 				else 
 				{
@@ -639,7 +698,10 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				}
 			});
 		}
-		
+		else
+		{
+			ActualitzaTextMidesImatge(imatgeSeleccionada.get());
+		}
 		
 		// Entrada de mides imatge
 		const inputWidth = document.getElementById(inputWidthId);
@@ -677,7 +739,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				}
 				else
 				{
-					return (resultatMidesImatge.width*imatgeSeleccionada.width/100) * (resultatMidesImatge.height*imatgeSeleccionada.height/100) <= numMaximPixelsStorymap;
+					return (resultatMidesImatge.width*imatgeSeleccionada.get().width/100) * (resultatMidesImatge.height*imatgeSeleccionada.get().height/100) <= numMaximPixelsStorymap;
 
 				}
 			}
@@ -1023,14 +1085,16 @@ function SeguentPasStoryMap(i_relat)
 			const relat = ParamCtrl.StoryMap[i_relat].html;
 			const parser = new DOMParser();
 			const DOMStorymap = parser.parseFromString(relat, "text/html");
-
+			//Eliminem el títol del relat de la part del text a editar
 			const title = DOMStorymap.querySelector("#" + h1TitleStorymap);
 			if (title !== null)
 			{
 				title.remove();
 			}
-			const seiralizer = new XMLSerializer();
-			(initEditors.find((editor) => editor.id == tinyTextStoryMapId)).setContent( seiralizer.serializeToString(DOMStorymap), { format: 'html' });
+			// Afegim les imatges indicatives d'accions de mapa
+			AfegeixMarkerANodesFillsStoryMapVisible(DOMStorymap.body, DOMStorymap.body.childNodes, 0);
+
+			(initEditors.find((editor) => editor.id == tinyTextStoryMapId)).setContent( DOMStorymap.body.innerHTML);
 		}	
 	});
 }
@@ -1173,12 +1237,11 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		*	i així saber quan podem calcular les alçades correctes dels <div> amb acció al mapa.
 		*/
 		const mutationObserver = new MutationObserver(function(changes, observer) {
-			const imgBlanc = document.querySelector("img[name='"+ imgEspaiBlancNom +"']");
-			const imgAccio = document.querySelectorAll("img[id^=" + idImgSvgAccioMapa);
-			if(changes[0].target.contains(imgBlanc) && imgAccio && changes[0].target.contains(imgAccio[0]))
+			const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
+			if(imgAccio && changes[0].target.contains(imgAccio[0]))
 			{
 				// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
-				ExtreuAlcadesIAccionsDivisions(changes[0].target.innerHTML);
+				RecuperarIdsImatgesAccions(changes[0].target.innerHTML);
 				observer.disconnect();
 			}
 		});
@@ -1201,17 +1264,17 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 			contadorAccionsMapa--;
 			if (contadorAccionsMapa >= 0)
 			{
-				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+				const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
 				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
 				if (ancoraNavegacio)
 				{
-					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.setAttribute("href", "#" + idImatge);
 					ancoraNavegacio.click();
 				}
 				else 
 				{
 					ancoraNavegacio = document.createElement("a");
-					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.setAttribute("href", "#" + idImatge);
 					ancoraNavegacio.click();
 				}
 			}
@@ -1228,23 +1291,23 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		seguentBoto.setAttribute("value", GetMessage("Next"));
 		seguentBoto.addEventListener("click", function () {
 			contadorAccionsMapa++;
-			if (contadorAccionsMapa < arrayAlcadesScrollIAccions.length)
+			if (contadorAccionsMapa < arrayIdsImgAccions.length)
 			{
-				const infoAccio = arrayAlcadesScrollIAccions[contadorAccionsMapa];
+				const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
 				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
 				if (ancoraNavegacio)
 				{
-					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.setAttribute("href", "#" + idImatge);
 					ancoraNavegacio.click();
 				}
 				else 
 				{
 					ancoraNavegacio = document.createElement("a");
-					ancoraNavegacio.setAttribute("href", "#" + infoAccio.identificadorImg);
+					ancoraNavegacio.setAttribute("href", "#" + idImatge);
 					ancoraNavegacio.click();
 				}
 			}
-			if (contadorAccionsMapa == arrayAlcadesScrollIAccions.length)
+			if (contadorAccionsMapa == arrayIdsImgAccions.length)
 				contadorAccionsMapa--;
 		});
 
@@ -1291,10 +1354,10 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	ExecutaAttributsStoryMapVisible();
 }
 
-function ExtreuAlcadesIAccionsDivisions(textHtml)
+function RecuperarIdsImatgesAccions(textHtml)
 {
 	// Netegem l'array d'antics càlculs
-	arrayAlcadesScrollIAccions = [];
+	arrayIdsImgAccions = [];
 
 	const domFromText = new DOMParser().parseFromString(textHtml, "text/html");
 	const arrayDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
@@ -1305,18 +1368,9 @@ function ExtreuAlcadesIAccionsDivisions(textHtml)
 		let contadorAccionsTransformades= 0;
 		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
-			let datasetTransformat=[];
 			divAccio = document.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
-			const atributsPropis = divAccio.dataset;
-			for (var key in atributsPropis)
-			{	
-				const prefix = "data-mm-";
-				let transformacioClau = prefix + String.fromCharCode(key.charCodeAt(2)+32) + key.substring(3);
-				datasetTransformat.push(transformacioClau);
-				datasetTransformat.push(atributsPropis[key]);
-			}
-			imgAccio = divAccio.querySelector("img[id^='" + idImgSvgAccioMapa + "']");
-			arrayAlcadesScrollIAccions.push({"identificadorImg": imgAccio.id, "datasetTransformat": datasetTransformat});
+			imgAccio = divAccio.querySelector(`img[id^='${idImgSvgAccioMapa}']`);
+			arrayIdsImgAccions.push(imgAccio.id);
 		}
 	}	
 }
