@@ -992,6 +992,7 @@ function SeguentPasStoryMap(i_relat)
 
 	tinymce.init({
         target: tinytextarea,
+		license_key: 'gpl',
 		custom_undo_redo_levels: 15,
 		plugins: 'code lists',
 		toolbar: 'undo redo styles bold italic insertImageButton insertLocationZoom | alignleft aligncenter alignright alignjustify outdent indent bullist numlist code',
