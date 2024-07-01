@@ -3265,7 +3265,7 @@ var MessageLang=
       "fre": "Sélectionner une image",
       "cze": "Vyberte obrázek",
       "ger": "Bild auswählen"
-	},
+	  },
     "AttachImage": {
       "cat": "Adjuntar imatge",
       "spa": "Adjuntar imagen",
@@ -3465,6 +3465,14 @@ var MessageLang=
       "fre": "Il est permis d'éditer seulement un storymap à la fois",
       "cze": "Je povoleno editovat pouze jednu mapu příběhu najednou",
       "ger": "Es ist erlaubt, nur eine Storymap zu einer Zeit zu bearbeiten"
+    },
+    "EditStorymap": {
+      "cat": "Editar relat amb mapes",
+      "spa": "Editar relato con mapas",
+      "eng": "Edit storymaps",
+      "fre": "Modifier carte de l'histoire",
+      "cze": "Upravit mapu příběhu",
+      "ger": "Storymap bearbeiten"
     }
   },
   "tresD": {

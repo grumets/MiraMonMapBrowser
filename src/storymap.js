@@ -265,11 +265,20 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 
 			storyToEdit = ParamCtrl.StoryMap[i_relat];
 			idRelatEditat = storyToEdit.id;
+			if (isLayer(getBarraLayer(window, "creaStoryMap")))
+			{
+				titolFinestraLayer(window, "creaStoryMap", GetMessage("EditStorymap", "storymap"));
+			}
 		}
 		else
 		{
 			//Tancar la finestra de la graella de les histories
 			TancaFinestraLayer("triaStoryMap");
+
+			if (isLayer(getBarraLayer(window, "creaStoryMap")))
+			{
+				titolFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"));
+			}
 		}
 
 		if (isFinestraLayer(window, "creaStoryMap"))
@@ -527,7 +536,7 @@ function CreaDialegAlertaTitol()
 function CreaDialegMidesImatge(imatge)
 {
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
-	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
+	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='widthImageNm'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' name='widthImageNm' title='Only digits'><label id='" + labelHeightId + "' for='heightImageNm'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' name='heightImageNm' ></p><p><label for='selectUnitNm'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "' name='selectUnitNm'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='chboxPropNm'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' name='chboxPropNm' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
 	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
@@ -544,7 +553,7 @@ function ActualitzaTextMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chboxPosZoomName, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chboxCapesStyleName, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chboxTempsName, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }

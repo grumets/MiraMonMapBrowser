@@ -4954,8 +4954,8 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		nodePare.appendChild(divCapcalera);
 		return;
 	}
-	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit'", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",		i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
-			"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
+	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit' name='nomesAmbitNm' ", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",		i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
+			"<label for='nomesAmbitNm'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
 
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
@@ -4995,8 +4995,8 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 			return;
 		}
 	}
-	cdnsFragmentsHtml.push("&nbsp;<input type='checkbox' id='ambGeometria'", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
-	"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>&nbsp;",
+	cdnsFragmentsHtml.push("&nbsp;<input type='checkbox' id='ambGeometria' name='ambGeometriaNm' ", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
+	"<label for='ambGeometriaNm'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>&nbsp;",
 	"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>");
 	paragrafCheckboxs.insertAdjacentHTML("beforeend", cdnsFragmentsHtml.join(""));
 	divCapcalera.appendChild(paragrafCheckboxs);
