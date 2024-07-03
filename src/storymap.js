@@ -61,7 +61,10 @@ const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
+// NOM per a les imatges que impliquen una acció de mapa.
 const nomPuntSincr = "sincrPoint";
+// IDENTIFICADOR per a les imatges que impliquen una acció de mapa.
+const idImgSvgAccioMapa = "id_storymap_mm_action_";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 let arrayIdsImgAccions = [];
@@ -428,14 +431,14 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 		
 		if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
 		{ 
-			const nodeImatge = tinyEditor.selection.getNode();
-			if (esPermetModificacio(nodeImatge, tinyEditor.getBody()))
+			const nodeDestiImatge = tinyEditor.selection.getNode();
+			if (esPermetModificacio(nodeDestiImatge, tinyEditor.getBody()))
 			{
 				const rangCursor = tinyEditor.selection.getRng();
-				const previHtml = nodeImatge.innerText.substring(0, rangCursor.startOffset);
-				const postHtml = nodeImatge.innerText.substring(rangCursor.startOffset, nodeImatge.innerHTML.length);
+				const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
+				const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
 
-				nodeImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
+				nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
 			}
 			else
 			{
@@ -571,7 +574,7 @@ function creaDialegInsercioIncorrecta()
 // Funció per avaluar la ideoneitat del lloc del relat a adjuntar una modificació per inserir una imatge o bé una acció de mapa.
 function esPermetModificacio(nodeObjectiu, tinyBody)
 {
-	const regexpImgId = new RegExp(`^${nomPuntSincr}`);
+	const regexpImgId = new RegExp(`^${idImgSvgAccioMapa}`);
 	if (comprovaNodePareAmbAccio(nodeObjectiu, tinyBody))
 		return false;
 	else if (regexpImgId.test(nodeObjectiu.id))
@@ -579,6 +582,12 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 	else 
 		return true;
 
+	/**
+	 * Comprova si el node o algun del seus pares ja té una acció de mapa associada (attributes='data-mm-...').
+	 * @param {*} nodeObjectiu Node des del qual comencem a observar i als seus nodes ascendets.
+	 * @param {*} tinyBody Tot l'html que conté l'editor del Tiny MCE en aquest moment.
+	 * @returns 
+	 */
 	function comprovaNodePareAmbAccio(nodeObjectiu, tinyBody)
 	{
 		if (nodeObjectiu.nodeName == "DIV")
@@ -595,7 +604,10 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 				}
 			}
 		}
-		// Hem comprovat tots els nodes i els seus pares fins assegurar-nos que no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del node objectiu inicial.
+		/* Hem comprovat tots els nodes i els seus pares fins assegurar-nos que 
+		   no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del 
+		   node objectiu inicial. Si ja hem arribat a l'arrel del body hem acabat.
+		*/
 		if (nodeObjectiu.parentNode === tinyBody)
 			return false;
 		//Recursivitat per seguir comprovant els pares de la gerarquia ascendent.
@@ -1243,7 +1255,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 		
 		/* 
 		*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
-		*	i així saber quan podem calcular les alçades correctes dels <div> amb acció al mapa.
+		*	i així saber quan ja hi son les imatges d'acció de mapa i poder obtenir-ne els seus Ids.
 		*/
 		const mutationObserver = new MutationObserver(function(changes, observer) {
 			const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
@@ -1781,7 +1793,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 	{
 		var cdns=[];
 		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
-			"id=\"", nomPuntSincr, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
+			"id=\"", idImgSvgAccioMapa, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
 			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
 			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
 		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
@@ -1791,7 +1803,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 		if (imgSvgIconaSincroMapa)
 		{
 			const svgClone = imgSvgIconaSincroMapa.cloneNode(true);
-			svgClone.setAttribute('id', nomPuntSincr + indexImatge);
+			svgClone.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 			divRef.insertAdjacentElement("afterbegin", svgClone);
 		}
 		else
@@ -1818,7 +1830,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 				*/
 				const imgDeSvg = document.createElement("img");
 				imgDeSvg.setAttribute("src", "data:image/svg+xml;UTF8," + encodeURI(svg.outerHTML));
-				imgDeSvg.setAttribute('id', nomPuntSincr + indexImatge);
+				imgDeSvg.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 				imgDeSvg.setAttribute('name', nomPuntSincr);
 				imgSvgIconaSincroMapa = imgDeSvg;
 				divRef.insertAdjacentElement("afterbegin", imgDeSvg);
