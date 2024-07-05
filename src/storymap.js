@@ -325,7 +325,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			finestra = getFinestraLayer(window, "triaStoryMap");
 		}
 		
-		if (!finestra.contains(dialegAlertaRedaccioEnCursId))
+		if (!finestra.contains(dialegRedaccioCurs))
 		{
 			finestra.appendChild(dialegRedaccioCurs);
 		}
@@ -1112,10 +1112,26 @@ function SeguentPasStoryMap(i_relat)
 			{
 				title.remove();
 			}
-			// Afegim les imatges indicatives d'accions de mapa
-			AfegeixMarkerANodesFillsStoryMapVisible(DOMStorymap.body, DOMStorymap.body.childNodes, 0);
 
-			(initEditors.find((editor) => editor.id == tinyTextStoryMapId)).setContent( DOMStorymap.body.innerHTML);
+			// Afegim les imatges indicatives d'accions de mapa
+			const arrayDivAccions = DOMStorymap.querySelectorAll(`div[id^='${identificadorDivAccioMapa}']`);
+			const arrayDivIds= [];
+			/* No ens és vàlid només demanar la llista de <div> on hi han accions de mapa amb querySelectorAll 
+			/	perquè la llista resultant és una llista estàtica de nodes. Tot canvi aplicat als 
+			/ 	elements d'aquesta llista no tindrà efecte al HTML general del relat. Per això obtenim 
+			/	la llista dels seus Ids	per poder-los instanciar amb aquests i llavors si modificar-los al nostre gust.
+			*/
+			arrayDivAccions.forEach((div)=> {arrayDivIds.push(div.getAttribute("id"))});
+			let comptadorDivAccio = 0;
+			let idDivAccio, divAccioACompletar;
+			for(idDivAccio of arrayDivIds)
+			{
+				divAccioACompletar = DOMStorymap.getElementById(idDivAccio);
+				CreaImatgeMarcadorSincronismeMapa(divAccioACompletar, comptadorDivAccio);
+				comptadorDivAccio++;
+			}
+			const editor = initEditors.find((editor) => editor.id == tinyTextStoryMapId);
+			editor.setContent( DOMStorymap.body.innerHTML);
 		}	
 	});
 }
