@@ -73,7 +73,6 @@ var contadorAccionsMapa = 0;
 const indentificadorSelectorControls = "controls";
 const controlScroll = "scroll", controlManual = "manual";
 const divRelatId = "divRelat";
-const idImgSvgAccioMapa = "id_storymap_mm_action_";
 const ancoraRelat = "ancoraRelat"; 
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
@@ -82,7 +81,7 @@ IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
 function createStorymapFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
-	const min_width_finestra_storymap = 335, min_height_finestra_storymap = 400;
+	const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
 	createFinestraLayer(window, name, titol, botons, left, top, width, height, ancora, param, content);
 
 	let currentStyle;
@@ -392,19 +391,8 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 	const imageToMesure = new Image();
 	
 	imageToMesure.onload =  function () {
-		
-		function obtenImatgeSeleccionada() 
-		{
-			var imatge = null;
-			return {
-			  get: function() { imatge; },  
-			  set: function(novaImatge) { imatge = novaImatge; }
-			};
-		}
-		var imatgeSeleccionadaFunc = obtenImatgeSeleccionada();
-		imatgeSeleccionadaFunc.set(this);
 
-		MostraDialogImatgeNavegador(imatgeSeleccionadaFunc, mostraImatgeRedimensionada);
+		MostraDialogImatgeNavegador(this, mostraImatgeRedimensionada);
 	};
 
 	imageToMesure.onerror = function() {
@@ -460,6 +448,7 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 				dialegInsercio.show();
 			}
 		}
+		cntx.clearRect(0, 0, canvasReduccioImg.width, canvasReduccioImg.height);
 		URL.revokeObjectURL(urlImage);
 	}
 
@@ -617,7 +606,7 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 
 function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 {
-	const esImatgeApaisada = imatgeSeleccionada.get().width >= imatgeSeleccionada.get().height;
+	const esImatgeApaisada = imatgeSeleccionada.width >= imatgeSeleccionada.height;
 	function calcularLimitImatges(imatge)
 	{
 		let proporcio = imatge.height/imatge.width;
@@ -641,102 +630,128 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 		}	
 	}
 
-	calcularLimitImatges(imatgeSeleccionada.get());
+	calcularLimitImatges(imatgeSeleccionada);
+	
 	// Element del DOM que ens permet anclar el dialeg
 	let anchorElement = document.getElementById(inputImageStorymapId);
 	
 	if (anchorElement)
 	{
+		function retornaMidesImatge(event) {
+			// Després de tancar el missatge emergent de les mides.
+			resultatMidesImatge = {};
+			let resultatDialeg = JSON.parse(event.target.returnValue);
+			
+			// Eliminem els events abans de destruir el contexte en que han esta creats
+			inputWidth.removeEventListener("change", nouValorAmplada, true);
+			inputHeight.removeEventListener("change", nouValorAlcada, true);
+			chboxProportional.removeEventListener("change", alternaProporcionalitat, true);
+			selector.removeEventListener("change", canviUnitats, true);
+			confirmBtn.removeEventListener("click", confirmarMides, true);
+			midesDialog.removeEventListener("close", retornaMidesImatge, true);
+			callback(resultatDialeg);
+		};
+
 		let midesDialog = document.getElementById(dialegMidesId);
 		if (!midesDialog)
 		{
-			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada.get());
+			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
 			anchorElement.parentNode.appendChild(midesDialog);
 			
-			midesDialog.addEventListener("close", (event) => {
-				// Després de tancar el missatge emergent de les mides.
-				resultatMidesImatge = {};
-				let resultatDialeg = JSON.parse(event.target.returnValue);
-				
-				callback(resultatDialeg);
-			});
-			// Caixetí d'amplada
-			const inputWidth = document.getElementById(inputWidthId);
-			inputWidth.addEventListener("change", (event) => {
-				if (chboxProportional.checked)
-				{
-					resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada.get(), event.target);
-					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-				}
-				else
-				{
-					resultatMidesImatge.width = parseFloat(event.target.value);
-				}
-				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-			});
-			// Caixetí d'alçada
-			const inputHeight = document.getElementById(inputHeightId);
-			inputHeight.addEventListener("change", (event) => {
-				if (chboxProportional.checked)
-				{
-					resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada.get(), event.target);
-					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-				}
-				else
-				{
-					resultatMidesImatge.height = parseFloat(event.target.value);
-				}			
-				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-			});
-			// Checkbox Propocional
-			const chboxProportional = document.getElementById(chboxProportionalId);
-			chboxProportional.addEventListener("change", (event) => {
-				if (event.target.checked)
-				{
-					resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada.get(), null);
-					updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
-					confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-				}
-			});
-			// Selector de unitats
-			const selector = document.getElementById(selectSizeUnitId);
-			selector.addEventListener("change", (event) => {
-				updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada.get());
-			});
-			// Botó de confirmació
-			const confirmBtn = document.getElementById(confirmImageBtnId);
-			confirmBtn.addEventListener("click", (event) => {
-				event.preventDefault();
-				if (checkImageLimits())
-				{
-					let midesConfirmadesImatge = 0;
-					selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.get().width/100, height: resultatMidesImatge.height*imatgeSeleccionada.get().height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
-					midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels.	
-				}
-				else 
-				{
-					alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
-				}
-			});
+			midesDialog.addEventListener("close", retornaMidesImatge, true);
 		}
 		else
 		{
-			ActualitzaTextMidesImatge(imatgeSeleccionada.get());
+			ActualitzaTextMidesImatge(imatgeSeleccionada);
+			midesDialog.addEventListener("close", retornaMidesImatge, true);
+		}
+		// Caixetí d'amplada
+		const inputWidth = document.getElementById(inputWidthId);
+
+		function nouValorAmplada(event) {
+			if (chboxProportional.checked)
+			{
+				resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada, event.target);
+				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+			}
+			else
+			{
+				resultatMidesImatge.width = parseFloat(event.target.value);
+			}
+			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 		}
 		
+		inputWidth.addEventListener("change", nouValorAmplada, true);
+
+		// Caixetí d'alçada
+		const inputHeight = document.getElementById(inputHeightId);
+
+		function nouValorAlcada(event) {
+			if (chboxProportional.checked)
+			{
+				resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada, event.target);
+				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+			}
+			else
+			{
+				resultatMidesImatge.height = parseFloat(event.target.value);
+			}			
+			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
+		}
+
+		inputHeight.addEventListener("change", nouValorAlcada, true);
+
+		// Checkbox Propocional
+		const chboxProportional = document.getElementById(chboxProportionalId);
+
+		function alternaProporcionalitat(event) {
+			if (event.target.checked)
+			{
+				resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
+				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
+				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
+			}
+		}
+
+		chboxProportional.addEventListener("change", alternaProporcionalitat, true);
+
+		// Selector de unitats
+		const selector = document.getElementById(selectSizeUnitId);
+
+		function canviUnitats(event) {
+			updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
+		}
+		
+		selector.addEventListener("change", canviUnitats, true);
+
+		// Botó de confirmació
+		const confirmBtn = document.getElementById(confirmImageBtnId);
+
+		function confirmarMides(event) {
+			event.preventDefault();
+			if (checkImageLimits())
+			{
+				let midesConfirmadesImatge = 0;
+				selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
+				midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels.	
+			}
+			else 
+			{
+				alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
+			}
+		}
+		
+		confirmBtn.addEventListener("click", confirmarMides, true);
+		
 		// Entrada de mides imatge
-		const inputWidth = document.getElementById(inputWidthId);
 		inputWidth.value = limitsMidesImatge["width"][percentageUnit];
 		resultatMidesImatge.width = limitsMidesImatge["width"][percentageUnit];
 		
-		const inputHeight = document.getElementById(inputHeightId);
 		inputHeight.value = limitsMidesImatge["height"][percentageUnit];
 		resultatMidesImatge.height = limitsMidesImatge["height"][percentageUnit];
 				
 		// Comprovem que no tenim valors en els caixetins de mides.
 		const checkForEmptyValuesOrNonNumbers = new Function("inputWidth", "inputHeight", "return isNaN(parseFloat(inputWidth.value)) || isNaN(parseFloat(inputHeight.value))");
-		
-		const selector = document.getElementById(selectSizeUnitId);
 
 		// Comprovem per les proporcions de la imatges quines són les mides més amplies que ens podem permetre.
 		function checkImageLimits()
@@ -760,7 +775,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 				}
 				else
 				{
-					return (resultatMidesImatge.width*imatgeSeleccionada.get().width/100) * (resultatMidesImatge.height*imatgeSeleccionada.get().height/100) <= numMaximPixelsStorymap;
+					return (resultatMidesImatge.width*imatgeSeleccionada.width/100) * (resultatMidesImatge.height*imatgeSeleccionada.height/100) <= numMaximPixelsStorymap;
 
 				}
 			}
