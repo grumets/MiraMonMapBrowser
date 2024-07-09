@@ -1330,8 +1330,16 @@
 								"type": "string"
 							},
 							"nomCampGeometria": {
-								"description": "Nom del camp del CSV que conté la geometria en format WKT.",
-								"type": "string"
+								"description": "Informació que ens permet obtenir la geometria dels objectes de la capa. Potser de tipus string si conté el nom del camp del CSV que conté la geometria en format WKT, o tipus TipusCampGeoCoordPunt, si conté els noms dels camps X i Y que contenen les coordenades X i Y si la geometria és de tipus punt, o tipus TipusCampGeoFitxer el nom de la capa en GEOJSON o en WFS que conté la geometria i el camp identitat que ens permet relacionar la geometria amb els atributs. (aquest darrer tipus PENDENT de implementar",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"type": "string"
+								},{
+									"$ref": "#/definitions/TipusCampGeoCoordPunt" 
+								},{
+									"$ref": "#/definitions/TipusCampGeoFitxer" 
+								}]
 							}
 						}
 					},
@@ -1352,8 +1360,8 @@
 						"type": ["string", "null"]
 					},
 					"id":	{ 
-						"type": ["string", "null"]
 						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, s'en genera un automàticament de tipus text a partir de diverses característiques de la capa, si aquest ja existeix s'en genera un basat en un algoritme hash() reproduible. Indiqueu un 'id' si la capa no té nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors. L'id indicat aquí identifica la capa del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
+						"type": ["string", "null"]						
 					},					
 					"nom":	{ 
 						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan 'model' és 'ràster'.",
@@ -3127,6 +3135,38 @@
 							}
 						}
 					}
+				}
+			}
+		},
+		"TipusCampGeoCoordPunt":
+		{
+			"description": "Nom dels camps X i Y que contenen les coordenades de les geometries de tipus punt d'un fitxer CSV",
+			"type": "object",
+			"required": ["x", "y"],
+			"properties": {
+				"x": {
+					"description": "Nom del camp que conté la coordenada X",
+					"type": "string"
+				},
+				"y": {
+					"description": "Nom del camp que conté la coordenada Y",
+					"type": "string"
+				}
+			}
+		},
+		"TipusCampGeoFitxer":
+		{
+			"description": "Fitxer que conté la geometria en format GeoJSON i nom del camp identificador entitat que ens permet vincular les dades geogràfiques amb els atributs del fitxer CSV",
+			"type": "object",
+			"required": ["fitxer", "campIdEntitat"],
+			"properties": {
+				"fitxer": {
+					"description": "Fitxer geoJson que conté la geometria",
+					"type": "string"
+				},
+				"campIdEntitat": {
+					"description": "Nom del camp identicador entitat que ens permet relacionar la geometria amb els atributs",
+					"type": "string"
 				}
 			}
 		},

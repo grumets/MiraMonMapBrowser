@@ -471,11 +471,30 @@ function OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(obs, feature, data
 
 function ParsejaCSVObjectesIPropietats(results, capa)
 {
+var wkt;
+
 	if(!results || !results.data ||  results.data.length<1)
 		return 0;
 	if(!capa || !capa.configCSV || !capa.configCSV.nomCampGeometria)
 		return 0;
+	
 	// Camp geometria
+	// Puc tenir un camp geometria o bé dos camps x,y
+	if(typeof capa.configCSV.nomCampGeometria==="string")
+	{
+		wkt = new Wkt.Wkt();
+	}
+	else if(typeof capa.configCSV.nomCampGeometria==="object" && 
+		capa.configCSV.nomCampGeometria.x && capa.configCSV.nomCampGeometria.y)
+	{
+		wkt=null;
+	}
+	else
+	{
+		// tipus desconegut
+		return 0;
+	}
+	
 	if(!capa.objectes)
 		capa.objectes={"type": "FeatureCollection", "features": []};
 	
@@ -489,21 +508,38 @@ function ParsejaCSVObjectesIPropietats(results, capa)
 		}
 	}
 	
-	var rows=results.data, i_row, row, i_atrib, i_obj, i_data=-1, data_iso, wkt = new Wkt.Wkt(), wkt_obj, geometria, feature, 
+	var rows=results.data, i_row, row, i_atrib, i_obj, i_data=-1, data_iso, wkt_obj, x, y, geometria, feature, 
 			attributesArray=capa.attributes ? Object.keys(capa.attributes): null,
 			attributesRowArray;
 	
 	if(!capa.attributes)
 		capa.attributes={};
+	
 	// cada fila del csv és un objecte amb les seves propietats
 	for(i_row=0; i_row<rows.length; i_row++)
 	{
 		row=rows[i_row];
-		wkt_obj=row[capa.configCSV.nomCampGeometria];
-		if(wkt_obj)
+		geometria=null;
+		if(wkt)
 		{
-			wkt.read(wkt_obj);
-			geometria=wkt.toJson();
+			wkt_obj=row[capa.configCSV.nomCampGeometria];
+			if(wkt_obj)
+			{
+				wkt.read(wkt_obj);
+				geometria=wkt.toJson();
+			}
+		}
+		else
+		{		
+			x=row[capa.configCSV.nomCampGeometria.x];
+			y=row[capa.configCSV.nomCampGeometria.y];
+			if(x && y || (x==0 || y==0))
+			{
+				geometria={"type": "Point", "coordinates": [x, y]};			
+			}
+		}				
+		if(geometria)
+		{
 			// ·$· no faig cap transformació de les coordenades m'en refio del que s'ha documentat a CRSGeometry
 			i_obj=capa.objectes.features.push({type: "Feature",
 										geometry: geometria,
@@ -529,7 +565,9 @@ function ParsejaCSVObjectesIPropietats(results, capa)
 				attributesRowArray=Object.keys(row);
 				for(i_atrib=0; i_atrib<attributesRowArray.length; i_atrib++)
 				{
-					if(attributesRowArray[i_atrib]!=capa.configCSV.nomCampGeometria)
+					if((wkt && attributesRowArray[i_atrib]!=capa.configCSV.nomCampGeometria) ||  
+						(!wkt && attributesRowArray[i_atrib]!=capa.configCSV.nomCampGeometria.x && 
+									attributesRowArray[i_atrib]!=capa.configCSV.nomCampGeometria.y))
 					{
 						capa.objectes.features[i_obj].properties[attributesRowArray[i_atrib]]=row[attributesRowArray[i_atrib]];
 						
@@ -1455,7 +1493,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false;
 							//cal_crear_vista=true;
 							valor=tag[0].childNodes[0].nodeValue;
 							var coord=valor.split(" ");
-							if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // ·$· NJ-> JM Crec que això no està bé, perquè les coordenades en el cas del SOS són de moment sempre en EPGS:4326 i  no en el sistema de sistuació acutal
+							if (CalGirarCoordenades(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, null))  // ·$· NJ-> JM Crec que això no està bé, perquè les coordenades en el cas del SOS són de moment sempre en EPGS:4326 i  no en el sistema de situació actual
 							{
 								feature.geometry.coordinates[0]=parseFloat(coord[1]);
 								feature.geometry.coordinates[1]=parseFloat(coord[0]);
