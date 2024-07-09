@@ -2223,8 +2223,18 @@ var capa=this;
 
 function LlegeixParametresCSV(form)
 {
-	if(!form.camp_geo.value)
-		return null;		
+var camp_geo=null, camp_x=null, camp_y=null;
+	
+	if(form.camp_geo.value)
+		camp_geo=form.camp_geo.value;
+	else
+	{		
+		camp_x=form.camp_geo_punt_x.value;		
+		camp_y=form.camp_geo_punt_y.value;				
+	}
+	if(!camp_geo && (!camp_x || !camp_y))
+		return;
+	
 	var separador;
 	if(form.fieldDelimitador.value=="tab")
 		separador="\t";
@@ -2239,23 +2249,17 @@ function LlegeixParametresCSV(form)
 		
 	var configuracio={
 			  header: (form.header_csv.checked) ? true : false,
-			  encoding: (form.encoding_crs.value && form.encoding_crs.value!="utf-8") ? form.encoding_crs.value : "",		
+			  encoding: (form.encoding_csv.value && form.encoding_csv.value!="utf-8") ? form.encoding_csv.value : "",		
 			  separadorCamps: separador,
 			  nomCampDateTime : form.camp_time.value ? form.camp_time.value: null,
-			  nomCampGeometria: form.camp_geo.value};
+			  nomCampGeometria: (camp_geo ? camp_geo : {x: camp_x, y: camp_y})};
 	return configuracio;
 }
 
-function CarregaCapaCSVLocal(i_on_afegir, form)
+function CarregaCapaCSVLocal(i_on_afegir, configuracio, form)
 {
-var k, configuracio;
+var k;
 
-	if(!form.nom_fitxer_local.files[0].name)
-		return;
-	
-	if(null==(configuracio=LlegeixParametresCSV(form)))
-		return;	
-	
 	var capa={servidor: form.nom_fitxer_local.files[0].name,
 		versio: null,
 		tipus: "TipusHTTP_GET",
@@ -2346,7 +2350,12 @@ function CarregaFitxerLocalOURLSeleccionat(form)
 		}
 		else  if(form.source_type.value=="local")
 		{
-			CarregaCapaCSVLocal(NumeroDeCapesVolatils(-1), form);	
+			if(!form.nom_fitxer_local.files[0].name)
+				return;
+			var configuracio={};
+			if(null==(configuracio=LlegeixParametresCSV(form)))
+				return;
+			CarregaCapaCSVLocal(NumeroDeCapesVolatils(-1), configuracio, form);	
 			TancaFinestraLayer("afegirCapa");			
 			return;
 		}
@@ -2550,8 +2559,15 @@ var cdns=[], i;
 			"<fieldset><legend>", GetMessage("Geometry", "cntxmenu"),": </legend>",	
 			"<label for=\"crs_csv\">CRS: </label>",
 			DonaCadenaDesplegableCRS("csv"),"<br>",			
-			"<label for=\"camp_geo\">",GetMessage("CSVNameGeoField", "cntxmenu"),": </label>",
-			"<input type=\"text\" id=\"camp_geo\" name=\"camp_geo\" style=\"width:200px;\"><br>",
+			"<input type=\"radio\" id=\"TipusGeoCamp\" name=\"tipus_geo\" value=\"camp\" checked=\"checked\">",
+				"<label for=\"TipusGeoCamp\">",GetMessage("CSVNameGeoField", "cntxmenu"),": </label><br>",
+				"&nbsp;&nbsp;&nbsp;<input type=\"text\" id=\"camp_geo\" name=\"camp_geo\" style=\"width:250px;\"><br>",
+			"<input type=\"radio\" id=\"TipusGeoPunt\" name=\"tipus_geo\" value=\"camp\">",
+				"<label for=\"TipusGeoPunt\">", GetMessage("NameFieldWith", "cntxmenu"),": </label><br>",
+				"&nbsp;&nbsp;&nbsp;<label for=\"camp_geo_punt_x\">",GetMessage("XField", "cntxmenu"),": </label>",
+				"<input type=\"text\" id=\"camp_geo_punt_x\" name=\"camp_geo_punt_x\" style=\"width:250px;\"><br>",
+				"&nbsp;&nbsp;&nbsp;<label for=\"camp_geo_punt_y\">",GetMessage("YField", "cntxmenu"),": </label>",
+				"<input type=\"text\" id=\"camp_geo_punt_y\" name=\"camp_geo_punt_y\" style=\"width:250px;\"><br>",
 			"</fieldset>",
 			"<label for=\"camp_time\">",GetMessage("CSVNameDateTimeField", "cntxmenu"),": </label>",
 			"<input type=\"text\" id=\"camp_time\" name=\"camp_time\" style=\"width:200px;\"><br>",
@@ -3005,7 +3021,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					cdns.push("<option value=\"",i_atrib,"\"",
 							((i_atrib==0) ? " selected=\"selected\"" : "") ,
-						">", DonaCadenaDescripcioAttribute(capa.attributes[attributesArray[i_atrib]], attributesArray[i_atrib], false), "</option>");
+						">", DonaCadenaDescripcioAttribute(attributesArray[i_atrib], capa.attributes[attributesArray[i_atrib]], false), "</option>");
 				}
 				cdns.push("</select>");
 			}

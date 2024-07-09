@@ -2078,8 +2078,8 @@ var xhr = new XMLHttpRequest();
 						data = JSON.parse(xhr.responseText);
 					}
 					catch (e) {
-		                		if (error)
-							return error("JSON file: \""+ path + "\". " + e);
+		                if (error)
+							return error("JSON file: \""+ path + "\". " + e, extra_param);
 					}
 					success(data, extra_param);
 				}
@@ -2096,7 +2096,7 @@ var xhr = new XMLHttpRequest();
 							s=s.substring(s.indexOf("<body>"));
 					}
 					if (xhr.status)
-			    			error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
+			    		error("JSON file: \""+ path + "\". Status: " + xhr.statusText + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 					else
 						error("JSON file: \""+ path + "\". Desconnected from the Internet." + "\n\nURL: "+ path + ((xhr.getAllResponseHeaders && xhr.getAllResponseHeaders()) ? "\n\nResponse headers:\n"+xhr.getAllResponseHeaders() : "") + ((s) ? "\nResponse Body:\n"+s : ""), extra_param);
 				}
