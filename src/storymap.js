@@ -465,6 +465,7 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	//Mirem la mida de la imatge
 	const urlImage = URL.createObjectURL(fitxerImatge);
 	const imageToMesure = new Image();
+	const abortController = new AbortController();
 	try{
 		imageToMesure.onload =  function () {
 			if (this)
@@ -481,16 +482,13 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				const cntx = canvasReduccioThumbnail.getContext("2d");
 				cntx.drawImage(this, 0, 0, canvasReduccioThumbnail.width, canvasReduccioThumbnail.height);
 				const imageThumbnail = document.getElementById(imageThumbnailId);
-				imageThumbnail.setAttribute("style", "visibility:visible;");
+				imageThumbnail.setAttribute("style", "visibility:visible");
 				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
 				const botoEsborra = document.getElementById(botoBorraThumbnailId);
 				if (botoEsborra)
 				{
-					botoEsborra.setAttribute("style", "display:inline;");
-					if (!botoEsborra.onclick)
-					{
-						botoEsborra.addEventListener("click", esborraImatgePortada);
-					}
+					botoEsborra.setAttribute("style", "display:inline");
+					botoEsborra.addEventListener("click", esborraImatgePortada, {signal: abortController.signal});
 				}
  			}
 			 URL.revokeObjectURL(urlImage);
@@ -515,8 +513,9 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 			}
 
 			imgThumbnail.removeAttribute("src");
-			imgThumbnail.setAttribute("style", "display:none");
+			imgThumbnail.setAttribute("style", "visibility:hidden");
 		}
+		abortController.abort();
 	}
 }
 /**
