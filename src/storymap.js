@@ -45,6 +45,7 @@ const inputStoryTitolId = "inputTitolRelat";
 const inputThumbnailId = "inputThumbnail";
 const h1TitleStorymap = "titleStorymap";
 const imageThumbnailId = "imageThumbnail";
+const botoBorraThumbnailId = "borraThumbnail";
 // Límit de mida per imatges. Establerta en píxels.
 const midaImatgeMiniaturaMaximaPx = 150;
 const midaImatgeMaximaPx = 500;
@@ -172,7 +173,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
-		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", /*background:", storyActual.compartida? "green" : "red", ";'*/" href='javascript:void(0)' onclick='");
+		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", " href='javascript:void(0)' onclick='");
 		(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
 		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
@@ -290,8 +291,8 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 				const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
 								"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
 								"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
-								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
-								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
+								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this)'/><br><br>",												
+								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/> <button id='", botoBorraThumbnailId,"' style='display:none'>", GetMessage("RemoveImage", "storymap"),"</button><br>"];
 				const inputBtnNext = document.createElement("input");
 				inputBtnNext.setAttribute("type", "button");
 				inputBtnNext.setAttribute("class", "buttonDialog");
@@ -462,11 +463,10 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 function CarregaImatgeMiniaturaStoryMap(fitxerImatge) 
 {
 	//Mirem la mida de la imatge
-	const urlIamge = URL.createObjectURL(fitxerImatge);
+	const urlImage = URL.createObjectURL(fitxerImatge);
 	const imageToMesure = new Image();
 	try{
 		imageToMesure.onload =  function () {
-			URL.revokeObjectURL(this.src);
 			if (this)
 			{
 				const canvasThumbnailId = "canvasReduccioThumbnail";
@@ -483,7 +483,17 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				const imageThumbnail = document.getElementById(imageThumbnailId);
 				imageThumbnail.setAttribute("style", "visibility:visible;");
 				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
+				const botoEsborra = document.getElementById(botoBorraThumbnailId);
+				if (botoEsborra)
+				{
+					botoEsborra.setAttribute("style", "display:inline;");
+					if (!botoEsborra.onclick)
+					{
+						botoEsborra.addEventListener("click", esborraImatgePortada);
+					}
+				}
  			}
+			 URL.revokeObjectURL(urlImage);
 		}
 	}
 	catch (err)
@@ -491,7 +501,23 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 		throw new Error(GetMessage("ErrorReadingImages", "storymap") + ":", {cause: err});
 	}
 
-	imageToMesure.src = urlIamge;
+	imageToMesure.src = urlImage;
+
+	function esborraImatgePortada()
+	{
+		const imgThumbnail = document.getElementById(imageThumbnailId);
+		if (imgThumbnail && imgThumbnail.src != "")
+		{
+			const botoEsborrar = document.getElementById(botoBorraThumbnailId);
+			if (botoEsborrar)
+			{
+				botoEsborrar.setAttribute("style", "display:none");
+			}
+
+			imgThumbnail.removeAttribute("src");
+			imgThumbnail.setAttribute("style", "display:none");
+		}
+	}
 }
 /**
  * Crea un diàleg per avisar a l'usuari de la presència d'un relat en redacció en curs. Només permetrem redactar 1 relat a la vegada.
@@ -528,7 +554,7 @@ function CreaDialegAlertaTitol()
 function CreaDialegMidesImatge(imatge)
 {
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
-	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='widthImageNm'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' name='widthImageNm' title='Only digits'><label id='" + labelHeightId + "' for='heightImageNm'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' name='heightImageNm' ></p><p><label for='selectUnitNm'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "' name='selectUnitNm'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='chboxPropNm'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' name='chboxPropNm' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
+	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "'></p><p><label for='", selectSizeUnitId,"'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
 	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
@@ -545,7 +571,7 @@ function ActualitzaTextMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chboxPosZoomName, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chboxCapesStyleName, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chboxTempsName, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }
@@ -1107,7 +1133,7 @@ function SeguentPasStoryMap(i_relat)
 			});
 			editor.ui.registry.addButton("insertLocationZoom", {
 				text: GetMessage("SyncWithMap", "storymap"),
-				icon: "embed", //checkmark
+				icon: "embed",
 				tooltip: GetMessage("SavesMapCharacteristics", "storymap"),
 				onAction: (_) => MostraDialogCaracteristiquesNavegador(endButtonId)
 			});
@@ -1275,126 +1301,129 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
 	}
 
-	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
-	{		
-		// Crear el marc per al relat de mapes. 
-		let divRelat = document.createElement("div");
-		divRelat.setAttribute("id", divRelatId);
-		divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
-		divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-		divRelat.insertAdjacentHTML("afterbegin", relatACarregar.html);
-		
-		/* 
-		*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
-		*	i així saber quan ja hi son les imatges d'acció de mapa i poder obtenir-ne els seus Ids.
-		*/
-		const mutationObserver = new MutationObserver(function(changes, observer) {
-			const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
-			if(imgAccio && changes[0].target.contains(imgAccio[0]))
+	// Crear el marc per al relat de mapes. 
+	let divRelat = document.createElement("div");
+	divRelat.setAttribute("id", divRelatId);
+	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
+	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
+	divRelat.insertAdjacentHTML("afterbegin", text_html);
+	
+	/* 
+	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
+	*	i així saber quan ja hi son les imatges d'acció de mapa i poder obtenir-ne els seus Ids.
+	*/
+	const mutationObserver = new MutationObserver(function(changes, observer) {
+		const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
+		if(imgAccio && changes[0].target.contains(imgAccio[0]))
+		{
+			// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
+			RecuperarIdsImatgesAccions(changes[0].target.innerHTML);
+			observer.disconnect();
+		}
+	});
+
+	mutationObserver.observe(divRelat, {childList: true, subtree: true, attributes: false, characterData: false});
+
+	// Text explicatiu controls
+	let definicio = document.createElement("label");
+	definicio.innerHTML = GetMessage("ActionOnMap", "storymap") + ":";
+	definicio.className = "control";
+	// Botons següent i previ
+	let previBoto = document.createElement("input");
+	previBoto.setAttribute("type", "button");
+	previBoto.className = "button_image_dialog";
+	previBoto.classList.add("center");
+	previBoto.classList.add("control");
+	previBoto.setAttribute("name", "controlAccio");
+	previBoto.setAttribute("value", GetMessage("Previous"));
+	previBoto.addEventListener("click", function () {
+		contadorAccionsMapa--;
+		if (contadorAccionsMapa >= 0)
+		{
+			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
+			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+			if (ancoraNavegacio)
 			{
-				// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
-				RecuperarIdsImatgesAccions(changes[0].target.innerHTML);
-				observer.disconnect();
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
 			}
-		});
+			else 
+			{
+				ancoraNavegacio = document.createElement("a");
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+		}
+		if (contadorAccionsMapa < 0)
+			contadorAccionsMapa = 0;
+	});
 
-		mutationObserver.observe(divRelat, {childList: true, subtree: true, attributes: false, characterData: false});
-
-		// Text explicatiu controls
-		let definicio = document.createElement("label");
-		definicio.innerHTML = GetMessage("ActionOnMap", "storymap") + ":";
-		definicio.className = "control";
-		// Botons següent i previ
-		let previBoto = document.createElement("input");
-		previBoto.setAttribute("type", "button");
-		previBoto.className = "button_image_dialog";
-		previBoto.classList.add("center");
-		previBoto.classList.add("control");
-		previBoto.setAttribute("name", "controlAccio");
-		previBoto.setAttribute("value", GetMessage("Previous"));
-		previBoto.addEventListener("click", function () {
+	let seguentBoto = document.createElement("input");
+	seguentBoto.setAttribute("type", "button");
+	seguentBoto.className = "button_image_dialog";
+	seguentBoto.classList.add("center");
+	seguentBoto.classList.add("control");
+	seguentBoto.setAttribute("name", "controlAccio");
+	seguentBoto.setAttribute("value", GetMessage("Next"));
+	seguentBoto.addEventListener("click", function () {
+		contadorAccionsMapa++;
+		if (contadorAccionsMapa < arrayIdsImgAccions.length)
+		{
+			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
+			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+			if (ancoraNavegacio)
+			{
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+			else 
+			{
+				ancoraNavegacio = document.createElement("a");
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+		}
+		if (contadorAccionsMapa == arrayIdsImgAccions.length)
 			contadorAccionsMapa--;
-			if (contadorAccionsMapa >= 0)
-			{
-				const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
-				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
-				if (ancoraNavegacio)
-				{
-					ancoraNavegacio.setAttribute("href", "#" + idImatge);
-					ancoraNavegacio.click();
-				}
-				else 
-				{
-					ancoraNavegacio = document.createElement("a");
-					ancoraNavegacio.setAttribute("href", "#" + idImatge);
-					ancoraNavegacio.click();
-				}
-			}
-			if (contadorAccionsMapa < 0)
-				contadorAccionsMapa = 0;
-		});
+	});
 
-		let seguentBoto = document.createElement("input");
-		seguentBoto.setAttribute("type", "button");
-		seguentBoto.className = "button_image_dialog";
-		seguentBoto.classList.add("center");
-		seguentBoto.classList.add("control");
-		seguentBoto.setAttribute("name", "controlAccio");
-		seguentBoto.setAttribute("value", GetMessage("Next"));
-		seguentBoto.addEventListener("click", function () {
-			contadorAccionsMapa++;
-			if (contadorAccionsMapa < arrayIdsImgAccions.length)
-			{
-				const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
-				let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
-				if (ancoraNavegacio)
-				{
-					ancoraNavegacio.setAttribute("href", "#" + idImatge);
-					ancoraNavegacio.click();
-				}
-				else 
-				{
-					ancoraNavegacio = document.createElement("a");
-					ancoraNavegacio.setAttribute("href", "#" + idImatge);
-					ancoraNavegacio.click();
-				}
-			}
-			if (contadorAccionsMapa == arrayIdsImgAccions.length)
-				contadorAccionsMapa--;
-		});
+	
+	
+	let divBotonsAccio = document.createElement("div");
+	divBotonsAccio.setAttribute("class", "horizontalSpreadElements");
+	divBotonsAccio.setAttribute("style", "height: 100%;");
+	divBotonsAccio.appendChild(definicio);
+	divBotonsAccio.appendChild(previBoto);
+	divBotonsAccio.appendChild(seguentBoto);
 
-		let divDivisio = document.createElement("div");
-		divDivisio.setAttribute("class", "control");
-		
-		let divBotonsAccio = document.createElement("div");
-		divBotonsAccio.setAttribute("class", "horizontalSpreadElements");
-		divBotonsAccio.setAttribute("style", "height: 100%;");
-		divBotonsAccio.appendChild(divDivisio);
-		divBotonsAccio.appendChild(definicio);
-		divBotonsAccio.appendChild(previBoto);
-		divBotonsAccio.appendChild(seguentBoto);
-
-		// Afegim els botons d'edició dins de la finestra de visualització:
-		let divBotons = document.createElement("div");
+	let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
 		divBotons.setAttribute("style", "height: 8%; position: relative; top: 0 px; left: 0 px");
+
+	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
+	{
+		let divDivisio = document.createElement("div");
+		divDivisio.setAttribute("class", "control");
+		divBotonsAccio.insertAdjacentElement("afterbegin", divDivisio);
+
+		// Afegim els botons d'edició dins de la finestra de visualització:
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
 
 		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
-		
-		divBotons.appendChild(divBotonsAccio);
-
-		finestraRelat.insertAdjacentElement("afterbegin", divRelat);
-		finestraRelat.insertAdjacentElement("afterbegin", divBotons);
-		
-		// Línia horitzontal separadora amb inici del relat.
-		let liniaHoritzontal = document.createElement("hr");
-		liniaHoritzontal.className = "separadorHoritzonal";
-		divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
 	}
+	
+	divBotons.appendChild(divBotonsAccio);
+
+	finestraRelat.insertAdjacentElement("afterbegin", divRelat);
+	finestraRelat.insertAdjacentElement("afterbegin", divBotons);
+	
+	// Línia horitzontal separadora amb inici del relat.
+	let liniaHoritzontal = document.createElement("hr");
+	liniaHoritzontal.className = "separadorHoritzonal";
+	divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
 	
 	ObreFinestra(window, "storyMap");
 	
@@ -1412,16 +1441,16 @@ function RecuperarIdsImatgesAccions(textHtml)
 	arrayIdsImgAccions = [];
 
 	const domFromText = new DOMParser().parseFromString(textHtml, "text/html");
-	const arrayDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
-	
+	const nodeListDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
+	const arrayDivAccions = Array.from(nodeListDivAccions).filter((div) => div.id.includes(identificadorDivAccioMapa));
 	if (arrayDivAccions.length > 0)
 	{
 		let divAccio, imgAccio;
 		let contadorAccionsTransformades= 0;
 		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
-			divAccio = document.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
-			imgAccio = divAccio.querySelector(`img[id^='${idImgSvgAccioMapa}']`);
+			divAccio = domFromText.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
+			imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
 			arrayIdsImgAccions.push(imgAccio.id);
 		}
 	}	

@@ -3497,6 +3497,14 @@ var MessageLang=
       "fre": "Modifier carte de l'histoire",
       "cze": "Upravit mapu příběhu",
       "ger": "Storymap bearbeiten"
+    },
+    "RemoveImage": {
+      "cat": "Esborrar la imatge",
+      "spa": "Borrar la imagen",
+      "eng": "Remove image",
+      "fre": "Supprimer l'image",
+      "cze": "Odstranit obrázek",
+      "ger": "Bild entfernen"
     }
   },
   "tresD": {
