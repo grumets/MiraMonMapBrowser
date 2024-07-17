@@ -77,6 +77,7 @@ const divRelatId = "divRelat";
 const ancoraRelat = "ancoraRelat"; 
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
+const missatgeAvisImatgeId = "missatgeAvisImatge";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -418,36 +419,14 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 		const tinyEditor = tinymce.get(tinyTextStoryMapId);
 		const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
 		
-		if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
+		if (tinyEditor && imatgeReduida && imatgeReduida!="data:," && esPermetAfegirImatge(tinyEditor))
 		{ 
 			const nodeDestiImatge = tinyEditor.selection.getNode();
-			if (esPermetModificacio(nodeDestiImatge, tinyEditor.getBody()))
-			{
-				const rangCursor = tinyEditor.selection.getRng();
-				const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
-				const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
+			const rangCursor = tinyEditor.selection.getRng();
+			const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
+			const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
 
-				nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
-			}
-			else
-			{
-				const finestraRelats = document.getElementById("creaStoryMap_finestra");
-				let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
-				if (dialegInsercio)
-				{
-					if (!finestraRelats.contains(dialegInsercio))
-					{
-						finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
-					}
-				}
-				else
-				{
-					dialegInsercio = creaDialegInsercioIncorrecta();
-					finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
-				}
-					
-				dialegInsercio.show();
-			}
+			nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
 		}
 		cntx.clearRect(0, 0, canvasReduccioImg.width, canvasReduccioImg.height);
 		URL.revokeObjectURL(urlImage);
@@ -578,23 +557,97 @@ function CreaDialegSincronitzarAmbMapa()
 /*
 * Infroma a l'usuari que l'acció del mapa o la imatge que es vol inserir no és possible.
 */
-function creaDialegInsercioIncorrecta()
+function creaDialegInsercioIncorrecta(motiu)
 {
-	const dialogHtml = ["<form><p>" + GetMessage("NotPossibleInsertNewContent", "storymap") + "</p><div style='align-items: center;'><button id='", confirmNoInsercioId, "' formmethod='dialog' value='cancel'>" + GetMessage("OK") + "</button></div></form>"];
+	const dialogHtml = ["<form><p id='", missatgeAvisImatgeId, "'>", GetMessage("NotPossibleInsertNewContent", "storymap"), ": ", (motiu == null ? GetMessage("unknown") : motiu) , "</p><div style='align-items: center;'><button id='", confirmNoInsercioId, "' formmethod='dialog' value='cancel'>", GetMessage("OK"), "</button></div></form>"];
 
 	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
 
+// Comprovar si podem afegir una imatge al relat en el lloc que preveiem.
+function esPermetAfegirImatge(tinyEditor)
+{
+	let esPermet = false;
+	let motiu;
+
+	if (tinyEditor.selection.getSel().type=="Range")
+	{
+		if (tinyEditor.selection.getNode().nodeName == "IMG")
+		{
+			motiu = GetMessage("NotAdmittedOnImage", "storymap");
+		}
+		else
+		{
+			motiu = GetMessage("NotAdmittedRangeSelection", "storymap");
+		}
+		esPermet = false;
+	}
+	else
+	{
+		esPermet = true;
+	}
+
+	if (!esPermet)
+	{
+		const finestraRelats = document.getElementById("creaStoryMap_finestra");
+		let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+		if (dialegInsercio)
+		{
+			let missatgeAvis = document.getElementById(missatgeAvisImatgeId);
+			if (missatgeAvis)
+			{
+				missatgeAvis.innerText = GetMessage("NotPossibleInsertNewContent", "storymap") + ": " + motiu;
+			}
+
+			if (!finestraRelats.contains(dialegInsercio))
+			{
+				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+			}
+		}
+		else
+		{
+			dialegInsercio = creaDialegInsercioIncorrecta(motiu);
+			dialegInsercio.setAttribute("id", dialegAlertaInsercioId);
+			finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+		}
+			
+		dialegInsercio.show();
+	}
+
+	return esPermet;
+}
+
 // Funció per avaluar la ideoneitat del lloc del relat a adjuntar una modificació per inserir una imatge o bé una acció de mapa.
-function esPermetModificacio(nodeObjectiu, tinyBody)
+function esPermetModificacioAccio(tinyEditor)
 {
 	const regexpImgId = new RegExp(`^${idImgSvgAccioMapa}`);
-	if (comprovaNodePareAmbAccio(nodeObjectiu, tinyBody))
-		return false;
-	else if (regexpImgId.test(nodeObjectiu.id))
-		return false;
-	else 
-		return true;
+	const seleccio = tinyEditor.selection.getSel();
+	const nodeObjectiu = tinyEditor.selection.getNode();
+	const cosRelat = tinyEditor.getBody();
+	if (seleccio.type == "Caret" && comprovaNodePareAmbAccio(nodeObjectiu, cosRelat))
+		return false
+	else if (seleccio.type == "Range")
+	{
+		if (nodeObjectiu.nodeName == "IMG")
+			return !regexpImgId.test(nodeObjectiu.id) && !comprovaNodePareAmbAccio(nodeObjectiu, cosRelat);
+		else
+		{
+			const arrayNodes = Array.from(cosRelat.childNodes);
+			const nodeInicial = tinyEditor.selection.getStart();
+			const nodeFinal = tinyEditor.selection.getEnd();
+			let accioTrobada = false, indexActual = arrayNodes.indexOf(nodeInicial), indexFinal = arrayNodes.indexOf(nodeFinal);
+			
+			while(!accioTrobada && indexActual <= indexFinal)
+			{
+				accioTrobada = comprovaNodePareAmbAccio(arrayNodes[indexActual], cosRelat) || comprovaNodeFillAmbAccio(arrayNodes[indexActual], 0);
+				indexActual++;
+			}
+
+			return !accioTrobada;
+		}
+	}
+	
+	return true;
 
 	/**
 	 * Comprova si el node o algun del seus pares ja té una acció de mapa associada (attributes='data-mm-...').
@@ -603,6 +656,44 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 	 * @returns 
 	 */
 	function comprovaNodePareAmbAccio(nodeObjectiu, tinyBody)
+	{
+		if (comprovaHiHaAccio(nodeObjectiu))
+			return true;
+		/* Hem comprovat tots els nodes i els seus pares fins assegurar-nos que 
+		   no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del 
+		   node objectiu inicial. Si ja hem arribat a l'arrel del body hem acabat.
+		*/
+		if (nodeObjectiu === tinyBody || nodeObjectiu.parentNode === tinyBody || nodeObjectiu.parentNode == null)
+			return false;
+		//Recursivitat per seguir comprovant els pares de la gerarquia ascendent.
+		return comprovaNodePareAmbAccio(nodeObjectiu.parentNode, tinyBody);
+	}
+
+	/**
+	 * 
+	 * @param {*} nodeObjectiu Node el qual comprovem si té alguna acció de mapa. 
+	 * @param {*} profunditat 1er Nivell de fills, 2n nivell de fills... 0 és el nivell més superficial i inicial. 
+	 * @returns true si es troba acció de mapa o false del contrari.
+	 */
+	function comprovaNodeFillAmbAccio(nodeObjectiu, profunditat)
+	{
+		if (comprovaHiHaAccio(nodeObjectiu))
+			return true;
+		if (nodeObjectiu.hasChildNodes)
+		{
+			const childs = nodeObjectiu.childNodes;
+			for (const node of childs)
+			{
+				if (comprovaNodeFillAmbAccio(node, profunditat++))
+					return true;
+			}
+		}
+		else if (profunditat==0)
+			return false;
+	}
+
+	// Busquem en el node passat per paràmetre un attribut que comenci per data-mm-
+	function comprovaHiHaAccio(nodeObjectiu)
 	{
 		if (nodeObjectiu.nodeName == "DIV")
 		{
@@ -618,14 +709,7 @@ function esPermetModificacio(nodeObjectiu, tinyBody)
 				}
 			}
 		}
-		/* Hem comprovat tots els nodes i els seus pares fins assegurar-nos que 
-		   no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del 
-		   node objectiu inicial. Si ja hem arribat a l'arrel del body hem acabat.
-		*/
-		if (nodeObjectiu.parentNode === tinyBody)
-			return false;
-		//Recursivitat per seguir comprovant els pares de la gerarquia ascendent.
-		return comprovaNodePareAmbAccio(nodeObjectiu.parentNode, tinyBody);
+		return false;
 	}
 }
 
@@ -1049,8 +1133,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		formCheckbox.reset();
 
 	const tinyEditor = tinymce.get(tinyTextStoryMapId);
-	const tinyParent = tinyEditor.selection.getNode();
-	if (esPermetModificacio(tinyParent, tinyEditor.getBody()))
+	if (esPermetModificacioAccio(tinyEditor))
 	{
 		caractDialog.showModal();
 	}

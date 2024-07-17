@@ -3467,12 +3467,12 @@ var MessageLang=
       "ger": "handbuch"
     },
     "NotPossibleInsertNewContent": {
-      "cat": "No es possible d'inserir aquest contingut aquí",
-      "spa": "No es posible de instertar este contenido aqui",
-      "eng": "It isn't possible to insert this content here",
-      "fre": "Il n'est pas possible d'insérer ce contenu ici",
-      "cze": "Tento obsah sem není možné vložit",
-      "ger": "Es ist nicht möglich, diesen Inhalt hier einzufügen"
+      "cat": "No es possible d'inserir aquest contingut aquí. \nMotiu",
+      "spa": "No es posible de instertar este contenido aqui. \nMotivo",
+      "eng": "It isn't possible to insert this content here. \nReason",
+      "fre": "Il n'est pas possible d'insérer ce contenu ici. \nMotif",
+      "cze": "Tento obsah sem není možné vložit. \nOdůvodnění",
+      "ger": "Es ist nicht möglich, diesen Inhalt hier einzufügen. \nBegründung"
     },
     "NextStoryMapContent": {
       "cat": "Continua la redacció del relat aquí",
@@ -3505,6 +3505,22 @@ var MessageLang=
       "fre": "Supprimer l'image",
       "cze": "Odstranit obrázek",
       "ger": "Bild entfernen"
+    },
+    "NotAdmittedRangeSelection": {
+      "cat": "No s'admet seleccionar un fragment amb el cursor. Posa el cursor en una posició concreta",
+      "spa": "No se admite seleccionar un fragmento con el cursor. Ponga el cursor en una posición específica",
+      "eng": "Not admitted cursor range selection. Place the cursor at a specific location",
+      "fre": "Sélection non admise de la plage de curseur. Placez le curseur à un endroit précis",
+      "cze": "Nepřijatý kurzorový výběr. Umístěte kurzor na konkrétní místo",
+      "ger": "Nicht zugelassen Cursor Auswahl. Platzieren Sie den Cursor an einem bestimmten Ort"
+    },
+    "NotAdmittedOnImage": {
+      "cat": "No s'admet adjuntar una imatge sobre una altra imatge",
+      "spa": "No se admite adjuntar una imagen sobre otra imagen",
+      "eng": "Not admitted to attach an image into over other image",
+      "fre": "Non admis en fixant une image sur une autre image",
+      "cze": "Nepřijímá se připevňování obrázku nad jiný obrázek",
+      "ger": "Nicht zugegeben, ein Bild über andere Bilder zu befestigen"
     }
   },
   "tresD": {
