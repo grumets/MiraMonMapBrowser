@@ -293,14 +293,22 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 								"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
 								"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
 								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this)'/><br><br>",												
-								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/> <button id='", botoBorraThumbnailId,"' style='display:none'>", GetMessage("RemoveImage", "storymap"),"</button><br>"];
+								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/>"];
+				const botoEsborrar = document.createElement("input")
+				botoEsborrar.setAttribute("type", "button");
+				botoEsborrar.setAttribute("id", botoBorraThumbnailId);
+				botoEsborrar.setAttribute("style", "display: " + (i_relat != "nou" && storyToEdit.srcData ? "inline" : "none"));
+				botoEsborrar.setAttribute("value", GetMessage("RemoveImage", "storymap"));
+				botoEsborrar.addEventListener("click", esborraImatgePortada);
 				const inputBtnNext = document.createElement("input");
 				inputBtnNext.setAttribute("type", "button");
 				inputBtnNext.setAttribute("class", "buttonDialog");
-				inputBtnNext.setAttribute("value", GetMessage("Next"));						
+				inputBtnNext.setAttribute("value", GetMessage("Next"));
 				inputBtnNext.addEventListener("click", comprovaTitol);
 								
 				novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", botoEsborrar);
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", document.createElement("br"));
 				novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
 			}
 		
@@ -404,31 +412,34 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 	// Callback function to really draw image file allready read but with right sizes.
 	function mostraImatgeRedimensionada(midesImatge)
 	{
-		const canvasId = "reduccioImatges";
-		let canvasReduccioImg = document.getElementById(canvasId);
-		if (!canvasReduccioImg)
+		if (midesImatge)
 		{
-			canvasReduccioImg = document.createElement("canvas");
-			canvasReduccioImg.setAttribute("id", canvasId);
-		} 
-		canvasReduccioImg.width = midesImatge.width;
-		canvasReduccioImg.height = midesImatge.height;
+			const canvasId = "reduccioImatges";
+			let canvasReduccioImg = document.getElementById(canvasId);
+			if (!canvasReduccioImg)
+			{
+				canvasReduccioImg = document.createElement("canvas");
+				canvasReduccioImg.setAttribute("id", canvasId);
+			} 
+			canvasReduccioImg.width = midesImatge.width;
+			canvasReduccioImg.height = midesImatge.height;
 
-		const cntx = canvasReduccioImg.getContext("2d");
-		cntx.drawImage(imageToMesure, 0, 0, midesImatge.width, midesImatge.height);
-		const tinyEditor = tinymce.get(tinyTextStoryMapId);
-		const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
-		
-		if (tinyEditor && imatgeReduida && imatgeReduida!="data:," && esPermetAfegirImatge(tinyEditor))
-		{ 
-			const nodeDestiImatge = tinyEditor.selection.getNode();
-			const rangCursor = tinyEditor.selection.getRng();
-			const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
-			const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
+			const cntx = canvasReduccioImg.getContext("2d");
+			cntx.drawImage(imageToMesure, 0, 0, midesImatge.width, midesImatge.height);
+			const tinyEditor = tinymce.get(tinyTextStoryMapId);
+			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+			
+			if (tinyEditor && imatgeReduida && imatgeReduida!="data:," && esPermetAfegirImatge(tinyEditor))
+			{ 
+				const nodeDestiImatge = tinyEditor.selection.getNode();
+				const rangCursor = tinyEditor.selection.getRng();
+				const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
+				const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
 
-			nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
+				nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
+			}
+			cntx.clearRect(0, 0, canvasReduccioImg.width, canvasReduccioImg.height);
 		}
-		cntx.clearRect(0, 0, canvasReduccioImg.width, canvasReduccioImg.height);
 		URL.revokeObjectURL(urlImage);
 	}
 
@@ -444,7 +455,7 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	//Mirem la mida de la imatge
 	const urlImage = URL.createObjectURL(fitxerImatge);
 	const imageToMesure = new Image();
-	const abortController = new AbortController();
+
 	try{
 		imageToMesure.onload =  function () {
 			if (this)
@@ -461,13 +472,12 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				const cntx = canvasReduccioThumbnail.getContext("2d");
 				cntx.drawImage(this, 0, 0, canvasReduccioThumbnail.width, canvasReduccioThumbnail.height);
 				const imageThumbnail = document.getElementById(imageThumbnailId);
-				imageThumbnail.setAttribute("style", "visibility:visible");
+				imageThumbnail.style.visibility = "visible";
 				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
-				const botoEsborra = document.getElementById(botoBorraThumbnailId);
-				if (botoEsborra)
+				const botoEsborrar = document.getElementById(botoBorraThumbnailId);
+				if (botoEsborrar)
 				{
-					botoEsborra.setAttribute("style", "display:inline");
-					botoEsborra.addEventListener("click", esborraImatgePortada, {signal: abortController.signal});
+					botoEsborrar.style.display = "inline";
 				}
  			}
 			 URL.revokeObjectURL(urlImage);
@@ -479,24 +489,25 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 	}
 
 	imageToMesure.src = urlImage;
+}
 
-	function esborraImatgePortada()
+// Esborra la imatge que estigui carregada com a portada del relat.
+function esborraImatgePortada()
+{
+	const imgThumbnail = document.getElementById(imageThumbnailId);
+	if (imgThumbnail && imgThumbnail.src != "")
 	{
-		const imgThumbnail = document.getElementById(imageThumbnailId);
-		if (imgThumbnail && imgThumbnail.src != "")
+		const botoEsborrar = document.getElementById(botoBorraThumbnailId);
+		if (botoEsborrar)
 		{
-			const botoEsborrar = document.getElementById(botoBorraThumbnailId);
-			if (botoEsborrar)
-			{
-				botoEsborrar.setAttribute("style", "display:none");
-			}
-
-			imgThumbnail.removeAttribute("src");
-			imgThumbnail.setAttribute("style", "visibility:hidden");
+			botoEsborrar.style.display = "none";
 		}
-		abortController.abort();
+
+		imgThumbnail.removeAttribute("src");
+		imgThumbnail.style.visibility = "hidden";
 	}
 }
+
 /**
  * Crea un diàleg per avisar a l'usuari de la presència d'un relat en redacció en curs. Només permetrem redactar 1 relat a la vegada.
  * @returns 
@@ -561,7 +572,7 @@ function creaDialegInsercioIncorrecta(motiu)
 {
 	const dialogHtml = ["<form><p id='", missatgeAvisImatgeId, "'>", GetMessage("NotPossibleInsertNewContent", "storymap"), ": ", (motiu == null ? GetMessage("unknown") : motiu) , "</p><div style='align-items: center;'><button id='", confirmNoInsercioId, "' formmethod='dialog' value='cancel'>", GetMessage("OK"), "</button></div></form>"];
 
-	return CreaDialog(dialegMidesId, dialogHtml.join(""));
+	return CreaDialog(dialegAlertaInsercioId, dialogHtml.join(""));
 }
 
 // Comprovar si podem afegir una imatge al relat en el lloc que preveiem.
@@ -749,8 +760,12 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 		function retornaMidesImatge(event) {
 			// Després de tancar el missatge emergent de les mides.
 			resultatMidesImatge = {};
-			let resultatDialeg = JSON.parse(event.target.returnValue);
-			
+			let resultatDialeg = null;
+
+			if (event.target.returnValue != "cancel")
+			{
+				resultatDialeg = JSON.parse(event.target.returnValue);
+			}
 			// Eliminem els events abans de destruir el contexte en que han esta creats
 			inputWidth.removeEventListener("change", nouValorAmplada, true);
 			inputHeight.removeEventListener("change", nouValorAlcada, true);
@@ -1144,6 +1159,12 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
 		if (dialegInsercio)
 		{
+			let missatgeAvis = document.getElementById(missatgeAvisImatgeId);
+			if (missatgeAvis)
+			{
+				missatgeAvis.innerText = GetMessage("NotPossibleInsertNewContent", "storymap") + ": " + GetMessage("NotAdmittedMapActionsNested", "storymap");
+			}
+
 			if (!finestraRelats.contains(dialegInsercio))
 			{
 				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
@@ -1151,7 +1172,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		}
 		else
 		{
-			dialegInsercio = creaDialegInsercioIncorrecta();			
+			dialegInsercio = creaDialegInsercioIncorrecta(GetMessage("NotAdmittedMapActionsNested", "storymap"));			
 			finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
 		}
 		

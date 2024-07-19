@@ -3521,6 +3521,14 @@ var MessageLang=
       "fre": "Non admis en fixant une image sur une autre image",
       "cze": "Nepřijímá se připevňování obrázku nad jiný obrázek",
       "ger": "Nicht zugegeben, ein Bild über andere Bilder zu befestigen"
+    },
+    "NotAdmittedMapActionsNested": {
+      "cat": "No s'admeten accions de mapa anidades",
+      "spa": "No se admiten acciones de mapa anidas ",
+      "eng": "Not admitted to nested map actions",
+      "fre": "Non admis aux actions de carte imbriquées",
+      "cze": "Nepřipouští vnořené akce mapy",
+      "ger": "Nicht zugelassen für verschachtelte Kartenaktionen"
     }
   },
   "tresD": {
