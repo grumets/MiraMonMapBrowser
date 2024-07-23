@@ -78,23 +78,23 @@ const ancoraRelat = "ancoraRelat";
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
+const min_width_finestra_storymap = "500px", min_height_finestra_storymap = "400px";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
-function createStorymapFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
+/*function createStorymapFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
-	const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
+	
 	createFinestraLayer(window, name, titol, botons, left, top, width, height, ancora, param, content);
 
 	let currentStyle;
 	const barraStorymap = getLayer(win, name+SufixBarra);
-	currentStyle = barraStorymap.getAttribute("style");
-	barraStorymap.setAttribute("style", currentStyle + ` min-width: ${min_width_finestra_storymap}px; min-height: ${min_height_finestra_storymap}px;`);
+	barraStorymap.style["minWidth"] = min_width_finestra_storymap + "px";
 
 	const finestraStorymap = getLayer(win, name+SufixFinestra);
-	currentStyle = finestraStorymap.getAttribute("style");
-	finestraStorymap.setAttribute("style", currentStyle + ` min-width: ${min_width_finestra_storymap}px; min-height: ${min_height_finestra_storymap}px;`);
-	
+	finestraStorymap.style["minHeight"] = min_height_finestra_storymap + "px";
+	finestraStorymap.style["minWidth"] = min_width_finestra_storymap + "px";
+
 	let i_finestra;
 
 	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
@@ -105,7 +105,7 @@ function createStorymapFinestraLayer(win, name, titol, botons, left, top, width,
 			break;
 		}
 	}
-}
+}*/
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
