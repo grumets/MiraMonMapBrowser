@@ -1107,7 +1107,6 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 						{
 							let paragrafContinuacioRelat = document.createElement("p");
 							paragrafContinuacioRelat.setAttribute("id", paragrafContinuacioId);
-							paragrafContinuacioRelat.setAttribute("style", "font: italic 16px/2 cursive;");
 							paragrafContinuacioRelat.innerText = " -	" + GetMessage("NextStoryMapContent", "storymap") +"	-";
 							tinyEditor.getBody().appendChild(paragrafContinuacioRelat);
 						}
@@ -1194,7 +1193,6 @@ function netejaUltimParagraf(modificacio)
 	{
 		modificacio.element.innerHTML = "&nbsp;";
 		modificacio.element.removeAttribute("id");
-		modificacio.element.removeAttribute("style");
 	}
 }
 
