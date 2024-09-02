@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -71,7 +71,7 @@ GUFIncludeScript("guf_locale.js");
 
 function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, access_token_type)
 {
-	for (var i=0; i<targets.length; i++)
+	/*for (var i=0; i<targets.length; i++)
 	{	
 		if (targets[i].title)
 			targets[i].title = DonaCadenaPerValorDeFormulari(targets[i].title);
@@ -79,7 +79,7 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 			targets[i].code = DonaCadenaPerValorDeFormulari(targets[i].code);
 		if (targets[i].codespace) //decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara
 			targets[i].codespace = DonaCadenaPerValorDeFormulari(targets[i].codespace).replace("https://","http://"); 
-	}
+	}*/
 	if (reprod_usage.abstract)
 		reprod_usage.abstract = DonaCadenaPerValorDeFormulari(reprod_usage.abstract);
 	if (reprod_usage.ru_code)
@@ -87,13 +87,13 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 	if (reprod_usage.ru_code_media_type)
 		reprod_usage.ru_code_media_type = DonaCadenaPerValorDeFormulari(reprod_usage.ru_code_media_type);
 	if (reprod_usage.ru_platform)
-		reprod_usage.ru_platform = encodeURI(reprod_usage.ru_platform);
+		reprod_usage.ru_platform = escapeWin1252(reprod_usage.ru_platform);
 	if (reprod_usage.ru_schema)
-		reprod_usage.ru_schema = encodeURIComponent(reprod_usage.ru_schema);
+		reprod_usage.ru_schema = escapeWin1252Component(reprod_usage.ru_schema);
 	if (typeof reprod_usage.ru_sugg_app === "undefined")
-		reprod_usage.ru_sugg_app = encodeURI(location.href);
+		reprod_usage.ru_sugg_app = escapeWin1252(location.href);
 	else if (reprod_usage.ru_sugg_app)
-		reprod_usage.ru_sugg_app = encodeURI(reprod_usage.ru_sugg_app);
+		reprod_usage.ru_sugg_app = escapeWin1252(reprod_usage.ru_sugg_app);
 	return GUFAfegirFeedbackCapaMultipleTargets(targets, lang, access_token_type, reprod_usage);
 }
 
@@ -111,7 +111,7 @@ function GUFGetURLPreviousFeedbackWithReproducibleUsage(code, codespace, reprod_
 		
 	//decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara 
 	url+="&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + DonaCadenaPerValorDeFormulari(code) + 
-					"&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + encodeURIComponent(codespace.replace("https://","http://")) + "&TRG_OPR_2=EQ";
+					"&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + escapeWin1252Component(codespace.replace("https://","http://")) + "&TRG_OPR_2=EQ";
 	
 	var i_cond=1;
 	if (reprod_usage.ru_platform)
@@ -183,8 +183,8 @@ function GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, seed_div_id
 		return;
 	}
 	
-	loadFile(GUFGetURLPreviousFeedbackWithReproducibleUsage(code, codespace, reprod_usage, lang, access_token_type), 
-			"text/xml", GUFCarregaFeedbacksAnteriorsCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, 
+	var url=GUFGetURLPreviousFeedbackWithReproducibleUsage(code, codespace, reprod_usage, lang, access_token_type);
+	loadFile(url,"text/xml", GUFCarregaFeedbacksAnteriorsCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, 
 			{url: url, div_id: seed_div_id, lang: lang, access_token_type: access_token_type, callback_function: callback_function, params_function: params_function, edit_button: false});
 }
 
@@ -202,8 +202,11 @@ function GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, seed_div_id, rsc_type, ta
 			targets[i].codespace=targets[i].codespace.replace("https://","http://");
 	}
 	elem.innerHTML = GUFDonaCadenaFinestraFeedbackResourceMultipleTargets(seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function);
+
 	//demano el fitxer atom de feedbacks previs
 	GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(seed_div_id, rsc_type, targets, lang, access_token_type);
+	
+	GUFDisplayOrHidePreviousFeedbacks(lang);
 }
 
 function GUFShowPreviousFeedbackInHTMLDiv(div_id, rsc_type, code, codespace, lang, access_token_type)
@@ -212,11 +215,33 @@ var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
 	return GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targets, lang, access_token_type);
 }
 
+function GUFDisplayOrHidePreviousFeedbacks(lang)
+{
+	// Toggle display of previous feedback
+	document.getElementById("showPrevFB").addEventListener("click", function(event) {
+		event.preventDefault();
+		var preFB = document.getElementById("preFB");
+		var feedback_summary_div= document.getElementById("feedback_summary_div");
+		var showPrevFB = document.getElementById("showPrevFB");
+		if (preFB.style.display === "none") {
+			preFB.style.display = "block";
+			feedback_summary_div.style.display="none";
+			showPrevFB.innerHTML = GUFDonaCadenaLang({"cat":"Mostra el resum de les valoracions prèvies", "spa":"Muestra el resumen de las valoraciones previas", "eng":"Show summary of previous user feedback", "fre":"Afficher le résumé des commentaires précédents des utilisateurs"}, lang);
+		} else {
+			preFB.style.display = "none";
+			feedback_summary_div.style.display="block";
+			showPrevFB.innerHTML = GUFDonaCadenaLang({"cat":"Mostra valoracions prèvies", "spa":"Muestra valoraciones previas", "eng":"Show previous user feedback", "fre":"Afficher les commentaires précédents des utilisateurs"}, lang)
+		}
+	});
+}
+
 function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targets, lang, access_token_type)
 {
 	var tinc_target_secondary=false;
 	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK";
 	var url2=url;
+	//OG
+	var summary=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:SUMMARY&LANGUAGE=" + lang + "&TYPE=FEEDBACK";
 	
 //ara assumeixo que tinc un primari segur i potser un secundari. Futur-> poden haver N de cada un dels TRES tipus, i per cada un farçe un quadradet, suposo
 
@@ -228,15 +253,20 @@ function GUFShowPreviousFeedbackMultipleTargetsInHTMLDiv(div_id, rsc_type, targe
 	
 		if (targets[i].title && targets[i].code && targets[i].codespace && (typeof(targets[i].role)== "undefined" || targets[i].role=="primary"))
 		{			 
-			url+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";			
+			url+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";
+			//OG
+			summary+="&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + targets[i].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[i].codespace + "&TRG_OPR_2=EQ";			
 			break;
 		}
 	}
+	//carreguem el FB SUMMARY
+	loadFile(summary, "text/xml", GUFCarregaFeedbacksSummaryCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: summary, div_id: div_id+"Summary", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
+	
 	//l'espai de FB previs sobre el target primari el poso sempre, perquè sempre en tinc un	
 	loadFile(url, "text/xml", GUFCarregaFeedbacksAnteriorsCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: div_id+"Previ", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
 
 	//busco el target secundari i l'envio a la segona part de la finestra
-	for (var i=0; i<targets.length; i++)	
+	for (var i=0; i<targets.length; i++)
 	{
 		if (targets[i].title && targets[i].code && targets[i].codespace && targets[i].role=="secondary")
 		{	//la peticio buscarà els que parlin del secondari d'ara, però només com a PRIMARI, per veure tb en el dataset els comentaris generals de la col·lecció (i no tornar a veure els secudaris d'questa o altres imatges!)
@@ -363,6 +393,172 @@ function GUFLoadLastPreviousReproducibleUsageCodeCallback(doc, extra_param)
 	loadFile(owc.features[i_feature].properties.links.alternates[0].href, "text/xml", GUFLoadOnePreviousReproducibleUsageCodeCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i_feature].properties.links.alternates[0].href, callback_function: extra_param.callback_function, params_function: extra_param.params_function});
 }
 
+function GUFCarregaFeedbacksSummaryCallback(doc, extra_param)
+{
+	var cdns=[];
+
+	if (!doc || !doc.documentElement)
+		{
+			alert (extra_param.url + ": " + GUFDonaCadenaLang({"cat":"El retorn no és xml", "spa":"El retorno no es xml", "eng":"Return is not xml", "fre":"Le retour n'est pas xml"}, extra_param.lang));
+			return ;
+		}
+	var root=doc.documentElement;
+	var output = GetRetrieveResourceFeedbackSummaryOutputs(root);
+	
+	if (!output)
+	{
+		cdns.push(GUFDonaCadenaLang({"cat":"No hi ha cap valoració prèvia", 
+					"spa":"No hay ninguna valoración previa", 
+					"eng":"There are no previous user feedback", 
+					"fre":"Il n'y a pas encore de commentaires des utilisateurs"}, extra_param.lang)); 
+
+		if (extra_param.rsc_type != "")
+			cdns.push(GUFDonaCadenaLang({"cat":" sobre la", 
+						"spa":" sobre la", 
+						"eng":" on the", 
+						"fre":" sur la"}, extra_param.lang), 
+						" ", extra_param.rsc_type, " ");
+
+		cdns.push(GUFDonaCadenaLang({"cat":"encara", 
+					"spa":"todavía", 
+					"eng":"yet", 
+					"fre":"encore"}, extra_param.lang));
+		document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
+		
+		document.getElementById("showPrevFB").style.display="none";
+		return;
+	}
+	else
+	{
+		if (!output.numberOfRatings)
+		{
+			//si tenim feedbacks però no tenen rating passem directament a ensenyar els feedbacks pq no té sentit ensenyar el summary
+			document.getElementById("feedback_summary_div").style.display="none";
+			document.getElementById("preFB").style.display="block";
+			document.getElementById("showPrevFB").innerHTML=GUFDonaCadenaLang({"cat":"Mostra el resum de les valoracions prèvies", "spa":"Muestra el resumen de las valoraciones previas", "eng":"Show summary of previous user feedback", "fre":"Afficher le résumé des commentaires précédents des utilisateurs"}, extra_param.lang);
+		}
+
+		//start of feedback summary
+		var meanRating = parseInt(output.averageRating);
+	
+		cdns.push('<br>');
+		cdns.push('<div id="meanRating">');
+		
+		// Crida a la funció per generar la taula de valoracions
+		var titleCell = '<b>' + GUFDonaCadenaLang({ "cat": "Valoració mitjana: ", "spa": "Valoración promedio: ", "eng": "Average rating: ", "fre": "note moyenne" }, extra_param.lang) + '</b>';
+		generateRatingTable(cdns, meanRating, 'meanRating', titleCell);
+
+
+		// min, max and n ratings. A table is used to maintain alignment with previous elements.
+		if (output.numberOfRatings) {
+			cdns.push('<table border="0" cellspacing="5">');
+			cdns.push('<tr>');
+			cdns.push('<td id="summary_ratings"><b>' + GUFDonaCadenaLang({ "cat": "n puntuacions: ", "spa": "n puntuaciones: ", "eng": "n ratings: ", "fre": "n évaluations:" }, extra_param.lang) +'</b>'+ output.numberOfRatings + ", <b>" + GUFDonaCadenaLang({ "cat": "puntuació mín.: ", "spa": "puntuación mín.: ", "eng": "min rating: ", "fre": "note min.: " }, extra_param.lang) +'</b>'+ parseInt(output.minimumRating) + ", <b>" + GUFDonaCadenaLang({ "cat": "puntuació màx.: ", "spa": "puntuación máx.: ", "eng": "max rating: ", "fre":"note max.: " }, extra_param.lang)+'</b>' + parseInt(output.maximumRating) + '</td>');
+			cdns.push('</tr>');
+			cdns.push('</table>');
+		} else {
+			cdns.push('<table border="0" cellspacing="5">');
+			cdns.push('<tr>');
+			cdns.push('<td id="summary_ratings"><b>' + GUFDonaCadenaLang({ "cat": "n puntuacions: ", "spa": "n puntuaciones: ", "eng": "n ratings: ", "fre": "n évaluations" }, extra_param.lang) + "</b>, <b>" + GUFDonaCadenaLang({ "cat": "puntuació mín.: ", "spa": "puntuación mín.: ", "eng": "min rating: ", "fre": "note min.: " }, extra_param.lang) + "</b>, <b>" + GUFDonaCadenaLang({ "cat": "puntuació màx.: ", "spa": "puntuación máx.: ", "eng": "max rating: ", "fre": "note max.: " }, extra_param.lang) + '</b></td>');
+			cdns.push('</tr>');
+			cdns.push('</table>');
+		}
+		cdns.push('<br>');
+		// summary table byRatingCount
+		if (output.numberOfRatings != 0) {
+			cdns.push('<div id="byRatingCount_table" style="width: 230px; padding-left: 5px;">');
+			cdns.push('<table style="width: 100%;">');
+			for (var i = output.byRatingCount.length - 1; i >= 0; i--) {
+				var widthPercent = (output.byRatingCount[i].count / output.numberOfRatings) * 100;
+				cdns.push('<tr>');
+				cdns.push('<td style="width: 25px; height: 15px; text-align: left;"><b>' + output.byRatingCount[i].rating + ' &#9733;</b></td>');
+				cdns.push('<td style="height: 15px;"><div style="background-color: #eeeeee; width: 100%;"><div id="byRatingCount' + i + '" style="background-color: #FFC107; width: ' + widthPercent + '%; height: 15px;">&nbsp;</div></div></td>');
+				cdns.push('<td style="width: 20px; height: 15px; text-align: center; vertical-align: middle;">' + output.byRatingCount[i].count + '</td>');
+				cdns.push('</tr>');
+			}
+			cdns.push('</table>');
+			cdns.push('</div>');
+		}
+	
+		// Display toggle for additional information
+		cdns.push('<p style="text-align: right;"><a href="#" id="moreInfoLink">+ info</a></p>');
+	
+		// Additional information section
+		cdns.push('<div id="current_feedback_summary" style="display:none;">');
+
+        cdns.push('<table cellspacing="5">');
+        cdns.push('<tr><td><b>' + GUFDonaCadenaLang({"cat": "n feedbacks: ", "spa": "n feedbacks: ", "eng": "n feedbacks: ", "fre": "n feedbacks"}, extra_param.lang) + '</b></td><td>' + output.numberOfFeedbackItems + '</td><td><b>'+GUFDonaCadenaLang({"cat": "data de l'últim element: ", "spa": "fecha del último elemento: ", "eng": "latest item date: ", "fre": "date du dernier élément :"}, extra_param.lang)+'</b></td><td>');
+
+        if (output.latestItemDate) 
+		{
+            var fb_date = new Date(output.latestItemDate);
+            cdns.push(fb_date.toLocaleString());
+        }
+        cdns.push('</td></tr>');
+
+        cdns.push('<tr><td><b>'+GUFDonaCadenaLang({"cat": "n comentaris dels usuaris: ", "spa": "n comentarios de los usuarios: ", "eng": "n user comments: ", "fre": "n commentaires d'utilisateurs: "}, extra_param.lang)+'</b></td><td>' + output.numberOfUserComments + '</td><td><b>'+GUFDonaCadenaLang({"cat": "informes d'ús: ", "spa": "informes de uso: ", "eng": "usage reports: ", "fre": "rapports d'utilisation :"}, extra_param.lang)+'</b></td><td>' + output.numberOfUsageReports + '</td></tr>');
+        cdns.push('<tr><td><b>'+GUFDonaCadenaLang({"cat": "informes d'ús reproduïble: ", "spa": "informes de uso reproducible: ", "eng": "reproducible usage reports: ", "fre": "rapports d'utilisation reproductibles: "}, extra_param.lang)+'</b></td><td>' + output.numberOfReproducibleUsageReports + '</td><td><b>'+GUFDonaCadenaLang({"cat": "citacions: ", "spa": "citaciones: ", "eng": "citations: ", "fre": "citations: "}, extra_param.lang)+'</b></td><td>' + output.numberOfCitations + '</td></tr>');
+        cdns.push('</table><br>');
+
+        cdns.push('<p><b>'+GUFDonaCadenaLang({"cat": "Per objectiu: ", "spa": "Por objectivo: ", "eng": "By target: ", "fre": "Par cible: "}, extra_param.lang)+'</b></p>');
+        cdns.push('<table cellspacing="5">');
+
+        cdns.push('<tr><td><b>'+GUFDonaCadenaLang({"cat": "objectiu primari: ", "spa": "objectivo primario: ", "eng": "primary targets: ", "fre": "cibles principales: "}, extra_param.lang)+'</b></td><td>');
+        if (output.numberOfPrimaryTargets)
+            cdns.push(output.numberOfPrimaryTargets);
+        cdns.push('</td></tr>');
+
+        cdns.push('<tr><td><b>'+GUFDonaCadenaLang({"cat": "objectiu secundari: ", "spa": "objectivo secundario: ", "eng": "secondary targets: ", "fre": "cibles secondaires: "}, extra_param.lang)+'</b></td><td>');
+        if (output.numberOfSecondaryTargets)
+            cdns.push(output.numberOfSecondaryTargets);
+        cdns.push('</td></tr>');
+
+        cdns.push('<tr><td><b>'+GUFDonaCadenaLang({"cat": "objectiu suplementari: ", "spa": "objectivo suplementario: ", "eng": "supplementary targets: ", "fre": "cibles supplémentaires: "}, extra_param.lang)+'</b></td><td>');
+        if (output.numberOfSupplementaryTargets)
+            cdns.push(output.numberOfSupplementaryTargets);
+        cdns.push('</td></tr>');
+
+        cdns.push('</table><br>');
+
+        if (output.byRoleCount)
+		{
+            cdns.push('<p><b>'+GUFDonaCadenaLang({"cat": "Per rol de l'usuari: ", "spa": "Por rol del usuario: ", "eng": "By user role: ", "fre": "Par rôle d'utilisateur: "}, extra_param.lang)+'</b></p>');
+            cdns.push('<table cellspacing="5">');
+            for (var i = 0; i < output.byRoleCount.length; i++)
+			{
+                if (i % 2 === 0)
+                    cdns.push('<tr>');
+
+                cdns.push('<td><b>' + GUFDonaCadenaLang(GUF_UserRoleCode[output.byRoleCount[i].userRole]) +'</b>:</td><td>' + output.byRoleCount[i].count + '</td>');
+
+                if (i % 2 != 0)
+                    cdns.push('</tr>');
+            }
+            cdns.push('</table><br>');
+        }
+		cdns.push('</div>'); //this div closes the additional information section
+	
+		cdns.push('</div>');
+
+		document.getElementById(extra_param.div_id).innerHTML = cdns.join("");
+
+		// Toggle display of additional information
+		document.getElementById("moreInfoLink").addEventListener("click", function(event) {
+			event.preventDefault();
+			var summary = document.getElementById("current_feedback_summary");
+			var moreInfoLink = document.getElementById("moreInfoLink");
+			if (summary.style.display === "none") {
+				summary.style.display = "block";
+				moreInfoLink.innerHTML = "- info";
+			} else {
+				summary.style.display = "none";
+				moreInfoLink.innerHTML = "+ info";
+			}
+		});
+		document.getElementById("showPrevFB").style.display="block";
+	}
+}
+
 function GUFCarregaFeedbacksAnteriorsCallback(doc, extra_param)
 {
 var cdns=[];
@@ -399,6 +595,7 @@ var cdns=[];
 		document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
 		return;
 	}
+
 	//OG: canviem de posició el botó edit, que inicialment estava al final de tot de la llista de FB
 	if (typeof extra_param.edit_button!=="undefined" && extra_param.edit_button==false)
 	; //si el param no existeix o diu que no vull botó no el poso
@@ -421,11 +618,13 @@ var cdns=[];
 			var n2 = str2.indexOf("&");  
 			str = str2.substring(0, n2);
  		  
-			cdns.push("<fieldset class=\"guf_fieldset user\"><legend class=\"guf_legend user\">", owc.features[i].properties.authors[0].name, ", ", DonaDataISOComAText(owc.features[i].properties.updated), 
-				"</legend>", 							
-				"<div class=\"guf_fb_id user\"><span class=\"guf_key user\">NiMMbus Id.</span>: <a class=\"guf_link user\" href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+extra_param.lang+"&RESOURCE="+str+"\" target=\"_blank\">"+str+"</a></div>",				
-				"<div class=\"guf_abstract user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Résumé"}, extra_param.lang), "</span>: ", owc.features[i].properties.title,
-				"</div><div id=\"", extra_param.div_id, "_",i , "\"></div>");
+			cdns.push("<fieldset class=\"guf_fieldset user\"><legend class=\"guf_legend user\"><a class=\"guf_link user\" href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+extra_param.lang+"&RESOURCE="+str+"\" target=\"_blank\">", owc.features[i].properties.authors[0].name, ", ", DonaDataISOComAText(owc.features[i].properties.updated), 
+				"</a></legend>", 							
+				//"<div class=\"guf_fb_id user\"><span class=\"guf_key user\">NiMMbus Id.</span>: <a class=\"guf_link user\" href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+extra_param.lang+"&RESOURCE="+str+"\" target=\"_blank\">"+str+"</a></div>",				
+				//"<div class=\"guf_abstract user\"><span class=\"guf_key user\"><br>", GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Résumé"}, extra_param.lang), "</span>: ", owc.features[i].properties.title,
+				//"<div class=\"guf_abstract user\"><br><b>", owc.features[i].properties.title,
+				//"</b></div><div id=\"", extra_param.div_id, "_",i , "\"></div>");
+				"<div id=\"", extra_param.div_id, "_",i , "\"></div>");
 								
 			if (typeof extra_param.callback_function!=="undefined" && extra_param.callback_function != "")
 			{
@@ -445,7 +644,7 @@ var cdns=[];
 	{
 		type=GetNimmbusTypeOfAOWCFeature(owc.features[i]);
 		if (type=="FEEDBACK" && owc.features[i].properties && owc.features[i].properties.links && owc.features[i].properties.links.alternates && owc.features[i].properties.links.alternates.length && owc.features[i].properties.links.alternates[0].href)
-			loadFile(owc.features[i].properties.links.alternates[0].href, "text/xml", GUFCarregaFeedbackAnteriorCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i].properties.links.alternates[0].href, div_id: extra_param.div_id + "_" + i, lang: extra_param.lang});
+			loadFile(owc.features[i].properties.links.alternates[0].href, "text/xml", GUFCarregaFeedbackAnteriorCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i].properties.links.alternates[0].href, div_id: extra_param.div_id + "_" + i, lang: extra_param.lang, esRU: extra_param.callback_function});
 	}
 }
 
@@ -467,7 +666,6 @@ function ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(identifier, lang, es_id_fb_it
 		if (identifier.code)
 			text_html=text_html+identifier.code;
 			
-		//text_html=text_html+". ";
 			
 		if (text_html.indexOf("www.doi.org") >= 0 || text_html.indexOf("/doi.org") >= 0)
 			link_html="<span class=\"guf_key_2 user\">DOI</span>: <a class=\"guf_link user\" href=\""+text_html+"\" target=\"_blank\">"+identifier.code+"</a>. <br/>";
@@ -667,264 +865,79 @@ var cdns=[];
 		window[extra_param.callback_function](JSON.parse(extra_param.params_function), guf);
 		return;
 	}
-	
-	/* Ara l'he posat a fora perquè quedi més endreçat (Id, titol + resta)
-	if (guf.identifier)
-		cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.identifier, extra_param.lang, true));*/
-	
-	/*if (guf.abstract) ja no existeix pq és el feature.title que JA he posat)
-		cdns.push("<div class=\"guf_abstract user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Resum", "spa":"Resumen", "eng":"Abstract", "fre":"Abstrait"}, extra_param.lang), ":</span> ", guf.abstract, "</div>");*/
 
-	if (guf.purpose)
-		cdns.push("<div class=\"guf_purpose user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Propòsit", "spa":"Propósito", "eng":"Purpose", "fre":"Raison"}, extra_param.lang), ":</span> ", guf.purpose, "</div>");
-
-	//if (guf.contact)
-	
-	if (guf.contactRole && GUF_UserRoleCode[guf.contactRole])
-		cdns.push("<div class=\"guf_contact_role user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Rol de l'usuari", "spa":"Rol del usuario", "eng":"User role", "fre":"Rôle de user"}, extra_param.lang), ":</span> ", GUFDonaCadenaLang(GUF_UserRoleCode[guf.contactRole], extra_param.lang), "</div>");
-
-	if (guf.dateInfo)
+	if (extra_param.esRU=="AdoptaEstil") // aquí es pinten els elements que es demanen quan fem un retrieve styles
 	{
-		for (var i_date=0; i_date<guf.dateInfo.length; i_date++)
-		{
-			if (guf.dateInfo[i_date].dateType)
-				cdns.push("<div class=\"guf_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+" ("+GUFDonaCadenaLang(CI_DateTypeCode[guf.dateInfo[i_date].dateType],extra_param.lang)+"):</span> "+guf.dateInfo[i_date].date+"</div>");
-			else
-				cdns.push("<div class=\"guf_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+":</span> "+guf.dateInfo[i_date].date+"</div>");
-		}
-	}	
+		cdns.push('<div style="text-align: justify;"><br>' + guf.abstract + '</div><br>');
+
+		printFBusage(cdns, guf, extra_param);						
+
+		cdns.push('<br><p><a href="#" id="fb_moreInfoLink'+extra_param.div_id+'">+ info</a></p>');
 	
-	if (guf.rating)	
-		cdns.push("<div class=\"guf_rating user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Puntuació", "spa":"Puntuación", "eng":"Rating", "fre":"Évaluation"}, extra_param.lang), ":</span> ", guf.rating, "/5</div>");
 
-	if (guf.user_comment && guf.user_comment.comment)
-	{ 
-		cdns.push("<div class=\"guf_comment user\"><hr class=\"guf_solid user\">");
-		cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Comentari", "spa":"Comentario", "eng":"Comment", "fre":"Commentaire"}, extra_param.lang), ":</span> ", guf.user_comment.comment, "<br/>");
-		if (guf.user_comment.motivation && GUF_MotivationCode[guf.user_comment.motivation])
-			cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Motivació del comentari", "spa":"Motivación del comentario", "eng":"Comment motivation", "fre":"Motivation du commentaire"}, extra_param.lang), ":</span> ", GUFDonaCadenaLang(GUF_MotivationCode[guf.user_comment.motivation], extra_param.lang));			
-		cdns.push("</div><!-- guf_comment -->");
-	}
-
-	if (guf.usage)
-	{
-		cdns.push("<div class=\"guf_usage user\"><hr class=\"guf_solid user\">");
-		if (guf.usage.reportAspect && guf.usage.reportAspect.length>0)
-		{
-			var s="";
-			for (var item=0; item<guf.usage.reportAspect.length; item++)
-			{
-				if (item!=0)
-					s+=", ";
-				s+=GUFDonaCadenaLang(GUF_ReportAspectCode[guf.usage.reportAspect[item]], extra_param.lang);
-			}
-			cdns.push("<div class=\"guf_aspect_reported user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Aspecte reportat", "spa": "Aspecto reportado", "eng": "Aspect reported", "fre":"Aspect rapporté"}, extra_param.lang), ":</span> ", s, "</div>");
-		}
+	// Display toggle for additional information
+	cdns.push('<div id="fb_moreInfo'+extra_param.div_id+'" style=\"display:none;\">');
 		
-		if (guf.usage.usage_descr)
-		{
-			cdns.push("<div class=\"guf_usage_description user\"><hr class=\"guf_dashed user\">");			
-			if (guf.usage.usage_descr.specific_usage)
-				cdns.push("<div class=\"guf_spec_usage_description user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Descripció de l'ús específic", "spa": "Descripción del uso específico", "eng": "Specific usage description", "fre":"Description d'utilisation spécifique"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.specific_usage, "</div>");				
-				
-			if (guf.usage.usage_descr.usage_dt)
-			{
-				var s=DonaCadenaDataHoraDesDeElementCompost(guf.usage.usage_descr.usage_dt);
-				if (s!="")
-					cdns.push("<div class=\"guf_usage_dt user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data i  hora de l'ús", "spa": "Fecha y hora del uso", "eng": "Usage date and time", "fre": "Date et heure d'utilisation"}, extra_param.lang), ":</span> ", s, "</div>");
-			}
-			
-			if (guf.usage.usage_descr.user_det_lim)
-				cdns.push("<div class=\"guf_user_deter_limits user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Limitacions determinades per l'usuari", "spa": "Limitaciones determinadas por el usuario", "eng": "User determined limitations", "fre":"Limites déterminées par l'utilisateur"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.user_det_lim, "</div>");				
-				
-			if (guf.usage.usage_descr.response)
-				cdns.push("<div class=\"guf_response user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Resposta", "spa": "Respuesta", "eng": "Response", "fre":"Réponse"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.response, "</div>");				
-				
-			if (guf.usage.usage_descr.add_doc)
-			{
-				cdns.push("<div class=\"guf_add_doc user\">");
-				for (var item=0; item<guf.usage.usage_descr.add_doc.length; item++)
-				{
-					cdns.push("<div>");
-					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.usage_descr.add_doc[item], item, 
-						GUFDonaCadenaLang({"cat": "Documentació addicional", "spa": "Documentación adicional", "eng": "Additional documentation", "fre":"Documentation complémentaire"}, extra_param.lang), 
-						"add_doc", extra_param, false);
-					cdns.push("</div>");
-				}
-				cdns.push("</div><!-- guf_add_doc -->");
-			}
-			
-			if (GUFHiHaReprodUsage(guf.usage.usage_descr))
-			{
-				cdns.push("<div class=\"guf_reprodUsage user\">");
-				cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Ús reproduïble", "spa":"Uso reproducible", "eng":"Reproducible usage", "fre":"Utilisation reproductible"}, extra_param.lang), ":</span>");								
-				if (guf.usage.usage_descr.code)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Codi (text)", "spa":"Código (texto)", "eng":"Code (text)", "fre":"Code (texte)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.code);
-				if (guf.usage.usage_descr.codeLink.linkage)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Codi (adreça URL)", "spa":"Código (dirección URL)", "eng": "Code (URL link)", "fre":"Code (URL)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.codeLink.linkage);												
-				if (guf.usage.usage_descr.codeMediaType && guf.usage.usage_descr.codeMediaType.length>0)
-				{
-					var s="";				
-					if (guf.usage.usage_descr.codeMediaType=="application/json")
-						s="JSON ("+guf.usage.usage_descr.codeMediaType+")";
-					else if (guf.usage.usage_descr.codeMediaType=="text/x-python")
-						s="Phyton ("+guf.usage.usage_descr.codeMediaType+")";
-					else if (guf.usage.usage_descr.codeMediaType=="text/x-r-source")
-						s="R ("+guf.usage.usage_descr.codeMediaType+")";
-					else if (guf.usage.usage_descr.codeMediaType=="application/vnd.docker")
-						s=GUFDonaCadenaLang({"cat":"Contenidor docker", "spa":"Contenedor docker", "eng":"Docker container", "fre":"Conteneur Docker"}, extra_param.lang)+" ("+guf.usage.usage_descr.codeMediaType+")";
-					else
-						s=guf.usage.usage_descr.codeMediaType;
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Format del codi", "spa":"Formato del código", "eng": "Code format", "fre":"Format de code"}, extra_param.lang), "</span>: ", s);								
-				}	
-				if (guf.usage.usage_descr.platform)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Plataforma", "spa":"Plataforma", "eng":"Platform", "fre":"Plateforme"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.platform);							
-				if (guf.usage.usage_descr.version)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Versió", "spa":"Versión", "eng": "Version", "fre":"Version"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.version);								
-				if (guf.usage.usage_descr.schema)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Esquema", "spa":"Esquema", "eng": "Schema", "fre":"Schème"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.schema);
-				if (guf.usage.usage_descr.suggestedApplication)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Aplicació suggerida", "spa":"Aplicación sugerida", "eng":"Suggested application", "fre":"Application suggérée"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.suggestedApplication);							
-				if (guf.usage.usage_descr.diagram)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Diagrama (text)", "spa":"Diagrama (texto)", "eng": "Diagram (text)", "fre":"Diagramme (texte)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.diagram);			
-				if (guf.usage.usage_descr.diagramLink.linkage)
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Diagrama (adreça URL)", "spa":"Diagrama (dirección URL)", "eng": "Diagram (URL link)", "fre":"Diagramme (URL)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.diagramLink.linkage);			
-				if (guf.usage.usage_descr.diagramMediaType && guf.usage.usage_descr.diagramMediaType.length>0)
-				{
-					var s="";					
-					if (guf.usage.usage_descr.diagramMediaType=="image/jpeg")
-						s="JPEG ("+guf.usage.usage_descr.diagramMediaType+")";
-					else if (guf.usage.usage_descr.diagramMediaType=="image/png")
-						s="PNG ("+guf.usage.usage_descr.diagramMediaType+")";
-					else if (guf.usage.usage_descr.diagramMediaType=="text/x-python")
-						s="Phyton ("+guf.usage.usage_descr.diagramMediaType+")";
-					else if (guf.usage.usage_descr.diagramMediaType=="text/x-yuml")
-						s="YUML ("+guf.usage.usage_descr.diagramMediaType+")";
-					else if (guf.usage.usage_descr.diagramMediaType=="application/xmi+xml")
-						s="XMI ("+guf.usage.usage_descr.diagramMediaType+")";
-					else
-						s=guf.usage.usage_descr.diagramMediaType;
-					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Format del diagrama", "spa":"Formato del diagrama", "eng": "Diagram format", "fre":"Format de diagramme"}, extra_param.lang), "</span>: ", s);
-				}
-				cdns.push("</div><!-- guf_reprodUsage -->");
-			}						
-			cdns.push("</div><!-- guf_usage_description -->");						
-		}	
-		if (guf.usage.discov_issue)
-		{			
-			cdns.push("<div class=\"guf_discovered_issue user\"><hr class=\"guf_dashed user\">");
-			
-			if (guf.usage.discov_issue.known_problem)
-				cdns.push("<div class=\"guf_known_problem user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Problema conegut", "spa": "Problema conocido", "eng": "Known problem", "fre": "Problème connu"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.known_problem, "</div>");
-			
-			if (guf.usage.discov_issue.problem_dt)
-			{
-				var s=DonaCadenaDataHoraDesDeElementCompost(guf.usage.discov_issue.problem_dt);
-				if (s!="")
-					cdns.push("<div class=\"guf_known_problem_dt user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data i hora del problema conegut", "spa": "Fecha y hora del problema conocido", "eng": "Known problem date and time", "fre": "Problème connu date et heure"}, extra_param.lang), ":</span> ", s, "</div>");
-			}	
-			
-			if (guf.usage.discov_issue.work_around)
-				cdns.push("<div class=\"guf_work_around user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Solució", "spa": "Solución", "eng": "Work around", "fre":"Solution"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.work_around, "</div>");		
-				
-			if (guf.usage.discov_issue.ref_doc)
-			{	
-				cdns.push("<div class=\"guf_ref_doc user\">");				
-				for (var item=0; item<guf.usage.discov_issue.ref_doc.length; item++)
-				{
-					cdns.push("<div>");
-					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.ref_doc[item], item, 
-						GUFDonaCadenaLang({"cat": "Document de referencia", "spa": "Documento de referencia", "eng": "Reference document", "fre":"Document de référence"}, extra_param.lang), 
-						"ref_doc", extra_param, true);
-					cdns.push("</div>");
-				}
-				cdns.push("</div><!-- guf_ref_doc -->");
-			}
-			
-			if (guf.usage.discov_issue.exp_fix_date)
-				cdns.push("<div class=\"guf_exp_solution_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data prevista per la distribució d'una solució", "spa": "Fecha prevista para la distribución de una solución", 
-					"eng": "Expected date for a solution to be released", "fre": "Date prévue pour la publication d'une solution"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.exp_fix_date, "</div>");;
-			
-			if (guf.usage.discov_issue.fix_rsrc)
-			{					
-				cdns.push("<div class=\"guf_fix_rsrc user\">");				
-				for (var item=0; item<guf.usage.discov_issue.fix_rsrc.length; item++)
-				{
-					cdns.push("<div>");
-					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.fix_rsrc[item], item, 
-						GUFDonaCadenaLang({"cat": "Recurs arreglat", "spa": "Recurso arreglado", "eng": "Fixed resource", "fre": "Ressource fixe"}, extra_param.lang), 
-						"fix_rsrc", extra_param, false);
-					cdns.push("</div>");
-				}
-				cdns.push("</div><!-- guf_fix_rsrc -->");
-			}			
-			cdns.push("</div><!-- guf_discovered_issue -->");
-			
-			if (guf.usage.discov_issue.alt_rsrc)
-			{					
-				cdns.push("<div class=\"guf_alt_rsrc user\">");				
-				for (var item=0; item<guf.usage.discov_issue.alt_rsrc.length; item++)
-				{
-					cdns.push("<div>");
-					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.alt_rsrc[item], item, 
-						GUFDonaCadenaLang({"cat": "Recurs alternatiu", "spa": "Recurso alternativo", "eng": "Alternative resource", "fre": "Ressource alternative"}, extra_param.lang), 
-						"alt_rsrc", extra_param, false);
-					cdns.push("</div>");
-				}
-				cdns.push("</div><!-- guf_alt_rsrc -->");
-			}			
-			cdns.push("</div><!-- guf_discovered_issue -->");
-		}	
-		cdns.push("</div><!-- guf_usage user -->");
-	}
+		cdns.push("<div id='rating_table'>");
+		generateRatingTable(cdns, guf.rating, 'rating', '', '');
+		cdns.push("</div>");
 
-	if (guf.public)
-	{			
-		cdns.push("<div class=\"guf_public user\"><hr class=\"guf_solid user\">");
-		for (var i_publi=0; i_publi<guf.public.length; i_publi++)
-		{
-			cdns.push("<div>");
-			ConstrueixCadenaDesdeCitationOPublication(cdns, guf.public[i_publi], i_publi, null, "pub", extra_param, true);		
-			cdns.push("</div>");
-		}
-		cdns.push("</div><!-- guf_public -->");
-	}
+		printFBpurpose(cdns, guf, extra_param);
+		printFBcontact(cdns, guf, extra_param);
+		printFBdateInfo(cdns, guf, extra_param);
+		printFBcomment(cdns, guf, extra_param);
+		printFBpublic(cdns, guf, extra_param);
+		printFBtarget (cdns, guf, extra_param);
+
+		cdns.push('</div>');
 	
-	if (guf.target)
-	{			
-		cdns.push("<div class=\"guf_target user\"><hr class=\"guf_solid user\">");	
-		for (var i_target=0; i_target<guf.target.length; i_target++)
-		{	
-			cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Recurs valorat", "spa":"Recurso valorado", "eng":"Target resource", "fre":"Ressource valorisée"}, extra_param.lang));
-			
-			if (guf.target[i_target].role)
-				cdns.push(" (", GUFDonaCadenaLang(GUF_TargetRoleCode[guf.target[i_target].role],extra_param.lang),"):</span> ");
-			else
-				cdns.push(":</span> ");
-			//cdns.push("<input type=\"checkbox\" id=\""+extra_param.div_id+"_"+i_target+"\" style=\"display:none;\">");
-
-			if (guf.target[i_target].title)
-				cdns.push(guf.target[i_target].title, "<br/>");
-			//cdns.push(" <div class=\"guf_folded user\">");
-			
-			if (guf.target[i_target].identifier)
-			{
-	  			for (var i_id=0; i_id<guf.target[i_target].identifier.length; i_id++)
-	  				cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.target[i_target].identifier[i_id], extra_param.lang, false));
-			}
-			if (guf.target[i_target].scope) //comprovem que a l'xml hi ha la secció scope
-			{
-				if (guf.target[i_target].minlong) //comprovem que hi ha dades de coordenades. No cal comprovar que hi siguin totes.
-					cdns.push("<span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Envolupant", "spa":"Envolvente", "eng":"Bounding box", "fre":"Extension géographique"}, extra_param.lang),":</span>"," ",guf.target[i_target].minlong,", ",guf.target[i_target].maxlong,", ",guf.target[i_target].minlat,", ",guf.target[i_target].maxlat,"<br>");
-				if (guf.target[i_target].gmlpol) //comprovem si tenim un poligon gml
-					cdns.push("<span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Polígon GML", "spa":"Polígono GML", "eng":"GML polygon", "fre":"GML polygone"}, extra_param.lang),":</span>"," ", GUFDonaCadenaLang({"cat":"definit", "spa":"definido", "eng":"defined", "fre":"défini"}, extra_param.lang),"<br>");
-			}
-			//cdns.push("</div><label for=\""+extra_param.div_id+"_"+i_target+"\"><i>Click to show/hide more information</i></label></input>");
-			//cdns.push("<br/>");
-		}
-		cdns.push("</div><!-- guf_target -->");
 	}
+	else // a partir d'aquí es pinten els elements que es demanen feedbacks
+	{
+		cdns.push('<br><div class="guf_rating user" style="display: flex; justify-content: space-between;">');
+	
+		// Compartiment de l'esquerra per al text
+		cdns.push('<div style="flex: 3; text-align: justify;">' + guf.abstract + '</div>');
+
+		// Compartiment de la dreta per a la taula de valoracions
+		cdns.push('<div style="flex: 2; text-align: right;">');
+		generateRatingTable(cdns, guf.rating, 'rating', '', 'margin-left: auto;');
+		cdns.push('<p><a href="#" id="fb_moreInfoLink'+extra_param.div_id+'">+ info</a></p>');
+		cdns.push('</div>');
+
+		cdns.push("</div>");
+		
+		// Display toggle for additional information
+		cdns.push('<div id="fb_moreInfo'+extra_param.div_id+'" style=\"display:none;\">');
+				
+		// Additional information section
+		printFBpurpose(cdns, guf, extra_param);
+		printFBcontact(cdns, guf, extra_param);
+		printFBdateInfo(cdns, guf, extra_param);
+		printFBcomment(cdns, guf, extra_param);
+		printFBusage(cdns, guf, extra_param);
+		printFBpublic(cdns, guf, extra_param);
+		printFBtarget (cdns, guf, extra_param);
+			
+		cdns.push('</div>');
+				}
+
+
 	document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
+
+	// Toggle display of additional information
+	document.getElementById("fb_moreInfoLink"+extra_param.div_id).addEventListener("click", function(event) {
+		event.preventDefault();
+		var summary = document.getElementById("fb_moreInfo"+extra_param.div_id);
+		var moreInfoLink = document.getElementById("fb_moreInfoLink"+extra_param.div_id);
+		if (summary.style.display === "none") {
+			summary.style.display = "block";
+			moreInfoLink.innerHTML = "- info";
+		} else {
+			summary.style.display = "none";
+			moreInfoLink.innerHTML = "+ info";
+		}
+	});
 }
 
 var GUFFeedbackWindow=null;
@@ -984,7 +997,14 @@ function GUFDonaNomFitxerAddFeedbackMutipleTargets(targets, lang, access_token_t
 	var n_targets=0;
 
 	for (var i=0; i<targets.length; i++)	
-	{		
+	{	
+		if (targets[i].title)
+			targets[i].title = DonaCadenaPerValorDeFormulari(targets[i].title);
+		if (targets[i].code)
+			targets[i].code = DonaCadenaPerValorDeFormulari(targets[i].code);
+		if (targets[i].codespace)
+			targets[i].codespace = DonaCadenaPerValorDeFormulari(targets[i].codespace);
+		
 		if (targets[i].title && targets[i].title!="" && targets[i].code && targets[i].code!="" && targets[i].codespace && targets[i].codespace!="")
 		{	//aquest target és vàlid
 			//OG: aquí afegim el bbox i el gml pol a la query que rebrà el nimmbus
@@ -1117,7 +1137,22 @@ var n_targets_secundaris=0;
 	else
 		cdns.push("</div><br>");
 
-	cdns.push("<div class=\"guf_report user\"><fieldset class=\"guf_fieldset user\"><legend class=\"guf_legend user\">"); 
+	// div for feedback summary
+	cdns.push("<div id=\"feedback_summary_div\" class=\"guf_summary user\" style=\"display:block;\"><fieldset class=\"guf_fieldset user\"><legend class=\"guf_legend user\">"); 
+	if (rsc_type != "")
+		cdns.push(GUFDonaCadenaLang({"cat":"Resum de les valoracions prèvies sobre", "spa":"Resumen de las valoraciones previas sobre", "eng":"Summary of previous user feedback on", "fre":"Résumé des précédent rétroaction de l'utilisateur de"}, lang));
+	else
+		cdns.push(GUFDonaCadenaLang({"cat":"Resum de les valoracions prèvies", "spa":"Resumen de las valoraciones previas", "eng":"Summary of previous user feedback", "fre":"Résumé des précédent rétroaction de l'utilisateur"}, lang));
+	cdns.push(" ", rsc_type, "</legend>");
+	
+	cdns.push("<div id=\"",div_id,"Summary\" style=\"width:98%\">", "</div></fieldset>");
+	cdns.push("</div>");
+
+	// Display toggle for previous feedbacks
+	cdns.push('<p style="text-align: left;"><a href="#" id="showPrevFB" style=\"display:none;\">'+ GUFDonaCadenaLang({"cat":"Mostra valoracions prèvies", "spa":"Muestra valoraciones previas", "eng":"Show previous user feedback", "fre":"Afficher les commentaires précédents des utilisateurs"}, lang)+'</a></p>');
+	//cdns.push('<p style="text-align: left;"><a href="#" id="showPrevFB" style=\"display:none;\"></a></p>');
+
+	cdns.push("<div id=\"preFB\" class=\"guf_report user\" style=\"display:none;\"><fieldset class=\"guf_fieldset user\"><legend class=\"guf_legend user\">"); 
 	if (rsc_type != "")
 		cdns.push(GUFDonaCadenaLang({"cat":"Valoracions prèvies a", "spa":"Valoraciones previas a", "eng":"Previous user feedback to", "fre":"Précédent rétroaction de l'utilisateur de"}, lang));
 	else
@@ -1141,7 +1176,7 @@ var n_targets_secundaris=0;
 		cdns.push("<div id=\"",div_id,"Previ_secundari\" style=\"width:98%\">", "</div></fieldset>");
 	}
 	cdns.push("</div>", "</div></form>");
-	
+
 	return cdns.join("");
 }
 
@@ -1151,5 +1186,294 @@ function EnviaReprodUsageComAPostMessage(event)
 	{
 		GUFFeedbackWindow.postMessage(ReprodUsageForPostMessage, ClientGUF);
 		ReprodUsageForPostMessage="";
+	}
+}
+
+
+function generateRatingTable(cdns, rating, idPrefix, titleCell, tableStyle) {
+    cdns.push('<table border="0" cellspacing="5" style="' + tableStyle + '">');
+    cdns.push('<tr>');
+
+    if (titleCell) {
+        cdns.push('<td id="title_' + idPrefix + '">' + titleCell + '</td>');
+    }
+
+    for (var i = 1; i <= 5; i++) {
+        if (rating >= i)
+            cdns.push('<td id="' + idPrefix + i + '" width="15" height="15" bgcolor="#FFC107"></td>');
+        else
+            cdns.push('<td id="' + idPrefix + i + '" width="15" height="15" bgcolor="#eeeeee"></td>');
+    }
+
+    if (!rating)
+        cdns.push('<td id="numeric_' + idPrefix + '">--/5</td>');
+    else
+        cdns.push('<td id="numeric_' + idPrefix + '">' + rating + '/5</td>');
+
+    cdns.push('</tr>');
+    cdns.push('</table>');
+}
+
+function printFBpurpose(cdns, guf, extra_param)
+{
+	if (guf.purpose)
+		cdns.push("<div class=\"guf_purpose user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Propòsit", "spa":"Propósito", "eng":"Purpose", "fre":"Raison"}, extra_param.lang), ":</span> ", guf.purpose, "</div>");
+}
+
+function printFBcontact(cdns, guf, extra_param)
+{
+	if (guf.contactRole && GUF_UserRoleCode[guf.contactRole])
+		cdns.push("<div class=\"guf_contact_role user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Rol de l'usuari", "spa":"Rol del usuario", "eng":"User role", "fre":"Rôle de user"}, extra_param.lang), ":</span> ", GUFDonaCadenaLang(GUF_UserRoleCode[guf.contactRole], extra_param.lang), "</div>");
+}
+
+function printFBdateInfo(cdns, guf, extra_param)
+{
+	if (guf.dateInfo)
+	{
+		for (var i_date=0; i_date<guf.dateInfo.length; i_date++)
+		{
+			if (guf.dateInfo[i_date].dateType)
+				cdns.push("<div class=\"guf_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+" ("+GUFDonaCadenaLang(CI_DateTypeCode[guf.dateInfo[i_date].dateType],extra_param.lang)+"):</span> "+guf.dateInfo[i_date].date+"</div>");
+			else
+				cdns.push("<div class=\"guf_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Data", "spa":"Fecha", "eng":"Date", "fre":"Date"},extra_param.lang)+":</span> "+guf.dateInfo[i_date].date+"</div>");
+		}
+	}	
+}		
+
+function printFBcomment(cdns, guf, extra_param)
+{
+	if (guf.user_comment && guf.user_comment.comment)
+	{ 
+		cdns.push("<div class=\"guf_comment user\"><hr class=\"guf_solid user\">");
+		cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Comentari", "spa":"Comentario", "eng":"Comment", "fre":"Commentaire"}, extra_param.lang), ":</span> ", guf.user_comment.comment, "<br/>");
+		if (guf.user_comment.motivation && GUF_MotivationCode[guf.user_comment.motivation])
+			cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Motivació del comentari", "spa":"Motivación del comentario", "eng":"Comment motivation", "fre":"Motivation du commentaire"}, extra_param.lang), ":</span> ", GUFDonaCadenaLang(GUF_MotivationCode[guf.user_comment.motivation], extra_param.lang));			
+		cdns.push("</div><!-- guf_comment -->");
+	}
+}
+
+function printFBusage(cdns, guf, extra_param)
+{
+	if (guf.usage)
+	{
+		cdns.push("<div class=\"guf_usage user\"><hr class=\"guf_solid user\">");
+		if (guf.usage.reportAspect && guf.usage.reportAspect.length>0)
+		{
+			var s="";
+			for (var item=0; item<guf.usage.reportAspect.length; item++)
+			{
+				if (item!=0)
+					s+=", ";
+				s+=GUFDonaCadenaLang(GUF_ReportAspectCode[guf.usage.reportAspect[item]], extra_param.lang);
+			}
+			cdns.push("<div class=\"guf_aspect_reported user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Aspecte reportat", "spa": "Aspecto reportado", "eng": "Aspect reported", "fre":"Aspect rapporté"}, extra_param.lang), ":</span> ", s, "</div>");
+		}
+		
+		if (guf.usage.usage_descr)
+		{
+			cdns.push("<div class=\"guf_usage_description user\"><hr class=\"guf_dashed user\">");			
+			if (guf.usage.usage_descr.specific_usage)
+				cdns.push("<div class=\"guf_spec_usage_description user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Descripció de l'ús específic", "spa": "Descripción del uso específico", "eng": "Specific usage description", "fre":"Description d'utilisation spécifique"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.specific_usage, "</div>");				
+				
+			if (guf.usage.usage_descr.usage_dt)
+			{
+				var s=DonaCadenaDataHoraDesDeElementCompost(guf.usage.usage_descr.usage_dt);
+				if (s!="")
+					cdns.push("<div class=\"guf_usage_dt user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data i  hora de l'ús", "spa": "Fecha y hora del uso", "eng": "Usage date and time", "fre": "Date et heure d'utilisation"}, extra_param.lang), ":</span> ", s, "</div>");
+			}
+			
+			if (guf.usage.usage_descr.user_det_lim)
+				cdns.push("<div class=\"guf_user_deter_limits user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Limitacions determinades per l'usuari", "spa": "Limitaciones determinadas por el usuario", "eng": "User determined limitations", "fre":"Limites déterminées par l'utilisateur"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.user_det_lim, "</div>");				
+				
+			if (guf.usage.usage_descr.response)
+				cdns.push("<div class=\"guf_response user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Resposta", "spa": "Respuesta", "eng": "Response", "fre":"Réponse"}, extra_param.lang), ":</span> ", guf.usage.usage_descr.response, "</div>");				
+				
+			if (guf.usage.usage_descr.add_doc)
+			{
+				cdns.push("<div class=\"guf_add_doc user\">");
+				for (var item=0; item<guf.usage.usage_descr.add_doc.length; item++)
+				{
+					cdns.push("<div>");
+					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.usage_descr.add_doc[item], item, 
+						GUFDonaCadenaLang({"cat": "Documentació addicional", "spa": "Documentación adicional", "eng": "Additional documentation", "fre":"Documentation complémentaire"}, extra_param.lang), 
+						"add_doc", extra_param, false);
+					cdns.push("</div>");
+				}
+				cdns.push("</div><!-- guf_add_doc -->");
+			}
+
+			if (GUFHiHaReprodUsage(guf.usage.usage_descr))
+			{
+				cdns.push("<div class=\"guf_reprodUsage user\">");
+				cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Ús reproduïble", "spa":"Uso reproducible", "eng":"Reproducible usage", "fre":"Utilisation reproductible"}, extra_param.lang), ":</span>");								
+				if (guf.usage.usage_descr.code)
+					cdns.push("<br><span class=\"guf_key_2 user\" style=\"display:inline-block; word-wrap:break-word; word-break:break-word; white-space:normal;\">", GUFDonaCadenaLang({"cat":"Codi (text)", "spa":"Código (texto)", "eng":"Code (text)", "fre":"Code (texte)"}, extra_param.lang), "</span>: <span style=\"display:inline-block; word-wrap:break-word; word-break:break-word; white-space:normal;\">", guf.usage.usage_descr.code, "</span>");
+				if (guf.usage.usage_descr.codeLink.linkage)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Codi (adreça URL)", "spa":"Código (dirección URL)", "eng": "Code (URL link)", "fre":"Code (URL)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.codeLink.linkage);												
+				if (guf.usage.usage_descr.codeMediaType && guf.usage.usage_descr.codeMediaType.length>0)
+				{
+					var s="";				
+					if (guf.usage.usage_descr.codeMediaType=="application/json")
+						s="JSON ("+guf.usage.usage_descr.codeMediaType+")";
+					else if (guf.usage.usage_descr.codeMediaType=="text/x-python")
+						s="Phyton ("+guf.usage.usage_descr.codeMediaType+")";
+					else if (guf.usage.usage_descr.codeMediaType=="text/x-r-source")
+						s="R ("+guf.usage.usage_descr.codeMediaType+")";
+					else if (guf.usage.usage_descr.codeMediaType=="application/vnd.docker")
+						s=GUFDonaCadenaLang({"cat":"Contenidor docker", "spa":"Contenedor docker", "eng":"Docker container", "fre":"Conteneur Docker"}, extra_param.lang)+" ("+guf.usage.usage_descr.codeMediaType+")";
+					else
+						s=guf.usage.usage_descr.codeMediaType;
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Format del codi", "spa":"Formato del código", "eng": "Code format", "fre":"Format de code"}, extra_param.lang), "</span>: ", s);								
+				}	
+				if (guf.usage.usage_descr.platform)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Plataforma", "spa":"Plataforma", "eng":"Platform", "fre":"Plateforme"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.platform);							
+				if (guf.usage.usage_descr.version)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Versió", "spa":"Versión", "eng": "Version", "fre":"Version"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.version);								
+				if (guf.usage.usage_descr.schema)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Esquema", "spa":"Esquema", "eng": "Schema", "fre":"Schème"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.schema);
+				if (guf.usage.usage_descr.suggestedApplication)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Aplicació suggerida", "spa":"Aplicación sugerida", "eng":"Suggested application", "fre":"Application suggérée"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.suggestedApplication);							
+				if (guf.usage.usage_descr.diagram)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Diagrama (text)", "spa":"Diagrama (texto)", "eng": "Diagram (text)", "fre":"Diagramme (texte)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.diagram);			
+				if (guf.usage.usage_descr.diagramLink.linkage)
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Diagrama (adreça URL)", "spa":"Diagrama (dirección URL)", "eng": "Diagram (URL link)", "fre":"Diagramme (URL)"}, extra_param.lang), "</span>: ", guf.usage.usage_descr.diagramLink.linkage);			
+				if (guf.usage.usage_descr.diagramMediaType && guf.usage.usage_descr.diagramMediaType.length>0)
+				{
+					var s="";					
+					if (guf.usage.usage_descr.diagramMediaType=="image/jpeg")
+						s="JPEG ("+guf.usage.usage_descr.diagramMediaType+")";
+					else if (guf.usage.usage_descr.diagramMediaType=="image/png")
+						s="PNG ("+guf.usage.usage_descr.diagramMediaType+")";
+					else if (guf.usage.usage_descr.diagramMediaType=="text/x-python")
+						s="Phyton ("+guf.usage.usage_descr.diagramMediaType+")";
+					else if (guf.usage.usage_descr.diagramMediaType=="text/x-yuml")
+						s="YUML ("+guf.usage.usage_descr.diagramMediaType+")";
+					else if (guf.usage.usage_descr.diagramMediaType=="application/xmi+xml")
+						s="XMI ("+guf.usage.usage_descr.diagramMediaType+")";
+					else
+						s=guf.usage.usage_descr.diagramMediaType;
+					cdns.push("<br><span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Format del diagrama", "spa":"Formato del diagrama", "eng": "Diagram format", "fre":"Format de diagramme"}, extra_param.lang), "</span>: ", s);
+				}
+				cdns.push("</div><!-- guf_reprodUsage -->");
+			}						
+			cdns.push("</div><!-- guf_usage_description -->");						
+		}	
+		if (guf.usage.discov_issue)
+		{			
+			cdns.push("<div class=\"guf_discovered_issue user\"><hr class=\"guf_dashed user\">");
+			
+			if (guf.usage.discov_issue.known_problem)
+				cdns.push("<div class=\"guf_known_problem user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Problema conegut", "spa": "Problema conocido", "eng": "Known problem", "fre": "Problème connu"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.known_problem, "</div>");
+			
+			if (guf.usage.discov_issue.problem_dt)
+			{
+				var s=DonaCadenaDataHoraDesDeElementCompost(guf.usage.discov_issue.problem_dt);
+				if (s!="")
+					cdns.push("<div class=\"guf_known_problem_dt user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data i hora del problema conegut", "spa": "Fecha y hora del problema conocido", "eng": "Known problem date and time", "fre": "Problème connu date et heure"}, extra_param.lang), ":</span> ", s, "</div>");
+			}	
+			
+			if (guf.usage.discov_issue.work_around)
+				cdns.push("<div class=\"guf_work_around user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Solució", "spa": "Solución", "eng": "Work around", "fre":"Solution"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.work_around, "</div>");		
+				
+			if (guf.usage.discov_issue.ref_doc)
+			{	
+				cdns.push("<div class=\"guf_ref_doc user\">");				
+				for (var item=0; item<guf.usage.discov_issue.ref_doc.length; item++)
+				{
+					cdns.push("<div>");
+					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.ref_doc[item], item, 
+						GUFDonaCadenaLang({"cat": "Document de referencia", "spa": "Documento de referencia", "eng": "Reference document", "fre":"Document de référence"}, extra_param.lang), 
+						"ref_doc", extra_param, true);
+					cdns.push("</div>");
+				}
+				cdns.push("</div><!-- guf_ref_doc -->");
+			}
+			
+			if (guf.usage.discov_issue.exp_fix_date)
+				cdns.push("<div class=\"guf_exp_solution_date user\"><span class=\"guf_key user\">", GUFDonaCadenaLang({"cat": "Data prevista per la distribució d'una solució", "spa": "Fecha prevista para la distribución de una solución", 
+					"eng": "Expected date for a solution to be released", "fre": "Date prévue pour la publication d'une solution"}, extra_param.lang), ":</span> ", guf.usage.discov_issue.exp_fix_date, "</div>");;
+			
+			if (guf.usage.discov_issue.fix_rsrc)
+			{					
+				cdns.push("<div class=\"guf_fix_rsrc user\">");				
+				for (var item=0; item<guf.usage.discov_issue.fix_rsrc.length; item++)
+				{
+					cdns.push("<div>");
+					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.fix_rsrc[item], item, 
+						GUFDonaCadenaLang({"cat": "Recurs arreglat", "spa": "Recurso arreglado", "eng": "Fixed resource", "fre": "Ressource fixe"}, extra_param.lang), 
+						"fix_rsrc", extra_param, false);
+					cdns.push("</div>");
+				}
+				cdns.push("</div><!-- guf_fix_rsrc -->");
+			}			
+			cdns.push("</div><!-- guf_discovered_issue -->");
+			
+			if (guf.usage.discov_issue.alt_rsrc)
+			{					
+				cdns.push("<div class=\"guf_alt_rsrc user\">");				
+				for (var item=0; item<guf.usage.discov_issue.alt_rsrc.length; item++)
+				{
+					cdns.push("<div>");
+					ConstrueixCadenaDesdeCitationOPublication(cdns, guf.usage.discov_issue.alt_rsrc[item], item, 
+						GUFDonaCadenaLang({"cat": "Recurs alternatiu", "spa": "Recurso alternativo", "eng": "Alternative resource", "fre": "Ressource alternative"}, extra_param.lang), 
+						"alt_rsrc", extra_param, false);
+					cdns.push("</div>");
+				}
+				cdns.push("</div><!-- guf_alt_rsrc -->");
+			}			
+			cdns.push("</div><!-- guf_discovered_issue -->");
+		}	
+		cdns.push("</div><!-- guf_usage user -->");
+	}
+}
+
+function printFBpublic(cdns, guf, extra_param)
+{
+	if (guf.public)
+	{			
+		cdns.push("<div class=\"guf_public user\"><hr class=\"guf_solid user\">");
+		for (var i_publi=0; i_publi<guf.public.length; i_publi++)
+		{
+			cdns.push("<div>");
+			ConstrueixCadenaDesdeCitationOPublication(cdns, guf.public[i_publi], i_publi, null, "pub", extra_param, true);		
+			cdns.push("</div>");
+}
+		cdns.push("</div><!-- guf_public -->");
+	}
+}	
+
+function printFBtarget (cdns, guf, extra_param)
+{
+	if (guf.target)
+	{			
+		cdns.push("<div class=\"guf_target user\"><hr class=\"guf_solid user\">");	
+		for (var i_target=0; i_target<guf.target.length; i_target++)
+		{	
+			cdns.push("<span class=\"guf_key user\">", GUFDonaCadenaLang({"cat":"Recurs valorat", "spa":"Recurso valorado", "eng":"Target resource", "fre":"Ressource valorisée"}, extra_param.lang));
+			
+			if (guf.target[i_target].role)
+				cdns.push(" (", GUFDonaCadenaLang(GUF_TargetRoleCode[guf.target[i_target].role],extra_param.lang),"):</span> ");
+			else
+				cdns.push(":</span> ");
+			//cdns.push("<input type=\"checkbox\" id=\""+extra_param.div_id+"_"+i_target+"\" style=\"display:none;\">");
+			if (guf.target[i_target].title)
+				cdns.push(guf.target[i_target].title, "<br/>");
+			//cdns.push(" <div class=\"guf_folded user\">");
+			if (guf.target[i_target].identifier)
+			{
+				for (var i_id=0; i_id<guf.target[i_target].identifier.length; i_id++)
+					cdns.push(ConstrueixURLDesdeIdentifierSiDOIoNiMMbus(guf.target[i_target].identifier[i_id], extra_param.lang, false));
+			}
+			if (guf.target[i_target].scope) //comprovem que a l'xml hi ha la secció scope
+			{
+				if (guf.target[i_target].minlong) //comprovem que hi ha dades de coordenades. No cal comprovar que hi siguin totes.
+					cdns.push("<span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Envolupant", "spa":"Envolvente", "eng":"Bounding box", "fre":"Extension géographique"}, extra_param.lang),":</span>"," ",guf.target[i_target].minlong,", ",guf.target[i_target].maxlong,", ",guf.target[i_target].minlat,", ",guf.target[i_target].maxlat,"<br>");
+				if (guf.target[i_target].gmlpol) //comprovem si tenim un poligon gml
+					cdns.push("<span class=\"guf_key_2 user\">", GUFDonaCadenaLang({"cat":"Polígon GML", "spa":"Polígono GML", "eng":"GML polygon", "fre":"GML polygone"}, extra_param.lang),":</span>"," ", GUFDonaCadenaLang({"cat":"definit", "spa":"definido", "eng":"defined", "fre":"défini"}, extra_param.lang),"<br>");
+			}
+			//cdns.push("</div><label for=\""+extra_param.div_id+"_"+i_target+"\"><i>Click to show/hide more information</i></label></input>");
+			//cdns.push("<br/>");
+		}
+		cdns.push("</div><!-- guf_target -->");
 	}
 }
