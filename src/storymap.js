@@ -289,8 +289,8 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			{
 				const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
 				novaStoryMapFinestra.replaceChildren();
-				const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
-								"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
+				const beginingStoryMapContent = ["<br><br><label style='margin:0 5px' for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
+								"<label style='margin: 0 5px;'>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
 								"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
 								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this)'/><br><br>",												
 								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),"; padding: 0 10px;' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/>"];
@@ -341,8 +341,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 
 		dialegRedaccioCurs.show();	
 	}
-	
-
+		
 	function comprovaTitol(event)
 	{	
 		const finestra = event.target.parentNode;
@@ -388,6 +387,7 @@ function CarregaImatgeStoryMap(input)
 			CarregaImatgeMiniaturaStoryMap(fitxerObjectiu);
 		}
 	}
+	input.value = null;
 }
 
 /**
