@@ -3467,35 +3467,35 @@ var MessageLang=
       "ger": "handbuch"
     },
     "NotPossibleInsertNewContent": {
-      "cat": "No es possible d'inserir aquest contingut aquí. \nMotiu",
-      "spa": "No es posible de instertar este contenido aqui. \nMotivo",
-      "eng": "It isn't possible to insert this content here. \nReason",
-      "fre": "Il n'est pas possible d'insérer ce contenu ici. \nMotif",
-      "cze": "Tento obsah sem není možné vložit. \nOdůvodnění",
-      "ger": "Es ist nicht möglich, diesen Inhalt hier einzufügen. \nBegründung"
+      "cat": "No és possible inserir aquest contingut aquí.\nMotiu",
+      "spa": "No es posible insertar este contenido aqui.\nMotivo",
+      "eng": "This content cannot be inserted here.\nReason",
+      "fre": "Ce contenu ne peut pas être inséré ici.\nRaison",
+      "cze": "Tento obsah sem nelze vložit.\nDůvod",
+      "ger": "Dieser Inhalt kann hier nicht eingefügt werden.\nGrund"
     },
     "NextStoryMapContent": {
       "cat": "Continua la redacció del relat aquí",
-      "spa": "Continua la redacción del relato aquí",
-      "eng": "Continue the story map writing here",
-      "fre": "Continuer l'écriture de la carte d'histoire ici",
-      "cze": "Pokračujte v psaní příběhu",
-      "ger": "Weiter die Geschichte Karte schreiben hier"
+      "spa": "Continúa la redacción del relato aquí",
+      "eng": "Continue writing the story here"
+      "fre": "Continuez à écrire l'histoire ici",
+      "cze": "Pokračujte v psaní příběhu zde",
+      "ger": "Schreiben Sie die Geschichte hier weiter"      
     },
     "UnicStroymapWriting": {
-      "cat": "Es permet editar tant sols un relat a vegada",
-      "spa": "Se permite editar sólo un reato a la vez",
-      "eng": "It is allowed editing only one storymap at a time",
-      "fre": "Il est permis d'éditer seulement un storymap à la fois",
-      "cze": "Je povoleno editovat pouze jednu mapu příběhu najednou",
-      "ger": "Es ist erlaubt, nur eine Storymap zu einer Zeit zu bearbeiten"
+      "cat": "Només es pot editar un relat alhora",
+      "spa": "Sólo se puede editar una historia a la vez",
+      "eng": "Only one story can be edited at a time",
+      "fre": "Une seule histoire peut être éditée à la fois",
+      "cze": "Najednou lze upravit pouze jeden příběh",
+      "ger": "Es kann jeweils nur eine Story bearbeitet werden"
     },
     "EditStorymap": {
       "cat": "Editar relat amb mapes",
       "spa": "Editar relato con mapas",
       "eng": "Edit storymaps",
-      "fre": "Modifier carte de l'histoire",
-      "cze": "Upravit mapu příběhu",
+      "fre": "Modifier d'histoire avec des cartes",
+      "cze": "Upravte mapy příběhů",
       "ger": "Storymap bearbeiten"
     },
     "RemoveImage": {
@@ -3517,16 +3517,16 @@ var MessageLang=
     "NotAdmittedOnImage": {
       "cat": "No s'admet adjuntar una imatge sobre una altra imatge",
       "spa": "No se admite adjuntar una imagen sobre otra imagen",
-      "eng": "Not admitted to attach an image into over other image",
-      "fre": "Non admis en fixant une image sur une autre image",
+      "eng": "Attaching an image on top of another image is not allowed",
+      "fre": "Ajouter une image par-dessus une autre image n'est pas autorisé",
       "cze": "Nepřijímá se připevňování obrázku nad jiný obrázek",
       "ger": "Nicht zugegeben, ein Bild über andere Bilder zu befestigen"
     },
     "NotAdmittedMapActionsNested": {
-      "cat": "No s'admeten accions de mapa anidades",
-      "spa": "No se admiten acciones de mapa anidas ",
-      "eng": "Not admitted to nested map actions",
-      "fre": "Non admis aux actions de carte imbriquées",
+      "cat": "No s'admeten accions de mapa aniuades",
+      "spa": "No se admiten acciones de mapa anidas",
+      "eng": "Nested map actions are not supported",
+      "fre": "Les actions de carte imbriquées ne sont pas prises en charge",
       "cze": "Nepřipouští vnořené akce mapy",
       "ger": "Nicht zugelassen für verschachtelte Kartenaktionen"
     }
