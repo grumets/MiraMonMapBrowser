@@ -3477,7 +3477,7 @@ var MessageLang=
     "NextStoryMapContent": {
       "cat": "Continua la redacció del relat aquí",
       "spa": "Continúa la redacción del relato aquí",
-      "eng": "Continue writing the story here"
+      "eng": "Continue writing the story here",
       "fre": "Continuez à écrire l'histoire ici",
       "cze": "Pokračujte v psaní příběhu zde",
       "ger": "Schreiben Sie die Geschichte hier weiter"      

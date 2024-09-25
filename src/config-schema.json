@@ -482,6 +482,10 @@
 			"description": "Les capes que formen part d'un grup canvien el botó de selecció (check) per un botó alternatiu (radial)", 
 			"type": "boolean"
 		},
+		"LlegendaLligaVisibleAmbConsultable": {
+			"description": "Si una capa no està visible tampoc no serà consultable", 
+			"type": "boolean"
+		},
 		"LlegendaLligaVisibleAmbCtipica": {
 			"description": "Les capes que són consultades amb l'eina de consulta típica es fan visibles i consultables", 
 			"type": "boolean"

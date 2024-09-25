@@ -385,7 +385,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 						continue;
 					if (capa.visible!="no")
 						alguna.visible=1;
-					if (capa.consultable!="no")
+					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true && capa.consultable!="no")
 						alguna.consultable=1;
 					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && capa.descarregable!="no")
 						alguna.descarregable=1;
@@ -411,7 +411,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 
 function DonaCadenaHTMLEstilItemLlegenda(i_capa, aspecte, flag)
 {
-var cdns=[], cal_retorn=false;
+var cdns=[], cal_retorn=false, n_col_carac;
 
 	var capa=ParamCtrl.capa[i_capa];
 	var estil=capa.estil[capa.i_estil];
@@ -480,7 +480,7 @@ var cdns=[], cal_retorn=false;
 
 function DonaCadenaHTMLCapaLlegenda(alguna, i_capa, aspecte, flag)
 {
-var cdns=[], capa=ParamCtrl.capa[i_capa];
+var cdns=[], capa=ParamCtrl.capa[i_capa], n_col_carac;
 
 	if (EsIndexCapaVolatil(i_capa, ParamCtrl))
 		return cdns.join("");
@@ -503,24 +503,25 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					continue;
 				}
-					
 				cdns.push("<tr><td colspan=");
-				if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)					
-					cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-				else
-					cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-				cdns.push(" valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
+				n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+				if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+					n_col_carac+=alguna.consultable;
+				if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+					n_col_carac+=alguna.descarregable;
+				cdns.push(n_col_carac," valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
 				break;
 			}
 		}
 		else
 		{
 			cdns.push("<tr><td colspan=");
-			if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-				cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-			else
-				cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-			cdns.push(" valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
+			n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+			if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+				n_col_carac+=alguna.consultable;
+			if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+				n_col_carac+=alguna.descarregable;
+			cdns.push(n_col_carac, " valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
 		}
 	}
 
@@ -600,35 +601,38 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				"</td>");
 		}
 		//Icones consultable:
-		if (capa.consultable=="no")
+		if (!ParamCtrl.LlegendaLligaVisibleAmbConsultable)
 		{
-			if (alguna.consultable)
+			if (capa.consultable=="no")
 			{
-				if (ParamCtrl.LlegendaIconesInactivesGrises)
+				if (alguna.consultable)
+				{
+					if (ParamCtrl.LlegendaIconesInactivesGrises)
+						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
+							DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
+							"</td>");
+					else
+						cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\">",
+							"</td>");
+				}
+			}
+			else if (EsCapaInactivaGrisALaLlegenda(capa))
+			{
+				if (capa.consultable=="ara_no")
 					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
 						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 						"</td>");
 				else
-					cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\">",
+					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
+						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
 						"</td>");
 			}
-		}
-		else if (EsCapaInactivaGrisALaLlegenda(capa))
-		{
-			if (capa.consultable=="ara_no")
-				cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-					DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
-					"</td>");
 			else
-				cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-					DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
+			{
+				cdns.push("<td valign=\"middle\">",
+					DonaCadenaImgCanviaEstatCapa(i_capa, "consultable"),
 					"</td>");
-		}
-		else
-		{
-			cdns.push("<td valign=\"middle\">",
-				DonaCadenaImgCanviaEstatCapa(i_capa, "consultable"),
-				"</td>");
+			}
 		}
 		//Icones descarregable:
 		if (!ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
@@ -664,7 +668,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			}
 		}
 	}
-	//Botó de GetCovergage:
+	// GetCoverage button
 	if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
 	{
 		cdns.push("<td valign=\"middle\">",
@@ -677,7 +681,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 			cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\"></td>");
 	}
 
-	//Botó de WPS
+	// WPS button
 	if(capa.proces==null)
 	{
 		if (alguna.WPS)
@@ -702,7 +706,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 	else
 		cdns.push("<td colspan=2 valign=\"middle\" nowrap>");
 
-	//Nom de capa
+	// Layer name
 	if (flag&LlegendaAmbControlDeCapes)
 	{
 		if (isLayer(window, "menuContextualCapa"))
@@ -731,11 +735,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					cdns.push("<tr><td valign=\"middle\" colspan=\"2\"></td>",
 					   "<td valign=\"middle\" colspan=");
-					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-					else
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-					cdns.push("><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
+					n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+						n_col_carac+=alguna.consultable;
+					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+						n_col_carac+=alguna.descarregable;
+					cdns.push(n_col_carac,"><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
 					   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
 					var i_data_sel=DonaIndexDataCapa(capa, null);
 					for (var i_data=0; i_data<capa.data.length; i_data++)
@@ -767,11 +772,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					cdns.push("<tr><td valign=\"middle\" colspan=\"2\"></td>",
 						"<td valign=\"middle\" colspan=");
-					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-					else
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-					cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
+					n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+						n_col_carac+=alguna.consultable;
+					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+						n_col_carac+=alguna.descarregable;					
+					cdns.push(n_col_carac, ">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
 						": <select class=\"text_petit\" name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
 						   i_capa, ",", i_dim, ", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 					for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
@@ -814,11 +820,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 				{
 					cdns.push("<td valign=\"middle\" colspan=\"2\"></td>",
 						  "<td valign=\"middle\" colspan=");
-					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-					else
-						cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-					cdns.push("><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+					n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+						n_col_carac+=alguna.consultable;
+					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+						n_col_carac+=alguna.descarregable;					
+					cdns.push(n_col_carac, "><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 					var salt_entre_columnes=Math.floor(capa.estil.length/ncol_estil)+((capa.estil.length%ncol_estil!=0) ? 1 : 0);
 					for (var j=0; j<salt_entre_columnes; j++)
 					{
@@ -858,11 +865,12 @@ var cdns=[], capa=ParamCtrl.capa[i_capa];
 
 		//Contingut d'un estil a la llegenda (selectors, desc del items, i items de la llegenda
 		cdns.push("<tr><td id=\"id-descrip-lleg-capa-", i_capa, "\" colspan=");
-		if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-			cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-		else
-			cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-		cdns.push(">");
+		n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+		if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+			n_col_carac+=alguna.consultable;
+		if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+			n_col_carac+=alguna.descarregable;							
+		cdns.push(n_col_carac, ">");
 
 		cdns.push(DonaCadenaHTMLEstilItemLlegenda(i_capa, aspecte, flag));
 
@@ -940,7 +948,7 @@ var LlegendaAmbCapesNoVisibles=0x02;
 
 function DonaCadenaHTMLLlegenda(aspecte, flag)
 {
-var salt_entre_columnes, cdns=[], capa, estil;
+var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 
 	var alguna=DeterminaAlgunaCapa(flag);
 
@@ -954,7 +962,7 @@ var salt_entre_columnes, cdns=[], capa, estil;
 		cdns.push("<td width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 7 : 9), "\" height=\"1\"></td>");
 	if (alguna.visible)
 		cdns.push("<td width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 10 : 19), "\" height=\"1\"></td>");
-	if (alguna.consultable)
+	if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true && alguna.consultable)
 		cdns.push("<td width=\"16\" height=\"1\"></td>");
 	if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && alguna.descarregable)
 		cdns.push("<td width=\"18\" height=\"1\"></td>");
@@ -989,22 +997,24 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					}
 						
 					cdns.push("<tr><td colspan=");
-					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)					
-						cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-					else
-						cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-					cdns.push(" valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
+					n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+						n_col_carac+=alguna.consultable;
+					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+						n_col_carac+=alguna.descarregable;
+					cdns.push(n_col_carac, " valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
 					break;
 				}
 			}
 			else
 	    	{
 			    cdns.push("<tr><td colspan=");
-				if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-					cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-				else
-					cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-				cdns.push(" valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
+				n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+				if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+					n_col_carac+=alguna.consultable;
+				if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+					n_col_carac+=alguna.descarregable;
+				cdns.push(n_col_carac," valign=\"middle\">",aspecte.PreviSepara , DonaCadena(capa.separa) , aspecte.PostSepara , "</td></tr>");
 	    	}
 	    }
 
@@ -1090,35 +1100,38 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					"</td>");
 			}
 			//Icones consultable:
-			if (capa.consultable=="no")
+			if (!ParamCtrl.LlegendaLligaVisibleAmbConsultable)
 			{
-				if (alguna.consultable)
+				if (capa.consultable=="no")
 				{
-					if (ParamCtrl.LlegendaIconesInactivesGrises)
+					if (alguna.consultable)
+					{
+						if (ParamCtrl.LlegendaIconesInactivesGrises)
+							cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
+								DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
+								"</td>");
+						else
+							cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\">",
+								"</td>");
+					}
+				}
+				else if (EsCapaInactivaGrisALaLlegenda(capa))
+				{
+					if (capa.consultable=="ara_no")
 						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
 							DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
 							"</td>");
 					else
-						cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\">",
+						cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
+							DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
 							"</td>");
 				}
-			}
-			else if (EsCapaInactivaGrisALaLlegenda(capa))
-			{
-				if (capa.consultable=="ara_no")
-					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "ara_no_consultableg", 14, null, null),
-						"</td>");
 				else
-					cdns.push("<td valign=\"middle\" style=\"font-size: 1px;\">",
-						DonaTextImgGifSvg("c_ll_capa"+i_capa, null, "consultableg", 14, null, null),
+				{
+					cdns.push("<td valign=\"middle\">",
+						DonaCadenaImgCanviaEstatCapa(i_capa, "consultable"),
 						"</td>");
-			}
-			else
-			{
-				cdns.push("<td valign=\"middle\">",
-					DonaCadenaImgCanviaEstatCapa(i_capa, "consultable"),
-					"</td>");
+				}
 			}
 			//Icones descarregable:
 			if (!ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
@@ -1221,11 +1234,12 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					{
 						cdns.push("<tr><td valign=\"middle\" colspan=\"2\"></td>",
 						   "<td valign=\"middle\" colspan=");
-						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-						else
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-						cdns.push("><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
+						n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+						if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+							n_col_carac+=alguna.consultable;
+						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+							n_col_carac+=alguna.descarregable;
+						cdns.push(n_col_carac, "><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
 						   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
 						var i_data_sel=DonaIndexDataCapa(capa, null);
 						for (var i_data=0; i_data<capa.data.length; i_data++)
@@ -1257,11 +1271,12 @@ var salt_entre_columnes, cdns=[], capa, estil;
 					{
 						cdns.push("<tr><td valign=\"middle\" colspan=\"2\"></td>",
 							"<td valign=\"middle\" colspan=");
-						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-						else
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-						cdns.push(">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
+						n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+						if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+							n_col_carac+=alguna.consultable;
+						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+							n_col_carac+=alguna.descarregable;
+						cdns.push(n_col_carac,">", aspecte.PreviDescItems, DonaCadenaNomDesc(dim.clau), 
 							": <select class=\"text_petit\" name=\"dim_capa_",i_capa,"_",i_dim,"\" onChange=\"CanviaValorDimensioExtraDeCapa(",
 							   i_capa, ",", i_dim, ", parseInt(document.form_llegenda.dim_capa_",i_capa,"_",i_dim,".value));\">\n");
 						for (var i_v_dim=0; i_v_dim<dim.valor.length; i_v_dim++)
@@ -1304,11 +1319,12 @@ var salt_entre_columnes, cdns=[], capa, estil;
 				    {
 						cdns.push("<td valign=\"middle\" colspan=\"2\"></td>",
 							  "<td valign=\"middle\" colspan=");
-						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-						else
-							cdns.push((alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-						cdns.push("><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+						n_col_carac=alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+						if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+							n_col_carac+=alguna.consultable;
+						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+							n_col_carac+=alguna.descarregable;						
+						cdns.push(n_col_carac, "><table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
 						var salt_entre_columnes=Math.floor(capa.estil.length/ncol_estil)+((capa.estil.length%ncol_estil!=0) ? 1 : 0);
 						for (var j=0; j<salt_entre_columnes; j++)
 						{
@@ -1348,11 +1364,12 @@ var salt_entre_columnes, cdns=[], capa, estil;
 
 			//Contingut d'un estil a la llegenda (selectors, desc del items, i items de la llegenda
 			cdns.push("<tr><td id=\"id-descrip-lleg-capa-", i_capa, "\" colspan=");
-			if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
-				cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.getcoverage+alguna.WPS));
-			else
-				cdns.push((2+alguna.desplegable+alguna.visible+alguna.consultable+alguna.descarregable+alguna.getcoverage+alguna.WPS));
-			cdns.push(">");
+			n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+			if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
+				n_col_carac+=alguna.consultable;
+			if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
+				n_col_carac+=alguna.descarregable;			
+			cdns.push(n_col_carac,">");
 
 			cdns.push(DonaCadenaHTMLEstilItemLlegenda(i_capa, aspecte, flag));
 
@@ -1437,7 +1454,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 					}
 					if (capa.model!=model_vector && capa2.transparencia=="semitransparent")
 					{
-						CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
+						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, "semitransparent");//Així forço que passi a no visible
 				       	if (ParamCtrl.LlegendaGrupsComARadials)
 						{
 							if (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.colors)
@@ -1456,7 +1473,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 				}
 			}
 		}
-		CanviaEstatVisibleISiCalDescarregableCapa(i,"si");
+		CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i,"si");
 		if (grup_consultable && capa.consultable=="ara_no")
 			CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i),i);
 		if (capa.model==model_vector)
@@ -1510,7 +1527,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 		  capa.model==model_vector)  //Els vectors no tenen semitranparència (de moment)
 	{	
 		//pas a no visible
-		CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
+		CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "ara_no");
 		if (capa.model==model_vector)
 		{
 			if((capa.objectes && capa.objectes.features) || HiHaObjectesNumericsAAquestNivellDeZoom(capa))
@@ -1554,7 +1571,7 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 	else
 	{
 		//pas a semitransparent
-		CanviaEstatVisibleISiCalDescarregableCapa(i,"semitransparent");
+		CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i,"semitransparent");
 		if (EsCapaVisibleAAquestNivellDeZoom(capa))
 		{
 			for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
