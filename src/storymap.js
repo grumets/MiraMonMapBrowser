@@ -45,28 +45,67 @@ const inputStoryTitolId = "inputTitolRelat";
 const inputThumbnailId = "inputThumbnail";
 const h1TitleStorymap = "titleStorymap";
 const imageThumbnailId = "imageThumbnail";
+const botoBorraThumbnailId = "borraThumbnail";
 // Límit de mida per imatges. Establerta en píxels.
 const midaImatgeMiniaturaMaximaPx = 150;
 const midaImatgeMaximaPx = 500;
 const numMaximPixelsStorymap = Math.pow(midaImatgeMaximaPx, 2);
-// Extensions imatges permeses.
 // Identificador input imatges internes del Storymap.
 const inputImageStorymapId = "imagePicker";
 // Identificadors diàlegs
-const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "dialegAlertaTitol";
+const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAlertaTitolId = "alertaTitol", dialegAlertaInsercioId = "alertaInsercioDialeg", dialegAlertaRedaccioEnCursId = "alertaRedaccioEnCurs";
 // Dialeg Mida Imatges identificadors
-const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit";
+const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit", textMidesImatgeId = "textMidesImatge";
 // Dialeg Característiques checkbox identificadors i noms
-const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates";
+const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates", formCheckboxesId = "formCheckboxes";
 const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
 var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
+// NOM per a les imatges que impliquen una acció de mapa.
 const nomPuntSincr = "sincrPoint";
+// IDENTIFICADOR per a les imatges que impliquen una acció de mapa.
+const idImgSvgAccioMapa = "id_storymap_mm_action_";
 // Tots els idiomes suportats pel navegador amb les seves correspondències amb els idiomes de Tiny Editor.
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
-
+let arrayIdsImgAccions = [];
+const identificadorDivAccioMapa = "AccioMapa_";
+var contadorAccionsMapa = 0;
+const indentificadorSelectorControls = "controls";
+const controlScroll = "scroll", controlManual = "manual";
+const divRelatId = "divRelat";
+const ancoraRelat = "ancoraRelat"; 
+const confirmNoInsercioId = "confirmNoInsercio";
+const paragrafContinuacioId = "pContinuacio";
+const missatgeAvisImatgeId = "missatgeAvisImatge";
+const min_width_finestra_storymap = "500px", min_height_finestra_storymap = "400px";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
+
+// Especificitat de la funció creaFinestraLayer per a l'Storymap.
+/*function createStorymapFinestraLayer(win, name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
+{
+	
+	createFinestraLayer(window, name, titol, botons, left, top, width, height, ancora, param, content);
+
+	let currentStyle;
+	const barraStorymap = getLayer(win, name+SufixBarra);
+	barraStorymap.style["minWidth"] = min_width_finestra_storymap + "px";
+
+	const finestraStorymap = getLayer(win, name+SufixFinestra);
+	finestraStorymap.style["minHeight"] = min_height_finestra_storymap + "px";
+	finestraStorymap.style["minWidth"] = min_width_finestra_storymap + "px";
+
+	let i_finestra;
+
+	for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+	{
+		if (layerFinestraList[i_finestra].nom==name)
+		{
+			layerFinestraList[i_finestra].min_size_finestra = {w: min_width_finestra_storymap, h: min_height_finestra_storymap};
+			break;
+		}
+	}
+}*/
 
 //Mostra la finestra que conté el llistat d'històries
 function MostraFinestraTriaStoryMap()
@@ -85,6 +124,7 @@ function TancaFinestra_triaStoryMap()
 function TancaFinestra_visualitzaStoryMap()
 {
 	indexStoryMapActiu=null;
+	contadorAccionsMapa = 0;
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
@@ -134,12 +174,11 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
 		if ((i_story%ncol)==0)
 			cdns.push("<tr>");
-		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", /*background:", storyActual.compartida? "green" : "red", ";'*/" href='javascript:void(0)' onclick='");
+		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", " href='javascript:void(0)' onclick='");
 		(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
 		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
 			DonaCadena(storyActual.desc),
 		"</p></a></td>");
-			//style='position:relative; top:0px; right:0px; height:50px; width:50px;'
 		/* Incrementem valor en aquest precís instant per aconseguir que
 		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
@@ -221,20 +260,88 @@ var idRelatEditat = "";
 
 function TancaICreaEditaStoryMap(i_relat = "nou")
 {
-	let storyToEdit;
-	if (i_relat != "nou")
+	if (!comprovaRedaccioRelatEnCurs())
 	{
-		TancaFinestraLayer("storyMap");
+		let storyToEdit;
+		if (i_relat != "nou")
+		{
+			TancaFinestraLayer("storyMap");
 
-		storyToEdit = ParamCtrl.StoryMap[i_relat];
-		idRelatEditat = storyToEdit.id;
-	}
+			storyToEdit = ParamCtrl.StoryMap[i_relat];
+			idRelatEditat = storyToEdit.id;
+			if (isLayer(getBarraLayer(window, "creaStoryMap")))
+			{
+				titolFinestraLayer(window, "creaStoryMap", GetMessage("EditStorymap", "storymap"));
+			}
+		}
+		else
+		{
+			//Tancar la finestra de la graella de les histories
+			TancaFinestraLayer("triaStoryMap");
+
+			if (isLayer(getBarraLayer(window, "creaStoryMap")))
+			{
+				titolFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"));
+			}
+		}
+
+		if (isFinestraLayer(window, "creaStoryMap"))
+			{
+				const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
+				novaStoryMapFinestra.replaceChildren();
+				const beginingStoryMapContent = ["<br><br><label style='margin:0 5px' for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
+								"<label style='margin: 0 5px;'>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
+								"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
+								"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this)'/><br><br>",												
+								"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),"; padding: 0 10px;' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/>"];
+				const botoEsborrar = document.createElement("input")
+				botoEsborrar.setAttribute("type", "button");
+				botoEsborrar.setAttribute("id", botoBorraThumbnailId);
+				botoEsborrar.setAttribute("style", "display: " + (i_relat != "nou" && storyToEdit.srcData ? "inline" : "none"));
+				botoEsborrar.setAttribute("value", GetMessage("RemoveImage", "storymap"));
+				botoEsborrar.addEventListener("click", esborraImatgePortada);
+				const inputBtnNext = document.createElement("input");
+				inputBtnNext.setAttribute("type", "button");
+				inputBtnNext.setAttribute("class", "buttonDialog");
+				inputBtnNext.setAttribute("value", GetMessage("Next"));
+				inputBtnNext.addEventListener("click", comprovaTitol);
+								
+				novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", botoEsborrar);
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", document.createElement("br"));
+				novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
+			}
+		
+			ObreFinestra(window, "creaStoryMap");
+	} 
 	else
 	{
-		//Tancar la finestra de la graella de les histories
-		TancaFinestraLayer("triaStoryMap");
-	}
+		
+		let dialegRedaccioCurs = document.getElementById(dialegAlertaRedaccioEnCursId);
+		
+		if (!dialegRedaccioCurs)
+		{
+			dialegRedaccioCurs = CreaDialegRedaccioRelatEnCurs();
+		}
 
+		let finestra;
+		if (i_relat != "nou")
+		{
+			finestra = getFinestraLayer(window, "storyMap");
+		}
+		else 
+		{
+			finestra = getFinestraLayer(window, "triaStoryMap");
+		}
+		
+		if (!finestra.contains(dialegRedaccioCurs))
+		{
+			finestra.appendChild(dialegRedaccioCurs);
+		}
+
+		dialegRedaccioCurs.show();	
+	}
+		
 	function comprovaTitol(event)
 	{	
 		const finestra = event.target.parentNode;
@@ -243,38 +350,23 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			SeguentPasStoryMap(i_relat);
 		else
 		{
-			const dialegNodeList = finestra.querySelectorAll("dialog[id='"+ dialegAlertaTitolId + "']");
-			if (dialegNodeList && dialegNodeList.length != 0)
-				dialegNodeList[0].show();
-			else
+			let dialegTitol = document.getElementById(dialegAlertaTitolId);
+			
+			if (!dialegTitol)
 			{
-				const caractDialog = CreaDialegAlertaTitol();
-				finestra.insertAdjacentElement("beforeend", caractDialog);
-				caractDialog.show();
+				dialegTitol = CreaDialegAlertaTitol();
+				finestra.appendChild(dialegTitol);
 			}
+			
+			dialegTitol.show();
 		}
-	};	
-
-	if (isFinestraLayer(window, "creaStoryMap"))
-	{
-		const novaStoryMapFinestra = getFinestraLayer(window, "creaStoryMap");
-		novaStoryMapFinestra.replaceChildren();
-		const beginingStoryMapContent = ["<br><br><label for='title'>", GetMessage('Title') + ":", "</label><input type='text' id='", inputStoryTitolId, "' name='title' minlength='1' size='25' value='", (i_relat != "nou" ? storyToEdit.desc : ""), "'/><br><br>",
-						"<label>", GetMessage('StorymapThumbnailImage', 'storymap') + "(JPEG ",GetMessage("or")," PNG): ", "</label>",
-						"<button class=\"Verdana11px\" onclick=\"document.getElementById('",inputThumbnailId,"').click()\">"+GetMessage("SelectImage", "storymap")+"</button>",
-						"<input id='", inputThumbnailId, "' type='file' align='center' accept='.jpg,.jpeg,.png' style='display:none' onChange='CarregaImatgeStoryMap(this, \"imageThumbnail\", )'/><br><br>",												
-						"<img id='", imageThumbnailId, "' alt='", GetMessage("StorymapThumbnailImage", "storymap"), "' title='", GetMessage("StorymapThumbnailImage", "storymap"), "' style='visibility:", (i_relat != "nou" && storyToEdit.srcData ? "visible" : "hidden"),";' ", (i_relat != "nou" && storyToEdit.srcData ? "src='" + storyToEdit.srcData + "'" : ""),"/><br>"];
-		const inputBtnNext = document.createElement("input");
-		inputBtnNext.setAttribute("type", "button");
-		inputBtnNext.setAttribute("class", "buttonDialog");
-		inputBtnNext.setAttribute("value", GetMessage("Next"));						
-		inputBtnNext.addEventListener("click", comprovaTitol);
-						
-		novaStoryMapFinestra.insertAdjacentHTML("afterbegin", beginingStoryMapContent.join(""));
-		novaStoryMapFinestra.insertAdjacentElement("beforeend", inputBtnNext);
 	}
 
-	ObreFinestra(window, "creaStoryMap");
+	function comprovaRedaccioRelatEnCurs()
+	{
+		const style = getFinestraLayer(window, "creaStoryMap").getAttribute("style");
+		return style.includes("visible");
+	}
 }
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> dins del HTML del Tiny.    
@@ -290,11 +382,12 @@ function CarregaImatgeStoryMap(input)
 		{
 			CarregaImatgeRelatStoryMap(fitxerObjectiu);
 		}
-		else if (input.id == inputThumbnailStoryMapId)
+		else if (input.id == inputThumbnailId)
 		{
 			CarregaImatgeMiniaturaStoryMap(fitxerObjectiu);
 		}
 	}
+	input.value = null;
 }
 
 /**
@@ -303,31 +396,56 @@ function CarregaImatgeStoryMap(input)
  */
 function CarregaImatgeRelatStoryMap(fitxerImatge) 
 {
-	const midesPromise = new Promise((resolve, reject) => {
+	//Mirem la mida de la imatge
+	const urlImage = URL.createObjectURL(fitxerImatge);
+	const imageToMesure = new Image();
+	
+	imageToMesure.onload =  function () {
 
-		//Mirem la mida de la imatge
-		const urlIamge = URL.createObjectURL(fitxerImatge);
-		const imageToMesure = new Image();
+		MostraDialogImatgeNavegador(this, mostraImatgeRedimensionada);
+	};
 
-		imageToMesure.onload =  function () {
-			URL.revokeObjectURL(this.src);
-			if (this)
+	imageToMesure.onerror = function() {
+		new Error("Error carregant la imatge.");
+	};
+
+	// Callback function to really draw image file allready read but with right sizes.
+	function mostraImatgeRedimensionada(midesImatge)
+	{
+		if (midesImatge)
+		{
+			const canvasId = "reduccioImatges";
+			let canvasReduccioImg = document.getElementById(canvasId);
+			if (!canvasReduccioImg)
 			{
-				resolve(this);
+				canvasReduccioImg = document.createElement("canvas");
+				canvasReduccioImg.setAttribute("id", canvasId);
+			} 
+			canvasReduccioImg.width = midesImatge.width;
+			canvasReduccioImg.height = midesImatge.height;
+
+			const cntx = canvasReduccioImg.getContext("2d");
+			cntx.drawImage(imageToMesure, 0, 0, midesImatge.width, midesImatge.height);
+			const tinyEditor = tinymce.get(tinyTextStoryMapId);
+			const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
+			
+			if (tinyEditor && imatgeReduida && imatgeReduida!="data:," && esPermetAfegirImatge(tinyEditor))
+			{ 
+				const nodeDestiImatge = tinyEditor.selection.getNode();
+				const rangCursor = tinyEditor.selection.getRng();
+				const previHtml = nodeDestiImatge.innerText.substring(0, rangCursor.startOffset);
+				const postHtml = nodeDestiImatge.innerText.substring(rangCursor.startOffset, nodeDestiImatge.innerHTML.length);
+
+				nodeDestiImatge.innerHTML = previHtml + "<img src='" + imatgeReduida + "' width=" + midesImatge.width + "/>" + postHtml;
 			}
-			else
-			{
-				reject(new Error("Error carregant la imatge."))
-			}
-		};
+			cntx.clearRect(0, 0, canvasReduccioImg.width, canvasReduccioImg.height);
+		}
+		URL.revokeObjectURL(urlImage);
+	}
 
-		imageToMesure.src = urlIamge;
-	}).then(result => {
-
-		MostraDialogImatgeNavegador(result);
-
-	});
+	imageToMesure.src = urlImage;
 }
+
 /**
  * Seqüència sincrona de operacións per a la selecció de la imatge pertinent, modificació de les mides d'aquesta i càrrega de <img> de portada del relat.    
  * @param {*} fitxerImatge Element DOM tipus input que incorpora la imatge. 
@@ -335,11 +453,11 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 function CarregaImatgeMiniaturaStoryMap(fitxerImatge) 
 {
 	//Mirem la mida de la imatge
-	const urlIamge = URL.createObjectURL(fitxerImatge);
+	const urlImage = URL.createObjectURL(fitxerImatge);
 	const imageToMesure = new Image();
+
 	try{
 		imageToMesure.onload =  function () {
-			URL.revokeObjectURL(this.src);
 			if (this)
 			{
 				const canvasThumbnailId = "canvasReduccioThumbnail";
@@ -354,9 +472,15 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				const cntx = canvasReduccioThumbnail.getContext("2d");
 				cntx.drawImage(this, 0, 0, canvasReduccioThumbnail.width, canvasReduccioThumbnail.height);
 				const imageThumbnail = document.getElementById(imageThumbnailId);
-				imageThumbnail.setAttribute("style", "visibility:visible;");
+				imageThumbnail.style.visibility = "visible";
 				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
+				const botoEsborrar = document.getElementById(botoBorraThumbnailId);
+				if (botoEsborrar)
+				{
+					botoEsborrar.style.display = "inline";
+				}
  			}
+			 URL.revokeObjectURL(urlImage);
 		}
 	}
 	catch (err)
@@ -364,8 +488,39 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 		throw new Error(GetMessage("ErrorReadingImages", "storymap") + ":", {cause: err});
 	}
 
-	imageToMesure.src = urlIamge;
+	imageToMesure.src = urlImage;
 }
+
+// Esborra la imatge que estigui carregada com a portada del relat.
+function esborraImatgePortada()
+{
+	const imgThumbnail = document.getElementById(imageThumbnailId);
+	if (imgThumbnail && imgThumbnail.src != "")
+	{
+		const botoEsborrar = document.getElementById(botoBorraThumbnailId);
+		if (botoEsborrar)
+		{
+			botoEsborrar.style.display = "none";
+		}
+
+		imgThumbnail.removeAttribute("src");
+		imgThumbnail.style.visibility = "hidden";
+	}
+}
+
+/**
+ * Crea un diàleg per avisar a l'usuari de la presència d'un relat en redacció en curs. Només permetrem redactar 1 relat a la vegada.
+ * @returns 
+ */
+function CreaDialegRedaccioRelatEnCurs()
+{
+	const dialogHtml = ["<form><p>" + GetMessage("UnicStroymapWriting", "storymap") + ":</p><p style= 'text-align: center;'><button class='buttonDialog' value='cancel' formmethod='dialog'>", GetMessage("OK"), "</button></p></form>"];
+
+	const dialog = CreaDialog(dialegAlertaRedaccioEnCursId, dialogHtml.join(""));
+
+	return dialog;
+}
+
 /**
  * Crea un diàleg per avisar a l'usuari la falta d'un títol per al relat.
  * @returns 
@@ -388,89 +543,256 @@ function CreaDialegAlertaTitol()
 function CreaDialegMidesImatge(imatge)
 {
 	const textMides = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
-	const dialogHtml = ["<form><p>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "' ></p><p><label for='" + selectSizeUnitId + "'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
+	const dialogHtml = ["<form><p id='" + textMidesImatgeId + "'>", textMides, "</p><div align-items='stretch'><p style='align: center'><label id='" + labelWidthId + "' for='", inputWidthId, "'>"+ GetMessage("ReducedWidth", "storymap") + " (" + percentageUnit +"):</label><input type='text'  id='", inputWidthId, "' title='Only digits'><label id='" + labelHeightId + "' for='", inputHeightId, "'>"+ GetMessage("ReducedHeight", "storymap") + " (" + percentageUnit + "):</label><input type='text' title='Only digits' id='", inputHeightId, "'></p><p><label for='", selectSizeUnitId,"'>" + GetMessage("ChooseUnitMeasurement", "storymap") + ":</label><select id='" + selectSizeUnitId + "'><option value='" + pixelUnit + "'>" + pixelUnit + "</option><option value='" + percentageUnit + "' selected>" + percentageUnit + "</option></select><label for='", chboxProportionalId, "'>" + GetMessage("MaintainProportionality", "storymap") + "</label><input type='checkbox' id='", chboxProportionalId, "' checked></p><p style='align: center'><button id='", confirmImageBtnId, "' class='button_image_dialog buttonDialog' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button class='button_image_dialog buttonDialog' value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></p></div></form>"];
 
 	return CreaDialog(dialegMidesId, dialogHtml.join(""));
 }
+// Actualitza les mides de la imatge en el text del dialeg.
+function ActualitzaTextMidesImatge(imatge)
+{
+	const textMidesImatge = document.getElementById(textMidesImatgeId);
+	textMidesImatge.innerHTML = GetMessage("OriginalMeasurementsImage", "storymap") + ": <b>" + imatge.width + GetMessage("pxWidth", "storymap") + "</b>, <b>" + imatge.height + GetMessage("pxHeight", "storymap") + "</b>."
+}
+
 /**
  * Crea un diàleg per a elegir quines característiques del mapa mantindre per un determinat fragment del relat.
  * @returns 
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }
 
-function MostraDialogImatgeNavegador(imatgeSeleccionada)
+/*
+* Infroma a l'usuari que l'acció del mapa o la imatge que es vol inserir no és possible.
+*/
+function creaDialegInsercioIncorrecta(motiu)
+{
+	const dialogHtml = ["<form><p id='", missatgeAvisImatgeId, "'>", GetMessage("NotPossibleInsertNewContent", "storymap"), ": ", (motiu == null ? GetMessage("unknown") : motiu) , "</p><div style='align-items: center;'><button id='", confirmNoInsercioId, "' formmethod='dialog' value='cancel'>", GetMessage("OK"), "</button></div></form>"];
+
+	return CreaDialog(dialegAlertaInsercioId, dialogHtml.join(""));
+}
+
+// Comprovar si podem afegir una imatge al relat en el lloc que preveiem.
+function esPermetAfegirImatge(tinyEditor)
+{
+	let esPermet = false;
+	let motiu;
+
+	if (tinyEditor.selection.getSel().type=="Range")
+	{
+		if (tinyEditor.selection.getNode().nodeName == "IMG")
+		{
+			motiu = GetMessage("NotAdmittedOnImage", "storymap");
+		}
+		else
+		{
+			motiu = GetMessage("NotAdmittedRangeSelection", "storymap");
+		}
+		esPermet = false;
+	}
+	else
+	{
+		esPermet = true;
+	}
+
+	if (!esPermet)
+	{
+		const finestraRelats = document.getElementById("creaStoryMap_finestra");
+		let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+		if (dialegInsercio)
+		{
+			let missatgeAvis = document.getElementById(missatgeAvisImatgeId);
+			if (missatgeAvis)
+			{
+				missatgeAvis.innerText = GetMessage("NotPossibleInsertNewContent", "storymap") + ": " + motiu;
+			}
+
+			if (!finestraRelats.contains(dialegInsercio))
+			{
+				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+			}
+		}
+		else
+		{
+			dialegInsercio = creaDialegInsercioIncorrecta(motiu);
+			dialegInsercio.setAttribute("id", dialegAlertaInsercioId);
+			finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+		}
+			
+		dialegInsercio.show();
+	}
+
+	return esPermet;
+}
+
+// Funció per avaluar la ideoneitat del lloc del relat a adjuntar una modificació per inserir una imatge o bé una acció de mapa.
+function esPermetModificacioAccio(tinyEditor)
+{
+	const regexpImgId = new RegExp(`^${idImgSvgAccioMapa}`);
+	const seleccio = tinyEditor.selection.getSel();
+	const nodeObjectiu = tinyEditor.selection.getNode();
+	const cosRelat = tinyEditor.getBody();
+	if (seleccio.type == "Caret" && comprovaNodePareAmbAccio(nodeObjectiu, cosRelat))
+		return false
+	else if (seleccio.type == "Range")
+	{
+		if (nodeObjectiu.nodeName == "IMG")
+			return !regexpImgId.test(nodeObjectiu.id) && !comprovaNodePareAmbAccio(nodeObjectiu, cosRelat);
+		else
+		{
+			const arrayNodes = Array.from(cosRelat.childNodes);
+			const nodeInicial = tinyEditor.selection.getStart();
+			const nodeFinal = tinyEditor.selection.getEnd();
+			let accioTrobada = false, indexActual = arrayNodes.indexOf(nodeInicial), indexFinal = arrayNodes.indexOf(nodeFinal);
+			
+			while(!accioTrobada && indexActual <= indexFinal)
+			{
+				accioTrobada = comprovaNodePareAmbAccio(arrayNodes[indexActual], cosRelat) || comprovaNodeFillAmbAccio(arrayNodes[indexActual], 0);
+				indexActual++;
+			}
+
+			return !accioTrobada;
+		}
+	}
+	
+	return true;
+
+	/**
+	 * Comprova si el node o algun del seus pares ja té una acció de mapa associada (attributes='data-mm-...').
+	 * @param {*} nodeObjectiu Node des del qual comencem a observar i als seus nodes ascendets.
+	 * @param {*} tinyBody Tot l'html que conté l'editor del Tiny MCE en aquest moment.
+	 * @returns 
+	 */
+	function comprovaNodePareAmbAccio(nodeObjectiu, tinyBody)
+	{
+		if (comprovaHiHaAccio(nodeObjectiu))
+			return true;
+		/* Hem comprovat tots els nodes i els seus pares fins assegurar-nos que 
+		   no n'hi ha cap amb acció de mapa en tota la gerarquia ascendent del 
+		   node objectiu inicial. Si ja hem arribat a l'arrel del body hem acabat.
+		*/
+		if (nodeObjectiu === tinyBody || nodeObjectiu.parentNode === tinyBody || nodeObjectiu.parentNode == null)
+			return false;
+		//Recursivitat per seguir comprovant els pares de la gerarquia ascendent.
+		return comprovaNodePareAmbAccio(nodeObjectiu.parentNode, tinyBody);
+	}
+
+	/**
+	 * 
+	 * @param {*} nodeObjectiu Node el qual comprovem si té alguna acció de mapa. 
+	 * @param {*} profunditat 1er Nivell de fills, 2n nivell de fills... 0 és el nivell més superficial i inicial. 
+	 * @returns true si es troba acció de mapa o false del contrari.
+	 */
+	function comprovaNodeFillAmbAccio(nodeObjectiu, profunditat)
+	{
+		if (comprovaHiHaAccio(nodeObjectiu))
+			return true;
+		if (nodeObjectiu.hasChildNodes)
+		{
+			const childs = nodeObjectiu.childNodes;
+			for (const node of childs)
+			{
+				if (comprovaNodeFillAmbAccio(node, profunditat++))
+					return true;
+			}
+		}
+		else if (profunditat==0)
+			return false;
+	}
+
+	// Busquem en el node passat per paràmetre un attribut que comenci per data-mm-
+	function comprovaHiHaAccio(nodeObjectiu)
+	{
+		if (nodeObjectiu.nodeName == "DIV")
+		{
+			if (nodeObjectiu.hasAttributes())
+			{
+				//Com comprovar que hi han attributs propis amb forma de data-mm-... 
+				const regex = new RegExp(`^data-mm-`);
+				const attributsNode = nodeObjectiu.attributes;
+				for (const atribut of attributsNode)
+				{
+					if (regex.test(atribut.name))
+						return true;	
+				}
+			}
+		}
+		return false;
+	}
+}
+
+function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 {
 	const esImatgeApaisada = imatgeSeleccionada.width >= imatgeSeleccionada.height;
-	function calcularLimitImatges(imatgeSeleccionada)
+	function calcularLimitImatges(imatge)
 	{
-		let proporcio = imatgeSeleccionada.height/imatgeSeleccionada.width;
+		let proporcio = imatge.height/imatge.width;
 		if (esImatgeApaisada)
 		{
 			limitsMidesImatge.width = {};
-			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.width;
+			limitsMidesImatge["width"][percentageUnit] = midaImatgeMaximaPx * 100 / imatge.width;
 			limitsMidesImatge["width"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.height = {};
 			limitsMidesImatge["height"][pixelUnit] = limitsMidesImatge["width"][pixelUnit] * proporcio;
-			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatgeSeleccionada.height;
+			limitsMidesImatge["height"][percentageUnit] = limitsMidesImatge["height"][pixelUnit] * 100 / imatge.height;
 		}
 		else 
 		{
 			limitsMidesImatge.height = {};
-			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatgeSeleccionada.height;
+			limitsMidesImatge["height"][percentageUnit] = midaImatgeMaximaPx * 100 / imatge.height;
 			limitsMidesImatge["height"][pixelUnit] = midaImatgeMaximaPx;
 			limitsMidesImatge.width = {};
 			limitsMidesImatge["width"][pixelUnit] = limitsMidesImatge["height"][pixelUnit] * (1 / proporcio);
-			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatgeSeleccionada.width;
+			limitsMidesImatge["width"][percentageUnit] = limitsMidesImatge["width"][pixelUnit] * 100 / imatge.width;
 		}	
 	}
 
 	calcularLimitImatges(imatgeSeleccionada);
+	
 	// Element del DOM que ens permet anclar el dialeg
 	let anchorElement = document.getElementById(inputImageStorymapId);
 	
 	if (anchorElement)
 	{
-		const midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
-		anchorElement.insertAdjacentElement("afterend", midesDialog);
-		
-		midesDialog.addEventListener("close", (event) => {
+		function retornaMidesImatge(event) {
 			// Després de tancar el missatge emergent de les mides.
-			let resultatMides = JSON.parse(event.target.returnValue);
-			if (resultatMides) {
-				const canvasId = "reduccioImatges";
-				let canvasReduccioImg = document.getElementById(canvasId);
-				if (!canvasReduccioImg)
-				{
-					canvasReduccioImg = document.createElement("canvas");
-					canvasReduccioImg.setAttribute("id", canvasId);
-				} 
-
-				canvasReduccioImg.width = resultatMides.width;
-				canvasReduccioImg.height = resultatMides.height;
-
-				const cntx = canvasReduccioImg.getContext("2d");
-				cntx.drawImage(imatgeSeleccionada, 0, 0, resultatMides.width, resultatMides.height);
-				const tinyEditor = tinymce.get(tinyTextStoryMapId);
-				const imatgeReduida = canvasReduccioImg.toDataURL("image/jpeg", 0.5);
-				// "data:," és el resultat de crear una imatge amb canvas mides (0,0). Això passa en introduir caracters enlloc de números.
-				if (tinyEditor && imatgeReduida && imatgeReduida!="data:,")
-				{ 
-					let writenOnTiny = tinyEditor.getContent();
-					tinyEditor.setContent(writenOnTiny + "<img src='" + imatgeReduida + "' width=" + resultatMides.width + "/>", { format: 'html' });
-				}
-			}
 			resultatMidesImatge = {};
-		});
-		// Entrada de mides imatge
+			let resultatDialeg = null;
+
+			if (event.target.returnValue != "cancel")
+			{
+				resultatDialeg = JSON.parse(event.target.returnValue);
+			}
+			// Eliminem els events abans de destruir el contexte en que han esta creats
+			inputWidth.removeEventListener("change", nouValorAmplada, true);
+			inputHeight.removeEventListener("change", nouValorAlcada, true);
+			chboxProportional.removeEventListener("change", alternaProporcionalitat, true);
+			selector.removeEventListener("change", canviUnitats, true);
+			confirmBtn.removeEventListener("click", confirmarMides, true);
+			midesDialog.removeEventListener("close", retornaMidesImatge, true);
+			callback(resultatDialeg);
+		};
+
+		let midesDialog = document.getElementById(dialegMidesId);
+		if (!midesDialog)
+		{
+			midesDialog = CreaDialegMidesImatge(imatgeSeleccionada);
+			anchorElement.parentNode.appendChild(midesDialog);
+			
+			midesDialog.addEventListener("close", retornaMidesImatge, true);
+		}
+		else
+		{
+			ActualitzaTextMidesImatge(imatgeSeleccionada);
+			midesDialog.addEventListener("close", retornaMidesImatge, true);
+		}
+		// Caixetí d'amplada
 		const inputWidth = document.getElementById(inputWidthId);
-		inputWidth.value = limitsMidesImatge["width"][percentageUnit];
-		resultatMidesImatge.width = limitsMidesImatge["width"][percentageUnit];
-		inputWidth.addEventListener("change", (event) => {
+
+		function nouValorAmplada(event) {
 			if (chboxProportional.checked)
 			{
 				resultatMidesImatge = adaptImageGivenProportionaly({width: event.target.value, height: resultatMidesImatge.height}, imatgeSeleccionada, event.target);
@@ -481,11 +803,14 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				resultatMidesImatge.width = parseFloat(event.target.value);
 			}
 			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-		});
+		}
+		
+		inputWidth.addEventListener("change", nouValorAmplada, true);
+
+		// Caixetí d'alçada
 		const inputHeight = document.getElementById(inputHeightId);
-		inputHeight.value = limitsMidesImatge["height"][percentageUnit];
-		resultatMidesImatge.height = limitsMidesImatge["height"][percentageUnit];
-		inputHeight.addEventListener("change", (event) => {
+
+		function nouValorAlcada(event) {
 			if (chboxProportional.checked)
 			{
 				resultatMidesImatge = adaptImageGivenProportionaly({width: resultatMidesImatge.width, height: event.target.value}, imatgeSeleccionada, event.target);
@@ -496,42 +821,62 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada)
 				resultatMidesImatge.height = parseFloat(event.target.value);
 			}			
 			confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
-		});
+		}
+
+		inputHeight.addEventListener("change", nouValorAlcada, true);
+
 		// Checkbox Propocional
 		const chboxProportional = document.getElementById(chboxProportionalId);
-		chboxProportional.addEventListener("change", (event) => {
+
+		function alternaProporcionalitat(event) {
 			if (event.target.checked)
 			{
 				resultatMidesImatge = adaptImageGivenProportionaly(resultatMidesImatge, imatgeSeleccionada, null);
 				updateSizeInputValues(resultatMidesImatge.width, resultatMidesImatge.height);
 				confirmBtn.disabled = checkForEmptyValuesOrNonNumbers(inputWidth, inputHeight);
 			}
-		});
+		}
+
+		chboxProportional.addEventListener("change", alternaProporcionalitat, true);
+
 		// Selector de unitats
 		const selector = document.getElementById(selectSizeUnitId);
-		selector.addEventListener("change", (event) => {
+
+		function canviUnitats(event) {
 			updateUnitChangeInputValuesLabelUnits(event.target.value, imatgeSeleccionada);
-		});
+		}
+		
+		selector.addEventListener("change", canviUnitats, true);
+
 		// Botó de confirmació
 		const confirmBtn = document.getElementById(confirmImageBtnId);
-		confirmBtn.addEventListener("click", (event) => {
+
+		function confirmarMides(event) {
 			event.preventDefault();
 			if (checkImageLimits())
 			{
-				let midesConfirmades = 0;
-				selector.value == percentageUnit ? midesConfirmades = JSON.stringify({width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100}) : midesConfirmades = JSON.stringify(resultatMidesImatge);
-
-				midesDialog.close(midesConfirmades); // S'envia les mides en pixels al diàleg.	
+				let midesConfirmadesImatge = 0;
+				selector.value == percentageUnit ? midesConfirmadesImatge = {width: resultatMidesImatge.width*imatgeSeleccionada.width/100, height: resultatMidesImatge.height*imatgeSeleccionada.height/100} : midesConfirmadesImatge = {width: resultatMidesImatge.width, height: resultatMidesImatge.height};
+				midesDialog.close(JSON.stringify(midesConfirmadesImatge)); // S'envia les mides en pixels.	
 			}
 			else 
 			{
 				alert("La mida de imatge desitjada supera el límit establert. Redueixi-la.");
 			}
-		});
+		}
 		
+		confirmBtn.addEventListener("click", confirmarMides, true);
+		
+		// Entrada de mides imatge
+		inputWidth.value = limitsMidesImatge["width"][percentageUnit];
+		resultatMidesImatge.width = limitsMidesImatge["width"][percentageUnit];
+		
+		inputHeight.value = limitsMidesImatge["height"][percentageUnit];
+		resultatMidesImatge.height = limitsMidesImatge["height"][percentageUnit];
+				
 		// Comprovem que no tenim valors en els caixetins de mides.
 		const checkForEmptyValuesOrNonNumbers = new Function("inputWidth", "inputHeight", "return isNaN(parseFloat(inputWidth.value)) || isNaN(parseFloat(inputHeight.value))");
-		
+
 		// Comprovem per les proporcions de la imatges quines són les mides més amplies que ens podem permetre.
 		function checkImageLimits()
 		{
@@ -650,118 +995,145 @@ let imgSvgSincroMapa;
 
 function MostraDialogCaracteristiquesNavegador(ultimElemId)
 {
-	const ultimElem = document.getElementById(ultimElemId);
+	let caractDialog = document.getElementById(dialegCaractId);
+	if (!caractDialog)
+	{
+		const ultimElem = document.getElementById(ultimElemId);
+		caractDialog = CreaDialegSincronitzarAmbMapa();
+		ultimElem.insertAdjacentElement("afterend", caractDialog);		
 
-	const caractDialog = CreaDialegSincronitzarAmbMapa();
-	ultimElem.insertAdjacentElement("afterend", caractDialog);		
-
-	caractDialog.addEventListener("close", (event) => {
-		
-		if (event.target.returnValue != "")
-		{	
-			let resultatCaractUsuari = "";
-			try
-			{
-				resultatCaractUsuari = JSON.parse(event.target.returnValue);
-			}
-			catch(e)
-			{
-				if (e instanceof SyntaxError && event.target.returnValue == "cancel")
-				{
-					// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
-					return
-				}
-			}
+		caractDialog.addEventListener("close", (event) => {
 			
-			let hiHaCheckboxSeleccionat = false;
-
-			if(resultatCaractUsuari[chboxPosZoomName]["status"])
-			{
-				resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
-				resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
-				hiHaCheckboxSeleccionat = true;
-			}
-
-			if(resultatCaractUsuari[chboxCapesStyleName]["status"])
-			{
-				const capesVisiblesIds = [];
-				const estilsCapesIds = [];
-				ParamCtrl.capa.forEach(capa => { 
-					if (capa.visible=="si")
+			if (event.target.returnValue != "")
+			{	
+				let resultatCaractUsuari = "";
+				try
+				{
+					resultatCaractUsuari = JSON.parse(event.target.returnValue);
+				}
+				catch(e)
+				{
+					if (e instanceof SyntaxError && event.target.returnValue == "cancel")
 					{
-						capesVisiblesIds.push(capa.id);
-						estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+						// El contingut no és un JSON vàlid perquè s'ha cancel·lat l'acció.
+						return
 					}
-				});
-				if (capesVisiblesIds.length > 0)
-				{
-					resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
 				}
-				if (estilsCapesIds.length > 0)
-				{
-					resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
-				}
-				hiHaCheckboxSeleccionat = true;
-			}
-			
-			if (resultatCaractUsuari[chboxTempsName]["status"])
-			{
-				let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
-				let indexCorregit = 0;
-				let dataCapaAComparar;
+				
+				let hiHaCheckboxSeleccionat = false;
 
-				ParamCtrl.capa.forEach((capaActual) => {
-					if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
-					{
-						indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
-							dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-						if (dataResultat < dataCapaAComparar) 
+				if(resultatCaractUsuari[chboxPosZoomName]["status"])
+				{
+					resultatCaractUsuari[chboxCoordName]["attribute"] = {name: "data-mm-center", value: JSON.stringify(DonaCentreVista())};
+					resultatCaractUsuari[chboxZoomName]["attribute"] = {name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual};
+					hiHaCheckboxSeleccionat = true;
+				}
+
+				if(resultatCaractUsuari[chboxCapesStyleName]["status"])
+				{
+					const capesVisiblesIds = [];
+					const estilsCapesIds = [];
+					ParamCtrl.capa.forEach(capa => { 
+						if (capa.visible=="si")
 						{
-							dataResultat = dataCapaAComparar;
-						}			
-					}
-				});
-
-				resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
-				hiHaCheckboxSeleccionat = true;
-			}
-
-			if (hiHaCheckboxSeleccionat) 
-			{
-				let divResultatCaract = document.createElement("div");
-
-				Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
-					if(resultatCaractUsuari[caracteristica]["attribute"])
+							capesVisiblesIds.push(capa.id);
+							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+						}
+					});
+					if (capesVisiblesIds.length > 0)
 					{
-						divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+						resultatCaractUsuari[chboxCapesName]["attribute"] = {name: "data-mm-layers", value: capesVisiblesIds.toString()};
 					}
-				});
+					if (estilsCapesIds.length > 0)
+					{
+						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
+					}
+					hiHaCheckboxSeleccionat = true;
+				}
+				
+				if (resultatCaractUsuari[chboxTempsName]["status"])
+				{
+					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
+					let indexCorregit = 0;
+					let dataCapaAComparar;
+
+					ParamCtrl.capa.forEach((capaActual) => {
+						if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
+						{
+							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
+								dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
+							if (dataResultat < dataCapaAComparar) 
+							{
+								dataResultat = dataCapaAComparar;
+							}			
+						}
+					});
+
+					resultatCaractUsuari[chboxTempsName]["attribute"] = {name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))};
+					hiHaCheckboxSeleccionat = true;
+				}
+				
 				const tinyEditor = tinymce.get(tinyTextStoryMapId);
 				const tinyParent = tinyEditor.selection.getNode();
-				if (tinyParent && tinyParent.childNodes)
+				if (hiHaCheckboxSeleccionat) 
 				{
-					// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
-					if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+					let divResultatCaract = document.createElement("div");
+		
+					Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
+						if(resultatCaractUsuari[caracteristica]["attribute"])
+						{
+							divResultatCaract.setAttribute(resultatCaractUsuari[caracteristica]["attribute"]["name"], resultatCaractUsuari[caracteristica]["attribute"]["value"]);
+						}
+					});
+					
+					if (tinyParent && tinyParent.childNodes)
 					{
-						tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
-						divResultatCaract.appendChild(tinyParent);
+						// Distingim quan la selecció s'ha fet sobre 1 sol node o sobre més d'un.
+						if (tinyEditor.selection.getStart() == tinyEditor.selection.getEnd())
+						{
+							tinyParent.parentNode.insertBefore(divResultatCaract, tinyParent);
+							divResultatCaract.appendChild(tinyParent);
+
+						}
+						else
+						{
+							const nodesEditor = Array.from(tinyParent.childNodes);
+							const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
+							tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
+							nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
+						}
+
+						if (esUltimNodeFill(divResultatCaract, tinyEditor.getBody()))
+						{
+							let paragrafContinuacioRelat = document.createElement("p");
+							paragrafContinuacioRelat.setAttribute("id", paragrafContinuacioId);
+							paragrafContinuacioRelat.innerText = " -	" + GetMessage("NextStoryMapContent", "storymap") +"	-";
+							tinyEditor.getBody().appendChild(paragrafContinuacioRelat);
+						}
+
+						// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
+						const tinyEditorBody = tinyEditor.getBody();
+						const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
+						CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
 					}
-					else
-					{
-						const nodesEditor = Array.from(tinyParent.childNodes);
-						const nodesToCharacterize = nodesEditor.slice(nodesEditor.indexOf(tinyEditor.selection.getStart()), nodesEditor.indexOf(tinyEditor.selection.getEnd())+1);
-						tinyParent.insertBefore(divResultatCaract, tinyParent.childNodes[nodesEditor.indexOf(tinyEditor.selection.getStart())]);
-						nodesToCharacterize.forEach((node) => divResultatCaract.appendChild(node));
-					}
-					// Afegim la imatge que indica que hem realitzat una sincronització amb el mapa.
-					const tinyEditorBody = tinyEditor.getBody();
-					const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
-					CreaImatgeMarcadorSincronismeMapa(divResultatCaract, imatgesSincro.length);
+				
 				}
-			
 			}
-		}
-	});
+		});
+		// Events per als checkboxs
+		const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
+		const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
+		checkboxes.forEach(checkbox => {
+			checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
+			resultatCaract[checkbox.name] = {status: true};
+		});
+		// Event per al botó de confirmació.
+		const confirmBtn = document.getElementById(confirmCaractBtnId);
+		confirmBtn.addEventListener("click", (event) => {
+			event.preventDefault();
+			caractDialog.close(JSON.stringify(resultatCaract));
+		});
+	}
 
 	function saveCheckStatus(checkbox)
 	{
@@ -769,19 +1141,59 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 	};
 
 	const contenedorCheckbox = document.querySelector("dialog[id='"+ dialegCaractId + "']");
-	const checkboxes = contenedorCheckbox.querySelectorAll("input[type='checkbox']");
-	checkboxes.forEach(checkbox => {
-		checkbox.addEventListener("change", (event) => saveCheckStatus(event.target));
-		resultatCaract[checkbox.name] = {status: true};
-	});
-	
-	const confirmBtn = document.getElementById(confirmCaractBtnId);
-	confirmBtn.addEventListener("click", (event) => {
-		event.preventDefault();
-		caractDialog.close(JSON.stringify(resultatCaract));
-	});
+	// Per tal que els checkboxs i els valors d'estat d'aquests guardats a resultatCaract es corresponguin, resetejo els checkbox al seu valor inicial de "checked" o "no checked".
+	const formCheckbox = contenedorCheckbox.querySelector("form[id='" + formCheckboxesId + "']");
+	if (formCheckbox)
+		formCheckbox.reset();
 
-	caractDialog.showModal();
+	const tinyEditor = tinymce.get(tinyTextStoryMapId);
+	if (esPermetModificacioAccio(tinyEditor))
+	{
+		caractDialog.showModal();
+	}
+	else
+	{
+		//const tinyContainer = tinyEditor.getContainer();
+		const finestraRelats = document.getElementById("creaStoryMap_finestra");
+		let dialegInsercio = document.getElementById(dialegAlertaInsercioId);
+		if (dialegInsercio)
+		{
+			let missatgeAvis = document.getElementById(missatgeAvisImatgeId);
+			if (missatgeAvis)
+			{
+				missatgeAvis.innerText = GetMessage("NotPossibleInsertNewContent", "storymap") + ": " + GetMessage("NotAdmittedMapActionsNested", "storymap");
+			}
+
+			if (!finestraRelats.contains(dialegInsercio))
+			{
+				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+			}
+		}
+		else
+		{
+			dialegInsercio = creaDialegInsercioIncorrecta(GetMessage("NotAdmittedMapActionsNested", "storymap"));			
+			finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
+		}
+		
+		dialegInsercio.show();
+	}
+}
+
+// Comprova si el node del primer paràmetre correspon amb l'últim del relat. 
+function esUltimNodeFill(divCaracteristiques, tinyBody)
+{
+	let arrayChilds = Array.from(tinyBody.childNodes);
+	return arrayChilds[arrayChilds.length -1] === divCaracteristiques;
+}
+
+// Substitueix el contingut automàtic de l'últim paràgraf per l'introduït per l'usuari.
+function netejaUltimParagraf(modificacio) 
+{
+	if (modificacio.element && modificacio.element.id == paragrafContinuacioId && !modificacio.element.selectionChange)
+	{
+		modificacio.element.innerHTML = "&nbsp;";
+		modificacio.element.removeAttribute("id");
+	}
 }
 
 function SeguentPasStoryMap(i_relat)
@@ -805,6 +1217,7 @@ function SeguentPasStoryMap(i_relat)
 
 	tinymce.init({
         target: tinytextarea,
+		license_key: 'gpl',
 		custom_undo_redo_levels: 15,
 		plugins: 'code lists',
 		toolbar: 'undo redo styles bold italic insertImageButton insertLocationZoom | alignleft aligncenter alignright alignjustify outdent indent bullist numlist code',
@@ -821,9 +1234,12 @@ function SeguentPasStoryMap(i_relat)
 			});
 			editor.ui.registry.addButton("insertLocationZoom", {
 				text: GetMessage("SyncWithMap", "storymap"),
-				icon: "embed", //checkmark
+				icon: "embed",
 				tooltip: GetMessage("SavesMapCharacteristics", "storymap"),
 				onAction: (_) => MostraDialogCaracteristiquesNavegador(endButtonId)
+			});
+			editor.on("NodeChange", modificacioNode => {
+				netejaUltimParagraf(modificacioNode);
 			});
 		}
     }).then((initEditors) => {
@@ -832,14 +1248,32 @@ function SeguentPasStoryMap(i_relat)
 			const relat = ParamCtrl.StoryMap[i_relat].html;
 			const parser = new DOMParser();
 			const DOMStorymap = parser.parseFromString(relat, "text/html");
-
+			//Eliminem el títol del relat de la part del text a editar
 			const title = DOMStorymap.querySelector("#" + h1TitleStorymap);
 			if (title !== null)
 			{
 				title.remove();
 			}
-			const seiralizer = new XMLSerializer();
-			(initEditors.find((editor) => editor.id == tinyTextStoryMapId)).setContent( seiralizer.serializeToString(DOMStorymap), { format: 'html' });
+
+			// Afegim les imatges indicatives d'accions de mapa
+			const arrayDivAccions = DOMStorymap.querySelectorAll(`div[id^='${identificadorDivAccioMapa}']`);
+			const arrayDivIds= [];
+			/* No ens és vàlid només demanar la llista de <div> on hi han accions de mapa amb querySelectorAll 
+			/	perquè la llista resultant és una llista estàtica de nodes. Tot canvi aplicat als 
+			/ 	elements d'aquesta llista no tindrà efecte al HTML general del relat. Per això obtenim 
+			/	la llista dels seus Ids	per poder-los instanciar amb aquests i llavors si modificar-los al nostre gust.
+			*/
+			arrayDivAccions.forEach((div)=> {arrayDivIds.push(div.getAttribute("id"))});
+			let comptadorDivAccio = 0;
+			let idDivAccio, divAccioACompletar;
+			for(idDivAccio of arrayDivIds)
+			{
+				divAccioACompletar = DOMStorymap.getElementById(idDivAccio);
+				CreaImatgeMarcadorSincronismeMapa(divAccioACompletar, comptadorDivAccio);
+				comptadorDivAccio++;
+			}
+			const editor = initEditors.find((editor) => editor.id == tinyTextStoryMapId);
+			editor.setContent( DOMStorymap.body.innerHTML);
 		}	
 	});
 }
@@ -850,9 +1284,22 @@ function FinalitzarStoryMap(estemEditant = false)
 	const tinyEditorBody = tinyEditor.getBody();
 	const imatgesSincro = tinyEditorBody.querySelectorAll("img[name='" + nomPuntSincr + "']");
 	// Eliminem les imatges que indiquen cada punt del relat on s'ha sincronitzat el relat amb el mapa.
-	imatgesSincro.forEach((imatge) => imatge.parentNode.removeChild(imatge));
+	imatgesSincro.forEach((imatge) => imatge.remove());
+	//Eliminem el paràgraf afegit automàticament en cas que hi fos
+	let paragrafAutomatic = tinyEditorBody.querySelector("p[id='" + paragrafContinuacioId + "']");
+	if (paragrafAutomatic)
+	{
+		paragrafAutomatic.remove();
+	}
+	// Identifiquem cada <div> amb atributs d'acció al mapa.
+	const arrayImgsAccions = tinyEditorBody.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
+	arrayImgsAccions.forEach((divElement) => { 
+		divElement.setAttribute("id", identificadorDivAccioMapa+contadorAccionsMapa);
+		contadorAccionsMapa++;
+	});
+	contadorAccionsMapa = 0;
 
-	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + "<div>" + tinyEditor.getContent({format: "html"}) + "</div></html>";
+	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + tinyEditor.getContent({format: "html"}) + "</html>";
 	novaStoryMap.relat = cdns;
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
@@ -934,6 +1381,14 @@ function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
 
+	contadorAccionsMapa= 0;
+	const finestraRelat = getFinestraLayer(window, "storyMap");
+	
+	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
+	while (finestraRelat.firstChild) {
+		finestraRelat.removeChild(finestraRelat.firstChild);
+	}
+	  
 	if (relatACarregar.desc)
 		titolFinestraLayer(window, "storyMap", DonaCadena(relatACarregar.desc));
 
@@ -947,29 +1402,133 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
 	}
 
-	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
-	{	
-		// Afegim els botons d'edició dins de la finestra de visualització:
-		const parser = new DOMParser();
-		const DOMStorymap = parser.parseFromString(relatACarregar.html, "text/html");
-		let divBotons = document.createElement("div");
+	// Crear el marc per al relat de mapes. 
+	let divRelat = document.createElement("div");
+	divRelat.setAttribute("id", divRelatId);
+	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
+	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
+	divRelat.insertAdjacentHTML("afterbegin", text_html);
+	
+	/* 
+	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
+	*	i així saber quan ja hi son les imatges d'acció de mapa i poder obtenir-ne els seus Ids.
+	*/
+	const mutationObserver = new MutationObserver(function(changes, observer) {
+		const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
+		if(imgAccio && changes[0].target.contains(imgAccio[0]))
+		{
+			// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
+			RecuperarIdsImatgesAccions(changes[0].target.innerHTML);
+			observer.disconnect();
+		}
+	});
+
+	mutationObserver.observe(divRelat, {childList: true, subtree: true, attributes: false, characterData: false});
+
+	// Text explicatiu controls
+	let definicio = document.createElement("label");
+	definicio.innerHTML = GetMessage("ActionOnMap", "storymap") + ":";
+	definicio.className = "control";
+	// Botons següent i previ
+	let previBoto = document.createElement("input");
+	previBoto.setAttribute("type", "button");
+	previBoto.className = "button_image_dialog";
+	previBoto.classList.add("center");
+	previBoto.classList.add("control");
+	previBoto.setAttribute("name", "controlAccio");
+	previBoto.setAttribute("value", GetMessage("Previous"));
+	previBoto.addEventListener("click", function () {
+		contadorAccionsMapa--;
+		if (contadorAccionsMapa >= 0)
+		{
+			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
+			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+			if (ancoraNavegacio)
+			{
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+			else 
+			{
+				ancoraNavegacio = document.createElement("a");
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+		}
+		if (contadorAccionsMapa < 0)
+			contadorAccionsMapa = 0;
+	});
+
+	let seguentBoto = document.createElement("input");
+	seguentBoto.setAttribute("type", "button");
+	seguentBoto.className = "button_image_dialog";
+	seguentBoto.classList.add("center");
+	seguentBoto.classList.add("control");
+	seguentBoto.setAttribute("name", "controlAccio");
+	seguentBoto.setAttribute("value", GetMessage("Next"));
+	seguentBoto.addEventListener("click", function () {
+		contadorAccionsMapa++;
+		if (contadorAccionsMapa < arrayIdsImgAccions.length)
+		{
+			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
+			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
+			if (ancoraNavegacio)
+			{
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+			else 
+			{
+				ancoraNavegacio = document.createElement("a");
+				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.click();
+			}
+		}
+		if (contadorAccionsMapa == arrayIdsImgAccions.length)
+			contadorAccionsMapa--;
+	});
+
+	
+	
+	let divBotonsAccio = document.createElement("div");
+	divBotonsAccio.setAttribute("class", "horizontalSpreadElements");
+	divBotonsAccio.setAttribute("style", "height: 100%;");
+	divBotonsAccio.appendChild(definicio);
+	divBotonsAccio.appendChild(previBoto);
+	divBotonsAccio.appendChild(seguentBoto);
+
+	let divBotons = document.createElement("div");
 		divBotons.setAttribute("class", "horizontalSpreadElements");
+		divBotons.setAttribute("style", "height: 8%; position: relative; top: 0 px; left: 0 px");
+
+	if (relatACarregar.origen && relatACarregar.origen == OrigenUsuari)
+	{
+		let divDivisio = document.createElement("div");
+		divDivisio.setAttribute("class", "control");
+		divBotonsAccio.insertAdjacentElement("afterbegin", divDivisio);
+
+		// Afegim els botons d'edició dins de la finestra de visualització:
 		divBotons.insertAdjacentHTML("afterbegin", ["<button class='center' onclick='TancaICreaEditaStoryMap(", i_story,")'>", GetMessage("Edit"), "</button>"].join(""));
 
 		if (relatACarregar.compartida !=null && !relatACarregar.compartida)
 		{
 			divBotons.insertAdjacentHTML("beforeend", ["<button name='upload' class='center' onclick='CompartirStorymap(", i_story ,")'>", GetMessage("Share"), "</button>"].join(""));
 		}
-		
-		DOMStorymap.body.insertAdjacentElement("afterbegin", divBotons);
-
-		text_html = new XMLSerializer().serializeToString(DOMStorymap);
 	}
 	
-	contentFinestraLayer(window, "storyMap", RemoveBaseHTMLTag(text_html));
+	divBotons.appendChild(divBotonsAccio);
 
+	finestraRelat.insertAdjacentElement("afterbegin", divRelat);
+	finestraRelat.insertAdjacentElement("afterbegin", divBotons);
+	
+	// Línia horitzontal separadora amb inici del relat.
+	let liniaHoritzontal = document.createElement("hr");
+	liniaHoritzontal.className = "separadorHoritzonal";
+	divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
+	
 	ObreFinestra(window, "storyMap");
-	AfegeixEspaiTransparent(window);
+	
+	AfegeixEspaiTransparent();
 	AfegeixMarkerStoryMapVisible();
 
 	indexStoryMapActiu=i_story;
@@ -977,43 +1536,73 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	ExecutaAttributsStoryMapVisible();
 }
 
+function RecuperarIdsImatgesAccions(textHtml)
+{
+	// Netegem l'array d'antics càlculs
+	arrayIdsImgAccions = [];
+
+	const domFromText = new DOMParser().parseFromString(textHtml, "text/html");
+	const nodeListDivAccions = domFromText.body.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
+	const arrayDivAccions = Array.from(nodeListDivAccions).filter((div) => div.id.includes(identificadorDivAccioMapa));
+	if (arrayDivAccions.length > 0)
+	{
+		let divAccio, imgAccio;
+		let contadorAccionsTransformades= 0;
+		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
+		{	
+			divAccio = domFromText.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
+			imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
+			arrayIdsImgAccions.push(imgAccio.id);
+		}
+	}	
+}
+
 /* 	Afegeix una imatge transparent al final del relat per tal que
 	l'última línia de text pugui arribar fins dalt de tot de la finestra.
 */
 var imgEspaiBlancNom = "imgEspaiBlanc"
-function AfegeixEspaiTransparent(window)
+function AfegeixEspaiTransparent()
 {
-	let storyWindow = getFinestraLayer(window, "storyMap");
 	const imgTransparent = document.createElement("img");
+	let storyWindow = getFinestraLayer(window, "storyMap");
 	imgTransparent.setAttribute("name", imgEspaiBlancNom);
 	imgTransparent.src = "1tran.gif";
 	const boundingRectWindow = storyWindow.getBoundingClientRect();
 	imgTransparent.width = boundingRectWindow.width;
 	imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
-	storyWindow.insertAdjacentElement("beforeend", imgTransparent);
+
+	const divRelat = document.getElementById(divRelatId);
+	if (divRelat) {
+		
+		divRelat.insertAdjacentElement("beforeend", imgTransparent);
 	
-	const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
-	if (cantoRedimensionaStoryMap) {
-		const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
-		if (imgRedimensiona.onmousedown.length == 1)
-		{
-			imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
-
-			// Trobar índex de la finestra
-			let i_finestra
-			for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
+		const cantoRedimensionaStoryMap = getLayer(window, "storyMap" + SufixCanto);
+		if (cantoRedimensionaStoryMap) {
+			const imgRedimensiona = cantoRedimensionaStoryMap.querySelector("img[name=" + nomImgRedimensiona + "]");
+			if (imgRedimensiona.onmousedown.length == 1)
 			{
-				if (layerFinestraList[i_finestra].nom=="storyMap")
+				/*
+				* Elimino l'event de redimensió per posteriorment afegir-lo de nou mitjaçant la funció "addEventListener()" 
+				* i així poder enllaçar 2 funcions diferents al mateix event.
+				*/
+				imgRedimensiona.removeEventListener("mousedown", ActivaMovimentFinestraLayer);
+	
+				// Trobar índex de la finestra
+				let i_finestra
+				for (i_finestra=0; i_finestra<layerFinestraList.length; i_finestra++)
 				{
-					console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
-					break;
+					if (layerFinestraList[i_finestra].nom=="storyMap")
+					{
+						console.log("createFinestraLayer is creating a finestra with the same finestra name twice. Old one is overwritten.");
+						break;
+					}
 				}
+				imgRedimensiona.addEventListener("mousedown", function(event){
+					ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
+				});
+	
+				imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
 			}
-			imgRedimensiona.addEventListener("mousedown", function(event){
-				ActivaMovimentFinestraLayer(event, i_finestra, movimentRedimensionant);
-			});
-
-			imgRedimensiona.addEventListener("mousedown", ActualitzaEspaiTransparent);
 		}
 	}
 }
@@ -1065,6 +1654,7 @@ function AfegeixMarkerStoryMapVisible()
 	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
 }
 
+const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
 {
@@ -1089,7 +1679,7 @@ var node, attribute;
 					//Afegir el simbol dins
 					// Create a text node:
 					var divNode = document.createElement("span");
-					divNode.innerHTML=DonaTextImgGifSvg("id_storymap_mm_action_"+i_mm, "storymap_mm_action_"+i_mm, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+					divNode.innerHTML=DonaTextImgGifSvg(idImgSvgAccioMapa + i_mm, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
 					i_mm++;
 					node.insertBefore(divNode, node.children[0]);
 					break;
@@ -1124,145 +1714,147 @@ var attributes=[];
 function ExecuteDataMMAttributesArray(attributes)
 {
 var hihacanvis, attribute;
+const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
+	
+	hihacanvis=false;
 
-			hihacanvis=false;
+	for (var i_at = 0; i_at < attributes.length; i_at++)
+	{
+		attribute=attributes[i_at];
+		if (attribute.name=='data-mm-crs')   //Necessito aplicar aquest abans que tots els altres.
+		{
+			if (attribute.value.trim().length)
+			{
+				if (0==CommandMMNSetCRS(attribute.value.trim()))
+					hihacanvis=true;
+			}
+		}
+	}
+	for (var i_at = 0; i_at < attributes.length; i_at++)
+	{
+		attribute=attributes[i_at];
+		if (attribute.name=="data-mm-center")
+		{
+			var mmcenter = attribute.value.trim();
+			if (mmcenter.length)
+			{
+				var punt;
+				try {
+					punt=JSON.parse(mmcenter);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
+					break;
+				}
+				if (0==CommandMMNSetCenterCoord(punt))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=='data-mm-zoom')
+		{
+			if (attribute.value.trim().length)
+			{
+				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
+					hihacanvis=true;
+			}
+		}
+		else if (attribute.name=="data-mm-layers")
+		{
+			for (var i_styles = 0; i_styles < attributes.length; i_styles++)
+			{
+				if (attributes[i_styles].name=="data-mm-styles")
+					break;
+			}
+			if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
+					(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
+					"data-mm-layers"))
+				hihacanvis=true;
+		}
+		else if (attribute.name=="data-mm-time")
+		{
+			var datejson;
+			var mmtime = attribute.value.trim();
+			if (mmtime.length)
+			{
+				try
+				{
+					datejson=JSON.parse(mmtime);
+				}
+				catch (e)
+				{
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
+								GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
+					break;
+				}
+				if (0==CommandMMNSetDateTime(datejson))
+					hihacanvis=true;
+			}
+		}
+		else if (attribute.name=='data-mm-sels')
+		{
+			var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
+			if (mmsels.length>3)
+			{
+				var sels;
+				try {
+					sels=JSON.parse(mmsels);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
+					break;
+				}
+				if (0==CommandMMNSelections(sels))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=='data-mm-diags')
+		{
+			var mmdiags = "["+attribute.value.trim()+"]";
+			if (mmdiags.length>3)
+			{
+				var diags;
+				try {
+					diags=JSON.parse(mmdiags);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
+					break;
+				}
+				if (0==CommandMMNDiagrams(diags))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+		else if (attribute.name=="data-mm-extradims")
+		{
+			var mmlayerdims = "["+attribute.value.trim()+"]";
+			if (mmlayerdims.length>3)
+			{
+				var layerdims;
+				try {
+					layerdims=JSON.parse(mmlayerdims);
+				}
+				catch (e) {
+					alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
+								GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmlayerdims);
+					break;
+				}
+				if (0==CommandMMNSetLayersExtraDimensions(layerdims))
+					hihacanvis=true;
+			}
+			else
+				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
+		}
+	}
 
-			for (var i_at = 0; i_at < attributes.length; i_at++)
-			{
-				attribute=attributes[i_at];
-				if (attribute.name=='data-mm-crs')   //Necessito aplicar aquest abans que tots els altres.
-				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetCRS(attribute.value.trim()))
-							hihacanvis=true;
-					}
-				}
-			}
-			for (var i_at = 0; i_at < attributes.length; i_at++)
-			{
-				attribute=attributes[i_at];
-				if (attribute.name=="data-mm-center")
-				{
-					var mmcenter = attribute.value.trim();
-					if (mmcenter.length)
-					{
-						var punt;
-						try {
-							punt=JSON.parse(mmcenter);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmcenter);
-							break;
-						}
-						if (0==CommandMMNSetCenterCoord(punt))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=='data-mm-zoom')
-				{
-					if (attribute.value.trim().length)
-					{
-						if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-							hihacanvis=true;
-					}
-				}
-				else if (attribute.name=="data-mm-layers")
-				{
-					for (var i_styles = 0; i_styles < attributes.length; i_styles++)
-					{
-						if (attributes[i_styles].name=="data-mm-styles")
-							break;
-					}
-					if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
-							(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
-							"data-mm-layers"))
-						hihacanvis=true;
-				}
-				else if (attribute.name=="data-mm-time")
-				{
-					var datejson;
-					var mmtime = attribute.value.trim();
-					if (mmtime.length)
-					{
-						try
-						{
-							datejson=JSON.parse(mmtime);
-						}
-						catch (e)
-						{
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". "+
-										GetMessage("ParameterValueFoundIs", "storymap") + ": " + mmtime);
-							break;
-						}
-						if (0==CommandMMNSetChangeDateTime(datejson))
-							hihacanvis=true;
-					}
-				}
-				else if (attribute.name=='data-mm-sels')
-				{
-					var mmsels = "["+attribute.value.trim().replaceAll('¨', '\'')+"]";
-					if (mmsels.length>3)
-					{
-						var sels;
-						try {
-							sels=JSON.parse(mmsels);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmsels);
-							break;
-						}
-						if (0==CommandMMNSelections(sels))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=='data-mm-diags')
-				{
-					var mmdiags = "["+attribute.value.trim()+"]";
-					if (mmdiags.length>3)
-					{
-						var diags;
-						try {
-							diags=JSON.parse(mmdiags);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmhisto);
-							break;
-						}
-						if (0==CommandMMNDiagrams(diags))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-				else if (attribute.name=="data-mm-extradims")
-				{
-					var mmlayerdims = "["+attribute.value.trim()+"]";
-					if (mmlayerdims.length>3)
-					{
-						var layerdims;
-						try {
-							layerdims=JSON.parse(mmlayerdims);
-						}
-						catch (e) {
-							alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name + ". " + e + ". " +
-										GetMessage("ParameterValueFoundIs", "storymap") + ": "  + mmlayerdims);
-							break;
-						}
-						if (0==CommandMMNSetLayersExtraDimensions(layerdims))
-							hihacanvis=true;
-					}
-					else
-						alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
-				}
-			}
 	if (!diags)
 		TancaTotsElsHistogramaFinestra();
 	return hihacanvis;
@@ -1290,6 +1882,15 @@ var node;
 			if (ExecuteDataMMAttributesArray(node.attributes))
 			{
 				darrerNodeStoryMapVisibleExecutat=node;
+				/* 	
+				*	Actualitzem l'índex de l'última acció de mapa executada per tal que 
+				*	els botons "next" i "previous" en cas d'utilitzar-se executin l'acció correcta.
+				*/
+				if (node.getAttribute("id"))
+				{
+					const nodeId = node.getAttribute("id");
+					contadorAccionsMapa = parseInt(nodeId.slice(nodeId.indexOf("_")+1));
+				}
 				RepintaMapesIVistes();
 				return true;
 			}
@@ -1308,7 +1909,7 @@ var timerExecutaAttributsStoryMapVisible=null;
 // TODO: Utilitzar aquesta funció per tal de crear botó del Tiny on crei botons per executar attributs de mm-data...	
 function ExecutaAttributsStoryMapVisibleEvent(event)
 {
-	if (timerExecutaAttributsStoryMapVisible)
+	if (event !== undefined && timerExecutaAttributsStoryMapVisible)
 		clearTimeout(timerExecutaAttributsStoryMapVisible);
 	timerExecutaAttributsStoryMapVisible=setTimeout(ExecutaAttributsStoryMapVisible,500);
 }
@@ -1353,7 +1954,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 	{
 		var cdns=[];
 		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
-			"id=\"", nomPuntSincr, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
+			"id=\"", idImgSvgAccioMapa, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
 			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
 			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
 		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
@@ -1363,7 +1964,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 		if (imgSvgIconaSincroMapa)
 		{
 			const svgClone = imgSvgIconaSincroMapa.cloneNode(true);
-			svgClone.setAttribute('id', nomPuntSincr + indexImatge);
+			svgClone.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 			divRef.insertAdjacentElement("afterbegin", svgClone);
 		}
 		else
@@ -1390,7 +1991,7 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 				*/
 				const imgDeSvg = document.createElement("img");
 				imgDeSvg.setAttribute("src", "data:image/svg+xml;UTF8," + encodeURI(svg.outerHTML));
-				imgDeSvg.setAttribute('id', nomPuntSincr + indexImatge);
+				imgDeSvg.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 				imgDeSvg.setAttribute('name', nomPuntSincr);
 				imgSvgIconaSincroMapa = imgDeSvg;
 				divRef.insertAdjacentElement("afterbegin", imgDeSvg);
