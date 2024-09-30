@@ -482,6 +482,10 @@
 			"description": "Les capes que formen part d'un grup canvien el botó de selecció (check) per un botó alternatiu (radial)", 
 			"type": "boolean"
 		},
+		"LlegendaLligaVisibleAmbConsultable": {
+			"description": "Si una capa no està visible tampoc no serà consultable", 
+			"type": "boolean"
+		},
 		"LlegendaLligaVisibleAmbCtipica": {
 			"description": "Les capes que són consultades amb l'eina de consulta típica es fan visibles i consultables", 
 			"type": "boolean"
@@ -1361,7 +1365,7 @@
 					},
 					"id":	{ 
 						"description": "Identificador únic per a la capa en el navegador. Si no s'indica, s'en genera un automàticament de tipus text a partir de diverses característiques de la capa, si aquest ja existeix s'en genera un basat en un algoritme hash() reproduible. Indiqueu un 'id' si la capa no té nom o si el nom és ambigu; per exemple, si teniu capes amb el mateix nom en diferents servidors. L'id indicat aquí identifica la capa del navegador que es pot usar en les storymap i com a paràmetre en la url del navegador",
-						"type": ["string", "null"]						
+						"type": ["string", "null"]
 					},					
 					"nom":	{ 
 						"description": "Nom de la capa del servidor o digitalitzada. És obligatori quan 'model' és 'ràster'.",

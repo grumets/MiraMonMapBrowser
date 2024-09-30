@@ -3289,7 +3289,7 @@ var MessageLang=
       "fre": "Sélectionner une image",
       "cze": "Vyberte obrázek",
       "ger": "Bild auswählen"
-	},
+	  },
     "AttachImage": {
       "cat": "Adjuntar imatge",
       "spa": "Adjuntar imagen",
@@ -3458,6 +3458,78 @@ var MessageLang=
       "cze": "Storymap nelze importovat",
       "ger": "Der Storymap kann nicht importiert werden"
     },
+    "manual": {
+      "cat": "manual",
+      "spa": "manual",
+      "eng": "manual",
+      "fre": "manuel",
+      "cze": "manuální",
+      "ger": "handbuch"
+    },
+    "NotPossibleInsertNewContent": {
+      "cat": "No és possible inserir aquest contingut aquí.\nMotiu",
+      "spa": "No es posible insertar este contenido aqui.\nMotivo",
+      "eng": "This content cannot be inserted here.\nReason",
+      "fre": "Ce contenu ne peut pas être inséré ici.\nRaison",
+      "cze": "Tento obsah sem nelze vložit.\nDůvod",
+      "ger": "Dieser Inhalt kann hier nicht eingefügt werden.\nGrund"
+    },
+    "NextStoryMapContent": {
+      "cat": "Continua la redacció del relat aquí",
+      "spa": "Continúa la redacción del relato aquí",
+      "eng": "Continue writing the story here",
+      "fre": "Continuez à écrire l'histoire ici",
+      "cze": "Pokračujte v psaní příběhu zde",
+      "ger": "Schreiben Sie die Geschichte hier weiter"      
+    },
+    "UnicStroymapWriting": {
+      "cat": "Només es pot editar un relat alhora",
+      "spa": "Sólo se puede editar una historia a la vez",
+      "eng": "Only one story can be edited at a time",
+      "fre": "Une seule histoire peut être éditée à la fois",
+      "cze": "Najednou lze upravit pouze jeden příběh",
+      "ger": "Es kann jeweils nur eine Story bearbeitet werden"
+    },
+    "EditStorymap": {
+      "cat": "Editar relat amb mapes",
+      "spa": "Editar relato con mapas",
+      "eng": "Edit storymaps",
+      "fre": "Modifier d'histoire avec des cartes",
+      "cze": "Upravte mapy příběhů",
+      "ger": "Storymap bearbeiten"
+    },
+    "RemoveImage": {
+      "cat": "Esborrar la imatge",
+      "spa": "Borrar la imagen",
+      "eng": "Remove image",
+      "fre": "Supprimer l'image",
+      "cze": "Odstranit obrázek",
+      "ger": "Bild entfernen"
+    },
+    "NotAdmittedRangeSelection": {
+      "cat": "No s'admet seleccionar un fragment amb el cursor. Posa el cursor en una posició concreta",
+      "spa": "No se admite seleccionar un fragmento con el cursor. Ponga el cursor en una posición específica",
+      "eng": "Not admitted cursor range selection. Place the cursor at a specific location",
+      "fre": "Sélection non admise de la plage de curseur. Placez le curseur à un endroit précis",
+      "cze": "Nepřijatý kurzorový výběr. Umístěte kurzor na konkrétní místo",
+      "ger": "Nicht zugelassen Cursor Auswahl. Platzieren Sie den Cursor an einem bestimmten Ort"
+    },
+    "NotAdmittedOnImage": {
+      "cat": "No s'admet adjuntar una imatge sobre una altra imatge",
+      "spa": "No se admite adjuntar una imagen sobre otra imagen",
+      "eng": "Attaching an image on top of another image is not allowed",
+      "fre": "Ajouter une image par-dessus une autre image n'est pas autorisé",
+      "cze": "Nepřijímá se připevňování obrázku nad jiný obrázek",
+      "ger": "Nicht zugegeben, ein Bild über andere Bilder zu befestigen"
+    },
+    "NotAdmittedMapActionsNested": {
+      "cat": "No s'admeten accions de mapa aniuades",
+      "spa": "No se admiten acciones de mapa anidas",
+      "eng": "Nested map actions are not supported",
+      "fre": "Les actions de carte imbriquées ne sont pas prises en charge",
+      "cze": "Nepřipouští vnořené akce mapy",
+      "ger": "Nicht zugelassen für verschachtelte Kartenaktionen"
+    }
   },
   "tresD": {
     "Graphic_3D": {

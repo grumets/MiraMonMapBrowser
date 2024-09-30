@@ -1374,7 +1374,7 @@ function EsCapaDinsRangDEscalesVisibles(capa)
 
 
 //Aquesta funció ara caldrà usar-la cada vegada que es canvii l'estat de visibilitat d'una capa
-function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
+function CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, nou_estat)
 {
 	if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
 	{
@@ -1382,6 +1382,13 @@ function CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat)
 			ParamCtrl.capa[i_capa].descarregable="si";
 		else if((nou_estat=="no" || nou_estat=="ara_no") && ParamCtrl.capa[i_capa].descarregable=="si")
 			ParamCtrl.capa[i_capa].descarregable="ara_no";
+	}
+	if (ParamCtrl.LlegendaLligaVisibleAmbConsultable)
+	{
+		if( (nou_estat=="si" || nou_estat=="semitransparent") && ParamCtrl.capa[i_capa].consultable=="ara_no")
+			ParamCtrl.capa[i_capa].consultable="si";
+		else if((nou_estat=="no" || nou_estat=="ara_no") && ParamCtrl.capa[i_capa].consultable=="si")
+			ParamCtrl.capa[i_capa].consultable="ara_no";
 	}
 	ParamCtrl.capa[i_capa].visible=nou_estat;
 }
@@ -1414,7 +1421,7 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 							return;
 					}
 					if (nou_estat=="si" || nou_estat=="semitransparent")
-						CanviaEstatVisibleISiCalDescarregableCapa(i_capa2, "ara_no");
+						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa2, "ara_no");
 
 					if (capa2.consultable=="si")
 					{
@@ -1426,7 +1433,7 @@ var capa=ParamCtrl.capa[i_capa], capa2, grup_consultable=false;
 			}
 		}
 	}
-	CanviaEstatVisibleISiCalDescarregableCapa(i_capa, nou_estat);
+	CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, nou_estat);
 	if (grup_consultable && capa.consultable=="ara_no")
 		capa.consultable=="si"
 }
@@ -1454,8 +1461,8 @@ var capa, capa2;
 					if (EsCapaDinsRangDEscalesVisibles(capa2) && EsCapaDinsAmbitActual(capa2) && EsCapaDisponibleEnElCRSActual(capa2) &&
 					    capa2.visible=="ara_no")
 					{
-						CanviaEstatVisibleISiCalDescarregableCapa(j, capa.visible);
-						CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
+						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(j, capa.visible);
+						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "ara_no");
 					}
 				}
 			}
@@ -4234,7 +4241,7 @@ var capa, j, i, i_estil;
 	{
 		capa=ParamCtrl.capa[i];
 		if (capa.visible=="si" || capa.visible=="semitransparent")
-			CanviaEstatVisibleISiCalDescarregableCapa(i, "ara_no");
+			CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "ara_no");
 		if (capa.descarregable=="si")
 			capa.descarregable="ara_no";
 	}
@@ -4247,7 +4254,7 @@ var capa, j, i, i_estil;
 			if (capa_visible[j]==capa.id)
 			{
 				if (capa.visible=="ara_no")
-					CanviaEstatVisibleISiCalDescarregableCapa(i, "si");
+					CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "si");
 				else
 				{
 					alert(GetMessage("Layer") + " " + capa_visible[j] + " " +
@@ -4263,14 +4270,14 @@ var capa, j, i, i_estil;
 					    if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 					    {
 						    if (capa.visible!="no")
-							    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+							    CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "semitransparent");
 					    }
 					    else
 					    {
 						    if (capa_estil[j].length>16 && capa_estil[j].substring(capa_estil[j].length-16, capa_estil[j].length).toUpperCase()==":SEMITRANSPARENT")
 						    {
 							    if (capa.visible!="no")
-								    CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+								    CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "semitransparent");
 							    capa_estil[j]=capa_estil[j].substring(0, capa_estil[j].length-16);
 						    }
 						    for (i_estil=0; i_estil<capa.estil.length; i_estil++)
@@ -4294,7 +4301,7 @@ var capa, j, i, i_estil;
 						if (capa_estil[j].toUpperCase()=="SEMITRANSPARENT")
 						{
 							if (capa.visible!="no")
-								CanviaEstatVisibleISiCalDescarregableCapa(i, "semitransparent");
+								CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "semitransparent");
 
 						}
 						else
@@ -4648,7 +4655,14 @@ var i, j;
 	}
 	if (typeof param_ctrl.CorsServidorLocal==="undefined")
 		param_ctrl.CorsServidorLocal=false;
-
+	
+	if (typeof param_ctrl.LlegendaLligaVisibleAmbConsultable==="undefined")
+		param_ctrl.LlegendaLligaVisibleAmbConsultable=false;
+	if (typeof param_ctrl.LlegendaLligaVisibleAmbCtipica==="undefined")
+		param_ctrl.LlegendaLligaVisibleAmbCtipica=false;
+	if (typeof param_ctrl.LlegendaLligaVisibleAmbDescarregable==="undefined")
+		param_ctrl.LlegendaLligaVisibleAmbDescarregable=false;
+	
 	for (i=0; i<param_ctrl.capa.length; i++)
 	{
 		capa=param_ctrl.capa[i];
@@ -4954,8 +4968,10 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "feedbackAmbEstils", GetMessageJSON("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", GetMessageJSON("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", GetMessageJSON("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, resizable: true, ev: null}, null);
-	createFinestraLayer(window, "triaStoryMap", GetMessageJSON("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
-	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 220, 180, 500, 400, "Nw", {scroll: "ara_no", visible: false, ev: "onScroll='ExecutaAttributsStoryMapVisibleEvent(event);'", resizable:true}, null);
+
+	createFinestraLayer(window, "triaStoryMap", GetMessageJSON("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true, minWidth:"100px", minHeight:"150px"}, null);
+	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 220, 180, 510, 420, "Nw", {scroll: "no", visible: false, ev: null, resizable:true, minWidth:min_width_finestra_storymap, minHeight:min_height_finestra_storymap}, null);
+
 	createFinestraLayer(window, "info", GetMessageJSON("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", GetMessageJSON("ModifyName"), boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createLayer(window, "menuContextualCapa", 277, 168, 145, 240, "wC", {scroll: "no", visible: false, ev: null}, null);  //L'alt real es controla des de la funció OmpleLayerContextMenuCapa i l'ample real des de l'estil MenuContextualCapa
@@ -4963,7 +4979,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	//La següent finesta es fa servir pels missatges de les transaccions però, s'hauria de resoldre bé i fer servir de manera general per qualsevol missatge d'error emergent
 	createFinestraLayer(window, "misTransaccio", GetMessageJSON("ResultOfTheTransaction", "miramon"), boto_tancar, 420, 150, 300, 300, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "taulaCapaVectorial", GetMessageJSON("ElementsVectorialTable", "vector"), boto_copiar|boto_tancar, 420, 150, 500, 320, "nWSeC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
-	createFinestraLayer(window, "creaStoryMap", GetMessageJSON("NewStorymap", "storymap"), boto_tancar, 420, 150, 750, 500, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true}, null);
+	createFinestraLayer(window, "creaStoryMap", GetMessageJSON("NewStorymap", "storymap"), boto_tancar, 420, 150, 750, 500, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true, minWidth:"237px", minHeight:"107px"}, null);
 
 	if (ComprovaConsistenciaParamCtrl(ParamCtrl))
 		return;

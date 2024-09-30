@@ -518,7 +518,7 @@ var i_capa, i_capa_a_activar;
 					{
 			       		if (ParamCtrl.capa[i_capa].visible!="ara_no")
 						{
-							CanviaEstatVisibleISiCalDescarregableCapa(i_capa, "ara_no");
+							CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, "ara_no");
 							retorn=0;  //He tocat
 						}
 					}
@@ -549,9 +549,9 @@ var i_capa, i_capa_a_activar;
 			    ParamCtrl.capa[i_capa_a_activar].visible!="si")
 			{
 				if (i_capa==ParamCtrl.capa.length)
-					CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "si");
+					CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa_a_activar, "si");
 				else
-					CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "semitransparent");
+					CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa_a_activar, "semitransparent");
 				retorn=0;  //He tocat
 			}
 		}
@@ -559,7 +559,7 @@ var i_capa, i_capa_a_activar;
 		{
 			if (ParamCtrl.capa[i_capa_a_activar].visible!="si")
 			{
-				CanviaEstatVisibleISiCalDescarregableCapa(i_capa_a_activar, "si");
+				CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa_a_activar, "si");
 				retorn=0;  //He tocat
 			}
 		}
