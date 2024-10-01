@@ -1414,7 +1414,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	*	i així saber quan ja hi son les imatges d'acció de mapa i poder obtenir-ne els seus Ids.
 	*/
 	const mutationObserver = new MutationObserver(function(changes, observer) {
-		const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}`);
+		const imgAccio = document.querySelectorAll(`img[id^=${idImgSvgAccioMapa}]`);
 		if(imgAccio && changes[0].target.contains(imgAccio[0]))
 		{
 			// Quan la imatge en blanc ja està inclosa en el DOM fem el càlcul de les alçades.
