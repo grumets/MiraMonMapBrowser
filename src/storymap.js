@@ -1005,7 +1005,7 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 		caractDialog.addEventListener("close", (event) => {
 			
 			if (event.target.returnValue != "")
-			{	
+			{
 				let resultatCaractUsuari = "";
 				try
 				{
@@ -1291,13 +1291,6 @@ function FinalitzarStoryMap(estemEditant = false)
 	{
 		paragrafAutomatic.remove();
 	}
-	// Identifiquem cada <div> amb atributs d'acció al mapa.
-	const arrayImgsAccions = tinyEditorBody.querySelectorAll("div[data-mm-center],div[data-mm-zoom],div[data-mm-layers],div[data-mm-styles],div[data-mm-time],div[data-mm-sels],div[data-mm-diags],div[data-mm-extradims],div[data-mm-crs]");
-	arrayImgsAccions.forEach((divElement) => { 
-		divElement.setAttribute("id", identificadorDivAccioMapa+contadorAccionsMapa);
-		contadorAccionsMapa++;
-	});
-	contadorAccionsMapa = 0;
 
 	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + tinyEditor.getContent({format: "html"}) + "</html>";
 	novaStoryMap.relat = cdns;
@@ -1656,7 +1649,7 @@ function AfegeixMarkerStoryMapVisible()
 
 const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
-function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, i_mm)
+function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, iAccio)
 {
 var node, attribute;
 
@@ -1676,11 +1669,12 @@ var node, attribute;
 					attribute.name=="data-mm-time" || attribute.name=='data-mm-sels' || attribute.name=='data-mm-diags' || attribute.name=='data-mm-diags' || 
 					attribute.name=='data-mm-extradims')
 				{
-					//Afegir el simbol dins
-					// Create a text node:
+					// Afegim un Id per al Div que conté el paràgraf afectat per l'acció:
+					node.setAttribute("id", identificadorDivAccioMapa+iAccio);
+					// Afegim la imatge d'acció:
 					var divNode = document.createElement("span");
-					divNode.innerHTML=DonaTextImgGifSvg(idImgSvgAccioMapa + i_mm, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
-					i_mm++;
+					divNode.innerHTML=DonaTextImgGifSvg(idImgSvgAccioMapa + iAccio, imgRelatAccio, "storymap_action", 14, GetMessage("ActionOnMap", "storymap"), null);
+					iAccio++;
 					node.insertBefore(divNode, node.children[0]);
 					break;
 				}
@@ -1688,11 +1682,9 @@ var node, attribute;
 		}
 		if (node.childNodes && node.childNodes.length)
 		{
-			if (AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes, i_mm))
-				return true;
+			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes, iAccio);
 		}
 	}
-	return false;
 }
 
 /*Arguments variables. Com a parametres te una llista de 'data-mm-????' i els seu valor, 'data-mm-????' i els seu valor, ...
@@ -1948,13 +1940,12 @@ function CompartirStorymap(i_story)
 
 var imgSvgIconaSincroMapa;
 
-function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
+function CreaImatgeMarcadorSincronismeMapa(divRef)
 {
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 	{
 		var cdns=[];
-		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" ",
-			"id=\"", idImgSvgAccioMapa, indexImatge, "\" name=\"", nomPuntSincr, "\" ",
+		cdns.push("<img align=\"absmiddle\" src=\"", AfegeixAdrecaBaseSRC("storymap_action.gif"), "\" name=\"", nomPuntSincr, "\" ",
 			"width=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.ncol) ? ParamCtrl.BarraEstil.ncol : 23, "\" ",
 			"height=\"", (ParamCtrl.BarraEstil && ParamCtrl.BarraEstil.nfil) ? ParamCtrl.BarraEstil.nfil : 22, "\" ", "alt=\"", GetMessage("SyncWithMap", "storymap"), "\" title=\"", GetMessage("SyncWithMap", "storymap"), "\" >");
 		divRef.insertAdjacentHTML("afterbegin", cdns.join(""));
@@ -1964,7 +1955,6 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 		if (imgSvgIconaSincroMapa)
 		{
 			const svgClone = imgSvgIconaSincroMapa.cloneNode(true);
-			svgClone.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 			divRef.insertAdjacentElement("afterbegin", svgClone);
 		}
 		else
@@ -1991,7 +1981,6 @@ function CreaImatgeMarcadorSincronismeMapa(divRef, indexImatge)
 				*/
 				const imgDeSvg = document.createElement("img");
 				imgDeSvg.setAttribute("src", "data:image/svg+xml;UTF8," + encodeURI(svg.outerHTML));
-				imgDeSvg.setAttribute('id', idImgSvgAccioMapa + indexImatge);
 				imgDeSvg.setAttribute('name', nomPuntSincr);
 				imgSvgIconaSincroMapa = imgDeSvg;
 				divRef.insertAdjacentElement("afterbegin", imgDeSvg);
