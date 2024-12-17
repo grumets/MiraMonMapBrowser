@@ -4128,6 +4128,11 @@ function RepintaMapesIVistes()
 		SeleccionaRadialPuntCentralConsultesTipiques();
 		PosaAGrisRetallPerObjecteConsultesTipiques();
 	}
+	// Si el llistat de Storymaps és visible es repintarà.
+	if (getFinestraLayer(window, "triaStoryMap").style.visibility=="visible")
+	{
+		RefrescaFinestraTriaStoryMap(window, "triaStoryMap");
+	}
 }
 
 function ChangeSizeMiraMonMapBrowser()

@@ -192,6 +192,22 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	indexStoryMapActiu=-1;
 }
 
+// Per un canvi d'àmbit es refresca el contingut del llistat de relats.
+function RefrescaFinestraTriaStoryMap(win, name)
+{
+	let finestraTriaRelats = getFinestraLayer(win, name);
+
+	if (finestraTriaRelats)
+	{
+		// Netegem els continguts prèvis del div finestra.
+		while (finestraTriaRelats.firstChild) {
+			finestraTriaRelats.removeChild(finestraTriaRelats.firstChild);
+		}
+	}
+
+	OmpleFinestraTriaStoryMap(win, name);
+}
+
 function DemanaStorymapsNimmbus(name)
 {
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
@@ -1407,7 +1423,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	divRelat.setAttribute("id", divRelatId);
 	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
 	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-	divRelat.insertAdjacentHTML("afterbegin", text_html);
+	divRelat.insertAdjacentHTML("afterbegin", RemoveBaseHTMLTag(text_html));
 	
 	/* 
 	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
