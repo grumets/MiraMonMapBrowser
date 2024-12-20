@@ -72,13 +72,13 @@ let arrayIdsImgAccions = [];
 const identificadorDivAccioMapa = "AccioMapa_";
 var contadorAccionsMapa = 0;
 const indentificadorSelectorControls = "controls";
-const controlScroll = "scroll", controlManual = "manual";
 const divRelatId = "divRelat";
 const ancoraRelat = "ancoraRelat"; 
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
 const min_width_finestra_storymap = "500px", min_height_finestra_storymap = "400px";
+const fontImatgesUsuari = "data:image/jpeg;";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -1417,13 +1417,22 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 				(relatACarregar.Ample) ? relatACarregar.Ample : rect.ample,
 				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
 	}
-
+	
+	const textHtmlSenseBase = RemoveBaseHTMLTag(text_html);
+	let DOMTextHtml = new DOMParser().parseFromString(textHtmlSenseBase, "text/html");
+	// Identifiquem les imatges presents al relat que no es corresponen amb aquelles afegides amb l'editor de relats Tiny.
+	const imgsATractar = querySelectorAll(`:not(img[src^='${fontImatgesUsuari}'])`);
+	// Modifiquem el seu src per incloure la Base correcta.
+	imgsATractar.forEach((img)=> {
+		img.src = AfegeixAdrecaBaseSRC(img.src);
+	});
+	const textHTMLAdaptat = new XMLSerializer().serializeToString(DOMTextHtml);
 	// Crear el marc per al relat de mapes. 
 	let divRelat = document.createElement("div");
 	divRelat.setAttribute("id", divRelatId);
 	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
 	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-	divRelat.insertAdjacentHTML("afterbegin", RemoveBaseHTMLTag(text_html));
+	divRelat.insertAdjacentHTML("afterbegin", textHTMLAdaptat);
 	
 	/* 
 	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
