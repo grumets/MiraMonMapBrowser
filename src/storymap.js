@@ -1421,7 +1421,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	const textHtmlSenseBase = RemoveBaseHTMLTag(text_html);
 	let DOMTextHtml = new DOMParser().parseFromString(textHtmlSenseBase, "text/html");
 	// Identifiquem les imatges presents al relat que no es corresponen amb aquelles afegides amb l'editor de relats Tiny.
-	const imgsATractar = querySelectorAll(`:not(img[src^='${fontImatgesUsuari}'])`);
+	const imgsATractar = DOMTextHtml.querySelectorAll(`img:not([src^='${fontImatgesUsuari}'])`);
 	// Modifiquem el seu src per incloure la Base correcta.
 	imgsATractar.forEach((img)=> {
 		img.src = AfegeixAdrecaBaseSRC(img.src);
