@@ -5220,7 +5220,7 @@ function ExportarObjectesGeoJSON(i_capa)
 		const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
 		const capaExportar = {"type": "FeatureCollection", "features": []};
 		Object.keys(i_objectesAExportar).forEach(key => {
-			const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
+			const objAExportar = capa.objectes.features[key];
 			// Definir l'àmbit global dels elements exportats
 			if (objAExportar.bbox && objAExportar.bbox.length==4)
 			{

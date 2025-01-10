@@ -1418,21 +1418,12 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
 	}
 	
-	const textHtmlSenseBase = RemoveBaseHTMLTag(text_html);
-	let DOMTextHtml = new DOMParser().parseFromString(textHtmlSenseBase, "text/html");
-	// Identifiquem les imatges presents al relat que no es corresponen amb aquelles afegides amb l'editor de relats Tiny.
-	const imgsATractar = DOMTextHtml.querySelectorAll(`img:not([src^='${fontImatgesUsuari}'])`);
-	// Modifiquem el seu src per incloure la Base correcta.
-	imgsATractar.forEach((img)=> {
-		img.src = AfegeixAdrecaBaseSRC(img.src);
-	});
-	const textHTMLAdaptat = new XMLSerializer().serializeToString(DOMTextHtml);
 	// Crear el marc per al relat de mapes. 
 	let divRelat = document.createElement("div");
 	divRelat.setAttribute("id", divRelatId);
 	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
 	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-	divRelat.insertAdjacentHTML("afterbegin", textHTMLAdaptat);
+	divRelat.insertAdjacentHTML("afterbegin", RemoveBaseHTMLTag(text_html));
 	
 	/* 
 	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
