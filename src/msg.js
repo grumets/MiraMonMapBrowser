@@ -3239,7 +3239,15 @@ var MessageLang=
       "fre": "Sélectionner tous les objets",
       "cze": "Vybrat všechny objekty",
       "ger": "Alle Objekte auswählen"
-    }
+    },
+    "NoObjectSelectedTapis": {
+      "cat": "No s'ha seleccionat cap objecte per mostrar al TAPIS",
+      "spa": "No se ha seleccionado ningún objeto para mostrar en el TAPIS",
+      "eng": "No features has been selected to show on TAPIS",
+      "fre": "Aucune fonctionnalité n'a été sélectionnée pour afficher sur TAPIS",
+      "cze": "Na TAPIS nebyly vybrány žádné funkce",
+      "ger": "Zur Anzeige auf TAPIS wurden keine Features ausgewählt"
+    },
   },
   "storymap": {
     "Storymaps": {

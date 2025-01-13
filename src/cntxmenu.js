@@ -5299,8 +5299,15 @@ var capaIndexPerTAPIS;
  */
 function ObreObjectesGeoJsonTAPIS (i_capa)
 {
-	capaIndexPerTAPIS = i_capa;
-	finestraTAPIS = window.open(urlTAPIS, "_blank", "width=1400,height=800");
+	if (Object.keys(i_objectesAExportar).length > 0)
+	{
+		capaIndexPerTAPIS = i_capa;
+		finestraTAPIS = window.open(urlTAPIS, "_blank", "width=1400,height=800");
+	}
+	else
+	{
+		alert(GetMessage("NoObjectSelectedTapis", "cntxmenu"));
+	}
 }
 
 /**
