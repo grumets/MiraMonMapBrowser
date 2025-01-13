@@ -3331,7 +3331,7 @@ var MessageLang=
       "ger": "Öffnet den Selektor für Bilddateien"
     },
     "SyncWithMap": {
-      "cat": "Sincronitzar amb al mapa",
+      "cat": "Sincronitzar amb el mapa",
       "spa": "Sincronizar con el mapa",
       "eng": "Sync with the map",
       "fre": "Synchroniser avec la carte",
