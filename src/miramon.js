@@ -5429,8 +5429,19 @@ var elem, rect;
 function ProcessMessageMiraMonMapBrowser(event)
 {
 	if (typeof event.data !== "string" || event.data.substring(0, 10)!="CommandMMN")
+	{
+		try {
+			var json=JSON.parse(event.data);
+		}
+		catch{
+			return;
+		}
+		if (json.msg=="Tapis is listening") 
+		{
+			EnviaGeoJSONTAPIS();
+		}  
 		return;
+	}
 	eval(event.data);
 	RepintaMapesIVistes();
 }
-
