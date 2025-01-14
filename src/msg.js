@@ -3223,7 +3223,31 @@ var MessageLang=
       "fre": "Il n'y a pas d'objets de cette couche dans le champ de vision actuel",
       "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy",
       "ger": "Innerhalb des aktuellen Sichtbereiches sind keine Objekte dieses Layers zum Anzeigen vorhanden"
-    }
+    },
+    "OpenSelectedTapis": {
+     "cat": "Obre seleccionats amb TAPIS",
+     "spa": "Abrir seleccionados con TAPIS",
+     "eng": "Open selected with TAPIS",
+     "fre": "Ouvrir sélectionné avec TAPIS",
+     "cze": "Otevřít vybrané pomocí TAPIS",
+     "ger": "Mit TAPIS ausgewählt öffnen"
+   },
+   "SelectAllObjects": {
+      "cat": "Seleccionar tots els objectes",
+      "spa": "Seleccionar todos los objectos",
+      "eng": "Select all objects",
+      "fre": "Sélectionner tous les objets",
+      "cze": "Vybrat všechny objekty",
+      "ger": "Alle Objekte auswählen"
+    },
+    "NoObjectSelectedTapis": {
+      "cat": "No s'ha seleccionat cap objecte per mostrar al TAPIS",
+      "spa": "No se ha seleccionado ningún objeto para mostrar en el TAPIS",
+      "eng": "No features has been selected to show on TAPIS",
+      "fre": "Aucune fonctionnalité n'a été sélectionnée pour afficher sur TAPIS",
+      "cze": "Na TAPIS nebyly vybrány žádné funkce",
+      "ger": "Zur Anzeige auf TAPIS wurden keine Features ausgewählt"
+    },
   },
   "storymap": {
     "Storymaps": {

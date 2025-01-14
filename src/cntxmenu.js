@@ -38,6 +38,10 @@
 
 "use strict"
 
+const checkboxTotsElemTaulaVectId= "seleccionaTotsElem";
+const checkboxCadaElementId = "checkExport_";
+const urlTAPIS = "https://www.tapis.grumets.cat/";
+
 function MoureASobreDeTot(i_capa)
 {
 	var n_capes_especials_a_sobre=NumeroDeCapesVolatils(i_capa);
@@ -4929,7 +4933,7 @@ function MostraFinestraTaulaDeCapaVectorial()
 }
 
 /* Crea l'HTML per a construir la taula d'elements vectorials */
-function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true)
+function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = false, ambGeometria = true, ambTotSelec = false)
 {
 const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const attributesVisibles = {}, objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
@@ -4970,8 +4974,8 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		nodePare.appendChild(divCapcalera);
 		return;
 	}
-	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit' name='nomesAmbitNm' ", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(",		i_capa, ", this, document.getElementById(\"ambGeometria\"))'>",
-			"<label for='nomesAmbitNm'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
+	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit' ", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(", i_capa, ")'>&nbsp;",
+			"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
 
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
@@ -5011,9 +5015,12 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 			return;
 		}
 	}
-	cdnsFragmentsHtml.push("&nbsp;<input type='checkbox' id='ambGeometria' name='ambGeometriaNm' ", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ", document.getElementById(\"nomesAmbit\"), this)'>",
-	"<label for='ambGeometriaNm'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>&nbsp;",
-	"<button style='align-self:end;' onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>");
+	cdnsFragmentsHtml.push("<input type='checkbox' id='ambGeometria' ", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ")'>&nbsp;",
+	"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
+	"<input type='checkbox' id='" + checkboxTotsElemTaulaVectId + "' ", (ambTotSelec)? "checked" : "", " onChange='SeleccionaTotsObjectes(", objectes.length, ")'>&nbsp;",
+	"<label for='" + checkboxTotsElemTaulaVectId + "'>", GetMessage("SelectAllObjects", "cntxmenu"), "</label>",
+	"<button onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",
+	"<button style='align-self:end;' onClick='ObreObjectesGeoJsonTAPIS(", i_capa, ")'>", GetMessage("OpenSelectedTapis", "cntxmenu"),"</button>");
 	paragrafCheckboxs.insertAdjacentHTML("beforeend", cdnsFragmentsHtml.join(""));
 	divCapcalera.appendChild(paragrafCheckboxs);
 	divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
@@ -5088,7 +5095,7 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 				// Porta papers
 				cdnsPortapapers.push((prop ? prop :""), "\t");
 			}
-			filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='checkExport_"+ i + 
+			filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='" + checkboxCadaElementId + i + 
 							"' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
 			if(i_data==0)
 			{				
@@ -5120,7 +5127,7 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 				else
 					anarCoord={x : arrayCoords[0][0], y : arrayCoords[0][1]};
 				
-				anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", 			env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
+				anar_obj=["<td><button style='width=100%' onClick='AnarAObjVectorialTaula(", anarCoord.x, ",", anarCoord.y, ", \"",capa.CRSgeometry,"\",", 	env_temp.MinX, ",", env_temp.MaxX, ",", env_temp.MinY, ",", env_temp.MaxY, ");'>" , GetMessage("GoTo", "capavola") , "</button></td>"];
 				
 				cdns_anar_obj= anar_obj.join("");
 				
@@ -5178,14 +5185,37 @@ function ActualitzaIndexObjectesExportar(checkbox)
 {
 	const indexATreballar = checkbox.value.toString();
 	// És un diccionari d'índexos on cada element és a la vegada el mateix índex.
-	checkbox.checked ? (i_objectesAExportar[indexATreballar]=indexATreballar) : (delete i_objectesAExportar[indexATreballar]);
+	checkbox.checked ? i_objectesAExportar[indexATreballar]=indexATreballar : delete i_objectesAExportar[indexATreballar];
 }
 
 // Neteja de l'objecte d'índexos a exportar.
 function NetejaIndexosExportacio()
 {
+	const checkboxTotsElem = document.getElementById(checkboxTotsElemTaulaVectId);
+	if (checkboxTotsElem)
+		checkboxTotsElem.checked = false; 
+
 	for (var clau in i_objectesAExportar)
 		delete i_objectesAExportar[clau];
+}
+
+// Selecciona tots els objectes a exportar.
+function SeleccionaTotsObjectes(totalObjectes) 
+{
+	const checkboxTotsElem = document.getElementById(checkboxTotsElemTaulaVectId);
+	if (checkboxTotsElem)
+	{
+		let checkbox;
+		for (let i = 0; i < totalObjectes; i++)
+		{
+			checkbox = document.getElementById(checkboxCadaElementId + i);
+			if (checkbox)
+			{
+				checkbox.checked = checkboxTotsElem.checked;
+				checkboxTotsElem.checked ? i_objectesAExportar[checkbox.value.toString()]=checkbox.value.toString() : delete i_objectesAExportar[checkbox.value.toString()];
+			}
+		}
+	}
 }
 
 function DonaPortapapersTaulaCapaVectorial(contingutACopiar)
@@ -5205,48 +5235,87 @@ function TancaFinestra_taulaCapaVectorial()
 	}
 }
 
-function RecarregaTaula(i_capa, checkboxAmbit, checkboxGeometria)
+function RecarregaTaula(i_capa)
 {
-	const ambit = checkboxAmbit.checked, geometria = checkboxGeometria ? checkboxGeometria.checked : false;
-	InsereixCadenaTaulaDeCapaVectorial(getFinestraLayer(window, "taulaCapaVectorial"), i_capa, ambit, geometria);
-	//contentLayer(getFinestraLayer(window, "taulaCapaVectorial"), DonaCadenaTaulaDeCapaVectorial(i_capa, ambit, geometria));
+	const checkboxAmbit = document.getElementById("nomesAmbit");
+	const checkboxGeometria = document.getElementById("ambGeometria");
+	const checkboxTotSelec = document.getElementById(checkboxTotsElemTaulaVectId);
+	const ambit = checkboxAmbit ? checkboxAmbit.checked : false, geometria = checkboxGeometria ? checkboxGeometria.checked : false, totSelecc = checkboxTotSelec ? checkboxTotSelec.checked : false;
+	InsereixCadenaTaulaDeCapaVectorial(getFinestraLayer(window, "taulaCapaVectorial"), i_capa, ambit, geometria, totSelecc);
 }
+
+function PreparaGeoJSONObjectesSeleccionats(i_capa)
+{
+	const dadesExportar = {"type": "FeatureCollection", "features": []};
+	const capa = ParamCtrl.capa[i_capa];
+	// Valors mínims/màxims bbox
+	const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
+	
+	Object.keys(i_objectesAExportar).forEach(key => {
+		const objAExportar = capa.objectes.features[key];
+		// Definir l'àmbit global dels elements exportats
+		if (objAExportar.bbox && objAExportar.bbox.length==4)
+		{
+			const iteradorIndex = objAExportar.bbox.keys();
+			for (var index of iteradorIndex)
+			{
+				// Coord del bbox Mínima
+				if (index < 2)
+				{
+					if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+				else // Coord del bbox Màxima
+				{
+					if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
+						bboxObjectesAExportar[index] = objAExportar.bbox[index];
+				}
+			}
+			dadesExportar.bbox = bboxObjectesAExportar;
+		}
+		dadesExportar.features.push(objAExportar);
+	});
+
+	return dadesExportar;
+}
+
 function ExportarObjectesGeoJSON(i_capa)
 {
 	if (Object.keys(i_objectesAExportar).length > 0)
 	{
-		const capa = ParamCtrl.capa[i_capa];
-		// Valors mínims/màxims 
-		const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
-		const capaExportar = {"type": "FeatureCollection", "features": []};
-		Object.keys(i_objectesAExportar).forEach(key => {
-			const objAExportar = ParamCtrl.capa[i_capa].objectes.features[key];
-			// Definir l'àmbit global dels elements exportats
-			if (objAExportar.bbox && objAExportar.bbox.length==4)
-			{
-				const iteradorIndex = objAExportar.bbox.keys();
-				for (var index of iteradorIndex)
-				{
-					// Coord del bbox Mínima
-					if (index < 2)
-					{
-						if (objAExportar.bbox[index] < bboxObjectesAExportar[index])
-							bboxObjectesAExportar[index] = objAExportar.bbox[index];
-					}
-					else // Coord del bbox Màxima
-					{
-						if (objAExportar.bbox[index] > bboxObjectesAExportar[index])
-							bboxObjectesAExportar[index] = objAExportar.bbox[index];
-					}
-				}
-				capaExportar.bbox = bboxObjectesAExportar;
-			}
-			capaExportar.features.push(objAExportar);
-		});
-		return GuardaDadesJSONFitxerExtern(capaExportar, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
+		const objectesGeoJSON = PreparaGeoJSONObjectesSeleccionats(i_capa);
+		return GuardaDadesJSONFitxerExtern(objectesGeoJSON, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
 	}
 	else
 	{
 		alert(GetMessage("NoObjectSelectedExport", "cntxmenu"));
 	}
+}
+
+var finestraTAPIS;
+var capaIndexPerTAPIS;
+/**
+ * Permet obrir l'eina web TAPIS per visualitzar les dades dels objectes seleccionat
+ */
+function ObreObjectesGeoJsonTAPIS (i_capa)
+{
+	if (Object.keys(i_objectesAExportar).length > 0)
+	{
+		capaIndexPerTAPIS = i_capa;
+		finestraTAPIS = window.open(urlTAPIS, "_blank", "width=1400,height=800");
+	}
+	else
+	{
+		alert(GetMessage("NoObjectSelectedTapis", "cntxmenu"));
+	}
+}
+
+/**
+ * S'envia un GeoJSON per Post message al TAPIS que aquest interpretarà permetent visualitzar-lo.
+ */
+function EnviaGeoJSONTAPIS()
+{
+	const objectesGeoJSON = PreparaGeoJSONObjectesSeleccionats(capaIndexPerTAPIS);
+
+	finestraTAPIS.postMessage(JSON.stringify({type:"GeoJSON", data: objectesGeoJSON, url: DonaHost(ParamCtrl.ServidorLocal)}), "*");
 }
