@@ -4165,12 +4165,12 @@ var MessageLang=
       "ger": "Selektiver Download der Zone"
     },
     "MMZ_MMZX_NotInstalledDownload": {
-      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, descarregueu-lo",
-      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, descárguelo",
-      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, download it",
-      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, download it",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, stáhněte si ji pro formát MMZ nebo MMZX (ISO 19165-1).",
-      "ger": "Für das MMZ- oder MMZX-Format (ISO 19165-1) laden Sie bitte den MiraMon Universal Map Reader herunter, wenn Sie ihn nicht installiert oder aktualisiert haben."
+      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el MiraMon, descarregueu-lo",
+      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el MiraMon, descárguelo",
+      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon , please, download it",
+      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le MiraMon, please, download it",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon, stáhněte si ji pro formát MMZ nebo MMZX (ISO 19165-1).",
+      "ger": "Für das MMZ- oder MMZX-Format (ISO 19165-1) laden Sie bitte den MiraMon herunter, wenn Sie ihn nicht installiert oder aktualisiert haben."
     },
     "ViewLayers_MMZ_MMZX_InstalledMM": {
       "cat": "Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.",
@@ -4237,12 +4237,12 @@ var MessageLang=
       "ger": "Die Kartographie wird heruntergeladen"
     }, 
     "NotHaveMiramonInstalled": {
-      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
-      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
-      "eng": "If you don't have MiraMon Universal Map Reader installed or updated",
-      "fre": "Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader",
-      "ger": "Wenn MiraMon Universal Map Reader nicht installiert bzw. aktualisiert ist"
+      "cat": "Si no teniu instal·lat o actualitzat el MiraMon", 
+      "spa": "Si no tiene instalado o actualizado el MiraMon", 
+      "eng": "If you don't have MiraMon installed or updated",
+      "fre": "Si vous n'avez pas installé où actualisé le MiraMon",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon",
+      "ger": "Wenn MiraMon nicht installiert bzw. aktualisiert ist"
     },
     "CorrectDownloadLayers": {
       "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon", 
@@ -5003,6 +5003,14 @@ var MessageLang=
       "fre": "Installer le Lecteur Universel de Cartes du MiraMon",
       "cze": "Instalace MiraMon Universal Map Reader",
       "ger": "MiraMon Universal Map Reader installieren"
+    },
+	"InstallMiraMon": {
+      "cat": "Instal·lar el MiraMon d'escriptori",
+      "spa": "Instalar el MiraMon de escriptorio",
+      "eng": "Install MiraMon Desktop",
+      "fre": "Installer le MiraMon de bureau",
+      "cze": "Instalace MiraMon Desktop",
+      "ger": "MiraMon Desktop installieren"
     },
     "SureToDownloadMMR": {
       "cat": "Segur que vols descarregar el Lector Universal de Mapes del MiraMon?",
@@ -7197,6 +7205,14 @@ var MessageLang=
       "cze": "ajuda/eng/ajuda.htm",
       "ger": "ajuda/eng/ajuda.htm"
     },
+	"instMMZip": {
+      "cat": "https://www.miramon.cat/mus/cat/index.htm",
+      "spa": "https://www.miramon.cat/mus/spa/index.htm",
+      "eng": "https://www.miramon.cat/mus/eng/index.htm",
+      "fre": "https://www.miramon.cat/mus/eng/index.htm",
+      "cze": "https://www.miramon.cat/mus/eng/index.htm",
+      "ger": "https://www.miramon.cat/mus/eng/index.htm"
+    },	
     "installerMMRExe": {
       "cat": "https://www.miramon.cat/mmr/cat/exe/Inst_MMR.exe",
       "spa": "https://www.miramon.cat/mmr/esp/exe/Inst_MMR.exe",
