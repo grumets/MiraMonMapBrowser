@@ -538,13 +538,18 @@ var cdns=[];
 			cdns.push(CadenaBotoPolsable("print", "print", GetMessage("print"), "ObreTriaFullImprimir();"));
 		if (ParamCtrl.BarraBotoPlanaPrincipal)
 			cdns.push(CadenaBotoPolsable("home", "home", GetMessage("RestartFromServer", "barra"), "RestartMiraMonMapBrowser();"));
-		if (ParamCtrl.BarraBotoInstallarMMZ)
+		/*if (ParamCtrl.BarraBotoInstallarMMZ)
 		{
 			const instMmrNomBoto = "instmmr";
 			cdns.push(CadenaBotoPolsable(instMmrNomBoto, "instmmr",
 						GetMessage("InstallMiraMonReader", "barra"),
 						"PreguntaDescarregaMMReader(\"id_barra_" + instMmrNomBoto + "\");"));
-		}		
+		}*/		
+		if (ParamCtrl.BarraBotoInstallarMMZ)
+		{
+			const instMMNomBoto = "instmm";
+			cdns.push(CadenaBotoPolsable(instMMNomBoto, "instmm", GetMessage("InstallMiraMon", "barra"), "DescarregaMiraMon();"));						
+		}
 		if (ParamCtrl.BarraBotoStoryMaps || (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)) // Object.hasOwn(ParamCtrl, "StoryMap")) no comprova la longitud, només si hi ha el membre
 			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 		if (ParamCtrl.BarraBotoAjuda)
