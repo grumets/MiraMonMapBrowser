@@ -5318,5 +5318,5 @@ function EnviaGeoJSONTAPIS()
 {
 	const objectesGeoJSON = PreparaGeoJSONObjectesSeleccionats(capaIndexPerTAPIS);
 
-	finestraTAPIS.postMessage(JSON.stringify({type:"GeoJSON", data: objectesGeoJSON, url: DonaHost(ParamCtrl.ServidorLocal)}), "*");
+	finestraTAPIS.postMessage(JSON.stringify({type:"GeoJSON", data: objectesGeoJSON, url: window.location.href}), "*");
 }
