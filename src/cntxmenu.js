@@ -4964,6 +4964,7 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 
 	const paragrafCheckboxs = document.createElement("p");
 	paragrafCheckboxs.setAttribute("class", "vectorial");
+	paragrafCheckboxs.setAttribute("style", "display: flex;");
 
 	// Si no hi han attributes per mostrar, parem i mostrem missatge explicatiu.
 	var attributtesVisiblesArray=Object.keys(attributesVisibles);
@@ -4974,8 +4975,8 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		nodePare.appendChild(divCapcalera);
 		return;
 	}
-	cdnsFragmentsHtml.push("<input type='checkbox' id='nomesAmbit' ", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(", i_capa, ")'>&nbsp;",
-			"<label for='nomesAmbit'>", GetMessage("ViewItemsInScope", "cntxmenu"), "</label>");
+	cdnsFragmentsHtml.push("<fieldset>", "<legend>", GetMessage("Show"), "</legend>", "<input type='checkbox' id='nomesAmbit' ", (isNomesAmbit)? "checked" : "", " onChange='NetejaIndexosExportacio(); RecarregaTaula(", i_capa, ")'>&nbsp;",
+			"<label for='nomesAmbit'>", GetMessage("OnlyItemsInScope", "cntxmenu"), "</label> ");
 
 	// Si només desitgem veure els objectes de l'àmbit
 	if (isNomesAmbit)
@@ -5016,11 +5017,11 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		}
 	}
 	cdnsFragmentsHtml.push("<input type='checkbox' id='ambGeometria' ", (ambGeometria)? "checked" : "", " onChange='RecarregaTaula(",i_capa, ")'>&nbsp;",
-	"<label for='ambGeometria'>", GetMessage("ShowGeometry", "cntxmenu"), "</label>",
-	"<input type='checkbox' id='" + checkboxTotsElemTaulaVectId + "' ", (ambTotSelec)? "checked" : "", " onChange='SeleccionaTotsObjectes(", objectes.length, ")'>&nbsp;",
-	"<label for='" + checkboxTotsElemTaulaVectId + "'>", GetMessage("SelectAllObjects", "cntxmenu"), "</label>",
-	"<button onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("ExportObjects", "cntxmenu"),"</button>",
-	"<button style='align-self:end;' onClick='ObreObjectesGeoJsonTAPIS(", i_capa, ")'>", GetMessage("OpenSelectedTapis", "cntxmenu"),"</button>");
+	"<label for='ambGeometria'>", GetMessage("Geometry", "cntxmenu"), "</label>", "</fieldset>",
+	"<fieldset>", "<legend>", GetMessage("Seleccions", "cntxmenu"), "</legend>", "<input type='checkbox' id='" + checkboxTotsElemTaulaVectId + "' ", (ambTotSelec)? "checked" : "", " onChange='SeleccionaTotsObjectes(", objectes.length, ")'>&nbsp;",
+	"<label for='" + checkboxTotsElemTaulaVectId + "'>", GetMessage("AllObjects", "cntxmenu"), "</label> ",
+	"<button onClick='ExportarObjectesGeoJSON(", i_capa, ")'>", GetMessage("SaveObjects", "cntxmenu"),"</button> ",
+	"<button style='align-self:end;' onClick='ObreObjectesGeoJsonTAPIS(", i_capa, ")'>", GetMessage("OpenWithTapis", "cntxmenu"),"</button>", "</fieldset>");
 	paragrafCheckboxs.insertAdjacentHTML("beforeend", cdnsFragmentsHtml.join(""));
 	divCapcalera.appendChild(paragrafCheckboxs);
 	divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));

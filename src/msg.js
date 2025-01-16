@@ -3136,21 +3136,13 @@ var MessageLang=
       "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)",
       "ger": "Transparenzanteil im Bereich von 0% (undurchsichtig) bis 100% (transparent)"
     },
-	"ViewItemsInScope": {
-      "cat": "Veure només objectes dins de l'àmbit",
-      "spa": "Ver solo objectes dentro del ámbito",
-      "eng": "View only features within the scope",
-      "fre": "Ne voir que les objets dans le périmètre",
-      "cze": "Zobrazit pouze funkce v rozsahu",
-      "ger": "Nur Features innerhalb des Bereichs anzeigen"
-    },
-	"ShowGeometry": {
-      "cat": "Mostrar geometria",
-      "spa": "Mostrar geometría",
-      "eng": "Show geometry",
-      "fre": "Montrer la géométrie",
-      "cze": "Zobrazit geometrii",
-      "ger": "Geometrie anzeigen"
+	"OnlyItemsInScope": {
+      "cat": "Només objectes dins de l'àmbit",
+      "spa": "Solo objectos dentro del ámbito",
+      "eng": "Only features within the scope",
+      "fre": "Seuls les éléments du champ d'application",
+      "cze": "Pouze prvky v rámci rozsahu působnosti",
+      "ger": "Nur Merkmale im Anwendungsbereich"
     },
 	"Geometry": {
       "cat": "Geometria",
@@ -3168,13 +3160,13 @@ var MessageLang=
       "cze": "Vyberte objekt",
       "ger": "Wähle das Objekt aus"
    },
-   "ExportObjects": {
-     "cat": "Guardar seleccionats com GeoJSON",
-     "spa": "Guardar seleccionados como GeoJSON",
-     "eng": "Save selected as GeoJSON",
-     "fre": "Enregistrer la sélection sous GeoJSON",
-     "cze": "Uložit vybrané jako GeoJSON",
-     "ger": "Die Auswahl als GeoJSON speichern"
+   "SaveObjects": {
+     "cat": "Guardar com GeoJSON",
+     "spa": "Guardar como GeoJSON",
+     "eng": "Save as GeoJSON",
+     "fre": "Enregistrer sous GeoJSON",
+     "cze": "Uložit jako GeoJSON",
+     "ger": "Als GeoJSON speichern"
    },
 	"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
@@ -3224,21 +3216,21 @@ var MessageLang=
       "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy",
       "ger": "Innerhalb des aktuellen Sichtbereiches sind keine Objekte dieses Layers zum Anzeigen vorhanden"
     },
-    "OpenSelectedTapis": {
-     "cat": "Obre seleccionats amb TAPIS",
-     "spa": "Abrir seleccionados con TAPIS",
-     "eng": "Open selected with TAPIS",
-     "fre": "Ouvrir sélectionné avec TAPIS",
-     "cze": "Otevřít vybrané pomocí TAPIS",
-     "ger": "Mit TAPIS ausgewählt öffnen"
+    "OpenWithTapis": {
+     "cat": "Obrir amb TAPIS",
+     "spa": "Abrir con TAPIS",
+     "eng": "Open with TAPIS",
+     "fre": "Ouvrir avec TAPIS",
+     "cze": "Otevřít pomocí TAPIS",
+     "ger": "Mit TAPIS öffnen"
    },
-   "SelectAllObjects": {
-      "cat": "Seleccionar tots els objectes",
-      "spa": "Seleccionar todos los objectos",
-      "eng": "Select all objects",
-      "fre": "Sélectionner tous les objets",
-      "cze": "Vybrat všechny objekty",
-      "ger": "Alle Objekte auswählen"
+   "AllObjects": {
+      "cat": "Tots els objectes",
+      "spa": "Todos los objectos",
+      "eng": "All objects",
+      "fre": "Tous les objets",
+      "cze": "Všechny objekty",
+      "ger": "Alle Objekte"
     },
     "NoObjectSelectedTapis": {
       "cat": "No s'ha seleccionat cap objecte per mostrar al TAPIS",
@@ -3248,6 +3240,14 @@ var MessageLang=
       "cze": "Na TAPIS nebyly vybrány žádné funkce",
       "ger": "Zur Anzeige auf TAPIS wurden keine Features ausgewählt"
     },
+    "Seleccions": {
+      "cat": "Seleccions",
+      "spa": "Selecciones",
+      "eng": "Selections",
+      "fre": "Sélection",
+      "cze": "Výběry",
+      "ger": "Auswahl"
+    }
   },
   "storymap": {
     "Storymaps": {
