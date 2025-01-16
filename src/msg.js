@@ -3136,21 +3136,13 @@ var MessageLang=
       "cze": "Procento průhlednosti omezené na hodnoty 0 % (neprůhledné) až 100 % (průhledné)",
       "ger": "Transparenzanteil im Bereich von 0% (undurchsichtig) bis 100% (transparent)"
     },
-	"ViewItemsInScope": {
-      "cat": "Veure només objectes dins de l'àmbit",
-      "spa": "Ver solo objectes dentro del ámbito",
-      "eng": "View only features within the scope",
-      "fre": "Ne voir que les objets dans le périmètre",
-      "cze": "Zobrazit pouze funkce v rozsahu",
-      "ger": "Nur Features innerhalb des Bereichs anzeigen"
-    },
-	"ShowGeometry": {
-      "cat": "Mostrar geometria",
-      "spa": "Mostrar geometría",
-      "eng": "Show geometry",
-      "fre": "Montrer la géométrie",
-      "cze": "Zobrazit geometrii",
-      "ger": "Geometrie anzeigen"
+	"OnlyItemsInScope": {
+      "cat": "Només objectes dins de l'àmbit",
+      "spa": "Solo objectos dentro del ámbito",
+      "eng": "Only features within the scope",
+      "fre": "Seuls les éléments du champ d'application",
+      "cze": "Pouze prvky v rámci rozsahu působnosti",
+      "ger": "Nur Merkmale im Anwendungsbereich"
     },
 	"Geometry": {
       "cat": "Geometria",
@@ -3168,13 +3160,13 @@ var MessageLang=
       "cze": "Vyberte objekt",
       "ger": "Wähle das Objekt aus"
    },
-   "ExportObjects": {
-     "cat": "Guardar seleccionats com GeoJSON",
-     "spa": "Guardar seleccionados como GeoJSON",
-     "eng": "Save selected as GeoJSON",
-     "fre": "Enregistrer la sélection sous GeoJSON",
-     "cze": "Uložit vybrané jako GeoJSON",
-     "ger": "Die Auswahl als GeoJSON speichern"
+   "SaveObjects": {
+     "cat": "Guardar com GeoJSON",
+     "spa": "Guardar como GeoJSON",
+     "eng": "Save as GeoJSON",
+     "fre": "Enregistrer sous GeoJSON",
+     "cze": "Uložit jako GeoJSON",
+     "ger": "Als GeoJSON speichern"
    },
 	"VectorLayerValuesCopiedClipboardFormat": {
       "cat": "Els valors de la capa vectorial han estat copiats al portaretalls en format",
@@ -3224,21 +3216,21 @@ var MessageLang=
       "cze": "V aktuálním rozsahu zobrazení nejsou žádné objekty této vrstvy",
       "ger": "Innerhalb des aktuellen Sichtbereiches sind keine Objekte dieses Layers zum Anzeigen vorhanden"
     },
-    "OpenSelectedTapis": {
-     "cat": "Obre seleccionats amb TAPIS",
-     "spa": "Abrir seleccionados con TAPIS",
-     "eng": "Open selected with TAPIS",
-     "fre": "Ouvrir sélectionné avec TAPIS",
-     "cze": "Otevřít vybrané pomocí TAPIS",
-     "ger": "Mit TAPIS ausgewählt öffnen"
+    "OpenWithTapis": {
+     "cat": "Obrir amb TAPIS",
+     "spa": "Abrir con TAPIS",
+     "eng": "Open with TAPIS",
+     "fre": "Ouvrir avec TAPIS",
+     "cze": "Otevřít pomocí TAPIS",
+     "ger": "Mit TAPIS öffnen"
    },
-   "SelectAllObjects": {
-      "cat": "Seleccionar tots els objectes",
-      "spa": "Seleccionar todos los objectos",
-      "eng": "Select all objects",
-      "fre": "Sélectionner tous les objets",
-      "cze": "Vybrat všechny objekty",
-      "ger": "Alle Objekte auswählen"
+   "AllObjects": {
+      "cat": "Tots els objectes",
+      "spa": "Todos los objectos",
+      "eng": "All objects",
+      "fre": "Tous les objets",
+      "cze": "Všechny objekty",
+      "ger": "Alle Objekte"
     },
     "NoObjectSelectedTapis": {
       "cat": "No s'ha seleccionat cap objecte per mostrar al TAPIS",
@@ -3248,6 +3240,14 @@ var MessageLang=
       "cze": "Na TAPIS nebyly vybrány žádné funkce",
       "ger": "Zur Anzeige auf TAPIS wurden keine Features ausgewählt"
     },
+    "Seleccions": {
+      "cat": "Seleccions",
+      "spa": "Selecciones",
+      "eng": "Selections",
+      "fre": "Sélection",
+      "cze": "Výběry",
+      "ger": "Auswahl"
+    }
   },
   "storymap": {
     "Storymaps": {
@@ -4165,12 +4165,12 @@ var MessageLang=
       "ger": "Selektiver Download der Zone"
     },
     "MMZ_MMZX_NotInstalledDownload": {
-      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon, descarregueu-lo",
-      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon, descárguelo",
-      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon Universal Map Reader, please, download it",
-      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes du MiraMon, please, download it",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader, stáhněte si ji pro formát MMZ nebo MMZX (ISO 19165-1).",
-      "ger": "Für das MMZ- oder MMZX-Format (ISO 19165-1) laden Sie bitte den MiraMon Universal Map Reader herunter, wenn Sie ihn nicht installiert oder aktualisiert haben."
+      "cat": "Pel format MMZ o MMZX (ISO 19165-1), si no teniu instal·lat o actualitzat el MiraMon, descarregueu-lo",
+      "spa": "Para el formato MMZ o MMZX (ISO 19165-1), si no tiene instalado o actualizado el MiraMon, descárguelo",
+      "eng": "For the MMZ or MMZX format (ISO 19165-1), if you don't have installed or updated MiraMon , please, download it",
+      "fre": "Pour le format MMZ ou MMZX (ISO 19165-1), si vous n'avez pas installé où actualisé le MiraMon, please, download it",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon, stáhněte si ji pro formát MMZ nebo MMZX (ISO 19165-1).",
+      "ger": "Für das MMZ- oder MMZX-Format (ISO 19165-1) laden Sie bitte den MiraMon herunter, wenn Sie ihn nicht installiert oder aktualisiert haben."
     },
     "ViewLayers_MMZ_MMZX_InstalledMM": {
       "cat": "Per poder visualitzar les capes en format MMZ o MMZX (ISO 19165-1) cal tenir correctament instal·lat el programa MiraMon.",
@@ -4237,12 +4237,12 @@ var MessageLang=
       "ger": "Die Kartographie wird heruntergeladen"
     }, 
     "NotHaveMiramonInstalled": {
-      "cat": "Si no teniu instal·lat o actualitzat el Lector Universal de Mapes del MiraMon", 
-      "spa": "Si no tiene instalado o actualizado el Lector Universal de Mapas de MiraMon", 
-      "eng": "If you don't have MiraMon Universal Map Reader installed or updated",
-      "fre": "Si vous n'avez pas installé où actualisé le Lecteur Universel de Cartes MiraMon",
-      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon Universal Map Reader",
-      "ger": "Wenn MiraMon Universal Map Reader nicht installiert bzw. aktualisiert ist"
+      "cat": "Si no teniu instal·lat o actualitzat el MiraMon", 
+      "spa": "Si no tiene instalado o actualizado el MiraMon", 
+      "eng": "If you don't have MiraMon installed or updated",
+      "fre": "Si vous n'avez pas installé où actualisé le MiraMon",
+      "cze": "Pokud nemáte nainstalovanou nebo aktualizovanou aplikaci MiraMon",
+      "ger": "Wenn MiraMon nicht installiert bzw. aktualisiert ist"
     },
     "CorrectDownloadLayers": {
       "cat": "Per poder descarregar les capes cal tenir correctament instal·lat el programa MiraMon", 
@@ -5003,6 +5003,14 @@ var MessageLang=
       "fre": "Installer le Lecteur Universel de Cartes du MiraMon",
       "cze": "Instalace MiraMon Universal Map Reader",
       "ger": "MiraMon Universal Map Reader installieren"
+    },
+	"InstallMiraMon": {
+      "cat": "Instal·lar el MiraMon d'escriptori",
+      "spa": "Instalar el MiraMon de escriptorio",
+      "eng": "Install MiraMon Desktop",
+      "fre": "Installer le MiraMon de bureau",
+      "cze": "Instalace MiraMon Desktop",
+      "ger": "MiraMon Desktop installieren"
     },
     "SureToDownloadMMR": {
       "cat": "Segur que vols descarregar el Lector Universal de Mapes del MiraMon?",
@@ -7197,6 +7205,14 @@ var MessageLang=
       "cze": "ajuda/eng/ajuda.htm",
       "ger": "ajuda/eng/ajuda.htm"
     },
+	"instMMZip": {
+      "cat": "https://www.miramon.cat/mus/cat/index.htm",
+      "spa": "https://www.miramon.cat/mus/spa/index.htm",
+      "eng": "https://www.miramon.cat/mus/eng/index.htm",
+      "fre": "https://www.miramon.cat/mus/eng/index.htm",
+      "cze": "https://www.miramon.cat/mus/eng/index.htm",
+      "ger": "https://www.miramon.cat/mus/eng/index.htm"
+    },	
     "installerMMRExe": {
       "cat": "https://www.miramon.cat/mmr/cat/exe/Inst_MMR.exe",
       "spa": "https://www.miramon.cat/mmr/esp/exe/Inst_MMR.exe",
