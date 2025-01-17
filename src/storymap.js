@@ -1048,11 +1048,21 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				{
 					const capesVisiblesIds = [];
 					const estilsCapesIds = [];
-					ParamCtrl.capa.forEach(capa => { 
+					const dimensionsExtra=[];
+					ParamCtrl.capa.forEach((capa) => { 
 						if (capa.visible=="si")
 						{
 							capesVisiblesIds.push(capa.id);
 							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+							if (capa.dimensioExtra && capa.dimensioExtra.length > 0)
+							{
+								let dimensio;
+								for (let i=0; i<capa.dimensioExtra.length; i++)
+								{
+									dimensio = capa.dimensioExtra[i];
+									dimensionsExtra.push(`{"ly":"${capa.id}","dims":{"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"}}`);
+								}
+							}
 						}
 					});
 					if (capesVisiblesIds.length > 0)
@@ -1063,6 +1073,10 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					{
 						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
 					}
+					if (dimensionsExtra.length > 0)
+						{
+							resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-extradims", value: dimensionsExtra.toString()};
+						}
 					hiHaCheckboxSeleccionat = true;
 				}
 				
@@ -1923,7 +1937,7 @@ function ExecutaAttributsStoryMapVisibleEvent(event)
 
 function ExecutaAttributsStoryMapVisible()
 {
-	var div=getFinestraLayer(window, "storyMap")
+	var div=getFinestraLayer(window, "storyMap");
 	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
