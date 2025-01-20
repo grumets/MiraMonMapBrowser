@@ -1399,7 +1399,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	divRelat.setAttribute("id", divRelatId);
 	divRelat.setAttribute("style", "overflow-x: hidden; overflow-y: auto; padding: 0 3%; height: 92%;");
 	divRelat.addEventListener("scroll", ExecutaAttributsStoryMapVisibleEvent);
-	divRelat.insertAdjacentHTML("afterbegin", text_html);
+	divRelat.insertAdjacentHTML("afterbegin", RemoveBaseHTMLTag(text_html));
 	
 	/* 
 	*	Tot canvi que hi hagi entre les nodesfills del relat volem estar-ne al corrent 
