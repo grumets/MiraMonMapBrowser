@@ -1056,12 +1056,20 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
 							if (capa.dimensioExtra && capa.dimensioExtra.length > 0)
 							{
-								let dimensio;
+								let dimensio, cdns;
+								cdns = `{"ly":"${capa.id}","dims":{`;
 								for (let i=0; i<capa.dimensioExtra.length; i++)
 								{
 									dimensio = capa.dimensioExtra[i];
-									dimensionsExtra.push(`{"ly":"${capa.id}","dims":{"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"}}`);
+									cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
+									
+									if (i!=capa.dimensioExtra.length-1)
+									{
+										cdns += ",";
+									}
 								}
+								cdns += "}}";
+								dimensionsExtra.push(cdns);
 							}
 						}
 					});
