@@ -3672,24 +3672,24 @@ function CanviaDimensionsExtraDeCapes(layerdims, param_name_dim_extra)
 									}
 								}
 								if (i_valor==clau_valor.valor.length)
-									alert("La dimensio de la capa no suporta el valor solicitat" + " " + capa_visible[j] + " " +
+									alert("La dimensió de la capa no suporta el valor solicitat" + " " + capa + " " +
 										GetMessage("indicatedAt") + " " +  param_name_dim_extra);
 								break;
 							}
 						}
 						if (i_param==capa.dimensioExtra.length)
-							alert("La capa no te la dimensio extra solicidada" + " " + capa_visible[j] + " " +
+							alert("La capa no té la dimensió extra solicidada" + " " + capa + " " +
 								GetMessage("indicatedAt") + " " +  param_name_dim_extra);
 					}
 				}
 				else
-					alert("La capa no te dimensions" + " " + capa_visible[j] + " " +
+					alert("La capa no té dimensions" + " " + capa + " " +
 						GetMessage("indicatedAt") + " " +  param_name_dim_extra);
 				break;
 			}
 		}
 		if (i==ParamCtrl.capa.length)
-			alert(GetMessage("CannotFindLayer") + " " + capa_visible[j] + " " +
+			alert(GetMessage("CannotFindLayer") + " " + ly_dims.ly + " " +
 					GetMessage("indicatedAt") + " " +  param_name_dim_extra);
 	}
 	return (hihacanvis) ? 0 : 1;
