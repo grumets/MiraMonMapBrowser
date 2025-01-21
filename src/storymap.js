@@ -1581,8 +1581,11 @@ function RecuperarIdsImatgesAccions(textHtml)
 		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
 			divAccio = domFromText.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
-			imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
-			arrayIdsImgAccions.push(imgAccio.id);
+			if (divAccio)
+			{
+				imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
+				arrayIdsImgAccions.push(imgAccio.id);
+			}
 		}
 	}	
 }
