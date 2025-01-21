@@ -1680,16 +1680,17 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
 	return rect_div.top <= rect_el.top && rect_div.bottom >= rect_el.bottom;
 }
-
+var iAccio = 0;
 function AfegeixMarkerStoryMapVisible()
 {
 	var div=getFinestraLayer(window, "storyMap");
-	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
+	iAccio = 0;
+	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes);
 }
 
 const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
-function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, iAccio)
+function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes)
 {
 var node, attribute;
 
@@ -1722,7 +1723,7 @@ var node, attribute;
 		}
 		if (node.childNodes && node.childNodes.length)
 		{
-			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes, iAccio);
+			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes);
 		}
 	}
 }
