@@ -3434,13 +3434,13 @@ var MessageLang=
       "cze": "Chyba při načítání obrázku",
       "ger": "Fehler beim Laden eines Bildes"
     },
-    "Layers&Styles": {
-      "cat": "Capes i estils",
-      "spa": "Capas y estilos",
-      "eng": "Layers and styles",
+    "LayersStyles&Dimensions": {
+      "cat": "Capes, estils i dimensions",
+      "spa": "Capas, estilos y dimensiones",
+      "eng": "Layers, styles and dimensions",
       "fre": "Couches et styles",
-      "cze": "Vrstvy a styly",
-      "ger": "Layers und Stile"
+      "cze": "Vrstvy, styly a rozměry",
+      "ger": "Ebenen, Stile und Abmessungen"
     },
     "Position&Zoom": {
       "cat": "Posició i zoom",
