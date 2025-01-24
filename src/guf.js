@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -89,7 +89,7 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 	if (reprod_usage.ru_platform)
 		reprod_usage.ru_platform = escapeWin1252(reprod_usage.ru_platform);
 	if (reprod_usage.ru_schema)
-		reprod_usage.ru_schema = escapeWin1252(reprod_usage.ru_schema);
+		reprod_usage.ru_schema = escapeWin1252Component(reprod_usage.ru_schema);
 	if (typeof reprod_usage.ru_sugg_app === "undefined")
 		reprod_usage.ru_sugg_app = escapeWin1252(location.href);
 	else if (reprod_usage.ru_sugg_app)
@@ -111,7 +111,7 @@ function GUFGetURLPreviousFeedbackWithReproducibleUsage(code, codespace, reprod_
 		
 	//decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara 
 	url+="&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=FEEDBACK&TRG_TYPE_1=CITATION&TRG_FLD_1=CODE&TRG_VL_1=" + DonaCadenaPerValorDeFormulari(code) + 
-					"&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + codespace.replace("https://","http://") + "&TRG_OPR_2=EQ";
+					"&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=CITATION&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + escapeWin1252Component(codespace.replace("https://","http://")) + "&TRG_OPR_2=EQ";
 	
 	var i_cond=1;
 	if (reprod_usage.ru_platform)
@@ -894,7 +894,7 @@ function GUFCarregaFeedbackAnteriorCallback(doc, extra_param) {
     }
 
     if (extra_param.callback_function && typeof window[extra_param.callback_function] === "function") {
-        window[extra_param.callback_function](guf, JSON.parse(extra_param.params_function));
+        window[extra_param.callback_function](JSON.parse(extra_param.params_function), guf);
         return;
     }
 
