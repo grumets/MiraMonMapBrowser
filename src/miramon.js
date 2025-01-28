@@ -4136,6 +4136,11 @@ function RepintaMapesIVistes()
 		SeleccionaRadialPuntCentralConsultesTipiques();
 		PosaAGrisRetallPerObjecteConsultesTipiques();
 	}
+	// Si el llistat de Storymaps és visible es repintarà.
+	if (getFinestraLayer(window, "triaStoryMap").style.visibility=="visible")
+	{
+		RefrescaFinestraTriaStoryMap(window, "triaStoryMap");
+	}
 }
 
 function ChangeSizeMiraMonMapBrowser()
@@ -4254,6 +4259,9 @@ function BuscaIMarcaEstilCapa(i_capa, capa_visible, estil_capa)
 						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, "semitransparent");
 					estil_capa=estil_capa.substring(0, estil_capa.length-16);
 				}
+				
+				let i_estil;
+				
 				for (i_estil=0; i_estil<capa.estil.length; i_estil++)
 				{
 					if (capa.estil[i_estil].id==estil_capa)

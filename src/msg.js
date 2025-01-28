@@ -3466,13 +3466,13 @@ var MessageLang=
       "cze": "Sdílet mapu příběhu",
       "ger": "Storymap teilen"
     },
-    "RetrieveStorymap": {
-      "cat": "Recuperar relats",
-      "spa": "Recuperar relatos",
-      "eng": "Retrieve storymaps",
-      "fre": "Récupérer des histoires",
-      "cze": "Získat data příběhů",
-      "ger": "Storymaps abrufen"
+    "RetrieveOtherStories": {
+      "cat": "Recuperar altres relats creats per usuaris",
+      "spa": "Recuperar otros relatos creados por usuarios",
+      "eng": "Retrieve other stories created by users",
+      "fre": "Récupérer d'autres histoires créées par les utilisateurs",
+      "cze": "Získat další příběhy vytvořené uživateli",
+      "ger": "Retrieve andere Geschichten erstellt von Benutzern"
     },
     "StorymapCannotImported": {
       "cat": "No es pot importar el relat",

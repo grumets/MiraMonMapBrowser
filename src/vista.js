@@ -688,7 +688,7 @@ function EscriuCoordenadesAFinestraFeedbackAmbScope()
 	ResetCoordsFB();
 }
 
-//posem en blanc la variable Coord per la propera vegada que es defineixi un envoluant
+//posem en blanc la variable Coord per la propera vegada que es defineixi un envolupant
 function ResetCoordsFB () 
 {
 		CoordsFB.x1='';

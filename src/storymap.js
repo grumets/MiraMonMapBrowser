@@ -72,13 +72,13 @@ let arrayIdsImgAccions = [];
 const identificadorDivAccioMapa = "AccioMapa_";
 var contadorAccionsMapa = 0;
 const indentificadorSelectorControls = "controls";
-const controlScroll = "scroll", controlManual = "manual";
 const divRelatId = "divRelat";
 const ancoraRelat = "ancoraRelat"; 
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
 const min_width_finestra_storymap = "500px", min_height_finestra_storymap = "400px";
+const fontImatgesUsuari = "data:image/jpeg;";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -164,7 +164,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		nstory++;
 	}
 	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
-				GetMessage("RetrieveStorymap", "storymap"), "</button>", "<br><br>",
+				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
 
@@ -190,6 +190,22 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	cdns.push("</table>");
 	contentFinestraLayer(win, name, cdns.join(""));
 	indexStoryMapActiu=-1;
+}
+
+// Per un canvi d'àmbit es refresca el contingut del llistat de relats.
+function RefrescaFinestraTriaStoryMap(win, name)
+{
+	let finestraTriaRelats = getFinestraLayer(win, name);
+
+	if (finestraTriaRelats)
+	{
+		// Netegem els continguts prèvis del div finestra.
+		while (finestraTriaRelats.firstChild) {
+			finestraTriaRelats.removeChild(finestraTriaRelats.firstChild);
+		}
+	}
+
+	OmpleFinestraTriaStoryMap(win, name);
 }
 
 function DemanaStorymapsNimmbus(name)
@@ -1032,11 +1048,29 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				{
 					const capesVisiblesIds = [];
 					const estilsCapesIds = [];
-					ParamCtrl.capa.forEach(capa => { 
+					const dimensionsExtra=[];
+					ParamCtrl.capa.forEach((capa) => { 
 						if (capa.visible=="si")
 						{
 							capesVisiblesIds.push(capa.id);
 							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+							if (capa.dimensioExtra && capa.dimensioExtra.length > 0)
+							{
+								let dimensio, cdns;
+								cdns = `{"ly":"${capa.id}","dims":{`;
+								for (let i=0; i<capa.dimensioExtra.length; i++)
+								{
+									dimensio = capa.dimensioExtra[i];
+									cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
+									
+									if (i!=capa.dimensioExtra.length-1)
+									{
+										cdns += ",";
+									}
+								}
+								cdns += "}}";
+								dimensionsExtra.push(cdns);
+							}
 						}
 					});
 					if (capesVisiblesIds.length > 0)
@@ -1047,6 +1081,10 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					{
 						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
 					}
+					if (dimensionsExtra.length > 0)
+						{
+							resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-extradims", value: dimensionsExtra.toString()};
+						}
 					hiHaCheckboxSeleccionat = true;
 				}
 				
@@ -1393,7 +1431,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 				(relatACarregar.Ample) ? relatACarregar.Ample : rect.ample,
 				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
 	}
-
+	
 	// Crear el marc per al relat de mapes. 
 	let divRelat = document.createElement("div");
 	divRelat.setAttribute("id", divRelatId);
@@ -1543,8 +1581,11 @@ function RecuperarIdsImatgesAccions(textHtml)
 		for(contadorAccionsTransformades=0; contadorAccionsTransformades < arrayDivAccions.length; contadorAccionsTransformades++)
 		{	
 			divAccio = domFromText.getElementById(identificadorDivAccioMapa+contadorAccionsTransformades);
-			imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
-			arrayIdsImgAccions.push(imgAccio.id);
+			if (divAccio)
+			{
+				imgAccio = divAccio.querySelector(`img[id^=${idImgSvgAccioMapa}]`);
+				arrayIdsImgAccions.push(imgAccio.id);
+			}
 		}
 	}	
 }
@@ -1639,16 +1680,17 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
 	return rect_div.top <= rect_el.top && rect_div.bottom >= rect_el.bottom;
 }
-
+var iAccio = 0;
 function AfegeixMarkerStoryMapVisible()
 {
 	var div=getFinestraLayer(window, "storyMap");
-	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes, 0);
+	iAccio = 0;
+	AfegeixMarkerANodesFillsStoryMapVisible(div, div.childNodes);
 }
 
 const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
-function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes, iAccio)
+function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes)
 {
 var node, attribute;
 
@@ -1681,7 +1723,7 @@ var node, attribute;
 		}
 		if (node.childNodes && node.childNodes.length)
 		{
-			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes, iAccio);
+			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes);
 		}
 	}
 }
@@ -1907,7 +1949,7 @@ function ExecutaAttributsStoryMapVisibleEvent(event)
 
 function ExecutaAttributsStoryMapVisible()
 {
-	var div=getFinestraLayer(window, "storyMap")
+	var div=getFinestraLayer(window, "storyMap");
 	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
