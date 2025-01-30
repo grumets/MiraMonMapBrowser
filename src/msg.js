@@ -3435,9 +3435,9 @@ var MessageLang=
       "ger": "Fehler beim Laden eines Bildes"
     },
     "Layers&Styles": {
-      "cat": "Capes i estils i dimensions",
-      "spa": "Capas y estilos y dimensiones",
-      "eng": "Layers and styles and dimensions",
+      "cat": "Capes i estils",
+      "spa": "Capas y estilos",
+      "eng": "Layers and styles",
       "fre": "Couches et styles",
       "cze": "Vrstvy a styly rozměry",
       "ger": "Layers und Stile  Abmessungen"
