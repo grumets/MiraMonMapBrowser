@@ -57,11 +57,11 @@ const dialegCaractId = "caractDialeg", dialegMidesId = "midesDialeg", dialegAler
 // Dialeg Mida Imatges identificadors
 const labelWidthId = "labelWidth", inputWidthId = "widthMesure", labelHeightId = "labelHeight", inputHeightId = "heightMesure", confirmImageBtnId = "confirmImageBtn", chboxProportionalId = "chboxProportional", selectSizeUnitId = "selectSizeUnit", textMidesImatgeId = "textMidesImatge";
 // Dialeg Característiques checkbox identificadors i noms
-const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle", chboxCapesStyleName = "layerStyle",  chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates", formCheckboxesId = "formCheckboxes";
+const chBoxTempsId = "chboxDate", chboxTempsName = "date", chBoxCapesStyleId = "chboxLayerStyle",  chboxCapesStyleName = "layerStyle", chBoxDimensionsId = "chboxDimension",  chboxDimensionsName = "dimension",chBoxPosZoomId = "chboxPosZoom", chboxPosZoomName = "positionZoom", confirmCaractBtnId = "confirmCaractBtn", chboxCapesName = "layers", chboxEstilsName = "styles", chboxZoomName = "zoom", chboxCoordName = "coordinates", formCheckboxesId = "formCheckboxes";
 const pixelUnit = "px", percentageUnit = "%";
 const limitsMidesImatge = {};
 var resultatMidesImatge = {};
-var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}};
+var resultatCaract = {[chboxCapesName]: {}, [chboxEstilsName]: {}, [chboxZoomName]: {}, [chboxCoordName]: {}, [chboxTempsName]:{}, [chboxDimensionsName]:{}};
 // NOM per a les imatges que impliquen una acció de mapa.
 const nomPuntSincr = "sincrPoint";
 // IDENTIFICADOR per a les imatges que impliquen una acció de mapa.
@@ -70,7 +70,7 @@ const idImgSvgAccioMapa = "id_storymap_mm_action_";
 const idiomesTiny = {cat: 'ca', spa: 'es', eng: 'en', cze: 'cs', ger: 'de', fre: 'fr_FR'};
 let arrayIdsImgAccions = [];
 const identificadorDivAccioMapa = "AccioMapa_";
-var contadorAccionsMapa = 0;
+var contadorAccionsMapa = -1;
 const indentificadorSelectorControls = "controls";
 const divRelatId = "divRelat";
 const ancoraRelat = "ancoraRelat"; 
@@ -124,7 +124,7 @@ function TancaFinestra_triaStoryMap()
 function TancaFinestra_visualitzaStoryMap()
 {
 	indexStoryMapActiu=null;
-	contadorAccionsMapa = 0;
+	contadorAccionsMapa = -1;
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
@@ -575,7 +575,7 @@ function ActualitzaTextMidesImatge(imatge)
  */
 function CreaDialegSincronitzarAmbMapa()
 {
-	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements'><p><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label></p><p><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></p></div><div class= 'horizontalSpreadElements'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
+	const dialogHtml = ["<form id='", formCheckboxesId,"'><p>" + GetMessage("SelectMapFeatures", "storymap") + "</p><div class='horizontalSpreadElements' style='margin:0 0 2%;'><input type='checkbox' id='", chBoxPosZoomId, "' name='", chboxPosZoomName,"' checked><label for='", chBoxPosZoomId, "'>" + GetMessage("Position&Zoom", "storymap") + "</label><input type='checkbox' id='", chBoxCapesStyleId, "' name='", chboxCapesStyleName,"' checked><label for='", chBoxCapesStyleId, "'>" + GetMessage("Layers&Styles", "storymap") + "</label><input type='checkbox' id='", chBoxDimensionsId, "' name='", chboxDimensionsName,"' checked><label for='", chBoxDimensionsId, "'>" + GetMessage("Dimensions", "storymap") + "</label><input type='checkbox' id='", chBoxTempsId, "' name='", chboxTempsName,"' checked><label for='", chBoxTempsId, "'>" + GetMessage("Date") + "</label></div><div class= 'horizontalSpreadElements' style='margin:3% 0 0;'><button id='", confirmCaractBtnId, "' formmethod='dialog' value='default'>" + GetMessage("OK") + "</button><button value='cancel' formmethod='dialog'>" + GetMessage("Cancel") + "</button></div></form>"];
 
 	return CreaDialog(dialegCaractId, dialogHtml.join(""));
 }
@@ -1048,29 +1048,12 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				{
 					const capesVisiblesIds = [];
 					const estilsCapesIds = [];
-					const dimensionsExtra=[];
+					
 					ParamCtrl.capa.forEach((capa) => { 
 						if (capa.visible=="si")
 						{
 							capesVisiblesIds.push(capa.id);
 							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
-							if (capa.dimensioExtra && capa.dimensioExtra.length > 0)
-							{
-								let dimensio, cdns;
-								cdns = `{"ly":"${capa.id}","dims":{`;
-								for (let i=0; i<capa.dimensioExtra.length; i++)
-								{
-									dimensio = capa.dimensioExtra[i];
-									cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
-									
-									if (i!=capa.dimensioExtra.length-1)
-									{
-										cdns += ",";
-									}
-								}
-								cdns += "}}";
-								dimensionsExtra.push(cdns);
-							}
 						}
 					});
 					if (capesVisiblesIds.length > 0)
@@ -1081,13 +1064,39 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 					{
 						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-styles", value: estilsCapesIds.toString()};
 					}
-					if (dimensionsExtra.length > 0)
-						{
-							resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-extradims", value: dimensionsExtra.toString()};
-						}
+					
 					hiHaCheckboxSeleccionat = true;
 				}
 				
+				if (resultatCaractUsuari[chboxDimensionsName]["status"])
+				{
+					const dimensionsExtra=[];
+					ParamCtrl.capa.forEach((capa) => { 
+						if (capa.visible=="si" && capa.dimensioExtra && capa.dimensioExtra.length > 0)
+						{
+							let dimensio, cdns;
+							cdns = `{"ly":"${capa.id}","dims":{`;
+							for (let i=0; i<capa.dimensioExtra.length; i++)
+							{
+								dimensio = capa.dimensioExtra[i];
+								cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
+								
+								if (i!=capa.dimensioExtra.length-1)
+								{
+									cdns += ",";
+								}
+							}
+							cdns += "}}";
+							dimensionsExtra.push(cdns);
+						}
+					});
+					
+					if (dimensionsExtra.length > 0)
+					{
+						resultatCaractUsuari[chboxEstilsName]["attribute"] = {name: "data-mm-extradims", value: dimensionsExtra.toString()};
+					}
+				}
+
 				if (resultatCaractUsuari[chboxTempsName]["status"])
 				{
 					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
@@ -1115,7 +1124,8 @@ function MostraDialogCaracteristiquesNavegador(ultimElemId)
 				if (hiHaCheckboxSeleccionat) 
 				{
 					let divResultatCaract = document.createElement("div");
-		
+					divResultatCaract.setAttribute("data-mm-crs", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+
 					Object.keys(resultatCaractUsuari).forEach((caracteristica) => {
 						if(resultatCaractUsuari[caracteristica]["attribute"])
 						{
@@ -1411,7 +1421,7 @@ function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
 
-	contadorAccionsMapa= 0;
+	contadorAccionsMapa= -1;
 	const finestraRelat = getFinestraLayer(window, "storyMap");
 	
 	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
@@ -1468,9 +1478,10 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	previBoto.setAttribute("name", "controlAccio");
 	previBoto.setAttribute("value", GetMessage("Previous"));
 	previBoto.addEventListener("click", function () {
-		contadorAccionsMapa--;
-		if (contadorAccionsMapa >= 0)
+		if (contadorAccionsMapa > 0)
 		{
+			contadorAccionsMapa--;
+			
 			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
 			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
 			if (ancoraNavegacio)
@@ -1482,11 +1493,12 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 			{
 				ancoraNavegacio = document.createElement("a");
 				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.setAttribute("name", ancoraRelat);
+				ancoraNavegacio.setAttribute("display", "none");
+				finestraRelat.appendChild(ancoraNavegacio);
 				ancoraNavegacio.click();
 			}
 		}
-		if (contadorAccionsMapa < 0)
-			contadorAccionsMapa = 0;
 	});
 
 	let seguentBoto = document.createElement("input");
@@ -1497,9 +1509,11 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	seguentBoto.setAttribute("name", "controlAccio");
 	seguentBoto.setAttribute("value", GetMessage("Next"));
 	seguentBoto.addEventListener("click", function () {
-		contadorAccionsMapa++;
-		if (contadorAccionsMapa < arrayIdsImgAccions.length)
+		
+		if (contadorAccionsMapa < arrayIdsImgAccions.length-1)
 		{
+			contadorAccionsMapa++;
+
 			const idImatge = arrayIdsImgAccions[contadorAccionsMapa];
 			let ancoraNavegacio= document.querySelector("a[name='" + ancoraRelat + "']")
 			if (ancoraNavegacio)
@@ -1511,11 +1525,12 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 			{
 				ancoraNavegacio = document.createElement("a");
 				ancoraNavegacio.setAttribute("href", "#" + idImatge);
+				ancoraNavegacio.setAttribute("name", ancoraRelat);
+				ancoraNavegacio.setAttribute("display", "none");
+				finestraRelat.appendChild(ancoraNavegacio);
 				ancoraNavegacio.click();
 			}
 		}
-		if (contadorAccionsMapa == arrayIdsImgAccions.length)
-			contadorAccionsMapa--;
 	});
 
 	

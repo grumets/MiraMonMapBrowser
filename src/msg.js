@@ -3439,8 +3439,16 @@ var MessageLang=
       "spa": "Capas y estilos",
       "eng": "Layers and styles",
       "fre": "Couches et styles",
-      "cze": "Vrstvy a styly",
-      "ger": "Layers und Stile"
+      "cze": "Vrstvy a styly rozměry",
+      "ger": "Layers und Stile  Abmessungen"
+    },
+    "Dimensions":{
+      "cat": "Dimensions",
+      "spa": "Dimensiones",
+      "eng": "Dimensions",
+      "fre": "Dimensions",
+      "cze": "Rozměry",
+      "ger": "Abmessungen"
     },
     "Position&Zoom": {
       "cat": "Posició i zoom",
