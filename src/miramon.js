@@ -5335,6 +5335,8 @@ function FinalitzaMiraMonMapBrowser()
 
 	layerList=[];
 	ParamInternCtrl={};
+	indexStoryMapActiu = null;
+	
 }
 
 function EndMiraMonMapBrowser(event, reset)
