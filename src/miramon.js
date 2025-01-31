@@ -551,6 +551,9 @@ function CompletaDefinicioCapa(capa, capa_vola)
 
 	if (!capa.editable)
 		capa.editable="no";
+	
+	if(typeof capa.ForcaGetFeatureInfo==="undefined" || capa.ForcaGetFeatureInfo==null)
+		capa.ForcaGetFeatureInfo=false;
 
 	//Evito haver de posar el nom i la descripció del video si la capa és animable sola.
 	if (capa.animable && capa.AnimableMultiTime && capa.data && capa.data.length>1)

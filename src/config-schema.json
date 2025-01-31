@@ -1680,9 +1680,13 @@
 						"description": "Costat màxim dels nivells de zoom suportats per la capa. Opcional. Si no s'indica s'assumeix el zoom més gran",
 						"type": "number",
 						"minimum": 0
-					},														
+					},	
+					"ForcaGetFeatureInfo" : {
+						"description": "Forçar la petició de GetFeatureInfo en capes binaries WMS o WMTS en format application/x-img on és vol una consulta més complexa i que s'obtingui a partir de la petició GetFeatureInfo. Per defecte és false.",
+						"type" : "boolean"
+					},
 					"FormatConsulta": { 
-						"description": "Format en que s'ha de demanar la capa al servidor per a la consulta per localització. És un format MIME excepte per wmts-rest que és l'extensió del fitxer amb punt o sense. Si la capa no és consultable es deixa a null. No aplica per a capes digitalitzades",
+						"description": "Format en que s'ha de demanar la capa al servidor per a la consulta per localització. És un format MIME excepte per wmts-rest que és l'extensió del fitxer amb punt o sense. Si la capa no és consultable es deixa a null. No aplica per a capes digitalitzades ni per capes amb dades binàries si no és que s'ha indicat el flag ForcaGetFeatureInfo",
 						"type": ["string", "null"]
 					},
 					"grup":	{ 

@@ -1051,7 +1051,7 @@ var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false
 
 			NCapesConsultables++;
 			//capa=ParamCtrl.capa[i]; Ja s'ha fet abans
-			if (capa.valors)
+			if (capa.valors && !capa.ForcaGetFeatureInfo)
 			{
 				if (HiHaDadesBinariesPerAquestaCapa(PuntConsultat.i_nova_vista, i))
 				{
@@ -1496,7 +1496,7 @@ function ConsultaSobreVista(event_de_click, i_nova_vista)
 	}
 	else if (parent.consulta_info)  //Consulta incrustada en un frame
 		CreaConsulta(parent, 0);
-	else  //Cas normal, s'obre una finestre a part, multiconsulta o normal
+	else  //Cas normal, s'obre una finestra a part, multiconsulta o normal
 	{
 		if (ConsultaWindow==null || ConsultaWindow.closed)
 		{
