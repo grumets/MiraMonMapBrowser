@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -57,7 +57,7 @@ function DonaDataJSONDesDeDate(d)
 	return {year:d.getFullYear(), month: d.getMonth()+1, day: d.getDate(), hour: d.getHours(), minute: d.getMinutes(), second: d.getSeconds()};
 }
 
-//Dona un index que es pot aplicar directament a l'array de capes. 'i_data' pot ser null si volem la data per defecte. Com a 'capa' pots fer servir ParamCtrl.capa[i_capa]
+//Dona un índex que es pot aplicar directament a l'array de capes. 'i_data' pot ser null si volem la data per defecte. Com a 'capa' pots fer servir ParamCtrl.capa[i_capa]
 function DonaIndexDataCapa(capa, i_data)
 {
 	if (i_data==null)
@@ -1135,7 +1135,7 @@ var milliseg_b;
 	return sortAscendingNumber(milliseg_a, milliseg_b);
 }
 
-//Aquesta funció insereix una data a l'array de dades de la capa
+//Aquesta funció insereix una data a l'array de dates de la capa
 function InsereixDataISOaCapa(data_iso, data_capa)
 {
 var d=new Date(data_iso);
@@ -1146,5 +1146,17 @@ var milliseg_a=d.getTime();
 		data_capa.splice(-i-1, 0, DonaDataJSONDesDeDate(d));
 		i=-i-1;
 	}
+	return i;
+}
+
+// Aquesta funció busca una data en format ISO dins d'un array de dates
+function DonaIndexDataADataCapa(data_json, data_capa)
+{
+var d=DonaDateDesDeDataJSON(data_json);
+var milliseg_a=d.getTime();
+
+	var i=data_capa.binarySearch(milliseg_a, sortAscendingISOiData);
+	if (i<0)  //Not present in the array
+		return -1;
 	return i;
 }
