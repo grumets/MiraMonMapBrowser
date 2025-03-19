@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1887,7 +1887,7 @@ function EsCampCalculat(attributes, nom_camp)
 	{
 		if(attributes[nom_camp].FormulaConsulta)
 		{
-			attributesArray=Object.keys(attributes)
+			var attributesArray=Object.keys(attributes)
 			for (var i=0; i<attributesArray.length; i++)
 			{
 				if (attributesArray[i]==nom_camp)
@@ -1972,14 +1972,14 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 						if(-1==(i_calculat=EsCampCalculat(capa.attributes, simbols.NomCamp)))
 							llista.push(simbols.NomCamp);
 						else
-							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[simbols.NomCamp].FormulaConsulta));
 					}
 					if(simbols.NomCampFEscala)
 					{
 						if(-1==(i_calculat=EsCampCalculat(capa.attributes, simbols.NomCampFEscala)))
 							llista.push(simbols.NomCampFEscala);
 						else
-							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[simbols.NomCampFEscala].FormulaConsulta));
 					}
 				}
 			}
@@ -1988,7 +1988,7 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 				if(-1==(i_calculat=EsCampCalculat(capa.attributes, estil.NomCampSel)))
 					llista.push(estil.NomCampSel);
 				else
-					llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+					llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[estil.NomCampSel].FormulaConsulta));
 			}
 			if(estil.formes && estil.formes.length)
 			{
@@ -2000,14 +2000,14 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 						if(-1==(i_calculat=EsCampCalculat(capa.attributes, forma.interior.NomCamp)))
 							llista.push(forma.interior.NomCamp);
 						else
-							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[forma.interior.NomCamp].FormulaConsulta));
 					}
 					if(forma.vora && forma.vora.NomCamp)
 					{
 						if(-1==(i_calculat=EsCampCalculat(capa.attributes, forma.vora.NomCamp)))
 							llista.push(forma.vora.NomCamp);
 						else
-							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+							llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[forma.vora.NomCamp].FormulaConsulta));
 					}
 				}
 			}
@@ -2016,7 +2016,7 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 				if(-1==(i_calculat=EsCampCalculat(capa.attributes, estil.fonts.NomCamp)))
 					llista.push(estil.fonts.NomCamp);
 				else
-					llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[i_calculat].FormulaConsulta));
+					llista.push.apply(llista, DonaNomsCampsCapaDeAttributeCalculat(i_capa, capa.attributes[estil.fonts.NomCamp].FormulaConsulta));
 			}
 		}
 	}

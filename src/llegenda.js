@@ -1,4 +1,4 @@
-/* 
+﻿/* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1693,7 +1693,7 @@ function CanviaEstatCapa(i, estat)
 	{
 		var capa=ParamCtrl.capa[i];
 		CanviaEstatVisibleCapaLlegenda(document.getElementById("v_ll_capa"+i), i);
-		if ((capa.estil && capa.estil.length>1) || 
+		if (capa.LlegDesplegada || (capa.estil && capa.estil.length>1) || 
 			(capa.grup && ParamCtrl.LlegendaGrupsComARadials) ||
 			capa.AnimableMultiTime || capa.dimensioExtra)
 			CreaLlegenda();
