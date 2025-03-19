@@ -592,7 +592,7 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 		capa=ParamCtrl.capa[i];
 		if (capa.model==model_vector)
 			continue;
-		if (EsCapaConsultable(i) && !capa.valors)
+		if (EsCapaConsultable(i) && (!capa.valors || capa.ForcaGetFeatureInfo))
 		{
 			resposta_consulta_xml={"capa": capa, "i_capa": i, "win": win, "nom_layer": "LayerConsulta"+i, "estat": EstatAjaxXMLInit, "attribute": {}, "text": ""};
 
@@ -973,7 +973,7 @@ function IniciaFinestraConsulta(win)
 {
 var cdns=[], capa, capa2, hi_ha_capes_perfil=false, clic_sobre_elem_lineal=false, ncol=440, nfil=220, nfilCat=110;
 
-	/*L'us del següent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
+	/* L'ús del següent setTimeOut de 300 mseg i del setTimeOut de 30mseg que hi ha dins de PopDownFinestra_multi_consulta()
 	  es necessari en Netscape per evitar 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status] (i potser també en els
 	  altres navegadors). Això està explicat a: http://www.captain.at/howto-ajax-parent-opener-window-close-error.php*/
 	if(ParamCtrl.TipusConsulta=="FinestraDeCop" && isFinestraLayer(window, "multi_consulta"))
