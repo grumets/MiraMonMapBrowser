@@ -77,7 +77,7 @@ const ancoraRelat = "ancoraRelat";
 const confirmNoInsercioId = "confirmNoInsercio";
 const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
-const min_width_finestra_storymap = "500px", min_height_finestra_storymap = "400px";
+const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
 const fontImatgesUsuari = "data:image/jpeg;";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
@@ -125,6 +125,11 @@ function TancaFinestra_visualitzaStoryMap()
 {
 	indexStoryMapActiu=null;
 	contadorAccionsMapa = -1;
+	
+	if (window.location.hash != '')
+	{
+		history.replaceState(null, '', DonaAdrecaSenseHash());
+	}
 }
 
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
@@ -1657,11 +1662,11 @@ function AfegeixEspaiTransparent()
 // Actualitza la mida de la imatge transparent quan es redimensioni la finestra del relat.
 function ActualitzaEspaiTransparent()
 {
-	let storyWindow = getFinestraLayer(window, "storyMap");
-	const imgTransparent = storyWindow.querySelector("img[name=" + imgEspaiBlancNom + "]");
+	let storyLayer = getFinestraLayer(window, "storyMap");
+	const imgTransparent = storyLayer.querySelector("img[name=" + imgEspaiBlancNom + "]");
 	if (imgTransparent)
-	{
-		const boundingRectWindow = storyWindow.getBoundingClientRect();
+	{	
+		const boundingRectWindow = storyLayer.getBoundingClientRect();
 		imgTransparent.width = boundingRectWindow.width;
 		imgTransparent.height = boundingRectWindow.height - boundingRectWindow.height * 0.1;
 	}
@@ -1990,7 +1995,7 @@ function CompartirStorymap(i_story)
 	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
-			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap, ru_sugg_app: DonaAdrecaSenseHash()
 			}, ParamCtrl.idioma, "");
 }
 
