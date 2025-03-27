@@ -153,12 +153,27 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	let indexSeg = 0;
 	while (nstory < ParamCtrl.StoryMap.length)
 	{
-		if (ParamCtrl.StoryMap[nstory].EnvTotal && !EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
+		if (ParamCtrl.StoryMap[nstory].EnvTotal)
 		{
-			nstory++;
-			continue;
+			if(typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal)
+			{
+				for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
+				{
+					if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+					{
+						nstory++;
+						break;
+					}
+				}
+				if(i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length)
+					continue;
+			}
+			else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
+			{
+				nstory++;
+				continue;
+			}
 		}
-			
 		i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
 		indexSeg++;
 		nstory++;
