@@ -164,14 +164,16 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 			{
 				for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
 				{
-					if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+					if (EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
 					{
-						nstory++;
 						break;
 					}
 				}
-				if(i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length)
+				if(i_crs >= ParamCtrl.StoryMap[nstory].EnvTotal.length)
+				{
+					nstory++;
 					continue;
+				}
 			}
 			else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
 			{
