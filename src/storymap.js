@@ -155,36 +155,46 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 			ParamCtrl.StoryMap.push(newStory);	
 		}
 	}
-	let indexSeg = 0;
-	while (nstory < ParamCtrl.StoryMap.length)
+	if (ParamCtrl.ImatgeSituacio && ParamCtrl.ImatgeSituacio.length > 1)
 	{
-		if (ParamCtrl.StoryMap[nstory].EnvTotal)
+		let indexSeg = 0;
+		while (nstory < ParamCtrl.StoryMap.length)
 		{
-			if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
+			if (ParamCtrl.StoryMap[nstory].EnvTotal)
 			{
-				for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
+				if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
-					if (EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+					for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
 					{
-						break;
+						if (EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+						{
+							break;
+						}
+					}
+					if(i_crs >= ParamCtrl.StoryMap[nstory].EnvTotal.length)
+					{
+						nstory++;
+						continue;
 					}
 				}
-				if(i_crs >= ParamCtrl.StoryMap[nstory].EnvTotal.length)
+				else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
 					nstory++;
 					continue;
 				}
 			}
-			else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
-			{
-				nstory++;
-				continue;
-			}
+			i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
+			indexSeg++;
+			nstory++;
 		}
-		i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
-		indexSeg++;
-		nstory++;
 	}
+	else
+	{
+		// Crea un array amb una seqüencia de números des de 0 fins a la longitud de relats que tenim en el navegador. 
+		// Aquests números seran els índexos dels storymaps a mostrar en el llistat.
+		i_real_story = Array.from({length: ParamCtrl.StoryMap.length}, (e, i)=> i);
+	}
+		
 	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
 				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
