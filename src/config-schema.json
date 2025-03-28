@@ -912,8 +912,17 @@
 						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
-						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. No implementat encara",
-						"$ref": "#/definitions/envolupantCRS_2D" 
+						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. Pot ser un únic objecte o un array d'envolupants si el relat es passeja per diversos àmbits amb diversos CRS. Només s'usa pels relats predefinits al config i no als que es puguin crear durant la sessió de navegació (en aquest cas estan disponibles sempre).",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"$ref": "#/definitions/envolupantCRS_2D" 
+						},{
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/envolupantCRS_2D" 
+							}
+						}]
 					},
 					"Ample": {
 						"description": "Ample de la caixa que conté la història. Opcional; si no hi és val 500",
