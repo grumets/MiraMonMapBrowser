@@ -389,7 +389,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	{
 		if(capa.metadades.quality)
 		{
-			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", capa.metadades.quality ,",", i_capa,", -1);TancaContextMenuCapa();\">",
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(true,", i_capa,", -1);TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;
@@ -397,7 +397,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		else if(capa.metadades.standard && DonaCadena(capa.metadades) && DonaExtensioFitxerSensePunt(DonaNomFitxerMetadades(capa, -1)).toLowerCase()=="xml")
 		{
 			//Puc obtenir la qualitat de les metadades
-			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(null,",i_capa,", -1);TancaContextMenuCapa();\">",
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(false,",i_capa,", -1);TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 			if(!alguna_opcio)
 				alguna_opcio=true;			
@@ -557,13 +557,13 @@ var capa=ParamCtrl.capa[i_capa];
 	{
 		if(capa.estil[i_estil].metadades.quality)
 		{
-			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(", capa.estil[i_estil].metadades.quality,",",i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(true,",i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 		}
 		else if(capa.estil[i_estil].metadades.standard && DonaCadena(capa.estil[i_estil].metadades.standard) && DonaExtensioFitxerSensePunt(DonaNomFitxerMetadades(capa, -1)).toLowerCase()=="xml")
 		{
 			//Puc obtenir la qualitat de les metadades
-			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(null,", i_capa,", -1);TancaContextMenuCapa();\">",
+			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(false,", i_capa,", -1);TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 		}
 	}
@@ -4776,14 +4776,17 @@ var elem=ObreFinestra(window, "mostraLlinatge", GetMessage("forShowingLinageInfo
 	FinestraMostraLlinatgeCapa(elem, i_capa);
 }
 
-function ObreFinestraMostraQualitatCapa(qualitat, i_capa, i_estil)
+function ObreFinestraMostraQualitatCapa(existeix_qualitat, i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "mostraQualitat", GetMessage("forShowingQualityInformation", "cntxmenu"));
 
 	if (!elem)
 		return;
-	FinestraMostraQualitatCapa(elem, qualitat, capa, i_estil);
+	if(existeix_qualitat)
+		FinestraMostraQualitatCapa(elem,  (i_estil==-1) ? capa.metadades.quality : capa.estil[i_estil].metadades.quality, capa, i_estil);
+	else
+		FinestraMostraQualitatCapa(elem, null, capa, i_estil);
 }
 
 function ObreFinestraFeedbackCapa(i_capa, i_estil)
