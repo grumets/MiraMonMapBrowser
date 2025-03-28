@@ -160,7 +160,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	{
 		if (ParamCtrl.StoryMap[nstory].EnvTotal)
 		{
-			if(typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal)
+			if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
 			{
 				for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
 				{
@@ -233,7 +233,7 @@ function DemanaStorymapsNimmbus(name)
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
 	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlIdNavegador,
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
 	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
