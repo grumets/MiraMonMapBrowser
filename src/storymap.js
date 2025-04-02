@@ -1452,9 +1452,10 @@ var base;
 function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
+const storyMap = "storyMap";
 
 	contadorAccionsMapa= -1;
-	const finestraRelat = getFinestraLayer(window, "storyMap");
+	const finestraRelat = getFinestraLayer(window, storyMap);
 	
 	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
 	while (finestraRelat.firstChild) {
@@ -1462,16 +1463,17 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	}
 	  
 	if (relatACarregar.desc)
-		titolFinestraLayer(window, "storyMap", DonaCadena(relatACarregar.desc));
+		titolFinestraLayer(window, storyMap, DonaCadena(relatACarregar.desc));
 
 	if (typeof relatACarregar.MargeEsq!=="undefined" || typeof relatACarregar.MargeSup!=="undefined" ||
 	    relatACarregar.Ample || relatACarregar.Alt)
 	{
-		var rect=getRectFinestraLayer(window, "storyMap");
-		moveFinestraLayer(window, "storyMap", (typeof relatACarregar.MargeEsq!=="undefined" && relatACarregar.MargeEsq>=0) ? relatACarregar.MargeEsq : rect.esq,
+		var rect=getRectFinestraLayer(window, storyMap);
+		let minSize = getMinSizeFinestraLayer(win, storyMap);
+		moveFinestraLayer(window, storyMap, (typeof relatACarregar.MargeEsq!=="undefined" && relatACarregar.MargeEsq>=0) ? relatACarregar.MargeEsq : rect.esq,
 				(typeof relatACarregar.MargeSup!=="undefined" && relatACarregar.MargeSup>=0) ? relatACarregar.MargeSup : rect.sup,
 				(relatACarregar.Ample) ? relatACarregar.Ample : rect.ample,
-				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
+				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt, minSize.width, minSize.height);
 	}
 	
 	// Crear el marc per al relat de mapes. 
@@ -1603,7 +1605,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	liniaHoritzontal.className = "separadorHoritzonal";
 	divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
 	
-	ObreFinestra(window, "storyMap");
+	ObreFinestra(window, storyMap);
 	
 	AfegeixEspaiTransparent();
 	AfegeixMarkerStoryMapVisible();

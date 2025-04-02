@@ -1057,6 +1057,9 @@ var elem, rect, ancora, nom;
 		if (!elem)
 			continue;
 		rect=getRectLayer(elem);
+		let minWidth = elem.getAttribute("minWidth");
+		let minHeight = elem.getAttribute("minHeight");
+
 		if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
 		{
 			rect.alt+=AltBarraFinestraLayer;
@@ -1073,6 +1076,7 @@ var elem, rect, ancora, nom;
 					delta1=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta1;
 					rect.ample+=delta-delta1;
+					minWidth+=delta-delta1;
 				}
 				else if (ancora.indexOf("C")!=-1)
 				{
@@ -1081,6 +1085,7 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta;
+					minWidth+=delta;
 				}
 				canvis=true;
 			}
@@ -1099,6 +1104,7 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta_w;
+					minWidth+=delta_w
 				}
 				canvis=true;
 			}
@@ -1111,7 +1117,10 @@ var elem, rect, ancora, nom;
 					if (ancora.indexOf("C")!=-1)
 						;
 					else
+					{
 						rect.ample-=delta;
+						minWidth-=delta;
+					}
 					canvis=true;
 				}
 				//else if (ancora.indexOf("W")!=-1)
@@ -1124,6 +1133,7 @@ var elem, rect, ancora, nom;
 					delta1=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta1;
 					rect.alt+=delta-delta1;
+					minHeight+=delta-delta1;
 				}
 				else if (ancora.indexOf("R")!=-1)
 				{
@@ -1132,6 +1142,7 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta;
+					minHeight+=delta;
 				}
 				canvis=true;
 			}
@@ -1150,6 +1161,7 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta_h;
+					minHeight+=delta_h;
 				}
 				canvis=true;
 			}
@@ -1160,7 +1172,10 @@ var elem, rect, ancora, nom;
 					delta=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta;
 					if (ancora.indexOf("R")==-1)
+					{
 						rect.alt-=delta;
+						minHeight-=delta;
+					}
 					canvis=true;
 				}
 				//else if (ancora.indexOf("N")!=-1)
@@ -1177,8 +1192,13 @@ var elem, rect, ancora, nom;
 				if (rect.alt<5)    //Impedeixo que les layers desaparexin totalment
 					rect.alt=5;
 
+				if (minWidth<min_finestra_width)
+					minWidth=min_finestra_width;
+				if (minHeight<min_finestra_height)
+					minHeight=min_finestra_height;
+
 				if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
-					moveFinestraLayer(win, nom.substring(0, nom.length-SufixFinestra.length), rect.esq, rect.sup, rect.ample, rect.alt);
+					moveFinestraLayer(win, nom.substring(0, nom.length-SufixFinestra.length), rect.esq, rect.sup, rect.ample, rect.alt, minWidth, minHeight);
 				else
 					moveLayer(elem, rect.esq, rect.sup, rect.ample, rect.alt);
 			}
@@ -1440,17 +1460,29 @@ function removeFinestraLayer(win, name)
 
 function getRectFinestraLayer(win, name)
 {
-	var elem=getFinestraLayer(win, name)
+	var elem=getFinestraLayer(win, name);
 	var rect=getRectLayer(elem);
 	rect.alt+=AltBarraFinestraLayer;
 	rect.sup-=AltBarraFinestraLayer;
 	return rect;
 }
 
-function moveFinestraLayer(win, name, x, y, w, h)
+function getMinSizeFinestraLayer(win, name)
+{
+	let minSize = {width: 0, height: 0};
+	var elem=getFinestraLayer(win, name);
+	minSize.width = elem.style.minWidth;
+	minSize.height = elem.style.minHeight;
+	return minSize;
+}
+
+function moveFinestraLayer(win, name, x, y, w, h, mW, mH)
 {
 	moveLayer(getLayer(win, name+SufixBarra), x, y, w, AltBarraFinestraLayer);
-	moveLayer(getFinestraLayer(win, name), x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
+	let finestra = getFinestraLayer(win, name);
+	moveLayer(finestra, x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
+	finestra.style.minWidth = mW;
+	finestra.style.minHeight = mH;
 	var div=getLayer(win,name+SufixCanto);
 	if (div)
 		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
@@ -1461,13 +1493,14 @@ function ajustaAllargadaAContingutFinestraLayer(win, name, mida)
 {
 var elem=getFinestraLayer(win, name);
 var rec=getRectLayer(elem);
+let minSize = getMinSizeFinestraLayer(win, name);
 
 	if (mida==-1)
 		mida=elem.scrollHeight+AltBarraFinestraLayer;
 	else if (mida<AltBarraFinestraLayer)
 		mida=AltBarraFinestraLayer;
 
-	moveFinestraLayer(win, name, rec.esq, rec.sup-AltBarraFinestraLayer, rec.ample, mida);
+	moveFinestraLayer(win, name, rec.esq, rec.sup-AltBarraFinestraLayer, rec.ample, mida, minSize.width, minSize.height);
 }
 
 function isFinestraLayerVisible(win, name)
