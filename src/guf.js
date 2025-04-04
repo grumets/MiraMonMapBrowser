@@ -91,7 +91,7 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 	if (reprod_usage.ru_schema)
 		reprod_usage.ru_schema = escapeWin1252(reprod_usage.ru_schema);
 	if (typeof reprod_usage.ru_sugg_app === "undefined")
-		reprod_usage.ru_sugg_app = escapeWin1252(location.href);
+		reprod_usage.ru_sugg_app = escapeWin1252(location.origin+location.pathname);
 	else if (reprod_usage.ru_sugg_app)
 		reprod_usage.ru_sugg_app = escapeWin1252(reprod_usage.ru_sugg_app);
 	return GUFAfegirFeedbackCapaMultipleTargets(targets, lang, access_token_type, reprod_usage);
@@ -140,7 +140,7 @@ function GUFGetURLPreviousFeedbackWithReproducibleUsage(code, codespace, reprod_
 	
 	var intern_sugg_app;
 	if (typeof reprod_usage.ru_sugg_app === "undefined")
-		intern_sugg_app=location.href;
+		intern_sugg_app=location.origin + location.pathname;
 	else 
 		intern_sugg_app=reprod_usage.ru_sugg_app;
 	

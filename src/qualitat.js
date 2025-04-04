@@ -813,6 +813,7 @@ function FinestraFeedbackAmbEstilsCapa(elem, i_capa)
 {
 var cdns=[], s;
 var capa=ParamCtrl.capa[i_capa];
+const urlServidor = new URL(DonaServidorCapa(capa));
 
 	cdns.push(GetMessage("theLayer"),
 				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
@@ -824,7 +825,7 @@ var capa=ParamCtrl.capa[i_capa];
 		return;
 	}
 
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorCapa(capa),
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "LayerFeedbackAmbEstilsCapa", s, DonaServidorSenseQueryNiProtocolSegur(urlServidor.href),
 		{ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 			ru_schema: config_schema_estil /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
 		ParamCtrl.idioma, DonaAccessTokenTypeFeedback(capa) /*access_token_type*/, "AdoptaEstil"/*callback_function*/, {i_capa: i_capa});

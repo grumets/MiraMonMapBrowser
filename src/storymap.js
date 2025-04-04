@@ -245,7 +245,7 @@ function DemanaStorymapsNimmbus(name)
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
 	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
+	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, DonaServidorSenseQueryNiProtocolSegur(urlIdNavegador),
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
 	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
@@ -255,7 +255,7 @@ function DemanaStorymapsNimmbus(name)
  * @param {*} guf 
  * @returns 
  */
-function AdoptaStorymap(guf)
+function AdoptaStorymap(param_function, guf)
 {
 	if (!guf)
 	{
@@ -2024,8 +2024,7 @@ function CompartirStorymap(i_story)
 	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
-			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap, ru_sugg_app: DonaAdrecaSenseHash()
-			}, ParamCtrl.idioma, "");
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap}, ParamCtrl.idioma, "");
 }
 
 var imgSvgIconaSincroMapa;
