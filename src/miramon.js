@@ -287,15 +287,6 @@ function DonaCorsServidorCapa(capa)
 		return ParamCtrl.CorsServidorLocal;
 	return capa.cors;
 }
-/**
- * A partir d'un text que representa un servidor se'ns retorna aquest mateix servidor intercanviant el protocol https per http
- * i només la part conjunta de origin i pathname.  
- */
-function DonaServidorSenseQueryNiProtocolSegur(servidor)
-{
-	const urlServidor = new URL(servidor);
-	return urlServidor.origin + urlServidor.pathname.replace("https","http");
-}
 
 function MostraEnllacWMS(finestra)
 {
