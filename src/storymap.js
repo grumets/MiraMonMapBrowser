@@ -199,27 +199,53 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
 				"<br><table class=\"Verdana11px\">");
-
+	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
 	{
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
-		if ((i_story%ncol)==0)
-			cdns.push("<tr>");
-		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", " href='javascript:void(0)' onclick='");
-		(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
-		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
-			DonaCadena(storyActual.desc),
-		"</p></a></td>");
-		/* Incrementem valor en aquest precís instant per aconseguir que
-		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
-		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
-		la condició.*/
+		if (storyActual.compartida)
+		{
+			if(cdns2.length == 0)
+			{
+				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\">");
+			}
+			if ((i_relat_compartit%ncol)==0)
+				cdns2.push("<tr>");
+			cdns2.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='TancaIIniciaStoryMap(", i_real_story[i_story], ");'><img src='",(storyActual.src) ? storyActual.src : ((storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>",DonaCadena(storyActual.desc), "</p></a></td>");
+			/* Incrementem valor en aquest precís instant per aconseguir que
+			incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
+			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
+			la condició.*/
+			i_relat_compartit++;
+			if ((i_relat_compartit%ncol)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+				cdns2.push("</tr>");
+		}
+		else
+		{
+			if ((i_relat_local%ncol)==0)
+				cdns.push("<tr>");
+			cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='");
+			(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
+			cdns.push("<img src='",(storyActual.src) ? storyActual.src : ((storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>",
+				DonaCadena(storyActual.desc),
+			"</p></a></td>");
+			/* Incrementem valor en aquest precís instant per aconseguir que
+			incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
+			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
+			la condició.*/
+			i_relat_local++;
+			if ((i_relat_local%ncol)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+				cdns.push("</tr>");
+		}
 		i_story++;
-		if ((i_story%ncol)==0 || i_story==nstory)
-			cdns.push("</tr>");
 	}
 	cdns.push("</table>");
+	if(cdns2.length != 0)
+	{
+		cdns2.push("</table>");
+		cdns.push(cdns2);
+	}
 	contentFinestraLayer(win, name, cdns.join(""));
 	indexStoryMapActiu=-1;
 }
@@ -244,18 +270,83 @@ function DemanaStorymapsNimmbus(name)
 {
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
-	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
+	const elem = getFinestraLayer(window, name);		
+	// URL per a la consulta de relats disponibles per aquest navegador.
+	let url = GUFGetURLPreviousStorymapWithReproducibleUsage(urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
-		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
+		ru_schema: encodeURIComponent(config_schema_storymap)},
+	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/);
+	// Obtenim la llista de relats
+	loadFile(url, "application/xml", function(resposta) {
+		if(resposta && resposta.documentElement)
+		{
+			let respostaParsejada = ParseOWSContextAtom(resposta.documentElement); 
+			if(respostaParsejada.properties.totalResults != 0)
+			{
+				let type;
+				for(let i = 0; i<respostaParsejada.properties.totalResults; i ++)
+				{
+					type=GetNimmbusTypeOfAOWCFeature(respostaParsejada.features[i]);
+					if (type=="FEEDBACK")
+					{
+						var resource_id = respostaParsejada.features[i].properties.links.alternates[0].href;
+						if(!resource_id) 
+							continue;
+						
+						var n = resource_id.indexOf("&RESOURCE=");
+						if(n==-1)
+							continue;
+						resource_id = resource_id.substring(n+10);
+						if(!resource_id)
+							continue;
+						n = resource_id.indexOf("&");  
+						if(n ==-1)
+							continue;
+						resource_id = resource_id.substring(0, n);
+						if(!resource_id)
+							continue;
+						//CridaReadStorymap(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);	
+						CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
+
+					}
+					/*else
+					{
+						continue;
+					}
+					//let urlRelat = respostaParsejada.features[i].id; // Fem un loadFile de cada recurs?
+					// Obtenim un relat concret
+					//loadFile(urlRelat, "application/xml", CridaACallBackFunctionAmbEstructuraGUF, null, {lang: ParamCtrl.idioma, id: resource_id, callback_function: AdoptaStorymap, params_function: null});
+					//CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
+					*/
+				}
+			}
+			else
+			{
+				alert(MissatgeSenseElementsRetornats(extra_param));
+				return;
+			}
+		}
+	}, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); },{lang: "eng"});
 }
+/**
+ * 
+ * @param {*} lang 
+ * @param {*} resource_id 
+ * @param {*} func 
+ * @param {*} params_function 
+ */
+function CridaReadStorymap(lang, resource_id, func, params_function)
+{
+	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+lang+"&RESOURCE="+resource_id;		
+	loadFile(url, "text/xml", func, function(xhr, extra_param) { alert(url + ": " + xhr ); }, params_function);
+}
+
 /**
  * Ens permet descarregar un relat concret que estigui disponible a la plataforma Nimmbus i pel nostre mapa. 
  * @param {*} guf 
  * @returns 
  */
-function AdoptaStorymap(guf)
+function AdoptaStorymap(guf, params_function)
 {
 	if (!guf)
 	{
@@ -264,7 +355,8 @@ function AdoptaStorymap(guf)
 		TancaFinestraLayer('feedbackAmbEstils');
 		return;
 	}
-
+	/*const parseAnswer = ParseOWSContextAtom(guf.documentElement);
+	*/
 	const storyMapAGuardar = {compartida: true};
 	const parserAWeb = new DOMParser();
 	const relatSencer = parserAWeb.parseFromString(guf.usage.usage_descr.code, "text/html");
@@ -2021,11 +2113,10 @@ function CompartirStorymap(i_story)
 		relatFragDoc.prepend(imgPortada.outerHTML);
 	}
 	
-	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
+	GUFCreateStorymapWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
-			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap, ru_sugg_app: DonaAdrecaSenseHash()
-			}, ParamCtrl.idioma, "");
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap}, ParamCtrl.idioma, "");
 }
 
 var imgSvgIconaSincroMapa;
