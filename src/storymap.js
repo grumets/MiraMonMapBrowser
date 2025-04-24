@@ -198,7 +198,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
 				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
 				GetMessage("SelectStory", "storymap"), ":" ,
-				"<br><table class=\"Verdana11px\">");
+				"<br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, ">", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
@@ -208,7 +208,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		{
 			if(cdns2.length == 0)
 			{
-				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\">");
+				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, ">", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
 			}
 			if ((i_relat_compartit%ncol)==0)
 				cdns2.push("<tr>");
@@ -244,7 +244,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	if(cdns2.length != 0)
 	{
 		cdns2.push("</table>");
-		cdns.push(cdns2);
+		cdns = cdns.concat(cdns2);
 	}
 	contentFinestraLayer(win, name, cdns.join(""));
 	indexStoryMapActiu=-1;
@@ -305,19 +305,11 @@ function DemanaStorymapsNimmbus(name)
 						resource_id = resource_id.substring(0, n);
 						if(!resource_id)
 							continue;
-						//CridaReadStorymap(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);	
-						CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
-
+						if (!ComprovaRelatJaDescarregat(resource_id))
+						{
+							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
+						}
 					}
-					/*else
-					{
-						continue;
-					}
-					//let urlRelat = respostaParsejada.features[i].id; // Fem un loadFile de cada recurs?
-					// Obtenim un relat concret
-					//loadFile(urlRelat, "application/xml", CridaACallBackFunctionAmbEstructuraGUF, null, {lang: ParamCtrl.idioma, id: resource_id, callback_function: AdoptaStorymap, params_function: null});
-					//CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
-					*/
 				}
 			}
 			else
@@ -365,6 +357,8 @@ function AdoptaStorymap(guf, params_function)
 		console.log(errorNode.innerHTML);
 		return;
 	}
+	// Guardem l'identificador del recurs
+	storyMapAGuardar.recursId = guf.identifier.code;
 
 	// Trobem la imatge de portada si n'hi ha.
 	const imgPortada = relatSencer.querySelector("img#" + imageThumbnailId);
@@ -384,6 +378,18 @@ function AdoptaStorymap(guf, params_function)
 	storyMapAGuardar.html = parser.serializeToString(relatSencer);
 	
 	ParamCtrl.StoryMap.push(storyMapAGuardar);
+}
+
+/**
+ * Comprova mirant l'identificador de recurs si el relat ja ha estat descarregat en anterioritat.
+ * @param {*} id Identificador del recurs
+ * @returns bool Cert si el recurs ja s'ha descarregat. Fals per si és un recurs nou.
+ */
+function ComprovaRelatJaDescarregat(id)
+{
+	const resultatsCerca = ParamCtrl.StoryMap.find((relat) => relat.recursId == id);
+
+	return typeof resultatsCerca !== "undefined";
 }
 
 function TancaIIniciaStoryMap(i_story)
