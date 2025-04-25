@@ -196,9 +196,9 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 	}
 		
 	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
-				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
-				GetMessage("SelectStory", "storymap"), ":" ,
-				"<br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, ">", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
+				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br><span style=padding-left:3px;padding-bottom:3px>",
+				GetMessage("SelectStory", "storymap"), ":</span>" ,
+				"<br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, " style=text-align:left>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
@@ -208,7 +208,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		{
 			if(cdns2.length == 0)
 			{
-				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, ">", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, " style=text-align:left>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
 			}
 			if ((i_relat_compartit%ncol)==0)
 				cdns2.push("<tr>");
@@ -281,10 +281,11 @@ function DemanaStorymapsNimmbus(name)
 		if(resposta && resposta.documentElement)
 		{
 			let respostaParsejada = ParseOWSContextAtom(resposta.documentElement); 
-			if(respostaParsejada.properties.totalResults != 0)
+			let relatsTotals = respostaParsejada.properties.totalResults;
+			if(relatsTotals != 0)
 			{
-				let type;
-				for(let i = 0; i<respostaParsejada.properties.totalResults; i ++)
+				let type, relatsDescarregats = 0, relatsRestants = relatsTotals;
+				for(let i = 0; i<relatsTotals; i ++)
 				{
 					type=GetNimmbusTypeOfAOWCFeature(respostaParsejada.features[i]);
 					if (type=="FEEDBACK")
@@ -305,9 +306,26 @@ function DemanaStorymapsNimmbus(name)
 						resource_id = resource_id.substring(0, n);
 						if(!resource_id)
 							continue;
+						//Un array passat per paràmetre manté els canvis soferts en cadascuna de les seves posicions tant dins i fora dels àmbits 
+						// on es modifica. Es manté actualitzat arreu!
+						const arrayContadors = [relatsDescarregats, relatsRestants];
 						if (!ComprovaRelatJaDescarregat(resource_id))
 						{
-							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, AdoptaStorymap, null);
+							const comprovaFinal = function descarregaFinal(respostaParsejada, extra_params){
+								const arraycontadorsExtraParams = extra_params.arrayContadors;
+								if (AdoptaStorymap(respostaParsejada, null))
+									arraycontadorsExtraParams[0]++;
+								if (arraycontadorsExtraParams[0] == arraycontadorsExtraParams[1] && getFinestraLayer(window, "triaStoryMap").style.visibility=="visible")
+								{
+									//En acabar de descarregar tots els relats disponibles  
+									RefrescaFinestraTriaStoryMap(window, "triaStoryMap");
+								}
+							};
+							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, comprovaFinal, JSON.stringify({arrayContadors: arrayContadors}));
+						}
+						else 
+						{
+							arrayContadors[1]--;
 						}
 					}
 				}
@@ -336,7 +354,7 @@ function CridaReadStorymap(lang, resource_id, func, params_function)
 /**
  * Ens permet descarregar un relat concret que estigui disponible a la plataforma Nimmbus i pel nostre mapa. 
  * @param {*} guf 
- * @returns 
+ * @returns Boolean cert si s'ha descarregat correctament i false altrament.
  */
 function AdoptaStorymap(guf, params_function)
 {
@@ -345,7 +363,7 @@ function AdoptaStorymap(guf, params_function)
 		// modificar text missatge per relats.
 		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StorymapCannotImported", "storymap") + ".");
 		TancaFinestraLayer('feedbackAmbEstils');
-		return;
+		return false;
 	}
 	/*const parseAnswer = ParseOWSContextAtom(guf.documentElement);
 	*/
@@ -355,7 +373,7 @@ function AdoptaStorymap(guf, params_function)
 	const errorNode = relatSencer.querySelector("parsererror");
 	if (errorNode) {
 		console.log(errorNode.innerHTML);
-		return;
+		return false;
 	}
 	// Guardem l'identificador del recurs
 	storyMapAGuardar.recursId = guf.identifier.code;
@@ -378,6 +396,7 @@ function AdoptaStorymap(guf, params_function)
 	storyMapAGuardar.html = parser.serializeToString(relatSencer);
 	
 	ParamCtrl.StoryMap.push(storyMapAGuardar);
+	return true;
 }
 
 /**
