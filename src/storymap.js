@@ -79,6 +79,7 @@ const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
 const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
 const fontImatgesUsuari = "data:image/jpeg;";
+const carregadorAnimatId = "relatLoader";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -195,10 +196,10 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		i_real_story = Array.from({length: ParamCtrl.StoryMap.length}, (e, i)=> i);
 	}
 		
-	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
-				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br><span style=padding-left:3px;padding-bottom:3px>",
+	cdns.push("<br><p style='display:flex;'><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
+				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
 				GetMessage("SelectStory", "storymap"), ":</span>" ,
-				"<br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, " style=text-align:left>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
+				"<br><table class='Verdana11px'><thead><tr><th colspan=", ncol, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
@@ -208,7 +209,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		{
 			if(cdns2.length == 0)
 			{
-				cdns2.push("<br><hr class=\"separadorHoritzonal\" /><br><table class=\"Verdana11px\"><thead><tr><th colspan=", ncol, " style=text-align:left>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px'><thead><tr><th colspan=", ncol, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
 			}
 			if ((i_relat_compartit%ncol)==0)
 				cdns2.push("<tr>");
@@ -276,6 +277,8 @@ function DemanaStorymapsNimmbus(name)
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
 		ru_schema: encodeURIComponent(config_schema_storymap)},
 	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/);
+	const loader = document.getElementById(carregadorAnimatId);
+	loader.style.display = "flow";
 	// Obtenim la llista de relats
 	loadFile(url, "application/xml", function(resposta) {
 		if(resposta && resposta.documentElement)
@@ -332,11 +335,14 @@ function DemanaStorymapsNimmbus(name)
 			}
 			else
 			{
+				loader.style.display = "none";
 				alert(MissatgeSenseElementsRetornats(extra_param));
 				return;
 			}
 		}
-	}, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); },{lang: "eng"});
+	}, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); 
+		loader.style.display = "none";
+	},{lang: "eng"});
 }
 /**
  * 
