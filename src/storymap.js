@@ -80,6 +80,9 @@ const missatgeAvisImatgeId = "missatgeAvisImatge";
 const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
 const fontImatgesUsuari = "data:image/jpeg;";
 const carregadorAnimatId = "relatLoader";
+const taulaRelatsCompartitsId = "taulaRelatsCompartits";
+const numeroColumnesPerFila = 2;
+const identificadorFilaRelatsCompartits = "filaRelats";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -133,10 +136,23 @@ function TancaFinestra_visualitzaStoryMap()
 	}
 }
 
+/**
+ * Cera l'html intern d'una cel·la de la taula de relats.
+ * @param {*} indexRelat Índex del relat.
+ * @returns 
+ */
+function CreaContingutCellaRelat(indexRelat, ambCellaInclosa)
+{
+	let cadena = [];
+	const relat =  ParamCtrl.StoryMap[indexRelat];
+	cadena.push(ambCellaInclosa ? "<td style = 'vertical-align:text-top; text-align: center;'>" : "", "<a style='display: block;' href='javascript:void(0)' onclick='", relat.isNew ? "TancaICreaEditaStoryMap();'>" : "TancaIIniciaStoryMap(", indexRelat, ");'>", "<img src='", relat.src ? relat.src : (relat.srcData ? relat.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>", DonaCadena(relat.desc), "</p></a>", ambCellaInclosa ? "</td>" : "");
+	return cadena.join("");
+}
+
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
+var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
 
 	if (!ParamCtrl.StoryMap || ParamCtrl.StoryMap.length == 0)
 	{
@@ -196,11 +212,12 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		i_real_story = Array.from({length: ParamCtrl.StoryMap.length}, (e, i)=> i);
 	}
 		
-	cdns.push("<br><p style='display:flex;'><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
+	cdns.push("<br><p style='display:flex;'><button style='position:relative; right:-25px;' onclick='DemanaRelatsNimmbus(\"", name, "\")'>",
 				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
 				GetMessage("SelectStory", "storymap"), ":</span>" ,
-				"<br><table class='Verdana11px'><thead><tr><th colspan=", ncol, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
-	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0;
+				"<br><table class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
+
+	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0, numFilesRelatsCompartits = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
 	{
@@ -209,22 +226,26 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 		{
 			if(cdns2.length == 0)
 			{
-				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px'><thead><tr><th colspan=", ncol, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				numFilesRelatsCompartits = 0;
 			}
-			if ((i_relat_compartit%ncol)==0)
-				cdns2.push("<tr>");
+			if ((i_relat_compartit%numeroColumnesPerFila)==0)
+			{
+				cdns2.push("<tr id='", identificadorFilaRelatsCompartits + "_", numFilesRelatsCompartits, "'>");
+				numFilesRelatsCompartits++;
+			}
 			cdns2.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='TancaIIniciaStoryMap(", i_real_story[i_story], ");'><img src='",(storyActual.src) ? storyActual.src : ((storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>",DonaCadena(storyActual.desc), "</p></a></td>");
 			/* Incrementem valor en aquest precís instant per aconseguir que
 			incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
 			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
 			la condició.*/
 			i_relat_compartit++;
-			if ((i_relat_compartit%ncol)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+			if ((i_relat_compartit%numeroColumnesPerFila)==0 || (i_relat_local + i_relat_compartit) ==nstory)
 				cdns2.push("</tr>");
 		}
 		else
 		{
-			if ((i_relat_local%ncol)==0)
+			if ((i_relat_local%numeroColumnesPerFila)==0)
 				cdns.push("<tr>");
 			cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='");
 			(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
@@ -236,7 +257,7 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
 			la condició.*/
 			i_relat_local++;
-			if ((i_relat_local%ncol)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+			if ((i_relat_local%numeroColumnesPerFila)==0 || (i_relat_local + i_relat_compartit) ==nstory)
 				cdns.push("</tr>");
 		}
 		i_story++;
@@ -267,11 +288,11 @@ function RefrescaFinestraTriaStoryMap(win, name)
 	OmpleFinestraTriaStoryMap(win, name);
 }
 
-function DemanaStorymapsNimmbus(name)
+function DemanaRelatsNimmbus(name)
 {
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
-	const elem = getFinestraLayer(window, name);		
+	const finestraRelats = getFinestraLayer(window, name);		
 	// URL per a la consulta de relats disponibles per aquest navegador.
 	let url = GUFGetURLPreviousStorymapWithReproducibleUsage(urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
@@ -309,29 +330,63 @@ function DemanaStorymapsNimmbus(name)
 						resource_id = resource_id.substring(0, n);
 						if(!resource_id)
 							continue;
-						//Un array passat per paràmetre manté els canvis soferts en cadascuna de les seves posicions tant dins i fora dels àmbits 
-						// on es modifica. Es manté actualitzat arreu!
-						const arrayContadors = [relatsDescarregats, relatsRestants];
+						
 						if (!ComprovaRelatJaDescarregat(resource_id))
 						{
-							const comprovaFinal = function descarregaFinal(respostaParsejada, extra_params){
-								const arraycontadorsExtraParams = extra_params.arrayContadors;
+							const actualitzaFinestraRelats = function descarregaFinal(respostaParsejada){
+								
 								if (AdoptaStorymap(respostaParsejada, null))
-									arraycontadorsExtraParams[0]++;
-								if (arraycontadorsExtraParams[0] == arraycontadorsExtraParams[1] && getFinestraLayer(window, "triaStoryMap").style.visibility=="visible")
 								{
-									//En acabar de descarregar tots els relats disponibles  
-									RefrescaFinestraTriaStoryMap(window, "triaStoryMap");
+									const taulaRelatsCompartits = document.getElementById(taulaRelatsCompartitsId);
+									if (!taulaRelatsCompartits)
+									{
+										let cdns = [];
+
+										cdns.push("<br><hr class='separadorHoritzonal' /><br><table id=", taulaRelatsCompartitsId, " class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>", "<tr id='", identificadorFilaRelatsCompartits + "_0","'>", CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, true), "</tr>");
+										finestraRelats.innerHTML = finestraRelats.innerHTML + cdns.join("");
+									}
+									else
+									{
+										// Insertem el nou element dins la taula de compartits per usuaris.
+										if (taulaRelatsCompartits.rows.length)
+										{
+											// Comptem quantes files de la taula ens interessa desestimar per accedir a l'última fila amb dades. Les files pertanyents al Foot no ens interessen, i també hem d'afegir +1 per corregir l'índex del length. Les files del tHead no importen perquè son previes a les files amb dades.
+											const numFilesaRestarPerUltimaDades = /*(taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ) +*/ (taulaRelatsCompartits.tFoot ? taulaRelatsCompartits.tFoot.rows.length : 0 ) + 1;
+											if ((taulaRelatsCompartits.rows.length - numFilesaRestarPerUltimaDades) > -1)
+											{
+												let ultimaFilaAmbDades = taulaRelatsCompartits.rows[taulaRelatsCompartits.rows.length-numFilesaRestarPerUltimaDades];
+												if ((ultimaFilaAmbDades.cells.length%numeroColumnesPerFila)==0)
+												{
+													let novaFila = taulaRelatsCompartits.insertRow();
+													novaFila.setAttribute("id", identificadorFilaRelatsCompartits + "_" + (taulaRelatsCompartits.rows.length-(numFilesaRestarPerUltimaDades + (taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ))));
+													let novaCella = novaFila.insertCell();
+													novaCella.setAttribute("style", "vertical-align:text-top; text-align: center;");
+													novaCella.innerHTML = CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, false);
+												}
+												else
+												{
+													ultimaFilaAmbDades = document.getElementById(identificadorFilaRelatsCompartits + "_" + (taulaRelatsCompartits.rows.length-(numFilesaRestarPerUltimaDades + (taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ))));
+													//perquè no podem fer insert? ultimaFila Null? ALgo amb l'ID que no es cree bé, aquí hem de tenir en compte les files tHead...
+													let novaCella = ultimaFilaAmbDades.insertCell();
+													novaCella.setAttribute("style", "vertical-align:text-top; text-align: center;");
+													novaCella.innerHTML = CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, false);
+												}
+											}
+										}											
+									}
 								}
 							};
-							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, comprovaFinal, JSON.stringify({arrayContadors: arrayContadors}));
+							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, actualitzaFinestraRelats, null);
 						}
 						else 
 						{
-							arrayContadors[1]--;
+							relatsRestants--;
+							if (relatsRestants==0)
+								loader.style.display = "none";
 						}
 					}
 				}
+				loader.style.display = "none";
 			}
 			else
 			{
