@@ -3565,7 +3565,7 @@ var MessageLang=
     "FromBrowser": {
       "cat": "Del navegador",
       "spa": "Del navegador",
-      "eng": "From Browser",
+      "eng": "From browser",
       "fre": "Depuis browser",
       "cze": "z prohlížeče",
       "ger": "Von Browser"
