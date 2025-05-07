@@ -212,8 +212,8 @@ var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJ
 		i_real_story = Array.from({length: ParamCtrl.StoryMap.length}, (e, i)=> i);
 	}
 		
-	cdns.push("<br><p style='display:flex;'><button style='position:relative; right:-25px;' onclick='DemanaRelatsNimmbus(\"", name, "\")'>",
-				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
+	cdns.push("<br><div style='display:flex;'><button style='position:relative; margin: 0 15px 0;' onclick='DemanaRelatsNimmbus(\"", name, "\")'>",
+				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
 				GetMessage("SelectStory", "storymap"), ":</span>" ,
 				"<br><table class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 

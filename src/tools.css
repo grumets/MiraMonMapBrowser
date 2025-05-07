@@ -981,11 +981,12 @@ div.fullHeight {
 ********************************************************** */
 /* Cercle giratori animat*/
 .loader {
+	padding: 0.5em;
 	border: 3px solid #f3f3f3;
 	border-radius: 50%;
 	border-top: 3px solid #3498db;
-	width: 25px;
-	height: 25px;
+	width: 10px;
+	aspect-ratio: 1 / 1;
 	-webkit-animation: spin 2s linear infinite; /* Safari */
 	animation: spin 2s linear infinite;
 }
