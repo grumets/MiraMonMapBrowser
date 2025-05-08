@@ -1076,7 +1076,8 @@ var elem, rect, ancora, nom;
 					delta1=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta1;
 					rect.ample+=delta-delta1;
-					minWidth+=delta-delta1;
+					if (minWidth)
+						minWidth+=delta-delta1;
 				}
 				else if (ancora.indexOf("C")!=-1)
 				{
@@ -1085,7 +1086,8 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta;
-					minWidth+=delta;
+					if (minWidth)
+						minWidth+=delta;
 				}
 				canvis=true;
 			}
@@ -1096,6 +1098,8 @@ var elem, rect, ancora, nom;
 					delta=Math.round(delta_w*rect.esq/w_previ);
 					rect.esq+=delta;
 					rect.ample+=delta_w-delta;
+					if (minWidth)
+						minWidth+=delta_w-delta;
 				}
 				else if (ancora.indexOf("C")!=-1)
 				{
@@ -1104,7 +1108,8 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("W")!=-1)
 				{
 					rect.ample+=delta_w;
-					minWidth+=delta_w
+					if (minWidth)
+						minWidth+=delta_w;
 				}
 				canvis=true;
 			}
@@ -1119,7 +1124,8 @@ var elem, rect, ancora, nom;
 					else
 					{
 						rect.ample-=delta;
-						minWidth-=delta;
+						if (minWidth)
+							minWidth-=delta;
 					}
 					canvis=true;
 				}
@@ -1133,7 +1139,8 @@ var elem, rect, ancora, nom;
 					delta1=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta1;
 					rect.alt+=delta-delta1;
-					minHeight+=delta-delta1;
+					if (minHeight)
+						minHeight+=delta-delta1;
 				}
 				else if (ancora.indexOf("R")!=-1)
 				{
@@ -1142,7 +1149,8 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta;
-					minHeight+=delta;
+					if (minHeight)
+						minHeight+=delta;
 				}
 				canvis=true;
 			}
@@ -1153,6 +1161,8 @@ var elem, rect, ancora, nom;
 					delta=Math.round(delta_h*rect.sup/h_previ);
 					rect.sup+=delta;
 					rect.alt+=delta_h-delta;
+					if (minHeight)
+						minHeight+=delta_h-delta;
 				}
 				else if (ancora.indexOf("R")!=-1)
 				{
@@ -1161,7 +1171,8 @@ var elem, rect, ancora, nom;
 				else //if (ancora.indexOf("N")!=-1)
 				{
 					rect.alt+=delta_h;
-					minHeight+=delta_h;
+					if (minHeight)
+						minHeight+=delta_h;
 				}
 				canvis=true;
 			}
@@ -1174,7 +1185,8 @@ var elem, rect, ancora, nom;
 					if (ancora.indexOf("R")==-1)
 					{
 						rect.alt-=delta;
-						minHeight-=delta;
+						if (minHeight)
+							minHeight-=delta;
 					}
 					canvis=true;
 				}
@@ -1192,9 +1204,9 @@ var elem, rect, ancora, nom;
 				if (rect.alt<5)    //Impedeixo que les layers desaparexin totalment
 					rect.alt=5;
 
-				if (minWidth<min_finestra_width)
+				if (minWidth && minWidth<min_finestra_width)
 					minWidth=min_finestra_width;
-				if (minHeight<min_finestra_height)
+				if (minHeight && minHeight<min_finestra_height)
 					minHeight=min_finestra_height;
 
 				if(nom.length>SufixFinestra.length && nom.substr(-SufixFinestra.length)==SufixFinestra)
@@ -1481,8 +1493,10 @@ function moveFinestraLayer(win, name, x, y, w, h, mW, mH)
 	moveLayer(getLayer(win, name+SufixBarra), x, y, w, AltBarraFinestraLayer);
 	let finestra = getFinestraLayer(win, name);
 	moveLayer(finestra, x, (y==-1) ? -1 : y+AltBarraFinestraLayer, w, (h<AltBarraFinestraLayer) ? -1 : h-AltBarraFinestraLayer);
-	finestra.style.minWidth = mW;
-	finestra.style.minHeight = mH;
+	if (mW)
+		finestra.style.minWidth = mW;
+	if (mH)
+		finestra.style.minHeight = mH;
 	var div=getLayer(win,name+SufixCanto);
 	if (div)
 		moveLayer(div, x+w-MidaCantoFinestraLayer, y+h-MidaCantoFinestraLayer, MidaCantoFinestraLayer, MidaCantoFinestraLayer);
