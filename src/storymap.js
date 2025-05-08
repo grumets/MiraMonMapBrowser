@@ -2176,7 +2176,7 @@ function ExecutaAttributsStoryMapVisibleEvent(event)
 
 function ExecutaAttributsStoryMapVisible()
 {
-	var div=getFinestraLayer(window, "storyMap");
+	var div=document.getElementById("divRelat");
 	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
