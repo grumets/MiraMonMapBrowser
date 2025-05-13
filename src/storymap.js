@@ -1967,16 +1967,14 @@ var attributes=[];
 			break;
 		attributes.push({name: arguments[i_arg], value:arguments[i_arg+1]}); 
 	}
-	if (ExecuteDataMMAttributesArray(attributes))
+	let canvis = ExecuteDataMMAttributesArray(attributes);
+	if (canvis.any)
 		RepintaMapesIVistes();
 }
 
 function ExecuteDataMMAttributesArray(attributes)
 {
-var hihacanvis, attribute;
-const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
-	
-	hihacanvis=false;
+var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute;
 
 	for (var i_at = 0; i_at < attributes.length; i_at++)
 	{
@@ -1986,7 +1984,10 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (attribute.value.trim().length)
 			{
 				if (0==CommandMMNSetCRS(attribute.value.trim()))
-					hihacanvis=true;
+				{
+					hihaCanvis.any=true;
+					hihaCanvis.crs = true;
+				}
 			}
 		}
 	}
@@ -2008,7 +2009,10 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetCenterCoord(punt))
-					hihacanvis=true;
+				{
+					hihaCanvis.any=true;
+					hihaCanvis.center = true;
+				}
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2018,7 +2022,10 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (attribute.value.trim().length)
 			{
 				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-					hihacanvis=true;
+				{
+					hihaCanvis.any=true;
+					hihaCanvis.zoom = true;
+				}
 			}
 		}
 		else if (attribute.name=="data-mm-layers")
@@ -2031,7 +2038,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
 					(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
 					"data-mm-layers"))
-				hihacanvis=true;
+					hihaCanvis.any=true;
 		}
 		else if (attribute.name=="data-mm-time")
 		{
@@ -2050,7 +2057,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetDateTime(datejson))
-					hihacanvis=true;
+					hihaCanvis.any=true;
 			}
 		}
 		else if (attribute.name=='data-mm-sels')
@@ -2068,7 +2075,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSelections(sels))
-					hihacanvis=true;
+					hihaCanvis.any=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2088,7 +2095,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNDiagrams(diags))
-					hihacanvis=true;
+					hihaCanvis.any=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2108,18 +2115,87 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetLayersExtraDimensions(layerdims))
-					hihacanvis=true;
+					hihaCanvis.any=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 		}
 	}
 
+	// Canvis de CRS...ampliar envolupant...
+	AdaptarEnvolupantRelat(hihaCanvis);
+
 	if (!diags)
 		TancaTotsElsHistogramaFinestra();
-	return hihacanvis;
+	return hihaCanvis.any;
 }
 
+/**
+ * 
+ * @param {*} canvis Objecte amb els tipus de canvis 
+ */
+function AdaptarEnvolupantRelat(canvis)
+{
+	let relatActual = ParamCtrl.StoryMap[indexStoryMapActiu];
+	if ((canvis.crs || canvis.zoom || canvis.center) && !relatActual.compartida)
+	{
+		let envTotalRelat = relatActual.EnvTotal;
+
+		let puntCentralAlCRSnou = DonaCoordenadesCRS(ParamInternCtrl.PuntOri.x,ParamInternCtrl.PuntOri.y, CanviCRS.darrerCRS);
+		let minX = puntCentralAlCRSnou.x-ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual/2;
+		let minY = puntCentralAlCRSnou.y-ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual/2;
+		let darrerEnvCRS = {
+					"MinX": minX ,
+					"MaxX": minX + ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual,
+					"MinY": minY ,
+					"MaxY": minY + ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual
+				};
+
+		if (DonaCRSRepresentaQuasiIguals(envTotalRelat.CRS, CanviCRS.darrerCRS)!== null)
+		{
+			AdaptarMinMax(envTotalRelat.EnvCRS, darrerEnvCRS);
+		}
+		else
+		{
+			let relatGlobalLongLat, darrerEnvCRSLongLat;
+			// Otenim l'envolupant en Long Lat
+			if (!EsProjLongLat(envTotalRelat.CRS))
+			{
+				relatGlobalLongLat = DonaEnvolupantLongLat(envTotalRelat.EnvCRS, envTotalRelat.CRS);
+				envTotalRelat.EnvCRS = relatGlobalLongLat;
+			}
+			if (!EsProjLongLat(CanviCRS.darrerCRS))
+			{
+				darrerEnvCRSLongLat = DonaEnvolupantLongLat(darrerEnvCRS, CanviCRS.darrerCRS);
+			}
+			AdaptarMinMax(envTotalRelat.EnvCRS, darrerEnvCRSLongLat);
+		}
+	}
+}
+/**
+ * Ens quedem amb l'envolupant més gran que hi hagi.
+ * @param {*} envolupantTotal 
+ * @param {*} nouEnvolupant 
+ */
+function AdaptarMinMax(envolupantTotal, nouEnvolupant)
+{
+	if (envolupantTotal.MinX > nouEnvolupant.MinX);
+	{
+		envolupantTotal.MinX = nouEnvolupant.MinX;
+	}
+	if (envolupantTotal.MaxX < nouEnvolupant.MaxX);
+	{
+		envolupantTotal.MaxX = nouEnvolupant.MaxX;
+	}
+	if (envolupantTotal.MinY > nouEnvolupant.MinY);
+	{
+		envolupantTotal.MinY = nouEnvolupant.MinY;
+	}
+	if (envolupantTotal.MaxY < nouEnvolupant.MaxY);
+	{
+		envolupantTotal.MaxY = nouEnvolupant.MaxY;
+	}
+}
 
 var darrerNodeStoryMapVisibleExecutat=null;
 
