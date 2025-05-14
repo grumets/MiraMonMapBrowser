@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -614,6 +614,15 @@ function DonaAdrecaAbsoluta(url)
 	return location.protocol+"//"+location.host+DonaAdreca(location.pathname)+url;
 }
 
+/**
+ * Ens retorna la URL actual sense el fragment que segueix al '#' en cas que hi sigui.
+ * @returns String amb la url: origin + pathname + search  
+ */
+function DonaAdrecaSenseHash()
+{
+	let loc = window.location;
+	return loc.origin + loc.pathname + loc.search; 
+}
 
 
 //Inspired in http://stackoverflow.com/questions/126100/how-to-efficiently-count-the-number-of-keys-properties-of-an-object-in-javascrip
@@ -1580,13 +1589,13 @@ var layer_finestra=layerFinestraList[i_finestra];
 			let min_current_width = min_finestra_width;
 			let min_current_height = min_finestra_height;
 			// Si la finestra té una mida mínima especifica la respectem canviant els valors per defecte (h: 38, w: 100).
-			if (layer_finestra.min_size_finestra && layer_finestra.min_size_finestra.w)
+			if (layer_finestra.minSize && layer_finestra.minSize.w)
 			{
-				min_current_width = layer_finestra.min_size_finestra.w;
+				min_current_width = layer_finestra.minSize.w;
 			}
-			if (layer_finestra.min_size_finestra && layer_finestra.min_size_finestra.h)
+			if (layer_finestra.minSize && layer_finestra.minSize.h)
 			{
-				min_current_height = layer_finestra.min_size_finestra.h;
+				min_current_height = layer_finestra.minSize.h;
 			}
 			//Impedeixo que la caixa es faci massa petita al redimensionar.
 			if (layer_finestra.pos_ini_finestra.w+dx<min_current_width)
@@ -1657,7 +1666,7 @@ var nom, i_finestra;
 		}
 	}
 	layerFinestraList[i_finestra]={nom: name, titol: titol, botons: botons, estat_click: movimentDesactiu, onresize: param.onresize,
-			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null, minSize: {width: param.minWidth, height: param.minHeight}};
+			coord_click: null, pos_ini_barra: {x: 0, y: 0, w: 0}, pos_ini_finestra: {x: 0, y: 0, w: 0, h: 0}, pos_ini_canto: null, minSize: {w: param.minWidth, h: param.minHeight}};
 
 	//Creo les dos layers que formaran la layer tipus finestra amb títol i botons
 
