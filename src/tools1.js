@@ -1483,8 +1483,11 @@ function getMinSizeFinestraLayer(win, name)
 {
 	let minSize = {width: 0, height: 0};
 	var elem=getFinestraLayer(win, name);
-	minSize.width = elem.style.minWidth;
-	minSize.height = elem.style.minHeight;
+	if (elem)
+	{
+		minSize.width = elem.style.minWidth;
+		minSize.height = elem.style.minHeight;
+	}
 	return minSize;
 }
 

@@ -179,7 +179,8 @@ var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJ
 		{
 			if (ParamCtrl.StoryMap[nstory].EnvTotal)
 			{
-				if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
+				// DPS i NJ: En cas que es decideixi per tenir un array d'envolupants per cada relat. Ara per ara no es contempla.
+				/*if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
 					for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
 					{
@@ -194,7 +195,7 @@ var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJ
 						continue;
 					}
 				}
-				else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
+				else*/ if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
 					nstory++;
 					continue;
@@ -215,7 +216,7 @@ var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJ
 	cdns.push("<br><div style='display:flex;'><button style='position:relative; margin: 0 15px 0;' onclick='DemanaRelatsNimmbus(\"", name, "\")'>",
 				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
 				GetMessage("SelectStory", "storymap"), ":</span>" ,
-				"<br><table class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
+				"<br><table class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 
 	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0, numFilesRelatsCompartits = 0;
 	// Omplim totes les histories
@@ -226,7 +227,7 @@ var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJ
 		{
 			if(cdns2.length == 0)
 			{
-				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
 				numFilesRelatsCompartits = 0;
 			}
 			if ((i_relat_compartit%numeroColumnesPerFila)==0)
@@ -342,7 +343,7 @@ function DemanaRelatsNimmbus(name)
 									{
 										let cdns = [];
 
-										cdns.push("<br><hr class='separadorHoritzonal' /><br><table id=", taulaRelatsCompartitsId, " class='Verdana11px'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>", "<tr id='", identificadorFilaRelatsCompartits + "_0","'>", CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, true), "</tr>");
+										cdns.push("<br><hr class='separadorHoritzonal' /><br><table id=", taulaRelatsCompartitsId, " class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>", "<tr id='", identificadorFilaRelatsCompartits + "_0","'>", CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, true), "</tr>");
 										finestraRelats.innerHTML = finestraRelats.innerHTML + cdns.join("");
 									}
 									else
@@ -1974,7 +1975,7 @@ var attributes=[];
 
 function ExecuteDataMMAttributesArray(attributes)
 {
-var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute;
+var hihaCanvis = false, attribute;
 
 	for (var i_at = 0; i_at < attributes.length; i_at++)
 	{
@@ -1985,8 +1986,8 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 			{
 				if (0==CommandMMNSetCRS(attribute.value.trim()))
 				{
-					hihaCanvis.any=true;
-					hihaCanvis.crs = true;
+					hihaCanvis=true;
+					break;
 				}
 			}
 		}
@@ -2010,8 +2011,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 				}
 				if (0==CommandMMNSetCenterCoord(punt))
 				{
-					hihaCanvis.any=true;
-					hihaCanvis.center = true;
+					hihaCanvis=true;
 				}
 			}
 			else
@@ -2023,8 +2023,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 			{
 				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
 				{
-					hihaCanvis.any=true;
-					hihaCanvis.zoom = true;
+					hihaCanvis=true;
 				}
 			}
 		}
@@ -2038,7 +2037,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 			if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
 					(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
 					"data-mm-layers"))
-					hihaCanvis.any=true;
+					hihaCanvis=true;
 		}
 		else if (attribute.name=="data-mm-time")
 		{
@@ -2057,7 +2056,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 					break;
 				}
 				if (0==CommandMMNSetDateTime(datejson))
-					hihaCanvis.any=true;
+					hihaCanvis=true;
 			}
 		}
 		else if (attribute.name=='data-mm-sels')
@@ -2075,7 +2074,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 					break;
 				}
 				if (0==CommandMMNSelections(sels))
-					hihaCanvis.any=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2095,7 +2094,7 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 					break;
 				}
 				if (0==CommandMMNDiagrams(diags))
-					hihaCanvis.any=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2115,86 +2114,16 @@ var hihaCanvis = {any: false, crs: false, center: false, zoom: false}, attribute
 					break;
 				}
 				if (0==CommandMMNSetLayersExtraDimensions(layerdims))
-					hihaCanvis.any=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
 		}
 	}
 
-	// Canvis de CRS...ampliar envolupant...
-	AdaptarEnvolupantRelat(hihaCanvis);
-
 	if (!diags)
 		TancaTotsElsHistogramaFinestra();
-	return hihaCanvis.any;
-}
-
-/**
- * 
- * @param {*} canvis Objecte amb els tipus de canvis 
- */
-function AdaptarEnvolupantRelat(canvis)
-{
-	let relatActual = ParamCtrl.StoryMap[indexStoryMapActiu];
-	if ((canvis.crs || canvis.zoom || canvis.center) && !relatActual.compartida)
-	{
-		let envTotalRelat = relatActual.EnvTotal;
-
-		let puntCentralAlCRSnou = DonaCoordenadesCRS(ParamInternCtrl.PuntOri.x,ParamInternCtrl.PuntOri.y, CanviCRS.darrerCRS);
-		let minX = puntCentralAlCRSnou.x-ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual/2;
-		let minY = puntCentralAlCRSnou.y-ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual/2;
-		let darrerEnvCRS = {
-					"MinX": minX ,
-					"MaxX": minX + ParamInternCtrl.vista.ncol*ParamInternCtrl.vista.CostatZoomActual,
-					"MinY": minY ,
-					"MaxY": minY + ParamInternCtrl.vista.nfil*ParamInternCtrl.vista.CostatZoomActual
-				};
-
-		if (DonaCRSRepresentaQuasiIguals(envTotalRelat.CRS, CanviCRS.darrerCRS)!== null)
-		{
-			AdaptarMinMax(envTotalRelat.EnvCRS, darrerEnvCRS);
-		}
-		else
-		{
-			let relatGlobalLongLat, darrerEnvCRSLongLat;
-			// Otenim l'envolupant en Long Lat
-			if (!EsProjLongLat(envTotalRelat.CRS))
-			{
-				relatGlobalLongLat = DonaEnvolupantLongLat(envTotalRelat.EnvCRS, envTotalRelat.CRS);
-				envTotalRelat.EnvCRS = relatGlobalLongLat;
-			}
-			if (!EsProjLongLat(CanviCRS.darrerCRS))
-			{
-				darrerEnvCRSLongLat = DonaEnvolupantLongLat(darrerEnvCRS, CanviCRS.darrerCRS);
-			}
-			AdaptarMinMax(envTotalRelat.EnvCRS, darrerEnvCRSLongLat);
-		}
-	}
-}
-/**
- * Ens quedem amb l'envolupant més gran que hi hagi.
- * @param {*} envolupantTotal 
- * @param {*} nouEnvolupant 
- */
-function AdaptarMinMax(envolupantTotal, nouEnvolupant)
-{
-	if (envolupantTotal.MinX > nouEnvolupant.MinX);
-	{
-		envolupantTotal.MinX = nouEnvolupant.MinX;
-	}
-	if (envolupantTotal.MaxX < nouEnvolupant.MaxX);
-	{
-		envolupantTotal.MaxX = nouEnvolupant.MaxX;
-	}
-	if (envolupantTotal.MinY > nouEnvolupant.MinY);
-	{
-		envolupantTotal.MinY = nouEnvolupant.MinY;
-	}
-	if (envolupantTotal.MaxY < nouEnvolupant.MaxY);
-	{
-		envolupantTotal.MaxY = nouEnvolupant.MaxY;
-	}
+	return hihaCanvis;
 }
 
 var darrerNodeStoryMapVisibleExecutat=null;
