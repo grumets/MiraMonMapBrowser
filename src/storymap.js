@@ -302,7 +302,7 @@ function DemanaRelatsNimmbus(name)
 	const loader = document.getElementById(carregadorAnimatId);
 	loader.style.display = "flow";
 	// Obtenim la llista de relats
-	loadFile(url, "application/xml", function(resposta) {
+	loadFile(url, "application/xml", function(resposta, extra_param) {
 		if(resposta && resposta.documentElement)
 		{
 			let respostaParsejada = ParseOWSContextAtom(resposta.documentElement); 
@@ -398,19 +398,7 @@ function DemanaRelatsNimmbus(name)
 		}
 	}, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); 
 		loader.style.display = "none";
-	},{lang: "eng"});
-}
-/**
- * 
- * @param {*} lang 
- * @param {*} resource_id 
- * @param {*} func 
- * @param {*} params_function 
- */
-function CridaReadStorymap(lang, resource_id, func, params_function)
-{
-	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+lang+"&RESOURCE="+resource_id;		
-	loadFile(url, "text/xml", func, function(xhr, extra_param) { alert(url + ": " + xhr ); }, params_function);
+	},{lang: "eng", callback_function: "AdoptaStorymap"});
 }
 
 /**
