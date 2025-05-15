@@ -99,15 +99,6 @@ function GUFCreateFeedbackWithReproducibleUsage(targets, reprod_usage, lang, acc
 
 function GUFCreateStorymapWithReproducibleUsage(targets, reprod_usage, lang, access_token_type)
 {
-	/*for (var i=0; i<targets.length; i++)
-	{	
-		if (targets[i].title)
-			targets[i].title = DonaCadenaPerValorDeFormulari(targets[i].title);
-		if (targets[i].code)
-			targets[i].code = DonaCadenaPerValorDeFormulari(targets[i].code);
-		if (targets[i].codespace) //decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara
-			targets[i].codespace = DonaCadenaPerValorDeFormulari(targets[i].codespace).replace("https://","http://"); 
-	}*/
 	if (reprod_usage.abstract)
 		reprod_usage.abstract = DonaCadenaPerValorDeFormulari(reprod_usage.abstract);
 	if (reprod_usage.ru_code)
