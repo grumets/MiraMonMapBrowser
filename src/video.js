@@ -365,7 +365,8 @@ function OmpleFinestraVideo(win, name)
 var cdns=[], capa, i_capa_primer_video;
 
 	var div=win.document.getElementById(ParamCtrl.containerName);
-	moveFinestraLayer(win, name, -1, -1, (div.clientWidth && div.clientWidth<ParamInternCtrl.vista.ncol+142) ? div.clientWidth-4 : ParamInternCtrl.vista.ncol+142, (div.clientHeight && div.clientHeight<ParamInternCtrl.vista.nfil+140) ? div.clientHeight-4 : ParamInternCtrl.vista.nfil+140);
+	let minSize = getMinSizeFinestraLayer(win, name);
+	moveFinestraLayer(win, name, -1, -1, (div.clientWidth && div.clientWidth<ParamInternCtrl.vista.ncol+142) ? div.clientWidth-4 : ParamInternCtrl.vista.ncol+142, (div.clientHeight && div.clientHeight<ParamInternCtrl.vista.nfil+140) ? div.clientHeight-4 : ParamInternCtrl.vista.nfil+140, minSize.width, minSize.height);
 
 	//Determinar el primer video actiu.
 	for (i_capa_primer_video=0; i_capa_primer_video<ParamCtrl.capa.length; i_capa_primer_video++)

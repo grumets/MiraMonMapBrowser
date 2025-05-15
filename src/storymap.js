@@ -79,6 +79,10 @@ const paragrafContinuacioId = "pContinuacio";
 const missatgeAvisImatgeId = "missatgeAvisImatge";
 const min_width_finestra_storymap = 500, min_height_finestra_storymap = 400;
 const fontImatgesUsuari = "data:image/jpeg;";
+const carregadorAnimatId = "relatLoader";
+const taulaRelatsCompartitsId = "taulaRelatsCompartits";
+const numeroColumnesPerFila = 2;
+const identificadorFilaRelatsCompartits = "filaRelats";
 IncludeScript("tinymce/js/tinymce/tinymce.min.js");
 
 // Especificitat de la funció creaFinestraLayer per a l'Storymap.
@@ -132,10 +136,23 @@ function TancaFinestra_visualitzaStoryMap()
 	}
 }
 
+/**
+ * Cera l'html intern d'una cel·la de la taula de relats.
+ * @param {*} indexRelat Índex del relat.
+ * @returns 
+ */
+function CreaContingutCellaRelat(indexRelat, ambCellaInclosa)
+{
+	let cadena = [];
+	const relat =  ParamCtrl.StoryMap[indexRelat];
+	cadena.push(ambCellaInclosa ? "<td style = 'vertical-align:text-top; text-align: center;'>" : "", "<a style='display: block;' href='javascript:void(0)' onclick='", relat.isNew ? "TancaICreaEditaStoryMap();'>" : "TancaIIniciaStoryMap(", indexRelat, ");'>", "<img src='", relat.src ? relat.src : (relat.srcData ? relat.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>", DonaCadena(relat.desc), "</p></a>", ambCellaInclosa ? "</td>" : "");
+	return cadena.join("");
+}
+
 //Omple la finestra amb el llistat d'històries (i mostra la imatge de pre-visualització de la història).
 function OmpleFinestraTriaStoryMap(win, name)
 {
-var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
+var cdns=[], i_story=0, nstory=0, i_real_story=[], newStory={"desc": GetMessageJSON("NewStorymap", "storymap"), "src": "nova_storymap.svg", "url": "", "isNew": true};
 
 	if (!ParamCtrl.StoryMap || ParamCtrl.StoryMap.length == 0)
 	{
@@ -155,61 +172,103 @@ var cdns=[], i_story=0, ncol=2, nstory=0, i_real_story=[], newStory={"desc": Get
 			ParamCtrl.StoryMap.push(newStory);	
 		}
 	}
-	let indexSeg = 0;
-	while (nstory < ParamCtrl.StoryMap.length)
+	if (ParamCtrl.ImatgeSituacio && ParamCtrl.ImatgeSituacio.length > 1)
 	{
-		if (ParamCtrl.StoryMap[nstory].EnvTotal)
+		let indexSeg = 0;
+		while (nstory < ParamCtrl.StoryMap.length)
 		{
-			if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
+			if (ParamCtrl.StoryMap[nstory].EnvTotal)
 			{
-				for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
+				// DPS i NJ: En cas que es decideixi per tenir un array d'envolupants per cada relat. Ara per ara no es contempla.
+				/*if (typeof ParamCtrl.StoryMap[nstory].EnvTotal==="object" && Array.isArray(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
-					if (EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+					for(var i_crs=0; i_crs<ParamCtrl.StoryMap[nstory].EnvTotal.length; i_crs++)
 					{
-						break;
+						if (EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal[i_crs]))
+						{
+							break;
+						}
+					}
+					if(i_crs >= ParamCtrl.StoryMap[nstory].EnvTotal.length)
+					{
+						nstory++;
+						continue;
 					}
 				}
-				if(i_crs >= ParamCtrl.StoryMap[nstory].EnvTotal.length)
+				else*/ if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
 				{
 					nstory++;
 					continue;
 				}
 			}
-			else if (!EsEnvDinsAmbitActual(ParamCtrl.StoryMap[nstory].EnvTotal))
-			{
-				nstory++;
-				continue;
-			}
+			i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
+			indexSeg++;
+			nstory++;
 		}
-		i_real_story[indexSeg]=nstory;  // Ens quedem els índex que correpsonen a Stories dins l'àmbit del mapa.
-		indexSeg++;
-		nstory++;
 	}
-	cdns.push("<br><button style='position:relative; right:-25px;' onclick='DemanaStorymapsNimmbus(\"", name, "\")'>",
-				GetMessage("RetrieveOtherStories", "storymap"), "</button>", "<br><br>",
-				GetMessage("SelectStory", "storymap"), ":" ,
-				"<br><table class=\"Verdana11px\">");
+	else
+	{
+		// Crea un array amb una seqüencia de números des de 0 fins a la longitud de relats que tenim en el navegador. 
+		// Aquests números seran els índexos dels storymaps a mostrar en el llistat.
+		i_real_story = Array.from({length: ParamCtrl.StoryMap.length}, (e, i)=> i);
+	}
+		
+	cdns.push("<br><div style='display:flex;'><button style='position:relative; margin: 0 15px 0;' onclick='DemanaRelatsNimmbus(\"", name, "\")'>",
+				GetMessage("RetrieveOtherStories", "storymap"), "</button><div id=", carregadorAnimatId, " class='loader' style='display:none'></div></div>", "<br><br><span style='padding-left:3px;padding-bottom:3px;'>",
+				GetMessage("SelectStory", "storymap"), ":</span>" ,
+				"<br><table class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left'>", GetMessage("FromBrowser", "storymap"), "</th></tr></thead>");
 
+	let cdns2 = [], i_relat_local = 0, i_relat_compartit = 0, numFilesRelatsCompartits = 0;
 	// Omplim totes les histories
 	while (i_story<i_real_story.length)
 	{
 		const storyActual = ParamCtrl.StoryMap[i_real_story[i_story]];
-		if ((i_story%ncol)==0)
-			cdns.push("<tr>");
-		cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;", " href='javascript:void(0)' onclick='");
-		(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
-		cdns.push("<img src='",(storyActual.src) ? storyActual.src : (storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif"),"' height='100' width='150' border='0'><p>",
-			DonaCadena(storyActual.desc),
-		"</p></a></td>");
-		/* Incrementem valor en aquest precís instant per aconseguir que
-		incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
-		<tr> el </tr> no s'inclou fins la següent iteració que compleixi
-		la condició.*/
+		if (storyActual.compartida)
+		{
+			if(cdns2.length == 0)
+			{
+				cdns2.push("<br><hr class='separadorHoritzonal' /><br><table class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>");
+				numFilesRelatsCompartits = 0;
+			}
+			if ((i_relat_compartit%numeroColumnesPerFila)==0)
+			{
+				cdns2.push("<tr id='", identificadorFilaRelatsCompartits + "_", numFilesRelatsCompartits, "'>");
+				numFilesRelatsCompartits++;
+			}
+			cdns2.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='TancaIIniciaStoryMap(", i_real_story[i_story], ");'><img src='",(storyActual.src) ? storyActual.src : ((storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>",DonaCadena(storyActual.desc), "</p></a></td>");
+			/* Incrementem valor en aquest precís instant per aconseguir que
+			incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
+			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
+			la condició.*/
+			i_relat_compartit++;
+			if ((i_relat_compartit%numeroColumnesPerFila)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+				cdns2.push("</tr>");
+		}
+		else
+		{
+			if ((i_relat_local%numeroColumnesPerFila)==0)
+				cdns.push("<tr>");
+			cdns.push("<td style = 'vertical-align:text-top; text-align: center;'><a style='display: block;'", " href='javascript:void(0)' onclick='");
+			(storyActual.isNew) ? cdns.push("TancaICreaEditaStoryMap();'>") : cdns.push("TancaIIniciaStoryMap(", i_real_story[i_story], ");'>");
+			cdns.push("<img src='",(storyActual.src) ? storyActual.src : ((storyActual.srcData) ? storyActual.srcData : AfegeixAdrecaBaseSRC("1griscla.gif")),"' height='100' width='150' border='0'><p>",
+				DonaCadena(storyActual.desc),
+			"</p></a></td>");
+			/* Incrementem valor en aquest precís instant per aconseguir que
+			incloure els tags <tr> i </tr> sigui l'adequat, tal que quan s'inclou
+			<tr> el </tr> no s'inclou fins la següent iteració que compleixi
+			la condició.*/
+			i_relat_local++;
+			if ((i_relat_local%numeroColumnesPerFila)==0 || (i_relat_local + i_relat_compartit) ==nstory)
+				cdns.push("</tr>");
+		}
 		i_story++;
-		if ((i_story%ncol)==0 || i_story==nstory)
-			cdns.push("</tr>");
 	}
 	cdns.push("</table>");
+	if(cdns2.length != 0)
+	{
+		cdns2.push("</table>");
+		cdns = cdns.concat(cdns2);
+	}
 	contentFinestraLayer(win, name, cdns.join(""));
 	indexStoryMapActiu=-1;
 }
@@ -230,39 +289,144 @@ function RefrescaFinestraTriaStoryMap(win, name)
 	OmpleFinestraTriaStoryMap(win, name);
 }
 
-function DemanaStorymapsNimmbus(name)
+function DemanaRelatsNimmbus(name)
 {
 	const urlIdNavegador = ParamCtrl.ServidorLocal;
 	const urlServidor = new URL(urlIdNavegador);
-	const elem = getFinestraLayer(window, name);
-	GUFShowPreviousFeedbackWithReproducibleUsageInHTMLDiv(elem, "triaStoryMap_finestra", urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
+	const finestraRelats = getFinestraLayer(window, name);		
+	// URL per a la consulta de relats disponibles per aquest navegador.
+	let url = GUFGetURLPreviousStorymapWithReproducibleUsage(urlServidor.host, urlServidor.href.indexOf("?") != -1 ? (urlServidor.href.slice(0, urlServidor.href.indexOf("?"))).replace("https","http") : urlServidor.href.replace("https","http"),
 	{ru_platform: encodeURI(ToolsMMN), ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers,
-		ru_schema: encodeURIComponent(config_schema_storymap) /*, ru_sugg_app: location.href -> no cal passar-ho perquè s'omple per defecte*/},
-	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/, "AdoptaStorymap"/*callback_function*/, null);
+		ru_schema: encodeURIComponent(config_schema_storymap)},
+	ParamCtrl.idioma, DonaAccessTokenTypeFeedback(urlIdNavegador) /*access_token_type*/);
+	const loader = document.getElementById(carregadorAnimatId);
+	loader.style.display = "flow";
+	// Obtenim la llista de relats
+	loadFile(url, "application/xml", function(resposta, extra_param) {
+		if(resposta && resposta.documentElement)
+		{
+			let respostaParsejada = ParseOWSContextAtom(resposta.documentElement); 
+			let relatsTotals = respostaParsejada.properties.totalResults;
+			if(relatsTotals != 0)
+			{
+				let type, relatsDescarregats = 0, relatsRestants = relatsTotals;
+				for(let i = 0; i<relatsTotals; i ++)
+				{
+					type=GetNimmbusTypeOfAOWCFeature(respostaParsejada.features[i]);
+					if (type=="FEEDBACK")
+					{
+						var resource_id = respostaParsejada.features[i].properties.links.alternates[0].href;
+						if(!resource_id) 
+							continue;
+						
+						var n = resource_id.indexOf("&RESOURCE=");
+						if(n==-1)
+							continue;
+						resource_id = resource_id.substring(n+10);
+						if(!resource_id)
+							continue;
+						n = resource_id.indexOf("&");  
+						if(n ==-1)
+							continue;
+						resource_id = resource_id.substring(0, n);
+						if(!resource_id)
+							continue;
+						
+						if (!ComprovaRelatJaDescarregat(resource_id))
+						{
+							const actualitzaFinestraRelats = function descarregaFinal(respostaParsejada){
+								
+								if (AdoptaStorymap(respostaParsejada, null))
+								{
+									const taulaRelatsCompartits = document.getElementById(taulaRelatsCompartitsId);
+									if (!taulaRelatsCompartits)
+									{
+										let cdns = [];
+
+										cdns.push("<br><hr class='separadorHoritzonal' /><br><table id=", taulaRelatsCompartitsId, " class='Verdana11px' style='table-layout: fixed; width: 100%;'><thead><tr><th colspan=", numeroColumnesPerFila, " style='text-align:left;'>", GetMessage("FromUsers", "storymap"), "</th></tr></thead>", "<tr id='", identificadorFilaRelatsCompartits + "_0","'>", CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, true), "</tr>");
+										finestraRelats.innerHTML = finestraRelats.innerHTML + cdns.join("");
+									}
+									else
+									{
+										// Insertem el nou element dins la taula de compartits per usuaris.
+										if (taulaRelatsCompartits.rows.length)
+										{
+											// Comptem quantes files de la taula ens interessa desestimar per accedir a l'última fila amb dades. Les files pertanyents al Foot no ens interessen, i també hem d'afegir +1 per corregir l'índex del length. Les files del tHead no importen perquè son previes a les files amb dades.
+											const numFilesaRestarPerUltimaDades = /*(taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ) +*/ (taulaRelatsCompartits.tFoot ? taulaRelatsCompartits.tFoot.rows.length : 0 ) + 1;
+											if ((taulaRelatsCompartits.rows.length - numFilesaRestarPerUltimaDades) > -1)
+											{
+												let ultimaFilaAmbDades = taulaRelatsCompartits.rows[taulaRelatsCompartits.rows.length-numFilesaRestarPerUltimaDades];
+												if ((ultimaFilaAmbDades.cells.length%numeroColumnesPerFila)==0)
+												{
+													let novaFila = taulaRelatsCompartits.insertRow();
+													novaFila.setAttribute("id", identificadorFilaRelatsCompartits + "_" + (taulaRelatsCompartits.rows.length-(numFilesaRestarPerUltimaDades + (taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ))));
+													let novaCella = novaFila.insertCell();
+													novaCella.setAttribute("style", "vertical-align:text-top; text-align: center;");
+													novaCella.innerHTML = CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, false);
+												}
+												else
+												{
+													ultimaFilaAmbDades = document.getElementById(identificadorFilaRelatsCompartits + "_" + (taulaRelatsCompartits.rows.length-(numFilesaRestarPerUltimaDades + (taulaRelatsCompartits.tHead ? taulaRelatsCompartits.tHead.rows.length : 0 ))));
+													//perquè no podem fer insert? ultimaFila Null? ALgo amb l'ID que no es cree bé, aquí hem de tenir en compte les files tHead...
+													let novaCella = ultimaFilaAmbDades.insertCell();
+													novaCella.setAttribute("style", "vertical-align:text-top; text-align: center;");
+													novaCella.innerHTML = CreaContingutCellaRelat(ParamCtrl.StoryMap.length-1, false);
+												}
+											}
+										}											
+									}
+								}
+							};
+							CridaACallBackFunctionAmbEstructuraGUF(ParamCtrl.idioma, resource_id, actualitzaFinestraRelats, null);
+						}
+						else 
+						{
+							relatsRestants--;
+							if (relatsRestants==0)
+								loader.style.display = "none";
+						}
+					}
+				}
+				loader.style.display = "none";
+			}
+			else
+			{
+				loader.style.display = "none";
+				alert(MissatgeSenseElementsRetornats(extra_param));
+				return;
+			}
+		}
+	}, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); 
+		loader.style.display = "none";
+	},{lang: "eng", callback_function: "AdoptaStorymap"});
 }
+
 /**
  * Ens permet descarregar un relat concret que estigui disponible a la plataforma Nimmbus i pel nostre mapa. 
  * @param {*} guf 
- * @returns 
+ * @returns Boolean cert si s'ha descarregat correctament i false altrament.
  */
-function AdoptaStorymap(guf)
+function AdoptaStorymap(guf, params_function)
 {
 	if (!guf)
 	{
 		// modificar text missatge per relats.
 		alert(GetMessage("UnexpectedDefinitionOfFeedback", "qualitat") + ". " + GetMessage("StorymapCannotImported", "storymap") + ".");
 		TancaFinestraLayer('feedbackAmbEstils');
-		return;
+		return false;
 	}
-
+	/*const parseAnswer = ParseOWSContextAtom(guf.documentElement);
+	*/
 	const storyMapAGuardar = {compartida: true};
 	const parserAWeb = new DOMParser();
 	const relatSencer = parserAWeb.parseFromString(guf.usage.usage_descr.code, "text/html");
 	const errorNode = relatSencer.querySelector("parsererror");
 	if (errorNode) {
 		console.log(errorNode.innerHTML);
-		return;
+		return false;
 	}
+	// Guardem l'identificador del recurs
+	storyMapAGuardar.recursId = guf.identifier.code;
 
 	// Trobem la imatge de portada si n'hi ha.
 	const imgPortada = relatSencer.querySelector("img#" + imageThumbnailId);
@@ -282,6 +446,19 @@ function AdoptaStorymap(guf)
 	storyMapAGuardar.html = parser.serializeToString(relatSencer);
 	
 	ParamCtrl.StoryMap.push(storyMapAGuardar);
+	return true;
+}
+
+/**
+ * Comprova mirant l'identificador de recurs si el relat ja ha estat descarregat en anterioritat.
+ * @param {*} id Identificador del recurs
+ * @returns bool Cert si el recurs ja s'ha descarregat. Fals per si és un recurs nou.
+ */
+function ComprovaRelatJaDescarregat(id)
+{
+	const resultatsCerca = ParamCtrl.StoryMap.find((relat) => relat.recursId == id);
+
+	return typeof resultatsCerca !== "undefined";
 }
 
 function TancaIIniciaStoryMap(i_story)
@@ -1442,9 +1619,10 @@ var base;
 function CarregaStoryMap(text_html, i_story)
 {
 const relatACarregar = ParamCtrl.StoryMap[i_story];
+const storyMap = "storyMap";
 
 	contadorAccionsMapa= -1;
-	const finestraRelat = getFinestraLayer(window, "storyMap");
+	const finestraRelat = getFinestraLayer(window, storyMap);
 	
 	// Eliminem els nodes anidats a la finestra de lectura de relats així evitar tenir elements repretits de l'anterior visualitsació 
 	while (finestraRelat.firstChild) {
@@ -1452,16 +1630,17 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	}
 	  
 	if (relatACarregar.desc)
-		titolFinestraLayer(window, "storyMap", DonaCadena(relatACarregar.desc));
+		titolFinestraLayer(window, storyMap, DonaCadena(relatACarregar.desc));
 
 	if (typeof relatACarregar.MargeEsq!=="undefined" || typeof relatACarregar.MargeSup!=="undefined" ||
 	    relatACarregar.Ample || relatACarregar.Alt)
 	{
-		var rect=getRectFinestraLayer(window, "storyMap");
-		moveFinestraLayer(window, "storyMap", (typeof relatACarregar.MargeEsq!=="undefined" && relatACarregar.MargeEsq>=0) ? relatACarregar.MargeEsq : rect.esq,
+		var rect=getRectFinestraLayer(window, storyMap);
+		let minSize = getMinSizeFinestraLayer(win, storyMap);
+		moveFinestraLayer(window, storyMap, (typeof relatACarregar.MargeEsq!=="undefined" && relatACarregar.MargeEsq>=0) ? relatACarregar.MargeEsq : rect.esq,
 				(typeof relatACarregar.MargeSup!=="undefined" && relatACarregar.MargeSup>=0) ? relatACarregar.MargeSup : rect.sup,
 				(relatACarregar.Ample) ? relatACarregar.Ample : rect.ample,
-				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt);
+				(relatACarregar.Alt) ? relatACarregar.Alt : rect.alt, minSize.width, minSize.height);
 	}
 	
 	// Crear el marc per al relat de mapes. 
@@ -1593,7 +1772,7 @@ const relatACarregar = ParamCtrl.StoryMap[i_story];
 	liniaHoritzontal.className = "separadorHoritzonal";
 	divBotons.insertAdjacentElement("afterend", liniaHoritzontal);
 	
-	ObreFinestra(window, "storyMap");
+	ObreFinestra(window, storyMap);
 	
 	AfegeixEspaiTransparent();
 	AfegeixMarkerStoryMapVisible();
@@ -1777,16 +1956,14 @@ var attributes=[];
 			break;
 		attributes.push({name: arguments[i_arg], value:arguments[i_arg+1]}); 
 	}
-	if (ExecuteDataMMAttributesArray(attributes))
+	let canvis = ExecuteDataMMAttributesArray(attributes);
+	if (canvis.any)
 		RepintaMapesIVistes();
 }
 
 function ExecuteDataMMAttributesArray(attributes)
 {
-var hihacanvis, attribute;
-const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
-	
-	hihacanvis=false;
+var hihaCanvis = false, attribute;
 
 	for (var i_at = 0; i_at < attributes.length; i_at++)
 	{
@@ -1796,7 +1973,10 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (attribute.value.trim().length)
 			{
 				if (0==CommandMMNSetCRS(attribute.value.trim()))
-					hihacanvis=true;
+				{
+					hihaCanvis=true;
+					break;
+				}
 			}
 		}
 	}
@@ -1818,7 +1998,9 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetCenterCoord(punt))
-					hihacanvis=true;
+				{
+					hihaCanvis=true;
+				}
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -1828,7 +2010,9 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (attribute.value.trim().length)
 			{
 				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-					hihacanvis=true;
+				{
+					hihaCanvis=true;
+				}
 			}
 		}
 		else if (attribute.name=="data-mm-layers")
@@ -1841,7 +2025,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 			if (0==CommandMMNSetLayersAndStyles(attribute.value.trim(), 
 					(i_styles == attributes.length) ? null : attributes[i_styles].value.trim(), 
 					"data-mm-layers"))
-				hihacanvis=true;
+					hihaCanvis=true;
 		}
 		else if (attribute.name=="data-mm-time")
 		{
@@ -1860,7 +2044,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetDateTime(datejson))
-					hihacanvis=true;
+					hihaCanvis=true;
 			}
 		}
 		else if (attribute.name=='data-mm-sels')
@@ -1878,7 +2062,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSelections(sels))
-					hihacanvis=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -1898,7 +2082,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNDiagrams(diags))
-					hihacanvis=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -1918,7 +2102,7 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 					break;
 				}
 				if (0==CommandMMNSetLayersExtraDimensions(layerdims))
-					hihacanvis=true;
+					hihaCanvis=true;
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -1927,9 +2111,8 @@ const htmlStory = ParamCtrl.StoryMap[indexStoryMapActiu];
 
 	if (!diags)
 		TancaTotsElsHistogramaFinestra();
-	return hihacanvis;
+	return hihaCanvis;
 }
-
 
 var darrerNodeStoryMapVisibleExecutat=null;
 
@@ -1986,7 +2169,7 @@ function ExecutaAttributsStoryMapVisibleEvent(event)
 
 function ExecutaAttributsStoryMapVisible()
 {
-	var div=getFinestraLayer(window, "storyMap");
+	var div=document.getElementById("divRelat");
 	RecorreNodesFillsAttributsStoryMapVisible(div, div.childNodes);
 	timerExecutaAttributsStoryMapVisible=null;
 }
@@ -2009,11 +2192,10 @@ function CompartirStorymap(i_story)
 		relatFragDoc.prepend(imgPortada.outerHTML);
 	}
 	
-	GUFCreateFeedbackWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
+	GUFCreateStorymapWithReproducibleUsage([{title: relatACompartir.desc, code: urlServidor.host, codespace: ParamCtrl.ServidorLocal}],
 			{abstract: relatACompartir.desc, specific_usage: GetMessage("ShareStorymap", "storymap"),
 			ru_code: relatFragDoc.textContent, ru_code_media_type: "text/html",
-			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap, ru_sugg_app: DonaAdrecaSenseHash()
-			}, ParamCtrl.idioma, "");
+			ru_platform: ToolsMMN, ru_version: VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers, ru_schema: config_schema_storymap}, ParamCtrl.idioma, "");
 }
 
 var imgSvgIconaSincroMapa;
