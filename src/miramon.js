@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -286,6 +286,16 @@ function DonaCorsServidorCapa(capa)
 	if (typeof capa.cors==="undefined" || capa.cors==null)
 		return ParamCtrl.CorsServidorLocal;
 	return capa.cors;
+}
+
+/**
+ * A partir d'un text que representa un servidor se'ns retorna aquest mateix servidor intercanviant el protocol https per http
+ * i només la part conjunta de origin i pathname.  
+ */
+function DonaServidorSenseQueryNiProtocolSegur(servidor)
+{
+	const urlServidor = new URL(servidor);
+	return urlServidor.origin + urlServidor.pathname.replace("https","http");
 }
 
 function MostraEnllacWMS(finestra)
@@ -5012,7 +5022,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "param", GetMessageJSON("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true, minWidth: 413, minHeight: 571}, null);
 	createFinestraLayer(window, "download", GetMessageJSON("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "video", GetMessageJSON("TimeSeriesAnalysisAndAnimations", "miramon"), boto_tancar, 2, 1, 900, 610, "NWCR", {scroll: "ara_no", visible: false, ev: null}, null);
-	createFinestraLayer(window, "consola", GetMessageJSON("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "Nw", {scroll: "ara_no", visible: false, ev:null, resizable:true}, null);
+	createFinestraLayer(window, "consola", GetMessageJSON("RequestConsole", "miramon"), boto_tancar, 277, 220, 500, 300, "NwCR", {scroll: "ara_no", visible: false, ev:null, resizable:true, minWidth: 396, minHeight: 250}, null);
 	createFinestraLayer(window, "reclassificaCapa", GetMessageJSON("ReclassifierLayerValues", "miramon"), boto_tancar, 250, 200, 650, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "calculaQualitat", GetMessageJSON("ComputeQuality", "cntxmenu"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "mostraLlinatge", GetMessageJSON("Lineage"), boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
@@ -5024,7 +5034,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "enllacWMS", GetMessageJSON("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, resizable: true, ev: null}, null);
 
 	createFinestraLayer(window, "triaStoryMap", GetMessageJSON("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true, minWidth: 100, minHeight: 150}, null);
-	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 220, 180, 510, 420, "Nw", {scroll: "no", visible: false, ev: null, resizable:true, minWidth:min_width_finestra_storymap, minHeight:min_height_finestra_storymap}, null);
+	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 220, 180, 510, 420, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true, minWidth:min_width_finestra_storymap, minHeight:min_height_finestra_storymap}, null);
 
 	createFinestraLayer(window, "info", GetMessageJSON("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", GetMessageJSON("ModifyName"), boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);
