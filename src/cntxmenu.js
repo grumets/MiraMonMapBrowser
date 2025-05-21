@@ -2348,7 +2348,7 @@ function CarregaFitxerLocalOURLSeleccionat(form)
 			if(null==(configuracio=LlegeixParametresCSV(form)))
 				return;	
 			
-			AfegeixCapaCSV_URL(NumeroDeCapesVolatils(-1), configuracio, form.crs_csv.value ? form.crs_csv.value: "EPSG:4326");
+			AfegeixCapaCSV_URL(NumeroDeCapesVolatils(-1), configuracio, form.crs_csv.value ? form.crs_csv.value: "EPSG:4326", form.url_fitxer.value);
 			TancaFinestraLayer("afegirCapa");
 			return;
 		}

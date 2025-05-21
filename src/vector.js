@@ -531,8 +531,8 @@ var wkt;
 		}
 		else
 		{		
-			x=row[capa.configCSV.nomCampGeometria.x];
-			y=row[capa.configCSV.nomCampGeometria.y];
+			x=parseFloat(row[capa.configCSV.nomCampGeometria.x]);
+			y=parseFloat(row[capa.configCSV.nomCampGeometria.y]);
 			if(x && y || (x==0 || y==0))
 			{
 				geometria={"type": "Point", "coordinates": [x, y]};			

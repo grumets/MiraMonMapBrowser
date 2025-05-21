@@ -767,7 +767,7 @@ function DefineixAttributesCapaVectorSiCal(capa)
 }
 
 
-function AfegeixCapaCSV_URL(i_on_afegir, configuracio, CRS)
+function AfegeixCapaCSV_URL(i_on_afegir, configuracio, CRS, url)
 {
 var k;
 

@@ -1258,8 +1258,8 @@ var polygon, lineString;
 
 async function loadVectorData(i_capa2, i_valor2, imatge, vista, i_capa, i_data2, i_estil2, i_valor, nom_funcio_ok, funcio_ok_param)
 {
-	//De moment aiò només està ben implementat per capes vectorials que ja estan carregades.
-	//Cal pensar que passa si els objectes encara no s'han carregat. Cal cridar la carrega dels vectors de manera assincrona 
+	//De moment això només està ben implementat per capes vectorials que ja estan carregades.
+	//Cal pensar que passa si els objectes encara no s'han carregat. Cal cridar la carrega dels vectors de manera assíncrona 
 	//aquí abans de cridar el dibuixat de la capa oculta amb un await.
 	var objOculta = DonaObjCapaComABinaryArray(vista, i_capa2, ParamCtrl.capa[i_capa2].objectes);
 	ParamCtrl.capa[i_capa].valors[i_valor].datatype=objOculta.datatype;
@@ -1363,7 +1363,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 					AlertaNomAttributeIncorrecteSimbolitzar(simbols.NomCamp, "simbols.NomCamp", capa);
 					return ;
 				}
-				if (PrecarregaValorsArrayBinaryAttributeSiCal(i, OmpleVistaCapaDigiIndirect, param))
+				if (PrecarregaValorsArrayBinaryAttributeSiCal(i, OmpleVistaCapaDigiIndirect, param))  // Això suposo que es fa perquè tot i que estem dibuixant un vector, a la fórmula hi podria participar un ràster?
 					return;
 			}
 			if (simbols.NomCampFEscala)
