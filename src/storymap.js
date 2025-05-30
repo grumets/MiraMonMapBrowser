@@ -309,7 +309,7 @@ function DemanaRelatsNimmbus(name)
 			let relatsTotals = respostaParsejada.properties.totalResults;
 			if(relatsTotals != 0)
 			{
-				let type, relatsDescarregats = 0, relatsRestants = relatsTotals;
+				let type, relatsRestants = relatsTotals;
 				for(let i = 0; i<relatsTotals; i ++)
 				{
 					type=GetNimmbusTypeOfAOWCFeature(respostaParsejada.features[i]);
@@ -440,7 +440,6 @@ function AdoptaStorymap(guf, params_function)
 	if (titol) 
 	{
 		storyMapAGuardar.desc = titol.textContent;
-		titol.remove();
 	}
 	const parser = new XMLSerializer();
 	storyMapAGuardar.html = parser.serializeToString(relatSencer);
@@ -1636,7 +1635,7 @@ const storyMap = "storyMap";
 	    relatACarregar.Ample || relatACarregar.Alt)
 	{
 		var rect=getRectFinestraLayer(window, storyMap);
-		let minSize = getMinSizeFinestraLayer(win, storyMap);
+		let minSize = getMinSizeFinestraLayer(window, storyMap);
 		moveFinestraLayer(window, storyMap, (typeof relatACarregar.MargeEsq!=="undefined" && relatACarregar.MargeEsq>=0) ? relatACarregar.MargeEsq : rect.esq,
 				(typeof relatACarregar.MargeSup!=="undefined" && relatACarregar.MargeSup>=0) ? relatACarregar.MargeSup : rect.sup,
 				(relatACarregar.Ample) ? relatACarregar.Ample : rect.ample,
