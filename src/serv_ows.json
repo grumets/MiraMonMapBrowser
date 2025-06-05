@@ -11,7 +11,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "IDEA",
-			"desc": "Infrastructura de Dades Espacials D'Andorra"
+			"desc": "Infrastructura de Dades Espacials d'Andorra"
 		}
 	},
 	{
@@ -26,7 +26,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
-			"desc": "Infrastructura de Dades Espacials D'Andorra"
+			"desc": "Infrastructura de Dades Espacials d'Andorra"
 		}
 	},
 	{
@@ -41,7 +41,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
-			"desc": "Infrastructura de Dades Espacials D'Andorra"
+			"desc": "Infrastructura de Dades Espacials d'Andorra"
 		}
 	},
 	{
@@ -56,7 +56,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "IDEA",
-			"desc": "Infrastructura de Dades Espacials D'Andorra"
+			"desc": "Infrastructura de Dades Espacials d'Andorra"
 		}
 	},
 	{
@@ -71,7 +71,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "IDEA", 
-			"desc": "Infrastructura de Dades Espacials D'Andorra"
+			"desc": "Infrastructura de Dades Espacials d'Andorra"
 		}
 	},
 	{
@@ -112,7 +112,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "CREAF", 
-			"desc": "Centre de Recerca Ecològica i d'Aplicacions Forestals"
+			"desc": "Centre de Recerca Ecològica i Aplicacions Forestals"
 		}
 	},
 	{
@@ -138,7 +138,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{
@@ -153,7 +153,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{
@@ -168,7 +168,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{
@@ -183,7 +183,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{
@@ -198,7 +198,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{
@@ -213,7 +213,7 @@
 		"cors": true,
 		"categoria": {
 			"nom": "ICGC", 
-			"desc": "Institut Cartogràfic y Geològic de Catalunya"
+			"desc": "Institut Cartogràfic i Geològic de Catalunya"
 		}
 	},
 	{

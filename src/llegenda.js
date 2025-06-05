@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -353,7 +353,7 @@ function CanviaSelectorEstilCapa(input, i_capa, i_estil, i_comp, i_sltr)
 
 function DeterminaAlgunaCapa(flag)
 {
-var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverage:1, WPS:1};
+var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverage:1, WPS:1, feeback:1};
 
 	if (flag&LlegendaAmbControlDeCapes)
 	{
@@ -364,6 +364,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 			alguna.descarregable=0;			
 			alguna.getcoverage=0;
 			alguna.WPS=0;
+			alguna.feedback=0;
 			for (var i=0; i<ParamCtrl.capa.length; i++)
 			{
 				if (EsIndexCapaVolatil(i, ParamCtrl))
@@ -393,6 +394,8 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 						alguna.getcoverage=1;
 					if (capa.proces)
 						alguna.WPS=1;
+					if((capa.feedback)&&(capa.feedback.botoFeedbackALaLlegenda!="no"))
+						alguna.feedback=1;
 				//}
 			}
 		}
@@ -968,6 +971,8 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 		cdns.push("<td width=\"18\" height=\"1\"></td>");
 	if (alguna.getcoverage)
 		cdns.push("<td width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 20 : 16), "\" height=\"1\"></td>");
+	if (alguna.feedback)
+		cdns.push("<td width=\"", ((!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors) ? 20 : 16), "\" height=\"1\"></td>");
 	if (alguna.WPS)
 		cdns.push("<td width=\"22\" height=\"1\"></td>");		
 	cdns.push("<td width=\"27\" height=\"1\"></td><td width=\"300\" height=\"1\"></td></tr>");
@@ -997,7 +1002,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 					}
 						
 					cdns.push("<tr><td colspan=");
-					n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+					n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS+alguna.feedback;								
 					if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
 						n_col_carac+=alguna.consultable;
 					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
@@ -1009,7 +1014,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 			else
 	    	{
 			    cdns.push("<tr><td colspan=");
-				n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS;								
+				n_col_carac=2+alguna.desplegable+alguna.visible+alguna.getcoverage+alguna.WPS+alguna.feedback;								
 				if (ParamCtrl.LlegendaLligaVisibleAmbConsultable!=true)					
 					n_col_carac+=alguna.consultable;
 				if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
@@ -1180,7 +1185,15 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 				cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\"></td>");
 		}
 
-		//Botó de WPS
+		// botÃ³ feedback llegenda	
+		if ((capa.feedback!=null) && (capa.feedback.botoFeedbackALaLlegenda=="si"))
+		{
+			cdns.push("<td valign=\"middle\">",
+				CadenaBotoPolsable("fb_capa"+i_capa, "feedback", GetMessage("Feedback").toLowerCase(), "ObreFinestraFeedbackCapa("+i_capa+",-1)", 14),
+				"</td>");
+		}
+
+		//BotÃ³ de WPS
 		if(capa.proces==null)
 		{
 			if (alguna.WPS)

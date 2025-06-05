@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -816,9 +816,64 @@ var cdns=[], capa;
 
 function MostraFinestraDownload(i_capa)
 {
+    var capa;
+    var link;
+    var s;
+    capa = ParamCtrl.capa[i_capa];
+	var esUrlAbsoluta = false;
+	   
+	// Si només tenim un element a descarregar d'aquesta capa i només un format, ho descarreguem directament sense haver d'obrir una finestra intermèdia
+    if ((capa.DescarregaTot.length == 1) && (capa.DescarregaTot[0].format.length == 1))
+    {
+        //comprovem si el contingut de capa.DescarregaTot[0].url és ja una url
+		var ext=ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[0].format].extension;
+		s=capa.DescarregaTot[0].url.replace("{extension}", ext).replace("{EXTENSION}", ext);
+		
+		try {
+			var urlObject = new URL(s);
+			esUrlAbsoluta = true;
+		} catch (_) {
+			esUrlAbsoluta = false;
+		}
+		
+		//si el que ens passen no és url, sinó un path relatiu, hem de construir la url
+		if (esUrlAbsoluta == false)
+		{
+			// es genera el link de descàrrega
+			s = window.location.href+capa.DescarregaTot[0].url;	
+			s = s.replace("{extension}", ext);
+			s = s.replace("{EXTENSION}", ext);
+        }
+		
+		//si el format és htm, no descarreguem res, obrim l'htm en una nova finestra
+		if ((ext.toLowerCase() == "htm") || (ext.toLowerCase() == "html"))
+		{
+			window.open(s, "_blank");
+		}
+		// si el format és qualsevol altre (mmzx, tiff o el que sigui), el descarreguem
+		else
+		{	
+			// Crear un element <a> real
+			link = document.createElement("a");
+			link.href = s;
+			link.target = "_blank"; // Obre en una finestra nova
+			link.download = ""; // Intenta forçar la descàrrega
+			
+			// Afegir-lo temporalment al DOM i fer clic
+			document.body.appendChild(link);
+			link.click();
+			
+			// Eliminar-lo després per netejar el DOM
+			document.body.removeChild(link);
+		}
+    }
+    //en cas de poder triar entre diferents formats i capes, obrirem la finestra corresponent amb els vincles a totes les opcions
+	else
+    {    
 	if (!ObreFinestra(window, "download", GetMessage("ofDownloading", "download")))
 		return;
 	OmpleFinestraDownload(i_capa);
+	}
 }
 
 function GuardarCapaVectorialJSON(i_capa)

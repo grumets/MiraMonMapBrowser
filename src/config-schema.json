@@ -1,4 +1,4 @@
-﻿{
+{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Navegador de Mapes del MiraMon",
 	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
@@ -1706,6 +1706,24 @@
 						"type": ["array", "null"],
 						"items": {
 							"$ref": "#/definitions/estil" 
+						}
+					},
+					"feedback": {
+						"description": "Ens permet definir un únic objecte amb informació sobre el botó de feedback, el codi i l'espai de noms.",
+						"type": ["object", "null"],
+						"properties": {
+						  "botoFeedbackALaLlegenda": { 
+							"description": "Afegeix botó de feedback a la llegenda.",
+							"enum": [null, "no", "si"] 
+						  },
+						  "code": {
+							"description": "Codi que identifica la capa en la citació del NiMMbus.",
+							"type": "string"
+						  },
+						  "codeSpace": {
+							"description": "Espai de noms que identifica la capa en la citació del NiMMbus.",
+							"type": "string"
+						  }
 						}
 					},
 					"i_estil": {
