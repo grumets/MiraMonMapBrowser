@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1220,7 +1220,7 @@ var i_sel, tipus_node,sel_a_omplir;
 	{
 		AfegeixOptionASelect(sel_a_omplir, {text: GetMessage("name"), value:"name", selected: true});
 		AfegeixOptionASelect(sel_a_omplir, {text: GetMessage("reference"), value:"reference", selected: false});
-		AfegeixOptionASelect(sel_a_omplir, {text: getMessage("description"), value:"description", selected: false});
+		AfegeixOptionASelect(sel_a_omplir, {text: GetMessage("description"), value:"description", selected: false});
 	}
 	else if(tipus_node=="proces")
 	{
@@ -1240,7 +1240,7 @@ var i_sel, tipus_node,sel_a_omplir;
 	}
 	else if(tipus_node=="funcio")
 	{
-		AfegeixOptionASelect(sel_a_omplir, {text: getMessage("description"), value:"description", selected: true});
+		AfegeixOptionASelect(sel_a_omplir, {text: GetMessage("description"), value:"description", selected: true});
 	}
 }
 
@@ -1323,15 +1323,15 @@ function OmpleFinestraLlinatge(param)
 
 		var cdns=[];
 		cdns.push("<form name=\"LlinatgeCapes\" onSubmit=\"return false;\">",
-				  "<fieldset id=\"opcionsLlinatge\"><legend>",getMessage("QueryFilterOptions", "llinatge"), "</legend>",
+				  "<fieldset id=\"opcionsLlinatge\"><legend>",GetMessage("QueryFilterOptions", "llinatge"), "</legend>",
 				  "<fieldset id=\"capesLlinatge\">",DonaCadenaFormCapesALlinatge(),"</fieldset>",
 				  "<fieldset id=\"elemsLlinatge\">",DonaCadenaFormElementsVisiblesALlinatge(),"</fieldset>",
-				  "<fieldset id=\"simpleQLlinatge\">",DonaCadenaFormSimpleQueryLlinatge(),"</fieldset>",
-				  "<fieldset id=\"complexQLlinatge\">",DonaCadenaFormComplexQueryLlinatge(),"</fieldset>",
-				  "<br><input name=\"aplicarCanvisCapes\" type=\"button\" value=\"", GetMessage("Apply"),
+				  // de moment ho comento"<fieldset id=\"simpleQLlinatge\">",DonaCadenaFormSimpleQueryLlinatge(),"</fieldset>",
+				  // de moment ho comento"<fieldset id=\"complexQLlinatge\">",DonaCadenaFormComplexQueryLlinatge(),"</fieldset>",
+				  "<input name=\"aplicarCanvisCapes\" type=\"button\" value=\"", GetMessage("Apply"),
 		 		  "\" onClick='RedibuixaFinestraLlinatge();'/><br></fieldset>",
-				  "<fieldset id=\"grafLlinatge\" style=\"height:70%;position:relative;\"></fieldset>",
-				  "<fieldset id=\"infoLlinatge\" style=\"height:15%;position:relative;\"></fieldset>",
+				  "<fieldset id=\"grafLlinatge\" style=\"height:300px;position:relative;\"></fieldset>",
+				  "<fieldset id=\"infoLlinatge\" style=\"height:40px;position:relative;\"></fieldset>",
 				  "</form>");
 		contentLayer(param.elem, cdns.join(""));
 		CreaGrafLlinatge("grafLlinatge");

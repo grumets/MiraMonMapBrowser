@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -673,7 +673,10 @@ var factor_k, factorpixel;
 	
 	if(collection.extent && collection.extent.spatial && collection.extent.spatial.bbox && collection.extent.spatial.bbox.length>0)
 	{
-		var env={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": collection.extent.spatial.crs ? collection.extent.spatial.crs : "CRS:84"};
+		var crs;
+		if(null==(crs=DonaEPSGDeURLOpengis(collection.extent.spatial.crs)))
+			crs="CRS:84";
+		var env={"EnvCRS": {"MinX": +1e300, "MaxX": -1e300, "MinY": +1e300, "MaxY": -1e300}, "CRS": crs};
 		for(i=0; i<collection.extent.spatial.bbox.length;i++)
 		{
 			if(env.EnvCRS.MinX>collection.extent.spatial.bbox[i][0])
@@ -698,7 +701,8 @@ var factor_k, factorpixel;
 		layer.EnvLL=DonaEnvolupantLongLat(env.EnvCRS, env.CRS);
 	}
 
-	//minScaleDenominator
+	//minScaleDenominator o 
+	// ·$· A vegades he vist que hi ha  minCellSize usar alguna cosa com això DonaIndexNivellZoomCeil, revisar
 	if(typeof collection.minScaleDenominator==="number")
 		layer.CostatMinim=collection.minScaleDenominator*factorpixel/factor_k;
 	

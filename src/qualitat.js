@@ -62,7 +62,11 @@ function LlegeixReportDataQualtity(quality_element, node_DQElement)
 	{
 		node2=node[0].getElementsByTagName('gmd:MD_Identifier');
 		if(!node2 ||  node2.length<1)
-			return false;
+		{
+			node2=node[0].getElementsByTagName('gmd:RS_Identifier');
+			if(!node2 ||  node2.length<1)
+				return false;
+		}
 		node2=node2[0].getElementsByTagName('gmd:code');
 		if(!node2 ||  node2.length<1)
 			return false;

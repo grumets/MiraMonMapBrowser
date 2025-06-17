@@ -291,7 +291,7 @@ var trobat=false, criteris;
 				CostatMinim: minim,
 				CostatMaxim: maxim,
 				FormatConsulta: (i_get_featureinfo==-1 ? null :servidorGC.formatGetFeatureInfo[i_get_featureinfo]),
-				separa: DonaTextSeparadorCapaAfegida(k),
+				separa: null, // NJ_10_06_2025 Això no entenc perquè ho faig, no vull el separador del que ja hi havia DonaTextSeparadorCapaAfegida(k),
 				DescLlegenda: DonaCadenaNomDesc(layer),
 				estil: estils,
 				i_estil: 0,

@@ -1,4 +1,4 @@
-/* 
+﻿/* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -353,7 +353,7 @@ function CanviaSelectorEstilCapa(input, i_capa, i_estil, i_comp, i_sltr)
 
 function DeterminaAlgunaCapa(flag)
 {
-var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverage:1, WPS:1, feeback:1};
+var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getcoverage:1, WPS:1, feedback:1};
 
 	if (flag&LlegendaAmbControlDeCapes)
 	{
@@ -1185,7 +1185,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 				cdns.push("<td valign=\"middle\" width=\"1\" height=\"1\"></td>");
 		}
 
-		// botÃ³ feedback llegenda	
+		// botó feedback llegenda	
 		if ((capa.feedback!=null) && (capa.feedback.botoFeedbackALaLlegenda=="si"))
 		{
 			cdns.push("<td valign=\"middle\">",
@@ -1193,7 +1193,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 				"</td>");
 		}
 
-		//BotÃ³ de WPS
+		//Botó de WPS
 		if(capa.proces==null)
 		{
 			if (alguna.WPS)
