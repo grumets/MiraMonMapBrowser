@@ -1305,6 +1305,8 @@ var i= ParamCtrl.ImatgeSituacio.length;
 
 function DonaEPSGDeURLOpengis(url)
 {
+	if(!url)
+		return null;
 	if(url.match("www.opengis.net/def/crs/OGC/1.3/CRS84"))
 	{
 		return "CRS:84";
