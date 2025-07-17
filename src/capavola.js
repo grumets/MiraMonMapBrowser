@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -87,7 +87,7 @@ function MostraFinestraAnarCoordenada()
 
 function MostraFinestraAnarCoordenadaEvent(event) //Afegit Cristian 19/01/2016
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	MostraFinestraAnarCoordenada();
 	dontPropagateEvent(event);
 }//Fi de MostraFinestraAnarCoordenada()
@@ -101,6 +101,24 @@ function TancaFinestra_anarCoord()
 	   CreaVistes();
 	}
 }//Fi de TancaFinestra_anarCoord()
+function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, dims)
+{
+	
+	var trg=targets;
+	var lng=lang;
+	var tkn=access_token_type;
+
+	if (!ObreFinestra(window, "lbScope", GetMessage("ofLogBookScope", "capavola")))
+		return;
+	
+	TancaFinestraLayer("logbook");
+	OmpleFinestraLogBookAmbScope(trg, lng, tkn, dims);
+
+	//per defecte deixo marcat que volem un scope rectangular
+	mostraSelecLBScope(0);
+
+	return;
+}
 //OG: mostra finestra que permetrà afegir envolupant a un FB
 function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
 {
@@ -123,6 +141,48 @@ function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	return;
 }
 
+// Llista global de polígons
+var lpscopePoligons = [];
+var lpscopePoints = [];
+
+function OmpleFinestraLogBookAmbScope(targets, lang, access_token_type, dims)
+{
+	//ens assegurem que no hi ha res a les llistes quan obrim la finestra
+	lpscopePoligons = [];
+	lpscopePoints = [];
+
+	var trgStr = JSON.stringify(targets).replace(/'/g, "\\'");  // només un cop!
+	var lng = lang;
+	var tkn = access_token_type;
+	var dimsStr = JSON.stringify(dims);
+
+	var cdns = [];
+
+	// escollim si volem un punt o un rectangle:
+	cdns.push('<form name="LogPageScope_win" onSubmit="return false;">',
+		'<table class="Verdana11px" width="100%" align="center">',
+			'<tr>',
+				'<td><span>', GetMessage("ScopeUseMouse", "capavola"), '</span></td>',
+				'<td><input type="radio" id="LParea" name="LP_scope_type" value="area" checked onclick="mostraSelecLBScope(0);TancaFinestraEmergent_multi_consulta();"><label for="area">', GetMessage("ScopeTypeArea", "capavola"), '</label></td>',
+				'<td><input type="radio" id="LPpoint" name="LP_scope_type" value="punt" onclick="mostraSelecLBScope(1);"><label for="point">', GetMessage("ScopeTypePoint", "capavola"), '</label></td>',
+			'</tr>',
+		'</table>',
+		'<div id="lpScopeType"></div><br>',
+		'<div id="lpScopeList" align="center"></div><br>');
+
+	cdns.push('<table class="Verdana11px" width="50%" align="center">',
+		'<tr>',
+			'<td align="center"><input class="Verdana11px" type="button" name="Add" value="', GetMessage("Add"), '" onClick="AfegirElementsALPScope();"></td>',
+			'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="', GetMessage("OK"), 
+				'" onClick=\'AfegirLogPageScopeALogBook(' + JSON.stringify(trgStr) + ', "' + lng + '", "' + tkn + '", ' + dimsStr + '); TancaFinestraLayer("fbScope");\'></td>',
+			'<td align="center"><input class="Verdana11px" type="button" name="Tancar" value="', GetMessage("Cancel"), '" onClick=\'TancaFinestraLayer("lbScope");\'></td>',
+		'</tr>',
+		'</table>',
+	'</form>');
+
+	contentFinestraLayer(window, "lbScope", cdns.join(""));
+}
+
 //OG: aquesta funció és la que haurà d'omplir la finestra escrivint el codi hmtl
 function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 {
@@ -134,9 +194,11 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	//escollim si volem un punt o un rectangle:
 	cdns.push('<form name="FeedbackScope_win" onSubmit="return false;">',
 		'<table class="Verdana11px" width="100%" align="center">',
+			'<tr>',
 			'<td><span>',GetMessage("ScopeUseMouse","capavola"),'</span></td>',
 			'<td><input type="radio" id="FBarea" name="FB_scope_type" value="area" checked onclick="mostraSelecFBScope(0);TancaFinestraEmergent_multi_consulta();"><label for="area">',GetMessage("ScopeTypeArea","capavola"),'</label></td>',
 			'<td><input type="radio" id="FBpoint" name="FB_scope_type" value="punt" onclick="mostraSelecFBScope(1);"><label for="point">',GetMessage("ScopeTypePoint","capavola"),'</label></td>',
+			'</tr>',
 		'</table>',
 		'<div id=fbScopeType></div><br>',
 		'<table class="Verdana11px" width="50%" align="center">',
@@ -149,11 +211,174 @@ function OmpleFinestraFeedbackAmbScope(targets, lang, access_token_type)
 	contentFinestraLayer(window, "fbScope", cdns.join(""));
 }
 
+function mostraSelecLBScope(type)
+{
+	var tp=type;
+	
+	//si pol
+	if (tp==0)
+	{
+		document.getElementById("lpScopeList").innerHTML="";
+		CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+		CanviaEstatClickSobreVista("ClickRecLP1");		
+		
+		document.getElementById("lpScopeType").innerHTML='<br><br>'+
+			'<table class="Verdana11px" width="50%" align="center">'+
+				'<tr>'+
+					'<td colspan="2">'+ DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)+'</td>'+
+					'<td style="text-align:center;">Ymax</td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="lpscope_ymax" name="lpscope_ymax" type="text" size="8" value="" disabled></td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td style="text-align:rigth;">Xmin</td>'+
+					'<td><input class="Verdana11px" id="lpscope_xmin" name="lpscope_xmin" type="text" size="8" value="" disabled></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="lpscope_xmax" name="lpscope_xmax" type="text" size="8" value="" disabled></td>'+
+					'<td style="text-align:left;">Xmax</td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td><input class="Verdana11px" id="lpscope_ymin" name="lpscope_ymin" type="text" size="8" value="" disabled></td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+				'<tr>'+
+					'<td></td>'+
+					'<td></td>'+
+					'<td style="text-align:center;">Ymin</td>'+
+					'<td></td>'+
+					'<td></td>'+
+				'</tr>'+
+			'</table>';
+	}
+	//si punt
+	if (tp==1)
+	{
+		document.getElementById("lpScopeList").innerHTML="";
+		CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc",""); 
+		CanviaEstatClickSobreVista("ClickPointLP");
+
+		document.getElementById("lpScopeType").innerHTML='<br><br>'+
+		'<table class="Verdana11px" width="75%" align="center">'+
+		'<tr>'+
+			'<td colspan="2">'+ DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)+'</td>'+
+			'<td></td>'+
+			'<td></td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td style="text-align:rigth;">X:</td>'+
+			'<td><input class="Verdana11px" id="lpscope_x" name="lpscope_x" type="text" size="8" value="" disabled></td>'+
+			'<td style="text-align:rigth;">Y:</td>'+
+			'<td><input class="Verdana11px" id="lpscope_y" name="lpscope_y" type="text" size="8" value="" disabled></td>'+
+		'</tr>'+
+		'<tr>'+
+			'<td><input class="Verdana11px" id="lpscope_x_dec" name="lpscope_x_dec" type="hidden" size="8" value="" disabled></td>'+
+			'<td><input class="Verdana11px" id="lpscope_y_dec" name="lpscope_y_dec" type="hidden" size="8" value="" disabled></td>'+
+		'</tr>'+
+		'</table>';
+	}
+}
+
+function AfegirElementsALPScope()
+{
+	var type = document.getElementById("LPpoint").checked ? 1 : 0;
+
+	if (type==0)
+	{
+		var xmin = document.getElementById("lpscope_xmin").value;
+		var xmax = document.getElementById("lpscope_xmax").value;
+		var ymin = document.getElementById("lpscope_ymin").value;
+		var ymax = document.getElementById("lpscope_ymax").value;
+
+		if (!xmin || !xmax || !ymin || !ymax) {
+			alert("Falten coordenades.");
+			return;
+		}
+
+		// Afegeix el nou polígon a la llista
+		lpscopePoligons.push({ xmin, xmax, ymin, ymax });
+
+		// Mostra la llista
+		MostraPoligonsLPScope();
+	}
+	if (type==1)
+	{
+		var x = document.getElementById("lpscope_x_dec").value;
+		var y = document.getElementById("lpscope_y_dec").value;
+		
+		if (!x || !y) {
+			alert("Falten coordenades.");
+			return;
+		}
+		
+		// Afegeix el nou punt a la llista
+		lpscopePoints.push({ x, y });
+
+		// Mostra la llista
+		MostraPointsLPScope();		
+
+	}
+}
+
+function MostraPoligonsLPScope() 
+{
+	const contenedor = document.getElementById("lpScopeList");
+	contenedor.innerHTML = "<ol></ol>";
+	const ol = contenedor.querySelector("ol");
+
+	for (var i = 0; i < lpscopePoligons.length; i++) 
+	{
+		var poli = lpscopePoligons[i];
+		var li = document.createElement("li");
+		li.innerHTML = "Xmin: " + poli.xmin + "; Ymin: " + poli.ymin + "; Xmax: " + poli.xmax + "; Ymax: " + poli.ymax +
+		               " <span style='color:red; font-weight:bold; cursor:pointer; margin-left:10px;' onclick=\"EliminaPoligonLPScope(" + i + ")\">❌</span>";
+		ol.appendChild(li);
+	}
+}
+
+function MostraPointsLPScope() 
+{
+	var dec=ParamCtrl.NDecimalsCoordXY
+	const contenedor = document.getElementById("lpScopeList");
+	contenedor.innerHTML = "<ol></ol>";
+	const ol = contenedor.querySelector("ol");
+
+	for (var i = 0; i < lpscopePoints.length; i++) 
+	{
+		var pnt = lpscopePoints[i];
+		var li = document.createElement("li");
+		//he guardat el punt amb tots els decimals, però només mostro els decimals configurats pel navegador
+		li.innerHTML = "X: " + OKStrOfNe(pnt.x, dec) + "; Y: " + OKStrOfNe(pnt.y, dec) +
+		               " <span style='color:red; font-weight:bold; cursor:pointer; margin-left:10px;' onclick=\"EliminaPointLPScope(" + i + ")\">❌</span>";
+		ol.appendChild(li);
+	}
+}
+
+function EliminaPoligonLPScope(index) 
+{
+	lpscopePoligons.splice(index, 1);
+	MostraPoligonsLPScope();
+}
+
+function EliminaPointLPScope(index) 
+{
+	lpscopePoints.splice(index, 1);
+	MostraPointsLPScope();
+}
+
 //OG: en funció de si l'usuari vol fer FB sobre un punt o una àrea, mostrem un formulari o un altre.
 function mostraSelecFBScope(type)
 {
 	var tp=type;
-	var cdns=[];
 	
 	if (tp==0)
 	{
@@ -226,6 +451,82 @@ function mostraSelecFBScope(type)
 		'</tr>'+
 		'</table>';
 	}
+}
+
+function AfegirLogPageScopeALogBook(targets, lang, access_token_type, dims)
+{
+	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS; //mirem el SR
+	var trg=JSON.parse(targets);
+	var dec=ParamCtrl.NDecimalsCoordXY; //per defecte agafarem els decimals configurats
+
+	var lpscopePoligons_ll = [];
+	var lpscopePoints_ll = [];
+	//mirem si estem enviant punts o polígons
+	var type = document.getElementById("LPpoint").checked ? 1 : 0;
+
+	//lpscopePoligons = [];
+	//lpscopePoints = [];
+
+	//pol
+	if (type==0)
+	{
+		if (crs !="EPSG:4326" && crs !="CRS:84")
+		{
+			for (var i=0; i<lpscopePoints.length; i++)
+			{
+				var pol = lpscopePoligons[i];
+				//lower left
+				var ll= DonaCoordenadesLongLat(pol.xmin, pnt.ymin, crs);
+				//uper rigth
+				var ur= DonaCoordenadesLongLat(pol.xmax, pnt.ymax, crs);
+				lpscopePoligons_ll.push({ xmin: ll.x, xmax: ur.x, ymin: ll.y, ymax: ur.y });
+			}
+			//en principi sempre tindrem un únic target, o sigui que aquest for no ens caldria
+			for (var i=0; i<trg.length; i++)
+			{
+				trg[i].scopePol=lpscopePoligons_ll;
+			}
+		}
+		else
+		{
+			//en principi sempre tindrem un únic target, o sigui que aquest for no ens caldria
+			for (var i=0; i<trg.length; i++)
+			{
+				trg[i].scopePol=lpscopePoligons;
+			}
+		}
+		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, dims);
+	}
+	//pnt
+	if (type==1)
+	{
+		// si les coordenades no són en lon/lat, les transformem
+		if (crs !="EPSG:4326" && crs !="CRS:84")
+		{
+			for (var i=0; i<lpscopePoints.length; i++)
+			{
+				var pnt = lpscopePoints[i];
+				var coord_ll = DonaCoordenadesLongLat(pnt.x, pnt.y, crs);
+				lpscopePoints_ll.push({ x: coord_ll.x, y: coord_ll.y });
+			}
+			
+			//en principi sempre tindrem un únic target, o sigui que aquest for no ens caldria
+			for (var i=0; i<trg.length; i++)
+			{
+				trg[i].scopePnt=lpscopePoints_ll;
+			}
+		}
+		else
+		{
+			//en principi sempre tindrem un únic target, o sigui que aquest for no ens caldria
+			for (var i=0; i<trg.length; i++)
+			{
+				trg[i].scopePnt=lpscopePoints;
+			}
+		}
+		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, dims);
+	}
+	return;
 }
 
 //OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
@@ -349,6 +650,16 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 	return;
 }
 
+function TancaFinestraLogBookAmbScope()
+{
+	//Per defecte, al tancar la finestra de lbScope deixem les consultes per localització.
+	//Aquí estem en la situació que hem tancat la caixa des del botó tancar.
+	//primer comprovem si estàvem digitalitzant un punt. Si és així, esborrem la creu:
+	if (document.getElementById("LPpoint").checked)
+		TancaFinestra_multi_consulta();
+	ParamCtrl.EstatClickSobreVista="ClickConLoc";
+	CanviaEstatClickSobreVista("ClickConLoc");
+}
 
 function TancaFinestraFeedbackAmbScope()
 {
@@ -361,12 +672,33 @@ function TancaFinestraFeedbackAmbScope()
 	CanviaEstatClickSobreVista("ClickConLoc");
 }
 
+function ComprovaCalTancarAmbScope(estat)
+{
+	ComprovaCalTancarFeedbackAmbScope(estat);
+	ComprovaCalTancarLogBookAmbScope(estat);
+}
+
 function ComprovaCalTancarFeedbackAmbScope(estat)
 {
 	//si estem fent un FB amb Scope i clickem sobre algun botó de la barra d'eines que obra una finestra nova (anar a coord, config, calc, etc.) tanquem la finestra fbScope i posem per defecte el mouse a ConLoc
 	if (((ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2") && ((estat!="ClickPointFB")&&(estat!="ClickRecFB1"))) || ((ParamCtrl.EstatClickSobreVista=="ClickPointFB")&&(estat!="ClickRecFB1")))
 	{
 		TancaFinestraLayer("fbScope");
+		//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
+		if(!estat) //Aquí estem en una situació en què estem tancant la caixa pq estem entrant a una nova finestra de l'estil anar a coord, config, calc, etc.
+		{
+			CanviaEstatClickSobreVista("ClickConLoc");
+			CanviaPolsatEnBotonsAlternatius("pan","pan","","moumig","moumig","","zoomfin","zoomfin","","novavista","novavista","","conloc","conloc","p");
+		} // si sí que hi ha "estat", vol dir que estem seleccionant una eina de zoom, pan, etc i que CanviaEstatClickSobreVista segueix en seu curs normal.
+	}
+}
+
+function ComprovaCalTancarLogBookAmbScope(estat)
+{
+	//si estem fent un LB amb Scope i clickem sobre algun botó de la barra d'eines que obra una finestra nova (anar a coord, config, calc, etc.) tanquem la finestra lbScope i posem per defecte el mouse a ConLoc
+	if (((ParamCtrl.EstatClickSobreVista=="ClickRecLP1" || ParamCtrl.EstatClickSobreVista=="ClickRecLP2") && ((estat!="ClickPointLP")&&(estat!="ClickRecLP1"))) || ((ParamCtrl.EstatClickSobreVista=="ClickPointLP")&&(estat!="ClickRecLP1")))
+	{
+		TancaFinestraLayer("lbScope");
 		//Per defecte, al tancar la finestra de fbScope deixem les consultes per localització.
 		if(!estat) //Aquí estem en una situació en què estem tancant la caixa pq estem entrant a una nova finestra de l'estil anar a coord, config, calc, etc.
 		{

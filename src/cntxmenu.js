@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -416,6 +416,11 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 				GetMessage("Feedback"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
+
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
+				GetMessage("LogBook"), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
 	//}
 	if(alguna_opcio)
 	{
@@ -569,6 +574,8 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
+	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+			GetMessage("LogBook"), "</a><br>");
 
 	if (EsCapaBinaria(capa) || (capa.model==model_vector && capa.estil[i_estil].TipusObj != "S"))
 	{
@@ -2664,7 +2671,7 @@ function OmpleAfegeixCapaServidor(elem, i_capa)
 
 function IniciaFinestraAfegeixCapaServidor(i_capa)
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2673,7 +2680,7 @@ var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser",
 
 function IniciaFinestraCalculadoraCapes()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsOfLayers", "cntxmenu"));
 	if (!elem)
 		return;
@@ -2682,7 +2689,7 @@ var elem=ObreFinestra(window, "calculadoraCapa", GetMessage("toMakeCalculationsO
 
 function IniciaFinestraCombiCapa()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 var elem=ObreFinestra(window, "combinacioCapa", GetMessage("toCombineLayers", "cntxmenu"));
 	if (!elem)
 		return;
@@ -4796,6 +4803,15 @@ var elem=ObreFinestra(window, "feedback", GetMessage("ofUserFeedback", "cntxmenu
 	if (!elem)
 		return;
 	FinestraFeedbackCapa(elem, i_capa, i_estil);
+}
+
+function ObreFinestraLogBookCapa(i_capa, i_estil)
+{
+//var capa=ParamCtrl.capa[i_capa];
+var elem=ObreFinestra(window, "logbook", GetMessage("ofLogBook", "cntxmenu"));
+	if (!elem)
+		return;
+	FinestraLogBookCapa(elem, i_capa, i_estil);
 }
 
 function ObreFinestraFeedbackAmbEstilsDeCapa(i_capa)

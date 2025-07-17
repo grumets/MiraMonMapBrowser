@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -152,7 +152,7 @@ function CreaEscalaFullImprimir(win)
 var TriaFullWindow=null;
 function ObreTriaFullImprimir()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
     if (TriaFullWindow==null || TriaFullWindow.closed)
     {
         TriaFullWindow=window.open("print.htm","FinestraPrint",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=400,height=600,left=0,top=0');
@@ -224,8 +224,10 @@ var cursor="auto";
 
 		if(ParamCtrl.EstatClickSobreVista=="ClickZoomRec1" || ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" ||
 			ParamCtrl.EstatClickSobreVista=="ClickRecFB1" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2" ||
+			ParamCtrl.EstatClickSobreVista=="ClickRecLP1" || ParamCtrl.EstatClickSobreVista=="ClickRecLP2" ||
 		   ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" ||
-		   ParamCtrl.EstatClickSobreVista=="ClickMouMig" || ParamCtrl.EstatClickSobreVista=="ClickPointFB")
+		   ParamCtrl.EstatClickSobreVista=="ClickMouMig" || ParamCtrl.EstatClickSobreVista=="ClickPointFB" ||
+			ParamCtrl.EstatClickSobreVista=="ClickPointLP")
 			cursor="crosshair";
 		else if (ParamCtrl.EstatClickSobreVista=="ClickConLoc")
 			cursor="help";
@@ -273,7 +275,7 @@ function MouLaVistaSalt(sx,sy)
 
 function MouLaVistaEventDeSalt(event, sx, sy) //Afegit JM 18/09/2016
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	MouLaVistaSalt(sx,sy);
 	dontPropagateEvent(event);
 }
@@ -370,6 +372,8 @@ var HiHaHagutMoviment=false, HiHaHagutPrimerClick=false;
 var NovaVistaFinestra={"n": 0, "vista":[]};
 var CoordsFB={"x1":"", "y1":"","x2":"", "y2":""};
 var PuntFB={"i": 0, "j": 0, "x": 0.0, "y": 0.0, "i_nova_vista": -1};
+var CoordsLP={"x1":"", "y1":"","x2":"", "y2":""};
+var PuntLP={"i": 0, "j": 0, "x": 0.0, "y": 0.0, "i_nova_vista": -1};
 
 function ClickSobreVista(event, i_nova_vista)
 {
@@ -438,6 +442,25 @@ var i_vista;
 		}
 		ParamCtrl.EstatClickSobreVista="ClickRecFB2";
 	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickRecLP1")
+	{
+		ZRec_1PuntClient.x=event.clientX;
+		ZRec_1PuntClient.y=event.clientY;
+		//Guardo les coordenades del primer click
+		CoordsLP.x1=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		CoordsLP.y1=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		
+		for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+		{
+			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle),
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista),
+				 DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX)+DonaMargeEsquerraVista(i_nova_vista),
+				 DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY)+DonaMargeSuperiorVista(i_nova_vista));
+			showLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+SufixZRectangle));
+		}
+		ParamCtrl.EstatClickSobreVista="ClickRecLP2";
+	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickPointFB")
 	{
 		//com que en realitat les coordenades son transformades de la resolució de pantalla, el punt és un quadrat d'un píxel pantalla, així que les coordenades les calculo movent la dada que em dona el cursor mitja fila i mitja columa.
@@ -456,6 +479,25 @@ var i_vista;
 		PintaCreuFBPoint(PuntFB);
 		EscriuCoordenadesAFinestraFeedbackAmbScope();
 		ParamCtrl.EstatClickSobreVista=="ClickPointFB";
+	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickPointLP")
+	{
+		//com que en realitat les coordenades son transformades de la resolució de pantalla, el punt és un quadrat d'un píxel pantalla, així que les coordenades les calculo movent la dada que em dona el cursor mitja fila i mitja columa.
+		CoordsLP.x1=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientX-0.5));
+		CoordsLP.y1=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, (event.clientY-0.5));
+
+		
+		//aquí guardem la fila columna original i la coordenada x,y del click. Servirà per pintar la creu al lloc on ha clickat l'usuari.
+		PuntLP.i=DonaCoordIDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		PuntLP.j=DonaCoordJDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+	
+		PuntLP.x=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		PuntLP.y=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+		PuntLP.i_nova_vista=i_nova_vista;
+
+		PintaCreuFBPoint(PuntLP);
+		EscriuCoordenadesAFinestraLogBookAmbScope();
+		ParamCtrl.EstatClickSobreVista=="ClickPointLP";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista1" &&  i_nova_vista==NovaVistaPrincipal)
 	{
@@ -506,6 +548,16 @@ var i_vista;
 		EscriuCoordenadesAFinestraFeedbackAmbScope();
 
 		ParamCtrl.EstatClickSobreVista="ClickRecFB1";
+	}
+	else if (ParamCtrl.EstatClickSobreVista=="ClickRecLP2")
+	{
+		//Guardo les coordenades del segon click
+		CoordsLP.x2=DonaCoordXDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientX);
+		CoordsLP.y2=DonaCoordYDeCoordSobreVista(event.target.parentElement, i_nova_vista, event.clientY);
+
+		EscriuCoordenadesAFinestraLogBookAmbScope();
+
+		ParamCtrl.EstatClickSobreVista="ClickRecLP1";
 	}
 	else if (ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" && i_nova_vista==NovaVistaPrincipal)
 	{
@@ -688,6 +740,58 @@ function EscriuCoordenadesAFinestraFeedbackAmbScope()
 	ResetCoordsFB();
 }
 
+function EscriuCoordenadesAFinestraLogBookAmbScope()
+{
+	var xmin, xmax, ymin, ymax;
+	var dec=ParamCtrl.NDecimalsCoordXY; //decimals definits per l'usuari
+
+	//mirem si estem en la situació que l'usuari fa LP d'un punt
+	if ((document.getElementById("lpscope_x")) && (document.getElementById("lpscope_y"))) //lpscope_x i lpscope_y --> només existeixen quan hem seleccionat LP de tipus point
+	{
+		document.getElementById("lpscope_y").value=OKStrOfNe(CoordsLP.y1, dec); //aquesta és la coordenada que es mostra a la caixa, amb el num de decimals configurat.
+		document.getElementById("lpscope_x").value=OKStrOfNe(CoordsLP.x1, dec);
+
+		document.getElementById("lpscope_x_dec").value=CoordsLP.x1; // aquesta és la coordenada amb tots els decimals. La guardo en un lloc invisible.
+		document.getElementById("lpscope_y_dec").value=CoordsLP.y1;
+	}
+	else if ((CoordsLP.x1==CoordsLP.x2)||(CoordsLP.y1==CoordsLP.y2)) //l'usuari està digitalitzant un LP de tipus pol però les coordenades introduides no defineixen cap àrea
+	{
+		alert(GetMessage("WrongDefinedArea", "vista"));
+		TancaFinestraLayer("lbScope");
+	}
+	else //l'usuari està digitalitzant un LP de tipus pol i les coordenades son correctes
+	{
+		if (CoordsLP.x1>CoordsLP.x2)
+		{
+			xmin=CoordsLP.x2;
+			xmax=CoordsLP.x1;
+		}
+		else
+		{
+			xmin=CoordsLP.x1;
+			xmax=CoordsLP.x2;
+		}
+		
+		if (CoordsLP.y1>CoordsLP.y2)
+		{
+			ymin=CoordsLP.y2;
+			ymax=CoordsLP.y1;
+		}
+		else
+		{
+			ymin=CoordsLP.y1;
+			ymax=CoordsLP.y2;
+		}
+		//escrivim les coordenades endreçades a la finestra corresponent
+		document.getElementById("lpscope_ymin").value=OKStrOfNe(ymin, dec);
+		document.getElementById("lpscope_ymax").value=OKStrOfNe(ymax, dec);
+		document.getElementById("lpscope_xmin").value=OKStrOfNe(xmin, dec);
+		document.getElementById("lpscope_xmax").value=OKStrOfNe(xmax, dec);
+	}
+
+	ResetCoordsLP();
+}
+
 //posem en blanc la variable Coord per la propera vegada que es defineixi un envolupant
 function ResetCoordsFB () 
 {
@@ -697,10 +801,19 @@ function ResetCoordsFB ()
 		CoordsFB.y2='';
 }
 
+//posem en blanc la variable Coord per la propera vegada que es defineixi un envolupant
+function ResetCoordsLP () 
+{
+		CoordsLP.x1='';
+		CoordsLP.y1='';
+		CoordsLP.x2='';
+		CoordsLP.y2='';
+}
+
 
 function CanviaEstatClickSobreVista(estat)
 {
-	ComprovaCalTancarFeedbackAmbScope(estat);
+	ComprovaCalTancarAmbScope(estat);
 	for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle));
 	if(ParamCtrl.EstatClickSobreVista=="ClickEditarPunts")
@@ -930,6 +1043,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 	if (ParamCtrl.ZoomUnSolClic && HiHaHagutPrimerClick &&
 	    ParamCtrl.EstatClickSobreVista!="ClickZoomRec1" && ParamCtrl.EstatClickSobreVista!="ClickZoomRec2" &&
 		ParamCtrl.EstatClickSobreVista!="ClickRecFB1" && ParamCtrl.EstatClickSobreVista!="ClickRecFB2" && ParamCtrl.EstatClickSobreVista!="ClickPointFB" &&
+		ParamCtrl.EstatClickSobreVista!="ClickRecLP1" && ParamCtrl.EstatClickSobreVista!="ClickRecLP2" && ParamCtrl.EstatClickSobreVista!="ClickPointLP" &&
         ParamCtrl.EstatClickSobreVista!="ClickNovaVista1" && ParamCtrl.EstatClickSobreVista!="ClickNovaVista2" &&
 	    ParamCtrl.EstatClickSobreVista!="ClickPan1" && ParamCtrl.EstatClickSobreVista!="ClickPan2" &&
 		ParamCtrl.EstatClickSobreVista!="ClickEditarPunts" &&
@@ -941,7 +1055,7 @@ function MovimentSobreVista(event_de_moure, i_nova_vista)
 		ClickSobreVista(event_de_moure);
 	}
 
-	if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2")
+	if (ParamCtrl.EstatClickSobreVista=="ClickZoomRec2" || ParamCtrl.EstatClickSobreVista=="ClickNovaVista2" || ParamCtrl.EstatClickSobreVista=="ClickRecFB2" || ParamCtrl.EstatClickSobreVista=="ClickRecLP2")
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 			moveLayer2(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom + SufixZRectangle),

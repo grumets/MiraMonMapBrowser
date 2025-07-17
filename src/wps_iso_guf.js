@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -1173,6 +1173,10 @@ function GetNimmbusTypeOfAOWCFeature(feature)
 		{
 			if (categories[j].term=="POI")
 				return "POI"; 
+			else if (categories[j].term=="LOGBOOK")
+				return "LOGBOOK"; 
+			else if (categories[j].term=="LOGPAGE")
+				return "LOGPAGE"; 
 			else if (categories[j].term=="HREF")
 				return "HREF";
 			else if (categories[j].term=="FEEDBACK")

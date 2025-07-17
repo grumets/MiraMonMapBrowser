@@ -1,0 +1,69 @@
+
+div.lb_folded {
+  display: none;
+  background: #EEEEEE;
+}
+
+:checked + div.lb_folded {
+  display: block;
+}
+
+hr.lb_dashed {
+	border-top: 1px dashed #a6a6a6;
+}
+
+hr.lb_solid {
+	border-top: 1px solid #a6a6a6;
+}
+
+a.lb_link:link {
+	color: #0000EE;
+} 
+
+a.lb_link:hover {
+	color: red;
+} 
+
+a.lb_link:visited {
+	color: #551A8B;
+}
+
+div.lb_widget {
+	/*font-family: "Gotham Narrow SSm",sans-serif;*/
+	color: #66757F;
+}
+
+legend.lb_legend {
+	font-weight: bold;
+	color: #555555;
+}
+
+input.lb_button {}
+
+fieldset.lb_fieldset {}
+
+span.lb_key {
+	font-weight: bold;
+}
+
+span.lb_key_2 {
+ 	text-decoration: underline; 
+}
+
+div.lb_add_lp {}
+
+div.lb_lp_id {}
+
+div.lb_abstract {}
+
+div.lb_date {}
+
+div.lb_comment {}
+
+span.lb_show_more {
+	font-style: italic;
+}
+
+div.lb_edit {}
+
+div.lb_target {}

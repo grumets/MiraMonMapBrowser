@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -198,6 +198,14 @@ var MessageLang=
     "fre": "rétroaction",
     "cze": "Zpětná vazba",
     "ger": "Rückmeldung"
+  },
+  "LogBook": {
+    "cat": "Llibre de Registres",
+    "spa": "Libro de Registros",
+    "eng": "LogBook",
+    "fre": "Livre des records",
+    "cze": "Kniha rekordů",
+    "ger": "Buch der Rekorde"
   },
   "Definition":{
       "cat": "Definició",
@@ -3096,6 +3104,14 @@ var MessageLang=
       "cze": "zpětné vazby od uživatele",
       "ger": "des Benutzerfeedbacks"
     },
+    "ofLogBook":{
+      "cat": "de llibres de registre",
+      "spa": "de libros de registro",
+      "eng": "of log books",
+      "fre": "des journaux de bord",
+      "cze": "z lodních knih",
+      "ger": "von Logbüchern"
+    },
     "_withStatisticOf_": {
       "cat": " amb estadistics de ",
       "spa": " con estadísticos de ",
@@ -3825,6 +3841,14 @@ var MessageLang=
       "fre": "pour la rétroaction d'un domaine spécifique",
       "cze": "posouzení konkrétní oblasti",
       "ger": "einen bestimmten Bereichs"
+    },
+    "ofLogBookScope": {
+      "cat": "de registre d'una àrea específica",
+      "spa": "de registro de un área específica",
+      "eng": "of a logpage for a specific area",
+      "fre": "d'une page de journal pour une zone spécifique",
+      "cze": "stránky protokolu pro konkrétní oblast",
+      "ger": "einer Logseite für einen bestimmten Bereich"
     },
     "CheckNDecimalFigures": {
       "cat": "El nombre de decimals configurat per l'usuari no és suficient per definir l'àmbit correctament. Modifica aquest paràmetre al menú Opcions --> N. decimals",
@@ -4899,6 +4923,14 @@ var MessageLang=
       "fre": "Définir domaine de l'évaluation",
       "cze": "Definujte doménu hodnocení",
       "ger": "Definieren Sie den Umfang der Beurteilung"
+    },
+    "LBwithScope":{
+      "cat": "Definir envolupant de registre",
+      "spa": "Definir ámbito de registro",
+      "eng": "Define logpage's scope",
+      "fre": "Définir la portée de la page de journal",
+      "cze": "Definování rozsahu logpage",
+      "ger": "Definieren Sie den Umfang der Protokollseite"
     },
     "previousView": {
       "cat": "vista prèvia",

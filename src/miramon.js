@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -101,6 +101,7 @@ IncludeScript("commands.js");
 //IncludeScript("guf_locale.js", true);   //Ja el carrega el GUF.js
 //IncludeScript("Nmmblang", true);   //Ja el carrega el GUF.js
 IncludeScript("guf.js", true);
+IncludeScript("logbook.js", true);
 IncludeScript("gml.js", true);
 IncludeScript("owsc.js", true);
 IncludeScript("wps.js", true);
@@ -1169,6 +1170,9 @@ function CanviaIdioma(s)
 	elem=getFinestraLayer(window, "fbScope");
 	if(isLayer(elem) && isLayerVisible(elem))
 		OmpleFinestraFeedbackAmbScope();
+	elem=getFinestraLayer(window, "lbScope");
+	if(isLayer(elem) && isLayerVisible(elem))
+		OmpleFinestraLogBookAmbScope();
 
 	elem=getFinestraLayer(window, "param");
 	if(isLayer(elem) && isLayerVisible(elem))
@@ -1511,7 +1515,7 @@ function RecuperaVistaPrevia()
 
 function RecuperaVistaPreviaEvent(event) // Afegit Cristian 19/01/2016
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	RecuperaVistaPrevia();
 	dontPropagateEvent(event);
 }
@@ -1556,7 +1560,7 @@ function PortaVistaANormalScreen()
 
 function GoFullScreenEvent(event)
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	if (ParamCtrl.fullScreen)  //This should not happen
 		alert("Already in full screen");
 
@@ -1941,7 +1945,7 @@ function CreaProjeccio()
 var TriaFullWindow=null;
 function ObreTriaFullImprimir()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
     if (TriaFullWindow==null || TriaFullWindow.closed)
     {
         TriaFullWindow=window.open("print.htm","FinestraPrint",'toolbar=no,status=yes,scrollbars=no,location=no,menubar=no,directories=no,resizable=yes,width=400,height=600,left=0,top=0');
@@ -1954,7 +1958,7 @@ function ObreTriaFullImprimir()
 var AjudaWindow=null;
 function ObreFinestraAjuda()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
     if (AjudaWindow==null || AjudaWindow.closed)
     {
         AjudaWindow=window.open(GetMessage("helpHtm", "urls"),"FinestraAjuda",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=yes,directories=no,resizable=yes,width=780,height=580');
@@ -1997,14 +2001,14 @@ function PreguntaDescarregaMMReader(identificadorAncoraDialeg)
 
 function InstalaLectorMapes()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
     var instalaWindow=window.open(GetMessage("installerMMRExe", "urls"));
     ShaObertPopUp(instalaWindow);
 }
 
 function DescarregaMiraMon()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
     var instalaWindow=window.open(GetMessage("instMMZip", "urls"));
     ShaObertPopUp(instalaWindow);
 }
@@ -2125,6 +2129,8 @@ function TancaFinestraLayer(nom_finestra)
 		TancaFinestra_anarCoord();
 	else if (nom_finestra=="fbScope")
 		TancaFinestraFeedbackAmbScope();	
+	else if (nom_finestra=="lbScope")
+		TancaFinestraLogBookAmbScope();	
 	else if (nom_finestra=="video")
 		TancaFinestra_video();
 	else if (nom_finestra=="editarVector")
@@ -2349,7 +2355,7 @@ var cdns=[], cal_coma, capa, i;
 
 function MostraFinestraEnllac()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	showFinestraLayer(window, "enllac");
 	OmpleFinestraEnllac();
 	setzIndexFinestraLayer(window, "enllac", (layerList.length-1));
@@ -2357,7 +2363,7 @@ function MostraFinestraEnllac()
 
 function MostraFinestraEnllacWMS()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	showFinestraLayer(window, "enllacWMS");
 	OmpleFinestraEnllacWMS();
 	setzIndexFinestraLayer(window, "enllacWMS", (layerList.length-1));
@@ -2688,7 +2694,7 @@ function PortamAVistaGeneral()
 }
 function PortamAVistaGeneralEvent(event) //Afegit Cristian 19/01/2016
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	PortamAVistaGeneral();
 	dontPropagateEvent(event);
 }
@@ -2731,7 +2737,7 @@ function PortamANivellDeZoom(nivell)
 
 function PortamANivellDeZoomEvent(event, nivell) //Afegit Cristian 19/01/2016
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	dontPropagateEvent(event);
 	PortamANivellDeZoom(nivell);
 }
@@ -2802,7 +2808,7 @@ function CanviaNivellDeZoom(nivell, redibuixa)
 
 function MostraFinestraVideo()
 {
-	ComprovaCalTancarFeedbackAmbScope();
+	ComprovaCalTancarAmbScope();
 	if (!ObreFinestra(window, "video", GetMessage("timeSeries", "miramon")))
 		return;
 	PreparaIOmpleFinestraVideo();
@@ -5018,6 +5024,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "editaEstil", GetMessageJSON("EditStyle", "cntxmenu"), boto_tancar, 240, 110, 430, 435, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "anarCoord", GetMessageJSON("GoToCoordinate", "barra"), boto_tancar, 297, 298, 250, 160, "NwCR", {scroll: "no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "fbScope", GetMessageJSON("FBwithScope", "barra"), boto_tancar, 297, 298, 350, 250, "NwCR", {scroll: "no", visible: false, ev: null}, null);
+	createFinestraLayer(window, "lbScope", GetMessageJSON("LBwithScope", "barra"), boto_tancar, 297, 298, 400, 300, "NwCR", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "multi_consulta", GetMessageJSON("Query"), boto_tancar, 1, 243, 243, 661, "nWSe", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "param", GetMessageJSON("Parameters"), boto_tancar, 250, 150, 480, 595, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true, minWidth: 413, minHeight: 571}, null);
 	createFinestraLayer(window, "download", GetMessageJSON("DownloadLayer", "download"), boto_tancar, 190, 120, 400, 360, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true}, null);
@@ -5029,6 +5036,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "mostraQualitat", GetMessageJSON("Quality"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraExplanation", GetMessageJSON("Explanation"), boto_tancar, 200, 150, 400, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);	
 	createFinestraLayer(window, "feedback", GetMessageJSON("Feedback"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
+	createFinestraLayer(window, "logbook", GetMessageJSON("LogBook"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", GetMessageJSON("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "enllac", GetMessageJSON("OpenOrSaveContext", "miramon"), boto_tancar, 650, 165, 450, 200, "NwCR", {scroll: "ara_no", visible: false, ev: null}, null);
 	createFinestraLayer(window, "enllacWMS", GetMessageJSON("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, resizable: true, ev: null}, null);

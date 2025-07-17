@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -738,7 +738,32 @@ function DonaAccessTokenTypeFeedback(capa)
 	}
 	return null;
 }
+function FinestraLogBookCapa(elem, i_capa, i_estil)
+{
+var cdns=[], s;
+var capa=ParamCtrl.capa[i_capa];
+	cdns.push(GetMessage("theLayer"),
+				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+ 	if (i_estil!=-1)
+		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
+	cdns.push("\"");
 
+	if (!(s=DonaCodeCapaEstilFeedback(i_capa, i_estil)))
+	{
+		TancaFinestraLayer('logbook');
+		return;
+	}
+	LBShowLogBookInHTMLDiv(elem,
+			"LayerLogBookCapa",
+			cdns.join(""),
+			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
+			s, //identificador unic
+			DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
+			ParamCtrl.idioma,
+			DonaAccessTokenTypeFeedback(capa),
+			"MostraFinestraLogBookAmbScope",
+			capa);
+}
 
 function FinestraFeedbackCapa(elem, i_capa, i_estil)
 {
