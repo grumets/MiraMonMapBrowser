@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -101,6 +101,7 @@ function TancaFinestra_anarCoord()
 	   CreaVistes();
 	}
 }//Fi de TancaFinestra_anarCoord()
+
 function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, dims)
 {
 	
