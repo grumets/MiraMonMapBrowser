@@ -390,7 +390,7 @@ var capa, alguna={desplegable:1, visible:1, consultable:1, descarregable:1, getc
 						alguna.consultable=1;
 					if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true && capa.descarregable!="no")
 						alguna.descarregable=1;
-					if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
+					if (EsCapaDescarregableIndividualment(capa) || (capa.model==model_vector && capa.tipus==null)) 
 						alguna.getcoverage=1;
 					if (capa.proces)
 						alguna.WPS=1;
@@ -672,7 +672,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], n_col_carac;
 		}
 	}
 	// GetCoverage button
-	if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
+	if (EsCapaDescarregableIndividualment(capa) || (capa.model==model_vector && capa.tipus==null))
 	{
 		cdns.push("<td valign=\"middle\">",
 			CadenaBotoPolsable("getcov"+i_capa, "getcov", GetMessage("Download").toLowerCase(), "MostraFinestraDownload("+i_capa+")", 14),
@@ -1173,7 +1173,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 			}
 		}
 		//Botó de GetCovergage:
-		if (EsCapaDescarregableIndividualment(capa) || capa.model==model_vector)
+		if (EsCapaDescarregableIndividualment(capa) || (capa.model==model_vector && capa.tipus==null))
 		{
 			cdns.push("<td valign=\"middle\">",
 				CadenaBotoPolsable("getcov"+i_capa, "getcov", GetMessage("Download").toLowerCase(), "MostraFinestraDownload("+i_capa+")", 14),
