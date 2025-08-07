@@ -273,10 +273,12 @@ var cdns=[], lletra, msg, nom_gif, width=-1, capa=ParamCtrl.capa[i];
 	{
 		lletra="c";
 		msg=(capa[estat]=="si") ? GetMessage("queryable", "llegenda") : GetMessage("nonQueryable", "llegenda");
-		if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
+		//if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 			nom_gif=(capa[estat]=="si" ? estat : "ara_no_"+estat);
-		else
+		/*else
+		{
 			nom_gif=estat;
+		}*/
 		width=14;
 	}
 	else if (estat=="descarregable")
@@ -1619,7 +1621,7 @@ function CanviaEstatConsultableCapa(icon_capa, i)
 {
 	if (!ParamCtrl.BarraEstil || !ParamCtrl.BarraEstil.colors)
 	{
-		if (TreuAdreca(icon_capa.src)=="ara_no_consultable.gif")
+		if (ParamCtrl.capa[i].consultable=="ara_no")
 		{
 			ParamCtrl.capa[i].consultable="si";
 			icon_capa.src=AfegeixAdrecaBaseSRC("consultable.gif");
@@ -1643,15 +1645,16 @@ function CanviaEstatConsultableCapa(icon_capa, i)
 		if (ParamCtrl.capa[i].consultable=="ara_no")
 		{
 			ParamCtrl.capa[i].consultable="si";
-			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, true);
-			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("queryable", "llegenda"), colors: ParamCtrl.BarraEstil.colors});
+			//AddRemoveMouseOverOutSVG("c_ll_capa"+ i, true);
+			//ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("queryable", "llegenda"), colors: ParamCtrl.BarraEstil.colors});
 		}
 		else 
 		{
 			ParamCtrl.capa[i].consultable="ara_no";
-			AddRemoveMouseOverOutSVG("c_ll_capa"+ i, false);
-			ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("nonQueryable", "llegenda"), colors: ParamCtrl.BarraEstil.colorsGrey ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors});
+			//AddRemoveMouseOverOutSVG("c_ll_capa"+ i, false);
+			//ChangeTitleColorsSVG("c_ll_capa"+ i, {title: GetMessage("nonQueryable", "llegenda"), colors: ParamCtrl.BarraEstil.colorsGrey ? ParamCtrl.BarraEstil.colorsGrey : ParamCtrl.BarraEstil.colors});
 		}
+		icon_capa.outerHTML=DonaCadenaImgCanviaEstatCapa(i, "consultable");
 	}
 }
 
