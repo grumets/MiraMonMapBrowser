@@ -823,7 +823,7 @@ function MostraFinestraDownload(i_capa)
 	var esUrlAbsoluta = false;
 	   
 	// Si només tenim un element a descarregar d'aquesta capa i només un format, ho descarreguem directament sense haver d'obrir una finestra intermèdia
-    if ((capa.DescarregaTot.length == 1) && (capa.DescarregaTot[0].format.length == 1))
+    if (capa.DescarregaTot && capa.DescarregaTot.length == 1 && capa.DescarregaTot[0].format.length == 1)
     {
         //comprovem si el contingut de capa.DescarregaTot[0].url és ja una url
 		var ext=ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[0].format].extension;
