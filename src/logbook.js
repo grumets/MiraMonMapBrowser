@@ -323,7 +323,7 @@ var cdns=[];
 	var owc=ParseOWSContextAtom(root);
 	if (owc.properties.totalResults==0 || !owc.features)
 	{
-		document.getElementById(extra_param.div_id).innerHTML= MissatgeSenseElementsRetornats(extra_param);
+		document.getElementById(extra_param.div_id).innerHTML= LBMissatgeSenseElementsRetornats(extra_param);
 		return;
 	}
 
@@ -370,6 +370,32 @@ var cdns=[];
 		if (type=="LOGPAGE" && owc.features[i].properties && owc.features[i].properties.links && owc.features[i].properties.links.alternates && owc.features[i].properties.links.alternates.length && owc.features[i].properties.links.alternates[0].href)
             loadFile(owc.features[i].properties.links.alternates[0].href, "text/xml", LBCarregaLogPageAnteriorCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i].properties.links.alternates[0].href, div_id: extra_param.div_id + "_" + i, lang: extra_param.lang, esRU: extra_param.callback_function});
 	}
+}
+
+function LBMissatgeSenseElementsRetornats(elements)
+{
+	let missatge = [];
+	let lang = elements.lang
+
+	missatge.push(GUFDonaCadenaLang({"cat":"No hi ha pÃ gines prÃ¨vies", 
+		"spa":"No hay pÃ¡gina previas", 
+		"eng":"There is no previous log pages", 
+		"fre":"Il n'y a pas encore pages prÃ©cÃ©dentes"}, lang));
+
+
+	if (typeof elements.rsc_type !== "undefined" && elements.rsc_type != "")
+		missatge.push(GUFDonaCadenaLang({"cat":" sobre la", 
+					"spa":" sobre la", 
+					"eng":" on the", 
+					"fre":" sur la"}, lang), 
+					" ", elements.rsc_type);
+
+	missatge.push(GUFDonaCadenaLang({"cat":" encara", 
+				"spa":" todavÃ­a", 
+				"eng":" yet", 
+				"fre":" encore"}, lang));
+
+	return missatge.join("");
 }
 
 var LBlogpageWindow=null;
