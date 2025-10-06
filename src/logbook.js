@@ -1,4 +1,4 @@
-﻿/* 
+/* 
     This file is part of NiMMbus system. NiMMbus is a solution for 
     storing geospatial resources on the MiraMon private cloud. 
     MiraMon is a family of GIS&RS products developed since 1994 
@@ -297,7 +297,7 @@ function LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_typ
 	{
 		for (var i = 0; i < dims.length; i++)		
 		{
-			url+="&AGG_TYPE_"+ (i+1) + "=" + dims[i][0] +" &AGG_VAL_"+ (i+1) + "=" + dims[i][1];
+			url+="&DIM_NAME_"+ (i+1) + "=" + dims[i][0] +" &DIM_VAL_"+ (i+1) + "=" + dims[i][1];
 		}
 	}
 
@@ -523,8 +523,8 @@ function LBCarregaLogPageAnteriorCallback(doc, extra_param)
         '<span id="extraInfo_' + divId + '" style="display:none; margin-top: 0.5em;">' +
             '<div><strong>Content Date:</strong> ' + (lp.contentDateIni || '-') + ' / ' + (lp.contentDateFin || '-') +'</div>' +
             '<div><strong>Link:</strong> ' + (lp.link || '-') + '</div>' +
-			'<div><strong>Aggregation Type:</strong> ' + (lp.aggType || '-') + '</div>' +
-            '<div><strong>Aggregation Value:</strong> ' + (lp.aggValue || '-') + '</div>' +
+			'<div><strong>Dimension Name:</strong> ' + (lp.dimName || '-') + '</div>' +
+            '<div><strong>Dimension Value:</strong> ' + (lp.dimValue || '-') + '</div>' +
         '</span><br>' +
         '<a href="#" id="toggleInfo_' + divId + '">+ info</a>'
     );
