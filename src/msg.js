@@ -1631,6 +1631,22 @@ var MessageLang=
     "cze": "Zavřít aktuální vizualizaci a otevřít novou s vybranými vrstvami",
     "ger": "Schließen Sie die aktuelle Visualisierung und öffnen Sie eine neue mit den ausgewählten Layers"
   },
+  "DoYouWantTheLayer": {
+	"cat": "Vols que la capa",
+	"spa": "¿Desea que la capa",
+	"eng": "Do you want the layer",
+	"fre": "Voulez-vous que le couche",
+	"cze": "Chcete, aby se vrstva",
+	"ger": "Möchten Sie, dass die Ebene"
+  },
+  "BeUpdatedAutoWhenChanges?": {
+	"cat": " s'actualitzi automàticament quan hi hagi canvis?",
+	"spa": " se actualice automáticamente cuando se produzcan cambios?",
+	"eng": " to be updated automatically when changes appears?",
+	"fre": " soit mis à jour automatiquement lorsqu'il y a des modifications?",
+	"cze": " automaticky aktualizovala při změnách?",
+	"ger": " bei Änderungen automatisch aktualisiert wird?"
+  },
   "DocumentLanguage": {
     "cat": "Idioma del document",
     "spa": "Idioma del documento",

@@ -69,6 +69,7 @@ IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("imgtiff.js");
 IncludeScript("geomet.js");
+IncludeScript("ngeohash.js");
 IncludeScript("papaparse.min.js"); // Extret de https://www.papaparse.com/
 IncludeScript("wicket.js"); // Extret de : https://github.com/arthur-e/Wicket
 IncludeScript("vector.js");
@@ -112,6 +113,8 @@ IncludeScript("moment.min.js", true);
 IncludeScript("3d.js", true);
 IncludeScript("vis.min.js", true);
 
+IncludeScript("md5.min.js", true);
+IncludeScript("websubhook.js", true);
 
 
 IncludeScript("msg.js", true);
@@ -384,7 +387,7 @@ function CompletaDescarregaTotCapa(capa)
 			}
 			if (i_format==ParamCtrl.FormatDescarregaTot.length)
 				ParamCtrl.FormatDescarregaTot.push({format: {nom:"geojson", desc:"GeoJSON"}, extension:"json"});
-			capa.DescarregaTot=[{desc: "GeoJSON", url:capa.servidor, format:[i_format]}];
+			capa.DescarregaTot=[{desc: "GeoJSON", url: capa.servidor, format:[i_format]}];
 		}
 		else
 		{
@@ -539,6 +542,8 @@ function GeneraUIDCapa(capa)
 function CompletaDefinicioCapa(capa, capa_vola)
 {	
 	GeneraUIDCapa(capa);
+	var tipus=DonaTipusServidorCapa(capa);
+	
 	//Càlcul de la envolupant el·lipsoidal
 	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
@@ -553,6 +558,16 @@ function CompletaDefinicioCapa(capa, capa_vola)
 
 	if (!capa.visible)
 		capa.visible="si";
+
+	if (!capa.subscribed || (tipus!="TipusSTA" && tipus=="TipusSTAplus"))
+		capa.subscribed="no";
+	else if(capa.subscribed=="si" && capa.visible=="ara_no")
+		capa.subscribed="ara_no";
+	else if(capa.subscribed=="si" && capa.visible=="no")
+		capa.subscribed="no";
+	
+	if(capa.subscribed!="no" && (!ParamCtrl.webSocketUrl || !ParamCtrl.webHookUrl ))
+		capa.subscribed=="no";
 
 	if (!capa.consultable)
 		capa.consultable="si";
@@ -592,15 +607,42 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		if (!capa.FlagsData)
 			capa.FlagsData=flagdata;
 	}
+	if(capa.dataMinima)
+	{
+		var s=capa.dataMinima;
+		if (typeof s==="string")
+		{
+			capa.dataMinima={};
+			OmpleDataJSONAPartirDeDataISO8601(capa.dataMinima, s);
+		}
+	}
+	
+	if(capa.dataMaxima)
+	{
+		var s=capa.dataMaxima;
+		if (typeof s==="string")
+		{
+			capa.dataMaxima={};
+			OmpleDataJSONAPartirDeDataISO8601(capa.dataMaxima, s);
+		}
+	}
 
-	var tipus=DonaTipusServidorCapa(capa);
+	
 	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
 	{
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
 
-	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || (tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv")) || (capa.objectes && capa.objectes.features))
+	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" ||
+		(tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv")) || 
+		(capa.objectes && capa.objectes.features))
 		capa.model=model_vector;
+	
+	if(tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	{
+		if(!capa.origenAccesObjs)
+			capa.origenAccesObjs=origen_FeaturesOfInterest;		
+	}
 
 	CompletaDescarregaTotCapa(capa);
 	
@@ -1393,19 +1435,36 @@ function EsCapaDinsRangDEscalesVisibles(capa)
 //Aquesta funció ara caldrà usar-la cada vegada que es canvii l'estat de visibilitat d'una capa
 function CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i_capa, nou_estat)
 {
+var capa=ParamCtrl.capa[i_capa];
 	if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable)
 	{
-		if( (nou_estat=="si" || nou_estat=="semitransparent") && ParamCtrl.capa[i_capa].descarregable=="ara_no")
-			ParamCtrl.capa[i_capa].descarregable="si";
-		else if((nou_estat=="no" || nou_estat=="ara_no") && ParamCtrl.capa[i_capa].descarregable=="si")
-			ParamCtrl.capa[i_capa].descarregable="ara_no";
+		if( (nou_estat=="si" || nou_estat=="semitransparent") && capa.descarregable=="ara_no")
+			capa.descarregable="si";
+		else if((nou_estat=="no" || nou_estat=="ara_no") && capa.descarregable=="si")
+			capa.descarregable="ara_no";
 	}
 	if (ParamCtrl.LlegendaLligaVisibleAmbConsultable)
 	{
-		if( (nou_estat=="si" || nou_estat=="semitransparent") && ParamCtrl.capa[i_capa].consultable=="ara_no")
-			ParamCtrl.capa[i_capa].consultable="si";
-		else if((nou_estat=="no" || nou_estat=="ara_no") && ParamCtrl.capa[i_capa].consultable=="si")
-			ParamCtrl.capa[i_capa].consultable="ara_no";
+		if( (nou_estat=="si" || nou_estat=="semitransparent") && capa.consultable=="ara_no")
+			capa.consultable="si";
+		else if((nou_estat=="no" || nou_estat=="ara_no") && capa.consultable=="si")
+			capa.consultable="ara_no";
+	}
+	if(capa.subscribed!="no")
+	{
+		if(nou_estat=="si" || nou_estat=="semitransparent")
+		{
+			if (capa.subscribed=="ara_no" &&
+				confirm(GetMessage("DoYouWantTheLayer")+" '"+DonaCadena(capa.desc)+"'"+GetMessage("BeUpdatedAutoWhenChanges?")))
+			{
+				capa.subscribed="si";
+			}
+		}
+		else if (capa.subscribed=="si")
+		{
+			capa.subscribed="ara_no";
+			UnSubscribeTopicToWebHub(capa.id);
+		}
 	}
 	ParamCtrl.capa[i_capa].visible=nou_estat;
 }
@@ -1670,6 +1729,17 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 			if(capa.tileMatrixSetGeometry.tilesSol)
 				delete capa.tileMatrixSetGeometry.tilesSol;
 		}
+		if (capa.cellZoneLevelSet)
+		{
+			if(capa.cellZoneLevelSet.zoneLevels)
+			{
+				for(var i_cell=0; i_cell<capa.cellZoneLevelSet.zoneLevels.length; i_cell++)
+				{
+					if(capa.cellZoneLevelSet.zoneLevels[i_cell].cells)
+						delete capa.cellZoneLevelSet.zoneLevels[i_cell].cells;
+				}
+			}
+		}
 
 		if (capa.EnvTotalLL)
 			delete capa.EnvTotalLL;
@@ -1825,7 +1895,7 @@ function CanviaCRSISituacio(crs_dest, i_situacio)
 		eval(ParamCtrl.FuncioCanviProjeccio);
 }
 
-//El segon paràmetre no cal especificar-lo si és el CRS actual. Aquesta funció no canvia el mapa de situació.
+// El segon paràmetre no cal especificar-lo si és el CRS actual. Aquesta funció no canvia el mapa de situació.
 function CanviaCRS(crs_dest, crs_ori)
 {
 var factor=1;
@@ -1869,6 +1939,19 @@ var i;
 		{
 			ParamCtrl.capa[i].CostatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMinim*=factor);
 			ParamCtrl.capa[i].CostatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMaxim*=factor);
+			var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
+			if((tipus=="TipusSTA" || tipus=="TipusSTAplus") &&
+				(ParamCtrl.capa[i].origenAccesObjs==origen_CellsFeaturesOfInterest || ParamCtrl.capa[i].origenAccesObjs==origen_CellsThings) && 
+				ParamCtrl.capa[i].cellZoneLevelSet && ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels)
+			{
+				for (var j=0; j<ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.length; j++)
+				{
+					if(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim)
+						ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim*=factor);
+					if(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim)
+						ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim*=factor);
+				}
+			}
 		}
 		ParamInternCtrl.vista.CostatZoomActual=ArrodoneixSiSoroll(ParamInternCtrl.vista.CostatZoomActual*=factor);
 		CreaBarra(crs_dest);
@@ -2116,7 +2199,7 @@ function EsCapaConsultable(i)
 var capa=ParamCtrl.capa[i];
 
 	return capa.consultable=="si" && EsCapaDinsAmbitActual(capa) && EsCapaDisponibleEnElCRSActual(capa) &&
-			    (!(ParamCtrl.ConsultableSegonsEscala && ParamCtrl.ConsultableSegonsEscala) || EsCapaDinsRangDEscalesVisibles(capa));
+			    (!(ParamCtrl.ConsultableSegonsEscala) || EsCapaDinsRangDEscalesVisibles(capa));
 }
 
 function TancaFinestraLayer(nom_finestra)
@@ -4998,7 +5081,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	div.innerHTML="";
 
 	if (ParamCtrl.AdrecaBaseSRC)
-		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal versificar-ho cada cop. (JM)
+		ParamCtrl.AdrecaBaseSRC=DonaAdrecaSenseBarraFinal(ParamCtrl.AdrecaBaseSRC);  // Es verifica aquí i així ja no cal verificar-ho cada cop. (JM)
 
 	for (i=0; i<ParamCtrl.Layer.length; i++)
 	{

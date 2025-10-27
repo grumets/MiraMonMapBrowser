@@ -162,7 +162,6 @@ function ResponseHeaderContentTypeConteMimeType(mimetype, xhr)
 	}*/
 	return false;
 }
-
 								  
 								  
 function loadFile(path, mimetype, success, error, extra_param)

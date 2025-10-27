@@ -1781,7 +1781,7 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 						{
 							simbol=simbols.simbol;
 							if (i_col<0 || i_col>vista.ncol || i_fil<0 || i_fil>vista.nfil)
-								i_simbol=-1;  //Necessari per evitar formules que puguin contenir valors de raster.
+								i_simbol=-1;  //Necessari per evitar formules que puguin contenir valors de ràster.
 							else if (simbol.length==1 && !simbols.NomCamp)
 								i_simbol=0;
 							else
@@ -2018,7 +2018,7 @@ function DeterminaEstilObjNumerics(estil)
 		return {
 			"simbols": [{"simbol": [{ "icona" : {"type": "circle", "r": 20}}]}],
 			"formes":[{"interior": {"paleta":{"colors":["#FF0000"]}}, "vora": {"paleta":{"colors":["#000000"]}, "gruix": 1}}],
-			"fonts":{"NomCampText": nom_camp_nObjs_tessella, "aspecte":[{"font":{"font":"10px Verdana", "i":10, "j":-2}}]},
+			"fonts":{"NomCampText": nom_camp_nObjs_tessella, "aspecte":[{"font":{"font":"10px Verdana", "i":10, "j":-2}}]}
 		};	
 	}
 	return estil.estilTilesObjNum;		
@@ -2027,15 +2027,17 @@ function DeterminaEstilObjNumerics(estil)
 function OmpleVistaCapaDigiIndirect(param)
 {
 var nom_vista=param.nom_vista, vista=param.vista;
-var capa=ParamCtrl.capa[param.i_capa];
+var capa=ParamCtrl.capa[param.i_capa], tipus=DonaTipusServidorCapa(capa);
 var env=vista.EnvActual;
 var neteja_canvas=true;
 
 	if (capa.model!=model_vector)
 		return;
 
-	if(DonaTipusServidorCapa(capa))
+	if(tipus)
 	{
+		if(DemanaCellsDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
+			return;
 		if(DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
 			return;
 		if(DemanaFitxerObjectesIPropietatsDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
@@ -2044,6 +2046,16 @@ var neteja_canvas=true;
 			return;		
 	}
 	// Si la capa és tessel·lada, dibuixo l'array d'objectes numèrics (un objecte amb el nombre d'objectes que conté la tessel·la si és superior al límit indicat)
+	if((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+	{	
+		var zoneLevelId=DonaCellsIndexZoneLevelMesProperAZoomActual(capa);
+		if(zoneLevelId!=-1 && capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels[zoneLevelId].cells && 
+			capa.cellZoneLevelSet.zoneLevels[zoneLevelId].cells.features)
+		{		
+			DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.cellZoneLevelSet.zoneLevels[zoneLevelId].cells, capa.estil[capa.i_estil]);
+			return;
+		}		
+	}
 	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 &&
 		capa.tileMatrixSetGeometry && capa.tileMatrixSetGeometry.tileMatrix)
 	{	
@@ -2055,12 +2067,12 @@ var neteja_canvas=true;
 			DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.tileMatrixSetGeometry.atriObjNumerics, capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics, estil_obj_num);
 			neteja_canvas=false;
 		}		
-	}
+	}	
 	if (capa.objectes && capa.objectes.features)
 		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.objectes, capa.estil[capa.i_estil]);
 }
 
-//Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)
+// Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)
 function DonaNomCanvasCapaDigi(nom_vista, i)
 {
 	if (i<0)

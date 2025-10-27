@@ -141,6 +141,14 @@
 			"type": "string",
 			"format": "uri"
 		},
+		"webSocketUrl": {
+			"description": "Adreça URL del websocket (wss:://) per a les capes que es poden subscriure a actualitzacions a un servei WebHub. Això només per a serveis 'TipusSTA' or 'TipusSTAplus'",
+			"type": "string"
+		},
+		"webHookUrl":{
+			"description": "Adreça URL del webhook (https://)(callback) per a les capes que es poden subscriure a actualitzacions a un servei WebHub. Això només per a serveis 'TipusSTA' or 'TipusSTAplus'.",
+			"type": "string"
+		},	
 		"idiomes":	{
 			"description": "Languages in which the browser will be available",
 			"type": "array",
@@ -344,7 +352,7 @@
 						"$ref": "#/definitions/versio" 
 					},
 					"tipus": { 
-						"description": "Tipus de servei. Només se suporta 'TipusWMS'.  Opcional; si no s'indica s'assumeix TipusServidorLocal",
+						"description": "Tipus de servei. Només se suporta 'TipusWMS'. Opcional; si no s'indica s'assumeix TipusServidorLocal",
 						"$ref": "#/definitions/EnumTipusServidor" 
 					},					
 					"nom":	{ 
@@ -1313,6 +1321,14 @@
 							"$ref": "#/definitions/EnumTipusServidor" 
 						}]
 					},
+					"origenAccesObjs":{
+						"description": "When using services of type 'TipusSTA' or 'TipusSTAplus', this indicates how we want to access the data (position and observations): either via 'Things' or via 'FeaturesOfInterest'. If not specified, the default is 'FeaturesOfInterest'. We can also use the 'Cells' approach, applied to either 'FeaturesOfInterest' or 'Things', when working with services that hide the exact location of the observations. Currently, 'CellsThings' has not been implemented.",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"enum": ["Things", "FeaturesOfInterest", "CellsFeaturesOfInterest", "CellsThings"]
+						}]
+					},
 					"configCSV": {
 						"description": "En el cas de que tinguem un o diversos CSV que s'usen per omplir els objectes i/o les característiques dels objectes, cal definir algunes propietats del CSV per poder fer la transformació correctament.",
 						"type": "object",
@@ -1358,7 +1374,7 @@
 						},{
 							"enum": ["raster", "vector"]
 						}]
-					},
+					},					
 					"namespace": {
 						"description": "Espai de noms utilitzat. Només s'usa quan el 'model' és 'vector'. Interna excepte per els serveis SOS on es necessita per muntar l'identificador de les observedProperty; si és null, no des concatena ni namespce ni /observableProperty",
 						"type": ["string", "null"]
@@ -1393,7 +1409,7 @@
 						"type": "number"
 					},
 					"CRSgeometry": { 
-						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
+						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1470,6 +1486,71 @@
 								"TileMatrix":  {
 									"description": "Array de tileMatrix amb la seva descripció i paràmetres de tessel·lació",
 									"$ref": "#/definitions/tileMatrix"
+								}
+							}
+						}
+					},
+					"cellZoneLevelSet": {
+						"description": "Definition of the layer's cell-based tessellation following a DGGS that represents the position of objects as cells according to the chosen DGGS (specified by CellType). This only applies when the service type is 'TipusSTA' or 'TipusSTAplus' and 'origenAccesObjs' is set to 'CellsFeaturesOfInterest' or 'CellsThings'.",
+						"type": ["object", "null"],
+						"properties": {			
+							"cellType": {
+								"description": "Indicates the type of algorithm used for the cells. For example, geohash...",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"enum": ["GeoHash"]
+								}]														
+							},		
+							"zoneLevels":{
+								"description": "Levels contained in the tessellation",
+								"type": "array",
+								"items": {																		
+									"type": "object",
+									"properties": {				
+										"zoneLevelId": {
+											"description": "zoneLevel identifier",
+											"type": "string"
+										},
+										"costatMinim": {
+											"description": "Minimum zoom level at which this zoneLevel is meaningfully visible for the layer. Optional. If not specified, only costatMaxim is defined and this zoneLevel is only visible in one zoom.",
+											"type": "number",
+											"minimum": 0
+										},
+										"costatMaxim":	{
+											"description": "Maximum zoom level at which this zoneLevel is meaningfully visible for the layer. Optional.If not specified, only costatMinim is defined and this zoneLevel is only visible in one zoom.",
+											"type": "number",
+											"minimum": 0
+										},
+										"cells": {
+											"description": "Interna No usar. Array d'objectes amb l'envolupant de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					"$ref": "#/definitions/featureCollection"
+										},
+										"zones": {
+											"type": "array",
+											"items": {																
+												"type": "object",
+												"properties": {	
+													"zoneId" : {
+														"description": "Zone identifier for a concrete zoneLevel",
+														"type": "string"
+													},													
+													"cell": {
+														"type": "object",
+														"properties": {		
+															"cellId":{
+																"description": "Identifier of a cell within a specific zone",
+																"type": "string"
+															},
+															"statistics":{
+																"description": "Object containing the names of the cell's properties along with their statistics.",
+																"$ref": "#/definitions/statisticsDescription"	
+															}
+														}							
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}
@@ -1760,10 +1841,14 @@
 							"multipleOf" : 1
 						}
 					},
+					"subscribed": {
+						"description": "Estat de subscripció a un servei WebHub a actualitzacions de la capa. Només per a serveis 'TipusSTA' or 'TipusSTAplus'. Possibilitats: la capa no admet subscripcions ('no'), la capa es pot subscriure però en aquest moment no ho està ('ara_no'), la capa està subscrita ('si). Opcional. Per defecte és 'no'. Programaticament va lligat a l'estat de 'visible' de la capa; si aquesta no és visible la subscripció passa a valer 'ara_no'.", 
+						"enum": [null, "no", "ara_no", "si"]
+					},
 					"consultable": {
 						"description": "Estat de la capa per a la consulta. Possibilitats: mai (no), no està consultable però l'usuari la pot activar (ara_no), si (si). Opcional. Per defecte és 'si'", 
 						"enum": [null, "no", "ara_no", "si"]
-					},																				
+					},															
 					"descarregable": {
 						"description": "DEPPRECATED: No recomanat per l'esforç que representa pel servidor, es recomana l'ús de 'DescarregaTot' o ParamCoverage, Formatoverage i ResCoverage. La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage'. Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no'. No té sentit quan el 'model' és 'vector'.", 						
 						"enum": [null, "no", "ara_no", "si"]
@@ -1918,6 +2003,14 @@
 						"minimum": -1,
 						"multipleOf" : 1
 					},
+					"dataMinima": {
+						"description": "Data mínima en que es sol·licitaran les observacions d'un STA o STA+ que conté sèries temporals",
+						"$ref": "#/definitions/data" 
+					},
+					"dataMaxima":	{
+						"description": "Data màxima en que es sol·licitaran les observacions d'un STA o STA+ que conté sèries temporals",
+						"$ref": "#/definitions/data" 
+					},	
 					"animable":	{
 						"description": "La capa participa d'un vídeo. Opcional. Per defecte val false. Només aplica quan el 'model' és 'raster'.", 
 						"type": ["boolean", "null"]

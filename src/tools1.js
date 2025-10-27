@@ -1340,8 +1340,7 @@ function getResizableLayer(win, name)
 {
 	if (isFinestraLayer(win, name))
 		return getFinestraLayer(win, name);
-	else
-		return getLayer(win, name);
+	return getLayer(win, name);
 }
 
 function getFinestraLayer(win, name)
@@ -1754,7 +1753,7 @@ var nom, i_finestra;
 		classLayer(getLayer(win, nom), "cantofinestra");
 		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
 	}
-}//Fi de createFinestraLayer()
+}
 
 function textHTMLFinestraLayer(name, titol, botons, left, top, width, height, ancora, param, content)   //param --> scroll, visible, ev, bg_trans, resizable
 {
@@ -1782,7 +1781,7 @@ var nom, s, i_finestra=layerFinestraList.length;
 		layerFinestraList[i_finestra].pos_ini_canto={x: 0, y: 0};
 	}
 	return s;
-}//Fi de textHTMLFinestraLayer()
+}
 
 
 function createLayer(win, name, left, top, width, height, ancora, param, content)  // param --> scroll, visible, ev
@@ -1861,7 +1860,7 @@ function Ajax()
 	this.responseXML = null;
 	this.handleResp = null;
 	this.responseFormat = 'text/plain', // 'text/plain', 'text/xml', 'object'
-	this.requestFormat = 'application/x-www-form-urlencoded'  //només per POST
+	this.requestFormat = 'application/x-www-form-urlencoded; charset=utf-8'  //només per POST
 	this.structResp=null;
 	this.mimeType = null;
 	//this.headers = [];
@@ -1898,7 +1897,7 @@ function Ajax()
 	this.doPost = function(url, request_format, dataPayload, hand, response_format, struct)
 	{
 		this.url = url;
-		this.requestFormat = request_format || 'application/x-www-form-urlencoded';
+		this.requestFormat = request_format || 'application/x-www-form-urlencoded; charset=utf-8';
 		this.dataPayload = dataPayload;
 		this.handleResp = hand;
 		this.responseFormat = response_format || 'text/plain';
@@ -2339,6 +2338,239 @@ function loadBinaryFile(path, mimetype, success, retry, error, extra_param)
 
 	xhr.send();
 }
+// Aquestes funcions han estat extretes del TAPIS HTTPdata.js
+function getURLWithoutQueryParams(s) {
+	var i=s.indexOf('?')
+	if (i==-1)
+		return s;
+	return s.substring(0, i);
+}
+
+function getURLQueryParams(s) {
+	var i=s.indexOf('?')
+	if (i==-1)
+		return "";
+	return s.substring(i+1);
+}
+
+function RemoveQueryParamFromURL(url, queryparam) {
+	var queryparams=getURLQueryParams(url);
+	if (!queryparams)
+		return url;
+	var kvp=queryparams.split("&");
+	for(var i=0; i<kvp.length; i++) {
+		var j = kvp[i].indexOf("=");  // Gets the first index where a space occours
+		if (j==-1)
+			continue;
+		if (kvp[i].substring(0, j).toLowerCase()==queryparam.toLowerCase()){
+			kvp.splice(i, 1);
+			if (kvp.length)
+				return getURLWithoutQueryParams(url)+'?'+kvp.join('&');
+			return getURLWithoutQueryParams(url)
+		}
+	}
+	return url;
+}
+
+function removeParamContentType(contentType) {
+	if (!contentType)
+		return contentType;
+	var i=contentType.indexOf(';')
+	if (i<0)
+		return contentType;
+	return contentType.substring(0, i);
+}
+
+function standardStatusText(status){
+	switch (status){
+		case 400:
+			return "Bad Request. The request cannot be fulfilled due to bad syntax.";
+		case 401: 
+			return "Unauthorized. The request was a legal request, but the server is refusing to respond to it. Please authenticate using the Login button and try again.";
+		case 403:
+			return "Forbidden. The request was a legal request, but the server is refusing to respond to it.";
+		case 404: 
+			return "Not Found. The requested page could not be found but may be available again in the future.";
+		case 405: 
+			return "Method Not Allowed. A request was made of a page using a request method not supported by that page.";
+		case 406: 
+			return "Not Acceptable. The server can only generate a response that is not accepted by the client.";
+		case 407: 
+			return "Proxy Authentication Required. The client must first authenticate itself with the proxy.";
+		case 408: 
+			return "Request Timeout. The server timed out waiting for the request.";
+		case 409: 
+			return "Conflict. The request could not be completed because of a conflict in the request.";
+		case 410: 
+			return "Gone. The requested page is no longer available.";
+		case 411: 
+			return "Length Required. The \"Content-Length\" is not defined. The server will not accept the request without it.";
+		case 412: 
+			return "Precondition Failed. The precondition given in the request evaluated to false by the server.";
+		case 413: 
+			return "Request Too Large. The server will not accept the request, because the request entity is too large.";
+		case 414: 
+			return "Request-URI Too Long. The server will not accept the request, because the URI is too long. Occurs when you convert a POST request to a GET request with a long query information.";
+		case 415: 
+			return "Unsupported Media Type	The server will not accept the request, because the media type is not supported."; 
+		case 416: 
+			return "Range Not Satisfiable. The client has asked for a portion of the file, but the server cannot supply that portion.";
+		case 417: 
+			return "Expectation Failed.";
+		default:
+			return "";
+	}
+}
+
+
+/*
+Inspired in https://web.dev/fetch-api-error-handling/
+Despite the name of the function, it can also be used for retrieving non-json files.
+In fact, the response is an object with the following members: obj (only if the response is application/json), text: (only if the response is not application/json), responseHeaders: (only the ones listed in headersToGet), ok (always true);
+*/
+//url is the URL to request. To do GET it can be used with the first parameter only.
+//headersToGet is an array of header names that are extracted to the response and included in the responseHeaders memeber of the function return. Can be null.
+//method is the name of the method in capitals. E.g. "POST". Default is "GET". The special method "GET-HEAD" is used to retrieve the headers without getting the data when HEAD is not allowed by the server.
+//objToSend is a JavaScript object that will be stringify into JSON text and send as the body of the HTTP request (e.g. HTTP POST) or a string that will be send directly.
+//headersToSend is an object with the headers to include in the request. It requests JSON content in 'Accept' by default. If you use headersToSend to specify headers then there is no default 'Accept' and you may specify it. headersToSend is an object like this: {'Accept': '*/*', 'Authorization': "XXX"}
+//mediaToSend is the media type declared for the body content (based on objToSend). If undefined, null or blank, "application/json" is assumed
+/*
+When all is OK response is an object {obj: , text: , responseHeaders: , ok: };
+*/
+async function HTTPFetch(url, headersToGet, method, objToSend, headersToSend, mediaToSend) {
+	var response, jsonData, options={};
+	try {
+		if (method && method!="GET-HEAD")
+			options.method=method;
+		
+		if (headersToSend)
+			options.headers=headersToSend;
+		else
+			options.headers={'Accept': 'application/json, */*;q=0.8'};
+
+		if (objToSend)
+		{
+			options.headers['Content-Type']=(mediaToSend) ? (mediaToSend) : "application/json";
+			options.body=(typeof objToSend === "object") ? JSON.stringify(objToSend) : objToSend;
+		}
+		response = await fetch(url, options);
+	}
+	catch (error) {
+		alert('There was an error with ' + url + ": " + error.message);
+		console.log('There was an error', error);
+		return;
+	}
+	// Uses the 'optional chaining' operator
+	if (!(response?.ok)) {
+		var body;
+		if ((removeParamContentType(response.headers.get('Content-Type'))=="application/json" || removeParamContentType(response.headers.get('Content-Type'))=="application/ld+json") &&
+			(response.headers.get('Content-Length')==null || parseInt(response.headers.get('Content-Length'))>0)) {
+			body=await response.json();
+			body=JSON.stringify(body);
+		}
+		else
+			body=await response.text();
+		alert("Error: HTTP " + (method && method!="GET-HEAD" ? method : "GET") + " URL: " + url + ", HTTP code: " + response?.status + ", Description: "+ (response.statusText ? response.statusText : standardStatusText(response.status)) + (body ? ", " + body : ""));
+		console.log("HTTP Response Code: " + response?.status + ": " + response?.statusText + (body ? JSON.stringify(body) : ""));
+		return response;
+	}
+	try {
+		//console.log(...response.headers); //Enumerate the headers for debugging. It does not work directly in the console of Chrome
+		var headersObj={};
+		if (headersToGet)
+		{
+			for (var i=0; i<headersToGet.length; i++)
+				headersObj[headersToGet[i]]=response.headers.get(headersToGet[i]);
+		}
+		if (method=="HEAD" || method=="GET-HEAD")
+			return {obj: null, text: null, responseHeaders: headersObj, ok: true};
+		else if ((removeParamContentType(response.headers.get('Content-Type'))=="application/json" || removeParamContentType(response.headers.get('Content-Type'))=="application/ld+json") &&
+				(response.headers.get('Content-Length')==null || parseInt(response.headers.get('Content-Length'))>0))
+			return {obj: await response.json(), text: null, responseHeaders: headersObj, ok: true};
+		else
+			return {obj: null, text: await response.text(), responseHeaders: headersObj, ok: true};
+	} catch (error) {
+		if (error instanceof SyntaxError) {
+			alert('Syntax error reading ' + url + ": " + error.message);
+			console.log('There was a SyntaxError', error);
+			return;
+		}
+		else {
+			alert('Error interpreting ' + url + ": " + error.message);
+			console.log('There was an error', error);
+			return;
+		}
+	}
+}
+
+async function HTTPHead(url, headersToGet, headersToSend) {
+	return await HTTPFetch(url, headersToGet, "HEAD", null, headersToSend);
+}
+
+async function HTTPBinaryData(url, headersToGet, method, objToSend, headersToSend, mediaToSend) {
+	var response, jsonData, options={};
+	try {
+		if (method && method!="GET-HEAD")
+			options.method=method;
+		
+		if (headersToSend)
+			options.headers=headersToSend;
+
+		if (objToSend)
+		{
+			options.headers['Content-Type']=(mediaToSend) ? (mediaToSend) : "application/json";
+			options.body=(typeof objToSend === "object") ? JSON.stringify(objToSend) : objToSend;
+		}
+		response = await fetch(url, options);
+	}
+	catch (error) {
+		alert('There was an error with ' + url + ": " + error.message);
+		console.log('There was an error', error);
+		return;
+	}
+	// Uses the 'optional chaining' operator
+	if (!(response?.ok)) {
+		var body;
+		if ((removeParamContentType(response.headers.get('Content-Type'))=="application/json" || removeParamContentType(response.headers.get('Content-Type'))=="application/ld+json") &&
+			(response.headers.get('Content-Length')==null || parseInt(response.headers.get('Content-Length'))>0)) {
+			body=await response.json();
+			body=JSON.stringify(body);
+		}
+		else
+			body=await response.text();
+		alert("Error: HTTP " + (method && method!="GET-HEAD" ? method : "GET") + " URL: " + url + ", HTTP code: " + response?.status + ", Description: "+ (response.statusText ? response.statusText : standardStatusText(response.status)) + (body ? ", " + body : ""));
+		console.log("HTTP Response Code: " + response?.status + ": " + response?.statusText + (body ? JSON.stringify(body) : ""));
+		return response;
+	}
+	try {
+		var headersObj={};
+		if (headersToGet)
+		{
+			for (var i=0; i<headersToGet.length; i++)
+				headersObj[headersToGet[i]]=response.headers.get(headersToGet[i]);
+		}
+		if (method=="HEAD" || method=="GET-HEAD")
+			return {obj: null, text: null, responseHeaders: headersObj, ok: true};
+		else if (removeParamContentType(response.headers.get('Content-Type'))=="application/json" || removeParamContentType(response.headers.get('Content-Type'))=="application/ld+json" || 
+				removeParamContentType(response.headers.get('Content-Type'))=="text/html" || removeParamContentType(response.headers.get('Content-Type'))=="text/plain" || 
+				(response.headers.get('Content-Length')!=null && parseInt(response.headers.get('Content-Length'))==0))
+			return {arrayBuf: null, text: await response.text(), responseHeaders: headersObj, ok: true};
+		else
+			return {arrayBuf: await response.arrayBuffer(), text: null, responseHeaders: headersObj, ok: true};
+	} catch (error) {
+		if (error instanceof SyntaxError) {
+			alert('Syntax error reading ' + url + ": " + error.message);
+			console.log('There was a SyntaxError', error);
+			return;
+		}
+		else {
+			alert('Error interpreting ' + url + ": " + error.message);
+			console.log('There was an error', error);
+			return;
+		}
+	}
+}
+
 
 function arrayBufferToString(buffer){
     var arr = new Uint8Array(buffer);

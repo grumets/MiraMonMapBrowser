@@ -1174,7 +1174,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 				}
 			}
 		}
-		//Botó de GetCovergage:
+		//Botó de GetCoverage:
 		if (EsCapaDescarregableIndividualment(capa) || (capa.model==model_vector && capa.tipus==null))
 		{
 			cdns.push("<td valign=\"middle\">",

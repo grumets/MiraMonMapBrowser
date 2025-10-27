@@ -1064,7 +1064,7 @@ function CalculaConsistenciaLogicaDeCampsiLlistaValors(param)
 {
 var punt={}, capa_digi=ParamCtrl.capa[param.i_capa], combinacio=[], n_consistents=0, n=0, n_dins=0;
 
-	if (!capa_digi.objectes.features)
+	if (!capa_digi.objectes || !capa_digi.objectes.features)
 		return false;
 
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
@@ -1152,7 +1152,7 @@ function CalculaQualExacPosicDesDeCampUncertainty(param)
 {
 var capa_digi=ParamCtrl.capa[param.i_capa], n=0, n_dins=0, desv_tip=0, punt={}, i, UoM;
 
-	if (!capa_digi.objectes.features)
+	if (!capa_digi.objectes || !capa_digi.objectes.features)
 		return false;
 
 	for (var i_obj=0; i_obj<capa_digi.objectes.features.length; i_obj++)
