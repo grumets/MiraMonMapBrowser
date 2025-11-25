@@ -332,7 +332,13 @@
 				"properties": {
 					"EnvTotal":	{
 						"description": "Envolupant representada pel mapa de situació. El CRS és també el CRS de la pròpia imatge de situació",
-						"$ref": "#/definitions/envolupantCRS_2D" 
+						"oneOf":[{
+								"type": "null"
+							},
+							{
+								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
+							}
+						]
 					},
 					"servidor": { 
 						"description": "URL del servidor WMS. Opcional, si no s'indica, s'assumeix que el nom conté el nom de fitxer directament. Si s'índica null és el servidor local",
@@ -566,7 +572,7 @@
 									},
 									"env": { 
 										"description": "Envolupant ocupat pels objectes que tenen aquest valor únic dins de la projecció",
-										"$ref": "#/definitions/envolupant2D" 
+										"$ref": "metadata-schema.json#/definitions/envolupant2D" 
 									}
 								}
 							}
@@ -913,7 +919,13 @@
 					},
 					"EnvTotal": {
 						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. Si la història es passeja per més d'un àmbit es recomana especificar l'envolupant en long/lat. Només s'usa pels relats predefinits al config i no pels que es puguin crear durant la sessió de navegació o pels que siguin descarregats del NiMMBus(en aquest cas estan disponibles sempre).",
-						"$ref": "#/definitions/envolupantCRS_2D"
+						"oneOf":[{
+								"type": "null"
+							},
+							{
+								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
+							}
+						]
 					},
 					"Ample": {
 						"description": "Ample de la caixa que conté la història. Opcional; si no hi és val 500",
@@ -1414,7 +1426,7 @@
 											"objNumerics" : 
 											{ 	
 												"description": "Interna No usar. Array d'objectes amb el nombre d'objectes de cada una de les tessel·les del tileMatrix que ha estat sol·licitada i que conté un nombre d'objectes superior al límit per tessel·la.",								
-												"$ref": "#/definitions/featureCollection"
+												"$ref": "metadata-schema.json#/definitions/featureCollection"
 											}
 										}
 									}		
@@ -1480,13 +1492,13 @@
 								"type": "null"
 							},
 							{
-								"$ref": "#/definitions/envolupantCRS_2D" 
+								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
 							}
 						]
 					},
 					"EnvTotalLL": {
 						"description": "Interna; no usar. Envolupant total de la capa traduida a Lat/Long",
-						"$ref": "#/definitions/envolupant2D" 
+						"$ref": "metadata-schema.json#/definitions/envolupant2D" 
 					},					
 					"FormatImatge": { 
 						"description": "Format en que s'ha de demanar la capa al servidor per a la visualització. Malgrat el nom també aplica per vectors. En vectors, si no s'indica es considera XML. És un format MIME excepte per wmts-rest que és l'extensió del fitxer amb punt o sense.",
@@ -1494,7 +1506,7 @@
 					},
 					"objectes": {
 						"description": "La col·lecció d'objectes vectorials en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84. Només aplica quan el 'model' és 'vector'. Només s'ha d'inicialitzar si tipus no està definit. Si tipus és TipusSOS, TipusSTA, TipusSTAplus o TipusWFS els objectes es carreguen automàticament i no s'ha d'inicialitzar.",
-						"$ref": "#/definitions/featureCollection"
+						"$ref": "metadata-schema.json#/definitions/featureCollection"
 					},				
 					"attributes": {
 						"description": "Objecte que conté noms que descriuen les propietats dels objectes. Si un atribut no és aquí descrit, no es mostra mai a les consultes. A més l'ordre dels atributs aquí mana ordre d'aparició dels atributs a les consultes. Si és null, els atributs es defineixen automàticament de manera trivial a partir del primer objecte. Només aplica quan el 'model' és 'vector' o quan tenim un WMS no binary sense estil. En el model ràster està dins de cada estil.",
@@ -1829,12 +1841,12 @@
 					},
 					"metadades": {
 						"description": "Metadades per aquesta capa. Opcional.",
-						"$ref": "#/definitions/metadades"
+						"$ref": "metadata-schema.json"
 					},
 					"explanation":
 					{
 						"description": "URL multidiomàtica que defineix o explica que és el contingut de la capa.",
-						"$ref": "#/definitions/URLLangoStringOCadenaLang" 
+						"$ref": "#/definitions/URLLangOStringOCadenaLang" 
 					},
 					"NomVideo": { 
 						"description": "Nom del vídeo. Totes les capes amb el mateix nom de vídeo es mostren agrupades en una sola animació i també es consideren com un tot en l'slider de temps. Totes les capes del mateix video ha de tenir els mateixos estils. Opcional, si aquesta capa no necessita agruparse amb cap d'altre, es pot no indicar i si la capa és 'animable': true i 'AnimableMultiTime': true aquest valor s'adopta de capa.nom. Només aplica quan el 'model' és 'raster'.",
@@ -2002,7 +2014,7 @@
 				"VariantVers":	{ "type": ["string", "number", "null"] }
 			}
 		},		
-		"URLLangOStringOCadenaLang" :{
+		"URLLangOStringOCadenaLang": {
 			"description": "objecte que pot contenir una URL multidiomàtica o un text també multidiomàtic",			
 			"oneOf":[{
 					"type": "null"
@@ -2048,26 +2060,6 @@
 						"enum": ["transaction", "capabilities", "consultaLink", "map"]
 					}
 				}
-			}
-		},
-		"envolupantCRS_2D": {
-			"description": "Envolupant 2D i CRS",
-			"type": "object",	
-			"required": ["EnvCRS", "CRS"],
-			"properties": {
-				"EnvCRS": { "$ref": "#/definitions/envolupant2D" },
-				"CRS":	{ "type": "string", "format": "uri" }
-			}
-		},
-		"envolupant2D": {
-			"description": "Envolupant 2D",
-			"type": "object",
-			"required": ["MinX", "MaxX" , "MinY", "MaxY"],
-			"properties": {
-				"MinX":	{ "type": "number" },
-				"MaxX": { "type": "number" },
-				"MinY":	{ "type": "number" },
-				"MaxY":	{ "type": "number" }
 			}
 		},
 		"punt2D": {
@@ -2783,7 +2775,7 @@
 				},
 				"metadades": { 
 					"description": "Metadades d'aquest estil.",
-					"$ref": "#/definitions/metadades"
+					"$ref": "metadata-schema.json"
 				},
 				"explanation":
 				{
@@ -2992,21 +2984,6 @@
 				}
 			}
 		},
-		"keyValuePair":
-		{
-			"description": "Parella clau i valor",
-			"type": "object",
-			"properties": {
-				"name": {
-					"description": "name of the parameter",
-					"type": "string"
-				},
-				"value": {
-					"description": "value of the parameter",
-					"type": "string"
-				}
-			}
-		},
 		"intervalValorsDescripcionsSel": {
 			"description": "Interval de valors i valor seleccionat",
 			"type": "object",
@@ -3164,223 +3141,6 @@
 				}
 			}
 		},
-		"TipusCampGeoCoordPunt":
-		{
-			"description": "Nom dels camps X i Y que contenen les coordenades de les geometries de tipus punt d'un fitxer CSV",
-			"type": "object",
-			"required": ["x", "y"],
-			"properties": {
-				"x": {
-					"description": "Nom del camp que conté la coordenada X",
-					"type": "string"
-				},
-				"y": {
-					"description": "Nom del camp que conté la coordenada Y",
-					"type": "string"
-				}
-			}
-		},
-		"TipusCampGeoFitxer":
-		{
-			"description": "Fitxer que conté la geometria en format GeoJSON i nom del camp identificador entitat que ens permet vincular les dades geogràfiques amb els atributs del fitxer CSV",
-			"type": "object",
-			"required": ["fitxer", "campIdEntitat"],
-			"properties": {
-				"fitxer": {
-					"description": "Fitxer geoJson que conté la geometria",
-					"type": "string"
-				},
-				"campIdEntitat": {
-					"description": "Nom del camp identicador entitat que ens permet relacionar la geometria amb els atributs",
-					"type": "string"
-				}
-			}
-		},
-		"bboxGeoJSON": {
-			"description": "Àmbit format per un array de 4 coordenades",
-			"type": "array",
-			"minItems": 4, 
-			"maxItems": 4,
-			"items": {
-				"type": "number"
-			}
-		},
-		"origenProperties": {
-			"description": "URL o nom del fitxer del origen que conté les dades per obtenir les 'propertiesGeoJSON'. L'origen serà del tipus indicat a 'FormatImatge', i de moment només pot ser 'text/csv'.",
-			"type": "string"
-		},		
-		"propertiesGeoJSON": {
-			"description": "Característiques no geomètriques de l'objecte GeoJSON.",
-			"type": "object"
-		},
-		"coordinate" :{
-			"description": "Un vèrtex",
-			"type": ["array"],
-			"minItems": 2,
-			"maxItems": 3,
-			"items": {
-				"description": "coordenada com un double",
-				"type": "number"
-			}
-		},
-		"geometryGeoJSON": {
-			"description": "Caraterístiques geomètriques de l'objecte",
-			"type": "object",
-			"required": ["type", "coordinates"],
-			"oneOf": [
-				{
-					"properties": {
-						"type": {"enum": ["Point"]},
-						"coordinates": {
-							"$ref": "#/definitions/coordinate"
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["MultiPoint"]},
-						"coordinates": {
-							"description": "Un multipoint",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"$ref": "#/definitions/coordinate"
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["LineString"]},
-						"coordinates": {
-							"description": "Una linia",
-							"type": ["array"],
-							"minItems": 2,
-							"items": {
-								"$ref": "#/definitions/coordinate"
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["MultiLineString"]},
-						"coordinates": {
-							"description": "Un multilinestring",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Una linia",
-								"type": ["array"],
-								"minItems": 2,
-								"items": {
-									"$ref": "#/definitions/coordinate"
-								}
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["Polygon"]},
-						"coordinates": {
-							"description": "Un polígon",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Un anell",
-								"type": ["array"],
-								"minItems": 2,
-								"items": {
-									"$ref": "#/definitions/coordinate"
-								}
-							}
-						}
-					}
-				},
-				{
-					"properties": {
-						"type": {"enum": ["MultiPolygon"]},
-						"coordinates": {
-							"description": "Un polipolígon",
-							"type": ["array"],
-							"minItems": 1,
-							"items": {
-								"description": "Un polígon",
-								"type": ["array"],
-								"minItems": 1,
-								"items": {
-									"description": "Un anell",
-									"type": ["array"],
-									"minItems": 2,
-									"items": {
-										"$ref": "#/definitions/coordinate"
-									}
-								}
-							}
-						}
-					}
-				}
-			]
-		},
-		"featureCollection": {
-			"description": "La col·lecció d'objectes vectorial en format GeoJSON (https://tools.ietf.org/rfc/rfc7946.txt) amb algunes ampliacions. En contra del RFC7946 les coordenades estan en el CRS indicat a sobre i no només en CRS84",
-			"type": ["object", "null"],
-			"required": [ "type", "features" ],
-			"properties": {
-				"type": {"enum": ["FeatureCollection"]},
-				"bbox": {
-					"description": "Àmbit de la capa",
-					"$ref": "#/definitions/bboxGeoJSON"
-				},
-				"features": {
-					"type": ["array", "null"],
-					"items": {
-						"description": "Objecte digitalitzat o recuperat d'un servei OWS",
-						"type": "object",
-						"required": [ "type", "geometry", "properties" ],
-						"properties": {
-							"type": {"enum": ["Feature"]},
-							"id": {
-								"description": "Identificador del objecte de la capa digitalitzat o recuperat d'un servei OWS",
-								"type": "string"
-							},
-							"bbox": {
-								"description": "Àmbit de l'objecte",
-								"$ref": "#/definitions/bboxGeoJSON"
-							},									
-							"geometry": {
-								"$ref": "#/definitions/geometryGeoJSON"
-							},
-							"origenProperties": {
-								"description": "Informació sobre l'origen de les caraterístiques no geomètriques de l'objecte GeoJSON. Per exemple, quan les properties venen d'un CSV on hi ha els valors de les diverses propietats.",
-								"$ref": "#/definitions/origenProperties"
-							},
-							"properties": {
-								"description": "Caraterístiques no geomètriques de l'objecte GeoJSON. El contingut és lliure però els noms de les propietats són els atributs.nom i estil.NomCamp",
-								"$ref": "#/definitions/propertiesGeoJSON"
-							},
-							"data": {
-								"description": "NJ: Crec que això no s'usa mai enlloc, que s'usa l'array de data de la capa. Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
-								"type": ["array", "null"],
-								"items": {
-									"description": "Data disponible per la capa",
-									"$ref": "#/definitions/data" 
-								}
-							},
-							"geometryCRSactual": {
-								"description": "Interna. No usar. Geometria igual que 'geometry' però en el CRS actual de navegació. Si CRS capa i crs navegació són iguals aquests contingut no és vàlid.",
-								"$ref": "#/definitions/geometryGeoJSON"
-							},
-							"seleccionat": {
-								"description": "L'objecte es simbolitza com a seleccionat. Per defecte és false",
-								"type": "boolean"
-							}
-						}
-					}
-				}
-			}
-		},
 		"descripcioCategories": { 
 			"description": "Llista de les descripcions alfanumèriques del valors numèrics ràster. Actua com una taula 'tesaure' on la posició en l'array és el valor numèric i les properties la resta de valors del registre. Si el valor no és possible (p.ex si els valros comencen a 1) poseu null en l'array. Només aplica quan el FormatImatge és application/x-img i s'ha definit 1 sol component.",
 			"type": ["array", "null"],
@@ -3473,409 +3233,6 @@
 					}
 				}
 			}]
-		},
-		"metadades": {
-			"description": "Informació addicional de la capa: metadades standard, quality, documentació, publicacions, feedback...",
-			"type": ["object","null"],
-			"properties": {
-				"standard": {
-					"description": "URL idiomàtica de les metadades en format estàndard. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ). {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor. Si no hi ha cap parametre DIM totes les dimensions es descriuen al mateix fitxer de metadades",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"document": {
-					"description": "URL idiomàtica d'altre documentació associada a la capa. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ)",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"guf": {
-					"description": "DEPRECATED: Tota capa pot tenir feedback. Abans indicava si es pot llegir i proporcionar geospatial user feedback sobre aquest item",
- 					"type": "boolean"
-				},				
-				"provenance": {
-					"type": ["object","null"],
-					"properties": {
-						"peticioServCSW": {
-							"description": "Indica si el lineage s'obté dinàmicament del servidor de la capa fent una petició CSW (true) o bé el lineage és estàtic (false) i si n'hi ha, està escrit directament en el config.json ",
-							"type": "boolean"
-						},
-						"lineage": {
-							"description": "Informació sobre el llinatge de les dades",
-							"$ref": "#/definitions/lineage" 
-						}
-					}
-				},							
-				"quality": {
-					"description": "Informació sobre la qualitat de les dades",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/qualityElement"
-					}
-				}
-			}
-		},
-		"qualityElement": {
-			"description": "Un element de qualitat de les dades",
-			"type": "object",
-			"required": ["indicator"],
-			"properties": { 
-				"scope": {
-					"type": "object",
-					"properties":{
-						"env": {
-							"description": "Envolupant de element de qualitat. Normalment no n'hi ha i afecta a tota la capa",
-							"$ref": "#/definitions/envolupantCRS_2D" 
-						}
-					}
-				},
-				"indicator": {
-					"enum": ["DQ_CompletenessCommission", "DQ_CompletenessOmission", "DQ_ConceptualConsistency","DQ_FormatConsistency","DQ_TopologicalConsistency","DQ_AbsoluteExternalPositionalAccuracy","DQ_RelativeInternalPositionalAccuracy","DQ_GriddedDataPositionalAccuracy","DQ_AccuracyOfATimeMeasurement","DQ_TemporalConsistency","DQ_TemporalValidity","DQ_ThematicClassificationCorrectness","DQ_NonQuantitativeAttributeCorrectness","DQ_QuantitativeAttributeAccuracy","DQ_UsabilityElement","DQ_Confidence","DQ_Representativity","DQ_Homogeneity"]
-				},
-				"statement": {
-					"description": "Textual information on how to interpret the data or that complements the quality result",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},							
-				"result": {
-					"description": "Array of results",
-					"type": "array",
-					"items": {
-						"oneOf": [{
-							"type": "object",
-							"required": ["qualityml"],
-							"properties":
-							{
-								"qualityml": {
-									"type": "object",
-									"required": ["measure", "domain", "metrics"],
-									"properties": { 
-										"version": {
-											"description": "Version of the qualityml. Optional. The default value is 1.0",
-											"type": "string"
-										},
-										"measure": {
-											"description": "A measure in qualityml",
-											"type": "object",
-											"required": ["name"],
-											"properties": {
-												"name": {
-													"description": "A measure id in qualityml",
-													"type": "string"
-												},
-												"param": {
-													"description": "key and value pair parameters",
-													"type": "array",
-													"items": {
-														"$ref": "#/definitions/keyValuePair"
-													}
-												}
-											}
-										},
-										"domain": {
-											"description": "Array of domains in qualityml",
-											"type": "array",
-											"items": {
-												"description": "A domain in qualityml",
-												"type": "object",
-												"required": ["name"],
-												"properties": {
-													"name": {
-														"description": "A domain id in qualityml",
-														"type": "string"
-													},
-													"param": {
-														"description": "key and value pair parameters",
-														"type": "array",
-														"items": {
-															"$ref": "#/definitions/keyValuePair"
-														}
-													},											
-													"values": {
-														"description": "Array of values where the metrics has been applied",
-														"oneOf":[{
-															"description": "Values with known position",
-															"$ref": "#/definitions/featureCollection"
-														},{
-															"description": "Values as a list of numbers",
-															"type": "object",
-															"required": ["list"],
-															"properties": {
-																"list": {"type": "array"},
-																"units" : {"type": "string"}
-															}
-														}]
-													}
-												}
-											}
-										},
-										"metrics": {
-											"description": "Array of metrics in qualityml",
-											"type": "array",
-											"items": {											
-												"description": "A metric in qualityml",
-												"type": "object",
-												"required": ["name", "values"],
-												"properties": {
-													"name": {
-														"description": "A metric id in qualityml",
-														"type": "string"
-													},
-													"param": {
-														"description": "key and value pair parameters",
-														"type": "array",
-														"items": {
-															"$ref": "#/definitions/keyValuePair"
-														}
-													},
-													"values": {
-														"description": "values of the metric",
-														"$ref": "#/definitions/valuesOrStyle"
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						},{
-							"type": "object",
-							"required": ["values"],
-							"properties": {
-								"values": {
-									"description": "values of the metric",
-									"$ref": "#/definitions/valuesOrStyle"
-								}
-							}
-						}]
-					}
-				}
-			}
-		},
-		"lineage": {
-			"description": "Llinatge de les dades",
-			"type": "object",
-			"properties": { 
-				"statement": {
-					"description": "Textual information on the lineage of the data",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"grup":{
-					"description":"Grup de processos de llinatge",
-					"$ref": "#/definitions/grupProcessos"
-				},
-				"processes": {
-					"description": "Processes applied to this dataset",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/processStep"
-					}
-				},
-				"sources": {
-					"description": "Sources used to generate this dataset",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/source"
-					}
-				}
-			}
-		},
-		"processStep": {
-			"description": "Process applied to this dataset",
-			"type": "object",
-			"properties": {
-				"grup":{
-					"description":"Grup de processos de llinatge. Tots els processos del mateix grup i consecutius es representaran agrupats.",
-					"$ref": "#/definitions/grupProcessos"
-				},
-				"processor": {				
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/responsability"					
-					}
-				},
-				"purpose": {
-					"description": "Textual description of the process",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"timeDate": {
-					"description": "When the process was done",
-					"type": "string"
-				},				
-				"executable": {
-					"description": "Name of the executable file or service url",
-					"type": "object",
-					"properties": {
-						"reference": {
-							"description": "Name of the executable file or service url",
-							"type": "string",
-							"format": "uri"
-						},
-						"compilationDate": {
-							"description": "When the executable was produced. It is a way to recognize the version of the executable.",
-							"type": "string"
-						},
-						"responsibleParty": {				
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/responsability"					
-							}
-						},
-						"algorithm": {
-							"description": "Algorithm implemented by the executable",
-							"type": "object",
-							"properties": {
-								"name": {
-									"description": "Name of the algortihm ",
-									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-								},
-								"responsibleParty": {				
-									"type": "array",
-									"items": {
-										"$ref": "#/definitions/responsability"					
-									}
-								},
-								"functionality": {
-									"description": "Functionality given by the algorithm",
-									"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-								}
-							}
-						}						
-					}
-				},
-				"parameters": {
-					"description": "Input ans output parameters submited to the executable",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/inOut"
-					}					
-				}
-			}
-		},
-		"inOut": {
-			"description": "Sources used to generate this dataset",
-			"type": "object",
-			"properties": {
-				"id": {
-					"description": "Per a les aplicacions de MiraMon aquest paràmetres val Param# (paràmetre sense barra) o un nom de modificador (paràmetre amb barra) però sense la barra",
-					"type": "string"
-				},
-				"name": {
-					"description": " En el cas de paràmetres de tipus Param#, hi pot haver un nom més descriptiu del paràmetre",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"purpose": {
-					"description": "Description of the parameter",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"direction": {
-					"description": "Sentit del paràmetre",
-					"enum": ["in", "out", "inOut"]
-				},
-				"valueType": {
-					"description": "type of parameter",
-					"enum": ["string", "number", "boolean", "date", "source", "null"]
-				},
-				"value": {
-					"description": "Value of the parameter except for a source",
-					"type": "string"
-				},
-				"units" : {"type": "string"},
-				"source": {
-					"description": "Value of a source type parameter",
-					"$ref": "#/definitions/source"
-				}
-			}
-		},
-		"source": {
-			"description": "Sources used to generate this dataset",
-			"type": "object",
-			"properties": {
-				"reference": {
-					"description": "Name or url of the source",
-					"type": "string",
-					"format": "uri"
-				},
-				"description": {
-					"description": "Description of the source",
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				},
-				"responsibleParty": {				
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/responsability"					
-					}
-				},
-				"processes": {
-					"description": "Processes applied to this dataset",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/processStep"
-					}
-				},
-				"sources": {
-					"description": "Sources used to generate this dataset",
-					"type": "array",
-					"items": {
-						"$ref": "#/definitions/source"
-					}
-				}
-			}
-		},
-		"grupProcessos":{
-			"description": "Serveix per definir un grup de processos",
-			"type": "object",
-			 "properties": {
-				"id": {
-					"description": "Identificador del grup", 
-					"type": "string"
-					
-				},
-				"desc":{
-					"description": "Descripció del grup", 
-					"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
-				}
-			}
-		},
-		"responsability": {
-			"description": "Responsability",
-			"type": "object",
-			 "properties": {
-				"role": {
-					"description": "Role of the party", 
-					"type": "string"
-				},
-				"party": {
-					"description": "Responsable party",
-					"type": "object",
-					"anyOf":[
-						{
-							"properties": {
-								"organisation":{
-									"description": "Responsable organization",
-									"type": "object",
-									"properties": {
-										"name": {
-											"description": "Name of the organization",
-											"type": "string"
-										}
-									}
-								}
-							}
-						},
-						{
-							"properties": {
-								"individual":{
-									"description": "Responsable individual",
-									"type": "object",
-									"properties": {
-										"name": {
-											"description": "Name of the individual",
-											"type": "string"
-										}
-									}
-								}
-							}
-						}
-					]
-				}
-			}
 		}
 	}
 }

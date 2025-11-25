@@ -1,0 +1,96 @@
+{
+  "$id": "https://meaning.ad4gd.eu/meaning.schema.json",
+  "$schema": "https://meaning.ad4gd.eu/json-meta/meaning",
+  "type": "object",
+  "properties": {
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "geometry": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "string"},
+              "coordinates": {"type": "array"}
+            }
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "Place": {
+                "descripcio": "Place name",
+                "type": "string", 
+                "mostrar": "si"
+              },
+              "PM1_{time?f=ISO}": {
+                "descripcio": "Particulate matter 1μm",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#ff0000"
+                }
+              },
+              "PM10_{time?f=ISO}": {
+                "descripcio": "Particulate matter 10μm",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#ff0000"
+                }
+              },
+              "PM25_{time?f=ISO}": {
+                "descripcio": "Particulate matter 2.5μm",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#ff0000"
+                }
+              },
+              "RH_{time?f=ISO}": {
+                "descripcio": "Relative humidity",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#323232"
+                }
+              },
+              "light_{time?f=ISO}": {
+                "descripcio": "Ambient Light",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#323232"
+                }
+              },
+              "noise_{time?f=ISO}": {
+                "descripcio": "Noise Level",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#323232"
+                }
+              },
+              "pres_{time?f=ISO}": {
+                "descripcio": "Barometric Pressure",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#323232"
+                }
+              },
+              "temp_{time?f=ISO}": {
+                "descripcio": "Air Temperature",
+                "type": "number", 
+                "mostrar": "si",
+                "serieTemporal": {
+                  "color": "#323232"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
