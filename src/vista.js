@@ -1448,13 +1448,31 @@ var arrayBuffer, array_uint, datatype, nodata, mida=canvas_ocult.width*canvas_oc
 	return {arrayBuffer: arrayBuffer, datatype: datatype, nodata: nodata};
 }
 
+function DeterminaEstiramentPaletaForma(estiramentPaleta, i_nova_vista, capa, features, attribute, attribute_name, i_col, i_fil) {
+var feature, valor;
+	estiramentPaleta.valorMaxim=-1e+10;
+	estiramentPaleta.valorMinim=1e+10;
+	for (var j=features.length-1; j>=0; j--)
+	{
+		feature=features[j];
+		valor=DeterminaValorAttributeObjecteCapaDigi(i_nova_vista, capa, feature, attribute, attribute_name, i_col, i_fil);
+		if (!isNaN(valor)) {
+			if (estiramentPaleta.valorMinim>valor)
+				estiramentPaleta.valorMinim=valor;
+			if (estiramentPaleta.valorMaxim<valor)
+				estiramentPaleta.valorMaxim=valor;
+			estiramentPaleta.auto=false;
+		}
+	}
+}
+
 function DibuixaObjCapaDigiAVista(param, neteja_canvas, attributes, objectes, estil)
 {	
 var nom_vista=param.nom_vista, vista=param.vista;
 var capa=ParamCtrl.capa[param.i_capa];
 var env=vista.EnvActual;
 var i, i_atri_sel, i_atri_interior=[], i_atri_vora=[];
-var i_simb, simbols, i_simbol, i_forma, forma;
+var i_simb, simbols, i_simbol, i_forma, forma, i_col, i_fil;
 
 	if (!objectes || !objectes.features || !estil)
 		return;
@@ -1542,11 +1560,24 @@ var i_simb, simbols, i_simbol, i_forma, forma;
 		if (DescarregaPropietatsCapaDigiVistaSiCal(OmpleVistaCapaDigiIndirect, param))
 			return;  //ja es tornarà a cridar a si mateixa quan la crida assíncrona acabi
 	}
+
+	// Determino si la simbolització amb paleta automàtica i no s'ha determinat encara
+	if (estil.formes && estil.formes.length)
+	{
+		for (i_forma=0; i_forma<estil.formes.length; i_forma++)
+		{
+			forma=estil.formes[i_forma];
+			if (forma.interior && forma.interior.NomCamp && forma.interior.estiramentPaleta && forma.interior.estiramentPaleta.auto)
+				DeterminaEstiramentPaletaForma(forma.interior.estiramentPaleta, vista.i_nova_vista, capa, objectes.features, attributes[forma.interior.NomCamp], forma.interior.NomCamp, i_col, i_fil);
+			if (forma.vora && forma.vora.NomCamp && forma.vora.estiramentPaleta && forma.vora.estiramentPaleta.auto)
+				DeterminaEstiramentPaletaForma(forma.vora.estiramentPaleta, vista.i_nova_vista, capa, objectes.features, attributes[forma.vora.NomCamp], forma.vora.NomCamp, i_col, i_fil);
+		}
+	}
 	
 	// Ja tenim tot el que necessitem i anem a dibuixar els objectes
 	var previ={}, a_vmin_ncol_interior=[], a_vmin_ncol_interiorSel=[], un_a_vmin_ncol_interior, valor, a_vmin_ncol_vora=[], a_vmin_ncol_voraSel=[], un_a_vmin_ncol_vora, forma_interior, forma_vora;
 	var nom_canvas=DonaNomCanvasCapaDigi(nom_vista, param.i_capa);
-	var env_icona, i_col, i_fil, simbol, icona, font, mida, text, coord, geometry;
+	var env_icona, simbol, icona, font, mida, text, coord, geometry;
 	var win = DonaWindowDesDeINovaVista(vista);
 	var canvas = win.document.getElementById(nom_canvas);
 	var ctx = canvas.getContext('2d');

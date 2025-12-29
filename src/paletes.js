@@ -81,55 +81,61 @@ var cdns=[], w;
 
 function TransformRampToColorsArray(paleta)
 {
-var ramp=paleta.ramp, color, color0, bigint, bigint0, r, g, b, r0, g0, b0, a_r, a_g, a_b, b_r, b_g, b_b;
+var ramp=paleta.ramp, color, color0, r, g, b, a, r0, g0, b0, a0, a_r, a_g, a_b, a_a, b_r, b_g, b_b, b_a;
 	if (!ramp || !ramp.length)
 		return 1;
 	color0=ramp[0].color;
 	if (typeof color0==="object")
 		color0=RGB_JSON(color0);
+	color0=rgbaToHex(color0);
 	if (typeof color0!=="string" || color0.charAt(0)!="#")
 	{
 		alert(GetMessage("UnsupportedColor", "imgrle") + ": " + color0 + ". " + GetMessage("UseTheFormat") + ": #RRGGBB");
 		return 1;
 	}
-	bigint0 = parseInt(color0.substring(1), 16);
-	r0=(bigint0 >> 16) & 255;
-	g0=(bigint0 >> 8) & 255;
-	b0=bigint0 & 255;
+	r0=parseInt(color0.substr(1,2), 16);
+	g0=parseInt(color0.substr(3,2), 16);
+	b0=parseInt(color0.substr(5,2), 16);
+	a0=(color0.length==9) ? parseInt(color0.substr(7,2), 16) : 255;
 	paleta.colors=[color0];
 	for (var i_ramp=1; i_ramp<ramp.length; i_ramp++)
 	{
 		color=ramp[i_ramp].color;
 		if (typeof color==="object")
 			color=RGB_JSON(color);
+		color=rgbaToHex(color);
 		if (typeof color!=="string" || color.charAt(0)!="#")
 		{
 			alert(GetMessage("UnsupportedColor", "imgrle") + ": " + color + ". " + GetMessage("UseTheFormat") + ": #RRGGBB");
 			return 1;
 		}
-		bigint = parseInt(color.substring(1), 16);
-		r=(bigint >> 16) & 255;
-		g=(bigint >> 8) & 255;
-		b=bigint & 255;
+
+		r=parseInt(color.substr(1,2), 16);
+		g=parseInt(color.substr(3,2), 16);
+		b=parseInt(color.substr(5,2), 16);
+		a=(color.length==9) ? parseInt(color.substr(7,2), 16) : 255;
+
 		a_r=(r-r0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
 		a_g=(g-g0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
 		a_b=(b-b0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
+		a_a=(a-a0)/(ramp[i_ramp].i_color-(paleta.colors.length-1));
 		b_r=r0-(paleta.colors.length-1)*a_r;
 		b_g=g0-(paleta.colors.length-1)*a_g;
 		b_b=b0-(paleta.colors.length-1)*a_b;
+		b_a=a0-(paleta.colors.length-1)*a_a;
 		while (paleta.colors.length<ramp[i_ramp].i_color)
-			paleta.colors.push(RGB(Math.round(a_r*paleta.colors.length+b_r), Math.round(a_g*paleta.colors.length+b_g), Math.round(a_b*paleta.colors.length+b_b)));
-		bigint0 = bigint;
+			paleta.colors.push(RGB(Math.round(a_r*paleta.colors.length+b_r), Math.round(a_g*paleta.colors.length+b_g), Math.round(a_b*paleta.colors.length+b_b), Math.round(a_a*paleta.colors.length+b_a)));
 		r0=r;
 		g0=g;
 		b0=b;
+		a0=a;
 		color0=color;
 		paleta.colors.push(color0);
 	}
 	return 0;
 }
 
-function RGB(r,g,b)
+function RGB(r,g,b,a)
 {
 	if (r<0 || r>255 || g<0 || g>255 || b<0 || b>255)
 	{
@@ -138,7 +144,8 @@ function RGB(r,g,b)
 	}
 	return "#" + (r.toString(16).length==1 ? "0"+r.toString(16) : r.toString(16))
 			+ (g.toString(16).length==1 ? "0"+g.toString(16) : g.toString(16))
-			+ (b.toString(16).length==1 ? "0"+b.toString(16) : b.toString(16));
+			+ (b.toString(16).length==1 ? "0"+b.toString(16) : b.toString(16))
+			+ (typeof a==="undefined" ? "" : (a.toString(16).length==1 ? "0"+a.toString(16) : a.toString(16)));
 }
 
 //Aquesta funció necessita que color estigui en JSON i si no dona un error.
@@ -163,4 +170,53 @@ function RGB_color(color)
 	return RGB(color.r, color.g, color.b);
 }
 
+/*Adapted from: https://medium.com/@techsolutionsx/converting-rgba-to-hex-in-javascript-a-comprehensive-guide-908fbb1d13cf
+rgbaToHex('rgba(255, 99, 71, 0.5)') // Output: #ff634780
+rgbaToHex('rgb(255, 99, 71)')       // Output: #ff6347
+rgbaToHex('255 99 71 / 0.5')        // Output: #ff634780
+rgbaToHex('255 99 71 / 0.5', true)) // Output: #ff6347
+rgbaToHex(#ff6347) 		    // Output: #ff6347
+*/
+function rgbaToHex(colorStr, forceRemoveAlpha)
+{
+	// Check if the input string contains '/'
+	const hasSlash = colorStr.includes('/')
+
+	if (hasSlash) {
+    		// Extract the RGBA values from the input string
+    		const rgbaValues = colorStr.match(/(\d+)\s+(\d+)\s+(\d+)\s+\/\s+([\d.]+)/);
+
+		if (!rgbaValues) 
+			return colorStr; // Return the original string if it doesn't match the expected format
+
+		const [red, green, blue, alpha] = rgbaValues.slice(1, 5).map(parseFloat);
+
+		// Convert the RGB values to hexadecimal format	
+		const redHex = red.toString(16).padStart(2, '0');
+		const greenHex = green.toString(16).padStart(2, '0');
+		const blueHex = blue.toString(16).padStart(2, '0');
+
+		// Convert alpha to a hexadecimal format (assuming it's already a decimal value in the range [0, 1])
+		const alphaHex = forceRemoveAlpha ? '' : Math.round(alpha * 255).toString(16).padStart(2, '0');
+
+		// Combine the hexadecimal values to form the final hex color string
+		return `#${redHex}${greenHex}${blueHex}${alphaHex}`;
+	} else {
+		// Use the second code block for the case when '/' is not present
+		if (!colorStr.startsWith("rgba(") && !colorStr.startsWith("rgb("))
+			return(colorStr);
+		return (
+			'#' +
+			colorStr
+			.replace(/^rgba?\(|\s+|\)$/g, '') // Get's rgba / rgb string values
+			.split(',') // splits them at ","
+			.filter((string, index) => !forceRemoveAlpha || index !== 3)
+			.map(string => parseFloat(string)) // Converts them to numbers
+			.map((number, index) => (index === 3 ? Math.round(number * 255) : number)) // Converts alpha to 255 number
+			.map(number => number.toString(16)) // Converts numbers to hex
+			.map(string => (string.length === 1 ? '0' + string : string)) // Adds 0 when length of one number is 1
+			.join('')
+		);
+	}
+}
 

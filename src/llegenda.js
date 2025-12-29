@@ -79,15 +79,21 @@ function EsColorSimilar(c, c2)
 {
 	if (!c || !c2 || !c.length || !c2.length)
 		return false;
-	if (c.charAt(0)!="#"  || c.length!=7 )
+	if (c.charAt(0)!="#"  || (c.length!=7 && c.length!=9))
 	{
-		alert("Unsupported hexadecimal format color \"" + c +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
-		return false;
+		c=rgbaToHex(c);
+		if (c.charAt(0)!="#"  || (c.length!=7 && c.length!=9)){
+			alert("Unsupported hexadecimal format color \"" + c +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
+			return false;
+		}
 	}
-	if (c2.charAt(0)!="#" || c2.length!=7)
+	if (c2.charAt(0)!="#" || (c2.length!=7 && c2.length!=9))
 	{
-		alert("Unsupported hexadecimal format color \"" + c +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
-		return false;
+		c2=rgbaToHex(c2);
+		if (c2.charAt(0)!="#"  || (c2.length!=7 && c2.length!=9)) {
+			alert("Unsupported hexadecimal format color \"" + c2 +"\". Hexadecimal colors should follow the exact format \"#RRGGBB\". If first digits are 0, manually add 0 digits at the left hand side.");
+			return false;
+		}
 	}
 	if (DonaCaracterHexaMultiple3(c.charAt(1))==DonaCaracterHexaMultiple3(c2.charAt(1)) && 
 	    DonaCaracterHexaMultiple3(c.charAt(3))==DonaCaracterHexaMultiple3(c2.charAt(3)) &&
@@ -172,16 +178,53 @@ var capa=ParamCtrl.capa[i_capa];
 	if (!capa.estil)
 		return;
 
-var estil=capa.estil[i_estil];
-var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample, n_item_lleg_auto;
+	var estil=capa.estil[i_estil];
+	var value, i_color, value_text, ncolors, colors=null, ample, estiramentPaleta=null, NDecimals=null;
+
+	if (estil.paleta) {
+		if (estil.paleta.ramp && !estil.paleta.colors)
+			TransformRampToColorsArray(estil.paleta);
+		if (estil.paleta.colors)
+			colors=estil.paleta.colors;
+		if (estil.component && estil.component.length && estil.component.length<3) {
+			estiramentPaleta=estil.component[0].estiramentPaleta;
+			NDecimals=estil.component[0].NDecimals;
+		}
+	}
+
+	var forma;
+	if (estil.formes) {
+		for (var i=0; i<estil.formes.length; i++) {
+			forma=estil.formes[i];
+			if (forma.interior && forma.interior.paleta) {
+				TransformRampToColorsArray(forma.interior.paleta);
+				if (!colors && forma.interior.paleta.colors)
+					colors=forma.interior.paleta.colors;
+				if (!estiramentPaleta && forma.interior.estiramentPaleta) {
+					estiramentPaleta=forma.interior.estiramentPaleta;
+					NDecimals=forma.interior.NDecimals;
+					if (estiramentPaleta.auto && capa.objectes.features && capa.attributes && forma.interior.NomCamp)
+						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, capa.objectes.features, capa.attributes[forma.interior.NomCamp], forma.interior.NomCamp, 0, 0);
+				}
+			}
+			if (estil.formes[i].vora && estil.formes[i].vora.paleta) {
+				TransformRampToColorsArray(estil.formes[i].vora.paleta);
+				if (!colors && estil.formes[i].vora.paleta.colors)
+					colors=estil.formes[i].vora.paleta.colors;
+				if (!estiramentPaleta && estil.formes[i].vora.estiramentPaleta) {
+					estiramentPaleta=estil.formes[i].vora.estiramentPaleta;
+					NDecimals=estil.formes[i].vora.NDecimals;
+					if (estiramentPaleta.auto && capa.objectes.features && capa.attributes && forma.vora.NomCamp)
+						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, capa.objectes.features, capa.attributes[forma.vora.NomCamp], forma.vora.NomCamp, 0, 0);
+				}
+			}
+		}
+	}
+
+	ncolors=colors ? colors.length : 256;
 
 	if (estil.ItemLleg && estil.ItemLleg.length>0)
 		return;  //No cal fer-la: ja està feta.
-
-	if (estil.paleta && estil.paleta.ramp && !estil.paleta.colors)
-		TransformRampToColorsArray(estil.paleta);
-	colors=(estil.paleta && estil.paleta.colors) ? estil.paleta.colors : null;
-	ncolors=colors ? colors.length : 256;
 
 	//COLOR_TIF_06092022: Ancora per lligar els 3 llocs on es gestiones els colors i categories dels fitxers TIFF
 
@@ -215,13 +258,14 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 		return;
 	}
 
-	if (!estil.component || estil.component.length==0 || estil.component.length>2)
+	if (!estiramentPaleta)
 		return;
 
 	//La llegenda es pot generar a partir d'estirar la paleta.
-	a=DonaFactorAEstiramentPaleta(estil.component[0].estiramentPaleta, ncolors);
-	valor_min=DonaFactorValorMinEstiramentPaleta(estil.component[0].estiramentPaleta);
-	valor_max=DonaFactorValorMaxEstiramentPaleta(estil.component[0].estiramentPaleta, ncolors);
+	var a=DonaFactorAEstiramentPaleta(estiramentPaleta, ncolors);
+	var valor_min=DonaFactorValorMinEstiramentPaleta(estiramentPaleta);
+	var valor_max=DonaFactorValorMaxEstiramentPaleta(estiramentPaleta, ncolors);
+	var n_item_lleg_auto;
 
 	if (!estil.nItemLlegAuto)
 	{
@@ -257,8 +301,8 @@ var a, value, valor_min, valor_max, i_color, value_text, ncolors, colors, ample,
 				value_text=multipleOf(value, estil.descColorMultiplesDe) 
 			else
 				value_text=value;
-			if (estil.component[0].NDecimals!=null)
-				value_text=OKStrOfNe(parseFloat(value_text), estil.component[0].NDecimals);
+			if (NDecimals!=null)
+				value_text=OKStrOfNe(parseFloat(value_text), NDecimals);
 		}
 		estil.ItemLleg[i]={"color": (colors) ? colors[i_color] : RGB(i_color,i_color,i_color), "DescColor": value_text};
 		i++;

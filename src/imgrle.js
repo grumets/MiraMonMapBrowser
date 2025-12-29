@@ -2431,11 +2431,11 @@ var c, histo, estadistics;
 				if (estadistics.recompte<histograma.classe_nodata/600)
 					return false;  //Hi ha massa pocs valors per definir l'estirament
 				c.estiramentPaleta.valorMinim=estadistics.mitjana-estadistics.desv_tipica*2;
-				if (c.estiramentPaleta.valorMinim<histo.valorMinimReal)
-					c.estiramentPaleta.valorMinim<histo.valorMinimReal;
+				if (c.estiramentPaleta.valorMinin>histo.valorMinimReal)
+					c.estiramentPaleta.valorMinim=histo.valorMinimReal;
 				c.estiramentPaleta.valorMaxim=estadistics.mitjana+estadistics.desv_tipica*2;
-				if (c.estiramentPaleta.valorMaxim>histo.valorMaximReal)
-					c.estiramentPaleta.valorMaxim<histo.valorMaximReal;
+				if (c.estiramentPaleta.valorMaxim<histo.valorMaximReal)
+					c.estiramentPaleta.valorMaxim=histo.valorMaximReal;
 				c.estiramentPaleta.auto=false;
 			}
 		}

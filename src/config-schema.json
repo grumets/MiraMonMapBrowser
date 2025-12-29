@@ -2208,7 +2208,7 @@
 		{
 			"oneOf": [
 				{
-					"description": "Color de la paleta en format #RRGGBB o en format RGB(r,g,b) o RGBA(r,g,b,a) on r, g i b van de 0 a 255 i a va de 0 a 1 (on 0 es totalment transparent i 1 opac). Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
+					"description": "Color de la paleta en format #RRGGBB, #RRGGBBAA o en format rgb(r,g,b) o rgba(r,g,b,a) on r, g i b van de 0 a 255 i a va de 0 a 1 (on 0 es totalment transparent i 1 opac). Per obtenir això des d'una paleta DBF cal obrir-lo amb Excel i 1) a la cel·la E2 poses: =SI(B2<16;\"0\"&DEC.A.HEX(B2);DEC.A.HEX(B2)), 2) a la cel·la F2 poses: =SI(C2<16;\"0\"&DEC.A.HEX(C2);DEC.A.HEX(C2)), 3) a la cel la G2 poses: =SI(D2<16;\"0\"&DEC.A.HEX(D2);DEC.A.HEX(D2)), 4) a la cel·la H2 poses: =\"\"\"#\"&E2&F2&G2&\"\"\", \", 5) ho propagues, canvies retorns per espais i ja ho tens.",
 					"type": "string"
 				},
 				{
@@ -2289,6 +2289,13 @@
 				"estiramentPaleta": {
 					"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta",
 					"$ref": "#/definitions/estiramentPaleta" 											
+				},
+				"NDecimals": { 
+								"description": "Nombre de decimals dels valors mostrats per pantalla.  Opcional: per defecte no es trunca la precisió. Usat en la generació de la llegenda automatica.",
+								"type": "number",
+								"minimum": 0,
+								"maximum": 20,
+								"multipleOf" : 1
 				}
 			}
 		},
@@ -2729,7 +2736,7 @@
 								"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 							},
 							"NDecimals": { 
-								"description": "Nombre de decimals dels valors mostrats per pantalla. Si és null no es trunca la precisió",
+								"description": "Nombre de decimals dels valors mostrats per pantalla. Opcional: per defecte no es trunca la precisió. Usat en la generació de la llegenda automatica.",
 								"type": "number",
 								"minimum": 0,
 								"maximum": 20,
