@@ -332,13 +332,7 @@
 				"properties": {
 					"EnvTotal":	{
 						"description": "Envolupant representada pel mapa de situació. El CRS és també el CRS de la pròpia imatge de situació",
-						"oneOf":[{
-								"type": "null"
-							},
-							{
-								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
-							}
-						]
+						"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
 					},
 					"servidor": { 
 						"description": "URL del servidor WMS. Opcional, si no s'indica, s'assumeix que el nom conté el nom de fitxer directament. Si s'índica null és el servidor local",
@@ -881,9 +875,8 @@
 			"$ref": "#/definitions/icona" 
 		},
 		"IconaEdicio": {
-			"description": "Nom del fitxer de la icona que adoptaran els objectes digitalitzats (generalment un GIF o PNG). Opcional",
-			"type": ["null", "string"],
-			"format": "uri"
+			"description": "Icona que adoptaran els objectes digitalitzats (generalment un GIF o PNG). Opcional",
+			"$ref": "#/definitions/icona"
 		},
 		"FuncioIconaEdicio": {
 			"description": "Nom de la funció que s'executa quan s'insereix un objecte digitalitzat. Opcional",
@@ -919,13 +912,7 @@
 					},
 					"EnvTotal": {
 						"description": "Envolupant associada a la història. Si el navegador està en un àmbit fora de la envolupant, la història no s'inclou a la llista de les disponibles. Si la història es passeja per més d'un àmbit es recomana especificar l'envolupant en long/lat. Només s'usa pels relats predefinits al config i no pels que es puguin crear durant la sessió de navegació o pels que siguin descarregats del NiMMBus(en aquest cas estan disponibles sempre).",
-						"oneOf":[{
-								"type": "null"
-							},
-							{
-								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
-							}
-						]
+						"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
 					},
 					"Ample": {
 						"description": "Ample de la caixa que conté la història. Opcional; si no hi és val 500",
@@ -1488,13 +1475,7 @@
 					},
 					"EnvTotal": {
 						"description": "Envolupant total de la capa. Opcional",
-						"oneOf":[{
-								"type": "null"
-							},
-							{
-								"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
-							}
-						]
+						"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
 					},
 					"EnvTotalLL": {
 						"description": "Interna; no usar. Envolupant total de la capa traduida a Lat/Long",
@@ -1685,12 +1666,12 @@
 					},															
 					"CostatMinim": {
 						"description": "Costat mínim dels nivells de zoom suportats per la capa. Opcional. Si no s'indica s'assumeix el zoom més petit",
-						"type": "number",
+						"type": ["number", "null"],
 						"minimum": 0
 					},
 					"CostatMaxim":	{
 						"description": "Costat màxim dels nivells de zoom suportats per la capa. Opcional. Si no s'indica s'assumeix el zoom més gran",
-						"type": "number",
+						"type": ["number", "null"],
 						"minimum": 0
 					},	
 					"ForcaGetFeatureInfo" : {
@@ -2693,7 +2674,7 @@
 									"f":{
 										"description": "The values of the DEM exageration factor. Default value is 1",
 										"type": "number",
-										"minimum": 1
+										"minimum": 0
 									} 
 								}
 							},
@@ -3157,7 +3138,7 @@
 						"type": ["null"]
 					},
 					{
-						"$ref": "#/definitions/propertiesGeoJSON"
+						"$ref": "metadata-schema.json#/definitions/propertiesGeoJSON"
 					}
 				]
 			}
@@ -3213,33 +3194,6 @@
 					"type": "number"
 				}								
 			}
-		},
-		"valuesOrStyle":
-		{
-			"description": "values in the form of a list or as a reference to another style of the same layer",
-			"oneOf":[{
-				"type": "object",
-				"required": ["list"],
-				"properties": {
-					"list": {"type": "array"},
-					"units": {
-						"description": "Units of the metric",
-						"type": "string" 
-					}					
-				}
-			},{
-				"type": "object",
-				"required": ["i_estil"],
-				"properties": {
-					"i_estil": {
-						"description": "Pointers to i_estil in this capa representing this metric",
-						"type": "array", 
-						"items": {
-							"type": "number"
-						}
-					}
-				}
-			}]
 		}
 	}
 }

@@ -1457,12 +1457,21 @@ var feature, valor;
 		feature=features[j];
 		valor=DeterminaValorAttributeObjecteCapaDigi(i_nova_vista, capa, feature, attribute, attribute_name, i_col, i_fil);
 		if (!isNaN(valor)) {
+			if (typeof valor === "string")
+				valor=parseFloat(valor);
 			if (estiramentPaleta.valorMinim>valor)
 				estiramentPaleta.valorMinim=valor;
 			if (estiramentPaleta.valorMaxim<valor)
 				estiramentPaleta.valorMaxim=valor;
 			estiramentPaleta.auto=false;
 		}
+	}
+	if (estiramentPaleta.auto)  //No object had a numeric value so a "default" strech is defined to prevent entering here in a loop.
+	{
+		estiramentPaleta.valorMaxim=1;
+		estiramentPaleta.valorMinim=0;
+		estiramentPaleta.auto=false;
+		estiramentPaleta=null;
 	}
 }
 

@@ -39,7 +39,7 @@
 	"definitions":{ 
 		"envolupantCRS_2D": {
 			"description": "Envolupant 2D i CRS",
-			"type": "object",	
+			"type": ["object", "null"],
 			"required": ["EnvCRS", "CRS"],
 			"properties": {
 				"EnvCRS": { "$ref": "#/definitions/envolupant2D" },
@@ -72,6 +72,33 @@
 				}
 			}
 		},		
+		"valuesOrStyle":
+		{
+			"description": "values in the form of a list or as a reference to another style of the same layer",
+			"oneOf":[{
+				"type": "object",
+				"required": ["list"],
+				"properties": {
+					"list": {"type": "array"},
+					"units": {
+						"description": "Units of the metric",
+						"type": "string" 
+					}					
+				}
+			},{
+				"type": "object",
+				"required": ["i_estil"],
+				"properties": {
+					"i_estil": {
+						"description": "Pointers to i_estil in this capa representing this metric",
+						"type": "array", 
+						"items": {
+							"type": "number"
+						}
+					}
+				}
+			}]
+		},
 		"bboxGeoJSON": {
 			"description": "Àmbit format per un array de 4 coordenades",
 			"type": "array",
