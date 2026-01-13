@@ -416,12 +416,13 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 				GetMessage("Feedback"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
-
+	//}
+	if (capa.admitLogEntries) {
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
 				GetMessage("LogBook"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
-	//}
+	}
 	if(alguna_opcio)
 	{
 		cdns.push("<hr>");
@@ -574,8 +575,10 @@ var capa=ParamCtrl.capa[i_capa];
 	}
 	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
-	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
-			GetMessage("LogBook"), "</a><br>");
+	if (capa.admitLogEntries) {
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+				GetMessage("LogBook"), "</a><br>");
+	}
 
 	if (EsCapaBinaria(capa) || (capa.model==model_vector && capa.estil[i_estil].TipusObj != "S"))
 	{

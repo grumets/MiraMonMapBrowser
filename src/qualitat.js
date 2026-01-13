@@ -583,7 +583,7 @@ function DonaCodeCapaEstilFeedback(i_capa, i_estil)
 {
 var MAX_LEN_IDENTIFICADOR_CAPA_O_ESTIL=254;
 var capa=ParamCtrl.capa[i_capa];
-var s=capa.nom;
+var s=capa.nom ? capa.nom : capa.id;  //Si no hi ha nom posi l'id perqué si s és null i i_estil=-1 retornaria -1
 
 	if (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || !capa.tipus))
 		return DonaUrlLecturaTiff(i_capa, 0, capa.i_data, null);
