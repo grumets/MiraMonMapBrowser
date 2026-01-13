@@ -86,7 +86,7 @@
 					"format": "uri"
 				},
 				"mostrar": {
-					"description": "Should it be shown in the query box? Can be 'si' (always), 'no' (never), 'si_ple' (it will only be displayed if the attribute has content).",
+					"description": "Should it be shown in the query box? Can be 'si' (always), 'no' (never), 'si_ple' (it will only be displayed if the attribute has content). Default value is 'si'",
 					"enum": [ "si", "no", "si_ple" ]
 				},
 				"mida": {

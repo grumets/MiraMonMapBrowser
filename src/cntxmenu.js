@@ -3814,7 +3814,7 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], estil=capa.estil[capa.i_estil];
 	    		if (!attributesArray[i_atrib] || estil.attributes[attributesArray[i_atrib]].mostrar == "no") //en aquest cas no cal posar igual a false perquè ja es creen amb "si"/"no"...
 	    			continue;
 
-	    		//primer mirar sui_ple, pq si es que no no cal q em proecupi si él nom és un dles que m¡0interessa , oq igualment no es mostrara
+	    		//primer mirar si_ple, pq si es que no no cal que em preocupi si el nom és un dels que m'interessa, perquè igualment no es mostrara
 			if (attributesArray[i_atrib] == "$stat$_sum")
 			{
 				value_text+="<input type=\"radio\" id=\"stat_sum_2\" name=\"stat\" value=\"sum_2\"><label for=\"stat_sum_2\">"+GetMessage("Sum")+"</label><br>";
@@ -4977,7 +4977,7 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 	for (i = 0; i < attrLength; i++)
 	{
 		const attribute = capa.attributes[attributesArray[i]];
-		if (attribute.mostrar == "si")
+		if (attribute.mostrar != "no")
 			attributesVisibles[attributesArray[i]]=capa.attributes[attributesArray[i]];
 	}
 
