@@ -738,12 +738,22 @@ function DonaAccessTokenTypeFeedback(capa)
 	}
 	return null;
 }
-function FinestraLogBookCapa(elem, i_capa, i_estil)
+function FinestraLogBookCapa(elem, i_capa, i_estil, idfeature)
 {
 var cdns=[], s;
 var capa=ParamCtrl.capa[i_capa];
+if (idfeature==null)
+{
 	cdns.push(GetMessage("theLayer"),
 				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+}
+else
+{
+	cdns.push(GetMessage("theFeature"),
+				" \"", idfeature, "\" ");
+	cdns.push(GetMessage("ofTheLayer"),
+				" \"", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+}
  	if (i_estil!=-1)
 		cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
 	cdns.push("\"");
@@ -753,6 +763,7 @@ var capa=ParamCtrl.capa[i_capa];
 		TancaFinestraLayer('logbook');
 		return;
 	}
+
 	LBShowLogBookInHTMLDiv(elem,
 			"LayerLogBookCapa",
 			cdns.join(""),
@@ -762,10 +773,11 @@ var capa=ParamCtrl.capa[i_capa];
 			ParamCtrl.idioma,
 			DonaAccessTokenTypeFeedback(capa),
 			"MostraFinestraLogBookAmbScope",
-			capa);
+			capa,
+			idfeature);
 }
 
-function FinestraFeedbackCapa(elem, i_capa, i_estil)
+function FinestraFeedbackCapa(elem, i_capa, i_estil, targets)
 {
 var cdns=[], s;
 var capa=ParamCtrl.capa[i_capa];
@@ -789,15 +801,29 @@ var capa=ParamCtrl.capa[i_capa];
 			GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, "LayerFeedbackCapa", cdns.join(""), targets, ParamCtrl.idioma);
 	}
 	else*/
+
+	if (targets!=null) //multiple tragets
+	{
+		GUFShowFeedbackMultipleTargetsInHTMLDiv(elem, 
+			"LayerFeedbackCapa", 
+			cdns.join(""), 
+			targets, 
+			ParamCtrl.idioma, 
+			DonaAccessTokenTypeFeedback(capa),
+			"MostraFinestraFeedbackAmbScope");
+	}
+	else //només tenim un target
+	{
 		GUFShowFeedbackInHTMLDiv(elem,
-				"LayerFeedbackCapa",
-				cdns.join(""),
-				DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
-				s, //identificador unic
-				DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
-				ParamCtrl.idioma,
-				DonaAccessTokenTypeFeedback(capa),
-				"MostraFinestraFeedbackAmbScope");
+			"LayerFeedbackCapa",
+			cdns.join(""),
+			DonaCadena(capa.desc) + (i_estil==-1 ? "": ", " + DonaCadena(capa.estil[i_estil].desc)),  //desc, es pot haver canviat, però no és crític
+			s, //identificador unic
+			DonaAdrecaAbsoluta(DonaServidorCapa(capa)).replace("//ecopotential.grumets.cat/", "//maps.ecopotential-project.eu/"),
+			ParamCtrl.idioma,
+			DonaAccessTokenTypeFeedback(capa),
+			"MostraFinestraFeedbackAmbScope");
+	}
 }
 
 function AdoptaEstil(guf, params_function)

@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -499,6 +499,35 @@ var cdns=[], i_capa;
 	return cdns.join("");	
 }
 
+//ordena els atributs d'un ojecte de manera que la cadena sempre sigui estable
+function stableStringify(obj) {
+	if (obj === null || typeof obj !== "object")
+		return JSON.stringify(obj);
+
+	if (Array.isArray(obj))
+		return "[" + obj.map(stableStringify).join(",") + "]";
+
+	const keys = Object.keys(obj).sort();
+	return "{" + keys.map(k => JSON.stringify(k) + ":" + stableStringify(obj[k])).join(",") + "}";
+}
+
+//genera un id a partir d'un objecte json
+function AfegeixIdAObjecteSiCal(obj) {
+	if (obj.id !== undefined && obj.id !== null)
+		return;
+
+	// Evitem camps volàtils
+	const base = {
+		geometry: obj.geometry,
+		properties: obj.properties
+	};
+
+	const str = stableStringify(base); // recomanat
+	const hash = stringToHash(str);
+
+	// Forcem string i prefix
+	obj.id = "id" + Math.abs(hash);
+}
 // Crea un UUID si cal basat en un algoritme hash reproduïble i no aleàtori
 function CreaIdOIdHashCapaSiCal(obj)
 {

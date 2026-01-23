@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -207,6 +207,14 @@ var MessageLang=
     "cze": "Kniha rekordů",
     "ger": "Buch der Rekorde"
   },
+    "LogPages": {
+    "cat": "Pàgines de Registre",
+    "spa": "Páginas de Registro",
+    "eng": "LogPages",
+    "fre": "Pages de logs",
+    "cze": "Stránky protokolů",
+    "ger": "Log-Seiten"
+  },
   "Definition":{
       "cat": "Definició",
       "spa": "Definición",
@@ -406,6 +414,14 @@ var MessageLang=
     "fre": "de la couche",
     "cze": "vrstvy",
     "ger": "des Layers"
+  },
+    "theFeature": {
+    "cat": "l'objecte",
+    "spa": "del objeto",
+    "eng": "the feature",
+    "fre": "l'objet'",
+    "cze": "objekt",
+    "ger": "das Objekt"
   },
   "Add": {
     "cat": "Afegir",

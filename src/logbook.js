@@ -65,23 +65,24 @@ function LBIncludeScript(url, late)   //https://stackoverflow.com/questions/9500
 
 LBIncludeScript("xml_log.js");
 
-function LBShowLogBookInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type, name_scope_function, capa)
+function LBShowLogBookInHTMLDiv(elem, seed_div_id, rsc_type, title, code, codespace, lang, access_token_type, name_scope_function, capa, idfeature)
 {
     var targets=[{title: title, code: code, codespace: codespace, role: "primary"}];
     if (targets[0].codespace)
         targets[0].codespace=targets[0].codespace.replace("https://","http://");
 
-    elem.innerHTML = LBDonaCadenaFinestraLogBookResource(seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function, capa);
+    elem.innerHTML = LBDonaCadenaFinestraLogBookResource(seed_div_id, rsc_type, targets, lang, access_token_type, name_scope_function, capa, idfeature);
 
     //demano el fitxer atom de logpages previs
-    LBShowPreviousLogPagesInHTMLDiv(seed_div_id, rsc_type, targets, lang, access_token_type);
+    LBShowPreviousLogPagesInHTMLDiv(seed_div_id, rsc_type, targets, lang, access_token_type, idfeature);
 }
 
-function LBShowPreviousLogPagesInHTMLDiv(div_id, rsc_type, targets, lang, access_token_type)
+function LBShowPreviousLogPagesInHTMLDiv(div_id, rsc_type, targets, lang, access_token_type, idfeature)
 {
 	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:ENUMERATE&LANGUAGE=" + lang + "&STARTINDEX=1&COUNT=100&FORMAT=text/xml&TYPE=LOGPAGE";
-	var url2=url;
 	
+	if (idfeature != null)
+        url += "&ID_FEATURE=" + idfeature;
     //Agafo el logbook i l'envio a la primera part de la finestra
     if (targets[0].codespace) //decidim que els codespace han de ser independent del protocol i per això els posarem sense S sempre ara
         targets[0].codespace=targets[0].codespace.replace("https://","http://");
@@ -90,10 +91,10 @@ function LBShowPreviousLogPagesInHTMLDiv(div_id, rsc_type, targets, lang, access
         url+="&TRG_TYPE_1=LOGBOOK&TRG_FLD_1=CODE&TRG_VL_1=" + targets[0].code + "&TRG_OPR_1=EQ&TRG_NXS_1=AND&TRG_TYPE_2=LOGBOOK&TRG_FLD_2=NAMESPACE&TRG_VL_2=" + targets[0].codespace + "&TRG_OPR_2=EQ";
 	
 	//l'espai de LogPages previs sobre el LogBook el poso sempre 
-	loadFile(url, "text/xml", LBCarregaLogPageAnteriorsCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: div_id+"Previ", rsc_type:rsc_type, lang: lang, access_token_type: access_token_type});
+	loadFile(url, "text/xml", LBCarregaLogPageAnteriorsCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: url, div_id: div_id, rsc_type:rsc_type, lang: lang, access_token_type: access_token_type, id_feature: idfeature});
 }
 
-function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, access_token_type, name_scope_function, capa) 
+function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, access_token_type, name_scope_function, capa, idfeature) 
 {
 	var cdns = [];
 
@@ -106,37 +107,47 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 	else
 		cdns.push("<div class=\"lb_add_fb user\">");
 
-	// Desplegables
-	if (capa && capa.dimensioExtra && capa.dimensioExtra.length > 0) {
-		for (var i = 0; i < capa.dimensioExtra.length; i++) {
-			var dim = capa.dimensioExtra[i];
-			var selectedIndex = dim.i_valor || 0;
+	// Desplegable
+	if (capa && capa.objectes && capa.objectes.features && capa.objectes.features.length > 0) 
+	{
+		var optAllText = { cat: "Tots", spa: "Todos", eng: "All", fre: "Tous" }[lang] || "All";
 
-			var optAllText = { cat: "Tots", spa: "Todos", eng: "All", fre: "Tous" }[lang] || "Tots";
+		var featureLabelText = {cat: "Objecte", spa: "Objecto", eng: "Feature", fre: "Entité"}[lang] || "Feature";
 
-			var hasAll = dim.valor.some(function(v) {
-				return v.desc.trim().toLowerCase() === optAllText.toLowerCase();
-			});
+		cdns.push(
+			"<label for=\"featureSelect\" style=\"margin-right:0.5em;\">",
+			featureLabelText,
+			":</label>"
+		);
 
-			cdns.push("<label for=\"dimExtra_" + i + "\" style=\"margin-right:0.5em;\">",
-					dim.clau.desc || ("Dimensió " + (i+1)), ":</label>");
-			cdns.push("<select id=\"dimExtra_" + i + "\" name=\"dimExtra_" + i + "\" class=\"lb_select user\" style=\"margin-bottom:0.5em;\">");
 
-			if (!hasAll) {
+		cdns.push(
+			"<select id=\"featureSelect\" name=\"featureSelect\" class=\"lb_select user\" style=\"margin-bottom:0.5em;\">"
+		);
+
+		// Opció "Tots"
 				cdns.push("<option value=\"-1\">" + optAllText + "</option>");
-			}
 
-			for (var j = 0; j < dim.valor.length; j++) {
-				var val = dim.valor[j];
-				var selected = (j === selectedIndex) ? " selected" : "";
-				cdns.push("<option value=\"" + j + "\"" + selected + ">" + val.desc + "</option>");
+		for (var i = 0; i < capa.objectes.features.length; i++) {
+			var feature = capa.objectes.features[i];
+
+			// Evitem errors si no té id
+			if (feature && feature.id !== undefined && feature.id !== null) {
+				// Si coincideix amb idfeature, afegim selected
+				var selectedAttr = (idfeature && feature.id === idfeature) ? ' selected' : '';
+				cdns.push(
+					"<option value=\"" + feature.id + "\"" + selectedAttr + ">" +
+					feature.id +
+					"</option>"
+				);
 			}
+		}
 
 			cdns.push("</select><br>");
-		}
 	}
 
-	var numDimExtras = (capa && capa.dimensioExtra) ? capa.dimensioExtra.length : 0;
+	// Núm. de features
+	var numFeatures = (capa && capa.objectes && capa.objectes.features)	? capa.objectes.features.length : 0;
 
 	// Botó 1: Afegir un registre
 	cdns.push(DonaBotoAfegirLogBook(
@@ -144,7 +155,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 		lang,
 		access_token_type,
 		"LBAfegirLogPageCapaMultipleTargets",
-		numDimExtras,
+		numFeatures,
 		LBDonaCadenaLang({
 			cat: "Afegir un registre",
 			spa: "Añadir un registro",
@@ -161,7 +172,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 			lang,
 			access_token_type,
 			name_scope_function,
-			numDimExtras,
+			numFeatures,
 			LBDonaCadenaLang({
 				cat: "Afegir un registre (punt/pol)",
 				spa: "Añadir un registro (punto/pol)",
@@ -179,14 +190,24 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 
 	cdns.push("<div id=\"preLP\" class=\"lb_report user\"><fieldset class=\"lb_fieldset user\"><legend class=\"lb_legend user\">"); 
 	if (rsc_type != "")
-		cdns.push(LBDonaCadenaLang({"cat":"Registres previs a", "spa":"Registros previos a", "eng":"Previous logs to", "fre":"Précédent enregistrements de"}, lang));
+		cdns.push(LBDonaCadenaLang({"cat":"Registres previs de", "spa":"Registros previos", "eng":"Previous logs of", "fre":"Précédent enregistrements de"}, lang));
 	else
 		cdns.push(LBDonaCadenaLang({"cat":"Registres previs", "spa":"Registros previos", "eng":"Previous logs", "fre":"Précédent enregistrements"}, lang));
 	cdns.push(" ", rsc_type, "</legend>");
 	
 	cdns.push("<div id=\"",div_id,"Previ\" style=\"width:98%\">", "</div></fieldset>");
-	cdns.push("</div>", "</div></form>");
+	cdns.push("</div>");
 
+	//----------
+	cdns.push("<div id=\"altresLP\" class=\"lb_report user\" style=\"display:none\"><fieldset class=\"lb_fieldset user\"><legend class=\"lb_legend user\">");
+	if (idfeature!=null)
+		cdns.push(LBDonaCadenaLang({"cat":"Altres registres genèrics d'aquest llibre de registros", "spa":"Otros registros genèricos de este libro de registros", "eng":"Other generic logs of this logbook", "fre":"Autres enregistrements génériques de ce Livre des records"}, lang));
+	cdns.push("</legend>");
+	cdns.push("<div id=\"", div_id, "Altres\" style=\"width:98%\">", "</div></fieldset></div>");
+	cdns.push("</div>");
+	//-------------
+
+	cdns.push("</div></form>");
 	return cdns.join("");
 }
 
@@ -293,83 +314,149 @@ function LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_typ
 		}
 	}
 
-	if (dims)
-	{
-		for (var i = 0; i < dims.length; i++)		
-		{
-			url+="&DIM_NAME_"+ (i+1) + "=" + dims[i][0] +" &DIM_VAL_"+ (i+1) + "=" + dims[i][1];
-		}
-	}
+	if (idfeature)
+		url+="&ID_FEATURE=" + idFeature;
 
     url+="&ACCESS_TOKEN_TYPE=" + access_token_type + "&PAGE=ADDLOGPAGE&SHARE_BORROWER_1=Anonymous"; 
 
 	return url;
 }
 
+function LBCreaBotoEdit(extra_param)
+{
+    return (
+        "<div class=\"lb_edit user\">" +
+            "<input type=\"button\" class=\"lb_button user\" value=\"" +
+            LBDonaCadenaLang(
+                {"cat":"Edita","spa":"Edita","eng":"Edit","fre":"Éditer"},
+                extra_param.lang
+            ) +
+            "\" onClick='LBOpenNimmbus(\"" +
+            extra_param.lang + "\",\"" +
+            extra_param.access_token_type + "\");' /> " +
+            LBDonaCadenaLang(
+                {
+                    "cat":"les teves entrades",
+                    "spa":"tus entradas",
+                    "eng":"your entries",
+                    "fre":"vos entrées"
+                },
+                extra_param.lang
+            ) +
+        "</div>"
+    );
+}
+
 function LBCarregaLogPageAnteriorsCallback(doc, extra_param)
 {
-var cdns=[];
-
 	if (!doc || !doc.documentElement)
 	{
-		alert (extra_param.url + ": " + LBDonaCadenaLang({"cat":"El retorn no és xml", "spa":"El retorno no es xml", "eng":"Return is not xml", "fre":"Le retour n'est pas xml"}, extra_param.lang));
-		return ;
+        alert(extra_param.url + ": " +
+            LBDonaCadenaLang({
+                "cat":"El retorn no és xml",
+                "spa":"El retorno no es xml",
+                "eng":"Return is not xml",
+                "fre":"Le retour n'est pas xml"
+            }, extra_param.lang)
+        );
+        return;
 	}
-	var root=doc.documentElement;
 
+    var root = doc.documentElement;
 	if (LBAnalitzaExceptionReport(root, extra_param.url))
 		return;
 		
-	var owc=ParseOWSContextAtom(root);
-	if (owc.properties.totalResults==0 || !owc.features)
+    var owc = ParseOWSContextAtom(root);
+    if (!owc || owc.properties.totalResults == 0 || !owc.features)
 	{
-		document.getElementById(extra_param.div_id).innerHTML= LBMissatgeSenseElementsRetornats(extra_param);
+        document.getElementById(extra_param.div_id + "Previ").innerHTML =
+            LBMissatgeSenseElementsRetornats(extra_param);
 		return;
 	}
 
-	if (typeof extra_param.edit_button!=="undefined" && extra_param.edit_button==false)
-	; //si el param no existeix o diu que no vull botó no el poso
-	else
-		cdns.push("<div class=\"lb_edit user\"><input type=\"button\" class=\"lb_button user\" value=\"",
-			LBDonaCadenaLang({"cat":"Edita", "spa":"Edita", "eng":"Edit", "fre":"Éditer"}, extra_param.lang), "\"",
-			" onClick='LBOpenNimmbus(\"", extra_param.lang, "\",\"", extra_param.access_token_type, "\");' /> ",
-			LBDonaCadenaLang({"cat":"les teves entrades prèvies", "spa":"tus entradas previas", "eng":"your previous entries", "fre":"vos entrées précédentes"}, extra_param.lang), "</div><!-- lb_edit -->"); 
 
-	var type;
-
-	for (var i=0; i<owc.features.length; i++)
-	{
-		type=GetNimmbusTypeOfAOWCFeature(owc.features[i]);
-		if (type=="LOGPAGE")
+    /* Botó Edita */
+	if (typeof extra_param.edit_button === "undefined" || extra_param.edit_button !== false)
 		{
-			var str = owc.features[i].properties.links.alternates[0].href; 
-			var n = str.indexOf("&RESOURCE=");
-			var str2 = str.substring(n+10);
-			var n2 = str2.indexOf("&");  
-			str = str2.substring(0, n2);
+		var htmlEdit = LBCreaBotoEdit(extra_param);
  		  
-			cdns.push("<fieldset class=\"lb_fieldset user\"><legend class=\"lb_legend user\"><a class=\"lb_link user\" href=\""+ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+extra_param.lang+"&RESOURCE="+str+"\" target=\"_blank\">", owc.features[i].properties.authors[0].name, ", ", DonaDataISOComAText(owc.features[i].properties.updated), 
-				"</a></legend>", 							
-				"<div id=\"", extra_param.div_id, "_",i , "\"></div>");
+		var previDiv = document.getElementById(extra_param.div_id + "Previ");
+		if (previDiv)
+			previDiv.insertAdjacentHTML("afterbegin", htmlEdit);
 								
-			/*if (typeof extra_param.callback_function!=="undefined" && extra_param.callback_function != "")
+		var altresDiv = document.getElementById(extra_param.div_id + "Altres");
+		if (altresDiv)
+			altresDiv.insertAdjacentHTML("afterbegin", htmlEdit);
+	}
+
+    /* Creem els fieldsets (sense decidir Previ/Altres) */
+    for (var i = 0; i < owc.features.length; i++)
 			{
-				var params=JSON.stringify(extra_param.params_function);
-				params=params.replaceAll("\"","\\\"");
-				cdns.push("<div class=\"lb_adopt user\"><input type=\"button\" class=\"lb_button user\" value=\"",
-						LBDonaCadenaLang({"cat":"Adopta", "spa":"Adopta", "eng":"Adopt", "fre":"Adopter"}, extra_param.lang), "\"",
-                        " onClick='CridaACallBackFunctionAmbEstructuraLB(\"", extra_param.lang, "\",\"", str, "\",\"", extra_param.callback_function, "\",\"", params, "\");'/>");			
-			}*/
-			cdns.push("</fieldset>");		
-		}
+        var feature = owc.features[i];
+        var type = GetNimmbusTypeOfAOWCFeature(feature);
+        if (type !== "LOGPAGE")
+            continue;
+
+        var href = feature.properties.links.alternates[0].href;
+        var n = href.indexOf("&RESOURCE=");
+        var tmp = href.substring(n + 10);
+        var n2 = tmp.indexOf("&");
+        var resourceId = tmp.substring(0, n2);
+
+        /* Placeholder temporal */
+        var fieldset = document.createElement("fieldset");
+        fieldset.className = "lb_fieldset user";
+        fieldset.id = extra_param.div_id + "_fs_" + i;
+
+        fieldset.innerHTML =
+            "<legend class=\"lb_legend user\">" +
+                "<a class=\"lb_link user\" href=\"" + ServerGUF +
+                "?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE" +
+                "&LANGUAGE=" + extra_param.lang +
+                "&RESOURCE=" + resourceId +
+                "\" target=\"_blank\">" +
+                feature.properties.authors[0].name + ", " +
+                DonaDataISOComAText(feature.properties.updated) +
+                "</a>" +
+            "</legend>" +
+            "<div id=\"" + extra_param.div_id + "_" + i + "\"></div>";
+
+        /* Inicialment els pengem tots a Altres */
+        document.getElementById(extra_param.div_id + "Altres").appendChild(fieldset);
 	}
-	document.getElementById(extra_param.div_id).innerHTML=cdns.join("");
-	for (var i=0; i<owc.features.length; i++)
+    /* Carreguem el contingut de cada LOGPAGE */
+    for (var i = 0; i < owc.features.length; i++)
 	{
-		type=GetNimmbusTypeOfAOWCFeature(owc.features[i]);
-		if (type=="LOGPAGE" && owc.features[i].properties && owc.features[i].properties.links && owc.features[i].properties.links.alternates && owc.features[i].properties.links.alternates.length && owc.features[i].properties.links.alternates[0].href)
-            loadFile(owc.features[i].properties.links.alternates[0].href, "text/xml", LBCarregaLogPageAnteriorCallback, function(xhr, extra_param) { alert(extra_param.url + ": " + xhr ); }, {url: owc.features[i].properties.links.alternates[0].href, div_id: extra_param.div_id + "_" + i, lang: extra_param.lang, esRU: extra_param.callback_function});
+        var feature = owc.features[i];
+        var type = GetNimmbusTypeOfAOWCFeature(feature);
+
+        if (type === "LOGPAGE" &&
+            feature.properties &&
+            feature.properties.links &&
+            feature.properties.links.alternates &&
+            feature.properties.links.alternates.length &&
+			feature.properties.links.alternates[0].href)
+        {
+            loadFile(
+                feature.properties.links.alternates[0].href,
+                "text/xml",
+                LBCarregaLogPageAnteriorCallback,
+                function(xhr, extra_param)
+                {
+                    alert(extra_param.url + ": " + xhr);
+                },
+                {
+                    url: feature.properties.links.alternates[0].href,
+                    div_id: extra_param.div_id + "_" + i,
+                    fieldset_id: extra_param.div_id + "_fs_" + i,
+                    id_feature: extra_param.id_feature,
+                    div_previ: extra_param.div_id + "Previ",
+                    div_altres:  extra_param.div_id + "Altres",
+                    lang: extra_param.lang
 	}
+            );
+}
+    }
 }
 
 function LBMissatgeSenseElementsRetornats(elements)
@@ -377,10 +464,10 @@ function LBMissatgeSenseElementsRetornats(elements)
 	let missatge = [];
 	let lang = elements.lang
 
-	missatge.push(GUFDonaCadenaLang({"cat":"No hi ha pÃ gines prÃ¨vies", 
-		"spa":"No hay pÃ¡gina previas", 
+	missatge.push(GUFDonaCadenaLang({"cat":"No hi ha pàgines prèvies", 
+		"spa":"No hay página previas", 
 		"eng":"There is no previous log pages", 
-		"fre":"Il n'y a pas encore pages prÃ©cÃ©dentes"}, lang));
+		"fre":"Il n'y a pas encore pages précédentes"}, lang));
 
 
 	if (typeof elements.rsc_type !== "undefined" && elements.rsc_type != "")
@@ -391,7 +478,7 @@ function LBMissatgeSenseElementsRetornats(elements)
 					" ", elements.rsc_type);
 
 	missatge.push(GUFDonaCadenaLang({"cat":" encara", 
-				"spa":" todavÃ­a", 
+				"spa":" todavía", 
 				"eng":" yet", 
 				"fre":" encore"}, lang));
 
@@ -472,85 +559,149 @@ function LBDonaCadenaLang(cadena_lang, lang)
 	return cadena_lang.eng;
 }
 
-function CridaACallBackFunctionAmbEstructuraLB(lang, resource_id, callback_function, params_function)
+function CridaACallBackFunctionAmbEstructuraLB( lang, resource_id, callback_function, params_function, extra_param)
 {
-	var url=ServerGUF+"?SERVICE=WPS&REQUEST=EXECUTE&IDENTIFIER=NB_RESOURCE:RETRIEVE&LANGUAGE="+lang+"&RESOURCE="+resource_id;		
-	loadFile(url, "text/xml", LBCarregaLogPageAnteriorCallback, function(xhr, extra_param) { alert(url + ": " + xhr ); }, {url: url, lang: lang, callback_function: callback_function, params_function: params_function});
+    var url = ServerGUF +
+        "?SERVICE=WPS&REQUEST=EXECUTE" +
+        "&IDENTIFIER=NB_RESOURCE:RETRIEVE" +
+        "&LANGUAGE=" + lang +
+        "&RESOURCE=" + resource_id;
+
+    if (!extra_param)
+        extra_param = {};
+
+    extra_param.url = url;
+    extra_param.lang = lang;
+    extra_param.callback_function = callback_function;
+    extra_param.params_function = params_function;
+
+    loadFile(
+        url,
+        "text/xml",
+        LBCarregaLogPageAnteriorCallback,
+        function(xhr, extra_param)
+        {
+            alert(extra_param.url + ": " + xhr);
+        },
+        extra_param
+    );
 }
 
 function LBCarregaLogPageAnteriorCallback(doc, extra_param) 
 {
-    var cdns = [];
-
-    if (!doc || !doc.documentElement) {
-        alert(extra_param.url + ": " + LBDonaCadenaLang({
-            "cat": "El retorn no és xml",
-            "spa": "El retorno no es xml",
-            "eng": "Return is not xml",
-            "fre": "Le retour n'est pas xml"
-        }, extra_param.lang));
+    if (!doc || !doc.documentElement)
         return;
-    }
 
     var root = doc.documentElement;
 
     if (LBAnalitzaExceptionReport(root, extra_param.url))
         return;
 
-    var lp = GetRetrieveResourceLogBookOutputs(root);
-
-    if (!lp) 
-	{
-        alert(extra_param.url + ": " + LBDonaCadenaLang({
-            "cat": "El retorn no és un xml d'una pàgina de registre",
-            "spa": "El retorno no es un xml de una página de registro",
-            "eng": "Return is not a logpage xml",
-            "fre": "Le retour n'est pas un xml d'une page d'inscription"
-        }, extra_param.lang));
+    var log = GetRetrieveResourceLogBookOutputs(root);
+    if (!log)
         return;
+
+    /* ===============================
+       DECISIÓ PREVI / ALTRES (CLAU)
+       =============================== */
+
+    var idFeatureLog = (log && log.idFeature) ? log.idFeature : null;
+	var targetDiv;
+
+	/* CAS 1: no hi ha filtre → tot a Previ */
+	if (extra_param.id_feature == null)
+	{
+		targetDiv = extra_param.div_previ;
     }
+	/* CAS 2: hi ha filtre → només coincidències a Previ */
+	else if (idFeatureLog && idFeatureLog === extra_param.id_feature)
+	{
+		targetDiv = extra_param.div_previ;
+	}
+	else
+	{
+		targetDiv = extra_param.div_altres;
+	}
 
-    var divId = extra_param.div_id;
-    var comment = lp.comment || "";
+	//només mostrem secció logs genèrics si n'hi ha algun
+	if (targetDiv === extra_param.div_altres)
+	{
+		var altresLP = document.getElementById("altresLP");
+		if (altresLP)
+			altresLP.style.display = "block";
+	}
+
+
+    var fieldset = document.getElementById(extra_param.fieldset_id);
+    var container = document.getElementById(targetDiv);
+
+    if (fieldset && container && fieldset.parentNode !== container)
+        container.appendChild(fieldset);
+
+    /* ===============================
+       DIBUIXAT DEL CONTINGUT
+       =============================== */
+
+    var div = document.getElementById(extra_param.div_id);
+    if (!div)
+        return;
+
+    var comment = log.comment || "";
     var isLong = comment.length > 100;
-    var truncated = isLong ? comment.substring(0, 100) + '[...]' : comment;
+    var truncated = isLong ? comment.substring(0, 100) + "[...]" : comment;
 
-    cdns.push('<span id="title_' + divId + '"><b>' + lp.title + '</b></span><br><br>');
-    cdns.push('<span id="lpDesc_' + divId + '">' + truncated + '</span><br>');
+    var cdns = [];
 
-    // Extra info sempre present però ocult d'inici
+    cdns.push("<b>", log.title || "", "</b><br><br>");
+    cdns.push("<span id=\"lpDesc_", extra_param.div_id, "\">", truncated, "</span><br>");
     cdns.push(
-        '<span id="extraInfo_' + divId + '" style="display:none; margin-top: 0.5em;">' +
-            '<div><strong>Content Date:</strong> ' + (lp.contentDateIni || '-') + ' / ' + (lp.contentDateFin || '-') +'</div>' +
-            '<div><strong>Link:</strong> ' + (lp.link || '-') + '</div>' +
-			'<div><strong>Dimension Name:</strong> ' + (lp.dimName || '-') + '</div>' +
-            '<div><strong>Dimension Value:</strong> ' + (lp.dimValue || '-') + '</div>' +
-        '</span><br>' +
-        '<a href="#" id="toggleInfo_' + divId + '">+ info</a>'
+        "<span id=\"extraInfo_", extra_param.div_id,
+        "\" style=\"display:none; margin-top:0.5em;\">"
     );
 
-    document.getElementById(divId).innerHTML = cdns.join("");
+    cdns.push(
+        "<div><strong>Content Date:</strong> ",
+        (log.contentDateIni || "-"), " / ", (log.contentDateFin || "-"),
+        "</div>"
+    );
 
-    // Afegeix el comportament de toggle sempre
-    document.getElementById("toggleInfo_" + divId).addEventListener("click", function (event) {
-        event.preventDefault();
-        var extra = document.getElementById("extraInfo_" + divId);
-        var shortComment = document.getElementById("lpDesc_" + divId);
-        var link = document.getElementById("toggleInfo_" + divId);
+    if (log.link)
+        cdns.push("<div><strong>Link:</strong> ", log.link, "</div>");
 
-        var showingExtra = extra.style.display === "block";
+    if (log.dimName)
+        cdns.push("<div><strong>Dimension Name:</strong> ", log.dimName, "</div>");
 
-        if (showingExtra) 
-		{
+    if (log.dimValue)
+        cdns.push("<div><strong>Dimension Value:</strong> ", log.dimValue, "</div>");
+
+    if (log.idFeature)
+        cdns.push("<div><strong>Feature ID:</strong> ", log.idFeature, "</div>");
+
+    cdns.push("</span><br>");
+    cdns.push("<a href=\"#\" id=\"toggleInfo_", extra_param.div_id, "\">+ info</a>");
+
+    div.innerHTML = cdns.join("");
+
+    /* ===============================
+       TOGGLE INFO
+       =============================== */
+
+    document
+        .getElementById("toggleInfo_" + extra_param.div_id)
+        .addEventListener("click", function (e) {
+            e.preventDefault();
+
+            var extra = document.getElementById("extraInfo_" + extra_param.div_id);
+            var desc  = document.getElementById("lpDesc_" + extra_param.div_id);
+
+            if (extra.style.display === "block") {
             extra.style.display = "none";
-            shortComment.innerHTML = isLong ? truncated : comment;
-            link.innerHTML = "+ info";
-        }
-		else 
-		{
+                desc.innerHTML = isLong ? truncated : comment;
+                this.innerHTML = "+ info";
+            } else {
             extra.style.display = "block";
-            shortComment.innerHTML = comment;  // sempre mostrem el complet
-            link.innerHTML = "- info";
+                desc.innerHTML = comment;
+                this.innerHTML = "- info";
         }
     });
 }

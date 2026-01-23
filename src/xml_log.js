@@ -113,6 +113,8 @@ function GetRetrieveResourceLogBookOutputs(root)
                     logpage.owner=OmpleInputDesDeWPSLiteralOutput(output.item(item));
                 else if (identifier.childNodes[0].nodeValue=="title")
                     logpage.title=OmpleInputDesDeWPSLiteralOutput(output.item(item));
+                else if (identifier.childNodes[0].nodeValue=="idFeature")
+                    logpage.idFeature=OmpleInputDesDeWPSLiteralOutput(output.item(item));
                 else if (identifier.childNodes[0].nodeValue=="reason")
                     logpage.reason=OmpleInputDesDeWPSLiteralOutput(output.item(item));
                 else if (identifier.childNodes[0].nodeValue=="idLogBook")
@@ -161,10 +163,6 @@ function GetRetrieveResourceLogBookOutputs(root)
                     logpage.comment=OmpleInputDesDeWPSLiteralOutput(output.item(item));
                 else if (identifier.childNodes[0].nodeValue=="link")
                     logpage.link=OmpleInputDesDeWPSLiteralOutput(output.item(item));
-                else if (identifier.childNodes[0].nodeValue=="dimName")
-                    logpage.dimName=OmpleInputDesDeWPSLiteralOutput(output.item(item));
-                else if (identifier.childNodes[0].nodeValue=="dimValue")
-                    logpage.dimValue=OmpleInputDesDeWPSLiteralOutput(output.item(item));
                 else if (identifier.childNodes[0].nodeValue == "LogPageScope") 
                 {
                     var scope_item = OmpleInputDesDeWPSComplexOutput(output.item(item));

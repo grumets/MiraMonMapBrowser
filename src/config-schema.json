@@ -1827,7 +1827,7 @@
 					"admitLogEntries": {
 						"description": "The 'capa' admit adding or viewing entries in a logbook (used in the Monalisa project) . Opcional.",
 						"type": "boolean" 
-					}
+					},
 					"explanation": 					{
 						"description": "URL multidiomàtica que defineix o explica que és el contingut de la capa.",
 						"$ref": "#/definitions/URLLangOStringOCadenaLang" 

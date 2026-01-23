@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -412,13 +412,14 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 	}
 	/*if (capa.metadades && capa.metadades.guf)
 	{*/
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,", -1, null);TancaContextMenuCapa();\">",
 				GetMessage("Feedback"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	//}
+	//estem afegint el logbook al menú de la llegenda.
 	if (capa.admitLogEntries) {
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,", -1);TancaContextMenuCapa();\">",
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,", -1, null);TancaContextMenuCapa();\">",
 				GetMessage("LogBook"), "</a><br>");
 		if(!alguna_opcio)
 			alguna_opcio=true;
@@ -573,10 +574,11 @@ var capa=ParamCtrl.capa[i_capa];
 					GetMessage("Quality"), "</a><br>");
 		}
 	}
-	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+	cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,",", i_estil, null,");TancaContextMenuCapa();\">",
 			GetMessage("Feedback"), "</a><br>");
+	//logbook des del menú
 	if (capa.admitLogEntries) {
-		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,",", i_estil,");TancaContextMenuCapa();\">",
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraLogBookCapa(", i_capa,",", i_estil, null,");TancaContextMenuCapa();\">",
 				GetMessage("LogBook"), "</a><br>");
 	}
 
@@ -4799,22 +4801,22 @@ var elem=ObreFinestra(window, "mostraQualitat", GetMessage("forShowingQualityInf
 		FinestraMostraQualitatCapa(elem, null, capa, i_estil);
 }
 
-function ObreFinestraFeedbackCapa(i_capa, i_estil)
+function ObreFinestraFeedbackCapa(i_capa, i_estil, targets)
 {
 //var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "feedback", GetMessage("ofUserFeedback", "cntxmenu"));
 	if (!elem)
 		return;
-	FinestraFeedbackCapa(elem, i_capa, i_estil);
+	FinestraFeedbackCapa(elem, i_capa, i_estil, targets);
 }
 
-function ObreFinestraLogBookCapa(i_capa, i_estil)
+function ObreFinestraLogBookCapa(i_capa, i_estil, idfeature)
 {
 //var capa=ParamCtrl.capa[i_capa];
 var elem=ObreFinestra(window, "logbook", GetMessage("ofLogBook", "cntxmenu"));
 	if (!elem)
 		return;
-	FinestraLogBookCapa(elem, i_capa, i_estil);
+	FinestraLogBookCapa(elem, i_capa, i_estil, idfeature);
 }
 
 function ObreFinestraFeedbackAmbEstilsDeCapa(i_capa)
@@ -5063,15 +5065,27 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 						"MaxY", "\t", env_temp.MaxY, "\n",
 						GetMessage("Type"), "\t", capa.model, " ", objectes[0].geometry.type, "\n");
 	
+	// Assegurem que tots els objectes tenen ID. Si no el tenen el creem i l'afegirem a la taula
+	for (i = 0; i < objectes.length; i++) {
+		AfegeixIdAObjecteSiCal(objectes[i]);
+	}
 	//Comencem la taula.
 	const taulaElementsVect = document.createElement("table");
 	taulaElementsVect.setAttribute("class", "vectorial");
 
 	// Comencem la fila capçalera de la taula.
 	const filaCapcalera = document.createElement("tr");	
+	//Nova columna ID
+	filaCapcalera.insertAdjacentHTML(
+		"beforeend",
+		"<th class='vectorial'>ID</th>"
+	);
+
+	// Porta papers
+	cdnsPortapapers.push("ID", "\t");
 	for (i = 0, attrLength = attributtesVisiblesArray.length; i < attrLength; i++)
 	{
-		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + DonaCadenaDescripcioAttribute(attributtesVisiblesArray, attributesVisibles[attributtesVisiblesArray[i]], true) + "</th>");
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + DonaCadenaDescripcioAttribute(attributtesVisiblesArray[i], attributesVisibles[attributtesVisiblesArray[i]], true) + "</th>");
 
 		// Porta papers
 		cdnsPortapapers.push(attributesVisibles[attributtesVisiblesArray[i]].descripcio, "\t");
@@ -5085,6 +5099,13 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		// Porta papers
 		cdnsPortapapers.push(GetMessage("Geometry", "cntxmenu"), "\n");		
 	}
+	// afegim capçalera de columnes de feedback i logpage
+	filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + GetMessage("Feedback") + "</th>");
+
+	if (ParamCtrl.capa[i_capa].admitLogEntries)
+	{
+		filaCapcalera.insertAdjacentHTML("beforeend", "<th class='vectorial'>" + GetMessage("LogBook") + "</th>");
+	}
 	taulaElementsVect.insertAdjacentElement("afterbegin", filaCapcalera);
 	
 	// Comencem files d'objectes vectorials de la taula.
@@ -5094,7 +5115,7 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 	{
 		for (i = 0; i < attributtesVisiblesArray.length; i++)
 		{
-			if(attributesVisibles[attributtesVisiblesArray[i]].serieTemporal)
+			if (attributesVisibles[attributtesVisiblesArray[i]].serieTemporal)
 			{
 				algun_attribute_es_serie_temporal=true;
 				break;
@@ -5110,14 +5131,33 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 		{
 			const filaObjecte = document.createElement("tr");
 			filaObjecte.setAttribute("class", "vectorial");
-			//cdnsHtml.push("<tr class='vectorial' height='20px'>");
+			// PRIMERA columna: ID
+			filaObjecte.insertAdjacentHTML(
+				"beforeend",
+				"<td class='vectorial'>" + objecteARepresentar.id + "</td>"
+			);
+
+			// Porta papers
+			cdnsPortapapers.push(objecteARepresentar.id, "\t");
+
+			// Columnes d’atributs
 			for (j = 0, attrLength = attributtesVisiblesArray.length; j < attrLength; j++)
 			{
-				prop=objecteARepresentar.properties[CanviaVariablesDeCadena(attributtesVisiblesArray[j], capa, i_data, null)];
-				filaObjecte.insertAdjacentHTML("beforeend", "<td class='vectorial' sytle='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" + (prop ? prop :"") + "</td>");
+				prop = objecteARepresentar.properties[
+					CanviaVariablesDeCadena(attributtesVisiblesArray[j], capa, i_data, null)
+				];
+
+				filaObjecte.insertAdjacentHTML(
+					"beforeend",
+					"<td class='vectorial' style='text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>" +
+					(prop ? prop : "") +
+					"</td>"
+				);
 				// Porta papers
-				cdnsPortapapers.push((prop ? prop :""), "\t");
+				cdnsPortapapers.push((prop ? prop : ""), "\t");
 			}
+			// Porta papers
+			cdnsPortapapers.push(objecteARepresentar.id, "\t");
 			filaObjecte.insertAdjacentHTML("beforeend", "<td style='text-align:center'><input type='checkbox' id='" + checkboxCadaElementId + i + 
 							"' value='" + i + "' onChange='ActualitzaIndexObjectesExportar(this);'></td>");
 			if(i_data==0)
@@ -5177,6 +5217,40 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 				// Porta papers
 				cdnsPortapapers.push(cadena_obj_wkt, "\t");
 			}							
+			//Afegim els botons de feedback i logbook a cada fila
+			//cal definir el target primari (el feature) i el secondari (la capa)
+			var targets=[];
+			var feature=objecteARepresentar.id;
+			//titol primary i secondary target
+			var title_s = DonaCadena(capa.desc);
+			var title_p = title_s + " (feature: "+ feature +")";	
+			//code primary i secondary target
+			var code_s = DonaCodeCapaEstilFeedback(i_capa, -1);
+			var code_p = code_s + "/" + feature;
+			//codespace
+			var codespace = DonaAdrecaAbsoluta(DonaServidorCapa(capa));
+
+			targets.push({title: title_p, code: code_p, codespace: codespace, role: "primary", feature: feature}); //li passo el feature, d'aquesta manera puc saber que estem parlant d'un element d'una capa vectorial quan dibuixi la caixa del feedback
+			targets.push({title: title_s, code: code_s, codespace: codespace, role: "secondary"});
+
+
+			filaObjecte.insertAdjacentHTML(
+				"beforeend",
+  				"<td style='text-align:center'>" +
+  				"<button onClick='ObreFinestraFeedbackCapa(" +
+    			i_capa + ", -1, " + JSON.stringify(targets) +
+  				")'>" +
+  				GetMessage("Feedback") +
+  				"</button></td>"
+			);
+
+			
+			//logbook des de la taula de features
+			if (ParamCtrl.capa[i_capa].admitLogEntries)
+			{
+				filaObjecte.insertAdjacentHTML("beforeend",	"<td style='text-align:center'>" + "<button onClick=\"ObreFinestraLogBookCapa(" + i_capa + ", -1, '" + feature + "'" + ");\">" + 
+					GetMessage("LogPages") + "</button>" + "</td>");
+			}
 			taulaElementsVect.insertAdjacentElement("beforeend", filaObjecte);
 			// Porta papers
 			cdnsPortapapers.push("\n");
