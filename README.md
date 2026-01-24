@@ -9,16 +9,21 @@ General information about the main functionalities of the map browser here: http
 
 ## Code
 
-The code of the map browser is in the SRC folder. To test it, you can set a copy of the SRC folder in your web server folder (for example, in Windows IIS, folder in C:\inetpub\wwwroot\MiraMonMapBrowser). The landing page of the browser is called index.htm. The code of the MiraMon Map Browser can be used with no modification.
+The MiraMon Map Browser code can be found in the SRC folder. To test it, you can set a copy of the SRC folder in your web server folder (for example, in Windows IIS, folder in C:\inetpub\wwwroot\MiraMonMapBrowser). The landing page of the browser is called index.htm. 
 
-The MiraMon Map Browser can be configured to your purposes populating a file named config.json. The SRC folder does not contain a config.json file to prevent accidental loss of your instance configuration when updating. Several examples of config.json documents can be found in [the examples](src/examples) folder. You can request a Windows application called Adm_MMN.exe to edit some parts of config.json in a more user friendly way by sending a request to suport@miramon.uab.cat (unfortunately this application does not allow configuring the recent functionalities).
+The code of the MiraMon Map Browser can be used with no modification. However it requires a config.json file that configures the Map Browser behavior including the list of layers that can be shown and query. Since the config.json is specific of you deployment, the SRC folder does not contain a config.json file. This prevents accidental loss of your instance configuration when updating to a new version of the code. 
 
-The config.json data model is described and can be validated using a [json schema file](src/config-schema.json)
+## How to create a config.json
+One easy way to start a MiraMon Map Browser deployment, is to take one of the examples of config.json documents can be found in [the examples](src/examples) folder and copying the selected one to the root of your deployment as "config.json". You can also copy the folder containing the images (folder ending with "-img") one level down.
 
-It is also possible to load a config file with a different name by calling the landing page with the extra parameter index.htm?config={name-config.json}
+You can request a Windows application called Adm_MMN.exe (that is part of the MiraMon products) to edit some parts of config.json in a user friendly way by sending a request to suport@miramon.uab.cat (unfortunately this application does not allow configuring the more recent functionalities).
+
+To know the meaning of all keys in the config.json data model, you can open de config schema [json schema file](src/config-schema.json) and read the descriptions of the objects and keys. The config schema can also be used to semantically validate the config.json
+
+It is also possible to load a different config file (with a different name) by calling the landing page of the MiraMon Map Browser with the `config` extra parameter: index.htm?config={name-config.json}
 
 ## Evolution
-Commit descriptions provide information about updates and corrections not listed here
+Commit descriptions provide information about updates and corrections not listed here.
 
 ## Attribution
 The MiraMon Map Browser is part of the MiraMon project managed by CREAF.
