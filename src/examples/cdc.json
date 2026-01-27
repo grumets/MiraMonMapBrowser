@@ -104,9 +104,9 @@
 			"visible": true,
 			"ev": null,
 			"content": {
-				"cat": "<a href=\"https://www.miramon.cat\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
-				"spa": "<a href=\"https://www.miramon.cat\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
-				"eng": "<a href=\"https://www.miramon.cat\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
+				"cat": "<a href=\"https://www.miramon.cat/Index.htm\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"spa": "<a href=\"https://www.miramon.cat/Index_spa.htm\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"eng": "<a href=\"https://www.miramon.cat/Index_eng.htm\" target=\"_blank\"><img src=\"examples/cdc-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
 			}
 		},
 		{
