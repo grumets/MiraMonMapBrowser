@@ -72,9 +72,9 @@
 		{
 			"name": "atribucio",
 			"left": 203,
-			"top": 866,
+			"top": 860,
 			"width": 1030,
-			"height": 15,
+			"height": 20,
 			"ancora": "SEwR",
 			"scroll": "no",
 			"visible": true,
@@ -92,9 +92,9 @@
 			"visible": true,
 			"ev": null,
 			"content": {
-				"cat": "<a href=\"https://www.miramon.cat/index_ca.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
-				"spa": "<a href=\"https://www.miramon.cat/index_es.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
-				"eng": "<a href=\"https://www.miramon.cat/index.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
+				"cat": "<a href=\"https://www.miramon.cat/Index.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"spa": "<a href=\"https://www.miramon.cat/Index_spa.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"eng": "<a href=\"https://www.miramon.cat/Index_eng.htm\" target=\"_blank\"><img src=\"examples/osm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
 			}
 		},
 		{
