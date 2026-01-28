@@ -1,0 +1,82 @@
+﻿<!--<!DOCTYPE html>-->
+<html>
+
+<!--
+This file is part of MiraMon Map Browser.
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    MiraMon Map Browser is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General 
+    Public License along with MiraMon Map Browser.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    MiraMon Map Browser can be updated from
+    https://github.com/grumets/MiraMonMapBrowser.
+
+    Copyright 2001, 2023 Xavier Pons
+
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència GNU Affero General Public 
+    License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+    https://github.com/grumets/MiraMonMapBrowser.
+-->
+
+<head>
+    <style type="text/css">
+        p {
+            text-align: justify;
+            font-family: arial;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<p>The <b>EU-snow monitor</b> improves the measurement of the Snow Water Equivalent as an estimation of the available water stored in snow covered areas in the Alps. This supports the planning activities of the Hydrological Offices and Hydro Power Generators across the Alps.</p>
+<h2>High resolution Snow Water Equivalent in selected alpine mountain regions</h2>
+<div data-mm-center='{"x":10.70 , "y": 46.58 }' data-mm-zoom='0.0016666666666667'
+    data-mm-layers="swe_reconstruction_c,osm_auto:all,rgb" 
+    data-mm-extradims='{"ly":"swe_reconstruction_c", "dims": {"DATE": "20171109"}}'
+    data-mm-crs="EPSG:4326">
+	<p>Decision makers need detailed information on the amount of water stored in the snowpack to improve how they
+		manage water resources in a timely and efficient manner. The 50 m resolution Snow Water Equivalent maps and
+		derivates thereof allow optimizing the use of water resources in river management, hydro-energy production and
+		agriculture. Browse through the daily timeseries to trace the how the available water in the snowpack changes
+		within a season and trhoughout the years.</p>
+				
+		 <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"swe_reconstruction_c\", \"dims\": {\"DATE\": \"20180226\"}}")'>2018</button>
+		 <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"swe_reconstruction_c\", \"dims\": {\"DATE\": \"20190226\"}}")'>2019</button>
+		 <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"swe_reconstruction_c\", \"dims\": {\"DATE\": \"20200226\"}}")'>2020</button>
+		 <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"swe_reconstruction_c\", \"dims\": {\"DATE\": \"20210226\"}}")'>2021</button>
+		 <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"swe_reconstruction_c\", \"dims\": {\"DATE\": \"20220226\"}}")'>2022</button>
+		 
+
+		<p><b>Authors:</b><br>Peter Zellner (peterjames.zellner@eurac.edu) <br>Valentina Premier (valentina.premier@eurac.edu) <br>Nicola Ciapponi
+			 (nicola.ciapponi@eurac.edu) <br> Carlo Marin (carlo.marin@eurac.edu)</p>
+		<p><b>Computational notebook:</b></p>
+
+		<p><b>Metadata link:</b></p>
+		<a href="https://zenodo.org/records/10686757" target="_blank">https://zenodo.org/records/10686757</a><br>
+
+		<hr align=\"left\" width=\"20\">
+		<h2><b>Publications</b></h2>
+		<hr align=\"left\" width=\"20\">
+		<h2><b>Use cases</b></h2>
+</div>
+</html>

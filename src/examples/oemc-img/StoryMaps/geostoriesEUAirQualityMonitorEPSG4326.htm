@@ -1,0 +1,89 @@
+﻿<!--<!DOCTYPE html>-->
+<html>
+<!--
+This file is part of MiraMon Map Browser.
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    MiraMon Map Browser is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General 
+    Public License along with MiraMon Map Browser.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    MiraMon Map Browser can be updated from
+    https://github.com/grumets/MiraMonMapBrowser.
+
+    Copyright 2001, 2023 Xavier Pons
+
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència GNU Affero General Public 
+    License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+    https://github.com/grumets/MiraMonMapBrowser.
+-->
+
+<head>
+
+    <style type="text/css">
+        p {
+            text-align: justify;
+            font-family: arial;
+            font-size: 12px;
+        }
+        button {
+            background-color:rgba(119, 105, 59, 0.315); 
+            border-color:black; 
+            color:rgb(82, 83, 60)
+        }
+
+        h3 {
+            border-top-style: solid;
+            border-top-color: rgb(213, 224, 227);
+            border-top-width: thin;  
+        }
+    </style>
+</head>
+<p><b>The OEMC Air Quality Monitor </b> provides tools to retrieve, pre-process and interpolate measurement data and covariates at different temporal and spatial resolutions. The displayed maps are prototypes and will be updated later in the project. Similar products for PM2.5, NO2, and O3 will be added.</p>
+<br>
+<h2>Air Quality during COVID-19 (Europe)</h2>
+<div data-mm-center='{"x":0.73 , "y": 50.41 }' data-mm-zoom='0.05' data-mm-layers="air_quality_pm10,s2cloudless-2020"
+    data-mm-crs="EPSG:4326">
+    
+<p>Air pollution is a health risk to millions of people in Europe. An indicator for air quality is the concentration of
+    particles with a size of ~10 µm (PM10). Heavier pollution occurs in densely populated or industrial areas we can
+    observe more combustion of fossil fuels. The COVID-19 pandemic made many citizens remain at home when Europe went
+    into lockdown. This sudden decline in demand for transport and industrial production had a positive impact on air
+    quality in many regions. Check out the Monthly PM10 Air Quality (2019-2020) layer to get insights into air pollution
+    in Europe throughout the years 2019 and 2020. Click the following buttons to inspect the differences between single time steps, for example:</p>
+    <button  onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"air_quality_pm10\", \"dims\": {\"DATE\": \"20190401_20190430\"}}")'>April 2019</button>
+    <button onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"air_quality_pm10\", \"dims\": {\"DATE\": \"20200401_20200430\"}}")'>April 2020</button> 
+    <br>
+    <br>
+    <p><b>Author:</b> Johannes Heisig (jheisig@uni-muenster.de)</p>
+    <p><b>Computational notebook:</b></p>
+
+    <p><b>Metadata link:</b></p>
+    <h3><b>Publications</b></h3>
+    
+    <h3><b>Use cases</b></h3>
+    <a href="https://gkhub.earthobservations.org/packages/dqrhe-az456" target="_blank">
+        https://gkhub.earthobservations.org/packages/dqrhe-az456</a><br>
+
+</div>
+</html>

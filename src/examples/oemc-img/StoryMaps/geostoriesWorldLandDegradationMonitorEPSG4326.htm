@@ -1,0 +1,233 @@
+﻿<!--<!DOCTYPE html>-->
+<html>
+
+<!--
+This file is part of MiraMon Map Browser.
+    MiraMon Map Browser is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    MiraMon Map Browser is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+    See the GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General 
+    Public License along with MiraMon Map Browser.
+    If not, see https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    MiraMon Map Browser can be updated from
+    https://github.com/grumets/MiraMonMapBrowser.
+
+    Copyright 2001, 2023 Xavier Pons
+
+    Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
+    amb l'ajut de Núria Julià (n julia at creaf uab cat)
+    dins del grup del MiraMon. MiraMon és un projecte del 
+    CREAF que elabora programari de Sistema d'Informació Geogràfica 
+    i de Teledetecció per a la visualització, consulta, edició i anàlisi 
+    de mapes ràsters i vectorials. Aquest programari inclou
+    aplicacions d'escriptori i també servidors i clients per Internet.
+    No tots aquests productes són gratuïts o de codi obert. 
+    
+    En particular, el Navegador de Mapes del MiraMon (client per Internet) 
+    es distribueix sota els termes de la llicència GNU Affero General Public 
+    License, mireu https://www.gnu.org/licenses/licenses.html#AGPL.
+    
+    El Navegador de Mapes del MiraMon es pot actualitzar des de 
+    https://github.com/grumets/MiraMonMapBrowser.
+-->
+
+<head>
+    <style type="text/css">
+        p {
+            text-align: justify;
+            font-family: arial;
+            font-size: 12px;
+        }
+
+        button {
+            background-color: rgba(119, 105, 59, 0.315);
+            border-color: black;
+            color: rgb(82, 83, 60)
+        }
+
+        h3 {
+            border-top-style: solid;
+            border-top-color: rgb(213, 224, 227);
+            border-top-width: thin;
+        }
+    </style>
+</head>
+<p><b>World-land degradation neutrality monitor</b> aims at serving open EO-derived bio-physical indices that can be
+    used to support UNCCD’s goal of land degradation neutrality (LDN).</p>
+<h2>Urbanization trends (global)</h2>
+<div data-mm-center='{"x":7.53 , "y": 17.50}' data-mm-zoom='0.1666666666666667'
+    data-mm-layers="nightlights_500m,nightlights.difference_viirs.v21_m_500m_s_2000_2021_go_epsg4326_v20230823,s2cloudless-2020"
+    data-mm-crs="EPSG:4326">
+    <p>Cities are growing rapidly with over 56% of the world's population (4.4 billion) now lives in cities. Find out
+        how fast have cities grown from 2000 to 2021 based on the visible night light images at 500 m resolution.</p>
+
+
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"nightlights_500m\", \"dims\": {\"DATE\": \"20000101_20001231\"}}")'>2000</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"nightlights_500m\", \"dims\": {\"DATE\": \"20050101_20051231\"}}")'>2005</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"nightlights_500m\", \"dims\": {\"DATE\": \"20100101_20101231\"}}")'>2010</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"nightlights_500m\", \"dims\": {\"DATE\": \"20150101_20151231\"}}")'>2015</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"nightlights_500m\", \"dims\": {\"DATE\": \"20210101_20211231\"}}")'>2021</button>
+
+    <p><b>Author:</b><br>Tom Hengl (tom.hengl@opengeohub.org)</p>
+    <p><b>Computational notebook:</b>
+        <a href="https://openlandmap.github.io/book/" target="_blank">https://openlandmap.github.io/book/</a>
+    </p>
+
+    <p><b>Metadata link:</b></p>
+    <p><a href="https://stac.openlandmap.org/nightlights.average_viirs.v21/collection.json"
+            target="_blank">https://stac.openlandmap.org/nightlights.average_viirs.v21/collection.json</a></p>
+
+    
+    <h3><b>Publications</b></h3>
+   
+    <h3><b>Use cases</b></h3>
+   
+</div>
+<br>
+<div style="border: thin solid rgb(211, 211, 211); width:100"></div>
+<br>
+<h2>Losses and gains in primary productivity</h2>
+<div data-mm-center='{"x":7.53 , "y": 17.50}' data-mm-zoom='0.1666666666666667'
+    data-mm-layers="fapar_essd.lstm.p95.whittaker.beta_m_250m_s_20000301_20211231_go_epsg.4326_v20230619,fapar_250m,s2cloudless-2020"
+    data-mm-crs="EPSG:4326">
+    <p>Fraction of Absorbed Photosynthetically Active Radiation (FAPAR) is one of the key biophysical variables
+        describing primary productivity of world ecosystems. Observe how much has FAPAR changed over last 20+ years and
+        where are the potential land degradation spots.</p>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"fapar_250m\", \"dims\": {\"DATE\": \"20000901_20000930\"}}")'>Sep
+        2000</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"fapar_250m\", \"dims\": {\"DATE\": \"20060901_20060930\"}}")'>Sep
+        2006</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"fapar_250m\", \"dims\": {\"DATE\": \"20100901_20100930\"}}")'>Sep
+        2010</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"fapar_250m\", \"dims\": {\"DATE\": \"20160901_20160930\"}}")'>Sep
+        2016</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"fapar_250m\", \"dims\": {\"DATE\": \"20210901_20210930\"}}")'>Sep
+        2021</button>
+
+
+    <p><b>Authors:</b><br> Julia Hackländer (julia.hacklaender@opengeohub.org)</p>
+    <p><b>Computational notebook:</b></p>
+    <p><a href="https://github.com/Open-Earth-Monitor/Global_FAPAR_250m"
+            target="_blank">https://github.com/Open-Earth-Monitor/Global_FAPAR_250m</a></p>
+    <p><b>Metadata link:</b></p>
+    <p><a href="https://stac.openlandmap.org/fapar_essd.lstm/collection.json"
+            target="_blank">https://stac.openlandmap.org/fapar_essd.lstm/collection.json</a></p>
+
+    <h3><b>Publications</b></h3>
+  
+    <h3><b>Use cases</b></h3>
+   
+</div>
+<br>
+<div style="border: thin solid rgb(211, 211, 211); width:100"></div>
+<br>
+<h2>Future vegetation for 2040, 2060 and 2080 (global)</h2>
+<div data-mm-center='{"x":7.53, "y": 17.50}' data-mm-zoom='0.1666666666666667'
+    data-mm-layers="biomes_1km_v3,s2cloudless-2020" data-mm-crs="EPSG:4326">
+    <p>As we our rapidly changing our climate we can expect that world vegetation is dynamically follow the new norms.
+        Click on these buttons to see future distribution of world biomes under climate change scenarios (RCP 2.6, 4.5
+        and 8.5).</p>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"biomes_1km_v3\", \"dims\": {\"DATE\": \"19790101_20131231\"}}")'>1979-2013</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"biomes_1km_v3\", \"dims\": {\"DATE\": \"20400101_20601231\"}}")'>2040-2060</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"biomes_1km_v3\", \"dims\": {\"DATE\": \"20610101_20801231\"}}")'>2061-2080</button>
+
+    <p><b>Author:</b><br> Carmelo Bonannella (carmelo.bonannella@opengeohub.org)</p>
+    <p><b>Computational notebook:</b></p>
+    <p><a href="https://github.com/Envirometrix/PNVmaps" target="_blank">https://github.com/Envirometrix/PNVmaps</a><br>
+    </p>
+    <p><b>Metadata link:</b></p>
+    <a href="https://stac.openlandmap.org/biomes_biome6k.tropical.savanna.rcp45/collection.json"
+        target="_blank">https://stac.openlandmap.org/biomes_biome6k.tropical.savanna.rcp45/collection.json</a><br>
+    <br>
+    <h3><b>Publications</b></h3> 
+    <h3><b>Use cases</b></h3>
+ 
+</div>
+<br>
+<div style="border: thin solid rgb(211, 211, 211); width:100"></div>
+<br>
+<h2>Grassland and Pastureland</h2>
+<div data-mm-center='{"x":-60.83 , "y": -13.87}' data-mm-zoom='0.0833333333333333' data-mm-layers="pft_grass_nat_esa,pft_grass_man_esa,s2cloudless-2020"
+    data-mm-crs="EPSG:4326">
+    <p>Pastures and grasslands are among the most extensive covering approximately 40% of the Earth’s surface. Check out
+        the
+        layers of natural grasses and herbaceous cropland over South America.</p>
+
+    <p><b>Author:</b> Leandro Parente (leandro.parente@opengeohub.org)</p>
+    <p><b>Computational notebook:</b></p>
+
+    <p><b>Metadata link:</b></p>  
+    <h3><b>Publications</b></h3>
+    <h3><b>Use cases</b></h3>
+
+</div>
+<br>
+<div style="border: thin solid rgb(211, 211, 211); width:100"></div>
+<br>
+<h1>Gross Primary productivity</h1>
+<div data-mm-center='{"x":-35.10, "y": -6.50 }' data-mm-zoom='0.0166666666666667'
+    data-mm-layers="gdmp_copernicus,s2cloudless-2020" data-mm-crs="EPSG:4326">
+    <p>This layer indicates the general rate of growth or increase in dry plant matter of the ecosystem. However, it's
+        measured in units tailored for agricultural statistics (kg/ha/day). Observations are provided every 10 days,
+        nearly
+        in real-time, on a global scale, with a spatial resolution of 300 meters. These observations cover the time
+        period
+        from 2014 to 2022.</p>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"gdmp_copernicus\", \"dims\": {\"DATE\": \"20140701_20140831\"}}")'>
+        Jul-Aug 2014</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"gdmp_copernicus\", \"dims\": {\"DATE\": \"20160701_20160831\"}}")'>Jul-Aug
+        2016</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"gdmp_copernicus\", \"dims\": {\"DATE\": \"20180701_20180831\"}}")'>Jul-Aug
+        2018</button>
+    <button
+        onClick='ExecuteDataMMAttributes("data-mm-extradims", "{\"ly\":\"gdmp_copernicus\", \"dims\": {\"DATE\": \"20220701_20220831\"}}")'>Jul-Aug
+        2022</button>
+    <br>
+    <p><b>Author:</b> Leandro Parente (leandro.parente@opengeohub.org)</p>
+    <p><b>Computational notebook:</b></p>
+
+    <p><b>Metadata link:</b></p>
+  
+    <h3><b>Publications</b></h3>
+   
+    <h3><b>Use cases</b></h3>
+   
+</div>
+<br>
+<div style="border: thin solid rgb(211, 211, 211); width:100"></div>
+<br>
+<h2>Flood risk index</h2>
+<div data-mm-center='{"x":6.07, "y": 53.19}' data-mm-zoom='0.0083333333333333'
+    data-mm-layers="overlay_base_bright,hyd_deltares_flood_map_rp0000_m_100m,hyd_deltares_flood_map_rp0250_m_100m,s2cloudless-2020" data-mm-crs="EPSG:4326">
+    <p>Coastal flooding stands out as one of the most destructive perils faced by coastal regions, with its impact poised to escalate due to Sea Level Rise (SLR), climate variations, and population expansion. Effective mitigation of coastal flooding is imperative, particularly for vulnerable communities in developing nations and small island states. This layer delineates historical disasters and alterations in flood-prone regions. Utilizing three Digital Elevation Models (DEMs) – namely MERIT, NASADEM, and LiDAR DTM – in tandem with three spatial resolutions (90m, 1km, and 5km), global coastal flood maps are simulated. These simulations are based on extreme water levels along coastlines with specified return periods, derived from the Deltares dataset, which encapsulates alterations in extreme sea levels under forthcoming climate change scenarios.</p>
+    <p><b>Author:</b><br> Yu-feng Ho (yu-feng.ho@opengeohub.org)</p>
+    <p><b>Computational notebook:</b></p>
+    <p><b>Metadata link:</b></p> 
+    <h3><b>Publications</b></h3>
+    <h3><b>Use cases</b></h3>
+</div>
+</html>
