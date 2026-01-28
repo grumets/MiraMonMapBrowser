@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -1646,6 +1646,22 @@ var MessageLang=
     "fre": "Fermez la visualisation en cours et ouvrez une nouvelle avec les couches choisies",
     "cze": "Zavřít aktuální vizualizaci a otevřít novou s vybranými vrstvami",
     "ger": "Schließen Sie die aktuelle Visualisierung und öffnen Sie eine neue mit den ausgewählten Layers"
+  },
+  "DoYouWantTheLayer": {
+	"cat": "Vols que la capa",
+	"spa": "¿Desea que la capa",
+	"eng": "Do you want the layer",
+	"fre": "Voulez-vous que le couche",
+	"cze": "Chcete, aby se vrstva",
+	"ger": "Möchten Sie, dass die Ebene"
+  },
+  "BeUpdatedAutoWhenChanges?": {
+	"cat": " s'actualitzi automàticament quan hi hagi canvis?",
+	"spa": " se actualice automáticamente cuando se produzcan cambios?",
+	"eng": " to be updated automatically when changes appears?",
+	"fre": " soit mis à jour automatiquement lorsqu'il y a des modifications?",
+	"cze": " automaticky aktualizovala při změnách?",
+	"ger": " bei Änderungen automatisch aktualisiert wird?"
   },
   "DocumentLanguage": {
     "cat": "Idioma del document",

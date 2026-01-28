@@ -89,7 +89,7 @@ var trans=Transaccio[param.i_transaccio], capa=ParamCtrl.capa[trans.i_capa], obj
 		var punt={x: trans.feature.geometry.coordinates[0], y: trans.feature.geometry.coordinates[1]};
 		if (!DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 			punt=TransformaCoordenadesPunt(punt, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRS);
-		FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(trans.i_capa, DonaEnvDeXYAmpleAlt(punt.x, punt.y, d, d), false);
+		FesPeticioAjaxObjectesDigitalitzatsPerEnvolupant(trans.i_capa, DonaEnvDeXYAmpleAlt(punt.x, punt.y, d, d), null, false);
 	}
 	/*if(!doc) return;
 	try {
@@ -423,7 +423,7 @@ var trans_actual;
 		identificador.push(elem[0].getAttribute('fid'));
 
 		//Faig la petició GetFeature
-		FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(trans_actual.i_capa, identificador, false);
+		FesPeticioAjaxObjectesDigitalitzatsPerIdentificador(trans_actual.i_capa, null, identificador, false);
 		var mis=getLayer(trans_actual.win, "missatges");
 		if(mis)
 		{

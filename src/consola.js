@@ -53,10 +53,13 @@ var TipusEventFeatureInsertTransaction=12;
 var TipusEventFeatureUpdateTransaction=13;
 var TipusEventFeatureDeleteTransaction=14;
 var TipusEventHttpGet=15;
+var TipusEventWebSocket=16;
+var TipusEventDiscover=17;
 
 var EstarEventPendent=1;
 var EstarEventError=2;
 var EstarEventTotBe=3;
+var EstatEventOnGoing=4;
 
 var EventConsola=[];
 var i_EventConsola=0; //Actual d'identificador perquè sempre augmenta i ningú el torna a posar mai a 0
@@ -82,6 +85,19 @@ function CreaIOmpleEventConsola(titol, i_capa, desc, tipus)
 	return -1;
 }
 
+function AfegeixTextADescripcioEventConsola(desc,i_event)
+{
+	if (i_event==-1)
+		return;
+	for (var i=EventConsola.length-1; i>=0; i--)
+	{
+		if (EventConsola[i].id==i_event)
+		{
+			EventConsola[i].desc=EventConsola[i].desc+"\n"+desc;
+			return;
+		}
+	}
+}
 function CanviaEstatEventConsola(event, i_event, estat)
 {
 	if (i_event==-1)
@@ -125,7 +141,7 @@ var temp, event_consola;
 		}
 		temp=temp.replace("<", "&lt;");
 		temp=temp.replace(">", "&gt;");
-		temp=temp.replace("\n", "<br>");
+		temp=temp.replaceAll("\n", "<br>");
 		cdns.push("<b>", event_consola.titol);
 		if (event_consola.tipus==TipusEventGetFeature || event_consola.tipus==TipusEventGetFeatureOfInterest || event_consola.tipus==TipusEventGetObservation)
 		{
@@ -149,10 +165,16 @@ var temp, event_consola;
 			else
 				cdns.push(" ", ParamCtrl.capa[event_consola.i_capa].nom);
 		}
-		cdns.push("</b> <small>layer " + event_consola.i_capa +"</small> (", DonaDateComATextISO8601(event_consola.timeRequest, {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": true}), ")<br>",
-			  "<i><a href=\"",temp,"\" target=\"_blank\">",temp,"</a></i><br>");
+		cdns.push("</b> <small>layer " + event_consola.i_capa +"</small> (", DonaDateComATextISO8601(event_consola.timeRequest, {"DataMostraAny": true, "DataMostraMes": true, "DataMostraDia": true, "DataMostraHora": true, "DataMostraMinut": true, "DataMostraSegon": true}), ")<br>");
+		if(event_consola.tipus==TipusEventWebSocket)
+			cdns.push("<i>",temp, "</i><br>");
+		else
+			 cdns.push("<i><a href=\"",temp,"\" target=\"_blank\">",temp,"</a></i><br>");
+		 
 		if (event_consola.estat==EstarEventError)
 			cdns.push("<font color=\"red\">Error</font>");
+		else if (event_consola.estat==EstatEventOnGoing)
+			cdns.push("<font color=\"green\">On going</font>");
 		else if (event_consola.estat==EstarEventTotBe)
 			cdns.push("<font color=\"green\">Ok</font>");
 		if ((event_consola.estat==EstarEventError || event_consola.estat==EstarEventTotBe) && event_consola.timeResponse)

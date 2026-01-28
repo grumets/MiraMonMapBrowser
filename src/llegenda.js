@@ -1,4 +1,4 @@
-/* 
+﻿/* 
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -1218,7 +1218,7 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 				}
 			}
 		}
-		//Botó de GetCovergage:
+		//Botó de GetCoverage:
 		if (EsCapaDescarregableIndividualment(capa) || (capa.model==model_vector && capa.tipus==null))
 		{
 			cdns.push("<td valign=\"middle\">",

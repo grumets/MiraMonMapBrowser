@@ -1,17 +1,17 @@
-{
+﻿{
  	"$schema": "http://json-schema.org/draft-07/schema#",
-	"title": "Navegador de Mapes del MiraMon",
-	"description": "Definició de les estructures que permeten configurar i personalitzar el Navegador de Mapes del MiraMon a partir del fitxer config.json",
+	"title": "MiraMon Map Browser",
+	"description": "Specification of the structures used to configure and customize the MiraMon Map Browser through the config.json file.",
 	"type": "object",
 	"required": ["VersioConfigMMN", "SpaceForLayers" ],
 	"properties": {
 		"VersioConfigMMN": { 
-			"description": "Versió del fitxer config",
+			"description": "Config file version",
 			"$ref": "#/definitions/versio" 
 		},
 		"SpaceForLayers": {
 			"type": "object",
-			"description": "Amplada i alçada del navegador per defecte en píxels. Noteu que la finestra definida per aquestes mesures és la base per les posicions i dimensions de les differents Layer.",
+			"description": "Default width and height of the browser in pixels. Note that the window defined by these dimensions serves as the basis for the positions and sizes of the different Layers.",
 			"required": ["width", "height"],
 			"properties": {
 				"width": { 
@@ -31,100 +31,100 @@
 			"items": 
 			{
 				"type": "object",
-				"description": "Llista de Layers que es crearà internament amb createLayer(). Heu d'interpretar el vell concepte de netscape de 'layer' com una moderna 'div' en HTML.",
+				"description": "List of Layers that will be created internally using createLayer(). You should interpret the old Netscape concept of a 'layer' as a modern 'div' in HTML.",
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "id de la divisió. Ha de ser únic a la plana HTML. Noms reservats amb contingut gestionat automàticament: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord' i 'ctipica' ",
+						"description": "Division identifier. It must be unique within the HTML page. Reserved names with content managed automatically: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord', and 'ctipica'."
 						"type": "string"
 					},
 					"title": {
-						"description": "Titol de la divisió. Només aplica quan la divisió és 'resizable'",
+						"description": "Title of the division. Only applies when the division is 'resizable'.",
 						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"left": { 
-						"description": "Distància a la vora dreta quan la finestra medeix SpaceForLayers.width",
+						"description": "Distance to the right edge when the window measures SpaceForLayers.width",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"top": { 
-						"description": "Distància a la vora superior quan la finestra medeix SpaceForLayers.height",
+						"description": "Distance to the top edge when the window measures SpaceForLayers.height",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"width": { 
-						"description": "Ample de la layer quan la finestra medeix SpaceForLayers.width",
+						"description": "Width of the layer when the window measures SpaceForLayers.width",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"height": { 
-						"description": "Alt de la layer quan la finestra medeix SpaceForLayers.height",
+						"description": "Height of the layer when the window measures SpaceForLayers.height",
 						"type": "number",
 						"minimum": 0,
 						"multipleOf" : 1
 					},
 					"ancora": {
-						"description": "Com s'ancora la finestra als extrems de la finestra del navegador. Es fan servir punts cardinals 'NSEW' (es manté la distància amb el punt cardinal) o 'nsew' (es manté una distància proporcionalment al punt cardinal) i 'CR' (es manté l'ample (Columns) o l'alt (Rows)). p.ex. 'NW'",
+						"description": "How to anchor the window to the edges of the browser window. Cardinal points 'NSEW' (keep the distance to the cardinal point) or 'nsew' (keep a distance proportional to the cardinal point) and 'CR' (keep the width (Columns) or height (Rows)) are used. e.g. 'NW'",
 						"type": "string"
 					},
 					"scroll": {
-						"description": "La layer presenta scrolls? Pot ser 'si' (sempre), 'ara_no' (automàtiques), 'no' (no scrolls)",
+						"description": "Does the layer have scrolls? It can be 'yes' (always), 'no' (automatic), 'no' (no scrolls)",
 						"enum": ["no", "ara_no", "si"]
 					},
 					"visible": {
-						"description": "La divisió es crea com a visible immediatament?. Pot ser true o false",
+						"description": "Is the division created as visible immediately? Can be true or false",
 						"type": "boolean"
 					},  
 					"resizable": {
-						"description": "La divisió és una caixa redimensionable?. Pot ser true o false",
+						"description": "Is the division a resizable box? It can be true or false",
 						"type": "boolean"
 					},
 					"ev": {
-						"description": "Events de la divisió. El format inclou també el nom de l'event 'onClick=\"alert(1)\"'. A la pràctica serviria per posar quasevol altre propietat de la divisió. La propietat 'resizable' activa events de mouse que no es poden redefinir aquí. Opcional. Pot ser null",
+						"description": "Events of the division. The format also includes the name of the event 'onClick=\"alert(1)\"'. In practice it would serve to set almost any other property of the division. The 'resizable' property activates mouse events that cannot be redefined here. Optional. Can be null",
 						"type": ["string", "null"]
 					},
 					"content": {
-						"description": "Contingut html de l'interior de la layer. Opcional. Pot ser null",
+						"description": "HTML content inside the layer. Optional. Can be null",
 						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang"
 					}
 				}
 			}
 		},
 		"hideLayersOverVista": {
-			"description": "Mostra les layers que hi ha sobre la/les vista/es. Si es true, la vista es veu neta (sense cap botó o finestra superposada). Per defecte és 'false'",
+			"description": "Shows the layers that are on the view(s). If true, the view looks clean (without any buttons or windows overlapping). Default is 'false'",
 			"type": "boolean"
 		},
 		"containerName": {
-			"description": "Nom de la divisió que conté el navegador. INTERN; no usar. S'omple a partir del nom indicat a StartMiraMonMapBrowser(div_name)",
+			"description": "Division name containing the browser. INTERNAL; do not use. Populates from the name specified in 'StartMiraMonMapBrowser(div_name)'.",
 			"type": "string"
 		},
 		"config_json": {
-			"description": "El propi config.json com a text. INTERN; no usar. S'omple al iniciar el navegador",
+			"description": "The config.json itself as text. INTERNAL; do not use. Filled on browser startup.",
 			"type": "string"
 		},
 		"ServidorLocal": { 
-			"description": "Adreça i nom del servidor local, típicament una url de la cgi que es fa servir més. Si hi ha alguna capa on servidor és null, llavors es fa servir aquest valor i esdevé obligatori.",
+			"description": "Address and name of the local service, typically a cgi url that is most used. If there is any layer where 'servidor' is null, then this value is used and becomes mandatory.",
 			"type": "string",
 			"format": "uri"
 		},
 		"VersioServidorLocal": { 
-			"description": "Versió en que es faran les peticions OWS al ServidorLocal",
+			"description": "Version in which the OWS requests will be made to the 'ServidorLocal'",
 			"$ref": "#/definitions/versio" 
 		},
 		"CorsServidorLocal": { 
-			"description": "El ServidorLocal suporta CORS (Cross-Origin Resource Sharing)?",
+			"description": "Does 'ServidorLocal' support CORS (Cross-Origin Resource Sharing)?",
 			"type": "boolean"
 		},
 		"TipusServidorLocal": {
-			"description": "Tipus de servei del ServidorLocal",
+			"description": "Service type of 'ServidorLocal'",
 			"$ref": "#/definitions/EnumTipusServidor" 
 		},
 		"accessClientId":
 		{
-			"description": "Noms i client IDs dels applicacions d'autentificació",
+			"description": "Names and client IDs of authentication applications",
 			"type": "object",
 			"properties": {
 				"authenix": { "type": "string"},
@@ -132,17 +132,25 @@
 			}
 		},
 		"AdrecaBaseSRC": { 
-			"description": "Adreça base de les imatges del navegador. Pot ser una cadena buida",
+			"description": "Base address of the browser images. Can be an empty string.",
 			"type": "string",
 			"format": "uri"
 		},
 		"WPSschemaURL": { 
-			"description": "Adreça base dels esquemes de validació pel servei WPS",
+			"description": "Base address of validation schemes for the WPS service",
 			"type": "string",
 			"format": "uri"
 		},
+		"webSocketUrl": {
+			"description": "Adreça URL del websocket (wss:://) per a les capes que es poden subscriure a actualitzacions a un servei WebHub. Això només per a serveis 'TipusSTA' or 'TipusSTAplus'",
+			"type": "string"
+		},
+		"webHookUrl":{
+			"description": "Adreça URL del webhook (https://)(callback) per a les capes que es poden subscriure a actualitzacions a un servei WebHub. Això només per a serveis 'TipusSTA' or 'TipusSTAplus'.",
+			"type": "string"
+		},	
 		"idiomes":	{
-			"description": "Idiomes en els que estarà disponible el navegador",
+			"description": "Languages in which the browser will be available",
 			"type": "array",
 			"items": {
 				"enum": ["cat", "spa", "eng", "fre", "cze", "ger"]
@@ -711,7 +719,7 @@
 			"type": "boolean"
 		},
 		"BarraBotoInstallarMMZ": {
-			"description": "Mostrar el botó per instal·lar el Lector Universal de Mapes del MiraMon a la barra de botons", 
+			"description": "Mostrar el botó per instal·lar el MiraMon a la barra de botons", 
 			"type": "boolean"
 		},
 		"BarraBotonsIdiomes": {
@@ -1286,7 +1294,7 @@
 			}
 		}, 
 		"capa":	{
-			"description": "Array de capes del navegador",
+			"description": "Browser layer array",
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -1310,6 +1318,14 @@
 							"type": "null"
 						},{
 							"$ref": "#/definitions/EnumTipusServidor" 
+						}]
+					},
+					"origenAccesObjs":{
+						"description": "When using services of type 'TipusSTA' or 'TipusSTAplus', this indicates how we want to access the data (position and observations): either via 'Things' or via 'FeaturesOfInterest'. If not specified, the default is 'FeaturesOfInterest'. We can also use the 'Cells' approach, applied to either 'FeaturesOfInterest' or 'Things', when working with services that hide the exact location of the observations. Currently, 'CellsThings' has not been implemented.",
+						"oneOf":[{
+							"type": "null"
+						},{
+							"enum": ["Things", "FeaturesOfInterest", "CellsFeaturesOfInterest", "CellsThings"]
 						}]
 					},
 					"configCSV": {
@@ -1351,7 +1367,7 @@
 						"$ref": "#/definitions/access"
 					},
 					"model": {
-						"description": "Model de dades de la capa. Si no es defineix es determina automàticament.",
+						"description": "Data model of the layer. If not defined, it is determined automatically.",
 						"oneOf":[{
 							"type": "null"
 						},{
@@ -1392,7 +1408,7 @@
 						"type": "number"
 					},
 					"CRSgeometry": { 
-						"description": "CRS en que es demanaran les geometry al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
+						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1473,8 +1489,73 @@
 							}
 						}
 					},
+					"cellZoneLevelSet": {
+						"description": "Definition of the layer's cell-based tessellation following a DGGS that represents the position of objects as cells according to the chosen DGGS (specified by CellType). This only applies when the service type is 'TipusSTA' or 'TipusSTAplus' and 'origenAccesObjs' is set to 'CellsFeaturesOfInterest' or 'CellsThings'.",
+						"type": ["object", "null"],
+						"properties": {			
+							"cellType": {
+								"description": "Indicates the type of algorithm used for the cells. For example, geohash...",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"enum": ["GeoHash"]
+								}]														
+							},		
+							"zoneLevels":{
+								"description": "Levels contained in the tessellation",
+								"type": "array",
+								"items": {																		
+									"type": "object",
+									"properties": {				
+										"zoneLevelId": {
+											"description": "zoneLevel identifier",
+											"type": "string"
+										},
+										"costatMinim": {
+											"description": "Minimum zoom level at which this zoneLevel is meaningfully visible for the layer. Optional. If not specified, only costatMaxim is defined and this zoneLevel is only visible in one zoom.",
+											"type": "number",
+											"minimum": 0
+										},
+										"costatMaxim":	{
+											"description": "Maximum zoom level at which this zoneLevel is meaningfully visible for the layer. Optional.If not specified, only costatMinim is defined and this zoneLevel is only visible in one zoom.",
+											"type": "number",
+											"minimum": 0
+										},
+										"cells": {
+											"description": "Interna No usar. Array d'objectes amb l'envolupant de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					"$ref": "#/definitions/featureCollection"
+										},
+										"zones": {
+											"type": "array",
+											"items": {																
+												"type": "object",
+												"properties": {	
+													"zoneId" : {
+														"description": "Zone identifier for a concrete zoneLevel",
+														"type": "string"
+													},													
+													"cell": {
+														"type": "object",
+														"properties": {		
+															"cellId":{
+																"description": "Identifier of a cell within a specific zone",
+																"type": "string"
+															},
+															"statistics":{
+																"description": "Object containing the names of the cell's properties along with their statistics.",
+																"$ref": "#/definitions/statisticsDescription"	
+															}
+														}							
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
 					"EnvTotal": {
-						"description": "Envolupant total de la capa. Opcional",
+						"description": "Total bounding box of the layer. Optional.",
 						"$ref": "metadata-schema.json#/definitions/envolupantCRS_2D" 
 					},
 					"EnvTotalLL": {
@@ -1753,12 +1834,16 @@
 							"multipleOf" : 1
 						}
 					},
+					"subscribed": {
+						"description": "Estat de subscripció a un servei WebHub a actualitzacions de la capa. Només per a serveis 'TipusSTA' or 'TipusSTAplus'. Possibilitats: la capa no admet subscripcions ('no'), la capa es pot subscriure però en aquest moment no ho està ('ara_no'), la capa està subscrita ('si). Opcional. Per defecte és 'no'. Programaticament va lligat a l'estat de 'visible' de la capa; si aquesta no és visible la subscripció passa a valer 'ara_no'.", 
+						"enum": [null, "no", "ara_no", "si"]
+					},
 					"consultable": {
 						"description": "Estat de la capa per a la consulta. Possibilitats: mai (no), no està consultable però l'usuari la pot activar (ara_no), si (si). Opcional. Per defecte és 'si'", 
 						"enum": [null, "no", "ara_no", "si"]
 					},																				
 					"descarregable": {
-						"description": "La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage'. Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no', No té sentit quan el 'model' és 'vector'.", 						
+						"description": "DEPPRECATED: No recomanat per l'esforç que representa pel servidor, es recomana l'ús de 'DescarregaTot' o ParamCoverage, Formatoverage i ResCoverage. La capa per a ser descarregada com a part d'un únic MMZ generat des del servidor amb aquesta i altres capes. Hi ha altres alternatives de descàrrega com 'DescarregaTot' o 'FormatCoverage'. Aquesta possibilitat no la usem massa perquè requereix d'un esforç important del servidor. Possibilitats: mai ('no'), no està descarregable però l'usuari la pot activar ('ara_no'), si ('si'). Opcional. Per defecte és 'no'. No té sentit quan el 'model' és 'vector'.", 						
 						"enum": [null, "no", "ara_no", "si"]
 					},
 					"ParamCoverage": {
@@ -1914,6 +1999,14 @@
 						"minimum": -1,
 						"multipleOf" : 1
 					},
+					"dataMinima": {
+						"description": "Data mínima en que es sol·licitaran les observacions d'un STA o STA+ que conté sèries temporals",
+						"$ref": "#/definitions/data" 
+					},
+					"dataMaxima":	{
+						"description": "Data màxima en que es sol·licitaran les observacions d'un STA o STA+ que conté sèries temporals",
+						"$ref": "#/definitions/data" 
+					},	
 					"animable":	{
 						"description": "La capa participa d'un vídeo. Opcional. Per defecte val false. Només aplica quan el 'model' és 'raster'.", 
 						"type": ["boolean", "null"]
