@@ -558,7 +558,7 @@ function CanviaImatgeCapaRefVideo(i_capa)
 	else
 	{
 		var cdns=[];
-		cdns.push(EsCapaBinaria(ParamCtrl.capa[i_capa]) ? "<canvas id=\"video_i_raster_ref\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster_ref\" name=\"video_i_raster_ref\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">");
+		cdns.push((EsCapaBinaria(ParamCtrl.capa[i_capa]) || EsCapaImatgeSencera(ParamCtrl.capa[i_capa])) ? "<canvas id=\"video_i_raster_ref\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster_ref\" name=\"video_i_raster_ref\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">");
 		document.getElementById("video_m_raster_ref").innerHTML=cdns.join("");
 		document.getElementById("video_l_raster_ref").style.opacity=1;
 		var image=document.getElementById("video_i_raster_ref");
@@ -809,7 +809,7 @@ var ncol, nfil;
 				"<tr><td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_sup",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",ncol+4,"px\" height=\"2px\"></td></tr>",
 				"<tr><td style=\"font-size: 1px\"><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",nfil,"px\"></td>",
 				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:auto; width:", ncol, "px; height:", nfil, "px; background-color:white; \" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
-				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\">"),
+				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa]) || EsCapaImatgeSencera(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("1tran.gif")+"\">"),
 				"</div></td>",
 				"<td style=\"font-size: 1px\"><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"", nfil,"px\"></td></tr>",
 				"<tr><td colspan=\"3\" style=\"font-size: 1px\"><img name=\"video_marc_inf",i_data_video, "\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"",ncol+4,"px\" height=\"2px\"></td></tr>");
@@ -837,7 +837,7 @@ var ncol, nfil;
 		{
 			cdns.push("<td style=\"font-size: 1px\"><img name=\"video_marc_esq",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",nfil,"px\"></td>",
 				"<td><div id=\"rodet_l_raster",i_data_video,"\" style=\"overflow:clip; width:", ncol, "px; height:", nfil, "px; background-color:white;\" onClick=\"MostraFotogramaAillat(", i_data_video,", false)\">",
-				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
+				((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa]) || EsCapaImatgeSencera(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"rodet_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"rodet_i_raster"+i_data_video+"\" name=\"rodet_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
 				"</div></td>",
 				"<td style=\"font-size: 1px\"><img name=\"video_marc_dre",i_data_video,"\" src=\"",AfegeixAdrecaBaseSRC("1negre.gif"),"\" width=\"2px\" height=\"",nfil,"px\"></td>");
 		}
@@ -894,7 +894,7 @@ var cdns=[];
 		//http://www.greywyvern.com/?post=337
 		cdns.push("<div class=\"frame-video\" id=\"video_f_raster",i_data_video,"\" style=\"width:", ncol, "px; height:", nfil, "px;\">",
 			"<div class=\"frame-video-image\" id=\"video_l_raster",i_data_video,"\" style=\"width:", ncol, "px; height:", nfil, "px; opacity:0;\">",
-			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
+			((EsCapaBinaria(ParamCtrl.capa[DatesVideo[i_data_video].i_capa]) || EsCapaImatgeSencera(ParamCtrl.capa[DatesVideo[i_data_video].i_capa])) ? "<canvas id=\"video_i_raster"+i_data_video+"\" width=\""+ncol+"px\" height=\""+nfil+"px\"></canvas>" : "<img id=\"video_i_raster"+i_data_video+"\" name=\"video_i_raster"+i_data_video+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\">"),
 			"</div>",
 			"</div>");
 	}

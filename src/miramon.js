@@ -670,7 +670,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		if(!capa.origenAccesObjs)
 			capa.origenAccesObjs=origen_FeaturesOfInterest;		
 	}
-
+	
 	CompletaDescarregaTotCapa(capa);
 	
 	if (!capa_vola)
@@ -3665,7 +3665,6 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 			plantilla=plantilla.replace("{styleId}", "default");
 		cdns.push(plantilla);
 	}
-	
 	var url_crs=null;
 	if(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.indexOf("EPSG:")!=-1 ||
 		ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.indexOf("CRS:")!=-1)
@@ -3684,7 +3683,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 	if (tipus=="TipusOAPI_Maps")
 		cdns.push(url_crs);
 	else
-	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
+		cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	
 	if (tipus=="TipusOAPI_Maps")
 		 cdns.push("&bbox=");
@@ -4048,6 +4047,12 @@ function EsCapaBinaria(capa)
 {
 	return capa.FormatImatge=="application/x-img" || capa.FormatImatge=="image/heif" ||
 	    (capa.FormatImatge=="image/tiff" && (capa.tipus=="TipusHTTP_GET" || capa.tipus=="TipusOAPI_Coverages" || !capa.tipus))
+}
+
+function EsCapaImatgeSencera(capa)
+{
+	return capa.tipus=="TipusHTTP_GET" && 
+		(capa.FormatImatge=="image/png" || capa.FormatImatge=="image/jpeg" || capa.FormatImatge=="image/gif" || capa.FormatImatge=="image/heif");
 }
 
 

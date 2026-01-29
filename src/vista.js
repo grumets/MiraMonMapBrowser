@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1170,7 +1170,9 @@ function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok,
 {
 var capa=ParamCtrl.capa[i_capa];
 
-	if (EsCapaBinaria(capa))
+	if (EsCapaImatgeSencera(capa))
+		CanviaImatgeSenceraCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+	else if (EsCapaBinaria(capa))
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
 	{
@@ -1235,8 +1237,70 @@ function CanviaImatgeCapaSiCal(imatge, i_capa)
 	}
 }*/
 
-function PrecarregaValorsArrayBinaryAttributeSiCal(i_attribute, funcio, param)
+
+function CapaImatgeSenceraOnLoad(i_event, i_capa)
 {
+	ParamCtrl.capa[i_capa].imageLoaded=true;
+	CanviaEstatEventConsola(null, i_event, EstarEventTotBe);
+	// ·$· el onload hauria de ser una funció que a més de canviar l'estat canvies l'estat de la capa a la consola.
+}
+
+function CapaImatgeSenceraOnError(i_event, i_capa)
+{
+	ParamCtrl.capa[i_capa].imageLoaded=false;
+	CanviaEstatEventConsola(null, i_event, EstarEventError);
+	//·$· el onError hauria de ser una funció que a més de canviar l'estat canvies l'estat de la capa a la consola.
+}
+function CapaImatgeSenceraOnUnload(i_capa)
+{
+	ParamCtrl.capa[i_capa].imageLoaded=false;
+}
+
+function CanviaImatgeSenceraCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+{
+var capa=ParamCtrl.capa[i_capa];
+
+	/* és el canvas en el que es mostrarà la imatge a la resolució i àmbit que toca
+	i segueix aquesta nomenclatura 
+	"<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"*/
+	var ctx=imatge.getContext("2d");
+	var nom_vista="vista"; //·$· això s'ha de corregir
+	var imatgeSencera=document.getElementById(nom_vista + "_i_imatge"+i_capa);
+	if(!imatgeSencera)
+	{
+		var s, url=CanviaVariablesDeCadena(capa.servidor, capa, i_data, null);
+		capa.imageLoaded=false;
+		var i_event=CreaIOmpleEventConsola("HTTP GET", i_capa, url, TipusEventHttpGet);
+		if(capa.FormatImatge=="image/png" || capa.FormatImatge=="image/jpeg" || capa.FormatImatge=="image/gif"){
+			s="<img id=\""+nom_vista+"_i_imatge"+i_capa+"\" src=\""+url+"\" onLoad=\"CapaImatgeSenceraOnLoad("+i_event+","+i_capa+");\"" +
+			"onError=\"CapaImatgeSenceraOnError("+i_event+","+i_capa+");\" onUnload=\"CapaImatgeSenceraOnUnload("+i_capa+");\" style=\"display:none\">";
+		}
+		else{
+			s="<canvas id=\""+nom_vista+"_i_imatge"+i_capa+"\" style=\"display:none\"></canvas>";
+			
+			//·$· falta afegir la capa aquí al canvas i fer alguna cosa similar de onLoad i onError
+		}
+		document.getElementById(ParamCtrl.containerName).insertAdjacentHTML("afterend",s);
+		
+	}
+	if(!capa.imageLoaded)
+	{
+		setTimeout(CanviaImatgeSenceraCapa, 1000, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+		return;
+	}
+	var alt = imatgeSencera.height, ample = imatgeSencera.width;
+
+	// ·$·Podria ser que el CRS actual no sigui en el que està la capa
+	ctx.drawImage(imatgeSencera,(vista.EnvActual.MinX-capa.EnvTotal.EnvCRS.MinX)*ample/(capa.EnvTotal.EnvCRS.MaxX-capa.EnvTotal.EnvCRS.MinX),
+								(capa.EnvTotal.EnvCRS.MaxY-vista.EnvActual.MaxY)*alt/(capa.EnvTotal.EnvCRS.MaxY-capa.EnvTotal.EnvCRS.MinY),
+								(vista.EnvActual.MaxX-vista.EnvActual.MinX)*ample/(capa.EnvTotal.EnvCRS.MaxX-capa.EnvTotal.EnvCRS.MinX),
+								(vista.EnvActual.MaxY-vista.EnvActual.MinY)*alt/(capa.EnvTotal.EnvCRS.MaxY-capa.EnvTotal.EnvCRS.MinY), 
+								0, 0, ctx.canvas.width, ctx.canvas.height);
+	return;
+}
+
+function PrecarregaValorsArrayBinaryAttributeSiCal(i_attribute, funcio, param)
+{ 
 var capa=ParamCtrl.capa[param.i_capa];
 var attributeArray=Object.keys(capa.attributes);
 var attribute=capa.attributes[attributeArray[i_attribute]];
@@ -2729,7 +2793,9 @@ var p, unitats_CRS;
 				{
 					cdns.push(textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(vista.i_nova_vista)+1, DonaMargeSuperiorVista(vista.i_nova_vista)+1, vista.ncol, vista.nfil, null, {scroll: "no", visible:
 											((EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=-1 ? vista.i_vista : DonaIVista(nom_vista), i)) ? true : false), ev: null, save_content: false}, null,
-											(EsCapaBinaria(capa) ? "<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : "<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\"  class=\"ImgHVCenter\">")));
+											((EsCapaBinaria(capa) || EsCapaImatgeSencera(capa)) ? 
+													"<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>" : 
+													"<img id=\"" + nom_vista + "_i_raster"+i+"\" name=\"" + nom_vista + "_i_raster"+i+"\" src=\""+AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif")+"\"  class=\"ImgHVCenter\">")));
 				}
 			}
 		}
