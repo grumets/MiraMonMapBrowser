@@ -1317,3 +1317,16 @@ function DonaEPSGDeURLOpengis(url)
 	}
 	return null;
 }
+
+function DonaURLOpengisDeEPSG(url)
+{
+	if(!url)
+		return null;
+	if(url.match("CRS:84"))
+		return "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+	
+	var crs=url.slice(url.lastIndexOf("EPSG:")+"EPSG:".length);
+	if (crs)
+		return "http://www.opengis.net/def/crs/EPSG/0/"+crs;
+	return null;
+}

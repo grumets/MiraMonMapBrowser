@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2026 Xavier Pons
+    Copyright 2001, 2025 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -3666,24 +3666,13 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 		cdns.push(plantilla);
 	}
 	
-	var url_crs=null;
-	if(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.indexOf("EPSG:")!=-1 ||
-		ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.indexOf("CRS:")!=-1)
-		url_crs=DonaURLOpengisDeEPSG(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
-	if(!url_crs)
-		url_crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
 	if (tipus=="TipusOAPI_Maps")
-	{
-		cdns.push("crs=", url_crs, // crs de la imatge
+		cdns.push("crs=", ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, // crs de la imatge
 				  "&bbox-crs="); // crs del bounding-box
-	}
 	else if (DonaVersioServidorCapa(capa).Vers<1 || (DonaVersioServidorCapa(capa).Vers==1 && DonaVersioServidorCapa(capa).SubVers<2))
 		cdns.push("SRS="); // CRS de la imatge idel BBOX
 	else
 		cdns.push("CRS=");  // CRS de la imatge idel BBOX
-	if (tipus=="TipusOAPI_Maps")
-		cdns.push(url_crs);
-	else
 	cdns.push(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	
 	if (tipus=="TipusOAPI_Maps")
@@ -3700,7 +3689,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 	if(tipus=="TipusOAPI_Maps")
 	{
 		cdns.push("&width=" , ncol , "&height=" , nfil,
-				"&f=" , (capa.FormatImatge == "image/heif" ? "hej2" : (capa.FormatImatge == "image/png" ? "png" : (capa.FormatImatge == "image/jpeg" ? "jpeg" : capa.FormatImatge))),
+				"&f=" , (capa.FormatImatge == "image/heif" ? "hej2" : capa.FormatImatge),
 				((capa.FormatImatge=="image/jpeg") ? "" : "&transparent=" + ((capa.transparencia && capa.transparencia!="opac")? "true" : "false")));
 	}
 	else
@@ -3723,7 +3712,7 @@ var cdns=[], tipus, plantilla, i_estil2=-1, capa=ParamCtrl.capa[i];
 				else
 				{
 					cdns.push(capa.estil[i_estil2].nom);
-					if (pot_semitrans && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
+					if (pot_semitrans && !EsCapaBinaria(capa) && capa.FormatImatge!="image/jpeg" && capa.visible=="semitransparent" && ParamCtrl.TransparenciaDesDeServidor)
 						cdns.push(":SEMITRANSPARENT");
 				}
 			}
