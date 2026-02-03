@@ -1,4 +1,5 @@
-#Examples
+##  Examples
+
 Examples of configuration files that can be validated with the ../config-schema.json
 
 To load the browser using them use URL such as:
