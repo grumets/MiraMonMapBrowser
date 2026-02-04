@@ -1,0 +1,1066 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Modelo Digital de Alturas de Cataluña (lidarCat_v1)</title>
+<style type="text/css">
+.titol {font-family: Arial, Helvetica, sans-serif; font-size: 20px;font-style: normal;font-weight: bold;color: #666666;}
+.titol2 {font-family: Arial, Helvetica, sans-serif; font-size: 16px;font-style: normal;font-weight: bold;color: #666666;}
+a{text-decoration: none; font-family: Arial, Helvetica, sans-serif; font-size: 12px;color: #400000;} 
+.text{font-family: Arial, Helvetica, sans-serif;font-size: 12px;}
+.text_general{font-family: Arial, Helvetica, sans-serif;font-size: 12px;text-align:justify;}
+.text_credits{font-family: Arial, Helvetica, sans-serif;font-size: 8px;font-style: italic;}
+.numero {font-family: Arial, Helvetica, sans-serif;	font-size: 12px;text-align:right;}
+.text_link{font-family: Arial, Helvetica, sans-serif;font-size: 12px;color: #400000;}
+.text_link_blau{font-family: Arial, Helvetica, sans-serif;font-size: 12px;color:#007BFF;}
+.text_negreta {font-family: Arial, Helvetica, sans-serif;font-size: 12px;font-weight: bold;color: #666666;}
+.columna_centrada {font-family: Arial, Helvetica, sans-serif;font-size: 12px;vertical-align: middle
+.impressio{font-family: Arial, Helvetica, sans-serif;font-size: 12px;color:#666666; border: 1px solid #666666; border-radius: 3px;padding:2px;}
+</style>
+</head>
+<body>
+<span class="titol">INFORMACIÓN SOBRE LOS METADATOS</span><br><br>
+<span class="text_negreta">Fichero de metadatos:</span> <span class="text_general">MDA_lidarCatv1I.rel</span><br>
+<span class="text_negreta">Identificador del fichero de metadatos:</span> <span class="text_general">MDA_lidarCatv1_tmpI_31715</span><br>
+<span class="text_negreta">Nivel jerárquico:</span> <span class="text_general">Capa</span><br>
+<span class="text_negreta">Nombre del Nivel jerárquico:</span> <span class="text_general">Capa-Hoja</span>
+<dl><span class="text_negreta">Estándar de metadatos:</span>
+	<dd><span class="text_negreta">Nombre:</span> <span class="text_general">GeMM (ISO 19115, GeMM profile)</span></dd>
+	<dd><span class="text_negreta">Versión:</span> <span class="text_general">5.0 (ISO 19115 FDIS)</span></dd>
+</dl>
+<dl><span class="text_negreta">Idioma:</span>
+	<dd><span class="text_general">[cat] Catalán</span></dd>
+	<dd><span class="text_general">[spa] Español</span></dd>
+	<dd><span class="text_general">[eng] Inglés</span></dd>
+</dl>
+<span class="text_negreta">Código de caracteres:</span> <span class="text_general">8859part1</span>
+<dl><span class="text_negreta">ORGANISMOS</span><br>
+<br>
+<dd><span class="text_general">PROCESADOR</span></dd>
+<dd><span class="text_negreta">GRUP DE RECERCA EN TELEDETECCIÓ I SISTEMES D'INFORMACIÓ GEOGRÀFICA [GRUMETS, UAB-CREAF]</span></dd>
+<dd><span class="text_negreta">Teléfono:</span></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<dd><a class="text_link" href="https://www.grumets.cat/" target="_blank">https://www.grumets.cat/</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Información</span></dd>
+</dl>
+<span class="text_negreta">Fecha de creación de los metadatos:</span> <span class="text_general">21-06-2021 13:45:33.13 (Hora local oficial, +02:00)</span><br>
+<br>
+<span class="titol">IDENTIFICACIÓN</span><br><br>
+<span class="text_negreta">Identificador único de los datos: </span><span class="text_general">/MDA_lidarCatv1_31715</span><br>
+<span class="text_negreta">Título de la capa:</span> <span class="text_general">Modelo Digital de Alturas de Cataluña (lidarCat_v1)</span><br>
+<dl><span class="text_negreta">Título alternativo:</span>
+<dd><span class="text_general">MDA lidarCat_v1</span></dd>
+</dl>
+<dl><span class="text_negreta">Idioma:</span>
+<dd><span class="text_general">[cat] Catalán</span></dd>
+<dd><span class="text_general">[spa] Español</span></dd>
+<dd><span class="text_general">[eng] Inglés</span></dd>
+</dl>
+<span class="text_negreta">Categoría del tema de la capa:</span> <span class="text_general"><dl><dd><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAABK0lEQVQ4y+3QLU/EQBAG4Nlhu7u3bbcNTQ2iDtGPBNFU9Sc0lyDQRWCwDRpHgiUIfP8DHoFBYak7eYQEhaAJJUVwe4IeXA+FYJJXzGTmEQPw12pr7KLv+/ucc7Nt2/lova5rzLLM0X2WZZJSOmOM3VVVhaMhpdSBEOJc97ZtnwFADwC9UupoFFKWJWWMPSDiSxzHO0EQ7CLiq4YopU9RFG2vhSzLKvWRlPKSc36tex3TNK9+RKbTKTcMY6YPELH7iizm757n7X0LSSmPVx2uCmPstigKMkDyPDcZY/OxEAD0ruseDqDJZHKyCbJ4/GMYhu4SSdPUMQzjeVNo8fiLJSSEOP0NAgA9IeTN87yEJEniNE1z33Wd0jAiLkPI5z8JIYPouZTyBv5rbX0Av9t6Q5lRUZ0AAAAASUVORK5CYII="> Altitud, pendiente, orientación</dd><dd><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABN2lDQ1BBZG9iZSBSR0IgKDE5OTgpAAAokZWPv0rDUBSHvxtFxaFWCOLgcCdRUGzVwYxJW4ogWKtDkq1JQ5ViEm6uf/oQjm4dXNx9AidHwUHxCXwDxamDQ4QMBYvf9J3fORzOAaNi152GUYbzWKt205Gu58vZF2aYAoBOmKV2q3UAECdxxBjf7wiA10277jTG+38yH6ZKAyNguxtlIYgK0L/SqQYxBMygn2oQD4CpTto1EE9AqZf7G1AKcv8ASsr1fBBfgNlzPR+MOcAMcl8BTB1da4Bakg7UWe9Uy6plWdLuJkEkjweZjs4zuR+HiUoT1dFRF8jvA2AxH2w3HblWtay99X/+PRHX82Vun0cIQCw9F1lBeKEuf1UYO5PrYsdwGQ7vYXpUZLs3cLcBC7dFtlqF8hY8Dn8AwMZP/fNTP8gAAAAJcEhZcwAACxMAAAsTAQCanBgAAAXjaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA2LjAtYzAwNiA3OS5kYWJhY2JiLCAyMDIxLzA0LzE0LTAwOjM5OjQ0ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjIuNCAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIxLTA1LTIwVDEyOjM2OjM4KzAyOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTA1LTIwVDE1OjI3OjA5KzAyOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMS0wNS0yMFQxNToyNzowOSswMjowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mjk2N2JhZjYtMTc4NC1jZTQzLTlmMmMtYzI1Y2MzNDNhOTg0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOmNhYWRiZWFkLTJiNzMtNGI0MC04ZTAyLTVkMDgyMDdjNzQ3MyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOmNhYWRiZWFkLTJiNzMtNGI0MC04ZTAyLTVkMDgyMDdjNzQ3MyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9IkFkb2JlIFJHQiAoMTk5OCkiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmNhYWRiZWFkLTJiNzMtNGI0MC04ZTAyLTVkMDgyMDdjNzQ3MyIgc3RFdnQ6d2hlbj0iMjAyMS0wNS0yMFQxMjozNjozOCswMjowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIyLjQgKFdpbmRvd3MpIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoyOTY3YmFmNi0xNzg0LWNlNDMtOWYyYy1jMjVjYzM0M2E5ODQiIHN0RXZ0OndoZW49IjIwMjEtMDUtMjBUMTU6Mjc6MDkrMDI6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMi40IChXaW5kb3dzKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6HB8A0AAADjElEQVQ4ja2Ue0yTZxTGnw/brwW0LW3taGlTLkI1Rgitq6CzKdsSVhYTF4dbuixmtxinZvOWbSxuKJuZ2YxbjMyZEJ0h1CEhhGwUVAS3pC7DFWFokItuGYXCNksLvX1f+c7+wdD6Nyd5/zjJ+/zynrzPcxgiwnJU2rJQAIiSG37MBbFCA6gtin8HPO/uPVTDxiQ59jLbs+Zfh31n3tx9IGzeaKj/bRKz08E4nBskEAPIBMCkjDbbBfBRx7enf2pzdXtZkueAuDjmp+8DK1hwaUpsf33P7LrqXc40Fm6HDpAsgkBESyd2w7H/eRPlWF+jg6cunWjvaD02PuIdqq/dS1ZzCWmVLAGgrdUfUXuAHBwRQovaJBBnrn9/B9mcdf7eGNlPXnKDyIfY3ebfDSodHW3qpX5P18jbr1QmZAzo1SPfUZzILDwJCg5e8RozpLTnQn8PEbFjPj8EIcgEH3i0g79cvX0vQAeJyDbjaYpb8rJIpDLRZe+0l4jyU0AtJ/eRGKDNuz+nKSLTAhE4CmHqj47Hd1bf+/HM9NbS9bS+uJgMKiXt+uQifTPMvUBES99/d7R/jlU8hajvr9htPzR9ISCMKGLRBBIJDoGBtj7nOzWakVke6RIp5CsZjE08iMQDvCbFR1z0EVZpjAj1tUkbvzj7s0iGMjlWwffQX3O9s/PaufMNxvG4Aga1HCQsIEEixBYSKzbqRfoUH2WpTZLo3DC0WhVuNX+Ghrw1nZb3Kvs9LY32s+MxaFkBuQY1IAgAw0AkcJBJM9AwFL1ZoWeXXmSzWvjMyCQEkQyKrEy0fnlAXnfqvH3T4a/wwculuH/HC59vAn/7AwAE+OdFKDdvSXxcIWeRYsjI8HFn5Y6j7vE4TMbV4MIBTPoDyNv0IhzlBUhPlyBbm/vPxGB3zPV9oyGS/RyarrfWWbPSjgFYSDak+GH31x1F2TrSGArpaauVLJZSKtSrKcNYRlf95CEiBG+dbi9UZtIR10DHPJHYt6hPCm2Qzy3Pr2o6Ue0uUK3E6J9TCEV48AxQqF+LyZtXAh++VNKy85Br27rDze6iZ4qr5gD+ccCSshYEN3QZrEqJ/2YktecaWvb33BlVhjhAKhKDTc+AVLMW297YdzyhX/NpYCaEt2wyEADdk+kXiBB+FIbKaKrdXlHcozPmVxRtrtrCJEL4oWvIk11i7yndUNB7YywIQuoeY5Zrsf0PpunjlFFxvMIAAAAASUVORK5CYII="> Cartografía de base</dd></dl></span>
+<span class="text_negreta">Palabras clave:</span>
+<dl>
+<dd>
+<span class="text_negreta">ALTURA</span>
+ <span class="text_general">(      5)</span>
+</dd>
+<dd><span class="text_negreta">Tesauro:</span></dd>
+<dd><span class="text_general">Tesauro de IDEC (MiraMon)</span>
+ (<span class="text_general">29-11-2022 </span>)</dd>
+<dd><span class="text_general">Creador</span>: 
+<span class="text_negreta">MIRAMON</span>
+ (<a class="text_link" href="https://www.miramon.cat" target="_blank">https://www.miramon.cat</a>)
+</dd>
+</dl>
+<dl>
+<dd>
+<span class="text_negreta">TELEDETECCIÓN</span>
+ <span class="text_general">(      5)</span>
+</dd>
+<dd><span class="text_negreta">Tesauro:</span></dd>
+<dd><span class="text_general">GEMET Thesaurus version 1.0</span>
+ (<span class="text_general">2008-06-10</span>)</dd>
+<dd><span class="text_general">Creador</span>: 
+<span class="text_negreta">EUROPEAN ENVIRONMENT INFORMATION AND OBSERVATION NETWORK (EIONET)</span>
+ (<a class="text_link" href="https://www.eionet.europa.eu/gemet/" target="_blank">https://www.eionet.europa.eu/gemet/</a>)
+</dd>
+</dl>
+<dl>
+<dd>
+<span class="text_negreta">CATALUÑA</span>
+ <span class="text_general">(      2)</span>
+</dd>
+<dd><span class="text_negreta">Tesauro:</span></dd>
+<dd><span class="text_general">Tesauro de MiraMon</span>
+ (<span class="text_general">2021-07-19</span>)</dd>
+<dd><span class="text_general">Creador</span>: 
+<span class="text_negreta">MIRAMON</span>
+ (<a class="text_link" href="https://www.miramon.cat" target="_blank">https://www.miramon.cat</a>)
+</dd>
+</dl>
+<dl>
+<dd>
+<span class="text_negreta">CARTOGRAFÍA</span>
+ <span class="text_general">(      5)</span>
+</dd>
+<dd><span class="text_negreta">Tesauro:</span></dd>
+<dd><span class="text_general">GEMET Thesaurus version 1.0</span>
+ (<span class="text_general">2008-06-10</span>)</dd>
+<dd><span class="text_general">Creador</span>: 
+<span class="text_negreta">EUROPEAN ENVIRONMENT INFORMATION AND OBSERVATION NETWORK (EIONET)</span>
+ (<a class="text_link" href="https://www.eionet.europa.eu/gemet/" target="_blank">https://www.eionet.europa.eu/gemet/</a>)
+</dd>
+</dl>
+<br>
+<span class="titol">PRESENTACIÓN</span><br><br>
+<span class="text_negreta">Resumen:</span> <span class="text_general">Modelo Digital de Alturas de Cataluña de 2 m de lado de celda generado a partir de la primera cobertura lidar del ICGC con densidad mínima de 0.5 puntos/m² (generada a partir de diferentes vuelos entre 2008 y 2012), el Modelo Digital de Elevaciones del ICGC de 2 m de resolución y otras bases de referencia como los Mapas de Usos y Cubiertas del Suelo de Cataluña (MUCSC) de la UAB-CREAF y la ortofoto IRC 1:2500 (2009) del ICGC. Los datos corresponden mayormente a los meses entre marzo y agosto (88.4 %), siendo los de mayo y junio los más abundantes (28.5 % y 14.8 % respectivamente). Por años, 2009 aporta el 43.6 % de los datos, seguido de 2010 (28.1 %), 2008 (15.3 %) y 2011 (12.9 %) y una aportación muy pequeña de datos de 2012.</span><br>
+<span class="text_negreta">Propósito:</span> <span class="text_general">Caracterización y estudios de evolución en altura de las cubiertas del suelo.</span><br>
+<dl><span class="text_negreta">ORGANISMOS</span><br>
+<br>
+<dd><span class="text_general">AUTOR</span></dd>
+<dd><span class="text_negreta">GRUP DE RECERCA EN TELEDETECCIÓ I SISTEMES D'INFORMACIÓ GEOGRÀFICA [GRUMETS,UAB- CREAF]</span></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<dd><a class="text_link" href="https://www.grumets.cat/" target="_blank">https://www.grumets.cat/</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Información</span></dd>
+<br>
+<dd><span class="text_general">INVESTIGADOR PRINCIPAL</span></dd>
+<dd><span class="text_negreta">GRUP DE RECERCA EN TELEDETECCIÓ I SISTEMES D'INFORMACIÓ GEOGRÀFICA [GRUMETS, UAB-CREAF]</span></dd>
+<dd><span class="text_negreta">Nombre individual:</span> <span class="text_general">Xavier Pons</span></dd>
+<dd><span class="text_negreta">Cargo:</span> <span class="text_general">Cap de grup</span></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<dd><a class="text_link" href="https://www.grumets.cat/" target="_blank">https://www.grumets.cat/</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Información</span></dd>
+<br>
+<dd><span class="text_general">PROVEEDOR DE RECURSOS</span></dd>
+<dd><span class="text_negreta">GENERALITAT DE CATALUNYA. DEPARTAMENT DE LA VICEPRESIDÈNCIA I DE POLÍTIQUES DIGITALS I TERRITORI</span></dd>
+<dd><span class="text_negreta">Dirección:</span></dd>	
+<dd><a class="text_link" href="www.gencat.cat" target="_blank">www.gencat.cat</a></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<dd><a class="text_link" href="https://agricultura.gencat.cat/ca/serveis/cartografia-sig/bases-cartografiques/usos-sol-subsol/usos-sol/" target="_blank">https://agricultura.gencat.cat/ca/serveis/cartografia-sig/bases-cartografiques/usos-sol-subsol/usos-sol/</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Descarga</span></dd>
+<br>
+<dd><span class="text_general">PROVEEDOR DE RECURSOS</span></dd>
+<dd><span class="text_negreta">GENERALITAT DE CATALUNYA. INSTITUT CARTOGRÀFIC I GEOLÒGIC DE CATALUNYA (ICGC)</span></dd>
+<dd><span class="text_negreta">Dirección:</span></dd>	
+<dd><span class="text">Parc de Montjuïc, 08038 Barcelona. Catalunya. Espanya.</span></dd>
+<dd><span class="text_negreta">Teléfono:</span></dd>
+<dd><span class="text_general">935671500</span></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_general">935671567</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<dd><a class="text_link" href="https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals-Elevacions/Dades-historiques-lidar" target="_blank">https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals-Elevacions/Dades-historiques-lidar</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Descarga</span></dd>
+</dl>
+<span class="text_negreta">Fecha de creación de la capa:</span> <span class="text_general">21-06-2021 13:40:20.47 (Hora local oficial, +02:00)</span> 
+<br><br><span class="titol2">ASPECTOS TÉCNICOS</span><br><br>
+<span class="text_negreta">Tipo de fichero:</span> <span class="text_general">Binario</span><br>
+<span class="text_negreta">Tamaño de la capa:</span> <span class="text_general">15283 bytes (MDA_lidarCatv1I.rel)</span><br>
+<span class="text_negreta">Modelo de datos:</span> <span class="text_general">Ráster</span><br>
+<span class="text_negreta">Tipo de objeto:</span> <span class="text_general">Celdas ráster</span><br>
+<span class="text_negreta">Número de objetos:</span> <span class="text_general">17979078201 (dato modal)</span><br>	
+<span class="text_negreta">Ubicación:</span> <span class="text_general"></span><br>
+<span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span><br>
+<span class="text_negreta">Columnas:</span> <span class="text_general">136101 (dato modal)</span><br>
+<span class="text_negreta">Filas:</span> <span class="text_general">132101 (dato modal)</span><br>
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_D.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_M.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Y.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_OrigenAlcariaCella.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<dl>
+	<br>
+	<dd><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Fiabilitat.img</span></dd>
+	<dd><span class="text_negreta">Ubicación:</span> <span class="text_general"></span></dd>
+	<dd><span class="text_negreta">Base alfanumérica:</span> <span class="text_general">Imatge multibanda</span></dd>
+	<dd><span class="text_negreta">Columnas:</span> <span class="text_general">136101</span></dd>
+	<dd><span class="text_negreta">Filas:</span> <span class="text_general">132101</span></dd>
+	<dd><span class="text_negreta">Número de objetos:</span> <span class="text_general">799209017</span></dd>	
+</dl>	
+<br>
+<span class="titol">SIST. REFERENCIA</span><br><br>
+<span class="titol2">SISTEMA DE REFERENCIA HORIZONTAL</span><br><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Cartográfico</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">UTM-31N-ETRS89</span><br>
+<span class="text_negreta">Unidades:</span> <span class="text_general">metros</span><br>
+<span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m (dato modal)</span><br>
+<span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m (dato modal)</span><br>
+<span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros (dato modal)</span><br>
+<span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000 (dato modal)</span><br>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_D.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_M.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Y.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_OrigenAlcariaCella.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Fiabilitat.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Lado de celda:</span> <span class="text_general">2 m</span></dd>
+	<dd><span class="text_negreta">Resolución:</span> <span class="text_general">1.414 m</span></dd>
+	<dd><span class="text_negreta">Unidades de la resolución:</span> <span class="text_general">metros</span></dd>
+	<dd><span class="text_negreta">Escala equivalente:</span> <span class="text_general">1:7000</span></dd>
+</dl>
+<br>
+<span class="text_negreta">PROYECCIÓN</span><br>
+<span class="text_negreta">Id. proyección:</span> <span class="text_general">UTM</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Universal Transversal de Mercator o UTM</span><br>
+<span class="text_negreta">Equivalente:</span> <span class="text_general">Sí, aprox.</span><br>
+<span class="text_negreta">Equidistante:</span> <span class="text_general">Sí, aprox.</span><br>
+<span class="text_negreta">Conforme:</span> <span class="text_general">Sí</span><br>
+<span class="text_negreta">Implementada en esféricas:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Implementada en elipsoidales:</span> <span class="text_general">Sí</span><br>
+<dl>
+	<dd><span class="text_negreta">Id. parám. proy.:</span> <span class="text_general">UTM:31N</span></dd>
+	<dd><span class="text_negreta">Descripción:</span> <span class="text_general">Fus 31 nord</span></dd>
+	<dd><span class="text_negreta">Constant de Tissot (c_tissot):</span> <span class="text_general">0.9996 </span></dd>
+	<dd><span class="text_negreta">Fus (zone):</span> <span class="text_general">31 </span></dd>
+	<dd><span class="text_negreta">Hemisferi (hemisphere):</span> <span class="text_general">N </span></dd>
+</dl>
+<span class="text_negreta">DÁTUM</span><br>
+<span class="text_negreta">Id. datum:</span> <span class="text_general">ETRS89</span><br>
+<span class="text_negreta">Id. grupo datum:</span> <span class="text_general">ETRS89</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Sistema de Referència Terrestre Europeu 1989</span><br>
+<span class="text_negreta">Lugares de aplicación:</span> <span class="text_general">Europa/EUREF</span><br>
+<span class="text_negreta">Delta X:</span> <span class="text_general">0</span><br>
+<span class="text_negreta">Delta Y:</span> <span class="text_general">0</span><br>
+<span class="text_negreta">Delta Z:</span> <span class="text_general">0</span><br>
+<br>
+<span class="text_negreta">ELIPSOIDE</span><br>
+<span class="text_negreta">Id. elipsoide:</span> <span class="text_general">GRS 1980</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">GRS 1980</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Elipsoidal</span><br>
+<span class="text_negreta">Radio ecuatorial (a):</span> <span class="text_general">6378137</span><br>
+<span class="text_negreta">1/f:</span> <span class="text_general">298.257222101</span><br>
+<span class="text_negreta">Radio polar (b):</span> <span class="text_general">6356752.31414036</span><br>
+<span class="text_negreta">Aplanamiento (f):</span> <span class="text_general">0.00335281068118232</span><br>
+<span class="text_negreta">Excentricidad (e):</span> <span class="text_general">0.0818191910428152</span><br>
+<span class="text_negreta">Fuente de los datos:</span> <span class="text_general">DMA 1987 TR WGS84</span><br>
+<br>
+<span class="titol2">SISTEMA DE REFERENCIA VERTICAL</span><br><br>
+<span class="text_negreta">Unidades:</span> <span class="text_general">Unidades desconocidas</span><br>
+<br>
+<span class="titol">EXTENSIÓN</span><br><br>
+<br><span class="titol2">EXTENSIÓN PLANAR</span><br><br>
+<span class="text_negreta">Centro de escena (Calculado):</span> <span class="text_general">long: 1° 42' 5.504324'' lat: 41° 43' 28.100396'' (Id. Sist. Referencia: lat/long-ETRS89)</span><br>
+<br>
+<table width="100%">
+<tr><td width="40%">
+<table>
+<tr height="15px"><td colspan="2"></td></tr>
+<tr><td colspan="2" class="text_negreta">ENVOLVENTE</td></tr>
+<tr><td class="text_negreta" colspan="2">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</td></tr>
+<tr><td class="text_negreta">X mínima</td><td class="numero">255899 m (dato modal)</td></tr>
+<tr><td class="text_negreta">X máxima</td><td class="numero">528101 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Y mínima</td><td class="numero">4487899 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Y máxima</td><td class="numero">4752101 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Ámbito total en X:</td><td class="numero">272202 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Ámbito total en Y:</td><td class="numero">264202 m (dato modal)</td></tr>
+<tr><td class="text_negreta" colspan="2">CENTROS DE LOS PÍXELES EXTREMOS</td></tr>
+<tr><td class="text_negreta">X mínima</td><td class="numero">255900 m (dato modal)</td></tr>
+<tr><td class="text_negreta">X máxima</td><td class="numero">528100 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Y mínima</td><td class="numero">4487900 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Y máxima</td><td class="numero">4752100 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Ámbito total en X:</td><td class="numero">272200 m (dato modal)</td></tr>
+<tr><td class="text_negreta">Ámbito total en Y:</td><td class="numero">264200 m (dato modal)</td></tr>
+<tr height="15px"><td colspan="2"></td></tr>
+<tr><td colspan="2" class="text_negreta">ENVOLVENTE GEOGRÁFICO</td></tr>
+<tr><td class="text_negreta">Longitud mínima</td><td class="numero">0° 0' 39.580169''</td></tr>
+<tr><td class="text_negreta">Longitud máxima</td><td class="numero">3° 20' 39.556828''</td></tr>
+<tr><td class="text_negreta">Latitud mínima</td><td class="numero">40° 30' 21.290694''</td></tr>
+<tr><td class="text_negreta">Latitud máxima</td><td class="numero">42° 55' 15.647259''</td></tr>
+</table>
+</td>
+<td width="3%"></td>
+<td width="57%" valign="top"><div style="position:relative"><div id="situacio" style="position:absolute;left:0px;top:0px;width:300px;height:300px;visibility:visible;"><img src="data:image/jpeg;base64,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"></div><div id="rectangle" style="position:absolute;left:45px;top:26px;width:300px;height:300px;visibility:visible;"><table border=0 cellspacing=0 cellpadding=0><tr><td colspan=3><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMwzAAAAACwAAAAAAQABAAACAkQBADs=" height=1 width=220></td></tr><tr><td><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMwzAAAAACwAAAAAAQABAAACAkQBADs=" height=158 width=1></td><td><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMwzAAAAACwAAAAAAQABAAACAkQBADs=" height=158 width=218 style="opacity:0.2"></td><td><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMwzAAAAACwAAAAAAQABAAACAkQBADs=" height=158 width=1></td></tr><tr><td colspan=3><img src="data:image/gif;base64,R0lGODlhAQABAIAAAMwzAAAAACwAAAAAAQABAAACAkQBADs=" height=1 width=220></td></table></div></div></td>
+</tr>
+</table>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_D.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_M.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Y.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_OrigenAlcariaCella.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Fiabilitat.img</span><br>
+<dl>
+	<dd><span class="text_negreta">BORDE EXTERNO DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255899 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528101 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487899 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752101 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272202 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264202 m</span></dd>
+	<br><dd><span class="text_negreta">CENTROS DE LOS PÍXELES EXTREMOS</span></dd>
+	<dd><span class="text_negreta">X mínima:</span> <span class="text_general">255900 m</span></dd>
+	<dd><span class="text_negreta">X máxima:</span> <span class="text_general">528100 m</span></dd>
+	<dd><span class="text_negreta">Y mínima:</span> <span class="text_general">4487900 m</span></dd>
+	<dd><span class="text_negreta">Y máxima:</span> <span class="text_general">4752100 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en X:</span> <span class="text_general">272200 m</span></dd>
+	<dd><span class="text_negreta">Ámbito total en Y:</span> <span class="text_general">264200 m</span></dd>
+<br><dd><span class="text_negreta">ENVOLVENTE GEOGRÁFICO</span></dd>
+	<dd><span class="text_negreta">Longitud mínima:</span> <span class="text_general">0° 0' 39.580169''</span></dd>
+	<dd><span class="text_negreta">Longitud máxima:</span> <span class="text_general">3° 20' 39.556828''</span></dd>
+	<dd><span class="text_negreta">Latitud mínima:</span> <span class="text_general">40° 30' 21.290694''</span></dd>
+	<dd><span class="text_negreta">Latitud máxima:</span> <span class="text_general">42° 55' 15.647259''</span></dd>
+</dl>
+<br><span class="titol2">EXTENSIÓN TEMPORAL</span><br><br>
+<span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ] (dato modal)</span><br>
+<!-- ##FiEXTENT:TEMPORAL:QUALITY## -->
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_D.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_M.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Y.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_OrigenAlcariaCella.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<br><span class="text_negreta">BANDA:</span> <span class="text_general">MDA_lidarCatv1_Fiabilitat.img</span><br>
+<dl>
+	<dd><span class="text_negreta">Extensión temporal:</span></dd>
+	<dd><span class="text_negreta"></span> <span class="text_general">[ 06-03-2008 , 06-07-2012 ]</span></dd>
+	<!-- ##FiOVERVIEW:CONTENTDATES## -->
+</dl>
+</dl>
+<!-- ##FiATTRIBUTE_DATA:CAMP:TEMPORAL## -->
+<br>
+<span class="titol">INFORMACIÓN TEMÁTICA</span><br><br>
+<span class="text_negreta">Fichero de metadatos:</span> <span class="text_general">MDA_lidarCatv1I.rel</span>
+<br><span class="text_negreta">Versión de metadatos:</span> <span class="text_general">5.0</span>
+<br><span class="text_negreta">Versión de relaciones entre tablas:</span> <span class="text_general">4.3</span>
+<BR><BR><TABLE CELLPADDING=0 CELLSPACING=0>
+<TR>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='16' HEIGHT='1'></TD>
+<TD><IMG SRC='blanc1p1.gif' WIDTH='800' HEIGHT='1'></TD>
+</TR>
+<TR>
+<TD><IMG SRC="ico_rel.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=6><FONT FACE='Verdana' SIZE='1'><b>MDA_lidarCatv1I.rel</b></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_multibanda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=5><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000001CBC0F0' NAME='A0000000001CBC0F0'>Imatge multibanda</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002443A80' NAME='A0000000002443A80'>Banda MDA: Altura</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#00000000024453B0' NAME='A00000000024453B0'>Banda D: Día</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002446CE0' NAME='A0000000002446CE0'>Banda M: Mes</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002448610' NAME='A0000000002448610'>Banda Y: Año</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002449F40' NAME='A0000000002449F40'>Banda QA_1: Origen de la altura de la celda</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_rel.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=3><FONT FACE='Verdana' SIZE='1'><b>Tes_OrigenAlcariaCella.rel</b></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=2><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003EAF9A0' NAME='A0000000003EAF9A0'>Tes_OrigenAlcariaCella.dbf</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002455AC0' NAME='A0000000002455AC0'><b>ID</b></A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000002458020' NAME='A0000000002458020'>.</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#000000000245A580' NAME='A000000000245A580'>.</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_vertical.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#000000000245CAE0' NAME='A000000000245CAE0'>.</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_banda.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=4><FONT FACE='Verdana' SIZE='1'><A HREF='#000000000244B870' NAME='A000000000244B870'>Banda QA_2: Fiabilidad</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_rel.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=3><FONT FACE='Verdana' SIZE='1'><b>Tes_Fiabilitat.rel</b></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=2><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003EB16E0' NAME='A0000000003EB16E0'>Tes_Fiabilitat.dbf</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003E5EF90' NAME='A0000000003E5EF90'><b>ID</b></A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003E614F0' NAME='A0000000003E614F0'>.</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_bifurca.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003E63A50' NAME='A0000000003E63A50'>.</A></FONT></TD>	
+</TR>
+<TR>
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=blanc.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC=l_canto.gif ALIGN=absmiddle BORDER=0></TD>	
+<TD><IMG SRC="ico_camp_dbf.gif" ALIGN=absmiddle BORDER=0></TD>	
+<TD NOWRAP COLSPAN=1><FONT FACE='Verdana' SIZE='1'><A HREF='#0000000003E65FB0' NAME='A0000000003E65FB0'>.</A></FONT></TD>	
+</TR>
+</TABLE>
+<br>
+<span class="titol2">IMAGEN MULTIBANDA:</span> <span class="text_general"><A HREF='#A0000000001CBC0F0' NAME='0000000001CBC0F0'>GENERICA_PRINCIPAL</A></span><br><br>
+<span class="text_negreta">N. bandas:</span> <span class="text_general">6</span><br>
+<table>
+<tr>
+	<td class="text_negreta" align="left">NOMBRE</td>
+	<td class="text_negreta" align="left">DESCRIPCIÓN</td>
+	<td class="text_negreta" align="left">TIPO</td>
+</tr>
+<tr>
+	<td class="text_general">MDA</td>
+	<td class="text_general">Altura</td>
+	<td class="text_general">real-RLE</td>
+</tr>
+<tr>
+	<td class="text_general">D</td>
+	<td class="text_general">Día</td>
+	<td class="text_general">byte-RLE</td>
+</tr>
+<tr>
+	<td class="text_general">M</td>
+	<td class="text_general">Mes</td>
+	<td class="text_general">byte-RLE</td>
+</tr>
+<tr>
+	<td class="text_general">Y</td>
+	<td class="text_general">Año</td>
+	<td class="text_general">integer-RLE</td>
+</tr>
+<tr>
+	<td class="text_general">QA_1</td>
+	<td class="text_general">Origen de la altura de la celda</td>
+	<td class="text_general">byte-RLE</td>
+</tr>
+<tr>
+	<td class="text_general">QA_2</td>
+	<td class="text_general">Fiabilidad</td>
+	<td class="text_general">byte-RLE</td>
+</tr>
+</table>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A0000000002443A80' NAME='0000000002443A80'>MDA</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Altura</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">MDA</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">real-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Cuantitativo continuo</span><br>
+<span class="text_negreta">Unidades:</span> <span class="text_general">m</span><br>
+<span class="text_negreta">Mostrar:</span> <span class="text_general">Sí</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">216.764145</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">-999</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<dl>
+<span class="text_negreta">CALIDAD</span><br>
+	<dd><span class="text_negreta">Parámetro:</span> <span class="text_general">Exactitud dels atributs quantitatius</span>
+	<div style="margin-left:20px">
+		<span class="text_negreta">Indicador:</span> <span class="text_general">Exactitud de los atributos cuantitativos</span><br>
+		<div style="margin-left:20px">
+			<span class="text_negreta">Medida:</span> <span class="text_general">Raíz cuadrática media=1.47  (Real de doble precisión)</span><br>
+		</div>
+	</div>
+	<dd>
+</dl>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A00000000024453B0' NAME='00000000024453B0'>D</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Día</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">D</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">byte-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Ordinal</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">1</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">31</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A0000000002446CE0' NAME='0000000002446CE0'>M</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Mes</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">M</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">byte-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Ordinal</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">2</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">12</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A0000000002448610' NAME='0000000002448610'>Y</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Año</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">Y</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">integer-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Ordinal</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">2008</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">2012</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A0000000002449F40' NAME='0000000002449F40'>QA_1</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Origen de la altura de la celda</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">QA_1</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">byte-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Enlace a tabla/s</span><br>
+<span class="text_negreta">Separador:</span> <span class="text_general"><html><pre><br><B>Origen de l'alçària de la cel·la / Origen de la altura de la celda / Origin of the cell height</B></pre></html>
+</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">1</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">10</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<br><span class="titol2">DATOS DE LA BANDA:</span> <span class="text_general"><A HREF='#A000000000244B870' NAME='000000000244B870'>QA_2</A></span><br><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">Fiabilidad</span><br>
+<span class="text_negreta">Nombre:</span> <span class="text_general">QA_2</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">byte-RLE </span><br>		
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Visible/consultable:</span> <span class="text_general">Enlace a tabla/s</span><br>
+<span class="text_negreta">Separador:</span> <span class="text_general"><html><pre><br><B>Fiabilitat / Fiabilidad / Reliability</B></pre></html>
+</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>			
+<dl>
+	<span class="text_negreta">ESTADÍSTICAS</span>
+	<dd><span class="text_negreta">Mínimo:</span> <span class="text_general">1</span></dd>
+	<dd><span class="text_negreta">Máximo:</span> <span class="text_general">10</span></dd>
+</dl>
+<dl>
+	<span class="text_negreta">Hay sindatos:</span> <span class="text_general">Sí</span>
+	<dd><span class="text_negreta">Valor:</span> <span class="text_general">0</span></dd>
+	<dd><span class="text_negreta">Def.:</span> <span class="text_general">sensedades</span></dd>
+</dl>
+<br><br><span class="titol2">TABLA:</span> <span class="text_general"><A HREF='#A0000000003EAF9A0' NAME='0000000003EAF9A0'>MDA_LIDARAMB_ORIGENALCARIACELLA_TES_ORIGENALCARIACELLA_DBF (DBF)</A></span><br><br>
+<span class="text_negreta">Nombre de la tabla:</span> <span class="text_general">Tes_OrigenAlcariaCella.dbf</span><br>	
+<span class="text_negreta">Tipo de relación:</span> <span class="text_general">Varios a 1 (diccionario)</span><br>
+<span class="text_negreta">N. registros:</span> <span class="text_general">10</span><br>
+<span class="text_negreta">N. campos:</span> <span class="text_general">4</span><br>
+<span class="text_negreta">Juego caracteres:</span> <span class="text_general">DOS OEM-850</span><br><br><br>			
+<table>
+	<tr>
+		<td class="text_negreta">NOMBRE</td>
+		<td class="text_negreta">DESCRIPCIÓN</td>
+		<td class="text_negreta">TIPO</td>
+		<td class="text_negreta">TAMAÑO</td>
+		<td class="text_negreta">DECIMALES</td>
+		<td class="text_negreta">MOSTRAR EN CONSULTAS</td>
+		<td class="text_negreta">SIMBOLIZABLE</td>
+	</tr>
+	<tr>
+		<td class="text_general">ID</td>
+		<td class="text_general"></td>
+		<td class="text_general">Numérico</td>
+		<td class="text_general">2</td>
+		<td class="text_general">0</td>
+		<td class="text_general">No</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">O_CAT</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">199</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">O_SPA</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">199</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">O_ENG</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">199</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+</table>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000002455AC0' NAME='0000000002455AC0'>ID</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">ID</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Numérico</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">2</span><br>
+<span class="text_negreta">Decimales:</span> <span class="text_general">0</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Localización y atributos</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000002458020' NAME='0000000002458020'>O_CAT</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">O_CAT</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">199</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A000000000245A580' NAME='000000000245A580'>O_SPA</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">O_SPA</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">199</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A000000000245CAE0' NAME='000000000245CAE0'>O_ENG</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">O_ENG</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">199</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">TABLA:</span> <span class="text_general"><A HREF='#A0000000003EB16E0' NAME='0000000003EB16E0'>MDA_LIDARAMB_FIABILITAT_FIABILITAT_DBF (DBF)</A></span><br><br>
+<span class="text_negreta">Nombre de la tabla:</span> <span class="text_general">Tes_Fiabilitat.dbf</span><br>	
+<span class="text_negreta">Tipo de relación:</span> <span class="text_general">Varios a 1 (diccionario)</span><br>
+<span class="text_negreta">N. registros:</span> <span class="text_general">10</span><br>
+<span class="text_negreta">N. campos:</span> <span class="text_general">4</span><br>
+<span class="text_negreta">Juego caracteres:</span> <span class="text_general">DOS OEM-850</span><br><br><br>			
+<table>
+	<tr>
+		<td class="text_negreta">NOMBRE</td>
+		<td class="text_negreta">DESCRIPCIÓN</td>
+		<td class="text_negreta">TIPO</td>
+		<td class="text_negreta">TAMAÑO</td>
+		<td class="text_negreta">DECIMALES</td>
+		<td class="text_negreta">MOSTRAR EN CONSULTAS</td>
+		<td class="text_negreta">SIMBOLIZABLE</td>
+	</tr>
+	<tr>
+		<td class="text_general">ID</td>
+		<td class="text_general"></td>
+		<td class="text_general">Numérico</td>
+		<td class="text_general">2</td>
+		<td class="text_general">0</td>
+		<td class="text_general">No</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">F_CAT</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">237</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">F_SPA</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">237</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+	<tr>
+		<td class="text_general">F_ENG</td>
+		<td class="text_general">.</td>
+		<td class="text_general">Carácter</td>
+		<td class="text_general">237</td>
+		<td class="text_general"></td>
+		<td class="text_general">Sí</td>
+		<td class="text_general">Sí</td>
+	</tr>
+</table>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000003E5EF90' NAME='0000000003E5EF90'>ID</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">ID</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Numérico</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">2</span><br>
+<span class="text_negreta">Decimales:</span> <span class="text_general">0</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Localización y atributos</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000003E614F0' NAME='0000000003E614F0'>F_CAT</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">F_CAT</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">237</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000003E63A50' NAME='0000000003E63A50'>F_SPA</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">F_SPA</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">237</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br><span class="titol2">DATOS DEL CAMPO:</span> <span class="text_general"><A HREF='#A0000000003E65FB0' NAME='0000000003E65FB0'>F_ENG</A></span><br><br>		
+<span class="text_negreta">Nombre:</span> <span class="text_general">F_ENG</span><br>
+<span class="text_negreta">Descripción:</span> <span class="text_general">.</span><br>
+<span class="text_negreta">Tipo:</span> <span class="text_general">Carácter</span><br>
+<span class="text_negreta">Tamaño:</span> <span class="text_general">237</span><br>
+<span class="text_negreta">Tratamiento:</span> <span class="text_general">Categórico</span><br>
+<span class="text_negreta">Es Hipervínculo:</span> <span class="text_general">No</span><br>
+<span class="text_negreta">Mostrar en consultas:</span> <span class="text_general">Loc. si tiene contenido y atrb.</span><br>
+<span class="text_negreta">Simbolizable:</span> <span class="text_general">Sí</span><br>
+<br>
+<span class="titol">CALIDAD</span><br><br>
+<span class="text_negreta">Linaje:</span> <span class="text_general">Pons X, González-Guerrero O (2022) Generación de Modelos Digitales de Alturas de Cataluña a partir de datos lidar. Ruiz LA, Estornell J, González-Audícana M, Álvarez-Mozos J (eds.) Teledetección para una agricultura sostenible en la era del big data. XIX Congreso de la Asociación Española de Teledetección 2022, Pamplona. ISBN: 978-84-9769-382-0, pp. 193-196. XIX Congreso de la Asociación Española de Teledetección, 29 Jun-1 Jul, Pamplona</span><br>
+<br>
+<span class="titol">DISTRIBUCIÓN</span>
+<br><br><span class="titol2">DISTRIBUIDOR</span><br>  
+<dl><span class="text_negreta">ORGANISMO</span><br><br>
+<dd><span class="text_negreta">GRUMETS</span></dd>  	
+<dd><span class="text_negreta">Dirección:</span></dd> 
+<!-- ##DISTRIBUTION_INFO:ADDRESS:ELECTRONIC_MAIL_ADDRESS## -->
+<dd><a class="text_link" href="contact.grumets@creaf.uab.cat" target="_blank">contact.grumets@creaf.uab.cat</a></dd>
+<!-- ##FiDISTRIBUTION_INFO:ADDRESS:ELECTRONIC_MAIL_ADDRESS## -->	
+<dd><span class="text_negreta">Teléfono:</span></dd>
+<dd><span class="text_negreta">Fax:</span></dd>
+<dd><span class="text_negreta">Recursos en línea:</span></dd>
+<!-- ##METADADES:ORGANISME:ONLINE_RESOURCES## -->
+<dd><a class="text_link" href="https://www.grumets.cat/" target="_blank">https://www.grumets.cat/</a></dd>
+<dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Información</span></dd>
+<!-- ##FiMETADADES:ORGANISME:ONLINE_RESOURCES## -->
+</dl>
+<dl><span class="text_negreta">FORMATO</span><br><br>   
+<dd><span class="text_negreta">Nombre:</span> <span class="text_general">MMZX</span></dd>
+<dd><span class="text_negreta">Versión:</span> <span class="text_general">1</span></dd>
+<dd><span class="text_negreta">Subversión:</span> <span class="text_general">0</span></dd>
+<dd><span class="text_negreta">Estándar, perfil o documento que describe el formato:</span> <span class="text_general">ISO 19165-1:2018</span></dd>
+<dd><span class="text_negreta">Tipo de compresión:</span> <span class="text_general">ZIP</span></dd>
+</dl>
+<dl><span class="text_negreta">OPCIONES DE TRANSFERENCIA</span><br><br>   
+<dd><span class="text_negreta">Unidad de distribución:</span> <span class="text_general">Cataluña</span></dd>
+<dd><span class="text_negreta">Tamaño aprox. de la unidad de distribución:</span> <span class="text_general">37000</span></dd>
+    <dl><span class="text_negreta">MEDIO DE DISTRIBUCIÓN:</span><br><br>
+            <!-- ##DISTRIBUTION_INFO:ORGANISME:TRANSFER_OPTIONS:ONLINE_RESOURCES## -->
+                <dd><span class="text_negreta">POR INTERNET:</span></dd>
+                <dd><span class="text_negreta">Dirección URL:</span> <span class="text_general">https://lidarteam.grumets.cat/maps/download/mda_lidarcat_v1.html</span></dd>
+                <dd><span class="text_negreta">Protocolo:</span> <span class="text_general">Edita o escull (per a geoserveis)</span></dd>
+                <dd><span class="text_negreta">Función de la URL:</span> <span class="text_general">Descarga</span></dd>                
+            <!-- ##FiDISTRIBUTION_INFO:ORGANISME:TRANSFER_OPTIONS:ONLINE_RESOURCES## -->
+    </dl>
+</dl>
+<p class="text_credits">Extracción de metadatos realizada por "Students and educational institutions" con el programa GeM+ v. 2.0d el 28-03-2025 11:15:05.12 (Hora local oficial, +01:00).</p>
+</body>
+</html>

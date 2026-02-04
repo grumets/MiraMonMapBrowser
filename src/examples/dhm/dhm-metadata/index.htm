@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Metadata.js" defer></script>
+	<link href="../propies/favicon.ico" rel="shortcut icon" type="favicon.icon" />		
+    <title id="t_web">Model Digital d'Alçàries</title>
+    <style>
+        body {
+            width: 800px;
+            margin: 0 auto;
+            font-family: Arial, Verdana, sans-serif;
+            padding-bottom: 70px; /* Espai per a la barra de logos */
+            overflow-y: auto; /* Permet desplaçament si cal */
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            background: white;
+            z-index: 1000;
+        }
+
+        .language-selector {
+            align-self: center;
+        }
+
+        .language-selector select {
+            font-size: 0.8rem;
+            padding: 2px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Estil per a la icona de tres ratlles */
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .menu-icon div {
+            height: 3px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+
+        /* Estil per al menú desplegable */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: white;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            z-index: 1001;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu a {
+            text-decoration: none;
+            color: black;
+            padding: 10px 20px;
+            display: block;
+			font-size: 14px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Mostrar el menú quan està actiu */
+        .menu-active .dropdown-menu {
+            display: block;
+        }
+
+        .title-container {
+            text-align: center;
+            width: 800px;
+            max-width: 800px;
+            margin-top: 60px;
+        }
+
+        .title-container h1 {
+            margin-bottom: 5px; /* Redueix l'espaiat entre línies */
+            font-size: 1.8rem;
+        }
+
+        .title-container h2 {
+            color: gray; /* Canvia el color del subtítol a gris */
+            margin-top: 5px; /* Redueix l'espaiat entre línies */
+            font-size: 1.2rem;
+        }
+
+        .text-container {
+            width: 800px;
+            max-width: 800px;
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        .map-container {
+            width: 600px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .map-container img {
+            width: 600px;
+            height: 200px;
+            display: block;
+        }
+
+        .map-container svg {
+            width: 600px;
+            height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        svg rect {
+            fill: transparent;
+            stroke-width: 0;
+            transition: fill 0.3s;
+        }
+
+        svg rect:hover {
+            fill: rgba(0, 255, 0, 0.5);
+        }
+
+        .logo-bar {
+            width: 100%;
+            padding: 5px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: white;
+            z-index: 1000;
+        }
+
+        .logo-bar img {
+            height: 35px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <!-- Icona del menú de tres ratlles -->
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Selector d'idioma -->
+        <div class="language-selector">
+            <form align="right">
+                <label for="language">🌍</label>
+                <select id="sel_language" onChange="setLang();">
+                    <option value="eng" selected="selected">English</option>
+                    <option value="cat">Català</option>
+                    <option value="spa">Español</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div class="dropdown-menu">
+            <a id="m_home" href="../../">Home</a>
+			<a id="m_navi" href="../index.htm">Map Browser</a>
+            <a id="m_down" href="../download">Downloads</a>
+            <a id="m_meta" href="">Metadata</a>
+			<a id="m_stnd" href="../api">OGC Web service & API</a>
+        </div>
+    </div>
+
+    <div class="title-container">
+        <h1 id="title"></h1>
+        <h2 id="subtitle"></h2>
+    </div>
+    
+    <div class="text-container">
+        <br>
+        <p id="par_01"></p>
+    </div>
+
+    <div class="map-container">
+        <svg width="600" height="200" viewBox="0 0 600 200">
+            <a id="md_1" xlink:href="mda_lidarcat_v1/MDA_lidarCatv1_metadata_eng.zip">
+                <text id="lv1" x="80" y="80" text-anchor="middle" dominant-baseline="middle" fill="black">MDA lidarcat v1</text>
+                <rect x="0" y="0" width="160" height="160" fill="transparent"/>
+            </a>
+            <a id="md_2" xlink:href="mda_lidarcat_v2/MDA_lidarCatv2_metadata_eng.zip">
+                <text id="lv2" x="290" y="80" text-anchor="middle" dominant-baseline="middle" fill="black">MDA lidarcat v2</text>
+                <rect x="210" y="0" width="160" height="160" fill="transparent"/>
+            </a>
+            <a id="md_3" xlink:href="mda_lidar_amb/MDA_lidar_amb_metadata_eng.zip">
+                <text id="amb" x="500" y="80" text-anchor="middle" dominant-baseline="middle" fill="black">MDA AMB</text>
+                <rect x="420" y="0" width="160" height="160" fill="transparent"/>
+            </a>
+        </svg>
+    </div>
+
+    <div class="logo-bar">
+        <a href="http://www.creaf.cat" target="_blank"><img src="../img/LogoCREAF.png" alt="CREAF"></a>
+        <a href="http://www.uab.cat" target="_blank"><img src="../img/logo_uab.png" alt="UAB"></a>
+        <a href="https://www.grumets.cat" target="_blank"><img src="../img/logo_grumets.png" alt="GRUMETS"></a>
+    </div>
+
+    <script>
+        // Funció per alternar el menú desplegable
+        function toggleMenu() {
+            document.querySelector('.top-bar').classList.toggle('menu-active');
+        }
+    </script>
+</body>
+</html>
