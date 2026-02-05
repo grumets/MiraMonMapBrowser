@@ -51,7 +51,7 @@ ECOPotential: http://maps.ecopotential-project.eu/
 *	Compare pies with and without the border filter
 *	Geospatial user feedback in canopy height in Swiss National Park
 
-LidarCAT: https://www.ogc3.grumets.cat/mdalidarcat/?BBOX=436625.67982456135,4605133.216867469,439595.67982456135,4606339.216867469
+LidarCAT: https://lidarteam.grumets.cat/maps/?BBOX=436625.67982456135,4605133.216867469,439595.67982456135,4606339.216867469
 *	Create a difference of heights between two times,
 *	Change to rainbow palette,
 *	Visually detect some spot with square shape in the metropolitan area; see a building to appear.
