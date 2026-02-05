@@ -1,0 +1,48 @@
+<!DOCTYPE html> 
+<html lang="en">
+<base href="../../../">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="BESTMAP Layer explanation">	
+</head>
+
+<body style="font-family: 'Verdana', 'Arial', 'Helvetica', sans-serif; font-size: 12px;">
+
+    <h4 style="font-family: 'Verdana', 'Arial', 'Helvetica', sans-serif; font-size: 13px; color: #000099; text-decoration-line: underline; text-underline-offset: 2px;">BESTMAP Water Quality - Nutrient Delivery Ratio model - Nitrogen and Phosphorus</h4>
+
+        <p>The objective of this model is to map nutrient sources, from watershed to stream. It allows nutrient retention by natural vegetation in relation to surface water quality to be investigated (Sharp et al., 2018). As a result, the outputs of this model are the following layers:
+
+            <ul style= "list-style-type: disc;">
+                <li><b style= "color: #000099;">Water Quality - Nutrient Delivery Ratio Nitrogen:</b> nitrogen surface export in kg/year/km.</li> 
+                <li><b style= "color: #000099;">Water Quality - Nutrient Delivery Ratio Phosphorus:</b> phosphorus surface export kg/year/km.</li>
+            </ul>
+
+        <p> Each layer consists of 3 different pieces of information which the user can select from the three available dropdown lists:</p>
+
+            <ul style= "list-style-type: '- ';">
+                <li><b>Scenario:</b> either with AES or no AES, indicating the scenario with current Agri-Environment Schemes (AES) adoption, or the one without AES;</li> 
+                <li><b>Borselli_k:</b> it indicates the value of the parameter Borselli K (either 1, 2 or 4);</li>
+                <li><b>Flow accumulation:</b> it indicates the values of the parameter threshold flow accumulation (either 100, 1000 or 10000).</li>
+            </ul>
+
+            <br>
+
+        <p style= "text-decoration-line: underline; text-underline-offset: 2px;">Example:</p>
+
+        <p>Layer → Water Quality - Nutrient Delivery Ratio Nitrogen of Mulde (DE) case study, with scenario No AES, Borselli_k=2 and flow accumulation=TFA1000 is the farm-level total nitrogen export, calculated with a Borselli_k=2 and a flow accumulation=1000, for the scenario without AES.</p>
+
+            <img src="examples/bestmap-img/explanations/pics/example_DE_ndr_n.png"  width=300>
+
+        <br><br><br>
+
+        <p>In the Humber (UK) case study, the percentage difference (%) of total nitrogen and phosphorus export has been calculated. In order to visualise these results, the user has to select "perc diff n" (in the case of nitrogen) or "perc diff p" (in the case of phosphorus) from the "Scenario" dropdown list and select "Diff" (please see below).</p>
+
+            <img src="examples/bestmap-img/explanations/pics/ndr_perc_diff.png"  width=250>
+
+        <br><br><br>
+
+        <p style= "font-size: 10px;"> <b>Note:</b> For some case studies, not all combinations are available.</p>
+
+</body>
+</html>
+
