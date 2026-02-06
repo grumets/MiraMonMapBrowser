@@ -1,0 +1,3570 @@
+{
+	"VersioConfigMMN":
+	{
+		"Vers": 6,
+		"SubVers": 0,
+		"VariantVers": null
+	},
+	"SpaceForLayers": {"width": 1280,"height": 904},
+	"Layer": 
+	[		
+		{
+			"name": "titol",
+			"left": 13,
+			"top": 5,
+			"width": 600,
+			"height": 120,
+			"ancora": "NwEs",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "logos",
+			"left": 800,
+			"top": 0,
+			"width": 600,
+			"height": 150,
+			"ancora": "NwEsC",
+			"scroll": "no",
+			"visible": true,
+			"content":
+				{
+					"cat":"<table><colgroup><col><col><col><col style=\"width: 50px;\"><col></colgroup><tr><td></td><td></td><td></td><td></td><td><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"-1\">dades lidar:</font></td></tr><tr><td valign=\"middle\" align=\"center\"><a href=\"http://www.creaf.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoCREAF.png\" width=100 title=\"CREAF\" border=0></a></td><td valign=\"middle\" align=\"center\"><a href=\"http://www.uab.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_uab.png\" width=100 title=\"UAB\" border=0></a></td><td align=\"center\"><a href=\"https://www.grumets.cat/\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoGRUMETSNou.png\" title=\"Grumets\" width=100 border=0></a></td><td></td><td align=\"center\"><a href=\"https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals-Elevacions/Dades-historiques-LiDAR\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" title=\"ICGC\" width=80 border=0></a></td></tr><tr><td></td><td></td><td></td><td></td><td align=\"center\"><a href=\"https://geoportalcartografia.amb.cat/AppGeoportalCartografia2/?locale=ca&Categoria=Lidar&Producte=54\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/AMB.png\" title=\"AMB\" height=20 border=0></a></td></tr></table>",
+					"spa":"<table><colgroup><col><col><col><col style=\"width: 50px;\"><col></colgroup><tr><td></td><td></td><td></td><td></td><td><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"-1\">datos lidar:</font></td></tr><tr><td valign=\"middle\" align=\"center\"><a href=\"http://www.creaf.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoCREAF.png\" width=100 title=\"CREAF\" border=0></a></td><td valign=\"middle\" align=\"center\"><a href=\"http://www.uab.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_uab.png\" width=100 title=\"UAB\" border=0></a></td><td align=\"center\"><a href=\"https://www.grumets.cat/\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoGRUMETSNou.png\" title=\"Grumets\" width=100 border=0></a></td><td></td><td align=\"center\"><a href=\"https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals-Elevacions/Dades-historiques-LiDAR\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" title=\"ICGC\" width=80 border=0></a></td></tr><tr><td></td><td></td><td></td><td></td><td align=\"center\"><a href=\"https://geoportalcartografia.amb.cat/AppGeoportalCartografia2/?locale=ca&Categoria=Lidar&Producte=54\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/AMB.png\" title=\"AMB\" height=20 border=0></a></td></tr></table>",
+					"eng":"<table><colgroup><col><col><col><col style=\"width: 50px;\"><col></colgroup><tr><td></td><td></td><td></td><td></td><td><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"-1\">lidar data:</font></td></tr><tr><td valign=\"middle\" align=\"center\"><a href=\"http://www.creaf.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoCREAF.png\" width=100 title=\"CREAF\" border=0></a></td><td valign=\"middle\" align=\"center\"><a href=\"http://www.uab.cat\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_uab.png\" width=100 title=\"UAB\" border=0></a></td><td align=\"center\"><a href=\"https://www.grumets.cat/\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/LogoGRUMETSNou.png\" title=\"Grumets\" width=100 border=0></a></td><td></td><td align=\"center\"><a href=\"https://www.icgc.cat/ca/Geoinformacio-i-mapes/Dades-i-productes/Bessons-digitals-Elevacions/Dades-historiques-LiDAR\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" title=\"ICGC\" width=80 border=0></a></td></tr><tr><td></td><td></td><td></td><td></td><td align=\"center\"><a href=\"https://geoportalcartografia.amb.cat/AppGeoportalCartografia2/?locale=ca&Categoria=Lidar&Producte=54\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/AMB.png\" title=\"AMB\" height=20 border=0></a></td></tr></table>"
+				}
+		},
+		{
+			"name": "barra",
+			"left": 8,
+			"top": 90,
+			"width": 685,
+			"height": 35,
+			"ancora": "wC",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "ctipica",
+			"left": 550,
+			"top": 97,
+			"width": 1000,
+			"height": 30,
+			"ancora": "wC",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "projeccio",
+			"left": 990,
+			"top": 100,
+			"width": 140,
+			"height": 80,
+			"ancora": "NwEsC",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "vista",
+			"left": 5,
+			"top": 122,
+			"width": 1275,
+			"height": 800,
+			"ancora": "NwSE",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "atribucio",
+			"left": 203,
+			"top": 860,
+			"width": 1030,
+			"height": 20,
+			"ancora": "SEwR",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "logo_miramon",
+			"left": 1175,
+			"top": 788,
+			"width": 55,
+			"height": 75,
+			"ancora": "SECR",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": {
+				"cat": "<a href=\"https://www.miramon.cat/Index.htm\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"spa": "<a href=\"https://www.miramon.cat/Index_spa.htm\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"eng": "<a href=\"https://www.miramon.cat/Index_eng.htm\" target=\"_blank\"><img src=\"examples/dhm/dhm-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
+			}
+		},
+		{
+			"name": "situacio",
+			"left": 20,
+			"top": 600,
+			"width": 150,
+			"height": 243,
+			"ancora": "nWSe",
+			"scroll": "no",
+			"visible": true,
+			"resizable": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "llegenda",
+			"title": {
+				"cat": "Llegenda i control de les capes",
+				"spa": "Leyenda y control de capas",
+				"eng": "Legend & layer control"
+			},
+			"left": 1025,
+			"top": 300,
+			"width": 225,
+			"height": 460,
+			"ancora": "NwEsCR",
+			"scroll": "ara_no",
+			"visible": true,
+			"resizable": true,
+			"ev": null,
+			"content": null
+		},
+		{
+			"name": "coord",
+			"left": 20,
+			"top": 480,
+			"width": 150,
+			"height": 90,
+			"ancora": "nWse",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"resizable": true,
+			"content": null
+		}
+	],
+	"ServidorLocal": "https://lidarteam.grumets.cat/cgi-bin/MiraMon.cgi?",
+	"VersioServidorLocal": 
+	{
+		"Vers": 1,
+		"SubVers": 3,
+		"VariantVers": 0
+	},
+	"TipusServidorLocal": "TipusWMS",
+	"AdrecaBaseSRC": "",
+	"WPSschemaURL": "http://schemas.opengis.net",
+	"idiomes": ["cat","spa","eng"],
+	"idioma": "cat",
+	"PlanaPrincipal": null,
+	"TitolNavegador": 
+	{
+		"layer": "titol",
+		"text": 
+		{
+			"cat": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">Model Digital d'Alçàries multitemporal de Catalunya</font><br></b>",
+			"spa": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">Modelo Digital de Alturas multitemporal de Cataluña</font><br></b>",
+			"eng": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">Multitemporal Digital Height Model of Catalonia</font><br></b>"
+		}
+	},
+	"titol": 
+	{
+		"cat": "Model Digital d'Alçàries multitemporal de Catalunya",
+		"spa": "Modelo Digital de Alturas multitemporal de Cataluña",
+		"eng": "Multitemporal Digital Height Model of Catalonia"
+	},
+	"TitolCaixa": 
+	{
+		"cat": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Model Digital d'Alçàries multitemporal de Catalunya</b></font>",
+		"spa": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Modelo Digital de Alturas multitemporal de Cataluña</b></font>",
+		"eng": "<font face=\"Arial\" size=\"2\" color=\"#009900\"><b>Multitemporal Digital Height Model of Catalonia</b></font>"
+	},
+	"ncol": 640,
+	"nfil": 480,
+	"NColNFilAuto": true,
+	"psalt": 80,
+	"MargeEsqVista": 10,
+	"MargeSupVista": 3,
+	"ColorFonsVista": "#CCCCCC",
+	"ColorQuadratSituacio": "#FF0000",
+	"ColorFonsPlana": "#FFFFFF",
+	"EstilCoord": "area",
+	"NDecimalsCoordXY": 2,
+	"CoordActualProj": true,
+	"CoordActualLongLatG": true,
+	"CoordActualLongLatGMS": true,
+	"zoom": 
+	[
+		{"costat": 1000},		
+		{"costat": 500},
+		{"costat": 200},
+		{"costat": 100},
+		{"costat": 50},
+		{"costat": 20},
+		{"costat": 10},
+		{"costat": 4},
+		{"costat": 2},
+		{"costat": 1},
+		{"costat": 0.5}		
+	],
+	"NivellZoomCostat": 500,
+	"ConsultableSegonsEscala": true,
+	"DesplegableProj": true,
+	"CanviProjAuto": false,
+	"ZoomUnSolClic": true,
+	"ZoomContinu": false,
+	"UsaSempreMeuServidor": false,
+	"MostraBarraEscala": true,
+	"RelaxaAmbitVisualitzacio": false,
+	"VoraVistaGrisa": false,
+	"ImatgeSituacio":
+	[
+		{
+			"EnvTotal": 
+			{
+				"EnvCRS": 
+				{
+					"MinX": 260305.0,
+					"MaxX": 528025.0,
+					"MinY": 4488915.0,
+					"MaxY": 4748120.0
+				},
+				"CRS": "EPSG:25831"
+			},
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/mapa-base/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": "TipusWMS",
+			"nom": "orto-hibrida",
+			"Ample": 200,
+			"MargeEsq": 0,
+			"MargeSup": 0,
+			"Alt": 194
+		}	
+	],
+	"AmpleAltSituacioAuto": true,
+	"ISituacioOri": 0,
+	"PuntOri": {"x": 388500,"y": 4609500},
+	"AspecteLlegenda": 
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda": 
+		{
+			"cat": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>Fonts externes:</b><br><br><sup>1</sup>Capa extreta del SIG del Dep. d'Acció Climàtica, Alimentació i Agenda Rural<br><sup>2</sup>Servidor de l'ICGC<br><sup>3</sup>MODIS, NASA</font><br><img src=\"examples/dhm/dhm-img/logo_generalitat.png\" alt=\"Generalitat de Catalunya\" width=\"130\"><br><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" alt=\"Institut Cartogràfic i Geològic de Catalunya\" width=\"120\">",
+			"spa": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>Fuentes externas:</b><br><br><sup>1</sup>Capa extraída del SIG del Dep. d'Acció Climàtica, Alimentació i Agenda Rural<br><sup>2</sup>Servidor del ICGC<br><sup>3</sup>MODIS, NASA</font><br><img src=\"examples/dhm/dhm-img/logo_generalitat.png\" alt=\"Generalitat de Catalunya\" width=\"130\"><br><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" alt=\"Institut Cartogràfic i Geològic de Catalunya\" width=\"120\">",
+			"eng": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1><b>External sources:</b><br><br><sup>1</sup>Layer extracted from the Dep. d'Acció Climàtica, Alimentació i Agenda Rural GIS<br><sup>2</sup>ICGC server<br><sup>3</sup>MODIS, NASA</font><br><img src=\"examples/dhm/dhm-img/logo_generalitat.png\" alt=\"Generalitat de Catalunya\" width=\"130\"><br><img src=\"examples/dhm/dhm-img/logo_ICGC.jpg\" alt=\"Institut Cartogràfic i Geològic de Catalunya\" width=\"120\">"
+		},
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000000\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"AspecteLlegendaImpressio": 
+	{
+		"CapcaleraLlegenda": "",
+		"PeuLlegenda": "",
+		"PreviSepara": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000000\">",
+		"PostSepara": "</font>",
+		"PreviDescLlegenda": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>",
+		"PostDescLlegenda": "</b></font>",
+		"PreviDescLlegendaGris": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#AAAAAA\" size=1><b>",
+		"PostDescLlegendaGris": "</b></font>",
+		"PreviDescEstil": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099  \"><i>",
+		"PostDescEstil": "</i></font>",
+		"PreviDescItems": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescItems": "</font>",
+		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
+		"PostDescColor": "</font>"
+	},
+	"PlantillaDImpressio": 
+	[
+		{
+			"nom": "A4Vertical",
+			"desc": "A4 vertical",
+			"src": "a4vertical.htm",
+			"ample": 600,
+			"alt": 800
+		},
+		{
+			"nom": "A4Horitzontal",
+			"desc": "A4 horizontal",
+			"src": "a4horitzontal.htm",
+			"ample": 800,
+			"alt": 600
+		}
+	],
+	"LlegendaAmagaSegonsEscala": false,
+	"LlegendaGrisSegonsEscala": true,
+	"LlegendaIconesInactivesGrises": false,
+	"LlegendaGrupsComARadials": true,
+	"LlegendaLligaVisibleAmbCtipica": false,
+	"LlegendaAmagaSeparaNoCapa": true,
+	"LlegendaAmagaSiForaAmbit": true,
+	"LlegendaGrisSiForaAmbit": true,
+	"LlegendaLligaVisibleAmbDescarregable": true,
+	"CapaConsultaPreguntaServidor": 
+	[
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?", 
+			"nom_antic": "munis50k_ICC-catalunya",
+			"nom": "MunicipisSEL_BM-5M_v2_0",
+			"cors": true,
+			"camps": 
+			[
+				{
+					"previ": {"cat": "Anar a la:","spa": "Ir a la:","eng": "Go to:"},
+					"nom_antic": "MUNICIPI`MUNICIPI_TE_MUNI_DBF`NOMN_MUNI",
+					"nom": "NOMMUNI",
+					"desc": {"cat": "Municipi","spa": "Municipio","eng": "Municipality"},
+					"post": {"cat": "de:","spa": "de:","eng": "of:"}
+				}
+			],
+			"CRS": "EPSG:25831",
+			"id_camp": null
+		},	
+		{
+			"servidor_antic": "https://www.opengis.grumets.cat/cgi-bin/SatCat/MiraMon.cgi?",
+			"servidor": null,
+			"cors": true,
+			"nom_antic": "comar50k_ICC-catalunya",
+			"nom": "ComarquesSEL_BM-5M_v2_0",
+			"camps": 
+			[
+				{
+					"previ": {"cat": "Anar a la:","spa": "Ir a la:","eng": "Go to:"},
+					"nom_antic": "MUNICIPI`MUNICIPI_TE_MUNI_DBF`COMARCA`COMARCA_TE_COMA_DBF`NOM_COMAR",
+					"nom": "NOMCOMAR",
+					"desc": {"cat": "Comarca","spa": "Comarca","eng": "County"},
+					"post": {"cat": "de:","spa": "de:","eng": "of:"}
+				}
+			],
+			"CRS": "EPSG:25831",
+			"id_camp": null
+		}			
+	],
+	"ConsultaTipica": 
+	[{
+		"nom": "ctipica",
+		"TipusConsultaTipica": "CTipicaDesplegables",
+		"NomCapa_antic": 
+		[
+		"comar50k_ICC-catalunya",
+		"munis50k_ICC-catalunya"
+		],
+		"NomCapa": 
+		[
+			"ComarquesSEL_BM-5M_v2_0",
+			"MunicipisSEL_BM-5M_v2_0"
+		]
+	}],
+	"VistaPermanent": [{"nom": "vista"}],
+	"BarraEstil": {
+		"classic": false,
+		"colors": {
+			"cls-1": "#48A3A2",
+			"cls-2": "#DDDDDD",
+			"cls-w": "#f1f2f2",
+			"cls-g": "#939598"			
+		},
+		"colorsGrey": {
+			"cls-1": "#333333",
+			"cls-2": "#EDFAF2",
+			"cls-w": "#f1f2f2",
+			"cls-g": "#939598"			
+		} 
+	},		
+	"BarraBotoMes": false,
+	"BarraBotoMenys": false,
+	"BarraBotoBack": false,
+	"BarraBotoVGeneral": false,
+	"BarraBotonsAlternatius": true,
+	"BarraBotoMouMig": true,
+	"BarraBotoNovaVista": true,
+	"BarraEscala": false,
+	"BarraBotoCaixaParam": true,
+	"BarraBotoPrint": true,
+	"BarraBotoPlanaPrincipal": true,
+	"BarraBotoAjuda": true,
+	"BarraBotoInstallarMMZ": true,
+	"BarraBotonsIdiomes": true,
+	"BarraBotoAnarCoord": false,
+	"BarraBotoConsola": true,
+	"BarraBotoEnllac": true,
+	"BarraBotoInsereix": false,
+	"BarraBotoEnllacWMS": true,
+	"BarraBotoAfegeixCapa": true,
+	"BarraBotoCalculadora": true,
+	"BarraBotoCombiCapa": true,  
+	"BarraBotoCTipica": false,
+	"BarraNomesDescarrega": false,
+	"VistaBotonsBruixola": true,
+	"VistaBotonsZoom": true,
+	"VistaEscalaNumerica": true,
+	"VistaSliderZoom": false,
+	"BotoVistaBack": "false NO IMPLEMENTAT",
+	"BotoVistaAnarACoordenada": "false NO IMPLEMENTAT",
+	"AltresLinks": null,
+	"TitolLlistatNivellZoom": 
+	{
+		"cat": "<span class=\"text_coord\">Escala: </span>",
+		"spa": "<span class=\"text_coord\">Escala: </span>",
+		"eng": "<span class=\"text_coord\">Scale: </span>"
+	},
+	"LlistatZoomFraccio": false,
+	"LlistatZoomMidaPixel": true,
+	"LlistatZoomEscalaAprox": true,
+	"EstatClickSobreVista": "ClickConLoc",
+	"TipusConsulta": "FinestraDeCop",
+	"IconaConsulta": 
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"PlantillaConsulta": 
+	{
+		"nom": null,
+		"desc": null,
+		"src": "consulta_de_cop.htm",
+		"ample": 500,
+		"alt": 500
+	},
+	"IconaAnarCoord": 
+	{
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"MostraPosicioGPS": false,
+	"IconaEdicio": {
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"FuncioIconaEdicio": null,
+	"FuncioCanviProjeccio": null,
+	"IconaValidacio": null,
+	"TempsRefresc": 5000,
+	"DescarregesCertificades": true,
+	"ParGetCoverage": null,
+	"FormatGetCoverage": null,
+	"ResGetCoverage": null,
+	"FormatDescarregaTot": [{
+		"format": {
+				"nom": "text/html",
+				"desc": 
+				{
+					"cat": "Format HTML",
+					"spa": "Formato HTML",
+					"eng": "HTML format"
+				}
+			},
+			"extension": "html"
+	}],
+	"capa": 
+	[
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "InfraestructuresFerroviaries",
+			"desc": 
+			{
+				"cat": "Xarxa de ferrocarril",
+				"spa": "Red ferroviária",
+				"eng": "Railway network"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": 
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Cartografia de referència <sup>1</sup></b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Cartografía de referencia <sup>1</sup></b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Reference layers <sup>1</sup></b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda": 
+			{
+				"cat": "Vies de tren",
+				"spa": "Vías de tren",
+				"eng": "Railways"
+			},
+			"estil": 
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg": 
+					[
+						{
+							"color": "#9A59FF",
+							"DescColor": null
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "InfraestructuresViaries",
+			"desc": 
+			{
+				"cat": "Xarxa de carreteres",
+				"spa": "Red de carreteras",
+				"eng": "Road network"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Xarxa de carreteres",
+				"spa": "Red de carreteras",
+				"eng": "Road network"
+			},
+			"estil": 
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg": 
+					[
+						{
+							"color": "#19408B",
+							"DescColor": 
+							{
+								"cat": "Autopistes/autovies",
+								"spa": "Autopistas/autovias",
+								"eng": "Municipality"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": 
+							{
+								"cat": "Xarxa bàsica",
+								"spa": "Red básica",
+								"eng": "Basic network"
+							}
+						},
+						{
+							"color": "#007800",
+							"DescColor": 
+							{
+								"cat": "Xarxa comarcal",
+								"spa": "Red Comarcal",
+								"eng": "County network"
+							}
+						},
+						{
+							"color": "#FFDF00",
+							"DescColor": 
+							{
+								"cat": "Xarxa local",
+								"spa": "Red local",
+								"eng": "Local network"
+							}
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "hidro250k-catalunya",
+			"desc": 
+			{
+				"cat": "Hidrografia de Catalunya (1:250000)",
+				"spa": "Hidrografía de Catalunya (1:250000)",
+				"eng": "Catalonia hidrography (1:250000)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Rius",
+				"spa": "Ríos",
+				"eng": "Rivers"
+			},
+			"estil": 
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg": 
+					[
+						{"color": "#00FFFF","DescColor": null}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "altim250k-catalunya",
+			"desc": 
+			{
+				"cat": "Corbes de nivell de Catalunya (1:250000)",
+				"spa": "Curvas de nivel de Cataluña (1:250000)",
+				"eng": "Catalonia contour lines (1:250000)"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/gif",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Corbes de nivell",
+				"spa": "Curvas de nivel",
+				"eng": "Contour Lines"
+			},
+			"estil": 
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg": 
+					[
+						{"color": "#C10000","DescColor": null}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "LimAdmin_BM-5M_v2_0",
+			"desc": 
+			{
+				"cat": "Límits municipals de Catalunya 1:5 000 (BM-5M) v2.0",
+				"spa": "Límites municipales de Cataluña 1:5 000 (BM-5M) v2.0",
+				"eng": "Municipal limits of Catalonia 1:5 000 (BM-5M) v2.0"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Límits administratius",
+				"spa": "Límites administrativos",
+				"eng": "Administrative boundaries"
+			},
+			"estil": 
+			[
+				{
+					"TipusObj": "L",
+					"ItemLleg": 
+					[
+						{
+							"color": "#969696",
+							"DescColor": 
+							{
+								"cat": "Municipal",
+								"spa": "Municipal",
+								"eng": "Municipality"
+							}
+						},
+						{
+							"color": "#008000",
+							"DescColor": 
+							{
+								"cat": "Comarcal",
+								"spa": "Comarcal",
+								"eng": "County"
+							}
+						},
+						{
+							"color": "#1E321E",
+							"DescColor": 
+							{
+								"cat": "Provincial",
+								"spa": "Provincial",
+								"eng": "Provincial"
+							}
+						},
+						{
+							"color": "#804000",
+							"DescColor": 
+							{
+								"cat": "Autonòmic",
+								"spa": "Autonómico",
+								"eng": "Autonomic"
+							}
+						},
+						{
+							"color": "#FF0000",
+							"DescColor": 
+							{
+								"cat": "Estatal",
+								"spa": "Estatal",
+								"eng": "Estate"
+							}
+						},
+						{
+							"color": "#0000FF",
+							"DescColor": 
+							{
+								"cat": "Línia de costa",
+								"spa": "Línea de costa",
+								"eng": "Coast line"
+							}
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": 0,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "MunicipisSEL_BM-5M_v2_0",
+			"desc": 
+			{
+				"cat": "Municipis de Catalunya",
+				"spa": "Municipios de Catalunya",
+				"eng": "Municipalities of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "int16",
+					"nodata": [0,948]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Municipis de Catalunya",
+				"spa": "Municipios de Catalunya",
+				"eng": "Municipalities of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "Municipis",
+						"spa": "Municipios",
+						"eng": "Municipalities"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": [{"i_valor": 0}],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						null,
+						{"COVER": "Arenys de Mar"},
+						{"COVER": "Badalona"},
+						{"COVER": "Cabrera de Mar"},
+						{"COVER": "Caldes d'Estrac"},
+						{"COVER": "Pineda de Mar"},
+						{"COVER": "Canet de Mar"},
+						{"COVER": "Sant Iscle de Vallalta"},
+						{"COVER": "Castelldefels"},
+						{"COVER": "Cubelles"},
+						{"COVER": "Gavà"},
+						{"COVER": "Viladecans"},
+						{"COVER": "Malgrat de Mar"},
+						{"COVER": "el Masnou"},
+						{"COVER": "Mataró"},
+						{"COVER": "Montgat"},
+						{"COVER": "Tiana"},
+						{"COVER": "Sant Cebrià de Vallalta"},
+						{"COVER": "Tordera"},
+						{"COVER": "el Prat de Llobregat"},
+						{"COVER": "Sant Boi de Llobregat"},
+						{"COVER": "Premià de Mar"},
+						{"COVER": "Vallgorguina"},
+						{"COVER": "Sant Celoni"},
+						{"COVER": "Sant Adrià de Besòs"},
+						{"COVER": "Sant Andreu de Llavaneres"},
+						{"COVER": "Sant Joan Despí"},
+						{"COVER": "Sant Climent de Llobregat"},
+						{"COVER": "Santa Coloma de Cervelló"},
+						{"COVER": "Sant Feliu de Buixalleu"},
+						{"COVER": "Riells i Viabrea"},
+						{"COVER": "Santa Maria de Palautordera"},
+						{"COVER": "Torrelles de Llobregat"},
+						{"COVER": "Sant Esteve de Palautordera"},
+						{"COVER": "Sant Pere de Vilamajor"},
+						{"COVER": "Sant Fost de Campsentelles"},
+						{"COVER": "Sant Feliu de Llobregat"},
+						{"COVER": "Sant Vicenç dels Horts"},
+						{"COVER": "Sant Just Desvern"},
+						{"COVER": "Vilassar de Mar"},
+						{"COVER": "Sant Pere de Ribes"},
+						{"COVER": "Santa Maria de Martorelles"},
+						{"COVER": "Vallromanes"},
+						{"COVER": "la Palma de Cervelló"},
+						{"COVER": "Sant Vicenç de Montalt"},
+						{"COVER": "Teià"},
+						{"COVER": "Maçanet de la Selva"},
+						{"COVER": "Vallirana"},
+						{"COVER": "Vilalba Sasserra"},
+						{"COVER": "Vilanova del Vallès"},
+						{"COVER": "Agullana"},
+						{"COVER": "Darnius"},
+						{"COVER": "la Vajol"},
+						{"COVER": "la Jonquera"},
+						{"COVER": "Albanyà"},
+						{"COVER": "Alp"},
+						{"COVER": "Fontanals de Cerdanya"},
+						{"COVER": "Arbúcies"},
+						{"COVER": "Espinelves"},
+						{"COVER": "Sant Hilari Sacalm"},
+						{"COVER": "Viladrau"},
+						{"COVER": "Maçanet de Cabrenys"},
+						{"COVER": "Bolvir"},
+						{"COVER": "Breda"},
+						{"COVER": "Boadella i les Escaules"},
+						{"COVER": "Biure"},
+						{"COVER": "Terrades"},
+						{"COVER": "Maià de Montcal"},
+						{"COVER": "Cistella"},
+						{"COVER": "Lladó"},
+						{"COVER": "Navata"},
+						{"COVER": "Sant Llorenç de la Muga"},
+						{"COVER": "Crespià"},
+						{"COVER": "Camprodon"},
+						{"COVER": "Molló"},
+						{"COVER": "Montagut i Oix"},
+						{"COVER": "Llanars"},
+						{"COVER": "la Vall de Bianya"},
+						{"COVER": "Sant Pau de Segúries"},
+						{"COVER": "Cantallops"},
+						{"COVER": "Capmany"},
+						{"COVER": "Masarac"},
+						{"COVER": "Sant Climent Sescebes"},
+						{"COVER": "Queralbs"},
+						{"COVER": "Ribes de Freser"},
+						{"COVER": "Setcases"},
+						{"COVER": "Vilallonga de Ter"},
+						{"COVER": "Castellfollit de la Roca"},
+						{"COVER": "Sant Joan les Fonts"},
+						{"COVER": "Castelló d'Empúries"},
+						{"COVER": "Vilanant"},
+						{"COVER": "Rabós"},
+						{"COVER": "Esponellà"},
+						{"COVER": "Das"},
+						{"COVER": "Ger"},
+						{"COVER": "Isòvol"},
+						{"COVER": "Prats i Sansor"},
+						{"COVER": "Urús"},
+						{"COVER": "Espolla"},
+						{"COVER": "Mollet de Peralada"},
+						{"COVER": "Fontcoberta"},
+						{"COVER": "Vilademuls"},
+						{"COVER": "Serinyà"},
+						{"COVER": "Puigcerdà"},
+						{"COVER": "Porqueres"},
+						{"COVER": "Garriguella"},
+						{"COVER": "Vilajuïga"},
+						{"COVER": "Meranges"},
+						{"COVER": "Guils de Cerdanya"},
+						{"COVER": "Hostalric"},
+						{"COVER": "Massanes"},
+						{"COVER": "Bellver de Cerdanya"},
+						{"COVER": "Vilamaniscle"},
+						{"COVER": "Llers"},
+						{"COVER": "Vilafant"},
+						{"COVER": "Pont de Molins"},
+						{"COVER": "Vidreres"},
+						{"COVER": "Sant Ferriol"},
+						{"COVER": "Lles de Cerdanya"},
+						{"COVER": "Peralada"},
+						{"COVER": "Riudarenes"},
+						{"COVER": "Sils"},
+						{"COVER": "Mieres"},
+						{"COVER": "Sant Martí de Llémena"},
+						{"COVER": "Sant Miquel de Campmajor"},
+						{"COVER": "Santa Pau"},
+						{"COVER": "Sant Aniol de Finestres"},
+						{"COVER": "Tortellà"},
+						{"COVER": "Sant Jaume de Llierca"},
+						{"COVER": "Sales de Llierca"},
+						{"COVER": "Ordis"},
+						{"COVER": "Pontós"},
+						{"COVER": "Ogassa"},
+						{"COVER": "Ripoll"},
+						{"COVER": "Pardines"},
+						{"COVER": "Sant Joan de les Abadesses"},
+						{"COVER": "Olot"},
+						{"COVER": "la Vall d'en Bas"},
+						{"COVER": "les Preses"},
+						{"COVER": "Osor"},
+						{"COVER": "la Cellera de Ter"},
+						{"COVER": "Santa Coloma de Farners"},
+						{"COVER": "Susqueda"},
+						{"COVER": "Palau-saverdera"},
+						{"COVER": "Pau"},
+						{"COVER": "Pals"},
+						{"COVER": "Pedret i Marzà"},
+						{"COVER": "Vila-sacra"},
+						{"COVER": "Vilabertran"},
+						{"COVER": "les Planes d'Hostoles"},
+						{"COVER": "Sant Feliu de Pallerols"},
+						{"COVER": "Planoles"},
+						{"COVER": "Toses"},
+						{"COVER": "la Selva de Mar"},
+						{"COVER": "Vallfogona de Ripollès"},
+						{"COVER": "Vidrà"},
+						{"COVER": "Riudaura"},
+						{"COVER": "Sant Gregori"},
+						{"COVER": "Sant Julià de Ramis"},
+						{"COVER": "Sant Julià del Llor i Bonmatí"},
+						{"COVER": "Sant Pere Pescador"},
+						{"COVER": "Vilobí d'Onyar"},
+						{"COVER": "Santa Llogaia d'Àlguema"},
+						{"COVER": "Riu de Cerdanya"},
+						{"COVER": "Viladasens"},
+						{"COVER": "Àger"},
+						{"COVER": "Sant Esteve de la Sarga"},
+						{"COVER": "Camarasa"},
+						{"COVER": "Alcarràs"},
+						{"COVER": "Gimenells i el Pla de la Font"},
+						{"COVER": "Alfarràs"},
+						{"COVER": "Alins"},
+						{"COVER": "Almacelles"},
+						{"COVER": "Almatret"},
+						{"COVER": "Seròs"},
+						{"COVER": "Almenar"},
+						{"COVER": "Alòs de Balaguer"},
+						{"COVER": "Alt Àneu"},
+						{"COVER": "Naut Aran"},
+						{"COVER": "Espot"},
+						{"COVER": "Canejan"},
+						{"COVER": "Vilaller"},
+						{"COVER": "la Vall de Boí"},
+						{"COVER": "Vielha e Mijaran"},
+						{"COVER": "el Pont de Bar"},
+						{"COVER": "Montellà i Martinet"},
+						{"COVER": "Arres"},
+						{"COVER": "Bossòst"},
+						{"COVER": "la Sentiu de Sió"},
+						{"COVER": "Vallfogona de Balaguer"},
+						{"COVER": "Bellcaire d'Urgell"},
+						{"COVER": "les Avellanes i Santa Linya"},
+						{"COVER": "Aitona"},
+						{"COVER": "Sarroca de Lleida"},
+						{"COVER": "Soses"},
+						{"COVER": "Balaguer"},
+						{"COVER": "Cubells"},
+						{"COVER": "Castelló de Farfanya"},
+						{"COVER": "Os de Balaguer"},
+						{"COVER": "Térmens"},
+						{"COVER": "Menàrguens"},
+						{"COVER": "el Pont de Suert"},
+						{"COVER": "Sarroca de Bellera"},
+						{"COVER": "la Torre de Cabdella"},
+						{"COVER": "Bausen"},
+						{"COVER": "Penelles"},
+						{"COVER": "Bellmunt d'Urgell"},
+						{"COVER": "Montgai"},
+						{"COVER": "Linyola"},
+						{"COVER": "Prullans"},
+						{"COVER": "Bellvís"},
+						{"COVER": "Vilamòs"},
+						{"COVER": "Es Bòrdes"},
+						{"COVER": "Les"},
+						{"COVER": "Vilanova de Meià"},
+						{"COVER": "Castellserà"},
+						{"COVER": "Preixens"},
+						{"COVER": "Cava"},
+						{"COVER": "la Vansa i Fórnols"},
+						{"COVER": "Josa i Tuixén"},
+						{"COVER": "Foradada"},
+						{"COVER": "Rialp"},
+						{"COVER": "Esterri d'Àneu"},
+						{"COVER": "la Guingueta d'Àneu"},
+						{"COVER": "Sort"},
+						{"COVER": "la Fuliola"},
+						{"COVER": "Ivars d'Urgell"},
+						{"COVER": "Gavet de la Conca"},
+						{"COVER": "Llimiana"},
+						{"COVER": "Gósol"},
+						{"COVER": "Guixers"},
+						{"COVER": "la Granja d'Escarp"},
+						{"COVER": "Navès"},
+						{"COVER": "Odèn"},
+						{"COVER": "la Coma i la Pedra"},
+						{"COVER": "Sant Llorenç de Morunys"},
+						{"COVER": "Ivars de Noguera"},
+						{"COVER": "Tornabous"},
+						{"COVER": "Vila-sana"},
+						{"COVER": "Isona i Conca Dellà"},
+						{"COVER": "Conca de Dalt"},
+						{"COVER": "Lleida"},
+						{"COVER": "Montoliu de Lleida"},
+						{"COVER": "Sudanell"},
+						{"COVER": "Torregrossa"},
+						{"COVER": "Torrefarrera"},
+						{"COVER": "Torre-serona"},
+						{"COVER": "el Poal"},
+						{"COVER": "Lladorre"},
+						{"COVER": "Lladurs"},
+						{"COVER": "Llardecans"},
+						{"COVER": "Torrebesses"},
+						{"COVER": "Maials"},
+						{"COVER": "Llavorsí"},
+						{"COVER": "les Valls de Valira"},
+						{"COVER": "Massalcoreig"},
+						{"COVER": "Flix"},
+						{"COVER": "Riba-roja d'Ebre"},
+						{"COVER": "Vilanova de la Barca"},
+						{"COVER": "Torrelameu"},
+						{"COVER": "Miralcamp"},
+						{"COVER": "Mollerussa"},
+						{"COVER": "el Palau d'Anglesola"},
+						{"COVER": "Montferrer i Castellbò"},
+						{"COVER": "Sunyer"},
+						{"COVER": "Olius"},
+						{"COVER": "Fígols i Alinyà"},
+						{"COVER": "Oliana"},
+						{"COVER": "Peramola"},
+						{"COVER": "Riner"},
+						{"COVER": "Pinell de Solsonès"},
+						{"COVER": "Solsona"},
+						{"COVER": "Organyà"},
+						{"COVER": "Sidamon"},
+						{"COVER": "la Pobla de Segur"},
+						{"COVER": "Salàs de Pallars"},
+						{"COVER": "Sanaüja"},
+						{"COVER": "Vilanova de l'Aguda"},
+						{"COVER": "Torrefeta i Florejacs"},
+						{"COVER": "Pinós"},
+						{"COVER": "Torà"},
+						{"COVER": "Bellaguarda"},
+						{"COVER": "Margalef"},
+						{"COVER": "Tremp"},
+						{"COVER": "Puiggròs"},
+						{"COVER": "Puigverd d'Agramunt"},
+						{"COVER": "Puigverd de Lleida"},
+						{"COVER": "Soriguera"},
+						{"COVER": "les Valls d'Aguilar"},
+						{"COVER": "Ribera d'Urgellet"},
+						{"COVER": "la Seu d'Urgell"},
+						{"COVER": "Rosselló"},
+						{"COVER": "Vilanova de Segrià"},
+						{"COVER": "Talarn"},
+						{"COVER": "Sant Ramon"},
+						{"COVER": "Sant Guim de la Plana"},
+						{"COVER": "Castell de Mur"},
+						{"COVER": "Torres de Segre"},
+						{"COVER": "Senterada"},
+						{"COVER": "Tarroja de Segarra"},
+						{"COVER": "Tiurana"},
+						{"COVER": "Vall de Cardós"},
+						{"COVER": "els Plans de Sió"},
+						{"COVER": "Alfara de Carles"},
+						{"COVER": "Xerta"},
+						{"COVER": "Paüls"},
+						{"COVER": "Horta de Sant Joan"},
+						{"COVER": "Altafulla"},
+						{"COVER": "Arnes"},
+						{"COVER": "Ascó"},
+						{"COVER": "Vinebre"},
+						{"COVER": "Móra d'Ebre"},
+						{"COVER": "Garcia"},
+						{"COVER": "la Fatarella"},
+						{"COVER": "Batea"},
+						{"COVER": "Benifallet"},
+						{"COVER": "Prat de Comte"},
+						{"COVER": "Tivenys"},
+						{"COVER": "Rasquera"},
+						{"COVER": "el Pinell de Brai"},
+						{"COVER": "Benissanet"},
+						{"COVER": "Tivissa"},
+						{"COVER": "Miravet"},
+						{"COVER": "Corbera d'Ebre"},
+						{"COVER": "la Bisbal de Falset"},
+						{"COVER": "la Palma d'Ebre"},
+						{"COVER": "Bot"},
+						{"COVER": "Caseres"},
+						{"COVER": "Cabacés"},
+						{"COVER": "la Morera de Montsant"},
+						{"COVER": "la Torre de l'Espanyol"},
+						{"COVER": "la Figuera"},
+						{"COVER": "Calafell"},
+						{"COVER": "Capçanes"},
+						{"COVER": "la Sénia"},
+						{"COVER": "Colldejou"},
+						{"COVER": "Vilalba dels Arcs"},
+						{"COVER": "Gandesa"},
+						{"COVER": "Cornudella de Montsant"},
+						{"COVER": "Creixell"},
+						{"COVER": "la Pobla de Montornès"},
+						{"COVER": "el Molar"},
+						{"COVER": "la Vilella Baixa"},
+						{"COVER": "el Lloar"},
+						{"COVER": "els Guiamets"},
+						{"COVER": "el Masroig"},
+						{"COVER": "Móra la Nova"},
+						{"COVER": "Ginestar"},
+						{"COVER": "Gratallops"},
+						{"COVER": "Marçà"},
+						{"COVER": "Ulldemolins"},
+						{"COVER": "Pradell de la Teixeta"},
+						{"COVER": "Poboleda"},
+						{"COVER": "Torroja del Priorat"},
+						{"COVER": "la Vilella Alta"},
+						{"COVER": "la Nou de Gaià"},
+						{"COVER": "el Perelló"},
+						{"COVER": "la Pobla de Massaluca"},
+						{"COVER": "Vespella de Gaià"},
+						{"COVER": "Porrera"},
+						{"COVER": "la Torre de Fontaubella"},
+						{"COVER": "Pratdip"},
+						{"COVER": "Renau"},
+						{"COVER": "Vilabella"},
+						{"COVER": "la Secuita"},
+						{"COVER": "la Riera de Gaià"},
+						{"COVER": "Roquetes"},
+						{"COVER": "Tortosa"},
+						{"COVER": "Santa Bàrbara"},
+						{"COVER": "Salomó"},
+						{"COVER": "Vallmoll"},
+						{"COVER": "Vila-seca"},
+						{"COVER": "la Canonja"},
+						{"COVER": "Camarles"},
+						{"COVER": "l'Aldea"},
+						{"COVER": "Ulldecona"},
+						{"COVER": "Vilanova de Prades"},
+						{"COVER": "Vallclara"},
+						{"COVER": "Valls"},
+						{"COVER": "el Vendrell"},
+						{"COVER": "Sant Jaume d'Enveja"},
+						{"COVER": "Alella"},
+						{"COVER": "Arenys de Munt"},
+						{"COVER": "Dosrius"},
+						{"COVER": "Argentona"},
+						{"COVER": "Cabrils"},
+						{"COVER": "Santa Coloma de Gramenet"},
+						{"COVER": "Bagà"},
+						{"COVER": "Saldes"},
+						{"COVER": "Guardiola de Berguedà"},
+						{"COVER": "Gisclareny"},
+						{"COVER": "Sant Cugat del Vallès"},
+						{"COVER": "Molins de Rei"},
+						{"COVER": "Esplugues de Llobregat"},
+						{"COVER": "l'Hospitalet de Llobregat"},
+						{"COVER": "Cerdanyola del Vallès"},
+						{"COVER": "Begues"},
+						{"COVER": "Olivella"},
+						{"COVER": "Olesa de Bonesvalls"},
+						{"COVER": "el Brull"},
+						{"COVER": "Tagamanent"},
+						{"COVER": "Seva"},
+						{"COVER": "Montseny"},
+						{"COVER": "Vilassar de Dalt"},
+						{"COVER": "Òrrius"},
+						{"COVER": "Calonge de Segarra"},
+						{"COVER": "Castellfollit de Riubregós"},
+						{"COVER": "la Molsosa"},
+						{"COVER": "Pujalt"},
+						{"COVER": "Campins"},
+						{"COVER": "Gualba"},
+						{"COVER": "Fogars de Montclús"},
+						{"COVER": "Cànoves i Samalús"},
+						{"COVER": "les Franqueses del Vallès"},
+						{"COVER": "Cardedeu"},
+						{"COVER": "Figaró-Montmany"},
+						{"COVER": "la Garriga"},
+						{"COVER": "Canyelles"},
+						{"COVER": "Castellet i la Gornal"},
+						{"COVER": "Capolat"},
+						{"COVER": "Castellar del Riu"},
+						{"COVER": "Sant Antoni de Vilamajor"},
+						{"COVER": "Llinars del Vallès"},
+						{"COVER": "la Roca del Vallès"},
+						{"COVER": "Cardona"},
+						{"COVER": "Navàs"},
+						{"COVER": "Sant Mateu de Bages"},
+						{"COVER": "Viver i Serrateix"},
+						{"COVER": "Montmajor"},
+						{"COVER": "Clariana de Cardener"},
+						{"COVER": "Casserres"},
+						{"COVER": "Puig-reig"},
+						{"COVER": "Cercs"},
+						{"COVER": "Fígols"},
+						{"COVER": "Castellar de n'Hug"},
+						{"COVER": "la Pobla de Lillet"},
+						{"COVER": "Gombrèn"},
+						{"COVER": "Castellbisbal"},
+						{"COVER": "Corbera de Llobregat"},
+						{"COVER": "Pallejà"},
+						{"COVER": "el Papiol"},
+						{"COVER": "Martorell"},
+						{"COVER": "Ullastrell"},
+						{"COVER": "Sant Andreu de la Barca"},
+						{"COVER": "Rubí"},
+						{"COVER": "Castell de l'Areny"},
+						{"COVER": "la Nou de Berguedà"},
+						{"COVER": "les Llosses"},
+						{"COVER": "Vilada"},
+						{"COVER": "Olèrdola"},
+						{"COVER": "Castellví de la Marca"},
+						{"COVER": "Sant Jaume dels Domenys"},
+						{"COVER": "Bellvei"},
+						{"COVER": "Santa Margarida i els Monjos"},
+						{"COVER": "l'Arboç"},
+						{"COVER": "Ivorra"},
+						{"COVER": "Estaràs"},
+						{"COVER": "Castellnou de Bages"},
+						{"COVER": "Súria"},
+						{"COVER": "Santpedor"},
+						{"COVER": "el Montmell"},
+						{"COVER": "Sant Martí Sarroca"},
+						{"COVER": "Castellví de Rosanes"},
+						{"COVER": "Cervelló"},
+						{"COVER": "Gelida"},
+						{"COVER": "Cornellà de Llobregat"},
+						{"COVER": "l'Espunyola"},
+						{"COVER": "Montclar"},
+						{"COVER": "Vallcebre"},
+						{"COVER": "Fogars de la Selva"},
+						{"COVER": "Fonollosa"},
+						{"COVER": "Font-rubí"},
+						{"COVER": "Santa Fe del Penedès"},
+						{"COVER": "el Pla del Penedès"},
+						{"COVER": "Torrelavit"},
+						{"COVER": "Torrelles de Foix"},
+						{"COVER": "Mediona"},
+						{"COVER": "Vilobí del Penedès"},
+						{"COVER": "Granollers"},
+						{"COVER": "Gaià"},
+						{"COVER": "Sallent"},
+						{"COVER": "Sant Sadurní d'Anoia"},
+						{"COVER": "Sant Esteve Sesrovires"},
+						{"COVER": "Subirats"},
+						{"COVER": "Sant Llorenç d'Hortons"},
+						{"COVER": "la Granada"},
+						{"COVER": "Sant Cugat Sesgarrigues"},
+						{"COVER": "Vilafranca del Penedès"},
+						{"COVER": "Montmeló"},
+						{"COVER": "Lliçà de Vall"},
+						{"COVER": "Lliçà d'Amunt"},
+						{"COVER": "Montornès del Vallès"},
+						{"COVER": "Sant Julià de Cerdanyola"},
+						{"COVER": "la Llacuna"},
+						{"COVER": "Querol"},
+						{"COVER": "Santa Maria de Miralles"},
+						{"COVER": "la Llagosta"},
+						{"COVER": "Parets del Vallès"},
+						{"COVER": "Palau-solità i Plegamans"},
+						{"COVER": "Santa Eulàlia de Ronçana"},
+						{"COVER": "Mollet del Vallès"},
+						{"COVER": "Palafolls"},
+						{"COVER": "Malla"},
+						{"COVER": "Martorelles"},
+						{"COVER": "Masquefa"},
+						{"COVER": "Piera"},
+						{"COVER": "els Hostalets de Pierola"},
+						{"COVER": "Sant Pere de Riudebitlles"},
+						{"COVER": "la Torre de Claramunt"},
+						{"COVER": "Sant Quintí de Mediona"},
+						{"COVER": "Montcada i Reixac"},
+						{"COVER": "Santa Perpètua de Mogoda"},
+						{"COVER": "Barberà del Vallès"},
+						{"COVER": "Ripollet"},
+						{"COVER": "Montesquiu"},
+						{"COVER": "Sant Quirze de Besora"},
+						{"COVER": "Santa Maria de Besora"},
+						{"COVER": "Sant Quirze Safaja"},
+						{"COVER": "Sant Martí de Centelles"},
+						{"COVER": "Navarcles"},
+						{"COVER": "Talamanca"},
+						{"COVER": "Sant Fruitós de Bages"},
+						{"COVER": "Olvan"},
+						{"COVER": "la Quar"},
+						{"COVER": "Sagàs"},
+						{"COVER": "Orís"},
+						{"COVER": "Orpí"},
+						{"COVER": "Pacs del Penedès"},
+						{"COVER": "Sentmenat"},
+						{"COVER": "Polinyà"},
+						{"COVER": "la Pobla de Claramunt"},
+						{"COVER": "Vallbona d'Anoia"},
+						{"COVER": "Puigdàlber"},
+						{"COVER": "Vilanova del Camí"},
+						{"COVER": "Sant Jaume de Frontanyà"},
+						{"COVER": "Sabadell"},
+						{"COVER": "Pontons"},
+						{"COVER": "els Prats de Rei"},
+						{"COVER": "Sant Martí Sesgueioles"},
+						{"COVER": "Rubió"},
+						{"COVER": "Premià de Dalt"},
+						{"COVER": "Santa Maria de Merlès"},
+						{"COVER": "Sant Guim de Freixenet"},
+						{"COVER": "el Pont de Vilomara i Rocafort"},
+						{"COVER": "Sant Vicenç de Castellet"},
+						{"COVER": "Sant Quirze del Vallès"},
+						{"COVER": "Terrassa"},
+						{"COVER": "Badia del Vallès"},
+						{"COVER": "Sant Pere Sallavinera"},
+						{"COVER": "Sant Joan de Vilatorrada"},
+						{"COVER": "Sant Feliu de Codines"},
+						{"COVER": "Sant Feliu Sasserra"},
+						{"COVER": "Sant Julià de Vilatorta"},
+						{"COVER": "Taradell"},
+						{"COVER": "Sant Llorenç Savall"},
+						{"COVER": "Sant Martí de Tous"},
+						{"COVER": "Santa Margarida de Montbui"},
+						{"COVER": "Sant Pere de Torelló"},
+						{"COVER": "Sant Vicenç de Torelló"},
+						{"COVER": "l'Esquirol"},
+						{"COVER": "Sora"},
+						{"COVER": "Sant Sadurní d'Osormort"},
+						{"COVER": "Vilanova de Sau"},
+						{"COVER": "Marganell"},
+						{"COVER": "Santa Eugènia de Berga"},
+						{"COVER": "Torelló"},
+						{"COVER": "Rupit i Pruit"},
+						{"COVER": "Tavertet"},
+						{"COVER": "Pontils"},
+						{"COVER": "Tona"},
+						{"COVER": "Tavèrnoles"},
+						{"COVER": "Viladecavalls"},
+						{"COVER": "Vacarisses"},
+						{"COVER": "Veciana"},
+						{"COVER": "Aiguaviva"},
+						{"COVER": "Riudellots de la Selva"},
+						{"COVER": "Fornells de la Selva"},
+						{"COVER": "Vilablareix"},
+						{"COVER": "Beuda"},
+						{"COVER": "Albons"},
+						{"COVER": "Viladamat"},
+						{"COVER": "la Tallada d'Empordà"},
+						{"COVER": "el Far d'Empordà"},
+						{"COVER": "Vilamalla"},
+						{"COVER": "Figueres"},
+						{"COVER": "Fortià"},
+						{"COVER": "Amer"},
+						{"COVER": "Anglès"},
+						{"COVER": "Brunyola i Sant Martí Sapresa"},
+						{"COVER": "Argelaguer"},
+						{"COVER": "l'Armentera"},
+						{"COVER": "Ventalló"},
+						{"COVER": "Avinyonet de Puigventós"},
+						{"COVER": "Borrassà"},
+						{"COVER": "Regencós"},
+						{"COVER": "Banyoles"},
+						{"COVER": "Bàscara"},
+						{"COVER": "Garrigàs"},
+						{"COVER": "Bellcaire d'Empordà"},
+						{"COVER": "Besalú"},
+						{"COVER": "Bescanó"},
+						{"COVER": "Salt"},
+						{"COVER": "Bordils"},
+						{"COVER": "Juià"},
+						{"COVER": "Sant Martí Vell"},
+						{"COVER": "Sant Joan de Mollet"},
+						{"COVER": "Cervià de Ter"},
+						{"COVER": "Cabanes"},
+						{"COVER": "Cabanelles"},
+						{"COVER": "Caldes de Malavella"},
+						{"COVER": "Cassà de la Selva"},
+						{"COVER": "Sant Andreu Salou"},
+						{"COVER": "Llagostera"},
+						{"COVER": "Forallac"},
+						{"COVER": "Cruïlles, Monells i Sant Sadurní de l'Heura"},
+						{"COVER": "Camós"},
+						{"COVER": "Cornellà del Terri"},
+						{"COVER": "Palol de Revardit"},
+						{"COVER": "Canet d'Adri"},
+						{"COVER": "Campdevànol"},
+						{"COVER": "Campelles"},
+						{"COVER": "Campllong"},
+						{"COVER": "Llambilles"},
+						{"COVER": "Vilamacolum"},
+						{"COVER": "Riumors"},
+						{"COVER": "Celrà"},
+						{"COVER": "Girona"},
+						{"COVER": "Sant Jordi Desvalls"},
+						{"COVER": "Siurana"},
+						{"COVER": "Palau de Santa Eulàlia"},
+						{"COVER": "Torroella de Fluvià"},
+						{"COVER": "Colomers"},
+						{"COVER": "Jafre"},
+						{"COVER": "Vilopriu"},
+						{"COVER": "Foixà"},
+						{"COVER": "Corçà"},
+						{"COVER": "la Pera"},
+						{"COVER": "Rupià"},
+						{"COVER": "Parlavà"},
+						{"COVER": "Flaçà"},
+						{"COVER": "Verges"},
+						{"COVER": "Ultramort"},
+						{"COVER": "Fontanilles"},
+						{"COVER": "Palau-sator"},
+						{"COVER": "Serra de Daró"},
+						{"COVER": "Gualta"},
+						{"COVER": "Ullastret"},
+						{"COVER": "Quart"},
+						{"COVER": "Sant Mori"},
+						{"COVER": "Vilaür"},
+						{"COVER": "Garrigoles"},
+						{"COVER": "Sarrià de Ter"},
+						{"COVER": "Ullà"},
+						{"COVER": "Madremanya"},
+						{"COVER": "Vall-llobrega"},
+						{"COVER": "Torrent"},
+						{"COVER": "Sant Miquel de Fluvià"},
+						{"COVER": "Saus, Camallera i Llampaies"},
+						{"COVER": "Abella de la Conca"},
+						{"COVER": "Coll de Nargó"},
+						{"COVER": "Agramunt"},
+						{"COVER": "Artesa de Segre"},
+						{"COVER": "Oliola"},
+						{"COVER": "els Alamús"},
+						{"COVER": "Bell-lloc d'Urgell"},
+						{"COVER": "Alàs i Cerc"},
+						{"COVER": "Arsèguel"},
+						{"COVER": "Estamariu"},
+						{"COVER": "Albatàrrec"},
+						{"COVER": "Albesa"},
+						{"COVER": "Alguaire"},
+						{"COVER": "Algerri"},
+						{"COVER": "la Portella"},
+						{"COVER": "Alcanó"},
+						{"COVER": "Granyena de les Garrigues"},
+						{"COVER": "Alfés"},
+						{"COVER": "Alcoletge"},
+						{"COVER": "Aspa"},
+						{"COVER": "el Cogul"},
+						{"COVER": "Tírvia"},
+						{"COVER": "Esterri de Cardós"},
+						{"COVER": "Farrera"},
+						{"COVER": "Alpicat"},
+						{"COVER": "Arbeca"},
+						{"COVER": "Maldà"},
+						{"COVER": "els Omellons"},
+						{"COVER": "Belianes"},
+						{"COVER": "Vilanova de Bellpuig"},
+						{"COVER": "la Floresta"},
+						{"COVER": "Artesa de Lleida"},
+						{"COVER": "Castelldans"},
+						{"COVER": "Ponts"},
+						{"COVER": "la Baronia de Rialb"},
+						{"COVER": "Baix Pallars"},
+						{"COVER": "Bellpuig"},
+						{"COVER": "Castellar de la Ribera"},
+						{"COVER": "Sant Martí de Riucorb"},
+						{"COVER": "Vilagrassa"},
+						{"COVER": "Preixana"},
+						{"COVER": "Castellnou de Seana"},
+						{"COVER": "Benavent de Segrià"},
+						{"COVER": "Corbins"},
+						{"COVER": "Biosca"},
+						{"COVER": "Llobera"},
+						{"COVER": "Massoteres"},
+						{"COVER": "Bovera"},
+						{"COVER": "les Borges Blanques"},
+						{"COVER": "Cervià de les Garrigues"},
+						{"COVER": "Vinaixa"},
+						{"COVER": "Cabanabona"},
+						{"COVER": "Cabó"},
+						{"COVER": "Golmés"},
+						{"COVER": "Cervera"},
+						{"COVER": "Montoliu de Segarra"},
+						{"COVER": "Ribera d'Ondara"},
+						{"COVER": "Granyena de Segarra"},
+						{"COVER": "Granyanella"},
+						{"COVER": "les Oluges"},
+						{"COVER": "Juncosa"},
+						{"COVER": "la Pobla de Cérvoles"},
+						{"COVER": "el Soleràs"},
+						{"COVER": "l'Espluga Calba"},
+						{"COVER": "Senan"},
+						{"COVER": "Fondarella"},
+						{"COVER": "Fulleda"},
+						{"COVER": "Tarrés"},
+						{"COVER": "l'Espluga de Francolí"},
+						{"COVER": "la Granadella"},
+						{"COVER": "els Torms"},
+						{"COVER": "Tàrrega"},
+						{"COVER": "Verdú"},
+						{"COVER": "Montornès de Segarra"},
+						{"COVER": "Guimerà"},
+						{"COVER": "Vallfogona de Riucorb"},
+						{"COVER": "Passanant i Belltall"},
+						{"COVER": "Guissona"},
+						{"COVER": "Juneda"},
+						{"COVER": "Vallbona de les Monges"},
+						{"COVER": "els Omells de na Gaia"},
+						{"COVER": "Talavera"},
+						{"COVER": "Llorac"},
+						{"COVER": "Nalec"},
+						{"COVER": "Ossó de Sió"},
+						{"COVER": "el Vilosell"},
+						{"COVER": "Santa Coloma de Queralt"},
+						{"COVER": "Vimbodí i Poblet"},
+						{"COVER": "Blancafort"},
+						{"COVER": "Solivella"},
+						{"COVER": "Aiguamúrcia"},
+						{"COVER": "el Pla de Santa Maria"},
+						{"COVER": "el Pont d'Armentera"},
+						{"COVER": "Vila-rodona"},
+						{"COVER": "Albinyana"},
+						{"COVER": "Santa Oliva"},
+						{"COVER": "Freginals"},
+						{"COVER": "Alcover"},
+						{"COVER": "Mont-ral"},
+						{"COVER": "la Riba"},
+						{"COVER": "Aldover"},
+						{"COVER": "Alforja"},
+						{"COVER": "Vilaplana"},
+						{"COVER": "Riudecols"},
+						{"COVER": "Arbolí"},
+						{"COVER": "Alió"},
+						{"COVER": "Masdenverge"},
+						{"COVER": "la Febró"},
+						{"COVER": "Banyeres del Penedès"},
+						{"COVER": "l'Argentera"},
+						{"COVER": "Vilanova d'Escornalbou"},
+						{"COVER": "Duesaigües"},
+						{"COVER": "Riudecanyes"},
+						{"COVER": "la Bisbal del Penedès"},
+						{"COVER": "Llorenç del Penedès"},
+						{"COVER": "Barberà de la Conca"},
+						{"COVER": "Pira"},
+						{"COVER": "Bellmunt del Priorat"},
+						{"COVER": "Falset"},
+						{"COVER": "Rodonyà"},
+						{"COVER": "Masllorenç"},
+						{"COVER": "Montblanc"},
+						{"COVER": "Bonastre"},
+						{"COVER": "Montferri"},
+						{"COVER": "Botarell"},
+						{"COVER": "Riudoms"},
+						{"COVER": "Montbrió del Camp"},
+						{"COVER": "Bràfim"},
+						{"COVER": "Puigpelat"},
+						{"COVER": "Cabra del Camp"},
+						{"COVER": "Vinyols i els Arcs"},
+						{"COVER": "Capafonts"},
+						{"COVER": "Prades"},
+						{"COVER": "el Catllar"},
+						{"COVER": "els Pallaresos"},
+						{"COVER": "Mas de Barberans"},
+						{"COVER": "Conesa"},
+						{"COVER": "Rocafort de Queralt"},
+						{"COVER": "Sarral"},
+						{"COVER": "les Piles"},
+						{"COVER": "Savallà del Comtat"},
+						{"COVER": "Forès"},
+						{"COVER": "Constantí"},
+						{"COVER": "Reus"},
+						{"COVER": "la Selva del Camp"},
+						{"COVER": "la Pobla de Mafumet"},
+						{"COVER": "Figuerola del Camp"},
+						{"COVER": "Godall"},
+						{"COVER": "la Galera"},
+						{"COVER": "els Garidells"},
+						{"COVER": "la Masó"},
+						{"COVER": "el Milà"},
+						{"COVER": "Maspujols"},
+						{"COVER": "Vilaverd"},
+						{"COVER": "Vilallonga del Camp"},
+						{"COVER": "el Morell"},
+						{"COVER": "el Rourell"},
+						{"COVER": "Nulles"},
+						{"COVER": "Perafort"},
+						{"COVER": "Abrera"},
+						{"COVER": "Olesa de Montserrat"},
+						{"COVER": "Esparreguera"},
+						{"COVER": "Aguilar de Segarra"},
+						{"COVER": "Castellfollit del Boix"},
+						{"COVER": "Rajadell"},
+						{"COVER": "Alpens"},
+						{"COVER": "Sant Agustí de Lluçanès"},
+						{"COVER": "Borredà"},
+						{"COVER": "Lluçà"},
+						{"COVER": "l'Ametlla del Vallès"},
+						{"COVER": "Bigues i Riells"},
+						{"COVER": "Argençola"},
+						{"COVER": "Montmaneu"},
+						{"COVER": "Jorba"},
+						{"COVER": "Artés"},
+						{"COVER": "Calders"},
+						{"COVER": "Avinyó"},
+						{"COVER": "Avià"},
+						{"COVER": "Berga"},
+						{"COVER": "Moià"},
+						{"COVER": "Santa Maria d'Oló"},
+						{"COVER": "Avinyonet del Penedès"},
+						{"COVER": "Aiguafreda"},
+						{"COVER": "Centelles"},
+						{"COVER": "Balenyà"},
+						{"COVER": "Collsuspina"},
+						{"COVER": "Balsareny"},
+						{"COVER": "Bellprat"},
+						{"COVER": "Caldes de Montbui"},
+						{"COVER": "el Bruc"},
+						{"COVER": "Sant Salvador de Guardiola"},
+						{"COVER": "Castellolí"},
+						{"COVER": "les Cabanyes"},
+						{"COVER": "Cabrera d'Anoia"},
+						{"COVER": "Capellades"},
+						{"COVER": "Calaf"},
+						{"COVER": "Gallifa"},
+						{"COVER": "Monistrol de Calders"},
+						{"COVER": "Calldetenes"},
+						{"COVER": "Folgueroles"},
+						{"COVER": "Callús"},
+						{"COVER": "Canovelles"},
+						{"COVER": "Carme"},
+						{"COVER": "Gironella"},
+						{"COVER": "Castellar del Vallès"},
+						{"COVER": "Castellbell i el Vilar"},
+						{"COVER": "Monistrol de Montserrat"},
+						{"COVER": "Rellinars"},
+						{"COVER": "Castellterçol"},
+						{"COVER": "Castellcir"},
+						{"COVER": "Òdena"},
+						{"COVER": "Castellgalí"},
+						{"COVER": "Manresa"},
+						{"COVER": "Granera"},
+						{"COVER": "Collbató"},
+						{"COVER": "Copons"},
+						{"COVER": "l'Estany"},
+						{"COVER": "Vic"},
+						{"COVER": "Gurb"},
+						{"COVER": "Mura"},
+						{"COVER": "Santa Cecília de Voltregà"},
+						{"COVER": "les Masies de Roda"},
+						{"COVER": "Manlleu"},
+						{"COVER": "Roda de Ter"},
+						{"COVER": "les Masies de Voltregà"},
+						{"COVER": "Sant Bartomeu del Grau"},
+						{"COVER": "Igualada"},
+						{"COVER": "Sant Martí d'Albars"},
+						{"COVER": "Perafita"},
+						{"COVER": "Sobremunt"},
+						{"COVER": "Matadepera"},
+						{"COVER": "Oristà"},
+						{"COVER": "Santa Eulàlia de Riuprimer"},
+						{"COVER": "Olost"},
+						{"COVER": "Sant Boi de Lluçanès"},
+						{"COVER": "Prats de Lluçanès"},
+						{"COVER": "la Bisbal d'Empordà"},
+						{"COVER": "l'Albagés"},
+						{"COVER": "l'Albi"},
+						{"COVER": "Anglesola"},
+						{"COVER": "Barbens"},
+						{"COVER": "Ciutadilla"},
+						{"COVER": "l'Albiol"},
+						{"COVER": "l'Aleixar"},
+						{"COVER": "Almoster"},
+						{"COVER": "Castellvell del Camp"},
+						{"COVER": "les Borges del Camp"},
+						{"COVER": "Muntanyola"},
+						{"COVER": "Llívia"},
+						{"COVER": "Portbou"},
+						{"COVER": "Colera"},
+						{"COVER": "Llançà"},
+						{"COVER": "el Port de la Selva"},
+						{"COVER": "Cadaqués"},
+						{"COVER": "Roses"},
+						{"COVER": "l'Escala"},
+						{"COVER": "Torroella de Montgrí"},
+						{"COVER": "Sant Hipòlit de Voltregà"},
+						{"COVER": "Bassella"},
+						{"COVER": "Begur"},
+						{"COVER": "Palafrugell"},
+						{"COVER": "Mont-ras"},
+						{"COVER": "Palamós"},
+						{"COVER": "Calonge i Sant Antoni"},
+						{"COVER": "Castell-Platja d'Aro"},
+						{"COVER": "Sant Feliu de Guíxols"},
+						{"COVER": "Santa Cristina d'Aro"},
+						{"COVER": "Tossa de Mar"},
+						{"COVER": "Lloret de Mar"},
+						{"COVER": "Blanes"},
+						{"COVER": "Santa Susanna"},
+						{"COVER": "Calella"},
+						{"COVER": "Sant Pol de Mar"},
+						{"COVER": "Barcelona"},
+						{"COVER": "Sitges"},
+						{"COVER": "Vilanova i la Geltrú"},
+						{"COVER": "Cunit"},
+						{"COVER": "Roda de Berà"},
+						{"COVER": "Torredembarra"},
+						{"COVER": "Tarragona"},
+						{"COVER": "Cambrils"},
+						{"COVER": "Salou"},
+						{"COVER": "Mont-roig del Camp"},
+						{"COVER": "Vandellòs i l'Hospitalet de l'Infant"},
+						{"COVER": "l'Ametlla de Mar"},
+						{"COVER": "l'Ampolla"},
+						{"COVER": "Deltebre"},
+						{"COVER": "Amposta"},
+						{"COVER": "Sant Carles de la Ràpita"},
+						{"COVER": "Alcanar"},
+						null
+					],
+					"attributes": {
+						"COVER": {
+							"descripcio": {
+								"cat": "Municipis",
+								"spa": "Municipios",
+								"eng": "Municipalities"
+							},
+							"mostrar": "si"
+						}
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "ComarquesSEL_BM-5M_v2_0",
+			"desc": 
+			{
+				"cat": "Comarques de Catalunya",
+				"spa": "Comarcas de Catalunya",
+				"eng": "Counties of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata": 
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Comarques de Catalunya",
+				"spa": "Comarcas de Catalunya",
+				"eng": "Counties of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "Comarca",
+						"spa": "Comarca",
+						"eng": "County"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": 
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						null,
+						{"COVER": "Alt Urgell"},
+						{"COVER": "Pallars Sobirà"},
+						{"COVER": "Solsonès"},
+						{"COVER": "Alta Ribagorça"},
+						{"COVER": "Val d'Aran"},
+						{"COVER": "Pallars Jussà"},
+						{"COVER": "Anoia"},
+						{"COVER": "Segarra"},
+						{"COVER": "Bages"},
+						{"COVER": "Baix Llobregat"},
+						{"COVER": "Osona"},
+						{"COVER": "Moianès"},
+						{"COVER": "Vallès Occidental"},
+						{"COVER": "Baix Camp"},
+						{"COVER": "Ribera d'Ebre"},
+						{"COVER": "Terra Alta"},
+						{"COVER": "Baix Penedès"},
+						{"COVER": "Vallès Oriental"},
+						{"COVER": "Cerdanya"},
+						{"COVER": "Ripollès"},
+						{"COVER": "Conca de Barberà"},
+						{"COVER": "Garrigues"},
+						{"COVER": "Urgell"},
+						{"COVER": "Priorat"},
+						{"COVER": "Pla d'Urgell"},
+						{"COVER": "Garrotxa"},
+						{"COVER": "Gironès"},
+						{"COVER": "Pla de l'Estany"},
+						{"COVER": "Noguera"},
+						{"COVER": "Alt Camp"},
+						{"COVER": "Alt Penedès"},
+						{"COVER": "Alt Empordà"},
+						{"COVER": "Berguedà"},
+						{"COVER": "Baix Empordà"},
+						{"COVER": "Selva"},
+						{"COVER": "Segrià"},
+						{"COVER": "Maresme"},
+						{"COVER": "Barcelonès"},
+						{"COVER": "Garraf"},
+						{"COVER": "Tarragonès"},
+						{"COVER": "Baix Ebre"},
+						{"COVER": "Montsià"}
+					],
+					"attributes": {
+						"COVER": {
+							"descripcio": {
+								"cat": "Comarca",
+								"spa": "Comarca",
+								"eng": "County"
+							},
+							"mostrar": "si"
+						}
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "ProvinciesSEL_BM-5M_v2_0",
+			"desc": 
+			{
+				"cat": "Províncies de Catalunya",
+				"spa": "Provincias de Catalunya",
+				"eng": "Provinces of Catalonia"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "uint8",
+					"nodata": 
+					[
+						0,
+						255
+					]
+				}
+			],
+			"CostatMinim": 2,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Províncies de Catalunya",
+				"spa": "Provincias de Catalunya",
+				"eng": "Provinces of Catalonia"
+			},
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "Província",
+						"spa": "Provincia",
+						"eng": "Province"
+					},
+					"DescItems": null,
+					"TipusObj": "P",
+					"ItemLleg": null,
+					"component": 
+					[
+						{
+							"i_valor": 0
+						}
+					],
+					"metadades": null,
+					"ncol": 1,
+					"categories": 
+					[
+						null,
+						{"COVER": "Tarragona"},
+						{"COVER": "Girona"},
+						{"COVER": "Lleida"},
+						{"COVER": "Barcelona"}
+					],
+					"attributes": {
+						"COVER": {
+							"descripcio": {
+								"cat": "Província",
+								"spa": "Provincia",
+								"eng": "Province"
+							},
+							"mostrar": "si"
+						}
+					}
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 1,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": false,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},		
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MDALidarCat_AMB_2011_2013",
+			"desc": 
+			{
+				"cat": "Model Digital d'Alçàries AMB [2011-2013]",
+				"spa": "Modelo Digital de Alturas AMB [2011-2013]",
+				"eng": "AMB Digital Height Model [2011-2013]"
+			},
+			"CRS": null,
+			"EnvTotal": 
+			{
+				"EnvCRS": 
+				{
+					"MinX": 401999,
+					"MaxX": 442001,
+					"MinY": 4567499,
+					"MaxY": 4600001
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "int16",
+					"nodata": [-32768]
+				}
+			],
+			"transparencia": "semitransparent",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 100,
+			"TileMatrixSet": null,
+			"ForcaGetFeatureInfo": true,
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa":{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Model Digital d'Alçàries</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Modelo Digital de Altura</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Digital Height Model</b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda": 
+			{
+				"cat": "Model Digital d'Alçàries AMB [2011-2013]",
+				"spa": "Modelo Digital de Alturas AMB [2011-2013]",
+				"eng": "AMB Digital Height Model [2011-2013]"
+			},
+			"ItemLleg": null,
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "MDA",
+						"spa": "MDA",
+						"eng": "DHM"
+					},
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": 
+					[
+						{
+							"FormulaConsulta": "(v[0]/100)",
+							"i_valor": 0,
+							"representacio": {
+								"tipus": "3d"
+							},
+							"NDecimals": 2,
+							"estiramentPaleta": 
+							{
+								"valorMaxim": 40,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 13,
+					"ncol": 4,
+					"descColorMultiplesDe": 5,
+					"ColorMinimPrimer": true,
+					"paleta": 
+					{
+						"colors":["#000000","#000400","#000C00","#001000","#001800","#001C00","#002000","#002800","#002D00","#003500","#003900","#004100","#004500","#004900","#005100","#005500","#005D00","#006100","#006500","#006900","#006D00","#007100","#007500","#007900","#007D00","#008200","#008200","#008600","#008A00","#008E00","#009200","#009600","#009A00","#009E00","#00A200","#00A600","#00AE00","#00B200","#00B600","#00BE00","#00C200","#00C600","#00CE00","#00D200","#00DB00","#00DF00","#00E300","#00EB00","#00EF00","#00F300","#00FB00","#00FF00","#10FF00","#1CFF00","#2DFF00","#3DFF00","#4DFF00","#59FF00","#69FF00","#79FF00","#86FF00","#96FF00","#A6FF00","#B2FF00","#C2FF00","#D2FF00","#E3FF00","#EFFF00","#FFFF00","#FFFB00","#FFFB00","#FFF700","#FFF300","#FFF300","#FFEF00","#FFEB00","#FFEB00","#FFE700","#FFE700","#FFE300","#FFDF00","#FFDF00","#FFDB00","#FFD700","#FFD700","#FFD200","#FFD200","#FFCE00","#FFCE00","#FFCA00","#FFCA00","#FFCA00","#FFC600","#FFC600","#FFC200","#FFC200","#FFBE00","#FFBE00","#FFBE00","#FFBA00","#FFBA00","#FFB600","#FFB600","#FFB200","#FFB200","#FFAE00","#FFAA00","#FFAA00","#FFA600","#FFA200","#FFA200","#FF9E00","#FF9E00","#FF9A00","#FF9600","#FF9600","#FF9200","#FF8E00","#FF8E00","#FF8A00","#FF8A00","#FF8600","#FF8600","#FF8600","#FF8200","#FF8200","#FF8200","#FF7D00","#FF7D00","#FF7900","#FF7900","#FF7900","#FF7500","#FF7500","#FF7500","#FF7100","#FF7100","#FB7100","#F76D00","#F36D00","#EF6900","#EB6900","#E76900","#E36500","#DF6500","#DB6100","#D76100","#D25D00","#CE5D00","#CA5D00","#C65900","#C25900","#BE5500","#BA5500","#BA5900","#BA5900","#BA5D00","#BA5D00","#BA6100","#BA6500","#BA6500","#BA6900","#B66900","#B66D00","#B66D00","#B67100","#B67500","#B67500","#B67900","#B67900","#B67D00","#B68200","#B68200","#B68600","#B68600","#B68A00","#B68A00","#B68E00","#B68E00","#BA9200","#BA9200","#BA9600","#BA9600","#BA9A00","#BA9A00","#BA9E00","#BA9E00","#BAA200","#B69E00","#B29A00","#AE9600","#AA9200","#A69200","#A28E00","#9E8A00","#9A8600","#9A8200","#967D00","#927900","#8E7500","#8A7500","#867100","#826D00","#7D6900","#796500","#796100","#796100","#795D00","#795D00","#795900","#795900","#795500","#795500","#795100","#795100","#794D00","#794D00","#794900","#794900","#794500","#794500","#794100","#824D10","#8A551C","#8E612D","#966939","#9E7549","#A68255","#AA8A65","#B29671","#BA9E82","#C2AA8E","#C6B29E","#CEBEAA","#D7CABA","#DFD2C6","#E3DFD7","#EBE7E3","#F3F3F3","#F3EFF3","#F3EBF3","#F7E7F7","#F7E3F7","#F7DFF7","#F7DBF7","#F7D7F7","#F7D2F7","#FBD2FB","#FBCEFB","#FBCAFB","#FBC6FB","#FBC2FB","#FBBEFB","#FFBAFF","#FFB6FF","#FFB2FF"]
+					},
+					"ItemLleg": [
+						{
+							"color": "#003500",
+							"DescColor": "0"
+						},
+						{
+							"color": "#008E00",
+							"DescColor": "5"
+						},
+						{
+							"color": "#00F300",
+							"DescColor": "10"
+						},
+						{
+							"color": "#FFCE00",
+							"DescColor": "15"
+						},
+						{
+							"color": "#FF7D00",
+							"DescColor": "20"
+						},
+						{
+							"color": "#B67500",
+							"DescColor": "25"
+						},
+						{
+							"color": "#796100",
+							"DescColor": "30"
+						},
+						{
+							"color": "#F7D2F7",
+							"DescColor": ">40"
+						}
+					]
+				}					
+			],
+			"feedback":{
+				"botoFeedbackALaLlegenda":"si"
+			},
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": {
+				"standard": null,
+				"quality": [
+					{
+						"indicator": "DQ_QuantitativeAttributeAccuracy",
+						"statement": {
+							"cat":"Calculat a partir de les diferències mínimes absolutes entre els punts de test i el MDA (m) en zones urbanes",
+							"spa":"Calculado a partir de la diferencias mínimas absolutas entre los puntos de test y el MDA (m) en zonas urbanas",
+							"eng":"Computed from the absolute minimum differences between test points and DHM (m) in urban areas"
+						},
+						"result": [
+							{
+								"qualityml":{
+									"measure":{
+										"name": "../metrics/RootMeanSquareError"
+									},
+									"domain":[
+										{
+											"name": "../domain/DifferentialErrors1D"
+										}
+									],
+									"metrics":[
+										{
+											"name": "RootMeanSquareError",
+											"values": {
+												"list":[1.54],
+												"units":""
+											}
+										}
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			"DescarregaTot":null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},		
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MDALidarCat2008_2012",
+			"desc": 
+			{
+				"cat": "Model Digital d'Alçàries v.1 [2008-2012]",
+				"spa": "Modelo Digital de Alturas v.1 [2008-2012]",
+				"eng": "Digital Height Model v.1 [2008-2012]"
+			},
+			"CRS": null,
+			"EnvTotal": 
+			{
+				"EnvCRS": 
+				{
+					"MinX": 257999,
+					"MaxX": 527907,
+					"MinY": 4487999,
+					"MaxY": 4749999
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "int16",
+					"nodata": [-32768]
+				}
+			],
+			"transparencia": "semitransparent",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"ForcaGetFeatureInfo": true,
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Model Digital d'Alçàries v.1 [2008-2012]",
+				"spa": "Modelo Digital de Alturas v.1 [2008-2012]",
+				"eng": "Digital Height Model v.1 [2008-2012]"
+			},
+			"ItemLleg": null,
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "MDA",
+						"spa": "MDA",
+						"eng": "DHM"
+					},					
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": 
+					[
+						{
+							"FormulaConsulta": "(v[0]/100)",
+							"i_valor": 0,
+							"representacio": {
+								"tipus": "3d"
+							},							
+							"NDecimals": 2,
+							"estiramentPaleta": 
+							{
+								"valorMaxim": 40,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 13,
+					"ncol": 4,
+					"descColorMultiplesDe": 5,
+					"ColorMinimPrimer": true,
+					"paleta": 
+					{
+						"colors":["#000000","#000400","#000C00","#001000","#001800","#001C00","#002000","#002800","#002D00","#003500","#003900","#004100","#004500","#004900","#005100","#005500","#005D00","#006100","#006500","#006900","#006D00","#007100","#007500","#007900","#007D00","#008200","#008200","#008600","#008A00","#008E00","#009200","#009600","#009A00","#009E00","#00A200","#00A600","#00AE00","#00B200","#00B600","#00BE00","#00C200","#00C600","#00CE00","#00D200","#00DB00","#00DF00","#00E300","#00EB00","#00EF00","#00F300","#00FB00","#00FF00","#10FF00","#1CFF00","#2DFF00","#3DFF00","#4DFF00","#59FF00","#69FF00","#79FF00","#86FF00","#96FF00","#A6FF00","#B2FF00","#C2FF00","#D2FF00","#E3FF00","#EFFF00","#FFFF00","#FFFB00","#FFFB00","#FFF700","#FFF300","#FFF300","#FFEF00","#FFEB00","#FFEB00","#FFE700","#FFE700","#FFE300","#FFDF00","#FFDF00","#FFDB00","#FFD700","#FFD700","#FFD200","#FFD200","#FFCE00","#FFCE00","#FFCA00","#FFCA00","#FFCA00","#FFC600","#FFC600","#FFC200","#FFC200","#FFBE00","#FFBE00","#FFBE00","#FFBA00","#FFBA00","#FFB600","#FFB600","#FFB200","#FFB200","#FFAE00","#FFAA00","#FFAA00","#FFA600","#FFA200","#FFA200","#FF9E00","#FF9E00","#FF9A00","#FF9600","#FF9600","#FF9200","#FF8E00","#FF8E00","#FF8A00","#FF8A00","#FF8600","#FF8600","#FF8600","#FF8200","#FF8200","#FF8200","#FF7D00","#FF7D00","#FF7900","#FF7900","#FF7900","#FF7500","#FF7500","#FF7500","#FF7100","#FF7100","#FB7100","#F76D00","#F36D00","#EF6900","#EB6900","#E76900","#E36500","#DF6500","#DB6100","#D76100","#D25D00","#CE5D00","#CA5D00","#C65900","#C25900","#BE5500","#BA5500","#BA5900","#BA5900","#BA5D00","#BA5D00","#BA6100","#BA6500","#BA6500","#BA6900","#B66900","#B66D00","#B66D00","#B67100","#B67500","#B67500","#B67900","#B67900","#B67D00","#B68200","#B68200","#B68600","#B68600","#B68A00","#B68A00","#B68E00","#B68E00","#BA9200","#BA9200","#BA9600","#BA9600","#BA9A00","#BA9A00","#BA9E00","#BA9E00","#BAA200","#B69E00","#B29A00","#AE9600","#AA9200","#A69200","#A28E00","#9E8A00","#9A8600","#9A8200","#967D00","#927900","#8E7500","#8A7500","#867100","#826D00","#7D6900","#796500","#796100","#796100","#795D00","#795D00","#795900","#795900","#795500","#795500","#795100","#795100","#794D00","#794D00","#794900","#794900","#794500","#794500","#794100","#824D10","#8A551C","#8E612D","#966939","#9E7549","#A68255","#AA8A65","#B29671","#BA9E82","#C2AA8E","#C6B29E","#CEBEAA","#D7CABA","#DFD2C6","#E3DFD7","#EBE7E3","#F3F3F3","#F3EFF3","#F3EBF3","#F7E7F7","#F7E3F7","#F7DFF7","#F7DBF7","#F7D7F7","#F7D2F7","#FBD2FB","#FBCEFB","#FBCAFB","#FBC6FB","#FBC2FB","#FBBEFB","#FFBAFF","#FFB6FF","#FFB2FF"]
+					},
+					"ItemLleg": [
+						{
+							"color": "#003500",
+							"DescColor": "0"
+						},
+						{
+							"color": "#008E00",
+							"DescColor": "5"
+						},
+						{
+							"color": "#00F300",
+							"DescColor": "10"
+						},
+						{
+							"color": "#FFCE00",
+							"DescColor": "15"
+						},
+						{
+							"color": "#FF7D00",
+							"DescColor": "20"
+						},
+						{
+							"color": "#B67500",
+							"DescColor": "25"
+						},
+						{
+							"color": "#796100",
+							"DescColor": "30"
+						},
+						{
+							"color": "#F7D2F7",
+							"DescColor": ">40"
+						}
+					]
+				}
+			],
+			"feedback":{
+				"botoFeedbackALaLlegenda":"si"
+			},
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "si",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades":{
+				"standard": {
+					"cat": "examples/dhm/dhm-metadata/mda_lidarcat_v1/MDA_lidarcat_v1_cat.htm",
+					"spa": "examples/dhm/dhm-metadata/mda_lidarcat_v1/MDA_lidarcat_v1_spa.htm",
+					"eng": "examples/dhm/dhm-metadata/mda_lidarcat_v1/MDA_lidarcat_v1_eng.htm"
+				},
+				"quality": [
+					{
+						"indicator": "DQ_QuantitativeAttributeAccuracy",
+						"statement": {
+							"cat":"Calculat a partir de les diferències mínimes absolutes entre els punts de test i el MDA (m) en zones urbanes",
+							"spa":"Calculado a partir de la diferencias mínimas absolutas entre los puntos de test y el MDA (m) en zonas urbanas",
+							"eng":"Computed from the absolute minimum differences between test points and DHM (m) in urban areas"
+						},
+						"result": [
+							{
+								"qualityml":{
+									"measure":{
+										"name": "../metrics/RootMeanSquareError"
+									},
+									"domain":[
+										{
+											"name": "../domain/DifferentialErrors1D"
+										}
+									],
+									"metrics":[
+										{
+											"name": "RootMeanSquareError",
+											"values": {
+												"list":[1.47],
+												"units":""
+											}
+										}
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			"DescarregaTot": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": null,
+			"versio": null,
+			"tipus": null,
+			"nom": "MDALidarCat2016_2017",
+			"desc": 
+			{
+				"cat": "Model Digital d'Alçàries v.2 [2016-2017]",
+				"spa": "Modelo Digital de Alturas v.2 [2016-2017]",
+				"eng": "Digital Height Model v.2 [2016-2017]"
+			},
+			"CRS": null,
+			"EnvTotal": 
+			{
+				"EnvCRS": 
+				{
+					"MinX": 257999,
+					"MaxX": 527907,
+					"MinY": 4487999,
+					"MaxY": 4749999
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "int16",
+					"nodata": [-32768]
+				}
+			],
+			"transparencia": "semitransparent",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"ForcaGetFeatureInfo": true,
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": null,
+			"DescLlegenda": 
+			{
+				"cat": "Model Digital d'Alçàries v.2 [2016-2017]",
+				"spa": "Modelo Digital de Alturas v.2 [2016-2017]",
+				"eng": "Digital Height Model v.2 [2016-2017]"
+			},
+			"ItemLleg": null,
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc": 
+					{
+						"cat": "MDA",
+						"spa": "MDA",
+						"eng": "DHM"
+					},					
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": 
+					[
+						{
+							"FormulaConsulta": "(v[0]/100)",
+							"i_valor": 0,
+							"representacio": {
+								"tipus": "3d"
+							},			
+							"NDecimals": 2,
+							"estiramentPaleta": 
+							{
+								"valorMaxim": 40,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 13,
+					"ncol": 4,
+					"descColorMultiplesDe": 5,
+					"ColorMinimPrimer": true,
+					"paleta": 
+					{
+						"colors":["#000000","#000400","#000C00","#001000","#001800","#001C00","#002000","#002800","#002D00","#003500","#003900","#004100","#004500","#004900","#005100","#005500","#005D00","#006100","#006500","#006900","#006D00","#007100","#007500","#007900","#007D00","#008200","#008200","#008600","#008A00","#008E00","#009200","#009600","#009A00","#009E00","#00A200","#00A600","#00AE00","#00B200","#00B600","#00BE00","#00C200","#00C600","#00CE00","#00D200","#00DB00","#00DF00","#00E300","#00EB00","#00EF00","#00F300","#00FB00","#00FF00","#10FF00","#1CFF00","#2DFF00","#3DFF00","#4DFF00","#59FF00","#69FF00","#79FF00","#86FF00","#96FF00","#A6FF00","#B2FF00","#C2FF00","#D2FF00","#E3FF00","#EFFF00","#FFFF00","#FFFB00","#FFFB00","#FFF700","#FFF300","#FFF300","#FFEF00","#FFEB00","#FFEB00","#FFE700","#FFE700","#FFE300","#FFDF00","#FFDF00","#FFDB00","#FFD700","#FFD700","#FFD200","#FFD200","#FFCE00","#FFCE00","#FFCA00","#FFCA00","#FFCA00","#FFC600","#FFC600","#FFC200","#FFC200","#FFBE00","#FFBE00","#FFBE00","#FFBA00","#FFBA00","#FFB600","#FFB600","#FFB200","#FFB200","#FFAE00","#FFAA00","#FFAA00","#FFA600","#FFA200","#FFA200","#FF9E00","#FF9E00","#FF9A00","#FF9600","#FF9600","#FF9200","#FF8E00","#FF8E00","#FF8A00","#FF8A00","#FF8600","#FF8600","#FF8600","#FF8200","#FF8200","#FF8200","#FF7D00","#FF7D00","#FF7900","#FF7900","#FF7900","#FF7500","#FF7500","#FF7500","#FF7100","#FF7100","#FB7100","#F76D00","#F36D00","#EF6900","#EB6900","#E76900","#E36500","#DF6500","#DB6100","#D76100","#D25D00","#CE5D00","#CA5D00","#C65900","#C25900","#BE5500","#BA5500","#BA5900","#BA5900","#BA5D00","#BA5D00","#BA6100","#BA6500","#BA6500","#BA6900","#B66900","#B66D00","#B66D00","#B67100","#B67500","#B67500","#B67900","#B67900","#B67D00","#B68200","#B68200","#B68600","#B68600","#B68A00","#B68A00","#B68E00","#B68E00","#BA9200","#BA9200","#BA9600","#BA9600","#BA9A00","#BA9A00","#BA9E00","#BA9E00","#BAA200","#B69E00","#B29A00","#AE9600","#AA9200","#A69200","#A28E00","#9E8A00","#9A8600","#9A8200","#967D00","#927900","#8E7500","#8A7500","#867100","#826D00","#7D6900","#796500","#796100","#796100","#795D00","#795D00","#795900","#795900","#795500","#795500","#795100","#795100","#794D00","#794D00","#794900","#794900","#794500","#794500","#794100","#824D10","#8A551C","#8E612D","#966939","#9E7549","#A68255","#AA8A65","#B29671","#BA9E82","#C2AA8E","#C6B29E","#CEBEAA","#D7CABA","#DFD2C6","#E3DFD7","#EBE7E3","#F3F3F3","#F3EFF3","#F3EBF3","#F7E7F7","#F7E3F7","#F7DFF7","#F7DBF7","#F7D7F7","#F7D2F7","#FBD2FB","#FBCEFB","#FBCAFB","#FBC6FB","#FBC2FB","#FBBEFB","#FFBAFF","#FFB6FF","#FFB2FF"]
+					},
+					"ItemLleg": [
+						{
+							"color": "#003500",
+							"DescColor": "0"
+						},
+						{
+							"color": "#008E00",
+							"DescColor": "5"
+						},
+						{
+							"color": "#00F300",
+							"DescColor": "10"
+						},
+						{
+							"color": "#FFCE00",
+							"DescColor": "15"
+						},
+						{
+							"color": "#FF7D00",
+							"DescColor": "20"
+						},
+						{
+							"color": "#B67500",
+							"DescColor": "25"
+						},
+						{
+							"color": "#796100",
+							"DescColor": "30"
+						},
+						{
+							"color": "#F7D2F7",
+							"DescColor": ">40"
+						}					
+					]
+				}
+			],
+			"feedback":{
+				"botoFeedbackALaLlegenda":"si"
+			},
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": true,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": {
+				"standard": null,
+				"quality": [
+					{
+						"indicator": "DQ_QuantitativeAttributeAccuracy",
+						"statement": {
+							"cat":"Calculat a partir de les diferències mínimes absolutes entre els punts de test i el MDA (m) en zones urbanes",
+							"spa":"Calculado a partir de la diferencias mínimas absolutas entre los puntos de test y el MDA (m) en zonas urbanas",
+							"eng":"Computed from the absolute minimum differences between test points and DHM (m) in urban areas"
+						},
+						"result": [
+							{
+								"qualityml":{
+									"measure":{
+										"name": "../metrics/RootMeanSquareError"
+									},
+									"domain":[
+										{
+											"name": "../domain/DifferentialErrors1D"
+										}
+									],
+									"metrics":[
+										{
+											"name": "RootMeanSquareError",
+											"values": {
+												"list":[1.70],
+												"units":""
+											}
+										}
+									]
+								}
+							}
+						]
+					},
+					{
+						"indicator": "DQ_QuantitativeAttributeAccuracy",
+						"statement": {
+							"cat":"Calculat a partir de les diferències mínimes absolutes entre els punts de test i el MDA (m) en boscos",
+							"spa":"Calculado a partir de la diferencias mínimas absolutas entre los puntos de test y el MDA (m) en boscos",
+							"eng":"Computed from the absolute minimum differences between test points and DHM (m) in forest areas"
+						},
+						"result": [
+							{
+								"qualityml":{
+									"measure":{
+										"name": "../metrics/RootMeanSquareError"
+									},
+									"domain":[
+										{
+											"name": "../domain/DifferentialErrors1D"
+										}
+									],
+									"metrics":[
+										{
+											"name": "RootMeanSquareError",
+											"values": {
+												"list":[1.64],
+												"units":""
+											}
+										}
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			"DescarregaTot": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},	
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom": "MDT5m",
+			"desc": 
+			{
+				"cat": "Model Digital d'Elevacions",
+				"spa": "Modelo Digital de Elevaciones",
+				"eng": "Digital Elevation Model"
+			},
+			"CRS": null,
+			"EnvTotal": 
+			{
+				"EnvCRS": 
+				{
+					"MinX": 258102.5,
+					"MaxX": 539822.5,
+					"MinY": 4485517.5,
+					"MaxY": 4763932.5
+				},
+				"CRS": "EPSG:25831"
+			},
+			"FormatImatge": "application/x-img",
+			"valors": 
+			[
+				{
+					"compression": "RLE",
+					"datatype": "float32",
+					"nodata": [-9999]
+				}
+			],
+			"transparencia": "semitransparent",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"FormatConsulta": "text/xml",
+			"grup": null,
+			"separa": 
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Altres models</b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Otros modelos</b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Other models</b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda": 
+			{
+				"cat": "Model Digital d'Elevacions",
+				"spa": "Modelo Digital de Elevaciones",
+				"eng": "Digital Elevation Model"
+			},
+			"ItemLleg": null,
+			"estil": 
+			[
+				{
+					"nom": null,
+					"desc":
+					{
+						"cat": "MDE",
+						"spa": "MDE",
+						"eng": "DEM"
+					},					
+					"DescItems": "m",
+					"TipusObj": "P",
+					"component": 
+					[
+						{
+							"i_valor": 0,
+							"representacio": {
+								"tipus": "3d"
+							},										
+							"NDecimals": 0,
+							"estiramentPaleta": 
+							{
+								"valorMaxim": 3143,
+								"valorMinim": 0
+							}
+						}
+					],
+					"metadades": null,
+					"nItemLlegAuto": 13,
+					"ncol": 4,
+					"descColorMultiplesDe": 250,
+					"ColorMinimPrimer": true,
+					"paleta": 
+					{
+						"colors":["#000000","#000400","#000C00","#001000","#001800","#001C00","#002000","#002800","#002D00","#003500","#003900","#004100","#004500","#004900","#005100","#005500","#005D00","#006100","#006500","#006900","#006D00","#007100","#007500","#007900","#007D00","#008200","#008200","#008600","#008A00","#008E00","#009200","#009600","#009A00","#009E00","#00A200","#00A600","#00AE00","#00B200","#00B600","#00BE00","#00C200","#00C600","#00CE00","#00D200","#00DB00","#00DF00","#00E300","#00EB00","#00EF00","#00F300","#00FB00","#00FF00","#10FF00","#1CFF00","#2DFF00","#3DFF00","#4DFF00","#59FF00","#69FF00","#79FF00","#86FF00","#96FF00","#A6FF00","#B2FF00","#C2FF00","#D2FF00","#E3FF00","#EFFF00","#FFFF00","#FFFB00","#FFFB00","#FFF700","#FFF300","#FFF300","#FFEF00","#FFEB00","#FFEB00","#FFE700","#FFE700","#FFE300","#FFDF00","#FFDF00","#FFDB00","#FFD700","#FFD700","#FFD200","#FFD200","#FFCE00","#FFCE00","#FFCA00","#FFCA00","#FFCA00","#FFC600","#FFC600","#FFC200","#FFC200","#FFBE00","#FFBE00","#FFBE00","#FFBA00","#FFBA00","#FFB600","#FFB600","#FFB200","#FFB200","#FFAE00","#FFAA00","#FFAA00","#FFA600","#FFA200","#FFA200","#FF9E00","#FF9E00","#FF9A00","#FF9600","#FF9600","#FF9200","#FF8E00","#FF8E00","#FF8A00","#FF8A00","#FF8600","#FF8600","#FF8600","#FF8200","#FF8200","#FF8200","#FF7D00","#FF7D00","#FF7900","#FF7900","#FF7900","#FF7500","#FF7500","#FF7500","#FF7100","#FF7100","#FB7100","#F76D00","#F36D00","#EF6900","#EB6900","#E76900","#E36500","#DF6500","#DB6100","#D76100","#D25D00","#CE5D00","#CA5D00","#C65900","#C25900","#BE5500","#BA5500","#BA5900","#BA5900","#BA5D00","#BA5D00","#BA6100","#BA6500","#BA6500","#BA6900","#B66900","#B66D00","#B66D00","#B67100","#B67500","#B67500","#B67900","#B67900","#B67D00","#B68200","#B68200","#B68600","#B68600","#B68A00","#B68A00","#B68E00","#B68E00","#BA9200","#BA9200","#BA9600","#BA9600","#BA9A00","#BA9A00","#BA9E00","#BA9E00","#BAA200","#B69E00","#B29A00","#AE9600","#AA9200","#A69200","#A28E00","#9E8A00","#9A8600","#9A8200","#967D00","#927900","#8E7500","#8A7500","#867100","#826D00","#7D6900","#796500","#796100","#796100","#795D00","#795D00","#795900","#795900","#795500","#795500","#795100","#795100","#794D00","#794D00","#794900","#794900","#794500","#794500","#794100","#824D10","#8A551C","#8E612D","#966939","#9E7549","#A68255","#AA8A65","#B29671","#BA9E82","#C2AA8E","#C6B29E","#CEBEAA","#D7CABA","#DFD2C6","#E3DFD7","#EBE7E3","#F3F3F3","#F3EFF3","#F3EBF3","#F7E7F7","#F7E3F7","#F7DFF7","#F7DBF7","#F7D7F7","#F7D2F7","#FBD2FB","#FBCEFB","#FBCAFB","#FBC6FB","#FBC2FB","#FBBEFB","#FFBAFF","#FFB6FF","#FFB2FF"]
+					},
+					"ItemLleg": [
+						{
+							"color": "#003500",
+							"DescColor": "0"
+						},
+						{
+							"color": "#008E00",
+							"DescColor": "250"
+						},
+						{
+							"color": "#00F300",
+							"DescColor": "500"
+						},
+						{
+							"color": "#FFFF00",
+							"DescColor": "750"
+						},
+						{
+							"color": "#FFCE00",
+							"DescColor": "1000"
+						},
+						{
+							"color": "#FFA600",
+							"DescColor": "1250"
+						},
+						{
+							"color": "#FF7D00",
+							"DescColor": "1500"
+						},
+						{
+							"color": "#D25D00",
+							"DescColor": "1750"
+						},
+						{
+							"color": "#B67500",
+							"DescColor": "2000"
+						},
+						{
+							"color": "#BAA200",
+							"DescColor": "2250"
+						},
+						{
+							"color": "#796100",
+							"DescColor": "2500"
+						},
+						{
+							"color": "#9E7549",
+							"DescColor": "2750"
+						},
+						{
+							"color": "#F7D2F7",
+							"DescColor": "3000"
+						}
+					]
+				}
+			],
+			"i_estil": 0,
+			"NColEstil": 2,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "si",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": null,
+			"tipus": null,
+			"nom": "ortofoto_color_provisional",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 vigent",
+				"spa": "Ortofoto 1:2500 vigente",
+				"eng": "Current orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": 
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Ortofoto 1:2500 <sup>2</sup></b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Ortofoto 1:2500 <sup>2</sup></b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Orthophoto 1:2500 <sup>2</sup></b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda": 
+			{
+				"cat": "Ortofoto vigent",
+				"spa": "Ortofoto vigente",
+				"eng": "Current orthophoto"
+			},
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": {
+				"provenance":  
+				{
+					"peticioServCSW": false,
+					"lineage":
+					{
+						"statement":{"cat":"Imatge aèria vertical que ha estat rectificada de tal manera que es manté una escala uniforme a tota la superfície de la imatge. Constitueix una representació geomètrica a escala de la superfície terrestre. Es tracta d’una ortofoto de 250 cm de resolució obtinguda, mitjançant tècniques de generalització, a partir d’ortofotos de més resolució. Generalment s'utilitzen ortofotos de la sèrie Ortofoto de Catalunya 50 cm. L’ortofoto en color (OF-25M) aporta informació de la zona visible de l’espectre electromagnètic. Mostra la combinació de bandes RGB (de l’anglès Red, Green i Blue) que es corresponen als canals Vermell, Verd i Blau, combinació que s’anomena “color natural”."}
+					}
+				}	
+			},
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2017",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2017",
+				"spa": "Ortofoto 1:2500 2017",
+				"eng": "2017 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2017",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},		
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2016",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2016",
+				"spa": "Ortofoto 1:2500 2016",
+				"eng": "2016 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2016",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2015",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2015",
+				"spa": "Ortofoto 1:2500 2015",
+				"eng": "2015 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2015",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2014",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2014",
+				"spa": "Ortofoto 1:2500 2014",
+				"eng": "2014 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2014",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2013",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2013",
+				"spa": "Ortofoto 1:2500 2013",
+				"eng": "2013 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2013",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2012",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2012",
+				"spa": "Ortofoto 1:2500 2012",
+				"eng": "2012 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2012",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2011",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2011",
+				"spa": "Ortofoto 1:2500 2011",
+				"eng": "2011 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2011",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2010",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2010",
+				"spa": "Ortofoto 1:2500 2010",
+				"eng": "2010 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2010",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2009",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2009",
+				"spa": "Ortofoto 1:2500 2009",
+				"eng": "2009 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda": "2009",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms?",
+			"versio": 
+			{
+				"Vers": 1,
+				"SubVers": 1,
+				"VariantVers": 0
+			},
+			"tipus": null,
+			"nom": "ortofoto_25cm_color_2008",
+			"desc": 
+			{
+				"cat": "Ortofoto 1:2500 2008",
+				"spa": "Ortofoto 1:2500 2008",
+				"eng": "2008 orthophoto 1:2500"
+			},
+			"CRS": null,
+			"EnvTotal": null,
+			"FormatImatge": "image/png",
+			"CostatMinim": 0.5,
+			"CostatMaxim": 1000,
+			"TileMatrixSet": null,
+			"transparencia": "transparent",
+			"FormatConsulta": "text/xml",
+			"grup": "Orto2500",
+			"separa": null,
+			"DescLlegenda":"2008",
+			"ItemLleg": null,
+			"estil": null,
+			"i_estil": 0,
+			"NColEstil": 0,
+			"LlegDesplegada": false,
+			"VisibleALaLlegenda": true,
+			"visible": "ara_no",
+			"visible_vista": null,
+			"consultable": "no",
+			"descarregable": "no",
+			"ParamCoverage": null,
+			"FormatCoverage": null,
+			"ResCoverage": null,
+			"metadades": null,
+			"NomVideo": null,
+			"DescVideo": null,
+			"FlagsData": null,
+			"data": null,
+			"i_data": 0,
+			"animable": false,
+			"AnimableMultiTime": false,
+			"proces": null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+		},
+		{
+			"servidor": "https://www.opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
+			"versio": null,
+			"tipus": null,
+			"nom":	"BlueMarble_2002",
+			"desc":	"Blue Marble 2002",
+			"CRS":	null,
+			"EnvTotal":	null,
+			"FormatImatge":	"image/gif",
+			"transparencia":	"transparent",
+			"CostatMinim":	500,
+			"CostatMaxim":	1000,
+			"TileMatrixSet":	null,
+			"FormatConsulta":	"text/xml",
+			"grup":	null,
+			"separa": 
+			{
+				"cat": "<hr align=\"left\" width=\"230\"><b>Altres capes </b><hr align=\"left\" width=\"230\">",
+				"spa": "<hr align=\"left\" width=\"230\"><b>Otras capas </b><hr align=\"left\" width=\"230\">",
+				"eng": "<hr align=\"left\" width=\"230\"><b>Other layers </b><hr align=\"left\" width=\"230\">"
+			},
+			"DescLlegenda":	"<hr align=\"left\" width=\"230\"><b>Blue Marble 2002 </b><sup>3</sup></b><hr align=\"left\" width=\"230\">",
+			"estil":	null,
+			"i_estil":	0,
+			"NColEstil":	1,
+			"LlegDesplegada":	false,
+			"VisibleALaLlegenda":	true,
+			"visible":	"ara_no",
+			"visible_vista":	null,
+			"consultable":	"no",
+			"descarregable":	"no",
+			"ParamCoverage":	null,
+			"FormatCoverage":	null,
+			"ResCoverage":	null,
+			"metadades":	null,
+			"NomVideo":	null,
+			"DescVideo":	null,
+			"FlagsData":	null,
+			"data":	null,
+			"i_data":	0,
+			"animable":	false,
+			"AnimableMultiTime":	false,
+			"proces":	null,
+			"ProcesMostrarTitolCapa": false,
+			"editable": "no"
+	}
+	],
+	"containerName": "mmn",
+	"CorsServidorLocal": false,
+	"araCanviProjAuto": true,
+	"IconaAnarObj": {
+		"icona": "mes.gif",
+		"ncol": 9,
+		"nfil": 9,
+		"i": 5,
+		"j": 5
+	},
+	"hideLayersOverVista": false,
+	"LlegendaAmagaSiForaCRS": false
+}
