@@ -147,7 +147,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 	}
 
 	// Núm. de features
-	//var numFeatures = (capa && capa.objectes && capa.objectes.features)	? capa.objectes.features.length : 0;
+	var numFeatures = (capa && capa.objectes && capa.objectes.features)	? capa.objectes.features.length : 0;
 
 	// Botó 1: Afegir un registre
 	cdns.push(DonaBotoAfegirLogBook(
@@ -155,7 +155,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 		lang,
 		access_token_type,
 		"LBAfegirLogPageCapaMultipleTargets",
-		idfeature,
+		numFeatures,
 		LBDonaCadenaLang({
 			cat: "Afegir un registre",
 			spa: "Añadir un registro",
@@ -172,7 +172,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 			lang,
 			access_token_type,
 			name_scope_function,
-			idfeature,
+			numFeatures,
 			LBDonaCadenaLang({
 				cat: "Afegir un registre (punt/pol)",
 				spa: "Añadir un registro (punto/pol)",
@@ -211,7 +211,7 @@ function LBDonaCadenaFinestraLogBookResource(div_id, rsc_type, targets, lang, ac
 	return cdns.join("");
 }
 
-function DonaBotoAfegirLogBook(targets, lang, access_token_type, name_scope_function, idfeature, label, id_boto) {
+function DonaBotoAfegirLogBook(targets, lang, access_token_type, name_scope_function, numDimExtras, label, id_boto) {
 	const id = id_boto;
 	const cdns = [];
 
@@ -222,7 +222,15 @@ function DonaBotoAfegirLogBook(targets, lang, access_token_type, name_scope_func
 		const boto = document.getElementById(id);
 		if (boto) {
 			boto.onclick = function () {
-				window[name_scope_function](targets, lang, access_token_type, idfeature);
+				const dims = [];
+				for (let i = 0; i < numDimExtras; i++) {
+					const sel = document.getElementById("dimExtra_" + i);
+					const labelEl = document.querySelector("label[for='dimExtra_" + i + "']");
+					const label = labelEl ? labelEl.innerText.trim() : "dimExtra_" + i;
+					const val = sel ? sel.options[sel.selectedIndex].text : "-1";
+					dims.push([label, val]);
+				}
+				window[name_scope_function](targets, lang, access_token_type, dims);
 			};
 		}
 	}, 0);
@@ -230,7 +238,7 @@ function DonaBotoAfegirLogBook(targets, lang, access_token_type, name_scope_func
 	return cdns.join("");
 }
 
-function LBAfegirLogPageCapaMultipleTargets(targets_obj_o_str, lang, access_token_type, idfeature)
+function LBAfegirLogPageCapaMultipleTargets(targets_obj_o_str, lang, access_token_type, dims)
 {
 var targets;
 	
@@ -246,7 +254,7 @@ var targets;
 	
 	if (LBlogpageWindow==null || LBlogpageWindow.closed)
 	{
-		var url=LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, idfeature);
+		var url=LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, dims);
 		if (!url)
 			return;
 		LBlogpageWindow=window.open(url,"Logpage", Opcions_LBlogpageWindow);
@@ -254,12 +262,12 @@ var targets;
 	}
 	else
 	{
-		LBlogpageWindow.location.href=LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, idfeature);
+		LBlogpageWindow.location.href=LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, dims);
 		LBlogpageWindow.focus();
 	}	
 }
 
-function LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, idfeature)
+function LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_type, dims)
 {
 	var url=ClientGUF;
 
@@ -307,7 +315,7 @@ function LBDonaNomFitxerAddLogPageMutipleTargets(targets, lang, access_token_typ
 	}
 
 	if (idfeature)
-		url+="&ID_FEATURE=" + idfeature;
+		url+="&ID_FEATURE=" + idFeature;
 
     url+="&ACCESS_TOKEN_TYPE=" + access_token_type + "&PAGE=ADDLOGPAGE&SHARE_BORROWER_1=Anonymous"; 
 

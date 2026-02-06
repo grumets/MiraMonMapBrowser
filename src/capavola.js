@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -102,7 +102,7 @@ function TancaFinestra_anarCoord()
 	}
 }//Fi de TancaFinestra_anarCoord()
 
-function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, idfeature)
+function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, dims)
 {
 	
 	var trg=targets;
@@ -113,7 +113,7 @@ function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, idfeatu
 		return;
 	
 	TancaFinestraLayer("logbook");
-	OmpleFinestraLogBookAmbScope(trg, lng, tkn, idfeature);
+	OmpleFinestraLogBookAmbScope(trg, lng, tkn, dims);
 
 	//per defecte deixo marcat que volem un scope rectangular
 	mostraSelecLBScope(0);
@@ -146,7 +146,7 @@ function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
 var lpscopePoligons = [];
 var lpscopePoints = [];
 
-function OmpleFinestraLogBookAmbScope(targets, lang, access_token_type, idfeature)
+function OmpleFinestraLogBookAmbScope(targets, lang, access_token_type, dims)
 {
 	//ens assegurem que no hi ha res a les llistes quan obrim la finestra
 	lpscopePoligons = [];
@@ -155,7 +155,7 @@ function OmpleFinestraLogBookAmbScope(targets, lang, access_token_type, idfeatur
 	var trgStr = JSON.stringify(targets).replace(/'/g, "\\'");  // només un cop!
 	var lng = lang;
 	var tkn = access_token_type;
-	var feature = JSON.stringify(idfeature);
+	var dimsStr = JSON.stringify(dims);
 
 	var cdns = [];
 
@@ -175,7 +175,7 @@ function OmpleFinestraLogBookAmbScope(targets, lang, access_token_type, idfeatur
 		'<tr>',
 			'<td align="center"><input class="Verdana11px" type="button" name="Add" value="', GetMessage("Add"), '" onClick="AfegirElementsALPScope();"></td>',
 			'<td align="center"><input class="Verdana11px" type="button" name="Acceptar" value="', GetMessage("OK"), 
-				'" onClick=\'AfegirLogPageScopeALogBook(' + JSON.stringify(trgStr) + ', "' + lng + '", "' + tkn + '", ' + feature + '); TancaFinestraLayer("fbScope");\'></td>',
+				'" onClick=\'AfegirLogPageScopeALogBook(' + JSON.stringify(trgStr) + ', "' + lng + '", "' + tkn + '", ' + dimsStr + '); TancaFinestraLayer("fbScope");\'></td>',
 			'<td align="center"><input class="Verdana11px" type="button" name="Tancar" value="', GetMessage("Cancel"), '" onClick=\'TancaFinestraLayer("lbScope");\'></td>',
 		'</tr>',
 		'</table>',
@@ -454,7 +454,7 @@ function mostraSelecFBScope(type)
 	}
 }
 
-function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
+function AfegirLogPageScopeALogBook(targets, lang, access_token_type, dims)
 {
 	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS; //mirem el SR
 	var trg=JSON.parse(targets);
@@ -496,7 +496,7 @@ function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 				trg[i].scopePol=lpscopePoligons;
 			}
 		}
-		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, idfeature);
+		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, dims);
 	}
 	//pnt
 	if (type==1)
@@ -525,7 +525,7 @@ function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 				trg[i].scopePnt=lpscopePoints;
 			}
 		}
-		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, idfeature);
+		LBAfegirLogPageCapaMultipleTargets(trg, lang, access_token_type, dims);
 	}
 	return;
 }
