@@ -21484,7 +21484,7 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://www.opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
 			"versio": {
 				"Vers": 1,
 				"SubVers": 3,
@@ -21591,7 +21591,7 @@
 			"ProcesMostrarTitolCapa": false
 		},
 				{
-			"servidor": "https://www.opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
 			"versio": {
 				"Vers": 1,
 				"SubVers": 3,

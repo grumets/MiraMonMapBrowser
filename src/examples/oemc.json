@@ -606,7 +606,7 @@
 	"PlantillaConsulta": {
 		"nom": null,
 		"desc": null,
-		"src": "GetFeatureInfo_output.htm",
+		"src": "consulta_de_cop.htm",
 		"ample": 500,
 		"alt": 500
 	},
@@ -3271,7 +3271,7 @@
 			"cors": true,
 			"id": "chl_rtm_ann",
 			"nom": "chl_rtm_ann",
-			"desc": "FAPAR yearly (2019 - 2023)",
+			"desc": "FAPAR yearly (2019 - 2024)",
 			"atribucio": "Open-Earth-Monitor Cyberinfrastructure",
 			"CRS": null,
 			"EnvTotal": {
@@ -3307,12 +3307,12 @@
 			"grup": null,
 			"separa": null,
 			"DescLlegenda": {
-				"eng": "FAPAR yearly (2019 - 2023)"
+				"eng": "FAPAR yearly (2019 - 2024)"
 			},
 			"estil": [
 				{
 					"nom": null,
-					"desc": "FAPAR yearly (2019 - 2023)",
+					"desc": "FAPAR yearly (2019 - 2024)",
 					"DescItems": "m<sup>2</sup>/m<sup>2</sup>",
 					"TipusObj": "P",
 					"metadades": null,
@@ -3366,6 +3366,10 @@
 						{
 							"nom": "20230101_20231231",
 							"desc": "2023"
+						},
+						{
+							"nom": "20240101_20241231",
+							"desc": "2024"
 						}
 					],
 					"i_valor": 0
@@ -3413,7 +3417,7 @@
 			"cors": true,
 			"id": "lai_rtm_ann",
 			"nom": "lai_rtm_ann",
-			"desc": "LAI yearly (2019 - 2023)",
+			"desc": "LAI yearly (2019 - 2024)",
 			"atribucio": "Open-Earth-Monitor Cyberinfrastructure",
 			"CRS": null,
 			"EnvTotal": {
@@ -3449,12 +3453,12 @@
 			"grup": null,
 			"separa": null,
 			"DescLlegenda": {
-				"eng": "LAI yearly (2019 - 2023)"
+				"eng": "LAI yearly (2019 - 2024)"
 			},
 			"estil": [
 				{
 					"nom": null,
-					"desc": "LAI yearly (2019 - 2023)",
+					"desc": "LAI yearly (2019 - 2024)",
 					"DescItems": "m<sup>2</sup>/m<sup>2</sup>",
 					"TipusObj": "P",
 					"metadades": null,
@@ -3512,6 +3516,10 @@
 						{
 							"nom": "20230101_20231231",
 							"desc": "2023"
+						},
+						{
+							"nom": "20240101_20241231",
+							"desc": "2024"
 						}
 					],
 					"i_valor": 0
@@ -3557,9 +3565,9 @@
 			},
 			"tipus": "TipusWMS",
 			"cors": true,
-			"id": "ewt_rtm_ann",
-			"nom": "ewt_rtm_ann",
-			"desc": "FCOVER yearly (2019 - 2023)",
+			"id": "fcover_rtm_ann",
+			"nom": "fcover_rtm_ann",
+			"desc": "FCOVER yearly (2019 - 2024)",
 			"atribucio": "Open-Earth-Monitor Cyberinfrastructure",
 			"CRS": null,
 			"EnvTotal": {
@@ -3595,12 +3603,12 @@
 			"grup": null,
 			"separa": null,
 			"DescLlegenda": {
-				"eng": "FCOVER yearly (2019 - 2023)"
+				"eng": "FCOVER yearly (2019 - 2024)"
 			},
 			"estil": [
 				{
 					"nom": null,
-					"desc": "FCOVER yearly (2019 - 2023)",
+					"desc": "FCOVER yearly (2019 - 2024)",
 					"DescItems": null,
 					"TipusObj": "P",
 					"metadades": null,
@@ -3636,6 +3644,10 @@
 						{
 							"nom": "20230101_20231231",
 							"desc": "2023"
+						},
+						{
+							"nom": "20240101_20241231",
+							"desc": "2024"
 						}
 					],
 					"i_valor": 0
@@ -33232,7 +33244,7 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://www.opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
+			"servidor": "https://opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
 			"versio": {
 				"Vers": 1,
 				"SubVers": 1,
@@ -33298,7 +33310,7 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://www.opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
+			"servidor": "https://opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
 			"versio": {
 				"Vers": 1,
 				"SubVers": 1,
