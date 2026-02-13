@@ -1,0 +1,13 @@
+file title  : 
+id type     : integer
+file type   : ascii
+object type : polygon
+ref. system : UTM-36N-WGS84
+ref. units  : m
+unit dist.  : 1.000000
+min. X      : 644874.708625004
+max. X      : 697624.000000000
+min. Y      : 3370606.49547499
+max. Y      : 3444856.00000000
+pos'n error : unknown
+resolution  : unknown
