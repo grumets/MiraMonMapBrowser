@@ -22755,15 +22755,15 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://geoserveis.icgc.cat/icc_mapesbase/wms/service?",
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/orto-territorial/wms",
 			"versio": {
 				"Vers": 1,
-				"SubVers": 1,
+				"SubVers": 3,
 				"VariantVers": 0
 			},
 			"tipus": "TipusWMS",
-			"nom": "orto5m",
-			"desc": "Ortofoto de Catalunya 1:5.000 vigent",
+			"nom": "ortofoto_color_vigent",
+			"desc": "Ortofoto de Catalunya vigent",
 			"atribucio": null,
 			"CRS": null,
 			"EnvTotal": null,
@@ -22773,14 +22773,14 @@
 			"CostatMinim": null,
 			"CostatMaxim": null,
 			"TileMatrixSet": null,
-			"FormatConsulta": "text/plain",
+			"FormatConsulta": "text/html",
 			"grup": null,
-			"DescLlegenda": "Ortofoto de Catalunya 1:5.000",
+			"DescLlegenda": "Ortofoto de Catalunya",
 			"separa": null,
 			"estil": [
 				{
 					"nom": null,
-					"desc": "Ortofoto de Catalunya 1:5.000 vigent",
+					"desc": "Ortofoto de Catalunya vigent",
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
