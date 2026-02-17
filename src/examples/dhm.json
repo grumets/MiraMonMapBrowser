@@ -348,7 +348,7 @@
 			"id_camp": null
 		},	
 		{
-			"servidor_antic": "https://www.opengis.grumets.cat/cgi-bin/SatCat/MiraMon.cgi?",
+			"servidor_antic": "https://opengis.grumets.cat/cgi-bin/SatCat/MiraMon.cgi?",
 			"servidor": null,
 			"cors": true,
 			"nom_antic": "comar50k_ICC-catalunya",
@@ -795,7 +795,7 @@
 			"CostatMaxim": 1000,
 			"TileMatrixSet": null,
 			"transparencia": "transparent",
-			"FormatConsulta": "text/xml",
+			"FormatConsulta": "text/html",
 			"grup": null,
 			"separa": null,
 			"DescLlegenda": 
@@ -2208,7 +2208,7 @@
 			"CostatMinim": 0.5,
 			"CostatMaxim": 100,
 			"TileMatrixSet": null,
-			"ForcaGetFeatureInfo": true,
+			"ForcaGetFeatureInfo": false,
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa":{
@@ -2394,7 +2394,7 @@
 			"CostatMinim": 0.5,
 			"CostatMaxim": 1000,
 			"TileMatrixSet": null,
-			"ForcaGetFeatureInfo": true,
+			"ForcaGetFeatureInfo": false,
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
@@ -2532,7 +2532,13 @@
 					}
 				]
 			},
-			"DescarregaTot": null,
+			"DescarregaTot": [
+				{
+					"desc": "Model Digital d'Alçàries v.1 [2008-2012]",
+					"url": "examples/dhm/dhm-download/mda_lidarcat_v1.{extension}",
+					"format": [0]
+				}
+			],
 			"NomVideo": null,
 			"DescVideo": null,
 			"FlagsData": null,
@@ -2580,7 +2586,7 @@
 			"CostatMinim": 0.5,
 			"CostatMaxim": 1000,
 			"TileMatrixSet": null,
-			"ForcaGetFeatureInfo": true,
+			"ForcaGetFeatureInfo": false,
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
@@ -3509,7 +3515,7 @@
 			"editable": "no"
 		},
 		{
-			"servidor": "https://www.opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
+			"servidor": "https://opengis.grumets.cat/cgi-bin/world/miramon.cgi?",
 			"versio": null,
 			"tipus": null,
 			"nom":	"BlueMarble_2002",

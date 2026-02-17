@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="mda_lidarcat_v1.js" defer></script>
+    <title id="t_web">Model Digital d'Alçàries v.1 [2008-2012]</title>
+    <style>
+        body {
+            width: 800px;
+            margin: 0 auto;
+            font-family: Arial, Verdana, sans-serif;
+            padding-bottom: 70px; /* Espai per a la barra de logos */
+            overflow-y: auto; /* Permet desplaçament si cal */
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            background: white;
+            z-index: 1000;
+        }
+
+        .language-selector {
+            align-self: center;
+        }
+		
+		.language-selector select {
+            font-size: 0.8rem;
+            padding: 2px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+		
+       /* Estil per a la icona de tres ratlles */
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .menu-icon div {
+            height: 3px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+
+        /* Estil per al menú desplegable */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background-color: white;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            z-index: 1001;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu a {
+            text-decoration: none;
+            color: black;
+            padding: 10px 20px;
+            display: block;
+			font-size: 14px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Mostrar el menú quan està actiu */
+        .menu-active .dropdown-menu {
+            display: block;
+        }
+
+        .title-container {
+            text-align: center;
+            width: 800px;
+            max-width: 800px;
+            margin-top: 60px;
+        }
+
+        .title-container h1 {
+            margin-bottom: 5px; /* Redueix l'espaiat entre línies */
+			font-size: 1.8rem;
+        }
+
+        .title-container h2 {
+            color: gray; /* Canvia el color del subtítol a gris */
+            margin-top: 5px; /* Redueix l'espaiat entre línies */
+			font-size: 1.2rem;
+        }
+
+        .text-container {
+            width: 800px;
+            max-width: 800px;
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        .map-container {
+            width: 600px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .map-container img {
+            width: 600px;
+            height: 600px;
+            display: block;
+        }
+
+        .map-container svg {
+            width: 600px;
+            height: 600px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        svg rect {
+            fill: transparent;
+            stroke-width: 0;
+            transition: fill 0.3s;
+        }
+
+        svg rect:hover {
+            fill: rgba(0, 255, 0, 0.5);
+        }
+
+        .logo-bar {
+            width: 100%;
+            padding: 5px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: white;
+            z-index: 1000;
+        }
+
+        .logo-bar img {
+            height: 35px;
+        }
+		
+		.cita {
+			text-align: justify;
+			margin-left: 2em;
+			margin-right: 2em;
+		}		
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <!-- Icona del menú de tres ratlles -->
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Selector d'idioma -->
+        <div class="language-selector">
+            <form align="right">
+                <label for="language">🌍</label>
+                <select id="sel_language" onChange="setLang();">
+                    <option value="eng" selected="selected">English</option>
+                    <option value="cat">Català</option>
+                    <option value="spa">Español</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div class="dropdown-menu">
+            <a id="m_home" href="../../">Home</a>
+			<a id="m_navi" href="../index.htm">Map Browser</a>
+            <a id="m_down" href="../download">Downloads</a>
+            <a id="m_meta" href="../metadata">Metadata</a>
+			<a id="m_stnd" href="../api">OGC Web service & API</a>
+        </div>
+    </div>
+
+    <div class="title-container">
+        <h1 id="title">Model Digital d'Alçàries</h1>
+        <h2 id="subtitle">MDA LidarCat Versió 1.0 (2008-2012)</h2>
+    </div>
+
+    <div class="text-container">
+        <br>
+		<p id="par_01"></p>
+		<p id="par_02"></p>
+		<div class="selector">
+			<label id="par_03" for="formatSelector"></label>
+			<select id="formatSelector" onChange="updateDownloadLinks();">
+				<option value="mmzx" selected>*.mmzx</option>
+				<option value="zip">*.tiff</option>
+			</select>
+		</div>
+		<p id="par_04"></p>
+    </div>
+
+    <div class="map-container">
+        <img src="Div_Dwnld.png" width="600" height="600">
+        <svg width="600" height="600" viewBox="0 0 600 600">
+			<a id="downloadLink1" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/01_MDA_LidarCat_v1.mmzx"><rect x="107" y="18" width="98" height="94"/></a>
+            <a id="downloadLink2" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/02_MDA_LidarCat_v1.mmzx"><rect x="203" y="18" width="98" height="94"/></a>
+            <a id="downloadLink3" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/03_MDA_LidarCat_v1.mmzx"><rect x="300" y="18" width="98" height="94"/></a>
+			
+            <a id="downloadLink4" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/04_MDA_LidarCat_v1.mmzx"><rect x="107" y="112" width="98" height="94"/></a>
+            <a id="downloadLink5" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/05_MDA_LidarCat_v1.mmzx"><rect x="203" y="112" width="98" height="94"/></a>
+            <a id="downloadLink6" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/06_MDA_LidarCat_v1.mmzx"><rect x="300" y="112" width="98" height="94"/></a>
+            <a id="downloadLink7" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/07_MDA_LidarCat_v1.mmzx"><rect x="396" y="112" width="98" height="94"/></a>
+            <a id="downloadLink8" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/08_MDA_LidarCat_v1.mmzx"><rect x="493" y="112" width="98" height="94"/></a>
+
+            <a id="downloadLink9" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/09_MDA_LidarCat_v1.mmzx"><rect x="10" y="205" width="98" height="94"/></a>
+            <a id="downloadLink10" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/10_MDA_LidarCat_v1.mmzx"><rect x="107" y="205" width="98" height="94"/></a>
+            <a id="downloadLink11" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/11_MDA_LidarCat_v1.mmzx"><rect x="203" y="205" width="98" height="94"/></a>
+            <a id="downloadLink12" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/12_MDA_LidarCat_v1.mmzx"><rect x="300" y="205" width="98" height="94"/></a>
+			<a id="downloadLink13" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/13_MDA_LidarCat_v1.mmzx"><rect x="396" y="205" width="98" height="94"/></a>
+			<a id="downloadLink14" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/14_MDA_LidarCat_v1.mmzx"><rect x="493" y="205" width="98" height="94"/></a>
+			
+			<a id="downloadLink15" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/15_MDA_LidarCat_v1.mmzx"><rect x="10" y="298" width="98" height="94"/></a>
+            <a id="downloadLink16" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/16_MDA_LidarCat_v1.mmzx"><rect x="107" y="298" width="98" height="94"/></a>
+            <a id="downloadLink17" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/17_MDA_LidarCat_v1.mmzx"><rect x="203" y="298" width="98" height="94"/></a>
+            <a id="downloadLink18" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/18_MDA_LidarCat_v1.mmzx"><rect x="300" y="298" width="98" height="94"/></a>
+			<a id="downloadLink19" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/19_MDA_LidarCat_v1.mmzx"><rect x="396" y="298" width="98" height="94"/></a>
+			<a id="downloadLink20" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/20_MDA_LidarCat_v1.mmzx"><rect x="493" y="298" width="98" height="94"/></a>
+
+			<a id="downloadLink21" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/21_MDA_LidarCat_v1.mmzx"><rect x="10" y="392" width="98" height="94"/></a>
+            <a id="downloadLink22" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/22_MDA_LidarCat_v1.mmzx"><rect x="107" y="392" width="98" height="94"/></a>
+			<a id="downloadLink23" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/23_MDA_LidarCat_v1.mmzx"><rect x="203" y="392" width="98" height="94"/></a>
+			<a id="downloadLink24" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/24_MDA_LidarCat_v1.mmzx"><rect x="300" y="392" width="98" height="94"/></a>
+
+            <a id="downloadLink25" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/25_MDA_LidarCat_v1.mmzx"><rect x="10" y="486" width="98" height="94"/></a>
+            <a id="downloadLink26" xlink:href="https://www.infoambiental.grumets.cat/MDAlidar/lidarCat_v1/26_MDA_LidarCat_v1.mmzx"><rect x="107" y="486" width="98" height="94"/></a>
+        </svg>
+    </div>
+
+    <div class="logo-bar">
+        <a href="http://www.creaf.cat" target="_blank"><img src="../dhm-img/LogoCREAF.png" alt="CREAF"></a>
+        <a href="http://www.uab.cat" target="_blank"><img src="../dhm-img/logo_uab.png" alt="UAB"></a>
+        <a href="https://www.grumets.cat" target="_blank"><img src="../dhm-img/logo_grumets.png" alt="GRUMETS"></a>
+    </div>
+	
+	<script>
+        // Funció per alternar el menú desplegable
+        function toggleMenu() {
+            document.querySelector('.top-bar').classList.toggle('menu-active');
+        }
+    </script>	
+
+</body>
+</html>
