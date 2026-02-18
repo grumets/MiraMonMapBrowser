@@ -1,46 +1,176 @@
 {
-	"VersioConfigMMN": {"Vers": 6,"SubVers": 0,"VariantVers": null},
-	"SpaceForLayers": {"width": 1280,"height": 904},
-	"Layer": 
-	[
-		{"name": "situacio","left": 0,"top": 0,"width": 223,"height": 243,"ancora": "NWse","scroll": "no","visible": true,"content": null},
-		{"name": "llegenda","left": 1,"top": 243,"width": 223,"height": 661,"ancora": "nWSe","scroll": "ara_no","visible": true,"content": null},
-		{"name": "titol","left": 230,"top": 5,"width": 900,"height": 80,"ancora": "NwEs","scroll": "no","visible": true,"content": null},
-		{"name": "logos","left": 940,"top": 5,"width": 270,"height": 150,"ancora": "NwEsC","scroll": "no","visible": true,"content": "<a href=\"https://www.grumets.cat\" target=\"_blank\"><img src=\"examples/satcat-img/LogoGRUMETSNou.png\" title=\"GRUMETS\" border=0></a> <a href=\"https://www.uab.cat\" target=\"_blank\"><img src=\"examples/satcat-img/uab.gif\" title=\"Universitat Autònoma de Barcelona\" border=0></a><a href=\"http://www.creaf.cat\" target=\"_blank\"><img src=\"examples/satcat-img/LogoCREAF.gif\" title=\"CREAF\" border=0></a><a href=\"https://www.gencat.cat\" target=\"_blank\"><img src=\"examples/satcat-img/escugene.gif\" title=\"Generalitat de Catalunya\" border=0></a>"},
-		{"name": "barra","left": 225,"top": 85,"width": 885,"height": 35,"ancora": "wC","scroll": "no","visible": true,"content": null},
-		{"name": "projeccio","left": 1000,"top": 85,"width": 140,"height":30,"ancora": "NwEsC","scroll": "no","visible": true,"content": null},
-		{"name": "vista","left": 223,"top": 112,"width": 1057,"height": 820,"ancora": "NwSE","scroll": "no","visible": false,"content": null},		
-		{"name": "ctipica","left": 720,"top": 85,"width": 500,"height": 20,"ancora": "wC","scroll": "no","visible": true,"content": null},
-		{"name": "atribucio","left": 200,"top": 860,"width": 1030,"height": 20,"ancora": "SEwR","scroll": "no","visible": true,"content": null},
-		{"name": "logo_miramon","left": 1175,"top": 780,"width": 55,"height": 75,"ancora": "SECR","scroll": "no","visible": true,"ev": null,"content": {"cat": "<a href=\"https://www.miramon.cat/Index.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","spa": "<a href=\"https://www.miramon.cat/index_spa.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>","eng": "<a href=\"https://www.miramon.cat/Index_eng.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"}},
-		{"name": "coord","title": {"cat": "Posició actual: ","spa": "Posición actual: ","eng": "Current position: "},"left": 240,"top": 750,"width": 320,"height": 70,"ancora": "SCwR","scroll": "no","visible": true,"resizable": true,"content": null}
-
+	"VersioConfigMMN": {
+		"Vers": 6,
+		"SubVers": 0,
+		"VariantVers": null
+	},
+	"SpaceForLayers": {
+		"width": 1280,
+		"height": 904
+	},
+	"Layer": [
+		{
+			"name": "situacio",
+			"left": 0,
+			"top": 0,
+			"width": 223,
+			"height": 243,
+			"ancora": "NWse",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "llegenda",
+			"left": 1,
+			"top": 243,
+			"width": 223,
+			"height": 661,
+			"ancora": "nWSe",
+			"scroll": "ara_no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "titol",
+			"left": 230,
+			"top": 5,
+			"width": 900,
+			"height": 80,
+			"ancora": "NwEs",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "logos",
+			"left": 940,
+			"top": 5,
+			"width": 270,
+			"height": 150,
+			"ancora": "NwEsC",
+			"scroll": "no",
+			"visible": true,
+			"content": "<a href=\"https://www.grumets.cat\" target=\"_blank\"><img src=\"examples/satcat-img/LogoGRUMETSNou.png\" title=\"GRUMETS\" border=0></a> <a href=\"https://www.uab.cat\" target=\"_blank\"><img src=\"examples/satcat-img/logo_uab.png\" width=100 title=\"Universitat Autònoma de Barcelona\" border=0></a><a href=\"http://www.creaf.cat\" target=\"_blank\"><img src=\"examples/satcat-img/LogoCREAF.gif\" title=\"CREAF\" border=0></a><a href=\"https://www.gencat.cat\" target=\"_blank\"><img src=\"examples/satcat-img/escugene.gif\" title=\"Generalitat de Catalunya\" border=0></a>"
+		},
+		{
+			"name": "barra",
+			"left": 225,
+			"top": 85,
+			"width": 885,
+			"height": 35,
+			"ancora": "wC",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "projeccio",
+			"left": 1030,
+			"top": 85,
+			"width": 140,
+			"height": 30,
+			"ancora": "NwEsC",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "vista",
+			"left": 223,
+			"top": 112,
+			"width": 1057,
+			"height": 820,
+			"ancora": "NwSE",
+			"scroll": "no",
+			"visible": false,
+			"content": null
+		},
+		{
+			"name": "ctipica",
+			"left": 720,
+			"top": 85,
+			"width": 500,
+			"height": 20,
+			"ancora": "wC",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "atribucio",
+			"left": 200,
+			"top": 860,
+			"width": 1030,
+			"height": 20,
+			"ancora": "SEwR",
+			"scroll": "no",
+			"visible": true,
+			"content": null
+		},
+		{
+			"name": "logo_miramon",
+			"left": 1175,
+			"top": 780,
+			"width": 55,
+			"height": 75,
+			"ancora": "SECR",
+			"scroll": "no",
+			"visible": true,
+			"ev": null,
+			"content": {
+				"cat": "<a href=\"https://www.miramon.cat/Index.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"spa": "<a href=\"https://www.miramon.cat/index_spa.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>",
+				"eng": "<a href=\"https://www.miramon.cat/Index_eng.htm\" target=\"_blank\"><img src=\"examples/satcat-img/logomiramon_petit.jpg\" title=\"MiraMon\" border=0></a>"
+			}
+		},
+		{
+			"name": "coord",
+			"title": {
+				"cat": "Posició actual: ",
+				"spa": "Posición actual: ",
+				"eng": "Current position: "
+			},
+			"left": 240,
+			"top": 750,
+			"width": 320,
+			"height": 70,
+			"ancora": "SCwR",
+			"scroll": "no",
+			"visible": true,
+			"resizable": true,
+			"content": null
+		}
 	],
 	"ServidorLocal": "https://opengis.grumets.cat/cgi-bin/SatCat/MiraMon.cgi?",
-	"VersioServidorLocal": {"Vers": 1,"SubVers": 3,"VariantVers": 0},
+	"VersioServidorLocal": {
+		"Vers": 1,
+		"SubVers": 3,
+		"VariantVers": 0
+	},
 	"TipusServidorLocal": "TipusWMS",
 	"AdrecaBaseSRC": "",
 	"WPSschemaURL": "http://schemas.opengis.net",
-	"idiomes": ["cat","spa","eng"],
-	"idioma": "cat",	
-	"TitolNavegador": 
-	{
+	"idiomes": [
+		"cat",
+		"spa",
+		"eng"
+	],
+	"idioma": "cat",
+	"TitolNavegador": {
 		"layer": "titol",
-		"text": 
-		{
+		"text": {
 			"cat": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">SatCat</font>:<br><font size=\"+3\">S</font>ervidor d'<font size=\"+3\">I</font>matges de <font size=\"+3\">S</font>atèl·lit de <font size=\"+3\">C</font>atalunya</font></b>",
 			"spa": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">SatCat</font>:<br><font size=\"+3\">S</font>ervidor de <font size=\"+3\">I</font>mágenes de <font size=\"+3\">S</font>atélite de <font size=\"+3\">C</font>ataluña</font></b>",
 			"eng": "<b><font face=\"Verdana, Arial, Helvetica, sans-serif\" color=\"#000099\" size=\"+2\"><font size=\"+3\">SatCat</font>:<br><font size=\"+3\"><font size=\"+3\">C</font>atalonia <font size=\"+3\">S</font>atellite <font size=\"+3\">I</font>mage <font size=\"+3\">S</font>erver</font></b>"
 		}
 	},
-	"titol": 
-	{
+	"titol": {
 		"cat": "SatCat: Servidor d'imatges de satèl·lit de Catalunya",
 		"spa": "SatCat: Servidor de imágenes de satélite de Cataluña",
 		"eng": "SatCat: Catalonia satellite image server"
 	},
-	"TitolCaixa": 
-	{
+	"TitolCaixa": {
 		"cat": "<font face=\"Arial\" size=\"2\" color=\"#000099\"><b>SatCat: Servidor d'imatges de satèl·lit de Catalunya</b></font>",
 		"spa": "<font face=\"Arial\" size=\"2\" color=\"#000099\"><b>SatCat: Servidor de imágenes de satélite de Cataluña</b></font>",
 		"eng": "<font face=\"Arial\" size=\"2\" color=\"#000099\"><b>SatCat: Catalonia satellite image server</b></font>"
@@ -60,15 +190,28 @@
 	"CoordActualProj": true,
 	"CoordActualLongLatG": false,
 	"CoordActualLongLatGMS": false,
-	"zoom": 
-	[
-		{"costat": 1000},
-		{"costat": 500},
-		{"costat": 200},
-		{"costat": 100},
-		{"costat": 50},
-		{"costat": 20},
-		{"costat": 10}
+	"zoom": [
+		{
+			"costat": 1000
+		},
+		{
+			"costat": 500
+		},
+		{
+			"costat": 200
+		},
+		{
+			"costat": 100
+		},
+		{
+			"costat": 50
+		},
+		{
+			"costat": 20
+		},
+		{
+			"costat": 10
+		}
 	],
 	"NivellZoomCostat": 50,
 	"ConsultableSegonsEscala": true,
@@ -80,13 +223,10 @@
 	"MostraBarraEscala": true,
 	"RelaxaAmbitVisualitzacio": false,
 	"VoraVistaGrisa": false,
-	"ImatgeSituacio": 
-	[
+	"ImatgeSituacio": [
 		{
-			"EnvTotal": 
-			{
-				"EnvCRS": 
-				{
+			"EnvTotal": {
+				"EnvCRS": {
 					"MinX": 257765,
 					"MaxX": 534765,
 					"MinY": 4486431,
@@ -101,10 +241,8 @@
 			"MargeSup": 2
 		},
 		{
-			"EnvTotal": 
-			{
-				"EnvCRS": 
-				{
+			"EnvTotal": {
+				"EnvCRS": {
 					"MinX": 257765,
 					"MaxX": 534765,
 					"MinY": 4486431,
@@ -121,12 +259,13 @@
 	],
 	"AmpleAltSituacioAuto": true,
 	"ISituacioOri": 1,
-	"PuntOri": {"x": 422736.47,"y": 4577522.45},
-	"AspecteLlegenda": 
-	{
+	"PuntOri": {
+		"x": 422736.47,
+		"y": 4577522.45
+	},
+	"AspecteLlegenda": {
 		"CapcaleraLlegenda": null,
-		"PeuLlegenda": 
-		{
+		"PeuLlegenda": {
 			"cat": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>Notes:</b><br> <sup>1</sup> Capa extreta del SIG del <a href=\"https://web.gencat.cat/ca/generalitat/com-ens-organitzem/departaments/territori\" target=\"_blank\">DTES</a> i <a href=\"https://web.gencat.cat/ca/generalitat/com-ens-organitzem/departaments/agricultura\" target=\"_blank\">DAAM</a><br>  <sup>2</sup> Capa elaborada al <a href=\"http://www.creaf.cat\" target=\"_blank\">CREAF</a><br>  <sup>3</sup> Capa elaborada a l'<a href=\"https://www.icgc.cat\" target=\"_blank\">ICGC</a><br></font>",
 			"spa": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>Notas:</b><br> <sup>1</sup> Capa extraida del SIG <a href=\"https://web.gencat.cat/es/generalitat/com-ens-organitzem/departaments/territori\" target=\"_blank\">DTES</a> y <a href=\"https://web.gencat.cat/es/generalitat/com-ens-organitzem/departaments/agricultura\" target=\"_blank\">DAAM</a><br>  <sup>2</sup> Capa elaborada en el <a href=\"http://www.creaf.cat\" target=\"_blank\">CREAF</a><br>  <sup>3</sup> Capa elaborada en el <a href=\"https://www.icgc.cat\" target=\"_blank\">ICGC</a><br></font>",
 			"eng": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\"><b>Notes:</b><br> <sup>1</sup> Layer extracted from the <a href=\"https://web.gencat.cat/en/generalitat/com-ens-organitzem/departaments/territori\" target=\"_blank\">DTES</a> and <a href=\"https://web.gencat.cat/en/generalitat/com-ens-organitzem/departaments/agricultura\" target=\"_blank\">DAAM</a> GIS<br>  <sup>2</sup> Layer developed by <a href=\"http://www.creaf.cat\" target=\"_blank\">CREAF</a><br>  <sup>3</sup> Layer developed by <a href=\"https://www.icgc.cat\" target=\"_blank\">ICGC</a><br></font>"
@@ -144,11 +283,9 @@
 		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
 		"PostDescColor": "</font>"
 	},
-	"AspecteLlegendaImpressio": 
-	{
+	"AspecteLlegendaImpressio": {
 		"CapcaleraLlegenda": null,
-		"PeuLlegenda": 
-		{
+		"PeuLlegenda": {
 			"cat": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\">Notes:<br> <sup>1</sup> Capa extreta del SIG del DTES i DAAM<br>  <sup>2</sup> Capa elaborada al CREAF<br>  <sup>3</sup> Capa elaborada a l'ICGC<br></font>",
 			"spa": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\">Notas:<br> <sup>1</sup> Capa extraida del SIG DTES y DAAM<br>  <sup>2</sup> Capa elaborada en el CREAF<br>  <sup>3</sup> Capa elaborada en el ICGC<br></font>",
 			"eng": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1 color=\"#000099\">Notes:<br> <sup>1</sup> Layer extracted from the DTES and DAAM GIS<br>  <sup>2</sup> Layer developed by CREAF<br>  <sup>3</sup> Layer developed by ICGC<br></font>"
@@ -166,10 +303,21 @@
 		"PreviDescColor": "<font face=\"Verdana, Arial, Helvetica, sans-serif\" size=1>",
 		"PostDescColor": "</font>"
 	},
-	"PlantillaDImpressio": 
-	[
-		{"nom": "A4Vertical","desc": "A4 vertical","src": "a4vertical.htm","ample": 600,"alt": 800},
-		{"nom": "A4Horitzontal","desc": "A4 horizontal","src": "a4horitzontal.htm","ample": 800,"alt": 600}
+	"PlantillaDImpressio": [
+		{
+			"nom": "A4Vertical",
+			"desc": "A4 vertical",
+			"src": "a4vertical.htm",
+			"ample": 600,
+			"alt": 800
+		},
+		{
+			"nom": "A4Horitzontal",
+			"desc": "A4 horizontal",
+			"src": "a4horitzontal.htm",
+			"ample": 800,
+			"alt": 600
+		}
 	],
 	"LlegendaAmagaSegonsEscala": false,
 	"LlegendaGrisSegonsEscala": true,
@@ -180,30 +328,25 @@
 	"LlegendaAmagaSiForaAmbit": false,
 	"LlegendaGrisSiForaAmbit": true,
 	"LlegendaLligaVisibleAmbDescarregable": true,
-	"CapaConsultaPreguntaServidor": 
-	[
+	"CapaConsultaPreguntaServidor": [
 		{
 			"servidor": null,
 			"cors": true,
 			"nom": "comar50k_ICC-catalunya",
-			"camps": 
-			[
+			"camps": [
 				{
-					"previ": 
-					{
+					"previ": {
 						"cat": "Anar a la:",
 						"spa": "Ir a la:",
 						"eng": "Go to:"
 					},
 					"nom": "MUNICIPI`MUNICIPI_TE_MUNI_DBF`COMARCA`COMARCA_TE_COMA_DBF`NOM_COMAR",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Comarca",
 						"spa": "Comarca",
 						"eng": "Region"
 					},
-					"post": 
-					{
+					"post": {
 						"cat": "de:",
 						"spa": "de:",
 						"eng": "of:"
@@ -216,24 +359,20 @@
 			"servidor": null,
 			"cors": true,
 			"nom": "munis50k_ICC-catalunya",
-			"camps": 
-			[
+			"camps": [
 				{
-					"previ": 
-					{
+					"previ": {
 						"cat": "Anar a la:",
 						"spa": "Ir a la:",
 						"eng": "Go to:"
 					},
 					"nom": "MUNICIPI`MUNICIPI_TE_MUNI_DBF`NOMN_MUNI",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Municipi",
 						"spa": "Municipio",
 						"eng": "Municipality"
 					},
-					"post": 
-					{
+					"post": {
 						"cat": "de:",
 						"spa": "de:",
 						"eng": "of:"
@@ -246,24 +385,20 @@
 			"servidor": null,
 			"cors": true,
 			"nom": "conques-catalunya",
-			"camps": 
-			[
+			"camps": [
 				{
-					"previ": 
-					{
+					"previ": {
 						"cat": "Anar a la:",
 						"spa": "Ir a la:",
 						"eng": "Go to:"
 					},
 					"nom": "NOM_CONCA",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Conca",
 						"spa": "Cuenca",
 						"eng": "Basin"
 					},
-					"post": 
-					{
+					"post": {
 						"cat": "de:",
 						"spa": "de:",
 						"eng": "of:"
@@ -273,20 +408,22 @@
 			"CRS": "EPSG:23031"
 		}
 	],
-	"ConsultaTipica": 
-	[
+	"ConsultaTipica": [
 		{
 			"nom": "ctipica",
 			"TipusConsultaTipica": "CTipicaDesplegables",
-			"NomCapa": 
-			[
+			"NomCapa": [
 				"comar50k_ICC-catalunya",
 				"munis50k_ICC-catalunya",
 				"conques-catalunya"
 			]
 		}
 	],
-	"VistaPermanent": [{"nom": "vista"}],
+	"VistaPermanent": [
+		{
+			"nom": "vista"
+		}
+	],
 	"BarraEstil": {
 		"classic": false,
 		"colors": {
@@ -307,7 +444,7 @@
 	"BarraBotoBack": false,
 	"BarraBotoVGeneral": false,
 	"BarraBotonsAlternatius": true,
-	"BarraBotoMouMig": true,		
+	"BarraBotoMouMig": true,
 	"BarraBotoNovaVista": true,
 	"BarraEscala": false,
 	"BarraBotoCaixaParam": true,
@@ -334,8 +471,7 @@
 	"BotoVistaBack": "false NO IMPLEMENTAT",
 	"BotoVistaAnarACoordenada": "false NO IMPLEMENTAT",
 	"AltresLinks": null,
-	"TitolLlistatNivellZoom": 
-	{
+	"TitolLlistatNivellZoom": {
 		"cat": "<span class=\"text_coord\">Escala: </span>",
 		"spa": "<span class=\"text_coord\">Escala: </span>",
 		"eng": "<span class=\"text_coord\">Scale: </span>"
@@ -345,24 +481,21 @@
 	"LlistatZoomEscalaAprox": true,
 	"EstatClickSobreVista": "ClickConLoc",
 	"TipusConsulta": "FinestraDeCop",
-	"IconaConsulta": 
-	{
+	"IconaConsulta": {
 		"icona": "mes.gif",
 		"ncol": 9,
 		"nfil": 9,
 		"i": 5,
 		"j": 5
 	},
-	"PlantillaConsulta": 
-	{
+	"PlantillaConsulta": {
 		"nom": null,
 		"desc": null,
 		"src": "consulta_de_cop.htm",
 		"ample": 500,
 		"alt": 500
 	},
-	"IconaAnarCoord": 
-	{
+	"IconaAnarCoord": {
 		"icona": "mes.gif",
 		"ncol": 9,
 		"nfil": 9,
@@ -375,30 +508,24 @@
 	"IconaValidacio": null,
 	"TempsRefresc": 5000,
 	"DescarregesCertificades": true,
-	"ParGetCoverage": 
-	[
+	"ParGetCoverage": [
 		{
 			"nom": "Passada Landsat 7 ETM+",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 3, 2 i 1) (JPEG)",
 								"spa": "optimizada en color natural (bandas 3, 2 y 1) (JPEG)",
 								"eng": "optimized in true color (bands 3, 2 and 1) (JPEG)"
@@ -407,8 +534,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 4, 5 i 3) (JPEG)",
 								"spa": "optimizada en falso color (bandas 4, 5 y 3) (JPEG)",
 								"eng": "optimized in false color (bands 4, 5 and 3) (JPEG)"
@@ -417,8 +543,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -428,23 +553,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Bandes",
 							"spa": "Bandas",
 							"eng": "Bands"
 						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "8-PAN",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 8 [pancromàtic 0.520-0.900 µm] (15m)",
 								"spa": "Banda 8 [pancromático 0.520-0.900 µm] (15m)",
 								"eng": "Band 8 [panchromatic 0.520-0.900 µm] (15m)"
@@ -453,8 +574,7 @@
 						},
 						{
 							"nom": "1-B",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 1 [blau 0.450-0.520 µm] (20m)",
 								"spa": "Banda 1 [azul 0.450-0.520 µm] (20m)",
 								"eng": "Band 1 [blue 0.450-0.520 µm] (20m)"
@@ -463,8 +583,7 @@
 						},
 						{
 							"nom": "2-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 2 [verd 0.520-0.600 µm] (20m)",
 								"spa": "Banda 2 [verde 0.520-0.600 µm] (20m)",
 								"eng": "Band 2 [green 0.520-0.600 µm] (20m)"
@@ -473,8 +592,7 @@
 						},
 						{
 							"nom": "3-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 3 [vermell 0.630-0.690 µm] (20m)",
 								"spa": "Banda 3 [rojo 0.630-0.690 µm] (20m)",
 								"eng": "Band 3 [red 0.630-0.690 µm] (20m)"
@@ -483,8 +601,7 @@
 						},
 						{
 							"nom": "4-IRp",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [infraroig proper 0.760-0.900 µm] (20m)",
 								"spa": "Banda 4 [infrarojo cercano 0.760-0.900 µm] (20m)",
 								"eng": "Band 4 [near infrared  0.760-0.900 µm] (20m)"
@@ -493,8 +610,7 @@
 						},
 						{
 							"nom": "5-IRm1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 5 [infraroig mitjà 1 1.550-1.750 µm] (20m)",
 								"spa": "Banda 5 [infrarojo medio 1 1.550-1.750 µm] (20m)",
 								"eng": "Band 5 [medium infrared 1 1.550-1.750 µm] (20m)"
@@ -503,8 +619,7 @@
 						},
 						{
 							"nom": "7-IRm2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 7 [infraroig mitjà 2 2.080-2.350 µm] (20m)",
 								"spa": "Banda 7 [infrarojo medio 2 2.080-2.350 µm] (20m)",
 								"eng": "Band 7 [medium infrared 2 2.080-2.350 µm] (20m)"
@@ -513,8 +628,7 @@
 						},
 						{
 							"nom": "6-IRt",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 6 [infraroig tèrmic 10.400-12.500 µm] (20m)",
 								"spa": "Banda 6 [infrarojo térmico 10.400-12.500 µm] (20m)",
 								"eng": "Band 6 [thermal infrared 10.400-12.500 µm] (20m)"
@@ -523,8 +637,7 @@
 						},
 						{
 							"nom": "9-IRt_HG",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 9 [infraroig tèrmic (alt guany) 10.400-12.500 µm] (20m)",
 								"spa": "Banda 9 [infrarojo térmico (alta ganáncia) 10.400-12.500 µm] (20m)",
 								"eng": "Band 9 [thermal infrared (high gain) 10.400-12.500 µm] (20m)"
@@ -534,32 +647,40 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": {"cat": "Dia","spa": "Día","eng": "Day"}
+						"desc": {
+							"cat": "Dia",
+							"spa": "Día",
+							"eng": "Day"
+						}
 					},
 					"cardin": "1",
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -567,26 +688,21 @@
 		},
 		{
 			"nom": "Passada Landsat 4-5 TM",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 3, 2 i 1) (JPEG)",
 								"spa": "optimizada en color natural (bandas 3, 2 y 1) (JPEG)",
 								"eng": "optimized in true color (bands 3, 2 and 1) (JPEG)"
@@ -595,8 +711,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 4, 5 i 3) (JPEG)",
 								"spa": "optimizada en falso color (bandas 4, 5 y 3) (JPEG)",
 								"eng": "optimized in false color (bands 4, 5 and 3) (JPEG)"
@@ -605,8 +720,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -616,18 +730,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": {"cat": "Bandes","spa": "Bandas","eng": "Bands"}
+						"desc": {
+							"cat": "Bandes",
+							"spa": "Bandas",
+							"eng": "Bands"
+						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "1-B",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 1 [blau 0.450-0.520 µm] (20m)",
 								"spa": "Banda 1 [azul 0.450-0.520 µm] (20m)",
 								"eng": "Band 1 [blue 0.450-0.520 µm] (20m)"
@@ -636,8 +751,7 @@
 						},
 						{
 							"nom": "2-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 2 [verd 0.520-0.600 µm] (20m)",
 								"spa": "Banda 2 [verde 0.520-0.600 µm] (20m)",
 								"eng": "Band 2 [green 0.520-0.600 µm] (20m)"
@@ -646,8 +760,7 @@
 						},
 						{
 							"nom": "3-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 3 [vermell 0.630-0.690 µm] (20m)",
 								"spa": "Banda 3 [rojo 0.630-0.690 µm] (20m)",
 								"eng": "Band 3 [red 0.630-0.690 µm] (20m)"
@@ -656,8 +769,7 @@
 						},
 						{
 							"nom": "4-IRp",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [infraroig proper 0.760-0.900 µm] (20m)",
 								"spa": "Banda 4 [infrarojo cercano 0.760-0.900 µm] (20m)",
 								"eng": "Band 4 [near infrared  0.760-0.900 µm] (20m)"
@@ -666,8 +778,7 @@
 						},
 						{
 							"nom": "5-IRm1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 5 [infraroig mitjà 1 1.550-1.750 µm] (20m)",
 								"spa": "Banda 5 [infrarojo medio 1 1.550-1.750 µm] (20m)",
 								"eng": "Band 5 [medium infrared 1 1.550-1.750 µm] (20m)"
@@ -676,8 +787,7 @@
 						},
 						{
 							"nom": "7-IRm2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 7 [infraroig mitjà 2 2.080-2.350 µm] (20m)",
 								"spa": "Banda 7 [infrarojo medio 2 2.080-2.350 µm] (20m)",
 								"eng": "Band 7 [medium infrared 2 2.080-2.350 µm] (20m)"
@@ -686,8 +796,7 @@
 						},
 						{
 							"nom": "6-IRt",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 6 [infraroig tèrmic 10.400-12.500 µm] (20m)",
 								"spa": "Banda 6 [infrarojo térmico 10.400-12.500 µm] (20m)",
 								"eng": "Band 6 [thermal infrared 10.400-12.500 µm] (20m)"
@@ -697,32 +806,40 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": {"cat": "Dia","spa": "Día","eng": "Day"}
+						"desc": {
+							"cat": "Dia",
+							"spa": "Día",
+							"eng": "Day"
+						}
 					},
 					"cardin": "1",
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -730,26 +847,21 @@
 		},
 		{
 			"nom": "Landsat tot Catalunya",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 3, 2 i 1) (JPEG)",
 								"spa": "optimizada en color natural (bandas 3, 2 y 1) (JPEG)",
 								"eng": "optimized in true color (bands 3, 2 and 1) (JPEG)"
@@ -758,8 +870,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 4, 5 i 3) (JPEG)",
 								"spa": "optimizada en falso color (bandas 4, 5 y 3) (JPEG)",
 								"eng": "optimized in false color (bands 4, 5 and 3) (JPEG)"
@@ -769,32 +880,40 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": {"cat": "Dia","spa": "Día","eng": "Day"}
+						"desc": {
+							"cat": "Dia",
+							"spa": "Día",
+							"eng": "Day"
+						}
 					},
 					"cardin": "1",
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -802,26 +921,21 @@
 		},
 		{
 			"nom": "Passada Landsat 4-5 MSS",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 4, 1 i 2) (JPEG)",
 								"spa": "optimizada en falso color (bandas 4, 1 y 2) (JPEG)",
 								"eng": "optimized in false color (bands 4, 1 and 2) (JPEG)"
@@ -830,8 +944,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -841,23 +954,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Bandes",
 							"spa": "Bandas",
 							"eng": "Bands"
 						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "1-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 1 [Banda 0.500-0.600 µm] (60m)",
 								"spa": "Banda 1 [Banda 0.500-0.600 µm] (60m)",
 								"eng": "Band 1 [Banda 0.500-0.600 µm] (60m)"
@@ -866,8 +975,7 @@
 						},
 						{
 							"nom": "2-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 2 [Banda 0.600-0.700 µm] (60m)",
 								"spa": "Banda 2 [Banda 0.600-0.700 µm] (60m)",
 								"eng": "Band 2 [Banda 0.600-0.700 µm] (60m)"
@@ -876,8 +984,7 @@
 						},
 						{
 							"nom": "3-IRp1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 3 [Banda 0.700-0.800 µm] (60m)",
 								"spa": "Banda 3 [Banda 0.700-0.800 µm] (60m)",
 								"eng": "Band 3 [Banda 0.700-0.800 µm] (60m)"
@@ -886,8 +993,7 @@
 						},
 						{
 							"nom": "4-IRp2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [Banda 0.800-1.100 µm] (60m)",
 								"spa": "Banda 4 [Banda 0.800-1.100 µm] (60m)",
 								"eng": "Band 4 [Banda 0.800-1.100 µm] (60m)"
@@ -897,11 +1003,9 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Dia",
 							"spa": "Día",
 							"eng": "Day"
@@ -911,23 +1015,28 @@
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -935,26 +1044,21 @@
 		},
 		{
 			"nom": "Passada Landsat 1-2-3 MSS",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 7, 4 i 5) (JPEG)",
 								"spa": "optimizada en falso color (bandas 7, 4 y 5) (JPEG)",
 								"eng": "optimized in false color (bands 7, 4 and 5) (JPEG)"
@@ -963,8 +1067,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -974,23 +1077,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Bandes",
 							"spa": "Bandas",
 							"eng": "Bands"
 						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "4-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [Banda 0.500-0.600 µm] (60m)",
 								"spa": "Banda 4 [Banda 0.500-0.600 µm] (60m)",
 								"eng": "Band 4 [Banda 0.500-0.600 µm] (60m)"
@@ -999,8 +1098,7 @@
 						},
 						{
 							"nom": "5-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 5 [Banda 0.600-0.700 µm] (60m)",
 								"spa": "Banda 5 [Banda 0.600-0.700 µm] (60m)",
 								"eng": "Band 5 [Banda 0.600-0.700 µm] (60m)"
@@ -1009,8 +1107,7 @@
 						},
 						{
 							"nom": "6-IRp1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 6 [Banda 0.700-0.800 µm] (60m)",
 								"spa": "Banda 6 [Banda 0.700-0.800 µm] (60m)",
 								"eng": "Band 6 [Banda 0.700-0.800 µm] (60m)"
@@ -1019,8 +1116,7 @@
 						},
 						{
 							"nom": "7-IRp2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 7 [Banda 0.800-1.100 µm] (60m)",
 								"spa": "Banda 7 [Banda 0.800-1.100 µm] (60m)",
 								"eng": "Band 7 [Banda 0.800-1.100 µm] (60m)"
@@ -1030,11 +1126,9 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Dia",
 							"spa": "Día",
 							"eng": "Day"
@@ -1044,23 +1138,28 @@
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -1068,26 +1167,21 @@
 		},
 		{
 			"nom": "Passada Landsat 8 OLI-TIRS",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 4, 3 i 2) (JPEG)",
 								"spa": "optimizada en color natural (bandas 4, 3 y 2) (JPEG)",
 								"eng": "optimized in true color (bands 4, 3 and 2) (JPEG)"
@@ -1096,8 +1190,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 5, 6 i 4) (JPEG)",
 								"spa": "optimizada en falso color (bandas 5, 6 y 4) (JPEG)",
 								"eng": "optimized in false color (bands 5, 6 and 4) (JPEG)"
@@ -1106,8 +1199,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -1117,23 +1209,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Bandes",
 							"spa": "Bandas",
 							"eng": "Bands"
 						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "8-PAN",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 8 [pancromàtic 0.500-0.680 µm] (15m) (OLI)",
 								"spa": "Banda 8 [pancromático 0.500-0.680 µm] (15m) (OLI)",
 								"eng": "Band 8 [panchromatic 0.500-0.680 µm] (15m) (OLI)"
@@ -1142,8 +1230,7 @@
 						},
 						{
 							"nom": "1-CA",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 1 [litoral/aerosols 0.433-0.453 µm] (30m) (OLI)",
 								"spa": "Banda 1 [litoral/aerosoles 0.433-0.453 µm] (30m) (OLI)",
 								"eng": "Band 1 [Coastal/aerosol 0.433-0.453 µm] (30m) (OLI)"
@@ -1152,8 +1239,7 @@
 						},
 						{
 							"nom": "2-B",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 2 [blau 0.450-0.515 µm] (30m) (OLI)",
 								"spa": "Banda 2 [azul 0.450-0.515 µm] (30m) (OLI)",
 								"eng": "Band 2 [blue 0.450-0.515 µm] (30m) (OLI)"
@@ -1162,8 +1248,7 @@
 						},
 						{
 							"nom": "3-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 3 [verd 0.525-0.600 µm] (30m) (OLI)",
 								"spa": "Banda 3 [verde 0.525-0.600 µm] (30m) (OLI)",
 								"eng": "Band 3 [green 0.525-0.600 µm] (30m) (OLI)"
@@ -1172,8 +1257,7 @@
 						},
 						{
 							"nom": "4-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [vermell 0.630-0.680 µm] (30m) (OLI)",
 								"spa": "Banda 4 [rojo 0.630-0.680 µm] (30m) (OLI)",
 								"eng": "Band 4 [red 0.630-0.680 µm] (30m) (OLI)"
@@ -1182,8 +1266,7 @@
 						},
 						{
 							"nom": "5-NIR",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 5 [infraroig proper 0.845-0.885 µm] (30m) (OLI)",
 								"spa": "Banda 5 [infrarojo cercano 0.845-0.885 µm] (30m) (OLI)",
 								"eng": "Band 5 [near infrared  0.845-0.885 µm] (30m) (OLI)"
@@ -1192,8 +1275,7 @@
 						},
 						{
 							"nom": "6-SWIR1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 6 [infraroig d'ona curta 1 1.560-1.660 µm] (30m) (OLI)",
 								"spa": "Banda 6 [infrarojo de onda corta 1 1.560-1.660 µm] (30m) (OLI)",
 								"eng": "Band 6 [short-wave infrared 1 1.560-1.660 µm] (30m) (OLI)"
@@ -1202,8 +1284,7 @@
 						},
 						{
 							"nom": "7-SWIR2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 7 [infraroig d'ona curta 2 2.100-2.300 µm] (30m) (OLI)",
 								"spa": "Banda 7 [infrarojo de onda corta 2 2.100-2.300 µm] (30m) (OLI)",
 								"eng": "Band 7 [short-wave infrared 2 2.100-2.300 µm] (30m) (OLI)"
@@ -1212,8 +1293,7 @@
 						},
 						{
 							"nom": "9-CI",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 9 [cirrus 1.360-1.390 µm] (30m) (OLI)",
 								"spa": "Banda 9 [cirrus 1.360-1.390 µm] (30m) (OLI)",
 								"eng": "Band 9 [cirrus 1.360-1.390 µm] (30m) (OLI)"
@@ -1222,8 +1302,7 @@
 						},
 						{
 							"nom": "10-LWIR1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 10 [infraroig d'ona llarga 1 10.600-11.190 µm] (30m) (TIRS)",
 								"spa": "Banda 10 [infrarojo de onda larga 1 10.600-11.190 µm] (30m) (TIRS)",
 								"eng": "Band 10 [large-wave infrared 1 10.600-11.190 µm] (30m) (TIRS)"
@@ -1232,8 +1311,7 @@
 						},
 						{
 							"nom": "11-LWIR2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 11 [infraroig d'ona llarga 2 10.600-11.190 µm] (30m) (TIRS)",
 								"spa": "Banda 11 [infrarojo de onda larga 2 10.600-11.190 µm] (30m) (TIRS)",
 								"eng": "Band 11 [large-wave infrared 2 10.600-11.190 µm] (30m) (TIRS)"
@@ -1242,8 +1320,7 @@
 						},
 						{
 							"nom": "QA-DesignatedFill",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: qualitat designada (30m)",
 								"spa": "Banda de calidad: calidad designada (30m)",
 								"eng": "Band quality: Designated fill (30m)"
@@ -1252,18 +1329,16 @@
 						},
 						{
 							"nom": "QA-TerrainOcclusion",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell d'oclusió del terreny (30m)",
 								"spa": "Banda de calidad: Nivel de oclusión del terreno (30m)",
 								"eng": "Band quality: Terrain occlusion (30m)"
 							},
 							"sel": false
-						},					
+						},
 						{
 							"nom": "QA-SnowIceConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre neu/gel (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en la nieve/hielo (30m)",
 								"eng": "Band quality: Snow/ice confidence (30m)"
@@ -1272,8 +1347,7 @@
 						},
 						{
 							"nom": "QA-CirrusConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre Cirrus (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en el Cirrus (30m)",
 								"eng": "Band quality: Cirrus confidence (30m)"
@@ -1282,8 +1356,7 @@
 						},
 						{
 							"nom": "QA-CloudConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre els núvols (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en las nubes (30m)",
 								"eng": "Band quality: Cloud confidence (30m)"
@@ -1293,11 +1366,9 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Dia",
 							"spa": "Día",
 							"eng": "Day"
@@ -1307,23 +1378,28 @@
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -1331,26 +1407,21 @@
 		},
 		{
 			"nom": "Landsat 8 tot Catalunya",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 4, 3 i 2) (JPEG)",
 								"spa": "optimizada en color natural (bandas 4, 3 y 2) (JPEG)",
 								"eng": "optimized in true color (bands 4, 3 and 2) (JPEG)"
@@ -1359,8 +1430,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 5, 6 i 4) (JPEG)",
 								"spa": "optimizada en falso color (bandas 5, 6 y 4) (JPEG)",
 								"eng": "optimized in false color (bands 5, 6 and 4) (JPEG)"
@@ -1370,11 +1440,9 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Dia",
 							"spa": "Día",
 							"eng": "Day"
@@ -1384,23 +1452,28 @@
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
@@ -1408,26 +1481,21 @@
 		},
 		{
 			"nom": "Passada Landsat 8 OLI-TIRS",
-			"ll": 
-			[
+			"ll": [
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "RADIOMET",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Ortoimatge",
 							"spa": "Ortoimagen",
 							"eng": "Ortoimage"
 						}
 					},
 					"cardin": "1",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "opti_nat",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en color natural (bandes 4, 3 i 2) (JPEG)",
 								"spa": "optimizada en color natural (bandas 4, 3 y 2) (JPEG)",
 								"eng": "optimized in true color (bands 4, 3 and 2) (JPEG)"
@@ -1436,8 +1504,7 @@
 						},
 						{
 							"nom": "opti_fals",
-							"desc": 
-							{
+							"desc": {
 								"cat": "optimitzada en fals color (bandes 5, 6 i 4) (JPEG)",
 								"spa": "optimizada en falso color (bandas 5, 6 y 4) (JPEG)",
 								"eng": "optimized in false color (bands 5, 6 and 4) (JPEG)"
@@ -1446,8 +1513,7 @@
 						},
 						{
 							"nom": "orig",
-							"desc": 
-							{
+							"desc": {
 								"cat": "radiometria original (IMG/TIFF)",
 								"spa": "radiometría original (IMG/TIFF)",
 								"eng": "original radiometry (IMG/TIFF)"
@@ -1457,23 +1523,19 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "BAND",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Bandes",
 							"spa": "Bandas",
 							"eng": "Bands"
 						}
 					},
 					"cardin": "n",
-					"valors": 
-					[
+					"valors": [
 						{
 							"nom": "8-PAN",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 8 [pancromàtic 0.500-0.680 µm] (15m) (OLI)",
 								"spa": "Banda 8 [pancromático 0.500-0.680 µm] (15m) (OLI)",
 								"eng": "Band 8 [panchromatic 0.500-0.680 µm] (15m) (OLI)"
@@ -1482,8 +1544,7 @@
 						},
 						{
 							"nom": "1-CA",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 1 [litoral/aerosols 0.433-0.453 µm] (30m) (OLI)",
 								"spa": "Banda 1 [litoral/aerosoles 0.433-0.453 µm] (30m) (OLI)",
 								"eng": "Band 1 [Coastal/aerosol 0.433-0.453 µm] (30m) (OLI)"
@@ -1492,8 +1553,7 @@
 						},
 						{
 							"nom": "2-B",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 2 [blau 0.450-0.515 µm] (30m) (OLI)",
 								"spa": "Banda 2 [azul 0.450-0.515 µm] (30m) (OLI)",
 								"eng": "Band 2 [blue 0.450-0.515 µm] (30m) (OLI)"
@@ -1502,8 +1562,7 @@
 						},
 						{
 							"nom": "3-G",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 3 [verd 0.525-0.600 µm] (30m) (OLI)",
 								"spa": "Banda 3 [verde 0.525-0.600 µm] (30m) (OLI)",
 								"eng": "Band 3 [green 0.525-0.600 µm] (30m) (OLI)"
@@ -1512,8 +1571,7 @@
 						},
 						{
 							"nom": "4-R",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 4 [vermell 0.630-0.680 µm] (30m) (OLI)",
 								"spa": "Banda 4 [rojo 0.630-0.680 µm] (30m) (OLI)",
 								"eng": "Band 4 [red 0.630-0.680 µm] (30m) (OLI)"
@@ -1522,8 +1580,7 @@
 						},
 						{
 							"nom": "5-NIR",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 5 [infraroig proper 0.845-0.885 µm] (30m) (OLI)",
 								"spa": "Banda 5 [infrarojo cercano 0.845-0.885 µm] (30m) (OLI)",
 								"eng": "Band 5 [near infrared  0.845-0.885 µm] (30m) (OLI)"
@@ -1532,8 +1589,7 @@
 						},
 						{
 							"nom": "6-SWIR1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 6 [infraroig d'ona curta 1 1.560-1.660 µm] (30m) (OLI)",
 								"spa": "Banda 6 [infrarojo de onda corta 1 1.560-1.660 µm] (30m) (OLI)",
 								"eng": "Band 6 [short-wave infrared 1 1.560-1.660 µm] (30m) (OLI)"
@@ -1542,8 +1598,7 @@
 						},
 						{
 							"nom": "7-SWIR2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 7 [infraroig d'ona curta 2 2.100-2.300 µm] (30m) (OLI)",
 								"spa": "Banda 7 [infrarojo de onda corta 2 2.100-2.300 µm] (30m) (OLI)",
 								"eng": "Band 7 [short-wave infrared 2 2.100-2.300 µm] (30m) (OLI)"
@@ -1552,8 +1607,7 @@
 						},
 						{
 							"nom": "9-CI",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 9 [cirrus 1.360-1.390 µm] (30m) (OLI)",
 								"spa": "Banda 9 [cirrus 1.360-1.390 µm] (30m) (OLI)",
 								"eng": "Band 9 [cirrus 1.360-1.390 µm] (30m) (OLI)"
@@ -1562,8 +1616,7 @@
 						},
 						{
 							"nom": "10-LWIR1",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 10 [infraroig d'ona llarga 1 10.600-11.190 µm] (30m) (TIRS)",
 								"spa": "Banda 10 [infrarojo de onda larga 1 10.600-11.190 µm] (30m) (TIRS)",
 								"eng": "Band 10 [large-wave infrared 1 10.600-11.190 µm] (30m) (TIRS)"
@@ -1572,8 +1625,7 @@
 						},
 						{
 							"nom": "11-LWIR2",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda 11 [infraroig d'ona llarga 2 10.600-11.190 µm] (30m) (TIRS)",
 								"spa": "Banda 11 [infrarojo de onda larga 2 10.600-11.190 µm] (30m) (TIRS)",
 								"eng": "Band 11 [large-wave infrared 2 10.600-11.190 µm] (30m) (TIRS)"
@@ -1582,8 +1634,7 @@
 						},
 						{
 							"nom": "QA-DesignatedFill",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: qualitat designada (30m)",
 								"spa": "Banda de calidad: calidad designada (30m)",
 								"eng": "Band quality: Designated fill (30m)"
@@ -1592,8 +1643,7 @@
 						},
 						{
 							"nom": "QA-TerrainOcclusion",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell d'oclusió del terreny (30m)",
 								"spa": "Banda de calidad: Nivel de oclusión del terreno (30m)",
 								"eng": "Band quality: Terrain occlusion (30m)"
@@ -1602,8 +1652,7 @@
 						},
 						{
 							"nom": "QA-WaterConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre l'aigua (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en el agua (30m)",
 								"eng": "Band quality: Water confidence (30m)"
@@ -1612,8 +1661,7 @@
 						},
 						{
 							"nom": "QA-SnowIceConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre neu/gel (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en la nieve/hielo (30m)",
 								"eng": "Band quality: Snow/ice confidence (30m)"
@@ -1622,8 +1670,7 @@
 						},
 						{
 							"nom": "QA-CirrusConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre Cirrus (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en el Cirrus (30m)",
 								"eng": "Band quality: Cirrus confidence (30m)"
@@ -1632,8 +1679,7 @@
 						},
 						{
 							"nom": "QA-CloudConfidence",
-							"desc": 
-							{
+							"desc": {
 								"cat": "Banda de qualitat: Nivell de confiança sobre els núvols (30m)",
 								"spa": "Banda de calidad: Nivel de confianza en las nubes (30m)",
 								"eng": "Band quality: Cloud confidence (30m)"
@@ -1643,11 +1689,9 @@
 					]
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "TIME",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Dia",
 							"spa": "Día",
 							"eng": "Day"
@@ -1657,39 +1701,41 @@
 					"valors": null
 				},
 				{
-					"nom": 
-					{
+					"nom": {
 						"nom": "QUALITY",
-						"desc": 
-						{
+						"desc": {
 							"cat": "Qualitat JPEG",
 							"spa": "Calidad JPEG",
 							"eng": "JPEG quality"
 						}
 					},
 					"cardin": "i",
-					"valors": 
-					{
+					"valors": {
 						"v1": 5,
-						"desc1": {"cat": "baixa","spa": "baja","eng": "low"},
+						"desc1": {
+							"cat": "baixa",
+							"spa": "baja",
+							"eng": "low"
+						},
 						"v2": 99,
-						"desc2": {"cat": "alta","spa": "alta","eng": "high"},
+						"desc2": {
+							"cat": "alta",
+							"spa": "alta",
+							"eng": "high"
+						},
 						"sel": 85
 					}
 				}
 			]
 		}
 	],
-	"FormatGetCoverage": 
-	[
+	"FormatGetCoverage": [
 		{
 			"nom": "Passada Landsat 7 ETM+",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1698,8 +1744,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1710,12 +1755,10 @@
 		},
 		{
 			"nom": "Passada Landsat 4-5 TM",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1724,8 +1767,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1736,12 +1778,10 @@
 		},
 		{
 			"nom": "Landsat tot Catalunya",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1750,8 +1790,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1762,12 +1801,10 @@
 		},
 		{
 			"nom": "Passada Landsat 4-5 MSS",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1776,8 +1813,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1788,12 +1824,10 @@
 		},
 		{
 			"nom": "Passada Landsat 1-2-3 MSS",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1802,8 +1836,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1814,12 +1847,10 @@
 		},
 		{
 			"nom": "Passada Landsat 8 OLI-TIRS",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1828,8 +1859,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1840,12 +1870,10 @@
 		},
 		{
 			"nom": "Landsat 8 tot Catalunya",
-			"ll": 
-			[
+			"ll": [
 				{
 					"nom": "application/x-mmz",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Mapa Comprimit de MiraMon (MMZ)",
 						"spa": "Mapa Comprimido de MiraMon (MMZ)",
 						"eng": "MiraMon Compressed Map (MMZ)"
@@ -1854,8 +1882,7 @@
 				},
 				{
 					"nom": "application/x-zip-compressed",
-					"desc": 
-					{
+					"desc": {
 						"cat": "JPEG/GeoTIFF dins d'un ZIP",
 						"spa": "JPEG/GeoTIFF dentro de un ZIP",
 						"eng": "JPEG/GeoTIFF within a ZIP"
@@ -1865,76 +1892,150 @@
 			]
 		}
 	],
-	"ResGetCoverage": 
-	[
+	"ResGetCoverage": [
 		{
 			"nom": "Passada Landsat 7 ETM+",
-			"ll": 
-			{
-				"x": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20},
-				"y": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20}
+			"ll": {
+				"x": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				},
+				"y": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				}
 			}
 		},
 		{
 			"nom": "Passada Landsat 4-5 TM",
-			"ll": 
-			{
-				"x": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20},
-				"y": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20}
+			"ll": {
+				"x": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				},
+				"y": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				}
 			}
 		},
 		{
 			"nom": "Landsat tot Catalunya",
-			"ll": 
-			{
-				"x": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20},
-				"y": {"v1": 20,"desc1": null,"v2": 20,"desc2": null,"sel": 20}
+			"ll": {
+				"x": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				},
+				"y": {
+					"v1": 20,
+					"desc1": null,
+					"v2": 20,
+					"desc2": null,
+					"sel": 20
+				}
 			}
 		},
 		{
 			"nom": "Passada Landsat 4-5 MSS",
-			"ll":
-			{
-				"x": {"v1": 60,"desc1": null,"v2": 60,"desc2": null,"sel": 60},
-				"y": {"v1": 60,"desc1": null,"v2": 60,"desc2": null,"sel": 60}
-			}			
+			"ll": {
+				"x": {
+					"v1": 60,
+					"desc1": null,
+					"v2": 60,
+					"desc2": null,
+					"sel": 60
+				},
+				"y": {
+					"v1": 60,
+					"desc1": null,
+					"v2": 60,
+					"desc2": null,
+					"sel": 60
+				}
+			}
 		},
 		{
 			"nom": "Passada Landsat 1-2-3 MSS",
-			"ll":
-			{
-				"x": {"v1": 60,"desc1": null,"v2": 60,"desc2": null,"sel": 60},
-				"y": {"v1": 60,"desc1": null,"v2": 60,"desc2": null,"sel": 60}
-			}			
+			"ll": {
+				"x": {
+					"v1": 60,
+					"desc1": null,
+					"v2": 60,
+					"desc2": null,
+					"sel": 60
+				},
+				"y": {
+					"v1": 60,
+					"desc1": null,
+					"v2": 60,
+					"desc2": null,
+					"sel": 60
+				}
+			}
 		},
 		{
 			"nom": "Pasada Landsat 8 OLI-TIRS",
-			"ll":
-			{
-				"x": {"v1": 30,"desc1": null,"v2": 30,"desc2": null,"sel": 30},
-				"y": {"v1": 30,"desc1": null,"v2": 30,"desc2": null,"sel": 30}
+			"ll": {
+				"x": {
+					"v1": 30,
+					"desc1": null,
+					"v2": 30,
+					"desc2": null,
+					"sel": 30
+				},
+				"y": {
+					"v1": 30,
+					"desc1": null,
+					"v2": 30,
+					"desc2": null,
+					"sel": 30
+				}
 			}
 		},
 		{
 			"nom": "Landsat 8 tot Catalunya",
-			"ll":
-			{
-				"x": {"v1": 30,"desc1": null,"v2": 30,"desc2": null,"sel": 30},
-				"y": {"v1": 30,"desc1": null,"v2": 30,"desc2": null,"sel": 30}
+			"ll": {
+				"x": {
+					"v1": 30,
+					"desc1": null,
+					"v2": 30,
+					"desc2": null,
+					"sel": 30
+				},
+				"y": {
+					"v1": 30,
+					"desc1": null,
+					"v2": 30,
+					"desc2": null,
+					"sel": 30
+				}
 			}
 		}
 	],
-	"capa": 
-	[
+	"capa": [
 		{
 			"servidor": null,
 			"cors": true,
 			"versio": null,
 			"tipus": null,
 			"nom": "ToponimiaMunicipis50k_ICC-catalunya",
-			"desc": 
-			{
-				"cat": "Noms dels municipis",
+			"desc": {
+				"cat": "Noms dels logo_uab.pngs",
 				"spa": "Nombre de los municipios",
 				"eng": "Municipality name"
 			},
@@ -1947,14 +2048,12 @@
 			"TileMatrixSet": null,
 			"FormatConsulta": "text/xml",
 			"grup": null,
-			"separa": 
-			{
+			"separa": {
 				"cat": "<hr align=\"left\" width=\"230\"><b>Bases de referència</b><hr align=\"left\" width=\"230\">",
 				"spa": "<hr align=\"left\" width=\"230\"><b>Bases de referencia</b><hr align=\"left\" width=\"230\">",
 				"eng": "<hr align=\"left\" width=\"230\"><b>Reference datasets</b><hr align=\"left\" width=\"230\">"
 			},
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Noms dels municipis<sup>3</sup>",
 				"spa": "Nombre de los municipios<sup>3</sup>",
 				"eng": "Municipality name<sup>3</sup>"
@@ -1988,8 +2087,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "ToponimiaComarques50k_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Noms de les comarques",
 				"spa": "Nombre de las comarcas",
 				"eng": "Region name"
@@ -2004,8 +2102,7 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Noms de les comarques<sup>3</sup>",
 				"spa": "Nombre de las comarcas<sup>3</sup>",
 				"eng": "Region name<sup>3</sup>"
@@ -2039,8 +2136,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "LimAdmin50kv33r151_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Municipis de Catalunya (1:50000)",
 				"spa": "Municipios de Catalunya (1:50000)",
 				"eng": "Catalonia municipality (1:50000)"
@@ -2055,37 +2151,50 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Límits administratius<sup>3</sup>",
 				"spa": "Límites administrativos<sup>3</sup>",
 				"eng": "Administratives boundaries<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[
+					"ItemLleg": [
 						{
 							"color": "#FFE0C1",
-							"DescColor": {"cat": "Municipal","spa": "Municipal","eng": "Municipality"}
+							"DescColor": {
+								"cat": "Municipal",
+								"spa": "Municipal",
+								"eng": "Municipality"
+							}
 						},
 						{
 							"color": "#FF00FF",
-							"DescColor": {"cat": "Comarcal","spa": "Comarcal","eng": "Region"}
+							"DescColor": {
+								"cat": "Comarcal",
+								"spa": "Comarcal",
+								"eng": "Region"
+							}
 						},
 						{
 							"color": "#590059",
-							"DescColor": {"cat": "Autonòmic","spa": "Autonómico","eng": "Autonomous"}
+							"DescColor": {
+								"cat": "Autonòmic",
+								"spa": "Autonómico",
+								"eng": "Autonomous"
+							}
 						},
 						{
 							"color": "#8000FF",
-							"DescColor": {"cat": "Estatal","spa": "Estatal","eng": "State"}
+							"DescColor": {
+								"cat": "Estatal",
+								"spa": "Estatal",
+								"eng": "State"
+							}
 						}
 					],
 					"ncol": 1
@@ -2119,8 +2228,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "XarxaCarreteres50K_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Carreteres de Catalunya (1:50000)",
 				"spa": "Carreteras de Cataluña (1:50000)",
 				"eng": "Roads of Catalonia (1:50000)"
@@ -2135,34 +2243,38 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Carreteres<sup>3</sup>",
 				"spa": "Carreteras<sup>3</sup>",
 				"eng": "Roads<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[
+					"ItemLleg": [
 						{
 							"color": "#FF0000",
-							"DescColor": {"cat": "Xarxa bàsica","spa": "Red básica","eng": "Basic network"}
+							"DescColor": {
+								"cat": "Xarxa bàsica",
+								"spa": "Red básica",
+								"eng": "Basic network"
+							}
 						},
 						{
 							"color": "#FFFF00",
-							"DescColor": {"cat": "Xarxa comarcal","spa": "Red comarcal","eng": "Regional network"}
+							"DescColor": {
+								"cat": "Xarxa comarcal",
+								"spa": "Red comarcal",
+								"eng": "Regional network"
+							}
 						},
 						{
 							"color": "#00FF00",
-							"DescColor": 
-							{
+							"DescColor": {
 								"cat": "Xarxa local",
 								"spa": "Red local",
 								"eng": "Local network"
@@ -2170,8 +2282,7 @@
 						},
 						{
 							"color": "#787878",
-							"DescColor": 
-							{
+							"DescColor": {
 								"cat": "Altres",
 								"spa": "Otras",
 								"eng": "Other"
@@ -2209,8 +2320,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "XarxaAutopistes50K_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Autopistes i vies preferents de Catalunya (1:50000)",
 				"spa": "Autopistas y vías preferentes de Cataluña (1:50000)",
 				"eng": "Highways and preference ways of Catalonia (1:50000)"
@@ -2225,22 +2335,19 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Autopistes i vies preferents<sup>3</sup>",
 				"spa": "Autopistas y vías preferentes<sup>3</sup>",
 				"eng": "Highways and preference ways<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[
+					"ItemLleg": [
 						{
 							"color": "#0000FF",
 							"DescColor": null
@@ -2277,8 +2384,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "XarxaFerroviaria50K_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Xarxa ferroviària de Catalunya (1:50000)",
 				"spa": "Red ferroviaria de Cataluña (1:50000)",
 				"eng": "Railroad network of Catalonia (1:50000)"
@@ -2293,26 +2399,22 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Xarxa ferroviària<sup>3</sup>",
 				"spa": "Red ferroviaria<sup>3</sup>",
 				"eng": "Railroad network<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[
+					"ItemLleg": [
 						{
 							"color": "#000000",
-							"DescColor": 
-							{
+							"DescColor": {
 								"cat": "Cas genèric",
 								"spa": "Caso genérico",
 								"eng": "Generic case"
@@ -2320,8 +2422,7 @@
 						},
 						{
 							"color": "#C0C0C0",
-							"DescColor": 
-							{
+							"DescColor": {
 								"cat": "Cobert",
 								"spa": "Cubierto",
 								"eng": "Covered"
@@ -2359,8 +2460,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "XarxaHidrografica50K_ICC-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Xarxa hidrogràfica de Catalunya (1:50000)",
 				"spa": "Red hidrográfica de Cataluña (1:50000)",
 				"eng": "Hydrographic network of Catalonia (1:20000)"
@@ -2375,22 +2475,24 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Xarxa hidrogràfica<sup>3</sup>",
 				"spa": "Red hidrográfica<sup>3</sup>",
 				"eng": "Hydrographic network<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[{"color": "#0000A0","DescColor": null}],
+					"ItemLleg": [
+						{
+							"color": "#0000A0",
+							"DescColor": null
+						}
+					],
 					"ncol": 1
 				}
 			],
@@ -2422,8 +2524,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "altim250k-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Corbes de nivell de Catalunya (1:250000)",
 				"spa": "Curvas de nivel de Cataluña (1:250000)",
 				"eng": "Contour lines of Catalonia (1:250000)"
@@ -2438,22 +2539,24 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Corbes de nivell<sup>1</sup><br><span class=\"no_negreta\">(equidistància 100 m)</span>",
 				"spa": "Curvas de nivel<sup>1</sup><br><span class=\"no_negreta\">(equidistancia 100 m)</span>",
 				"eng": "Contour lines<sup>1</sup><br><span class=\"no_negreta\">(equidistance 100 m)</span>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": null,
 					"TipusObj": "L",
 					"metadades": null,
-					"ItemLleg": 
-					[{"color": "#C10000","DescColor": null}],
+					"ItemLleg": [
+						{
+							"color": "#C10000",
+							"DescColor": null
+						}
+					],
 					"ncol": 1
 				}
 			],
@@ -2485,8 +2588,7 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MDT_30m_ASTER-catalunya",
-			"desc": 
-			{
+			"desc": {
 				"cat": "MDE ombrejat 30m ASTER de Catalunya",
 				"spa": "MDE sombreado 30m ASTER de Cataluña",
 				"eng": "Shadow DEM 30m ASTER of Catalonia"
@@ -2501,25 +2603,31 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "Relleu<sup>3</sup>",
 				"spa": "Relieve<sup>3</sup>",
 				"eng": "Relief<sup>3</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
 					"desc": null,
 					"DescItems": "m",
 					"TipusObj": "P",
 					"metadades": null,
-					"ItemLleg": 
-					[
-						{"color": "#000000","DescColor": "[0-250)"},
-						{"color": "#006900","DescColor": "[250-500)"},
-						{"color": "#00B600","DescColor": "[500-750)"},
+					"ItemLleg": [
+						{
+							"color": "#000000",
+							"DescColor": "[0-250)"
+						},
+						{
+							"color": "#006900",
+							"DescColor": "[250-500)"
+						},
+						{
+							"color": "#00B600",
+							"DescColor": "[500-750)"
+						},
 						{
 							"color": "#59FF00",
 							"DescColor": "[750-1000)"
@@ -2579,7 +2687,9 @@
 			"ParamCoverage": null,
 			"FormatCoverage": null,
 			"ResCoverage": null,
-			"metadades": {"standard" :"metadades/MDT_30m_ASTER.htm"},
+			"metadades": {
+				"standard": "metadades/MDT_30m_ASTER.htm"
+			},
 			"NomVideo": null,
 			"DescVideo": null,
 			"FlagsData": null,
@@ -2590,19 +2700,17 @@
 			"proces": null,
 			"ProcesMostrarTitolCapa": false
 		},
-		{		
-			"servidor": "/cgi-bin/MCSC/MiraMon.cgi?",
+		{
+			"servidor": "https://opengis.grumets.cat/cgi-bin/MCSC/MiraMon.cgi?",
 			"cors": true,
-			"versio": 
-			{
+			"versio": {
 				"Vers": 1,
 				"SubVers": 3,
 				"VariantVers": 0
 			},
 			"tipus": "TipusWMS",
 			"nom": "MCSCv4Nivell5",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Mapa de Cobertes del Sòl de Catalunya (MCSC) 4ª edició (2009) nivell 5",
 				"spa": "Mapa de Cubiertas del Suelo de Cataluña (MCSC) 4ª edición (2009) nivel 5",
 				"eng": "Catalonia Land Cover Map (CLCM) 4th edition (2009) level 5"
@@ -2610,12 +2718,14 @@
 			"CRS": null,
 			"EnvTotal": null,
 			"FormatImatge": "application/x-img",
-			"valors": 
-			[
+			"valors": [
 				{
 					"compression": "RLE",
 					"datatype": "uint8",
-					"nodata": [0,255]
+					"nodata": [
+						0,
+						255
+					]
 				}
 			],
 			"transparencia": "semitransparent",
@@ -2625,31 +2735,42 @@
 			"FormatConsulta": "text/xml",
 			"grup": "MCSC",
 			"separa": null,
-			"DescLlegenda": 
-			{
+			"DescLlegenda": {
 				"cat": "MCSC 4ª edició (2009) <sup>2</sup>",
 				"spa": "MCSC 4ª edición (2009) <sup>2</sup>",
 				"eng": "CLCM 4th edition (2009) <sup>2</sup>"
 			},
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": null,
-					"desc": 
-					{
+					"desc": {
 						"cat": "Tipus de coberta (Nivell 5)",
 						"spa": "Tipo de cubierta (Nivel 5)",
 						"eng": "Land cover type (Level 5)"
 					},
 					"DescItems": null,
 					"TipusObj": "P",
-					"ItemLleg": 
-					[
-						{"color": "#689019","DescColor": "Boscos (>= 20%cc)"},
-						{"color": "#A0FFAA","DescColor": "Boscos (5-20%cc)"},
-						{"color": "#00FF01","DescColor": "Boscos caducifolis de ribera"},
-						{"color": "#80FF88","DescColor": "Franja de protecció"},
-						{"color": "#699026","DescColor": "Plantacions"},
+					"ItemLleg": [
+						{
+							"color": "#689019",
+							"DescColor": "Boscos (>= 20%cc)"
+						},
+						{
+							"color": "#A0FFAA",
+							"DescColor": "Boscos (5-20%cc)"
+						},
+						{
+							"color": "#00FF01",
+							"DescColor": "Boscos caducifolis de ribera"
+						},
+						{
+							"color": "#80FF88",
+							"DescColor": "Franja de protecció"
+						},
+						{
+							"color": "#699026",
+							"DescColor": "Plantacions"
+						},
 						{
 							"color": "#405E09",
 							"DescColor": "Plantacions d'avet"
@@ -2907,263 +3028,745 @@
 							"DescColor": "Sóls nus urbans"
 						}
 					],
-					"component": 
-					[
-						{"i_valor": 0}
+					"component": [
+						{
+							"i_valor": 0
+						}
 					],
 					"metadades": null,
 					"ncol": 2,
-					"categories": 
-					[
-						{"COVER": ""},
-						{"COVER": "Pineda de pi pinyer (>= 20%cc)"},
-						{"COVER": "Pineda de pinastre (>= 20%cc)"},
-						{"COVER": "Pineda de pi blanc (>= 20%cc)"},
-						{"COVER": "Pineda de pinassa (>= 20%cc)"},
-						{"COVER": "Pineda de pi roig (>= 20%cc)"},
-						{"COVER": "Pineda de pi negre (>= 20%cc)"},
-						{"COVER": "Avetosa (>= 20%cc)"},
-						{"COVER": "Altres coníferes (>= 20%cc)"},
-						{"COVER": "Alzinar (>= 20%cc)"},
-						{"COVER": "Sureda (>= 20%cc)"},
-						{"COVER": "Arboçar (>= 20%cc)"},
-						{"COVER": "Altres perennifolis (>= 20%cc)"},
-						{"COVER": "Bedollar (>= 20%cc)"},
-						{"COVER": "Castanyeda (>= 20%cc)"},
-						{"COVER": "Fageda (>= 20%cc)"},
-						{"COVER": "Roureda de roure pènol (>= 20%cc)"},
-						{"COVER": "Roureda de roure de fulla gran (>= 20%cc)"},
-						{"COVER": "Roureda de roure africà (>= 20%cc)"},
-						{"COVER": "Roureda de roure martinenc (>= 20%cc)"},
-						{"COVER": "Roureda de roure de fulla menuda (>= 20%cc)"},
-						{"COVER": "Roureda de reboll (>= 20%cc)"},
-						{"COVER": "Avellanosa (>= 20%cc)"},
-						{"COVER": "Freixeneda (>= 20%cc)"},
-						{"COVER": "Altres caducifolis (>= 20%cc)"},
-						{"COVER": "Boscos caducifolis de ribera (>= 20%cc)"},
-						{"COVER": "Pineda de pi pinyer (5-20%cc)"},
-						{"COVER": "Pineda de pinastre (5-20%cc)"},
-						{"COVER": "Pineda de pi blanc (5-20%cc)"},
-						{"COVER": "Pineda de pinassa (5-20%cc)"},
-						{"COVER": "Pineda de pi roig (5-20%cc)"},
-						{"COVER": "Pineda de pi negre (5-20%cc)"},
-						{"COVER": "Avetosa (5-20%cc)"},
-						{"COVER": "Altres coníferes (5-20%cc)"},
-						{"COVER": "Alzinar (5-20%cc)"},
-						{"COVER": "Sureda (5-20%cc)"},
-						{"COVER": "Arboçar (5-20%cc)"},
-						{"COVER": "Altres perennifolis (5-20%cc)"},
-						{"COVER": "Bedollar (5-20%cc)"},
-						{"COVER": "Castanyeda (5-20%cc)"},
-						{"COVER": "Fageda (5-20%cc)"},
-						{"COVER": "Roureda de roure pènol (5-20%cc)"},
-						{"COVER": "Roureda de roure de fulla gran (5-20%cc)"},
-						{"COVER": "Roureda de roure africà (5-20%cc)"},
-						{"COVER": "Roureda de roure martinenc (5-20%cc)"},
-						{"COVER": "Roureda de roure de fulla menuda (5-20%cc)"},
-						{"COVER": "Roureda de reboll (5-20%cc)"},
-						{"COVER": "Avellanosa (5-20%cc)"},
-						{"COVER": "Freixeneda (5-20%cc)"},
-						{"COVER": "Altres caducifolis (5-20%cc)"},
-						{"COVER": "Boscos caducifolis de ribera (5-20%cc)"},
-						{"COVER": "Franja de protecció de pi pinyer"},
-						{"COVER": "Franja de protecció de pinastre"},
-						{"COVER": "Franja de protecció de pi blanc"},
-						{"COVER": "Franja de protecció de pinassa"},
-						{"COVER": "Franja de protecció de pi roig"},
-						{"COVER": "Franja de protecció d'alzina"},
-						{"COVER": "Franja de protecció d'alzina surera"},
-						{"COVER": "Franja de protecció de castanyer"},
-						{"COVER": "Franja de protecció de faig"},
-						{"COVER": "Franja de protecció de roure pènol"},
-						{"COVER": "Franja de protecció de roure de fulla gran"},
-						{"COVER": "Franja de protecció de roure africà"},
-						{"COVER": "Franja de protecció de roure martinenc"},
-						{"COVER": "Franja de protecció de roure de fulla menuda"},
-						{"COVER": "Franja de protecció d'altres caducifolis"},
-						{"COVER": "Plantacions de pi pinyer"},
-						{"COVER": "Plantacions de pinastre"},
-						{"COVER": "Plantacions de pi blanc"},
-						{"COVER": "Plantacions de pinassa"},
-						{"COVER": "Plantacions de pi roig"},
-						{"COVER": "Plantacions de pi negre"},
-						{"COVER": "Plantacions d'avet"},
-						{"COVER": "Vivers forestals"},
-						{"COVER": "Plantacions de coníferes no autòctones"},
-						{"COVER": "Plantacions d'alzina surera"},
-						{"COVER": "Plantacions de castanyer"},
-						{"COVER": "Plantacions d'altres caducifolis"},
-						{"COVER": "Plantacions d'eucaliptus"},
-						{"COVER": "Plantacions de pollancres"},
-						{"COVER": "Plantacions de plàtans"},
-						{"COVER": "Regeneració de pi blanc"},
-						{"COVER": "Regeneració de pinastre"},
-						{"COVER": "Regeneració de pinassa"},
-						{"COVER": "Regeneració de pi roig"},
-						{"COVER": "Regeneració de pi negre"},
-						{"COVER": "Regeneració d'avet"},
-						{"COVER": "Regeneració d'alzina"},
-						{"COVER": "Regeneració de bedoll"},
-						{"COVER": "Regeneració de faig"},
-						{"COVER": "Regeneració de roureda de roure martinenc"},
-						{"COVER": "Regeneració de roure de fulla menuda"},
-						{"COVER": "Matollars"},
-						{"COVER": "Matollars en línies elèctriques"},
-						{"COVER": "Franja de protecció de matollars"},
-						{"COVER": "Matollars en tallafocs"},
-						{"COVER": "Matollars procedents de tallades arreu"},
-						{"COVER": "Matollars de formacions de ribera"},
-						{"COVER": "Canyars"},
-						{"COVER": "Vegetació d'aiguamolls litorals"},
-						{"COVER": "Vegetació d'aiguamolls continentals"},
-						{"COVER": "Molleres d'alta muntanya"},
-						{"COVER": "Salines"},
-						{"COVER": "Prats i herbassars"},
-						{"COVER": "Prats i herbassars en línies elèctriques"},
-						{"COVER": "Franja de protecció de prats i herbassars"},
-						{"COVER": "Prats i herbassars d'alta muntanya"},
-						{"COVER": "Prats i herbassars d'alta muntanya en línies elèctriques"},
-						{"COVER": "Prats i herbassars en tallafocs"},
-						{"COVER": "Prats i herbassars procedents de tallades arreu"},
-						{"COVER": "Prats i herbassars d'alta muntanya procedents de tallades arreu"},
-						{"COVER": "Vegetació arbustiva de dunes i sorrals"},
-						{"COVER": "Vegetació herbàcia de dunes i sorrals"},
-						{"COVER": "Zones cremades"},
-						{"COVER": "Penya-segats marins"},
-						{"COVER": "Roquissars"},
-						{"COVER": "Tarteres"},
-						{"COVER": "Lleres naturals"},
-						{"COVER": "Sòl nu en tallafocs"},
-						{"COVER": "Sòl erosionat per agent natural"},
-						{"COVER": "Sòl nu per acció antròpica"},
-						{"COVER": "Sòl nu en línies elèctriques"},
-						{"COVER": "Platges"},
-						{"COVER": "Glaceres i congestes"},
-						{"COVER": "Llacs i llacunes continentals"},
-						{"COVER": "Llacunes litorals"},
-						{"COVER": "Rius"},
-						{"COVER": "Embassaments"},
-						{"COVER": "Mar"},
-						{"COVER": "Cítrics"},
-						{"COVER": "Fruiters no cítrics"},
-						{"COVER": "Fruiters no cítrics en regadiu"},
-						{"COVER": "Vivers agrícoles"},
-						{"COVER": "Vinyes"},
-						{"COVER": "Oliverars"},
-						{"COVER": "Oliverars en regadiu"},
-						{"COVER": "Garroferars"},
-						{"COVER": "Garroferars en regadiu"},
-						{"COVER": "Arrossars"},
-						{"COVER": "Altres conreus herbacis"},
-						{"COVER": "Altres conreus herbacis en regadiu"},
-						{"COVER": "Prats de dall"},
-						{"COVER": "Conreus en transformació"},
-						{"COVER": "Rompudes agrícoles"},
-						{"COVER": "Hivernacles"},
-						{"COVER": "Conreus d'horta sota plàstic"},
-						{"COVER": "Cítrics en bancals"},
-						{"COVER": "Fruiters no cítrics en bancals"},
-						{"COVER": "Fruiters no cítrics en bancals en regadiu"},
-						{"COVER": "Vinyes en bancals"},
-						{"COVER": "Oliverars en bancals"},
-						{"COVER": "Oliverars en bancals en regadiu"},
-						{"COVER": "Garroferars en bancals"},
-						{"COVER": "Altres conreus herbacis en bancals"},
-						{"COVER": "Altres conreus herbacis en bancals en regadiu"},
-						{"COVER": "Conreus abandonats - boscos"},
-						{"COVER": "Conreus abandonats - matollars"},
-						{"COVER": "Conreus abandonats - prats en zones forestals"},
-						{"COVER": "Conreus abandonats - prats d'alta muntanya en zones forestals"},
-						{"COVER": "Cítrics abandonats - prats en zones agrícoles"},
-						{"COVER": "Cítrics abandonats - prats en zones agrícoles en bancals"},
-						{"COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles"},
-						{"COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles"},
-						{"COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles en bancals"},
-						{"COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles en bancals"},
-						{"COVER": "Vinyes abandonades - prats en zones agrícoles"},
-						{"COVER": "Oliverars abandonats - prats en zones agrícoles"},
-						{"COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles"},
-						{"COVER": "Garroferars abandonats - prats en zones agrícoles"},
-						{"COVER": "Arrossars abandonats regadiu no regat - prats en zones agrícoles"},
-						{"COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles"},
-						{"COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles"},
-						{"COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles en bancals"},
-						{"COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles en bancals"},
-						{"COVER": "Prats de dall abandonats regadiu no regat - prats en zones agrícoles"},
-						{"COVER": "Prats de dall abandonats regadiu no regat - prats d'alta muntanya en zones agrícoles"},
-						{"COVER": "Vinyes abandonades - prats en zones agrícoles en bancals"},
-						{"COVER": "Oliverars abandonats - prats en zones agrícoles en bancals"},
-						{"COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles en bancals"},
-						{"COVER": "Garroferars abandonats - prats en zones agrícoles en bancals"},
-						{"COVER": "Hivernacles en bancals"},
-						{"COVER": "Horta familiar"},
-						{"COVER": "Assentament agrícola residencial"},
-						{"COVER": "Piscifactories i conreus aqüícoles a terra"},
-						{"COVER": "Piscifactories i conreus aqüícoles a mar"},
-						{"COVER": "Canals artificials"},
-						{"COVER": "Basses agrícoles"},
-						{"COVER": "Urbanitzacions"},
-						{"COVER": "Centre urbà"},
-						{"COVER": "Eixample"},
-						{"COVER": "Habitatges unifamiliars"},
-						{"COVER": "Colònies i nuclis aïllats"},
-						{"COVER": "Cases aïllades"},
-						{"COVER": "Polígon industrial ordenat"},
-						{"COVER": "Polígon industrial sense ordenar"},
-						{"COVER": "Indústries aïllades"},
-						{"COVER": "Serreries"},
-						{"COVER": "Complexos comercials i d'oficines"},
-						{"COVER": "Vivers"},
-						{"COVER": "Complexos hotelers"},
-						{"COVER": "Altres construccions"},
-						{"COVER": "Naus d'ús agrícola"},
-						{"COVER": "Granges"},
-						{"COVER": "Preses"},
-						{"COVER": "Cementiris"},
-						{"COVER": "Grans vials"},
-						{"COVER": "Zones d'aparcament"},
-						{"COVER": "Parcs urbans"},
-						{"COVER": "Basses urbanes"},
-						{"COVER": "Autopistes i autovies"},
-						{"COVER": "Carreteres"},
-						{"COVER": "Aeroports"},
-						{"COVER": "Vies de ferrocarril"},
-						{"COVER": "Zones portuàries"},
-						{"COVER": "Zones verdes viàries"},
-						{"COVER": "Zones verdes ferroviàries"},
-						{"COVER": "Àrees de servei en xarxa viària"},
-						{"COVER": "Estacions d'autobusos"},
-						{"COVER": "Zones d'esport"},
-						{"COVER": "Parcs recreatius"},
-						{"COVER": "Càmpings"},
-						{"COVER": "Camps de golf"},
-						{"COVER": "Complexos administratius"},
-						{"COVER": "Equipaments sanitaris"},
-						{"COVER": "Equipaments educatius"},
-						{"COVER": "Centres penitenciaris"},
-						{"COVER": "Centres religiosos"},
-						{"COVER": "Centres culturals"},
-						{"COVER": "Centrals eòliques"},
-						{"COVER": "Centrals solars"},
-						{"COVER": "Centrals nuclears"},
-						{"COVER": "Centrals tèrmiques"},
-						{"COVER": "Infraestructures elèctriques"},
-						{"COVER": "Depuradores i potabilitzadores"},
-						{"COVER": "Desalinitzadores"},
-						{"COVER": "Telecomunicacions"},
-						{"COVER": "Zones d'extracció minera"},
-						{"COVER": "Abocadors"},
-						{"COVER": "Plantes de tractament"},
-						{"COVER": "Sòls nus urbans no edificats"},
-						{"COVER": "Zones urbanes en construcció"},
-						{"COVER": "Moviments de terres"}
+					"categories": [
+						{
+							"COVER": ""
+						},
+						{
+							"COVER": "Pineda de pi pinyer (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pinastre (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi blanc (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pinassa (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi roig (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi negre (>= 20%cc)"
+						},
+						{
+							"COVER": "Avetosa (>= 20%cc)"
+						},
+						{
+							"COVER": "Altres coníferes (>= 20%cc)"
+						},
+						{
+							"COVER": "Alzinar (>= 20%cc)"
+						},
+						{
+							"COVER": "Sureda (>= 20%cc)"
+						},
+						{
+							"COVER": "Arboçar (>= 20%cc)"
+						},
+						{
+							"COVER": "Altres perennifolis (>= 20%cc)"
+						},
+						{
+							"COVER": "Bedollar (>= 20%cc)"
+						},
+						{
+							"COVER": "Castanyeda (>= 20%cc)"
+						},
+						{
+							"COVER": "Fageda (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure pènol (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure de fulla gran (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure africà (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure martinenc (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure de fulla menuda (>= 20%cc)"
+						},
+						{
+							"COVER": "Roureda de reboll (>= 20%cc)"
+						},
+						{
+							"COVER": "Avellanosa (>= 20%cc)"
+						},
+						{
+							"COVER": "Freixeneda (>= 20%cc)"
+						},
+						{
+							"COVER": "Altres caducifolis (>= 20%cc)"
+						},
+						{
+							"COVER": "Boscos caducifolis de ribera (>= 20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi pinyer (5-20%cc)"
+						},
+						{
+							"COVER": "Pineda de pinastre (5-20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi blanc (5-20%cc)"
+						},
+						{
+							"COVER": "Pineda de pinassa (5-20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi roig (5-20%cc)"
+						},
+						{
+							"COVER": "Pineda de pi negre (5-20%cc)"
+						},
+						{
+							"COVER": "Avetosa (5-20%cc)"
+						},
+						{
+							"COVER": "Altres coníferes (5-20%cc)"
+						},
+						{
+							"COVER": "Alzinar (5-20%cc)"
+						},
+						{
+							"COVER": "Sureda (5-20%cc)"
+						},
+						{
+							"COVER": "Arboçar (5-20%cc)"
+						},
+						{
+							"COVER": "Altres perennifolis (5-20%cc)"
+						},
+						{
+							"COVER": "Bedollar (5-20%cc)"
+						},
+						{
+							"COVER": "Castanyeda (5-20%cc)"
+						},
+						{
+							"COVER": "Fageda (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure pènol (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure de fulla gran (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure africà (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure martinenc (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de roure de fulla menuda (5-20%cc)"
+						},
+						{
+							"COVER": "Roureda de reboll (5-20%cc)"
+						},
+						{
+							"COVER": "Avellanosa (5-20%cc)"
+						},
+						{
+							"COVER": "Freixeneda (5-20%cc)"
+						},
+						{
+							"COVER": "Altres caducifolis (5-20%cc)"
+						},
+						{
+							"COVER": "Boscos caducifolis de ribera (5-20%cc)"
+						},
+						{
+							"COVER": "Franja de protecció de pi pinyer"
+						},
+						{
+							"COVER": "Franja de protecció de pinastre"
+						},
+						{
+							"COVER": "Franja de protecció de pi blanc"
+						},
+						{
+							"COVER": "Franja de protecció de pinassa"
+						},
+						{
+							"COVER": "Franja de protecció de pi roig"
+						},
+						{
+							"COVER": "Franja de protecció d'alzina"
+						},
+						{
+							"COVER": "Franja de protecció d'alzina surera"
+						},
+						{
+							"COVER": "Franja de protecció de castanyer"
+						},
+						{
+							"COVER": "Franja de protecció de faig"
+						},
+						{
+							"COVER": "Franja de protecció de roure pènol"
+						},
+						{
+							"COVER": "Franja de protecció de roure de fulla gran"
+						},
+						{
+							"COVER": "Franja de protecció de roure africà"
+						},
+						{
+							"COVER": "Franja de protecció de roure martinenc"
+						},
+						{
+							"COVER": "Franja de protecció de roure de fulla menuda"
+						},
+						{
+							"COVER": "Franja de protecció d'altres caducifolis"
+						},
+						{
+							"COVER": "Plantacions de pi pinyer"
+						},
+						{
+							"COVER": "Plantacions de pinastre"
+						},
+						{
+							"COVER": "Plantacions de pi blanc"
+						},
+						{
+							"COVER": "Plantacions de pinassa"
+						},
+						{
+							"COVER": "Plantacions de pi roig"
+						},
+						{
+							"COVER": "Plantacions de pi negre"
+						},
+						{
+							"COVER": "Plantacions d'avet"
+						},
+						{
+							"COVER": "Vivers forestals"
+						},
+						{
+							"COVER": "Plantacions de coníferes no autòctones"
+						},
+						{
+							"COVER": "Plantacions d'alzina surera"
+						},
+						{
+							"COVER": "Plantacions de castanyer"
+						},
+						{
+							"COVER": "Plantacions d'altres caducifolis"
+						},
+						{
+							"COVER": "Plantacions d'eucaliptus"
+						},
+						{
+							"COVER": "Plantacions de pollancres"
+						},
+						{
+							"COVER": "Plantacions de plàtans"
+						},
+						{
+							"COVER": "Regeneració de pi blanc"
+						},
+						{
+							"COVER": "Regeneració de pinastre"
+						},
+						{
+							"COVER": "Regeneració de pinassa"
+						},
+						{
+							"COVER": "Regeneració de pi roig"
+						},
+						{
+							"COVER": "Regeneració de pi negre"
+						},
+						{
+							"COVER": "Regeneració d'avet"
+						},
+						{
+							"COVER": "Regeneració d'alzina"
+						},
+						{
+							"COVER": "Regeneració de bedoll"
+						},
+						{
+							"COVER": "Regeneració de faig"
+						},
+						{
+							"COVER": "Regeneració de roureda de roure martinenc"
+						},
+						{
+							"COVER": "Regeneració de roure de fulla menuda"
+						},
+						{
+							"COVER": "Matollars"
+						},
+						{
+							"COVER": "Matollars en línies elèctriques"
+						},
+						{
+							"COVER": "Franja de protecció de matollars"
+						},
+						{
+							"COVER": "Matollars en tallafocs"
+						},
+						{
+							"COVER": "Matollars procedents de tallades arreu"
+						},
+						{
+							"COVER": "Matollars de formacions de ribera"
+						},
+						{
+							"COVER": "Canyars"
+						},
+						{
+							"COVER": "Vegetació d'aiguamolls litorals"
+						},
+						{
+							"COVER": "Vegetació d'aiguamolls continentals"
+						},
+						{
+							"COVER": "Molleres d'alta muntanya"
+						},
+						{
+							"COVER": "Salines"
+						},
+						{
+							"COVER": "Prats i herbassars"
+						},
+						{
+							"COVER": "Prats i herbassars en línies elèctriques"
+						},
+						{
+							"COVER": "Franja de protecció de prats i herbassars"
+						},
+						{
+							"COVER": "Prats i herbassars d'alta muntanya"
+						},
+						{
+							"COVER": "Prats i herbassars d'alta muntanya en línies elèctriques"
+						},
+						{
+							"COVER": "Prats i herbassars en tallafocs"
+						},
+						{
+							"COVER": "Prats i herbassars procedents de tallades arreu"
+						},
+						{
+							"COVER": "Prats i herbassars d'alta muntanya procedents de tallades arreu"
+						},
+						{
+							"COVER": "Vegetació arbustiva de dunes i sorrals"
+						},
+						{
+							"COVER": "Vegetació herbàcia de dunes i sorrals"
+						},
+						{
+							"COVER": "Zones cremades"
+						},
+						{
+							"COVER": "Penya-segats marins"
+						},
+						{
+							"COVER": "Roquissars"
+						},
+						{
+							"COVER": "Tarteres"
+						},
+						{
+							"COVER": "Lleres naturals"
+						},
+						{
+							"COVER": "Sòl nu en tallafocs"
+						},
+						{
+							"COVER": "Sòl erosionat per agent natural"
+						},
+						{
+							"COVER": "Sòl nu per acció antròpica"
+						},
+						{
+							"COVER": "Sòl nu en línies elèctriques"
+						},
+						{
+							"COVER": "Platges"
+						},
+						{
+							"COVER": "Glaceres i congestes"
+						},
+						{
+							"COVER": "Llacs i llacunes continentals"
+						},
+						{
+							"COVER": "Llacunes litorals"
+						},
+						{
+							"COVER": "Rius"
+						},
+						{
+							"COVER": "Embassaments"
+						},
+						{
+							"COVER": "Mar"
+						},
+						{
+							"COVER": "Cítrics"
+						},
+						{
+							"COVER": "Fruiters no cítrics"
+						},
+						{
+							"COVER": "Fruiters no cítrics en regadiu"
+						},
+						{
+							"COVER": "Vivers agrícoles"
+						},
+						{
+							"COVER": "Vinyes"
+						},
+						{
+							"COVER": "Oliverars"
+						},
+						{
+							"COVER": "Oliverars en regadiu"
+						},
+						{
+							"COVER": "Garroferars"
+						},
+						{
+							"COVER": "Garroferars en regadiu"
+						},
+						{
+							"COVER": "Arrossars"
+						},
+						{
+							"COVER": "Altres conreus herbacis"
+						},
+						{
+							"COVER": "Altres conreus herbacis en regadiu"
+						},
+						{
+							"COVER": "Prats de dall"
+						},
+						{
+							"COVER": "Conreus en transformació"
+						},
+						{
+							"COVER": "Rompudes agrícoles"
+						},
+						{
+							"COVER": "Hivernacles"
+						},
+						{
+							"COVER": "Conreus d'horta sota plàstic"
+						},
+						{
+							"COVER": "Cítrics en bancals"
+						},
+						{
+							"COVER": "Fruiters no cítrics en bancals"
+						},
+						{
+							"COVER": "Fruiters no cítrics en bancals en regadiu"
+						},
+						{
+							"COVER": "Vinyes en bancals"
+						},
+						{
+							"COVER": "Oliverars en bancals"
+						},
+						{
+							"COVER": "Oliverars en bancals en regadiu"
+						},
+						{
+							"COVER": "Garroferars en bancals"
+						},
+						{
+							"COVER": "Altres conreus herbacis en bancals"
+						},
+						{
+							"COVER": "Altres conreus herbacis en bancals en regadiu"
+						},
+						{
+							"COVER": "Conreus abandonats - boscos"
+						},
+						{
+							"COVER": "Conreus abandonats - matollars"
+						},
+						{
+							"COVER": "Conreus abandonats - prats en zones forestals"
+						},
+						{
+							"COVER": "Conreus abandonats - prats d'alta muntanya en zones forestals"
+						},
+						{
+							"COVER": "Cítrics abandonats - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Cítrics abandonats - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Fruiters no cítrics abandonats - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Fruiters no cítrics abandonats regadiu no regat - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Vinyes abandonades - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Oliverars abandonats - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Garroferars abandonats - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Arrossars abandonats regadiu no regat - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Altres conreus herbacis abandonats - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Altres conreus herbacis abandonats regadiu no regat - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Prats de dall abandonats regadiu no regat - prats en zones agrícoles"
+						},
+						{
+							"COVER": "Prats de dall abandonats regadiu no regat - prats d'alta muntanya en zones agrícoles"
+						},
+						{
+							"COVER": "Vinyes abandonades - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Oliverars abandonats - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Oliverars abandonats regadiu no regat - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Garroferars abandonats - prats en zones agrícoles en bancals"
+						},
+						{
+							"COVER": "Hivernacles en bancals"
+						},
+						{
+							"COVER": "Horta familiar"
+						},
+						{
+							"COVER": "Assentament agrícola residencial"
+						},
+						{
+							"COVER": "Piscifactories i conreus aqüícoles a terra"
+						},
+						{
+							"COVER": "Piscifactories i conreus aqüícoles a mar"
+						},
+						{
+							"COVER": "Canals artificials"
+						},
+						{
+							"COVER": "Basses agrícoles"
+						},
+						{
+							"COVER": "Urbanitzacions"
+						},
+						{
+							"COVER": "Centre urbà"
+						},
+						{
+							"COVER": "Eixample"
+						},
+						{
+							"COVER": "Habitatges unifamiliars"
+						},
+						{
+							"COVER": "Colònies i nuclis aïllats"
+						},
+						{
+							"COVER": "Cases aïllades"
+						},
+						{
+							"COVER": "Polígon industrial ordenat"
+						},
+						{
+							"COVER": "Polígon industrial sense ordenar"
+						},
+						{
+							"COVER": "Indústries aïllades"
+						},
+						{
+							"COVER": "Serreries"
+						},
+						{
+							"COVER": "Complexos comercials i d'oficines"
+						},
+						{
+							"COVER": "Vivers"
+						},
+						{
+							"COVER": "Complexos hotelers"
+						},
+						{
+							"COVER": "Altres construccions"
+						},
+						{
+							"COVER": "Naus d'ús agrícola"
+						},
+						{
+							"COVER": "Granges"
+						},
+						{
+							"COVER": "Preses"
+						},
+						{
+							"COVER": "Cementiris"
+						},
+						{
+							"COVER": "Grans vials"
+						},
+						{
+							"COVER": "Zones d'aparcament"
+						},
+						{
+							"COVER": "Parcs urbans"
+						},
+						{
+							"COVER": "Basses urbanes"
+						},
+						{
+							"COVER": "Autopistes i autovies"
+						},
+						{
+							"COVER": "Carreteres"
+						},
+						{
+							"COVER": "Aeroports"
+						},
+						{
+							"COVER": "Vies de ferrocarril"
+						},
+						{
+							"COVER": "Zones portuàries"
+						},
+						{
+							"COVER": "Zones verdes viàries"
+						},
+						{
+							"COVER": "Zones verdes ferroviàries"
+						},
+						{
+							"COVER": "Àrees de servei en xarxa viària"
+						},
+						{
+							"COVER": "Estacions d'autobusos"
+						},
+						{
+							"COVER": "Zones d'esport"
+						},
+						{
+							"COVER": "Parcs recreatius"
+						},
+						{
+							"COVER": "Càmpings"
+						},
+						{
+							"COVER": "Camps de golf"
+						},
+						{
+							"COVER": "Complexos administratius"
+						},
+						{
+							"COVER": "Equipaments sanitaris"
+						},
+						{
+							"COVER": "Equipaments educatius"
+						},
+						{
+							"COVER": "Centres penitenciaris"
+						},
+						{
+							"COVER": "Centres religiosos"
+						},
+						{
+							"COVER": "Centres culturals"
+						},
+						{
+							"COVER": "Centrals eòliques"
+						},
+						{
+							"COVER": "Centrals solars"
+						},
+						{
+							"COVER": "Centrals nuclears"
+						},
+						{
+							"COVER": "Centrals tèrmiques"
+						},
+						{
+							"COVER": "Infraestructures elèctriques"
+						},
+						{
+							"COVER": "Depuradores i potabilitzadores"
+						},
+						{
+							"COVER": "Desalinitzadores"
+						},
+						{
+							"COVER": "Telecomunicacions"
+						},
+						{
+							"COVER": "Zones d'extracció minera"
+						},
+						{
+							"COVER": "Abocadors"
+						},
+						{
+							"COVER": "Plantes de tractament"
+						},
+						{
+							"COVER": "Sòls nus urbans no edificats"
+						},
+						{
+							"COVER": "Zones urbanes en construcció"
+						},
+						{
+							"COVER": "Moviments de terres"
+						}
 					],
-					"attributes": 
-					[
+					"attributes": [
 						{
 							"nom": "COVER",
-							"descripcio": 
-							{
+							"descripcio": {
 								"cat": "Tipus de coberta",
 								"spa": "Tipo de cubierta",
 								"eng": "Land cover type"
@@ -3171,9 +3774,251 @@
 							"mostrar": "si"
 						}
 					],
-					"paleta": 
-					{
-						"colors":["#FFFFFF","#689010","#689011","#689012","#689013","#689014","#689015","#689016","#689017","#689018","#689019","#68901A","#68901B","#68901C","#68901D","#68901E","#68901F","#689020","#689021","#689022","#689023","#689024","#689025","#689026","#689027","#00FF01","#A0FFA0","#A0FFA1","#A0FFA2","#A0FFA3","#A0FFA4","#A0FFA5","#A0FFA6","#A0FFA7","#A0FFA8","#A0FFA9","#A0FFAA","#A0FFAB","#A0FFAC","#A0FFAD","#A0FFAE","#A0FFAF","#A0FFB0","#A0FFB1","#A0FFB2","#A0FFB3","#A0FFB4","#A0FFB5","#A0FFB6","#A0FFB7","#00FF03","#80FF80","#80FF81","#80FF82","#80FF83","#80FF84","#80FF87","#80FF88","#80FF8A","#80FF8B","#80FF8C","#80FF8D","#80FF8E","#80FF8F","#80FF90","#80FF92","#699023","#699024","#699025","#699026","#699027","#699028","#405E09","#40C209","#405E0A","#689029","#68902A","#68902B","#46FF46","#005A00","#C3FF00","#C0C096","#C0C097","#C0C098","#C0C099","#C0C09A","#C0C09B","#C1C099","#C1C09A","#C1C09B","#C1C09C","#C1C09D","#C1C09E","#C1C09F","#C1C0A0","#C1C0A1","#95CD17","#C1C0A2","#C1C0A3","#80FFFF","#19FFFF","#002524","#356C6B","#FFFF82","#FFFF83","#FFFF84","#FFFF85","#FFFF86","#FFFF87","#96CD17","#95CD18","#C0C09F","#FFFF88","#FF0000","#797979","#79797A","#D0D0D0","#FF8610","#FF972F","#FF9730","#FF9731","#FF9732","#F5DF78","#D7FFF5","#000064","#0000DC","#3737FF","#6F6FFF","#000080","#7F4218","#7F4219","#7F421A","#7F4238","#AF5B15","#7F421B","#7F421C","#7F421D","#7F421E","#F8DCC4","#F4C8A3","#F4C8A4","#F4C8A5","#F2E4E4","#F2E4E5","#D7FFF6","#F4C8A6","#7F4221","#7F4222","#7F4223","#AF5B1F","#7F4224","#7F4225","#7F4226","#F4C8AD","#F4C8AE","#FFFF00","#FFFF01","#FFFF02","#FFFF03","#FFFF04","#FFFF05","#B7B700","#B7B701","#797900","#797901","#D7FFFF","#F4C8A7","#F4C9A7","#F4C8A8","#00FFBE","#00FFBF","#01FFBF","#00FFC2","#03FFC2","#00FFC3","#00FFC4","#00FFC5","#F4C8A9","#F4C9A9","#F4C8AA","#D8FFFF","#F5C8A7","#F5C8A8","#03FFBE","#03FFBF","#12466D","#185F94","#FFA4E2","#FF53CB","#FF53CD","#FFA4ED","#FFA4E5","#FFA4E4","#71004F","#710050","#710051","#710055","#710056","#710057","#71005D","#71005E","#C8008A","#C8008B","#2C001E","#000000","#FFCBF2","#FFCBF3","#49FD00","#12466E","#ADAACA","#827DAD","#67629A","#4A466E","#2F2D46","#289700","#289701","#289702","#289703","#6200C4","#6200C5","#952BFF","#B163FF","#FE53CD","#FF53CE","#FF53CF","#FF53D0","#FF53D1","#FF53D2","#720056","#720057","#720058","#720059","#72005A","#72005B","#72005C","#72005D","#4A9595","#254B4B","#72005E","#FFCBEF","#FFCBF0","#FFCBF1"]
+					"paleta": {
+						"colors": [
+							"#FFFFFF",
+							"#689010",
+							"#689011",
+							"#689012",
+							"#689013",
+							"#689014",
+							"#689015",
+							"#689016",
+							"#689017",
+							"#689018",
+							"#689019",
+							"#68901A",
+							"#68901B",
+							"#68901C",
+							"#68901D",
+							"#68901E",
+							"#68901F",
+							"#689020",
+							"#689021",
+							"#689022",
+							"#689023",
+							"#689024",
+							"#689025",
+							"#689026",
+							"#689027",
+							"#00FF01",
+							"#A0FFA0",
+							"#A0FFA1",
+							"#A0FFA2",
+							"#A0FFA3",
+							"#A0FFA4",
+							"#A0FFA5",
+							"#A0FFA6",
+							"#A0FFA7",
+							"#A0FFA8",
+							"#A0FFA9",
+							"#A0FFAA",
+							"#A0FFAB",
+							"#A0FFAC",
+							"#A0FFAD",
+							"#A0FFAE",
+							"#A0FFAF",
+							"#A0FFB0",
+							"#A0FFB1",
+							"#A0FFB2",
+							"#A0FFB3",
+							"#A0FFB4",
+							"#A0FFB5",
+							"#A0FFB6",
+							"#A0FFB7",
+							"#00FF03",
+							"#80FF80",
+							"#80FF81",
+							"#80FF82",
+							"#80FF83",
+							"#80FF84",
+							"#80FF87",
+							"#80FF88",
+							"#80FF8A",
+							"#80FF8B",
+							"#80FF8C",
+							"#80FF8D",
+							"#80FF8E",
+							"#80FF8F",
+							"#80FF90",
+							"#80FF92",
+							"#699023",
+							"#699024",
+							"#699025",
+							"#699026",
+							"#699027",
+							"#699028",
+							"#405E09",
+							"#40C209",
+							"#405E0A",
+							"#689029",
+							"#68902A",
+							"#68902B",
+							"#46FF46",
+							"#005A00",
+							"#C3FF00",
+							"#C0C096",
+							"#C0C097",
+							"#C0C098",
+							"#C0C099",
+							"#C0C09A",
+							"#C0C09B",
+							"#C1C099",
+							"#C1C09A",
+							"#C1C09B",
+							"#C1C09C",
+							"#C1C09D",
+							"#C1C09E",
+							"#C1C09F",
+							"#C1C0A0",
+							"#C1C0A1",
+							"#95CD17",
+							"#C1C0A2",
+							"#C1C0A3",
+							"#80FFFF",
+							"#19FFFF",
+							"#002524",
+							"#356C6B",
+							"#FFFF82",
+							"#FFFF83",
+							"#FFFF84",
+							"#FFFF85",
+							"#FFFF86",
+							"#FFFF87",
+							"#96CD17",
+							"#95CD18",
+							"#C0C09F",
+							"#FFFF88",
+							"#FF0000",
+							"#797979",
+							"#79797A",
+							"#D0D0D0",
+							"#FF8610",
+							"#FF972F",
+							"#FF9730",
+							"#FF9731",
+							"#FF9732",
+							"#F5DF78",
+							"#D7FFF5",
+							"#000064",
+							"#0000DC",
+							"#3737FF",
+							"#6F6FFF",
+							"#000080",
+							"#7F4218",
+							"#7F4219",
+							"#7F421A",
+							"#7F4238",
+							"#AF5B15",
+							"#7F421B",
+							"#7F421C",
+							"#7F421D",
+							"#7F421E",
+							"#F8DCC4",
+							"#F4C8A3",
+							"#F4C8A4",
+							"#F4C8A5",
+							"#F2E4E4",
+							"#F2E4E5",
+							"#D7FFF6",
+							"#F4C8A6",
+							"#7F4221",
+							"#7F4222",
+							"#7F4223",
+							"#AF5B1F",
+							"#7F4224",
+							"#7F4225",
+							"#7F4226",
+							"#F4C8AD",
+							"#F4C8AE",
+							"#FFFF00",
+							"#FFFF01",
+							"#FFFF02",
+							"#FFFF03",
+							"#FFFF04",
+							"#FFFF05",
+							"#B7B700",
+							"#B7B701",
+							"#797900",
+							"#797901",
+							"#D7FFFF",
+							"#F4C8A7",
+							"#F4C9A7",
+							"#F4C8A8",
+							"#00FFBE",
+							"#00FFBF",
+							"#01FFBF",
+							"#00FFC2",
+							"#03FFC2",
+							"#00FFC3",
+							"#00FFC4",
+							"#00FFC5",
+							"#F4C8A9",
+							"#F4C9A9",
+							"#F4C8AA",
+							"#D8FFFF",
+							"#F5C8A7",
+							"#F5C8A8",
+							"#03FFBE",
+							"#03FFBF",
+							"#12466D",
+							"#185F94",
+							"#FFA4E2",
+							"#FF53CB",
+							"#FF53CD",
+							"#FFA4ED",
+							"#FFA4E5",
+							"#FFA4E4",
+							"#71004F",
+							"#710050",
+							"#710051",
+							"#710055",
+							"#710056",
+							"#710057",
+							"#71005D",
+							"#71005E",
+							"#C8008A",
+							"#C8008B",
+							"#2C001E",
+							"#000000",
+							"#FFCBF2",
+							"#FFCBF3",
+							"#49FD00",
+							"#12466E",
+							"#ADAACA",
+							"#827DAD",
+							"#67629A",
+							"#4A466E",
+							"#2F2D46",
+							"#289700",
+							"#289701",
+							"#289702",
+							"#289703",
+							"#6200C4",
+							"#6200C5",
+							"#952BFF",
+							"#B163FF",
+							"#FE53CD",
+							"#FF53CE",
+							"#FF53CF",
+							"#FF53D0",
+							"#FF53D1",
+							"#FF53D2",
+							"#720056",
+							"#720057",
+							"#720058",
+							"#720059",
+							"#72005A",
+							"#72005B",
+							"#72005C",
+							"#72005D",
+							"#4A9595",
+							"#254B4B",
+							"#72005E",
+							"#FFCBEF",
+							"#FFCBF0",
+							"#FFCBF1"
+						]
 					}
 				}
 			],
@@ -3188,7 +4033,9 @@
 			"ParamCoverage": null,
 			"FormatCoverage": null,
 			"ResCoverage": null,
-			"metadades": {"standard" :"/MCSC/metadades/MCSC/MCSC4_N5.htm"},
+			"metadades": {
+				"standard": "/MCSC/metadades/MCSC/MCSC4_N5.htm"
+			},
 			"NomVideo": null,
 			"DescVideo": null,
 			"FlagsData": null,
@@ -3200,24 +4047,22 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://geoserveis.icgc.cat/icc_mapesbase/wms/service?",
-			"versio": 
-			{
+			"servidor": "https://geoserveis.icgc.cat/servei/catalunya/mapa-base/wms?",
+			"versio": {
 				"Vers": 1,
 				"SubVers": 1,
 				"VariantVers": 1
 			},
 			"tipus": "TipusWMS",
-			"nom": "mtc50m",
-			"desc": 
-			{
-				"cat": "Mapa Topogràfic 1:50000 de Catalunya",
-				"spa": "Mapa Topográfico 1:50000 de Cataluña",
-				"eng": "Topographic Map 1:50000 of Catalonia"
+			"nom": "simplificat",
+			"desc": {
+				"cat": "Mapa base de Catalunya",
+				"spa": "Mapa base de Cataluña",
+				"eng": "Catalonia base map"
 			},
 			"CRS": null,
 			"EnvTotal": null,
-			"FormatImatge": "image/gif",
+			"FormatImatge": "image/png",
 			"transparencia": "semitransparent",
 			"CostatMinim": 10,
 			"CostatMaxim": 1000,
@@ -3225,11 +4070,10 @@
 			"FormatConsulta": "text/xml",
 			"grup": null,
 			"separa": null,
-			"DescLlegenda": 
-			{
-				"cat": "Mapa topogràfic 1:50000<sup>3</sup>",
-				"spa": "Mapa topográfico 1:50000<sup>3</sup>",
-				"eng": "Topographic map 1:50000<sup>3</sup>"
+			"DescLlegenda": {
+				"cat": "Mapa base de Catalunya",
+				"spa": "Mapa base de Cataluña",
+				"eng": "Catalonia base map"
 			},
 			"estil": null,
 			"i_estil": 0,
@@ -3260,14 +4104,12 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "TotCatalunyaED50",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat 1-2-3-4-5-7 Tot Catalunya",
 				"spa": "Landsat 1-2-3-4-5-7 Todo Cataluña",
 				"eng": "Landsat 1-2-3-4-5-7 Whole Catalonia"
 			},
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -3278,19 +4120,16 @@
 			"TileMatrixSet": null,
 			"FormatConsulta": "text/xml",
 			"grup": "imatges",
-			"separa": 
-			{
+			"separa": {
 				"cat": "<hr align=\"left\" width=\"230\"><b>Imatges de satèl·lit</b><hr align=\"left\" width=\"230\">Tot Catalunya<font size=1><br></font>",
 				"spa": "<hr align=\"left\" width=\"230\"><b>Imágenes de satélite</b><hr align=\"left\" width=\"230\">Todo Cataluña<font size=1><br></font>",
 				"eng": "<hr align=\"left\" width=\"230\"><b>Satellite images</b><hr align=\"left\" width=\"230\">Whole Catalonia<font size=1><br></font>"
 			},
 			"DescLlegenda": "Landsat 1-2-3-4-5-7",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -3303,8 +4142,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -3327,16 +4165,16 @@
 			"ParamCoverage": 2,
 			"FormatCoverage": 2,
 			"ResCoverage": 2,
-			"metadades": {"standard" : "metadades/EPSG_23031/Cat_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/Cat_{TIME}.htm"
+			},
 			"NomVideo": "LandTotCatTM_ED50",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat 1-2-3-4-5-7 Tot Catalunya ED50",
 				"spa": "Landsat 1-2-3-4-5-7 Toda Cataluña ED50",
 				"eng": "Landsat 1-2-3-4-5-7 Whole Catalonia ED50"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": false,
@@ -3345,24 +4183,71 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8},
-				{"year": 1984,"month": 4},
-				{"year": 1987,"month": 6},
-				{"year": 1992,"month": 7},
-				{"year": 2000,"month": 8},
-				{"year": 2001,"month": 4},
-				{"year": 2002,"month": 5},
-				{"year": 2003,"month": 8},
-				{"year": 2004,"month": 6},
-				{"year": 2005,"month": 5},
-				{"year": 2006,"month": 6},
-				{"year": 2007,"month": 5},
-				{"year": 2008,"month": 7},
-				{"year": 2009,"month": 7},
-				{"year": 2010,"month": 2},
-				{"year": 2011,"month": 3}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8
+				},
+				{
+					"year": 1984,
+					"month": 4
+				},
+				{
+					"year": 1987,
+					"month": 6
+				},
+				{
+					"year": 1992,
+					"month": 7
+				},
+				{
+					"year": 2000,
+					"month": 8
+				},
+				{
+					"year": 2001,
+					"month": 4
+				},
+				{
+					"year": 2002,
+					"month": 5
+				},
+				{
+					"year": 2003,
+					"month": 8
+				},
+				{
+					"year": 2004,
+					"month": 6
+				},
+				{
+					"year": 2005,
+					"month": 5
+				},
+				{
+					"year": 2006,
+					"month": 6
+				},
+				{
+					"year": 2007,
+					"month": 5
+				},
+				{
+					"year": 2008,
+					"month": 7
+				},
+				{
+					"year": 2009,
+					"month": 7
+				},
+				{
+					"year": 2010,
+					"month": 2
+				},
+				{
+					"year": 2011,
+					"month": 3
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -3376,13 +4261,12 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "LC8_TotCatalunyaETRS89",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat 8 Tot Catalunya",
 				"spa": "Landsat 8 Todo Cataluña",
 				"eng": "Landsat 8 Whole Catalonia"
 			},
-			"CRS": null,			
+			"CRS": null,
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -3393,12 +4277,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 8",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -3411,8 +4293,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -3437,14 +4318,12 @@
 			"ResCoverage": 6,
 			"metadades": null,
 			"NomVideo": "LandTotCatTM_ETRS89",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat 1-2-3-4-5-7-8 Tot Catalunya ETRS89",
 				"spa": "Landsat 1-2-3-4-5-7-8 Toda Cataluña ETRS89",
 				"eng": "Landsat 1-2-3-4-5-7-8 Whole Catalonia ETRS89"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": false,
@@ -3453,12 +4332,23 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 2013,"month": 11},
-				{"year": 2014,"month": 3},
-				{"year": 2018,"month": 9},
-				{"year": 2020,"month": 1}
+			"data": [
+				{
+					"year": 2013,
+					"month": 11
+				},
+				{
+					"year": 2014,
+					"month": 3
+				},
+				{
+					"year": 2018,
+					"month": 9
+				},
+				{
+					"year": 2020,
+					"month": 1
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -3472,14 +4362,12 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "TotCatalunyaETRS89",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat 1-2-3-4-5-7 Tot Catalunya",
 				"spa": "Landsat 1-2-3-4-5-7 Todo Cataluña",
 				"eng": "Landsat 1-2-3-4-5-7 Whole Catalonia"
 			},
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -3492,12 +4380,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 1-2-3-4-5-7",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -3510,8 +4396,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -3536,14 +4421,12 @@
 			"ResCoverage": 2,
 			"metadades": null,
 			"NomVideo": "LandTotCatTM_ETRS89",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat 1-2-3-4-5-7-8 Tot Catalunya ETRS89",
 				"spa": "Landsat 1-2-3-4-5-7-8 Toda Cataluña ETRS89",
 				"eng": "Landsat 1-2-3-4-5-7-8 Whole Catalonia ETRS89"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": false,
@@ -3552,24 +4435,71 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8},
-				{"year": 1984,"month": 4},
-				{"year": 1987,"month": 6},
-				{"year": 1992,"month": 7},
-				{"year": 2000,"month": 8},
-				{"year": 2001,"month": 4},
-				{"year": 2002,"month": 5},
-				{"year": 2003,"month": 8},
-				{"year": 2004,"month": 6},
-				{"year": 2005,"month": 5},
-				{"year": 2006,"month": 6},
-				{"year": 2007,"month": 5},
-				{"year": 2008,"month": 7},
-				{"year": 2009,"month": 7},
-				{"year": 2010,"month": 2},
-				{"year": 2011,"month": 3}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8
+				},
+				{
+					"year": 1984,
+					"month": 4
+				},
+				{
+					"year": 1987,
+					"month": 6
+				},
+				{
+					"year": 1992,
+					"month": 7
+				},
+				{
+					"year": 2000,
+					"month": 8
+				},
+				{
+					"year": 2001,
+					"month": 4
+				},
+				{
+					"year": 2002,
+					"month": 5
+				},
+				{
+					"year": 2003,
+					"month": 8
+				},
+				{
+					"year": 2004,
+					"month": 6
+				},
+				{
+					"year": 2005,
+					"month": 5
+				},
+				{
+					"year": 2006,
+					"month": 6
+				},
+				{
+					"year": 2007,
+					"month": 5
+				},
+				{
+					"year": 2008,
+					"month": 7
+				},
+				{
+					"year": 2009,
+					"month": 7
+				},
+				{
+					"year": 2010,
+					"month": 2
+				},
+				{
+					"year": 2011,
+					"month": 3
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -3595,12 +4525,10 @@
 			"grup": "imatges",
 			"separa": "<font size=1><br></font>Girona-Barcelona",
 			"DescLlegenda": "Landsat 8 Sensor OLI-TIRS",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -3613,8 +4541,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -3637,11 +4564,12 @@
 			"ParamCoverage": 5,
 			"FormatCoverage": 5,
 			"ResCoverage": 5,
-			"metadades": {"standard" :"metadades/EPSG_25831/LC8_197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/LC8_197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaETRS89",
 			"DescVideo": "Landsat TM/ETM+/OLI-TIRS Girona-Barcelona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -3650,67 +4578,302 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 2013,"month": 4,"day": 16},
-				{"year": 2013,"month": 5,"day": 2},
-				{"year": 2013,"month": 5,"day": 18},
-				{"year": 2013,"month": 6,"day": 3},
-				{"year": 2013,"month": 6,"day": 19},
-				{"year": 2013,"month": 7,"day": 5},
-				{"year": 2013,"month": 7,"day": 21},
-				{"year": 2013,"month": 8,"day": 6},
-				{"year": 2013,"month": 8,"day": 22},
-				{"year": 2013,"month": 9,"day": 7},
-				{"year": 2013,"month": 9,"day": 23},
-				{"year": 2013,"month": 10,"day": 9},
-				{"year": 2013,"month": 10,"day": 25},
-				{"year": 2013,"month": 11,"day": 26},
-				{"year": 2013,"month": 12,"day": 12},
-				{"year": 2013,"month": 12,"day": 28},
-				{"year": 2014,"month": 1,"day": 13},
-				{"year": 2014,"month": 1,"day": 29},
-				{"year": 2014,"month": 2,"day": 14},
-				{"year": 2014,"month": 3,"day": 2},
-				{"year": 2014,"month": 3,"day": 18},
-				{"year": 2014,"month": 4,"day": 3},
-				{"year": 2014,"month": 4,"day": 19},
-				{"year": 2014,"month": 5,"day": 5},
-				{"year": 2014,"month": 6,"day": 6},
-				{"year": 2014,"month": 6,"day": 22},
-				{"year": 2014,"month": 7,"day": 8},
-				{"year": 2014,"month": 7,"day": 24},
-				{"year": 2014,"month": 8,"day": 9},
-				{"year": 2014,"month": 8,"day": 25},
-				{"year": 2014,"month": 9,"day": 10},
-				{"year": 2014,"month": 9,"day": 26},
-				{"year": 2014,"month": 10,"day": 12},
-				{"year": 2014,"month": 11,"day": 13},
-				{"year": 2014,"month": 11,"day": 29},
-				{"year": 2014,"month": 12,"day": 15},
-				{"year": 2014,"month": 12,"day": 31},
-				{"year": 2015,"month": 1,"day": 16},
-				{"year": 2015,"month": 2,"day": 1},
-				{"year": 2015,"month": 2,"day": 17},
-				{"year": 2015,"month": 3,"day": 5},
-				{"year": 2015,"month": 3,"day": 21},
-				{"year": 2015,"month": 4,"day": 6},
-				{"year": 2015,"month": 4,"day": 22},
-				{"year": 2015,"month": 5,"day": 8},
-				{"year": 2015,"month": 5,"day": 24},
-				{"year": 2015,"month": 6,"day": 9},
-				{"year": 2015,"month": 6,"day": 25},
-				{"year": 2015,"month": 7,"day": 11},
-				{"year": 2015,"month": 7,"day": 27},
-				{"year": 2015,"month": 8,"day": 12},
-				{"year": 2015,"month": 8,"day": 28},
-				{"year": 2015,"month": 9,"day": 13},
-				{"year": 2015,"month": 9,"day": 29},
-				{"year": 2015,"month": 10,"day": 15},
-				{"year": 2015,"month": 10,"day": 31},
-				{"year": 2015,"month": 11,"day": 16},
-				{"year": 2015,"month": 12,"day": 2},
-				{"year": 2015,"month": 12,"day": 18},
+			"data": [
+				{
+					"year": 2013,
+					"month": 4,
+					"day": 16
+				},
+				{
+					"year": 2013,
+					"month": 5,
+					"day": 2
+				},
+				{
+					"year": 2013,
+					"month": 5,
+					"day": 18
+				},
+				{
+					"year": 2013,
+					"month": 6,
+					"day": 3
+				},
+				{
+					"year": 2013,
+					"month": 6,
+					"day": 19
+				},
+				{
+					"year": 2013,
+					"month": 7,
+					"day": 5
+				},
+				{
+					"year": 2013,
+					"month": 7,
+					"day": 21
+				},
+				{
+					"year": 2013,
+					"month": 8,
+					"day": 6
+				},
+				{
+					"year": 2013,
+					"month": 8,
+					"day": 22
+				},
+				{
+					"year": 2013,
+					"month": 9,
+					"day": 7
+				},
+				{
+					"year": 2013,
+					"month": 9,
+					"day": 23
+				},
+				{
+					"year": 2013,
+					"month": 10,
+					"day": 9
+				},
+				{
+					"year": 2013,
+					"month": 10,
+					"day": 25
+				},
+				{
+					"year": 2013,
+					"month": 11,
+					"day": 26
+				},
+				{
+					"year": 2013,
+					"month": 12,
+					"day": 12
+				},
+				{
+					"year": 2013,
+					"month": 12,
+					"day": 28
+				},
+				{
+					"year": 2014,
+					"month": 1,
+					"day": 13
+				},
+				{
+					"year": 2014,
+					"month": 1,
+					"day": 29
+				},
+				{
+					"year": 2014,
+					"month": 2,
+					"day": 14
+				},
+				{
+					"year": 2014,
+					"month": 3,
+					"day": 2
+				},
+				{
+					"year": 2014,
+					"month": 3,
+					"day": 18
+				},
+				{
+					"year": 2014,
+					"month": 4,
+					"day": 3
+				},
+				{
+					"year": 2014,
+					"month": 4,
+					"day": 19
+				},
+				{
+					"year": 2014,
+					"month": 5,
+					"day": 5
+				},
+				{
+					"year": 2014,
+					"month": 6,
+					"day": 6
+				},
+				{
+					"year": 2014,
+					"month": 6,
+					"day": 22
+				},
+				{
+					"year": 2014,
+					"month": 7,
+					"day": 8
+				},
+				{
+					"year": 2014,
+					"month": 7,
+					"day": 24
+				},
+				{
+					"year": 2014,
+					"month": 8,
+					"day": 9
+				},
+				{
+					"year": 2014,
+					"month": 8,
+					"day": 25
+				},
+				{
+					"year": 2014,
+					"month": 9,
+					"day": 10
+				},
+				{
+					"year": 2014,
+					"month": 9,
+					"day": 26
+				},
+				{
+					"year": 2014,
+					"month": 10,
+					"day": 12
+				},
+				{
+					"year": 2014,
+					"month": 11,
+					"day": 13
+				},
+				{
+					"year": 2014,
+					"month": 11,
+					"day": 29
+				},
+				{
+					"year": 2014,
+					"month": 12,
+					"day": 15
+				},
+				{
+					"year": 2014,
+					"month": 12,
+					"day": 31
+				},
+				{
+					"year": 2015,
+					"month": 1,
+					"day": 16
+				},
+				{
+					"year": 2015,
+					"month": 2,
+					"day": 1
+				},
+				{
+					"year": 2015,
+					"month": 2,
+					"day": 17
+				},
+				{
+					"year": 2015,
+					"month": 3,
+					"day": 5
+				},
+				{
+					"year": 2015,
+					"month": 3,
+					"day": 21
+				},
+				{
+					"year": 2015,
+					"month": 4,
+					"day": 6
+				},
+				{
+					"year": 2015,
+					"month": 4,
+					"day": 22
+				},
+				{
+					"year": 2015,
+					"month": 5,
+					"day": 8
+				},
+				{
+					"year": 2015,
+					"month": 5,
+					"day": 24
+				},
+				{
+					"year": 2015,
+					"month": 6,
+					"day": 9
+				},
+				{
+					"year": 2015,
+					"month": 6,
+					"day": 25
+				},
+				{
+					"year": 2015,
+					"month": 7,
+					"day": 11
+				},
+				{
+					"year": 2015,
+					"month": 7,
+					"day": 27
+				},
+				{
+					"year": 2015,
+					"month": 8,
+					"day": 12
+				},
+				{
+					"year": 2015,
+					"month": 8,
+					"day": 28
+				},
+				{
+					"year": 2015,
+					"month": 9,
+					"day": 13
+				},
+				{
+					"year": 2015,
+					"month": 9,
+					"day": 29
+				},
+				{
+					"year": 2015,
+					"month": 10,
+					"day": 15
+				},
+				{
+					"year": 2015,
+					"month": 10,
+					"day": 31
+				},
+				{
+					"year": 2015,
+					"month": 11,
+					"day": 16
+				},
+				{
+					"year": 2015,
+					"month": 12,
+					"day": 2
+				},
+				{
+					"year": 2015,
+					"month": 12,
+					"day": 18
+				},
 				{
 					"year": 2016,
 					"month": 1,
@@ -4131,66 +5294,306 @@
 					"month": 12,
 					"day": 29
 				},
-				{"year": 2020,"month": 1,"day": 14},
-				{"year": 2020,"month": 1,"day": 30},
-				{"year": 2020,"month": 2,"day": 15},
-				{"year": 2020,"month": 3,"day": 2},
-				{"year": 2020,"month": 3,"day": 18},
-				{"year": 2020,"month": 4,"day": 3},
-				{"year": 2020,"month": 4,"day": 19},
-				{"year": 2020,"month": 5,"day": 5},
-				{"year": 2020,"month": 5,"day": 21},
-				{"year": 2020,"month": 6,"day": 6},
-				{"year": 2020,"month": 6,"day": 22},
-				{"year": 2020,"month": 7,"day": 8},
-				{"year": 2020,"month": 7,"day": 24},
-				{"year": 2020,"month": 8,"day": 9},
-				{"year": 2020,"month": 8,"day": 25},
-				{"year": 2020,"month": 9,"day": 10},
-				{"year": 2020,"month": 9,"day": 26},
-				{"year": 2020,"month": 10,"day": 12},
-				{"year": 2020,"month": 10,"day": 28},
-				{"year": 2020,"month": 11,"day": 29},
-				{"year": 2020,"month": 12,"day": 15},
-				{"year": 2020,"month": 12,"day": 31},				
-				{"year": 2021,"month": 1,"day": 16},
-				{"year": 2021,"month": 2,"day": 1},
-				{"year": 2021,"month": 2,"day": 17},
-				{"year": 2021,"month": 3,"day": 5},
-				{"year": 2021,"month": 3,"day": 21},
-				{"year": 2021,"month": 4,"day": 6},
-				{"year": 2021,"month": 4,"day": 22},
-				{"year": 2021,"month": 5,"day": 8},
-				{"year": 2021,"month": 5,"day": 24},
-				{"year": 2021,"month": 6,"day": 9},
-				{"year": 2021,"month": 6,"day": 25},
-				{"year": 2021,"month": 7,"day": 11},
-				{"year": 2021,"month": 7,"day": 27},
-				{"year": 2021,"month": 8,"day": 12},
-				{"year": 2021,"month": 8,"day": 28},
-				{"year": 2021,"month": 9,"day": 13},
-				{"year": 2021,"month": 9,"day": 29},
-				{"year": 2021,"month": 10,"day": 15},
-				{"year": 2021,"month": 10,"day": 31},
-				{"year": 2021,"month": 12,"day": 2},
-				{"year": 2021,"month": 12,"day": 18},
-				{"year": 2022,"month": 1,"day": 3},
-				{"year": 2022,"month": 1,"day": 19},
-				{"year": 2022,"month": 2,"day": 4},
-				{"year": 2022,"month": 3,"day": 8},
-				{"year": 2022,"month": 3,"day": 24},
-				{"year": 2022,"month": 4,"day": 9},
-				{"year": 2022,"month": 4,"day": 25},
-				{"year": 2022,"month": 5,"day": 11},
-				{"year": 2022,"month": 5,"day": 27},
-				{"year": 2022,"month": 6,"day": 12},
-				{"year": 2022,"month": 6,"day": 28},
-				{"year": 2022,"month": 7,"day": 14},
-				{"year": 2022,"month": 7,"day": 30},
-				{"year": 2022,"month": 8,"day": 15},
-				{"year": 2022,"month": 8,"day": 31},
-				{"year": 2022,"month": 9,"day": 16},
-				{"year": 2022,"month": 10,"day": 2}				
+				{
+					"year": 2020,
+					"month": 1,
+					"day": 14
+				},
+				{
+					"year": 2020,
+					"month": 1,
+					"day": 30
+				},
+				{
+					"year": 2020,
+					"month": 2,
+					"day": 15
+				},
+				{
+					"year": 2020,
+					"month": 3,
+					"day": 2
+				},
+				{
+					"year": 2020,
+					"month": 3,
+					"day": 18
+				},
+				{
+					"year": 2020,
+					"month": 4,
+					"day": 3
+				},
+				{
+					"year": 2020,
+					"month": 4,
+					"day": 19
+				},
+				{
+					"year": 2020,
+					"month": 5,
+					"day": 5
+				},
+				{
+					"year": 2020,
+					"month": 5,
+					"day": 21
+				},
+				{
+					"year": 2020,
+					"month": 6,
+					"day": 6
+				},
+				{
+					"year": 2020,
+					"month": 6,
+					"day": 22
+				},
+				{
+					"year": 2020,
+					"month": 7,
+					"day": 8
+				},
+				{
+					"year": 2020,
+					"month": 7,
+					"day": 24
+				},
+				{
+					"year": 2020,
+					"month": 8,
+					"day": 9
+				},
+				{
+					"year": 2020,
+					"month": 8,
+					"day": 25
+				},
+				{
+					"year": 2020,
+					"month": 9,
+					"day": 10
+				},
+				{
+					"year": 2020,
+					"month": 9,
+					"day": 26
+				},
+				{
+					"year": 2020,
+					"month": 10,
+					"day": 12
+				},
+				{
+					"year": 2020,
+					"month": 10,
+					"day": 28
+				},
+				{
+					"year": 2020,
+					"month": 11,
+					"day": 29
+				},
+				{
+					"year": 2020,
+					"month": 12,
+					"day": 15
+				},
+				{
+					"year": 2020,
+					"month": 12,
+					"day": 31
+				},
+				{
+					"year": 2021,
+					"month": 1,
+					"day": 16
+				},
+				{
+					"year": 2021,
+					"month": 2,
+					"day": 1
+				},
+				{
+					"year": 2021,
+					"month": 2,
+					"day": 17
+				},
+				{
+					"year": 2021,
+					"month": 3,
+					"day": 5
+				},
+				{
+					"year": 2021,
+					"month": 3,
+					"day": 21
+				},
+				{
+					"year": 2021,
+					"month": 4,
+					"day": 6
+				},
+				{
+					"year": 2021,
+					"month": 4,
+					"day": 22
+				},
+				{
+					"year": 2021,
+					"month": 5,
+					"day": 8
+				},
+				{
+					"year": 2021,
+					"month": 5,
+					"day": 24
+				},
+				{
+					"year": 2021,
+					"month": 6,
+					"day": 9
+				},
+				{
+					"year": 2021,
+					"month": 6,
+					"day": 25
+				},
+				{
+					"year": 2021,
+					"month": 7,
+					"day": 11
+				},
+				{
+					"year": 2021,
+					"month": 7,
+					"day": 27
+				},
+				{
+					"year": 2021,
+					"month": 8,
+					"day": 12
+				},
+				{
+					"year": 2021,
+					"month": 8,
+					"day": 28
+				},
+				{
+					"year": 2021,
+					"month": 9,
+					"day": 13
+				},
+				{
+					"year": 2021,
+					"month": 9,
+					"day": 29
+				},
+				{
+					"year": 2021,
+					"month": 10,
+					"day": 15
+				},
+				{
+					"year": 2021,
+					"month": 10,
+					"day": 31
+				},
+				{
+					"year": 2021,
+					"month": 12,
+					"day": 2
+				},
+				{
+					"year": 2021,
+					"month": 12,
+					"day": 18
+				},
+				{
+					"year": 2022,
+					"month": 1,
+					"day": 3
+				},
+				{
+					"year": 2022,
+					"month": 1,
+					"day": 19
+				},
+				{
+					"year": 2022,
+					"month": 2,
+					"day": 4
+				},
+				{
+					"year": 2022,
+					"month": 3,
+					"day": 8
+				},
+				{
+					"year": 2022,
+					"month": 3,
+					"day": 24
+				},
+				{
+					"year": 2022,
+					"month": 4,
+					"day": 9
+				},
+				{
+					"year": 2022,
+					"month": 4,
+					"day": 25
+				},
+				{
+					"year": 2022,
+					"month": 5,
+					"day": 11
+				},
+				{
+					"year": 2022,
+					"month": 5,
+					"day": 27
+				},
+				{
+					"year": 2022,
+					"month": 6,
+					"day": 12
+				},
+				{
+					"year": 2022,
+					"month": 6,
+					"day": 28
+				},
+				{
+					"year": 2022,
+					"month": 7,
+					"day": 14
+				},
+				{
+					"year": 2022,
+					"month": 7,
+					"day": 30
+				},
+				{
+					"year": 2022,
+					"month": 8,
+					"day": 15
+				},
+				{
+					"year": 2022,
+					"month": 8,
+					"day": 31
+				},
+				{
+					"year": 2022,
+					"month": 9,
+					"day": 16
+				},
+				{
+					"year": 2022,
+					"month": 10,
+					"day": 2
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -4205,8 +5608,7 @@
 			"tipus": null,
 			"nom": "ETM30_GironaBarcelonaED50",
 			"desc": "Landsat ETM+ 30 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -4219,12 +5621,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 7 Sensor ETM+",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -4237,8 +5637,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -4261,11 +5660,12 @@
 			"ParamCoverage": 0,
 			"FormatCoverage": 0,
 			"ResCoverage": 0,
-			"metadades": {"standard" :"metadades/EPSG_23031/197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaED50",
 			"DescVideo": "Landsat TM/ETM+ Girona-Barcelona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -4274,8 +5674,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1999,
 					"month": 7,
@@ -4920,8 +6319,7 @@
 			"tipus": null,
 			"nom": "ETM30_GironaBarcelonaETRS89",
 			"desc": "Landsat ETM+ 30 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -4934,12 +6332,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 7 Sensor ETM+",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -4952,8 +6348,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -4976,11 +6371,12 @@
 			"ParamCoverage": 0,
 			"FormatCoverage": 0,
 			"ResCoverage": 0,
-			"metadades": {"standard" : "metadades/EPSG_25831/197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaETRS89",
 			"DescVideo": "Landsat TM/ETM+/OLI-TIRS Girona-Barcelona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -4989,8 +6385,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1999,
 					"month": 7,
@@ -5620,8 +7015,7 @@
 			"tipus": null,
 			"nom": "TM30_GironaBarcelonaED50",
 			"desc": "Landsat TM30 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -5634,12 +7028,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 4-5 Sensor TM",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -5652,8 +7044,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -5676,11 +7067,12 @@
 			"ParamCoverage": 1,
 			"FormatCoverage": 1,
 			"ResCoverage": 1,
-			"metadades": {"standard" :"metadades/EPSG_23031/197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaED50",
 			"DescVideo": "Landsat TM/ETM+ Girona-Barcelona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -5689,8 +7081,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 6,
@@ -6545,8 +7936,7 @@
 			"tipus": null,
 			"nom": "TM30_GironaBarcelonaETRS89",
 			"desc": "Landsat TM30 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -6559,12 +7949,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 4-5 Sensor TM",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -6577,8 +7965,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -6601,11 +7988,12 @@
 			"ParamCoverage": 1,
 			"FormatCoverage": 1,
 			"ResCoverage": 1,
-			"metadades": {"standard" :"metadades/EPSG_25831/197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaETRS89",
 			"DescVideo": "Landsat TM/ETM+/OLI-TIRS Girona-Barcelona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -6614,8 +8002,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 6,
@@ -7400,8 +8787,7 @@
 			"tipus": null,
 			"nom": "MSS45_GironaBarcelona",
 			"desc": "Landsat MSS45 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -7426,11 +8812,12 @@
 			"ParamCoverage": 3,
 			"FormatCoverage": 3,
 			"ResCoverage": 3,
-			"metadades": {"standard" :"metadades/EPSG_23031/MSS45_197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/MSS45_197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaMSSED50",
 			"DescVideo": "Landsat MSS Girona-Barcelona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -7439,8 +8826,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 4,
@@ -7525,8 +8911,7 @@
 			"tipus": null,
 			"nom": "MSS45_GironaBarcelona",
 			"desc": "Landsat MSS45 Girona-Barcelona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -7551,11 +8936,12 @@
 			"ParamCoverage": 3,
 			"FormatCoverage": 3,
 			"ResCoverage": 3,
-			"metadades": {"standard" :"metadades/EPSG_25831/MSS45_197_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/MSS45_197_{TIME}.htm"
+			},
 			"NomVideo": "LandSatGiBaMSSETRS89",
 			"DescVideo": "Landsat MSS Girona-Barcelona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -7564,8 +8950,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 4,
@@ -7661,12 +9046,10 @@
 			"grup": "imatges",
 			"separa": "<font size=1><br></font>Lleida-Tarragona",
 			"DescLlegenda": "Landsat 8 Sensor OLI-TIRS",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -7679,8 +9062,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -7703,11 +9085,12 @@
 			"ParamCoverage": 5,
 			"FormatCoverage": 5,
 			"ResCoverage": 5,
-			"metadades": {"standard" :"metadades/EPSG_25831/LC8_198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/LC8_198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaETRS89",
 			"DescVideo": "Landsat TM/ETM+/OLI-TIRS Lleida-Tarragona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -7716,8 +9099,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 2013,
 					"month": 4,
@@ -8458,21 +9840,81 @@
 					"month": 5,
 					"day": 12
 				},
-				{"year": 2020,"month": 5,"day": 28},				
-				{"year": 2020,"month": 6,"day": 13},
-				{"year": 2020,"month": 6,"day": 29},
-				{"year": 2020,"month": 7,"day": 15},
-				{"year": 2020,"month": 7,"day": 31},
-				{"year": 2020,"month": 8,"day": 16},
-				{"year": 2020,"month": 9,"day": 1},
-				{"year": 2020,"month": 9,"day": 17},
-				{"year": 2020,"month": 10,"day": 3},
-				{"year": 2020,"month": 10,"day": 19},
-				{"year": 2020,"month": 11,"day": 20},
-				{"year": 2020,"month": 12,"day": 6},
-				{"year": 2020,"month": 12,"day": 22},
-				{"year": 2021,"month": 1,"day": 7},
-				{"year": 2021,"month": 1,"day": 23}				
+				{
+					"year": 2020,
+					"month": 5,
+					"day": 28
+				},
+				{
+					"year": 2020,
+					"month": 6,
+					"day": 13
+				},
+				{
+					"year": 2020,
+					"month": 6,
+					"day": 29
+				},
+				{
+					"year": 2020,
+					"month": 7,
+					"day": 15
+				},
+				{
+					"year": 2020,
+					"month": 7,
+					"day": 31
+				},
+				{
+					"year": 2020,
+					"month": 8,
+					"day": 16
+				},
+				{
+					"year": 2020,
+					"month": 9,
+					"day": 1
+				},
+				{
+					"year": 2020,
+					"month": 9,
+					"day": 17
+				},
+				{
+					"year": 2020,
+					"month": 10,
+					"day": 3
+				},
+				{
+					"year": 2020,
+					"month": 10,
+					"day": 19
+				},
+				{
+					"year": 2020,
+					"month": 11,
+					"day": 20
+				},
+				{
+					"year": 2020,
+					"month": 12,
+					"day": 6
+				},
+				{
+					"year": 2020,
+					"month": 12,
+					"day": 22
+				},
+				{
+					"year": 2021,
+					"month": 1,
+					"day": 7
+				},
+				{
+					"year": 2021,
+					"month": 1,
+					"day": 23
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -8487,8 +9929,7 @@
 			"tipus": null,
 			"nom": "ETM30_LleidaTarragonaED50",
 			"desc": "Landsat ETM+ 30 Lleida-Tarragona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -8501,12 +9942,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 7 Sensor ETM+",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -8519,8 +9958,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -8543,11 +9981,12 @@
 			"ParamCoverage": 0,
 			"FormatCoverage": 0,
 			"ResCoverage": 0,
-			"metadades": {"standard" :"metadades/EPSG_23031/198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaED50",
 			"DescVideo": "Landsat TM/ETM+ Lleida-Tarragona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -8556,8 +9995,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1999,
 					"month": 7,
@@ -9237,8 +10675,7 @@
 			"tipus": null,
 			"nom": "ETM30_LleidaTarragonaETRS89",
 			"desc": "Landsat ETM+ 30 Lleida-Tarragona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -9251,12 +10688,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 7 Sensor ETM+",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -9269,8 +10704,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -9293,11 +10727,12 @@
 			"ParamCoverage": 0,
 			"FormatCoverage": 0,
 			"ResCoverage": 0,
-			"metadades": {"standard" :"metadades/EPSG_25831/198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaETRS89",
 			"DescVideo": "Landsat TM/ETM+ Lleida-Tarragona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -9306,8 +10741,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1999,
 					"month": 7,
@@ -9942,8 +11376,7 @@
 			"tipus": null,
 			"nom": "TM30_LleidaTarragonaED50",
 			"desc": "Landsat TM30 Lleida-Tarragona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:23031"
 			],
 			"EnvTotal": null,
@@ -9956,12 +11389,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 4-5 Sensor TM",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -9974,8 +11405,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -9998,11 +11428,12 @@
 			"ParamCoverage": 1,
 			"FormatCoverage": 1,
 			"ResCoverage": 1,
-			"metadades": {"standard" :"metadades/EPSG_23031/198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaED50",
 			"DescVideo": "Landsat TM/ETM+ Lleida-Tarragona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -10011,8 +11442,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 5,
@@ -10937,8 +12367,7 @@
 			"tipus": null,
 			"nom": "TM30_LleidaTarragonaETRS89",
 			"desc": "Landsat TM30 Lleida-Tarragona",
-			"CRS": 
-			[
+			"CRS": [
 				"EPSG:25831"
 			],
 			"EnvTotal": null,
@@ -10951,12 +12380,10 @@
 			"grup": "imatges",
 			"separa": null,
 			"DescLlegenda": "Landsat 4-5 Sensor TM",
-			"estil": 
-			[
+			"estil": [
 				{
 					"nom": "opti_nat",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Color natural",
 						"spa": "Color natural",
 						"eng": "True color"
@@ -10969,8 +12396,7 @@
 				},
 				{
 					"nom": "opti_fals",
-					"desc": 
-					{
+					"desc": {
 						"cat": "Fals color",
 						"spa": "Falso color",
 						"eng": "False color"
@@ -10993,11 +12419,12 @@
 			"ParamCoverage": 1,
 			"FormatCoverage": 1,
 			"ResCoverage": 1,
-			"metadades": {"standard" :"metadades/EPSG_25831/198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaETRS89",
 			"DescVideo": "Landsat TM/ETM+ Lleida-Tarragona ETR89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -11006,8 +12433,7 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
+			"data": [
 				{
 					"year": 1984,
 					"month": 5,
@@ -11737,7 +13163,9 @@
 			"tipus": null,
 			"nom": "MSS45_LleidaTarragona",
 			"desc": "Landsat MSS45 Lleida-Tarragona",
-			"CRS": ["EPSG:23031"],
+			"CRS": [
+				"EPSG:23031"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -11760,11 +13188,12 @@
 			"ParamCoverage": 3,
 			"FormatCoverage": 3,
 			"ResCoverage": 3,
-			"metadades": {"standard" :"metadades/EPSG_23031/MSS45_198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/MSS45_198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaMSSED50",
 			"DescVideo": "Landsat MSS Lleida-Tarragona ED50",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -11773,27 +13202,102 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1984,"month": 5,"day": 9},
-				{"year": 1984,"month": 5,"day": 25},
-				{"year": 1984,"month": 6,"day": 26},
-				{"year": 1984,"month": 10,"day": 16},
-				{"year": 1984,"month": 11,"day": 1},
-				{"year": 1984,"month": 11,"day": 17},
-				{"year": 1984,"month": 12,"day": 19},
-				{"year": 1985,"month": 1,"day": 4},
-				{"year": 1985,"month": 1,"day": 20},
-				{"year": 1985,"month": 2,"day": 21},
-				{"year": 1985,"month": 3,"day": 25},
-				{"year": 1985,"month": 4,"day": 10},
-				{"year": 1987,"month": 4,"day": 16},
-				{"year": 1987,"month": 5,"day": 2},
-				{"year": 1987,"month": 5,"day": 18},
-				{"year": 1987,"month": 6,"day": 3},
-				{"year": 1987,"month": 7,"day": 5},
-				{"year": 1987,"month": 9,"day": 7},
-				{"year": 1987,"month": 9,"day": 23}
+			"data": [
+				{
+					"year": 1984,
+					"month": 5,
+					"day": 9
+				},
+				{
+					"year": 1984,
+					"month": 5,
+					"day": 25
+				},
+				{
+					"year": 1984,
+					"month": 6,
+					"day": 26
+				},
+				{
+					"year": 1984,
+					"month": 10,
+					"day": 16
+				},
+				{
+					"year": 1984,
+					"month": 11,
+					"day": 1
+				},
+				{
+					"year": 1984,
+					"month": 11,
+					"day": 17
+				},
+				{
+					"year": 1984,
+					"month": 12,
+					"day": 19
+				},
+				{
+					"year": 1985,
+					"month": 1,
+					"day": 4
+				},
+				{
+					"year": 1985,
+					"month": 1,
+					"day": 20
+				},
+				{
+					"year": 1985,
+					"month": 2,
+					"day": 21
+				},
+				{
+					"year": 1985,
+					"month": 3,
+					"day": 25
+				},
+				{
+					"year": 1985,
+					"month": 4,
+					"day": 10
+				},
+				{
+					"year": 1987,
+					"month": 4,
+					"day": 16
+				},
+				{
+					"year": 1987,
+					"month": 5,
+					"day": 2
+				},
+				{
+					"year": 1987,
+					"month": 5,
+					"day": 18
+				},
+				{
+					"year": 1987,
+					"month": 6,
+					"day": 3
+				},
+				{
+					"year": 1987,
+					"month": 7,
+					"day": 5
+				},
+				{
+					"year": 1987,
+					"month": 9,
+					"day": 7
+				},
+				{
+					"year": 1987,
+					"month": 9,
+					"day": 23
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -11808,7 +13312,9 @@
 			"tipus": null,
 			"nom": "MSS45_LleidaTarragona",
 			"desc": "Landsat MSS45 Lleida-Tarragona",
-			"CRS": ["EPSG:25831"],
+			"CRS": [
+				"EPSG:25831"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -11831,11 +13337,12 @@
 			"ParamCoverage": 3,
 			"FormatCoverage": 3,
 			"ResCoverage": 3,
-			"metadades": {"standard" :"metadades/EPSG_25831/MSS45_198_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/MSS45_198_{TIME}.htm"
+			},
 			"NomVideo": "LandSatLlTaMSSETRS89",
 			"DescVideo": "Landsat MSS Lleida-Tarragona ETRS89",
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -11844,27 +13351,102 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1984,"month": 5,"day": 9},
-				{"year": 1984,"month": 5,"day": 25},
-				{"year": 1984,"month": 6,"day": 26},
-				{"year": 1984,"month": 10,"day": 16},
-				{"year": 1984,"month": 11,"day": 1},
-				{"year": 1984,"month": 11,"day": 17},
-				{"year": 1984,"month": 12,"day": 19},
-				{"year": 1985,"month": 1,"day": 4},
-				{"year": 1985,"month": 1,"day": 20},
-				{"year": 1985,"month": 2,"day": 21},
-				{"year": 1985,"month": 3,"day": 25},
-				{"year": 1985,"month": 4,"day": 10},
-				{"year": 1987,"month": 4,"day": 16},
-				{"year": 1987,"month": 5,"day": 2},
-				{"year": 1987,"month": 5,"day": 18},
-				{"year": 1987,"month": 6,"day": 3},
-				{"year": 1987,"month": 7,"day": 5},
-				{"year": 1987,"month": 9,"day": 7},
-				{"year": 1987,"month": 9,"day": 23}
+			"data": [
+				{
+					"year": 1984,
+					"month": 5,
+					"day": 9
+				},
+				{
+					"year": 1984,
+					"month": 5,
+					"day": 25
+				},
+				{
+					"year": 1984,
+					"month": 6,
+					"day": 26
+				},
+				{
+					"year": 1984,
+					"month": 10,
+					"day": 16
+				},
+				{
+					"year": 1984,
+					"month": 11,
+					"day": 1
+				},
+				{
+					"year": 1984,
+					"month": 11,
+					"day": 17
+				},
+				{
+					"year": 1984,
+					"month": 12,
+					"day": 19
+				},
+				{
+					"year": 1985,
+					"month": 1,
+					"day": 4
+				},
+				{
+					"year": 1985,
+					"month": 1,
+					"day": 20
+				},
+				{
+					"year": 1985,
+					"month": 2,
+					"day": 21
+				},
+				{
+					"year": 1985,
+					"month": 3,
+					"day": 25
+				},
+				{
+					"year": 1985,
+					"month": 4,
+					"day": 10
+				},
+				{
+					"year": 1987,
+					"month": 4,
+					"day": 16
+				},
+				{
+					"year": 1987,
+					"month": 5,
+					"day": 2
+				},
+				{
+					"year": 1987,
+					"month": 5,
+					"day": 18
+				},
+				{
+					"year": 1987,
+					"month": 6,
+					"day": 3
+				},
+				{
+					"year": 1987,
+					"month": 7,
+					"day": 5
+				},
+				{
+					"year": 1987,
+					"month": 9,
+					"day": 7
+				},
+				{
+					"year": 1987,
+					"month": 9,
+					"day": 23
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -11878,13 +13460,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_212",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 212) Girona",
 				"spa": "Landsat MSS13 (órbita 212) Girona",
 				"eng": "Landsat MSS13 (orbit 212) Girona"
 			},
-			"CRS": ["EPSG:23031"],
+			"CRS": [
+				"EPSG:23031"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -11893,8 +13476,7 @@
 			"TileMatrixSet": null,
 			"FormatConsulta": "text/xml",
 			"grup": "imatges",
-			"separa": 
-			{
+			"separa": {
 				"cat": "<font size=1><br></font>órbita 212 Girona",
 				"spa": "<font size=1><br></font>órbita 212 Girona",
 				"eng": "<font size=1><br></font>orbit 212 Girona"
@@ -11912,16 +13494,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_23031/MSS13_212_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/MSS13_212_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_212ED50",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 212) Girona ED50",
 				"spa": "Landsat MSS 1-2-3 (órbita 212) Girona ED50",
 				"eng": "Landsat MSS 1-2-3 (orbit 212) Girona ED50"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -11930,11 +13512,22 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 11,"day": 15},
-				{"year": 1973,"month": 3,"day": 21},
-				{"year": 1975,"month": 7,"day": 6}
+			"data": [
+				{
+					"year": 1972,
+					"month": 11,
+					"day": 15
+				},
+				{
+					"year": 1973,
+					"month": 3,
+					"day": 21
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 6
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -11948,13 +13541,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_212",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 212) Girona",
 				"spa": "Landsat MSS13 (órbita 212) Girona",
 				"eng": "Landsat MSS13 (orbit 212) Girona"
 			},
-			"CRS": ["EPSG:25831"],
+			"CRS": [
+				"EPSG:25831"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -11977,16 +13571,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_25831/MSS13_212_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/MSS13_212_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_212ETRS89",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 212) Girona ETRS89",
 				"spa": "Landsat MSS 1-2-3 (órbita 212) Girona ETRS89",
 				"eng": "Landsat MSS 1-2-3 (orbit 212) Girona ETRS89"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -11995,11 +13589,22 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 11,"day": 15},
-				{"year": 1973,"month": 3,"day": 21},
-				{"year": 1975,"month": 7,"day": 6}
+			"data": [
+				{
+					"year": 1972,
+					"month": 11,
+					"day": 15
+				},
+				{
+					"year": 1973,
+					"month": 3,
+					"day": 21
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 6
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -12013,13 +13618,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_213",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 213) Centre",
 				"spa": "Landsat MSS13 (órbita 213) Centro",
 				"eng": "Landsat MSS13 (orbit 213) Center"
 			},
-			"CRS": ["EPSG:23031"],
+			"CRS": [
+				"EPSG:23031"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -12028,8 +13634,7 @@
 			"TileMatrixSet": null,
 			"FormatConsulta": "text/xml",
 			"grup": "imatges",
-			"separa": 
-			{
+			"separa": {
 				"cat": "<font size=1><br></font>órbita 213 Centre",
 				"spa": "<font size=1><br></font>órbita 213 Centro",
 				"eng": "<font size=1><br></font>orbit 213 Center"
@@ -12047,16 +13652,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_23031/MSS13_213_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/MSS13_213_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_213ED50",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 213) Centre ED50",
 				"spa": "Landsat MSS 1-2-3 (órbita 213) Centro ED50",
 				"eng": "Landsat MSS 1-2-3 (orbit 213) Center ED50"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -12065,12 +13670,27 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8,"day": 18},
-				{"year": 1973,"month": 10,"day": 24},
-				{"year": 1975,"month": 6,"day": 19},
-				{"year": 1975,"month": 7,"day": 7}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8,
+					"day": 18
+				},
+				{
+					"year": 1973,
+					"month": 10,
+					"day": 24
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 19
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 7
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -12084,13 +13704,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_213",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 213) Centre",
 				"spa": "Landsat MSS13 (órbita 213) Centro",
 				"eng": "Landsat MSS13 (orbit 213) Center"
 			},
-			"CRS": ["EPSG:25831"],
+			"CRS": [
+				"EPSG:25831"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -12113,16 +13734,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_25831/MSS13_213_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/MSS13_213_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_213ETRS89",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 213) Centre ETRS89",
 				"spa": "Landsat MSS 1-2-3 (órbita 213) Centro ETRS89",
 				"eng": "Landsat MSS 1-2-3 (orbit 213) Center ETRS89"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -12131,12 +13752,27 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8,"day": 18},
-				{"year": 1973,"month": 10,"day": 24},
-				{"year": 1975,"month": 6,"day": 19},
-				{"year": 1975,"month": 7,"day": 7}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8,
+					"day": 18
+				},
+				{
+					"year": 1973,
+					"month": 10,
+					"day": 24
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 19
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 7
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -12150,13 +13786,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_214",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 214) Lleida",
 				"spa": "Landsat MSS13 (órbita 214) Lleida",
 				"eng": "Landsat MSS13 (orbit 2134 Lleida"
 			},
-			"CRS": ["EPSG:23031"],
+			"CRS": [
+				"EPSG:23031"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -12165,8 +13802,7 @@
 			"TileMatrixSet": null,
 			"FormatConsulta": "text/xml",
 			"grup": "imatges",
-			"separa": 
-			{
+			"separa": {
 				"cat": "<font size=1><br></font>órbita 214 Lleida",
 				"spa": "<font size=1><br></font>órbita 214 Lleida",
 				"eng": "<font size=1><br></font>orbit 214 Lleida"
@@ -12184,16 +13820,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_23031/MSS13_214_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_23031/MSS13_214_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_214ED50",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 214) Lleida ED50",
 				"spa": "Landsat MSS 1-2-3 (órbita 214) Lleida ED50",
 				"eng": "Landsat MSS 1-2-3 (orbit 214) Lleida ED50"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -12202,13 +13838,32 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8,"day": 19},
-				{"year": 1975,"month": 6,"day": 2},
-				{"year": 1975,"month": 6,"day": 20},
-				{"year": 1975,"month": 7,"day": 26},
-				{"year": 1980,"month": 4,"day": 9}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8,
+					"day": 19
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 2
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 20
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 26
+				},
+				{
+					"year": 1980,
+					"month": 4,
+					"day": 9
+				}
 			],
 			"i_data": -1,
 			"animable": true,
@@ -12222,13 +13877,14 @@
 			"versio": null,
 			"tipus": null,
 			"nom": "MSS13_214",
-			"desc": 
-			{
+			"desc": {
 				"cat": "Landsat MSS13 (órbita 214) Lleida",
 				"spa": "Landsat MSS13 (órbita 214) Lleida",
 				"eng": "Landsat MSS13 (orbit 2134 Lleida"
 			},
-			"CRS": ["EPSG:25831"],
+			"CRS": [
+				"EPSG:25831"
+			],
 			"EnvTotal": null,
 			"FormatImatge": "image/jpeg",
 			"transparencia": "opac",
@@ -12251,16 +13907,16 @@
 			"ParamCoverage": 4,
 			"FormatCoverage": 4,
 			"ResCoverage": 4,
-			"metadades": {"standard" :"metadades/EPSG_25831/MSS13_214_{TIME}.htm"},
+			"metadades": {
+				"standard": "metadades/EPSG_25831/MSS13_214_{TIME}.htm"
+			},
 			"NomVideo": "LandSatMSS13_214ETRS89",
-			"DescVideo": 
-			{
+			"DescVideo": {
 				"cat": "Landsat MSS 1-2-3 (órbita 214) Lleida ETRS89",
 				"spa": "Landsat MSS 1-2-3 (órbita 214) Lleida ETRS89",
 				"eng": "Landsat MSS 1-2-3 (orbit 214) Lleida ETRS89"
 			},
-			"FlagsData": 
-			{
+			"FlagsData": {
 				"DataMostraAny": true,
 				"DataMostraMes": true,
 				"DataMostraDia": true,
@@ -12269,13 +13925,32 @@
 				"DataMostraSegon": false,
 				"DataMostraDescLlegenda": false
 			},
-			"data": 
-			[
-				{"year": 1972,"month": 8,"day": 19},
-				{"year": 1975,"month": 6,"day": 2},
-				{"year": 1975,"month": 6,"day": 20},
-				{"year": 1975,"month": 7,"day": 26},
-				{"year": 1980,"month": 4,"day": 9}
+			"data": [
+				{
+					"year": 1972,
+					"month": 8,
+					"day": 19
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 2
+				},
+				{
+					"year": 1975,
+					"month": 6,
+					"day": 20
+				},
+				{
+					"year": 1975,
+					"month": 7,
+					"day": 26
+				},
+				{
+					"year": 1980,
+					"month": 4,
+					"day": 9
+				}
 			],
 			"i_data": -1,
 			"animable": true,
