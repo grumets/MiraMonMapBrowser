@@ -96,9 +96,9 @@
 		{
 			"name": "atribucio",
 			"left": 243,
-			"top": 866,
+			"top": 860,
 			"width": 1012,
-			"height": 16,
+			"height": 20,
 			"ancora": "SEwR",
 			"scroll": "no",
 			"visible": true,
