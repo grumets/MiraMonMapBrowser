@@ -14,7 +14,7 @@ The MiraMon Map Browser code can be found in the SRC folder. To test it, you can
 The code of the MiraMon Map Browser can be used with no modification. However it requires a config.json file that configures the Map Browser behavior including the list of layers that can be shown and query. Since the config.json is specific of you deployment, the SRC folder does not contain a config.json file. This prevents accidental loss of your instance configuration when updating to a new version of the code. 
 
 ## How to create a config.json
-One easy way to start a MiraMon Map Browser deployment, is to take one of the examples of config.json documents can be found in [the examples](src/examples) folder and copying the selected one to the root of your deployment as "config.json". You can also copy the folder containing the images (folder ending with "-img") one level down.
+One easy way to start a MiraMon Map Browser deployment, is to take one of the examples of config.json documents can be found in the [examples](src/examples) folder and copying the selected one to the root of your deployment as "config.json". You can also copy the folder containing the images (folder ending with "-img") one level down.
 
 You can request a Windows application called Adm_MMN.exe (that is part of the MiraMon products) to edit some parts of config.json in a user friendly way by sending a request to suport@miramon.uab.cat (unfortunately this application does not allow configuring the more recent functionalities).
 
@@ -46,7 +46,7 @@ Catalan Data Cube with COG: https://www.datacube.cat/cdc-cog/
 * Illustrate that the same capacities are possible with COG format.
 * Show the possibility to load a local TIFF or GeoJSON
 
-ECOPotential: http://maps.ecopotential-project.eu/
+ECOPotential: https://maps.ecopotential-project.eu/
 *	In Swiss National Park filter the landcover by the park border.
 *	Compare pies with and without the border filter
 *	Geospatial user feedback in canopy height in Swiss National Park
