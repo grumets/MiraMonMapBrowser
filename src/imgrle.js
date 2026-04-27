@@ -775,7 +775,7 @@ var j, i, comptador, acumulat, i_byte=0, bytesDadaType=DonaBytesDataType(datatyp
 					{
 						i_byte+=bytesDadaType;
 					}
-               			}
+               	}
 			}
 		}
 		return 0; //No s'hauria de sortir mai per aquí
@@ -1607,7 +1607,7 @@ This is especially handy for Canvas image processing algorithms since now you do
 image processing math to avoid overflowing the 8-bit range.
 'data' es un array de dades que servirà per enviar al canvas
 'histograma' pot contenir una variable on escriure histograma. Pot ser null si es vol obtenir un histograma.
-'dv' són les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bades però moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...);
+'dv' són les dades a treballar que seran explorades per funcions tipus dv[i].getUint8(). N'hi ha tantes com bandes però moltes poden ser null si no apareixen a la formula. Es poden obtenir amb CarregaDataViewsCapa(dv, ...);
 'mes_duna_v' Indica si hi ha més d'una dv[] carregada. Es pot fer servir CarregaDataViewsCapa()-1
 'component' és capa.estil[i_estil].component
 'valors' és capa.valors. No es mira la part on hi ha els arrays binaris perquè això està a dv.
@@ -1651,6 +1651,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 			{
 				if (typeof colors[i_color0]==="object")
 					colors[i_color0]=RGB_JSON(colors[i_color0]);
+				colors[i_color0]=rgbaToHex(colors[i_color0]);
 				if (typeof colors[i_color0]!=="string" ||colors[i_color0].charAt(0)!="#")
 				{
 					alert(GetMessage("UnsupportedColor", "imgrle") + ": " + colors[i_color0] + ". " + GetMessage("UseTheFormat") + ": #RRGGBB");
@@ -1762,7 +1763,7 @@ var colors, ncolors, valors_i, nodata, una_component, bytesDadaType_i;
 	{
 		for (j=0;j<nfil;j++)
 		{
-			OmpleMultiFilaDVDesDeBinaryArray(fila, dv, valors, ncol, i_byte, i_cell)
+			OmpleMultiFilaDVDesDeBinaryArray(fila, dv, valors, ncol, i_byte, i_cell);
 			//Segon passem la fila a colors RGB
 			if (una_component)
 			{
@@ -2641,6 +2642,7 @@ var data;
 	}
 }
 
+
 //Si imatge==null aquest funció no dibuixarà però servirà per carregar totes les bandes necessaries. Això és útil per attributes calculats de capes vectorials a partir de capes raster.
 function CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
@@ -2829,7 +2831,7 @@ var i_estil2=(i_estil==-1) ? ParamCtrl.capa[i_capa].i_estil : i_estil;
 				if(window.httploadHeif && ParamCtrl.capa[i_capa2].FormatImatge=="image/heif")					
 					httploadHeif(url_dades, CanviaImatgeBinariaCapaCallback, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :funcio_ok_param});
 				else
-					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param :	 funcio_ok_param});
+					loadBinaryFile(url_dades, "application/x-img", CanviaImatgeBinariaCapaCallback, 11, ErrorImatgeBinariaCapaCallback, {imatge: imatge, vista: vista, i_capa: i_capa, i_data: i_data2, i_estil: i_estil2, i_valor: i, i_event: i_event, nom_funcio_ok : nom_funcio_ok, funcio_ok_param : funcio_ok_param});
 			}
 		}
 	}

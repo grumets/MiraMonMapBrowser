@@ -262,7 +262,7 @@ var i, geometry, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300};
 		geometry=capa.objectes.features[i].geometry;
 		env=DonaEnvCalculatGeometry(geometry, env);
 	}
-	return {"EnvCRS": env, "CRS": capa.CRSgeometry};
+	return {"EnvCRS": JSON.parse(JSON.stringify(env)), "CRS": capa.CRSgeometry};
 }
 
 function ZoomACapa(capa)
@@ -396,7 +396,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		}
 		else if(capa.metadades.standard && DonaCadena(capa.metadades) && DonaExtensioFitxerSensePunt(DonaNomFitxerMetadades(capa, -1)).toLowerCase()=="xml")
 		{
-			//Puc obtenir la qualitat de les metadades
+			// Puc obtenir la qualitat de les metadades
 			cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraMostraQualitatCapa(false,",i_capa,", -1);TancaContextMenuCapa();\">",
 					GetMessage("Quality"), "</a><br>");
 			if(!alguna_opcio)
@@ -466,7 +466,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (EsCapaBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio && capa.estil[capa.i_estil].component[0].representacio.tipus=="3d")
+	if (EsCapaBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].component && capa.estil[capa.i_estil].component.length>0 && capa.estil[capa.i_estil].component[0].representacio && capa.estil[capa.i_estil].component[0].representacio.tipus=="3d")
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraSuperficie3D(", i_capa, ");TancaContextMenuCapa();\">", GetMessage("Surface", "cntxmenu"), " 3D</a><br>");

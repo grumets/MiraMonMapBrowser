@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -1825,12 +1825,10 @@ S'ha de cridar ABANS de crear la DIV corresponent.
 */
 function textHTMLiframeLayer(name, left, top, width, height, visible)
 {
-var s="";
-	if (NecessariLayerIFrame)
-	{
-	      s='<iframe src="blanc.htm" id="iframe_' + name + '" style="position:absolute; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + '"></iframe>';
+	if (NecessariLayerIFrame){
+	      return '<iframe src="blanc.htm" id="iframe_' + name + '" style="position:absolute; left:' + left + 'px; top:' + top + 'px; width:' + width + 'px; height:' + height + 'px;' + ' visibility:' + (visible ? 'visible;' : 'hidden;') + '"></iframe>';
 	}
-	return s;
+	return "";
 }
 
 function getLayer(win, name)

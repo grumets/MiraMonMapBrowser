@@ -241,12 +241,12 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			if (authResponse.error)
 			{
 				alert(authResponse.error.message)
-				return;
+				return null;
 			}
 			if (authResponse.error_description)
 			{
 				alert(authResponse.error_description)
-				return;
+				return null;
 			}
 			var tiff = await GeoTIFFfromUrl(url, {headers: {"Authorization":"Bearer "+authResponse.access_token}});
 		}
@@ -369,7 +369,7 @@ var bbox, width, height, dades, env_tiff;
 		height=vista.nfil;
 	}
 
-	//Demano la imatge en el sistema propi del tiff
+	// Demano la imatge en el sistema propi del tiff
 	var data = await tiff.readRasters({samples: [capa2.valors[i_valor2].iBand ? capa2.valors[i_valor2].iBand : 0], 
 					bbox: bbox, 
 					width: width, height: height, 
