@@ -116,6 +116,7 @@ IncludeScript("vis.min.js", true);
 IncludeScript("md5.min.js", true);
 IncludeScript("websubhook.js", true);
 
+IncludeScript("imgheif.js", true);
 
 IncludeScript("msg.js", true);
 
@@ -655,7 +656,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	}
 
 	
-	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles"/*|| tipus=="TipusGoogle_KVP"*/)
+	if (tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles" || EsCapaImatgeTessellacioInterna(capa) /*|| tipus=="TipusGoogle_KVP"*/)
 	{
 		capa.VistaCapaTiled={"TileMatrix": null, "ITileMin": 0, "ITileMax": 0, "JTileMin": 0, "JTileMax": 0, "dx": 0, "dy": 0};
 	}
@@ -1322,9 +1323,9 @@ function ComprovaDisponibilitatIdiomaPreferit()
 	{
 		return defaultLanguage;
 	}
-} // Fi function ComprovaDisponibilitatIdiomaPreferit()
+} // Fi comprovaDisponibilitatIdiomaPreferit()
 
-function DonaIndexNivellZoom(costat)
+function DonaIndexNivellZoom(costat)  // Aquesta funció està dissenyada per no haver de comprovar el retorn
 {
 	for (var i=0; i<ParamCtrl.zoom.length; i++)
 	{
@@ -1333,6 +1334,7 @@ function DonaIndexNivellZoom(costat)
 	}
 	return 0;
 }
+
 
 /*Dona el costat de píxel igual o immediatament inferior al demanat o -1.
 function DonaIndexNivellZoomFloor(costat)
@@ -1427,6 +1429,39 @@ function DonaIndexTileMatrix(i_capa, i_tile_matrix_set, costat)
 	return -1;
 }
 
+function DonaIndexTileMatrixMesProper(i_capa, i_tile_matrix_set, costat)
+{
+	var i, tms=ParamCtrl.capa[i_capa].TileMatrixSet[i_tile_matrix_set];
+	for (i=0; i<tms.TileMatrix.length; i++)
+	{
+		if (tms.TileMatrix[i].costat>costat*0.9999 && tms.TileMatrix[i].costat<costat*1.0001)
+			return {index: i, tipus: "exacte"};
+	}
+	if(EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
+	{
+		var costat_per_sobre=+1e300, costat_per_sota=-1e300, i_proper_per_sobre=-1, i_proper_per_sota=-1;
+		for(i=0; i<tms.TileMatrix.length; i++)
+		{
+			if (costat_per_sobre > tms.TileMatrix[i].costat && tms.TileMatrix[i].costat > costat)
+			{
+				costat_per_sobre=tms.TileMatrix[i].costat;
+				i_proper_per_sobre=i;
+			}
+			if (costat_per_sota < tms.TileMatrix[i].costat && tms.TileMatrix[i].costat < costat)
+			{
+				costat_per_sota=tms.TileMatrix[i].costat;
+				i_proper_per_sota=i;
+			}
+		}
+		if(i_proper_per_sota!=-1)
+			return {index: i_proper_per_sota, tipus: "per_sota"};
+		
+		if(i_proper_per_sobre!=-1)
+			return {index: i_proper_per_sobre, tipus: "per_sobre"};
+		
+	}	
+	return {index: -1, tipus: "no_trobat"};
+}
 
 function GuardaVistaPrevia()
 {
@@ -1742,6 +1777,12 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 				}
 			}
 		}
+		else if (capa.FormatImatge=="image/heif" )
+		{
+			// Esborro els objectes tiff
+			if(capa.heif)
+				delete capa.heif;
+		}
 		DescarregaSimbolsCapaDigi(capa);
 		if (capa.tileMatrixSetGeometry)
 		{
@@ -2012,14 +2053,14 @@ var cdns=[], i;
 
 	if (ParamCtrl.DesplegableProj && ParamCtrl.ImatgeSituacio.length>1)
 	{
-		cdns.push("<form name=\"FormulProjeccio\" onSubmit=\"return false;\"><select CLASS=\"text_petit\" name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value));\">");
+		cdns.push("<form name=\"FormulProjeccio\" onSubmit=\"return false;\"><select class=\"text_petit\" name=\"imatge\" onChange=\"CanviaCRSDeImatgeSituacio(parseInt(document.FormulProjeccio.imatge.value));\">");
 		if (ParamCtrl.CanviProjAuto)
 		{
-			cdns.push("<OPTION VALUE=\"-1\"",(ParamCtrl.araCanviProjAuto ? " SELECTED" : "") ,">",
+			cdns.push("<option value=\"-1\"",(ParamCtrl.araCanviProjAuto ? " selected" : "") ,">",
 				GetMessage("automatic"));
 			if (ParamCtrl.araCanviProjAuto)
 				cdns.push(" (", DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS), ")");
-			cdns.push("</OPTION>");
+			cdns.push("</option>");
 		}
 		//NJ_31_03_2017: Hi ha casos en que hi ha imatges de situació amb igual sistema de referència però diferent àmbit
 		//al desplegable de projeccions no té sentit que surtin repeticions, per tant, construeixo un array de crs,
@@ -2034,8 +2075,8 @@ var cdns=[], i;
 		crs_temp.removeDuplicates(OrdenacioCRSSituacio);
 		for (i=0; i<crs_temp.length; i++)
 		{
-			cdns.push("<OPTION VALUE=\"", crs_temp[i].i_situacio ,"\"",((!ParamCtrl.araCanviProjAuto && crs_temp[i].i_situacio==ParamInternCtrl.ISituacio) ? " SELECTED" : ""),">",
-				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[crs_temp[i].i_situacio].EnvTotal.CRS) , "</OPTION>");
+			cdns.push("<option value=\"", crs_temp[i].i_situacio ,"\"",((!ParamCtrl.araCanviProjAuto && crs_temp[i].i_situacio==ParamInternCtrl.ISituacio) ? " selected" : ""),">",
+				DonaDescripcioCRS(ParamCtrl.ImatgeSituacio[crs_temp[i].i_situacio].EnvTotal.CRS) , "</option>");
 		}
 		cdns.push("</select></form>");
 	}
@@ -2281,7 +2322,7 @@ function TancaFinestraLayer(nom_finestra)
 			}
 		}
 		if (estil.diagrama.length == 0)
-				delete estil.diagrama;
+			delete estil.diagrama;
 	}
 	else if (nom_finestra.length>prefixSuperficie3DFinestra.length && nom_finestra.substring(0, prefixSuperficie3DFinestra.length) == prefixSuperficie3DFinestra)
 	{
@@ -2301,9 +2342,8 @@ function TancaFinestraLayer(nom_finestra)
 			}
 		}
 		if (estil.diagrama.length == 0)
-				delete estil.diagrama;
+			delete estil.diagrama;
 	}
-	
 }
 
 function TancaFinestra_novaFinestra(nom, finestra)
@@ -2763,7 +2803,9 @@ var cdns=[], i, j, vista, capa;
 		{
 			capa=ParamCtrl.capa[i_capa];
 			if (EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(vista.i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : 0/*S'hauria de fer això però no se el nom de la vista: DonaIVista(nom_vista)*/, i_capa) &&
-				capa.model!=model_vector && HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
+				capa.model!=model_vector && 
+				!EsCapaImatgeSencera(capa) && !EsCapaImatgeTessellacioInterna(capa) &&
+				HiHaDadesBinariesPerAquestaCapa(i_nova_vista, i_capa))
 			{
 				var s=DonaValorEstilComATextDesDeValorsCapa(i_nova_vista, i_capa, DonaValorsDeDadesBinariesCapa(i_nova_vista, capa, null, i, j), true);
 				if (s=="")
@@ -3042,13 +3084,14 @@ var env_situa_actual=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTota
 
 function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 {
-	if(DonaTipusServidorCapa(c)=="TipusWMS_C" || DonaTipusServidorCapa(c)=="TipusWMTS_REST" || DonaTipusServidorCapa(c)=="TipusWMTS_KVP" || DonaTipusServidorCapa(c)=="TipusWMTS_SOAP" ||  DonaTipusServidorCapa(c)=="TipusOAPI_MapTiles")
+	var tipus=DonaTipusServidorCapa(c);
+	if( tipus=="TipusWMS_C" || tipus=="TipusWMTS_REST" || tipus=="TipusWMTS_KVP" || 
+		tipus=="TipusWMTS_SOAP" || tipus=="TipusOAPI_MapTiles" || tipus=="TipusHTTP_GET" && c.FormatImatge=="image/heif")
 	{
 		if(c.TileMatrixSet)
 		{
 			for (var i=0; i<c.TileMatrixSet.length; i++)
 			{
-				//·$· Que passa amb els sinònims de sistemes de referència??? ara mateix no es tenen en compte i no funcionen
 				if (c.TileMatrixSet[i].CRS &&
 					DonaCRSRepresentaQuasiIguals(c.TileMatrixSet[i].CRS, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 				{
@@ -3057,6 +3100,8 @@ function EsTileMatrixSetDeCapaDisponbleEnElCRSActual(c)
 			}
 			return false;
 		}
+		if(tipus=="TipusHTTP_GET" && c.FormatImatge=="image/heif")
+			return true;  // Perquè pot ser que no sigui tessel·lada i he de permetre els dos casos
 		return false;
 	}
 	return true;
@@ -3216,6 +3261,7 @@ function MMnewTileMatrixSetFromImageURL(wmts_img_url,tileCRS)
 
 	return myTileMatrixSet;
 }
+
 function CreaGetTileWMTS_SOAP(i_capa, i_tile_matrix, j, i)
 {
 	this.i_capa=i_capa;
@@ -3438,12 +3484,10 @@ var s, cdns=[], url_template, i_estil2, capa=ParamCtrl.capa[i_capa], tipus=DonaT
 		else
 			s=s.replace("{style}/", "");
 
-
 		if (capa.AnimableMultiTime)
 			s=s.replace("{time}", DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, i_data)], capa.FlagsData));
 		else
 			s=s.replace("{time}/", "");
-
 
 		s=s.replace("{TileMatrixSet}", capa.TileMatrixSet[i_tile_matrix_set].nom);
 		s=s.replace("{TileMatrix}", capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].Identifier);
@@ -4053,6 +4097,11 @@ function EsCapaImatgeSencera(capa)
 {
 	return capa.tipus=="TipusHTTP_GET" && 
 		(capa.FormatImatge=="image/png" || capa.FormatImatge=="image/jpeg" || capa.FormatImatge=="image/gif" || capa.FormatImatge=="image/heif");
+}
+
+function EsCapaImatgeTessellacioInterna(capa)
+{
+	return capa.tipus=="TipusHTTP_GET" && capa.FormatImatge=="image/heif" && capa.TileMatrixSet;
 }
 
 
@@ -4784,7 +4833,7 @@ var attributesArray=Object.keys(attributes), avis_mostrar_attributes=false;
 							attributes[attributesArray[j]].mostrar = "si";
 						else
 							attributes[attributesArray[j]].mostrar = "no";
-						}
+					}
 					else
 					{
 						if (!avis_mostrar_attributes)
@@ -4819,6 +4868,15 @@ function CanviaAtributsPerAttributesSiCalParamCtrl(prop, ref_source_attrib)
 		delete prop.atributs;
 	}
 }
+
+function OrdenacioCostatDescendent(z1,z2) {
+	// Descendent per costat
+	if ( z1.costat > z2.costat) return -1;
+	if ( z1.costat < z2.costat ) return 1;
+	return 0;
+}
+
+
 
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
@@ -4881,7 +4939,7 @@ var i, j;
 		if (capa.attributes)
 			ComprovaConsistenciaAttributesMostrar(capa.attributes, GetMessage("Layer") + " = " + DonaCadenaNomDesc(capa));
 
-		if ((capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img"))
+		if (capa.FormatImatge=="image/tiff" ||  capa.FormatImatge=="application/x-img")
 		{
 			if (!capa.valors || capa.valors.length==0)
 			{
@@ -4911,13 +4969,22 @@ var i, j;
 					ComprovaConsistenciaAttributesMostrar(estil.attributes, " capa = " + DonaCadenaNomDesc(capa) + " estil = " + DonaCadenaNomDesc(estil));
 			}
 		}
+		if(capa.TileMatrixSet)
+		{
+			for(j=0; j<capa.TileMatrixSet.length; j++)
+				capa.TileMatrixSet[j].TileMatrix.sort(OrdenacioCostatDescendent);
+		}
 	}
 
+	/*
+	NJ_24_03_2026: Enlloc de queixar-me ho reordeno com ho necessitem
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)
 	{
 		alert(GetMessage("ZoomSizesSortedBiggerFirst", "miramon"));
 		return 1;
-	}
+	}*/
+	param_ctrl.zoom.sort(OrdenacioCostatDescendent);
+	
 	for (i=0; i<param_ctrl.zoom.length; i++)
 		if (param_ctrl.zoom[i].costat==param_ctrl.NivellZoomCostat)
 			break;
@@ -4928,6 +4995,8 @@ var i, j;
 	}
 	return 0;
 }
+
+
 
 function AfegeixPuntsCapabilitiesACapaDePunts(layers, capaDePunts)
 {

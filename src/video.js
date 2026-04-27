@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -542,13 +542,13 @@ var capa=ParamCtrl.capa[i_capa_video_actiu];
 function CanviaImatgeCapaRodet(i_data_video, vista, i_capa, i_estil, i_data)
 {
 	var image=document.getElementById("rodet_i_raster"+i_data_video);
-	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaRodet, i_data_video);
+	CanviaImatgeCapa(image, null, vista, i_capa, i_estil, i_data, ActivaFotogramaRodet, i_data_video);// ·$· potser aquí hauré de fer algun canvi per canviar aquest null pel nom_vista
 }
 
 function CanviaImatgeCapaVideo(i_data_video, vista, i_capa, i_estil, i_data)
 {
 	var image=document.getElementById("video_i_raster"+i_data_video);
-	CanviaImatgeCapa(image, vista, i_capa, i_estil, i_data, ActivaFotogramaVideo, i_data_video);
+	CanviaImatgeCapa(image, null, vista, i_capa, i_estil, i_data, ActivaFotogramaVideo, i_data_video);// ·$· potser aquí hauré de fer algun canvi per canviar aquest null pel nom_vista
 }
 
 function CanviaImatgeCapaRefVideo(i_capa)
@@ -562,7 +562,7 @@ function CanviaImatgeCapaRefVideo(i_capa)
 		document.getElementById("video_m_raster_ref").innerHTML=cdns.join("");
 		document.getElementById("video_l_raster_ref").style.opacity=1;
 		var image=document.getElementById("video_i_raster_ref");
-		CanviaImatgeCapa(image, ParamInternCtrl.vista, i_capa, -1, null, null, null);
+		CanviaImatgeCapa(image, null, ParamInternCtrl.vista, i_capa, -1, null, null, null); // ·$· potser aquí hauré de fer algun canvi per canviar aquest null pel nom_vista
 	}
 }
 

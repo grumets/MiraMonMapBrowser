@@ -1110,17 +1110,17 @@ var elem=getLayer(window, "atribucio");
 }
 
 
-function OmpleVistaCapa(nom_vista, vista, i)
+function OmpleVistaCapa(nom_vista, vista, i_capa)
 {
-var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
-	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusHTTP_GET" || tipus=="TipusOAPI_Coverages")
+var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
+	if (tipus=="TipusWMS" || tipus=="TipusOAPI_Maps" || tipus=="TipusOAPI_Coverages" || (tipus=="TipusHTTP_GET" && !EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa])))
 	{
-		//var image=eval("this.document." + nom_vista + "_i_raster"+i);  //Això no funciona pel canvas.
+		//var image=eval("this.document." + nom_vista + "_i_raster"+i_capa);  //Això no funciona pel canvas.
 		var win=DonaWindowDesDeINovaVista(vista);
-		CanviaImatgeCapa(win.document.getElementById(nom_vista + "_i_raster"+i), vista, i, -1, null, null, null);
+		CanviaImatgeCapa(win.document.getElementById(nom_vista + "_i_raster"+i_capa), nom_vista, vista, i_capa, -1, null, null, null);
 	}
 	else
-		CreaMatriuCapaTiled(nom_vista, vista, i);
+		CreaMatriuCapaTiled(nom_vista, vista, i_capa);
 }
 
 //Aquesta funció està en desús i només es fa servir pel video. Useu DonaRequestGetMap() directament. 'estil' és el nom de l'estil o null per fer servir l'estiu predeterminat a l'estructura.
@@ -1166,12 +1166,12 @@ function onErrorCanviaImatge(event)
 	this.src="1tran.gif";
 }
 
-function CanviaImatgeCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+function CanviaImatgeCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
 var capa=ParamCtrl.capa[i_capa];
 
 	if (EsCapaImatgeSencera(capa))
-		CanviaImatgeSenceraCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+		CanviaImatgeSenceraCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else if (EsCapaBinaria(capa))
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else
@@ -1203,7 +1203,7 @@ var capa=ParamCtrl.capa[i_capa];
 				else*/
 				if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
 				{
-					AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
+					AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, nom_vista, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
 					return;
 				}
 			}
@@ -1256,36 +1256,92 @@ function CapaImatgeSenceraOnUnload(i_capa)
 	ParamCtrl.capa[i_capa].imageLoaded=false;
 }
 
-function CanviaImatgeSenceraCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+function CapaImatgeSenceraHeifOnLoad(param)
 {
-var capa=ParamCtrl.capa[i_capa];
+	if(!param)
+		return;
+	if(typeof param.i_capa!=="undefined")
+		ParamCtrl.capa[param.i_capa].imageLoaded=true;
+	if(typeof param.i_event!=="undefined")
+		CanviaEstatEventConsola(null, param.i_event, EstarEventTotBe);
+	CanviaImatgeSenceraCapa(param.imatge, param.nom_vista, param.vista, param.i_capa, param.i_estil, param.i_data);
+}
+
+function CapaImatgeSenceraHeifOnError(error)
+{
+	if(!error || !error.param)
+		return;
+	if(typeof error.param.i_capa!=="undefined")
+		ParamCtrl.capa[error.param.i_capa].imageLoaded=false;
+	if(typeof error.param.i_event!=="undefined")
+		CanviaEstatEventConsola(null, error.param.i_event, EstarEventError);
+}
+
+function CapaImatgeSenceraHeifOnUnload(param)
+{
+	if(param && typeof param.i_capa!=="undefined")
+		ParamCtrl.capa[param.i_capa].imageLoaded=false;
+}
+
+function CanviaImatgeSenceraCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data)
+{
+var capa=ParamCtrl.capa[i_capa], i_estil2=(i_estil==-1) ? capa.i_estil : i_estil;
 
 	/* és el canvas en el que es mostrarà la imatge a la resolució i àmbit que toca
 	i segueix aquesta nomenclatura 
-	"<canvas id=\"" + nom_vista + "_i_raster"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"*/
-	var ctx=imatge.getContext("2d");
-	var nom_vista="vista"; //·$· això s'ha de corregir
-	var imatgeSencera=document.getElementById(nom_vista + "_i_imatge"+i_capa);
+	"<canvas id=\"" + nom_vista + "_i_imatge"+i+"\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"*/
+	var ctx=imatge.getContext("2d"), nomImatgeSencera=nom_vista + "_i_imatge"+i_capa, imatgeSencera=document.getElementById(nomImatgeSencera);
 	if(!imatgeSencera)
 	{
-		var s, url=CanviaVariablesDeCadena(capa.servidor, capa, i_data, null);
+		var s, url=CanviaVariablesDeCadena(capa.servidor, capa, i_data, null), i_event;
 		capa.imageLoaded=false;
-		var i_event=CreaIOmpleEventConsola("HTTP GET", i_capa, url, TipusEventHttpGet);
 		if(capa.FormatImatge=="image/png" || capa.FormatImatge=="image/jpeg" || capa.FormatImatge=="image/gif"){
-			s="<img id=\""+nom_vista+"_i_imatge"+i_capa+"\" src=\""+url+"\" onLoad=\"CapaImatgeSenceraOnLoad("+i_event+","+i_capa+");\"" +
+			i_event=CreaIOmpleEventConsola("HTTP GET", i_capa, url, TipusEventHttpGet);
+			s="<img id=\""+nomImatgeSencera+"\" src=\""+url+"\" onLoad=\"CapaImatgeSenceraOnLoad("+i_event+","+i_capa+");\"" +
 			"onError=\"CapaImatgeSenceraOnError("+i_event+","+i_capa+");\" onUnload=\"CapaImatgeSenceraOnUnload("+i_capa+");\" style=\"display:none\">";
+			document.getElementById(ParamCtrl.containerName).insertAdjacentHTML("afterend",s);
+		}
+		else if(capa.FormatImatge=="image/heif"){
+			s="<canvas id=\""+nomImatgeSencera+"\" style=\"display:none\"></canvas>";
+			document.getElementById(ParamCtrl.containerName).insertAdjacentHTML("afterend",s);
+			
+			i_event=CreaIOmpleEventConsola("HTTP GET", i_capa, url, TipusEventHttpGet);
+			if (!GetHeifCapa(i_capa, i_estil2, i_data, vista))
+			{
+				var imatgeHeifEvent={i_event: i_event, imatge: imatge, nom_vista: nom_vista,
+					CanviaImatgeHeifIndirect: function (param){
+						if (param)
+						{
+							if(ParamCtrl.capa[param.i_capa].TileMatrixSet)
+							{
+								CanviaEstatEventConsola(null, param.i_event, EstarEventTotBe);
+								setTimeout(OmpleVistaCapa,1,this.nom_vista, param.vista, param.i_capa);
+								return;
+							}
+							LoadHeifData(this.imatge, this.nom_vista, param.vista, param.i_capa, param.i_estil, param.i_data, -1, -1, -1, -1, this.i_event, CapaImatgeSenceraHeifOnLoad).catch(CapaImatgeSenceraHeifOnError);
+						}
+						return;
+					},
+					ErrorImatgeHeifIndirect: function (error){
+						alert(error);						
+						CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+						// Hauria de possar la imatge a no visible
+						//·$·
+					}
+				};
+				PreparaLecturaHeif(vista, i_capa, i_estil2, i_data).then(imatgeHeifEvent.CanviaImatgeHeifIndirect.bind(imatgeHeifEvent), imatgeHeifEvent.ErrorImatgeHeifIndirect.bind(imatgeHeifEvent));				
+				return;
+			}
+			LoadHeifData(imatge, nom_vista, vista, i_capa, i_estil2, i_data, -1, -1, -1, -1, i_event, CapaImatgeSenceraHeifOnLoad).catch(CapaImatgeSenceraHeifOnError);
 		}
 		else{
-			s="<canvas id=\""+nom_vista+"_i_imatge"+i_capa+"\" style=\"display:none\"></canvas>";
-			
-			//·$· falta afegir la capa aquí al canvas i fer alguna cosa similar de onLoad i onError
+			// ·$· Donar algun error?
+			return;
 		}
-		document.getElementById(ParamCtrl.containerName).insertAdjacentHTML("afterend",s);
-		
 	}
 	if(!capa.imageLoaded)
 	{
-		setTimeout(CanviaImatgeSenceraCapa, 1000, imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
+		setTimeout(CanviaImatgeSenceraCapa, 1000, imatge, nom_vista, vista, i_capa, i_estil2, i_data);
 		return;
 	}
 	var alt = imatgeSencera.height, ample = imatgeSencera.width;
@@ -1296,8 +1352,89 @@ var capa=ParamCtrl.capa[i_capa];
 								(vista.EnvActual.MaxX-vista.EnvActual.MinX)*ample/(capa.EnvTotal.EnvCRS.MaxX-capa.EnvTotal.EnvCRS.MinX),
 								(vista.EnvActual.MaxY-vista.EnvActual.MinY)*alt/(capa.EnvTotal.EnvCRS.MaxY-capa.EnvTotal.EnvCRS.MinY), 
 								0, 0, ctx.canvas.width, ctx.canvas.height);
+								
 	return;
 }
+
+function DonaInfoPeticioCapaImatgeTesselacioInterna(i_capa, i_tile_matrix_set, i_tile_matrix, j_tile, i_tile)
+{
+var capa=ParamCtrl.capa[i_capa];
+
+	if(!capa.TileMatrixSet)
+		return "";
+	var iItem=capa.TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix].iItem;
+	return "type: "+capa.heif.items[iItem].itemType+" itemId: "+iItem+" j: "+j_tile+" i: "+i_tile;
+}
+
+function CanviaImatgeTessellacioInterna(nom_vista, vista, i_capa, i_tile_matrix_set, i_tile_matrix, j_tile, i_tile)
+{
+var capa=ParamCtrl.capa[i_capa], i_estil=capa.i_estil;
+
+	/* és el canvas en el que es mostrarà la imatge a la resolució i àmbit que toca
+	i segueix aquesta nomenclatura 
+	cdns.push("<canvas name=\"", nom_vista, "_i_raster", i_capa, "_" , j_tile , "_", i_tile ,"\"");
+	De moment només uso un canvas i no redimensiono la imatge, si fos el cas caldria crear un canvas com es fa en 
+	CanviaImatgeSenceraCapa, amb el mateix nom que ara però enlloc de _i_raster usant _i_imatge
+	*/
+	
+	//var ctx=imatge.getContext("2d"), 
+	var nom_imatge=nom_vista+"_i_raster"+i_capa+"_"+j_tile+"_"+i_tile, imatge=document.getElementById(nom_imatge);
+	//if(!imatgeTessella) // En aquest cas demano sempre la imatge
+	{
+		var s, url=CanviaVariablesDeCadena(capa.servidor, capa, -1, null), i_event;
+		capa.imageLoaded=false;
+		if(capa.FormatImatge=="image/heif"){
+			//s="<canvas id=\""+nomImatgeTessella+"\" style=\"display:none\"></canvas>";
+			//document.getElementById(ParamCtrl.containerName).insertAdjacentHTML("afterend",s);
+			var param_url=DonaInfoPeticioCapaImatgeTesselacioInterna(i_capa, i_tile_matrix_set, i_tile_matrix, j_tile, i_tile);
+			i_event=CreaIOmpleEventConsola("HTTP GET, tiled: "+param_url, i_capa, url, TipusEventHttpGet);
+			if (!GetHeifCapa(i_capa, i_estil, -1, vista))
+			{
+				var imatgeHeifEvent={i_event: i_event, imatge: imatge, nom_vista: nom_vista,
+					CanviaImatgeHeifIndirectTessellada: function (param){
+						if (param)
+						{
+							LoadHeifData(this.imatge, this.nom_vista, param.vista, param.i_capa, param.i_estil, param.i_data, param.i_tile_matrix_set, param.i_tile_matrix, param.j_tile, param.i_tile, this.i_event, CapaImatgeSenceraHeifOnLoad).catch(CapaImatgeSenceraHeifOnError);
+						}
+						return;
+					},
+					ErrorImatgeHeifIndirectTessellada: function (error){
+						alert(error);						
+						CanviaEstatEventConsola(null, this.i_event, EstarEventError);
+						// Hauria de possar la imatge a no visible
+						//·$·
+					}
+				};
+				PreparaLecturaHeif(vista, i_capa, i_estil, -1).then(imatgeHeifEvent.CanviaImatgeHeifIndirectTessellada.bind(imatgeHeifEvent), imatgeHeifEvent.ErrorImatgeHeifIndirectTessellada.bind(imatgeHeifEvent));				
+				return;
+			}
+			LoadHeifData(imatge, nom_vista, vista, i_capa, i_estil, -1, i_tile_matrix_set, i_tile_matrix, j_tile, i_tile, i_event, CapaImatgeSenceraHeifOnLoad).catch(CapaImatgeSenceraHeifOnError);
+		}
+		else{
+			// ·$· Donar algun error?
+			return;
+		}
+	}
+	/* Això de moment no ho faig en el cas de les tessel·les
+	if(!capa.imageLoaded)
+	{
+		setTimeout(CanviaImatgeTessellacioInterna, 1000, nom_vista, vista, i_capa, i_tile_matrix_set, i_tile_matrix, j_tile, i_tile);
+		return;
+	}
+	var alt = imatgeSencera.height, ample = imatgeSencera.width;
+
+	// ·$·Podria ser que el CRS actual no sigui en el que està la capa
+	ctx.drawImage(imatgeSencera,(vista.EnvActual.MinX-capa.EnvTotal.EnvCRS.MinX)*ample/(capa.EnvTotal.EnvCRS.MaxX-capa.EnvTotal.EnvCRS.MinX),
+								(capa.EnvTotal.EnvCRS.MaxY-vista.EnvActual.MaxY)*alt/(capa.EnvTotal.EnvCRS.MaxY-capa.EnvTotal.EnvCRS.MinY),
+								(vista.EnvActual.MaxX-vista.EnvActual.MinX)*ample/(capa.EnvTotal.EnvCRS.MaxX-capa.EnvTotal.EnvCRS.MinX),
+								(vista.EnvActual.MaxY-vista.EnvActual.MinY)*alt/(capa.EnvTotal.EnvCRS.MaxY-capa.EnvTotal.EnvCRS.MinY), 
+								0, 0, ctx.canvas.width, ctx.canvas.height);
+	*/
+								
+	return;
+}
+
+
 
 function PrecarregaValorsArrayBinaryAttributeSiCal(i_attribute, funcio, param)
 { 
@@ -2205,15 +2342,17 @@ function CreaCapaDigiLayer(nom_vista, i_nova_vista, i)
 
 function OmpleMatriuVistaCapaTiled(i_capa, vista, i_tile_matrix_set)
 {
-var vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
+var capa=ParamCtrl.capa[i_capa], vista_tiled=capa.VistaCapaTiled, 
+	i_tile_matrix_proper=DonaIndexTileMatrixMesProper(i_capa, i_tile_matrix_set, vista.CostatZoomActual);
 
-	var i_tile_matrix=DonaIndexTileMatrix(i_capa, i_tile_matrix_set, vista.CostatZoomActual);
-	if (i_tile_matrix==-1)
+	if(i_tile_matrix_proper.index==-1)
 	{
+		vista_tiled.tipus_costat=null;
 		vista_tiled.TileMatrix=null;
-		return i_tile_matrix;
+		return -1;
 	}
-	vista_tiled.TileMatrix=ParamCtrl.capa[i_capa].TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix];
+	vista_tiled.tipus_costat=i_tile_matrix_proper.tipus;
+	vista_tiled.TileMatrix=ParamCtrl.capa[i_capa].TileMatrixSet[i_tile_matrix_set].TileMatrix[i_tile_matrix_proper.index];		
 
 	vista_tiled.ITileMin = floor_DJ((vista.EnvActual.MinX - vista_tiled.TileMatrix.TopLeftPoint.x) / (vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileWidth));
 	vista_tiled.ITileMax = floor_DJ((vista.EnvActual.MaxX - vista_tiled.TileMatrix.TopLeftPoint.x) / (vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileWidth));
@@ -2230,10 +2369,17 @@ var vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	if (vista_tiled.JTileMax < 0) vista_tiled.JTileMax = 0;
 	else if (vista_tiled.JTileMax >= vista_tiled.TileMatrix.MatrixHeight) vista_tiled.JTileMax = vista_tiled.TileMatrix.MatrixHeight - 1;
 
+	if(vista_tiled.tipus_costat!="exacte")
+	{
+		// Moc la layer, li canvio de mides i la tallo.
+		vista_tiled.dx= floor_DJ((vista.EnvActual.MinX - (vista_tiled.TileMatrix.TopLeftPoint.x+vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileWidth*vista_tiled.ITileMin))/vista.CostatZoomActual);
+		vista_tiled.dy= floor_DJ(((vista_tiled.TileMatrix.TopLeftPoint.y-vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileHeight*vista_tiled.JTileMin) - vista.EnvActual.MaxY)/vista.CostatZoomActual);
+		return i_tile_matrix_proper.index;
+	}
 	//Moc la layer, li canvio de mides i la tallo.
 	vista_tiled.dx= floor_DJ((vista.EnvActual.MinX - (vista_tiled.TileMatrix.TopLeftPoint.x+vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileWidth*vista_tiled.ITileMin))/vista_tiled.TileMatrix.costat);
 	vista_tiled.dy= floor_DJ(((vista_tiled.TileMatrix.TopLeftPoint.y-vista_tiled.TileMatrix.costat*vista_tiled.TileMatrix.TileHeight*vista_tiled.JTileMin) - vista.EnvActual.MaxY)/vista_tiled.TileMatrix.costat);
-	return i_tile_matrix;
+	return i_tile_matrix_proper.index;
 }
 
 function AssignaDonaNomImatgeTiledASrc(nom_vista, i_capa, i_tile_matrix_set, i_tile_matrix, j, i)
@@ -2266,31 +2412,44 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	var i_tile_matrix_set=DonaIndexTileMatrixSetCRS(i_capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 	if (i_tile_matrix_set==-1)
 	{
-		window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
+		if(!EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
+			window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
 		return;
 	}
 	var i_tile_matrix=OmpleMatriuVistaCapaTiled(i_capa, vista, i_tile_matrix_set);
 	if(i_tile_matrix==-1)
 	{
-		window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
+		if(!EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
+			window.document[nom_vista + "_i_raster"+i_capa].src=AfegeixAdrecaBaseSRC("1tran.gif");
 		return;
 	}
 	var layer_vista=getLayer(window, nom_vista + "_l_capa"+i_capa);
 
-	moveLayer(layer_vista, DonaMargeEsquerraVista(vista.i_nova_vista)+1-vista_tiled.dx, DonaMargeSuperiorVista(vista.i_nova_vista)+1-vista_tiled.dy, (vista_tiled.ITileMax-vista_tiled.ITileMin+1)*vista_tiled.TileMatrix.TileWidth, (vista_tiled.JTileMax-vista_tiled.JTileMin+1)*vista_tiled.TileMatrix.TileHeight);
-	clipLayer(layer_vista, vista_tiled.dx, vista_tiled.dy, vista.ncol, vista.nfil);
-
-	//Genero la taula
-	cdns.push("<table style=\"border: 0px; border-collapse: collapse; padding: 0px;line-height:0px;\">");
-	//cdns.push("<table border=0 cellspacing=0 cellpadding=0>");
+	if(vista_tiled.tipus_costat!="exacte") 	{
+		var factor=vista.CostatZoomActual>vista_tiled.TileMatrix.costat ? vista_tiled.TileMatrix.costat/vista.CostatZoomActual : vista.CostatZoomActual/vista_tiled.TileMatrix.costat;
+		moveLayer(layer_vista, DonaMargeEsquerraVista(vista.i_nova_vista)+1-vista_tiled.dx, DonaMargeSuperiorVista(vista.i_nova_vista)+1-vista_tiled.dy, 
+		factor*((vista_tiled.ITileMax-vista_tiled.ITileMin+1)*vista_tiled.TileMatrix.TileWidth), factor*((vista_tiled.JTileMax-vista_tiled.JTileMin+1)*vista_tiled.TileMatrix.TileHeight));
+		clipLayer(layer_vista, vista_tiled.dx, vista_tiled.dy, vista.ncol, vista.nfil);
+		// Genero la taula
+		cdns.push("<table style=\"border: 0px; border-collapse: collapse; padding: 0px;line-height:0px;transform: scale(",factor,");transform-origin: top left;\">");
+	}
+	else{
+		moveLayer(layer_vista, DonaMargeEsquerraVista(vista.i_nova_vista)+1-vista_tiled.dx, DonaMargeSuperiorVista(vista.i_nova_vista)+1-vista_tiled.dy, (vista_tiled.ITileMax-vista_tiled.ITileMin+1)*vista_tiled.TileMatrix.TileWidth, (vista_tiled.JTileMax-vista_tiled.JTileMin+1)*vista_tiled.TileMatrix.TileHeight);
+		clipLayer(layer_vista, vista_tiled.dx, vista_tiled.dy, vista.ncol, vista.nfil);
+		// Genero la taula
+		cdns.push("<table style=\"border: 0px; border-collapse: collapse; padding: 0px;line-height:0px;\">");
+	}
 	for (var j=vista_tiled.JTileMin; j<=vista_tiled.JTileMax; j++)
 	{
 		cdns.push(" <tr style=\"border: 0px; border-collapse: collapse; padding: 0px; height:",vista_tiled.TileMatrix.TileHeight,"px;\">");
-		//cdns.push("  <tr cellspacing=0 cellpadding=0  height=",vista_tiled.TileMatrix.TileHeight,">");
 		for (var i=vista_tiled.ITileMin; i<=vista_tiled.ITileMax; i++)
 		{
-			cdns.push("<td style=\"border: 0px; border-collapse: collapse; padding: 0px; width:", vista_tiled.TileMatrix.TileWidth,"px;\"><img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",
-						AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,"px;max-height:",vista_tiled.TileMatrix.TileHeight,"px;width:auto;height:auto;\"></td>");
+			cdns.push("<td style=\"border: 0px; border-collapse: collapse; padding: 0px; width:", vista_tiled.TileMatrix.TileWidth,"px;\">");
+			if(EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
+				cdns.push("<canvas id=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i ,"\" name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i ,"\"");
+			else
+				cdns.push("<img name=\"", nom_vista, "_i_raster", i_capa, "_" , j , "_", i , "\" src=\"",AfegeixAdrecaBaseSRC("espereu_"+ParamCtrl.idioma+".gif"),"\"");
+			cdns.push(" style=\"max-width:",vista_tiled.TileMatrix.TileWidth,"px;max-height:",vista_tiled.TileMatrix.TileHeight,"px;width:auto;height:auto;\"></td>");
 		}
 		cdns.push("  </tr>");
 	}
@@ -2307,6 +2466,10 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 			{
 				//if(j==vista_tiled.JTileMin && i==vista_tiled.ITileMin)
 				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè el estil i el i_data sempre són null en el WMTS??
+			}
+			else if(EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
+			{
+				setTimeout("CanviaImatgeTessellacioInterna(\""+nom_vista+"\", "+JSON.stringify(vista)+" ,"+i_capa+", "+i_tile_matrix_set+", "+i_tile_matrix+", "+j+", "+i+");");
 			}
 			else
 			{
@@ -2767,7 +2930,6 @@ var p, unitats_CRS;
 	}
 	cdns.push("</table>");
 
-	//alert(cdns.join(""));
 
 	if (isLayer(elem))
 	{

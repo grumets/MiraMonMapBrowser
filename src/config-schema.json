@@ -268,7 +268,7 @@
 			"type": "boolean"
 		},
 		"zoom": {
-			"description": "Array de nivells de zoom que tindrà el navegador. Ordenats amb el número més gran primer",
+			"description": "Array de nivells de zoom que tindrà el navegador. Ordenats amb el número de costat més gran primer",
 			"type": "array",
 			"items": {
 				"type": "object",
@@ -1300,7 +1300,7 @@
 				"type": "object",
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF o un GeoJSON o un CSV o és null si hi ha un CSV per cada un dels objectes ); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF, un GeoJSON, un JPEG, un PNG, un HEIF o un CSV o és null si hi ha un CSV per cada un dels objectes); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1408,7 +1408,7 @@
 						"type": "number"
 					},
 					"CRSgeometry": { 
-						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG). Opcional; si no s'indica s'adopta el del primer mapa de situació.",
+						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG) o TipusHTTP_GET en format JPEG, PNG o HEIF. Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"],
 						"format": "uri"
 					},
@@ -1463,7 +1463,7 @@
 						}
 					},
 					"TileMatrixSet":{
-						"description": "Descripció de les TileMatrixSet suportades per la capa o null si la capa no és WMTS. Només aplica quan el 'model' és 'raster'.",
+						"description": "Descripció de les TileMatrixSet suportades per la capa quan és 'WMTS', 'TipusOAPI_MapTiles' o, 'TipusHTTP_GET' i 'image/heif' amb tessel·les internes, en la resta de casos és null. Només aplica quan el 'model' és 'raster'.",
 						"type": ["array", "null"],
 						"items": {
 							"description": "Descripció i paràmetres de la TileMatrixSet",
@@ -1625,7 +1625,7 @@
 									"format": "uri"
 								},
 								"iBand": {
-									"description": "Index de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
+									"description": "Índex de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
 									"type": "number"
 								},
 								"arrayBuffer": {
@@ -1910,7 +1910,7 @@
 						"$ref": "metadata-schema.json"
 					},
 					"admitLogEntries": {
-						"description": "The 'capa' admit adding or viewing entries in a logbook (used in the Monalisa project) . Opcional.",
+						"description": "The 'capa' admit adding or viewing entries in a logbook (used in the Monalisa project). Opcional.",
 						"type": "boolean" 
 					},
 					"explanation": 					{
@@ -2117,7 +2117,7 @@
 			]
 		},
 		"EnumTipusServidor": {
-			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG i GeoJSON. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
+			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG, GeoJSON, CSV, JPEG, PNG i HEIF. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
 			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET", "TipusOAPI_Coverages"]
 		},
 		"access": 
@@ -2148,7 +2148,7 @@
 			}		
 		},
 		"tileMatrix": {
-			"description": "Descripció i paràmetres dels TileMatrixs",
+			"description": "Descripció i paràmetres dels TileMatrixs. Ordenats amb el número de costat més gran primer.",
 			"type": ["array"],
 			"items": {
 				"description": "Descripció i paràmetres d'un TileMatrix",
@@ -2663,7 +2663,7 @@
 					"type": ["string", "null"]
 				},								
 				"nom":	{ 
-					"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a  null",
+					"description": "En el WMS clàssic (i.e. el FormatImatge NO és application/x-img) és el nom de l'estil en el servidor; pot ser null si només n'hi ha un i és el per defecte del servidor. Si el FormatImatge és application/x-img; deixeu-ho a null",
 					"type": ["string", "null"]
 				},
 				"desc":	{ 
@@ -2714,6 +2714,10 @@
 							"formulaInterna": { 
 								"description": "Fórmula matemàtica igual a la 'FormulaConsulta' però sense referencies a selectors. Interna; No usar.",
 								"type": "string"
+							},
+							"iItem": {
+								"description": "Índex de l'ítem que conté la imatge o que conté la tessel·lació dins d'un fitxer llegit amb 'TipusHTTP_GET'. Només aplica per HEIF.'",
+								"type": "number"
 							},
 							"i_valor": { 
 								"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha 'FormulaConsulta' o 'calcul'. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
@@ -2820,7 +2824,7 @@
 								"multipleOf" : 1
 							},
 							"estiramentPaleta": {
-								"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
+								"description": "Valor màxim i mínim del conjunt de valors per estirar la paleta si la llegenda és automàtica i si FormatImatge és application/x-img o image/heig amb uncC. L'estirament depèn severament de la FormulaConsulta o pot dependre de la banda seleccionada per i_valor",
 								"$ref": "#/definitions/estiramentPaleta" 
 							},											
 							"herenciaOrigen": { 
