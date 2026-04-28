@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -837,13 +837,21 @@ function MostraFinestraDownload(i_capa)
 		}
 		
 		//si el que ens passen no és url, sinó un path relatiu, hem de construir la url
-		if (esUrlAbsoluta == false)
+		/*if (esUrlAbsoluta == false)
 		{
 			// es genera el link de descàrrega
-			//s = window.location.href+capa.DescarregaTot[0].url;	
+			//s = window.location.href+capa.DescarregaTot[0].url
 			s = window.location.origin + (capa.DescarregaTot[0].url.charAt(0)=='/' ? capa.DescarregaTot[0].url : window.location.pathname+ (window.location.pathname.charAt(window.location.pathname.length-1)=="/" ? "" : "/") +capa.DescarregaTot[0].url);
 			s = s.replace("{extension}", ext);
 			s = s.replace("{EXTENSION}", ext);
+        	}*/
+		if (esUrlAbsoluta == false)
+		{
+			s = capa.DescarregaTot[0].url
+				.replace("{extension}", ext)
+				.replace("{EXTENSION}", ext);
+
+			s = new URL(s, window.location.href).href;
 		}
 		
 		//si el format és htm, no descarreguem res, obrim l'htm en una nova finestra
