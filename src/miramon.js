@@ -3164,11 +3164,72 @@ var text=(i_estil==-1) ?(capa.explanation.text ? DonaCadena(capa.explanation.tex
 }
 
 var FitxerMetadadesWindow=null;
-function ObreFinestraFitxerMetadades(i_capa, i_estil)
+async function ObreFinestraFitxerMetadades(i_capa, i_estil)
 {
 var capa=ParamCtrl.capa[i_capa];
 
-	if (FitxerMetadadesWindow==null || FitxerMetadadesWindow.closed)
+	if(capa.heif)
+	{
+		// Obro una finestraLayer i hi incrusto el Text
+		var elem=ObreFinestra(window, "mostraMetadadesHEIF", GetMessage("Metadata"));
+		if (!elem)
+			return;
+		
+		var cdns=[];
+		
+		cdns.push("<form name=\"MetadadesHEIFCapa\" onSubmit=\"return false;\">");
+		cdns.push("<div id=\"LayerMetadadesHEIFCapa\" class=\"Verdana11px\" style=\"position:absolute;left:10px;top:10px;width:95%\">",
+			"<span class=\"titolfinestra\">", GetMessage("Layer"), ": ", (DonaCadena(capa.DescLlegenda) ? DonaCadena(capa.DescLlegenda): capa.nom));
+		if (i_estil!=-1)
+			cdns.push(", ", DonaCadena(capa.estil[i_estil].desc));
+		cdns.push("</span><br/><br/><fieldset><legend>",GetMessage("Metadata"),"</legend>");
+		if(capa.heif.brand){
+			cdns.push("<b>Major brand</b>: ", capa.heif.brand.majorBrand, "<br/>",
+					  "<b>Compatible brands</b>: ", JSON.stringify(capa.heif.brand.compatibleBrands), "<br/>",
+					  "<b>Minor Version</b>: ", capa.heif.brand.minorVersion, "<br/>",
+					  "<b>Media handler</b>: ", capa.heif.mediaHandler, "<br/>");
+		}
+		cdns.push("<b>File size</b>: ", capa.heif.fileSize, " bytes<br/>",
+				  "<b>CRS</b>: ", capa.CRSgeometry, "<br/>",
+				  "<b>Bounding box</b>: ", JSON.stringify(capa.EnvTotal.EnvCRS), "<br/>");
+		if(capa.heif.items)
+		{
+			var primary_item=capa.heif.items[capa.estil[0].component[0].iItem];
+			cdns.push("<b>File size</b>: ", capa.heif.fileSize, "bytes<br/>",
+					  "<b>Image height</b>: ", primary_item.imageHeight,"<br/>",					  
+					  "<b>Image width</b>: ", primary_item.imageWidth,"<br/>",
+					  "<b>Is Tiled?</b>: ", (capa.TileMatrixSet ? "true": "false"),"<br/>",
+					  "<b>Item type</b>: ", (capa.TileMatrixSet ? primary_item.itemTypeTile : primary_item.itemType),"<br/>");
+					  
+			if(capa.TileMatrixSet)
+				cdns.push("<b>Type of tile system</b>: ", primary_item.itemType,"<br/>");		
+			if(primary_item.itemType=='unci' || (capa.TileMatrixSet && primary_item.itemTypeTile=='unci')){
+				if(primary_item.uncompressProfile)
+					cdns.push("<b>Uncompress profile</b>: ", primary_item.uncompressProfile,"<br/>");
+				else
+					cdns.push("<b>Data type</b>: ", capa.valors[0].datatype,"<br/>");
+			}
+		}
+		cdns.push("</fieldset>");
+		if(capa.heif.ttlJsonld){
+			cdns.push("<fieldset><legend>",GetMessage("RDFMetadata"),"</legend><pre>", JSON.stringify(capa.heif.ttlJsonld, null, 2), "</pre></fieldset>");
+		}
+		if(capa.heif.items){
+			var item, url=CanviaVariablesDeCadena(capa.servidor, capa, -1, null);
+			for (var i=0; i<capa.heif.items.length; i++) {
+				item=capa.heif.items[i];
+				if (item.itemType=='mime' && item.contentType=="application/x.fake-dni-arh+xml" && item.extents && item.extents.length) {
+					var sec_marks=await getURLText(url, item.extents[0].extentOffset, item.extents[0].extentOffset+item.extents[0].extentLength-1);
+					if(sec_marks)
+						cdns.push("<fieldset><legend>",GetMessage("SecurityMarkings"), "</legend><xmp>",sec_marks, "</xmp></fieldset>");
+					break;
+				}
+			}
+		}
+		cdns.push("</div></form>");
+		contentLayer(elem, cdns.join(""));
+	}
+	else if (FitxerMetadadesWindow==null || FitxerMetadadesWindow.closed)
 	{
 		var url=DonaNomFitxerMetadades(capa, i_estil);
 		FitxerMetadadesWindow=window.open(url,"FitxerMetadades",'toolbar=no,status=no,scrollbars=yes,location=no,menubar=no,directories=no,resizable=yes,width=700,height=600');
@@ -5230,6 +5291,8 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "mostraLlinatge", GetMessageJSON("Lineage"), boto_tancar, 250, 1, 800, 420, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraQualitat", GetMessageJSON("Quality"), boto_tancar, 250, 200, 700, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "mostraExplanation", GetMessageJSON("Explanation"), boto_tancar, 200, 150, 400, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);	
+	createFinestraLayer(window, "mostraMetadadesHEIF", GetMessageJSON("Metadata"), boto_tancar, 200, 150, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);	
+	
 	createFinestraLayer(window, "feedback", GetMessageJSON("Feedback"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "logbook", GetMessageJSON("LogBook"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "feedbackAmbEstils", GetMessageJSON("FeedbackContainingStyles", "miramon"), boto_tancar, 220, 180, 625, 400, "Nw", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
@@ -5484,10 +5547,18 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 		}
 
 		DadesPendentsAccio=false;
-		FormAnarCoord={"proj": true,
+		if(ParamCtrl.AnarCoordIni) {
+			FormAnarCoord=JSON.parse(JSON.stringify(ParamCtrl.AnarCoordIni));
+			if(!FormAnarCoord.proj)
+				FormAnarCoord.proj=true;
+		}
+		else {
+			FormAnarCoord={"proj": true,
 					"x": ParamInternCtrl.PuntOri.x,
 					"y": ParamInternCtrl.PuntOri.y,
 					"m_voltant": (EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS) ? FactorGrausAMetres : 1)*ParamInternCtrl.vista.CostatZoomActual*ParamInternCtrl.vista.ncol/5};
+		}
+		
 	}
 
 	IniciaPosicioGPS();

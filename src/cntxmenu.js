@@ -371,7 +371,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;			
 	}
-	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades))
+	if (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades) || capa.heif)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFitxerMetadades(", i_capa, ", -1);TancaContextMenuCapa();\">",
 				GetMessage("Metadata"), "</a><br>");
@@ -410,6 +410,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 				alguna_opcio=true;
 		}
 	}
+	
 	/*if (capa.metadades && capa.metadades.guf)
 	{*/
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackCapa(", i_capa,", -1, null);TancaContextMenuCapa();\">",
@@ -4433,10 +4434,10 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 	}
 	else if (estil.component && estil.component.length<3)
 	{
-		var paleta_de_estil_capa=false;
+		var paleta_de_estil_capa=false, paleta_temp;
 		if (document.getElementById("edita-estil-capa-paleta-actual").checked)
 			; //Nothing to do
-		else if (estil.paletaPrevia && document.getElementById("edita-estil-capa-paleta-previa").checked)
+		else if (estil.paletaPrevia && document.getElementById("edita-estil-capa-paleta-previa") && document.getElementById("edita-estil-capa-paleta-previa").checked)
 		{
 			estil.paleta=JSON.parse(JSON.stringify(estil.paletaPrevia));
 			delete estil.paletaPrevia;
@@ -4449,7 +4450,8 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 				{
 					if (i==i_estil || !capa.estil[i].paleta)
 						continue;
-					if (document.getElementById("edita-estil-capa-paleta-estil-"+i).checked)
+					paleta_temp=document.getElementById("edita-estil-capa-paleta-estil-"+i);
+					if (paleta_temp && paleta_temp.checked)
 					{
 						paleta_de_estil_capa=true;
 						if (!estil.paletaPrevia && estil.paleta)
@@ -4469,7 +4471,8 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 					{
 						if (!PaletesGlobals.categoric.hasOwnProperty(paleta))
 							continue;
-						if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+						paleta_temp=document.getElementById("edita-estil-capa-paleta-" + paleta);
+						if (paleta_temp && paleta_temp.checked)
 						{
 							estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.categoric[paleta]));
 						}
@@ -4477,7 +4480,8 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 				}
 				else
 				{
-					if (document.getElementById("edita-estil-capa-paleta-grisos").checked)
+					paleta_temp=document.getElementById("edita-estil-capa-paleta-grisos");
+					if (paleta_temp && paleta_temp.checked)
 						estil.paleta=null;
 					else
 					{
@@ -4487,7 +4491,8 @@ var capa=ParamCtrl.capa[i_capa], estil=capa.estil[i_estil], valor_min, valor_max
 						{
 							if (!PaletesGlobals.continuous.hasOwnProperty(paleta))
 								continue;
-							if (document.getElementById("edita-estil-capa-paleta-" + paleta).checked)
+							paleta_temp=document.getElementById("edita-estil-capa-paleta-" + paleta);
+							if (paleta_temp && paleta_temp.checked)
 								estil.paleta=JSON.parse(JSON.stringify(PaletesGlobals.continuous[paleta]));
 						}
 					}

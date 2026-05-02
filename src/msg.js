@@ -175,6 +175,22 @@ var MessageLang=
     "cze": "Metadata",
     "ger": "Metadaten"
   },
+  "RDFMetadata":  {
+    "cat": "Metadades RDF",
+    "spa": "Metadatos RDF",
+    "eng": "RDF Metadata",
+    "fre": "Métadonnées RDF",
+    "cze": "Metadata RDF",
+    "ger": "RDF-Metadaten"
+  },
+  "SecurityMarkings": {
+	  "cat": "Marques de seguretat",
+	  "spa": "Marcas de seguridad",
+	  "eng": "Security markings",
+	  "fre": "Marquages ​​de sécurité",
+	  "cze": "Bezpečnostní značení",
+	  "ger": "Sicherheitsmarkierungen"
+  },
   "Quality": {
     "cat": "Qualitat",
     "spa": "Calidad",

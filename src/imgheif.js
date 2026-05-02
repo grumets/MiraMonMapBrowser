@@ -73,7 +73,7 @@ async function InitLoadSOH(url, ttlMdURL)
 		heif.primaryItemId=pitm.primaryItemId;
 	heif.groups=await readSOHGroupsDumpURL(url, heif, null, false);
 	heif.items=await readSOHItemsDumpURL(url, ttlMdURL, heif, null, false);
-	if(ttlMdURL)
+	/*if(ttlMdURL)
 		heif.hasTtlMd=true;
 	else 
 	{
@@ -84,7 +84,7 @@ async function InitLoadSOH(url, ttlMdURL)
 				break;
 			}			
 		}
-	}
+	}*/
 	return heif;
 }
 
@@ -284,7 +284,7 @@ function CompleteCapaHeifDefinition(capa, heif)
 	{
 		if(heif.crs)
 			capa.CRSgeometry=DonaEPSGDeURLOpengis(heif.crs);
-		else if(heif.hasTtlMd)
+		else if(heif.ttlJsonld)
 			capa.CRSgeometry="CRS:84";
 		else
 			capa.CRSgeometry=ParamCtrl.ImatgeSituacio[0].EnvTotal.CRS;
@@ -307,7 +307,7 @@ function CompleteCapaHeifDefinition(capa, heif)
 		capa.estil[0].component[0].iPyramid=GetIndexPyramidHeifCapa(heif);
 	
 	// capa Bbox 
-	if(!capa.EnvTotal && heif.hasTtlMd)
+	if(!capa.EnvTotal && heif.ttlJsonld)
 	{
 		var env = GetHeifBoundingBox(heif, capa.estil[0].component[0].iItem, DonaIdPyramidDeIndexPyramidHeifCapa(capa.heif, capa.estil[0].component[0].iPyramid));
 		if(env)

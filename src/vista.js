@@ -2425,8 +2425,8 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 	}
 	var layer_vista=getLayer(window, nom_vista + "_l_capa"+i_capa);
 
-	if(vista_tiled.tipus_costat!="exacte") 	{
-		var factor=vista.CostatZoomActual>vista_tiled.TileMatrix.costat ? vista_tiled.TileMatrix.costat/vista.CostatZoomActual : vista.CostatZoomActual/vista_tiled.TileMatrix.costat;
+	if(vista_tiled.tipus_costat!="exacte") 	{		
+		var factor=vista_tiled.TileMatrix.costat/vista.CostatZoomActual;
 		moveLayer(layer_vista, DonaMargeEsquerraVista(vista.i_nova_vista)+1-vista_tiled.dx, DonaMargeSuperiorVista(vista.i_nova_vista)+1-vista_tiled.dy, 
 		factor*((vista_tiled.ITileMax-vista_tiled.ITileMin+1)*vista_tiled.TileMatrix.TileWidth), factor*((vista_tiled.JTileMax-vista_tiled.JTileMin+1)*vista_tiled.TileMatrix.TileHeight));
 		clipLayer(layer_vista, vista_tiled.dx, vista_tiled.dy, vista.ncol, vista.nfil);
