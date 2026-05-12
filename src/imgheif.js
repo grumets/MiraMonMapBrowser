@@ -37,12 +37,12 @@
     El Navegador de Mapes del MiraMon es pot actualitzar des de 
     https://github.com/grumets/MiraMonMapBrowser.
 */
-// no sé perquè però no em funciona l'import
-//import { decode as AVIFDecoder } from "@jsquash/avif"; // from https://www.npmjs.com/package/@jsquash/avif
+
 
 IncludeScript("ttl2jsonld/ttl2jsonld.js"); // from: https://github.com/frogcat/ttl2jsonld
 IncludeScript("libde265/libde265.js");
-IncludeScript("j2k/openjpegjs.js"); //from : https://www.npmjs.com/package/@cornerstonejs/codec-openjpeg?activeTab=code and https://github.com/cornerstonejs/codecs/tree/main/packages/openjpeg
+IncludeScript("j2k/openjpegjs.js"); // from : https://www.npmjs.com/package/@cornerstonejs/codec-openjpeg?activeTab=code and https://github.com/cornerstonejs/codecs/tree/main/packages/openjpeg
+IncludeScript("decompress/pako.min.js"); // from https://github.com/nodeca/pako
 IncludeScript("libSOH.js"); 
 
 
@@ -204,7 +204,7 @@ var TileMatrixSet=null, i;
 		// Ordenar la piramide del TileMatrix pel costat 
 		TileMatrixSet[0].TileMatrix.sort(OrdenacioCostatDescendent);
 		var nzoom_previs=ParamCtrl.zoom.length;
-		
+		/*
 		// Afegir els costats de píxels que no siguin a la piramide
 		for(k=0, i=0; i<TileMatrixSet[0].TileMatrix.length; i++)
 		{
@@ -225,6 +225,7 @@ var TileMatrixSet=null, i;
 			for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				ReOmpleSlider(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista);
 		}
+		*/
 	}
 	return TileMatrixSet;
 }
@@ -311,11 +312,10 @@ function CompleteCapaHeifDefinition(capa, heif)
 	{
 		var env = GetHeifBoundingBox(heif, capa.estil[0].component[0].iItem, DonaIdPyramidDeIndexPyramidHeifCapa(capa.heif, capa.estil[0].component[0].iPyramid));
 		if(env)
-		{
 			capa.EnvTotal={"EnvCRS": JSON.parse(JSON.stringify(env)), "CRS": capa.CRSgeometry};
-			capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
-		}
 	}
+	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
+		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
 	
 	// Tessel·lació de la capa
 	if(!capa.TileMatrixSet)
@@ -434,6 +434,52 @@ function ShowSOHImage(data, canvasId, width, height, nom_funcio_ok, param_funcio
 	}
 }
 
+
+async function brotliLoadLibrary()
+{
+//https://dmitripavlutin.com/ecmascript-modules-dynamic-import/
+	const module = await import("./decompress/brotli/decode.js");
+	
+	window.brotliDecoder = module;
+}
+
+async function deflateDataView(compressionType, data)
+{
+	var decoded_data=null;
+	
+	if(compressionType=='brot')
+	{
+		if(!window.brotliDecoder)
+			await brotliLoadLibrary();
+		decoded_data=await brotliDecoder.BrotliDecode(new Int8Array(data));
+		if(decoded_data)
+			return new DataView(decoded_data.buffer, decoded_data.byteOffset, decoded_data.byteLength);
+	}
+	else if(compressionType=='zlib')
+	{
+		try{
+			decoded_data=pako.inflate(data);
+		} catch (error) {
+			console.log("error" + error);
+			return null;
+		}
+		if(decoded_data)
+			return new DataView(decoded_data.buffer, decoded_data.byteOffset, decoded_data.byteLength);
+	}
+	else if(compressionType=='defl')
+	{
+		try{
+			decoded_data=pako.inflateRaw(data);
+		} catch (error) {
+			console.log("error" + error);
+			return null;
+		}
+		if(decoded_data)
+			return new DataView(decoded_data.buffer, decoded_data.byteOffset, decoded_data.byteLength);
+	}
+	return decoded_data;
+}
+
 // Image Item in UNCI
 async function GetAndShowSOHUnciImage(url, imatge, item, valors, estil, nom_funcio_ok, param_funcio_ok, iTile, jTile)
 {
@@ -462,8 +508,20 @@ async function GetAndShowSOHUnciImage(url, imatge, item, valors, estil, nom_func
 	if(typeof item.uncompressProfile=== "undefined" || item.uncompressProfile==0 )  // cap perfil predeterminat
 	{
 		if(item.compressionType){
-			alert("ERROR: compression not supported");
-			return false;
+			
+			if(item.compressionType=="brot" || item.compressionType=="defl" || item.compressionType=="zlib")
+			{
+				dataView=await deflateDataView(item.compressionType, arrayBuffer);
+				if(!dataView){
+					alert("ERROR: during deflating the image");
+					return false;
+				}
+			}
+			else 
+			{	
+				alert("ERROR: compression '"+item.compressionType+"' not supported");
+				return false;
+			}
 		}
 		// Construeixo el canvas amb les dades+paleta (i/o categories)
 		var dv=[];
@@ -792,6 +850,14 @@ async function GetAndShowSOHJ2KImage(url, imatge, item, nom_funcio_ok, param_fun
 	return true;
 }
 
+async function AVIFLoadLibrary()
+{
+//https://dmitripavlutin.com/ecmascript-modules-dynamic-import/
+	const avi_module = await import('./avif/decode.js');
+	window.AVIFDecoder = avi_module;
+	//import { decode as AVIFDecoder } from "avif"; // from https://www.npmjs.com/package/@jsquash/avif
+}
+
 async function GetAndShowSOHAvifImage(url, imatge, item, nom_funcio_ok, param_funcio_ok, iTile, jTile)
 {
 	var arrayBuffer=null, itemType, height, width;
@@ -814,6 +880,8 @@ async function GetAndShowSOHAvifImage(url, imatge, item, nom_funcio_ok, param_fu
 	
 	var dataView=new DataView(arrayBuffer);
 	
+	if(!window.AVIFDecoder)
+		await AVIFLoadLibrary();
 	const imageData = await AVIFDecoder(arrayBuffer);
 	if(!imageData)
 		return false;
