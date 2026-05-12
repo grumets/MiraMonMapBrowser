@@ -3195,8 +3195,7 @@ var capa=ParamCtrl.capa[i_capa];
 		if(capa.heif.items)
 		{
 			var primary_item=capa.heif.items[capa.estil[0].component[0].iItem];
-			cdns.push("<b>File size</b>: ", capa.heif.fileSize, "bytes<br/>",
-					  "<b>Image height</b>: ", primary_item.imageHeight,"<br/>",					  
+			cdns.push("<b>Image height</b>: ", primary_item.imageHeight,"<br/>",					  
 					  "<b>Image width</b>: ", primary_item.imageWidth,"<br/>",
 					  "<b>Is Tiled?</b>: ", (capa.TileMatrixSet ? "true": "false"),"<br/>",
 					  "<b>Item type</b>: ", (capa.TileMatrixSet ? primary_item.itemTypeTile : primary_item.itemType),"<br/>");
@@ -5300,7 +5299,7 @@ var i, j, l, titolFinestra, div=document.getElementById(ParamCtrl.containerName)
 	createFinestraLayer(window, "enllacWMS", GetMessageJSON("LinksToOGCServicesBrowser", "miramon"), boto_tancar, 650, 165, 400, 120, "NwCR", {scroll: "ara_no", visible: false, resizable: true, ev: null}, null);
 
 	createFinestraLayer(window, "triaStoryMap", GetMessageJSON("Storymaps", "storymap"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: false, resizable:true, minWidth: 100, minHeight: 150}, null);
-	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 220, 180, 510, 420, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true, minWidth:min_width_finestra_storymap, minHeight:min_height_finestra_storymap}, null);
+	createFinestraLayer(window, "storyMap", GetMessageJSON("storyMapTitle", "miramon"), boto_tancar, 90, 50, 510, 420, "NwCR", {scroll: "no", visible: false, ev: null, resizable:true, minWidth:min_width_finestra_storymap, minHeight:min_height_finestra_storymap}, null);
 
 	createFinestraLayer(window, "info", GetMessageJSON("InformationHelp", "miramon"), boto_tancar, 420, 150, 420, 350, "nWC", {scroll: "ara_no", visible: false, ev: null, resizable:true}, null);
 	createFinestraLayer(window, "modificaNom", GetMessageJSON("ModifyName"), boto_tancar, 250, 200, 600, 200, "Nw", {scroll: "ara_no", visible: false, ev: null}, null);

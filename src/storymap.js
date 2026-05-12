@@ -1955,8 +1955,7 @@ var attributes=[];
 			break;
 		attributes.push({name: arguments[i_arg], value:arguments[i_arg+1]}); 
 	}
-	let canvis = ExecuteDataMMAttributesArray(attributes);
-	if (canvis.any)
+	if (ExecuteDataMMAttributesArray(attributes))
 		RepintaMapesIVistes();
 }
 

@@ -386,8 +386,16 @@ function readSOHCmpC(dataView, offset, start, fileSize) {
 	//‘zlib’	DEFLATE algorithm as packaged in the format defined by IETF RFC 1950
 	//‘brot’	Brotli algorithm as defined in IETF RFC 7932
 	
-	//unsigned int(1) must_decompress_individual_entities can_decompress_contiguous_ranges;
-	//unsigned int(7) compressed_range_typecompressed_entity_type;
+
+    /*unsigned int(32) compression_type;
+    unsigned int(8)  compression_unit_type;
+    unsigned int(8)  compression_level;
+
+    unsigned int(32) compressed_unit_size;
+    unsigned int(64) uncompressed_unit_size;
+
+    unsigned int(8)  compression_params[];*/
+
 	return result;
 }
 
