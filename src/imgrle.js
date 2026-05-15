@@ -959,11 +959,10 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 						i_byte[i_v]++;
 						acumulat += comptador;
 
-						for ( ; i<acumulat; i++)
-									{
+						for ( ; i<acumulat; i++){
 							fila[i][i_v]=dv_i.getInt16(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=2;
-								}
+						}
 					}
 					else
 					{
@@ -972,7 +971,7 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 						i_byte[i_v]+=2;
 						for ( ; i<acumulat; i++)
 							fila[i][i_v]=v_i;
-							}
+					}
 				}
 			}
 			else
@@ -1000,11 +999,10 @@ var i_v, v_i, dv_i, valors_i, nodata, dtype, i, acumulat, comptador, n_v=valors.
 						i_byte[i_v]++;
 						acumulat += comptador;
 
-						for ( ; i<acumulat; i++)
-									{
+						for ( ; i<acumulat; i++){
 							fila[i][i_v]=dv_i.getUint16(i_byte[i_v], littleEndian);
 							i_byte[i_v]+=2;
-								}
+						}
 					}
 					else
 					{
@@ -2468,7 +2466,7 @@ var data;
 	else
 		valors[extra_param.i_valor].nova_capa[extra_param.vista.i_nova_vista].arrayBuffer=dades;
 
-	//Comprovo que tinc les bandes que necessito. Si no hi son, espero més.
+	//Comprovo que tinc les bandes que necessito. Si no hi són, espero més.
 	n_v=valors.length;
 	var v=DeterminaArrayValorsNecessarisCapa(extra_param.i_capa, extra_param.i_estil);
 	for (i_v=0; i_v<n_v; i_v++)
@@ -2500,7 +2498,7 @@ var data;
 		}
 	}
   
-	//Ara ha se que tinc el que necessito.	
+	//Ara ha sé que tinc el que necessito.	
 	//Depen del ordre en que passen les coses s'arriba aquí quan ja s'ha demanat un altre redibuixat i aquest ja no està en sincronia amb l'actual contigut de la vista (que te les capes definides diferentment). 
 	if (extra_param.imatge && extra_param.imatge.getContext)
 	{

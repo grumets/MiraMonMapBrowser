@@ -505,24 +505,23 @@ async function GetAndShowSOHUnciImage(url, imatge, item, valors, estil, nom_func
 	
 	var dataView=new DataView(arrayBuffer), data=[];
 	
-	if(typeof item.uncompressProfile=== "undefined" || item.uncompressProfile==0 )  // cap perfil predeterminat
-	{
-		if(item.compressionType){
-			
-			if(item.compressionType=="brot" || item.compressionType=="defl" || item.compressionType=="zlib")
-			{
-				dataView=await deflateDataView(item.compressionType, arrayBuffer);
-				if(!dataView){
-					alert("ERROR: during deflating the image");
-					return false;
-				}
-			}
-			else 
-			{	
-				alert("ERROR: compression '"+item.compressionType+"' not supported");
+	if(item.compressionType){		
+		if(item.compressionType=="brot" || item.compressionType=="defl" || item.compressionType=="zlib")
+		{
+			dataView=await deflateDataView(item.compressionType, arrayBuffer);
+			if(!dataView){
+				alert("ERROR: during deflating the image");
 				return false;
 			}
 		}
+		else 
+		{	
+			alert("ERROR: compression '"+item.compressionType+"' not supported");
+			return false;
+		}
+	}
+	if(typeof item.uncompressProfile=== "undefined" || item.uncompressProfile==0 )  // cap perfil predeterminat
+	{		
 		// Construeixo el canvas amb les dades+paleta (i/o categories)
 		var dv=[];
 		dv[0]=dataView;
@@ -853,8 +852,10 @@ async function GetAndShowSOHJ2KImage(url, imatge, item, nom_funcio_ok, param_fun
 async function AVIFLoadLibrary()
 {
 //https://dmitripavlutin.com/ecmascript-modules-dynamic-import/
-	const avi_module = await import('./avif/decode.js');
-	window.AVIFDecoder = avi_module;
+	const { 
+		default: decode
+	}  = await import('./avif/decode.js');
+	window.AVIFDecoder = decode;
 	//import { decode as AVIFDecoder } from "avif"; // from https://www.npmjs.com/package/@jsquash/avif
 }
 
@@ -963,7 +964,7 @@ var bbox, width, height, dades, param={imatge: imatge, nom_vista: nom_vista, vis
 		}			
 		else if(item.itemType=='j2k1')	
 			retorn= await GetAndShowSOHJ2KImage(url, nomImatgeSencera, item, nom_funcio_ok, param);		
-		else if(item.itemTypeTile=='av01')	
+		else if(item.itemType=='av01')	
 			retorn= await GetAndShowSOHAvifImage(url, nomImatgeSencera, item, nom_funcio_ok, param);
 	}
 	if(!retorn)
