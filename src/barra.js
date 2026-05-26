@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -516,6 +516,8 @@ var cdns=[];
 				break;
 			}
 		}
+		if (ParamCtrl.BarraBotoStoryMaps || (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)) // Object.hasOwn(ParamCtrl, "StoryMap")) no comprova la longitud, només si hi ha el membre
+			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
 
 		if (ParamCtrl.BarraBotoCaixaParam)
 			cdns.push(CadenaBotoPolsable("param", "param", GetMessage("Options"), "MostraFinestraParametres();"));
@@ -546,8 +548,7 @@ var cdns=[];
 		}*/		
 		if (ParamCtrl.BarraBotoInstallarMMZ)
 			cdns.push(CadenaBotoPolsable("instmm", "instmm", GetMessage("InstallMiraMon", "barra"), "DescarregaMiraMon();"));						
-		if (ParamCtrl.BarraBotoStoryMaps || (ParamCtrl.StoryMap && ParamCtrl.StoryMap.length)) // Object.hasOwn(ParamCtrl, "StoryMap")) no comprova la longitud, només si hi ha el membre
-			cdns.push(CadenaBotoPolsable("storyMap", "storyMap", GetMessage("Storymaps", "storymap"), "MostraFinestraTriaStoryMap();"));
+		
 		if (ParamCtrl.BarraBotoAjuda)
 			cdns.push(CadenaBotoPolsable("ajuda", "ajuda", GetMessage("InteractiveHelp"),
 				"ObreFinestraAjuda();"));
@@ -587,5 +588,5 @@ var cdns=[];
 		if (window.document.zoom.nivell)
 			window.document.zoom.nivell.focus();
 	}
-}//Fi de CreaBarra()
+}
 
