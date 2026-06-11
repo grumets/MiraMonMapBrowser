@@ -826,8 +826,8 @@ function MostraFinestraDownload(i_capa)
     if (capa.DescarregaTot && capa.DescarregaTot.length == 1 && capa.DescarregaTot[0].format.length == 1)
     {
         //comprovem si el contingut de capa.DescarregaTot[0].url és ja una url
-		var ext=ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[0].format].extension;
-		s=capa.DescarregaTot[0].url.replace("{extension}", ext).replace("{EXTENSION}", ext);
+		s=DonaNomFitxerDescarregaTot(i_capa, 0, 0, DonaIndexDataCapa(capa, null));		
+		//s=capa.DescarregaTot[0].url.replace("{extension}", ext).replace("{EXTENSION}", ext);
 		
 		try {
 			var urlObject = new URL(s);
@@ -837,24 +837,16 @@ function MostraFinestraDownload(i_capa)
 		}
 		
 		//si el que ens passen no és url, sinó un path relatiu, hem de construir la url
-		/*if (esUrlAbsoluta == false)
-		{
-			// es genera el link de descàrrega
-			//s = window.location.href+capa.DescarregaTot[0].url
-			s = window.location.origin + (capa.DescarregaTot[0].url.charAt(0)=='/' ? capa.DescarregaTot[0].url : window.location.pathname+ (window.location.pathname.charAt(window.location.pathname.length-1)=="/" ? "" : "/") +capa.DescarregaTot[0].url);
-			s = s.replace("{extension}", ext);
-			s = s.replace("{EXTENSION}", ext);
-        	}*/
 		if (esUrlAbsoluta == false)
 		{
-			s = capa.DescarregaTot[0].url
-				.replace("{extension}", ext)
-				.replace("{EXTENSION}", ext);
-
-			s = new URL(s, window.location.href).href;
-		}
+			// es genera el link de descàrrega
+			s = window.location.href+capa.DescarregaTot[0].url;	
+			//s = s.replace("{extension}", ext);
+			//s = s.replace("{EXTENSION}", ext);
+        }
 		
 		//si el format és htm, no descarreguem res, obrim l'htm en una nova finestra
+		var ext=ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[0].format].extension;
 		if ((ext.toLowerCase() == "htm") || (ext.toLowerCase() == "html"))
 		{
 			window.open(s, "_blank");

@@ -1,4 +1,4 @@
-﻿{
+{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "MiraMon Map Browser",
 	"description": "Specification of the structures used to configure and customize the MiraMon Map Browser through the config.json file.",
@@ -35,7 +35,7 @@
 				"required": ["name", "left", "top", "width", "height", "ancora"],
 				"properties": {
 					"name": {
-						"description": "Division identifier. It must be unique within the HTML page. Reserved names with content managed automatically: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord', and 'ctipica'."
+						"description": "Division identifier. It must be unique within the HTML page. Reserved names with content managed automatically: 'situacio', 'llegenda', 'titol', 'barra', 'projeccio', 'vista', 'atribucio', 'coord', and 'ctipica'.",
 						"type": "string"
 					},
 					"title": {
