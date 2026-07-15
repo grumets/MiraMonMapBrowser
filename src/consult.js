@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -437,7 +437,7 @@ function MostraConsultaComHTML(consulta)
 				var i_capa_validar=-1, i;
 				if(Accio && Accio.accio&AccioValidacio && Accio.capes)
 				{
-					for(var i=0; i<Accio.capes.length; i++)
+					for(i=0; i<Accio.capes.length; i++)
 					{
 						if(Accio.capes[i]==consulta.capa.nom)
 						{
@@ -448,10 +448,10 @@ function MostraConsultaComHTML(consulta)
 				}
 				// Necessito construir un array de propietats per fer els càlculs
 				var properties={};
-				for(var i=0; i<attributesArray.length; i++)
+				for(i=0; i<attributesArray.length; i++)
 					properties[attributesArray[i]]=consulta.attributes[attributesArray[i]].valor;
 				
-				for(var i=0; i<attributesArray.length; i++)
+				for(i=0; i<attributesArray.length; i++)
 				{
 					attribute=consulta.attributes[attributesArray[i]];
 					if (attribute.separador && DonaCadena(attribute.separador))
@@ -1204,7 +1204,7 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 				{
 					if (EsObjDigiConsultable(i,j) && objectes.features[j].properties && CountPropertiesOfObject(objectes.features[j].properties)>0)
 					{
-						for (var a=0; a<attributesArray.length; a++)
+						for (a=0; a<attributesArray.length; a++)
 						{
 							if (capa.attributes[attributesArray[a]].serieTemporal)
 								MostraGraficSerieTemporalAttribute(win, "canvas_cnsl_serie_" + i + "_" + -1+"_"+ j + "_" + a, i, -1, j, a);
@@ -1235,7 +1235,7 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 				}
 				if(!objectes || !objectes.features)
 					continue;
-				for(var j=0, k=0; j<capa.objectes.features.length; j++)
+				for(j=0, k=0; j<objectes.features.length; j++)
 				{
 					if ((objectes.features[j].geometry.type=="MultiLineString" || objectes.features[j].geometry.type=="LineString") &&
 						((iZoneLevel==-1 && EsObjDigiConsultable(i,j)) || 

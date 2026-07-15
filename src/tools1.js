@@ -645,6 +645,7 @@ function CreaDialog(identificadorDialog, contingutHtml)
 	const dialog = document.createElement("dialog");
 	dialog.setAttribute("id", identificadorDialog);
 	dialog.insertAdjacentHTML("afterbegin", contingutHtml);
+	document.body.appendChild(dialog);
 	return dialog;
 }
 
