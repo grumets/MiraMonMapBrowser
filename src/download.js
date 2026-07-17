@@ -688,7 +688,8 @@ function DonaNomFitxerDescarregaTot(i_capa, i_des, i_format, i_data)
 var capa=ParamCtrl.capa[i_capa];
 var s=CanviaVariablesDeCadena(capa.DescarregaTot[i_des].url, capa, i_data, null);
 
-	if (ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension)
+	if (capa.DescarregaTot[i_des].format[i_format]<ParamCtrl.FormatDescarregaTot.length &&
+		ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension)
 	{
 		s=s.replace("{extension}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
 		s=s.replace("{EXTENSION}", ParamCtrl.FormatDescarregaTot[capa.DescarregaTot[i_des].format[i_format]].extension);
