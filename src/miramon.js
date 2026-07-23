@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -4552,10 +4552,12 @@ function BuscaIMarcaEstilCapa(i_capa, capa_visible, estil_capa)
 
 // Per compatibilitat descendent a les story maps faig la omparació entre ids però si no ho trobo amb els noms 
 // ja que abans el id era el nom de la capa
-function FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, param_name_layers)
+//s'ha modificat per fer que els storymaps també puguin guardar si una capa està en un estat semitransparents de visibilitat
+function FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, visibilities, param_name_layers)
 {
 var capa_visible=layers.split(","), capa_estil=styles ? styles.split(",") : null;
 var capa, j, i, i_estil;
+var capa_visibility =  visibilities ? visibilities.split(",") : null;
 
 	if (capa_estil && capa_visible.length!=capa_estil.length)
 	{
@@ -4581,7 +4583,7 @@ var capa, j, i, i_estil;
 			if (capa_visible[j]==capa.id)
 			{
 				if (capa.visible=="ara_no")
-					CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "si");
+					CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, (capa_visibility && capa_visibility[j]) ? capa_visibility[j] : "si");
 				else
 				{
 					alert(GetMessage("Layer") + " " + capa_visible[j] + " " +
@@ -4605,7 +4607,7 @@ var capa, j, i, i_estil;
 				if (capa_visible[j]==capa.nom)
 				{
 					if (capa.visible=="ara_no")
-						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "si");
+						CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, (capa_visibility && capa_visibility[j]) ? capa_visibility[j] : "si");
 					else
 					{
 						alert(GetMessage("Layer") + " " + capa_visible[j] + " " +

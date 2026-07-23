@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -3386,6 +3386,30 @@ var MessageLang=
       "cze": "Připojit obrázek",
       "ger": "Bild anhängen"
     },
+    "AddButton": {
+      "cat": "Afegir botó",
+      "spa": "Añadir botón",
+      "eng": "Add button",
+      "fre": "Ajouter un bouton",
+      "cze": "Přidat tlačítko",
+      "ger": "Schaltfläche hinzufügen"
+    },
+    "AddMapActionButton": {
+      "cat": "Afegir botó d'acció sobre el mapa",
+      "spa": "Añadir botón de acción sobre el mapa",
+      "eng": "Add map action button",
+      "fre": "Ajouter un bouton d'action sur la carte",
+      "cze": "Přidat tlačítko akce nad mapou",
+      "ger": "Schaltfläche für Kartenaktion hinzufügen"
+    },
+    "ButtonText":{
+      "cat": "Text del botó",
+      "spa": "Texto del botón",
+      "eng": "Button text",
+      "fre": "Texte du bouton",
+      "cze": "Text tlačítka",
+      "ger": "Schaltflächentext"      
+    },
     "OpensImageFilesSelector": {
       "cat": "Obre selector de fitxers d'imatge",
       "spa": "Abre selector de ficheros de imagen",
@@ -3545,6 +3569,14 @@ var MessageLang=
       "fre": "Récupérer d'autres histoires créées par les utilisateurs",
       "cze": "Získat další příběhy vytvořené uživateli",
       "ger": "Retrieve andere Geschichten erstellt von Benutzern"
+    },
+    "RetrieveLocalStorymap":{
+      "cat":"Recuperar relats guardats en local",
+      "spa":"Recuperar relatos guardados localmente",
+      "eng":"Open locally saved stories",
+      "fre":"Récupérer des récits enregistrés localement",
+      "cze":"Načíst místně uložené příběhy",
+      "ger":"Lokal gespeicherte Geschichten öffnen"
     },
     "StorymapCannotImported": {
       "cat": "No es pot importar el relat",

@@ -638,15 +638,16 @@ function LBCarregaLogPageAnteriorCallback(doc, extra_param)
     if (!div)
         return;
 
-    var comment = log.comment || "";
+    /*var comment = log.comment || "";
     var isLong = comment.length > 100;
-    var truncated = isLong ? comment.substring(0, 100) + "[...]" : comment;
+    var truncated = isLong ? comment.substring(0, 100) + "[...]" : comment;*/
 
     var cdns = [];
 
     cdns.push("<b>", log.title || "", "</b><br><br>");
-    cdns.push("<span id=\"lpDesc_", extra_param.div_id, "\">", truncated, "</span><br>");
-    cdns.push(
+    /*cdns.push("<span id=\"lpDesc_", extra_param.div_id, "\">", truncated, "</span><br>");*/
+
+   /* cdns.push(
         "<span id=\"extraInfo_", extra_param.div_id,
         "\" style=\"display:none; margin-top:0.5em;\">"
     );
@@ -658,19 +659,13 @@ function LBCarregaLogPageAnteriorCallback(doc, extra_param)
     );
 
     if (log.link)
-        cdns.push("<div><strong>Link:</strong> ", log.link, "</div>");
-
-    if (log.dimName)
-        cdns.push("<div><strong>Dimension Name:</strong> ", log.dimName, "</div>");
-
-    if (log.dimValue)
-        cdns.push("<div><strong>Dimension Value:</strong> ", log.dimValue, "</div>");
+        cdns.push("<div><strong>Link:</strong> ", log.link, "</div>");*/
 
     if (log.idFeature)
         cdns.push("<div><strong>Feature ID:</strong> ", log.idFeature, "</div>");
 
     cdns.push("</span><br>");
-    cdns.push("<a href=\"#\" id=\"toggleInfo_", extra_param.div_id, "\">+ info</a>");
+    /*cdns.push("<a href=\"#\" id=\"toggleInfo_", extra_param.div_id, "\">+ info</a>");*/
 
     div.innerHTML = cdns.join("");
 

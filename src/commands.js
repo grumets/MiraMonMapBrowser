@@ -1,4 +1,4 @@
-﻿/*
+/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -100,9 +100,9 @@ function CommandMMNSetDateTime(datejson)
 
 //layers is an array of capa ids (strings)
 //styles is an array of style ids (strings)
-function CommandMMNSetLayersAndStyles(layers, styles)
+function CommandMMNSetLayersAndStyles(layers, styles, visibilities, param_name_layers)
 {
-	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, "CommandMMNSetLayersAndStyles");
+	FesVisiblesNomesAquestesCapesAmbEstils(layers, styles, visibilities, param_name_layers);
 	return 0;
 }
 
