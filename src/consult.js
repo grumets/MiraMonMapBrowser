@@ -1974,7 +1974,7 @@ var capa=ParamCtrl.capa[i_capa], feature;
 
 	//Quan no té attributes només retorno fals si és una capa estàtica, perquè sinó pot voler dir que haig de sol·licitar els attributes
 	if(capa.consultable!="si" || !capa.objectes ||
-		(!capa.tipus && (!capa.objectes.features || CountPropertiesOfObject(capa.objectes.features[i_obj].properties)==0)) ||
+		(!capa.tipus && (!capa.objectes.features || !capa.objectes.features[i_obj].geometry ||  CountPropertiesOfObject(capa.objectes.features[i_obj].properties)==0)) ||
 		capa.estil==null || !capa.estil.length)
 	{
 		return false;

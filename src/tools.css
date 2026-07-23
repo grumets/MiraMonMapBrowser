@@ -536,6 +536,7 @@ de forma que es pugui diferenciar de la resta de camps consultables i no validab
 	margin: 0px;
 	padding: 0px;
 	border: 1px solid #99CCFF;
+	container-type: inline-size;
 	/*resize:both;*/
 }
 .cantofinestra {

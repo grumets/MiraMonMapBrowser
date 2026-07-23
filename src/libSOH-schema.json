@@ -1,0 +1,466 @@
+{
+ 	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "libSOH main structure",
+	"description": "",
+	"type": "object",
+	"properties": {
+		"boxes": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"start": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the box in the full file (starting by 0)"
+					},
+					"size": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Size of box in bytes including the size itself and the type"
+					},
+					"type": { 
+						"type": "string",
+						"minLength": 4,
+						"description": "Four caracters in 4cc format or 16 bytes uuid defining the box type (e.g. 'meta')"
+					},
+					"dataOffset": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the data in the box from the start of the box (not from the start of the file). Commonly 8"
+					},
+					"dataView": { 
+						"type": ["object", "null"],
+						"description": "Data contained in the box after the header (commonly size and type) Can be partial or null"
+					}
+				}
+			}
+		},
+		"items": {
+			"type": "array",
+			"description": "List of the items in the file based on the 'iinf' box and the 'infe' subboxes",
+			"items": {
+				"type": "object",
+				"properties": {
+					"start": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the 'infe' box in the full file (starting by 0)"
+					},
+					"size": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Size of the 'infe' box in bytes including the size itself and the type"
+					},
+					"type": { 
+						"type": "string",
+						"minLength": 4,
+						"maxLength": 4,
+						"enum": ["infe"],
+						"description": "Four caracters in 4cc format (always 'infe')"
+					},
+					"dataOffset": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the data from the start of the dataview of the 'infe' (not from the start of the file)"
+					},
+					"version": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Version of the 'infe' full box"
+					},
+					"flags": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Flags of the 'infe' full box. Commonly encoded as bits"
+					},
+					"itemId": { 
+						"type": "integer",
+						"description": "Item identifier (in the 'infe' full box), Commonly starting by 1"
+					},
+					"itemProtectionIndex": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Data protection index of the item (in the 'infe' full box)"
+					},
+					"itemType": { 
+						"type": "string",
+						"minLength": 4,
+						"maxLength": 4,
+						"description": "Type of the item in the 'infe' full box (e.g. 'tili')"
+					},					
+					"itemName": { 
+						"type": "string",
+						"description": "Name of the item (in the 'infe' full box)"
+					},
+					"extents": {
+						"type": "array",
+						"description": "Extents of the item from the 'iloc' box",
+						"items": {
+							"type": "object",
+							"description": "A single extent of the item (in bytes) from the 'iloc' box",
+							"properties": {
+								"extentIndex": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Index of the extent"
+								},
+								"extentOffset": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Offset of the range of bytes of the data in the file for this item"
+								},
+								"extentLength": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Size of the range of bytes of the data in the file for this item"
+								}
+							}
+						}
+					},
+					"associations": {
+						"type": "array",
+						"description": "Types of 'ipco' sections associated to this item",
+						"items": {
+							"type": "object",
+							"description": "Type of 'ipco' sections associated to this item",
+							"properties": {
+								"essential": {
+									"type": "boolean"
+								},
+								"type": {
+									"type": "string",
+									"description": "Type of 'ipco' sections associated to this item (e.g. 'ispe')"
+								}
+							}
+						}
+					},
+					"imageWidth": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of columns of the image in this item"
+					},
+					"imageHeight": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of rows of the image in this item"
+					},
+					"bitsPerChannels": {
+						"type": "array",
+						"description": "Number of bits per channels in the images",
+						"items": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of bits per channel in the images"
+						}
+					},
+					"uncompressProfile": {
+						"type": ["string", "integer", "null"],
+						"minLength": 4,
+						"maxLength": 4,
+						"description": "Type of encoding of uncompressed item (e.g. 'rgb3'). Defined in the 'uncC' box when the itemType is 'unci'. Can be a predefined profile such as 'rgb3' or, 0 or not defined if is not predefined, in this case the configuration is completely described with the remaining fields."						
+					},
+					"componentCount": {
+						"type": "integer",
+						"description": "Number of components per pixel/frame. Defined in the 'uncC' box when the itemType is 'unci'.",
+					},
+					"componentIndex": {
+						"type": "array",
+						"description": "Component index (starts at 0). It is used to indicate the order of the components. Defined in the 'uncC' box when the itemType is 'unci'.",
+						"items": {
+							"type": "integer",
+							"minimum": 0
+						}
+					},
+					"componentBitDepthMinusOne": {
+						"type": "array",
+						"description": "Size in bits minus one of the values for each component. Defined in the 'uncC' box when the itemType is 'unci'.",
+						"items": {
+							"type": "integer"
+						}
+					},
+					"componentFormat": {
+						"type": "array",
+						"description": "Data type of the values for each component. Defined in the 'uncC' box when the itemType is 'unci'. Can be '0' if the values are unsigned integer numbers, '1' if the values are float numbers, '2' if the values are complex numbers, '3' if the values are signed integer numbers or >3 for other formats.",
+						"items": {
+							"type": "integer"
+						}
+					},
+					"componentAlignSize": {
+						"type": "array",
+						"description": "Align size in memory per component. Defined in the 'uncC' box when the itemType is 'unci'. If it is 0, the component value is coded on component bit depth bits exactly",
+						"items": {
+							"type": "integer"
+						}
+					},
+					"samplingType":{
+						"type": "integer",
+						"description": "Sampling mode. Defined in the 'uncC' box when the itemType is 'unci'."
+					},
+					"interleaveType":{
+						"type": "integer",
+						"description": "Interleaving type of the components. Defined in the 'uncC' box when the itemType is 'unci'. Pixel, Component, Row... interleave"
+					},
+					"componentsLittleEndian":{
+						"type": "integer",
+						"description": "Components are stored as little endian? '0' is big-endian, '1' is little-endian.  Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"blockPadLsb":{
+						"type": "integer",
+						"description": "Indicates padding bits location. Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"blockLittleEndian":{
+						"type": "integer",
+						"description": "Indicates block endianness. '0' is big-endian, '1' is little-endian. Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"blockReversed":{
+						"type": "integer",
+						"description": "Indicates if component order is reversed within the block. Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"padUnknown":{
+						"type": "integer",
+						"description": "Indicates that the value of padded bits in blocks or padded components is unknown. Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"pixelSize":{
+						"type": "integer",
+						"description": "Indicates the total number of bytes (including component and block padding) used to store all components for a single pixel when component values for that pixel are interleaved. Defined in the 'uncC' box when the itemType is 'unci'. "
+					},
+					"blockSize":{
+						"type": "integer",
+						"description": "Size in bytes of blocks. If !=0 indicates that is tiled. Defined in the 'uncC' box when the itemType is 'unci' and when is tiled (another tile type than 'grid' and 'tili'). "
+					},
+					"rowAlignSize":{
+						"type": "integer",
+						"description": "Indicates the padding between rows. Defined in the 'uncC' box when the itemType is 'unci' and when is tiled. "
+					},
+					"tileAlignSize":{
+						"type": "integer",
+						"description": "indicates the padding between tiles. Defined in the 'uncC' box when the itemType is 'unci' and when is tiled. "
+					},
+					"numTileColsMinusOne":{
+						"type": "integer",
+						"description": "The horizontal number minus one of tiles in the frame/image. Defined in the 'uncC' box when the itemType is 'unci' and when is tiled. "
+					},
+					"numTileRowsMinusOne":{
+						"type": "integer",
+						"description": "The vertical number minus one of tiles in the frame/image. Defined in the 'uncC' box when the itemType is 'unci' and when is tiled. "
+					},
+					"compressionType": {
+						"type": ["string", "null"],
+						"minLength": 4,
+						"maxLength": 4,
+						"description": "Compression type in the frame/image/item. Defined in 'cmpC' box (Compression Configuration Box) when the itemType is 'unci'."
+					},
+					"tileWidth": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of columns of the tiles in this item (from the 'tilC' box)"
+					},
+					"tileHeight": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of rows of the tiles in this item (from the 'tilC' box)"
+					},
+					"offsetTileLength": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Size of the offsets (in bits) written in the header of the 'tili' box in the 'mdat' box  (from the 'tilC' box)"
+					},
+					"sizeTileLength": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Size of the sizes (in bits) written in the header of the 'tili' box in the 'mdat' box (from the 'tilC' box)"
+					},
+					"areTileOffsetsSequential": {
+						"type": "boolean",
+						"description": "Are the tiles sequential? (from the 'tilC' box)"
+					},					
+					"tileProperties": {
+						"type": "array",
+						"description": "Properties in the 'ipco' associated with this tile",
+						"items": {
+							"type": "string",
+							"description": "Property in the 'ipco' associated with this tile"
+						}
+					},
+					"matrixWidth": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of tiles per column in the 'tili' box in the 'mdat' box (calculated)"
+					},
+					"matrixHeight": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of tiles per row in the 'tili' box in the 'mdat' box (calculated)"
+					},
+					"pyramidId": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Id of the group that describes the pyramid this item is part of"
+					}, 					
+					"sizeMultiple": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Multiple of the original size of the tile pyramid"
+					},
+					"itemTypeTile": {
+						"type": "string",
+						"minLength": 4,
+						"maxLength": 4,
+						"description": "Type of the item of the individual tiles (e.g. 'unci') in a grid or in a tili (e.g. 'av01')"
+					},	
+					"isTile": { 
+						"type": "boolean",
+						"description": "This item is a tile related to a 'grid'. It is useful to escape the tile items that are already considered in the 'grid' item, and to identify images that are not part of a grid (e.g. not tiled or belonging to a zoom level with only one tile). Remember that 'tili' tiles are not listed as 'items'. Grid tiles are combined in a 'grid' item automaticaly by the library and this way the structure of a 'grid' item is very similar to a 'tilC' item"
+					},
+					"tiles": {
+						"type": "array",
+						"description": "Position of the tiles in the file. Valid for 'grid' and 'tili'",
+						"items": {
+							"type": "object",
+							"description": "Position of a tile in the file",
+							"properties": {
+								"offset": {
+									"type": "integer",
+									"minimum": 0,
+									"description": "Offset of the tile from the origin of the 'mdat' box (not from the begining of the file)"
+								},
+								"size": {
+									"type": "integer",
+									"minimum": 0,
+									"description": "Size of the tile in the file in bytes (inside the 'mdat' box)"
+								},
+								"itemId":  {
+									"type": "integer",
+									"minimum": 0,
+									"description": "Reference to an Item identifier (in the 'infe' full box), Commonly starting by 1. Identical to for all tiles in 'tili' and different for each tile in 'grid'"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"groups": {
+			"type": "array",
+			"description": "List of the groups in the file based on the 'grpl' box and the subboxes (for the moment only 'pymd')",
+			"items": {
+				"type": "object",
+				"properties": {
+					"start": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the subbox in the full file (starting by 0)"
+					},
+					"size": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Size of the subbox in bytes including the size itself and the type"
+					},
+					"type": { 
+						"type": "string",
+						"description": "Four caracters in 4ccc format (for the moment only 'pymd')"
+					},
+					"dataOffset": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Offset of the data from the start of the dataview of the subbox (not from the start of the file)"
+					},
+					"version": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Version of the subfullbox full box"
+					},
+					"flags": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Flags of the subfullbox. Commonly encoded as bits"
+					},
+					"groupId": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Group identifier"
+					},
+					"entities": {
+						"type": "array",
+						"description": "Entities in the group",
+						"items": {
+							"type": "object",
+							"description": "Entity in the group. In case of a 'pymd' box is the levels of the pyramid",
+							"properties": {
+								"itemId": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Entity identifier that coindides with the itemId of the item that this entity (e.g. a zoom level in the pyramid) describes. The itemId can be used to find where the actual tiles are stored. It can be a 'grid' (if some tiles are in this level) a 'tilC' (if more that 65k tiles are in this level) or a image item (if only one tile is in this level)"
+								},
+								"sizeMultiple": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Multiple of the original size of the tile pyramid"
+								}, 
+								"matrixWidth": {
+									"type": "integer",
+									"minimum": 0,
+									"description": "Number of tiles per column in this level of the pyramid"
+								},
+								"matrixHeight": { 
+									"type": "integer",
+									"minimum": 0,
+									"description": "Number of tiles per row in this level of the pyramid"
+								}
+							}
+						}
+					},
+					"tileWidth": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of columns of the tiles in the pyramid"
+					},
+					"tileHeight": { 
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of rows of the tiles in the pyramid"
+					}
+				}
+			}
+		},
+		"fileSize": { 
+			"type": "integer",
+			"description": "File size in bytes"
+		},
+		"brand":{
+			"type": "object",
+			"description" :"The brand is part of the 'ftyp' box (file type box) and is used to identify the file type and which specifications it is compatible with. A brand is a four-character code that says: which standard the file follows, which players or decoders can interpret it, which variant of the format is used",
+			"properties": {
+				"majorBrand": {
+					"type": "string",
+					"minLength": 4,
+					"maxLength": 4,
+					"description":"File major brand (format)"
+				},
+				"minorVersion": {
+					"type": "string",
+					"minLength": 4,
+					"maxLength": 4,
+					"description":"Version of major brand"
+				},
+				"compatibleBrands" : {
+					"type": "array",
+					"description":"other brands the file is compatible with",
+					"items": {
+						"type": "string"
+						"minLength": 4,
+						"maxLength": 4
+					}
+				}
+			}
+		},
+		"mediaHandler":{
+			"type": "string",
+			"minLength": 4,
+			"maxLength": 4,
+			"description": "Media content type of the file or track. Defined by 'hdlr' box. Values can be 'pict' for images, 'vide' for videos, 'meta' for metadata, 'soun' for audio, 'aux' for auxiliari images, etc.",
+			
+		}
+	}
+}

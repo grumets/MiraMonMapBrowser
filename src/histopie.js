@@ -773,7 +773,7 @@ var tipus_chart;
 			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
 			ncol/=1.3;
 			nfil/=2;
-			cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"font-size: 4vw\"></p>");
+			cdns.push("<p id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"font-size: clamp(8px, 6cqw, 72px);\"></p>");
 			//cdns.push("<div id=\"", DonaNomEstadistic(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
 		}
 	}

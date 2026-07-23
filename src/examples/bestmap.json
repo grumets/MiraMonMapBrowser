@@ -132,7 +132,7 @@
 			"content": null
 		}
 	],
-	"ServidorLocal": "https://www.ogc3.grumets.cat/cgi-bin/bestmap/MiraMon.cgi?",
+	"ServidorLocal": "https://www.ogc.grumets.cat/cgi-bin/bestmap/MiraMon.cgi?",
 	"VersioServidorLocal": { "Vers": 1, "SubVers": 1, "VariantVers": 1 },
 	"TipusServidorLocal": "TipusWMS",
 	"AdrecaBaseSRC": "",
@@ -22044,9 +22044,9 @@
 				}
 			},			
 			"DescarregaTot": [
-				{"desc": "MCSC 2009 (Llegenda Nivell 2)", "url": "download/MCSC/MCSC_2009_n2.{extension}", "format": [0]},
-				{"desc": "MCSC 2009 vectorial per fulls", "url": "https://mcsc.creaf.cat/poligons4.{extension}", "format": [4]},
-				{"desc": "MCSC 2009 ràster per fulls", "url": "https://mcsc.creaf.cat/rasters4.{extension}", "format": [4]}
+				{"desc": "MCSC 2009 (Llegenda Nivell 2)", "url": "https://opengis.grumets.cat/MCSC/download/MCSC/MCSC_2009_n2.{extension}", "format": [0]},
+				{"desc": "MCSC 2009 vectorial per fulls", "url": "https://mcsc.creaf.cat/poligons4.{extension}", "format": [1]},
+				{"desc": "MCSC 2009 ràster per fulls", "url": "https://mcsc.creaf.cat/rasters4.{extension}", "format": [1]}
 			],
 			"NomVideo": "MCSCn2",
 			"DescVideo": 
@@ -22352,7 +22352,7 @@
 			"ProcesMostrarTitolCapa": false
 		},
 		{
-			"servidor": "https://localhost/bestmap/propies/COG",
+			"servidor": "https://ogc.grumets.cat/bestmap/propies/COG",
 			"versio": null,
 			"tipus": "TipusHTTP_GET",
 			"cors": true,

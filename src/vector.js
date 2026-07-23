@@ -3719,7 +3719,17 @@ function TransformaCoordenadesFeatures(features, crs_ori, crs_dest)
 	for(var j=0; j<features.length; j++)
 	{
 		var feature=features[j], coordinates2, coordinates3;
-		feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
+		if (!feature.geometry)
+			feature.geometryCRSactual=null;
+		else {
+			try {
+				feature.geometryCRSactual=JSON.parse(JSON.stringify(feature.geometry));
+			} catch (error) {
+				feature.geometryCRSactual=null;
+			}
+		}
+		if (!feature.geometryCRSactual)
+			continue;
 		if (feature.geometryCRSactual.type=="MultiPolygon")
 		{
 			for(var c3=0; c3<feature.geometryCRSactual.coordinates.length; c3++)
