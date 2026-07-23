@@ -1,4 +1,4 @@
-﻿@import "guf.css"; 
+@import "guf.css"; 
 @import "logbook.css";
 @import "vis.min.css"; 
 
@@ -71,7 +71,7 @@ a:hover { text-decoration: underline}
 	flex: 1 auto;
 	margin: 5px;
 	line-height: 1.5;
-	max-width: 80px;
+	max-width: 90px;
 }
 
 button.center {
