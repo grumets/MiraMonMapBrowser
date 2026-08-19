@@ -876,23 +876,22 @@
 		},
 		"AnarCoordIni": {
 			"description": "Coordenades i radi (en metres) amb les que es vol inicialitzar la finestra d'anar a coordenades, han d'estar en les unitats i el sistema de referència inicial del navegador. Si no es diu res s'inicialitzarà per defecte amb el punt inicial del navegador o amb les coordenades de les accions programades.",
-			"type": [null, "object"],
+			"type": ["object"],
 			"properties": {
 				"x":{
 					"description": "Coordenada x del punt al que es vol anar",
-					"type": "number",
+					"type": "number"
 				},
 				"y":{
 					"description": "Coordenada y del punt al que es vol anar",
-					"type": "number",
+					"type": "number"
 				},
 				"m_voltant": { 
 					"description": "Radi en metres que es vol mostrar al voltant del punt",
-					"type": "number",
+					"type": "number"
 				}
 			}
-		},{
-		
+		},
 		"MostraPosicioGPS": {
 			"description": "Cal representar el lloc on el dispositiu diu que es troba en aquell moment (i potser en el futur la ruta). Opcional. Si és 'false' no es demana ni dibuixa la posició actual (o la ruta). Per defecte és 'true'.",
 			"type": ["null", "boolean"]
