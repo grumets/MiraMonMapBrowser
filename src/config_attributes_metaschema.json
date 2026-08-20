@@ -22,7 +22,7 @@
 	],
 	"definitions": {
 		"AttributeDescription": {
-			"title": "GeoJSON meaning vocabulary meta-schema",
+			"description": "GeoJSON meaning vocabulary meta-schema",
 			"type": "object",
 			"$comment": "The name of the property is the name of the attribute. If the server is SOS there are 2 special names can be used __om_time__, __om_sensor__ and the rest match the field names of the table containing the data. The properties that define each attribute can be de ones defined below or properties from JSON schema itself if indicated in this comment. For the moment, only 'description' is implemented. Others from 'string' (https://json-schema.org/understanding-json-schema/reference/string.html) or number can be useful (https://json-schema.org/understanding-json-schema/reference/numeric.html).",
 			"properties": {

@@ -358,17 +358,16 @@
 					"nom":	{ 
 						"description": "Nom del fitxer de la imatge que fa de rectangle de situació o el nom de la capa si s'extreu d'un servei WMS",
 						"type": "string",
-						"format": "uri"
+						"format": "uri-reference",
+						"contentMediaType": "image/*"
 					},
 					"NomEstil": { 
 						"description": "Nom de l'estil usat en la petició WMS per obtenir el rectangle de situació si s'extreu d'un servei WMS",
-						"type": "string",
-						"format": "uri"
+						"type": "string"
 					},
 					"FormatImatge": {
 						"description": "Format en que s'ha de demanar la imatge de situació al servidor si s'extreu d'un servei WMS. És un format MIME. Optional",
-						"type": ["string", "null"],
-						"format": "uri"
+						"type": ["string", "null"]
 					},
 					"Ample": { 
 						"description": "Ample del fitxer de la imatge que fa mapa de situació en píxels",
@@ -437,7 +436,7 @@
 					"src": { 
 						"description": "Nom del fitxer HTML que conté la plantilla d'impressió",
 						"type": "string",
-						"format": "uri"
+						"format": "uri-reference"
 					},
 					"ample": {
 						"description": "Ample del document HTML de la plantilla d'impressió",
@@ -661,7 +660,7 @@
 					"multipleOf" : 1
 				},
 				"colors": {
-					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill",
+					"description": "Colors a aplicar als botons de la barra. Si no s'indica, els botons seràn els clàssics (en base a GIFs multicolor). Si s'indica, els botons seran vectorials de colors plans (SVG). Les propietats d'aquest objectes són els noms de classe que hi ha dins del SVG i els valors, els colors en format #RRGGBB. Els colors només apliquen a la propietat del 'fill'",
 					"type": "object",
 					"additionalProperties": { 
 						"description": "The the color of this element class. De moment els botons SVG que distribuim tenen un estil de fons anomenat 'cls-1' i un estil de contorns anomenat 'cls-2' i aquestes serien les 2 propietats a indicar.",
@@ -802,7 +801,8 @@
 				"boto":	{
 					"description": "Fragment del nom del fitxer GIF que conté el dibuix del botó",
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference",
+					"contentMediaType": "image/*"
 				},
 				"text_boto": {
 					"description": "Text que descriu el botó",
@@ -915,7 +915,8 @@
 		"IconaValidacio": {
 			"description": "Nom del fitxer de la icona que es posa al lloc del clic a la vista en un procés de validació de coordenades (generalment un GIF o PNG). Opcional",
 			"type": ["null", "string"],
-			"format": "uri"
+			"format": "uri-reference",
+			"contentMediaType": "image/*"
 		},		
 		"StoryMap": {
 			"type": ["null", "array"],
@@ -930,7 +931,8 @@
 					"src":{
 						"description": "Adreça i nom del fitxer que conté la imatge petita (thumbnail) que representa la història en format JPEG, PNG... Opcional",
 						"type": "string",
-						"format": "uri"
+						"format": "uri-reference",
+						"contentMediaType": "image/*"
 					},
 					"url": {
 						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles (algunes comentes han de ser dobles però no ho puc posar aquí):   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-diags={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els diagrames no indicats i si no hi ha el paramentre data-mm-diags, es tanquen tots els histogrames; IdCapa* ha de ser una capa d'arrays binaris) (6) data-mm-extradims={'ly': , 'dims': {`clau`: `valor`}}, {'ly': , 'dims': {`clau`: `valor`, `clau2`: `valor2`}}, ... Es també possible posar botons que tinguin onClick='ExecuteDataMMAttributes('data-mm-center', '{'x': `number`, 'y': `number`}', ...), data-mm-visibilities='`si`,`semitransparent`'",
@@ -1367,7 +1369,7 @@
 								"type": "string"
 							},
 							"nomCampGeometria": {
-								"description": "Informació que ens permet obtenir la geometria dels objectes de la capa. Potser de tipus string si conté el nom del camp del CSV que conté la geometria en format WKT, o tipus TipusCampGeoCoordPunt, si conté els noms dels camps X i Y que contenen les coordenades X i Y si la geometria és de tipus punt, o tipus TipusCampGeoFitxer el nom de la capa en GEOJSON o en WFS que conté la geometria i el camp identitat que ens permet relacionar la geometria amb els atributs. (aquest darrer tipus PENDENT de implementar",
+								"description": "Informació que ens permet obtenir la geometria dels objectes de la capa. Potser de tipus string si conté el nom del camp del CSV que conté la geometria en format WKT, o tipus TipusCampGeoCoordPunt, si conté els noms dels camps X i Y que contenen les coordenades X i Y si la geometria és de tipus punt, o tipus TipusCampGeoFitxer el nom de la capa en GEOJSON o en WFS que conté la geometria i el camp identitat que ens permet relacionar la geometria amb els atributs. (El darrer tipus PENDENT de implementar)",
 								"oneOf":[{
 									"type": "null"
 								},{
@@ -1540,7 +1542,8 @@
 											"minimum": 0
 										},
 										"cells": {
-											"description": "Interna No usar. Array d'objectes amb l'envolupant de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					"$ref": "#/definitions/featureCollection"
+											"description": "Interna No usar. Array d'objectes amb l'envolupant de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					
+											"$ref": "metadata-schema.json#/definitions/featureCollection"
 										},
 										"zones": {
 											"type": "array",
@@ -2557,7 +2560,8 @@
 						"icona": {
 							"description": "URL del fitxer que fa d'icona (generalment un GIF, PNG o un altres format que el navegador sap pintar com a una imatge",
 							"type": "string",
-							"format": "uri"
+							"format": "uri-reference",
+							"contentMediaType": "image/*"
 						},
 						"ncol": {
 							"description": "Nombre de columnes de la icona",

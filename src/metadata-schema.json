@@ -268,7 +268,7 @@
 								"type": ["array", "null"],
 								"items": {
 									"description": "Data disponible per la capa",
-									"$ref": "#/definitions/data" 
+									"$ref": "config-schema.json#/definitions/data" 
 								}
 							},
 							"geometryCRSactual": {
