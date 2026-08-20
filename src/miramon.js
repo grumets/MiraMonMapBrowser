@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -68,6 +68,7 @@ IncludeScript("consult.js");
 IncludeScript("consola.js");
 IncludeScript("imgrle.js");
 IncludeScript("imgtiff.js");
+IncludeScript("imgheif.js", true);
 IncludeScript("geomet.js");
 IncludeScript("ngeohash.js");
 IncludeScript("papaparse.min.js"); // Extret de https://www.papaparse.com/
@@ -116,7 +117,6 @@ IncludeScript("vis.min.js", true);
 IncludeScript("md5.min.js", true);
 IncludeScript("websubhook.js", true);
 
-IncludeScript("imgheif.js", true);
 
 IncludeScript("msg.js", true);
 
@@ -572,6 +572,8 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	GeneraUIDCapa(capa);
 	var tipus=DonaTipusServidorCapa(capa);
 	
+	if(capa.access && !capa.access.authenticationType)
+		capa.access.authenticationType="bearer"; // si no hi ha res omplo amb el tipus per defecte quan hi ha access
 	//Càlcul de la envolupant el·lipsoidal
 	if (capa.EnvTotal && capa.EnvTotal.EnvCRS)
 		capa.EnvTotalLL=DonaEnvolupantLongLat(capa.EnvTotal.EnvCRS, capa.EnvTotal.CRS);
@@ -1287,7 +1289,7 @@ function CanviaIdioma(s)
 		else
 			IniciaStoryMap(indexStoryMapActiu);
 	}
-} // Fi function CanviaIdioma()
+} 
 
 
 /*

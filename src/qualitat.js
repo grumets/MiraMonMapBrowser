@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -357,14 +357,41 @@ function MostraQualitatCapa(elem, quality, capa, i_estil)
 	{
 		var ajax=new Ajax();
 		if (window.doAutenticatedHTTPRequest && capa.access)
-			doAutenticatedHTTPRequest(capa.access, "GET", 
+		{
+			if(capa.access.authenticationType=="basic"){
+				const doGetWithBasic = function() {
+					ajax.setRequestHeader('Authorization', capa.access.cadenaAutenBasica);
+					ajax.doGet(DonaNomFitxerMetadades(capa, i_estil),
+						ParsejaDocMetadadesXMLPerOmplirQualitatCapa, "text/xml",
+						{elem: elem, quality: null, capa: capa, i_estil: i_estil});
+				};
+				// Si ja tenim les credencials, fem la petició immediatament
+				if (capa.access.cadenaAutenBasica)
+					doGetWithBasic();
+				else
+				{
+					// Obrim el diàleg i esperem la resposta de l'usuari
+					// CreaDialogAutentificacioBasica retorna una Promise que es resolt si l'usuari prem OK
+					CreaDialogAutentificacioBasica(i_capa).then(function(ok){
+						// si l'usuari ha introduït les credencials (cadenaAutenBasica s'hauria d'haver omplert)
+						if (capa.access.cadenaAutenBasica)
+							doGetWithBasic();
+						// si l'usuari cancel·la o no hi ha cadena, no fem la petició
+					}).catch(function(){
+						// cancel·lació o error: no fem res
+					});
+				}
+			}
+			else
+				doAutenticatedHTTPRequest(capa.access, "GET", 
 					ajax, DonaNomFitxerMetadades(capa, i_estil), null, null, 
 					ParsejaDocMetadadesXMLPerOmplirQualitatCapa, 
 					"text/xml", {elem: elem, quality: null, capa: capa, i_estil: i_estil});
+		}
 		else
 			ajax.doGet(DonaNomFitxerMetadades(capa, i_estil),
 					ParsejaDocMetadadesXMLPerOmplirQualitatCapa, "text/xml",{elem: elem, quality: null, capa: capa, i_estil: i_estil});
-	}
+	}	
 	else		
 		contentLayer(elem, DonaCadenaMostraQualitatCapa(quality, capa, i_estil));
 }

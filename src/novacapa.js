@@ -1005,6 +1005,10 @@ async function CompletaDefinicioCapaTIFF(capa, tiff, url, descEstil, i_valor)
 		var i_v=i_valor;
 		for (var i=0; i<image.getSamplesPerPixel(); i++)
 		{
+			// M'he trobat que m'ha petat perquè no havia escrit tots els valors al config i sembla que és obligatori
+			// ho protegeixo perquè no em peti, però potser ho podria afegir com quan és una capa d'usuari?
+			if(!capa.valors || capa.valors[i_v+i])
+				break;
 			capa.valors[i_v+i].datatype=datatype;
 			capa.valors[i_v+i].nodata=(image.getGDALNoData()!==null) ? [image.getGDALNoData()] : null;
 			/* NJ_25_07_2023: A això no li trobo sentit i crec que no s'hi entra mai perquè sempre existeix capa.servidor
@@ -1224,6 +1228,8 @@ var i_fitxer, i_event;
 	if (!urls.length)
 		return;
 
+	// ·$· Aquí caldria fer alguna cosa per si hi ha autentificació, ara mateix quan s'afegeix una capa des de la finestra
+	// d'afegir no es permet que hi hagi autentificació
 	var capa=IniciaDefinicioCapaTIFF((urls.length==1) ? urls[0] : null, TreuAdreca(urls[0]), null, "si");
 
 	for (i_fitxer=0; i_fitxer<urls.length; i_fitxer++)
@@ -1233,7 +1239,7 @@ var i_fitxer, i_event;
 
 		i_event=CreaIOmpleEventConsola("HTTP GET", -1, urls[i_fitxer], TipusEventHttpGet);
 		try{
-			var tiff = await GeoTIFFfromUrl(urls[i_fitxer]);
+			var tiff = await GeoTIFFfromUrl(urls[i_fitxer], {allowFullFile: TiffURLAllowFullFile, cache: TiffURLCache});
 			CanviaEstatEventConsola(null, i_event, EstarEventTotBe);
 		}catch(e){
 			alert(e);

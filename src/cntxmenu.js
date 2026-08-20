@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -2675,10 +2675,70 @@ function OmpleAfegeixCapaServidor(elem, i_capa)
 	contentLayer(elem, DonaCadenaAfegeixCapaServidor(null, i_capa));
 }
 
+function DonaCadenaBasicAuth(user, pass) {
+  return "Basic " + window.btoa(
+    unescape(encodeURIComponent(`${user}:${pass}`))
+  );
+}
+
+function DonaCadenaAutentificacioBasicaCapa(dialogAB, formAB, i_capa)
+{
+	var capa=ParamCtrl.capa[i_capa];
+	if(!capa.access || capa.access.authenticationType!="basic")
+	{
+		dialogAB.close("error");
+		return;
+	}
+	if(!formAB.username.value)
+	{
+		alert(Message("ValidUserMustBeProvided", "authens"));
+		return;
+	}
+	if(!formAB.password.value)
+	{
+		alert(Message("ValidPasswordMustBeProvided", "authens"));
+		return;
+	}
+	capa.access.cadenaAutenBasica=DonaCadenaBasicAuth(formAB.username.value, formAB.password.value);
+	dialogAB.close("ok");
+	return;
+}
+
+function DonaCadenaFinestraAutentificacioBasica(i_capa)
+{
+var cdns=[];
+	cdns.push("<form method='dialog' id='loginFormBasicAuth'><p class='Verdana11px'>",GetMessage("LoginServidor", "authens"),
+			ParamCtrl.capa[i_capa].servidor, " ('",DonaCadena(ParamCtrl.capa[i_capa].DescLlegenda),"')</p>",
+			"<label class='Verdana11px'>",GetMessage("User", "authens"),"<input type='text' id='username' class='Verdana11px' required></label><br><br>",
+			"<label class='Verdana11px'>",GetMessage("Password", "authens"),"<input type='password' id='password' class='Verdana11px' required></label><br><br>",
+			"<input type='button' class='Verdana11px' value='",GetMessage("OK"),"' id='OKBasicAuth'/>",
+			"<input type='button' class='Verdana11px' value='", GetMessage("Cancel"), "' id='CancelBasicAuth'/></form>");
+	return cdns.join("");
+}
+async function CreaDialogAutentificacioBasica(i_capa)
+{
+	return new Promise(function(resolve, reject){
+	
+		const dialogABasica=CreaDialog("autenBasica", DonaCadenaFinestraAutentificacioBasica(i_capa));
+		const okBA = document.getElementById("OKBasicAuth");
+		const cancelBA = document.getElementById("CancelBasicAuth");
+		okBA.onclick = function () {
+			DonaCadenaAutentificacioBasicaCapa(dialogABasica, document.getElementById("loginFormBasicAuth"), i_capa);
+			dialogABasica.close("ok");
+			resolve(true);
+		};
+		cancelBA.onclick = function () {
+			dialogABasica.close("cancel");
+			reject(false);
+		};
+		dialogABasica.showModal();		
+	});
+}
+
 function IniciaFinestraAfegeixCapaServidor(i_capa)
 {
 	ComprovaCalTancarAmbScope();
-var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser", "cntxmenu"));
+	var elem=ObreFinestra(window, "afegirCapa", GetMessage("ofAddingLayerToBrowser", "cntxmenu"));
 	if (!elem)
 		return;
 	FinestraAfegeixCapaServidor(elem, i_capa);
@@ -5388,10 +5448,7 @@ function ExportarObjectesGeoJSON(i_capa)
 		const objectesGeoJSON = PreparaGeoJSONObjectesSeleccionats(i_capa);
 		return GuardaDadesJSONFitxerExtern(objectesGeoJSON, GetMessage("exportedVectorObjects", "cntxmenu") + Date.now());
 	}
-	else
-	{
-		alert(GetMessage("NoObjectSelectedExport", "cntxmenu"));
-	}
+	alert(GetMessage("NoObjectSelectedExport", "cntxmenu"));
 }
 
 var finestraTAPIS;

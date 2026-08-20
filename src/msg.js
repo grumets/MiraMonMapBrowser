@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of MiraMon Map Browser.
     MiraMon Map Browser is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Alba Brobia (a brobia at creaf uab cat) , Didac Pardell (d.pardell at creaf uab cat)
@@ -158,6 +158,14 @@ var MessageLang=
     "fre": "Zone de la cellule",
     "cze": "Plocha buňky",
     "ger": "Fläche der Zelle"
+  },
+  "Resolution": {
+    "cat": "Resolució",
+    "spa": "Resolución",
+    "eng": "Resolution",
+    "fre": "Résolution",
+    "cze": "Rozlišení",
+    "ger": "Auflösung"
   },
   "metadata": {
     "cat": "metadades",
@@ -855,6 +863,62 @@ var MessageLang=
     "cze": "Datum a čas",
     "ger": "Datum und Uhrzeit"
   },
+  "Time": {
+	"cat": "Hora",
+    "spa": "Hora",
+    "eng": "Time",
+    "fre": "L'heure",
+    "cze": "Čas",
+    "ger": "Zeit"
+  },
+  "Year":{
+	"cat": "Any",
+    "spa": "Año",
+    "eng": "Year",
+    "fre": "Année",
+    "cze": "Rok",
+    "ger": "Jahr"
+  },
+  "Month":{
+	"cat": "Mes",
+    "spa": "Mes",
+    "eng": "Month",
+    "fre": "Mois",
+    "cze": "Měsíc",
+    "ger": "Monat"
+  },
+  "Day":{
+	"cat": "Dia",
+    "spa": "Día",
+    "eng": "Day",
+    "fre": "Jour",
+    "cze": "Den",
+    "ger": "Tag"
+  },
+  "Hour":{
+	"cat": "Hora",
+    "spa": "Hora",
+    "eng": "Hour",
+    "fre": "Heure",
+    "cze": "Hodina",
+    "ger": "Hodina"
+  },
+  "Minute":{
+	"cat": "Minut",
+    "spa": "Minuto",
+    "eng": "Minute",
+    "fre": "Minute",
+    "cze": "Minuta",
+    "ger": "Minute"
+  },
+  "Second":{
+	"cat": "Segon",
+    "spa": "Segundo",
+    "eng": "Second",
+    "fre": "Seconde",
+    "cze": "Sekunda",
+    "ger": "Sekunde"
+  },
   "Next": {
     "cat": "Següent",
     "spa": "Siguiente",
@@ -886,14 +950,6 @@ var MessageLang=
     "fre": "de",
     "cze": "z",
     "ger": "von"
-  },
-  "Time": {
-    "cat": "Hora",
-    "spa": "Hora",
-    "eng": "Time",
-    "fre": "L'heure",
-    "cze": "Čas",
-    "ger": "Zeit"
   },
   "Option": {
     "cat": "Opció",
@@ -5947,10 +6003,18 @@ var MessageLang=
       "cze": "Přihlášení",
       "ger": "Anmeldung"
     },
+	"LoginServidor": {
+      "cat": "Iniciar sessió per accedir als recursos del servidor (o de la capa):",
+      "spa": "Iniciar sesión para acceder a los recursos del servidor (o de la capa):",
+      "eng": "Log in to access server (or layer) resources:",
+      "fre": "Se connecter pour accéder aux ressources du serveur (ou de la couche):",
+      "cze": "Přihlaste se pro přístup k serverovým (nebo vrstvovým) zdrojům:",
+      "ger": "Melden Sie sich an, um auf Server- (oder Layer-)Ressourcen zuzugreifen:"
+    },
     "LoginAccountFailed": {
       "cat": "Error o cancel·lació de la identificació amb el compte de",
       "spa": "Error o cancelación de la identificación en la cuenta de",
-      "eng": "Login in your account failed or cancelled in",
+      "eng": "Log in in your account failed or cancelled in",
       "fre": "La connexion à votre compte a échoué ou a été annulée dans",
       "cze": "Přihlášení k účtu se nezdařilo nebo bylo zrušeno v",
       "ger": "Anmeldung in Ihrem Konto fehlgeschlagen oder abgebrochen in"
@@ -5982,7 +6046,7 @@ var MessageLang=
     "BrowserContainsLayersRequireLogin": {
       "cat": "Aquest navegador conté capes que requereixen inici de sessió",
       "spa": "Este navegador contiene capas que requieren inicio de sesión",
-      "eng": "This browser contains layers that require login",
+      "eng": "This browser contains layers that require log in",
       "fre": "Ce navigateur contient des couches qui nécessitent une connexion",
       "cze": "Tento prohlížeč obsahuje vrstvy, které vyžadují přihlášení",
       "ger": "Dieser Browser enthält Layers, die eine Anmeldung erfordern"
@@ -5994,7 +6058,39 @@ var MessageLang=
       "fre": "Voulez-vous vous connecter maintenant?",
       "cze": "Chcete se nyní přihlásit?",
       "ger": "Möchten Sie sich jetzt anmelden?"
-    }
+    },
+	"User":{
+		"cat": "Usuari",
+		"spa": "Usuario",
+		"eng": "User",
+		"fre": "Identifiant",
+		"cze": "Uživatel",
+		"ger": "Benutzername"
+	},
+	"Password":{
+		"cat": "Contrasenya",
+		"spa": "Contraseña",
+		"eng": "Password",
+		"fre": "Mot de passe",
+		"cze": "Heslo",
+		"ger": "Passwort"
+	},
+	"ValidUserMustBeProvided": {
+      "cat": "Cal indicar un usuari vàlid",
+      "spa": "Se debe indicar un usuario válido",
+      "eng": "A valid user must be provided",
+      "fre": "Vous devez indiquer un identifiant valide",
+      "cze": "Je nutné zadat platného uživatele",
+      "ger": "Es muss ein gültiger Benutzer angegeben werden"
+    },
+	"ValidPasswordMustBeProvided": {
+      "cat": "Cal indicar una contrasenya vàlida",
+      "spa": "Se debe indicar una contraseña válida",
+      "eng": "A valid password must be provided",
+      "fre": "Vous devez indiquer un mot de posse valide",
+      "cze": "Je nutné zadat platné heslo",
+      "ger": "Es muss ein gültiges Passwort angegeben werden"
+    },
   },
   "llinatge": {
     "Process": {

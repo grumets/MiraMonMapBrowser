@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -37,6 +37,8 @@
 */
 
 "use strict"
+const TiffURLAllowFullFile=true;
+const TiffURLCache=true;
 
 function DonaTiffCapa(i_capa2, i_valor2, i_data2, dims, i_capa, i_valor, vista, url_peticio)
 {
@@ -232,32 +234,45 @@ async function PreparaLecturaTiff(i_capa2, i_valor2, i_data2, imatge, vista, i_c
 			return;
 		}
 	}*/
-
-	if (window.doAutenticatedHTTPRequest && capa2.access && capa2.access.request && capa2.access.request.indexOf("map")!=-1)
+	if(capa2.access && capa2.access.request && (capa2.access.request.indexOf("map")!=-1 || capa2.access.request.indexOf("coverage")!=-1))
 	{
-		var authResponse=hello(capa2.access.tokenType).getAuthResponse();
-		if (IsAuthResponseOnline(authResponse))
+		if(capa2.access.authenticationType=="basic"){
+			if(!capa2.access.cadenaAutenBasica){
+				await CreaDialogAutentificacioBasica(i_capa2);
+				if(!capa2.access.cadenaAutenBasica)
+					return null;
+			}
+			var tiff = await GeoTIFFfromUrl(url, {headers: {Authorization:capa2.access.cadenaAutenBasica}, allowFullFile: TiffURLAllowFullFile, cache: TiffURLCache});
+			
+		}
+		else if (window.doAutenticatedHTTPRequest)
 		{
-			if (authResponse.error)
+			var authResponse=hello(capa2.access.tokenType).getAuthResponse();
+			if (IsAuthResponseOnline(authResponse))
 			{
-				alert(authResponse.error.message)
+				if (authResponse.error)
+				{
+					alert(authResponse.error.message)
+					return null;
+				}
+				if (authResponse.error_description)
+				{
+					alert(authResponse.error_description)
+					return null;
+				}
+				var tiff = await GeoTIFFfromUrl(url, {headers: {"Authorization":"Bearer "+authResponse.access_token}, allowFullFile: TiffURLAllowFullFile, cache: TiffURLCache});
+			}
+			else
+			{
+				AuthResponseConnect(PreparaLecturaTiff, capa2.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
 				return null;
 			}
-			if (authResponse.error_description)
-			{
-				alert(authResponse.error_description)
-				return null;
-			}
-			var tiff = await GeoTIFFfromUrl(url, {headers: {"Authorization":"Bearer "+authResponse.access_token}});
 		}
 		else
-		{
-			AuthResponseConnect(PreparaLecturaTiff, capa2.access, i_capa2, i_valor2, i_data2, imatge, vista, i_capa, i_estil, i_data, dims, i_valor, nom_funcio_ok, funcio_ok_param);
-			return null;
-		}
+			var tiff = await GeoTIFFfromUrl(url, {allowFullFile: TiffURLAllowFullFile, cache: TiffURLCache});
 	}
 	else
-		var tiff = await GeoTIFFfromUrl(url);
+		var tiff = await GeoTIFFfromUrl(url, {allowFullFile: TiffURLAllowFullFile, cache: TiffURLCache});
 
 	if (valor2.url || capa2.tipus=="TipusOAPI_Coverages")
 	{

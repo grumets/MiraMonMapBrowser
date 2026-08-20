@@ -1166,7 +1166,51 @@ function onErrorCanviaImatge(event)
 	this.src="1tran.gif";
 }
 
-function CanviaImatgeCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+function AssignaDonaNomImatgeCapaASrc(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
+{
+var url_dades, url_dades_real, capa=ParamCtrl.capa[i_capa], tipus=DonaTipusServidorCapa(capa);
+
+	if(tipus=="TipusOAPI_Coverages")
+	{
+		url_dades_real=url_dades=DonaRequestGetCoverage(i_capa, i_estil, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		if (capa.access && capa.access.request && capa.access.request.indexOf("coverage")!=-1 && window.doAutenticatedHTTPRequest)
+		{				
+			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
+			{
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, nom_vista, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
+				return;
+			}
+		}
+	}
+	else
+	{
+		url_dades_real=url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		if (capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1 && window.doAutenticatedHTTPRequest)
+		{				
+			if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
+			{
+				AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, nom_vista, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
+				return;
+			}
+		}
+	}
+	if (tipus=="TipusOAPI_Maps")
+		imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
+	else if(tipus=="TipusOAPI_Coverages")
+		imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa, url_dades, TipusEventGetCoverage);
+	else
+		imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
+	if (nom_funcio_ok)
+		imatge.nom_funcio_ok=nom_funcio_ok;
+	if (typeof funcio_ok_param!=="undefined" && funcio_ok_param!=null)
+		imatge.funcio_ok_param=funcio_ok_param;
+	imatge.onload=onLoadCanviaImatge;
+	imatge.onerror=onErrorCanviaImatge;
+	imatge.src=url_dades_real;
+}
+
+
+async function CanviaImatgeCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param)
 {
 var capa=ParamCtrl.capa[i_capa];
 
@@ -1174,55 +1218,40 @@ var capa=ParamCtrl.capa[i_capa];
 		CanviaImatgeSenceraCapa(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 	else if (EsCapaBinaria(capa))
 		CanviaImatgeBinariaCapa(imatge, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
-	else
+	else if (capa.access && capa.access.request && capa.access.authenticationType=="basic" && 
+			(capa.access.request.indexOf("map")!=-1 || capa.access.request.indexOf("coverage")!=-1))
 	{
-		var url_dades, url_dades_real, tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
-		if(tipus=="TipusOAPI_Coverages")
-			url_dades_real=url_dades=DonaRequestGetCoverage(i_capa, i_estil, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
-		else
+		if(capa.access.authenticationType=="basic")
 		{
-			url_dades=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
-			url_dades_real=url_dades;
-			if (window.doAutenticatedHTTPRequest && capa.access && capa.access.request && capa.access.request.indexOf("map")!=-1)
-			{
-				/*var authResponse=hello(capa.access.tokenType).getAuthResponse();
-				if (IsAuthResponseOnline(authResponse))
-				{
-					if (authResponse.error)
-					{
-						alert(authResponse.error.message)
-						return;
-					}
-					if (authResponse.error_description)
-					{
-						alert(authResponse.error_description)
-						return;
-					}
-					url_dades_real+= "&" + "access_token=" + authResponse.access_token;
-				}
-				else*/
-				if (null==(url_dades_real=AddAccessTokenToURLIfOnline(url_dades_real, capa.access)))
-				{
-					AuthResponseConnect(CanviaImatgeCapa, capa.access, imatge, nom_vista, vista, i_capa, i_estil, i_data, null, nom_funcio_ok, funcio_ok_param, null, null, null, null);
-					return;
-				}
+			if(!capa.access.cadenaAutenBasica){
+				await CreaDialogAutentificacioBasica(i_capa);
+				if(!capa.access.cadenaAutenBasica)
+					return null;
 			}
 		}
+		var url, tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
+		if(tipus=="TipusOAPI_Coverages")
+			url=DonaRequestGetCoverage(i_capa, i_estil, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		else
+			url=DonaRequestGetMap(i_capa, i_estil, true, vista.ncol, vista.nfil, vista.EnvActual, i_data, null);
+		var ajax=new Ajax();
+		ajax.setRequestHeader('Authorization', capa.access.cadenaAutenBasica);
 		if (tipus=="TipusOAPI_Maps")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
 		else if(tipus=="TipusOAPI_Coverages")
 			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa, url_dades, TipusEventGetCoverage);
 		else
 			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
-		if (nom_funcio_ok)
-			imatge.nom_funcio_ok=nom_funcio_ok;
-		if (typeof funcio_ok_param!=="undefined" && funcio_ok_param!=null)
-			imatge.funcio_ok_param=funcio_ok_param;
-		imatge.onerror=onErrorCanviaImatge;
-		imatge.onload=onLoadCanviaImatge;
-
-		imatge.src=url_dades_real;
+		
+		var format_capa=capa.FormatImatge.toLowerCase();			
+		if(format_capa == "gif") format_capa="image/gif";
+		else if (format_capa == "png") format_capa="image/png";
+		else if (format_capa == "jpeg" || format_capa == "jpg") format_capa="image/jpeg";
+		
+		ajax.doGet(url, AvaluaRespostaDonaImatgeCapa, format_capa, {elem: elem, quality: null, capa: capa, i_estil: i_estil});
 	}
+	else
+		AssignaDonaNomImatgeCapaASrc(imatge, nom_vista, vista, i_capa, i_estil, i_data, nom_funcio_ok, funcio_ok_param);
 }
 
 /* No puc fer servir aquestas funció donat que els PNG's progressius no es tornen a mostrar només fent un showLayer. Els torno a demanar sempre.
@@ -1242,14 +1271,13 @@ function CapaImatgeSenceraOnLoad(i_event, i_capa)
 {
 	ParamCtrl.capa[i_capa].imageLoaded=true;
 	CanviaEstatEventConsola(null, i_event, EstarEventTotBe);
-	// ·$· el onload hauria de ser una funció que a més de canviar l'estat canvies l'estat de la capa a la consola.
 }
 
 function CapaImatgeSenceraOnError(i_event, i_capa)
 {
 	ParamCtrl.capa[i_capa].imageLoaded=false;
 	CanviaEstatEventConsola(null, i_event, EstarEventError);
-	//·$· el onError hauria de ser una funció que a més de canviar l'estat canvies l'estat de la capa a la consola.
+
 }
 function CapaImatgeSenceraOnUnload(i_capa)
 {
@@ -1264,6 +1292,20 @@ function CapaImatgeSenceraHeifOnLoad(param)
 		ParamCtrl.capa[param.i_capa].imageLoaded=true;
 	if(typeof param.i_event!=="undefined")
 		CanviaEstatEventConsola(null, param.i_event, EstarEventTotBe);
+	
+	//Carrego el buffer de dades a valors
+	/*
+	var valors=ParamCtrl.capa[param.i_capa].valors;
+	if (param.vista.i_nova_vista==NovaVistaPrincipal)
+		valors[0].arrayBuffer=param.dades;
+	else if (param.vista.i_nova_vista==NovaVistaImprimir)
+		valors[0].arrayBufferPrint=param.dades;
+	else if (param.vista.i_nova_vista==NovaVistaRodet)
+		valors[0].capa_rodet[param.i_data].arrayBuffer=param.dades;
+	else if (param.vista.i_nova_vista==NovaVistaVideo)
+		valors[0].capa_video[param.i_data].arrayBuffer=param.dades;
+	else
+		valors[0].nova_capa[param.vista.i_nova_vista].arrayBuffer=param.dades;*/
 	CanviaImatgeSenceraCapa(param.imatge, param.nom_vista, param.vista, param.i_capa, param.i_estil, param.i_data);
 }
 
@@ -2465,7 +2507,7 @@ var cdns=[], vista_tiled=ParamCtrl.capa[i_capa].VistaCapaTiled;
 			if (DonaTipusServidorCapa(ParamCtrl.capa[i_capa])=="TipusWMTS_SOAP")
 			{
 				//if(j==vista_tiled.JTileMin && i==vista_tiled.ITileMin)
-				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè el estil i el i_data sempre són null en el WMTS??
+				FesPeticioAjaxGetTileWMTS_SOAP(i_capa, null, i_tile_matrix_set, i_tile_matrix, j, i, null);  //NJ a JM: Perquè l'estil i el i_data sempre són null en el WMTS??
 			}
 			else if(EsCapaImatgeTessellacioInterna(ParamCtrl.capa[i_capa]))
 			{
@@ -2947,7 +2989,7 @@ var p, unitats_CRS;
 			{
 				cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, i));
 				if (capa.estil[capa.i_estil].TipusObj=='P')
-					cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -i-1)); //La capa oculta per rasteritzar identificadors gràfics de poligons
+					cdns.push(CreaCapaDigiLayer(nom_vista, vista.i_nova_vista, -i-1)); //La capa oculta per rasteritzar identificadors gràfics de polígons
 			}
 			else
 			{
