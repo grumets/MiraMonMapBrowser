@@ -1,4 +1,4 @@
-{
+﻿{
 	"title": "GeoJSON properties meaning schema",
 	"$schema": "http://json-schema.org/draft/2019-09/schema#",
 	"$id": "https://meaning.ad4gd.eu/json-meta/meaning",
@@ -27,15 +27,15 @@
 			"$comment": "The name of the property is the name of the attribute. If the server is SOS there are 2 special names can be used __om_time__, __om_sensor__ and the rest match the field names of the table containing the data. The properties that define each attribute can be de ones defined below or properties from JSON schema itself if indicated in this comment. For the moment, only 'description' is implemented. Others from 'string' (https://json-schema.org/understanding-json-schema/reference/string.html) or number can be useful (https://json-schema.org/understanding-json-schema/reference/numeric.html).",
 			"properties": {
 				"originalName": {
-					"description": "Name of the original attribute. Optional. If the attributes are taken from a CSV and are transformed into one or more attributes (because they are associated with time). In this case the nomOri maybe different from the property name.",
-					"type": [ "string", "null" ]
+					"description": "Original attribute name. Optional. If attributes are imported from a CSV and transformed into one or more attributes (for example, because they are associated with different time instants), this name may differ from the property name.",
+					"type": ["string", "null"]
 				},
 				"symbol": {
-					"description": "Symbol of the attribute. Note that it is not the units of measurement symbol but the attribute itself. For example, the letter 'σ' (sigma) usually represents the standard deviation. It will be used in the compact display (coordinates box) if defined. Created for statistical attributes, but can be used elsewhere.",
+					"description": "Attribute symbol. Note that it is not the units of measurement symbol but the attribute itself. For example, the letter 'σ' (sigma) usually represents the standard deviation. It will be used in the compact display (coordinates box) if defined. Created for statistical attributes, but can be used elsewhere.",
 					"type": [ "string", "null" ]
 				},
 				"descripcio": {
-					"description": "Description of the attribute in multiple languages. If you do not need multilanguage support, please use 'description'",
+					"description": "Description of the attribute in one or multiple languages if there is multilanguage support.",
 					"$ref": "#/definitions/StringOCadenaLang"
 				},
 				"definition": {
@@ -44,7 +44,7 @@
 					"format": "uri"
 				},
 				"UoM": {
-					"description": "Units of measurement of the attribute. Formerly refered as 'unitats'",
+					"description": "Unit of measurement of the attribute. Formerly refered as 'unitats'",
 					"type": [ "string", "null" ]
 				},
 				"UoMSymbol": {

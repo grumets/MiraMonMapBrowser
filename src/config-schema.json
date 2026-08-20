@@ -107,8 +107,8 @@
 		},
 		"ServidorLocal": { 
 			"description": "Address and name of the local service, typically a cgi url that is most used. If there is any layer where 'servidor' is null, then this value is used and becomes mandatory.",
-			"type": "string",
-			"format": "uri"
+			"type": ["null","string"],
+			"format": "uri-reference"
 		},
 		"VersioServidorLocal": { 
 			"description": "Version in which the OWS requests will be made to the 'ServidorLocal'",
@@ -345,7 +345,7 @@
 					"servidor": { 
 						"description": "URL del servidor WMS. Opcional, si no s'indica, s'assumeix que el nom conté el nom de fitxer directament. Si s'índica null és el servidor local",
 						"type": "string",
-						"format": "uri"
+						"format": "uri-reference"
 					},
 					"versio": { 
 						"description": "Versió del servei WMS. Opcional; si no s'indica s'assumeix VersioServidorLocal",
@@ -515,7 +515,7 @@
 					"servidor":	{ 
 						"description": "Adreça i nom del servidor del MiraMon per a les consultes típiques. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) vol dir que els objectes estan definits directament al 'proj_camp' i no es demanen a cap servidor.",
 						"type": ["string", "null"],
-						"format": "uri"
+						"format": "uri-reference"
 					},
 					"cors": { 
 						"description": "El servidor suporta CORS (Cross-Origin Resource Sharing)?",
@@ -554,8 +554,7 @@
 					},
 					"CRS": { 
 						"description": "Sistema de referència de la capa sobre la que es fa la consulta típica",
-						"type": "string",
-						"format": "uri"
+						"type": "string"
 					},
 					"proj_camp": { 
 						"description": "Projecció per a cada camp. Opcional, s'omple automaticament des del servidor si no està ple. Si s'indica no es pregunta al servidor",
@@ -840,7 +839,11 @@
 		},
 		"IconaConsulta": {
 			"description": "Icona que representa el lloc on s'ha fet clic en una consulta per localització. Opcional. Si no n'hi a es posa una per defecte.",
+			"oneOf":[{
+				"type": "null"
+			},{
 			"$ref": "#/definitions/icona" 
+			}]
 		},
 		"PlantillaConsulta": {
 			"description": "Plantilla HTML per a mostrar el resultats de la consulta per localització",
@@ -850,7 +853,7 @@
 				"src": { 
 					"description": "Adreça i nom de la plantilla HTML per a la consulta per localització",
 					"type": "string",
-					"format": "uri"
+					"format": "uri-reference"
 				},
 				"ample": { 
 					"description": "Ample de la plantilla de la consulta per localització",
@@ -868,15 +871,23 @@
 		},
 		"IconaAnarCoord": {
 			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-coordenada. Opcional. Si no n'hi ha es posa una per defecte.",
+			"oneOf":[{
+				"type": "null"
+			},{
 			"$ref": "#/definitions/icona" 
+			}]
 		},
 		"IconaAnarObj": {
 			"description": "Icona que representa el lloc on es troba la coordenada que s'ha fet servir per anar-a-objecte. Opcional. Si no n'hi ha es posa una per defecte.",
+			"oneOf":[{
+				"type": "null"
+			},{
 			"$ref": "#/definitions/icona"
+			}]
 		},
 		"AnarCoordIni": {
 			"description": "Coordenades i radi (en metres) amb les que es vol inicialitzar la finestra d'anar a coordenades, han d'estar en les unitats i el sistema de referència inicial del navegador. Si no es diu res s'inicialitzarà per defecte amb el punt inicial del navegador o amb les coordenades de les accions programades.",
-			"type": ["object"],
+			"type": ["null", "object"],
 			"properties": {
 				"x":{
 					"description": "Coordenada x del punt al que es vol anar",
@@ -898,11 +909,19 @@
 		},
 		"IconaPosicioGPS": {
 			"description": "Interna, no usar. Actualment actua (i si no es posa, en posem una per defecte). És la icona que representa el lloc on es troba el dispositiu. MiraMon es reserva el dret a canviar el comportament per pintar la ruta GPS (sense icona) i eliminar aquesta entrada.",
+			"oneOf":[{
+				"type": "null"
+			},{
 			"$ref": "#/definitions/icona" 
+			}] 
 		},
 		"IconaEdicio": {
 			"description": "Icona que adoptaran els objectes digitalitzats (generalment un GIF o PNG). Opcional",
+			"oneOf":[{
+				"type": "null"
+			},{
 			"$ref": "#/definitions/icona"
+			}]
 		},
 		"FuncioIconaEdicio": {
 			"description": "Nom de la funció que s'executa quan s'insereix un objecte digitalitzat. Opcional",
@@ -997,6 +1016,7 @@
 							"oneOf":[
 								{
 									"type": "object",
+									"required": ["nom", "cardin"],
 									"properties": {
 										"nom":	{ 
 											"description": "Nom i la descripció del paràmetre WCS",
@@ -1018,6 +1038,7 @@
 								},
 								{
 									"type": "object",
+									"required": ["nom", "cardin"],
 									"properties": {
 										"nom":	{ 
 											"description": "Nom i la descripció del paràmetre WCS",
@@ -1039,13 +1060,14 @@
 								},
 								{
 									"type": "object",
+									"required": ["nom", "cardin"],
 									"properties": {
 										"nom":	{ 
 											"description": "Nom i la descripció del paràmetre WCS",
 											"$ref": "#/definitions/nomDescripcio"
 										},
 										"cardin": {
-											"description": "La ardinalitat del paràmetre GetCoverage és i (es representarà com un rectangel editable per posar un número dins d'un interval)",
+											"description": "La cardinalitat del paràmetre GetCoverage és i (es representarà com un rectangle editable per posar un número dins d'un interval)",
 											"enum": ["i"]
 										},
 										"valors": {
@@ -1135,7 +1157,7 @@
 		},
 		"capesDeServei": {
 			"description": "Array de serveis que el navegador intentarà convertir en capes en iniciar",
-			"type": "array",
+			"type": ["array","null"],
 			"items": {
 				"type": "object",
 				"properties": {									
@@ -1146,7 +1168,7 @@
 							"servidor": { 
 								"description": "Adreça i nom del servidor. Si és null s'agafa el ServidorLocal.",
 								"type": ["string", "null"],
-								"format": "uri"
+								"format": "uri-reference"
 							},
 							"versio": { 
 								"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
@@ -1322,7 +1344,7 @@
 					"servidor": { 
 						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF, un GeoJSON, un JPEG, un PNG, un HEIF o un CSV o és null si hi ha un CSV per cada un dels objectes); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
 						"type": ["string", "null"],
-						"format": "uri"
+						"format": "uri-reference"
 					},
 					"versio": { 
 						"description": "Versió en que es faran les peticions OWS per aquesta capa. Si és null s'agafa VersioServidorLocal",
@@ -1419,8 +1441,7 @@
 						"type": ["array", "null"],
 						"items": {
 							"description": "Sistema de referència en que la capa està disponible",
-							"type": "string",
-							"format": "uri"
+							"type": "string"
 						}
 					},
 					"objLimit": {
@@ -1429,8 +1450,7 @@
 					},
 					"CRSgeometry": { 
 						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG) o TipusHTTP_GET en format JPEG, PNG o HEIF. Opcional; si no s'indica s'adopta el del primer mapa de situació.",
-						"type": ["string", "null"],
-						"format": "uri"
+						"type": ["string", "null"]
 					},
 					"tileMatrixSetGeometry": {
 						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
@@ -1495,12 +1515,12 @@
 								},
 								"CRS": { 
 									"description": "Sistema de referència del TileMatrixSet",
-									"type": "string",
-									"format": "uri"
+									"type": "string"
 								},
 								"URLTemplate": { 
 									"description": "Plantilla URL de la capa WMTS REST. Deixeu-ho a null en els altres casos",
-									"type": ["string", "null"]
+									"type": ["string", "null"],
+									"format": "uri-template"
 								},
 								"TileMatrix":  {
 									"description": "Array de tileMatrix amb la seva descripció i paràmetres de tessel·lació",
@@ -1514,11 +1534,11 @@
 						"type": ["object", "null"],
 						"properties": {			
 							"cellType": {
-								"description": "Indicates the type of algorithm used for the cells. For example, geohash...",
+								"description": "Indicates the type of algorithm used for the cells. For example, Geohash or H3.... By default is 'H3'",
 								"oneOf":[{
 									"type": "null"
 								},{
-									"enum": ["GeoHash"]
+									"enum": ["GeoHash", "H3"]
 								}]														
 							},		
 							"zoneLevels":{
@@ -1643,7 +1663,7 @@
 								"url": {
 									"description": "Si cada valor està contingut en un fitxer diferent, part final del nom del fitxer llegit amb TipusHTTP_GET que es concatena amb 'servidor'. Només aplica per TIFF. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre llegir una capa multitime. Opcional. Si no s'indica es fa servir 'servidor' sense afegir res",
 									"type": ["string", "null"],
-									"format": "uri"
+									"format": "uri-reference"
 								},
 								"iBand": {
 									"description": "Índex de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
@@ -1706,24 +1726,21 @@
 								},
 								"i_capa": { 
 									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra capa en un estil tipus 'calcul'",
-									"type": "number",
-									"minimum": 0,
-									"multipleOf": 1									
+									"type": "integer",
+									"minimum": 0									
 								},
 								"i_data": { 
 									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul'",
-									"type": "number",
-									"minimum": 0,
-									"multipleOf": 1									
+									"type": "integer",
+									"minimum": 0								
 								},
 								"i_valor": { 
 									"description": "INTERN: s'afegeix programaticament si la banda usa una altra banda en un estil tipus 'calcul'",
-									"type": "number",
-									"minimum": 0,
-									"multipleOf": 1
+									"type": "integer",
+									"minimum": 0
 								},
 								"objectes": { 
-									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul' on es fa una condició vectorial sobre una capa ràster. Es un 'punter' als objectes de la capa vectorial",
+									"description": "INTERN: s'afegeix programaticament si la banda ve d'una altra data en un estil tipus 'calcul' on es fa una condició vectorial sobre una capa ràster. És un 'punter' als objectes de la capa vectorial",
 									"type": "number",
 									"minimum": 0,
 									"multipleOf": 1									
@@ -1911,7 +1928,7 @@
 								"url": {
 									"description": "Adreça i nom del fitxer que es descarregarà. Es substitueix automàticament {time} per la data (YYYYMMDD) i {time?f=ISO} per la data (YYYY-MM-DDTHH:MM:SSZ) per permetre descàrreges d'una capa multitime i {extension} per l'extensió escrita a FormatDescarregaTot. {DIM?name=} permet indicar el nom d'altres dimensions (guardades a valors[i_valor].param[i]) que es substitueix pel valor actual marcat per capa.estil[capa.i_estil].i_valor o capa.estil[capa.i_estil].FormulaConsulta només si la darrera involucra un sol v[]. Si no hi ha cap paràmetre DIM, s'assumeix que totes les dimensions extra s'empaqueten en un sol fitxer.",
 									"type": "string",
-									"format": "uri"
+									"format": "uri-template"
 								},
 								"format": {
 									"description": "Array d'index de FormatDescarregaTot",
@@ -1978,6 +1995,35 @@
 								"description": "Mostrar descripció de la llegenda", 
 								"type": "boolean"
 							},
+							"DataMostraPeriodes": {
+								"description": "Mostrar les dates-temps en la resolució indicada però amb desplegables separats per les dates i el temps, segons la resolució del període indicat", 
+								"type": "boolean"
+							},
+							"DataMostraBotonsResolucio" : {
+								"description": "Mostrar uns botons de + i - al costat dels selectors de dates que permeten canviar la resolució temporal del selector. Per exemple, per anar de any-mes a any-mes-dia,...", 
+								"type": "boolean"
+							},
+							"DataSelectorPeriodes": {
+								"description": "INTERN: No tocar. S'omple a partir dels períodes actius disponbles per la capa en el zoom actual de visualització, ja que en el cas de STA i celles aquests periodes disponibles poden canviar.", 
+								"type": "object",
+								"properties":{
+									"periodes":{
+										"description": "Array de resolucions temporals o periodes en que està disponible les dates de la capa en el nivell de zoom actual.",
+										"type": "array",
+										"items":{
+											"description": "Un període o resolució temporal definit seguint la ISO 8601 comença sempre per 'P', després hi ha els anys, mesos, dies ('Y': any, 'M': mes, 'W': setmana, 'D': dia) i després el separador de temps indicat per una 'T' i despres les hores, minuts i segons. ('H': hora, 'M': minut, 'S': segon). Per exemple: 'P1Y': indica un any, 'P1M': indica 1 mes, 'P1W': indica una setmana, 'P15D': indica 15 dies, 'PT1M': indica 1 minut.", 							
+											"type": "string",
+											"format": "duration"									
+										}
+									},
+									"i_periode_actual":{
+										"description": "Índex del periode seleccionat actualment",
+										"type": ["number", "null"],
+										"minimum": -1,
+										"multipleOf" : 1
+									}
+								}
+							},
 							"properties": {
 								"description": "Propietats a mostrar al desplegable de dades de la llegenda (p.ex. Qualitat, recobriment...). Opcional", 
 								"type": "array",
@@ -2015,7 +2061,7 @@
 						}
 					},
 					"i_data": { 
-						"description": "Índex de data seleccionada per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc. Només aplica quan el 'model' és 'raster'.",
+						"description": "Índex de data seleccionada per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir la darrera data, -2 la penúltima, etc.",
 						"type": ["number", "null"],
 						"minimum": -1,
 						"multipleOf" : 1
@@ -2049,7 +2095,7 @@
 										"servidor": {
 											"description": "URL del servei de processos",
 											"type": "string",
-											"format": "uri"
+											"format": "uri-reference"
 										},
 										"versio": { 
 											"description": "Versió del servei de processos",
@@ -2076,7 +2122,7 @@
 								"capa_wps": {
 									"description": "fitxer o url de la capa que s'està visualitzant accessible pel servidor de processos que executarà la operació",
 									"type": "string",
-									"format": "uri"
+									"format": "uri-reference"
 								}
 							}
 						}
@@ -2119,6 +2165,7 @@
 				},
 				{
 					"type": "object",
+					"required": ["URL"],
 					"properties": {
 						"URL":	{ 
 							"description": "URL única o multidiomàtica",
@@ -2128,6 +2175,7 @@
 				},
 				{
 					"type": "object",
+					"required": ["text"],
 					"properties": {
 						"text":	{ 
 							"description": "text únic o multidiomàtic",
@@ -2143,19 +2191,23 @@
 		},
 		"access": 
 		{
-			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. En aquest cas cal incloure al index.htm la llibreria 'hello.js', la 'authen.js' i les 'authen*.js que s'indiquin a tokenType.", 
-			"type": "object",
+			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken (oauth), o basicAuth). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. En aquest cas, si la autentificació és de tipus 'oauth' cal incloure al index.htm la llibreria 'hello.js', la 'authen.js' i les 'authen*.js que s'indiquin a tokenType.", 
+			"type": ["null","object"],
 			"properties": {
 				"tokenType": {
 					"description": "Nom del servei d'autentificació.", 
 					"enum": ["authenix", "wqems"]
+				},
+				"authenticationType": {
+					"description": "Tipus d'autentificació. Per defecte és 'Bearer' amb tookens", 
+					"enum": ["basic", "bearer"]
 				},
 				"request": {
 					"description": "Llista de requests que necessiten autentificació", 
 					"type": ["null", "array"],
 					"items": {
 						"description": "Request que necessita autentificació", 
-						"enum": ["transaction", "capabilities", "consultaLink", "map"]
+						"enum": ["transaction", "capabilities", "consultaLink", "map", "coverage"]
 					}
 				}
 			}
@@ -2170,7 +2222,7 @@
 		},
 		"tileMatrix": {
 			"description": "Descripció i paràmetres dels TileMatrixs. Ordenats amb el número de costat més gran primer.",
-			"type": ["array"],
+			"type": ["null", "array"],
 			"items": {
 				"description": "Descripció i paràmetres d'un TileMatrix",
 				"type": "object",
@@ -2316,17 +2368,18 @@
 					"properties": {
 						"r": { "type": "integer", "minimum": 0, "maximum": 255},
 						"g": { "type": "integer", "minimum": 0, "maximum": 255},
-						"b": { "type": "integer", "minimum": 0, "maximum": 255}
+						"b": { "type": "integer", "minimum": 0, "maximum": 255},
+						"a": { "type": "number", "minimum": 0,  "maximum": 1}
 					}
 				}
 			]
 		},
 		"paleta": {
-			"description": "Paleta de colors",
+			"description": "Palette of colors",
 			"type": "object",
 			"properties": {
 				"colors": {
-					"description": "Colors de la paleta",
+					"description": "A color from a palette",
 					"type": "array",
 					"minItems": 1,
 					"items": {
@@ -2334,7 +2387,7 @@
 					}
 				},
 				"ramp": {
-					"description": "Palette colors defined by ramps. Internally it will be convered to 'colors'.",
+					"description": "Palette of colors defined by ramps. Internally it will be convered to 'colors'.",
 					"type": "array",
 					"minItems": 2,
 					"items": {
@@ -2342,7 +2395,7 @@
 						"required": ["i_color", "color"],
 						"properties": {
 							"i_color": {
-								"description": "Index of the color in the pallete. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap with the previous index, in between colors will be linear interpolated",
+								"description": "Index of the color in the palette. It most be bigger than the previous one. It this is the first it sould be 0. If there is a gap with the previous index, in between colors will be linear interpolated",
 								"type": "integer",
 								"minimum": 0
 							},
@@ -2695,7 +2748,7 @@
 				"definition": {
 					"description": "PENDENT: A URI that defines the observedProperty or the variable represented by this style. Normalment només s'usa en model raster, perquè els vectors ja tenen els attributes que descriuen això, però hi ha casos en que pot tenir sentit, per exemple unes corbes de nivell vectorial. You may find the right definitions in https://qudt.org/2.1/vocab/quantitykind, http://vocabs.lter-europe.net/EnvThes or https://www.eea.europa.eu/help/glossary/eea-glossary.",
 					"type": [ "string", "null" ],
-					"format": "uri"
+					"format": "uri-reference"
 				},
 				"UoM": {
 					"description": "PENDENT: Units of measurement of the variable represented by this style. Formerly refered as 'unitats'",
@@ -2708,7 +2761,7 @@
 				"UoMDefinition": {
 					"description": "PENDENT: A URI that defines the units of measurement of the variable represented by this style. You may find the right definitions in https://qudt.org/2.1/vocab/unit",
 					"type": [ "string", "null" ],
-					"format": "uri"
+					"format": "uri-reference"
 				},
 				"DescItems": { 
 					"description": "Descripció dels ítems de la llegenda. Opcional. Acostuma a servir per representar les unitats. No aplica si hi ha 3 components.",
@@ -2743,9 +2796,8 @@
 							},
 							"i_valor": { 
 								"description": "Element de l'array de valors que s'usa. Considerat si hi ha capa.valors i no hi ha 'FormulaConsulta' o 'calcul'. Es proporciona com una alternativa ràpida a la FormulaConsulta equivalent: 'v[{i_valor}]'. El valor per defecte és 0",
-								"type": "number",
-								"minimum": 0,
-								"multipleOf": 1
+								"type": "integer",
+								"minimum": 0
 							},
 							"selector": {
 								"description": "Array de les selectors. Només es pot fer servir si la capa té 'FormulaConsulta' o un 'calcul'. Opcional",
@@ -2932,7 +2984,6 @@
 				"estilTilesObjNum": {
 					"description" : "Estil de simbolització dels objectes que es generen per mostrar el nombre d'objectes que conté una tessel·la vectorial",
 					"type": "object",
-					"multipleOf": 1,
 					"properties": {									
 						"simbols": {
 							"description": "Simbols o formes pels objectes digitalitzats base i sobrecarregats",
@@ -3132,36 +3183,41 @@
 				{
 					"description": "Data en JSON",
 					"type": "object",
+					"required": ["year"],
 					"properties": {
 						"year": {
 							"description": "Any",
-							"type": "number",
-							"multipleOf": 1
+							"type": "integer"
 						},
 						"month": {
 							"description": "Mes",
-							"type": "number",
-							"multipleOf": 1
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 12
 						},
 						"day": {
 							"description": "Dia",
-							"type": "number",
-							"multipleOf": 1
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 31
 						},
 						"hour": {
 							"description": "Hora",
-							"type": "number",
-							"multipleOf": 1
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 23
 						},
 						"minute": {
 							"description": "Minut",
-							"type": "number",
-							"multipleOf": 1
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 60
 						},				
 						"second": {
 							"description": "Segon",
 							"type": "number",
-							"multipleOf": 1
+							"minimum": 0,
+							"exclusiveMaximum": 60
 						},
 						"histo": {
 							"description": "Histograma de valors que representa l'escena sencera per aquesta data. Serveix per mostrar algun d'aquest valors en el desplegable de dades de la llegenda. El que es mostra realment es configura a partir de FlagsData.properties. Opcional",

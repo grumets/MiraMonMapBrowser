@@ -264,7 +264,7 @@
 								"$ref": "#/definitions/propertiesGeoJSON"
 							},
 							"data": {
-								"description": "NJ: Crec que això no s'usa mai enlloc, que s'usa l'array de data de la capa. Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
+								"description": "Array de dates en la que la informació està disponible. Es fa servir pel paràmetre TIME però també pel vídeo",
 								"type": ["array", "null"],
 								"items": {
 									"description": "Data disponible per la capa",
