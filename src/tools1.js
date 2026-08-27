@@ -193,6 +193,8 @@ function EsborraTotesOptionDeSelect(selector)
 
 function AfegeixOptionASelect(selector, param, index)
 {
+	if(!selector || !param)
+		return;
 	var option = document.createElement("option");
 	option.text = param.text;
 	option.selected= param.selected ? true: false;
@@ -316,11 +318,11 @@ if(!Array.prototype.binarySearch)
         		var k = (n + m) >> 1;
 		        var cmp = (compare_fn) ? compare_fn(elem, this[k]) : (elem < this[k] ? -1 : (elem > this[k] ? 1 : 0));
 	        	if (cmp > 0) {
-				m = k + 1;
+					m = k + 1;
 	        	} else if(cmp < 0) {
-				n = k - 1;
+					n = k - 1;
 		        } else {
-				return k;
+					return k;
 		        }
 		}
 		return -m - 1;
@@ -666,6 +668,8 @@ function CreaPropietatsLayer(nom, ancora, contingut)
 
 function showOrHideLayer(elem, show)
 {
+	if(!elem)
+		return;
 	if (show)
 		showLayer(elem);
 	else
@@ -674,6 +678,8 @@ function showOrHideLayer(elem, show)
 
 function removeLayer(elem)
 {
+	if(!elem)
+		return;
 	var elem_pare=elem.parentNode;
 	if (!elem_pare)
 		return;
@@ -688,6 +694,8 @@ function removeLayer(elem)
 
 function hideLayer(elem)
 {
+	if(!elem)
+		return;
 	elem.style.visibility = "hidden";
 	if (NecessariLayerIFrame)
 	{
@@ -699,7 +707,9 @@ function hideLayer(elem)
 
 function showLayer(elem)
 {
-  	elem.style.visibility = "visible";
+  	if(!elem)
+		return;
+	elem.style.visibility = "visible";
 
 	if (NecessariLayerIFrame)
 	{
@@ -711,6 +721,8 @@ function showLayer(elem)
 
 function semitransparentLayer(elem)
 {
+	if(!elem)
+		return;
 	elem.style.opacity = 0.5;
 }
 
@@ -721,11 +733,15 @@ function semitransparentThisNomLayer(nom)
 
 function opacLayer(elem)
 {
+	if(!elem)
+		return;
 	elem.style.opacity = 1.0;
 }
 
 function isLayerVisible(elem)
 {
+	if(!elem)
+		return false;
 	if (elem.style.visibility == "hidden")
 		return false;
 	return true;
@@ -779,22 +795,30 @@ HTMLElement.prototype.insertAdjacentElement){
 //where can be: 'beforebegin' Before the element itself. 'afterbegin' Just inside the element, before its first child. 'beforeend' Just inside the element, after its last child.'afterend': After the element itself.
 function insertContentLayer(elem_pare, where, content)
 {
+	if(!elem_pare)
+		return;
 	elem_pare.insertAdjacentHTML(where, content);
 }
 
 function contentLayer(elem, content)
 {
+	if(!elem)
+		return;
 	elem.innerHTML = content;
 }
 
 function getContentLayer(elem)
 {
+	if(!elem)
+		return null;
 	return elem.innerHTML;
 }
 
 //Si alguna de les x, y, w, h són -1, no es canvia aquesta dimensió.
 function moveLayer(elem, x, y, w, h)
 {
+	if(!elem)
+		return;
 	//Ara ho manipulo i ho canvio.
 	var estil=elem.style;
 	if (x!=-1)
@@ -809,6 +833,8 @@ function moveLayer(elem, x, y, w, h)
 
 function changePosAndShowLayer(elem, x, y)
 {
+	if(!elem)
+		return;
 	var estil=elem.style;
 	estil.left = x+"px";
 	estil.top = y+"px";
@@ -825,66 +851,82 @@ function changePosAndShowLayer(elem, x, y)
 function moveLayer2(elem, x1, y1, x2, y2)
 {
 var x,y,w,h;
-  if (x1<x2)
-  {
-	x=x1;
-	w=x2-x1+1;
-  }
-  else
-  {
-	x=x2;
-	w=x1-x2+1;
-  }
-  if (w<2)
-	w=2;
-  if (y1<y2)
-  {
-	y=y1;
-	h=y2-y1+1;
-  }
-  else
-  {
-	y=y2;
-	h=y1-y2+1;
-  }
-  if (h<2)
-	h=2;
-  moveLayer(elem, x, y, w, h);
+	if(!elem)
+		return;
+	if (x1<x2)
+	{
+		x=x1;
+		w=x2-x1+1;
+	}
+	else
+	{
+		x=x2;
+		w=x1-x2+1;
+	}
+	if (w<2)
+		w=2;
+	if (y1<y2)
+	{
+		y=y1;
+		h=y2-y1+1;
+	}
+	else
+	{
+		y=y2;
+		h=y1-y2+1;
+	}
+	if (h<2)
+		h=2;
+	moveLayer(elem, x, y, w, h);
 }
 
 function clipLayer2(elem,x1,y1,x2,y2)
 {
+	if(!elem)
+		return;
    	elem.style.clip="rect("+y1+"px "+x2+"px "+y2+"px "+x1+"px)";
 }
 
 function clipLayer(elem,x,y,w,h)
 {
+	if(!elem)
+		return;
 	clipLayer2(elem,x,y,x+w,y+h);
 }
 
 function borderLayer(elem, s)
 {
+	if(!elem)
+		return;
 	elem.style.border = s;
 }
 
 //s pot ser "transparent" o un color
 function colorLayer(elem, s)
 {
+	if(!elem)
+		return;
 	elem.style.backgroundColor = s;
 }
 
 function classLayer(elem, s)
 {
+	if(!elem)
+		return;
 	elem.className = s;
 }
 
 function getzIndexLayer(elem)
 {
+	if(!elem)
+		return;
 	return elem.style.zIndex;
 }
 
 function setzIndexLayer(elem, z)
 {
+	if(!elem)
+		return;
 	elem.zIndex=z;
    	elem.style.zIndex=z;
 }
@@ -914,7 +956,7 @@ function getRectLayerName(win, name)
 
 //http://stackoverflow.com/questions/288699/get-the-position-of-a-div-span-tag
 function getRectLayer(elem)
-{
+{	
 	// ? és usat perquè FireFox no té pixelLeft i suposo que left està en píxels.
 	/*var estil=elem.style;
 	RectGetRectLayer.esq=estil.pixelLeft ? estil.pixelLeft : ((estil.left=="") ? 0 : parseInt(estil.left));
@@ -1222,6 +1264,8 @@ var elem, rect, ancora, nom;
 
 function vScrollLayer(elem, i, n)
 {
+	if(!elem)
+		return;
 	if (elem.scrollHeight && elem.scrollHeight>elem.offsetHeight)
 	{
 	    var i_scroll=i*elem.scrollHeight/n;

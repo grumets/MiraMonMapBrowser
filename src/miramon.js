@@ -71,6 +71,7 @@ IncludeScript("imgtiff.js");
 IncludeScript("imgheif.js", true);
 IncludeScript("geomet.js");
 IncludeScript("ngeohash.js");
+IncludeScript("h3-js.js");  // Extret de https://github.com/uber/h3-js
 IncludeScript("papaparse.min.js"); // Extret de https://www.papaparse.com/
 IncludeScript("wicket.js"); // Extret de : https://github.com/arthur-e/Wicket
 IncludeScript("vector.js");
@@ -116,6 +117,7 @@ IncludeScript("vis.min.js", true);
 
 IncludeScript("md5.min.js", true);
 IncludeScript("websubhook.js", true);
+
 
 
 IncludeScript("msg.js", true);
@@ -567,6 +569,76 @@ function GeneraUIDCapa(capa)
 	}
 }
 
+function OrdenacioPeriodeDescendent(p1,p2){
+	p1=DonaTextPeriodeISO(p1);
+	p2=DonaTextPeriodeISO(p2);
+	var d2=parseDurationISO8601(p2), d1=parseDurationISO8601(p1);
+	if(!p1 && !p2)
+		return 0;
+	if(!p1)
+		return 1;
+	if(!p2)
+		return -1;
+	var s2=DonaValorAproxDuracioEnSegons(d2), s1=DonaValorAproxDuracioEnSegons(d1);
+	if ( s1 > s2) return -1;
+	if ( s1 < s2 ) return 1;
+	return 0;
+}
+
+/*
+function AfegeixPeriodesADestiSiCal(pDesti, pOrigen, i_periode)
+{
+	var i=0, j=0, comp;
+
+    while (j < pOrigen.length)
+    {
+        while (i < pDesti.length)
+		{
+			comp = OrdenacioPeriodeDescendent(pDesti[i], pOrigen[j]);
+			if(comp<0){
+				i++;
+			}
+			else if(comp==0 && pDesti[i].toUpperCase()==pOrigen[j].toUpperCase())
+            {
+				// Tinc el mateix valor però podria ser que no fossin exactament iguals, comparo els textos
+				// és a dir, compara amb això "P1D" i no amb l'aproximació del temps.
+				i++;
+				j++;
+			}
+			else //if (comp>0) || quan comp==0 però comparant els textos és diferent
+			{
+				pDesti.splice(i, 0, pOrigen[j]);
+
+				if (i <= i_periode)
+					i_periode++;
+				i++;
+				j++;
+			}
+		}
+        if (i == pDesti.length)  // He arribat a final de destí, afegeixo totes les duracions d'origen que faltin al final de destí
+        {
+            while (j < pOrigen.length)
+                pDesti.push(pOrigen[j++]);
+			return i_periode;
+        }
+    }
+    return i_periode;
+}*/
+
+function NormalitzaArrayAggregationPeriods(periodes)
+{
+	var i;
+	if(!periodes || !periodes.length)
+		return periodes;
+	for(i=0; i<periodes.length; i++)
+	{
+		if(periodes[i] && periodes[i].periode && !periodes[i].dggsInterval)
+			periodes[i].dggsInterval=DonaIntervalSTADggsDesDePeriodeISO(periodes[i].periode);
+	}
+	periodes.sort(OrdenacioPeriodeDescendent);
+	return periodes;
+}
+
 function CompletaDefinicioCapa(capa, capa_vola)
 {	
 	GeneraUIDCapa(capa);
@@ -619,6 +691,42 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		if (!capa.DescVideo)
 			capa.DescVideo=JSON.parse(JSON.stringify(capa.desc));
 	}
+	// Periodes i  ZoneLevel i duracions
+	
+	//Ordeno les duracions de més a menys si n'hi ha
+	if(capa.dataPeriode && capa.dataPeriode.periodes)
+		capa.dataPeriode.periodes.sort(OrdenacioPeriodeDescendent);
+		
+	var hihaPeriode=false;
+	if(capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels)
+	{
+		for(j=0; j<capa.cellZoneLevelSet.zoneLevels.length; j++)
+		{
+			if(capa.cellZoneLevelSet.zoneLevels[j].aggregationPeriods){
+				NormalitzaArrayAggregationPeriods(capa.cellZoneLevelSet.zoneLevels[j].aggregationPeriods);
+				if(!hihaPeriode) hihaPeriode=true;
+			}
+		}
+	}
+	/*
+	// Comprovo que les duracions del cellZoneLevelSet estiguin a dins de les duracions generals de la capa i si cal les afegeix-ho
+	if(capa.dataPeriode && capa.dataPeriode.periodes && (tipus=="TipusSTA" || tipus=="TipusSTAplus") && 
+		capa.origenAccesObjs==origen_CellsFeaturesOfInterest && capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels)
+	{
+		for(var i=0;i<capa.cellZoneLevelSet.zoneLevels.length;i++)
+		{
+			var zoneLevel=capa.cellZoneLevelSet.zoneLevels[i];
+			if(zoneLevel.aggregationPeriods)
+			{
+				capa.dataPeriode.i_periode=AfegeixPeriodesADestiSiCal(capa.dataPeriode.periodes, zoneLevel.aggregationPeriods, capa.dataPeriode.i_periode);
+			}
+		}
+	}
+	*/
+	
+	// Creo l'array de dates a partir de les duracions
+	if(capa.dataPeriode)
+		CreaDatesDeDataPeriodeCapa(capa, true);	
 
 	if (capa.data && capa.data.length)
 	{
@@ -637,6 +745,14 @@ function CompletaDefinicioCapa(capa, capa_vola)
 		if (!capa.FlagsData)
 			capa.FlagsData=flagdata;
 	}
+	if(hihaPeriode && capa.dataPeriode && capa.dataPeriode.periodes){
+		if(!capa.FlagsData)
+			capa.FlagsData={};
+		capa.FlagsData.DataMostraPeriodes=true;
+		capa.FlagsData.DataMostraBotonsResolucio=true;
+		AjustaPeriodeTemporalCapaAlZoomSiCal(capa);
+	}
+	
 	if(capa.dataMinima)
 	{
 		var s=capa.dataMinima;
@@ -645,8 +761,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 			capa.dataMinima={};
 			OmpleDataJSONAPartirDeDataISO8601(capa.dataMinima, s);
 		}
-	}
-	
+	}	
 	if(capa.dataMaxima)
 	{
 		var s=capa.dataMaxima;
@@ -671,7 +786,9 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	if(tipus=="TipusSTA" || tipus=="TipusSTAplus")
 	{
 		if(!capa.origenAccesObjs)
-			capa.origenAccesObjs=origen_FeaturesOfInterest;		
+			capa.origenAccesObjs=origen_FeaturesOfInterest;	
+		if (capa.cellZoneLevelSet && !capa.cellZoneLevelSet.cellType)
+			capa.cellZoneLevelSet.cellType="H3";
 	}
 	
 	CompletaDescarregaTotCapa(capa);
@@ -4942,6 +5059,7 @@ function OrdenacioCostatDescendent(z1,z2) {
 
 
 
+
 function ComprovaConsistenciaParamCtrl(param_ctrl)
 {
 var i, j;
@@ -5037,9 +5155,9 @@ var i, j;
 		{
 			for(j=0; j<capa.TileMatrixSet.length; j++)
 				capa.TileMatrixSet[j].TileMatrix.sort(OrdenacioCostatDescendent);
-		}
+		}		
 	}
-
+		
 	/*
 	NJ_24_03_2026: Enlloc de queixar-me ho reordeno com ho necessitem
 	if (param_ctrl.zoom[param_ctrl.zoom.length-1].costat>param_ctrl.zoom[0].costat)

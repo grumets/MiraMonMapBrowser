@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat) 
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -769,7 +769,8 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], n_col_carac;
 	else
 		cdns.push(aspecte.PreviDescLlegenda , DonaCadena(capa.DescLlegenda) , aspecte.PostDescLlegenda);
 	
-	if (flag&LlegendaAmbControlDeCapes && (isLayer(window, "menuContextualCapa") || (capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades.standard))))
+	if (flag&LlegendaAmbControlDeCapes && (isLayer(window, "menuContextualCapa") || 
+		(capa.metadades && capa.metadades.standard && DonaCadena(capa.metadades.standard))))
 		cdns.push("</a>");
 	cdns.push("</td></tr>");
 
@@ -928,6 +929,42 @@ var cdns=[], capa=ParamCtrl.capa[i_capa], n_col_carac;
 	return cdns.join("");
 }
 
+function CanviaResolucioTemporalCapa(i_capa, mes_fina)
+{
+var capa=ParamCtrl.capa[i_capa], periodes, i_act, data_sel, dates;
+	if(!capa.dataPeriode || !capa.dataPeriode.periodes || !capa.data || !capa.data.length)
+		return;
+	OmpleFlagsDataSelectorPeriodesDeCapa(capa, true);
+	periodes=DonaPeriodesTemporalsActiusDeCapa(capa);
+	if(!periodes.length)
+		return;
+	i_act=DonaIPeriodeMesProperAActual(periodes, DonaPeriodeActualDeCapa(capa));
+	if(i_act<0)
+		i_act=0;
+	if(mes_fina)
+	{
+		if(i_act>=periodes.length-1)
+			return;
+		data_sel=structuredClone(capa.data[DonaIndexDataCapa(capa, null)]);
+		SincronitzaIPeriodeCapaAmbPeriode(capa, periodes[i_act+1]);
+	}
+	else
+	{
+		if(i_act<=0)
+			return;
+		data_sel=structuredClone(capa.data[DonaIndexDataCapa(capa, null)]);
+		SincronitzaIPeriodeCapaAmbPeriode(capa, periodes[i_act-1]);
+	}
+	dates=CreaDatesDeDataPeriodeCapa(capa, true);
+	if(!dates || !dates.length)
+		return;
+	capa.i_data=DonaIndexDataQueConte(capa, data_sel);
+	OmpleFlagsDataSelectorPeriodesDeCapa(capa, true);
+	BuidaCellsDeCapa(capa, null);
+	CreaLlegenda();
+	CanviaDataDeCapaMultitime(i_capa, capa.i_data);
+}
+
 function CanviaDataDeCapaMultitime(i_capa_data, i_data)
 {
 var capa=ParamCtrl.capa[i_capa_data];
@@ -977,6 +1014,43 @@ var capa=ParamCtrl.capa[i_capa_data];
 	}	
 }
 
+function DonaIndexDataCapaPeriodesDeSelectorLlegenda(i_capa, data_sel, hora_sel, minut_sel, segon_sel)
+{
+	var capa=ParamCtrl.capa[i_capa];
+	if (data_sel==null)
+		return capa.i_data<0 ? capa.data.length+capa.i_data : capa.i_data;
+	
+	var data_buscar=JSON.parse(data_sel.replaceAll("'", "\""));
+	if(hora_sel)
+		data_buscar.hour=parseInt(hora_sel);
+	if(minut_sel)
+		data_buscar.minute=parseInt(hora_sel);
+	if(segon_sel)
+		data_buscar.second=parseInt(segon_sel);
+	
+	var i_data = capa.data.findIndex(function(d) {
+		return comparaDatesJSON(d, data_buscar) === 0;
+	});
+	
+	if (i_data>=capa.data.length)
+		return capa.data.length-1;
+	if (-i_data>capa.data.length)
+		return 0;
+	return (i_data<0) ? capa.data.length+i_data : i_data;
+}
+
+function CanviaDataDeCapaMultitimeAmbTimer(i_capa_data, data_sel, hora_sel, minut_sel, segon_sel, temps_timer)
+{
+	if(TimerCapaMultiTime[("capa_"+i_capa_data)])
+		clearTimeout(TimerCapaMultiTime[("capa_"+i_capa_data)]);
+
+	var i_data=DonaIndexDataCapaPeriodesDeSelectorLlegenda(i_capa_data, data_sel, hora_sel, minut_sel, segon_sel);
+    TimerCapaMultiTime[("capa_"+i_capa_data)] = setTimeout(function () {
+        TimerCapaMultiTime[("capa_"+i_capa_data)] = null;
+        CanviaDataDeCapaMultitime(i_capa_data, i_data);
+    }, temps_timer);
+}
+
 function CanviaValorDimensioExtraDeCapa(i_capa_dim, i_dim, i_valor)
 {
 var capa=ParamCtrl.capa[i_capa_dim], dim=capa.dimensioExtra[i_dim];
@@ -995,11 +1069,39 @@ var capa=ParamCtrl.capa[i_capa_dim], dim=capa.dimensioExtra[i_dim];
 var LlegendaAmbControlDeCapes=0x01;
 var LlegendaAmbCapesNoVisibles=0x02;
 
+
+function sortAscendingData(d1,d2)
+{
+	if(d1.year < d2.year) return -1;
+	if(d1.year > d2.year) return 1;
+	
+	if((typeof d1.month==="undefined" || d1.month==null) && (typeof d2.month==="undefined" || d2.month==null))
+		return 0;
+	if(typeof d1.month==="undefined" || d1.month==null) // Això no hauria de passar mai però per si de cas ho faig
+		return 1;
+	if(typeof d2.month==="undefined" || d2.month==null) // Això no hauria de passar mai però per si de cas ho faig
+		return -1;
+	if(d1.month < d2.month) return -1;
+	if(d1.month > d2.month) return 1;
+	
+	if((typeof d1.day==="undefined" || d1.day==null) && (typeof d2.day==="undefined" || d2.day==null))
+		return 0;
+	if(typeof d1.day==="undefined" || d1.day==null) // Això no hauria de passar mai però per si de cas ho faig
+		return 1;
+	if(typeof d2.day==="undefined" || d2.day==null) // Això no hauria de passar mai però per si de cas ho faig
+		return -1;
+		
+	return d1.day-d2.day;
+}
+
+var TimerCapaMultiTime={};
 function DonaCadenaHTMLLlegenda(aspecte, flag)
 {
 var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 
 	var alguna=DeterminaAlgunaCapa(flag);
+	
+	TimerCapaMultiTime={};
 
 	if (flag&LlegendaAmbControlDeCapes)
 		cdns.push("<form name=\"form_llegenda\">");			
@@ -1298,16 +1400,103 @@ var salt_entre_columnes, cdns=[], capa, estil, n_col_carac;
 							n_col_carac+=alguna.consultable;
 						if (ParamCtrl.LlegendaLligaVisibleAmbDescarregable!=true)					
 							n_col_carac+=alguna.descarregable;
-						cdns.push(n_col_carac, "><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
-						   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
-						var i_data_sel=DonaIndexDataCapa(capa, null);
-						for (var i_data=0; i_data<capa.data.length; i_data++)
+						if(capa.FlagsData.DataMostraPeriodes)
 						{
-							cdns.push("<option value=\"",i_data,"\"",
-								((i_data==i_data_sel) ? " selected" : "") ,
-							">", DonaDataCapaPerLlegenda(i_capa,i_data) , "</option>\n");
+							TimerCapaMultiTime[("capa_"+i_capa)]=null;
+							clearTimeout(TimerCapaMultiTime[("capa_"+i_capa)]);
+							cdns.push(n_col_carac, ">");
+							cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("calendar.png"), "\" size=\"14px\" style=\"vertical-align:middle\">");
+							cdns.push("<select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitimeAmbTimer(",i_capa,
+										", document.form_llegenda.data_capa_",i_capa,".value,", 
+										(capa.FlagsData.DataMostraHora ? ("document.form_llegenda.hora_capa_"+i_capa+".value") : "null"), ",",
+										(capa.FlagsData.DataMostraMinut ? ("document.form_llegenda.minut_capa_"+i_capa+".value") : "null"),",", 
+										(capa.FlagsData.DataMostraSegon ? ("document.form_llegenda.segon_capa_"+i_capa+".value") : "null"), 
+										");\">\n");
+							var i_data_sel=DonaIndexDataCapa(capa, null), data_text, hora_sel=0, minut_sel=0, segon_sel=0;
+							
+							if(capa.FlagsData.DataMostraHora)
+								hora_sel=capa.data[i_data_sel].hour;
+							if(capa.FlagsData.DataMostraMinut)
+								hora_sel=capa.data[i_data_sel].minute;
+							if(capa.FlagsData.DataMostraSegon)
+								hora_sel=capa.data[i_data_sel].second;
+							// he de mirar de fer un array de dates sense repeticions
+							var data_temp=structuredClone(capa.data);							
+							data_temp.sort(sortAscendingData);
+							data_temp.removeDuplicates(sortAscendingData);
+							//Actualitzo la data selecccionada
+							i_data_sel = data_temp.findIndex(function(d) {
+									return sortAscendingData(d, capa.data[i_data_sel]) === 0;
+								});
+							
+							for (var i_data=0; i_data<data_temp.length; i_data++)
+							{
+								data_text=
+								cdns.push("<option value=\"{","'year':",data_temp[i_data].year,
+									capa.FlagsData.DataMostraMes?(",'month':"+data_temp[i_data].month):"",
+									capa.FlagsData.DataMostraDia?(",'day':"+data_temp[i_data].day):"",
+									"}\"",
+									((i_data==i_data_sel) ? " selected" : "") ,
+								">", DonaDataCapaPerLlegenda(i_capa,i_data,data_temp) , "</option>\n");
+							}
+							cdns.push("</select>");
+							if(capa.FlagsData.DataMostraHora){
+								cdns.push("<img src=\"", AfegeixAdrecaBaseSRC("clock.png"), "\" size=\"14px\" style=\"vertical-align:middle\">");
+								cdns.push("<select class=\"text_petit\" name=\"hora_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitimeAmbTimer(",i_capa,
+										", document.form_llegenda.data_capa_",i_capa,".value,",
+										(capa.FlagsData.DataMostraHora ? ("document.form_llegenda.hora_capa_"+i_capa+".value") : "null"), ",",
+										(capa.FlagsData.DataMostraMinut ? ("document.form_llegenda.minut_capa_"+i_capa+".value") : "null"),",", 
+										(capa.FlagsData.DataMostraSegon ? ("document.form_llegenda.segon_capa_"+i_capa+".value") : "null"), 
+										");\">\n");
+								for (var i_data=0; i_data<24; i_data++)
+									cdns.push("<option value=\"",i_data,"\"", ((i_data==hora_sel) ? " selected" : ""),">", i_data , "</option>\n");
+								cdns.push("</select>");
+								if(capa.FlagsData.DataMostraMinut){
+									cdns.push(" : <select class=\"text_petit\" name=\"minut_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitimeAmbTimer(",i_capa,
+												", document.form_llegenda.data_capa_",i_capa,".value,", 
+												(capa.FlagsData.DataMostraHora ? ("document.form_llegenda.hora_capa_"+i_capa+".value") : "null"), ",",
+												(capa.FlagsData.DataMostraMinut ? ("document.form_llegenda.minut_capa_"+i_capa+".value") : "null"), ",",
+												(capa.FlagsData.DataMostraSegon ? ("document.form_llegenda.segon_capa_"+i_capa+".value") : "null"), 
+												");\">\n");
+									for (var i_data=0; i_data<60; i_data++)
+										cdns.push("<option value=\"",i_data,"\"", ((i_data==minut_sel) ? " selected" : ""),">", i_data , "</option>\n");
+									cdns.push("</select>");
+									if(capa.FlagsData.DataMostraSegon){
+										cdns.push(" : <select class=\"text_petit\" name=\"segon_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitimeAmbTimer(",
+											   i_capa,", document.form_llegenda.data_capa_",i_capa,".value,", 
+											   (capa.FlagsData.DataMostraHora ? ("document.form_llegenda.hora_capa_"+i_capa+".value,") : "null"), ",",
+											   (capa.FlagsData.DataMostraMinut ? ("document.form_llegenda.minut_capa_"+i_capa+".value,") : "null"),",", 
+											   (capa.FlagsData.DataMostraSegon ? ("document.form_llegenda.segon_capa_"+i_capa+".value") : "null"), 
+											   ");\">\n");
+										for (var i_data=0; i_data<60; i_data++)
+											cdns.push("<option value=\"",i_data,"\"", ((i_data==segon_sel) ? " selected" : ""),">", i_data , "</option>\n")
+										cdns.push("</select>");
+									}
+								}
+							}
+							if(capa.FlagsData.DataMostraBotonsResolucio && capa.dataPeriode && capa.dataPeriode.periodes)
+							{
+								cdns.push("<br><span class=\"text_petit\">",GetMessage("Resolution"),": ",
+									DonaTextImgGifSvg("menysrs_capa"+i_capa, null, "minus", 12, GetMessage("Resolution"), "CanviaResolucioTemporalCapa("+i_capa+", false);"), " ");
+								var text_res=DonaTextUnitatResolucioSegonsFlags(capa.FlagsData);
+								if(text_res)
+									cdns.push(text_res);
+								cdns.push(" ",DonaTextImgGifSvg("mesrs_capa"+i_capa, null, "plus", 12, GetMessage("Resolution"), "CanviaResolucioTemporalCapa("+i_capa+", true);"),"</span>");
+							}
+							cdns.push("</td></tr>");
 						}
-						cdns.push("</select></td></tr>");
+						else{
+							cdns.push(n_col_carac, "><select class=\"text_petit\" name=\"data_capa_",i_capa,"\" onChange=\"CanviaDataDeCapaMultitime(",
+							   i_capa,", parseInt(document.form_llegenda.data_capa_",i_capa,".value));\">\n");
+							var i_data_sel=DonaIndexDataCapa(capa, null);
+							for (var i_data=0; i_data<capa.data.length; i_data++)
+							{
+								cdns.push("<option value=\"",i_data,"\"",
+									((i_data==i_data_sel) ? " selected" : "") ,
+								">", DonaDataCapaPerLlegenda(i_capa,i_data) , "</option>\n");
+							}
+							cdns.push("</select></td></tr>");
+						}
 					}
 					else
 					{

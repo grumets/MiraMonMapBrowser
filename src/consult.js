@@ -18,7 +18,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -129,7 +129,6 @@ var n_fills_NODATA, esNODATA, esLink, esImatge;
 					On algunes d'aquestes propietats és el nodeValue que passa a ser value.
 					nodeName passa a ser name.
 					Compte que això només és per attributes elements */
-
 				}
 				if(attributes)
 					consulta.attributes[tag.attributes[j].name].valor=tag.attributes[j].value;
@@ -462,7 +461,7 @@ function MostraConsultaComHTML(consulta)
 					valor=DeterminaTextValorAttributeConsultaDataCapa(capa, properties, attribute, attributesArray[i]);
 					if(attribute.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor==""))
 						continue;
-					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, (consulta.i_zone_level ? consulta.i_zone_level : -1), 0, i, attributesArray[i], attribute, separador, valor, i_capa_validar, true));
+					cdns.push(MostraConsultaAttributeComHTML(consulta.i_capa, DonaIdZoneLevelConsulta(consulta.i_zone_level), 0, i, attributesArray[i], attribute, separador, valor, i_capa_validar, true));
 					if (separador)
 						separador=null;
 				}
@@ -661,9 +660,18 @@ var s, resposta_consulta_xml, env_icones, env_icona, punt={}, cal_transformar, u
 			if(capa.origenAccesObjs==origen_Things)
 				url=DonaRequestSTAObservationsThings(RespostaConsultaObjDigiXML[i].i_capa, null, RespostaConsultaObjDigiXML[i].i_obj, null);
 			else if(capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
-				url=DonaRequestSTAObservationsCellsFeaturesOfInterest(RespostaConsultaObjDigiXML[i].i_capa, RespostaConsultaObjDigiXML[i].i_zone_level, RespostaConsultaObjDigiXML[i].i_obj, null);
+			{
+				if(!RespostaConsultaObjDigiXML[i].interval_dggs)
+					RespostaConsultaObjDigiXML[i].interval_dggs=DonaIntervalSTADggsDeCapa(capa);
+				url=DonaRequestSTAObservationsCellsFeaturesOfInterest(RespostaConsultaObjDigiXML[i].i_capa, RespostaConsultaObjDigiXML[i].i_zone_level, RespostaConsultaObjDigiXML[i].i_obj, null, RespostaConsultaObjDigiXML[i].interval_dggs, RespostaConsultaObjDigiXML[i].data_ini, RespostaConsultaObjDigiXML[i].data_fi);
+			}
 			else
 				url=DonaRequestSTAObservationsFeatureOfInterest(RespostaConsultaObjDigiXML[i].i_capa, null, RespostaConsultaObjDigiXML[i].i_obj, null);
+			if(!url)
+			{
+				ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(null, RespostaConsultaObjDigiXML[i]);
+				continue;
+			}
 			RespostaConsultaObjDigiXML[i].i_event=CreaIOmpleEventConsola("STA Observations", RespostaConsultaObjDigiXML[i].i_capa, url, TipusEventGetObservation);
 		}
 		else if(tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
@@ -761,52 +769,89 @@ function TancaFinestra_multi_consulta()
 		//	removeLayer(elem);
 		//hideLayer(getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa+ParamCtrl.ICapaVolaPuntConsult));
 	}
+	RespostaConsultaObjDigiXML=[];
 }//Fi de TancaFinestra_multi_consulta()
 
 var ConsultaCopiaSerieTemporalMostrat=false;
 
 function HiHaAlgunaSerieTemporal(capa)
 {
+	if(!capa || !capa.attributes)
+		return false;
 	var attributesArray=Object.keys(capa.attributes);
 	if(!attributesArray)
 		return false;
 	for(var i=0; i<attributesArray.length; i++)
 	{
-		if(capa.attributes[attributesArray[i]].serieTemporal)
+		if(capa.attributes[attributesArray[i]] && capa.attributes[attributesArray[i]].serieTemporal)
 			return true;
 	}
 	return false;
 }
 
-function ConsultaCopiaSerieTemporal(i_capa, i_zone_level, i_obj, i_atr)
+function DonaIdCanvasGrupSiUltim(grups, i_atr)
 {
-var cdns=[], capa, feature, attribute, atr;
+	var i, g, j;
+	for(i=0; i<grups.length; i++)
+	{
+		g=grups[i];
+		for(j=0; j<g.i_atrs.length; j++)
+		{
+			if(g.i_atrs[j]==i_atr)
+			{
+				if(j==g.i_atrs.length-1)
+					return g.id_html;
+				return false;
+			}
+		}
+	}
+	return undefined;
+}
+
+function PintaGraficsSerieTemporalConsulta(win, i_capa, i_zone_level, i_obj)
+{
+	var capa=ParamCtrl.capa[i_capa], id_zl, grups, g, a, attributesArray, en_grup={}, k;
+	if(!win || !capa || !capa.attributes)
+		return;
+	id_zl=DonaIdZoneLevelConsulta(i_zone_level);
+	attributesArray=Object.keys(capa.attributes);
+	grups=DonaGrupsSerieTemporalCapa(capa);
+	for(g=0; g<grups.length; g++)
+	{
+		for(k=0; k<grups[g].i_atrs.length; k++)
+			en_grup[grups[g].i_atrs[k]]=true;
+		MostraGraficSerieTemporalGrup(win, "canvas_cnsl_serie_" + i_capa + "_" + id_zl + "_" + i_obj + "_" + grups[g].id_html, i_capa, i_zone_level, i_obj, grups[g]);
+	}
+	for(a=0; a<attributesArray.length; a++)
+	{
+		if(capa.attributes[attributesArray[a]] && capa.attributes[attributesArray[a]].serieTemporal && !en_grup[a])
+			MostraGraficSerieTemporalAttribute(win, "canvas_cnsl_serie_" + i_capa + "_" + id_zl + "_" + i_obj + "_" + a, i_capa, i_zone_level, i_obj, a);
+	}
+}
+
+function EsAttributeCountSerieTemporal(nom, attribute)
+{
+	var s=(nom ? nom : "")+" "+(attribute && attribute.descripcio ? DonaCadena(attribute.descripcio) : "");
+	return /count/i.test(s);
+}
+
+function ConsultaCopiaSerieTemporal(i_capa, i_zone_level, i_obj, i_atr, id_grup)
+{
+var cdns=[], capa, feature, attribute, atr, serie, grups, grup, i, j, i_atrs=[], nom, v, que_mostrar, attributesArray, data_array, i_data_general, saved_data, feature_cnsl;
 
 	IniciaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv");
 
 	capa=ParamCtrl.capa[i_capa];
-	if(i_zone_level!=-1 && capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells && 
-		capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features && 
-		i_obj<capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features.length)
-		feature=capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features[i_obj];
-	else if(i_zone_level==-1 && capa.objectes && capa.objectes.features && i_obj<capa.objectes.features.length)
-		feature=capa.objectes.features[i_obj];
-	else
+	feature=DonaFeatureConsultaDigi(capa, i_zone_level, i_obj);
+	if(!feature)
 		return false;
-	
-	var data_array=null, tipus=DonaTipusServidorCapa(capa);
-	if(tipus=="TipusSTA" || tipus=="TipusSTAplus") // Agafo les dates del objecte en concret
-		data_array=feature.data;
-	else
-		data_array=capa.data;
-	
-	var attributesArray=Object.keys(capa.attributes);
-	attribute=capa.attributes[attributesArray[i_atr]];
+
+	attributesArray=Object.keys(capa.attributes);
+	serie=DonaSerieConsulta(i_capa, i_zone_level, i_obj);
 
 	cdns.push(GetMessage("Layer"), "\t", DonaCadena(capa.desc), "\n");
-	//cdns.push(DonaCadenaLang({"cat": "Objecte", "spa": "Objeto", "eng": "Feature", "fre": "Feature"}), "\t", i_obj, "\n");
 
-	for(var i=0; i<attributesArray.length; i++)
+	for(i=0; i<attributesArray.length; i++)
 	{
 		atr=capa.attributes[attributesArray[i]];
 		if(atr.mostrar=="no" || atr.serieTemporal)
@@ -816,20 +861,84 @@ var cdns=[], capa, feature, attribute, atr;
 			cdns.push("\t", atr.UoM);
 		cdns.push("\n");
 	}
-	cdns.push(GetMessage("Date"), "\t", DonaCadenaDescripcioAttribute(attributesArray[i_atr], attribute, false));
-	if (attribute.UoM)
-		cdns.push(" (", attribute.UoM, ")");
-	cdns.push("\n");
-	var i_data_general;
-	if(data_array)
+
+	if(id_grup)
 	{
-		for (var i_data=0; i_data<data_array.length; i_data++)
+		grups=DonaGrupsSerieTemporalCapa(capa);
+		for(i=0; i<grups.length; i++)
 		{
-			if(tipus=="TipusSTA" || tipus=="TipusSTAplus")
-				i_data_general=DonaIndexDataADataCapa(data_array[i_data], capa.data);
-			else
-				i_data_general=i_data;
-			cdns.push(DonaDataCapaComATextBreu(i_capa, i_data), "\t", DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, attribute, attributesArray[i_atr], i_data_general, PuntConsultat.i, PuntConsultat.j), "\n");
+			if(grups[i].id_html==id_grup)
+			{
+				grup=grups[i];
+				i_atrs=grup.i_atrs;
+				break;
+			}
+		}
+	}
+	if((!i_atrs || !i_atrs.length) && typeof i_atr==="number" && i_atr>=0)
+		i_atrs=[i_atr];
+
+	if(serie && serie.data && serie.valors && serie.data.length && i_atrs.length)
+	{
+		que_mostrar=DonaFlagsDataAPartirDePeriodeActualDeCapa(capa);
+		if(serie.interval)
+		{
+			var periode_copia=DonaPeriodeISODesDeIntervalSTADggs(capa, i_zone_level, serie.interval);
+			if(periode_copia)
+				que_mostrar=DonaFlagsDataAPartirDeDuration(parseDurationISO8601(periode_copia));
+		}
+		cdns.push(GetMessage("Date"));
+		for(j=0; j<i_atrs.length; j++)
+		{
+			nom=attributesArray[i_atrs[j]];
+			attribute=capa.attributes[nom];
+			cdns.push("\t", DonaCadenaDescripcioAttribute(nom, attribute, false));
+			if(attribute.UoM)
+				cdns.push(" (", attribute.UoM, ")");
+		}
+		cdns.push("\n");
+		saved_data=capa.data;
+		capa.data=serie.data;
+		try
+		{
+			for(i=0; i<serie.data.length; i++)
+			{
+				feature_cnsl={"id": feature.id, "properties": DonaPropertiesObjecteConsultaDesDeSerie(capa, feature, serie, i)};
+				cdns.push(DonaDataJSONComATextISO8601(serie.data[i], que_mostrar));
+				for(j=0; j<i_atrs.length; j++)
+				{
+					nom=attributesArray[i_atrs[j]];
+					attribute=capa.attributes[nom];
+					v=DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature_cnsl, attribute, nom, i, PuntConsultat.i, PuntConsultat.j);
+					cdns.push("\t", (typeof v!=="undefined" && v!=null && !(typeof v==="number" && isNaN(v))) ? v : "");
+				}
+				cdns.push("\n");
+			}
+		}
+		finally
+		{
+			capa.data=saved_data;
+		}
+	}
+	else
+	{
+		attribute=(typeof i_atr==="number") ? capa.attributes[attributesArray[i_atr]] : null;
+		if(attribute)
+		{
+			cdns.push(GetMessage("Date"), "\t", DonaCadenaDescripcioAttribute(attributesArray[i_atr], attribute, false));
+			if (attribute.UoM)
+				cdns.push(" (", attribute.UoM, ")");
+			cdns.push("\n");
+		}
+		tipus=DonaTipusServidorCapa(capa);
+		data_array=DonaDatesSerieTemporalConsulta(capa, feature);
+		if(data_array && attribute)
+		{
+			for (var i_data=0; i_data<data_array.length; i_data++)
+			{
+				i_data_general=DonaIDataCapaDeDataSerieTemporalConsulta(capa, feature, data_array, i_data);
+				cdns.push(DonaDataCapaComATextBreu(i_capa, i_data_general), "\t", DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, attribute, attributesArray[i_atr], i_data_general, PuntConsultat.i, PuntConsultat.j), "\n");
+			}
 		}
 	}
 	FinalitzaCopiaPortapapersFinestra(ConsultaWindow ? ConsultaWindow : window, "ConsultaDiv", cdns.join(""),
@@ -838,9 +947,9 @@ var cdns=[], capa, feature, attribute, atr;
 	return false;
 }
 
-function MostraConsultaAttributeComHTML(i_capa, i_zone_level, i_obj, i_atr, attribute_name, attribute, separador, valor, i_capa_validar, cal_class)
+function MostraConsultaAttributeComHTML(i_capa, i_zone_level, i_obj, i_atr, attribute_name, attribute, separador, valor, i_capa_validar, cal_class, id_canvas_grup)  // id_canvas_grup potser una booleana o un identificador de tipus string
 {
-var cdns=[], ncol=440, nfil=220, capa=ParamCtrl.capa[i_capa];
+var cdns=[], ncol=440, nfil=(typeof id_canvas_grup==="string") ? 260 : 220, capa=ParamCtrl.capa[i_capa];
 
 	if(separador)
 		cdns.push(DonaCadena(separador));
@@ -938,23 +1047,62 @@ var cdns=[], ncol=440, nfil=220, capa=ParamCtrl.capa[i_capa];
 	}
 	cdns.push((cal_class ? "</span>": ""), "<br>");
 
-	if (attribute.serieTemporal)
+	if (attribute.serieTemporal && id_canvas_grup!==false)
 	{
+		var id_zl=DonaIdZoneLevelConsulta(i_zone_level);
+		var id_serie=(typeof id_canvas_grup==="string") ? id_canvas_grup : String(i_atr);
 		if (cal_class)
 		{
 			cdns.push("<span class='ValorRespostaConsulta' class='invisiblewhenprint'>",
-				"<a id=\"href_cnsl_serie_", i_capa, "_", (i_zone_level ? i_zone_level : -1), "_", i_obj, "_", i_atr, "\" href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ",(i_zone_level ? i_zone_level : -1),", ", i_obj, ", ", i_atr, ") : ConsultaCopiaSerieTemporal(", i_capa, ", ", (i_zone_level ? i_zone_level : -1),", ", i_obj, ", ", i_atr, ")\">", GetMessage("CopySeriesValues", "consult"), "</a><br>",
+				"<a id=\"href_cnsl_serie_", i_capa, "_", id_zl, "_", i_obj, "_", id_serie, "\" href=\"javascript:void(0);\" onClick=\"(opener) ? opener.ConsultaCopiaSerieTemporal(", i_capa, ", ", id_zl, ", ", i_obj, ", ", i_atr, ", '", id_serie, "') : ConsultaCopiaSerieTemporal(", i_capa, ", ", id_zl, ", ", i_obj, ", ", i_atr, ", '", id_serie, "')\">", GetMessage("CopySeriesValues", "consult"), "</a><br>",
 				"</span>");
 		}
-		cdns.push("<div id=\"div_cnsl_serie_", i_capa, "_", (i_zone_level ? i_zone_level : -1), "_", i_obj, "_", i_atr, "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_cnsl_serie_", i_capa, "_", (i_zone_level ? i_zone_level : -1), "_", i_obj, "_", i_atr, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
+		cdns.push("<div id=\"div_cnsl_serie_", i_capa, "_", id_zl, "_", i_obj, "_", id_serie, "\" style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", "canvas_cnsl_serie_", i_capa, "_", id_zl, "_", i_obj, "_", id_serie, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
+		if(typeof id_canvas_grup==="string")
+		{
+			var serie_cnsl=DonaSerieConsulta(i_capa, i_zone_level, i_obj);
+			if(serie_cnsl)
+			{
+				var periode_cnsl=serie_cnsl.interval ? DonaPeriodeISODesDeIntervalSTADggs(capa, i_zone_level, serie_cnsl.interval) : DonaPeriodeActualDeCapa(capa);
+				cdns.push(DonaHTMLBotonsResolucioConsulta(i_capa, id_zl, i_obj, periode_cnsl, id_serie));
+			}
+		}
 	}
 	return cdns.join("");
+}
+
+function DonaTextValorSerieConsulta(i_capa, i_zone_level, i_obj, attribute_name, attribute)
+{
+	var capa=ParamCtrl.capa[i_capa], serie=DonaSerieConsulta(i_capa, i_zone_level, i_obj);
+	var feature, i_sel, saved_data, feature_cnsl, valor;
+	if(!serie || !serie.data || !serie.valors || !serie.data.length)
+		return null;
+	feature=DonaFeatureConsultaDigi(capa, i_zone_level, i_obj);
+	if(!feature)
+		return null;
+	i_sel=DonaIDataSerieMesProperaADataCapa(capa, serie);
+	if(i_sel<0)
+		return null;
+	saved_data=capa.data;
+	capa.data=serie.data;
+	try
+	{
+		feature_cnsl={"id": feature.id, "properties": DonaPropertiesObjecteConsultaDesDeSerie(capa, feature, serie, i_sel)};
+		valor=DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature_cnsl, attribute, attribute_name, i_sel, PuntConsultat.i, PuntConsultat.j);
+	}
+	finally
+	{
+		capa.data=saved_data;
+	}
+	if(typeof valor==="undefined" || valor==null || (typeof valor==="number" && isNaN(valor)))
+		return null;
+	return valor;
 }
 
 function MostraConsultaCapaDigitalitzadaComHTML(i_capa_digi, i_zone_level, i_obj_digi, cal_titol_capa, cal_class)
 {
 var cdns=[], capa=ParamCtrl.capa[i_capa_digi], attributes=capa.attributes, feature, valor, attribute;
-var separador=null;
+var separador=null, serie, i_sel=null, saved_data, cal_restaurar_data=false, feature_mostra;
 	
 	if(i_zone_level!=-1)
 	{
@@ -988,27 +1136,77 @@ var separador=null;
 	}*/
 	
 	var attributesArray=Object.keys(attributes);
-	for (var i=0; i<attributesArray.length; i++)
+	var grups=DonaGrupsSerieTemporalCapa(capa);
+	feature_mostra=feature;
+	serie=DonaSerieConsulta(i_capa_digi, i_zone_level, i_obj_digi);
+	if(serie && serie.data && serie.data.length)
 	{
-		attribute=attributes[attributesArray[i]];
-		if (attribute.separador && DonaCadena(attribute.separador))
-			separador=attribute.separador;
-		if(attribute.mostrar=="no")
-			continue;
-		valor=DeterminaTextValorAttributeObjecteCapaDigi(PuntConsultat.i_nova_vista, capa, feature, attribute, attributesArray[i], PuntConsultat.i, PuntConsultat.j);
+		i_sel=DonaIDataSerieMesProperaADataCapa(capa, serie);
+		saved_data=capa.data;
+		cal_restaurar_data=true;
+		capa.data=serie.data;
+		feature_mostra={"id": feature.id, "properties": DonaPropertiesObjecteConsultaDesDeSerie(capa, feature, serie, i_sel)};
+	}
+	else if(feature.data && feature.data.length)
+	{
+		i_sel=DonaIDataSerieMesProperaADataCapa(capa, {"data": feature.data});
+		saved_data=capa.data;
+		cal_restaurar_data=true;
+		capa.data=feature.data;
+		feature_mostra=feature;
+	}
+	try
+	{
+		for (var i=0; i<attributesArray.length; i++)
+		{
+			attribute=attributes[attributesArray[i]];
+			if (attribute.separador && DonaCadena(attribute.separador))
+				separador=attribute.separador;
+			if(attribute.mostrar=="no")
+				continue;
+			valor=DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature_mostra, attribute, attributesArray[i], i_sel, PuntConsultat.i, PuntConsultat.j);
 
-		if(attribute.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor=="" || isNaN(valor)))
-			continue;
-				
-		cdns.push(MostraConsultaAttributeComHTML(i_capa_digi, i_zone_level, i_obj_digi, i, attributesArray[i], attribute, separador, valor, -1, cal_class));			
-		
-		if (separador)
-			separador=null;
+			if(attribute.mostrar=="si_ple" && (typeof valor === "undefined" || valor==null || valor=="" || isNaN(valor)))
+				continue;
+
+			cdns.push(MostraConsultaAttributeComHTML(i_capa_digi, i_zone_level, i_obj_digi, i, attributesArray[i], attribute, separador, valor, -1, cal_class, DonaIdCanvasGrupSiUltim(grups, i)));
+
+			if (separador)
+				separador=null;
+		}
+	}
+	finally
+	{
+		if(cal_restaurar_data)
+			capa.data=saved_data;
 	}
 	return cdns.join("");
 }
 
-var RespostaConsultaObjDigiXML;
+var RespostaConsultaObjDigiXML;  // Una entrada per objecte consultat. consulta.serie: sèrie multiresolució d'aquesta consulta (no barrejar amb capa.data).
+
+function DonaConsultaObjDigiXML(i_capa, i_zone_level, i_obj)
+{
+	var i, id_zl=DonaIdZoneLevelConsulta(i_zone_level);
+	if(!RespostaConsultaObjDigiXML)
+		return null;
+	for(i=0; i<RespostaConsultaObjDigiXML.length; i++)
+	{
+		if(RespostaConsultaObjDigiXML[i].i_capa==i_capa &&
+			DonaIdZoneLevelConsulta(RespostaConsultaObjDigiXML[i].i_zone_level)==id_zl &&
+			RespostaConsultaObjDigiXML[i].i_obj==i_obj)
+			return RespostaConsultaObjDigiXML[i];
+	}
+	return null;
+}
+
+function DonaSerieConsulta(i_capa, i_zone_level, i_obj)
+{
+	var consulta=DonaConsultaObjDigiXML(i_capa, i_zone_level, i_obj);
+	if(consulta && consulta.serie)
+		return consulta.serie;
+	return null;
+}
 
 function IniciaFinestraConsulta(win)
 {
@@ -1056,7 +1254,7 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 	RespostaConsultaObjDigiXML=[];
 
 	NConsultesZero=NCapesConsultables=0;
-	var i, j, objectes, v, n_prop_capa, feature;
+	var i, j, objectes, v, n_prop, n_prop_capa, feature;
 	for (i=0; i<ParamCtrl.capa.length; i++)
 	{
 		capa=ParamCtrl.capa[i];
@@ -1089,7 +1287,8 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 						/* NJ 07-08-2025: No intento filtrar si he de fer o no la petició amb els resultats
 						de les observacions per cada una de les features of Interest solicitades en funció de si tinc o no les propietats perquè 
 						molt probablement tinc una sèrie temporal i no sé si tindré tota la sèrie o no, 
-						i no puc filtrar-ho, demano sempre la consulta per localització al servidor
+						i no puc filtrar-ho, demano sempre la consulta per localització al servidor.
+						El mapa només porta $top=1 a l'interval actual (p.ex. 1hour): això no és la sèrie de la consulta.
 						*/
 						cdns.push("<div align=\"left\" id=\"LayerObjDigiConsulta",i,"_",iZoneLevel,"_",j,
 							"\" class=\"layerresposta\">",
@@ -1203,13 +1402,7 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 				for(j=0; j<objectes.features.length; j++)
 				{
 					if (EsObjDigiConsultable(i,j) && objectes.features[j].properties && CountPropertiesOfObject(objectes.features[j].properties)>0)
-					{
-						for (a=0; a<attributesArray.length; a++)
-						{
-							if (capa.attributes[attributesArray[a]].serieTemporal)
-								MostraGraficSerieTemporalAttribute(win, "canvas_cnsl_serie_" + i + "_" + -1+"_"+ j + "_" + a, i, -1, j, a);
-						}
-					}
+						PintaGraficsSerieTemporalConsulta(win, i, -1, j);
 				}
 			}
 		}
@@ -1285,39 +1478,291 @@ var cdns=[], capa, capa2, tipus, hi_ha_capes_perfil=false, clic_sobre_elem_linea
 	OmpleRespostaConsultaNoHiHaDadesSiCal(win);
 }
 
-function MostraGraficSerieTemporalAttribute(win, nom_canvas, i_capa, i_zone_level, i_obj, i_atr)
+function DonaHTMLBotonsResolucioConsulta(i_capa, id_zl, i_obj, periode, id_serie)
 {
-var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons, v, tipus=DonaTipusServidorCapa(capa);
-var attributesArray=Object.keys(capa.attributes), data_array, feature, i_data_general;
+	var sufix=i_capa+"_"+id_zl+"_"+i_obj+(id_serie ? "_"+id_serie : "");
+	return ["<div class=\"text_petit invisiblewhenprint\" style=\"margin:12px 0 22px 0;line-height:22px;clear:both;text-align:right;\">",
+		GetMessage("Resolution"), ": ",
+		DonaTextImgGifSvg("menysrs_cnsl_"+sufix, null, "minus", 12, GetMessage("Resolution"),
+			"(opener)?opener.CanviaResolucioTemporalConsulta("+i_capa+","+id_zl+","+i_obj+",false):CanviaResolucioTemporalConsulta("+i_capa+","+id_zl+","+i_obj+",false);"),
+		" ", DonaTextUnitatResolucioConsultaDePeriode(periode), " ",
+		DonaTextImgGifSvg("mesrs_cnsl_"+sufix, null, "plus", 12, GetMessage("Resolution"),
+			"(opener)?opener.CanviaResolucioTemporalConsulta("+i_capa+","+id_zl+","+i_obj+",true):CanviaResolucioTemporalConsulta("+i_capa+","+id_zl+","+i_obj+",true);"),
+		"</div>"].join("");
+}
 
-	if(tipus=="TipusSTA" || tipus=="TipusSTAplus")
+function DonaTextUnitatResolucioSegonsFlags(flags)
+{
+	if(flags.DataMostraSegon)
+		return GetMessage("Second");
+	if(flags.DataMostraMinut)
+		return GetMessage("Minute");
+	if(flags.DataMostraHora)
+		return GetMessage("Hour");
+	if(flags.DataMostraDia)
+		return GetMessage("Day");
+	if(flags.DataMostraMes)
+		return GetMessage("Month");
+	if(flags.DataMostraAny)
+		return GetMessage("Year");
+	return null;
+}
+
+function DonaTextUnitatResolucioConsultaDePeriode(periode)
+{
+	var flags, duration;
+	if(!periode)
+		return "";
+	duration=parseDurationISO8601(periode);
+	flags=duration ? DonaFlagsDataAPartirDeDuration(duration) : null;
+	if(!flags)
+		return periode;
+	var text_res=DonaTextUnitatResolucioSegonsFlags(flags);
+	if(text_res)
+		return text_res;
+	return periode;
+}
+
+function CanviaResolucioTemporalConsulta(i_capa, i_zone_level, i_obj, mes_fina)
+{
+	var capa=ParamCtrl.capa[i_capa], serie=DonaSerieConsulta(i_capa, i_zone_level, i_obj);
+	var periodes, i_act, periode_act, interval, win;
+	if(!serie)
+		return;
+	periodes=DonaPeriodesTemporalsDeZoneLevelCapa(capa, i_zone_level);
+	if(!periodes.length)
+		return;
+	periode_act=DonaPeriodeISODesDeIntervalSTADggs(capa, i_zone_level, serie.interval);
+	i_act=DonaIPeriodeMesProperAActual(periodes, periode_act);
+	if(i_act<0)
+		i_act=0;
+	if(mes_fina)
 	{
-		// Agafo les dates del objecte en concret
-		if(i_zone_level!=-1 && capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+		if(i_act>=periodes.length-1)
+			return;
+		interval=DonaIntervalSTADggsDePeriodeICapa(capa, periodes[i_act+1]);
+	}
+	else
+	{
+		if(i_act<=0)
+			return;
+		interval=DonaIntervalSTADggsDePeriodeICapa(capa, periodes[i_act-1]);
+	}
+	if(!interval)
+		return;
+	win=ConsultaWindow && ConsultaWindow.closed==false ? ConsultaWindow : window;
+	TornaADemanarSerieConsulta(i_capa, i_zone_level, i_obj, interval, null, null, win);
+}
+
+function DonaFeatureConsultaDigi(capa, i_zone_level, i_obj)
+{
+	if(i_zone_level!=-1 && capa.origenAccesObjs==origen_CellsFeaturesOfInterest &&
+		capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels[i_zone_level] &&
+		capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells)
+		return capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features[i_obj];
+	if(capa.objectes && capa.objectes.features)
+		return capa.objectes.features[i_obj];
+	return null;
+}
+
+function DonaDatesSerieTemporalConsulta(capa, feature)
+{
+	if(feature && feature.data && feature.data.length)
+		return feature.data;
+	if(capa && capa.data && capa.data.length)
+		return capa.data;
+	return null;
+}
+
+function DonaIDataCapaDeDataSerieTemporalConsulta(capa, feature, data_array, i_data)
+{
+	if(feature && feature.data && data_array===feature.data && capa && capa.data && capa.data.length)
+		return DonaIndexDataADataCapa(data_array[i_data], capa.data);
+	return i_data;
+}
+
+function TornaADemanarSerieConsulta(i_capa, i_zone_level, i_obj, interval_dggs, data_ini, data_fi, win)
+{
+	var consulta=DonaConsultaObjDigiXML(i_capa, i_zone_level, i_obj);
+	var url;
+	if(!consulta)
+	{
+		consulta={"i_capa": i_capa, "i_obj": i_obj, "i_zone_level": i_zone_level,
+			"win": win ? win : (ConsultaWindow ? ConsultaWindow : window)};
+		if(!RespostaConsultaObjDigiXML)
+			RespostaConsultaObjDigiXML=[];
+		RespostaConsultaObjDigiXML.push(consulta);
+	}
+	consulta.interval_dggs=interval_dggs;
+	consulta.data_ini=data_ini;
+	consulta.data_fi=data_fi;
+	if(win)
+		consulta.win=win;
+	else if(!consulta.win)
+		consulta.win=ConsultaWindow ? ConsultaWindow : window;
+	url=DonaRequestSTAObservationsCellsFeaturesOfInterest(i_capa, i_zone_level, i_obj, null, interval_dggs, data_ini, data_fi);
+	if(!url)
+		return;
+	consulta.i_event=CreaIOmpleEventConsola("STA Observations", i_capa, url, TipusEventGetObservation);
+	loadJSON(url, OmpleCapaDigiAmbPropietatsObjecteDigitalitzat, ErrorCapaDigiAmbPropietatsObjecteDigitalitzat, consulta);
+}
+
+function MostraGraficSerieTemporalGrup(win, nom_canvas, i_capa, i_zone_level, i_obj, grup)
+{
+var capa=ParamCtrl.capa[i_capa], feature, serie, attributesArray, i, i_atr, nom, attr, v, millisegons;
+var datasets=[], labels=[], temps=[], data, ctx, nom_elem, elem, id_zl, que_mostrar, y_label, n_ok=0, saved_data, props_pas, feature_cnsl;
+
+	feature=DonaFeatureConsultaDigi(capa, i_zone_level, i_obj);
+	if(!feature || !grup || !grup.i_atrs || !grup.i_atrs.length)
+		return;
+	attributesArray=Object.keys(capa.attributes);
+	id_zl=DonaIdZoneLevelConsulta(i_zone_level);
+	serie=DonaSerieConsulta(i_capa, i_zone_level, i_obj);
+	que_mostrar=DonaFlagsDataAPartirDePeriodeActualDeCapa(capa);
+	if(serie && serie.interval)
+	{
+		var periode_int0=DonaPeriodeISODesDeIntervalSTADggs(capa, i_zone_level, serie.interval);
+		if(periode_int0)
+			que_mostrar=DonaFlagsDataAPartirDeDuration(parseDurationISO8601(periode_int0));
+	}
+
+	if(serie && serie.data && serie.data.length && serie.valors)
+	{
+		saved_data=capa.data;
+		capa.data=serie.data;
+		try
 		{
-			feature=capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features[i_obj];
-			data_array=feature.data;
+			props_pas=[];
+			for(i=0; i<serie.data.length; i++)
+			{
+				millisegons=DonaDateDesDeDataJSON(serie.data[i]).getTime();
+				labels.push(moment(millisegons));
+				temps.push(DonaDataComATextBreu(que_mostrar, serie.data[i]));
+				props_pas[i]=DonaPropertiesObjecteConsultaDesDeSerie(capa, feature, serie, i);
+			}
+			for(i=0; i<grup.i_atrs.length; i++)
+			{
+				i_atr=grup.i_atrs[i];
+				nom=attributesArray[i_atr];
+				attr=capa.attributes[nom];
+				data=[];
+				for(var i_data=0; i_data<serie.data.length; i_data++)
+				{
+					feature_cnsl={"id": feature.id, "properties": props_pas[i_data]};
+					v=parseFloat(DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature_cnsl, attr, nom, i_data, PuntConsultat.i, PuntConsultat.j));
+					millisegons=DonaDateDesDeDataJSON(serie.data[i_data]).getTime();
+					data.push({t: millisegons, y: isNaN(v) ? null : v});
+				}
+				for(var i_v=0; i_v<data.length; i_v++)
+				{
+					if(data[i_v].y!=null)
+						break;
+				}
+				if(i_v==data.length)
+					continue;
+				n_ok++;
+				datasets.push({
+					label: DonaCadenaDescripcioAttribute(nom, attr, false),
+					data: data,
+					color: (attr.serieTemporal && attr.serieTemporal.color) ? attr.serieTemporal.color : "#888888",
+					esCount: EsAttributeCountSerieTemporal(nom, attr)
+				});
+			}
 		}
-		else		
+		finally
 		{
-			feature=capa.objectes.features[i_obj];
-			data_array=feature.data;
+			capa.data=saved_data;
 		}
 	}
 	else
 	{
-		feature=capa.objectes.features[i_obj];
-		data_array=capa.data;
+		var data_array, i_data, i_data_general;
+		data_array=DonaDatesSerieTemporalConsulta(capa, feature);
+		if(data_array && data_array.length)
+		{
+			saved_data=capa.data;
+			if(feature.data && data_array===feature.data)
+				capa.data=feature.data;
+			try
+			{
+			for(i_data=0; i_data<data_array.length; i_data++)
+			{
+				millisegons=DonaDateDesDeDataJSON(data_array[i_data]).getTime();
+				labels.push(moment(millisegons));
+				i_data_general=DonaIDataCapaDeDataSerieTemporalConsulta(capa, feature, data_array, i_data);
+				temps.push(DonaDataCapaComATextBreu(i_capa, i_data_general));
+			}
+			for(i=0; i<grup.i_atrs.length; i++)
+			{
+				i_atr=grup.i_atrs[i];
+				nom=attributesArray[i_atr];
+				attr=capa.attributes[nom];
+				data=[];
+				for(i_data=0; i_data<data_array.length; i_data++)
+				{
+					i_data_general=DonaIDataCapaDeDataSerieTemporalConsulta(capa, feature, data_array, i_data);
+					v=parseFloat(DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, attr, nom, i_data_general, PuntConsultat.i, PuntConsultat.j));
+					millisegons=DonaDateDesDeDataJSON(data_array[i_data]).getTime();
+					data.push({t: millisegons, y: isNaN(v) ? null : v});
+				}
+				for(var i_v2=0; i_v2<data.length; i_v2++)
+				{
+					if(data[i_v2].y!=null)
+						break;
+				}
+				if(i_v2==data.length)
+					continue;
+				n_ok++;
+				datasets.push({
+					label: DonaCadenaDescripcioAttribute(nom, attr, false),
+					data: data,
+					color: (attr.serieTemporal && attr.serieTemporal.color) ? attr.serieTemporal.color : "#888888",
+					esCount: EsAttributeCountSerieTemporal(nom, attr)
+				});
+			}
+			}
+			finally
+			{
+				capa.data=saved_data;
+			}
+		}
 	}
+	ctx=win.document.getElementById(nom_canvas);
+	if(n_ok>0 && ctx)
+	{
+		y_label=grup.nom+(grup.uom ? " ("+grup.uom+")" : "");
+		CreaGraficSerieTemporalMultiple(ctx, datasets, labels, temps, y_label, que_mostrar, GetMessage("Count"));
+	}
+	else
+	{
+		nom_elem="div_cnsl_serie_"+i_capa+"_"+id_zl+"_"+i_obj+"_"+grup.id_html;
+		elem=win.document.getElementById(nom_elem);
+		if(elem) elem.style.display="none";
+		nom_elem="href_cnsl_serie_"+i_capa+"_"+id_zl+"_"+i_obj+"_"+grup.id_html;
+		elem=win.document.getElementById(nom_elem);
+		if(elem) elem.style.display="none";
+	}
+}
+
+function MostraGraficSerieTemporalAttribute(win, nom_canvas, i_capa, i_zone_level, i_obj, i_atr)
+{
+var capa=ParamCtrl.capa[i_capa], data=[], labels=[], temps=[], millisegons, v;
+var attributesArray=Object.keys(capa.attributes), data_array, feature, i_data_general;
+
+	feature=DonaFeatureConsultaDigi(capa, i_zone_level, i_obj);
+	if(!feature)
+		return;
+	data_array=DonaDatesSerieTemporalConsulta(capa, feature);
 	if(data_array)
 	{
-		var nom_elem, elem;
+		var nom_elem, elem, saved_data=capa.data;
+		if(feature.data && data_array===feature.data)
+			capa.data=feature.data;
+		try
+		{
 		for (var i_data=0; i_data<data_array.length; i_data++)
 		{
-			if(tipus=="TipusSTA" || tipus=="TipusSTAplus")
-				i_data_general=DonaIndexDataADataCapa(data_array[i_data], capa.data);
-			else
-				i_data_general=i_data;
+			i_data_general=DonaIDataCapaDeDataSerieTemporalConsulta(capa, feature, data_array, i_data);
 			
 			v=parseFloat(DeterminaTextValorAttributeObjecteDataCapaDigi(PuntConsultat.i_nova_vista, capa, feature, capa.attributes[attributesArray[i_atr]], attributesArray[i_atr], i_data_general, PuntConsultat.i, PuntConsultat.j));
 			if (isNaN(v))
@@ -1341,6 +1786,11 @@ var attributesArray=Object.keys(capa.attributes), data_array, feature, i_data_ge
 			nom_elem="href_cnsl_serie_"+i_capa+"_"+(i_zone_level ? i_zone_level : -1)+"_"+i_obj+"_"+i_atr;
 			elem=win.document.getElementById(nom_elem);
 			if(elem) elem.style.display="none";
+		}
+		}
+		finally
+		{
+			capa.data=saved_data;
 		}
 	}
 }
@@ -1984,15 +2434,24 @@ var capa=ParamCtrl.capa[i_capa], feature;
 
 function EsObjDigiZoneLevelConsultable(i_capa, i_zone_level, i_obj)
 {
-var capa=ParamCtrl.capa[i_capa], feature;
+var capa=ParamCtrl.capa[i_capa], feature, tipus, zone;
 
 	//Quan no té attributes només retorno fals si és una capa estàtica, perquè sinó pot voler dir que haig de sol·licitar els attributes
-	if(capa.consultable!="si" || !capa.objectes || i_zone_level==-1 ||
-		!capa.cellZoneLevelSet || capa.cellZoneLevelSet.zoneLevels ||
-		!capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features || 
-		CountPropertiesOfObject(capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features[i_obj].properties)==0 || capa.estil==null || !capa.estil.length)
+	if(capa.consultable!="si" || i_zone_level==-1 ||
+		!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels ||
+		!(zone=capa.cellZoneLevelSet.zoneLevels[i_zone_level]) ||
+		!zone.cells || !zone.cells.features || !zone.cells.features[i_obj] ||
+		capa.estil==null || !capa.estil.length)
 	{
 		return false;
 	}
-	return EsObjDigiConsultableSegonsSimb(i_capa, capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features[i_obj]);
+	feature=zone.cells.features[i_obj];
+	tipus=DonaTipusServidorCapa(capa);
+	/* El mapa de cel·les STA només porta $top=1 per simbolitzar. La sèrie de la consulta
+	   s'ha de demanar sempre: no exigeixo propietats plenes per considerar l'objecte clicable. */
+	if((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+		return EsObjDigiConsultableSegonsSimb(i_capa, feature);
+	if(!feature.properties || CountPropertiesOfObject(feature.properties)==0)
+		return false;
+	return EsObjDigiConsultableSegonsSimb(i_capa, feature);
 }

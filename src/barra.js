@@ -67,11 +67,11 @@ var cdns=[];
 	}
 	else
 	{
-		cdns.push("onLoad='ChangeSVGToInlineSVG(this, ChangeTitleColorsSVG, {", (title ? "title: \""+title.replaceAll("'", "&apos;")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
-			"onError='DefaultSVGToPNG(event, this, \"gif\");' ");
+		cdns.push("onLoad='(window.ChangeSVGToInlineSVG||opener.ChangeSVGToInlineSVG)(this, (window.ChangeTitleColorsSVG||opener.ChangeTitleColorsSVG), {", (title ? "title: \""+title.replaceAll("'", "&apos;")+"\", " : ""), "colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), ", format: \"gif\"});' ",
+			"onError='(window.DefaultSVGToPNG||opener.DefaultSVGToPNG)(event, this, \"gif\");' ");
 		if (ParamCtrl.BarraEstil.colorsGrey && onclick_function_name)
-			cdns.push("onmouseover='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
-				"onmouseout='ChangeTitleColorsSVG(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
+			cdns.push("onmouseover='(window.ChangeTitleColorsSVG||opener.ChangeTitleColorsSVG)(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colorsGrey), "});' ",
+				"onmouseout='(window.ChangeTitleColorsSVG||opener.ChangeTitleColorsSVG)(\"", id, "\", {colors: ", JSON.stringify(ParamCtrl.BarraEstil.colors), "});' ");
 	}
 	cdns.push(">");
 	return cdns.join("");
@@ -119,6 +119,18 @@ function ParseAndAssingTextSGV(img, f_next, params, text)
 		svg.onmouseover=img.onmouseover;
 	if (img.onmouseout)
 		svg.onmouseout=img.onmouseout;
+	if (params && params.colors)
+	{
+		for (var c in params.colors)
+		{
+			var els=svg.getElementsByClassName(c);
+			if (els)
+			{
+				for (var i=0; i<els.length; i++)
+					els[i].style.fill=params.colors[c];
+			}
+		}
+	}
 	// Replace image with new SVG
 	if(img.parentNode) // NJ: ho protegeixo perquè a vegades arribem aquí i això és null
 		img.parentNode.replaceChild(svg, img);
@@ -177,16 +189,19 @@ function ChangeTitleColorsSVG(id, params)
 {
 	if (params)
 	{
-		var svg=document.getElementById(id);
+		var svg=document.getElementById(id), doc;
 		//Es possible que hi hagi una promesa pendent sobre un element de la llegenda que es redibuixa sobint. Pot passar que la llegenda s'hagi redibuixat completament i aquest element ja no existeixi en el document
+		if (!svg && typeof ConsultaWindow!=="undefined" && ConsultaWindow && ConsultaWindow.closed==false)
+			svg=ConsultaWindow.document.getElementById(id);
 		if (!svg)
 			return;
+		doc=svg.ownerDocument ? svg.ownerDocument : document;
 			
 		if (params.title)
 		{
 			if (!svg.getElementsByTagName("title") || !svg.getElementsByTagName("title").length)
 			{
-				var newNode = document.createElementNS("http://www.w3.org/2000/svg", "title");
+				var newNode = doc.createElementNS("http://www.w3.org/2000/svg", "title");
 				svg.insertBefore(newNode, svg.firstChild);
 			}
 			svg.getElementsByTagName("title")[0].textContent=params.title;

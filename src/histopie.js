@@ -2364,9 +2364,10 @@ function CreaGraficSerieTemporal(nom_canvas, data, labels, temps, y_scale_label,
 				xAxes: [{
 			                type: 'time',
 			                distribution: 'linear',
-					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
 					time: {
-						tooltipFormat: DonaCadenaFormatDataHora(que_mostrar),
+						unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+						minUnit: DonaUnitTimeChartJSDataHora(que_mostrar),
+						tooltipFormat: DonaCadenaFormatEixTemporalGrafic(que_mostrar),
 						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
 					}
 				}],
@@ -2454,9 +2455,10 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 				xAxes: [{
 			                type: 'time',
 			                distribution: 'linear',
-					unit: DonaUnitTimeChartJSDataHora(que_mostrar),
 					time: {
-						tooltipFormat: DonaCadenaFormatDataHora(que_mostrar),
+						unit: DonaUnitTimeChartJSDataHora(que_mostrar),
+						minUnit: DonaUnitTimeChartJSDataHora(que_mostrar),
+						tooltipFormat: DonaCadenaFormatEixTemporalGrafic(que_mostrar),
 						displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
 					}
 				}],
@@ -2484,6 +2486,212 @@ function CreaGraficSerieTemporalSimple(ctx, data, labels, temps, y_scale_label, 
 	};
 	//var ctx = document.getElementById(nom_canvas);
 	return new Chart(ctx, cfg);
+}
+
+function AfegeixZoomEixTemporalGrafic(chart, callback)
+{
+	var canvas=chart.canvas, timer=null;
+	if(!canvas || canvas._mmZoomEix || !callback)
+		return;
+	canvas._mmZoomEix=true;
+	canvas.addEventListener("wheel", function(ev) {
+		var xAxis, min, max, range, factor, rect, centre, newMin, newMax, zoom_in;
+		ev.preventDefault();
+		xAxis=chart.scales["x-axis-0"];
+		if(!xAxis)
+			return;
+		min=xAxis.min;
+		max=xAxis.max;
+		range=max-min;
+		if(!range)
+			return;
+		zoom_in=ev.deltaY<0;
+		factor=zoom_in ? 0.7 : 1.4;
+		rect=canvas.getBoundingClientRect();
+		centre=xAxis.getValueForPixel(ev.clientX-rect.left);
+		if(typeof centre!=="number" || isNaN(centre))
+			centre=(min+max)/2;
+		newMin=centre-(centre-min)*factor;
+		newMax=centre+(max-centre)*factor;
+		if(!chart.options.scales.xAxes[0].time)
+			chart.options.scales.xAxes[0].time={};
+		chart.options.scales.xAxes[0].time.min=new Date(newMin);
+		chart.options.scales.xAxes[0].time.max=new Date(newMax);
+		chart.update(0);
+		if(timer)
+			clearTimeout(timer);
+		timer=setTimeout(function() { callback(newMin, newMax, zoom_in); }, 400);
+	}, {passive: false});
+}
+
+function DonaMillisPaddingUnitatTemporalGrafic(unit)
+{
+	if(unit=="year")
+		return 1000*60*60*24*180;
+	if(unit=="month")
+		return 1000*60*60*24*20;
+	if(unit=="week")
+		return 1000*60*60*24*4;
+	if(unit=="day")
+		return 1000*60*60*12;
+	if(unit=="hour")
+		return 1000*60*30;
+	if(unit=="minute")
+		return 1000*30;
+	return 1000*60*60*24;
+}
+
+function CreaGraficSerieTemporalMultiple(ctx, datasets, labels, temps, y_scale_label, que_mostrar, y_scale_label_count, onFinestraTemporal)
+{
+	var ds=[], i, j, yAxes, hasCount=false, cfg, chart, unit, format, punts, punts_x, p;
+	var t_min=null, t_max=null, n_x=0, pad, ticks_x;
+	if(!datasets || !datasets.length)
+		return null;
+	unit=DonaUnitTimeChartJSDataHora(que_mostrar);
+	format=DonaCadenaFormatEixTemporalGrafic(que_mostrar);
+	var time_opt={
+		tooltipFormat: format,
+		displayFormats: DonaDisplayFormatsChartJSDataHora(que_mostrar)
+	};
+	if(unit)
+	{
+		time_opt.unit=unit;
+		time_opt.minUnit=unit;
+	}
+	for(i=0; i<datasets.length; i++)
+	{
+		if(datasets[i].esCount)
+			hasCount=true;
+		punts=datasets[i].data;
+		punts_x=[];
+		if(punts)
+		{
+			for(j=0; j<punts.length; j++)
+			{
+				p=punts[j];
+				if(p && typeof p==="object")
+				{
+					punts_x.push({x: new Date(p.t!=null ? p.t : p.x), y: p.y});
+					if(i==0 && punts_x[punts_x.length-1].x && !isNaN(punts_x[punts_x.length-1].x.getTime()))
+					{
+						var tx=punts_x[punts_x.length-1].x.getTime();
+						if(t_min==null || tx<t_min) t_min=tx;
+						if(t_max==null || tx>t_max) t_max=tx;
+						n_x++;
+					}
+				}
+				else
+					punts_x.push(p);
+			}
+		}
+		ds.push({
+			label: datasets[i].label,
+			data: punts_x,
+			type: "line",
+			spanGaps: true,
+			pointRadius: 2,
+			pointHoverRadius: 5,
+			pointHitRadius: 10,
+			borderJoinStyle: "round",
+			fill: false,
+			lineTension: 0,
+			borderWidth: datasets[i].esCount ? 1 : 2,
+			borderDash: datasets[i].esCount ? [4, 3] : [],
+			pointStyle: "circle",
+			borderColor: datasets[i].color,
+			backgroundColor: datasets[i].color,
+			yAxisID: datasets[i].esCount ? "y-count" : "y-val"
+		});
+	}
+	if(t_min!=null && t_max!=null)
+	{
+		if(t_min==t_max)
+		{
+			pad=DonaMillisPaddingUnitatTemporalGrafic(unit);
+			time_opt.min=new Date(t_min-pad);
+			time_opt.max=new Date(t_max+pad);
+		}
+	}
+	ticks_x={
+		source: (n_x>0 && n_x<=24) ? "data" : "auto",
+		autoSkip: n_x>12,
+		maxTicksLimit: 12,
+		maxRotation: 45,
+		minRotation: 0
+	};
+	yAxes=[{
+		id: "y-val",
+		scaleLabel: {display: true, labelString: y_scale_label},
+		ticks: { beginAtZero:true }
+	}];
+	if(hasCount)
+		yAxes.push({
+			id: "y-count",
+			position: "right",
+			scaleLabel: {display: true, labelString: y_scale_label_count ? y_scale_label_count : GetMessage("Count")},
+			gridLines: {drawOnChartArea: false},
+			ticks: { beginAtZero:true }
+		});
+	cfg = {
+		type: "line",
+		data: {
+			temps: temps,
+			datasets: ds
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					type: "time",
+					distribution: "linear",
+					time: time_opt,
+					ticks: ticks_x
+				}],
+				yAxes: yAxes
+			},
+			tooltips: {
+				mode: "index",
+				intersect: false,
+				callbacks: {
+					title: function(tooltipItems, data) {
+						if(!tooltipItems || !tooltipItems.length)
+							return "";
+						if(tooltipItems[0].xLabel)
+							return tooltipItems[0].xLabel;
+						if(data.temps && data.temps[tooltipItems[0].index])
+							return data.temps[tooltipItems[0].index];
+						return "";
+					},
+					label: function(tooltipItem, data) {
+						var ds_i = data.datasets[tooltipItem.datasetIndex];
+						var allData = ds_i.data;
+						var punt = allData[tooltipItem.index];
+						var y = (punt && typeof punt==="object") ? punt.y : punt;
+						if(y==null || y==="" || (typeof y==="number" && isNaN(y)))
+							return null;
+						return ds_i.label + ": " + y;
+					}
+				}
+			},
+			hover: {
+				mode: "index",
+				intersect: false
+			},
+			legend: {
+				display: true,
+				position: "top",
+				align: "start",
+				labels: {
+					usePointStyle: true,
+					boxWidth: 6,
+					fontSize: 10,
+					padding: 6
+				}
+			}
+		}
+	};
+	chart=new Chart(ctx, cfg);
+	AfegeixZoomEixTemporalGrafic(chart, onFinestraTemporal);
+	return chart;
 }
 
 function CreaGraficPerfilContinuSimple(ctx, valors, labels, colors, title)

@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2025 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -93,7 +93,6 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 		tipus=="TipusHTTP_GET" ||
 		((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest))  // En les capes de tipus HTTP_GET ja siguin JSON o CSV o STA/STAplus amb cel·les no tinc tessel·lació, de moment tinc una petició única per obtenir tot el fitxer
 		return;
-	
 		
 	// En principi si no tinc límits no té sentit que hagi més d'un nivell de tessel·lació perquè al ser un model vectorial amb el que treballem amb els objectes directament
 	// de moment sempre tenim els mateixos objectes, tot i que això podria no ser veritat en un futur, perquè en el OGC s'està treballant per fer tessel·les de vectors i es podrien 
@@ -471,9 +470,10 @@ function OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(object, feature, c
 	if( capa.origenAccesObjs==origen_Things)
 		ExtreuTransformaSTAObservationsDeThing(object, feature, capa);
 	else if( capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
-		ExtreuTransformaSTAObservationsDeCellsOfFeaturesOfInterest(object, feature, capa);
+		return ExtreuTransformaSTAObservationsDeMultiDataStreams(object, feature, capa, {"serie": {"data": [], "valors": []}});
 	else
-		ExtreuTransformaSTAObservations(object, feature, capa); 	
+		ExtreuTransformaSTAObservations(object, feature, capa);
+	return null;
 }
 
 function ParsejaCSVObjectesIPropietats(results, capa)
@@ -714,14 +714,14 @@ function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 
 function MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta)
 {
-var capa=ParamCtrl.capa[consulta.i_capa];
-var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_obj;
+var capa=ParamCtrl.capa[consulta.i_capa], id_zl=DonaIdZoneLevelConsulta(consulta.i_zone_level);
+var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+consulta.i_obj;
 
-	if(consulta.i_zone_level!=-1)
+	if(id_zl!=-1)
 	{
-		if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels[consulta.i_zone_level].cells || 
-			!capa.cellZoneLevelSet.zoneLevels[consulta.i_zone_level].cells.features[consulta.i_obj].properties || 
-			CountPropertiesOfObject(capa.cellZoneLevelSet.zoneLevels[consulta.i_zone_level].cells.features[consulta.i_obj].properties)==0)
+		if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels[id_zl].cells || 
+			!capa.cellZoneLevelSet.zoneLevels[id_zl].cells.features[consulta.i_obj].properties || 
+			CountPropertiesOfObject(capa.cellZoneLevelSet.zoneLevels[id_zl].cells.features[consulta.i_obj].properties)==0)
 		{
 			removeLayer(getLayer(consulta.win, nom_layer));
 			NConsultesDigiZero++;
@@ -745,19 +745,8 @@ var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"
 	{
 		contentLayer(getLayer(consulta.win, nom_layer), text_resposta);
 		
-		// Determino si cal pintar sèries temporals, no ho puc fer abans perquè fins que no he omplert la layer de la consulta no tinc el canvas on he
-		// de pintar la sèrie creat
-		// De moment només ho canvio per els serveis STA, no sé si també caldrà fer-ho per altres tipus de capes
-		var tipus=DonaTipusServidorCapa(capa);
-		if(capa.attributes && (tipus=="TipusSTA" || tipus=="TipusSTAplus"))
-		{
-			var attributesArray=Object.keys(capa.attributes);
-			for (var a=0; a<attributesArray.length; a++)
-			{
-				if(capa.attributes[attributesArray[a]].serieTemporal)
-					MostraGraficSerieTemporalAttribute(consulta.win, "canvas_cnsl_serie_" + consulta.i_capa + "_" + consulta.i_zone_level+"_"+consulta.i_obj + "_" + a, consulta.i_capa, consulta.i_zone_level, consulta.i_obj, a);
-			}
-		}
+		// No puc pintar les sèries abans: el canvas es crea en omplir la layer
+		PintaGraficsSerieTemporalConsulta(consulta.win, consulta.i_capa, consulta.i_zone_level, consulta.i_obj);
 	}
 	return;
 }
@@ -937,7 +926,15 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 				return;
 			}
-			OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(object, feature, capa);
+			var serie=OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(object, feature, capa);
+			if(serie)
+			{
+				// Sèrie apart de capa.data: només si el zone level té més d'un període d'agregació
+				serie.interval=consulta.interval_dggs ? consulta.interval_dggs : DonaIntervalSTADggsDeCapa(capa);
+				serie.data_ini=consulta.data_ini;
+				serie.data_fi=consulta.data_fi;
+				consulta.serie=serie;
+			}
 		}
 	}
 	else if(tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
@@ -982,42 +979,97 @@ function ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 
 //var secondTime=false;
 
+function DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level)
+{
+	if(capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+	{
+		if(DonaIdZoneLevelConsulta(i_zone_level)==-1 || !capa.cellZoneLevelSet ||
+			!capa.cellZoneLevelSet.zoneLevels || !capa.cellZoneLevelSet.zoneLevels[i_zone_level] ||
+			!capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells)
+			return null;
+		return capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features;
+	}
+	if(capa.objectes)
+		return capa.objectes.features;
+	return null;
+}
+
+function DonaIdSTAPerCercaAFeatures(capa, iot_id)
+{
+	if(capa && capa.origenAccesObjs==origen_CellsFeaturesOfInterest &&
+		capa.cellZoneLevelSet && capa.cellZoneLevelSet.cellType=="H3" &&
+		iot_id!=null && typeof iot_id!=="bigint")
+		return BigInt(iot_id);
+	return iot_id;
+}
+
+// True si la geometria de la feature (en CRS actual) solapa l'envolupant, encara que sigui parcialment.
+function EsFeatureCapaDigiDinsOSolapadaAmbEnvolupant(feature, crs_capa, env)
+{
+var geometry, env_feat;
+
+	if(!feature || !env)
+		return false;
+	geometry=DonaGeometryCRSActual(feature, crs_capa);
+	if(!geometry)
+		return false;
+	env_feat=DonaEnvCalculatGeometry(geometry, null);
+	if(!env_feat)
+		return false;
+	return EsEnvDinsEnvolupant(env_feat, env);
+}
+
 //Retorna false si no cal o si no es pot. Retorno true si he iniciat un procés assincron per descarregar.
 function DescarregaPropietatsCapaDigiVistaSiCal(funcio, param)
 {
-var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=ParamInternCtrl.vista.EnvActual;
+var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, tipus, env=ParamInternCtrl.vista.EnvActual;
+var features, i_zone_level=-1, zoneLevelId=null, n_prop_simb, cal_descarregar=false, consulta_cb;
 
-	if (!capa.tipus //els objectes empotrats no poden obtenir les properties si no hi són
-		|| !capa.objectes || !capa.objectes.features)  //falten massa coses que hi hauria d'haver
+	if (!capa.tipus) //els objectes empotrats no poden obtenir les properties si no hi són
 		return false;
 
 	/*if (secondTime)
 		return false;
 	secondTime=true;*/
 	tipus=DonaTipusServidorCapa(capa);
-	for (j=0; j<capa.objectes.features.length; j++)
+	if((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
 	{
-		// Només vàlid per a fitxers de punts.
-		DonaCoordenadaPuntCRSActual(punt, capa.objectes.features[j], capa.CRSgeometry);
-		if (env.MinX < punt.x &&
-			env.MaxX > punt.x &&
-			env.MinY < punt.y &&
-			env.MaxY > punt.y)
+		i_zone_level=DonaCellsIndexZoneLevelMesProperAZoomActual(capa);
+		if(i_zone_level==-1)
+			return false;
+		zoneLevelId=capa.cellZoneLevelSet.zoneLevels[i_zone_level].zoneLevelId;
+		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level);
+	}
+	else
+		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, -1);
+
+	if(!features || !features.length)
+		return false;
+
+	n_prop_simb=DonaNombrePropietatsSimbolitzacio(param.i_capa);
+	for (j=0; j<features.length; j++)
+	{
+		if(!EsFeatureCapaDigiDinsOSolapadaAmbEnvolupant(features[j], capa.CRSgeometry, env))
+			continue;
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
 		{
-			if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
+			if (CountPropertiesOfObject(features[j].properties)<=n_prop_simb)  //Només hi ha les propietats de simbolització actuals carregades
 			{
-				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<=DonaNombrePropietatsSimbolitzacio(param.i_capa))  //Només hi ha les propietats de simbolització actuals carregades
-					break;
+				cal_descarregar=true;
+				break;
 			}
-			else //if (tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		}
+		else //if (tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+		{
+			if (CountPropertiesOfObject(features[j].properties)<n_prop_simb)
+			//if (CountPropertiesOfObject(features[j].properties)==0)  //No hi ha propietats carregades
 			{
-				if (CountPropertiesOfObject(capa.objectes.features[j].properties)<DonaNombrePropietatsSimbolitzacio(param.i_capa))
-				//if (CountPropertiesOfObject(capa.objectes.features[j].properties)==0)  //No hi ha propietats carregades
-					break;
+				cal_descarregar=true;
+				break;
 			}
 		}
 	}
-	if (j==capa.objectes.features.length)
+	if (!cal_descarregar)
 		return false; //no hi ha cap objecte que li faltin les properties.
 	if (tipus=="TipusWFS")
 	{
@@ -1039,20 +1091,21 @@ var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, punt={}, tipus, env=Para
 		if(capa.origenAccesObjs==origen_Things)
 			url=DonaRequestSTAThings(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
 		else if(capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
-			url=DonaRequestSTACellsFeaturesOfInterest(param.i_capa, null, ParamInternCtrl.vista.EnvActual);
+			url=DonaRequestSTACellsFeaturesOfInterest(param.i_capa, zoneLevelId, ParamInternCtrl.vista.EnvActual);
 		else
 			url=DonaRequestSTAObservationsFeatureOfInterest(param.i_capa, null, null, ParamInternCtrl.vista.EnvActual);
 		i_event=CreaIOmpleEventConsola("STA Observations", param.i_capa, url, TipusEventGetObservation);
 	}
 	else if (tipus=="TipusHTTP_GET" && capa.FormatImatge=="text/csv")
 	{
-		if(DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, ParamInternCtrl.vista.EnvActual, DescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event}))
+		if(DemanaCSVPropietatsObjectesDeCapaDigitalitzadaSiCal(capa, ParamInternCtrl.vista.EnvActual, DescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event, i_zone_level: i_zone_level}))
 			return true;	
 	}
+	consulta_cb={funcio: funcio, param: param, i_event: i_event, i_zone_level: i_zone_level};
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
-		loadJSON(url, DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
+		loadJSON(url, DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, consulta_cb);
 	else
-		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, {funcio: funcio, param: param, i_event: i_event});
+		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", DescarregaPropietatsCapaDigiVistaSiCalCallBack, ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack, consulta_cb);
 	return true;
 }
 
@@ -1078,7 +1131,7 @@ var root, i_obj, capa, valor, s, ini, fi, observation;
 
 function OmpleCapaDigiAmbPropietatsObjectes(doc, consulta)
 {
-var root, capa, features, valor, tipus, i_obj;
+var root, capa, features, valor, tipus, i_obj, objectes, i_obj_llegit, id_sta;
 
 	capa=ParamCtrl.capa[consulta.param.i_capa];
 	tipus=DonaTipusServidorCapa(capa);
@@ -1099,13 +1152,18 @@ var root, capa, features, valor, tipus, i_obj;
 			return 1;
 		}
 	}
-	features=capa.objectes.features;
+	features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, consulta.i_zone_level);
+	if(!features)
+	{
+		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+		return 1;
+	}
 	
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="tipusHTTP_GET")
 	{
 		if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 		{
-			var objectes=null;
+			objectes=null;
 			//try {
 			//	var geojson=JSON.parse(doc);
 				//si hi ha una bbox es podria actualitzar però com que no la uso...
@@ -1117,7 +1175,7 @@ var root, capa, features, valor, tipus, i_obj;
 			}*/
 			if(objectes && objectes.length>0)
 			{
-				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
+				for(i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
 					// objectes[i_obj_llegit].id=objectes[i_obj_llegit].id.substring(capa.nom.length+1); NJ no sé perquè serveix això
 					i_obj=features.binarySearch(objectes[i_obj_llegit], ComparaObjCapaDigiIdData);
@@ -1128,10 +1186,10 @@ var root, capa, features, valor, tipus, i_obj;
 		}
 		else
 		{
-			var objectes=root.getElementsByTagName(capa.nom);
+			objectes=root.getElementsByTagName(capa.nom);
 			if(objectes && objectes.length>0)
 			{
-				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
+				for(i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
 					//Agafo l'identificador del punt i miro si coincideix amb el de l'objecte que estic buscant.
 					//els objectes estan ordenats per "id"
@@ -1151,7 +1209,7 @@ var root, capa, features, valor, tipus, i_obj;
 	{
 		if (capa.FormatImatge=="application/json")
 		{
-			var objectes=null;
+			objectes=null;
 			var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
 			//try {
 			//	var geojson=JSON.parse(doc);
@@ -1164,7 +1222,7 @@ var root, capa, features, valor, tipus, i_obj;
 			}*/
 			if(objectes && objectes.length>0)
 			{
-				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
+				for(i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
 					objectes[i_obj_llegit].featureOfInterest=objectes[i_obj_llegit].featureOfInterest.substring(prefix_foi.length); //elimino el prefix de l'id.
 					i_obj=features.binarySearch({"id":capa.nom+"_"+objectes[i_obj_llegit].featureOfInterest}, ComparaObjCapaDigiIdData);
@@ -1175,11 +1233,11 @@ var root, capa, features, valor, tipus, i_obj;
 		}
 		else
 		{
-			var prefix_foi=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
-			var objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/om/2.0", "om", "OM_Observation");
+			var prefix_foi2=capa.namespace + "/" + capa.nom + "/featureOfInterest/";
+			objectes=DonamElementsNodeAPartirDelNomDelTag(root, "http://www.opengis.net/om/2.0", "om", "OM_Observation");
 			if(objectes && objectes.length>0)
 			{
-				for(var i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
+				for(i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 				{
 					var objecte_xml=objectes[i_obj_llegit];
 					var foi_xml=GetXMLChildElementByName(objecte_xml, '*', "featureOfInterest");
@@ -1188,7 +1246,7 @@ var root, capa, features, valor, tipus, i_obj;
 						valor=foi_xml.getAttribute('xlink:href');
 						if (valor)
 						{
-							valor=valor.substring(prefix_foi.length); //elimino el prefix de l'id.
+							valor=valor.substring(prefix_foi2.length); //elimino el prefix de l'id.
 							i_obj=features.binarySearch({"id":valor}, ComparaObjCapaDigiIdData);
 							if (i_obj>=0)
 								OmpleAttributesObjecteCapaDigiDesDeSOS(objecte_xml, capa, features[i_obj], capa.data);
@@ -1208,14 +1266,26 @@ var root, capa, features, valor, tipus, i_obj;
 			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 			return;
 		}*/
-		if(doc && doc.length>0)
+		if(doc && doc.value)
+			objectes=doc.value;
+		else if(doc && Array.isArray(doc))
+			objectes=doc;
+		else
+			objectes=null;
+		if(objectes && objectes.length>0)
 		{
-			for(var i_obj_llegit=0; i_obj_llegit<doc.length; i_obj_llegit++)
+			for(i_obj_llegit=0; i_obj_llegit<objectes.length; i_obj_llegit++)
 			{
-				//·$· Aquí cal fer bifurcacions segons si origen és Things, Features o Cells
-				i_obj=features.binarySearch({"id":doc[i_obj_llegit]["@oit.id"]}, ComparaObjCapaDigiIdData);
-				if (i_obj>=0)
-					OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(doc[i_obj_llegit].Observations, features[i_obj], capa);
+				id_sta=DonaIdSTAPerCercaAFeatures(capa, objectes[i_obj_llegit]["@iot.id"]);
+				i_obj=features.binarySearch({"id":id_sta}, ComparaObjCapaDigiIdData);
+				if (i_obj<0)
+					continue;
+				if(capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+					ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(objectes[i_obj_llegit], features[i_obj], capa);
+				else if(capa.origenAccesObjs==origen_Things)
+					OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(objectes[i_obj_llegit], features[i_obj], capa);
+				else
+					OmpleAttributesObjecteCapaDigiDesDeObservacionsDeSTA(objectes[i_obj_llegit].Observations, features[i_obj], capa);
 			}
 		}
 	}
@@ -1223,50 +1293,99 @@ var root, capa, features, valor, tipus, i_obj;
 	return 0;
 }
 
+function DonaNomClauSTAObservedProperty(obsProp, uom)
+{
+var key, i;
+
+	if (obsProp && obsProp.name)
+		return obsProp.name;
+	if(!uom)
+		return null;
+	if ((!uom.name || uom.name=="n/a") && uom.definition)
+	{
+		if (uom.definition.lastIndexOf("/")>0)
+			return uom.definition.substring(uom.definition.lastIndexOf("/")+1);
+		return uom.definition;
+	}
+	if (!uom.name)
+		return "name";
+	key=uom.name;
+	for (i=0; i<key.length; i++)
+	{
+		if (!isalnum(key.charAt(i)))
+			key=key.substring(0, i) + "_" + key.substring(i+1);
+	}
+	return key;
+}
+
+function SonClausSTAEquivalents(a, b)
+{
+	if(!a || !b)
+		return false;
+	if(a==b)
+		return true;
+	if((a=="time" && b=="phenomenonTime") || (a=="phenomenonTime" && b=="time"))
+		return true;
+	return false;
+}
+
+function DonaIAttributeCapaPerClauSTA(attributeArray, key)
+{
+	var i, nom;
+	if(!key || !attributeArray)
+		return -1;
+	for(i=0; i<attributeArray.length; i++)
+	{
+		nom=DonaNomAttributeSenseClaus(attributeArray[i]);
+		if(nom==key || SonClausSTAEquivalents(nom, key))
+			return i;
+	}
+	return -1;
+}
+
+function ActualitzaAttributeDesDeSTA(capa, attributeArray, obsProp, uom)
+{
+	var key=DonaNomClauSTAObservedProperty(obsProp, uom), i, attr;
+	if(!key || !capa || !capa.attributes)
+		return key;
+	if(!attributeArray)
+		attributeArray=Object.keys(capa.attributes);
+	i=DonaIAttributeCapaPerClauSTA(attributeArray, key);
+	if(i<0)
+		return key;
+	attr=capa.attributes[attributeArray[i]];
+	if(!attr)
+		return key;
+	if(obsProp && obsProp.definition && !attr.definition)
+		attr.definition=obsProp.definition;
+	if(uom)
+	{
+		// UoM es mostra al costat del nom; UoMSymbol després del valor (consult.js).
+		// No omplim UoMSymbol des del STA: duplicaria la unitat si el config ja té UoM.
+		if(uom.definition && !attr.UoMDefinition)
+			attr.UoMDefinition=uom.definition;
+		if(!attr.UoM)
+		{
+			if(uom.symbol)
+				attr.UoM=uom.symbol;
+			else if(uom.name && uom.name!="n/a")
+				attr.UoM=uom.name;
+		}
+	}
+	return key;
+}
+
 function AddPropertyAndTime(capa, attributeArray, prop, i_data, obsProp, uom, value)
 {
 var key, i;
 
-	// Agafo el nom de la propietat que em vé de les observacions
-	if (obsProp && obsProp.name)
-		key=obsProp.name;
-	else if(uom)
-	{
-		if ((!uom.name || uom.name=="n/a") && uom.definition)
-		{
-			if (uom.definition.lastIndexOf("/")>0)
-				key=uom.definition.substring(uom.definition.lastIndexOf("/")+1);
-			else
-				key=uom.definition;
-		}
-		else if (!uom.name)
-			key="name";
-		else
-		{
-			key=uom.name;
-			for (i=0; i<key.length; i++)
-			{
-				if (!isalnum(key.charAt(i)))
-					key=key.substring(0, i) + "_" + key.substring(i+1);
-			}
-		}
-	}
+	key=ActualitzaAttributeDesDeSTA(capa, attributeArray, obsProp, uom);
+	if(!key)
+		return;
 	if (i_data!=null && attributeArray!=null)
 	{
-		// Intento trobar l'equivalent a l'array d'attributes de la capa si hi ha temps, sinó ho inserto directament
-		var index, attribute;		
-		
-		for(i=0; i<attributeArray.length; i++)
-		{
-			if(-1!=(index=attributeArray[i].indexOf("{")))
-				attribute=attributeArray[i].slice(0,index);
-			else
-				attribute=attributeArray[i];
-				
-			if(attribute==key)
-				break;			
-		}
-		if(i<attributeArray.length)
+		i=DonaIAttributeCapaPerClauSTA(attributeArray, key);
+		if(i>=0)
 			prop[CanviaVariablesDeCadena(attributeArray[i], capa, i_data, null)]=value;
 		else
 			prop[key]=value;
@@ -1310,7 +1429,6 @@ var ob, prop={}, nom_param, ds, es_serie_temporal, i_data, attributeArray=Object
 				InsereixDataISOaCapa(phenomenonTime, feature.data);
 				i_data=InsereixDataISOaCapa(phenomenonTime, capa.data);
 			}			
-			//prop["time"]=ob.phenomenonTime;
 			AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"time"}, null, ob.phenomenonTime);				
 		}
 		if (ob.parameters)
@@ -1318,10 +1436,7 @@ var ob, prop={}, nom_param, ds, es_serie_temporal, i_data, attributeArray=Object
 			for (nom_param in ob.parameters)
 			{
 				if (ob.parameters.hasOwnProperty(nom_param) && typeof ob.parameters[nom_param]!=="object")
-				{
-					//prop[nom_param]=ob.parameters[nom_param];
 					AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:nom_param}, null, ob.parameters[nom_param]);					
-				}
 			}
 		}
 		
@@ -1341,27 +1456,15 @@ var ob, prop={}, nom_param, ds, es_serie_temporal, i_data, attributeArray=Object
 			ds=ob.Datastream;
 		}
 		if (ds.Thing && ds.Thing.name)
-		{
-			//prop["thing"]=ds.Thing.name;
 			AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"thing"}, null, ds.Thing.name);
-		}
 		/*if (ds.Party && ds.Party.name)
 			prop["party"]=ds.Party.name;*/
 		if (ds.Party && ds.Party.displayName)
-		{
-			//prop["party"]=ds.Party.displayName;
 			AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"party"}, null, ds.Party.displayName);
-		}
 		if (ds.Project && ds.Project.name)
-		{
-			//prop["project"]=ds.Project.name;
 			AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"project"}, null, ds.Project.name);
-		}
 		if (ds.License && ds.License.description)
-		{
-			//prop["license"]=ds.License.description;
 			AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"license"}, null, ds.License.description);
-		}
 	}
 	feature.properties=prop;
 }
@@ -1443,10 +1546,7 @@ var i, j, ds, obs, ob, prop={}, nom_param, es_serie_temporal, i_data, attributeA
 					for (nom_param in ob.parameters)
 					{
 						if (ob.parameters.hasOwnProperty(nom_param) && typeof ob.parameters[nom_param]!=="object")
-						{
-							//prop[nom_param]=ob.parameters[nom_param];
-							AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:nom_param}, null, ob.parameters[nom_param]);					
-						}
+							AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:nom_param}, null, ob.parameters[nom_param]);				
 					}
 				}
 				AddPropertyAndTime(capa, attributeArray, prop, i_data, ds.ObservedProperty, ob.unitOfMeasurement, ob.result);
@@ -1461,9 +1561,7 @@ var i, j, ds, obs, ob, prop={}, nom_param, es_serie_temporal, i_data, attributeA
 			obs=ds.Observations;
 			i_data=null;
 			if(obs.length>1 && !es_serie_temporal)
-			{		
 				es_serie_temporal=true;
-			}
 			if(es_serie_temporal)
 			{
 				if(!capa.data)
@@ -1491,7 +1589,6 @@ var i, j, ds, obs, ob, prop={}, nom_param, es_serie_temporal, i_data, attributeA
 						InsereixDataISOaCapa(phenomenonTime, feature.data);
 						i_data=InsereixDataISOaCapa(phenomenonTime, capa.data);
 					}			
-					//prop["time"]=ob.phenomenonTime;
 					AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"time"}, null, ob.phenomenonTime);				
 				}
 				if (ob.parameters)
@@ -1499,10 +1596,7 @@ var i, j, ds, obs, ob, prop={}, nom_param, es_serie_temporal, i_data, attributeA
 					for (nom_param in ob.parameters)
 					{
 						if (ob.parameters.hasOwnProperty(nom_param) && typeof ob.parameters[nom_param]!=="object")
-						{
-							//prop[nom_param]=ob.parameters[nom_param];
-							AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:nom_param}, null, ob.parameters[nom_param]);					
-						}
+							AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:nom_param}, null, ob.parameters[nom_param]);				
 					}
 				}
 				if (ds.ObservedProperties && ds.ObservedProperties.length>0 && 
@@ -1518,99 +1612,297 @@ var i, j, ds, obs, ob, prop={}, nom_param, es_serie_temporal, i_data, attributeA
 	feature.properties=prop;
 }
 
-function ExtreuTransformaSTAObservationsDeCellsOfFeaturesOfInterest(cell, feature, capa)
+function DonaIdZoneLevelConsulta(i_zone_level)
 {
-var i, j, ds, obs, ob, prop={}, es_serie_temporal, i_data, attributeArray=Object.keys(capa.attributes), phenomenonTime, final;
+	return (typeof i_zone_level==="number") ? i_zone_level : -1;
+}
 
-	if(HiHaAlgunaSerieTemporal(capa) || (capa.data && capa.data.length) || obs.length>1)
-		es_serie_temporal=true;
-	else 
-		es_serie_temporal=false;
-	
-	if (cell.name)
-		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"cell"}, null, cell.name);
-	if (cell.zoneId)
-		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"zoneId"}, null, cell.zoneId);
-	if (cell.zoneLevel)
-		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"zoneLevel"}, null, cell.zoneLevel);
-	
-	/*if(attributeArray)
+function DonaClauGrupSerieTemporal(attribute)
+{
+	if(!attribute || !attribute.serieTemporal)
+		return null;
+	if(typeof attribute.group!=="undefined" && attribute.group!=null && attribute.group!="")
+		return attribute.group;
+	return null;
+}
+
+function DonaNomMostratGrupSerieTemporal(attribute, clau)
+{
+	if(!attribute)
+		return clau;
+	if(attribute.groupName)
+		return attribute.groupName;
+	if(attribute.gruopName)
+		return attribute.gruopName;
+	if(attribute.separador && DonaCadena(attribute.separador))
+		return DonaCadena(attribute.separador);
+	return clau;
+}
+
+function DonaIdHtmlGrupSerieTemporal(clau)
+{
+	return String(clau).replace(/[^A-Za-z0-9_\-]/g, "_");
+}
+
+function DonaGrupsSerieTemporalCapa(capa)
+{
+var attributesArray, grups=[], mapa={}, i, a, clau, g;
+	if(!capa || !capa.attributes)
+		return grups;
+	attributesArray=Object.keys(capa.attributes);
+	for(i=0; i<attributesArray.length; i++)
 	{
-		// Creo les propietats involucrades en la simbolització encara que siguin buides
-		var camps_implicats=DonaLlistaPropietatsSimbolitzacio(ParamCtrl.capa.indexOf(capa));	
-		if(camps_implicats)
+		a=capa.attributes[attributesArray[i]];
+		if(!a || !a.serieTemporal)
+			continue;
+		clau=DonaClauGrupSerieTemporal(a);
+		if(clau==null)
+			continue;
+		if(!mapa[clau])
 		{
-			for(i=0; i<camps_implicats.length; i++)
-			{
-				AddPropertyAndTime(capa, attributeArray, prop, null, {name:camps_implicats[i]}, null, null);
-			}
+			g={"clau": clau, "id_html": DonaIdHtmlGrupSerieTemporal(clau), "nom": DonaNomMostratGrupSerieTemporal(a, clau), "i_atrs": [], "uom": a.UoM};
+			mapa[clau]=g;
+			grups.push(g);
 		}
-	}*/
-	if(cell.MultiDatastreams)
+		mapa[clau].i_atrs.push(i);
+		if(!mapa[clau].uom && a.UoM)
+			mapa[clau].uom=a.UoM;
+	}
+	return grups;
+}
+
+function AfegeixValorSerieConsultaCella(serie, phenomenonTime, capa, obsProp, uom, value)
+{
+	var d, milliseg_a, i, data, key, attributeArray;
+	if(!serie)
+		return;
+	attributeArray=capa && capa.attributes ? Object.keys(capa.attributes) : null;
+	key=ActualitzaAttributeDesDeSTA(capa, attributeArray, obsProp, uom);
+	if(!key)
+		return;
+	i=DonaIAttributeCapaPerClauSTA(attributeArray, key);
+	if(i>=0)
+		key=DonaNomAttributeSenseClaus(attributeArray[i]);
+	if(!serie.data)
+		serie.data=[];
+	if(!serie.valors)
+		serie.valors=[];
+	data=serie.data;
+	d=new Date(phenomenonTime);
+	milliseg_a=d.getTime();
+	i=data.binarySearch(milliseg_a, sortAscendingISOiData);
+	if (i<0)
 	{
-		for (i=0; i<cell.MultiDatastreams.length; i++)
+		i=-i-1;
+		data.splice(i, 0, DonaDataJSONDesDeDate(d));
+		serie.valors.splice(i, 0, {});
+	}
+	serie.valors[i][key]=value;
+}
+
+function DonaIDataSerieMesProperaADataCapa(capa, serie)
+{
+	var i, i_sel, millis_mapa, millis, millor;
+	if(!serie || !serie.data || !serie.data.length)
+		return -1;
+	i_sel=serie.data.length-1;
+	if(capa && capa.data && capa.data.length)
+	{
+		millis_mapa=DonaDateDesDeDataJSON(capa.data[DonaIndexDataCapa(capa, null)]).getTime();
+		millor=null;
+		for(i=0; i<serie.data.length; i++)
 		{
-			ds=cell.MultiDatastreams[i];
-			obs=ds.Observations;
-			
-			if(obs.length>1 && !es_serie_temporal)
-				es_serie_temporal=true;
-			if(es_serie_temporal)
+			millis=DonaDateDesDeDataJSON(serie.data[i]).getTime();
+			if(millor==null || Math.abs(millis-millis_mapa)<millor)
 			{
-				if(!capa.data)
-				{
-					capa.data=[];
-					capa.AnimableMultiTime=true;
-				}
-				if(!feature.data)
-					feature.data=[];
-			}
-			
-			for (j=0; j<obs.length; j++)
-			{
-				ob=obs[j];
-				i_data=null;
-				if (ob.phenomenonTime)
-				{
-					final=ob.phenomenonTime.indexOf('/');
-					if(final!=-1)
-						phenomenonTime=ob.phenomenonTime.substring(0, final);
-					else
-						phenomenonTime=ob.phenomenonTime;
-					if(es_serie_temporal)
-					{
-						InsereixDataISOaCapa(phenomenonTime, feature.data);
-						i_data=InsereixDataISOaCapa(phenomenonTime, capa.data);
-					}			
-					//prop["time"]=ob.phenomenonTime;
-					AddPropertyAndTime(capa, attributeArray, prop, i_data, {name:"time"}, null, ob.phenomenonTime);				
-				}
-				AddPropertyAndTime(capa, attributeArray, prop, i_data, ds.ObservedProperty, ob.unitOfMeasurement, ob.result);
+				millor=Math.abs(millis-millis_mapa);
+				i_sel=i;
 			}
 		}
 	}
+	return i_sel;
+}
+
+function DonaPropertiesObjecteConsultaDesDeSerie(capa, feature, serie, i_sel)
+{
+	var prop={}, key, attributeArray, valors;
+	if(feature && feature.properties)
+	{
+		for(key in feature.properties)
+		{
+			if(feature.properties.hasOwnProperty(key))
+				prop[key]=feature.properties[key];
+		}
+	}
+	if(!serie || i_sel==null || i_sel<0 || !serie.valors || !serie.valors[i_sel])
+		return prop;
+	valors=serie.valors[i_sel];
+	attributeArray=capa && capa.attributes ? Object.keys(capa.attributes) : [];
+	for(key in valors)
+	{
+		if(valors.hasOwnProperty(key))
+			AddPropertyAndTime(capa, attributeArray, prop, i_sel, {name:key}, null, valors[key]);
+	}
+	return prop;
+}
+
+function DonaValorResultatSTA(result, k)
+{
+	if(result==null)
+		return result;
+	if(Array.isArray(result) && typeof k==="number")
+		return result[k];
+	return result;
+}
+
+function AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, obsProp, uom, value)
+{
+	if(desti.serie)
+	{
+		if(phenomenonTime)
+			AfegeixValorSerieConsultaCella(desti.serie, phenomenonTime, capa, obsProp, uom, value);
+		return;
+	}
+	if(desti.prop)
+		AddPropertyAndTime(capa, attributeArray, desti.prop, i_data, obsProp, uom, value);
+}
+
+function ExtreuTransformaSTAObservationsDeMultiDataStreams(multiDS, feature, capa, desti)
+{
+var ob, nom_param, obs, ds, i, j, k, phenomenonTime, final, i_data, attributeArray, es_serie_temporal=false;
+
+	if(!desti)
+		return null;
+	if(!multiDS)
+		return desti.serie ? desti.serie : null;
+	if(!Array.isArray(multiDS))
+		multiDS=[multiDS];
+	attributeArray=capa && capa.attributes ? Object.keys(capa.attributes) : [];
+
+	if(desti.prop && (HiHaAlgunaSerieTemporal(capa) || (capa.data && capa.data.length)))
+		es_serie_temporal=true;
+
+	for (i=0; i<multiDS.length; i++)
+	{
+		ds=multiDS[i];
+		obs=ds.Observations;
+		if(!obs || !obs.length)
+			continue;
+		if(desti.prop && obs.length>1 && !es_serie_temporal)
+			es_serie_temporal=true;
+		if(desti.prop && es_serie_temporal)
+		{
+			if(!capa.data)
+			{
+				capa.data=[];
+				capa.AnimableMultiTime=true;
+			}
+			if(!feature.data)
+				feature.data=[];
+		}
+		for (j=0; j<obs.length; j++)
+		{
+			ob=obs[j];
+			phenomenonTime=null;
+			i_data=null;
+			if (ob.phenomenonTime)
+			{
+				final=ob.phenomenonTime.indexOf('/');
+				if(final!=-1)
+					phenomenonTime=ob.phenomenonTime.substring(0, final);
+				else
+					phenomenonTime=ob.phenomenonTime;
+				if(desti.prop && es_serie_temporal)
+				{
+					InsereixDataISOaCapa(phenomenonTime, feature.data);
+					i_data=InsereixDataISOaCapa(phenomenonTime, capa.data);
+				}
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:"time"}, null, ob.phenomenonTime);
+			}
+			if(!phenomenonTime && desti.serie)
+				continue;
+			if (ob.parameters)
+			{
+				for (nom_param in ob.parameters)
+				{
+					if (ob.parameters.hasOwnProperty(nom_param) && typeof ob.parameters[nom_param]!=="object")
+						AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:nom_param}, null, ob.parameters[nom_param]);
+				}
+			}
+			if (ds.ObservedProperties && ds.ObservedProperties.length>0 &&
+				ds.unitOfMeasurements && ds.unitOfMeasurements.length>0 &&
+				ds.ObservedProperties.length==ds.unitOfMeasurements.length &&
+				ob.result!=null)
+			{
+				for (k=0; k<ds.unitOfMeasurements.length; k++)
+					AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, ds.ObservedProperties[k], ds.unitOfMeasurements[k], DonaValorResultatSTA(ob.result, k));
+			}
+			else if (ds.ObservedProperty)
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, ds.ObservedProperty, ds.unitOfMeasurement ? ds.unitOfMeasurement : ob.unitOfMeasurement, ob.result);
+			if (ds.Thing && ds.Thing.name)
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:"thing"}, null, ds.Thing.name);
+			if (ds.Party && ds.Party.displayName)
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:"party"}, null, ds.Party.displayName);
+			if (ds.Project && ds.Project.name)
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:"project"}, null, ds.Project.name);
+			if (ds.License && ds.License.description)
+				AfegeixValorSTADeMultiDataStream(capa, attributeArray, desti, i_data, phenomenonTime, {name:"license"}, null, ds.License.description);
+		}
+	}
+	return desti.serie ? desti.serie : null;
+}
+
+function ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(cell, feature, capa)
+{
+var prop={}, attributeArray=Object.keys(capa.attributes);
+
+	if(!cell)
+		return;
+	if (cell.name)
+		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"cell"}, null, cell.name);
+	if (cell["@iot.id"])
+		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"zoneId"}, null, cell["@iot.id"]);
+	if (cell.resolution)
+		AddPropertyAndTime(capa, attributeArray, prop, null, {name:"zoneLevel"}, null, cell.resolution);
+	ExtreuTransformaSTAObservationsDeMultiDataStreams(cell.MultiDatastreams, feature, capa, {"prop": prop});
 	feature.properties=prop;
 }
 
 function ExtreuITransformaSTACells(fois, capa)
 {
-var features=[], una_feature, foi, prop={}, zoneId, bbox;
+var features=[], una_feature, foi, prop={}, zoneId, bbox, coord, c;
 
 	if(fois.value)
 	for (var i=0; i<fois.value.length; i++)
 	{
 		foi=fois.value[i];		
-		zoneId=foi["zoneId"];
-		bbox=ngeohash_decode_bbox(zoneId); // bbox=[minLat, minLon, maxLat, maxLon];
+		zoneId=foi["@iot.id"];
+		coord=null;
+		if(capa.cellZoneLevelSet.cellType=="GeoHash"){
+			bbox=ngeohash_decode_bbox(zoneId); // bbox=[minLat, minLon, maxLat, maxLon];
+			coord=[[bbox[1],bbox[0]],[bbox[3],bbox[0]],[bbox[3],bbox[2]],[bbox[1],bbox[2]],[bbox[1],bbox[0]]];
+		}
+		else if(capa.cellZoneLevelSet.cellType=="H3"){
+			// A dia 21-07-2026 hi ha el problema de que el servidor a vegades em retorna string i a vegades "Number"
+			if(typeof zoneId === "string")
+				zoneId=BigInt(zoneId);
+			coord=h3.cellToBoundary(zoneId.toString(16).toLowerCase()); 
+			for (c=0; c<coord.length; c++)
+				coord[c]=coord[c].reverse()
+			coord.push(coord[0]);
+		}
+		
+		if(!coord)
+			continue;
 		una_feature={type: "Feature",
-					id: foi["@iot.id"],
+					id: zoneId,
 					geometry: {
 						type: "Polygon",
-						coordinates: [[[bbox[1],bbox[0]],[bbox[3],bbox[0]],[bbox[3],bbox[2]],[bbox[1],bbox[2]],[bbox[1],bbox[0]]]]
+						coordinates: [coord]
 					},
 					properties: {}};
 					
-		ExtreuTransformaSTAObservationsDeCellsOfFeaturesOfInterest(foi, una_feature, capa);
+		ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(foi, una_feature, capa);
 		features.push(una_feature);
 	}
 	return features;
@@ -1792,26 +2084,19 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 			}
 			if(iZoneLevel!=-1)
 			{
-				if (capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells && 
-					capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features)
+				var features=ExtreuITransformaSTACells(doc, capa);
+				next_link=doc["@iot.nextLink"];
+				if(consulta.nova_peticio || !capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells ||
+					!capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features)
 				{
-					hi_havia_objectes=true;
-					var features=ExtreuITransformaSTACells(doc, capa);
-					next_link=doc["@iot.nextLink"];
-					if(features.length>0)
-					{
-						capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features.push.apply(capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features, features);  //Millor no usar concat. Extret de: https://jsperf.com/concat-vs-push-apply/10
-					}
+					hi_havia_objectes=false;
+					capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells={"type": "FeatureCollection", "features": features};
 				}
 				else
 				{
-					hi_havia_objectes=false
-					if (tipus=="TipusSTA" || tipus=="TipusSTAplus")
-					{
-						var features=ExtreuITransformaSTACells(doc, capa);
-						next_link=doc["@iot.nextLink"];
-						capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells={"type": "FeatureCollection", "features": features};						
-					}
+					hi_havia_objectes=true;
+					if(features.length>0)
+						capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features.push.apply(capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells.features, features);
 				}
 			}
 			else if(!nObj)
@@ -2475,6 +2760,16 @@ function DonaNombrePropietatsSimbolitzacio(i_capa)
 	return llista.length;
 }
 
+function DonaNomAttributeSenseClaus(nom)
+{
+	var index;
+	if(!nom)
+		return nom;
+	if(-1!=(index=nom.indexOf("{")))
+		return nom.slice(0,index);
+	return nom;
+}
+
 function DonaLlistaPropietatsSimbolitzacio(i_capa)
 {
 var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
@@ -2542,15 +2837,11 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 			}
 		}
 	}
-	if(llista.length>1)
+	if(llista.length)
 	{
 		// Elimino dels noms dels atributs el temps o altres variables que hi puguin haver
-		var index;
 		for(var i=0; i<llista.length;i++)
-		{
-			if(-1!=(index=llista[i].indexOf("{")))
-				llista[i]=llista[i].slice(0,index);
-		}
+			llista[i]=DonaNomAttributeSenseClaus(llista[i]);
 		//Ordeno i elimino repetits
 		llista.sort(sortAscendingStringSensible);
 		llista.removeDuplicates(sortAscendingStringSensible);
@@ -2932,7 +3223,7 @@ var cdns=[];
 	{
 		// Si vull usar les nostres llibreries del geohash
 		var llista_geohash=ngeohash_bboxes(env_ll.MinY, env_ll.MinX, env_ll.MaxY, env_ll.MinY, zoneLevelId);
-		cdns.push("zoneId in (");
+		cdns.push("@iot.id in (");
 		for (var i=0; i<llista_geohash.length; i++)
 			cdns.push((i==0)? "":",", llista_geohash[i]);
 		cdns.push(")");
@@ -2940,91 +3231,167 @@ var cdns=[];
 	else
 	{
 		// Funcions del servidor STA
-		cdns.push("zoneId isin geohashes_inbox(",env_ll.MinX,",",env_ll.MinY,",",env_ll.MaxX,",",env_ll.MaxY,",",zoneLevelId,")");
+		cdns.push("@iot.id isin geohashes_inbox(",env_ll.MinX,",",env_ll.MinY,",",env_ll.MaxX,",",env_ll.MaxY,",",zoneLevelId,")");
 	}
+	return cdns.join("");
+}
+
+function DonaCadenaFiltreH3Inbox(servidor, zoneLevelId, env, crs)
+{
+var cdns=[];
+
+	if(!env || !crs || !zoneLevelId)
+		return "";
+	var env_ll=DonaEnvolupantLongLat(env, crs);
+	// Amb això no en tinc prou perquè només em dona les cel·les que el seu centre és a dins del envolupant
+	//cdns.push("st_within(cellToLatLng(@iot.id),geography'");
+	// i jo vull les cel·les que estan total o parcialment dins de l'envolupant
+	cdns.push("st_intersects(cellToBoundary(@iot.id),geography'");
+	if(servidor.toUpperCase().includes("api-samenmeten.rivm.nl".toUpperCase()))
+		cdns.push("SRID=4326;");
+	
+	cdns.push("POLYGON((", env_ll.MinX, " ", env_ll.MinY, ",", env_ll.MaxX, " ", env_ll.MinY, ",", env_ll.MaxX, " ", 
+						   env_ll.MaxY, ",", env_ll.MinX, " ", env_ll.MaxY, ",", env_ll.MinX, " ", env_ll.MinY, "))')");
+	cdns.push(" and resolution eq ",zoneLevelId, " and MultiDatastreams/@iot.id ne null");
 	return cdns.join("");
 }
 
 function DonaRequestSTACellsFeaturesOfInterest(i_capa, zoneLevelId, env)
 {
-var capa=ParamCtrl.capa[i_capa], cdns=[], camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
+var capa=ParamCtrl.capa[i_capa], cdns=[], cdns_filter=[], camps_implicats=DonaLlistaPropietatsSimbolitzacio(i_capa);
+var data_ini=null, data_fi_json=null, data_fi=null, periode, interval_dggs, i, filtres_mds=[];
 		
-	cdns.push("/v",DonaVersioComAText(capa.versio),"/Cells?$top=",STAtopValue,"&$select=id,zoneId,zoneLevel");
+	cdns.push("/v",DonaVersioComAText(capa.versio),"/Cells?$top=",STAtopValue,"&$select=@iot.id,resolution");
 	// NJ: en el cas de Cells no considero el limit perquè les celles ja són un sistema de tessel·lació
-	if (env!=null)
-		cdns.push("&$filter=", DonaCadenaFiltreGeohashesInbox(zoneLevelId, env, capa.CRSgeometry, false));
+	if (env!=null){
+		if(capa.cellZoneLevelSet.cellType=="GeoHash")
+			cdns_filter.push(DonaCadenaFiltreGeohashesInbox(zoneLevelId, env, capa.CRSgeometry, false));
+		else if(capa.cellZoneLevelSet.cellType=="H3")
+			cdns_filter.push(DonaCadenaFiltreH3Inbox(DonaServidorCapa(capa), zoneLevelId, env, capa.CRSgeometry));
+	}
+	else{
+		if(capa.cellZoneLevelSet.cellType=="H3")
+			cdns_filter.push("resolution eq ",zoneLevelId, " and MultiDatastreams/@iot.id ne null");
+	}
+	if(capa.data && capa.data.length)
+	{
+		data_ini=DonaDataJSONComATextISO8601(capa.data[DonaIndexDataCapa(capa, null)], null, true);
+		data_fi_json=IncrementaDataSegonsPeriodeOFlagsData(capa, null);
+		if(data_fi_json)
+			data_fi=DonaDataJSONComATextISO8601(data_fi_json, null, true);
+		if(cdns_filter.length>0)
+			cdns_filter.push(" and ");
+		cdns_filter.push("MultiDatastreams/any(m:m/Observations/any(o:o/phenomenonTime ge ", data_ini);
+		if(data_fi)
+			cdns_filter.push(" and o/phenomenonTime lt ", data_fi);
+		cdns_filter.push("))");
+	}
+	if(cdns_filter.length>0)
+		cdns.push("&$filter=", cdns_filter.join(""));
+
 	if(camps_implicats.length<1)
 		return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 	
-	var cdns_datastream=[], i_camps_afegits, i;
-	cdns.push("&$expand=MultiDatastreams($filter=");
-	for(i_camps_afegits=i=0; i<camps_implicats.length; i++)
+	periode=DonaPeriodeActualDeCapa(capa);
+	interval_dggs=DonaIntervalSTADggsDeCapa(capa);
+	if(interval_dggs)
+		filtres_mds.push("properties/dggs.interval eq '"+interval_dggs+"'");
+	filtres_mds.push("Sensor/properties/role eq 'scheduler'");
+	var noms_op=[];
+	for(i=0; i<camps_implicats.length; i++)
 	{
-		if(camps_implicats[i] && camps_implicats[i]!="")
-		{
-			if(i_camps_afegits>0)
-				cdns.push(" or ");
-			cdns.push("ObservedProperties/name eq '", camps_implicats[i], "'");
-			i_camps_afegits++;
-		}
+		if(camps_implicats[i])
+			noms_op.push("ObservedProperties/name eq '"+camps_implicats[i]+"'");
 	}
+	if(noms_op.length)
+		filtres_mds.push("("+noms_op.join(" or ")+")");
+
+	cdns.push("&$expand=MultiDatastreams($filter=", filtres_mds.join(" and "));
 	cdns.push(";$expand=ObservedProperties($select=name),Observations($top=1;$orderby=phenomenonTime%20desc;$select=phenomenonTime,result");
-	if(capa.data)
-		cdns_datastream.push(";$filter=phenomenonTime le ", DonaDateDesDeDataJSON(capa.data[DonaIndexDataCapa(capa, null)]).toISOString());
-	cdns.push("))");	
+	if(data_ini)
+	{
+		cdns.push(";$filter=phenomenonTime ge ", data_ini);
+		if(data_fi)
+			cdns.push(" and phenomenonTime lt ", data_fi);
+	}
+	cdns.push("))");
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
-
-function DonaRequestSTAObservationsCellsFeaturesOfInterest(i_capa, zoneLevelId, i_obj, env)
+function DonaRequestSTAObservationsCellsFeaturesOfInterest(i_capa, zoneLevelIdOIndex, i_obj, env, interval_dggs, data_ini, data_fi)
 {
-var cdns=[], cdns_filter=[];
-var capa=ParamCtrl.capa[i_capa], tipus=DonaTipusServidorCapa(capa.tipus);
+var cdns=[], cdns_obs_filter=[], cdns_mds_filter=[], finestra;
+var capa=ParamCtrl.capa[i_capa], i_zone_level, cell, feature_id;
 
-	
 	cdns.push("/v",DonaVersioComAText(capa.versio),"/Cells");
-		
-	if(capa.dataMinima)
+
+	if(!data_ini || !data_fi)
 	{
-		cdns_filter.push("$filter=");
-		cdns_filter.push("phenomenonTime ge ", DonaDateDesDeDataJSON(capa.dataMinima).toISOString());
+		if(i_obj==null)
+		{
+			finestra=DonaFinestraISOConsultaTemporalCapa(capa);
+			if(!data_ini)
+				data_ini=finestra.ini;
+			if(!data_fi)
+				data_fi=finestra.fi;
+		}
 	}
-	if(capa.dataMaxima)
+	if(data_ini)
+		cdns_obs_filter.push("phenomenonTime ge ", data_ini);
+	if(data_fi)
 	{
-		if(cdns_filter.length)
-			cdns_filter.push(" and ");
-		else
-			cdns_filter.push("$filter=");
-		cdns_filter.push("phenomenonTime le ", DonaDateDesDeDataJSON(capa.dataMaxima).toISOString());
+		if(cdns_obs_filter.length)
+			cdns_obs_filter.push(" and ");
+		cdns_obs_filter.push("phenomenonTime lt ", data_fi);
 	}
-	
-	// Si no tinc identificador d'objectes demano Cells, si vull les observacions d'una cell en concret faig la petició per Observacions directament
+
+	if(!interval_dggs)
+		interval_dggs=DonaIntervalSTADggsDeCapa(capa);
+	cdns_mds_filter.push("Sensor/properties/role eq 'scheduler'");
+	if(interval_dggs)
+		cdns_mds_filter.push("properties/dggs.interval eq '"+interval_dggs+"'");
+
 	if (i_obj==null)
 	{
-		cdns.push("?$top=",STAtopValue,"&select=id,zoneId,zoneLevel"); 		
-		cdns.push("&$expand=MultiDatastreams($select=unitOfMeasurements,name", 
-					";$filter=Sensor/properties/virtual",
-					";$expand=ObservedProperties($select=name),Observations($top=",STAtopValue,
-					(cdns_filter.length) ? (";"+cdns_filter.join("")): "",
-					"))");
-		if (env!=null)
-			push.push("&$filter=", DonaCadenaFiltreGeohashesInbox(zoneLevelId, env, capa.CRSgeometry, false));
+		cdns.push("?$top=",STAtopValue,"&$select=@iot.id,resolution");
+		cdns.push("&$expand=MultiDatastreams($count=true;$top=",STAtopValue,";$select=name,phenomenonTime,unitOfMeasurements,properties",
+					";$expand=ObservedProperties($select=name),Observations($top=",STAtopValue,";$orderby=phenomenonTime%20asc;$select=phenomenonTime,result,parameters");
+		if(cdns_obs_filter.length)
+			cdns.push(";$filter=", cdns_obs_filter.join(""));
+		cdns.push(");$filter=", cdns_mds_filter.join(" and "), ")");
+
+		if (env!=null){
+			cdns.push("&$filter=");
+			if(capa.cellZoneLevelSet.cellType=="GeoHash")
+				cdns.push(DonaCadenaFiltreGeohashesInbox(zoneLevelIdOIndex, env, capa.CRSgeometry, false));
+			else if(capa.cellZoneLevelSet.cellType=="H3")
+				cdns.push(DonaCadenaFiltreH3Inbox(DonaServidorCapa(capa), zoneLevelIdOIndex, env, capa.CRSgeometry));
+		}
 	}
 	else
 	{
-		var i_zone_level=DonaIndexZoneLevelAPartirDeId(capa, zoneLevelId), cell;
-		cell=ZoneLevelSet.zoneLevels[i_zone_level].cells;
-		if (cell.features[i_obj].id==+cell.features[i_obj].id)  // test if this is a number
-			cdns.push("(", cell.features[i_obj].id, ")");
+		if(typeof zoneLevelIdOIndex==="number" && capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels &&
+			zoneLevelIdOIndex>=0 && zoneLevelIdOIndex<capa.cellZoneLevelSet.zoneLevels.length)
+			i_zone_level=zoneLevelIdOIndex;
 		else
-			cdns.push("('", cell.features[i_obj].id, "')");
-		cdns.push("/Observations?$count=true&$top=", STAtopValue, 
-			"&$select=result,phenomenonTime,parameters&",
-			"$expand=MultiDatastream($select=unitOfMeasurement,name",
-			";$filter=Sensor/properties/virtual",
-			";$expand=ObservedProperties($select=name))");
-		if(cdns_filter.length)
-			cdns.push("&",cdns_filter.join(""));
+			i_zone_level=DonaIndexZoneLevelAPartirDeId(capa, zoneLevelIdOIndex);
+		if(i_zone_level==-1)
+			return "";
+		cell=capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells;
+		if(!cell || !cell.features || !cell.features[i_obj])
+			return "";
+		feature_id=cell.features[i_obj].id;
+		if (typeof feature_id==="bigint" || typeof feature_id==="number" || feature_id==+feature_id)
+			cdns.push("(", feature_id, ")");
+		else
+			cdns.push("('", feature_id, "')");
+		// NJ_22_2_2026: A partir de 22/7/2026 des de les celles només puc accedir a MultiDatastreams, les Observacions només són visibles per els Observadors. 
+		// cdns.push("/Observations?$count=true&$top=", STAtopValue,"&$select=result,phenomenonTime,parameters&", "$expand=MultiDatastream($select=unitOfMeasurement,name",";$filter=Sensor/properties/virtual",";$expand=ObservedProperties($select=name))");
+		cdns.push("/MultiDatastreams?$count=true&$top=",STAtopValue,"&$select=name,phenomenonTime,unitOfMeasurements,properties",
+					"&$expand=ObservedProperties($select=name,definition),Observations($top=",STAtopValue,";$orderby=phenomenonTime%20asc;$select=phenomenonTime,result,parameters");
+		if(cdns_obs_filter.length)
+			cdns.push(";$filter=", cdns_obs_filter.join(""));
+		cdns.push(")&$filter=", cdns_mds_filter.join(" and "));
 	}
 	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
@@ -3206,7 +3573,7 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 	// env_sol està ja en el CRS de la capa
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
-			 {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "zoneLevelId": zoneLevelId, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param});
+			 {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "zoneLevelId": zoneLevelId, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param, "nova_peticio": !url_link});
 	else
 		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param});
@@ -3215,27 +3582,47 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 function DonaCellsIndexZoneLevelMesProperAZoomActual(capa)
 {
 var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
-var i_zoneLevel=-1;
+var i_zoneLevel=-1, i, z, mid, dif, dif_min=null;
 
-	for(var i=0; i<capa.cellZoneLevelSet.zoneLevels.length;i++)
+	if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
+		return -1;
+	for(i=0; i<capa.cellZoneLevelSet.zoneLevels.length;i++)
 	{
-		if(capa.cellZoneLevelSet.zoneLevels[i].costatMinim && capa.cellZoneLevelSet.zoneLevels[i].costatMaxim)
+		if( capa.cellZoneLevelSet.zoneLevels[i].costatMinim && capa.cellZoneLevelSet.zoneLevels[i].costatMaxim)
 		{
-			if (capa.cellZoneLevelSet.zoneLevels[i].costatMinim<=ParamInternCtrl.vista.CostatZoomActual && 
-			capa.cellZoneLevelSet.zoneLevels[i].costatMaxim>=ParamInternCtrl.vista.CostatZoomActual)	
+			if(	capa.cellZoneLevelSet.zoneLevels[i].costatMinim<=costat_actual && 
+				capa.cellZoneLevelSet.zoneLevels[i].costatMaxim>=costat_actual)	
 				i_zoneLevel=i;
 		}
 		else if(capa.cellZoneLevelSet.zoneLevels[i].costatMinim)
-		{
-			if(capa.cellZoneLevelSet.zoneLevels[i].costatMinim>costat_actual*0.9999 && 
-				capa.cellZoneLevelSet.zoneLevels[i].costatMinim<costat_actual*1.0001)
+		{	
+			if(capa.cellZoneLevelSet.zoneLevels[i].costatMinim<=costat_actual)
 				i_zoneLevel=i;
 		}
 		else if(capa.cellZoneLevelSet.zoneLevels[i].costatMaxim)
 		{
-			if(capa.cellZoneLevelSet.zoneLevels[i].costatMaxim>costat_actual*0.9999 && 
-				capa.cellZoneLevelSet.zoneLevels[i].costatMaxim<costat_actual*1.0001)
+			if(capa.cellZoneLevelSet.zoneLevels[i].costatMaxim>=costat_actual)
 				i_zoneLevel=i;
+		}
+	}
+	if(i_zoneLevel!=-1 || typeof costat_actual!=="number" || isNaN(costat_actual))
+		return i_zoneLevel;
+	for(i=0; i<capa.cellZoneLevelSet.zoneLevels.length;i++)
+	{
+		z=capa.cellZoneLevelSet.zoneLevels[i];
+		if(z.costatMinim && z.costatMaxim)
+			mid=(z.costatMinim+z.costatMaxim)/2;
+		else if(z.costatMinim)
+			mid=z.costatMinim;
+		else if(z.costatMaxim)
+			mid=z.costatMaxim;
+		else
+			continue;
+		dif=Math.abs(mid-costat_actual);
+		if(dif_min==null || dif<dif_min)
+		{
+			dif_min=dif;
+			i_zoneLevel=i;
 		}
 	}
 	return i_zoneLevel;
@@ -3294,9 +3681,47 @@ function DonaIndexTileMatrixVectorAPartirDeCostat(tileMatrix, costat)
 	return -1;	
 }
 
+function NetejaCanvasCapaDigi(i_capa)
+{
+var i_vista, nom_vista, canvas, ctx;
+	if(typeof i_capa!=="number" || i_capa<0 || !ParamCtrl.VistaPermanent)
+		return;
+	for(i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
+	{
+		nom_vista=ParamCtrl.VistaPermanent[i_vista].nom;
+		canvas=document.getElementById(DonaNomCanvasCapaDigi(nom_vista, i_capa));
+		if(!canvas || !canvas.getContext)
+			continue;
+		ctx=canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	}
+}
+
+function BuidaCellsDeCapa(capa, zoneLevelId)
+{
+	var i;
+	if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
+		return;
+	if(typeof zoneLevelId!=="undefined" && zoneLevelId!=null)
+	{
+		i=DonaIndexZoneLevelAPartirDeId(capa, zoneLevelId);
+		if(i!=-1 && capa.cellZoneLevelSet.zoneLevels[i].cells)
+			delete capa.cellZoneLevelSet.zoneLevels[i].cells;
+	}
+	else
+	{
+		for(i=0; i<capa.cellZoneLevelSet.zoneLevels.length; i++)
+		{
+			if(capa.cellZoneLevelSet.zoneLevels[i].cells)
+				delete capa.cellZoneLevelSet.zoneLevels[i].cells;
+		}
+	}
+	NetejaCanvasCapaDigi(ParamCtrl.capa.indexOf(capa));
+}
+
 function DemanaCellsDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
-var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false;
+var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false, periode_canviat=false;
 
 	if ((tipus!="TipusSTA" && tipus!="TipusSTAplus") || capa.origenAccesObjs!=origen_CellsFeaturesOfInterest)
 		return false;
@@ -3310,8 +3735,14 @@ var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false;
 		var zoneLevelId=null, env_temp, env_situacio;
 		if(null==(zoneLevelId=DonaCellsZoneLevelIdMesProperAZoomActual(capa)))
 			return true;
+
+		periode_canviat=AjustaPeriodeTemporalCapaAlZoomSiCal(capa);
+		if(periode_canviat)
+		{
+			CreaLlegenda();
+			BuidaCellsDeCapa(capa, null);
+		}
 		
-		// He d'ajustar l'envolupant a la situació
 		env_temp={"MinX": env.MinX, "MaxX": env.MaxX, "MinY": env.MinY, "MaxY": env.MaxY};
 		env_situacio=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.EnvCRS;
 		if (env_temp.MinX<env_situacio.MinX)
@@ -3329,8 +3760,8 @@ var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false;
 	}
 	return false;
 }
-
-
+		
+		
 function DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
 var env_total, env_temp, env_sol;

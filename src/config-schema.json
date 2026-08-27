@@ -1,4 +1,4 @@
-{
+﻿{
  	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "MiraMon Map Browser",
 	"description": "Specification of the structures used to configure and customize the MiraMon Map Browser through the config.json file.",
@@ -1562,32 +1562,26 @@
 											"minimum": 0
 										},
 										"cells": {
-											"description": "Interna No usar. Array d'objectes amb l'envolupant de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					
-											"$ref": "metadata-schema.json#/definitions/featureCollection"
+											"description": "Interna No usar. Array d'objectes amb la geometria de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					
+											"$ref": "#/definitions/featureCollection"
 										},
-										"zones": {
+										"aggregationPeriods": {
+											"description": "Array of aggregation periods (approximately corresponding to temporal resolutions or temporal aggregations) for which observations are available for this zone level. These periods are typically used to compute aggregated values, such as average temperature, at different temporal resolutions (for example, hourly, daily, or monthly) from sensor observations.",
 											"type": "array",
-											"items": {																
+											"items":{
 												"type": "object",
+												"required": ["periode"],
 												"properties": {	
-													"zoneId" : {
-														"description": "Zone identifier for a concrete zoneLevel",
-														"type": "string"
+													"periode": {
+														"description": "ISO 8601 duration used by the map browser to build the date array and FlagsData (e.g. 'P1M', 'PT1H').",
+														"type": "string",
+														"format": "duration"
 													},													
-													"cell": {
-														"type": "object",
-														"properties": {		
-															"cellId":{
-																"description": "Identifier of a cell within a specific zone",
+													"dggsInterval": {
+														"description": "Token used in STA MultiDatastream filter properties.dggs.interval (e.g. '1year', '1month', '1day', '1hour', '1min'). If omitted it is derived from 'periode' when the layer is loaded.",
 																"type": "string"
-															},
-															"statistics":{
-																"description": "Object containing the names of the cell's properties along with their statistics.",
-																"$ref": "#/definitions/statisticsDescription"	
-															}
-														}							
 													}
-												}
+												}							
 											}
 										}
 									}
@@ -2047,8 +2041,41 @@
 											"description": "Unitats del resultat de la fòrmula. Opcional",
 											"type": "string" 
 										}
-									}
+										}
 								}	  
+							}
+									}									
+					},
+					"dataPeriode":{
+						"description": "Periode que defineix un array de dates en la que la informació està disponible, s'inclou la 'dataIni' i la 'dataFi' i es defineixen les dates intermitges seguint la resolució temporal definida per 'i_periode'. A partir d'això es calcula i s'omple 'data'. 'FlagsData' també es modificat en funció de la resolució del periode (definida per 'i_periode'). Aplica quan el 'model' és 'raster' o quan el 'model' és 'vector' i s'ha definit algun 'atribut' com a 'serieTemporal'.",
+						"type": ["object", "null"],
+						"properties": {
+							"periodes":{
+								"description": "Array de periodes (aprox. resolució temporal) en que està disponible les dates de la capa dins de la 'dataIni' i 'dataFi'. Això permet configurar diversos arrays de dates en diverses resolucions temporals per una capa.",
+								"type": "array",
+								"items":{
+									"description": "Un període o resolució temporal definit seguint la ISO 8601 comença sempre per 'P', després hi ha els anys, mesos, dies ('Y': any, 'M': mes, 'W': setmana, 'D': dia) i després el separador de temps indicat per una 'T' i despres les hores, minuts i segons. ('H': hora, 'M': minut, 'S': segon). Per exemple: 'P1Y': indica un any, 'P1M': indica 1 mes, 'P1W': indica una setmana, 'P15D': indica 15 dies, 'PT1M': indica 1 minut.", 												
+									"type": "string",
+									"format": "duration"									
+								}	  
+							},
+							"i_periode":{
+								"description": "Índex del periode inicial seleccionat per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir el darrer",
+								"type": ["number", "null"],
+								"minimum": -1,
+								"multipleOf" : 1
+							},								
+							"dataIni": {
+								"description": "Data inicial del periode",
+								"$ref": "#/definitions/data" 
+							},
+							"dataFi": {
+								"description": "Data final del periode. Si és null, s'agafa la data-hora actual.",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"$ref": "#/definitions/data" 
+								}]
 							}
 						}
 					},
