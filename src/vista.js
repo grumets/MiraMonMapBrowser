@@ -1237,11 +1237,11 @@ var capa=ParamCtrl.capa[i_capa];
 		var ajax=new Ajax();
 		ajax.setRequestHeader('Authorization', capa.access.cadenaAutenBasica);
 		if (tipus=="TipusOAPI_Maps")
-			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url_dades, TipusEventGetMap);
+			imatge.i_event=CreaIOmpleEventConsola("OAPI_Maps", i_capa, url, TipusEventGetMap);
 		else if(tipus=="TipusOAPI_Coverages")
-			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa, url_dades, TipusEventGetCoverage);
+			imatge.i_event=CreaIOmpleEventConsola("OAPI_Coverages", i_capa, url, TipusEventGetCoverage);
 		else
-			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url_dades, TipusEventGetMap);
+			imatge.i_event=CreaIOmpleEventConsola("GetMap", i_capa, url, TipusEventGetMap);
 		
 		var format_capa=capa.FormatImatge.toLowerCase();			
 		if(format_capa == "gif") format_capa="image/gif";

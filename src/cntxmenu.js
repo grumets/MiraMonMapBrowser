@@ -2715,23 +2715,78 @@ var cdns=[];
 			"<input type='button' class='Verdana11px' value='", GetMessage("Cancel"), "' id='CancelBasicAuth'/></form>");
 	return cdns.join("");
 }
+
+// Les capes es demanen en paral·lel. Un segon showModal, amb el primer diàleg
+// encara al document, no rep el clic: getElementById enganxa l'onclick als
+// botons del primer i el diàleg de dalt queda inert.
+var cuaDialogAutenBasica=[];
+
+function ObreSeguentDialogAutenBasica()
+{
+	var dialogPrevi, peticio, i_capa, capa, dialogABasica, formAB, okBA, cancelBA, acabat;
+
+	if (!cuaDialogAutenBasica.length)
+		return;
+	dialogPrevi=document.getElementById("autenBasica");
+	if (dialogPrevi && !dialogPrevi.open && dialogPrevi.parentNode)
+		dialogPrevi.parentNode.removeChild(dialogPrevi);
+
+	peticio=cuaDialogAutenBasica[0];
+	i_capa=peticio.i_capa;
+	capa=ParamCtrl.capa[i_capa];
+	if (capa.access && capa.access.cadenaAutenBasica)
+	{
+		cuaDialogAutenBasica.shift();
+		peticio.resolve(true);
+		ObreSeguentDialogAutenBasica();
+		return;
+	}
+
+	dialogABasica=CreaDialog("autenBasica", DonaCadenaFinestraAutentificacioBasica(i_capa));
+	formAB=dialogABasica.querySelector("form");
+	okBA=dialogABasica.querySelector("#OKBasicAuth");
+	cancelBA=dialogABasica.querySelector("#CancelBasicAuth");
+	acabat=false;
+
+	function acaba(ok)
+	{
+		if (acabat)
+			return;
+		acabat=true;
+		if (dialogABasica.open)
+			dialogABasica.close(ok ? "ok" : "cancel");
+		if (dialogABasica.parentNode)
+			dialogABasica.parentNode.removeChild(dialogABasica);
+		cuaDialogAutenBasica.shift();
+		if (ok)
+			peticio.resolve(true);
+		else
+			peticio.reject(false);
+		// Fora de l'event close/click, perquè un showModal encadenat no quedi inert.
+		setTimeout(ObreSeguentDialogAutenBasica, 0);
+	}
+
+	okBA.onclick=function () {
+		DonaCadenaAutentificacioBasicaCapa(dialogABasica, formAB, i_capa);
+		// Si la validació falla, el diàleg continua obert.
+		if (!dialogABasica.open)
+			acaba(!!(ParamCtrl.capa[i_capa].access && ParamCtrl.capa[i_capa].access.cadenaAutenBasica));
+	};
+	cancelBA.onclick=function () {
+		acaba(false);
+	};
+	dialogABasica.addEventListener("close", function () {
+		acaba(!!(ParamCtrl.capa[i_capa].access && ParamCtrl.capa[i_capa].access.cadenaAutenBasica));
+	});
+	dialogABasica.showModal();
+}
+
 async function CreaDialogAutentificacioBasica(i_capa)
 {
 	return new Promise(function(resolve, reject){
-	
-		const dialogABasica=CreaDialog("autenBasica", DonaCadenaFinestraAutentificacioBasica(i_capa));
-		const okBA = document.getElementById("OKBasicAuth");
-		const cancelBA = document.getElementById("CancelBasicAuth");
-		okBA.onclick = function () {
-			DonaCadenaAutentificacioBasicaCapa(dialogABasica, document.getElementById("loginFormBasicAuth"), i_capa);
-			dialogABasica.close("ok");
-			resolve(true);
-		};
-		cancelBA.onclick = function () {
-			dialogABasica.close("cancel");
-			reject(false);
-		};
-		dialogABasica.showModal();		
+		cuaDialogAutenBasica.push({i_capa: i_capa, resolve: resolve, reject: reject});
+		if (cuaDialogAutenBasica.length==1)
+			ObreSeguentDialogAutenBasica();
 	});
 }
 
