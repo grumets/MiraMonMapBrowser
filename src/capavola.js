@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2024 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -90,7 +90,7 @@ function MostraFinestraAnarCoordenadaEvent(event) //Afegit Cristian 19/01/2016
 	ComprovaCalTancarAmbScope();
 	MostraFinestraAnarCoordenada();
 	dontPropagateEvent(event);
-}//Fi de MostraFinestraAnarCoordenada()
+}
 
 //No usar: Useu TancaFinestraLayer("anarCoord");
 function TancaFinestra_anarCoord()
@@ -100,7 +100,7 @@ function TancaFinestra_anarCoord()
 	   ParamCtrl.capa[ParamCtrl.ICapaVolaAnarCoord].visible="no";
 	   CreaVistes();
 	}
-}//Fi de TancaFinestra_anarCoord()
+}
 
 function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, idfeature)
 {
@@ -117,7 +117,6 @@ function MostraFinestraLogBookAmbScope(targets, lang, access_token_type, idfeatu
 
 	//per defecte deixo marcat que volem un scope rectangular
 	mostraSelecLBScope(0);
-
 	return;
 }
 //OG: mostra finestra que permetrà afegir envolupant a un FB
@@ -130,15 +129,12 @@ function MostraFinestraFeedbackAmbScope(targets, lang, access_token_type)
 
 	if (!ObreFinestra(window, "fbScope", GetMessage("ofUserFeedbackScope", "capavola")))
 		return;
-	
-
-	
+		
 	TancaFinestraLayer("feedback");
 	OmpleFinestraFeedbackAmbScope(trg, lng, tkn);
 
 	//per defecte deixo marcat que volem un fbScope rectangular
 	mostraSelecFBScope(0);
-
 	return;
 }
 
@@ -326,7 +322,6 @@ function AfegirElementsALPScope()
 
 		// Mostra la llista
 		MostraPointsLPScope();		
-
 	}
 }
 
@@ -456,7 +451,7 @@ function mostraSelecFBScope(type)
 
 function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 {
-	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS; //mirem el SR
+	var crs_up=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase(); //mirem el SR
 	var trg=JSON.parse(targets);
 	var dec=ParamCtrl.NDecimalsCoordXY; //per defecte agafarem els decimals configurats
 
@@ -471,15 +466,15 @@ function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 	//pol
 	if (type==0)
 	{
-		if (crs !="EPSG:4326" && crs !="CRS:84")
+		if (crs_up !="EPSG:4326" && crs_up !="CRS:84")
 		{
 			for (var i=0; i<lpscopePoints.length; i++)
 			{
 				var pol = lpscopePoligons[i];
 				//lower left
-				var ll= DonaCoordenadesLongLat(pol.xmin, pnt.ymin, crs);
+				var ll= DonaCoordenadesLongLat(pol.xmin, pnt.ymin, crs_up);
 				//uper rigth
-				var ur= DonaCoordenadesLongLat(pol.xmax, pnt.ymax, crs);
+				var ur= DonaCoordenadesLongLat(pol.xmax, pnt.ymax, crs_up);
 				lpscopePoligons_ll.push({ xmin: ll.x, xmax: ur.x, ymin: ll.y, ymax: ur.y });
 			}
 			//en principi sempre tindrem un únic target, o sigui que aquest for no ens caldria
@@ -502,12 +497,12 @@ function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 	if (type==1)
 	{
 		// si les coordenades no són en lon/lat, les transformem
-		if (crs !="EPSG:4326" && crs !="CRS:84")
+		if (crs_up !="EPSG:4326" && crs_up !="CRS:84")
 		{
 			for (var i=0; i<lpscopePoints.length; i++)
 			{
 				var pnt = lpscopePoints[i];
-				var coord_ll = DonaCoordenadesLongLat(pnt.x, pnt.y, crs);
+				var coord_ll = DonaCoordenadesLongLat(pnt.x, pnt.y, crs_up);
 				lpscopePoints_ll.push({ x: coord_ll.x, y: coord_ll.y });
 			}
 			
@@ -533,7 +528,7 @@ function AfegirLogPageScopeALogBook(targets, lang, access_token_type, idfeature)
 //OG: afegim el bbox i el gmlpol als attributes del target abans d'enviar-ho al NiMMbus.
 function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type)
 {
-	var crs=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS; //mirem el SR
+	var crs_up=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS.toUpperCase(); //mirem el SR
 	var trg=JSON.parse(targets);
 	var dec=ParamCtrl.NDecimalsCoordXY; //per defecte agafarem els decimals configurats
 	//comprovem que tenim totes les coordenades
@@ -554,12 +549,12 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 	if ((document.getElementById("fbscope_x")) && (document.getElementById("fbscope_y")))
 	{
 		// si les coordenades no són en lon/lat, les transformem
-		if (crs !="EPSG:4326" && crs !="CRS:84")
+		if (crs_up !="EPSG:4326" && crs_up !="CRS:84")
 		{
 			//ulc:upper left corner. lrc: lower right corner
 			//convertim coordenades a lon/lat
-			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
-			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs_up);
+			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs_up);
 
 			for (var i=0; i<trg.length; i++)
 			{
@@ -576,7 +571,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					//modifiquem les coordenades per generar un pol de 1 mm de costat
 					var dec_m=3;
 					var dif_m=0.0005;
-					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs_up+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.x)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(lrc.y)+dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.x)-dif_m).toString(),dec_m) + " " + OKStrOfNe((parseFloat(ulc.y)-dif_m).toString(),dec_m) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 				}
 			}
 		}
@@ -593,7 +588,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 					// li sumem/restem un diferencial de 0.0000000045 a les coordenades en graus, que és l'equivalent de 0.5 mm per generar micropols de 1 mm de costat.
 					trg[i].bbox={"xmin":OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g),"xmax":OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g),"ymin": OKStrOfNe((parseFloat(lrc.y)-dif).toString(),dec_g),"ymax":OKStrOfNe((parseFloat(ulc.y)+dif).toString(),dec_g)};
 					//afegim el GMLpol
-					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs_up+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.x)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(lrc.y)+dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.x)-dif).toString(),dec_g) + " " + OKStrOfNe((parseFloat(ulc.y)-dif).toString(),dec_g) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 				}
 			}
 		}
@@ -603,10 +598,10 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 	else
 	{
 		// si les coordenades no són en lon/lat, les transformem
-		if (crs !="EPSG:4326" && crs !="CRS:84")
+		if (crs_up !="EPSG:4326" && crs_up !="CRS:84")
 		{
-			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs);
-			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs);
+			var ulc_ll=DonaCoordenadesLongLat(ulc.x, ulc.y, crs_up);
+			var lrc_ll=DonaCoordenadesLongLat(lrc.x, lrc.y, crs_up);
 			for (var i=0; i<trg.length; i++)
 			{
 				//afegim el bbox i el gmlpol només al primary target
@@ -618,7 +613,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 			var dec_trans=9;
 			trg[i].bbox={"xmin":OKStrOfNe(ulc_ll.x,dec_trans),"xmax":OKStrOfNe(lrc_ll.x,dec_trans),"ymin": OKStrOfNe(lrc_ll.y,dec_trans),"ymax":OKStrOfNe(ulc_ll.y,dec_trans)};
 			//afegim el GMLpol en el crs original
-					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+					trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs_up+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 				}
 			}
 		}
@@ -641,7 +636,7 @@ function AfegirFeedbackScopeCapaMultipleTargets(targets, lang, access_token_type
 						//afegim el bounding box en lon/lat
 						trg[i].bbox={"xmin":OKStrOfNe(ulc.x,dec),"xmax":OKStrOfNe(lrc.x,dec),"ymin": OKStrOfNe(lrc.y,dec),"ymax":OKStrOfNe(ulc.y,dec)};
 						//afegim el GMLpol
-						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
+						trg[i].gmlpol={"gml": '<gml:Polygon srsName="'+crs_up+'"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">' + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + " " + OKStrOfNe(lrc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(lrc.y,dec) + " " + OKStrOfNe(ulc.x,dec) + " " + OKStrOfNe(ulc.y,dec) + "</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>"};
 					}
 				}
 			}
