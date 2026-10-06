@@ -842,7 +842,7 @@
 			"oneOf":[{
 				"type": "null"
 			},{
-			"$ref": "#/definitions/icona" 
+				"$ref": "#/definitions/icona" 
 			}]
 		},
 		"PlantillaConsulta": {
@@ -874,7 +874,7 @@
 			"oneOf":[{
 				"type": "null"
 			},{
-			"$ref": "#/definitions/icona" 
+				"$ref": "#/definitions/icona" 
 			}]
 		},
 		"IconaAnarObj": {
@@ -882,7 +882,7 @@
 			"oneOf":[{
 				"type": "null"
 			},{
-			"$ref": "#/definitions/icona"
+				"$ref": "#/definitions/icona" 
 			}]
 		},
 		"AnarCoordIni": {
@@ -912,7 +912,7 @@
 			"oneOf":[{
 				"type": "null"
 			},{
-			"$ref": "#/definitions/icona" 
+				"$ref": "#/definitions/icona" 
 			}] 
 		},
 		"IconaEdicio": {
@@ -920,7 +920,7 @@
 			"oneOf":[{
 				"type": "null"
 			},{
-			"$ref": "#/definitions/icona"
+				"$ref": "#/definitions/icona" 
 			}]
 		},
 		"FuncioIconaEdicio": {
@@ -1342,7 +1342,7 @@
 				"type": "object",
 				"properties": {									
 					"servidor": { 
-						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF, un GeoJSON, un JPEG, un PNG, un HEIF o un CSV o és null si hi ha un CSV per cada un dels objectes); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'",
+						"description": "Adreça i nom del servidor per aquesta capa. Si és null s'agafa el ServidorLocal. Si no existeix servidor (la propietat és undefined) i el 'model' és 'vector' vol dir que els objectes estan definits directament al 'objectes' i no es demanen a cap servidor. Si 'tipus' és 'TipusHTTP_GET', apunta directament a una url amb el fitxer de les dades (que pot ser un GeoTIFF, un GeoJSON, un JPEG, un PNG, un HEIF o un CSV o és null si hi ha un CSV per cada un dels objectes); i en aquest cas, si el 'model' és 'raster' i el fitxer és diferent per a cada 'valors' és només la primera part del path i la segona part està escrita a 'valors[].url'. Si el tipus és 'TipusDGGS_DBF' apunta a un catàleg DBF.",
 						"type": ["string", "null"],
 						"format": "uri-reference"
 					},
@@ -1452,35 +1452,109 @@
 						"description": "CRS en que es demanaran les geometries al servidor (o que ja estan escrites en les features de la capa). Només pel model vector i pels ràster en format TIFF (COG) o TipusHTTP_GET en format JPEG, PNG o HEIF. Opcional; si no s'indica s'adopta el del primer mapa de situació.",
 						"type": ["string", "null"]
 					},
+					"VistaCapaTiled":{
+						"description": "Interna; no usar. Estat de tessel·lació ràster de la capa per a la vista actual. El navegador la crea i l'actualitza en temps d'execució (CompletaDefinicioCapa / OmpleMatriuVistaCapaTiled) per capes TipusWMS_C, TipusWMTS_*, TipusOAPI_MapTiles o imatges amb tessel·lació interna (p.ex. HEIF). Serveix per saber quines tessel·les demanar i a quina resolució, com desplaçar/retallar la capa a la vista i, en consulta, quin píxel de quina tessel·la correspon al clic. No s'ha d'especificar a config.json.",
+						"type": ["object", "null"],
+						"properties": {
+							"TileMatrix": {
+								"description": "Referència al TileMatrix actiu (nivell de zoom de tessel·lació més adequat a la vista). És un element de capa.TileMatrixSet[].TileMatrix; null si no n'hi ha cap d'aplicable.",
+								"oneOf":[{
+									"type": "null"
+								},{
+									"$ref": "#/definitions/tileMatrix" 
+								}]
+							},
+							"ITileMin": {
+								"description": "Índex mínim de columna (TileCol) de la matriu de tessel·les que cobreix l'envolupant de la vista.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"ITileMax": {
+								"description": "Índex màxim de columna (TileCol) de la matriu de tessel·les que cobreix l'envolupant de la vista.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"JTileMin": {
+								"description": "Índex mínim de fila (TileRow) de la matriu de tessel·les que cobreix l'envolupant de la vista.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"JTileMax": {
+								"description": "Índex màxim de fila (TileRow) de la matriu de tessel·les que cobreix l'envolupant de la vista.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"dx": {
+								"description": "Desplaçament horitzontal en píxels de la vista: offset entre l'origen de la capa tessel·lada (vora de la tessel·la ITileMin) i MinX de la vista. S'usa per moure/retallar la layer i per localitzar el píxel dins la tessel·la en consulta.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"dy": {
+								"description": "Desplaçament vertical en píxels de la vista: offset entre l'origen de la capa tessel·lada (vora de la tessel·la JTileMin) i MaxY de la vista. S'usa per moure/retallar la layer i per localitzar el píxel dins la tessel·la en consulta.",
+								"type": "number",
+								"multipleOf": 1
+							},
+							"tipus_costat": {
+								"description": "Relació entre el costat del TileMatrix escollit i el CostatZoomActual de la vista. Omplert per OmpleMatriuVistaCapaTiled. Si no és 'exacte', la capa es reescala (CSS transform scale) per encaixar a la vista.",
+								"oneOf": [
+									{ "type": "null" },
+									{ "enum": ["exacte", "per_sota", "per_sobre", "no_trobat"] }
+								]
+							}
+						}
+					},
 					"tileMatrixSetGeometry": {
-						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Opcional. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'.",
+						"description": "Definició de la tesselació vectorial (TileMatrixSet) per a les peticions vectorials al servidor. Només n'hi haurà un amb el 'CRSgeometry'. Només aplica quan el 'model' és 'vector'. Quan el tipus és 'TipusDGGS_DBF' esdevé obligatòri.",
 						"type": ["object", "null"],
 						"properties": {	
 							"atriObjNumerics": {
-								"description": "Array que descriu les propietats dels objectes de tipus numèric (definits a tileMatrix com a 'objNumerics' i obtinguts dinàmicament). Hi haurà el nom del camp que serà usat per crear els 'objNumerics' i per simbolitzar la font d'aquests objectes. Si no s'indica res, es crearà automàticament amb el nom '__nObjsTessella'",
+								"description": "Array que descriu les propietats dels objectes de tipus numèric (definits a tileMatrix com a 'objNumerics' i obtinguts dinàmicament). Hi haurà el nom del camp que serà usat per crear els 'objNumerics' i per simbolitzar la font d'aquests objectes. Si no s'indica res, es crearà automàticament amb el nom '__nObjsTessella'. Només aplica quan hi ha 'objLimit'.",
 								"$ref": "#/definitions/descripcioAtributs"			
+							},		
+							"cellType": {
+								"description": "Només aplica quan la capa és tipus 'TipusDGGS_DBF'. La capa està tessel·lada segons un tileMatrixSet, però els objectes no són ben bé vectors sinó que són cel·les que segueixen un DGGS concret, el definit per 'cellType' i el que rebrem del servidor serà identificador de cel·les que després es transformaran en objectes vectorials que es desaran a tileMatrix.objectes",
+								"$ref": "#/definitions/cellType"																				
+							},
+							"cellIdAttribute": {
+								"description": "Nom del attribute que conté el cellId d'una cel·la concreta",
 							},			
+							"optimSol": {
+								"description":"Només aplica quan la capa és tipus 'TipusDGGS_DBF'. Indica que es vol o no optimitzar les sol·licituds o peticions de tessel·les i fer-ho agrupadament per files ('rows') o per columnes('cols'), enlloc de tessel·la a tessel·la ('no'). Si val 'rows' vol dir que per cada columna demanaré totes les files contingues. si val 'cols' vol dir que per cada fila demanaré totes les columnes contingues",
+								"enum": [ "no", "rows", "cols"]								
+							},
 							"tileMatrix":  {
-								"description": "Array de tileMatrix amb els paràmetres de tessel·lació.",
+								"description": "Array de tileMatrix amb els paràmetres de tessel·lació i els objectes del tileMatrix, ja siguin numèrics o els objectes de la capa en sí. CORREGIR: a partir d'ara no crec que sigui així: Si la capa no té 'ObjLimit' només n'hi haurà un, sinó se'n crearan de manera paral·lela als nivells de zoom de la capa fins que totes les tessel·les continguin objectes i no només el nombre d'objectes inclosos.",
 								"allOf": [
 									{ 	"$ref": "#/definitions/tileMatrix"},
 									{
 										"properties": {
 											"objNumerics" : 
 											{ 	
-												"description": "Interna No usar. Array d'objectes amb el nombre d'objectes de cada una de les tessel·les del tileMatrix que ha estat sol·licitada i que conté un nombre d'objectes superior al límit per tessel·la.",								
+												"description": "Interna No usar. Array d'objectes amb el nombre d'objectes de cada una de les tessel·les del tileMatrix que ha estat sol·licitada i que conté un nombre d'objectes superior al límit per tessel·la. Només aplica quan hi ha 'objLimit'.",								
+												"$ref": "metadata-schema.json#/definitions/featureCollection"
+											},
+											"objectes": {
+												"description": "Interna No usar. Array d'objectes del tileMatrix, això reemplaça l'array d'objectes generals. Només implementat per 'TipusDGGS_DBF'. En la resta de casos s'usa l'array general o l'array de cel·les",					
 												"$ref": "metadata-schema.json#/definitions/featureCollection"
 											}
 										}
-									}		
+									}
 								]									
 							},	
 							"tilesSol": {
-								"description": "Interna; no usar. Array de tiles sol·licitats. Si la capa no té 'ObjLimit' només n'hi haurà un, sinó se'n crearan de manera paral·lela als nivells de zoom de la capa fins que totes les tessel·les continguin objectes i no només el nombre d'objectes inclosos.",								
+								"description": "Interna; no usar. Array de tiles sol·licitats.",								
 								"type": ["array", "null"],
 								"items": {																		
 									"type": "object",
-									"properties": {										
+									"properties": {		
+										"tileMatrixId": {
+											"description": "Identificador del TileMatrix",								
+											"type": "number"
+										},
+										"costat": {
+											"description": "En desus aquí. Costat de píxel (nivell de zoom) del TileMatrix.",
+											"type": "number"
+										},
 										"iTile": {											
 											"description": "Índex de tessel·la en l'eix de les x.",								
 											"type": "number"
@@ -1488,11 +1562,7 @@
 										"jTile": {											
 											"description": "Índex de tessel·la en l'eix de les y.",								
 											"type": "number"
-										},
-										"costat": {
-											"description": "Costat de píxel (nivell de zoom) del TileMatrix.",
-											"type": "number"
-										},
+										},										
 										"nombreObjectes": {
 											"description": "Nombre d'objectes de la tessel·la. -1 indica desconegut.",								
 											"type": "number"
@@ -1534,13 +1604,8 @@
 						"type": ["object", "null"],
 						"properties": {			
 							"cellType": {
-								"description": "Indicates the type of algorithm used for the cells. For example, Geohash or H3.... By default is 'H3'",
-								"oneOf":[{
-									"type": "null"
-								},{
-									"enum": ["GeoHash", "H3"]
-								}]														
-							},		
+								"$ref": "#/definitions/cellType"																				
+							},	
 							"zoneLevels":{
 								"description": "Levels contained in the tessellation",
 								"type": "array",
@@ -1563,7 +1628,7 @@
 										},
 										"cells": {
 											"description": "Interna No usar. Array d'objectes amb la geometria de la zona, i amb les propietats de la zona, que són el zoneId i els valors de les estadístiques per cada una de les propietats.",					
-											"$ref": "#/definitions/featureCollection"
+											"$ref": "metadata-schema.json#/definitions/featureCollection"
 										},
 										"aggregationPeriods": {
 											"description": "Array of aggregation periods (approximately corresponding to temporal resolutions or temporal aggregations) for which observations are available for this zone level. These periods are typically used to compute aggregated values, such as average temperature, at different temporal resolutions (for example, hourly, daily, or monthly) from sensor observations.",
@@ -1571,17 +1636,17 @@
 											"items":{
 												"type": "object",
 												"required": ["periode"],
-												"properties": {	
+												"properties": {
 													"periode": {
 														"description": "ISO 8601 duration used by the map browser to build the date array and FlagsData (e.g. 'P1M', 'PT1H').",
 														"type": "string",
 														"format": "duration"
-													},													
+													},
 													"dggsInterval": {
 														"description": "Token used in STA MultiDatastream filter properties.dggs.interval (e.g. '1year', '1month', '1day', '1hour', '1min'). If omitted it is derived from 'periode' when the layer is loaded.",
-																"type": "string"
+														"type": "string"
 													}
-												}							
+												}
 											}
 										}
 									}
@@ -1662,6 +1727,10 @@
 								"iBand": {
 									"description": "Índex de banda dins d'un fitxer llegit amb TipusHTTP_GET. Només aplica per TIFF. Opcional. El valor per defecte és 0. Normalment no s'indica si s'ha indicat 'url'",
 									"type": "number"
+								},
+								"tiledBuffer":{
+									"descripttion": "pendent de definir",
+									"type": "array"
 								},
 								"arrayBuffer": {
 									"description": "INTERN: s'afegeix programaticament en carregar l'array binari de valors de la vista principal",
@@ -2041,10 +2110,10 @@
 											"description": "Unitats del resultat de la fòrmula. Opcional",
 											"type": "string" 
 										}
-										}
+									}
 								}	  
 							}
-									}									
+						}
 					},
 					"dataPeriode":{
 						"description": "Periode que defineix un array de dates en la que la informació està disponible, s'inclou la 'dataIni' i la 'dataFi' i es defineixen les dates intermitges seguint la resolució temporal definida per 'i_periode'. A partir d'això es calcula i s'omple 'data'. 'FlagsData' també es modificat en funció de la resolució del periode (definida per 'i_periode'). Aplica quan el 'model' és 'raster' o quan el 'model' és 'vector' i s'ha definit algun 'atribut' com a 'serieTemporal'.",
@@ -2057,7 +2126,7 @@
 									"description": "Un període o resolució temporal definit seguint la ISO 8601 comença sempre per 'P', després hi ha els anys, mesos, dies ('Y': any, 'M': mes, 'W': setmana, 'D': dia) i després el separador de temps indicat per una 'T' i despres les hores, minuts i segons. ('H': hora, 'M': minut, 'S': segon). Per exemple: 'P1Y': indica un any, 'P1M': indica 1 mes, 'P1W': indica una setmana, 'P15D': indica 15 dies, 'PT1M': indica 1 minut.", 												
 									"type": "string",
 									"format": "duration"									
-								}	  
+								}
 							},
 							"i_periode":{
 								"description": "Índex del periode inicial seleccionat per començar la visualització, indexat des de 0. Podeu indicar i_data negatius on -1 vol dir el darrer",
@@ -2213,8 +2282,8 @@
 			]
 		},
 		"EnumTipusServidor": {
-			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG, GeoJSON, CSV, JPEG, PNG i HEIF. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'",
-			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP","TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusHTTP_GET", "TipusOAPI_Coverages"]
+			"description": "Tipus de servei suportat per les capes. Mostrar la capa amb TipusWMTS_SOAP només funciona amb FireFox, Opera, etc però no amb IE 7 o inferiors. TipusGoogle_KVP només funciona si el sistema de referència és EPSG:3785 (Web Mercator). El TipusHTTP_GET està pensat per obtenir el fitxer via una URL de cop (o amb HTTP range); de moment se suporta GeoTIFF/COG, GeoJSON, CSV, JPEG, PNG i HEIF. En aquest cas 'servidor' conté la URL completa, i si no està defint s'assumeix que hi ha un fitxer diferent per a cada banda 'valors'. 'TipusDGGS_DBF' indica que tenim un servidor que apunta a un cataleg.DBF que és un fitxer especial que es prepara amb l'aplicació TiledDGGS i que conté una sèrie de DBF tessel·lat i que els objectes són cel·les d'un DGGS (per tant té com una doble tessel·lació),  a aquests fitxers s'hi accedeix per HTTP GET range.",
+			"enum": ["TipusWMS","TipusWMS_C","TipusWMTS_REST","TipusWMTS_KVP","TipusWMTS_SOAP", "TipusGoogle_KVP","TipusWFS", "TipusSOS", "TipusSTA", "TipusSTAplus", "TipusOAPI_Maps","TipusOAPI_MapTiles", "TipusOAPI_Features", "TipusOAPI_DGGS", "TipusHTTP_GET", "TipusOAPI_Coverages", "TipusDGGS_DBF"]
 		},
 		"access": 
 		{
@@ -2246,6 +2315,14 @@
 				"x": { "type": "number" },
 				"y": { "type": "number" }
 			}		
+		},
+		"cellType": {
+			"description": "Indicates the type of algorithm used for the cells. For example, Geohash or H3.... By default is 'H3'",
+			"oneOf":[{
+				"type": "null"
+			},{
+				"enum": ["GeoHash", "H3"]
+			}]		
 		},
 		"tileMatrix": {
 			"description": "Descripció i paràmetres dels TileMatrixs. Ordenats amb el número de costat més gran primer.",

@@ -1006,7 +1006,8 @@ var i_pan_vista;
 				//if (capa.visible!="no" &&  EsObjDigiVisibleAAquestNivellDeZoom(capa))
 				if (EsCapaVisibleAAquestNivellDeZoom(capa) &&  EsCapaVisibleEnAquestaVista(i_vista, i))
 				{
-					if ((!capa.objectes || !capa.objectes.features) && !HiHaObjectesNumericsAAquestNivellDeZoom(capa))						
+					if ((!capa.objectes || !capa.objectes.features) && !HiHaObjectesNumericsAAquestNivellDeZoom(capa) && 
+							!HiHaObjectesTileMatrixSetAAquestNivellDeZoom(capa) && !HiHaCellsDeCapaAAquestNivellDeZoom(capa))						
 						continue;
 					elem=getLayer(window, ParamCtrl.VistaPermanent[i_vista].nom+"_l_capa"+i);
 					moveLayer(elem, xm, ym, ParamInternCtrl.vista.ncol, ParamInternCtrl.vista.nfil);
@@ -1832,7 +1833,10 @@ var i_simb, simbols, i_simbol, i_forma, forma, i_col, i_fil;
 	var env_icona, simbol, icona, font, mida, text, coord, geometry;
 	var win = DonaWindowDesDeINovaVista(vista);
 	var canvas = win.document.getElementById(nom_canvas);
-	var ctx = canvas.getContext('2d');
+	var ctx;
+	if(!canvas || !canvas.getContext)
+		return;
+	ctx = canvas.getContext('2d');
 	if(neteja_canvas)
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -1843,6 +1847,8 @@ var i_simb, simbols, i_simbol, i_forma, forma, i_col, i_fil;
 			forma=estil.formes[i_forma];
 			if (forma.interior && forma.interior.paleta)
 			{
+				if (forma.interior.paleta.ramp && !forma.interior.paleta.colors)
+					TransformRampToColorsArray(forma.interior.paleta);
 				a_vmin_ncol_interior[i_forma]={};
 				a_vmin_ncol_interior[i_forma].ncolors=forma.interior.paleta.colors.length;
 				a_vmin_ncol_interior[i_forma].a=DonaFactorAEstiramentPaleta(forma.interior.estiramentPaleta, a_vmin_ncol_interior[i_forma].ncolors);
@@ -1877,6 +1883,8 @@ var i_simb, simbols, i_simbol, i_forma, forma, i_col, i_fil;
 	{
 		feature=objectes.features[j];
 		geometry=DonaGeometryCRSActual(feature, capa.CRSgeometry);
+		if (!geometry || !geometry.type || !geometry.coordinates)
+			continue;
 		if (geometry.type=="LineString" || geometry.type=="MultiLineString")
 		{
 			if (!estil.formes)
@@ -2316,7 +2324,9 @@ var neteja_canvas=true;
 
 	if (capa.model!=model_vector)
 		return;
-
+	if (!EsCapaVisibleAAquestNivellDeZoom(capa))
+		return;
+	
 	if(tipus)
 	{
 		if(DemanaCellsDeCapaDigitalitzadaSiCal(capa, env, OmpleVistaCapaDigiIndirect, param))
@@ -2339,17 +2349,26 @@ var neteja_canvas=true;
 			return;
 		}		
 	}
-	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 &&
-		capa.tileMatrixSetGeometry && capa.tileMatrixSetGeometry.tileMatrix)
+	if(capa.tileMatrixSetGeometry && capa.tileMatrixSetGeometry.tileMatrix && 
+		((typeof capa.objLimit !== "undefined" && capa.objLimit!=-1 ) || tipus=="TipusDGGS_DBF"))
 	{	
 		var i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa);
-		if(i_tileMatrix!=-1 && capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics && 
-			capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics.features)
-		{		
-			var estil_obj_num=DeterminaEstilObjNumerics(capa.estil[capa.i_estil]);
-			DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.tileMatrixSetGeometry.atriObjNumerics, capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics, estil_obj_num);
-			neteja_canvas=false;
-		}		
+		
+		if(i_tileMatrix!=-1 && capa.tileMatrixSetGeometry)
+		{
+			if(tipus=="TipusDGGS_DBF" && capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objectes && 
+				capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objectes.features)
+			{
+				DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objectes, capa.estil[capa.i_estil]);
+			}
+			else if(capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics && 
+				capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics.features)
+			{		
+				var estil_obj_num=DeterminaEstilObjNumerics(capa.estil[capa.i_estil]);
+				DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.tileMatrixSetGeometry.atriObjNumerics, capa.tileMatrixSetGeometry.tileMatrix[i_tileMatrix].objNumerics, estil_obj_num);
+				neteja_canvas=false; // perquè vull dibuixar les dues coses objectes numèrics i objectes vectorials de la capa
+			}
+		}			
 	}
 	if (capa.objectes && capa.objectes.features)
 		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.objectes, capa.estil[capa.i_estil]);
@@ -2375,9 +2394,11 @@ function CreaCapaDigiLayer(nom_vista, i_nova_vista, i)
 	if (ParamCtrl.capa[i].visible!="no"/* && EsObjDigiVisibleAAquestNivellDeZoom(ParamCtrl.capa[i])*/)
 	{
 		var vista=DonaVistaDesDeINovaVista(i_nova_vista);
+		var visible_ara=EsCapaVisibleAAquestNivellDeZoom(ParamCtrl.capa[i]) &&
+			EsCapaVisibleEnAquestaVista(i_nova_vista!=NovaVistaPrincipal ? vista.i_vista : DonaIVista(nom_vista), i);
 		return textHTMLLayer(nom_vista+"_l_capa"+i, DonaMargeEsquerraVista(i_nova_vista)+1, DonaMargeSuperiorVista(i_nova_vista)+1,
 						vista.ncol, vista.nfil,
-						null, {scroll: "no", visible: true, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
+						null, {scroll: "no", visible: visible_ara, ev: null, save_content: false}, null, "<canvas id=\"" + DonaNomCanvasCapaDigi(nom_vista, i) + "\" width=\""+vista.ncol+"\" height=\""+vista.nfil+"\"></canvas>"); 
 	}
 	return "";
 }

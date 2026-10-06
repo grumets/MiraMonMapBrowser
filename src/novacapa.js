@@ -751,14 +751,31 @@ var k;
 	RepintaMapesIVistes();
 }
 
-function DefineixAttributesCapaVectorSiCal(capa)
+function DefineixAttributesCapaVectorSiCal(capa, i_tm)
 {
-	if (!capa.attributes && capa.objectes && capa.objectes.features && capa.objectes.features.length && 
-		capa.objectes.features[0].properties)
+	if(capa.attributes)
+		return;
+	var objectes=null, tm;
+	if(DonaTipusServidorCapa(capa)=="TipusDGGS_DBF")
+	{
+		if(!capa.tileMatrixSetGeometry || !capa.tileMatrixSetGeometry.tileMatrix)
+			return;
+		if(typeof i_tm==="undefined" || i_tm==null || i_tm==-1)
+			return;
+		tm=capa.tileMatrixSetGeometry.tileMatrix[i_tm];
+		if(!tm)
+			return;
+		objectes=tm.objectes;		
+	}
+	else
+		objectes=capa.objectes;
+	
+	if (objectes && objectes.features && objectes.features.length && 
+		objectes.features[0].properties)
 	{
 		// Si els attributes no estaven definits es defineixen de manera trivial
 		capa.attributes={};
-		for (var j in capa.objectes.features[0].properties)
+		for (var j in objectes.features[0].properties)
 		{
 			capa.attributes[j]={"description": j,
 						"mostrar": "si_ple"};

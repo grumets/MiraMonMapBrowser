@@ -50,13 +50,8 @@ function HiHaObjectesNumericsAAquestNivellDeZoom(capa)
 		typeof capa.tileMatrixSetGeometry.tileMatrix==="undefined" || capa.tileMatrixSetGeometry.tileMatrix==null)
 		return false;
 	
-	var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
-	if (DonaUnitatsCoordenadesProj(capa.CRSgeometry)=="m" && EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS))
-		costat_actual=(costat_actual/FactorGrausAMetres);
-	else if (EsProjLongLat(capa.CRSgeometry) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
-		costat_actual=costat_actual*FactorGrausAMetres;
+	var i_tile_matrix=DonaTileMatrixMesProperAZoomActual(capa);
 	
-	var i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeCostat(capa.tileMatrixSetGeometry.tileMatrix, costat_actual);
 	if(i_tile_matrix!=-1 && typeof capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics!=="undefined" && 
 		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics &&
 		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objNumerics.features &&
@@ -83,6 +78,72 @@ function HiHaObjectesNumerics(capa)
 	return false;
 }
 
+function HiHaObjectesTileMatrixSetAAquestNivellDeZoom(capa)
+{
+	if( typeof capa.model==="undefined" || capa.model!=model_vector ||
+		typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null ||
+		typeof capa.tileMatrixSetGeometry.tileMatrix==="undefined" || capa.tileMatrixSetGeometry.tileMatrix==null)
+		return false;
+	
+	var i_tile_matrix=DonaTileMatrixMesProperAZoomActual(capa);
+	
+	if(i_tile_matrix!=-1 && typeof capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes!=="undefined" && 
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes &&
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes.features &&
+		capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes.features.length>0)
+		return true;
+	return false;
+}
+
+function HiHaObjectesTileMatrixSet(capa)
+{
+	if(typeof capa.model==="undefined" || capa.model!=model_vector ||
+		typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null ||
+		typeof capa.tileMatrixSetGeometry.tileMatrix==="undefined" || capa.tileMatrixSetGeometry.tileMatrix==null)
+		return false;
+	
+	for(var i=0; i<capa.tileMatrixSetGeometry.tileMatrix.length; i++)
+	{		
+		if(typeof capa.tileMatrixSetGeometry.tileMatrix[i].objectes!=="undefined" && 
+			capa.tileMatrixSetGeometry.tileMatrix[i].objectes &&			
+			capa.tileMatrixSetGeometry.tileMatrix[i].objectes.features &&
+			capa.tileMatrixSetGeometry.tileMatrix[i].objectes.features.length>0)
+		return true;
+	}
+	return false;
+}
+
+function HiHaCellsDeCapaAAquestNivellDeZoom(capa)
+{
+	if(typeof capa.model==="undefined" || capa.model!=model_vector ||
+		!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
+		return false;
+		
+	var i_zone_level=DonaCellsIndexZoneLevelMesProperAZoomActual(capa);
+	
+	if(i_zone_level!=-1 && 
+		capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells &&
+		capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features &&
+		capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features.length>0)
+		return true;
+	return false;
+}
+
+function HiHaCellsDeCapa(capa)
+{
+	if(typeof capa.model==="undefined" || capa.model!=model_vector ||
+		!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
+		return false;
+	for(var i=0; i<capa.cellZoneLevelSet.zoneLevels.length; i++)
+	{
+		if(capa.cellZoneLevelSet.zoneLevels[i].cells &&
+			capa.cellZoneLevelSet.zoneLevels[i].cells.features &&
+			capa.cellZoneLevelSet.zoneLevels[i].cells.features.length>0)
+			return true;
+	}
+	return false;
+}
+
 
 function InicialitzaIComprovaTileMatrixGeometryCapaDigi(capa)
 {
@@ -98,6 +159,7 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 	// de moment sempre tenim els mateixos objectes, tot i que això podria no ser veritat en un futur, perquè en el OGC s'està treballant per fer tessel·les de vectors i es podrien 
 	// servir objectes diferents en funció del nivell de zoom
 	
+	
 	if (typeof capa.tileMatrixSetGeometry==="undefined" || capa.tileMatrixSetGeometry==null)
 		capa.tileMatrixSetGeometry={};
 	
@@ -110,6 +172,14 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 			TMG.atriObjNumerics={};	
 			TMG.atriObjNumerics[nom_camp_nObjs_tessella]={}; 
 		}
+	}
+	
+	if(tipus=="TipusDGGS_DBF")
+	{
+		if(typeof TMG.cellType==="undefined" || TMG.cellType==null)
+			TMG.cellType="H3"; 
+		if(typeof TMG.cellIdAttribute==="undefined" || TMG.cellIdAttribute==null)
+			TMG.cellIdAttribute="NODE_ID"; 
 	}
 	
 	// Determino l'envolupant per poder determinar l'espai de tessel·lació
@@ -196,10 +266,14 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 			if(typeof TMG.tileMatrix[0].TileHeight === "undefined")
 				TMG.tileMatrix[0].TileHeight=Math.ceil((env_capa.EnvCRS.MaxX-env_capa.EnvCRS.MinX)/(TMG.tileMatrix[0].MatrixHeight*capa.CostatMaxim));		
 		}
+		if(TMG.tileMatrix)
+			AsseguraIdentificadorsIOrdreTileMatrixGeometry(TMG);
 		return;
 	}
 
-	if((typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null) || TMG.tileMatrix.length==1)  // si l'usuari no m'ha indicat la tessel·lacó la calculo sinó faig cas del que em diu
+	// A partir d'aquí tinc obj_limit
+	
+	if((typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null) || TMG.tileMatrix.length==1)  // si l'usuari no m'ha indicat la tessel·lació la calculo sinó faig cas del que em diu
 	{
 		if (typeof TMG.tileMatrix==="undefined" || TMG.tileMatrix==null)		
 			TMG.tileMatrix=[];		
@@ -208,15 +282,17 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 			tileWidth=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileWidth === "number")? TMG.tileMatrix[0].TileWidth:mida_tessela_vec_defecte),
 			tileHeight=((TMG.tileMatrix.length>0 && typeof TMG.tileMatrix[0].TileHeight === "number")? TMG.tileMatrix[0].TileHeight:mida_tessela_vec_defecte);		
 			
-		// Creo o comprovo l'espai de tessel·lació		
-		for(var i_zoom=ParamCtrl.zoom.length-1, i_tile_matrix=0; i_zoom>=0; i_zoom--,i_tile_matrix++)
+		// Creo o comprovo l'espai de tessel·lació. ParamCtrl.zoom ja està ordenat de costat gros a fi.
+		for(var i_zoom=0, i_tile_matrix=0; i_zoom<ParamCtrl.zoom.length; i_zoom++)
 		{
 			if(ParamCtrl.zoom[i_zoom].costat>=capa.CostatMinim && ParamCtrl.zoom[i_zoom].costat<=capa.CostatMaxim)				
 			{
 				if(typeof TMG.tileMatrix[i_tile_matrix]=== "undefined")
 					TMG.tileMatrix[i_tile_matrix]={};									
 				if(typeof TMG.tileMatrix[i_tile_matrix].costat !== "number")
-					TMG.tileMatrix[i_tile_matrix].costat=ParamCtrl.zoom[i_zoom].costat*factor;						
+					TMG.tileMatrix[i_tile_matrix].costat=ParamCtrl.zoom[i_zoom].costat*factor;
+				if(typeof TMG.tileMatrix[i_tile_matrix].Identifier==="undefined" || TMG.tileMatrix[i_tile_matrix].Identifier==null)
+					TMG.tileMatrix[i_tile_matrix].Identifier=""+i_tile_matrix;
 				if(typeof TMG.tileMatrix[i_tile_matrix].TileHeight !== "number")
 					TMG.tileMatrix[i_tile_matrix].TileHeight=tileHeight;
 				if(typeof TMG.tileMatrix[i_tile_matrix].TileWidth !== "number")
@@ -238,9 +314,22 @@ var TMG, tiles, env_capa, tipus=DonaTipusServidorCapa(capa);
 					// Recalculo la tessel·lació perquè ara pot haver canviat i que necessiti més tessel·les
 					TMG.tileMatrix[i_tile_matrix].MatrixWidth=Math.ceil((env_capa.EnvCRS.MaxX-TMG.tileMatrix[i_tile_matrix].TopLeftPoint.x)/(tileWidth*TMG.tileMatrix[i_tile_matrix].costat));
 					TMG.tileMatrix[i_tile_matrix].MatrixHeight=Math.ceil((TMG.tileMatrix[i_tile_matrix].TopLeftPoint.y-env_capa.EnvCRS.MinY)/(tileHeight*TMG.tileMatrix[i_tile_matrix].costat));
-				}				
+				}
+				i_tile_matrix++;
 			}
 		}
+	}
+	if(TMG.tileMatrix)
+		AsseguraIdentificadorsIOrdreTileMatrixGeometry(TMG);
+}
+
+function AsseguraIdentificadorsIOrdreTileMatrixGeometry(TMG)
+{
+	TMG.tileMatrix.sort(OrdenacioCostatDescendent);
+	for(var i=0; i<TMG.tileMatrix.length; i++)
+	{
+		if(typeof TMG.tileMatrix[i].Identifier==="undefined" || TMG.tileMatrix[i].Identifier==null)
+			TMG.tileMatrix[i].Identifier=""+i;
 	}
 }
 
@@ -706,7 +795,7 @@ function OmpleObjectesIAttributesCapaDigiDesDeCadenaCSV(doc, param)
 
 function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
-	removeLayer(getLayer(consulta.win,"LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_obj));
+	removeLayer(getLayer(consulta.win,"LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_tile_matrix+"_"+consulta.i_obj));
 	NConsultesDigiZero++;
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 }
@@ -714,14 +803,27 @@ function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 
 function MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta)
 {
-var capa=ParamCtrl.capa[consulta.i_capa], id_zl=DonaIdZoneLevelConsulta(consulta.i_zone_level);
-var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+consulta.i_obj;
+var capa=ParamCtrl.capa[consulta.i_capa], id_zl=DonaIdZoneLevelConsulta(consulta.i_zone_level), id_tm=DonaITileMatrixVectorConsulta(consulta.i_tile_matrix);
+var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+id_tm+"_"+consulta.i_obj;
 
 	if(id_zl!=-1)
 	{
 		if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels[id_zl].cells || 
+			!capa.cellZoneLevelSet.zoneLevels[id_zl].cells.features ||
 			!capa.cellZoneLevelSet.zoneLevels[id_zl].cells.features[consulta.i_obj].properties || 
 			CountPropertiesOfObject(capa.cellZoneLevelSet.zoneLevels[id_zl].cells.features[consulta.i_obj].properties)==0)
+		{
+			removeLayer(getLayer(consulta.win, nom_layer));
+			NConsultesDigiZero++;
+			return;
+		}
+	}
+	else if(id_tm!=-1)
+	{
+		if(!capa.tileMatrixSetGeometry || !capa.tileMatrixSetGeometry.tileMatrix[id_tm].objectes || 
+			!capa.tileMatrixSetGeometry.tileMatrix[id_tm].objectes.features ||
+			!capa.tileMatrixSetGeometry.tileMatrix[id_tm].objectes.features[consulta.i_obj].properties || 
+			CountPropertiesOfObject(capa.tileMatrixSetGeometry.tileMatrix[id_tm].objectes.features[consulta.i_obj].properties)==0)
 		{
 			removeLayer(getLayer(consulta.win, nom_layer));
 			NConsultesDigiZero++;
@@ -735,7 +837,7 @@ var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+consulta.i_ob
 		NConsultesDigiZero++;
 		return;
 	}
-	var text_resposta=MostraConsultaCapaDigitalitzadaComHTML(consulta.i_capa, consulta.i_zone_level, consulta.i_obj, true, true);
+	var text_resposta=MostraConsultaCapaDigitalitzadaComHTML(consulta.i_capa, consulta.i_zone_level, consulta.i_tile_matrix, consulta.i_obj, true, true);
 	if(!text_resposta || text_resposta=="")
 	{
 		removeLayer(getLayer(consulta.win, nom_layer));
@@ -746,14 +848,14 @@ var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+consulta.i_ob
 		contentLayer(getLayer(consulta.win, nom_layer), text_resposta);
 		
 		// No puc pintar les sèries abans: el canvas es crea en omplir la layer
-		PintaGraficsSerieTemporalConsulta(consulta.win, consulta.i_capa, consulta.i_zone_level, consulta.i_obj);
+		PintaGraficsSerieTemporalConsulta(consulta.win, consulta.i_capa, consulta.i_zone_level, consulta.i_tile_matrix, consulta.i_obj);
 	}
 	return;
 }
 
 function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
-var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_xml, foi_xml, nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_obj;
+var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_xml, foi_xml, nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_tile_matrix+"_"+consulta.i_obj;
 
 	if(!doc)
 	{
@@ -930,7 +1032,7 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 			if(serie)
 			{
 				// Sèrie apart de capa.data: només si el zone level té més d'un període d'agregació
-				serie.interval=consulta.interval_dggs ? consulta.interval_dggs : DonaIntervalSTADggsDeCapa(capa);
+				serie.interval=consulta.interval_dggs ? consulta.interval_dggs : DonaIntervalDGGSDeCapa(capa);
 				serie.data_ini=consulta.data_ini;
 				serie.data_fi=consulta.data_fi;
 				consulta.serie=serie;
@@ -941,6 +1043,10 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 	{
 		; //Si vinc aquí és que ja he passat per OmpleAttributesObjecteCapaDigiDesDeCadenaCSV(), però en principi no hi he de venir mai per aquest tipus
 	}	
+	else if(tipus=="TipusDGGS_DBF")
+	{
+		; //alert("Aqui no hi hauria de venir");
+	}
 	MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta);
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 }
@@ -979,16 +1085,31 @@ function ErrorDescarregaPropietatsCapaDigiVistaSiCalCallBack(doc, consulta)
 
 //var secondTime=false;
 
-function DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level)
+function DonaFeaturesCapaDigiCellsPerDescarregaPropietats(capa, i_zone_level)
 {
-	if(capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
-	{
-		if(DonaIdZoneLevelConsulta(i_zone_level)==-1 || !capa.cellZoneLevelSet ||
-			!capa.cellZoneLevelSet.zoneLevels || !capa.cellZoneLevelSet.zoneLevels[i_zone_level] ||
-			!capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells)
-			return null;
-		return capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features;
-	}
+	if(DonaIdZoneLevelConsulta(i_zone_level)==-1 || !capa.cellZoneLevelSet ||
+		!capa.cellZoneLevelSet.zoneLevels || !capa.cellZoneLevelSet.zoneLevels[i_zone_level] ||
+		!capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells)
+		return null;
+	return capa.cellZoneLevelSet.zoneLevels[i_zone_level].cells.features;
+}
+
+function DonaFeaturesCapaDigiTileMatrixPerDescarregaPropietats(capa, i_tile_matrix)
+{
+	if(i_tile_matrix==-1 || !capa.tileMatrixSetGeometry ||
+		!capa.tileMatrixSetGeometry.tileMatrix || !capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix] ||
+		!capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes)
+		return null;
+	return capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].objectes.features;
+}
+
+function DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level, i_tile_matrix)
+{
+	var tipus=DonaTipusServidorCapa(capa);
+	if((tipus=="TipusSTA" || tipus=="TipusSTAplus" )&& capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+		return DonaFeaturesCapaDigiCellsPerDescarregaPropietats(capa, i_zone_level);
+	if(tipus=="TipusDGGS_DBF")
+		return DonaFeaturesCapaDigiTileMatrixPerDescarregaPropietats(capa, i_tile_matrix);
 	if(capa.objectes)
 		return capa.objectes.features;
 	return null;
@@ -1023,7 +1144,7 @@ var geometry, env_feat;
 function DescarregaPropietatsCapaDigiVistaSiCal(funcio, param)
 {
 var capa=ParamCtrl.capa[param.i_capa], i_event, url, j, tipus, env=ParamInternCtrl.vista.EnvActual;
-var features, i_zone_level=-1, zoneLevelId=null, n_prop_simb, cal_descarregar=false, consulta_cb;
+var features, i_zone_level=-1, zoneLevelId=null, i_tile_matrix=-1, n_prop_simb, cal_descarregar=false, consulta_cb;
 
 	if (!capa.tipus) //els objectes empotrats no poden obtenir les properties si no hi són
 		return false;
@@ -1038,10 +1159,17 @@ var features, i_zone_level=-1, zoneLevelId=null, n_prop_simb, cal_descarregar=fa
 		if(i_zone_level==-1)
 			return false;
 		zoneLevelId=capa.cellZoneLevelSet.zoneLevels[i_zone_level].zoneLevelId;
-		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level);
+		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, i_zone_level, -1);
+	}
+	else if(tipus=="TipusDGGS_DBF")
+	{
+		i_tile_matrix=DonaTileMatrixMesProperAZoomActual(capa);
+		if(i_tile_matrix==-1)
+			return false;
+		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, -1, i_tile_matrix);
 	}
 	else
-		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, -1);
+		features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, -1, -1);
 
 	if(!features || !features.length)
 		return false;
@@ -1152,7 +1280,7 @@ var root, capa, features, valor, tipus, i_obj, objectes, i_obj_llegit, id_sta;
 			return 1;
 		}
 	}
-	features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, consulta.i_zone_level);
+	features=DonaFeaturesCapaDigiPerDescarregaPropietats(capa, consulta.i_zone_level, consulta.i_tile_matrix);
 	if(!features)
 	{
 		CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -1617,6 +1745,12 @@ function DonaIdZoneLevelConsulta(i_zone_level)
 	return (typeof i_zone_level==="number") ? i_zone_level : -1;
 }
 
+function DonaITileMatrixVectorConsulta(i_tile_matrix)
+{
+	return (typeof i_tile_matrix==="number") ? i_tile_matrix : -1;
+}
+
+
 function DonaClauGrupSerieTemporal(attribute)
 {
 	if(!attribute || !attribute.serieTemporal)
@@ -1631,9 +1765,7 @@ function DonaNomMostratGrupSerieTemporal(attribute, clau)
 	if(!attribute)
 		return clau;
 	if(attribute.groupName)
-		return attribute.groupName;
-	if(attribute.gruopName)
-		return attribute.gruopName;
+		return attribute.groupName;	
 	if(attribute.separador && DonaCadena(attribute.separador))
 		return DonaCadena(attribute.separador);
 	return clau;
@@ -1873,37 +2005,43 @@ function ExtreuITransformaSTACells(fois, capa)
 var features=[], una_feature, foi, prop={}, zoneId, bbox, coord, c;
 
 	if(fois.value)
-	for (var i=0; i<fois.value.length; i++)
 	{
-		foi=fois.value[i];		
-		zoneId=foi["@iot.id"];
-		coord=null;
-		if(capa.cellZoneLevelSet.cellType=="GeoHash"){
-			bbox=ngeohash_decode_bbox(zoneId); // bbox=[minLat, minLon, maxLat, maxLon];
-			coord=[[bbox[1],bbox[0]],[bbox[3],bbox[0]],[bbox[3],bbox[2]],[bbox[1],bbox[2]],[bbox[1],bbox[0]]];
+		for (var i=0; i<fois.value.length; i++)
+		{
+			foi=fois.value[i];		
+			zoneId=foi["@iot.id"];
+			coord=null;
+			if(capa.cellZoneLevelSet.cellType=="GeoHash"){
+				bbox=ngeohash_decode_bbox(zoneId); // bbox=[minLat, minLon, maxLat, maxLon];
+				coord=[[bbox[1],bbox[0]],[bbox[3],bbox[0]],[bbox[3],bbox[2]],[bbox[1],bbox[2]],[bbox[1],bbox[0]]];
+			}
+			else if(capa.cellZoneLevelSet.cellType=="H3"){
+				// A dia 21-07-2026 hi ha el problema de que el servidor a vegades em retorna string i a vegades "Number"
+				if(typeof zoneId === "string")
+					zoneId=BigInt(zoneId);
+				coord=h3.cellToBoundary(zoneId.toString(16).toLowerCase()); 
+				for (c=0; c<coord.length; c++)
+					coord[c]=coord[c].reverse();
+				coord.push(JSON.parse(JSON.stringify(coord[0])));
+			}
+			if(!coord)
+				continue;
+			if(capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, "EPSG:4326"))	
+			{				
+				for(c=0; c<coord.length; c++)
+					TransformaCoordenadesArray(coord[c], "EPSG:4326", capa.CRSgeometry);
+			}
+			una_feature={type: "Feature",
+						id: zoneId,
+						geometry: {
+							type: "Polygon",
+							coordinates: [coord]
+						},
+						properties: {}};
+						
+			ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(foi, una_feature, capa);
+			features.push(una_feature);
 		}
-		else if(capa.cellZoneLevelSet.cellType=="H3"){
-			// A dia 21-07-2026 hi ha el problema de que el servidor a vegades em retorna string i a vegades "Number"
-			if(typeof zoneId === "string")
-				zoneId=BigInt(zoneId);
-			coord=h3.cellToBoundary(zoneId.toString(16).toLowerCase()); 
-			for (c=0; c<coord.length; c++)
-				coord[c]=coord[c].reverse()
-			coord.push(coord[0]);
-		}
-		
-		if(!coord)
-			continue;
-		una_feature={type: "Feature",
-					id: zoneId,
-					geometry: {
-						type: "Polygon",
-						coordinates: [coord]
-					},
-					properties: {}};
-					
-		ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(foi, una_feature, capa);
-		features.push(una_feature);
 	}
 	return features;
 }
@@ -1981,17 +2119,84 @@ var features=[], una_feature, es_things=(capa.origenAccesObjs==origen_Things)? t
 	return features;
 }
 
+function ExtreuITransformaDGGS_DBFfeatures(JSONObj, capa)
+{
+	if(!JSONObj || !capa)
+		return [];
+	var features=[], una_feature, foi, prop, bbox, coord, c, cellId, cellType=capa.tileMatrixSetGeometry.cellType, cellIdAttribute=capa.tileMatrixSetGeometry.cellIdAttribute, noms_prop, attributeArray=Object.keys(capa.attributes), i_atrib, atrib;
+	
+	for (var i=0; i<JSONObj.length; i++)
+	{
+		foi=JSONObj[i];		
+		cellId=foi[cellIdAttribute];
+		if(cellId==null || typeof cellId==="undefined" || cellId=="")
+			continue;
+		noms_prop= Object.keys(foi);
+		coord=null;
+		
+		if(cellType=="GeoHash"){
+			bbox=ngeohash_decode_bbox(cellId); // bbox=[minLat, minLon, maxLat, maxLon];
+			if(!bbox || !bbox.length)
+				continue;
+			coord=[[bbox[1],bbox[0]],[bbox[3],bbox[0]],[bbox[3],bbox[2]],[bbox[1],bbox[2]],[bbox[1],bbox[0]]];
+		}
+		else if(cellType=="H3"){
+			try {
+				if(typeof cellId !== "string")
+					cellId=cellId.toString(16);
+				coord=h3.cellToBoundary(cellId.toLowerCase());
+				if(!coord || !coord.length)
+					continue;
+				for (c=0; c<coord.length; c++)
+					coord[c]=coord[c].reverse();
+				coord.push(JSON.parse(JSON.stringify(coord[0])));
+			}
+			catch(error){
+				continue;
+			}
+		}
+		if(!coord)
+			continue;
+		if(capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, "EPSG:4326"))	
+		{				
+			for(c=0; c<coord.length; c++)
+				TransformaCoordenadesArray(coord[c], "EPSG:4326", capa.CRSgeometry);
+		}
+		
+		una_feature={type: "Feature",
+					id: cellId,
+					geometry: {
+						type: "Polygon",
+						coordinates: [coord]
+					},
+					properties: {}};
+		prop={};
+		for (var j=0; j<noms_prop.length; j++)	
+		{
+			i_atrib=DonaIAttributeCapaPerClauSTA(attributeArray, noms_prop[j]);
+			if(i_atrib<0)
+				prop[noms_prop[j]]=foi[noms_prop[j]];
+			else
+				prop[CanviaVariablesDeCadena(attributeArray[i_atrib], capa, -1, null)]=foi[noms_prop[j]];
+		}
+		una_feature.properties=prop;		
+		features.push(una_feature);
+	}
+	return features;
+}
 
 function DonaPuntCentreEnvolupantTessella(capa, tile)
 {
 var TM=capa.tileMatrixSetGeometry.tileMatrix;
 	
-	var i=DonaIndexTileMatrixVectorAPartirDeCostat(TM, tile.costat);
+	//var i=DonaIndexTileMatrixVectorAPartirDeCostat(TM, tile.costat);
+	var i=DonaIndexTileMatrixVectorAPartirDeIdentifier(TM, tile.tileMatrixId);
 	if(i==-1)
 		return {"x":0, "y":0};	
 	return {"x": TM[i].TopLeftPoint.x +(tile.iTile*TM[i].TileWidth*TM[i].costat) +(TM[i].TileWidth*TM[i].costat/2),
 			"y": TM[i].TopLeftPoint.y -(tile.jTile*TM[i].TileHeight*TM[i].costat)-(TM[i].TileHeight*TM[i].costat/2)};
 }
+
 function DonaIndexZoneLevelAPartirDeId(capa, zoneLevelId)
 {
 	if(!capa || !zoneLevelId || !capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels || capa.cellZoneLevelSet.zoneLevels.length<1)
@@ -2004,11 +2209,69 @@ function DonaIndexZoneLevelAPartirDeId(capa, zoneLevelId)
 	return -1;
 }
 
+async function AsseguraDBFDGGSCacheCapa(capa, url)
+{
+	var catalogueUrl;
+	if(!capa)
+		throw new Error("AsseguraDBFDGGSCacheCapa: capa is missing");
+	catalogueUrl=url || capa.servidor;
+	if(capa.dbfCache && isDBFDGGSCacheOpen(capa.dbfCache))
+	{
+		if(!catalogueUrl || capa.dbfCache.catalogueUrl==new URL(catalogueUrl, window.location.href).href)
+			return capa.dbfCache;
+		closeDBFDGGSCache(capa.dbfCache);
+		delete capa.dbfCache;
+	}
+	if(capa.dbfCacheOpening)
+		return await capa.dbfCacheOpening;
+	capa.dbfCacheOpening=openDBFDGGSCache(catalogueUrl).then(function(cache){
+		capa.dbfCache=cache;
+		delete capa.dbfCacheOpening;
+		return cache;
+	}, function(error){
+		delete capa.dbfCacheOpening;
+		throw error;
+	});
+	return await capa.dbfCacheOpening;
+}
+
+function TancaDBFDGGSCacheCapa(capa)
+{
+	if(!capa)
+		return;
+	if(capa.dbfCacheOpening)
+	{
+		capa.dbfCacheOpening.then(function(cache){
+			closeDBFDGGSCache(cache);
+		}, function(){});
+		delete capa.dbfCacheOpening;
+	}
+	if(capa.dbfCache)
+	{
+		closeDBFDGGSCache(capa.dbfCache);
+		delete capa.dbfCache;
+	}
+}
+
+async function GetDGGS_DBF(url, tileMatrix, i_ini, i_fi, j_ini, j_fi, param){
+
+	var JSONObj=null, cache;
+	try{
+		cache=await AsseguraDBFDGGSCacheCapa(ParamCtrl.capa[param.i_capa_digi], url);
+		JSONObj=await getDBFDGGSCells(cache, tileMatrix, i_ini, i_fi, j_ini, j_fi,
+			ParamCtrl.capa[param.i_capa_digi].tileMatrixSetGeometry && ParamCtrl.capa[param.i_capa_digi].tileMatrixSetGeometry.optimSol);
+		await OmpleCapaDigiAmbObjectesDigitalitzats(JSONObj, param);
+	}
+	catch(error){
+		ErrorCapaDigiAmbObjectesDigitalitzats(error, param);
+	}
+	return;
+}
+
 // Els objectes es mantenen en memòria ordenats per id. Això es fa servir per afegir attributes als objectes més endavant.
 async function OmpleCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
-var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes, tipus, tile, i_tile_matrix=-1, iZoneLevel=-1;
-var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
+var root, tag, punt={}, objectes, valor, capa, feature, hi_havia_objectes=false, tipus, tile, i_tile_matrix=-1, iZoneLevel=-1, nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 
 	//Agafo tots els nodes que tenen per nom el nom de la capa, cada un d'ells serà un punt
 	if(!doc)
@@ -2021,7 +2284,8 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 	if(consulta.i_tile!=-1)
 	{
 		tile=capa.tileMatrixSetGeometry.tilesSol[consulta.i_tile];
-		i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeCostat(capa.tileMatrixSetGeometry.tileMatrix, tile.costat);
+		//i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeCostat(capa.tileMatrixSetGeometry.tileMatrix, tile.costat);
+		i_tile_matrix=DonaIndexTileMatrixVectorAPartirDeIdentifier(capa.tileMatrixSetGeometry.tileMatrix, tile.tileMatrixId);
 		tm=capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix];
 	}
 	else
@@ -2032,9 +2296,9 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 	
 	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json")
 	{
-		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET")
+		if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" || tipus=="TipusHTTP_GET" )
 		{				
-			if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1 && tile!=null)
+			if(typeof capa.objLimit !== "undefined" && capa.objLimit!=-1 && tile!=null && tm!=null)
 			{					
 				// Potser que hagi rebuts els objectes o el nombre d'objectes o les dues coses
 				if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features")
@@ -2061,7 +2325,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 				{
 					CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 					// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
-					FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, consulta.zoneLevelId, false, consulta.funcio, consulta.param, null, consulta.nomes_subsc);
+					FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1, null, null, null, null, null, true, consulta.env_sol, consulta.zoneLevelId, false, consulta.funcio, consulta.param, null, consulta.nomes_subsc);
 					return;					
 				}
 				// Afegeixo un objecte númeric amb el nombre d'objectes de la tessel·la
@@ -2134,14 +2398,28 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 						var features=ExtreuITransformaSTAfeatures(doc, capa);
 						next_link=doc["@iot.nextLink"];
 						capa.objectes={"type": "FeatureCollection", "features": features};						
-					}
-					/*NJ no sé perquè serveix això
-					var features=capa.objectes.features;
-					for (i=0; i<features.length; i++)
-						features[i].id=features[i].id.substring(capa.nom.length+1);*/
+					}					
 				}
 			}
 		}	
+		else if (tipus=="TipusDGGS_DBF" && tm!=null)
+		{
+			if((typeof tm.objectes==="undefined") || tm.objectes==null)
+				tm.objectes={"type":"FeatureCollection", "features":[]};
+			else if((typeof tm.objectes.features==="undefined") || tm.objectes.features==null)
+				tm.objectes.features=[];
+			else
+				hi_havia_objectes=true;
+			var features=ExtreuITransformaDGGS_DBFfeatures(doc, capa);
+			if(!features)
+				features=[];
+			if(hi_havia_objectes){
+				if(features.length>0)
+					tm.objectes.features.push.apply(tm.objectes.features, features);
+			}
+			else
+				tm.objectes={"type": "FeatureCollection", "features": features};
+		}
 		else
 		{
 			CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
@@ -2181,7 +2459,7 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 			{
 				CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 				// Torno a fer la petició però ara demanant els objectes i no el nombre d'objectes
-				FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, true, consulta.env_sol, consulta.zoneLevelId, false, consulta.funcio, consulta.param, null, consulta.nomes_subsc);					
+				FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, -1,  null, null, null, null, null, true, consulta.env_sol, consulta.zoneLevelId, false, consulta.funcio, consulta.param, null, consulta.nomes_subsc);					
 				return;
 			}
 			nObj=true;			
@@ -2331,13 +2609,22 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 	}
 	else if(!nObj)
 	{
-		if (capa.objectes && capa.objectes.features && capa.objectes.features.length==0)
-			capa.objectes=null;
-
-		if (capa.objectes && capa.objectes.features)
+		var objectes=null;
+		if(tipus=="TipusDGGS_DBF")
+		{
+			if (tm.objectes && tm.objectes.features && tm.objectes.features.length==0)
+				tm.objectes=null;
+			objectes=tm.objectes;
+		}
+		else{
+			if (capa.objectes && capa.objectes.features && capa.objectes.features.length==0)
+				capa.objectes=null;
+			objectes=capa.objectes;
+		}
+		if (objectes && objectes.features)
 		{
 			//Elimino els objectes que han estat carregats més d'un cop. Això pot passar en usar tiles.
-			var features=capa.objectes.features;
+			var features=objectes.features;
 			features.sort(ComparaObjCapaDigiIdData);
 			if (hi_havia_objectes)
 			{
@@ -2355,17 +2642,16 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 				}
 			}
 		}
-
 		if (!hi_havia_objectes)
-			DefineixAttributesCapaVectorSiCal(capa);
+			DefineixAttributesCapaVectorSiCal(capa, i_tile_matrix);
 
 		CanviaCRSITransformaCoordenadesCapaDigi(capa, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS);
 		/*if(consulta.seleccionar==false && cal_crear_vista)
 			CreaVistes(); Ara el redibuixat es fa en el canvas quan totes les tiles han finalitzat i no cal forçar-lo a cada tile mai.*/
 	}
-	else if(tm)
+	else if(tm && tm.objNumerics)
 	{
-		if (tm.objNumerics && tm.objNumerics.features && tm.objNumerics.features.length==0)
+		if (tm.objNumerics.features && tm.objNumerics.features.length==0)
 			tm.objNumerics=null;
 		
 		if (tm.objNumerics && tm.objNumerics.features)
@@ -2388,26 +2674,24 @@ var nObj=false, tm=null, hi_havia_objectes_tm=false, next_link=null;
 					}
 				}
 			}
-		}
-		
+		}		
 	}
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventTotBe);
 	if(next_link)
 	{
 		await FesPeticioAjaxObjectesDigitalitzats(consulta.i_capa_digi, consulta.i_tile, 
-					null, null, null, true, consulta.env_sol, consulta.zoneLevelId, consulta.seleccionar, 
+					null, null, null, null, null, true, consulta.env_sol, consulta.zoneLevelId, consulta.seleccionar, 
 					consulta.funcio, consulta.param, next_link, consulta.nomes_subsc);										
 		//return;
-	}
-		
+	}		
 	if(consulta.funcio)
 		consulta.funcio(consulta.param);
-
 }
 
 function ErrorCapaDigiAmbObjectesDigitalitzats(doc, consulta)
 {
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
+	
 }//Fi de ErrorCapaDigiAmbObjectesDigitalitzats()
 
 //Dona l'índex dins de l'array d'attributes d'un nom d'attribute
@@ -2681,7 +2965,7 @@ var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i_capa]);
 			return DonaRequestSTACellsFeaturesOfInterest(i_capa, zoneLevelId, env); 
 		return DonaRequestSTAFeaturesOfInterest(i_capa, limit, env);
 	}
-	if (tipus=="TipusHTTP_GET")
+	if (tipus=="TipusHTTP_GET" || tipus=="TipusDGGS_DBF")
 		return ParamCtrl.capa[i_capa].servidor;
 
 	alert(GetMessage("UnsuppServiceType") + ": " + tipus);
@@ -3293,7 +3577,7 @@ var data_ini=null, data_fi_json=null, data_fi=null, periode, interval_dggs, i, f
 		return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 	
 	periode=DonaPeriodeActualDeCapa(capa);
-	interval_dggs=DonaIntervalSTADggsDeCapa(capa);
+	interval_dggs=DonaIntervalDGGSDeCapa(capa);
 	if(interval_dggs)
 		filtres_mds.push("properties/dggs.interval eq '"+interval_dggs+"'");
 	filtres_mds.push("Sensor/properties/role eq 'scheduler'");
@@ -3346,7 +3630,7 @@ var capa=ParamCtrl.capa[i_capa], i_zone_level, cell, feature_id;
 	}
 
 	if(!interval_dggs)
-		interval_dggs=DonaIntervalSTADggsDeCapa(capa);
+		interval_dggs=DonaIntervalDGGSDeCapa(capa);
 	cdns_mds_filter.push("Sensor/properties/role eq 'scheduler'");
 	if(interval_dggs)
 		cdns_mds_filter.push("properties/dggs.interval eq '"+interval_dggs+"'");
@@ -3463,7 +3747,7 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 	}
 	else if (tipus=="TipusHTTP_GET" && !nomes_subsc)
 		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
-
+	
 	if(nomes_subsc)
 		return;
 	
@@ -3518,16 +3802,36 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 	loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats, {"i_capa_digi": i_capa_digi, "i_tile": -1, "seleccionar": seleccionar, "i_event": i_event});
 }
 
-async function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, costat, i_col, j_fil, demana_objs, env_sol, zoneLevelId, seleccionar, funcio, param, url_link, nomes_subsc)
+async function FesPeticioAjaxObjectesDigitalitzats(i_capa_digi, i_tile, i_tile_matrix, i_col_ini, i_col_fi, j_fil_ini, j_fil_fi, demana_objs, env_sol, zoneLevelId, seleccionar, funcio, param, url_link, nomes_subsc)
 {
 var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(capa);
+var i_col=i_col_ini, j_fil=j_fil_ini;
 
-	if(i_tile!=null && i_tile!=-1)
+	if(i_tile!=null && i_tile_matrix!=null && i_tile_matrix!=-1)
 	{		
-		if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
-			capa.tileMatrixSetGeometry.tilesSol=[];
-		if(i_tile>=capa.tileMatrixSetGeometry.tilesSol.length)
-			capa.tileMatrixSetGeometry.tilesSol[i_tile]={"costat": costat, "iTile": i_col , "jTile": j_fil, "nombreObjectes": -1};
+		if(tipus=="TipusDGGS_DBF" && typeof i_tile==="object" && Array.isArray(i_tile))
+		{
+			if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
+				capa.tileMatrixSetGeometry.tilesSol=[];
+			for(var i=0; i<i_tile.length; i++)
+			{
+				if(i_tile[i]!=-1 && i_tile[i]>=capa.tileMatrixSetGeometry.tilesSol.length)
+				{
+					capa.tileMatrixSetGeometry.tilesSol[i_tile[i]]={"tileMatrixId": capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].Identifier, "iTile": i_col , "jTile": j_fil, "nombreObjectes": -1};
+				}
+				if(i_col_fi!=null && i_col_fi!=-1)
+					i_col++;
+				else if(j_fil_fi!=null && j_fil_fi!=-1)
+					j_fil++;
+			}
+		}
+		else if (i_tile!=-1)
+		{
+			if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
+				capa.tileMatrixSetGeometry.tilesSol=[];
+			if(i_tile>=capa.tileMatrixSetGeometry.tilesSol.length)
+				capa.tileMatrixSetGeometry.tilesSol[i_tile]={"tileMatrixId": capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].Identifier, "iTile": i_col , "jTile": j_fil, "nombreObjectes": -1};
+		}
 	}
 	
 	if(url_link)
@@ -3566,14 +3870,23 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 	}
 	else if (tipus=="TipusHTTP_GET")
 		i_event=CreaIOmpleEventConsola("HTTP GET", i_capa_digi, url, TipusEventHttpGet);
+	else if (tipus=="TipusDGGS_DBF")
+		i_event=CreaIOmpleEventConsola("HTTP GET DGGS DBF"+" tileMatrix:"+capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].Identifier+" iTile:"+i_col_ini+((i_col_fi!=null && i_col_fi!=-1)?("-"+i_col_fi):(""))+" jTile:"+j_fil_ini+((j_fil_fi!=null && j_fil_fi!=-1)?("-"+j_fil_fi):("")), i_capa_digi, url, TipusEventHttpGet);
 	
 	if(nomes_subsc)
 		return;
 
 	// env_sol està ja en el CRS de la capa
-	if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	if(tipus=="TipusDGGS_DBF")
+	{
+		GetDGGS_DBF(url, capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].Identifier, i_col_ini, i_col_fi, j_fil_ini, j_fil_fi, 
+				{"i_capa_digi": i_capa_digi, "i_tile": i_tile, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param});
+	}
+	else if (capa.FormatImatge=="application/json" || capa.FormatImatge=="application/geo+json" || tipus=="TipusSTA" || tipus=="TipusSTAplus")
+	{
 		loadJSON(url, OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "zoneLevelId": zoneLevelId, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param, "nova_peticio": !url_link});
+	}
 	else
 		loadFile(url, (capa.FormatImatge) ? capa.FormatImatge : "text/xml", OmpleCapaDigiAmbObjectesDigitalitzats, ErrorCapaDigiAmbObjectesDigitalitzats,
 			 {"i_capa_digi": i_capa_digi, "i_tile": i_tile, "env_sol": env_sol, "seleccionar": seleccionar, "i_event": i_event, "funcio": funcio, "param":param});
@@ -3581,11 +3894,14 @@ var i_event, capa=ParamCtrl.capa[i_capa_digi], url, tipus=DonaTipusServidorCapa(
 
 function DonaCellsIndexZoneLevelMesProperAZoomActual(capa)
 {
-var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
-var i_zoneLevel=-1, i, z, mid, dif, dif_min=null;
+var costat_actual=ParamInternCtrl.vista.CostatZoomActual, i_zoneLevel=-1, i, z, mid, dif, dif_min=null;
 
 	if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
 		return -1;
+	
+	// En el cas del zoneLevel no he de mirar si les el sistema de referència de costat_actual i els dels costatMinim i costatMaxim de la capa són el mateix
+	// perquè és com el costatMinim i costatMaxim de la capa que sempre estan en el sistema de referència actual
+	
 	for(i=0; i<capa.cellZoneLevelSet.zoneLevels.length;i++)
 	{
 		if( capa.cellZoneLevelSet.zoneLevels[i].costatMinim && capa.cellZoneLevelSet.zoneLevels[i].costatMaxim)
@@ -3641,16 +3957,16 @@ var i_zoneLevel;
 function DonaTileMatrixMesProperAZoomActual(capa)
 {
 var costat_actual=ParamInternCtrl.vista.CostatZoomActual;
-var i_selec=0;
+var i_selec=capa.tileMatrixSetGeometry.tileMatrix.length-1;
 
 	if (DonaUnitatsCoordenadesProj(capa.CRSgeometry)=="m" && EsProjLongLat(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS))
 		costat_actual=ParamInternCtrl.vista.CostatZoomActual*FactorGrausAMetres;
-	else if (EsProjLongLat(capa.CRSgeometry) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamCtrl.ISituacioOri].EnvTotal.CRS)=="m")
+	else if (EsProjLongLat(capa.CRSgeometry) && DonaUnitatsCoordenadesProj(ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS)=="m")
 		costat_actual=ParamInternCtrl.vista.CostatZoomActual/FactorGrausAMetres;
 	else
 		costat_actual=ParamInternCtrl.vista.CostatZoomActual;
 	
-	for(var i=0; i<capa.tileMatrixSetGeometry.tileMatrix.length;i++)
+	for(var i=capa.tileMatrixSetGeometry.tileMatrix.length-1; i>=0;i--)
 	{
 		if (capa.tileMatrixSetGeometry.tileMatrix[i].costat<=costat_actual)	// Agafo el més proper per sota	
 			i_selec=i;
@@ -3658,24 +3974,34 @@ var i_selec=0;
 	return i_selec;
 }
 
-function DonaIndexTileDeCapaTileMatrixSetGeometry(capa, costat, i_col, j_fil)
+function DonaIndexTileDeCapaTileMatrixSetGeometry(capa, i_tile_matrix, i_col, j_fil)
 {
 	if(typeof capa.tileMatrixSetGeometry.tilesSol === "undefined" || capa.tileMatrixSetGeometry.tilesSol==null)
 		return -1;
 	
 	for(var i=0; i<capa.tileMatrixSetGeometry.tilesSol.length; i++)
-		if(capa.tileMatrixSetGeometry.tilesSol[i].costat>costat*0.9999 && 
-			capa.tileMatrixSetGeometry.tilesSol[i].costat<costat*1.0001 &&
+		if(	capa.tileMatrixSetGeometry.tilesSol[i].tileMatrixId==capa.tileMatrixSetGeometry.tileMatrix[i_tile_matrix].Identifier &&
 			capa.tileMatrixSetGeometry.tilesSol[i].iTile==i_col && 
 			capa.tileMatrixSetGeometry.tilesSol[i].jTile==j_fil)
 			return i;
 	return -1;	
 }
+
 function DonaIndexTileMatrixVectorAPartirDeCostat(tileMatrix, costat)
 {
 	for(var i=0; i<tileMatrix.length;i++)
 	{
 		if(tileMatrix[i].costat>costat*0.9999 && tileMatrix[i].costat<costat*1.0001)
+			return i;
+	}
+	return -1;	
+}
+
+function DonaIndexTileMatrixVectorAPartirDeIdentifier(tileMatrix, identifier)
+{
+	for(var i=0; i<tileMatrix.length;i++)
+	{
+		if(tileMatrix[i].Identifier==identifier)
 			return i;
 	}
 	return -1;	
@@ -3755,7 +4081,7 @@ var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false, periode_canviat=fa
 			env_temp.MaxY=env_situacio.MaxY;
 		
 		env_temp=TransformaEnvolupant(env_temp, ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS, capa.CRSgeometry);
-		FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), -1, null, null, null, true, env_temp, zoneLevelId, false, funcio, param, null, false);		
+		FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), -1, null, null, null, null, null, true, env_temp, zoneLevelId, false, funcio, param, null, false);		
 		return true;		
 	}
 	return false;
@@ -3765,7 +4091,7 @@ var tipus=DonaTipusServidorCapa(capa), vaig_a_carregar=false, periode_canviat=fa
 function DemanaTilesDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
 {
 var env_total, env_temp, env_sol;
-var i_tessella_min, i_tessella_max, j_tessella_min, j_tessella_max, i_col, j_fil, i_tile=0, zoneLevelId=null;
+var i_tessella_min, i_tessella_max, j_tessella_min, j_tessella_max, i_col, j_fil, i_tile, zoneLevelId=null;
 var i_tileMatrix, tileMatrix, TMS;
 var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 
@@ -3774,10 +4100,17 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
 		return ha_calgut;
 	
 	// He de mirar quin tiles i en quin nivell de zoom cal sol·licitar
-	if((typeof capa.objLimit !== "undefined") && capa.objLimit!=-1)
+	var tipus=DonaTipusServidorCapa(capa);
+	if(tipus=="TipusDGGS_DBF")
 	{
-		i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa)		
-		if(i_tileMatrix==0)		
+		i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa);		
+		demana_objs=true;
+	}
+	else if((typeof capa.objLimit !== "undefined" && capa.objLimit!=-1))
+	{
+		i_tileMatrix=DonaTileMatrixMesProperAZoomActual(capa);
+		// [0] és el costat més gros; els objectes reals només al nivell més fi
+		if(i_tileMatrix==capa.tileMatrixSetGeometry.tileMatrix.length-1)
 			demana_objs=true;
 		else
 			demana_objs=false;
@@ -3827,30 +4160,134 @@ var ha_calgut=false, vaig_a_carregar=false, demana_objs;
     else if(j_tessella_max>=tileMatrix.MatrixHeight)
     	j_tessella_max=tileMatrix.MatrixHeight-1;
 	
-	for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
+	if(tipus=="TipusDGGS_DBF" && TMS.optimSol=="rows")
 	{
-		for(j_fil=j_tessella_min; j_fil<=j_tessella_max; j_fil++)
-		{				
-			i_tile=DonaIndexTileDeCapaTileMatrixSetGeometry(capa, tileMatrix.costat, i_col, j_fil);
-					
-			if(i_tile==-1 || (capa.subscribed=="si" && vaig_a_carregar))
+		var j_fil_ini;
+		for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
+		{
+			j_fil_ini=null;
+			for(j_fil=j_tessella_min; j_fil<=j_tessella_max; j_fil++)
 			{
-				ha_calgut=(i_tile==-1)? true: false;
-				i_tile=(TMS.tilesSol) ? TMS.tilesSol.length : 0;
-				env_sol={"MinX": tileMatrix.TopLeftPoint.x+(i_col*incr_x),
-						"MaxX": tileMatrix.TopLeftPoint.x+((i_col+1)*incr_x),
-						"MinY": tileMatrix.TopLeftPoint.y-((j_fil+1)*incr_y),
-						"MaxY": tileMatrix.TopLeftPoint.y-(j_fil*incr_y)};
-				if(vaig_a_carregar)
+				i_tile=DonaIndexTileDeCapaTileMatrixSetGeometry(capa, i_tileMatrix, i_col, j_fil);
+				if(i_tile==-1)
 				{
-					FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, tileMatrix.costat, i_col, j_fil, demana_objs, env_sol, zoneLevelId, false, funcio, param, null, !ha_calgut);			 		
+					if(j_fil_ini==null)
+						j_fil_ini=j_fil;
 				}
+				else if(j_fil_ini!=null)
+				{
+					if(RegistraIDemanaRunTilesDGGS(capa, i_tileMatrix, tileMatrix, incr_x, incr_y,
+							i_col, i_col, j_fil_ini, j_fil-1, demana_objs, zoneLevelId, funcio, param, vaig_a_carregar))
+						ha_calgut=true;
+					else
+						return true;
+					j_fil_ini=null;
+				}
+			}
+			if(j_fil_ini!=null)
+			{
+				if(RegistraIDemanaRunTilesDGGS(capa, i_tileMatrix, tileMatrix, incr_x, incr_y,
+						i_col, i_col, j_fil_ini, j_tessella_max, demana_objs, zoneLevelId, funcio, param, vaig_a_carregar))
+					ha_calgut=true;
 				else
 					return true;
 			}
 		}
 	}
+	else if (tipus=="TipusDGGS_DBF" && TMS.optimSol=="cols")
+	{
+		var i_col_ini;
+		for(j_fil=j_tessella_min; j_fil<=j_tessella_max; j_fil++)
+		{
+			i_col_ini=null;
+			for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
+			{
+				i_tile=DonaIndexTileDeCapaTileMatrixSetGeometry(capa, i_tileMatrix, i_col, j_fil);
+				if(i_tile==-1)
+				{
+					if(i_col_ini==null)
+						i_col_ini=i_col;
+				}
+				else if(i_col_ini!=null)
+				{
+					if(RegistraIDemanaRunTilesDGGS(capa, i_tileMatrix, tileMatrix, incr_x, incr_y,
+							i_col_ini, i_col-1, j_fil, j_fil, demana_objs, zoneLevelId, funcio, param, vaig_a_carregar))
+						ha_calgut=true;
+					else
+						return true;
+					i_col_ini=null;
+				}
+			}
+			if(i_col_ini!=null)
+			{
+				if(RegistraIDemanaRunTilesDGGS(capa, i_tileMatrix, tileMatrix, incr_x, incr_y,
+						i_col_ini, i_tessella_max, j_fil, j_fil, demana_objs, zoneLevelId, funcio, param, vaig_a_carregar))
+					ha_calgut=true;
+				else
+					return true;
+			}
+		}
+	}
+	else
+	{
+		for(i_col=i_tessella_min; i_col<=i_tessella_max; i_col++)
+		{
+			for(j_fil=j_tessella_min; j_fil<=j_tessella_max; j_fil++)
+			{				
+				i_tile=DonaIndexTileDeCapaTileMatrixSetGeometry(capa, i_tileMatrix, i_col, j_fil);
+						
+				if(i_tile==-1 || (capa.subscribed=="si" && vaig_a_carregar))
+				{
+					ha_calgut=(i_tile==-1)? true: false;
+					i_tile=(TMS.tilesSol) ? TMS.tilesSol.length : 0;
+					env_sol={"MinX": tileMatrix.TopLeftPoint.x+(i_col*incr_x),
+							"MaxX": tileMatrix.TopLeftPoint.x+((i_col+1)*incr_x),
+							"MinY": tileMatrix.TopLeftPoint.y-((j_fil+1)*incr_y),
+							"MaxY": tileMatrix.TopLeftPoint.y-(j_fil*incr_y)};
+					if(vaig_a_carregar)
+					{
+						FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), i_tile, i_tileMatrix, i_col, -1, j_fil, -1, demana_objs, env_sol, zoneLevelId, false, funcio, param, null, !ha_calgut);			 		
+					}
+					else
+						return true;
+				}
+			}
+		}
+	}
 	return ha_calgut;
+}
+
+function RegistraIDemanaRunTilesDGGS(capa, i_tileMatrix, tileMatrix, incr_x, incr_y, i_ini, i_fi, j_ini, j_fi, demana_objs, zoneLevelId, funcio, param, vaig_a_carregar)
+{
+var TMS=capa.tileMatrixSetGeometry, i_col, j_fil, i_tile, primer=-1, env_sol, i_col_fi, j_fil_fi;
+
+	if(!TMS.tilesSol)
+		TMS.tilesSol=[];
+	for(i_col=i_ini; i_col<=i_fi; i_col++)
+	{
+		for(j_fil=j_ini; j_fil<=j_fi; j_fil++)
+		{
+			if(DonaIndexTileDeCapaTileMatrixSetGeometry(capa, i_tileMatrix, i_col, j_fil)!=-1)
+				continue;
+			i_tile=TMS.tilesSol.length;
+			TMS.tilesSol[i_tile]={"tileMatrixId": tileMatrix.Identifier, "iTile": i_col, "jTile": j_fil, "nombreObjectes": -1};
+			if(primer==-1)
+				primer=i_tile;
+		}
+	}
+	if(primer==-1)
+		return true;
+	if(!vaig_a_carregar)
+		return false;
+	env_sol={"MinX": tileMatrix.TopLeftPoint.x+(i_ini*incr_x),
+			"MaxX": tileMatrix.TopLeftPoint.x+((i_fi+1)*incr_x),
+			"MinY": tileMatrix.TopLeftPoint.y-((j_fi+1)*incr_y),
+			"MaxY": tileMatrix.TopLeftPoint.y-(j_ini*incr_y)};
+	i_col_fi=(i_ini==i_fi) ? -1 : i_fi;
+	j_fil_fi=(j_ini==j_fi) ? -1 : j_fi;
+	FesPeticioAjaxObjectesDigitalitzats(ParamCtrl.capa.indexOf(capa), primer, i_tileMatrix,
+		i_ini, i_col_fi, j_ini, j_fil_fi, demana_objs, env_sol, zoneLevelId, false, funcio, param, null, false);
+	return true;
 }
 
 function DemanaFitxerObjectesIPropietatsDeCapaDigitalitzadaSiCal(capa, env, funcio, param)
@@ -4201,18 +4638,32 @@ function CanviaCRSITransformaCoordenadesCapaDigi(capa, crs_dest)
 {	
 	if (capa.model==model_vector)
 	{
-		var hi_ha_objnums=false;
-		if(capa.CRSgeometry &&
-		   !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, crs_dest) && ((capa.objectes && capa.objectes.features) || true==(hi_ha_objnums=HiHaObjectesNumerics(capa))))
+		if(capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, crs_dest))
 		{
 			if(capa.objectes && capa.objectes.features)
 				TransformaCoordenadesFeatures(capa.objectes.features, capa.CRSgeometry, crs_dest);
-			if(hi_ha_objnums)
+			if(HiHaObjectesTileMatrixSet(capa))
 			{
 				for(var j=0; j<capa.tileMatrixSetGeometry.tileMatrix.length; j++)
 				{
-					if(capa.tileMatrixSetGeometry.tileMatrix.objNumerics &&  capa.tileMatrixSetGeometry.tileMatrix.objNumerics.features)
-						TransformaCoordenadesFeatures(capa.tileMatrixSetGeometry.tileMatrix.objNumerics.features, capa.CRSgeometry, crs_dest);
+					if(capa.tileMatrixSetGeometry.tileMatrix[j].objectes &&  capa.tileMatrixSetGeometry.tileMatrix[j].objectes.features)
+						TransformaCoordenadesFeatures(capa.tileMatrixSetGeometry.tileMatrix[j].objectes.features, capa.CRSgeometry, crs_dest);
+				}
+			}
+			if(HiHaObjectesNumerics(capa))
+			{
+				for(var j=0; j<capa.tileMatrixSetGeometry.tileMatrix.length; j++)
+				{
+					if(capa.tileMatrixSetGeometry.tileMatrix[j].objNumerics &&  capa.tileMatrixSetGeometry.tileMatrix[j].objNumerics.features)
+						TransformaCoordenadesFeatures(capa.tileMatrixSetGeometry.tileMatrix[j].objNumerics.features, capa.CRSgeometry, crs_dest);
+				}
+			}
+			if(HiHaCellsDeCapa(capa))
+			{
+				for(var j=0; j<capa.cellZoneLevelSet.zoneLevels.length; j++)
+				{
+					if(capa.cellZoneLevelSet.zoneLevels[j].cells &&  capa.cellZoneLevelSet.zoneLevels[j].cells.features)
+						TransformaCoordenadesFeatures(capa.cellZoneLevelSet.zoneLevels[j].cells.features, capa.CRSgeometry, crs_dest);
 				}
 			}
 		}

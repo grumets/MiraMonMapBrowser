@@ -74,6 +74,7 @@ IncludeScript("ngeohash.js");
 IncludeScript("h3-js.js");  // Extret de https://github.com/uber/h3-js
 IncludeScript("papaparse.min.js"); // Extret de https://www.papaparse.com/
 IncludeScript("wicket.js"); // Extret de : https://github.com/arthur-e/Wicket
+IncludeScript("dbf-range.js");
 IncludeScript("vector.js");
 IncludeScript("paletes.js");
 IncludeScript("capavola.js");
@@ -633,7 +634,7 @@ function NormalitzaArrayAggregationPeriods(periodes)
 	for(i=0; i<periodes.length; i++)
 	{
 		if(periodes[i] && periodes[i].periode && !periodes[i].dggsInterval)
-			periodes[i].dggsInterval=DonaIntervalSTADggsDesDePeriodeISO(periodes[i].periode);
+			periodes[i].dggsInterval=DonaIntervalDGGSDesDePeriodeISO(periodes[i].periode);
 	}
 	periodes.sort(OrdenacioPeriodeDescendent);
 	return periodes;
@@ -779,7 +780,7 @@ function CompletaDefinicioCapa(capa, capa_vola)
 	}
 
 	if (tipus=="TipusWFS" || tipus=="TipusOAPI_Features" || tipus=="TipusSOS" || tipus=="TipusSTA" || tipus=="TipusSTAplus" ||
-		(tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv")) || 
+		(tipus=="TipusHTTP_GET" && (capa.FormatImatge=="application/geo+json" || capa.FormatImatge=="text/csv") || tipus=="TipusDGGS_DBF") || 
 		(capa.objectes && capa.objectes.features))
 		capa.model=model_vector;
 	
@@ -1911,6 +1912,8 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 				{
 					if(capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics)
 						delete capa.tileMatrixSetGeometry.tileMatrix[i_tm].objNumerics;
+					if(capa.tileMatrixSetGeometry.tileMatrix[i_tm].objectes)
+						delete capa.tileMatrixSetGeometry.tileMatrix[i_tm].objectes;
 				}
 			}
 			if(capa.tileMatrixSetGeometry.tilesSol)
@@ -5155,7 +5158,9 @@ var i, j;
 		{
 			for(j=0; j<capa.TileMatrixSet.length; j++)
 				capa.TileMatrixSet[j].TileMatrix.sort(OrdenacioCostatDescendent);
-		}		
+		}	
+		if(capa.tileMatrixSetGeometry)
+			capa.tileMatrixSetGeometry.tileMatrix.sort(OrdenacioCostatDescendent);
 	}
 		
 	/*
@@ -5274,6 +5279,7 @@ var capa, n_capa_ini;
 					if (capa.access && capa.access.tokenType==ParamCtrl.capesDeServei[i].servei.access.tokenType && capa.origen==OrigenUsuari)
 					{
 						CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no te sentit; i ja hem avisat que no anirà bé.
+						TancaDBFDGGSCacheCapa(capa);
 						ParamCtrl.capa.splice(i_capa, 1);
 						i_capa--;
 					}

@@ -102,6 +102,7 @@ function EsborrarCapa(i_capa)
 		return;
 	var separador=JSON.parse(JSON.stringify(ParamCtrl.capa[i_capa].separa));  // em deso el separador per si cal afegir-ho a la següent capa de la llegenda
 	CanviaIndexosCapesSpliceCapa(-1, i_capa+1, -1, ParamCtrl);  // com que 'i_capa' desapareix, intentar moure cosa que apuntin a 'i_capa' no té sentit; i ja hem avisat que no anirà bé.
+	TancaDBFDGGSCacheCapa(ParamCtrl.capa[i_capa]);
 	ParamCtrl.capa.splice(i_capa, 1);
 	if(i_capa<ParamCtrl.capa.length) //Podria ser que no hi hagués cap més capa
 	{
@@ -254,13 +255,54 @@ function DonaEnvCalculatCapa(capa)
 {
 var i, geometry, env={MinX: +1e300, MaxX: -1e300, MinY: +1e300, MaxY: -1e300};
 	
-	if (capa.model!=model_vector || !capa.objectes || !capa.objectes.features)
+	if (capa.model!=model_vector)
 		return null;
-	
-	for (i=0; i<capa.objectes.features.length; i++)
+	var tipus=DonaTipusServidorCapa(capa);
+	if(tipus=="TipusDGGS_DBF")
 	{
-		geometry=capa.objectes.features[i].geometry;
-		env=DonaEnvCalculatGeometry(geometry, env);
+		if(!capa.tileMatrixSetGeometry || !capa.tileMatrixSetGeometry.tileMatrix)
+			return null;
+		var tile;
+		for(var j=0; j<capa.tileMatrixSetGeometry.tileMatrix.length; j++)
+		{
+			tile=capa.tileMatrixSetGeometry.tileMatrix[j];
+			if(tile.objectes && tile.objectes.features)
+			{
+				for (i=0; i<tile.objectes.features.length; i++)
+				{
+					geometry=tile.objectes.features[i].geometry;
+					env=DonaEnvCalculatGeometry(geometry, env);
+				}
+			}
+		}
+	}
+	else if((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+	{
+		if(!capa.cellZoneLevelSet || !capa.cellZoneLevelSet.zoneLevels)
+			return null;
+		var zone;
+		for(var j=0; j<capa.cellZoneLevelSet.zoneLevels.length; j++)
+		{
+			zone=capa.cellZoneLevelSet.zoneLevels[j];
+			if(zone.cells && zone.cells.features)
+			{
+				for (i=0; i<zone.cells.features.length; i++)
+				{
+					geometry=zone.cells.features[i].geometry;
+					env=DonaEnvCalculatGeometry(geometry, env);
+				}
+			}
+		}
+	}
+	else
+	{
+		if(!capa.objectes || !capa.objectes.features)
+			return null;
+		for (i=0; i<capa.objectes.features.length; i++)
+		{
+			geometry=capa.objectes.features[i].geometry;
+			env=DonaEnvCalculatGeometry(geometry, env);
+		}
 	}
 	return {"EnvCRS": JSON.parse(JSON.stringify(env)), "CRS": capa.CRSgeometry};
 }
@@ -2715,7 +2757,6 @@ var cdns=[];
 			"<input type='button' class='Verdana11px' value='", GetMessage("Cancel"), "' id='CancelBasicAuth'/></form>");
 	return cdns.join("");
 }
-
 // Les capes es demanen en paral·lel. Un segon showModal, amb el primer diàleg
 // encara al document, no rep el clic: getElementById enganxa l'onclick als
 // botons del primer i el diàleg de dalt queda inert.
@@ -5082,7 +5123,7 @@ function InsereixCadenaTaulaDeCapaVectorial(nodePare, i_capa, isNomesAmbit = fal
 const cdnsFragmentsHtml=[], cdnsPortapapers=[], capa=ParamCtrl.capa[i_capa];
 const attributesVisibles = {}, objectesDinsAmbit = [], etiquetesCorrd=["x", "y", "z"];
 var attributesArray=Object.keys(capa.attributes);
-var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length, objLength, env_temp;
+var objectes = null, i, j, attrLength = attributesArray.length, objLength, env_temp;
 
 	nodePare.innerHTML = "";
 	const divCapcalera = document.createElement("div");
@@ -5090,14 +5131,16 @@ var objectes = capa.objectes.features, i, j, attrLength = attributesArray.length
 	paragrafTitol.setAttribute("class", "vectorial");
 	paragrafTitol.setAttribute("style", "font-size: 20px");
 	paragrafTitol.appendChild(document.createTextNode(GetMessage("Layer")+": "+DonaCadena(capa.desc)));
+	
 
-	if (objectes.length <= 0)
+	if (!capa.objectes || !capa.objectes.features || capa.objectes.features.length <= 0)
 	{
 		divCapcalera.insertAdjacentElement("beforeend", document.createElement("hr"));
 		divCapcalera.insertAdjacentHTML("beforeend","<p style='text-align:center;'><b>" + GetMessage("NoObjectsToDisplay", "cntxmenu") + "</b></p>");
 		nodePare.appendChild(divCapcalera);
 		return;
 	}
+	objectes=capa.objectes.features;
 
 	for (i = 0; i < attrLength; i++)
 	{
@@ -5467,9 +5510,14 @@ function PreparaGeoJSONObjectesSeleccionats(i_capa)
 	const capa = ParamCtrl.capa[i_capa];
 	// Valors mínims/màxims bbox
 	const bboxObjectesAExportar = [180.0, 90.0, -180.0, -90.0];
+
+	if(!capa || !capa.objectes || !capa.objectes.features)
+		return dadesExportar;
 	
 	Object.keys(i_objectesAExportar).forEach(key => {
 		const objAExportar = capa.objectes.features[key];
+		if(!objAExportar)
+			return;
 		// Definir l'àmbit global dels elements exportats
 		if (objAExportar.bbox && objAExportar.bbox.length==4)
 		{

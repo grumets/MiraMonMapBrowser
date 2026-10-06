@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -55,6 +55,7 @@ var TipusEventFeatureDeleteTransaction=14;
 var TipusEventHttpGet=15;
 var TipusEventWebSocket=16;
 var TipusEventDiscover=17;
+
 
 var EstarEventPendent=1;
 var EstarEventError=2;

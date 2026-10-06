@@ -786,7 +786,7 @@ function DonaPeriodesTemporalsActiusDeCapa(capa)
 }
 
 // STA DGGS MultiDatastreams usen properties.dggs.interval com "1month", "1day", "1hour", "1min"
-function DonaIntervalSTADggsDesDePeriodeISO(periode)
+function DonaIntervalDGGSDesDePeriodeISO(periode)
 {
 	var d=parseDurationISO8601(periode);
 	if(!d)
@@ -825,13 +825,13 @@ function NormalitzaArrayAggregationPeriods(periodes)
 	for(i=0; i<periodes.length; i++)
 	{
 		if(periodes[i] && periodes[i].periode && !periodes[i].dggsInterval)
-			periodes[i].dggsInterval=DonaIntervalSTADggsDesDePeriodeISO(periodes[i].periode);
+			periodes[i].dggsInterval=DonaIntervalDGGSDesDePeriodeISO(periodes[i].periode);
 	}
 	periodes.sort(OrdenacioPeriodeDescendent);
 	return periodes;
 }
 
-function DonaIntervalSTADggsDePeriodeICapa(capa, periode)
+function DonaIntervalDGGSDePeriodeICapa(capa, periode)
 {
 	var i_zone, ap, i, p_iso;
 	if(!periode)
@@ -850,19 +850,19 @@ function DonaIntervalSTADggsDePeriodeICapa(capa, periode)
 					if(p_iso && p_iso.toUpperCase()==periode.toUpperCase())
 					{
 						if(!ap[i].dggsInterval)
-							ap[i].dggsInterval=DonaIntervalSTADggsDesDePeriodeISO(p_iso);
+							ap[i].dggsInterval=DonaIntervalDGGSDesDePeriodeISO(p_iso);
 						return ap[i].dggsInterval;
 					}
 				}
 			}
 		}
 	}
-	return DonaIntervalSTADggsDesDePeriodeISO(periode);
+	return DonaIntervalDGGSDesDePeriodeISO(periode);
 }
 
-function DonaIntervalSTADggsDeCapa(capa)
+function DonaIntervalDGGSDeCapa(capa)
 {
-	return DonaIntervalSTADggsDePeriodeICapa(capa, DonaPeriodeActualDeCapa(capa));
+	return DonaIntervalDGGSDePeriodeICapa(capa, DonaPeriodeActualDeCapa(capa));
 }
 
 function DonaPeriodesTemporalsDeZoneLevelCapa(capa, i_zone_level)
@@ -878,14 +878,14 @@ function DonaPeriodesTemporalsDeZoneLevelCapa(capa, i_zone_level)
 	return periodes;
 }
 
-function DonaPeriodeISODesDeIntervalSTADggs(capa, i_zone_level, interval_dggs)
+function DonaPeriodeISODesDeIntervalDGGS(capa, i_zone_level, interval_dggs)
 {
 	var periodes=DonaPeriodesTemporalsDeZoneLevelCapa(capa, i_zone_level), i, iv;
 	if(!interval_dggs || !periodes.length)
 		return null;
 	for(i=0; i<periodes.length; i++)
 	{
-		iv=DonaIntervalSTADggsDePeriodeICapa(capa, periodes[i]);
+		iv=DonaIntervalDGGSDePeriodeICapa(capa, periodes[i]);
 		if(iv && iv==interval_dggs)
 			return periodes[i];
 	}

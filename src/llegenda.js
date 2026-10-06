@@ -191,6 +191,21 @@ var capa=ParamCtrl.capa[i_capa];
 			NDecimals=estil.component[0].NDecimals;
 		}
 	}
+	var tipus=DonaTipusServidorCapa(capa), objectes=null, iZoneLevel=-1, iTileMatrix=-1;
+	if((tipus=="TipusSTA" || tipus=="TipusSTAplus") &&  capa.origenAccesObjs==origen_CellsFeaturesOfInterest)
+	{
+		if((iZoneLevel=DonaCellsIndexZoneLevelMesProperAZoomActual(capa))!=-1)
+			objectes=capa.cellZoneLevelSet.zoneLevels[iZoneLevel].cells;
+	}
+	else if(tipus=="TipusDGGS_DBF")
+	{
+		if((iTileMatrix=DonaTileMatrixMesProperAZoomActual(capa))!=-1)
+			objectes=capa.tileMatrixSetGeometry.tileMatrix[iTileMatrix].objectes;
+	}
+	else
+	{
+		objectes=capa.objectes;
+	}
 
 	var forma;
 	if (estil.formes) {
@@ -203,8 +218,8 @@ var capa=ParamCtrl.capa[i_capa];
 				if (!estiramentPaleta && forma.interior.estiramentPaleta) {
 					estiramentPaleta=forma.interior.estiramentPaleta;
 					NDecimals=forma.interior.NDecimals;
-					if (estiramentPaleta.auto && capa.objectes.features && capa.attributes && forma.interior.NomCamp)
-						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, capa.objectes.features, capa.attributes[forma.interior.NomCamp], forma.interior.NomCamp, 0, 0);
+					if (estiramentPaleta.auto && objectes && objectes.features && capa.attributes && forma.interior.NomCamp)
+						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, objectes.features, capa.attributes[forma.interior.NomCamp], forma.interior.NomCamp, 0, 0);
 				}
 			}
 			if (estil.formes[i].vora && estil.formes[i].vora.paleta) {
@@ -214,8 +229,8 @@ var capa=ParamCtrl.capa[i_capa];
 				if (!estiramentPaleta && estil.formes[i].vora.estiramentPaleta) {
 					estiramentPaleta=estil.formes[i].vora.estiramentPaleta;
 					NDecimals=estil.formes[i].vora.NDecimals;
-					if (estiramentPaleta.auto && capa.objectes.features && capa.attributes && forma.vora.NomCamp)
-						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, capa.objectes.features, capa.attributes[forma.vora.NomCamp], forma.vora.NomCamp, 0, 0);
+					if (estiramentPaleta.auto && objectes && objectes.features && capa.attributes && forma.vora.NomCamp)
+						DeterminaEstiramentPaletaForma(estiramentPaleta, 0, capa, objectes.features, capa.attributes[forma.vora.NomCamp], forma.vora.NomCamp, 0, 0);
 				}
 			}
 		}
@@ -379,7 +394,6 @@ var cdns=[], lletra, msg, nom_gif, width=-1, capa=ParamCtrl.capa[i];
 				width=17;
 		}
 	}
-
 	return DonaTextImgGifSvg(lletra+"_ll_capa"+i, null, nom_gif, width, msg, "CanviaEstatCapa("+i+", \""+estat+"\");");
 }
 
@@ -974,7 +988,6 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
 			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapaDigi(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
@@ -983,7 +996,6 @@ var capa=ParamCtrl.capa[i_capa_data];
 	{
 		for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 		{
-			//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
 			if(EsCapaVisibleEnAquestaVista(i_vista, i_capa_data))
 				OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa_data);
 		}
@@ -1005,7 +1017,6 @@ var capa=ParamCtrl.capa[i_capa_data];
 				for (var i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
 					if(EsCapaVisibleAAquestNivellDeZoom(capa) && EsCapaVisibleEnAquestaVista(i_vista, i_capa))
-					//if (!capa.visible_vista || capa.visible_vista.indexOf(i_vista)!=-1)
 						OmpleVistaCapa(ParamCtrl.VistaPermanent[i_vista].nom, ParamInternCtrl.vista, i_capa);
 				}
 				break;
@@ -1726,7 +1737,8 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 			CanviaEstatConsultableCapa(document.getElementById("c_ll_capa"+i),i);
 		if (capa.model==model_vector)
 		{
-			if (EsCapaVisibleAAquestNivellDeZoom(capa) && ((capa.objectes && capa.objectes.features) || capa.servidor || HiHaObjectesNumericsAAquestNivellDeZoom(capa)))
+			if (EsCapaVisibleAAquestNivellDeZoom(capa) /*&& ((capa.objectes && capa.objectes.features) || capa.servidor || 
+				HiHaObjectesNumericsAAquestNivellDeZoom(capa)) || HiHaCellsDeCapaAAquestNivellDeZoom(capa) || HiHaObjectesTileMatrixSetAAquestNivellDeZoom(capa)*/)
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
@@ -1778,7 +1790,8 @@ var nom_icona=icon_capa.src ? TreuExtensio(TreuAdreca(icon_capa.src)) : null;
 		CanviaEstatVisibleISiCalConsultableIDescarregableCapa(i, "ara_no");
 		if (capa.model==model_vector)
 		{
-			if((capa.objectes && capa.objectes.features) || HiHaObjectesNumericsAAquestNivellDeZoom(capa))
+			/*if((capa.objectes && capa.objectes.features) || capa.servidor || 
+				HiHaObjectesNumericsAAquestNivellDeZoom(capa) || HiHaCellsDeCapaAAquestNivellDeZoom(capa) || HiHaObjectesTileMatrixSetAAquestNivellDeZoom(capa))*/
 			{
 				for (i_vista=0; i_vista<ParamCtrl.VistaPermanent.length; i_vista++)
 				{
