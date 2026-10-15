@@ -124,16 +124,13 @@ function TancaFinestra_triaStoryMap()
 	indexStoryMapActiu=null;
 }
 
-
 function TancaFinestra_visualitzaStoryMap()
 {
 	indexStoryMapActiu=null;
 	contadorAccionsMapa = -1;
 	
 	if (window.location.hash != '')
-	{
 		history.replaceState(null, '', DonaAdrecaSenseHash());
-	}
 }
 
 /**
@@ -286,7 +283,6 @@ function RefrescaFinestraTriaStoryMap(win, name)
 			finestraTriaRelats.removeChild(finestraTriaRelats.firstChild);
 		}
 	}
-
 	OmpleFinestraTriaStoryMap(win, name);
 }
 
@@ -485,9 +481,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			storyToEdit = ParamCtrl.StoryMap[i_relat];
 			idRelatEditat = storyToEdit.id;
 			if (isLayer(getBarraLayer(window, "creaStoryMap")))
-			{
 				titolFinestraLayer(window, "creaStoryMap", GetMessage("EditStorymap", "storymap"));
-			}
 		}
 		else
 		{
@@ -495,9 +489,7 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 			TancaFinestraLayer("triaStoryMap");
 
 			if (isLayer(getBarraLayer(window, "creaStoryMap")))
-			{
 				titolFinestraLayer(window, "creaStoryMap", GetMessage("NewStorymap", "storymap"));
-			}
 		}
 
 		if (isFinestraLayer(window, "creaStoryMap"))
@@ -534,24 +526,16 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 		let dialegRedaccioCurs = document.getElementById(dialegAlertaRedaccioEnCursId);
 		
 		if (!dialegRedaccioCurs)
-		{
 			dialegRedaccioCurs = CreaDialegRedaccioRelatEnCurs();
-		}
 
 		let finestra;
 		if (i_relat != "nou")
-		{
 			finestra = getFinestraLayer(window, "storyMap");
-		}
 		else 
-		{
 			finestra = getFinestraLayer(window, "triaStoryMap");
-		}
 		
 		if (!finestra.contains(dialegRedaccioCurs))
-		{
 			finestra.appendChild(dialegRedaccioCurs);
-		}
 
 		dialegRedaccioCurs.show();	
 	}
@@ -571,7 +555,6 @@ function TancaICreaEditaStoryMap(i_relat = "nou")
 				dialegTitol = CreaDialegAlertaTitol();
 				finestra.appendChild(dialegTitol);
 			}
-			
 			dialegTitol.show();
 		}
 	}
@@ -593,13 +576,9 @@ function CarregaImatgeStoryMap(input)
 	if (fitxerObjectiu &&  (fitxerObjectiu.type == "image/png" || fitxerObjectiu.type == "image/jpg" || fitxerObjectiu.type == "image/jpeg"))
 	{
 		if (input.id == inputImageStorymapId)
-		{
 			CarregaImatgeRelatStoryMap(fitxerObjectiu);
-		}
 		else if (input.id == inputThumbnailId)
-		{
 			CarregaImatgeMiniaturaStoryMap(fitxerObjectiu);
-		}
 	}
 	input.value = null;
 }
@@ -615,7 +594,6 @@ function CarregaImatgeRelatStoryMap(fitxerImatge)
 	const imageToMesure = new Image();
 	
 	imageToMesure.onload =  function () {
-
 		MostraDialogImatgeNavegador(this, mostraImatgeRedimensionada);
 	};
 
@@ -690,9 +668,7 @@ function CarregaImatgeMiniaturaStoryMap(fitxerImatge)
 				imageThumbnail.src = canvasReduccioThumbnail.toDataURL("image/jpeg", 0.5);
 				const botoEsborrar = document.getElementById(botoBorraThumbnailId);
 				if (botoEsborrar)
-				{
 					botoEsborrar.style.display = "inline";
-				}
  			}
 			 URL.revokeObjectURL(urlImage);
 		}
@@ -713,10 +689,7 @@ function esborraImatgePortada()
 	{
 		const botoEsborrar = document.getElementById(botoBorraThumbnailId);
 		if (botoEsborrar)
-		{
 			botoEsborrar.style.display = "none";
-		}
-
 		imgThumbnail.removeAttribute("src");
 		imgThumbnail.style.visibility = "hidden";
 	}
@@ -798,13 +771,9 @@ function esPermetAfegirImatge(tinyEditor)
 	if (tinyEditor.selection.getSel().type=="Range")
 	{
 		if (tinyEditor.selection.getNode().nodeName == "IMG")
-		{
 			motiu = GetMessage("NotAdmittedOnImage", "storymap");
-		}
 		else
-		{
 			motiu = GetMessage("NotAdmittedRangeSelection", "storymap");
-		}
 		esPermet = false;
 	}
 	else
@@ -820,14 +789,10 @@ function esPermetAfegirImatge(tinyEditor)
 		{
 			let missatgeAvis = document.getElementById(missatgeAvisImatgeId);
 			if (missatgeAvis)
-			{
 				missatgeAvis.innerText = GetMessage("NotPossibleInsertNewContent", "storymap") + ": " + motiu;
-			}
 
 			if (!finestraRelats.contains(dialegInsercio))
-			{
 				finestraRelats.insertAdjacentElement("beforeend", dialegInsercio);
-			}
 		}
 		else
 		{
@@ -867,7 +832,6 @@ function esPermetModificacioAccio(tinyEditor)
 				accioTrobada = comprovaNodePareAmbAccio(arrayNodes[indexActual], cosRelat) || comprovaNodeFillAmbAccio(arrayNodes[indexActual], 0);
 				indexActual++;
 			}
-
 			return !accioTrobada;
 		}
 	}
@@ -1097,25 +1061,14 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 			if (chboxProportional.checked)
 			{
 				if (esImatgeApaisada)
-				{
 					return resultatMidesImatge.width <= limitsMidesImatge["width"][selector.value];
-				}
-				else 
-				{
-					return resultatMidesImatge.height <= limitsMidesImatge["height"][selector.value];
-				}
+				return resultatMidesImatge.height <= limitsMidesImatge["height"][selector.value];
 			}
 			else
 			{
 				if (selector.value == pixelUnit)
-				{
 					return resultatMidesImatge.width*resultatMidesImatge.height <= numMaximPixelsStorymap;
-				}
-				else
-				{
-					return (resultatMidesImatge.width*imatgeSeleccionada.width/100) * (resultatMidesImatge.height*imatgeSeleccionada.height/100) <= numMaximPixelsStorymap;
-
-				}
+				return (resultatMidesImatge.width*imatgeSeleccionada.width/100) * (resultatMidesImatge.height*imatgeSeleccionada.height/100) <= numMaximPixelsStorymap;
 			}
 		}
 
@@ -1131,14 +1084,10 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 					if (selector.value == percentageUnit)
 					{
 						let valorPxWidth = midesAdaptImatge.width * imatgeOriginal.width / 100;
-						let valorPxHeight = proporcio * valorPxWidth;
-	
+						let valorPxHeight = proporcio * valorPxWidth;	
 						return {width: midesAdaptImatge.width, height: valorPxHeight * 100 / imatgeOriginal.height};
 					}
-					else
-					{
-						return {width: midesAdaptImatge.width, height: proporcio * midesAdaptImatge.width};
-					}
+					return {width: midesAdaptImatge.width, height: proporcio * midesAdaptImatge.width};
 				}
 				else 
 				{
@@ -1149,10 +1098,7 @@ function MostraDialogImatgeNavegador(imatgeSeleccionada, callback)
 	
 						return {width: valorPxWidth * 100 / imatgeOriginal.width, height: valorPxHeight * 100 / imatgeOriginal.height};
 					}
-					else
-					{
-						return {width:  midesAdaptImatge.height * (1 / proporcio), height: midesAdaptImatge.height};
-					}
+					return {width:  midesAdaptImatge.height * (1 / proporcio), height: midesAdaptImatge.height};
 				}
 			} 
 			else  
@@ -1536,93 +1482,83 @@ function ObteAtributsMapaSeleccionats(resultatCaractUsuari)
 {
     const attributes = [];
 
-				if(resultatCaractUsuari[chboxPosZoomName]["status"])
-				{
+	if(resultatCaractUsuari[chboxPosZoomName]["status"])
+	{
 		attributes.push({name: "data-mm-center", value: JSON.stringify(DonaCentreVista())});
 		attributes.push({name: "data-mm-zoom", value: ParamInternCtrl.vista.CostatZoomActual});
-				}
+	}
 
-				if(resultatCaractUsuari[chboxCapesStyleName]["status"])
-				{
-					const capesVisiblesIds = [];
-					const estilsCapesIds = [];
+	if(resultatCaractUsuari[chboxCapesStyleName]["status"])
+	{
+		const capesVisiblesIds = [];
+		const estilsCapesIds = [];
 		const visibilitatsCapes = [];		
 					
-					ParamCtrl.capa.forEach((capa) => { 
+		ParamCtrl.capa.forEach((capa) => { 
 			if (capa.visible=="si" || capa.visible=="semitransparent")
-						{
-							capesVisiblesIds.push(capa.id);
-							estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
+			{
+				capesVisiblesIds.push(capa.id);
+				estilsCapesIds.push(capa.estil ? capa.estil[capa.i_estil].id : "");
 				visibilitatsCapes.push(capa.visible);
-						}
-					});
-					if (capesVisiblesIds.length > 0)
-					{
+			}
+		});
+		if (capesVisiblesIds.length > 0)
 			attributes.push({name: "data-mm-layers", value: capesVisiblesIds.toString()});
-					}
-					if (estilsCapesIds.length > 0)
-					{
+		if (estilsCapesIds.length > 0)
 			attributes.push({name: "data-mm-styles", value: estilsCapesIds.toString()});
-		}
 		if (visibilitatsCapes.length > 0)
-		{
 			attributes.push({name: "data-mm-visibilities", value: visibilitatsCapes.toString()});
-					}
+		var text_diags=DonaTextDiagramesOberts();
+		if (text_diags)
+			attributes.push({name: "data-mm-diags", value: text_diags});
 					
-				}
+	}
 				
-				if (resultatCaractUsuari[chboxDimensionsName]["status"])
+	if (resultatCaractUsuari[chboxDimensionsName]["status"])
+	{
+		const dimensionsExtra=[];
+		ParamCtrl.capa.forEach((capa) => { 
+			if (capa.visible=="si" && capa.dimensioExtra && capa.dimensioExtra.length > 0)
+			{
+				let dimensio, cdns;
+				cdns = `{"ly":"${capa.id}","dims":{`;
+				for (let i=0; i<capa.dimensioExtra.length; i++)
 				{
-					const dimensionsExtra=[];
-					ParamCtrl.capa.forEach((capa) => { 
-						if (capa.visible=="si" && capa.dimensioExtra && capa.dimensioExtra.length > 0)
-						{
-							let dimensio, cdns;
-							cdns = `{"ly":"${capa.id}","dims":{`;
-							for (let i=0; i<capa.dimensioExtra.length; i++)
-							{
-								dimensio = capa.dimensioExtra[i];
-								cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
-								
-								if (i!=capa.dimensioExtra.length-1)
-								{
-									cdns += ",";
-								}
-							}
-							cdns += "}}";
-							dimensionsExtra.push(cdns);
-						}
-					});
+					dimensio = capa.dimensioExtra[i];
+					cdns += `"${dimensio.clau.nom}":"${dimensio.valor[dimensio.i_valor].nom}"`;
 					
-					if (dimensionsExtra.length > 0)
-					{
-			attributes.push({name: "data-mm-extradims", value: dimensionsExtra.toString()});
-					}
+					if (i!=capa.dimensioExtra.length-1)
+						cdns += ",";
 				}
+				cdns += "}}";
+				dimensionsExtra.push(cdns);
+			}
+		});
+		
+		if (dimensionsExtra.length > 0)
+			attributes.push({name: "data-mm-extradims", value: dimensionsExtra.toString()});
+	}
 
-				if (resultatCaractUsuari[chboxTempsName]["status"])
-				{
-					let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
-					let indexCorregit = 0;
-					let dataCapaAComparar;
+	if (resultatCaractUsuari[chboxTempsName]["status"])
+	{
+		let dataResultat = new Date(0); // Data inicial en milisegons, which is 1970-01-01T00:00:00.000Z .
+		let indexCorregit = 0;
+		let dataCapaAComparar;
 
-					ParamCtrl.capa.forEach((capaActual) => {
-						if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
-						{
-							indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
-								dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
-							if (dataResultat < dataCapaAComparar) 
-							{
-								dataResultat = dataCapaAComparar;
-							}			
-						}
-					});
+		ParamCtrl.capa.forEach((capaActual) => {
+			if (capaActual.visible=="si" && capaActual.data && capaActual.data.length)
+			{
+				indexCorregit = DonaIndexDataCapa(capaActual, capaActual.i_data);
+					dataCapaAComparar = DonaDateDesDeDataJSON(capaActual.data[indexCorregit]);
+				if (dataResultat < dataCapaAComparar) 
+					dataResultat = dataCapaAComparar;
+			}
+		});
 
 		attributes.push({name: "data-mm-time", value: JSON.stringify(DonaDataJSONDesDeDate(dataResultat))});
-				}
-				
+	}				
     return attributes;
-						}
+}
 					
 
 
@@ -1708,9 +1644,7 @@ function SeguentPasStoryMap(i_relat)
 			//Eliminem el títol del relat de la part del text a editar
 			const title = DOMStorymap.querySelector("#" + h1TitleStorymap);
 			if (title !== null)
-			{
 				title.remove();
-			}
 
 			// Afegim les imatges indicatives d'accions de mapa
 			const arrayDivAccions = DOMStorymap.querySelectorAll(`div[id^='${identificadorDivAccioMapa}']`);
@@ -1733,7 +1667,8 @@ function SeguentPasStoryMap(i_relat)
 			editor.setContent( DOMStorymap.body.innerHTML);
 		}	
 	});
-		}	
+}	
+
 function MostraDialogBotoMapa(ultimElemId)
 {
     const textBoto =
@@ -1795,16 +1730,12 @@ async function FinalitzarStoryMap(estemEditant = false, descarregar = false)
 	//Eliminem el paràgraf afegit automàticament en cas que hi fos
 	let paragrafAutomatic = tinyEditorBody.querySelector("p[id='" + paragrafContinuacioId + "']");
 	if (paragrafAutomatic)
-	{
 		paragrafAutomatic.remove();
-	}
 
 	const cdns = "<html>" + ((novaStoryMap.titol && novaStoryMap.titol != "") ? ("<h1 id='" + h1TitleStorymap + "'>"+ novaStoryMap.titol + "</h1>") : "") + tinyEditor.getContent({format: "html"}) + "</html>";
 	novaStoryMap.relat = cdns;
 	if (descarregar)
-	{
 		await DesaStorymapHTML(novaStoryMap.titol, novaStoryMap.relat);
-	}
 	novaStoryMap.identificador = estemEditant ? idRelatEditat : novaStoryMap.titol + "_" +  Date.now();
 	GuardaEntradaStorymapConfig();
 	TancaFinestraLayer("creaStoryMap");
@@ -1933,13 +1864,9 @@ function GuardaEntradaStorymapConfig()
 		// Guardem l'entrada de Storymap al config. Si ja hi és present la substituïm per la nova versió editada.
 		const indexConegut = ParamCtrl.StoryMap.findIndex((relat) => relat.id == idRelatEditat);
 		if (indexConegut != -1)
-		{
 			ParamCtrl.StoryMap.splice(indexConegut, 1, storyMapAGuardar);
-		}
 		else
-		{
 			ParamCtrl.StoryMap.push(storyMapAGuardar);
-		}
 	}
 }
 
@@ -2292,6 +2219,7 @@ function isElemScrolledIntoViewDiv(el, div, partial)
 	//return (elemTop >= 0) && (elemBottom <= window.innerHeight);
 	return rect_div.top <= rect_el.top && rect_div.bottom >= rect_el.bottom;
 }
+
 var iAccio = 0;
 function AfegeixMarkerStoryMapVisible()
 {
@@ -2302,6 +2230,7 @@ function AfegeixMarkerStoryMapVisible()
 
 const imgRelatAccio = "storymap_mm_action";
 //Els tags "vendor specific" han de començar per "data-" https://www.w3schools.com/tags/att_data-.asp
+
 function AfegeixMarkerANodesFillsStoryMapVisible(div, nodes)
 {
 var node, attribute;
@@ -2309,11 +2238,8 @@ var node, attribute;
 	for (var i = 0; i < nodes.length; i++)
 	{
 		node=nodes[i];
-		if (node.nodeName === "BUTTON" &&
-			node.classList.contains("storymap-map-action"))
-		{
+		if (node.nodeName === "BUTTON" && node.classList.contains("storymap-map-action"))
 			continue;
-		}
 		if (node.nodeType!=Node.ELEMENT_NODE)
 			continue;
 		if (node.attributes)
@@ -2339,9 +2265,7 @@ var node, attribute;
 			}
 		}
 		if (node.childNodes && node.childNodes.length)
-		{
 			AfegeixMarkerANodesFillsStoryMapVisible(div, node.childNodes);
-		}
 	}
 }
 
@@ -2398,9 +2322,7 @@ var hihaCanvis = false, attribute;
 					break;
 				}
 				if (0==CommandMMNSetCenterCoord(punt))
-				{
 					hihaCanvis=true;
-				}
 			}
 			else
 				alert(GetMessage("WrongFormatParameter")+ ": " + attribute.name);
@@ -2410,9 +2332,7 @@ var hihaCanvis = false, attribute;
 			if (attribute.value.trim().length)
 			{
 				if (0==CommandMMNSetZoom(parseFloat(attribute.value.trim())))
-				{
 					hihaCanvis=true;
-				}
 			}
 		}
 		else if (attribute.name=="data-mm-layers")

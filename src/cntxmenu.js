@@ -337,6 +337,17 @@ function ZoomACapa(capa)
 		CanviaNivellDeZoom(DonaIndexNivellZoom(capa.CostatMaxim), true); //Canviar al CostatMaxim
 }
 
+function TeObjectesPerGraficVector(capa)
+{
+	if (!capa || capa.model!=model_vector)
+		return false;
+	if (HiHaCellsDeCapa(capa))
+		return true;
+	if (HiHaObjectesTileMatrixSet(capa))
+		return true;
+	return !!(capa.objectes && capa.objectes.features && capa.objectes.features.length);
+}
+
 function OmpleLayerContextMenuCapa(event, i_capa)
 {
 var cdns=[]
@@ -479,16 +490,20 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		if(!alguna_opcio)
 			alguna_opcio=true;
 	}
-	if (EsCapaBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].histograma)
+	if (capa.model==model_vector && capa.attributes && Object.keys(capa.attributes).length && TeObjectesPerGraficVector(capa))
+	{
+		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraHistogramaVector(", i_capa, ");TancaContextMenuCapa();\">",
+				DonaTitolMenuGraficVector(i_capa), "</a><br>");
+		if(!alguna_opcio)
+			alguna_opcio=true;
+	}
+	else if (EsCapaBinaria(capa) && capa.estil && capa.estil.length && capa.estil[capa.i_estil].histograma)
 	{
 		var estil=capa.estil[capa.i_estil];
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraHistograma(", i_capa, ");TancaContextMenuCapa();\">");
 
 		if (estil.component && estil.component[0].representacio && estil.component[0].representacio.tipus=="matriuConfusio")
-		{
-			//cdns.push(GetMessage("ConfusionMatrix", "cntxmenu"));
 			cdns.push(GetMessage("ContingencyTable"));
-		}
 		else if (DonaTipusGraficHistograma(estil, 0)=='pie')
 			cdns.push(GetMessage("PieChart"));
 		else
@@ -547,6 +562,7 @@ var capa=ParamCtrl.capa[i_capa], alguna_opcio=false;
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraFeedbackAmbEstilsDeCapa(", i_capa, ");TancaContextMenuCapa();\">",
 				GetMessage("RetrieveStyles", "cntxmenu"), "</a><br>");
 	}
+	
 	if (capa.model==model_vector)
 	{
 		cdns.push("<a class=\"unmenu\" href=\"javascript:void(0);\" onClick=\"ObreFinestraTaulaDeCapaVectorial(", i_capa, ");TancaContextMenuCapa();\">",
@@ -1627,7 +1643,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 			alert(GetMessage("WrongValuesFormatInLine", "cntxmenu")+" "+i_linia+": "+linia_reclass);
 			return null;
 		}
-		if(new_value.toUpperCase=="REMOVE")
+		if(new_value.toUpperCase()=="REMOVE")
 			new_value=NaN;
 		else if(NaN==parseFloat(new_value))
 		{
@@ -1673,7 +1689,7 @@ var i, old_value, old_up_value, new_value, desc_value, inici, final;
 				new_value=categories.length;
 			}
 		}
-		else if(new_value.toUpperCase=="REMOVE")
+		else if(new_value.toUpperCase()=="REMOVE")
 			new_value=NaN;
 		if(old_up_value && -1!=old_up_value.search(/["|']/i))	 //no pot ser indexOf perquè és una regular expression
 		{
@@ -2441,7 +2457,7 @@ function PlegaDesplegaFieldSetConfiguracio(form)
 {
 	if(FieldSetPlegatConfigCSV && FieldSetDesactivatConfigCSV==false)
 	{
-		form.configCSV.className="deplegat";		
+		form.configCSV.className="desplegat";		
 		document.getElementById("titolconfigCSV").innerHTML="- " + GetMessage("Parameters")+" (CSV)";
 		FieldSetPlegatConfigCSV=false;
 	}

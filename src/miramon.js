@@ -1958,7 +1958,8 @@ function NetejaParamCtrl(param_ctrl, is_local_storage)
 						var nom_finestra="";
 
 						if (estil.diagrama[i_diagrama].tipus == "chart" ||  estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" ||
-								estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ")
+								estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ" ||
+								estil.diagrama[i_diagrama].tipus == "chart_vector")
 							nom_finestra=DonaNomHistograma(estil.diagrama[i_diagrama].i_histograma);
 						else if (estil.diagrama[i_diagrama].tipus == "vista3d")
 							nom_finestra=DonaNomGrafic3d(estil.diagrama[i_diagrama].i_histograma);
@@ -2088,8 +2089,7 @@ function CanviaCRSISituacio(crs_dest, i_situacio)
 // El segon paràmetre no cal especificar-lo si és el CRS actual. Aquesta funció no canvia el mapa de situació.
 function CanviaCRS(crs_dest, crs_ori)
 {
-var factor=1;
-var i;
+var factor=1, i;
 
 	if (!crs_ori)
 		crs_ori=ParamCtrl.ImatgeSituacio[ParamInternCtrl.ISituacio].EnvTotal.CRS;
@@ -2121,6 +2121,7 @@ var i;
 	}
 	if (factor!=1)
 	{
+		var tipus, zoneLevel, j;
 		for (i=0; i<ParamCtrl.zoom.length; i++)
 		{
 			ParamCtrl.zoom[i].costat=ArrodoneixSiSoroll(ParamCtrl.zoom[i].costat*=factor);
@@ -2129,17 +2130,18 @@ var i;
 		{
 			ParamCtrl.capa[i].CostatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMinim*=factor);
 			ParamCtrl.capa[i].CostatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].CostatMaxim*=factor);
-			var tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
-			if((tipus=="TipusSTA" || tipus=="TipusSTAplus") &&
-				(ParamCtrl.capa[i].origenAccesObjs==origen_CellsFeaturesOfInterest || ParamCtrl.capa[i].origenAccesObjs==origen_CellsThings) && 
-				ParamCtrl.capa[i].cellZoneLevelSet && ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels)
+			tipus=DonaTipusServidorCapa(ParamCtrl.capa[i]);
+			if(ParamCtrl.capa[i].cellZoneLevelSet && ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels &&
+				(tipus=="TipusSTA" || tipus=="TipusSTAplus") &&
+				(ParamCtrl.capa[i].origenAccesObjs==origen_CellsFeaturesOfInterest || ParamCtrl.capa[i].origenAccesObjs==origen_CellsThings))
 			{
-				for (var j=0; j<ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.length; j++)
+				for (j=0; j<ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.length; j++)
 				{
-					if(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim)
-						ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim=ArrodoneixSiSoroll(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMinim*=factor);
-					if(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim)
-						ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim=ArrodoneixSiSoroll(ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels.costatMaxim*=factor);
+					zoneLevel=ParamCtrl.capa[i].cellZoneLevelSet.zoneLevels[j];
+					if(zoneLevel.costatMinim)
+						zoneLevel.costatMinim=ArrodoneixSiSoroll(zoneLevel.costatMinim*=factor);
+					if(zoneLevel.costatMaxim)
+						zoneLevel.costatMaxim=ArrodoneixSiSoroll(zoneLevel.costatMaxim*=factor);
 				}
 			}
 		}
@@ -2431,19 +2433,20 @@ function TancaFinestraLayer(nom_finestra)
 		var number_id = parseInt(str_id);
 		var estil = ParamCtrl.capa[HistogramaFinestra.vista[number_id].i_capa].estil[HistogramaFinestra.vista[number_id].i_estil];
 
-	 	if (estil.diagrama && estil.diagrama.length>0)
+	 	if (estil && estil.diagrama && estil.diagrama.length>0)
 		{
 			for (var i_diagrama=0; i_diagrama<estil.diagrama.length; i_diagrama++)
 			{
 				if (estil.diagrama[i_diagrama].i_histograma == number_id &&
 						(estil.diagrama[i_diagrama].tipus == "chart" || estil.diagrama[i_diagrama].tipus == "chart_categ" || estil.diagrama[i_diagrama].tipus == "matriu" ||
-						estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ"))
+						estil.diagrama[i_diagrama].tipus == "stat" || estil.diagrama[i_diagrama].tipus == "stat_categ" ||
+						estil.diagrama[i_diagrama].tipus == "chart_vector"))
 				//és aquest (cal comprovar el tipus perquè les numeracions són independents i es podrien repetir entre Histogrames i Vistes3D)
 					estil.diagrama.splice(i_diagrama, 1);
 					//break; -> crec que ara ja no passa que hi ha diversos "diagrama" amb el mateix number_id, perquè ara les 3 components van a un sol diagram. Comprovar i potser treure elcomentari per fer el break
 			}
 		}
-		if (estil.diagrama.length == 0)
+		if (estil && estil.diagrama && estil.diagrama.length == 0)
 			delete estil.diagrama;
 	}
 	else if (nom_finestra.length>prefixSuperficie3DFinestra.length && nom_finestra.substring(0, prefixSuperficie3DFinestra.length) == prefixSuperficie3DFinestra)

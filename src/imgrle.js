@@ -2580,6 +2580,7 @@ var data;
 						HistogramaFinestra.vista[i_histo].chart[i_c].options=retorn_prep_histo.options;
 						HistogramaFinestra.vista[i_histo].chart[i_c].update();
 					}
+					OmpleEstadisticsGraficRaster(i_histo);
 				}
 			}
 			else if (estil.diagrama[i_diagrama].tipus == "chart_categ")

@@ -2325,7 +2325,11 @@ var neteja_canvas=true;
 	if (capa.model!=model_vector)
 		return;
 	if (!EsCapaVisibleAAquestNivellDeZoom(capa))
+	{
+		if (vista.i_nova_vista==NovaVistaPrincipal)
+			CongelaHistogramesVectorCapa(param.i_capa, true);
 		return;
+	}
 	
 	if(tipus)
 	{
@@ -2346,6 +2350,7 @@ var neteja_canvas=true;
 			capa.cellZoneLevelSet.zoneLevels[zoneLevelId].cells.features)
 		{		
 			DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.cellZoneLevelSet.zoneLevels[zoneLevelId].cells, capa.estil[capa.i_estil]);
+			ActualitzaGraficsVectorDespresDeDibuixar(param);
 			return;
 		}		
 	}
@@ -2372,6 +2377,16 @@ var neteja_canvas=true;
 	}
 	if (capa.objectes && capa.objectes.features)
 		DibuixaObjCapaDigiAVista(param, neteja_canvas, capa.attributes, capa.objectes, capa.estil[capa.i_estil]);
+	ActualitzaGraficsVectorDespresDeDibuixar(param);
+}
+
+function ActualitzaGraficsVectorDespresDeDibuixar(param)
+{
+	if (!param || !param.vista || param.vista.i_nova_vista!=NovaVistaPrincipal)
+		return;
+	ObreHistogramesVectorPendents(param.i_capa);
+	CongelaHistogramesVectorCapa(param.i_capa, false);
+	ActualitzaHistogramesVectorCapaSiCal(param.i_capa);
 }
 
 // Per la capa oculta cal cridar amb DonaNomCanvasCapaDigi(nom_vista, -i-1)  (l'index és negatiu i desplaçat en 1)

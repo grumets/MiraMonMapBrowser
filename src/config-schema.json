@@ -954,7 +954,7 @@
 						"contentMediaType": "image/*"
 					},
 					"url": {
-						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles (algunes comentes han de ser dobles però no ho puc posar aquí):   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-diags={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': }, ... (es tanquen tots els diagrames no indicats i si no hi ha el paramentre data-mm-diags, es tanquen tots els histogrames; IdCapa* ha de ser una capa d'arrays binaris) (6) data-mm-extradims={'ly': , 'dims': {`clau`: `valor`}}, {'ly': , 'dims': {`clau`: `valor`, `clau2`: `valor2`}}, ... Es també possible posar botons que tinguin onClick='ExecuteDataMMAttributes('data-mm-center', '{'x': `number`, 'y': `number`}', ...), data-mm-visibilities='`si`,`semitransparent`'",
+						"description": "Adreça i nom del fitxer que conté el relat (storymap) en format HTML. Els relats poden contenir elements (tags) html amb atributs que controlen el mapa. Aquests són els atributs possibles (algunes comentes han de ser dobles però no ho puc posar aquí):   (1) data-mm-center='{'x': `number`, 'y': `number`}'  (2) data-mm-zoom=`number`   (3)   data-mm-crs=`crs_name` (4) data-mm-time='{'year': `number`..., 'second': `number`}'  (5) data-mm-layers='`IdCapa1`,`IdCapa2`,...'   (6) data-mm-styles='`styleId1`,`styleId2`...',    (7) data-mm-sels='{'ly': `NomCapa`, 'q': `FormulaConsulta`, 'id': `IdEstilNou`}, '{'ly': , 'q': , 'name': }, ...' (si la `FormulaConsulta` necessita cometes aquestes poden ser una dieresis (¨))  (8) data-mm-diags={'ly': '`IdCapa1`', 'stl': '`IdStyle1`', 'type': '`veure diagrama.tipus`', 'stat': '`veure diagrama.stat`', 'order': '`veure diagrama.order`', 'nom_camp': '`nomAtribut`'}, {'ly': , 'style': , 'type': , 'stat': , 'order': , 'nom_camp': }, ... (es tanquen tots els diagrames no indicats i si no hi ha el paramentre data-mm-diags, es tanquen tots els histogrames; IdCapa* pot ser una capa ràster d'arrays binaris o una capa vectorial; si type és chart_vector, nom_camp és el nom de l'atribut) (6) data-mm-extradims={'ly': , 'dims': {`clau`: `valor`}}, {'ly': , 'dims': {`clau`: `valor`, `clau2`: `valor2`}}, ... Es també possible posar botons que tinguin onClick='ExecuteDataMMAttributes('data-mm-center', '{'x': `number`, 'y': `number`}', ...), data-mm-visibilities='`si`,`semitransparent`'",
 						"$ref": "config_attributes_metaschema.json#/definitions/StringOCadenaLang" 
 					},
 					"EnvTotal": {
@@ -3121,7 +3121,7 @@
 				},
 				"diagrama": 
 				{
-					"description": "Descriu els diagrames relacionat amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard). Quan s'obre un diagrama, s'afegeix programaticament. Aplica tant a charts (histo o pie), vistes3D o matrius de confusió. Només aplica si el 'model' és 'raster'",
+					"description": "Descriu els diagrames relacionats amb aquest estil de la capa. Es pot fer servir per iniciar el navegador amb diagrames oberts (a la manera dashboard) i per demanar-los des d'una story map. Quan s'obre un diagrama, s'afegeix programaticament. Aplica a charts (histo o pie), vistes 3D i matrius de confusió dels ràsters, i als gràfics d'un camp dels vectors (chart_vector). Els recomptes del vector es calculen en obrir la finestra a partir dels objectes de la vista; no es desen a histograma",
 					"type": "array",
 					"items": 
 					{
@@ -3140,8 +3140,14 @@
 									"matriu",
 									"vista3d",
 									"stat",
-									"stat_categ" 
+									"stat_categ",
+									"chart_vector"
 								]
+							},
+							"nom_camp":
+							{
+								"description": "Nom de l'atribut representat. Només aplica si tipus és chart_vector",
+								"type": "string"
 							},	
 							"stat": 
 							{
@@ -3186,7 +3192,7 @@
 							},																	
 							"i_histograma": 
 							{
-								"description": "INTERN: lndex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
+								"description": "INTERN: Índex de la vista dins la variable global HistogramaFinestra.vista o Superficie3DFinestra.vista que conté aquest diagrama, comptant des de 0. S'afegeix programaticament en carregar l'array binari de valors per primer cop. És necessari per poder actualitzar-lo",
 								"type": "integer",
 								"minimum": 0
 							}

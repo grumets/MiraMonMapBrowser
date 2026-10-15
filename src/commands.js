@@ -171,10 +171,10 @@ var sel, capa, estil, i_estil;
 	return 0;
 }
 
-//histos is an array of {ly: `IdCapa1`, stl: `IdStyle1`', type': `veure diagrama.tipus`, stat: `veure diagrama.stat`, order: `veure diagrama.order`}
+//histos is an array of {ly: `IdCapa1`, stl: `IdStyle1`, type: `veure diagrama.tipus`, stat: `veure diagrama.stat`, order: `veure diagrama.order`, nom_camp: `atribut`}
 function CommandMMNDiagrams(histos)
 {
-var histo, capa, estil, i_estil;
+var histo, capa, estil, i_estil, i_capa;
 
 	TancaTotsElsHistogramaFinestra();
 	for (var i_histo=0; i_histo<histos.length; i_histo++)
@@ -183,7 +183,7 @@ var histo, capa, estil, i_estil;
 
 		if(typeof histo.ly === 'undefined')
 		{
-			alert(GetMessage("HistogramsIncorrectFormat", "commands") + GetMessage("LyRequired", "commands") + ": {ly: 'IdCapa1', style: 'styleNom', type: 'diagramType', stat: 'statEnum', order: 'orderEnum'}");
+			alert(GetMessage("HistogramsIncorrectFormat", "commands") + GetMessage("LyRequired", "commands") + ": {ly: 'IdCapa1', style: 'styleNom', type: 'diagramType', stat: 'statEnum', order: 'orderEnum', nom_camp: 'attribute'}");
 				return 1;
 		}
 		if (null==(capa=DonaCapaDesDeIdCapa(histo.ly)))
@@ -198,10 +198,14 @@ var histo, capa, estil, i_estil;
 		else
 			i_estil=-1;  //estil actual
 
+		i_capa=ParamCtrl.capa.indexOf(capa);
 		if (capa.visible=="ara_no")  //si no faig la capa visible no funcionaran les estadistiques igualment.
-			CanviaEstatVisibleCapa(ParamCtrl.capa.indexOf(capa), "si");
+			CanviaEstatVisibleCapa(i_capa, "si");
 
-		ObreFinestraHistograma(ParamCtrl.capa.indexOf(capa), i_estil, histo.type, histo.stat, histo.order);
+		if (histo.type=="chart_vector" || capa.model==model_vector)
+			ObreFinestraHistogramaVector(i_capa, histo.nom_camp);
+		else
+			ObreFinestraHistograma(i_capa, i_estil, histo.type, histo.stat, histo.order);
 	}
 	return 0;
 }

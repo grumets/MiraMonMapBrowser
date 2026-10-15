@@ -17,7 +17,7 @@
     MiraMon Map Browser can be updated from
     https://github.com/grumets/MiraMonMapBrowser.
 
-    Copyright 2001, 2023 Xavier Pons
+    Copyright 2001, 2026 Xavier Pons
 
     Aquest codi JavaScript ha estat idea de Joan Masó Pau (joan maso at uab cat)
     amb l'ajut de Núria Julià (n julia at creaf uab cat)
@@ -49,7 +49,7 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 {
 	if (nom_finestra.length>prefixHistogramaFinestra.length && nom_finestra.substring(0, prefixHistogramaFinestra.length) == prefixHistogramaFinestra)
 	{
-		var i_histo, prefix_div_copy, div, textarea;
+		var i_histo, prefix_div_copy, div, textarea, missatge;
 		i_histo=parseInt(nom_finestra.substring(prefixHistogramaFinestra.length));
 		if (isNaN(i_histo))
 			return;
@@ -60,7 +60,10 @@ function CopiaPortapapersFinestraLayer(nom_finestra)
 		textarea.select();
 		window.document.execCommand("Copy");
 		div.style.display="none";
-		window.alert(GetMessage("ImageValuesCopiedClipboardFormat", "histopie") + " " + GetMessage("tabSeparatedText")+".");
+		missatge=(HistogramaFinestra.vista[i_histo] && HistogramaFinestra.vista[i_histo].vector) ?
+			GetMessage("ChartValuesCopiedClipboard", "histopie") :
+			GetMessage("ImageValuesCopiedClipboardFormat", "histopie");
+		window.alert(missatge + " " + GetMessage("tabSeparatedText")+".");
 	}
 	else if (nom_finestra == taulaCapaVectorial)
 	{
@@ -549,6 +552,7 @@ function CanviOpcionsHistograma(event)
 							HistogramaFinestra.vista[n_histo].chart[i_c].options=retorn_prep_histo.options;
 							HistogramaFinestra.vista[n_histo].chart[i_c].update();
 						}
+						OmpleEstadisticsGraficRaster(n_histo);
 					}
 					else if (estilDiagrama.tipus == "chart_categ")
 					{
@@ -740,7 +744,6 @@ var tipus_chart;
 		{
 			//tip_est_intern=tipus_estad.substring(0, tipus_estad.length-2);
 			titol=GetMessage("Statistics")+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
-			//titol=DonaCadenaLang({"cat":"Estadístics per categoria", "spa":"Estadísticos por categoría", "eng":"Statistics by category", "fre":"Statistique par catégorie"})+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//if (presentacio == "graphic")
 			if (tipus=="chart_categ")
 			{
@@ -769,7 +772,6 @@ var tipus_chart;
 			//tip_est_intern=tipus_estad;
 			var s=DonaTitolEstadistic(estil.categories, estil.attributes, stat);
 			titol=GetMessage("Statistic")+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(estil.desc);
-			//titol=DonaCadenaLang({"cat": "Estadístic", "spa": "Estadístico", "eng": "Statistic", "fre": "Statistique"})+ " " + (HistogramaFinestra.n+1) + (s == "" ? "" : (": " + s))+ ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 			//·$· ncol i nfil podria ser més ample o més estret segons els stat que em demanen? o fins i tot directament segons la longitud del text en omplir...
 			ncol/=1.3;
 			nfil/=2;
@@ -781,7 +783,6 @@ var tipus_chart;
 	{
 		tipus_chart="matriu";
 		titol=GetMessage("ContingencyTable") + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(estil.desc);
-		//titol=DonaCadenaLang({"cat":"Taula de contingència", "spa":"Tabla de contingencia", "eng":"Contingency table", "fre":"Tableau de contingence"}) + " " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		ncol*=2;
 		nfil*=2;
 		cdns.push("<div id=\"", DonaNomMatriuConfusio(HistogramaFinestra.n), "\" style=\"width: ", ncol, "px;height: ", nfil, "px;overflow: scroll;\"></div>");
@@ -809,7 +810,6 @@ var tipus_chart;
 				GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
 		}
 
-		//titol=((estil.categories && estil.attributes) ? DonaCadenaLang({"cat":"Gràfic circular", "spa":"Gráfico circular", "eng":"Pie chart", "fre":"Diagramme à secteurs"}) : DonaCadenaLang({"cat":"Histograma", "spa":"Histograma", "eng":"Histogram", "fre":"Histogramme"}))+" " + (HistogramaFinestra.n+1) + ", "+ DonaCadena(ParamCtrl.capa[i_capa].desc);
 		if (component.length==1 || component.length==2)
 			cdns.push("<canvas id=\"", nom_histograma, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
 		else
@@ -819,6 +819,9 @@ var tipus_chart;
 			for (var i_c=0; i_c<component.length; i_c++)
 				cdns.push("<div style=\"width: ", ncol, "px;height: ", nfil, "px;\"><canvas id=\"", nom_histograma, "_canvas_", i_c, "\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas></div>");
 		}
+		cdns.push("<fieldset id=\"", nom_histograma, "_estad_fieldset\" class=\"plegat\" style=\"margin:4px 6px;\">",
+			"<legend id=\"", nom_histograma, "_estad_legend\" onClick=\"PlegaDesplegaEstadisticsGrafic(", HistogramaFinestra.n, ");\">+ ", GetMessage("Statistics"), "</legend>",
+			"<div id=\"", nom_histograma, "_estad_raster\"></div></fieldset>");
 	}
 	//Això només és pel portapapers, donat que aquesta àrea és invisible.
 	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom_histograma));
@@ -850,7 +853,8 @@ var tipus_chart;
 	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd",
 		textHTMLFinestraLayer(nom_histograma, titol, boto_tancar|boto_copiar, (des_left == -9999 ) ? 200+HistogramaFinestra.n*10 : des_left, (des_top == -9999) ? 200+HistogramaFinestra.n*10 : des_top,
 			(des_width == -9999) ? ncol : des_width, (des_height == -9999) ? (component.length == 2 ? nfil+AltBarraFinestraLayer+2+20 : nfil*component.length+AltBarraFinestraLayer+2+20) : des_height+20,
-			 "NW", (tipus_chart == "matriu" || tipus_chart == "stat" || tipus_chart == "stat_categ") ? {scroll: "ara_no", visible: true, ev: null, resizable:true} : {scroll: "no", visible: true, ev: null}, cdns.join("")));
+			 "NW", {scroll: (tipus_chart == "matriu" || tipus_chart == "stat" || tipus_chart == "stat_categ") ? "ara_no" : "no",
+				 visible: true, ev: null, resizable: true}, cdns.join("")));
 	OmpleBarraFinestraLayerNom(window, nom_histograma);
 	HistogramaFinestra.vista[HistogramaFinestra.n]={ //"nfil": nfil,
 				//"ncol": ncol,
@@ -873,6 +877,12 @@ var tipus_chart;
 		var n_comp_usar = estil.component.length==2 ? 1 : estil.component.length;
 		for (var i_c=0; i_c<n_comp_usar; i_c++)
 			CreaHistograma(HistogramaFinestra.n, i_c);
+		OmpleEstadisticsGraficRaster(HistogramaFinestra.n);
+		if (des_height==-9999)
+		{
+			ajustaAllargadaAContingutFinestraLayer(window, nom_histograma, 0);
+			ajustaAllargadaAContingutFinestraLayer(window, nom_histograma, -1);
+		}
 
 		if (i_diag != -1) //no s'havia creat encara i per això i_histograma estava indefinit, però estil.diagrama ja existia
 			estil.diagrama[i_diag].i_histograma=HistogramaFinestra.n;
@@ -1615,6 +1625,17 @@ function DesactivaCheckITextUnChartMatriuDinamic(i_capa, i_estil, i_diagrama, di
 	if (typeof estil.diagrama === "undefined" || i_diagrama>estil.diagrama.length)
 		return;
 	const estilDiagrama = estil.diagrama[i_diagrama];
+	if (estilDiagrama.tipus == "chart_vector")
+	{
+		if (typeof estilDiagrama.i_histograma === "undefined")
+		{
+			if (!disabled)
+				ObreFinestraHistogramaVector(i_capa, estilDiagrama.nom_camp);
+			return;
+		}
+		AplicaCheckDinamicHistogramaVector(estilDiagrama.i_histograma, disabled);
+		return;
+	}
 	if (typeof estilDiagrama.i_histograma === "undefined") //encara no s'havia carregat mai
 	{
 
@@ -1755,6 +1776,7 @@ function PreparaHistograma(n_histograma, i_c)
 				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
 		}
 		retorn_prep_histo.options={
+			responsive: false,
 			title: {
 				display: true,
 				text: str
@@ -1839,6 +1861,7 @@ function PreparaHistograma(n_histograma, i_c)
 				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
 		}
 		retorn_prep_histo.options={
+			responsive: false,
 			legend: {
 				display: false
 			},
@@ -1978,7 +2001,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 
 	retorn_prep_histo.options_area={
  		legend: { display: false},
- 	 	responsive: true,
+ 	 	responsive: false,
  	 	scales: {
  	 		xAxes: [{
  					scaleLabel: {display: true, labelString: "Area ("+retorn_prep_histo.unitats_area+"²)"},
@@ -2008,7 +2031,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 		label=estad_categ.desc + (estad_categ.UoM ? (" ("+estad_categ.UoM.replace("&sdot;","·")+")") : "");
 	retorn_prep_histo.options_estad={
  		legend: { display: false},
- 	 	responsive: true,
+ 	 	responsive: false,
  	 	scales: {
  	 		xAxes: [{
  					scaleLabel: {display: true, labelString: label},
@@ -2068,6 +2091,7 @@ var retorn_prep_histo={labels: [], data_area: [], colors_area: [], data_estad: [
 				str+=" ("+DonaCadenaNomDescFormula(capa.dimensioExtra[i_dim].formulaDesc, capa.dimensioExtra[i_dim].valor[capa.dimensioExtra[i_dim].i_valor])+")";
 		}
 		retorn_prep_histo.options={
+			responsive: false,
 			legend: {
 				display: false
 			},
@@ -2788,4 +2812,1264 @@ var data=[]
 		}
 
 	});
+}
+
+var ColorsCategoricsGraficVector=["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC948","#B07AA1","#FF9DA7","#9C755F","#BAB0AC"];
+var MaximClassesGraficCircularVector=24;
+
+function DonaNHistogramaDesDeId(id)
+{
+	var index;
+	if (!id)
+		return NaN;
+	index=id.indexOf(prefixHistogramaFinestra);
+	if (index==-1)
+		return NaN;
+	return parseInt(id.substring(index+prefixHistogramaFinestra.length));
+}
+
+function DonaNomSelectorCampHistograma(i_histo)
+{
+	return DonaNomHistograma(i_histo)+"_camp";
+}
+
+function DonaNomGrupRetallHistograma(i_histo)
+{
+	return DonaNomHistograma(i_histo)+"_trim_grup";
+}
+
+function EscapaTextHTMLGrafic(s)
+{
+	return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
+}
+
+function EsNomCampIgual(a, b)
+{
+	if (a==null || b==null)
+		return false;
+	return String(a).toUpperCase()==String(b).toUpperCase();
+}
+
+function EsValorBuitGraficVector(valor)
+{
+	return typeof valor==="undefined" || valor==null || valor==="";
+}
+
+function ValorNumericGraficVector(valor)
+{
+	var s;
+	if (typeof valor==="number")
+		return isFinite(valor) ? valor : NaN;
+	if (typeof valor==="string")
+	{
+		s=valor.trim();
+		if (s==="" || !isFinite(Number(s)))
+			return NaN;
+		return Number(s);
+	}
+	return NaN;
+}
+
+function TextValorGraficVector(valor, n_decimals)
+{
+	if (typeof valor!=="number" || !isFinite(valor))
+		return String(valor);
+	if (typeof n_decimals==="number")
+		return OKStrOfNe(valor, n_decimals);
+	if (Math.abs(valor)>=1000 || Math.abs(valor-Math.round(valor))<1e-9)
+		return OKStrOfNe(valor, 0);
+	return OKStrOfNe(valor, 2);
+}
+
+function DonaColorCSSGrafic(color, i_fallback)
+{
+	if (color==null || color==="")
+		return ColorsCategoricsGraficVector[i_fallback % ColorsCategoricsGraficVector.length];
+	if (typeof color==="object")
+		return RGB_color(color);
+	return color;
+}
+
+function DonaLlistaCampsGraficVector(capa)
+{
+	var llista=[], keys, i, attr;
+	if (!capa || !capa.attributes)
+		return llista;
+	keys=Object.keys(capa.attributes);
+	for (i=0; i<keys.length; i++)
+	{
+		attr=capa.attributes[keys[i]];
+		if (attr && attr.mostrar=="no")
+			continue;
+		llista.push(keys[i]);
+	}
+	if (llista.length==0)
+		return keys;
+	return llista;
+}
+
+function DonaColorIndexatDelCamp(estil, nom_camp)
+{
+	var i_forma, forma, costats, i_costat, costat;
+	if (!estil || !estil.formes || !nom_camp)
+		return null;
+	for (i_forma=0; i_forma<estil.formes.length; i_forma++)
+	{
+		forma=estil.formes[i_forma];
+		costats=[forma.interior, forma.vora];
+		for (i_costat=0; i_costat<costats.length; i_costat++)
+		{
+			costat=costats[i_costat];
+			if (costat && costat.NomCamp && EsNomCampIgual(costat.NomCamp, nom_camp) && costat.paleta)
+				return costat;
+		}
+	}
+	return null;
+}
+
+function DonaSimbolsDelCamp(estil, nom_camp)
+{
+	var i, simbols, i_simbol;
+	if (!estil || !estil.simbols || !nom_camp)
+		return null;
+	for (i=0; i<estil.simbols.length; i++)
+	{
+		simbols=estil.simbols[i];
+		if (!simbols || !EsNomCampIgual(simbols.NomCamp, nom_camp) || !simbols.simbol)
+			continue;
+		for (i_simbol=0; i_simbol<simbols.simbol.length; i_simbol++)
+		{
+			if (typeof simbols.simbol[i_simbol].ValorCamp!=="undefined")
+				return simbols;
+		}
+	}
+	return null;
+}
+
+function DonaNomCampPerDefecteGraficVector(capa)
+{
+	var estil, i, forma, camps, j;
+	if (!capa)
+		return null;
+	camps=DonaLlistaCampsGraficVector(capa);
+	estil=(capa.estil && capa.estil.length) ? capa.estil[capa.i_estil || 0] : null;
+	if (estil && estil.simbols)
+	{
+		for (i=0; i<estil.simbols.length; i++)
+		{
+			if (estil.simbols[i].NomCamp)
+				return estil.simbols[i].NomCamp;
+		}
+	}
+	if (estil && estil.formes)
+	{
+		for (i=0; i<estil.formes.length; i++)
+		{
+			forma=estil.formes[i];
+			if (forma.interior && forma.interior.NomCamp)
+				return forma.interior.NomCamp;
+			if (forma.vora && forma.vora.NomCamp)
+				return forma.vora.NomCamp;
+		}
+	}
+	if (estil && estil.simbols)
+	{
+		for (i=0; i<estil.simbols.length; i++)
+		{
+			if (estil.simbols[i].NomCampFEscala)
+				return estil.simbols[i].NomCampFEscala;
+		}
+	}
+	for (j=0; j<camps.length; j++)
+		return camps[j];
+	return null;
+}
+
+function DonaFeaturesFontGraficVector(capa)
+{
+	var tipus, i_zone, i_tile;
+	if (!capa)
+		return [];
+	tipus=DonaTipusServidorCapa(capa);
+	if ((tipus=="TipusSTA" || tipus=="TipusSTAplus") && capa.origenAccesObjs==origen_CellsFeaturesOfInterest &&
+			capa.cellZoneLevelSet && capa.cellZoneLevelSet.zoneLevels)
+	{
+		i_zone=DonaCellsIndexZoneLevelMesProperAZoomActual(capa);
+		if (i_zone!=-1 && capa.cellZoneLevelSet.zoneLevels[i_zone].cells && capa.cellZoneLevelSet.zoneLevels[i_zone].cells.features)
+			return capa.cellZoneLevelSet.zoneLevels[i_zone].cells.features;
+	}
+	if (tipus=="TipusDGGS_DBF" && capa.tileMatrixSetGeometry && capa.tileMatrixSetGeometry.tileMatrix)
+	{
+		i_tile=DonaTileMatrixMesProperAZoomActual(capa);
+		if (i_tile!=-1 && capa.tileMatrixSetGeometry.tileMatrix[i_tile].objectes && capa.tileMatrixSetGeometry.tileMatrix[i_tile].objectes.features)
+			return capa.tileMatrixSetGeometry.tileMatrix[i_tile].objectes.features;
+	}
+	if (capa.objectes && capa.objectes.features)
+		return capa.objectes.features;
+	return [];
+}
+
+function DonaColFilFeatureAVista(feature, capa)
+{
+	var geometry, env, vista, env_feat, c;
+	env=ParamInternCtrl.vista.EnvActual;
+	vista=ParamInternCtrl.vista;
+	geometry=DonaGeometryCRSActual(feature, capa.CRSgeometry);
+	if (!geometry || !geometry.coordinates || !env || env.MaxX==env.MinX || env.MaxY==env.MinY)
+		return {i_col: 0, i_fil: 0};
+	if (geometry.type=="Point")
+		c=geometry.coordinates;
+	else
+	{
+		env_feat=DonaEnvCalculatGeometry(geometry, null);
+		if (!env_feat)
+			return {i_col: 0, i_fil: 0};
+		c=[(env_feat.MinX+env_feat.MaxX)/2, (env_feat.MinY+env_feat.MaxY)/2];
+	}
+	return {
+		i_col: Math.round((c[0]-env.MinX)/(env.MaxX-env.MinX)*vista.ncol),
+		i_fil: Math.round((env.MaxY-c[1])/(env.MaxY-env.MinY)*vista.nfil)
+	};
+}
+
+function DonaValorCampFeatureVector(capa, feature, nom_camp)
+{
+	var attributes, keys, i_atrib, attr, colfil, i_col=0, i_fil=0;
+	if (!capa || !feature || !nom_camp)
+		return undefined;
+	attributes=capa.attributes;
+	if (!attributes)
+		return (feature.properties) ? feature.properties[nom_camp] : undefined;
+	i_atrib=DonaIAttributesDesDeNomAttribute(capa, attributes, nom_camp);
+	if (i_atrib==-1)
+		return (feature.properties) ? feature.properties[nom_camp] : undefined;
+	keys=Object.keys(attributes);
+	attr=attributes[keys[i_atrib]];
+	if (!feature.properties && !(attr && (attr.FormulaConsulta || attr.calcul)))
+		return undefined;
+	if (attr && (attr.FormulaConsulta || attr.calcul))
+	{
+		colfil=DonaColFilFeatureAVista(feature, capa);
+		i_col=colfil.i_col;
+		i_fil=colfil.i_fil;
+	}
+	if (!feature.properties)
+		feature.properties={};
+	return DeterminaValorAttributeObjecteCapaDigi(NovaVistaPrincipal, capa, feature, attr, keys[i_atrib], i_col, i_fil);
+}
+
+function DonaValorsCampVistaVector(capa, nom_camp)
+{
+	var features, i, feature, valor, valors=[], n_nodata=0, env;
+	features=DonaFeaturesFontGraficVector(capa);
+	env=ParamInternCtrl.vista.EnvActual;
+	for (i=0; i<features.length; i++)
+	{
+		feature=features[i];
+		if (!EsFeatureCapaDigiDinsOSolapadaAmbEnvolupant(feature, capa.CRSgeometry, env))
+			continue;
+		valor=DonaValorCampFeatureVector(capa, feature, nom_camp);
+		if (EsValorBuitGraficVector(valor) || (typeof valor==="number" && !isFinite(valor)))
+			n_nodata++;
+		else
+			valors.push(valor);
+	}
+	return {valors: valors, n_nodata: n_nodata};
+}
+
+function DonaTractamentCampVector(capa, estil, nom_camp, valors)
+{
+	var attr, i;
+	attr=DonaAttributeCampVector(capa, nom_camp);
+	if (attr && (attr.tractament=="categoric" || attr.tractament=="ordinal" || attr.tractament=="quantitatiu"))
+		return attr.tractament;
+	if (DonaSimbolsDelCamp(estil, nom_camp))
+		return "categoric";
+	if (DonaColorIndexatDelCamp(estil, nom_camp))
+		return "quantitatiu";
+	if (valors && valors.length)
+	{
+		for (i=0; i<valors.length; i++)
+		{
+			if (isNaN(ValorNumericGraficVector(valors[i])))
+				return "categoric";
+		}
+		return "quantitatiu";
+	}
+	return "categoric";
+}
+
+function DonaTipusGraficCampVector(estil, nom_camp, valors, capa)
+{
+	return DonaTractamentCampVector(capa, estil, nom_camp, valors)=="categoric" ? "pie" : "bar";
+}
+
+function DonaTitolMenuGraficVector(i_capa)
+{
+	return GetMessage("Histogram")+" / "+GetMessage("PieChart");
+}
+
+function DonaAttributeCampVector(capa, nom_camp)
+{
+	var i_atrib, keys;
+	if (!capa || !capa.attributes || !nom_camp)
+		return null;
+	i_atrib=DonaIAttributesDesDeNomAttribute(capa, capa.attributes, nom_camp);
+	if (i_atrib==-1)
+		return null;
+	keys=Object.keys(capa.attributes);
+	return capa.attributes[keys[i_atrib]];
+}
+
+function DonaNomCapaLlegendaGraficVector(capa)
+{
+	return DonaCadena(capa.DescLlegenda || capa.desc || capa.nom);
+}
+
+function DonaTitolFinestraHistogramaVector(capa, estil, nom_camp, tipus, i_histo)
+{
+	return (tipus=="pie" ? GetMessage("PieChart") : GetMessage("Histogram"))+" "+(i_histo+1)+", "+DonaNomCapaLlegendaGraficVector(capa);
+}
+
+function ActualitzaTitolFinestraHistogramaVector(i_histo, titol)
+{
+	var nom=DonaNomHistograma(i_histo), z;
+	for (z=0; z<layerFinestraList.length; z++)
+	{
+		if (layerFinestraList[z].nom==nom)
+		{
+			if (layerFinestraList[z].titol!=titol)
+			{
+				layerFinestraList[z].titol=titol;
+				OmpleBarraFinestraLayerNom(window, nom);
+			}
+			return;
+		}
+	}
+}
+
+function ActualitzaNomCampDiagramaVector(h)
+{
+	var estil, i;
+	if (!h)
+		return;
+	estil=ParamCtrl.capa[h.i_capa].estil[h.i_estil];
+	if (!estil || !estil.diagrama)
+		return;
+	for (i=0; i<estil.diagrama.length; i++)
+	{
+		if (estil.diagrama[i].tipus=="chart_vector" && estil.diagrama[i].i_histograma==h.i_histograma)
+			estil.diagrama[i].nom_camp=h.nom_camp;
+	}
+}
+
+function DonaNomEstadisticGraficVector(i_histo)
+{
+	return DonaNomHistograma(i_histo)+"_estad_vector";
+}
+
+function TextEstadisticGraficVector(valor, n_decimals)
+{
+	if (typeof valor!=="number" || !isFinite(valor))
+		return "";
+	if (typeof n_decimals==="number")
+		return OKStrOfNe(valor, n_decimals);
+	return OKStrOfNe(valor, 4);
+}
+
+function EsCampQuantitatiuGraficVector(estil, nom_camp, valors, capa)
+{
+	var tractament=DonaTractamentCampVector(capa, estil, nom_camp, valors);
+	return tractament=="quantitatiu" || tractament=="ordinal";
+}
+
+function CalculaEstadisticsValorsVector(valors, quantitatiu)
+{
+	var i, num, nums=[], suma=0, minim=NaN, maxim=NaN, mitjana=NaN, varianca=0;
+	var mapa, clau, millor=null, n=0;
+
+	if (!quantitatiu)
+	{
+		mapa={};
+		for (i=0; i<valors.length; i++)
+		{
+			clau=String(valors[i]);
+			if (!mapa[clau])
+				mapa[clau]={label: clau, n: 0};
+			mapa[clau].n++;
+			n++;
+			if (!millor || mapa[clau].n>millor.n)
+				millor=mapa[clau];
+		}
+		return {
+			quantitatiu: false,
+			recompte: n,
+			moda: millor ? millor.label : "",
+			recompte_moda: millor ? millor.n : 0,
+			percent_moda: (n && millor) ? millor.n/n*100 : 0
+		};
+	}
+	for (i=0; i<valors.length; i++)
+	{
+		num=ValorNumericGraficVector(valors[i]);
+		if (isNaN(num))
+			continue;
+		nums.push(num);
+		suma+=num;
+		if (isNaN(minim) || num<minim)
+			minim=num;
+		if (isNaN(maxim) || num>maxim)
+			maxim=num;
+	}
+	if (nums.length)
+	{
+		mitjana=suma/nums.length;
+		for (i=0; i<nums.length; i++)
+			varianca+=(nums[i]-mitjana)*(nums[i]-mitjana);
+		varianca/=nums.length;
+	}
+	return {
+		quantitatiu: true,
+		recompte: nums.length,
+		suma: suma,
+		mitjana: mitjana,
+		varianca: varianca,
+		desv_tipica: nums.length ? Math.sqrt(varianca) : NaN,
+		minim: minim,
+		maxim: maxim,
+		rang: nums.length ? maxim-minim : NaN
+	};
+}
+
+function DonaFilaEstadisticGraficVector(nom, valor)
+{
+	return "<tr><td><b>"+nom+"</b></td><td style=\"text-align:right;padding-left:12px;\">"+valor+"</td></tr>";
+}
+
+function DonaTextEstadisticsGraficVector(estad, n_nodata, n_decimals)
+{
+	var cdns=[];
+	if (!estad)
+		return "";
+	cdns.push("<table style=\"border-collapse:collapse;\">",
+		DonaFilaEstadisticGraficVector(GetMessage("Count"), estad.recompte),
+		DonaFilaEstadisticGraficVector(GetMessage("NoData"), n_nodata));
+	if (estad.recompte && estad.quantitatiu)
+	{
+		cdns.push(DonaFilaEstadisticGraficVector(GetMessage("Sum"), TextEstadisticGraficVector(estad.suma, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("Mean"), TextEstadisticGraficVector(estad.mitjana, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("Variance"), TextEstadisticGraficVector(estad.varianca, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("StandardDeviation"), TextEstadisticGraficVector(estad.desv_tipica, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("Minimum"), TextEstadisticGraficVector(estad.minim, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("Maximum"), TextEstadisticGraficVector(estad.maxim, n_decimals)),
+			DonaFilaEstadisticGraficVector(GetMessage("Range"), TextEstadisticGraficVector(estad.rang, n_decimals)));
+	}
+	else if (estad.recompte)
+	{
+		cdns.push(DonaFilaEstadisticGraficVector(GetMessage("ModalClass"), EscapaTextHTMLGrafic(estad.moda)),
+			DonaFilaEstadisticGraficVector(GetMessage("PercentageMode"), OKStrOfNe(estad.percent_moda, 2)+" %"));
+	}
+	cdns.push("</table>");
+	return cdns.join("");
+}
+
+function DonaFilaEstadisticsGraficRaster(nom, valors)
+{
+	var cdns=["<tr><td><b>", nom, "</b></td>"], i;
+	for (i=0; i<valors.length; i++)
+		cdns.push("<td style=\"text-align:right;padding-left:12px;\">", valors[i], "</td>");
+	cdns.push("</tr>");
+	return cdns.join("");
+}
+
+function DonaTextEstadisticsGraficRaster(i_histo)
+{
+	var histograma=HistogramaFinestra.vista[i_histo];
+	var estil=ParamCtrl.capa[histograma.i_capa].estil[histograma.i_estil];
+	var costat=ParamInternCtrl.vista.CostatZoomActual;
+	var env={MinX: ParamInternCtrl.vista.EnvActual.MinX, MaxX: ParamInternCtrl.vista.EnvActual.MaxX, MinY: ParamInternCtrl.vista.EnvActual.MinY, MaxY: ParamInternCtrl.vista.EnvActual.MaxY};
+	var i_situacio=ParamInternCtrl.ISituacio;
+	var area_cella=DonaAreaCella(env, costat, ParamCtrl.ImatgeSituacio[i_situacio].EnvTotal.CRS);
+	var categoric=DonaTractamentComponent(estil, 0)=="categoric";
+	var n_comp=categoric ? (estil.component.length==2 ? 1 : estil.component.length) : estil.component.length;
+	var i_c, ncolors, estad=[], recompte=false, cdns=[], valors, nom_comp;
+
+	for (i_c=0; i_c<n_comp; i_c++)
+	{
+		ncolors=estil.histograma.component[i_c].classe.length;
+		if (categoric)
+			estad[i_c]=CalculaEstadisticsCategorics(estil.histograma.component[i_c].classe);
+		else
+			estad[i_c]=CalculaEstadisticsHistograma(estil.histograma.component[i_c].classe,
+				DonaFactorValorMinEstiramentPaleta(estil.component[i_c].estiramentPaleta),
+				DonaFactorValorMaxEstiramentPaleta(estil.component[i_c].estiramentPaleta, ncolors),
+				estil.histograma.component[i_c].sumaValorsReal);
+		if (estad[i_c].recompte)
+			recompte=true;
+	}
+	cdns.push("<table style=\"border-collapse:collapse;\">");
+	if (n_comp>1)
+	{
+		cdns.push("<tr><td></td>");
+		for (i_c=0; i_c<n_comp; i_c++)
+		{
+			nom_comp=estil.component[i_c].desc ? DonaCadena(estil.component[i_c].desc) : DonaCadenaNomDescItemsLleg(estil);
+			cdns.push("<td style=\"text-align:right;padding-left:12px;\"><b>", nom_comp, "</b></td>");
+		}
+		cdns.push("</tr>");
+	}
+	valors=[];
+	for (i_c=0; i_c<n_comp; i_c++)
+		valors.push(estad[i_c].recompte);
+	cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Count"), valors));
+	cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("NoData"), [estil.histograma.classe_nodata || 0]));
+	valors=[];
+	for (i_c=0; i_c<n_comp; i_c++)
+		valors.push(TextEstadisticGraficVector(estad[i_c].recompte*area_cella, 2));
+	cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Area")+" (m²)", valors));
+	if (recompte && categoric)
+	{
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(DonaTextCategoriaDesDeColor(estil.categories, estil.attributes, estad[i_c].i_moda, true));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("ModalClass"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(OKStrOfNe(estil.histograma.component[i_c].classe[estad[i_c].i_moda]/estad[i_c].recompte*100, 2)+" %");
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("PercentageMode"), valors));
+	}
+	else if (recompte)
+	{
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estad[i_c].suma, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Sum"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estad[i_c].suma*area_cella, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("SumArea")+" (m²)", valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estad[i_c].mitjana, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Mean"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estad[i_c].varianca, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Variance"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estad[i_c].desv_tipica, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("StandardDeviation"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estil.histograma.component[i_c].valorMinimReal, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Minimum"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estil.histograma.component[i_c].valorMaximReal, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Maximum"), valors));
+		valors=[];
+		for (i_c=0; i_c<n_comp; i_c++)
+			valors.push(TextEstadisticGraficVector(estil.histograma.component[i_c].valorMaximReal-estil.histograma.component[i_c].valorMinimReal+1, estil.component[i_c].NDecimals));
+		cdns.push(DonaFilaEstadisticsGraficRaster(GetMessage("Range"), valors));
+	}
+	cdns.push("</table>");
+	return cdns.join("");
+}
+
+function OmpleEstadisticsGraficRaster(i_histo)
+{
+	var node=document.getElementById(DonaNomHistograma(i_histo)+"_estad_raster");
+	if (node)
+		node.innerHTML=DonaTextEstadisticsGraficRaster(i_histo);
+}
+
+function PlegaDesplegaEstadisticsGrafic(i_histo)
+{
+	var nom=DonaNomHistograma(i_histo);
+	var fieldset=document.getElementById(nom+"_estad_fieldset");
+	var plegat=fieldset.className=="plegat";
+
+	fieldset.className=plegat ? "desplegat" : "plegat";
+	document.getElementById(nom+"_estad_legend").innerHTML=(plegat ? "- " : "+ ")+GetMessage("Statistics");
+	ajustaAllargadaAContingutFinestraLayer(window, nom, 0);
+	ajustaAllargadaAContingutFinestraLayer(window, nom, -1);
+}
+
+function LimitaClassesGraficCircular(entrades)
+{
+	var i, altres, conservades;
+	if (entrades.length<=MaximClassesGraficCircularVector)
+		return entrades;
+	entrades.sort(function(a, b) { return b.n-a.n; });
+	altres=0;
+	for (i=MaximClassesGraficCircularVector-1; i<entrades.length; i++)
+		altres+=entrades[i].n;
+	conservades=entrades.slice(0, MaximClassesGraficCircularVector-1);
+	conservades.push({label: GetMessage("Others"), n: altres, color: "#BBBBBB"});
+	return conservades;
+}
+
+function PreparaHistogramaVector(i_histo, retall_cues)
+{
+	var h=HistogramaFinestra.vista[i_histo];
+	var capa=ParamCtrl.capa[h.i_capa];
+	var estil=capa.estil[h.i_estil];
+	var resum=DonaValorsCampVistaVector(capa, h.nom_camp);
+	var valors=resum.valors;
+	var tipus=DonaTipusGraficCampVector(estil, h.nom_camp, valors, capa);
+	var attr=DonaAttributeCampVector(capa, h.nom_camp);
+	var n_decimals=attr ? attr.NDecimals : undefined;
+	var color_indexat=DonaColorIndexatDelCamp(estil, h.nom_camp);
+	var simbols=DonaSimbolsDelCamp(estil, h.nom_camp);
+	var labels=[], data=[], colors=[], extrems=[], entrades=[], i, j, valor, num, clau, mapa, claus, entrada;
+	var valor_minim_real=NaN, valor_maxim_real=NaN, estirament=null, permet_retall=false;
+	var titol, options, total, a, vmin, ncolors, i_color, amplada, n_bins;
+	var retorn={tipus: tipus, labels: labels, data: data, colors: colors, valors: null, n_nodata: resum.n_nodata, permet_retall: false, options: null};
+
+	titol=DonaNomCapaLlegendaGraficVector(capa);
+	if (h.nom_camp)
+		titol+=", "+(attr ? DonaCadenaDescripcioAttribute(h.nom_camp, attr, false) : h.nom_camp);
+	if (capa.data)
+		titol+=" ("+DonaDataCapaComATextBreu(h.i_capa, capa.i_data)+")";
+
+	if (tipus=="pie" && simbols)
+	{
+		for (i=0; i<simbols.simbol.length; i++)
+		{
+			if (typeof simbols.simbol[i].ValorCamp==="undefined")
+				continue;
+			entrades.push({label: String(simbols.simbol[i].ValorCamp), n: 0, valor: simbols.simbol[i].ValorCamp, color: DonaColorCSSGrafic(null, i)});
+		}
+		for (i=0; i<valors.length; i++)
+		{
+			entrada=null;
+			for (j=0; j<entrades.length; j++)
+			{
+				if (valors[i]==entrades[j].valor)
+				{
+					entrada=entrades[j];
+					break;
+				}
+			}
+			if (entrada)
+				entrada.n++;
+			else
+			{
+				if (!entrades.altres)
+				{
+					entrades.altres={label: GetMessage("Others"), n: 0, color: "#BBBBBB"};
+					entrades.push(entrades.altres);
+				}
+				entrades.altres.n++;
+			}
+		}
+		for (i=entrades.length-1; i>=0; i--)
+		{
+			if (entrades[i].n==0)
+				entrades.splice(i, 1);
+		}
+		entrades=LimitaClassesGraficCircular(entrades);
+	}
+	else if (tipus=="pie")
+	{
+		mapa={};
+		for (i=0; i<valors.length; i++)
+		{
+			clau=String(valors[i]);
+			if (!mapa[clau])
+				mapa[clau]={label: clau, n: 0, valor: valors[i]};
+			mapa[clau].n++;
+		}
+		claus=Object.keys(mapa);
+		for (i=0; i<claus.length; i++)
+			entrades.push(mapa[claus[i]]);
+		if (entrades.length && !isNaN(ValorNumericGraficVector(entrades[0].valor)))
+			entrades.sort(function(a, b) { return ValorNumericGraficVector(a.valor)-ValorNumericGraficVector(b.valor); });
+		else
+			entrades.sort(function(a, b) { return b.n-a.n; });
+		for (i=0; i<entrades.length; i++)
+			entrades[i].color=DonaColorCSSGrafic(null, i);
+		entrades=LimitaClassesGraficCircular(entrades);
+	}
+	else if (color_indexat && color_indexat.paleta)
+	{
+		if (color_indexat.paleta.ramp && !color_indexat.paleta.colors)
+			TransformRampToColorsArray(color_indexat.paleta);
+		ncolors=(color_indexat.paleta.colors && color_indexat.paleta.colors.length) ? color_indexat.paleta.colors.length : 1;
+		estirament=color_indexat.estiramentPaleta;
+		for (i=0; i<valors.length; i++)
+		{
+			num=ValorNumericGraficVector(valors[i]);
+			if (isNaN(num))
+			{
+				retorn.n_nodata++;
+				continue;
+			}
+			if (isNaN(valor_minim_real) || num<valor_minim_real)
+				valor_minim_real=num;
+			if (isNaN(valor_maxim_real) || num>valor_maxim_real)
+				valor_maxim_real=num;
+		}
+		if (!estirament || estirament.auto==true || typeof estirament.valorMinim!=="number" || typeof estirament.valorMaxim!=="number")
+			estirament={valorMinim: isNaN(valor_minim_real) ? 0 : valor_minim_real, valorMaxim: isNaN(valor_maxim_real) ? 1 : valor_maxim_real};
+		a=DonaFactorAEstiramentPaleta(estirament, ncolors);
+		vmin=DonaFactorValorMinEstiramentPaleta(estirament);
+		for (i=0; i<ncolors; i++)
+		{
+			data[i]=0;
+			colors[i]=DonaColorCSSGrafic(color_indexat.paleta.colors ? color_indexat.paleta.colors[i] : "#888888", i);
+			extrems[i]=vmin+(estirament.valorMaxim-estirament.valorMinim)*i/ncolors;
+			labels[i]="";
+		}
+		extrems[ncolors]=estirament.valorMaxim;
+		if (ncolors>0)
+		{
+			labels[0]=TextValorGraficVector(extrems[0], n_decimals);
+			if (ncolors>2)
+				labels[Math.floor(ncolors/2)]=TextValorGraficVector((extrems[0]+estirament.valorMaxim)/2, n_decimals);
+			labels[ncolors-1]=TextValorGraficVector(estirament.valorMaxim, n_decimals);
+		}
+		for (i=0; i<valors.length; i++)
+		{
+			num=ValorNumericGraficVector(valors[i]);
+			if (isNaN(num))
+				continue;
+			i_color=Math.floor(a*(num-vmin));
+			if (i_color>=ncolors)
+				i_color=ncolors-1;
+			else if (i_color<0)
+				i_color=0;
+			data[i_color]++;
+		}
+		retorn.valors=extrems;
+		permet_retall=!isNaN(valor_minim_real) && !isNaN(valor_maxim_real) &&
+			((valor_minim_real<estirament.valorMinim) || (valor_maxim_real>estirament.valorMaxim));
+	}
+	else
+	{
+		for (i=0; i<valors.length; i++)
+		{
+			num=ValorNumericGraficVector(valors[i]);
+			if (isNaN(num))
+			{
+				retorn.n_nodata++;
+				continue;
+			}
+			if (isNaN(valor_minim_real) || num<valor_minim_real)
+				valor_minim_real=num;
+			if (isNaN(valor_maxim_real) || num>valor_maxim_real)
+				valor_maxim_real=num;
+		}
+		if (isNaN(valor_minim_real))
+		{
+			valor_minim_real=0;
+			valor_maxim_real=1;
+		}
+		n_bins=valors.length ? Math.round(Math.log(valors.length)/Math.LN2)+1 : 8;
+		if (n_bins<8)
+			n_bins=8;
+		if (n_bins>32)
+			n_bins=32;
+		if (valor_maxim_real==valor_minim_real)
+			n_bins=1;
+		amplada=(valor_maxim_real-valor_minim_real)/n_bins;
+		for (i=0; i<n_bins; i++)
+		{
+			data[i]=0;
+			colors[i]="#888888";
+			extrems[i]=valor_minim_real+amplada*i;
+			labels[i]="";
+		}
+		extrems[n_bins]=valor_maxim_real;
+		labels[0]=TextValorGraficVector(extrems[0], n_decimals);
+		if (n_bins>2)
+			labels[Math.floor(n_bins/2)]=TextValorGraficVector((extrems[0]+valor_maxim_real)/2, n_decimals);
+		if (n_bins>1)
+			labels[n_bins-1]=TextValorGraficVector(valor_maxim_real, n_decimals);
+		for (i=0; i<valors.length; i++)
+		{
+			num=ValorNumericGraficVector(valors[i]);
+			if (isNaN(num))
+				continue;
+			if (n_bins==1)
+				i_color=0;
+			else
+			{
+				i_color=Math.floor((num-valor_minim_real)/amplada);
+				if (i_color>=n_bins)
+					i_color=n_bins-1;
+				else if (i_color<0)
+					i_color=0;
+			}
+			data[i_color]++;
+		}
+		retorn.valors=extrems;
+	}
+
+	if (tipus=="pie")
+	{
+		for (i=0; i<entrades.length; i++)
+		{
+			labels[i]=entrades[i].label;
+			data[i]=entrades[i].n;
+			colors[i]=entrades[i].color || DonaColorCSSGrafic(null, i);
+		}
+		if (labels.join("").length<600)
+		{
+			for (i=0; i<labels.length; i++)
+			{
+				if (labels[i].length>40)
+					labels[i]=labels[i].substring(0, 40);
+			}
+		}
+		options={
+			responsive: false,
+			title: {display: true, text: titol},
+			legend: (labels.length && labels.join("").length<600) ? {position: "right", labels: {fontSize: 10, padding: 3}} : {display: false},
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data_chart) {
+						var allData=data_chart.datasets[tooltipItem.datasetIndex].data;
+						var suma=0, k;
+						for (k=0; k<allData.length; k++)
+							suma+=allData[k];
+						return data_chart.labels[tooltipItem.index]+": "+(suma ? OKStrOfNe(allData[tooltipItem.index]/suma*100, 2) : "0")+"%, "+allData[tooltipItem.index];
+					}
+				}
+			}
+		};
+	}
+	else
+	{
+		options={
+			responsive: false,
+			legend: {display: false},
+			title: {display: true, text: titol},
+			scales: {
+				xAxes: [{
+					categoryPercentage: 1,
+					barPercentage: 1.01+0.002*data.length,
+					gridLines: {display: false},
+					ticks: {autoSkip: false, maxRotation: 0}
+				}],
+				yAxes: [{
+					scaleLabel: {display: true, labelString: GetMessage("Count")},
+					ticks: {beginAtZero: true}
+				}]
+			},
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data_chart) {
+						var inici=data_chart.valors ? data_chart.valors[tooltipItem.index] : "";
+						var fi=data_chart.valors ? data_chart.valors[tooltipItem.index+1] : "";
+						return "("+inici+", "+fi+"), "+data_chart.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+					}
+				}
+			}
+		};
+		if (retall_cues && permet_retall && estirament)
+		{
+			var inici_bin=0, fi_bin=data.length, maxim=0;
+			if (valor_minim_real<estirament.valorMinim)
+				inici_bin=1;
+			if (valor_maxim_real>estirament.valorMaxim && fi_bin>inici_bin)
+				fi_bin--;
+			for (i=inici_bin; i<fi_bin; i++)
+			{
+				if (data[i]>maxim)
+					maxim=data[i];
+			}
+			options.scales.yAxes[0].ticks.max=maxim+maxim*0.1;
+		}
+	}
+
+	retorn.tipus=tipus;
+	retorn.labels=labels;
+	retorn.data=data;
+	retorn.colors=colors;
+	retorn.permet_retall=permet_retall;
+	retorn.options=options;
+	retorn.n_decimals=n_decimals;
+	retorn.estadistics=CalculaEstadisticsValorsVector(valors, EsCampQuantitatiuGraficVector(estil, h.nom_camp, valors, capa));
+	retorn.titol_finestra=DonaTitolFinestraHistogramaVector(capa, estil, h.nom_camp, tipus, i_histo);
+	OmpleTextPortapapersGraficVector(i_histo, capa, h.nom_camp, retorn);
+	return retorn;
+}
+
+function OmpleTextPortapapersGraficVector(i_histo, capa, nom_camp, prep)
+{
+	var cdns=[], i, total=0, textarea, estad=prep.estadistics;
+	for (i=0; i<prep.data.length; i++)
+		total+=prep.data[i];
+	cdns.push(GetMessage("Layer"), "\t", DonaNomCapaLlegendaGraficVector(capa), "\n",
+		GetMessage("Field"), "\t", nom_camp, "\n",
+		"MinX", "\t", ParamInternCtrl.vista.EnvActual.MinX, "\n",
+		"MaxX", "\t", ParamInternCtrl.vista.EnvActual.MaxX, "\n",
+		"MinY", "\t", ParamInternCtrl.vista.EnvActual.MinY, "\n",
+		"MaxY", "\t", ParamInternCtrl.vista.EnvActual.MaxY, "\n",
+		GetMessage("Count"), "\t", (estad ? estad.recompte : total), "\n",
+		GetMessage("NoData"), "\t", prep.n_nodata, "\n");
+	if (estad && estad.recompte && estad.quantitatiu)
+	{
+		cdns.push(GetMessage("Sum"), "\t", estad.suma, "\n",
+			GetMessage("Mean"), "\t", estad.mitjana, "\n",
+			GetMessage("Variance"), "\t", estad.varianca, "\n",
+			GetMessage("StandardDeviation"), "\t", estad.desv_tipica, "\n",
+			GetMessage("Minimum"), "\t", estad.minim, "\n",
+			GetMessage("Maximum"), "\t", estad.maxim, "\n",
+			GetMessage("Range"), "\t", estad.rang, "\n");
+	}
+	else if (estad && estad.recompte)
+	{
+		cdns.push(GetMessage("ModalClass"), "\t", estad.moda, "\n",
+			GetMessage("PercentageMode"), "\t", estad.percent_moda, "\n");
+	}
+	if (prep.tipus=="bar" && prep.valors)
+		cdns.push(GetMessage("ClassCentralValue", "histopie"), "\t", GetMessage("Count"), "\t%\n");
+	else
+		cdns.push(GetMessage("Class"), "\t", GetMessage("Count"), "\t%\n");
+	for (i=0; i<prep.data.length; i++)
+	{
+		if (prep.tipus=="bar" && prep.valors && i+1<prep.valors.length)
+			cdns.push((prep.valors[i]+prep.valors[i+1])/2);
+		else
+			cdns.push(prep.labels[i]);
+		cdns.push("\t", prep.data[i], "\t", (total ? prep.data[i]/total*100 : 0), "\n");
+	}
+	textarea=window.document.getElementById(DonaNomHistograma(i_histo)+"_copy_text");
+	if (textarea)
+		textarea.value=cdns.join("");
+}
+
+function ActualitzaGraficVector(i_histo)
+{
+	var h=HistogramaFinestra.vista[i_histo];
+	var selector, retall, grup_retall, prep, ctx, chart;
+	if (!h || !h.vector || typeof Chart==="undefined")
+		return;
+	selector=document.getElementById(DonaNomSelectorCampHistograma(i_histo));
+	if (selector && selector.value)
+		h.nom_camp=selector.value;
+	ActualitzaNomCampDiagramaVector(h);
+	retall=document.getElementById(DonaNomCheckTrimTailsHistograma(i_histo));
+	prep=PreparaHistogramaVector(i_histo, retall && retall.checked);
+	var node_estad=document.getElementById(DonaNomEstadisticGraficVector(i_histo));
+	if (node_estad)
+		node_estad.innerHTML=DonaTextEstadisticsGraficVector(prep.estadistics, prep.n_nodata, prep.n_decimals);
+	grup_retall=document.getElementById(DonaNomGrupRetallHistograma(i_histo));
+	if (grup_retall)
+		grup_retall.style.display=(prep.tipus=="bar" && prep.permet_retall) ? "inline" : "none";
+	ctx=document.getElementById(DonaNomCanvasHistograma(i_histo)+"0");
+	if (!ctx)
+		return;
+	chart=(h.chart && h.chart.length) ? h.chart[0] : null;
+	if (chart && chart.config.type!=prep.tipus)
+	{
+		chart.destroy();
+		chart=null;
+	}
+	if (!chart)
+	{
+		chart=new Chart(ctx, {
+			type: prep.tipus,
+			data: {
+				labels: prep.labels,
+				valors: prep.valors,
+				datasets: [{
+					data: prep.data,
+					backgroundColor: prep.colors,
+					borderWidth: 0
+				}]
+			},
+			options: prep.options
+		});
+		h.chart=[chart];
+	}
+	else
+	{
+		chart.config.data.labels=prep.labels;
+		chart.config.data.valors=prep.valors;
+		chart.config.data.datasets[0].data=prep.data;
+		chart.config.data.datasets[0].backgroundColor=prep.colors;
+		chart.options=prep.options;
+		chart.update();
+	}
+	ActualitzaTitolFinestraHistogramaVector(i_histo, prep.titol_finestra);
+}
+
+function CanviCampHistogramaVector(event)
+{
+	var n, h, capa;
+	if (!event || !event.target)
+		return;
+	n=DonaNHistogramaDesDeId(event.target.id);
+	if (isNaN(n) || !HistogramaFinestra.vista[n])
+		return;
+	h=HistogramaFinestra.vista[n];
+	h.nom_camp=event.target.value;
+	ActualitzaNomCampDiagramaVector(h);
+	capa=ParamCtrl.capa[h.i_capa];
+	if (CalDemanarPropietatsGraficVector(capa, h.nom_camp) &&
+			DescarregaPropietatsCapaDigiVistaSiCal(ActualitzaHistogramesVectorDespresPropietats, {i_capa: h.i_capa}))
+		return;
+	ActualitzaGraficVector(n);
+}
+
+function CanviDinamicHistogramaVector(event)
+{
+	var n;
+	if (!event || !event.target || !event.target.checked)
+		return;
+	n=DonaNHistogramaDesDeId(event.target.id);
+	if (!isNaN(n))
+		ActualitzaGraficVector(n);
+}
+
+function CanviRetallHistogramaVector(event)
+{
+	var n;
+	if (!event || !event.target)
+		return;
+	n=DonaNHistogramaDesDeId(event.target.id);
+	if (!isNaN(n))
+		ActualitzaGraficVector(n);
+}
+
+function CalDemanarPropietatsGraficVector(capa, nom_camp)
+{
+	var features, i, feature, n_vista=0, n_sense=0, attr;
+	if (!capa || !capa.tipus)
+		return false;
+	attr=DonaAttributeCampVector(capa, nom_camp);
+	if (attr && (attr.FormulaConsulta || attr.calcul))
+		return false;
+	features=DonaFeaturesFontGraficVector(capa);
+	for (i=0; i<features.length; i++)
+	{
+		feature=features[i];
+		if (!EsFeatureCapaDigiDinsOSolapadaAmbEnvolupant(feature, capa.CRSgeometry, ParamInternCtrl.vista.EnvActual))
+			continue;
+		n_vista++;
+		if (!feature.properties || CountPropertiesOfObject(feature.properties)==0)
+			n_sense++;
+	}
+	return n_vista>0 && n_sense==n_vista;
+}
+
+function ActualitzaHistogramesVectorDespresPropietats(param)
+{
+	if (param)
+		ActualitzaHistogramesVectorCapaSiCal(param.i_capa);
+}
+
+function ActualitzaHistogramesVectorCapaSiCal(i_capa)
+{
+	var i, h, el;
+	if (!HistogramaFinestra || !HistogramaFinestra.vista)
+		return;
+	for (i=0; i<HistogramaFinestra.vista.length; i++)
+	{
+		h=HistogramaFinestra.vista[i];
+		if (!h || !h.vector || h.i_capa!=i_capa)
+			continue;
+		el=document.getElementById(DonaNomCheckDinamicHistograma(i));
+		if (el && el.checked)
+			ActualitzaGraficVector(i);
+	}
+}
+
+function AplicaCheckDinamicHistogramaVector(i_histo, disabled)
+{
+	var part_id=DonaNomCheckDinamicHistograma(i_histo);
+	var el=window.document.getElementById(part_id);
+	var label, text;
+	if (!el)
+		return;
+	label=window.document.getElementById(part_id+"_label");
+	text=window.document.getElementById(part_id+"_text");
+	el.disabled=disabled ? true : false;
+	if (label)
+		label.style.fontStyle=disabled ? "italic" : "";
+	if (text)
+		text.style.display=disabled ? "inline" : "none";
+}
+
+function CongelaHistogramesVectorCapa(i_capa, disabled)
+{
+	var i, h;
+	if (!HistogramaFinestra || !HistogramaFinestra.vista)
+		return;
+	for (i=0; i<HistogramaFinestra.vista.length; i++)
+	{
+		h=HistogramaFinestra.vista[i];
+		if (h && h.vector && h.i_capa==i_capa)
+			AplicaCheckDinamicHistogramaVector(i, disabled);
+	}
+}
+
+function ObreHistogramesVectorPendents(i_capa)
+{
+	var capa=ParamCtrl.capa[i_capa], estil, i, pendents=[];
+	if (!capa || !capa.estil || !capa.estil.length)
+		return;
+	estil=capa.estil[(typeof capa.i_estil==="number") ? capa.i_estil : 0];
+	if (!estil || !estil.diagrama)
+		return;
+	for (i=0; i<estil.diagrama.length; i++)
+	{
+		if (estil.diagrama[i].tipus=="chart_vector" && typeof estil.diagrama[i].i_histograma==="undefined")
+			pendents.push(estil.diagrama[i].nom_camp || null);
+	}
+	for (i=0; i<pendents.length; i++)
+		ObreFinestraHistogramaVector(i_capa, pendents[i]);
+}
+
+function DonaTextDiagramesOberts()
+{
+	var cdns=[], i_capa, capa, i_estil, estil, i, diagrama, obj;
+	if (!ParamCtrl || !ParamCtrl.capa)
+		return "";
+	for (i_capa=0; i_capa<ParamCtrl.capa.length; i_capa++)
+	{
+		capa=ParamCtrl.capa[i_capa];
+		if (!capa.estil)
+			continue;
+		for (i_estil=0; i_estil<capa.estil.length; i_estil++)
+		{
+			estil=capa.estil[i_estil];
+			if (!estil.diagrama)
+				continue;
+			for (i=0; i<estil.diagrama.length; i++)
+			{
+				diagrama=estil.diagrama[i];
+				if (typeof diagrama.i_histograma==="undefined" || diagrama.tipus=="vista3d")
+					continue;
+				obj={ly: capa.id, type: diagrama.tipus};
+				if (estil.id)
+					obj.stl=estil.id;
+				if (diagrama.stat)
+					obj.stat=diagrama.stat;
+				if (diagrama.order)
+					obj.order=diagrama.order;
+				if (diagrama.nom_camp)
+					obj.nom_camp=diagrama.nom_camp;
+				cdns.push(JSON.stringify(obj));
+			}
+		}
+	}
+	return cdns.join(",");
+}
+
+function ObreFinestraHistogramaVector(i_capa, nom_camp_demanat)
+{
+	var capa=ParamCtrl.capa[i_capa], i_estil, estil, camps, nom_camp, n, nom, cdns=[], i, attr, i_diag=-1;
+	var des_left=-9999, des_top=-9999, ncol=460, nfil=260;
+	if (!capa || capa.model!=model_vector || !capa.estil || !capa.estil.length)
+		return;
+	i_estil=(typeof capa.i_estil==="number") ? capa.i_estil : 0;
+	estil=capa.estil[i_estil];
+	if (!estil)
+		return;
+	camps=DonaLlistaCampsGraficVector(capa);
+	if (!camps.length)
+		return;
+	nom_camp=nom_camp_demanat || DonaNomCampPerDefecteGraficVector(capa);
+	if (!nom_camp)
+		nom_camp=camps[0];
+	for (i=0; i<camps.length; i++)
+	{
+		if (EsNomCampIgual(camps[i], nom_camp))
+		{
+			nom_camp=camps[i];
+			break;
+		}
+	}
+	if (i==camps.length)
+		nom_camp=camps[0];
+	if (estil.diagrama)
+	{
+		for (i=0; i<estil.diagrama.length; i++)
+		{
+			if (estil.diagrama[i].tipus=="chart_vector" && typeof estil.diagrama[i].i_histograma==="undefined")
+			{
+				if (nom_camp_demanat && estil.diagrama[i].nom_camp && !EsNomCampIgual(estil.diagrama[i].nom_camp, nom_camp_demanat))
+					continue;
+				i_diag=i;
+				if (typeof estil.diagrama[i].left!=="undefined")
+					des_left=estil.diagrama[i].left;
+				if (typeof estil.diagrama[i].top!=="undefined")
+					des_top=estil.diagrama[i].top;
+				if (!nom_camp_demanat && estil.diagrama[i].nom_camp)
+					nom_camp=estil.diagrama[i].nom_camp;
+				break;
+			}
+		}
+	}
+	for (i=0; i<camps.length; i++)
+	{
+		if (EsNomCampIgual(camps[i], nom_camp))
+		{
+			nom_camp=camps[i];
+			break;
+		}
+	}
+	if (i==camps.length)
+		nom_camp=camps[0];
+	n=HistogramaFinestra.n;
+	nom=DonaNomHistograma(n);
+	cdns.push("<label for=\"", DonaNomSelectorCampHistograma(n), "\">", GetMessage("Field"), "</label> ");
+	cdns.push("<select id=\"", DonaNomSelectorCampHistograma(n), "\" style=\"max-width:280px\" onchange=\"CanviCampHistogramaVector(event);\">");
+	for (i=0; i<camps.length; i++)
+	{
+		attr=capa.attributes[camps[i]];
+		cdns.push("<option value=\"", EscapaTextHTMLGrafic(camps[i]), "\"", (EsNomCampIgual(camps[i], nom_camp) ? " selected=\"selected\"" : ""), ">",
+			EscapaTextHTMLGrafic(attr ? DonaCadenaDescripcioAttribute(camps[i], attr, false) : camps[i]), "</option>");
+	}
+	cdns.push("</select><br>");
+	cdns.push("<input type=\"checkbox\" id=\"", DonaNomCheckDinamicHistograma(n), "\" checked=\"checked\" onclick=\"CanviDinamicHistogramaVector(event);\">");
+	cdns.push("<label for=\"", DonaNomCheckDinamicHistograma(n), "\" id=\"", DonaNomCheckDinamicLabelHistograma(n), "\">", GetMessage("Dynamic"), "</label>");
+	cdns.push("&nbsp;&nbsp;<span id=\"", DonaNomCheckDinamicTextHistograma(n), "\" style=\"display: none\">",
+		GetMessage("Disabled"), " (", GetMessage("layerOrStyleNotVisible"), ")</span>");
+	cdns.push("<span id=\"", DonaNomGrupRetallHistograma(n), "\" style=\"display: none\">&nbsp;&nbsp;");
+	cdns.push("<input type=\"checkbox\" id=\"", DonaNomCheckTrimTailsHistograma(n), "\" onclick=\"CanviRetallHistogramaVector(event);\">");
+	cdns.push("<label for=\"", DonaNomCheckTrimTailsHistograma(n), "\" id=\"", DonaNomCheckTrimTailsLabelHistograma(n), "\">", GetMessage("CutTails", "histopie"), "</label>");
+	cdns.push("</span>");
+	cdns.push("<canvas id=\"", nom, "_canvas_0\" width=\"", ncol, "\" height=\"", nfil, "\"></canvas>");
+	cdns.push("<fieldset id=\"", nom, "_estad_fieldset\" class=\"plegat\" style=\"margin:4px 6px;\">",
+		"<legend id=\"", nom, "_estad_legend\" onClick=\"PlegaDesplegaEstadisticsGrafic(", n, ");\">+ ", GetMessage("Statistics"), "</legend>",
+		"<div id=\"", DonaNomEstadisticGraficVector(n), "\"></div></fieldset>");
+	cdns.push(DonaTextDivCopiaPortapapersFinestra(nom));
+
+	insertContentLayer(getLayer(window, "menuContextualCapa"), "afterEnd",
+		textHTMLFinestraLayer(nom, DonaTitolFinestraHistogramaVector(capa, estil, nom_camp, "bar", n), boto_tancar|boto_copiar,
+			(des_left==-9999) ? 200+n*10 : des_left, (des_top==-9999) ? 200+n*10 : des_top,
+			ncol, nfil+AltBarraFinestraLayer+110, "NW", {scroll: "no", visible: true, ev: null, resizable: true}, cdns.join("")));
+	OmpleBarraFinestraLayerNom(window, nom);
+	ajustaAllargadaAContingutFinestraLayer(window, nom, 0);
+	ajustaAllargadaAContingutFinestraLayer(window, nom, -1);
+	HistogramaFinestra.vista[n]={
+		i_capa: i_capa,
+		i_estil: i_estil,
+		i_histograma: n,
+		vector: true,
+		nom_camp: nom_camp,
+		chart: []
+	};
+	if (i_diag!=-1)
+	{
+		estil.diagrama[i_diag].i_histograma=n;
+		estil.diagrama[i_diag].nom_camp=nom_camp;
+	}
+	else
+	{
+		if (typeof estil.diagrama==="undefined")
+			estil.diagrama=[];
+		estil.diagrama.push({tipus: "chart_vector", i_histograma: n, nom_camp: nom_camp});
+	}
+	HistogramaFinestra.n++;
+	if (CalDemanarPropietatsGraficVector(capa, nom_camp) &&
+			DescarregaPropietatsCapaDigiVistaSiCal(ActualitzaHistogramesVectorDespresPropietats, {i_capa: i_capa}))
+		return;
+	ActualitzaGraficVector(n);
 }

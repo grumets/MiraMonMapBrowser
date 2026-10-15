@@ -112,6 +112,10 @@
 					"maximum": 20,
 					"multipleOf": 1
 				},
+				"tractament": {
+					"description": "Mathematical treatment of the attribute. It affects the chart and the statistics, as estil.component.tractament does for rasters. 'categoric' draws a pie chart and reports the mode. 'quantitatiu' and 'ordinal' draw a histogram and report numeric statistics. Optional. When omitted, a color-indexed field or a field of numbers is quantitative, and a unique-value symbol field or a non-numeric field is categorical.",
+					"enum": ["quantitatiu", "ordinal", "categoric"]
+				},
 				"serieTemporal": {
 					"description": "The values of this attribute form a time series that will be displayed as a graph.",
 					"type": "object",
