@@ -118,6 +118,7 @@ async function fetchDBFRangeNetwork(resolved, start, endInclusive) {
 	var response, buffer, status;
 
 	response = await fetch(resolved, {
+		cache: "no-store",
 		headers: {
 			Range: "bytes=" + start + "-" + endInclusive
 		}

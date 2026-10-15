@@ -41,7 +41,7 @@
 var model_vector="vector";
 var origen_Things="Things", origen_FeaturesOfInterest="FeaturesOfInterest", origen_CellsFeaturesOfInterest="CellsFeaturesOfInterest", origen_CellsThings="CellsThings";
 var nom_camp_nObjs_tessella="__nObjsTessella";
-var mida_tessela_vec_defecte=256, STAtopValue=10000;
+var mida_tessela_vec_defecte=256, STAtopValue=1000;
 
 function HiHaObjectesNumericsAAquestNivellDeZoom(capa)
 {
@@ -800,6 +800,105 @@ function ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 	CanviaEstatEventConsola(null, consulta.i_event, EstarEventError);
 }
 
+// Segueix @iot.nextLink i afegeix els items a 'acumulat' (array).
+async function CarregaPaginesSTANextLink(url, acumulat)
+{
+	var doc;
+	while (url)
+	{
+		doc=await promiseLoadJSON(url);
+		if (doc && doc.value && doc.value.length)
+			acumulat.push.apply(acumulat, doc.value);
+		url=(doc && doc["@iot.nextLink"]) ? doc["@iot.nextLink"] : null;
+	}
+	return acumulat;
+}
+
+// Completa la col·lecció expandida 'Observations' d'un Datastream/MultiDatastream (o similar).
+async function CompletaObservationsExpandidesSTA(obj)
+{
+	var next, obs;
+	if (!obj || typeof obj!=="object")
+		return;
+	next=obj["Observations@iot.nextLink"];
+	obs=obj.Observations;
+	if (obs && !Array.isArray(obs) && obs.value)
+	{
+		if (!next && obs["@iot.nextLink"])
+			next=obs["@iot.nextLink"];
+		obj.Observations=obs.value.slice();
+		obs=obj.Observations;
+	}
+	if (!obs)
+		obj.Observations=obs=[];
+	if (next)
+	{
+		await CarregaPaginesSTANextLink(next, obs);
+		delete obj["Observations@iot.nextLink"];
+	}
+}
+
+async function CompletaColleccioExpandidaSTA(obj, nom_prop)
+{
+	var arr, next;
+	if (!obj || typeof obj!=="object")
+		return;
+	arr=obj[nom_prop];
+	next=obj[nom_prop+"@iot.nextLink"];
+	if (arr && !Array.isArray(arr) && arr.value)
+	{
+		if (!next && arr["@iot.nextLink"])
+			next=arr["@iot.nextLink"];
+		obj[nom_prop]=arr.value.slice();
+		arr=obj[nom_prop];
+	}
+	if (!arr)
+	{
+		if (!next)
+			return;
+		obj[nom_prop]=arr=[];
+	}
+	if (next)
+	{
+		await CarregaPaginesSTANextLink(next, arr);
+		delete obj[nom_prop+"@iot.nextLink"];
+}
+}
+
+// Completa nextLinks d'un document STA de consulta: col·lecció principal i Observations niuades en DS/MDS.
+async function CompletaDocumentSTAAmbNextLinks(doc)
+{
+	var items, i, it;
+	if (!doc)
+		return doc;
+	if (doc.value && Array.isArray(doc.value) && doc["@iot.nextLink"])
+	{
+		await CarregaPaginesSTANextLink(doc["@iot.nextLink"], doc.value);
+		delete doc["@iot.nextLink"];
+	}
+	items=(doc.value && Array.isArray(doc.value)) ? doc.value : [doc];
+	for (i=0; i<items.length; i++)
+	{
+		it=items[i];
+		if (!it || typeof it!=="object")
+			continue;
+		if (it.Observations || it["Observations@iot.nextLink"])
+			await CompletaObservationsExpandidesSTA(it);
+		if (it.MultiDatastreams || it["MultiDatastreams@iot.nextLink"])
+		{
+			await CompletaColleccioExpandidaSTA(it, "MultiDatastreams");
+			for (var m=0; m<it.MultiDatastreams.length; m++)
+				await CompletaObservationsExpandidesSTA(it.MultiDatastreams[m]);
+		}
+		if (it.Datastreams || it["Datastreams@iot.nextLink"])
+		{
+			await CompletaColleccioExpandidaSTA(it, "Datastreams");
+			for (var d=0; d<it.Datastreams.length; d++)
+				await CompletaObservationsExpandidesSTA(it.Datastreams[d]);
+		}
+	}
+	return doc;
+}
 
 function MostraConsultaDeCapaDigiAmbPropietatsObjecteDigitalitzat(consulta)
 {
@@ -853,7 +952,7 @@ var nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+id_zl+"_"+id_tm+"_"+con
 	return;
 }
 
-function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
+async function OmpleCapaDigiAmbPropietatsObjecteDigitalitzat(doc, consulta)
 {
 var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_xml, foi_xml, nom_layer="LayerObjDigiConsulta"+consulta.i_capa+"_"+consulta.i_zone_level+"_"+consulta.i_tile_matrix+"_"+consulta.i_obj;
 
@@ -1006,6 +1105,13 @@ var root, id_obj_buscat, i_obj, capa, tipus, valor, features, objectes, objecte_
 		if(doc)
 		{
 			var object, feature;
+			try {
+				doc=await CompletaDocumentSTAAmbNextLinks(doc);
+			}
+			catch (e) {
+				ErrorCapaDigiAmbPropietatsObjecteDigitalitzat(e, consulta);
+				return;
+			}
 			if( capa.origenAccesObjs==origen_Things)
 			{
 				object=doc; // quan arribo aquí és que vull les observacions d'una thing concreta, però com que he de passar pels datastreams i els multidatastreams, ho demano a través de things
