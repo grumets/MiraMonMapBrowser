@@ -124,11 +124,20 @@
 		},
 		"accessClientId":
 		{
-			"description": "Names and client IDs of authentication applications",
+			"description": "Names and client IDs of authentication applications. For example 'wqms': 'wqems-miramon' or 'google': 'userid'",
 			"type": "object",
 			"properties": {
-				"authenix": { "type": "string"},
-				"wqems": { "type": "string"}
+				"authenix": { "type": "string" }
+				"wqems": { "type": "string" }
+			}
+		},
+		"authProviderScripts":
+		{
+			"description": "Additional authentication provider scripts loaded after authenix.js and hello.all.min.js to the provided `accessClientId` values. These scripts can also be included in index.htm.",
+			"type": "array",
+			"items": {
+				"type": "string",
+				"format": "uri-reference"
 			}
 		},
 		"AdrecaBaseSRC": { 
@@ -1405,7 +1414,7 @@
 						}
 					},
 					"access": { 
-						"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken).",
+						"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken o per autentificació bàsica).",
 						"$ref": "#/definitions/access"
 					},
 					"model": {
@@ -2287,15 +2296,15 @@
 		},
 		"access": 
 		{
-			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken (oauth), o basicAuth). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. En aquest cas, si la autentificació és de tipus 'oauth' cal incloure al index.htm la llibreria 'hello.js', la 'authen.js' i les 'authen*.js que s'indiquin a tokenType.", 
+			"description": "Indica que algunes 'request' estan protegides per autentificació (per accessToken (oauth), o basicAuth). Per exemple, en el cas que editable sigui 'si' o 'ara_no', si 'request' i si és 'transaction', llavors l'edició de la capa requereix autentificació. Si és bearer, es carrega authenix.js; els altres proveïdors s'indiquen a 'authProviderScripts' o a index.htm.", 
 			"type": ["null","object"],
 			"properties": {
 				"tokenType": {
-					"description": "Nom del servei d'autentificació.", 
-					"enum": ["authenix", "wqems"]
+					"description": "Nom del servei d'autentificació. Pot ser una de les propietats indicades a accessClientId, per exemple 'authenix' o 'wqms'. Si no s'indica res i l'autentificació és bearer, és a dir, per accessToken, s'usa 'authenix' com a valor per defecte", 
+					"type": "string"
 				},
 				"authenticationType": {
-					"description": "Tipus d'autentificació. Per defecte és 'Bearer' amb tookens", 
+					"description": "Tipus d'autentificació. Per defecte és 'bearer' amb tookens", 
 					"enum": ["basic", "bearer"]
 				},
 				"request": {

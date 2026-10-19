@@ -4541,9 +4541,7 @@ function TancarFinestra_editEstil(idDiv)
 	const divPrincipal = document.getElementById(idDivFinestra);
 	//Comprovo que la finestra dispose de scroll.
 	if (divPrincipal && divPrincipal.style.overflow == "auto")
-	{
 		divPrincipal.scrollTo(0,0);
-	}
 }
 
 function ForcaRecalculItemLleg(estil)

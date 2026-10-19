@@ -46,22 +46,40 @@ var config_schema_storymap="config-schema.json#/properties/storymap";
 
 function clientFullName() { return clientName+" Navigator v."+VersioToolsMMN.Vers+"."+VersioToolsMMN.SubVers; }
 
+/* Font original : https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
 
-function IncludeScript(url, late)   //https://stackoverflow.com/questions/950087/how-do-i-include-a-javascript-file-in-another-javascript-file
-{
-	var script = document.createElement("script");  // create a script DOM node
+  NOTA_NJ_19-10-2026: Un <script> creat per JavaScript és "async" (sense ordre) per defecte encara que no se li posi l'atribut async,
+  l'especificació HTML diu que els scripts no inserits pel parser tenen el flag intern "force-async" a true per defecte. 
+  En quan a l'atribut 'defer' sembla que no té cap efecte un un script afegit així, dinàmicament, només té afecte quan
+  l'script és "parser-inserted", és a dir el típic <script> en un document HTML.
 
-	if (late)
+  Per tant, per garantir l'ordre cal fixar explícitament script.async=false.
+  late false o no indicat: s'executa en l'ordre d'inclusió (es descarrega en paral·lel, però s'executa quan li toca).
+  late true: s'executa en segon pla, en l'ordre en que es vagi acabant de descarregar, sense bloquejar els altres scripts.
+  Si l'script ja s'havia inclòs abans (mateixa url), no el torna a carregar.
+  Retorna una promesa que es resol quan l'script s'ha executat, útil per als scripts que es carreguen a demanda i cal esperar. */
+var ScriptsInclosos={};
+function IncludeScript(url, late)
 	{
-		script.setAttributeNode(document.createAttribute("async"));
-		script.setAttributeNode(document.createAttribute("defer"));
-	}
-	script.src = url;  // set its src to the provided URL
+	if (ScriptsInclosos[url])
+		return ScriptsInclosos[url];
 
+	ScriptsInclosos[url]=new Promise(function(resolve, reject) {
+		var script=document.createElement("script");  // create a script DOM node
+		script.async= late ? true: false;
+		script.src=url;  // set its src to the provided URL
+		script.onload=function() { resolve(); };
+		script.onerror=function() {
+			delete ScriptsInclosos[url];
+			reject(new Error("The script \""+url+"\" could not be loaded"));
+		};
 	document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead). Ja ho he fet.
+	});
+	return ScriptsInclosos[url];
 }
 
 IncludeScript("tools1.js");
+IncludeScript("auth.js");
 IncludeScript("canviprj.js");
 IncludeScript("ctipica.js");
 IncludeScript("consult.js");
@@ -490,7 +508,7 @@ var cdns=[], i_capa;
 			cdns.push("_", capa.format);	
 	}
 	return cdns.join("");	
-}// Fi de DonaTextIdentificatiuCapa()
+}
 
 function DonaTextIdentificatiuCapaPerIdHash(capa)
 {
@@ -1407,6 +1425,7 @@ function CanviaIdioma(s)
 		else
 			IniciaStoryMap(indexStoryMapActiu);
 	}
+	TancaTotsElsHistogramaFinestra();
 } 
 
 
@@ -1439,11 +1458,8 @@ function ComprovaDisponibilitatIdiomaPreferit()
 		}
 		return idiomaTrobat ? mmnIdiom : defaultLanguage
 	}
-	else
-	{
 		return defaultLanguage;
 	}
-} // Fi comprovaDisponibilitatIdiomaPreferit()
 
 function DonaIndexNivellZoom(costat)  // Aquesta funció està dissenyada per no haver de comprovar el retorn
 {
@@ -4955,7 +4971,7 @@ function ComprovaVersioConfigMMN(param_ctrl)
 
 var ParamCtrl;
 
-function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
+async function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 {
 	ParamCtrl=param_ctrl; //Ho necessito aquí perquè funcioni la configuració idiomàtica en cas d'haver de preguntar.
 
@@ -4992,6 +5008,12 @@ function IniciaParamCtrlIVisualitzacio(param_ctrl, param)
 	ParamCtrl.config_json=param.config_json;
 
 	ResolveJSONPointerRefs(ParamCtrl);
+	try {
+		await CarregaAutenticacio(ParamCtrl);
+	}
+	catch (e) {
+		alert(e.message);
+	}
 
 	IniciaVisualitzacio();
 }
@@ -5791,7 +5813,7 @@ function EndMiraMonMapBrowser(event, reset)
 					"fre": "Statut de la carte enregistré (Pour restaurer l'état d'origine, ajoutez à l'URL:"})+" \"?reset=1\")";*/
 }
 
-function StartMiraMonMapBrowser(div_name)
+async function StartMiraMonMapBrowser(div_name)
 {
 var config_json="config.json", config_reset=false;
 var clau_config="CONFIG=", clau_reset="RESET=";
