@@ -2312,6 +2312,50 @@ function DonaAreaCella(env, costat, crs)
 	return costat*costat;
 }
 
+function CalculaAreaAnellPoligonGeoJSON(coord)
+{
+	var total=0;
+	if (coord && coord.length > 0)
+	{
+		var coord2=DonaCoordenaArrayLonLatACilindricaEqualArea(coord);
+		for(var i=0; i<coord2.length-1; i++)
+			total += (coord2[i+1][0] * coord2[i][1]) - (coord2[i][0] * coord2[i+1][1])		
+		total= Math.abs(total / 2);
+	}
+	return total;
+}
+
+function CalculaAreaPoligonGeoJSON(coord)
+{
+	var total = 0;
+	if (coord && coord.length > 0) {
+		total += Math.abs(CalculaAreaAnellPoligonGeoJSON(coord[0])); // el primer anell és exterior
+		for (var i = 1; i < coord.length; i++) 
+			total -= Math.abs(CalculaAreaAnellPoligonGeoJSON(coord[i])); // els altres anells són forats que cal restar
+	}
+	return total;
+}
+
+function CalculaAreaFeatureGeoJSON(feature) {
+	
+	if(!feature || !feature.geometry || (feature.geometry.type!="Polygon" && feature.geometry.type!="MultiPolygon"))
+		return 0;
+	var i, coordinates, total=0;
+	if (feature.geometry.type=="MultiPolygon")
+	{
+		for(i=0; i<feature.geometry.coordinates.length; i++)
+		{
+			coordinates=feature.geometry.coordinates[i];
+			total +=CalculaAreaPoligonGeoJSON(coordinates);
+		}
+	}
+	else if (feature.geometry.type=="Polygon")
+	{
+		total=CalculaAreaPoligonGeoJSON(feature.geometry.coordinates);
+	}
+	return total;
+}
+
 function EscriuCostatIUnitatsZoom(i, crs)
 {
 	if (EsProjLongLat(crs))

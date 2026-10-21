@@ -45,6 +45,12 @@ var FactorGrausAMetres=111319.5
 var M_PI_2=Math.PI/2;
 var M_PI_4=Math.PI/4
 
+var U_sobre_FlatTerra=298.257223563; //u_sobre_f
+var RadiEquatorial=6378137.0; //radi_a
+
+var DistGeo=null;
+
+
 var CRSIds=[];
 
 function g_gms(graus_totals, zeros)
@@ -218,6 +224,60 @@ function LambertAzimuthal_Funcio_3_12_Snyder(fi)
 	return (1.0-CanviCRS.e2)*(sin_fi/dvar1-Math.log(dvar2)/(2.0*CanviCRS.e));
 }
 
+// Funcions per poder calcular distàncies i àrees geodèsiques
+
+ // basada en DistGeod_Inicia_LonLat_A_Cilindrica_EqualArea
+function Inicia_DistGeo()
+{
+	if(typeof DistGeo!=="undefined" && DistGeo!=null)
+		return;
+	DistGeo={};
+	DistGeo.u_sobre_f=U_sobre_FlatTerra;
+	DistGeo.radi_a=RadiEquatorial;
+	DistGeo.f=1.0/DistGeo.u_sobre_f;
+    
+    DistGeo.e2=2.0*DistGeo.f-DistGeo.f*DistGeo.f;
+    DistGeo.u_e2=1-DistGeo.e2;
+
+    DistGeo.e=Math.sqrt(DistGeo.e2);
+
+    if (DistGeo.e)
+	    DistGeo.u_sobre_2e=1/(2*DistGeo.e);
+    else
+    	DistGeo.u_sobre_2e=0; 
+   
+    DistGeo.a_per_k0=DistGeo.radi_a;
+    DistGeo.a_sobre_2k0=DistGeo.radi_a/2;
+	return ;
+} 
+
+// Basada en l_DistGeod_De_LonLat_A_Cilindrica_EqualArea, útil per calcular perímetres i àrees de vectors
+function DistGeo_De_LonLat_A_Cilindrica_EqualArea(lon, lat)			
+{
+var coord=[];
+
+	Inicia_DistGeo();
+	
+	var sin_lat=Math.sin(FactorGrausARadiants*lat);
+    var e_per_sin_lat=DistGeo.e*sin_lat;
+
+    var q=DistGeo.u_e2*( sin_lat/(1-e_per_sin_lat*e_per_sin_lat) - DistGeo.u_sobre_2e*Math.log((1-e_per_sin_lat)/(1+e_per_sin_lat)));
+
+    coord[0]=DistGeo.a_per_k0*(FactorGrausARadiants*lon);
+	coord[1]=DistGeo.a_sobre_2k0*q;
+	return coord;
+}
+
+function DonaCoordenaArrayLonLatACilindricaEqualArea(coord)
+{
+	var coord2=[];
+	if (coord){
+		for(var i=0; i<coord.length; i++)
+			coord2.push(DistGeo_De_LonLat_A_Cilindrica_EqualArea(coord[i][0],coord[i][1]));
+	}
+	return coord2;
+}
+
 //Aquesta funció no cal cridar-la. La criden les de canvi de projecció directament si cal
 function InicialitzaCRS(crs)
 {
@@ -383,8 +443,8 @@ var crs_up=crs.toUpperCase();
 	}
 	else
 	{
-		CanviCRS.radi_a=6378137.0;
-		CanviCRS.u_sobre_f=298.257223563;
+		CanviCRS.radi_a=RadiEquatorial;
+		CanviCRS.u_sobre_f=U_sobre_FlatTerra;
 	}
 	CanviCRS.radi_b=((CanviCRS.u_sobre_f)?((CanviCRS.radi_a)-(CanviCRS.radi_a)/(CanviCRS.u_sobre_f)):CanviCRS.radi_a);
 	CanviCRS.e2=(CanviCRS.radi_a*CanviCRS.radi_a - CanviCRS.radi_b*CanviCRS.radi_b)/(CanviCRS.radi_a*CanviCRS.radi_a);
@@ -611,9 +671,9 @@ function LambertAzimutalEqualArea_Geo(x,y)
 	x-=CanviCRS.offset_mapa_X;
 	y-=CanviCRS.offset_mapa_Y;
 
-    	var ro=Math.sqrt((x/CanviCRS.D*x/CanviCRS.D)+(CanviCRS.D*y*CanviCRS.D*y));
+    var ro=Math.sqrt((x/CanviCRS.D*x/CanviCRS.D)+(CanviCRS.D*y*CanviCRS.D*y));
 	if (ro==0.0)
-    		return null;
+    	return null;
 	var ce=2.0*Math.asin(ro/(2.0*CanviCRS.Rq));
 	var sin_ce=Math.sin(ce);
 	var cos_ce=Math.cos(ce);
@@ -621,7 +681,7 @@ function LambertAzimutalEqualArea_Geo(x,y)
 	var beta=Math.asin(dvar);
 	dvar=CanviCRS.D*ro*CanviCRS.cos_beta1*cos_ce-CanviCRS.D*CanviCRS.D*y*CanviCRS.sin_beta1*sin_ce;
 	if (dvar==0.0)
-    		return null;
+    	return null;
 	var ll_x=CanviCRS.lambda_0+Math.atan(x*sin_ce/dvar);
 	var ll_y=beta+(CanviCRS.e2/3.0+31.0*CanviCRS.e4/180.0+517.0*CanviCRS.e6/5040.0)*Math.sin(2.0*beta)
                   +(23.0*CanviCRS.e4/360.0+251.0*CanviCRS.e6/3780.0)*Math.sin(4.0*beta)
@@ -1308,13 +1368,9 @@ function DonaEPSGDeURLOpengis(url)
 	if(!url)
 		return null;
 	if(url.match("www.opengis.net/def/crs/OGC/1.3/CRS84"))
-	{
 		return "CRS:84";
-	}
 	if(url.match("www.opengis.net/def/crs/EPSG/"))
-	{
 		return "EPSG:"+url.slice(url.lastIndexOf("/")+1);
-	}
 	return null;
 }
 
