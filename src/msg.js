@@ -4810,6 +4810,30 @@ var MessageLang=
       "cze": "Hodnoty grafu byly zkopírovány do schránky",
       "ger": "Die Werte des Diagramms wurden in die Zwischenablage kopiert"
     },
+    "CalculateBy": {
+      "cat": "Calcular per",
+      "spa": "Calcular por",
+      "eng": "Compute by",
+      "fre": "Calculer par",
+      "cze": "Počítat podle",
+      "ger": "Berechnen nach"
+    },
+    "ByVectorObject": {
+      "cat": "Objecte",
+      "spa": "Objeto",
+      "eng": "Object",
+      "fre": "Objet",
+      "cze": "Objekt",
+      "ger": "Objekt"
+    },
+    "ByArea": {
+      "cat": "Àrea",
+      "spa": "Área",
+      "eng": "Area",
+      "fre": "Superficie",
+      "cze": "Plocha",
+      "ger": "Fläche"
+    },
     "CutTails": {
       "cat": "Retall de cues",
       "spa": "Recorte de colas",

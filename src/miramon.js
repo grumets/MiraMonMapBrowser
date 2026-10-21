@@ -2312,6 +2312,23 @@ function DonaAreaCella(env, costat, crs)
 	return costat*costat;
 }
 
+function EsGeometriaPoligon(geometry)
+{
+	return geometry && (geometry.type=="Polygon" || geometry.type=="MultiPolygon");
+}
+
+function EsCapaDePoligons(capa)
+{
+	var features, i;
+	features=DonaFeaturesFontGraficVector(capa);
+	for (i=0; i<features.length; i++)
+	{
+		if (features[i].geometry)
+			return EsGeometriaPoligon(features[i].geometry);
+	}
+	return false;
+}
+
 function CalculaAreaAnellPoligonGeoJSON(coord)
 {
 	var total=0;
@@ -2355,6 +2372,37 @@ function CalculaAreaFeatureGeoJSON(feature) {
 	}
 	return total;
 }
+
+//L'àrea el·lipsoïdal es desa a properties.__areae__ i només es calcula si un gràfic la demana i encara no hi és.
+function DonaIOmpleAreaFeatureGeoJSON(crs, feature)
+{
+	var copia, area;
+	if (!feature)
+		return 0;
+	if (feature.properties && typeof feature.properties.__areae__==="number" && isFinite(feature.properties.__areae__))
+		return feature.properties.__areae__;
+	if (!EsGeometriaPoligonGraficVector(feature.geometry))
+		return 0;
+	if(!crs)
+		crs="EPSG:4326";
+	if (EsProjLongLat(crs))
+		area=CalculaAreaFeatureGeoJSON(feature);
+	else
+	{
+		copia={geometry: JSON.parse(JSON.stringify(feature.geometry))};
+		TransformaCoordenadesFeatures([copia], crs, "EPSG:4326");
+		if (!copia.geometryCRSactual)
+			return 0;
+		copia.geometry=copia.geometryCRSactual;
+		area=CalculaAreaFeatureGeoJSON(copia);
+	}
+	if (!feature.properties)
+		feature.properties={};
+	feature.properties.__areae__=area;
+	return area;
+}
+
+
 
 function EscriuCostatIUnitatsZoom(i, crs)
 {
