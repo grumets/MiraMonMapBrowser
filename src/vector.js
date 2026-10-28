@@ -862,7 +862,7 @@ async function CompletaColleccioExpandidaSTA(obj, nom_prop)
 	{
 		await CarregaPaginesSTANextLink(next, arr);
 		delete obj[nom_prop+"@iot.nextLink"];
-}
+	}
 }
 
 // Completa nextLinks d'un document STA de consulta: col·lecció principal i Observations niuades en DS/MDS.
@@ -2106,9 +2106,195 @@ var prop={}, attributeArray=Object.keys(capa.attributes);
 	feature.properties=prop;
 }
 
+function PuntAnellEquiv(p1, p2)
+{
+	if (Math.abs(p1[1]-p2[1])>1e-9)
+		return false;
+	if (Math.abs(p1[0]-p2[0])<1e-9)
+		return true;
+	return Math.abs(Math.abs(p1[0]-p2[0])-360)<1e-6;
+}
+
+function TancaAnellCella(anell)
+{
+	if (!anell.length)
+		return anell;
+	if (PuntAnellEquiv(anell[0], anell[anell.length-1]))
+		anell[anell.length-1]=[anell[0][0], anell[0][1]];
+	else
+		anell.push([anell[0][0], anell[0][1]]);
+	return anell;
+}
+
+function MinMaxCoordAnell(anell, ixy)
+{
+	var i, mn=anell[0][ixy], mx=anell[0][ixy];
+	for (i=1; i<anell.length; i++)
+	{
+		if (anell[i][ixy]<mn)
+			mn=anell[i][ixy];
+		if (anell[i][ixy]>mx)
+			mx=anell[i][ixy];
+	}
+	return {min: mn, max: mx};
+}
+
+function DesenrotllaAnellLon(anell)
+{
+	var out=[], i, lon, prev;
+	if (!anell || !anell.length)
+		return anell;
+	out.push([anell[0][0], anell[0][1]]);
+	prev=anell[0][0];
+	for (i=1; i<anell.length; i++)
+	{
+		lon=anell[i][0];
+		while (lon-prev>180)
+			lon-=360;
+		while (lon-prev<-180)
+			lon+=360;
+		out.push([lon, anell[i][1]]);
+		prev=lon;
+	}
+	// El vèrtex de tancament no pot quedar a lon±360: si no, el span és ~360°
+	// i es deixa l'anell sense partir (línia horitzontal a l'antimeridià).
+	if (out.length>=2 && PuntAnellEquiv(out[0], out[out.length-1]))
+		out[out.length-1]=[out[0][0], out[0][1]];
+	return out;
+}
+
+function InterseccioAnellALon(p1, p2, lonClip)
+{
+	var d=p2[0]-p1[0];
+	if (d==0)
+		return [lonClip, p1[1]];
+	return [lonClip, p1[1]+(p2[1]-p1[1])*((lonClip-p1[0])/d)];
+}
+
+function PuntDinsFinestraLon(p, lonMin, lonMax)
+{
+	return p[0]>=lonMin && p[0]<=lonMax;
+}
+
+function RetallaAnellEntreLons(anell, lonMin, lonMax)
+{
+	var i, a, b, out=[], aDins, bDins;
+	if (!anell || anell.length<2)
+		return null;
+	anell=TancaAnellCella(anell.slice());
+	for (i=0; i<anell.length-1; i++)
+	{
+		a=anell[i];
+		b=anell[i+1];
+		aDins=PuntDinsFinestraLon(a, lonMin, lonMax);
+		bDins=PuntDinsFinestraLon(b, lonMin, lonMax);
+		if (aDins && bDins)
+			out.push([b[0], b[1]]);
+		else if (aDins && !bDins)
+			out.push(InterseccioAnellALon(a, b, (b[0]>lonMax) ? lonMax : lonMin));
+		else if (!aDins && bDins)
+		{
+			out.push(InterseccioAnellALon(a, b, (a[0]>lonMax) ? lonMax : lonMin));
+			out.push([b[0], b[1]]);
+		}
+		else if ((a[0]<lonMin && b[0]>lonMax) || (a[0]>lonMax && b[0]<lonMin))
+		{
+			if (a[0]<b[0])
+			{
+				out.push(InterseccioAnellALon(a, b, lonMin));
+				out.push(InterseccioAnellALon(a, b, lonMax));
+			}
+			else
+			{
+				out.push(InterseccioAnellALon(a, b, lonMax));
+				out.push(InterseccioAnellALon(a, b, lonMin));
+			}
+		}
+	}
+	if (out.length<3)
+		return null;
+	return TancaAnellCella(out);
+}
+
+function FiltraAnellsPrimsCella(anells)
+{
+	var i, out=[], ample, ampleMax=0, mm;
+	for (i=0; i<anells.length; i++)
+	{
+		if (!anells[i] || anells[i].length<4)
+			continue;
+		mm=MinMaxCoordAnell(anells[i], 0);
+		ample=mm.max-mm.min;
+		if (ample>ampleMax)
+			ampleMax=ample;
+	}
+	for (i=0; i<anells.length; i++)
+	{
+		if (!anells[i] || anells[i].length<4)
+			continue;
+		mm=MinMaxCoordAnell(anells[i], 0);
+		ample=mm.max-mm.min;
+		if (ample<1e-8)
+			continue;
+		if (ampleMax>0 && ample<ampleMax*0.05)
+			continue;
+		out.push(anells[i]);
+	}
+	return out.length ? out : [];
+}
+
+function ParteixAnellAntimeridia(anell)
+{
+	var unw, mm, anells=[], tros, i;
+	if (!anell || anell.length<4)
+		return [anell];
+	unw=DesenrotllaAnellLon(anell);
+	mm=MinMaxCoordAnell(unw, 0);
+	// Recorregut al voltant del pol (span real > 180°), no un creuament de ±180°.
+	if (mm.max-mm.min>180)
+		return [anell];
+	if (mm.min>=-180 && mm.max<=180)
+		return [anell];
+	tros=RetallaAnellEntreLons(unw, -180, 180);
+	if (tros)
+		anells.push(tros);
+	if (mm.max>180)
+	{
+		tros=RetallaAnellEntreLons(unw, 180, mm.max+1e-9);
+		if (tros)
+		{
+			for (i=0; i<tros.length; i++)
+				tros[i][0]-=360;
+			anells.push(tros);
+		}
+	}
+	if (mm.min<-180)
+	{
+		tros=RetallaAnellEntreLons(unw, mm.min-1e-9, -180);
+		if (tros)
+		{
+			for (i=0; i<tros.length; i++)
+				tros[i][0]+=360;
+			anells.push(tros);
+		}
+	}
+	anells=FiltraAnellsPrimsCella(anells);
+	return anells.length ? anells : [anell];
+}
+
+function DonaGeometriaCellaDesDeAnell(anell)
+{
+	var anells=ParteixAnellAntimeridia(anell), multi=[], i;
+	if (anells.length==1)
+		return {type: "Polygon", coordinates: [anells[0]]};
+	for (i=0; i<anells.length; i++)
+		multi.push([anells[i]]);
+	return {type: "MultiPolygon", coordinates: multi};
+}
+
 function ExtreuITransformaSTACells(fois, capa)
 {
-var features=[], una_feature, foi, prop={}, zoneId, bbox, coord, c;
+var features=[], una_feature, foi, prop={}, zoneId, bbox, coord, c, geom;
 
 	if(fois.value)
 	{
@@ -2132,17 +2318,11 @@ var features=[], una_feature, foi, prop={}, zoneId, bbox, coord, c;
 			}
 			if(!coord)
 				continue;
-			if(capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, "EPSG:4326"))	
-			{				
-				for(c=0; c<coord.length; c++)
-					TransformaCoordenadesArray(coord[c], "EPSG:4326", capa.CRSgeometry);
-			}
+			geom=DonaGeometriaCellaDesDeAnell(coord);
+			TransformaCoordenadesGeometria(geom, "EPSG:4326", capa.CRSgeometry);
 			una_feature={type: "Feature",
 						id: zoneId,
-						geometry: {
-							type: "Polygon",
-							coordinates: [coord]
-						},
+						geometry: geom,
 						properties: {}};
 						
 			ExtreuTransformaSTAMultiDatastreamsDeCellsOfFeaturesOfInterest(foi, una_feature, capa);
@@ -2229,7 +2409,7 @@ function ExtreuITransformaDGGS_DBFfeatures(JSONObj, capa)
 {
 	if(!JSONObj || !capa)
 		return [];
-	var features=[], una_feature, foi, prop, bbox, coord, c, cellId, cellType=capa.tileMatrixSetGeometry.cellType, cellIdAttribute=capa.tileMatrixSetGeometry.cellIdAttribute, noms_prop, attributeArray=Object.keys(capa.attributes), i_atrib, atrib;
+	var features=[], una_feature, foi, prop, bbox, coord, c, geom, cellId, cellType=capa.tileMatrixSetGeometry.cellType, cellIdAttribute=capa.tileMatrixSetGeometry.cellIdAttribute, noms_prop, attributeArray=Object.keys(capa.attributes), i_atrib, atrib;
 	
 	for (var i=0; i<JSONObj.length; i++)
 	{
@@ -2263,18 +2443,12 @@ function ExtreuITransformaDGGS_DBFfeatures(JSONObj, capa)
 		}
 		if(!coord)
 			continue;
-		if(capa.CRSgeometry && !DonaCRSRepresentaQuasiIguals(capa.CRSgeometry, "EPSG:4326"))	
-		{				
-			for(c=0; c<coord.length; c++)
-				TransformaCoordenadesArray(coord[c], "EPSG:4326", capa.CRSgeometry);
-		}
-		
+		geom=DonaGeometriaCellaDesDeAnell(coord);
+		TransformaCoordenadesGeometria(geom, "EPSG:4326", capa.CRSgeometry);
+
 		una_feature={type: "Feature",
 					id: cellId,
-					geometry: {
-						type: "Polygon",
-						coordinates: [coord]
-					},
+					geometry: geom,
 					properties: {}};
 		prop={};
 		for (var j=0; j<noms_prop.length; j++)	
@@ -3237,6 +3411,32 @@ var llista=[], i_calculat, capa=ParamCtrl.capa[i_capa], simbols, forma, estil;
 		llista.removeDuplicates(sortAscendingStringSensible);
 	}
 	return llista;
+}
+
+function DonaRequestAOPIDGGSData(i_capa, zoneId)
+{
+var cdns=[], plantilla=[], c_afegir="", capa=ParamCtrl.capa[i_capa];
+
+	if(capa.URLTemplate)
+		plantilla.push(capa.URLTemplate);
+	else
+		plantilla.push("/collections/{collectionId}/dggs/{dggrsId}/zones/{zoneId}/data");
+	
+	plantilla=plantilla.join("");
+	plantilla=plantilla.replace("{collectionId}", capa.nom);
+	plantilla=plantilla.replace("{dggrsId}", capa.cellZoneLevelSet.cellType);
+	plantilla=plantilla.replace("{zoneId}", zoneId);
+
+	cdns.push(plantilla);
+	
+	//format
+	//·$·
+	//zone-depth : tots els servidors suporten un defaultDepht però no tenen perquè suportar altres depth
+		
+	// Si el servidor diu que per aquesta capa suporta defaultDepth	8 i maxRefinementLevel	19 --> 
+	// el màxim zoneLevel que puc demanar a defaultDepth és maxRefinementLevel-defaultDepth, per tant en aquest exemple seria 11
+	// Si el servidor suporta altres depth després podria demanar per exemple level=19 i depth=0
+	return AfegeixNomServidorARequest(DonaServidorCapa(capa), cdns.join(""), true, DonaCorsServidorCapa(capa));
 }
 
 function DonaRequestGetFeature(i_capa, limit, env, cadena_objectes, completa)
@@ -4688,11 +4888,59 @@ var env={}, mida;
 		"MaxY": punt.y-env.MinJ*ParamInternCtrl.vista.CostatZoomActual};
 }
 
+function TransformaCoordenadesGeometria(geom, crs_ori, crs_dest)
+{
+	var c1, c2, c3, coordinates2, coordinates3;
+	if (!geom)
+		return;
+	if (!crs_ori || !crs_dest || DonaCRSRepresentaQuasiIguals(crs_ori, crs_dest))
+		return;
+	if (geom.type=="GeometryCollection" && geom.geometries)
+	{
+		for (c1=0; c1<geom.geometries.length; c1++)
+			TransformaCoordenadesGeometria(geom.geometries[c1], crs_ori, crs_dest);
+		return;
+	}
+	if (!geom.coordinates)
+		return;
+	if (geom.type=="MultiPolygon")
+	{
+		for (c3=0; c3<geom.coordinates.length; c3++)
+		{
+			coordinates3=geom.coordinates[c3];
+			for (c2=0; c2<coordinates3.length; c2++)
+			{
+				coordinates2=coordinates3[c2];
+				for (c1=0; c1<coordinates2.length; c1++)
+					TransformaCoordenadesArray(coordinates2[c1], crs_ori, crs_dest);
+			}
+		}
+	}
+	else if (geom.type=="MultiLineString" || geom.type=="Polygon")
+	{
+		for (c2=0; c2<geom.coordinates.length; c2++)
+		{
+			coordinates2=geom.coordinates[c2];
+			for (c1=0; c1<coordinates2.length; c1++)
+				TransformaCoordenadesArray(coordinates2[c1], crs_ori, crs_dest);
+		}
+	}
+	else if (geom.type=="LineString" || geom.type=="Multipoint" || geom.type=="MultiPoint")
+	{
+		for (c1=0; c1<geom.coordinates.length; c1++)
+			TransformaCoordenadesArray(geom.coordinates[c1], crs_ori, crs_dest);
+	}
+	else if (geom.type=="Point")
+		TransformaCoordenadesArray(geom.coordinates, crs_ori, crs_dest);
+	else
+		geom.coordinates=null;
+}
+
 function TransformaCoordenadesFeatures(features, crs_ori, crs_dest)
 {
 	for(var j=0; j<features.length; j++)
 	{
-		var feature=features[j], coordinates2, coordinates3;
+		var feature=features[j];
 		if (!feature.geometry)
 			feature.geometryCRSactual=null;
 		else {
@@ -4704,39 +4952,7 @@ function TransformaCoordenadesFeatures(features, crs_ori, crs_dest)
 		}
 		if (!feature.geometryCRSactual)
 			continue;
-		if (feature.geometryCRSactual.type=="MultiPolygon")
-		{
-			for(var c3=0; c3<feature.geometryCRSactual.coordinates.length; c3++)
-			{
-				coordinates3=feature.geometryCRSactual.coordinates[c3];
-				for(var c2=0; c2<coordinates3.length; c2++)
-				{
-					coordinates2=coordinates3[c2];
-					for(var c1=0; c1<coordinates2.length; c1++)
-						TransformaCoordenadesArray(coordinates2[c1], crs_ori, crs_dest);
-				}
-			}
-		}
-		else if (feature.geometryCRSactual.type=="MultiLineString" || feature.geometryCRSactual.type=="Polygon")
-		{
-			for(var c2=0; c2<feature.geometryCRSactual.coordinates.length; c2++)
-			{
-				coordinates2=feature.geometryCRSactual.coordinates[c2];
-				for(var c1=0; c1<coordinates2.length; c1++)
-					TransformaCoordenadesArray(coordinates2[c1],crs_ori, crs_dest);
-			}
-		}
-		else if (feature.geometryCRSactual.type=="LineString" || feature.geometryCRSactual.type=="Multipoint")
-		{
-			for(var c1=0; c1<feature.geometryCRSactual.coordinates.length; c1++)
-			{
-				TransformaCoordenadesArray(feature.geometryCRSactual.coordinates[c1], crs_ori, crs_dest);
-			}
-		}
-		else if (feature.geometryCRSactual.type=="Point")
-			TransformaCoordenadesArray(feature.geometryCRSactual.coordinates, crs_ori, crs_dest);
-		else
-			feature.geometryCRSactual.coordinates=null;
+		TransformaCoordenadesGeometria(feature.geometryCRSactual, crs_ori, crs_dest);
 	}
 }
 
